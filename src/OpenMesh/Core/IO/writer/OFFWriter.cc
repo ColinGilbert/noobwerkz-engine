@@ -242,7 +242,7 @@ write_ascii(std::ostream& _out, BaseExporter& _be, Options _opt) const
       _out << " " << t[0] << " " << t[1];
     }
 
-    _out << "\n";
+    _out << '\n';
 
   }
 
@@ -281,7 +281,7 @@ write_ascii(std::ostream& _out, BaseExporter& _be, Options _opt) const
           }
         }
       }
-      _out << "\n";
+      _out << '\n';
     }
   }
   else
@@ -318,7 +318,7 @@ write_ascii(std::ostream& _out, BaseExporter& _be, Options _opt) const
         }
       }
 
-      _out << "\n";
+      _out << '\n';
     }
   }
 

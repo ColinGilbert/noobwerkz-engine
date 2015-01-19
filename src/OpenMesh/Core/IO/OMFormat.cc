@@ -194,20 +194,20 @@ namespace OMFormat {
   std::ostream& operator << ( std::ostream& _os, const Chunk::Header& _c )
   {
     _os << "Chunk Header : 0x" << std::setw(4)
-	<< std::hex << (*(uint16*)(&_c)) << std::dec << std::endl;
+	<< std::hex << (*(uint16*)(&_c)) << std::dec << '\n';
     _os << "entity = " 
-	<< as_string(Chunk::Entity(_c.entity_)) << std::endl;
+	<< as_string(Chunk::Entity(_c.entity_)) << '\n';
     _os << "type   = " 
 	<< as_string(Chunk::Type(_c.type_));
     if ( Chunk::Type(_c.type_)!=Chunk::Type_Custom) 
     {
-      _os << std::endl 
+      _os << '\n'
 	  << "signed = " 
-	  << _c.signed_ << std::endl;
+	  << _c.signed_ << '\n';
       _os << "float  = " 
-	  << _c.float_ << std::endl;
+	  << _c.float_ << '\n';
       _os << "dim    = " 
-	  << as_string(Chunk::Dim(_c.dim_)) << std::endl;
+	  << as_string(Chunk::Dim(_c.dim_)) << '\n';
       _os << "bits   = " 
 	  << (_c.float_
 	      ? as_string(Chunk::Float_Size(_c.bits_)) 
@@ -226,8 +226,8 @@ namespace OMFormat {
 	<< "version = 0x" << std::hex << (uint16)_h.version_ << std::dec
 	<< " (" << major_version(_h.version_) 
 	<< "."  << minor_version(_h.version_) << ")\n"
-	<< "#V      = " << _h.n_vertices_ << std::endl
-	<< "#F      = " << _h.n_faces_ << std::endl
+	<< "#V      = " << _h.n_vertices_ << '\n'
+	<< "#F      = " << _h.n_faces_ << '\n'
 	<< "#E      = " << _h.n_edges_;
     return _os;
   }

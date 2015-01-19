@@ -171,7 +171,7 @@ write(std::ostream& _os, BaseExporter& _be, Options _opt, std::streamsize _preci
 
 void _PLYWriter_::write_header(std::ostream& _out, BaseExporter& _be, Options& _opt) const {
   //writing header
-  _out << "ply" << std::endl;
+  _out << "ply" << '\n';
 
   if (_opt.is_binary()) {
     _out << "format ";
@@ -179,48 +179,48 @@ void _PLYWriter_::write_header(std::ostream& _out, BaseExporter& _be, Options& _
       _out << "binary_big_endian ";
     else
       _out << "binary_little_endian ";
-    _out << "1.0" << std::endl;
+    _out << "1.0" << '\n';
   } else
-    _out << "format ascii 1.0" << std::endl;
+    _out << "format ascii 1.0" << '\n';
 
-  _out << "element vertex " << _be.n_vertices() << std::endl;
+  _out << "element vertex " << _be.n_vertices() << '\n';
 
-  _out << "property float x" << std::endl;
-  _out << "property float y" << std::endl;
-  _out << "property float z" << std::endl;
+  _out << "property float x" << '\n';
+  _out << "property float y" << '\n';
+  _out << "property float z" << '\n';
 
   if ( _opt.vertex_has_normal() ){
-    _out << "property float nx" << std::endl;
-    _out << "property float ny" << std::endl;
-    _out << "property float nz" << std::endl;
+    _out << "property float nx" << '\n';
+    _out << "property float ny" << '\n';
+    _out << "property float nz" << '\n';
   }
 
   if ( _opt.vertex_has_texcoord() ){
-    _out << "property float u" << std::endl;
-    _out << "property float v" << std::endl;
+    _out << "property float u" << '\n';
+    _out << "property float v" << '\n';
   }
 
   if ( _opt.vertex_has_color() ){
     if ( _opt.color_is_float() ) {
-      _out << "property float red" << std::endl;
-      _out << "property float green" << std::endl;
-      _out << "property float blue" << std::endl;
+      _out << "property float red" << '\n';
+      _out << "property float green" << '\n';
+      _out << "property float blue" << '\n';
 
       if ( _opt.color_has_alpha() )
-        _out << "property float alpha" << std::endl;
+        _out << "property float alpha" << '\n';
     } else {
-      _out << "property uchar red" << std::endl;
-      _out << "property uchar green" << std::endl;
-      _out << "property uchar blue" << std::endl;
+      _out << "property uchar red" << '\n';
+      _out << "property uchar green" << '\n';
+      _out << "property uchar blue" << '\n';
 
       if ( _opt.color_has_alpha() )
-        _out << "property uchar alpha" << std::endl;
+        _out << "property uchar alpha" << '\n';
     }
   }
 
-  _out << "element face " << _be.n_faces() << std::endl;
-  _out << "property list uchar int vertex_indices" << std::endl;
-  _out << "end_header" << std::endl;
+  _out << "element face " << _be.n_faces() << '\n';
+  _out << "property list uchar int vertex_indices" << '\n';
+  _out << "end_header" << '\n';
 }
 
 
