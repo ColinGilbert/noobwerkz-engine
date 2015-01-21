@@ -6,7 +6,18 @@
 
 <!-- --------------------------------------------------------------------- -->
 
-<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1204)</td><td>
+<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1209)</td><td>
+
+<b>IO</b>
+<ul>
+<li>Writers: Avoid std::endl in various writers to avoid flushing the output stream on every line. (Thanks to Roman Zoller for the hint).</li>
+</ul>
+
+<b>General</b>
+<ul>
+<li>Fixed various build warnings</li>
+</ul>
+
 
 </tr>
 
