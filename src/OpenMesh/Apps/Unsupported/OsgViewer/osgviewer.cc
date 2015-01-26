@@ -124,7 +124,12 @@ public:
 
   bool bind( osg::GeometryPtr geo )
   {
-    std::auto_ptr<mesh_t> obj(new mesh_t);
+    #if __cplusplus > 199711L or __GXX_EXPERIMENTAL_CXX0X__
+      std::unique_ptr<mesh_t> obj(new mesh_t);
+    #else
+      std::auto_ptr<mesh_t> obj(new mesh_t);
+    #endif
+
 
     return (OpenMesh::Kernel_OSG::bind< mesh_t >( *obj, geo))
       ? (meshes_.push_back(obj.release()), true)

@@ -60,8 +60,6 @@
 #include <OpenMesh/Tools/Utils/HeapT.hh>
 #include <OpenMesh/Tools/Decimater/BaseDecimaterT.hh>
 
-
-
 //== NAMESPACE ================================================================
 
 namespace OpenMesh  {
@@ -168,7 +166,11 @@ private: //------------------------------------------------------- private data
   Mesh&      mesh_;
 
   // heap
-  std::auto_ptr<DeciHeap> heap_;
+  #if __cplusplus > 199711L or __GXX_EXPERIMENTAL_CXX0X__
+    std::unique_ptr<DeciHeap> heap_;
+  #else
+    std::auto_ptr<DeciHeap> heap_;
+  #endif
 
   // vertex properties
   VPropHandleT<HalfedgeHandle>  collapse_target_;
