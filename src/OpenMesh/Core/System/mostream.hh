@@ -63,6 +63,10 @@
 #include <string>
 #include <algorithm>
 
+#if __cplusplus > 199711L or __GXX_EXPERIMENTAL_CXX0X__
+  #include <mutex>
+#endif
+
 
 //== NAMESPACES ===============================================================
 
@@ -177,6 +181,11 @@ protected:
   // output what's in buffer_
   virtual int sync() 
   {
+    // If working on multiple threads, we need to serialize the output correctly (requires c++11 headers)
+    #if __cplusplus > 199711L or __GXX_EXPERIMENTAL_CXX0X__
+       std::lock_guard<std::mutex> lck (serializer_);
+    #endif
+
     if (!buffer_.empty())
     {
       if (enabled_) multiplex();
@@ -196,7 +205,17 @@ protected:
   int_type overflow(int_type _c = multiplex_streambuf::traits_type::eof())
   {
     char c = traits_type::to_char_type(_c);
-    buffer_.push_back(c);
+
+    // If working on multiple threads, we need to serialize the output correctly (requires c++11 headers)
+    #if __cplusplus > 199711L or __GXX_EXPERIMENTAL_CXX0X__
+       {
+         std::lock_guard<std::mutex> lck (serializer_);
+         buffer_.push_back(c);
+       }
+    #else
+      buffer_.push_back(c);
+    #endif
+
     if (c == '\n') sync();
     return 0;
   }
@@ -236,6 +255,12 @@ private:
   target_map   target_map_;
   std::string  buffer_;
   bool         enabled_;
+
+  // If working on multiple threads, we need to serialize the output correctly (requires c++11 headers)
+  #if __cplusplus > 199711L or __GXX_EXPERIMENTAL_CXX0X__
+     std::mutex serializer_;
+  #endif
+
 };
 
 #undef STREAMBUF
