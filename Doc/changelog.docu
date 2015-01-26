@@ -6,18 +6,33 @@
 
 <!-- --------------------------------------------------------------------- -->
 
-<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1209)</td><td>
+<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1213)</td><td>
+
+<b>Core</b>
+<ul>
+<li>Fixed crash when writing with multiple threads to mostream. closes #2293 (Note: This fix is only active with C++11 support) </li>
+</ul>
 
 <b>IO</b>
 <ul>
 <li>Writers: Avoid std::endl in various writers to avoid flushing the output stream on every line. (Thanks to Roman Zoller for the hint).</li>
 </ul>
 
+<b>Tools</b>
+<ul>
+<li>Don't use auto_ptr when compiler supports C++11. Replaced by unique_ptr.</li>
+</ul>
+
+
 <b>General</b>
 <ul>
 <li>Fixed various build warnings</li>
 </ul>
 
+<b>Documentation</b>
+<ul>
+<li>Added extra hint about status flags when collapsing edges</li>
+</ul>
 
 </tr>
 
