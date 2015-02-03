@@ -27,7 +27,7 @@ IF(OPENMESH_BUILD_PYTHON_BINDINGS)
 		MESSAGE(STATUS "Looking for Boost Python")
 
 		# Look for python component
-                FIND_PACKAGE(Boost QUIET COMPONENTS ${BOOST_PYTHON_COMPONENT} REQUIRED)
+                FIND_PACKAGE(Boost QUIET COMPONENTS ${BOOST_PYTHON_COMPONENT})
 
 		IF(Boost_FOUND)
 			MESSAGE(STATUS "Looking for Boost Python -- found")
