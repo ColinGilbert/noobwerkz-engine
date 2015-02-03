@@ -24,26 +24,10 @@ IF(OPENMESH_BUILD_PYTHON_BINDINGS)
 
 		SET(BOOST_PYTHON_COMPONENT "python-py${PYTHON_VERSION}")
 
-		# Check known boost versions for the python component
-		SET(BOOST_KNOWN_VERSIONS
-			"1.56.0" "1.56" "1.55.0" "1.55" "1.54.0" "1.54"
-			"1.53.0" "1.53" "1.52.0" "1.52" "1.51.0" "1.51"
-			"1.50.0" "1.50" "1.49.0" "1.49" "1.48.0" "1.48" "1.47.0" "1.47" "1.46.1"
-			"1.46.0" "1.46" "1.45.0" "1.45" "1.44.0" "1.44" "1.43.0" "1.43" "1.42.0" "1.42"
-			"1.41.0" "1.41" "1.40.0" "1.40" "1.39.0" "1.39" "1.38.0" "1.38" "1.37.0" "1.37"
-			"1.36.1" "1.36.0" "1.36" "1.35.1" "1.35.0" "1.35" "1.34.1" "1.34.0"
-			"1.34" "1.33.1" "1.33.0" "1.33"
-		)
-
 		MESSAGE(STATUS "Looking for Boost Python")
 
 		# Look for python component
-		FOREACH(VERSION ${BOOST_KNOWN_VERSIONS})
-			IF(Boost_FOUND)
-				BREAK()
-			ENDIF()
-			FIND_PACKAGE(Boost ${VERSION} EXACT QUIET COMPONENTS python)
-		ENDFOREACH()
+                FIND_PACKAGE(Boost QUIET COMPONENTS ${BOOST_PYTHON_COMPONENT} REQUIRED)
 
 		IF(Boost_FOUND)
 			MESSAGE(STATUS "Looking for Boost Python -- found")
@@ -62,7 +46,10 @@ IF(OPENMESH_BUILD_PYTHON_BINDINGS)
 
 			IF(COMPILE_WORKS)
 				# Look for the python interpreter to check if the example works
-				FIND_PACKAGE(PythonInterp ${PYTHONLIBS_VERSION_STRING} QUIET)
+
+                                # strip version string of any characters (e.g.  # '+') than 0-9 and .
+                                STRING(REGEX REPLACE "[^ 0-9 | \\.]" "" PYTHONLIBS_VERSION_STRING_STRIPPED ${PYTHONLIBS_VERSION_STRING})
+				FIND_PACKAGE(PythonInterp ${PYTHONLIBS_VERSION_STRING_STRIPPED} QUIET)
 
 				IF(PYTHONINTERP_FOUND)
 					EXECUTE_PROCESS(
@@ -78,7 +65,7 @@ IF(OPENMESH_BUILD_PYTHON_BINDINGS)
 						### EVERYTHING WORKS ###
 
 						MESSAGE(STATUS "Checking the Boost Python configuration -- done")
-						
+
 						IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" AND ${Boost_VERSION} VERSION_LESS 105600)
 							MESSAGE("There are known issues with Clang and Boost Python 1.55 and below.")
 							MESSAGE("Please consider updating Boost Python.")
