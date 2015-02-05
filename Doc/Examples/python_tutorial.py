@@ -130,3 +130,29 @@ for vh in mesh.vertices():
         prop_man[vh] += mesh.point(neighbor)
         valence += 1
     prop_man[vh] /= valence
+
+
+##################################################
+# I/O
+##################################################
+
+mesh = TriMesh()
+
+read_mesh(mesh, "bunny.obj")
+# modify mesh ...
+write_mesh(mesh, "bunny.obj")
+
+
+mesh = TriMesh()
+mesh.request_halfedge_normals()
+mesh.request_vertex_normals()
+
+options = Options()
+options += Options.VertexNormal
+
+result = read_mesh(mesh, "bunny.obj", options)
+
+if result:
+	print "everything worked"
+else:
+	print "something went wrong"
