@@ -23,7 +23,6 @@
 <li>Don't use auto_ptr when compiler supports C++11. Replaced by unique_ptr.</li>
 </ul>
 
-
 <b>General</b>
 <ul>
 <li>Fixed various build warnings</li>
@@ -32,7 +31,15 @@
 <b>Documentation</b>
 <ul>
 <li>Added extra hint about status flags when collapsing edges</li>
+<li>updated tutorial on reading and writing meshes with python bindings</li>
 </ul>
+
+<b>Build System</b>
+<ul>
+<li>Python Bindings: strip pythonlibs version string of possible other characters than 0-9 and .  (e.g. '+')</li>
+<li>Python Bindings: don't require boost-python</li>
+</ul>
+
 
 </tr>
 
