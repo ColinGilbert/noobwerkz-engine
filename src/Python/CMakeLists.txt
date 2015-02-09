@@ -26,14 +26,21 @@ IF(OPENMESH_BUILD_PYTHON_BINDINGS)
 
 		MESSAGE(STATUS "Looking for Boost Python")
 
-		# Look for python component
-                FIND_PACKAGE(Boost QUIET COMPONENTS ${BOOST_PYTHON_COMPONENT})
+		# Look for version specific python component
+        FIND_PACKAGE(Boost QUIET COMPONENTS ${BOOST_PYTHON_COMPONENT})
+		
+		# Look for any other python component
+		IF(NOT Boost_FOUND)
+			FIND_PACKAGE(Boost QUIET COMPONENTS python)
+		ENDIF()
 
 		IF(Boost_FOUND)
 			MESSAGE(STATUS "Looking for Boost Python -- found")
 
 			MESSAGE(STATUS "Checking the Boost Python configuration")
 
+			SET(CMAKE_TRY_COMPILE_CONFIGURATION "Release")
+			
 			TRY_COMPILE(
 				COMPILE_WORKS
 				${CMAKE_CURRENT_BINARY_DIR}
@@ -47,14 +54,21 @@ IF(OPENMESH_BUILD_PYTHON_BINDINGS)
 			IF(COMPILE_WORKS)
 				# Look for the python interpreter to check if the example works
 
-                                # strip version string of any characters (e.g.  # '+') than 0-9 and .
-                                STRING(REGEX REPLACE "[^ 0-9 | \\.]" "" PYTHONLIBS_VERSION_STRING_STRIPPED ${PYTHONLIBS_VERSION_STRING})
+				# strip version string of any characters (e.g.  # '+') than 0-9 and .
+				STRING(REGEX REPLACE "[^ 0-9 | \\.]" "" PYTHONLIBS_VERSION_STRING_STRIPPED ${PYTHONLIBS_VERSION_STRING})
 				FIND_PACKAGE(PythonInterp ${PYTHONLIBS_VERSION_STRING_STRIPPED} QUIET)
 
 				IF(PYTHONINTERP_FOUND)
+					
+					IF(MSVC)
+						SET(PYTHON_WORKING_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_TRY_COMPILE_CONFIGURATION}")
+					ELSE()
+						SET(PYTHON_WORKING_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+					ENDIF()
+					
 					EXECUTE_PROCESS(
 						COMMAND ${PYTHON_EXECUTABLE} -c "from example import *; greet(); planet = World()"
-						WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+						WORKING_DIRECTORY ${PYTHON_WORKING_DIR}
 						RESULT_VARIABLE PYTHON_WORKS
 						OUTPUT_QUIET
 						ERROR_QUIET
@@ -66,12 +80,13 @@ IF(OPENMESH_BUILD_PYTHON_BINDINGS)
 
 						MESSAGE(STATUS "Checking the Boost Python configuration -- done")
 
-						IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" AND ${Boost_VERSION} VERSION_LESS 105600)
+						IF(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" AND ${Boost_VERSION} VERSION_LESS 105600)
 							MESSAGE("There are known issues with Clang and Boost Python 1.55 and below.")
 							MESSAGE("Please consider updating Boost Python.")
 						ENDIF()
 
 						SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Build/python/)
+						FILE(MAKE_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
 						FILE(GLOB SOURCES *.cc *hh)
 						ADD_LIBRARY(openmesh SHARED ${SOURCES})
