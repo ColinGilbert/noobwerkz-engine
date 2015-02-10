@@ -296,11 +296,12 @@ TEST_F(OpenMeshAddFaceTriangleMesh, CreateStrangeConfig) {
   mesh_.add_face( vh[0], vh[5], vh[6] );
 
   // non-manifold!
-  mesh_.add_face(  vh[3], vh[0], vh[4] );
+  Mesh::FaceHandle invalidFH = mesh_.add_face(  vh[3], vh[0], vh[4] );
 
   // Check setup
   EXPECT_EQ(7u, mesh_.n_vertices() ) << "Wrong number of vertices";
-  EXPECT_EQ(4u, mesh_.n_faces() )    << "Wrong number of faces";
+  EXPECT_EQ(3u, mesh_.n_faces() )    << "Wrong number of faces";
+  EXPECT_EQ(invalidFH, Mesh::InvalidFaceHandle ) << "non manifold face is valid";
 
 }
 

@@ -176,16 +176,18 @@ PolyConnectivity::add_face(const VertexHandle* _vertex_handles, size_t _vhs_size
         do
           boundary_prev =
             opposite_halfedge_handle(next_halfedge_handle(boundary_prev));
-        while (!is_boundary(boundary_prev) || boundary_prev==inner_prev);
+        while (!is_boundary(boundary_prev));
         boundary_next = next_halfedge_handle(boundary_prev);
-        assert(is_boundary(boundary_prev));
-        assert(is_boundary(boundary_next));
+
         // ok ?
-        if (boundary_next == inner_next)
+        if (boundary_prev == inner_prev)
         {
           omerr() << "PolyMeshT::add_face: patch re-linking failed\n";
           return InvalidFaceHandle;
         }
+
+        assert(is_boundary(boundary_prev));
+        assert(is_boundary(boundary_next));
 
         // other halfedges' handles
         patch_start = next_halfedge_handle(inner_prev);
