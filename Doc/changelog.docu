@@ -6,11 +6,12 @@
 
 <!-- --------------------------------------------------------------------- -->
 
-<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1213)</td><td>
+<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1220)</td><td>
 
 <b>Core</b>
 <ul>
 <li>Fixed crash when writing with multiple threads to mostream. closes #2293 (Note: This fix is only active with C++11 support) </li>
+<li>fix "relink failed" condition closes #1244. This patch fixes a rare condition in add_face, where a non-manifold configuration could be created. </li>
 </ul>
 
 <b>IO</b>
