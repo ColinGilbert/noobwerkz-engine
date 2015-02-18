@@ -117,7 +117,7 @@ private:
     }
 
     bool is_valid(void) const
-    { return Kd_is_set_ || Ka_is_set_ || Ks_is_set_ || Tr_is_set_; }
+    { return Kd_is_set_ || Ka_is_set_ || Ks_is_set_ || Tr_is_set_ || map_Kd_is_set_; }
 
     bool has_Kd(void)     { return Kd_is_set_;     }
     bool has_Ka(void)     { return Ka_is_set_;     }
