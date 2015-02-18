@@ -6,7 +6,7 @@
 
 <!-- --------------------------------------------------------------------- -->
 
-<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1220)</td><td>
+<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1222)</td><td>
 
 <b>Core</b>
 <ul>
@@ -17,6 +17,7 @@
 <b>IO</b>
 <ul>
 <li>Writers: Avoid std::endl in various writers to avoid flushing the output stream on every line. (Thanks to Roman Zoller for the hint).</li>
+<li>OBJReader: fix reading mtl files with texture only for obj files</li>
 </ul>
 
 <b>Tools</b>
