@@ -328,12 +328,24 @@ TEST_F(OpenMeshTrimeshCirculatorVertexFace, VertexFaceIterCheckInvalidationAtEnd
   ++endIter ;
   EXPECT_FALSE(endIter.is_valid()) << "EndIter is not invalid after increment";
 
+  // Check if the end iterators becomes valid after decrement
+  endIter = mesh_.vf_end(vhandle[1]);
+  EXPECT_FALSE(endIter.is_valid()) << "EndIter is not invalid";
+  --endIter;
+  EXPECT_TRUE(endIter.is_valid()) << "EndIter is invalid after decrement";
+  EXPECT_EQ(0,endIter->idx()) << "EndIter points on the wrong element";
+
 
   // Check if the start iterator decrement is invalid
   Mesh::VertexFaceIter startIter = mesh_.vf_begin(vhandle[1]);
   EXPECT_TRUE(startIter.is_valid()) << "StartIter is not valid";
   --startIter;
   EXPECT_FALSE(startIter.is_valid()) << "StartIter decrement is not invalid";
+
+  // Check if the start iterator becomes valid
+  ++startIter;
+  EXPECT_TRUE(startIter.is_valid()) << "StarIter is invalid after re-incrementing";
+  EXPECT_EQ(startIter->idx(), mesh_.vf_begin(vhandle[1])->idx()) << "StartIter points on the wrong element";
 
 }
 
@@ -438,7 +450,5 @@ TEST_F(OpenMeshTrimeshCirculatorVertexFace, VertexFaceIterWithoutHolesDecrement)
   EXPECT_TRUE( cvf_it == cvf_end )  << "End iterator for ConstVertexFaceIter not matching";
 
 }
-
-
 
 }

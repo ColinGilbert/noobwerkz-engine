@@ -185,6 +185,13 @@ TEST_F(OpenMeshTrimeshCirculatorFaceVertex, FaceVertexIterCheckInvalidationAtEnd
   ++endIter ;
   EXPECT_FALSE(endIter.is_valid()) << "EndIter is not invalid after increment";
 
+  // Check if the end iterators becomes valid after decrement
+  endIter = mesh_.fv_end(fh0);
+  EXPECT_FALSE(endIter.is_valid()) << "EndIter is not invalid";
+  --endIter;
+  EXPECT_TRUE(endIter.is_valid()) << "EndIter is invalid after decrement";
+  EXPECT_EQ(2,endIter->idx()) << "EndIter points on the wrong element";
+
 
   // Check if the start iterator decrement is invalid
   Mesh::FaceVertexIter startIter = mesh_.fv_begin(fh0);
@@ -192,8 +199,12 @@ TEST_F(OpenMeshTrimeshCirculatorFaceVertex, FaceVertexIterCheckInvalidationAtEnd
   --startIter;
   EXPECT_FALSE(startIter.is_valid()) << "StartIter decrement is not invalid";
 
-}
+  // Check if the start iterator becomes valid
+  ++startIter;
+  EXPECT_TRUE(startIter.is_valid()) << "StartIter is invalid after re-incrementing";
+  EXPECT_EQ(startIter->idx(), mesh_.fv_begin(fh0)->idx()) << "StartIter points on the wrong element";
 
+}
 
 
 }

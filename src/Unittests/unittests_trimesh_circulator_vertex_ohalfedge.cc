@@ -374,12 +374,23 @@ TEST_F(OpenMeshTrimeshCirculatorVertexOHalfEdge, VertexOHalfEdgeIterCheckInvalid
   ++endIter ;
   EXPECT_FALSE(endIter.is_valid()) << "EndIter is not invalid after increment";
 
+  endIter = mesh_.voh_end(vhandle[1]);
+  EXPECT_FALSE(endIter.is_valid()) << "EndIter is not invalid";
+  --endIter;
+  EXPECT_TRUE(endIter.is_valid()) << "EndIter is invalid after decrement";
+  EXPECT_EQ(2,endIter->idx()) << "EndIter points on the wrong element";
+
 
   // Check if the start iterator decrement is invalid
   Mesh::VertexOHalfedgeIter startIter = mesh_.voh_begin(vhandle[1]);
   EXPECT_TRUE(startIter.is_valid()) << "StartIter is not valid";
   --startIter;
   EXPECT_FALSE(startIter.is_valid()) << "StartIter decrement is not invalid";
+
+  // Check if the start iterator becomes valid
+  ++startIter;
+  EXPECT_TRUE(startIter.is_valid()) << "StartIter is invalid after re-incrementing";
+  EXPECT_EQ(startIter->idx(), mesh_.voh_begin(vhandle[1])->idx()) << "StartIter points on the wrong element";
 
 }
 

@@ -259,12 +259,24 @@ TEST_F(OpenMeshTrimeshCirculatorVertexEdge, VertexEdgeIterCheckInvalidationAtEnd
   ++endIter ;
   EXPECT_FALSE(endIter.is_valid()) << "EndIter is not invalid after increment";
 
+  // Check if the end iterators becomes valid after decrement
+  endIter = mesh_.ve_end(vhandle[1]);
+  EXPECT_FALSE(endIter.is_valid()) << "EndIter is not invalid";
+  --endIter;
+  EXPECT_TRUE(endIter.is_valid()) << "EndIter is invalid after decrement";
+  EXPECT_EQ(1,endIter->idx()) << "EndIter points on the wrong element";
+
 
   // Check if the start iterator decrement is invalid
   Mesh::VertexEdgeIter startIter = mesh_.ve_begin(vhandle[1]);
   EXPECT_TRUE(startIter.is_valid()) << "StartIter is not valid";
   --startIter;
   EXPECT_FALSE(startIter.is_valid()) << "StartIter decrement is not invalid";
+
+  // Check if the start iterator becomes valid
+  ++startIter;
+  EXPECT_TRUE(startIter.is_valid()) << "StarIter is invalid after re-incrementing";
+  EXPECT_EQ(startIter->idx(), mesh_.ve_begin(vhandle[1])->idx()) << "StartIter points on the wrong element";
 
 }
 
