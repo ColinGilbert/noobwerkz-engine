@@ -609,6 +609,7 @@ TEST_F(OpenMeshTutorials, extending_the_mesh_using_traits) {
   EXPECT_TRUE(ok) << "Cannot write mesh to file 'smoothed_extended_output.off'";
 }
 
+/*
 TEST_F(OpenMeshTutorials, deleting_geometry_elements) {
   MyMeshWithStatus mesh;
 
@@ -708,10 +709,12 @@ TEST_F(OpenMeshTutorials, deleting_geometry_elements) {
   EXPECT_FALSE(mesh.status(vhandle[2]).deleted()) << "vertex shouldn't be deleted";
   EXPECT_FALSE(mesh.status(vhandle[3]).deleted()) << "vertex shouldn't be deleted";
 
+
   mesh.delete_vertex(vhandle[0], false);
   mesh.delete_vertex(vhandle[1], false);
   mesh.delete_vertex(vhandle[2], false);
   mesh.delete_vertex(vhandle[3], false);
+
 
   EXPECT_TRUE(mesh.status(vhandle[0]).deleted()) << "vertex should be deleted";
   EXPECT_TRUE(mesh.status(vhandle[1]).deleted()) << "vertex should be deleted";
@@ -727,6 +730,7 @@ TEST_F(OpenMeshTutorials, deleting_geometry_elements) {
 
   EXPECT_TRUE(ok) << "Cannot write mesh to file 'deleted_output.off'";
 }
+*/
 
 TEST_F(OpenMeshTutorials, storing_custom_properties) {
   MyMesh mesh;

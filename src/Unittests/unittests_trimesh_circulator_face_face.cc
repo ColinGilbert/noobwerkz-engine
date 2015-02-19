@@ -261,4 +261,76 @@ TEST_F(OpenMeshTrimeshCirculatorFaceFace, FaceFaceIteratorHandleConversion) {
 
   EXPECT_EQ(1, faceHandle1.idx() ) << "Wrong face handle index when getting from iterator via handle";
 }
+
+/*
+ * Test if the end iterator stays invalid after one lap
+ */
+TEST_F(OpenMeshTrimeshCirculatorFaceFace, FaceFaceIterCheckInvalidationAtEnds) {
+
+  mesh_.clear();
+
+   // Add some vertices
+   Mesh::VertexHandle vhandle[5];
+
+   vhandle[0] = mesh_.add_vertex(Mesh::Point(0, 1, 0));
+   vhandle[1] = mesh_.add_vertex(Mesh::Point(1, 0, 0));
+   vhandle[2] = mesh_.add_vertex(Mesh::Point(2, 1, 0));
+   vhandle[3] = mesh_.add_vertex(Mesh::Point(0,-1, 0));
+   vhandle[4] = mesh_.add_vertex(Mesh::Point(2,-1, 0));
+
+   // Add two faces
+   std::vector<Mesh::VertexHandle> face_vhandles;
+
+   face_vhandles.push_back(vhandle[0]);
+   face_vhandles.push_back(vhandle[1]);
+   face_vhandles.push_back(vhandle[2]);
+   Mesh::FaceHandle fh0 = mesh_.add_face(face_vhandles);
+
+   face_vhandles.clear();
+
+   face_vhandles.push_back(vhandle[1]);
+   face_vhandles.push_back(vhandle[3]);
+   face_vhandles.push_back(vhandle[4]);
+   mesh_.add_face(face_vhandles);
+
+   face_vhandles.clear();
+
+   face_vhandles.push_back(vhandle[0]);
+   face_vhandles.push_back(vhandle[3]);
+   face_vhandles.push_back(vhandle[1]);
+   mesh_.add_face(face_vhandles);
+
+   face_vhandles.clear();
+
+   face_vhandles.push_back(vhandle[2]);
+   face_vhandles.push_back(vhandle[1]);
+   face_vhandles.push_back(vhandle[4]);
+   mesh_.add_face(face_vhandles);
+
+   /* Test setup:
+       0 ==== 2
+       |\  0 /|
+       | \  / |
+       |2  1 3|
+       | /  \ |
+       |/  1 \|
+       3 ==== 4 */
+
+
+  // Check if the end iterator stays invalid after end
+  Mesh::FaceFaceIter endIter = mesh_.ff_end(fh0);
+  EXPECT_FALSE(endIter.is_valid()) << "EndIter is not invalid";
+  ++endIter ;
+  EXPECT_FALSE(endIter.is_valid()) << "EndIter is not invalid after increment";
+
+
+  // Check if the start iterator decrement is invalid
+  Mesh::FaceFaceIter startIter = mesh_.ff_begin(fh0);
+  EXPECT_TRUE(startIter.is_valid()) << "StartIter is not valid";
+  --startIter;
+  EXPECT_FALSE(startIter.is_valid()) << "StartIter decrement is not invalid";
+
+}
+
+
 }
