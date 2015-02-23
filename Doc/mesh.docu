@@ -845,6 +845,10 @@ All circulators provide the operations listed in
 CirculatorT<Mesh>, which are basically the same as the
 iterator funtions.
 
+\note Circulators are similar to bidirectional iterators and therefore they have the bidirectional_iterator_tag.
+However, the bidirectional requires that the attribute OpenMesh::Attributes::PrevHalfedge is available.
+Otherwise it is just a forward iterator.
+
 \deprecated
 While it is possible to use \c operator \c bool(), which returns true, as long
 as the circulator hasn't reached the end of the sequence, this function is
@@ -854,6 +858,35 @@ deprecated. Use the function \c is_valid() instead.
 to get circulators around a specified center item:
 
 \include circulator_functions.cc
+
+Additionally to the normal circulators there exists some for each
+direction (clock-wise, counterclock-wise). Those circulators might be slower
+than the normal one, but the direction of circulation is guaranteed.
+You can get these types of circulators by adding the infix "ccw" or "cw" to
+the function used to request the circulator of an item after the underscore.
+Example:
+
+\code
+VertexVertexIter vvit = mesh.vv_iter(some_vertex_handle);          // fastest (clock or counterclockwise)
+VertexVertexCWIter vvcwit = mesh.vv_cwiter(some_vertex_handle);    // clockwise
+VertexVertexCCWIter vvccwit = mesh.vv_ccwiter(some_vertex_handle); // counter-clockwise
+\endcode
+
+It is also possible to convert a cw circulator to a ccw circulator and vice versa.
+For this purpose, each circulator provides a constructor taking the other circulator as input.
+If a cw circulator is converted, the ccw circulator points on the same element as
+the cw circulator pointed on, but the direction for the increment and decrement changed.\n
+The conversion is only valid for valid circulators. The resulting circulator from a invalid circulator is still invalid,
+but might behave in a fashion not expected by normal iterators. Example:
+\code
+  VertexVertexCWIter vvcwit = mesh.vv_cwend(some_vertex_handle);
+  VertexVertexCCWIter vvccwit = VertexVertexCCWIter(vvcwit); //conversion of an invalid circulator
+   --vvcwit;  //is valid now (if the range >= 1)
+   ++vvccwit; //can still be invalid
+\endcode
+
+CW and CCW circulators requires that OpenMesh::Attributes::PrevHalfedge is available.
+
 
 \note For every circulator there also exists a constant version.
 To make use of these constant circulators just add the prefix<br />

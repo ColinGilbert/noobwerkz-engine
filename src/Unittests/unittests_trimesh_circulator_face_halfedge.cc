@@ -2,6 +2,7 @@
 #include <Unittests/unittests_common.hh>
 
 #include <iostream>
+#include <algorithm>
 
 namespace {
 
@@ -124,6 +125,146 @@ TEST_F(OpenMeshTrimeshCirculatorFaceHalfEdge, FaceHalfedgeIterWithoutHolesIncrem
   EXPECT_EQ(8, cfh_it->idx() ) << "Index wrong in ConstFaceHalfedgeIter at end";
   EXPECT_FALSE(cfh_it.is_valid()) << "Iterator invalid in ConstFaceHalfedgeIter at end";
   EXPECT_TRUE( cfh_it == cfh_end )  << "End iterator for ConstFaceHalfedgeIter not matching";
+
+}
+
+/*
+ * test CW and CCW iterators
+ */
+TEST_F(OpenMeshTrimeshCirculatorFaceHalfEdge, CWAndCCWTest) {
+
+  mesh_.clear();
+
+  // Add some vertices
+  Mesh::VertexHandle vhandle[6];
+
+  vhandle[0] = mesh_.add_vertex(Mesh::Point(0, 1, 0));
+  vhandle[1] = mesh_.add_vertex(Mesh::Point(1, 0, 0));
+  vhandle[2] = mesh_.add_vertex(Mesh::Point(2, 1, 0));
+  vhandle[3] = mesh_.add_vertex(Mesh::Point(3, 0, 0));
+  vhandle[4] = mesh_.add_vertex(Mesh::Point(4, 1, 0));
+  vhandle[5] = mesh_.add_vertex(Mesh::Point(2,-1, 0));
+
+  // Add three faces
+  std::vector<Mesh::VertexHandle> face_vhandles;
+
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[2]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[3]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[3]);
+  face_vhandles.push_back(vhandle[4]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[5]);
+  face_vhandles.push_back(vhandle[3]);
+  mesh_.add_face(face_vhandles);
+
+  /* Test setup:
+   *
+   * 0 ------ 2 ------ 4
+   *  \      / \      /
+   *   \  0 /   \  2 /
+   *    \  /  1  \  /
+   *     1 ------- 3
+   *      \       /
+   *       \  3  /
+   *        \   /
+   *         \ /
+   *          5
+   */
+
+
+  int indices[4] = {8, 3, 6, 8};
+  int rev_indices[4];
+  std::reverse_copy(indices,indices+4,rev_indices);
+
+  //CCW
+  Mesh::FaceHalfedgeIter fh_ccwit  = mesh_.fh_ccwbegin(mesh_.face_handle(1));
+  Mesh::FaceHalfedgeIter fh_ccwend = mesh_.fh_ccwend(mesh_.face_handle(1));
+  size_t i = 0;
+  for (;fh_ccwit != fh_ccwend; ++fh_ccwit, ++i)
+  {
+    EXPECT_EQ(indices[i], fh_ccwit->idx()) << "Index wrong in FaceHalfedgeIter";
+  }
+
+  EXPECT_FALSE(fh_ccwit.is_valid()) << "Iterator invalid in FaceHalfedgeIter at end";
+  EXPECT_TRUE( fh_ccwit == fh_ccwend )  << "End iterator for FaceHalfedgeIter not matching";
+
+  //constant CCW
+  Mesh::ConstFaceHalfedgeIter cfh_ccwit  = mesh_.cfh_ccwbegin(mesh_.face_handle(1));
+  Mesh::ConstFaceHalfedgeIter cfh_ccwend = mesh_.cfh_ccwend(mesh_.face_handle(1));
+  i = 0;
+  for (;cfh_ccwit != cfh_ccwend; ++cfh_ccwit, ++i)
+  {
+    EXPECT_EQ(indices[i], cfh_ccwit->idx()) << "Index wrong in ConstFaceHalfedgeIter";
+  }
+
+  EXPECT_FALSE(cfh_ccwit.is_valid()) << "Iterator invalid in ConstFaceHalfedgeIter at end";
+  EXPECT_TRUE( cfh_ccwit == cfh_ccwend )  << "End iterator for ConstFaceHalfedgeIter not matching";
+
+  //CW
+  Mesh::FaceHalfedgeCWIter fh_cwit  = mesh_.fh_cwbegin(mesh_.face_handle(1));
+  Mesh::FaceHalfedgeCWIter fh_cwend = mesh_.fh_cwend(mesh_.face_handle(1));
+  i = 0;
+  for (;fh_cwit != fh_cwend; ++fh_cwit, ++i)
+  {
+    EXPECT_EQ(rev_indices[i], fh_cwit->idx()) << "Index wrong in FaceHalfedgeCWIter";
+  }
+  EXPECT_FALSE(fh_cwit.is_valid()) << "Iterator invalid in FaceHalfedgeCWIter at end";
+  EXPECT_TRUE( fh_cwit == fh_cwend )  << "End iterator for FaceHalfedgeCWIter not matching";
+
+  //constant CW
+  Mesh::ConstFaceHalfedgeCWIter cfh_cwit  = mesh_.cfh_cwbegin(mesh_.face_handle(1));
+  Mesh::ConstFaceHalfedgeCWIter cfh_cwend = mesh_.cfh_cwend(mesh_.face_handle(1));
+  i = 0;
+  for (;cfh_cwit != cfh_cwend; ++cfh_cwit, ++i)
+  {
+    EXPECT_EQ(rev_indices[i], cfh_cwit->idx()) << "Index wrong in ConstFaceHalfedgeCWIter";
+  }
+  EXPECT_FALSE(cfh_cwit.is_valid()) << "Iterator invalid in ConstFaceHalfedgeCWIter at end";
+  EXPECT_TRUE( cfh_cwit == cfh_cwend )  << "End iterator for ConstFaceHalfedgeCWIter not matching";
+
+  /*
+   * conversion properties:
+   * a) cw_begin == CWIter(ccw_begin())
+   * b) cw_iter->idx() == CCWIter(cw_iter)->idx() for valid iterators
+   * c) --cw_iter == CWIter(++ccwIter) for valid iterators
+   * d) cw_end == CWIter(ccw_end()) => --cw_end != CWIter(++ccw_end())   *
+   */
+  Mesh::FaceHalfedgeCWIter fh_cwIter = mesh_.fh_cwbegin(mesh_.face_handle(1));
+  // a)
+  EXPECT_TRUE( fh_cwIter == Mesh::FaceHalfedgeCWIter(mesh_.fh_ccwbegin(mesh_.face_handle(1))) ) << "ccw to cw conversion failed";
+  EXPECT_TRUE( Mesh::FaceHalfedgeCCWIter(fh_cwIter) == mesh_.fh_ccwbegin(mesh_.face_handle(1)) ) << "cw to ccw conversion failed";
+  // b)
+  EXPECT_EQ( fh_cwIter->idx(), Mesh::FaceHalfedgeCCWIter(fh_cwIter)->idx()) << "iterators doesnt point on the same element";
+  // c)
+  ++fh_cwIter;
+  fh_ccwend = mesh_.fh_ccwend(mesh_.face_handle(1));
+  --fh_ccwend;
+  EXPECT_EQ(fh_cwIter->idx(),fh_ccwend->idx()) << "iteratoes are not equal after inc/dec";
+  // additional conversion check
+  fh_ccwend = Mesh::FaceHalfedgeCCWIter(fh_cwIter);
+  EXPECT_EQ(fh_cwIter->idx(),fh_ccwend->idx())<< "iterators doesnt point on the same element";
+  // d)
+  fh_cwIter = Mesh::FaceHalfedgeCWIter(mesh_.fh_ccwend(mesh_.face_handle(1)));
+  EXPECT_FALSE(fh_cwIter.is_valid()) << "end iterator is not invalid";
+  EXPECT_TRUE(Mesh::FaceHalfedgeCCWIter(mesh_.fh_cwend(mesh_.face_handle(1))) ==  mesh_.fh_ccwend(mesh_.face_handle(1))) << "end iterators are not equal";
+
 
 }
 

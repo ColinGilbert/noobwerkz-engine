@@ -105,6 +105,14 @@ public:
   typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::VertexHandle,
           &Iterators::GenericCirculatorBaseT<This>::toVertexHandle>
   VertexVertexIter;
+  typedef VertexVertexIter VertexVertexCWIter;
+
+  /**
+   * Enumerates 1-ring vertices in a counter clockwise fashion.
+   */
+  typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::VertexHandle,
+          &Iterators::GenericCirculatorBaseT<This>::toVertexHandle, false>
+  VertexVertexCCWIter;
 
   /**
    * Enumerates outgoing half edges in a clockwise fashion.
@@ -112,6 +120,14 @@ public:
   typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::HalfedgeHandle,
           &Iterators::GenericCirculatorBaseT<This>::toHalfedgeHandle>
   VertexOHalfedgeIter;
+  typedef VertexOHalfedgeIter VertexOHalfedgeCWIter;
+
+  /**
+   * Enumerates outgoing half edges in a counter clockwise fashion.
+   */
+  typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::HalfedgeHandle,
+      &Iterators::GenericCirculatorBaseT<This>::toHalfedgeHandle, false>
+  VertexOHalfedgeCCWIter;
 
   /**
    * Enumerates incoming half edges in a clockwise fashion.
@@ -119,6 +135,14 @@ public:
   typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::HalfedgeHandle,
           &Iterators::GenericCirculatorBaseT<This>::toOppositeHalfedgeHandle>
   VertexIHalfedgeIter;
+  typedef VertexIHalfedgeIter VertexIHalfedgeCWIter;
+
+  /**
+   * Enumerates incoming half edges in a counter clockwise fashion.
+   */
+  typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::HalfedgeHandle,
+          &Iterators::GenericCirculatorBaseT<This>::toOppositeHalfedgeHandle, false>
+  VertexIHalfedgeCCWIter;
 
   /**
    * Enumerates incident faces in a clockwise fashion.
@@ -126,6 +150,14 @@ public:
   typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::FaceHandle,
           &Iterators::GenericCirculatorBaseT<This>::toFaceHandle>
   VertexFaceIter;
+  typedef VertexFaceIter VertexFaceCWIter;
+
+  /**
+   * Enumerates incident faces in a counter clockwise fashion.
+   */
+  typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::FaceHandle,
+          &Iterators::GenericCirculatorBaseT<This>::toFaceHandle, false>
+  VertexFaceCCWIter;
 
   /**
    * Enumerates incident edges in a clockwise fashion.
@@ -133,6 +165,13 @@ public:
   typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::EdgeHandle,
           &Iterators::GenericCirculatorBaseT<This>::toEdgeHandle>
   VertexEdgeIter;
+  typedef VertexEdgeIter VertexEdgeCWIter;
+  /**
+   * Enumerates incident edges in a counter clockwise fashion.
+   */
+  typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::EdgeHandle,
+          &Iterators::GenericCirculatorBaseT<This>::toEdgeHandle, false>
+  VertexEdgeCCWIter;
 
   /**
    * Identical to #FaceHalfedgeIter. God knows why this typedef exists.
@@ -140,12 +179,29 @@ public:
   typedef Iterators::GenericCirculatorT<This, This::FaceHandle, This::HalfedgeHandle,
       &Iterators::GenericCirculatorBaseT<This>::toHalfedgeHandle>
   HalfedgeLoopIter;
+  typedef HalfedgeLoopIter HalfedgeLoopCWIter;
+  /**
+   * Identical to #FaceHalfedgeIter. God knows why this typedef exists.
+   */
+  typedef Iterators::GenericCirculatorT<This, This::FaceHandle, This::HalfedgeHandle,
+      &Iterators::GenericCirculatorBaseT<This>::toHalfedgeHandle, false>
+  HalfedgeLoopCCWIter;
 
-  typedef VertexVertexIter    ConstVertexVertexIter;
-  typedef VertexOHalfedgeIter ConstVertexOHalfedgeIter;
-  typedef VertexIHalfedgeIter ConstVertexIHalfedgeIter;
-  typedef VertexFaceIter      ConstVertexFaceIter;
-  typedef VertexEdgeIter      ConstVertexEdgeIter;
+  typedef VertexVertexIter        ConstVertexVertexIter;
+  typedef VertexVertexCWIter      ConstVertexVertexCWIter;
+  typedef VertexVertexCCWIter     ConstVertexVertexCCWIter;
+  typedef VertexOHalfedgeIter     ConstVertexOHalfedgeIter;
+  typedef VertexOHalfedgeCWIter   ConstVertexOHalfedgeCWIter;
+  typedef VertexOHalfedgeCCWIter  ConstVertexOHalfedgeCCWIter;
+  typedef VertexIHalfedgeIter     ConstVertexIHalfedgeIter;
+  typedef VertexIHalfedgeCWIter   ConstVertexIHalfedgeCWIter;
+  typedef VertexIHalfedgeCCWIter  ConstVertexIHalfedgeCCWIter;
+  typedef VertexFaceIter          ConstVertexFaceIter;
+  typedef VertexFaceCWIter        ConstVertexFaceCWIter;
+  typedef VertexFaceCCWIter       ConstVertexFaceCCWIter;
+  typedef VertexEdgeIter          ConstVertexEdgeIter;
+  typedef VertexEdgeCWIter        ConstVertexEdgeCWIter;
+  typedef VertexEdgeCCWIter       ConstVertexEdgeCCWIter;
 
   /*
    * Face-centered circulators
@@ -157,6 +213,14 @@ public:
   typedef Iterators::GenericCirculatorT<This,  This::FaceHandle,  This::VertexHandle,
           &Iterators::GenericCirculatorBaseT<This>::toVertexHandle>
   FaceVertexIter;
+  typedef FaceVertexIter FaceVertexCCWIter;
+
+  /**
+   * Enumerate incident vertices in a clockwise fashion.
+   */
+  typedef Iterators::GenericCirculatorT<This,  This::FaceHandle,  This::VertexHandle,
+      &Iterators::GenericCirculatorBaseT<This>::toVertexHandle, false>
+  FaceVertexCWIter;
 
   /**
    * Enumerate incident half edges in a counter clockwise fashion.
@@ -164,6 +228,14 @@ public:
   typedef Iterators::GenericCirculatorT<This,  This::FaceHandle,  This::HalfedgeHandle,
           &Iterators::GenericCirculatorBaseT<This>::toHalfedgeHandle>
   FaceHalfedgeIter;
+  typedef FaceHalfedgeIter FaceHalfedgeCCWIter;
+
+  /**
+   * Enumerate incident half edges in a clockwise fashion.
+   */
+  typedef Iterators::GenericCirculatorT<This,  This::FaceHandle,  This::HalfedgeHandle,
+          &Iterators::GenericCirculatorBaseT<This>::toHalfedgeHandle, false>
+  FaceHalfedgeCWIter;
 
   /**
    * Enumerate incident edges in a counter clockwise fashion.
@@ -171,6 +243,14 @@ public:
   typedef Iterators::GenericCirculatorT<This,  This::FaceHandle,  This::EdgeHandle,
           &Iterators::GenericCirculatorBaseT<This>::toEdgeHandle>
   FaceEdgeIter;
+  typedef FaceEdgeIter FaceEdgeCCWIter;
+
+  /**
+   * Enumerate incident edges in a clockwise fashion.
+   */
+  typedef Iterators::GenericCirculatorT<This,  This::FaceHandle,  This::EdgeHandle,
+          &Iterators::GenericCirculatorBaseT<This>::toEdgeHandle, false>
+  FaceEdgeCWIter;
 
   /**
    * Enumerate adjacent faces in a counter clockwise fashion.
@@ -178,16 +258,34 @@ public:
   typedef Iterators::GenericCirculatorT<This,  This::FaceHandle,  This::FaceHandle,
           &Iterators::GenericCirculatorBaseT<This>::toOppositeFaceHandle>
   FaceFaceIter;
+  typedef FaceFaceIter FaceFaceCCWIter;
 
-  typedef FaceVertexIter      ConstFaceVertexIter;
-  typedef FaceHalfedgeIter    ConstFaceHalfedgeIter;
-  typedef FaceEdgeIter        ConstFaceEdgeIter;
-  typedef FaceFaceIter        ConstFaceFaceIter;
+  /**
+   * Enumerate adjacent faces in a clockwise fashion.
+   */
+  typedef Iterators::GenericCirculatorT<This,  This::FaceHandle,  This::FaceHandle,
+          &Iterators::GenericCirculatorBaseT<This>::toOppositeFaceHandle, false>
+  FaceFaceCWIter;
+
+  typedef FaceVertexIter        ConstFaceVertexIter;
+  typedef FaceVertexCWIter      ConstFaceVertexCWIter;
+  typedef FaceVertexCCWIter     ConstFaceVertexCCWIter;
+  typedef FaceHalfedgeIter      ConstFaceHalfedgeIter;
+  typedef FaceHalfedgeCWIter    ConstFaceHalfedgeCWIter;
+  typedef FaceHalfedgeCCWIter   ConstFaceHalfedgeCCWIter;
+  typedef FaceEdgeIter          ConstFaceEdgeIter;
+  typedef FaceEdgeCWIter        ConstFaceEdgeCWIter;
+  typedef FaceEdgeCCWIter       ConstFaceEdgeCCWIter;
+  typedef FaceFaceIter          ConstFaceFaceIter;
+  typedef FaceFaceCWIter        ConstFaceFaceCWIter;
+  typedef FaceFaceCCWIter       ConstFaceFaceCCWIter;
 
   /*
    * Halfedge circulator
    */
-  typedef HalfedgeLoopIter   ConstHalfedgeLoopIter;
+  typedef HalfedgeLoopIter      ConstHalfedgeLoopIter;
+  typedef HalfedgeLoopCWIter    ConstHalfedgeLoopCWIter;
+  typedef HalfedgeLoopCCWIter   ConstHalfedgeLoopCCWIter;
 
   //@}
 
@@ -213,25 +311,59 @@ public:
   typedef ConstEdgeIter      CEIter;
   typedef ConstFaceIter      CFIter;
 
-  typedef VertexVertexIter      VVIter;
-  typedef VertexOHalfedgeIter   VOHIter;
-  typedef VertexIHalfedgeIter   VIHIter;
-  typedef VertexEdgeIter        VEIter;
-  typedef VertexFaceIter        VFIter;
-  typedef FaceVertexIter        FVIter;
-  typedef FaceHalfedgeIter      FHIter;
-  typedef FaceEdgeIter          FEIter;
-  typedef FaceFaceIter          FFIter;
+  typedef VertexVertexIter        VVIter;
+  typedef VertexVertexCWIter      VVCWIter;
+  typedef VertexVertexCCWIter     VVCCWIter;
+  typedef VertexOHalfedgeIter     VOHIter;
+  typedef VertexOHalfedgeCWIter   VOHCWIter;
+  typedef VertexOHalfedgeCCWIter  VOHCCWIter;
+  typedef VertexIHalfedgeIter     VIHIter;
+  typedef VertexIHalfedgeCWIter   VIHICWter;
+  typedef VertexIHalfedgeCCWIter  VIHICCWter;
+  typedef VertexEdgeIter          VEIter;
+  typedef VertexEdgeCWIter        VECWIter;
+  typedef VertexEdgeCCWIter       VECCWIter;
+  typedef VertexFaceIter          VFIter;
+  typedef VertexFaceCWIter        VFCWIter;
+  typedef VertexFaceCCWIter       VFCCWIter;
+  typedef FaceVertexIter          FVIter;
+  typedef FaceVertexCWIter        FVCWIter;
+  typedef FaceVertexCCWIter       FVCCWIter;
+  typedef FaceHalfedgeIter        FHIter;
+  typedef FaceHalfedgeCWIter      FHCWIter;
+  typedef FaceHalfedgeCCWIter     FHCWWIter;
+  typedef FaceEdgeIter            FEIter;
+  typedef FaceEdgeCWIter          FECWIter;
+  typedef FaceEdgeCCWIter         FECWWIter;
+  typedef FaceFaceIter            FFIter;
 
-  typedef ConstVertexVertexIter      CVVIter;
-  typedef ConstVertexOHalfedgeIter   CVOHIter;
-  typedef ConstVertexIHalfedgeIter   CVIHIter;
-  typedef ConstVertexEdgeIter        CVEIter;
-  typedef ConstVertexFaceIter        CVFIter;
-  typedef ConstFaceVertexIter        CFVIter;
-  typedef ConstFaceHalfedgeIter      CFHIter;
-  typedef ConstFaceEdgeIter          CFEIter;
-  typedef ConstFaceFaceIter          CFFIter;
+  typedef ConstVertexVertexIter         CVVIter;
+  typedef ConstVertexVertexCWIter       CVVCWIter;
+  typedef ConstVertexVertexCCWIter      CVVCCWIter;
+  typedef ConstVertexOHalfedgeIter      CVOHIter;
+  typedef ConstVertexOHalfedgeCWIter    CVOHCWIter;
+  typedef ConstVertexOHalfedgeCCWIter   CVOHCCWIter;
+  typedef ConstVertexIHalfedgeIter      CVIHIter;
+  typedef ConstVertexIHalfedgeCWIter    CVIHCWIter;
+  typedef ConstVertexIHalfedgeCCWIter   CVIHCCWIter;
+  typedef ConstVertexEdgeIter           CVEIter;
+  typedef ConstVertexEdgeCWIter         CVECWIter;
+  typedef ConstVertexEdgeCCWIter        CVECCWIter;
+  typedef ConstVertexFaceIter           CVFIter;
+  typedef ConstVertexFaceCWIter         CVFCWIter;
+  typedef ConstVertexFaceCCWIter        CVFCCWIter;
+  typedef ConstFaceVertexIter           CFVIter;
+  typedef ConstFaceVertexCWIter         CFVCWIter;
+  typedef ConstFaceVertexCCWIter        CFVCCWIter;
+  typedef ConstFaceHalfedgeIter         CFHIter;
+  typedef ConstFaceHalfedgeCWIter       CFHCWIter;
+  typedef ConstFaceHalfedgeCCWIter      CFHCCWIter;
+  typedef ConstFaceEdgeIter             CFEIter;
+  typedef ConstFaceEdgeCWIter           CFECWIter;
+  typedef ConstFaceEdgeCCWIter          CFECCWIter;
+  typedef ConstFaceFaceIter             CFFIter;
+  typedef ConstFaceFaceCWIter           CFFCWIter;
+  typedef ConstFaceFaceCCWIter          CFFCCWIter;
   //@}
 
 public:
@@ -426,192 +558,541 @@ public:
   /// vertex - vertex circulator
   VertexVertexIter vv_iter(VertexHandle _vh)
   { return VertexVertexIter(*this, _vh); }
+  /// vertex - vertex circulator cw
+  VertexVertexCWIter vv_cwiter(VertexHandle _vh)
+  { return VertexVertexCWIter(*this, _vh); }
+  /// vertex - vertex circulator ccw
+  VertexVertexCCWIter vv_ccwiter(VertexHandle _vh)
+  { return VertexVertexCCWIter(*this, _vh); }
   /// vertex - incoming halfedge circulator
   VertexIHalfedgeIter vih_iter(VertexHandle _vh)
   { return VertexIHalfedgeIter(*this, _vh); }
+  /// vertex - incoming halfedge circulator cw
+  VertexIHalfedgeCWIter vih_cwiter(VertexHandle _vh)
+  { return VertexIHalfedgeCWIter(*this, _vh); }
+  /// vertex - incoming halfedge circulator ccw
+  VertexIHalfedgeCCWIter vih_ccwiter(VertexHandle _vh)
+  { return VertexIHalfedgeCCWIter(*this, _vh); }
   /// vertex - outgoing halfedge circulator
   VertexOHalfedgeIter voh_iter(VertexHandle _vh)
   { return VertexOHalfedgeIter(*this, _vh); }
+  /// vertex - outgoing halfedge circulator cw
+  VertexOHalfedgeCWIter voh_cwiter(VertexHandle _vh)
+  { return VertexOHalfedgeCWIter(*this, _vh); }
+  /// vertex - outgoing halfedge circulator ccw
+  VertexOHalfedgeCCWIter voh_ccwiter(VertexHandle _vh)
+  { return VertexOHalfedgeCCWIter(*this, _vh); }
   /// vertex - edge circulator
   VertexEdgeIter ve_iter(VertexHandle _vh)
   { return VertexEdgeIter(*this, _vh); }
+  /// vertex - edge circulator cw
+  VertexEdgeCWIter ve_cwiter(VertexHandle _vh)
+  { return VertexEdgeCWIter(*this, _vh); }
+  /// vertex - edge circulator ccw
+  VertexEdgeCCWIter ve_ccwiter(VertexHandle _vh)
+  { return VertexEdgeCCWIter(*this, _vh); }
   /// vertex - face circulator
   VertexFaceIter vf_iter(VertexHandle _vh)
   { return VertexFaceIter(*this, _vh); }
+  /// vertex - face circulator cw
+  VertexFaceCWIter vf_cwiter(VertexHandle _vh)
+  { return VertexFaceCWIter(*this, _vh); }
+  /// vertex - face circulator ccw
+  VertexFaceCCWIter vf_ccwiter(VertexHandle _vh)
+  { return VertexFaceCCWIter(*this, _vh); }
 
   /// const vertex circulator
   ConstVertexVertexIter cvv_iter(VertexHandle _vh) const
   { return ConstVertexVertexIter(*this, _vh); }
+  /// const vertex circulator cw
+  ConstVertexVertexCWIter cvv_cwiter(VertexHandle _vh) const
+  { return ConstVertexVertexCWIter(*this, _vh); }
+  /// const vertex circulator ccw
+  ConstVertexVertexCCWIter cvv_ccwiter(VertexHandle _vh) const
+  { return ConstVertexVertexCCWIter(*this, _vh); }
   /// const vertex - incoming halfedge circulator
   ConstVertexIHalfedgeIter cvih_iter(VertexHandle _vh) const
   { return ConstVertexIHalfedgeIter(*this, _vh); }
+  /// const vertex - incoming halfedge circulator cw
+  ConstVertexIHalfedgeCWIter cvih_cwiter(VertexHandle _vh) const
+  { return ConstVertexIHalfedgeCWIter(*this, _vh); }
+  /// const vertex - incoming halfedge circulator ccw
+  ConstVertexIHalfedgeCCWIter cvih_ccwiter(VertexHandle _vh) const
+  { return ConstVertexIHalfedgeCCWIter(*this, _vh); }
   /// const vertex - outgoing halfedge circulator
   ConstVertexOHalfedgeIter cvoh_iter(VertexHandle _vh) const
   { return ConstVertexOHalfedgeIter(*this, _vh); }
+  /// const vertex - outgoing halfedge circulator cw
+  ConstVertexOHalfedgeCWIter cvoh_cwiter(VertexHandle _vh) const
+  { return ConstVertexOHalfedgeCWIter(*this, _vh); }
+  /// const vertex - outgoing halfedge circulator ccw
+  ConstVertexOHalfedgeCCWIter cvoh_ccwiter(VertexHandle _vh) const
+  { return ConstVertexOHalfedgeCCWIter(*this, _vh); }
   /// const vertex - edge circulator
   ConstVertexEdgeIter cve_iter(VertexHandle _vh) const
   { return ConstVertexEdgeIter(*this, _vh); }
+  /// const vertex - edge circulator cw
+  ConstVertexEdgeCWIter cve_cwiter(VertexHandle _vh) const
+  { return ConstVertexEdgeCWIter(*this, _vh); }
+  /// const vertex - edge circulator ccw
+  ConstVertexEdgeCCWIter cve_ccwiter(VertexHandle _vh) const
+  { return ConstVertexEdgeCCWIter(*this, _vh); }
   /// const vertex - face circulator
   ConstVertexFaceIter cvf_iter(VertexHandle _vh) const
   { return ConstVertexFaceIter(*this, _vh); }
+  /// const vertex - face circulator cw
+  ConstVertexFaceCWIter cvf_cwiter(VertexHandle _vh) const
+  { return ConstVertexFaceCWIter(*this, _vh); }
+  /// const vertex - face circulator ccw
+  ConstVertexFaceCCWIter cvf_ccwiter(VertexHandle _vh) const
+  { return ConstVertexFaceCCWIter(*this, _vh); }
 
   /// face - vertex circulator
   FaceVertexIter fv_iter(FaceHandle _fh)
   { return FaceVertexIter(*this, _fh); }
+  /// face - vertex circulator cw
+  FaceVertexCWIter fv_cwiter(FaceHandle _fh)
+  { return FaceVertexCWIter(*this, _fh); }
+  /// face - vertex circulator ccw
+  FaceVertexCCWIter fv_ccwiter(FaceHandle _fh)
+  { return FaceVertexCCWIter(*this, _fh); }
   /// face - halfedge circulator
   FaceHalfedgeIter fh_iter(FaceHandle _fh)
   { return FaceHalfedgeIter(*this, _fh); }
+  /// face - halfedge circulator cw
+  FaceHalfedgeCWIter fh_cwiter(FaceHandle _fh)
+  { return FaceHalfedgeCWIter(*this, _fh); }
+  /// face - halfedge circulator ccw
+  FaceHalfedgeCCWIter fh_ccwiter(FaceHandle _fh)
+  { return FaceHalfedgeCCWIter(*this, _fh); }
   /// face - edge circulator
   FaceEdgeIter fe_iter(FaceHandle _fh)
   { return FaceEdgeIter(*this, _fh); }
+  /// face - edge circulator cw
+  FaceEdgeCWIter fe_cwiter(FaceHandle _fh)
+  { return FaceEdgeCWIter(*this, _fh); }
+  /// face - edge circulator ccw
+  FaceEdgeCCWIter fe_ccwiter(FaceHandle _fh)
+  { return FaceEdgeCCWIter(*this, _fh); }
   /// face - face circulator
   FaceFaceIter ff_iter(FaceHandle _fh)
   { return FaceFaceIter(*this, _fh); }
+  /// face - face circulator cw
+  FaceFaceCWIter ff_cwiter(FaceHandle _fh)
+  { return FaceFaceCWIter(*this, _fh); }
+  /// face - face circulator ccw
+  FaceFaceCCWIter ff_ccwiter(FaceHandle _fh)
+  { return FaceFaceCCWIter(*this, _fh); }
 
   /// const face - vertex circulator
   ConstFaceVertexIter cfv_iter(FaceHandle _fh) const
   { return ConstFaceVertexIter(*this, _fh); }
+  /// const face - vertex circulator cw
+  ConstFaceVertexCWIter cfv_cwiter(FaceHandle _fh) const
+  { return ConstFaceVertexCWIter(*this, _fh); }
+  /// const face - vertex circulator ccw
+  ConstFaceVertexCCWIter cfv_ccwiter(FaceHandle _fh) const
+  { return ConstFaceVertexCCWIter(*this, _fh); }
   /// const face - halfedge circulator
   ConstFaceHalfedgeIter cfh_iter(FaceHandle _fh) const
   { return ConstFaceHalfedgeIter(*this, _fh); }
+  /// const face - halfedge circulator cw
+  ConstFaceHalfedgeCWIter cfh_cwiter(FaceHandle _fh) const
+  { return ConstFaceHalfedgeCWIter(*this, _fh); }
+  /// const face - halfedge circulator ccw
+  ConstFaceHalfedgeCCWIter cfh_ccwiter(FaceHandle _fh) const
+  { return ConstFaceHalfedgeCCWIter(*this, _fh); }
   /// const face - edge circulator
   ConstFaceEdgeIter cfe_iter(FaceHandle _fh) const
   { return ConstFaceEdgeIter(*this, _fh); }
+  /// const face - edge circulator cw
+  ConstFaceEdgeCWIter cfe_cwiter(FaceHandle _fh) const
+  { return ConstFaceEdgeCWIter(*this, _fh); }
+  /// const face - edge circulator ccw
+  ConstFaceEdgeCCWIter cfe_ccwiter(FaceHandle _fh) const
+  { return ConstFaceEdgeCCWIter(*this, _fh); }
   /// const face - face circulator
   ConstFaceFaceIter cff_iter(FaceHandle _fh) const
   { return ConstFaceFaceIter(*this, _fh); }
+  /// const face - face circulator cw
+  ConstFaceFaceCWIter cff_cwiter(FaceHandle _fh) const
+  { return ConstFaceFaceCWIter(*this, _fh); }
+  /// const face - face circulator
+  ConstFaceFaceCCWIter cff_ccwiter(FaceHandle _fh) const
+  { return ConstFaceFaceCCWIter(*this, _fh); }
   
   // 'begin' circulators
   
   /// vertex - vertex circulator
   VertexVertexIter vv_begin(VertexHandle _vh)
   { return VertexVertexIter(*this, _vh); }
+  /// vertex - vertex circulator cw
+  VertexVertexCWIter vv_cwbegin(VertexHandle _vh)
+  { return VertexVertexCWIter(*this, _vh); }
+  /// vertex - vertex circulator ccw
+  VertexVertexCCWIter vv_ccwbegin(VertexHandle _vh)
+  { return VertexVertexCCWIter(*this, _vh); }
   /// vertex - incoming halfedge circulator
   VertexIHalfedgeIter vih_begin(VertexHandle _vh)
   { return VertexIHalfedgeIter(*this, _vh); }
+  /// vertex - incoming halfedge circulator cw
+  VertexIHalfedgeCWIter vih_cwbegin(VertexHandle _vh)
+  { return VertexIHalfedgeCWIter(*this, _vh); }
+  /// vertex - incoming halfedge circulator ccw
+  VertexIHalfedgeCCWIter vih_ccwbegin(VertexHandle _vh)
+  { return VertexIHalfedgeCCWIter(*this, _vh); }
   /// vertex - outgoing halfedge circulator
   VertexOHalfedgeIter voh_begin(VertexHandle _vh)
   { return VertexOHalfedgeIter(*this, _vh); }
+  /// vertex - outgoing halfedge circulator cw
+  VertexOHalfedgeCWIter voh_cwbegin(VertexHandle _vh)
+  { return VertexOHalfedgeCWIter(*this, _vh); }
+  /// vertex - outgoing halfedge circulator ccw
+  VertexOHalfedgeCCWIter voh_ccwbegin(VertexHandle _vh)
+  { return VertexOHalfedgeCCWIter(*this, _vh); }
   /// vertex - edge circulator
   VertexEdgeIter ve_begin(VertexHandle _vh)
   { return VertexEdgeIter(*this, _vh); }
+  /// vertex - edge circulator cw
+  VertexEdgeCWIter ve_cwbegin(VertexHandle _vh)
+  { return VertexEdgeCWIter(*this, _vh); }
+  /// vertex - edge circulator ccw
+  VertexEdgeCCWIter ve_ccwbegin(VertexHandle _vh)
+  { return VertexEdgeCCWIter(*this, _vh); }
   /// vertex - face circulator
   VertexFaceIter vf_begin(VertexHandle _vh)
   { return VertexFaceIter(*this, _vh); }
+  /// vertex - face circulator cw
+  VertexFaceCWIter vf_cwbegin(VertexHandle _vh)
+  { return VertexFaceCWIter(*this, _vh); }
+  /// vertex - face circulator ccw
+  VertexFaceCCWIter vf_ccwbegin(VertexHandle _vh)
+  { return VertexFaceCCWIter(*this, _vh); }
+
 
   /// const vertex circulator
   ConstVertexVertexIter cvv_begin(VertexHandle _vh) const
   { return ConstVertexVertexIter(*this, _vh); }
+  /// const vertex circulator cw
+  ConstVertexVertexCWIter cvv_cwbegin(VertexHandle _vh) const
+  { return ConstVertexVertexCWIter(*this, _vh); }
+  /// const vertex circulator ccw
+  ConstVertexVertexCCWIter cvv_ccwbegin(VertexHandle _vh) const
+  { return ConstVertexVertexCCWIter(*this, _vh); }
   /// const vertex - incoming halfedge circulator
   ConstVertexIHalfedgeIter cvih_begin(VertexHandle _vh) const
   { return ConstVertexIHalfedgeIter(*this, _vh); }
+  /// const vertex - incoming halfedge circulator cw
+  ConstVertexIHalfedgeCWIter cvih_cwbegin(VertexHandle _vh) const
+  { return ConstVertexIHalfedgeCWIter(*this, _vh); }
+  /// const vertex - incoming halfedge circulator ccw
+  ConstVertexIHalfedgeCCWIter cvih_ccwbegin(VertexHandle _vh) const
+  { return ConstVertexIHalfedgeCCWIter(*this, _vh); }
   /// const vertex - outgoing halfedge circulator
   ConstVertexOHalfedgeIter cvoh_begin(VertexHandle _vh) const
   { return ConstVertexOHalfedgeIter(*this, _vh); }
+  /// const vertex - outgoing halfedge circulator cw
+  ConstVertexOHalfedgeCWIter cvoh_cwbegin(VertexHandle _vh) const
+  { return ConstVertexOHalfedgeCWIter(*this, _vh); }
+  /// const vertex - outgoing halfedge circulator ccw
+  ConstVertexOHalfedgeCCWIter cvoh_ccwbegin(VertexHandle _vh) const
+  { return ConstVertexOHalfedgeCCWIter(*this, _vh); }
   /// const vertex - edge circulator
   ConstVertexEdgeIter cve_begin(VertexHandle _vh) const
   { return ConstVertexEdgeIter(*this, _vh); }
+  /// const vertex - edge circulator cw
+  ConstVertexEdgeCWIter cve_cwbegin(VertexHandle _vh) const
+  { return ConstVertexEdgeCWIter(*this, _vh); }
+  /// const vertex - edge circulator ccw
+  ConstVertexEdgeCCWIter cve_ccwbegin(VertexHandle _vh) const
+  { return ConstVertexEdgeCCWIter(*this, _vh); }
   /// const vertex - face circulator
   ConstVertexFaceIter cvf_begin(VertexHandle _vh) const
   { return ConstVertexFaceIter(*this, _vh); }
+  /// const vertex - face circulator cw
+  ConstVertexFaceCWIter cvf_cwbegin(VertexHandle _vh) const
+  { return ConstVertexFaceCWIter(*this, _vh); }
+  /// const vertex - face circulator ccw
+  ConstVertexFaceCCWIter cvf_ccwbegin(VertexHandle _vh) const
+  { return ConstVertexFaceCCWIter(*this, _vh); }
 
   /// face - vertex circulator
   FaceVertexIter fv_begin(FaceHandle _fh)
   { return FaceVertexIter(*this, _fh); }
+  /// face - vertex circulator cw
+  FaceVertexCWIter fv_cwbegin(FaceHandle _fh)
+  { return FaceVertexCWIter(*this, _fh); }
+  /// face - vertex circulator ccw
+  FaceVertexCCWIter fv_ccwbegin(FaceHandle _fh)
+  { return FaceVertexCCWIter(*this, _fh); }
   /// face - halfedge circulator
   FaceHalfedgeIter fh_begin(FaceHandle _fh)
   { return FaceHalfedgeIter(*this, _fh); }
+  /// face - halfedge circulator cw
+  FaceHalfedgeCWIter fh_cwbegin(FaceHandle _fh)
+  { return FaceHalfedgeCWIter(*this, _fh); }
+  /// face - halfedge circulator ccw
+  FaceHalfedgeCCWIter fh_ccwbegin(FaceHandle _fh)
+  { return FaceHalfedgeCCWIter(*this, _fh); }
   /// face - edge circulator
   FaceEdgeIter fe_begin(FaceHandle _fh)
   { return FaceEdgeIter(*this, _fh); }
+  /// face - edge circulator cw
+  FaceEdgeCWIter fe_cwbegin(FaceHandle _fh)
+  { return FaceEdgeCWIter(*this, _fh); }
+  /// face - edge circulator ccw
+  FaceEdgeCCWIter fe_ccwbegin(FaceHandle _fh)
+  { return FaceEdgeCCWIter(*this, _fh); }
   /// face - face circulator
   FaceFaceIter ff_begin(FaceHandle _fh)
   { return FaceFaceIter(*this, _fh); }
+  /// face - face circulator cw
+  FaceFaceCWIter ff_cwbegin(FaceHandle _fh)
+  { return FaceFaceCWIter(*this, _fh); }
+  /// face - face circulator ccw
+  FaceFaceCCWIter ff_ccwbegin(FaceHandle _fh)
+  { return FaceFaceCCWIter(*this, _fh); }
   /// halfedge circulator
   HalfedgeLoopIter hl_begin(HalfedgeHandle _heh)
   { return HalfedgeLoopIter(*this, _heh); }
+  /// halfedge circulator
+  HalfedgeLoopCWIter hl_cwbegin(HalfedgeHandle _heh)
+  { return HalfedgeLoopCWIter(*this, _heh); }
+  /// halfedge circulator ccw
+  HalfedgeLoopCCWIter hl_ccwbegin(HalfedgeHandle _heh)
+  { return HalfedgeLoopCCWIter(*this, _heh); }
 
   /// const face - vertex circulator
   ConstFaceVertexIter cfv_begin(FaceHandle _fh) const
   { return ConstFaceVertexIter(*this, _fh); }
+  /// const face - vertex circulator cw
+  ConstFaceVertexCWIter cfv_cwbegin(FaceHandle _fh) const
+  { return ConstFaceVertexCWIter(*this, _fh); }
+  /// const face - vertex circulator ccw
+  ConstFaceVertexCCWIter cfv_ccwbegin(FaceHandle _fh) const
+  { return ConstFaceVertexCCWIter(*this, _fh); }
   /// const face - halfedge circulator
   ConstFaceHalfedgeIter cfh_begin(FaceHandle _fh) const
   { return ConstFaceHalfedgeIter(*this, _fh); }
+  /// const face - halfedge circulator cw
+  ConstFaceHalfedgeCWIter cfh_cwbegin(FaceHandle _fh) const
+  { return ConstFaceHalfedgeCWIter(*this, _fh); }
+  /// const face - halfedge circulator ccw
+  ConstFaceHalfedgeCCWIter cfh_ccwbegin(FaceHandle _fh) const
+  { return ConstFaceHalfedgeCCWIter(*this, _fh); }
   /// const face - edge circulator
   ConstFaceEdgeIter cfe_begin(FaceHandle _fh) const
   { return ConstFaceEdgeIter(*this, _fh); }
+  /// const face - edge circulator cw
+  ConstFaceEdgeCWIter cfe_cwbegin(FaceHandle _fh) const
+  { return ConstFaceEdgeCWIter(*this, _fh); }
+  /// const face - edge circulator ccw
+  ConstFaceEdgeCCWIter cfe_ccwbegin(FaceHandle _fh) const
+  { return ConstFaceEdgeCCWIter(*this, _fh); }
   /// const face - face circulator
   ConstFaceFaceIter cff_begin(FaceHandle _fh) const
   { return ConstFaceFaceIter(*this, _fh); }
+  /// const face - face circulator cw
+  ConstFaceFaceCWIter cff_cwbegin(FaceHandle _fh) const
+  { return ConstFaceFaceCWIter(*this, _fh); }
+  /// const face - face circulator ccw
+  ConstFaceFaceCCWIter cff_ccwbegin(FaceHandle _fh) const
+  { return ConstFaceFaceCCWIter(*this, _fh); }
   /// const halfedge circulator
   ConstHalfedgeLoopIter chl_begin(HalfedgeHandle _heh) const
   { return ConstHalfedgeLoopIter(*this, _heh); }
+  /// const halfedge circulator cw
+  ConstHalfedgeLoopCWIter chl_cwbegin(HalfedgeHandle _heh) const
+  { return ConstHalfedgeLoopCWIter(*this, _heh); }
+  /// const halfedge circulator ccw
+  ConstHalfedgeLoopCCWIter chl_ccwbegin(HalfedgeHandle _heh) const
+  { return ConstHalfedgeLoopCCWIter(*this, _heh); }
   
   // 'end' circulators
   
   /// vertex - vertex circulator
   VertexVertexIter vv_end(VertexHandle _vh)
   { return VertexVertexIter(*this, _vh, true); }
+  /// vertex - vertex circulator cw
+  VertexVertexCWIter vv_cwend(VertexHandle _vh)
+  { return VertexVertexCWIter(*this, _vh, true); }
+  /// vertex - vertex circulator ccw
+  VertexVertexCCWIter vv_ccwend(VertexHandle _vh)
+  { return VertexVertexCCWIter(*this, _vh, true); }
   /// vertex - incoming halfedge circulator
   VertexIHalfedgeIter vih_end(VertexHandle _vh)
   { return VertexIHalfedgeIter(*this, _vh, true); }
+  /// vertex - incoming halfedge circulator cw
+  VertexIHalfedgeCWIter vih_cwend(VertexHandle _vh)
+  { return VertexIHalfedgeCWIter(*this, _vh, true); }
+  /// vertex - incoming halfedge circulator ccw
+  VertexIHalfedgeCCWIter vih_ccwend(VertexHandle _vh)
+  { return VertexIHalfedgeCCWIter(*this, _vh, true); }
   /// vertex - outgoing halfedge circulator
   VertexOHalfedgeIter voh_end(VertexHandle _vh)
   { return VertexOHalfedgeIter(*this, _vh, true); }
+  /// vertex - outgoing halfedge circulator cw
+  VertexOHalfedgeCWIter voh_cwend(VertexHandle _vh)
+  { return VertexOHalfedgeCWIter(*this, _vh, true); }
+  /// vertex - outgoing halfedge circulator ccw
+  VertexOHalfedgeCCWIter voh_ccwend(VertexHandle _vh)
+  { return VertexOHalfedgeCCWIter(*this, _vh, true); }
   /// vertex - edge circulator
   VertexEdgeIter ve_end(VertexHandle _vh)
   { return VertexEdgeIter(*this, _vh, true); }
+  /// vertex - edge circulator cw
+  VertexEdgeCWIter ve_cwend(VertexHandle _vh)
+  { return VertexEdgeCWIter(*this, _vh, true); }
+  /// vertex - edge circulator ccw
+  VertexEdgeCCWIter ve_ccwend(VertexHandle _vh)
+  { return VertexEdgeCCWIter(*this, _vh, true); }
   /// vertex - face circulator
   VertexFaceIter vf_end(VertexHandle _vh)
   { return VertexFaceIter(*this, _vh, true); }
+  /// vertex - face circulator cw
+  VertexFaceCWIter vf_cwend(VertexHandle _vh)
+  { return VertexFaceCWIter(*this, _vh, true); }
+  /// vertex - face circulator ccw
+  VertexFaceCCWIter vf_ccwend(VertexHandle _vh)
+  { return VertexFaceCCWIter(*this, _vh, true); }
 
   /// const vertex circulator
   ConstVertexVertexIter cvv_end(VertexHandle _vh) const
   { return ConstVertexVertexIter(*this, _vh, true); }
+  /// const vertex circulator cw
+  ConstVertexVertexCWIter cvv_cwend(VertexHandle _vh) const
+  { return ConstVertexVertexCWIter(*this, _vh, true); }
+  /// const vertex circulator ccw
+  ConstVertexVertexCCWIter cvv_ccwend(VertexHandle _vh) const
+  { return ConstVertexVertexCCWIter(*this, _vh, true); }
   /// const vertex - incoming halfedge circulator
   ConstVertexIHalfedgeIter cvih_end(VertexHandle _vh) const
   { return ConstVertexIHalfedgeIter(*this, _vh, true); }
+  /// const vertex - incoming halfedge circulator cw
+  ConstVertexIHalfedgeCWIter cvih_cwend(VertexHandle _vh) const
+  { return ConstVertexIHalfedgeCWIter(*this, _vh, true); }
+  /// const vertex - incoming halfedge circulator ccw
+  ConstVertexIHalfedgeCCWIter cvih_ccwend(VertexHandle _vh) const
+  { return ConstVertexIHalfedgeCCWIter(*this, _vh, true); }
   /// const vertex - outgoing halfedge circulator
   ConstVertexOHalfedgeIter cvoh_end(VertexHandle _vh) const
   { return ConstVertexOHalfedgeIter(*this, _vh, true); }
+  /// const vertex - outgoing halfedge circulator cw
+  ConstVertexOHalfedgeCWIter cvoh_cwend(VertexHandle _vh) const
+  { return ConstVertexOHalfedgeCWIter(*this, _vh, true); }
+  /// const vertex - outgoing halfedge circulator ccw
+  ConstVertexOHalfedgeCCWIter cvoh_ccwend(VertexHandle _vh) const
+  { return ConstVertexOHalfedgeCCWIter(*this, _vh, true); }
   /// const vertex - edge circulator
   ConstVertexEdgeIter cve_end(VertexHandle _vh) const
   { return ConstVertexEdgeIter(*this, _vh, true); }
+  /// const vertex - edge circulator cw
+  ConstVertexEdgeCWIter cve_cwend(VertexHandle _vh) const
+  { return ConstVertexEdgeCWIter(*this, _vh, true); }
+  /// const vertex - edge circulator ccw
+  ConstVertexEdgeCCWIter cve_ccwend(VertexHandle _vh) const
+  { return ConstVertexEdgeCCWIter(*this, _vh, true); }
   /// const vertex - face circulator
   ConstVertexFaceIter cvf_end(VertexHandle _vh) const
   { return ConstVertexFaceIter(*this, _vh, true); }
+  /// const vertex - face circulator cw
+  ConstVertexFaceCWIter cvf_cwend(VertexHandle _vh) const
+  { return ConstVertexFaceCWIter(*this, _vh, true); }
+  /// const vertex - face circulator ccw
+  ConstVertexFaceCCWIter cvf_ccwend(VertexHandle _vh) const
+  { return ConstVertexFaceCCWIter(*this, _vh, true); }
 
   /// face - vertex circulator
   FaceVertexIter fv_end(FaceHandle _fh)
   { return FaceVertexIter(*this, _fh, true); }
+  /// face - vertex circulator cw
+  FaceVertexCWIter fv_cwend(FaceHandle _fh)
+  { return FaceVertexCWIter(*this, _fh, true); }
+  /// face - vertex circulator ccw
+  FaceVertexCCWIter fv_ccwend(FaceHandle _fh)
+  { return FaceVertexCCWIter(*this, _fh, true); }
   /// face - halfedge circulator
   FaceHalfedgeIter fh_end(FaceHandle _fh)
   { return FaceHalfedgeIter(*this, _fh, true); }
+  /// face - halfedge circulator cw
+  FaceHalfedgeCWIter fh_cwend(FaceHandle _fh)
+  { return FaceHalfedgeCWIter(*this, _fh, true); }
+  /// face - halfedge circulator ccw
+  FaceHalfedgeCCWIter fh_ccwend(FaceHandle _fh)
+  { return FaceHalfedgeCCWIter(*this, _fh, true); }
   /// face - edge circulator
   FaceEdgeIter fe_end(FaceHandle _fh)
   { return FaceEdgeIter(*this, _fh, true); }
+  /// face - edge circulator cw
+  FaceEdgeCWIter fe_cwend(FaceHandle _fh)
+  { return FaceEdgeCWIter(*this, _fh, true); }
+  /// face - edge circulator ccw
+  FaceEdgeCCWIter fe_ccwend(FaceHandle _fh)
+  { return FaceEdgeCCWIter(*this, _fh, true); }
   /// face - face circulator
   FaceFaceIter ff_end(FaceHandle _fh)
   { return FaceFaceIter(*this, _fh, true); }
+  /// face - face circulator cw
+  FaceFaceCWIter ff_cwend(FaceHandle _fh)
+  { return FaceFaceCWIter(*this, _fh, true); }
+  /// face - face circulator ccw
+  FaceFaceCCWIter ff_ccwend(FaceHandle _fh)
+  { return FaceFaceCCWIter(*this, _fh, true); }
   /// face - face circulator
   HalfedgeLoopIter hl_end(HalfedgeHandle _heh)
   { return HalfedgeLoopIter(*this, _heh, true); }
+  /// face - face circulator cw
+  HalfedgeLoopCWIter hl_cwend(HalfedgeHandle _heh)
+  { return HalfedgeLoopCWIter(*this, _heh, true); }
+  /// face - face circulator ccw
+  HalfedgeLoopCCWIter hl_ccwend(HalfedgeHandle _heh)
+  { return HalfedgeLoopCCWIter(*this, _heh, true); }
 
   /// const face - vertex circulator
   ConstFaceVertexIter cfv_end(FaceHandle _fh) const
   { return ConstFaceVertexIter(*this, _fh, true); }
+  /// const face - vertex circulator cw
+  ConstFaceVertexCWIter cfv_cwend(FaceHandle _fh) const
+  { return ConstFaceVertexCWIter(*this, _fh, true); }
+  /// const face - vertex circulator ccw
+  ConstFaceVertexCCWIter cfv_ccwend(FaceHandle _fh) const
+  { return ConstFaceVertexCCWIter(*this, _fh, true); }
   /// const face - halfedge circulator
   ConstFaceHalfedgeIter cfh_end(FaceHandle _fh) const
   { return ConstFaceHalfedgeIter(*this, _fh, true); }
+  /// const face - halfedge circulator cw
+  ConstFaceHalfedgeCWIter cfh_cwend(FaceHandle _fh) const
+  { return ConstFaceHalfedgeCWIter(*this, _fh, true); }
+  /// const face - halfedge circulator ccw
+  ConstFaceHalfedgeCCWIter cfh_ccwend(FaceHandle _fh) const
+  { return ConstFaceHalfedgeCCWIter(*this, _fh, true); }
   /// const face - edge circulator
   ConstFaceEdgeIter cfe_end(FaceHandle _fh) const
   { return ConstFaceEdgeIter(*this, _fh, true); }
+  /// const face - edge circulator cw
+  ConstFaceEdgeCWIter cfe_cwend(FaceHandle _fh) const
+  { return ConstFaceEdgeCWIter(*this, _fh, true); }
+  /// const face - edge circulator ccw
+  ConstFaceEdgeCCWIter cfe_ccwend(FaceHandle _fh) const
+  { return ConstFaceEdgeCCWIter(*this, _fh, true); }
   /// const face - face circulator
   ConstFaceFaceIter cff_end(FaceHandle _fh) const
   { return ConstFaceFaceIter(*this, _fh, true); }
   /// const face - face circulator
+  ConstFaceFaceCWIter cff_cwend(FaceHandle _fh) const
+  { return ConstFaceFaceCWIter(*this, _fh, true); }
+  /// const face - face circulator
+  ConstFaceFaceCCWIter cff_ccwend(FaceHandle _fh) const
+  { return ConstFaceFaceCCWIter(*this, _fh, true); }
+  /// const face - face circulator
   ConstHalfedgeLoopIter chl_end(HalfedgeHandle _heh) const
   { return ConstHalfedgeLoopIter(*this, _heh, true); }
+  /// const face - face circulator cw
+  ConstHalfedgeLoopCWIter chl_cwend(HalfedgeHandle _heh) const
+  { return ConstHalfedgeLoopCWIter(*this, _heh, true); }
+  /// const face - face circulator ccw
+  ConstHalfedgeLoopCCWIter chl_ccwend(HalfedgeHandle _heh) const
+  { return ConstHalfedgeLoopCCWIter(*this, _heh, true); }
   //@}
 
   /** @name Range based iterators and circulators */

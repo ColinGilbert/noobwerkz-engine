@@ -280,4 +280,138 @@ TEST_F(OpenMeshTrimeshCirculatorVertexEdge, VertexEdgeIterCheckInvalidationAtEnd
 
 }
 
+/*
+ * Test CW and CCW iterators
+ */
+TEST_F(OpenMeshTrimeshCirculatorVertexEdge, CWAndCCWCheck) {
+
+  mesh_.clear();
+
+  // Add some vertices
+  Mesh::VertexHandle vhandle[5];
+
+  vhandle[0] = mesh_.add_vertex(Mesh::Point(0, 1, 0));
+  vhandle[1] = mesh_.add_vertex(Mesh::Point(1, 0, 0));
+  vhandle[2] = mesh_.add_vertex(Mesh::Point(2, 1, 0));
+  vhandle[3] = mesh_.add_vertex(Mesh::Point(0,-1, 0));
+  vhandle[4] = mesh_.add_vertex(Mesh::Point(2,-1, 0));
+
+  // Add two faces
+  std::vector<Mesh::VertexHandle> face_vhandles;
+
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[2]);
+  Mesh::FaceHandle fh0 = mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[3]);
+  face_vhandles.push_back(vhandle[4]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[3]);
+  face_vhandles.push_back(vhandle[1]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[4]);
+  mesh_.add_face(face_vhandles);
+
+  /* Test setup:
+      0 ==== 2
+      |\  0 /|
+      | \  / |
+      |2  1 3|
+      | /  \ |
+      |/  1 \|
+      3 ==== 4 */
+
+
+  int indices[5] = {5, 1, 0, 3, 5};
+  int rev_indices[5];
+  std::reverse_copy(indices,indices+5,rev_indices);
+
+  //CCW
+  Mesh::VertexEdgeCCWIter ve_ccwit  = mesh_.ve_ccwbegin(vhandle[1]);
+  Mesh::VertexEdgeCCWIter ve_ccwend = mesh_.ve_ccwend(vhandle[1]);
+  size_t i = 0;
+  for (;ve_ccwit != ve_ccwend; ++ve_ccwit, ++i)
+  {
+    EXPECT_EQ(indices[i], ve_ccwit->idx()) << "Index wrong in VertexEdgeCCWIter";
+  }
+
+  EXPECT_FALSE(ve_ccwit.is_valid()) << "Iterator invalid in VertexEdgeCCWIter at end";
+  EXPECT_TRUE( ve_ccwit == ve_ccwend )  << "End iterator for VertexEdgeCCWIter not matching";
+
+  //constant CCW
+  Mesh::ConstVertexEdgeCCWIter cve_ccwit  = mesh_.cve_ccwbegin(vhandle[1]);
+  Mesh::ConstVertexEdgeCCWIter cve_ccwend = mesh_.cve_ccwend(vhandle[1]);
+  i = 0;
+  for (;cve_ccwit != cve_ccwend; ++cve_ccwit, ++i)
+  {
+    EXPECT_EQ(indices[i], cve_ccwit->idx()) << "Index wrong in ConstVertexEdgeCCWIter";
+  }
+
+  EXPECT_FALSE(cve_ccwit.is_valid()) << "Iterator invalid in ConstVertexEdgeCCWIter at end";
+  EXPECT_TRUE( cve_ccwit == cve_ccwend )  << "End iterator for ConstVertexEdgeCCWIter not matching";
+
+  //CW
+  Mesh::VertexEdgeCWIter ve_cwit  = mesh_.ve_cwbegin(vhandle[1]);
+  Mesh::VertexEdgeCWIter ve_cwend = mesh_.ve_cwend(vhandle[1]);
+  i = 0;
+  for (;ve_cwit != ve_cwend; ++ve_cwit, ++i)
+  {
+    EXPECT_EQ(rev_indices[i], ve_cwit->idx()) << "Index wrong in VertexEdgeCWIter";
+  }
+  EXPECT_FALSE(ve_cwit.is_valid()) << "Iterator invalid in VertexEdgeCWIter at end";
+  EXPECT_TRUE( ve_cwit == ve_cwend )  << "End iterator for VertexEdgeCWIter not matching";
+
+  //constant CW
+  Mesh::ConstVertexEdgeCWIter cve_cwit  = mesh_.cve_cwbegin(vhandle[1]);
+  Mesh::ConstVertexEdgeCWIter cve_cwend = mesh_.cve_cwend(vhandle[1]);
+  i = 0;
+  for (;cve_cwit != cve_cwend; ++cve_cwit, ++i)
+  {
+    EXPECT_EQ(rev_indices[i], cve_cwit->idx()) << "Index wrong in ConstVertexEdgeCWIter";
+  }
+  EXPECT_FALSE(cve_cwit.is_valid()) << "Iterator invalid in ConstVertexEdgeCWIter at end";
+  EXPECT_TRUE( cve_cwit == cve_cwend )  << "End iterator for ConstVertexEdgeCWIter not matching";
+
+  /*
+   * conversion properties:
+   * a) cw_begin == CWIter(ccw_begin())
+   * b) cw_iter->idx() == CCWIter(cw_iter)->idx() for valid iterators
+   * c) --cw_iter == CWIter(++ccwIter) for valid iterators
+   * d) cw_end == CWIter(ccw_end()) => --cw_end != CWIter(++ccw_end())   *
+   */
+  Mesh::VertexEdgeCWIter ve_cwIter = mesh_.ve_cwbegin(vhandle[1]);
+  // a)
+  EXPECT_TRUE( ve_cwIter == Mesh::VertexEdgeCWIter(mesh_.ve_ccwbegin(vhandle[1])) ) << "ccw to cw conversion failed";
+  EXPECT_TRUE( Mesh::VertexEdgeCCWIter(ve_cwIter) == mesh_.ve_ccwbegin(vhandle[1]) ) << "cw to ccw conversion failed";
+  // b)
+  EXPECT_EQ( ve_cwIter->idx(), Mesh::VertexEdgeCCWIter(ve_cwIter)->idx()) << "iterators doesnt point on the same element";
+  // c)
+  ++ve_cwIter;
+  ve_ccwend = mesh_.ve_ccwend(vhandle[1]);
+  --ve_ccwend;
+  EXPECT_EQ(ve_cwIter->idx(),ve_ccwend->idx()) << "iteratoes are not equal after inc/dec";
+  // additional conversion check
+  ve_ccwend = Mesh::VertexEdgeCCWIter(ve_cwIter);
+  EXPECT_EQ(ve_cwIter->idx(),ve_ccwend->idx())<< "iterators doesnt point on the same element";
+  // d)
+  ve_cwIter = Mesh::VertexEdgeCWIter(mesh_.ve_ccwend(vhandle[1]));
+  EXPECT_FALSE(ve_cwIter.is_valid()) << "end iterator is not invalid";
+  EXPECT_TRUE(Mesh::VertexEdgeCCWIter(mesh_.ve_cwend(vhandle[1])) ==  mesh_.ve_ccwend(vhandle[1])) << "end iterators are not equal";
+
+
+}
+
 }

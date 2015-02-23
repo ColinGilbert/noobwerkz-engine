@@ -2,6 +2,7 @@
 #include <Unittests/unittests_common.hh>
 
 #include <iostream>
+#include <algorithm>
 
 namespace {
 
@@ -202,6 +203,146 @@ TEST_F(OpenMeshTrimeshCirculatorFaceFace, FaceFaceIterWithoutHoles) {
   EXPECT_EQ(2, cff_it->idx() ) << "Index wrong in ConstFaceFaceIter at end";
   EXPECT_FALSE(cff_it.is_valid()) << "Iterator invalid in ConstFaceFaceIter at end";
   EXPECT_TRUE( cff_it == cff_end )  << "End iterator for ConstFaceFaceIter not matching";
+
+}
+
+/*
+ * Test CW and CCW iterators
+ */
+TEST_F(OpenMeshTrimeshCirculatorFaceFace, CWAndCCWCheck) {
+
+  mesh_.clear();
+
+  // Add some vertices
+  Mesh::VertexHandle vhandle[6];
+
+  vhandle[0] = mesh_.add_vertex(Mesh::Point(0, 1, 0));
+  vhandle[1] = mesh_.add_vertex(Mesh::Point(1, 0, 0));
+  vhandle[2] = mesh_.add_vertex(Mesh::Point(2, 1, 0));
+  vhandle[3] = mesh_.add_vertex(Mesh::Point(3, 0, 0));
+  vhandle[4] = mesh_.add_vertex(Mesh::Point(4, 1, 0));
+  vhandle[5] = mesh_.add_vertex(Mesh::Point(2,-1, 0));
+
+  // Add three faces
+  std::vector<Mesh::VertexHandle> face_vhandles;
+
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[2]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[3]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[3]);
+  face_vhandles.push_back(vhandle[4]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[5]);
+  face_vhandles.push_back(vhandle[3]);
+  mesh_.add_face(face_vhandles);
+
+  /* Test setup:
+   *
+   * 0 ------ 2 ------ 4
+   *  \      / \      /
+   *   \  0 /   \  2 /
+   *    \  /  1  \  /
+   *     1 ------- 3
+   *      \       /
+   *       \  3  /
+   *        \   /
+   *         \ /
+   *          5
+   */
+
+
+  int indices[4] = {2, 0, 3, 2};
+  int rev_indices[4];
+  std::reverse_copy(indices,indices+4,rev_indices);
+
+  //CCW
+  Mesh::FaceFaceCCWIter ff_ccwit  = mesh_.ff_ccwbegin(mesh_.face_handle(1));
+  Mesh::FaceFaceCCWIter ff_ccwend = mesh_.ff_ccwend(mesh_.face_handle(1));
+  size_t i = 0;
+  for (;ff_ccwit != ff_ccwend; ++ff_ccwit, ++i)
+  {
+    EXPECT_EQ(indices[i], ff_ccwit->idx()) << "Index wrong in FaceFaceCCWIter";
+  }
+
+  EXPECT_FALSE(ff_ccwit.is_valid()) << "Iterator invalid in FaceFaceCCWIter at end";
+  EXPECT_TRUE( ff_ccwit == ff_ccwend )  << "End iterator for FaceFaceCCWIter not matching";
+
+  //constant CCW
+  Mesh::ConstFaceFaceCCWIter cff_ccwit  = mesh_.cff_ccwbegin(mesh_.face_handle(1));
+  Mesh::ConstFaceFaceCCWIter cff_ccwend = mesh_.cff_ccwend(mesh_.face_handle(1));
+  i = 0;
+  for (;cff_ccwit != cff_ccwend; ++cff_ccwit, ++i)
+  {
+    EXPECT_EQ(indices[i], cff_ccwit->idx()) << "Index wrong in ConstFaceFaceCCWIter";
+  }
+
+  EXPECT_FALSE(cff_ccwit.is_valid()) << "Iterator invalid in ConstFaceFaceCCWIter at end";
+  EXPECT_TRUE( cff_ccwit == cff_ccwend )  << "End iterator for ConstFaceFaceCCWIter not matching";
+
+  //CW
+  Mesh::FaceFaceCWIter ff_cwit  = mesh_.ff_cwbegin(mesh_.face_handle(1));
+  Mesh::FaceFaceCWIter ff_cwend = mesh_.ff_cwend(mesh_.face_handle(1));
+  i = 0;
+  for (;ff_cwit != ff_cwend; ++ff_cwit, ++i)
+  {
+    EXPECT_EQ(rev_indices[i], ff_cwit->idx()) << "Index wrong in FaceFaceCWIter";
+  }
+  EXPECT_FALSE(ff_cwit.is_valid()) << "Iterator invalid in FaceFaceCWIter at end";
+  EXPECT_TRUE( ff_cwit == ff_cwend )  << "End iterator for FaceFaceCWIter not matching";
+
+  //constant CW
+  Mesh::ConstFaceFaceCWIter cff_cwit  = mesh_.cff_cwbegin(mesh_.face_handle(1));
+  Mesh::ConstFaceFaceCWIter cff_cwend = mesh_.cff_cwend(mesh_.face_handle(1));
+  i = 0;
+  for (;cff_cwit != cff_cwend; ++cff_cwit, ++i)
+  {
+    EXPECT_EQ(rev_indices[i], cff_cwit->idx()) << "Index wrong in ConstFaceFaceCWIter";
+  }
+  EXPECT_FALSE(cff_cwit.is_valid()) << "Iterator invalid in ConstFaceFaceCWIter at end";
+  EXPECT_TRUE( cff_cwit == cff_cwend )  << "End iterator for ConstFaceFaceCWIter not matching";
+
+  /*
+   * conversion properties:
+   * a) cw_begin == CWIter(ccw_begin())
+   * b) cw_iter->idx() == CCWIter(cw_iter)->idx() for valid iterators
+   * c) --cw_iter == CWIter(++ccwIter) for valid iterators
+   * d) cw_end == CWIter(ccw_end()) => --cw_end != CWIter(++ccw_end())   *
+   */
+  Mesh::FaceFaceCWIter ff_cwIter = mesh_.ff_cwbegin(mesh_.face_handle(1));
+  // a)
+  EXPECT_TRUE( ff_cwIter == Mesh::FaceFaceCWIter(mesh_.ff_ccwbegin(mesh_.face_handle(1))) ) << "ccw to cw conversion failed";
+  EXPECT_TRUE( Mesh::FaceFaceCCWIter(ff_cwIter) == mesh_.ff_ccwbegin(mesh_.face_handle(1)) ) << "cw to ccw conversion failed";
+  // b)
+  EXPECT_EQ( ff_cwIter->idx(), Mesh::FaceFaceCCWIter(ff_cwIter)->idx()) << "iterators doesnt point on the same element";
+  // c)
+  ++ff_cwIter;
+  ff_ccwend = mesh_.ff_ccwend(mesh_.face_handle(1));
+  --ff_ccwend;
+  EXPECT_EQ(ff_cwIter->idx(),ff_ccwend->idx()) << "iteratoes are not equal after inc/dec";
+  // additional conversion check
+  ff_ccwend = Mesh::FaceFaceCCWIter(ff_cwIter);
+  EXPECT_EQ(ff_cwIter->idx(),ff_ccwend->idx())<< "iterators doesnt point on the same element";
+  // d)
+  ff_cwIter = Mesh::FaceFaceCWIter(mesh_.ff_ccwend(mesh_.face_handle(1)));
+  EXPECT_FALSE(ff_cwIter.is_valid()) << "end iterator is not invalid";
+  EXPECT_TRUE(Mesh::FaceFaceCCWIter(mesh_.ff_cwend(mesh_.face_handle(1))) ==  mesh_.ff_ccwend(mesh_.face_handle(1))) << "end iterators are not equal";
+
 
 }
 
