@@ -342,9 +342,11 @@ TEST_F(OpenMeshTrimeshCirculatorVertexVertex, CWAndCCWCheck) {
   int rev_indices[5];
   std::reverse_copy(indices,indices+5,rev_indices);
 
+  Mesh::VertexHandle vh = vhandle[1];
+
   //CCW
-  Mesh::VertexVertexCCWIter vv_ccwit  = mesh_.vv_ccwbegin(vhandle[1]);
-  Mesh::VertexVertexCCWIter vv_ccwend = mesh_.vv_ccwend(vhandle[1]);
+  Mesh::VertexVertexCCWIter vv_ccwit  = mesh_.vv_ccwbegin(vh);
+  Mesh::VertexVertexCCWIter vv_ccwend = mesh_.vv_ccwend(vh);
   size_t i = 0;
   for (;vv_ccwit != vv_ccwend; ++vv_ccwit, ++i)
   {
@@ -355,8 +357,8 @@ TEST_F(OpenMeshTrimeshCirculatorVertexVertex, CWAndCCWCheck) {
   EXPECT_TRUE( vv_ccwit == vv_ccwend )  << "End iterator for VertexVertexCCWIter not matching";
 
   //constant CCW
-  Mesh::ConstVertexVertexCCWIter cvv_ccwit  = mesh_.cvv_ccwbegin(vhandle[1]);
-  Mesh::ConstVertexVertexCCWIter cvv_ccwend = mesh_.cvv_ccwend(vhandle[1]);
+  Mesh::ConstVertexVertexCCWIter cvv_ccwit  = mesh_.cvv_ccwbegin(vh);
+  Mesh::ConstVertexVertexCCWIter cvv_ccwend = mesh_.cvv_ccwend(vh);
   i = 0;
   for (;cvv_ccwit != cvv_ccwend; ++cvv_ccwit, ++i)
   {
@@ -367,8 +369,8 @@ TEST_F(OpenMeshTrimeshCirculatorVertexVertex, CWAndCCWCheck) {
   EXPECT_TRUE( cvv_ccwit == cvv_ccwend )  << "End iterator for ConstVertexVertexCCWIter not matching";
 
   //CW
-  Mesh::VertexVertexCWIter vv_cwit  = mesh_.vv_cwbegin(vhandle[1]);
-  Mesh::VertexVertexCWIter vv_cwend = mesh_.vv_cwend(vhandle[1]);
+  Mesh::VertexVertexCWIter vv_cwit  = mesh_.vv_cwbegin(vh);
+  Mesh::VertexVertexCWIter vv_cwend = mesh_.vv_cwend(vh);
   i = 0;
   for (;vv_cwit != vv_cwend; ++vv_cwit, ++i)
   {
@@ -378,8 +380,8 @@ TEST_F(OpenMeshTrimeshCirculatorVertexVertex, CWAndCCWCheck) {
   EXPECT_TRUE( vv_cwit == vv_cwend )  << "End iterator for VertexVertexCWIter not matching";
 
   //constant CW
-  Mesh::ConstVertexVertexCWIter cvv_cwit  = mesh_.cvv_cwbegin(vhandle[1]);
-  Mesh::ConstVertexVertexCWIter cvv_cwend = mesh_.cvv_cwend(vhandle[1]);
+  Mesh::ConstVertexVertexCWIter cvv_cwit  = mesh_.cvv_cwbegin(vh);
+  Mesh::ConstVertexVertexCWIter cvv_cwend = mesh_.cvv_cwend(vh);
   i = 0;
   for (;cvv_cwit != cvv_cwend; ++cvv_cwit, ++i)
   {
@@ -395,24 +397,24 @@ TEST_F(OpenMeshTrimeshCirculatorVertexVertex, CWAndCCWCheck) {
    * c) --cw_iter == CWIter(++ccwIter) for valid iterators
    * d) cw_end == CWIter(ccw_end()) => --cw_end != CWIter(++ccw_end())   *
    */
-  Mesh::VertexVertexCWIter vv_cwIter = mesh_.vv_cwbegin(vhandle[1]);
+  Mesh::VertexVertexCWIter vv_cwIter = mesh_.vv_cwbegin(vh);
   // a)
-  EXPECT_TRUE( vv_cwIter == Mesh::VertexVertexCWIter(mesh_.vv_ccwbegin(vhandle[1])) ) << "ccw to cw convvrsion failed";
-  EXPECT_TRUE( Mesh::VertexVertexCCWIter(vv_cwIter) == mesh_.vv_ccwbegin(vhandle[1]) ) << "cw to ccw convvrsion failed";
+  EXPECT_TRUE( vv_cwIter == Mesh::VertexVertexCWIter(mesh_.vv_ccwbegin(vh)) ) << "ccw to cw convvrsion failed";
+  EXPECT_TRUE( Mesh::VertexVertexCCWIter(vv_cwIter) == mesh_.vv_ccwbegin(vh) ) << "cw to ccw convvrsion failed";
   // b)
   EXPECT_EQ( vv_cwIter->idx(), Mesh::VertexVertexCCWIter(vv_cwIter)->idx()) << "iterators doesnt point on the same element";
   // c)
   ++vv_cwIter;
-  vv_ccwend = mesh_.vv_ccwend(vhandle[1]);
+  vv_ccwend = mesh_.vv_ccwend(vh);
   --vv_ccwend;
   EXPECT_EQ(vv_cwIter->idx(),vv_ccwend->idx()) << "iteratoes are not equal after inc/dec";
   // additional conversion check
   vv_ccwend = Mesh::VertexVertexCCWIter(vv_cwIter);
   EXPECT_EQ(vv_cwIter->idx(),vv_ccwend->idx())<< "iterators doesnt point on the same element";
   // d)
-  vv_cwIter = Mesh::VertexVertexCWIter(mesh_.vv_ccwend(vhandle[1]));
+  vv_cwIter = Mesh::VertexVertexCWIter(mesh_.vv_ccwend(vh));
   EXPECT_FALSE(vv_cwIter.is_valid()) << "end iterator is not invalid";
-  EXPECT_TRUE(Mesh::VertexVertexCCWIter(mesh_.vv_cwend(vhandle[1])) ==  mesh_.vv_ccwend(vhandle[1])) << "end iterators are not equal";
+  EXPECT_TRUE(Mesh::VertexVertexCCWIter(mesh_.vv_cwend(vh)) ==  mesh_.vv_ccwend(vh)) << "end iterators are not equal";
 
 
 }

@@ -453,9 +453,11 @@ TEST_F(OpenMeshTrimeshCirculatorVertexOHalfEdge, CWAndCCWCheck) {
   int rev_indices[5];
   std::reverse_copy(indices,indices+5,rev_indices);
 
+  Mesh::VertexHandle vh = vhandle[1];
+
   //CCW
-  Mesh::VertexOHalfedgeCCWIter voh_ccwit  = mesh_.voh_ccwbegin(vhandle[1]);
-  Mesh::VertexOHalfedgeCCWIter voh_ccwend = mesh_.voh_ccwend(vhandle[1]);
+  Mesh::VertexOHalfedgeCCWIter voh_ccwit  = mesh_.voh_ccwbegin(vh);
+  Mesh::VertexOHalfedgeCCWIter voh_ccwend = mesh_.voh_ccwend(vh);
   size_t i = 0;
   for (;voh_ccwit != voh_ccwend; ++voh_ccwit, ++i)
   {
@@ -466,8 +468,8 @@ TEST_F(OpenMeshTrimeshCirculatorVertexOHalfEdge, CWAndCCWCheck) {
   EXPECT_TRUE( voh_ccwit == voh_ccwend )  << "End iterator for VertexOHalfedgeCCWIter not matching";
 
   //constant CCW
-  Mesh::ConstVertexOHalfedgeCCWIter cvoh_ccwit  = mesh_.cvoh_ccwbegin(vhandle[1]);
-  Mesh::ConstVertexOHalfedgeCCWIter cvoh_ccwend = mesh_.cvoh_ccwend(vhandle[1]);
+  Mesh::ConstVertexOHalfedgeCCWIter cvoh_ccwit  = mesh_.cvoh_ccwbegin(vh);
+  Mesh::ConstVertexOHalfedgeCCWIter cvoh_ccwend = mesh_.cvoh_ccwend(vh);
   i = 0;
   for (;cvoh_ccwit != cvoh_ccwend; ++cvoh_ccwit, ++i)
   {
@@ -478,8 +480,8 @@ TEST_F(OpenMeshTrimeshCirculatorVertexOHalfEdge, CWAndCCWCheck) {
   EXPECT_TRUE( cvoh_ccwit == cvoh_ccwend )  << "End iterator for ConstVertexOHalfedgeCCWIter not matching";
 
   //CW
-  Mesh::VertexOHalfedgeCWIter voh_cwit  = mesh_.voh_cwbegin(vhandle[1]);
-  Mesh::VertexOHalfedgeCWIter voh_cwend = mesh_.voh_cwend(vhandle[1]);
+  Mesh::VertexOHalfedgeCWIter voh_cwit  = mesh_.voh_cwbegin(vh);
+  Mesh::VertexOHalfedgeCWIter voh_cwend = mesh_.voh_cwend(vh);
   i = 0;
   for (;voh_cwit != voh_cwend; ++voh_cwit, ++i)
   {
@@ -489,8 +491,8 @@ TEST_F(OpenMeshTrimeshCirculatorVertexOHalfEdge, CWAndCCWCheck) {
   EXPECT_TRUE( voh_cwit == voh_cwend )  << "End iterator for VertexOHalfedgeCWIter not matching";
 
   //constant CW
-  Mesh::ConstVertexOHalfedgeCWIter cvoh_cwit  = mesh_.cvoh_cwbegin(vhandle[1]);
-  Mesh::ConstVertexOHalfedgeCWIter cvoh_cwend = mesh_.cvoh_cwend(vhandle[1]);
+  Mesh::ConstVertexOHalfedgeCWIter cvoh_cwit  = mesh_.cvoh_cwbegin(vh);
+  Mesh::ConstVertexOHalfedgeCWIter cvoh_cwend = mesh_.cvoh_cwend(vh);
   i = 0;
   for (;cvoh_cwit != cvoh_cwend; ++cvoh_cwit, ++i)
   {
@@ -506,24 +508,24 @@ TEST_F(OpenMeshTrimeshCirculatorVertexOHalfEdge, CWAndCCWCheck) {
    * c) --cw_iter == CWIter(++ccwIter) for valid iterators
    * d) cw_end == CWIter(ccw_end()) => --cw_end != CWIter(++ccw_end())   *
    */
-  Mesh::VertexOHalfedgeCWIter voh_cwIter = mesh_.voh_cwbegin(vhandle[1]);
+  Mesh::VertexOHalfedgeCWIter voh_cwIter = mesh_.voh_cwbegin(vh);
   // a)
-  EXPECT_TRUE( voh_cwIter == Mesh::VertexOHalfedgeCWIter(mesh_.voh_ccwbegin(vhandle[1])) ) << "ccw to cw conversion failed";
-  EXPECT_TRUE( Mesh::VertexOHalfedgeCCWIter(voh_cwIter) == mesh_.voh_ccwbegin(vhandle[1]) ) << "cw to ccw conversion failed";
+  EXPECT_TRUE( voh_cwIter == Mesh::VertexOHalfedgeCWIter(mesh_.voh_ccwbegin(vh)) ) << "ccw to cw conversion failed";
+  EXPECT_TRUE( Mesh::VertexOHalfedgeCCWIter(voh_cwIter) == mesh_.voh_ccwbegin(vh) ) << "cw to ccw conversion failed";
   // b)
   EXPECT_EQ( voh_cwIter->idx(), Mesh::VertexOHalfedgeCCWIter(voh_cwIter)->idx()) << "iterators doesnt point on the same element";
   // c)
   ++voh_cwIter;
-  voh_ccwend = mesh_.voh_ccwend(vhandle[1]);
+  voh_ccwend = mesh_.voh_ccwend(vh);
   --voh_ccwend;
   EXPECT_EQ(voh_cwIter->idx(),voh_ccwend->idx()) << "iteratoes are not equal after inc/dec";
   // additional conversion check
   voh_ccwend = Mesh::VertexOHalfedgeCCWIter(voh_cwIter);
   EXPECT_EQ(voh_cwIter->idx(),voh_ccwend->idx())<< "iterators doesnt point on the same element";
   // d)
-  voh_cwIter = Mesh::VertexOHalfedgeCWIter(mesh_.voh_ccwend(vhandle[1]));
+  voh_cwIter = Mesh::VertexOHalfedgeCWIter(mesh_.voh_ccwend(vh));
   EXPECT_FALSE(voh_cwIter.is_valid()) << "end iterator is not invalid";
-  EXPECT_TRUE(Mesh::VertexOHalfedgeCCWIter(mesh_.voh_cwend(vhandle[1])) ==  mesh_.voh_ccwend(vhandle[1])) << "end iterators are not equal";
+  EXPECT_TRUE(Mesh::VertexOHalfedgeCCWIter(mesh_.voh_cwend(vh)) ==  mesh_.voh_ccwend(vh)) << "end iterators are not equal";
 
 
 }
