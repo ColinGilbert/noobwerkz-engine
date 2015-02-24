@@ -6,12 +6,16 @@
 
 <!-- --------------------------------------------------------------------- -->
 
-<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1222)</td><td>
+<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1228)</td><td>
 
 <b>Core</b>
 <ul>
 <li>Fixed crash when writing with multiple threads to mostream. closes #2293 (Note: This fix is only active with C++11 support) </li>
 <li>fix "relink failed" condition closes #1244. This patch fixes a rare condition in add_face, where a non-manifold configuration could be created. </li>
+<li>Fixed the problem that the end iterator could become valid again if it was incremented.</li>
+<li>Decrementing the start iterator will return an invalid iterator now (Maybe we can implement reverse iterators)</li>
+<li>Removed one check from the circulator iterations, which should result in faster execution of is_valid().</li>
+<li>Added CW and CCW Circulators</li>
 </ul>
 
 <b>IO</b>
@@ -32,6 +36,7 @@
 
 <b>Documentation</b>
 <ul>
+<li>Example for locking vertices in decimater</li>
 <li>Added extra hint about status flags when collapsing edges</li>
 <li>updated tutorial on reading and writing meshes with python bindings</li>
 </ul>

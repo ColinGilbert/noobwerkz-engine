@@ -903,10 +903,6 @@ this will lead to unpredictable behaviour. Using skipping iterators for iteratin
 the elements and creating circulators from them is safe as they don't contain
 deleted elements.
 
-\code
-
-\endcode
-
 \section it_circs_h How to use circulators in OpenMesh
 
 The following code example now shows how to enumerate the 1-ring of each vertex:
