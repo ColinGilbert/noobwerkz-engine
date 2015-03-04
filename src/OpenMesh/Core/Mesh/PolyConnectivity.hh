@@ -102,10 +102,11 @@ public:
   /**
    * Enumerates 1-ring vertices in a clockwise fashion.
    */
-  typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::VertexHandle,
+  typedef Iterators::GenericCirculatorT_DEPRECATED<This,  This::VertexHandle,  This::VertexHandle,
           &Iterators::GenericCirculatorBaseT<This>::toVertexHandle>
   VertexVertexIter;
-  typedef VertexVertexIter VertexVertexCWIter;
+  typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::VertexHandle,
+            &Iterators::GenericCirculatorBaseT<This>::toVertexHandle> VertexVertexCWIter;
 
   /**
    * Enumerates 1-ring vertices in a counter clockwise fashion.
@@ -117,10 +118,11 @@ public:
   /**
    * Enumerates outgoing half edges in a clockwise fashion.
    */
-  typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::HalfedgeHandle,
+  typedef Iterators::GenericCirculatorT_DEPRECATED<This,  This::VertexHandle,  This::HalfedgeHandle,
           &Iterators::GenericCirculatorBaseT<This>::toHalfedgeHandle>
   VertexOHalfedgeIter;
-  typedef VertexOHalfedgeIter VertexOHalfedgeCWIter;
+  typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::HalfedgeHandle,
+      &Iterators::GenericCirculatorBaseT<This>::toHalfedgeHandle> VertexOHalfedgeCWIter;
 
   /**
    * Enumerates outgoing half edges in a counter clockwise fashion.
@@ -132,10 +134,11 @@ public:
   /**
    * Enumerates incoming half edges in a clockwise fashion.
    */
-  typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::HalfedgeHandle,
+  typedef Iterators::GenericCirculatorT_DEPRECATED<This,  This::VertexHandle,  This::HalfedgeHandle,
           &Iterators::GenericCirculatorBaseT<This>::toOppositeHalfedgeHandle>
   VertexIHalfedgeIter;
-  typedef VertexIHalfedgeIter VertexIHalfedgeCWIter;
+  typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::HalfedgeHandle,
+      &Iterators::GenericCirculatorBaseT<This>::toOppositeHalfedgeHandle> VertexIHalfedgeCWIter;
 
   /**
    * Enumerates incoming half edges in a counter clockwise fashion.
@@ -147,10 +150,11 @@ public:
   /**
    * Enumerates incident faces in a clockwise fashion.
    */
-  typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::FaceHandle,
+  typedef Iterators::GenericCirculatorT_DEPRECATED<This,  This::VertexHandle,  This::FaceHandle,
           &Iterators::GenericCirculatorBaseT<This>::toFaceHandle>
   VertexFaceIter;
-  typedef VertexFaceIter VertexFaceCWIter;
+  typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::FaceHandle,
+      &Iterators::GenericCirculatorBaseT<This>::toFaceHandle> VertexFaceCWIter;
 
   /**
    * Enumerates incident faces in a counter clockwise fashion.
@@ -162,10 +166,11 @@ public:
   /**
    * Enumerates incident edges in a clockwise fashion.
    */
-  typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::EdgeHandle,
+  typedef Iterators::GenericCirculatorT_DEPRECATED<This,  This::VertexHandle,  This::EdgeHandle,
           &Iterators::GenericCirculatorBaseT<This>::toEdgeHandle>
   VertexEdgeIter;
-  typedef VertexEdgeIter VertexEdgeCWIter;
+  typedef Iterators::GenericCirculatorT<This,  This::VertexHandle,  This::EdgeHandle,
+      &Iterators::GenericCirculatorBaseT<This>::toEdgeHandle> VertexEdgeCWIter;
   /**
    * Enumerates incident edges in a counter clockwise fashion.
    */
@@ -176,10 +181,11 @@ public:
   /**
    * Identical to #FaceHalfedgeIter. God knows why this typedef exists.
    */
-  typedef Iterators::GenericCirculatorT<This, This::FaceHandle, This::HalfedgeHandle,
+  typedef Iterators::GenericCirculatorT_DEPRECATED<This, This::FaceHandle, This::HalfedgeHandle,
       &Iterators::GenericCirculatorBaseT<This>::toHalfedgeHandle>
   HalfedgeLoopIter;
-  typedef HalfedgeLoopIter HalfedgeLoopCWIter;
+  typedef Iterators::GenericCirculatorT<This, This::FaceHandle, This::HalfedgeHandle,
+      &Iterators::GenericCirculatorBaseT<This>::toHalfedgeHandle> HalfedgeLoopCWIter;
   /**
    * Identical to #FaceHalfedgeIter. God knows why this typedef exists.
    */

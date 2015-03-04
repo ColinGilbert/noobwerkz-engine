@@ -397,6 +397,210 @@ class GenericCirculatorT : protected GenericCirculatorBaseT<Mesh> {
         mutable value_type pointer_deref_value;
 };
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////           OLD           ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// OLD CIRCULATORS
+// deprecated circulators, will be removed soon
+// if you remove these circulators and go to the old ones, PLEASE ENABLE FOLLOWING UNITTESTS:
+//
+// OpenMeshTrimeshCirculatorVertexIHalfEdge.VertexIHalfEdgeIterCheckInvalidationAtEnds
+// OpenMeshTrimeshCirculatorVertexEdge.VertexEdgeIterCheckInvalidationAtEnds
+// OpenMeshTrimeshCirculatorVertexVertex.VertexVertexIterCheckInvalidationAtEnds
+// OpenMeshTrimeshCirculatorVertexOHalfEdge.VertexOHalfEdgeIterCheckInvalidationAtEnds
+// OpenMeshTrimeshCirculatorVertexFace.VertexFaceIterCheckInvalidationAtEnds
+// OpenMeshTrimeshCirculatorVertexFace.VertexFaceIterWithoutHolesDecrement
+//
+
+template<class Mesh, class CenterEntityHandle, class ValueHandle>
+class GenericCirculator_ValueHandleFnsT_DEPRECATED {
+    public:
+        inline static bool is_valid(const typename Mesh::HalfedgeHandle &heh,const typename Mesh::HalfedgeHandle &start, const int lap_counter) {
+            return ( heh.is_valid() && ((start != heh) || (lap_counter == 0 )) );
+        }
+        inline static void init(const Mesh*, typename Mesh::HalfedgeHandle&, typename Mesh::HalfedgeHandle&, int&) {};
+        inline static void increment(const Mesh *mesh, typename Mesh::HalfedgeHandle &heh, typename Mesh::HalfedgeHandle &start, int &lap_counter) {
+            GenericCirculator_CenterEntityFnsT<Mesh, CenterEntityHandle, true>::increment(mesh, heh, start, lap_counter);
+        }
+        inline static void decrement(const Mesh *mesh, typename Mesh::HalfedgeHandle &heh, typename Mesh::HalfedgeHandle &start, int &lap_counter) {
+            GenericCirculator_CenterEntityFnsT<Mesh, CenterEntityHandle, true>::decrement(mesh, heh, start, lap_counter);
+        }
+};
+
+template<class Mesh, class CenterEntityHandle>
+class GenericCirculator_ValueHandleFnsT_DEPRECATED<Mesh, CenterEntityHandle, typename Mesh::FaceHandle> {
+    public:
+        typedef GenericCirculator_DereferenciabilityCheckT<Mesh, CenterEntityHandle, typename Mesh::FaceHandle> GenericCirculator_DereferenciabilityCheck;
+
+        inline static bool is_valid(const typename Mesh::HalfedgeHandle &heh, const typename Mesh::HalfedgeHandle &start, const int lap_counter) {
+            return ( heh.is_valid() &&  ((start != heh) || (lap_counter == 0 )));
+        }
+        inline static void init(const Mesh *mesh, typename Mesh::HalfedgeHandle &heh, typename Mesh::HalfedgeHandle &start, int &lap_counter) {
+            if (heh.is_valid() && !GenericCirculator_DereferenciabilityCheck::isDereferenciable(mesh, heh) && lap_counter == 0 )
+                increment(mesh, heh, start, lap_counter);
+        };
+        inline static void increment(const Mesh *mesh, typename Mesh::HalfedgeHandle &heh, typename Mesh::HalfedgeHandle &start, int &lap_counter) {
+            do {
+                GenericCirculator_CenterEntityFnsT<Mesh, CenterEntityHandle, true>::increment(mesh, heh, start, lap_counter);
+            } while (is_valid(heh, start, lap_counter) && !GenericCirculator_DereferenciabilityCheck::isDereferenciable(mesh, heh));
+        }
+        inline static void decrement(const Mesh *mesh, typename Mesh::HalfedgeHandle &heh, typename Mesh::HalfedgeHandle &start, int &lap_counter) {
+            do {
+                GenericCirculator_CenterEntityFnsT<Mesh, CenterEntityHandle, true>::decrement(mesh, heh, start, lap_counter);
+            } while (is_valid(heh, start, lap_counter) && !GenericCirculator_DereferenciabilityCheck::isDereferenciable(mesh, heh));
+        }
+};
+
+template<class Mesh, class CenterEntityHandle, class ValueHandle,
+        ValueHandle (GenericCirculatorBaseT<Mesh>::*Handle2Value)() const>
+class GenericCirculatorT_DEPRECATED : protected GenericCirculatorBaseT<Mesh> {
+    public:
+        typedef std::ptrdiff_t difference_type;
+        typedef ValueHandle value_type;
+        typedef const value_type& reference;
+        typedef const value_type* pointer;
+        typedef std::bidirectional_iterator_tag iterator_category;
+
+        typedef typename GenericCirculatorBaseT<Mesh>::mesh_ptr mesh_ptr;
+        typedef typename GenericCirculatorBaseT<Mesh>::mesh_ref mesh_ref;
+        typedef GenericCirculator_ValueHandleFnsT_DEPRECATED<Mesh, CenterEntityHandle, ValueHandle> GenericCirculator_ValueHandleFns;
+
+    public:
+        GenericCirculatorT_DEPRECATED() {}
+        GenericCirculatorT_DEPRECATED(mesh_ref mesh, CenterEntityHandle start, bool end = false) :
+            GenericCirculatorBaseT<Mesh>(mesh, mesh.halfedge_handle(start), end) {
+
+          GenericCirculator_ValueHandleFns::init(this->mesh_, this->heh_, this->start_, this->lap_counter_);
+        }
+        GenericCirculatorT_DEPRECATED(mesh_ref mesh, HalfedgeHandle heh, bool end = false) :
+            GenericCirculatorBaseT<Mesh>(mesh, heh, end) {
+
+          GenericCirculator_ValueHandleFns::init(this->mesh_, this->heh_, this->start_, this->lap_counter_);
+        }
+        GenericCirculatorT_DEPRECATED(const GenericCirculatorT_DEPRECATED &rhs) : GenericCirculatorBaseT<Mesh>(rhs) {}
+
+        GenericCirculatorT_DEPRECATED& operator++() {
+            assert(this->mesh_);
+            GenericCirculator_ValueHandleFns::increment(this->mesh_, this->heh_, this->start_, this->lap_counter_);
+            return *this;
+        }
+        DEPRECATED("current decrement operator is deprecated. Please use CCW/CW iterators.")
+        GenericCirculatorT_DEPRECATED& operator--() {
+            assert(this->mesh_);
+            GenericCirculator_ValueHandleFns::decrement(this->mesh_, this->heh_, this->start_, this->lap_counter_);
+            return *this;
+        }
+
+        /// Post-increment
+        GenericCirculatorT_DEPRECATED operator++(int) {
+            assert(this->mesh_);
+            GenericCirculatorT_DEPRECATED cpy(*this);
+            ++(*this);
+            return cpy;
+        }
+
+        /// Post-decrement
+        DEPRECATED("current decrement operator is deprecated. Please use CCW/CW iterators.")
+        GenericCirculatorT_DEPRECATED operator--(int) {
+            assert(this->mesh_);
+            GenericCirculatorT_DEPRECATED cpy(*this);
+            --(*this);
+            return cpy;
+        }
+
+        /// Standard dereferencing operator.
+        value_type operator*() const {
+#ifndef NDEBUG
+            assert(this->heh_.is_valid());
+            value_type res = (this->*Handle2Value)();
+            assert(res.is_valid());
+            return res;
+#else
+            return (this->*Handle2Value)();
+#endif
+        }
+
+        /**
+         * @brief Pointer dereferentiation.
+         *
+         * This returns a pointer which points to a handle
+         * that loses its validity once this dereferentiation is
+         * invoked again. Thus, do not store the result of
+         * this operation.
+         */
+        pointer operator->() const {
+            pointer_deref_value = **this;
+            return &pointer_deref_value;
+        }
+
+        GenericCirculatorT_DEPRECATED &operator=(const GenericCirculatorT_DEPRECATED &rhs) {
+            GenericCirculatorBaseT<Mesh>::operator=(rhs);
+            return *this;
+        };
+
+        bool operator==(const GenericCirculatorT_DEPRECATED &rhs) const {
+            return GenericCirculatorBaseT<Mesh>::operator==(rhs);
+        }
+
+        bool operator!=(const GenericCirculatorT_DEPRECATED &rhs) const {
+            return GenericCirculatorBaseT<Mesh>::operator!=(rhs);
+        }
+
+        bool is_valid() const {
+            return GenericCirculator_ValueHandleFns::is_valid(this->heh_,this->start_, this->lap_counter_);
+        }
+
+        DEPRECATED("current_halfedge_handle() is an implementation detail and should not be accessed from outside the iterator class.")
+        /**
+         * \deprecated
+         * current_halfedge_handle() is an implementation detail and should not
+         * be accessed from outside the iterator class.
+         */
+        const HalfedgeHandle &current_halfedge_handle() const {
+            return this->heh_;
+        }
+
+        DEPRECATED("Do not use this error prone implicit cast. Compare to end-iterator or use is_valid(), instead.")
+        /**
+         * \deprecated
+         * Do not use this error prone implicit cast. Compare to the
+         * end-iterator or use is_valid() instead.
+         */
+        operator bool() const {
+            return is_valid();
+        }
+
+        /**
+         * \brief Return the handle of the current target.
+         * \deprecated
+         * This function clutters your code. Use dereferencing operators -> and * instead.
+         */
+        DEPRECATED("This function clutters your code. Use dereferencing operators -> and * instead.")
+        value_type handle() const {
+          return **this;
+        }
+
+        /**
+         * \brief Cast to the handle of the current target.
+         * \deprecated
+         * Implicit casts of iterators are unsafe. Use dereferencing operators
+         * -> and * instead.
+         */
+        DEPRECATED("Implicit casts of iterators are unsafe. Use dereferencing operators -> and * instead.")
+        operator value_type() const {
+          return **this;
+        }
+
+        template<typename STREAM>
+        friend STREAM &operator<< (STREAM &s, const GenericCirculatorT_DEPRECATED &self) {
+            return s << self.mesh_ << ", " << self.start_.idx() << ", " << self.heh_.idx() << ", " << self.lap_counter_;
+        }
+
+    private:
+        mutable value_type pointer_deref_value;
+};
+
 } // namespace Iterators
 } // namespace OpenMesh
 
