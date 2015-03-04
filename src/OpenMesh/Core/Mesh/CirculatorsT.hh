@@ -370,6 +370,11 @@ class GenericCirculatorT : protected GenericCirculatorBaseT<Mesh> {
 // OpenMeshTrimeshCirculatorVertexOHalfEdge.VertexOHalfEdgeIterCheckInvalidationAtEnds
 // OpenMeshTrimeshCirculatorVertexFace.VertexFaceIterCheckInvalidationAtEnds
 // OpenMeshTrimeshCirculatorVertexFace.VertexFaceIterWithoutHolesDecrement
+// OpenMeshTrimeshCirculatorFaceEdge.FaceEdgeIterCheckInvalidationAtEnds
+// OpenMeshTrimeshCirculatorFaceFace.FaceFaceIterCheckInvalidationAtEnds
+// OpenMeshTrimeshCirculatorFaceHalfEdge.FaceHalfedgeIterWithoutHolesIncrement
+// OpenMeshTrimeshCirculatorFaceVertex.FaceVertexIterCheckInvalidationAtEnds
+// OpenMeshTrimeshCirculatorFaceHalfEdge.FaceHalfedgeIterCheckInvalidationAtEnds
 //
 
 template<class Mesh, class CenterEntityHandle, class ValueHandle>

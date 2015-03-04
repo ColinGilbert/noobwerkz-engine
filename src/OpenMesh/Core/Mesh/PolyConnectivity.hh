@@ -216,10 +216,11 @@ public:
   /**
    * Enumerate incident vertices in a counter clockwise fashion.
    */
-  typedef Iterators::GenericCirculatorT<This,  This::FaceHandle,  This::VertexHandle,
+  typedef Iterators::GenericCirculatorT_DEPRECATED<This,  This::FaceHandle,  This::VertexHandle,
           &Iterators::GenericCirculatorBaseT<This>::toVertexHandle>
   FaceVertexIter;
-  typedef FaceVertexIter FaceVertexCCWIter;
+  typedef Iterators::GenericCirculatorT<This,  This::FaceHandle,  This::VertexHandle,
+      &Iterators::GenericCirculatorBaseT<This>::toVertexHandle> FaceVertexCCWIter;
 
   /**
    * Enumerate incident vertices in a clockwise fashion.
@@ -231,10 +232,11 @@ public:
   /**
    * Enumerate incident half edges in a counter clockwise fashion.
    */
-  typedef Iterators::GenericCirculatorT<This,  This::FaceHandle,  This::HalfedgeHandle,
+  typedef Iterators::GenericCirculatorT_DEPRECATED<This,  This::FaceHandle,  This::HalfedgeHandle,
           &Iterators::GenericCirculatorBaseT<This>::toHalfedgeHandle>
   FaceHalfedgeIter;
-  typedef FaceHalfedgeIter FaceHalfedgeCCWIter;
+  typedef Iterators::GenericCirculatorT<This,  This::FaceHandle,  This::HalfedgeHandle,
+      &Iterators::GenericCirculatorBaseT<This>::toHalfedgeHandle> FaceHalfedgeCCWIter;
 
   /**
    * Enumerate incident half edges in a clockwise fashion.
@@ -246,10 +248,11 @@ public:
   /**
    * Enumerate incident edges in a counter clockwise fashion.
    */
-  typedef Iterators::GenericCirculatorT<This,  This::FaceHandle,  This::EdgeHandle,
+  typedef Iterators::GenericCirculatorT_DEPRECATED<This,  This::FaceHandle,  This::EdgeHandle,
           &Iterators::GenericCirculatorBaseT<This>::toEdgeHandle>
   FaceEdgeIter;
-  typedef FaceEdgeIter FaceEdgeCCWIter;
+  typedef Iterators::GenericCirculatorT<This,  This::FaceHandle,  This::EdgeHandle,
+      &Iterators::GenericCirculatorBaseT<This>::toEdgeHandle> FaceEdgeCCWIter;
 
   /**
    * Enumerate incident edges in a clockwise fashion.
@@ -261,10 +264,11 @@ public:
   /**
    * Enumerate adjacent faces in a counter clockwise fashion.
    */
-  typedef Iterators::GenericCirculatorT<This,  This::FaceHandle,  This::FaceHandle,
+  typedef Iterators::GenericCirculatorT_DEPRECATED<This,  This::FaceHandle,  This::FaceHandle,
           &Iterators::GenericCirculatorBaseT<This>::toOppositeFaceHandle>
   FaceFaceIter;
-  typedef FaceFaceIter FaceFaceCCWIter;
+  typedef Iterators::GenericCirculatorT<This,  This::FaceHandle,  This::FaceHandle,
+      &Iterators::GenericCirculatorBaseT<This>::toOppositeFaceHandle> FaceFaceCCWIter;
 
   /**
    * Enumerate adjacent faces in a clockwise fashion.
