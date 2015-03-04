@@ -73,7 +73,7 @@ check(unsigned int _targets, std::ostream& _os)
   {
     typename Mesh::ConstVertexIter v_it(mesh_.vertices_begin()), v_end(mesh_.vertices_end());
     typename Mesh::VertexHandle    vh;
-    typename Mesh::ConstVertexVertexIter vv_it;
+    typename Mesh::ConstVertexVertexCWIter vv_it;
     typename Mesh::HalfedgeHandle  heh;
     unsigned int                   count;
     const unsigned int             max_valence(10000);
@@ -115,7 +115,7 @@ check(unsigned int _targets, std::ostream& _os)
 
 
         // check whether circulators are still in order
-        vv_it = mesh_.cvv_iter(vh);
+        vv_it = mesh_.cvv_cwiter(vh);
         for (count=0; vv_it.is_valid() && (count < max_valence); ++vv_it, ++count) {};
         if (count == max_valence)
         {
@@ -123,7 +123,7 @@ check(unsigned int _targets, std::ostream& _os)
               << ": ++circulator problem, one ring corrupt\n";
           ok = false;
         }
-        vv_it = mesh_.cvv_iter(vh);
+        vv_it = mesh_.cvv_cwiter(vh);
         for (count=0; vv_it.is_valid() && (count < max_valence); --vv_it, ++count) {};
         if (count == max_valence)
         {
