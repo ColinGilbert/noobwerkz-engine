@@ -485,7 +485,20 @@ class GenericCirculatorT_DEPRECATED : protected GenericCirculatorBaseT<Mesh> {
             GenericCirculator_ValueHandleFns::increment(this->mesh_, this->heh_, this->start_, this->lap_counter_);
             return *this;
         }
-        DEPRECATED("current decrement operator is deprecated. Please use CCW/CW iterators.")
+#ifndef NO_DECREMENT_DEPRECATED_WARNINGS
+#define DECREMENT_DEPRECATED_WARNINGS_TEXT "The current decrement operator has the unintended behavior that it stays\
+    valid when iterating below the start and will visit the first entity\
+    twice before getting invalid. Furthermore it gets valid again, if you\
+    increment at the end.\
+    When you are sure that you don't iterate below the start anywhere in\
+    your code or rely on this behaviour, you can disable this warning by\
+    setting the define NO_DECREMENT_DEPRECATED_WARNINGS at the command line (or enable it via the\
+    cmake flags).\
+    To be save, you can use the CW/CCW circulator definitions, which behave\
+    the same as the original ones, without the previously mentioned issues."
+
+        DEPRECATED( DECREMENT_DEPRECATED_WARNINGS_TEXT )
+#endif // NO_DECREMENT_DEPRECATED_WARNINGS
         GenericCirculatorT_DEPRECATED& operator--() {
             assert(this->mesh_);
             GenericCirculator_ValueHandleFns::decrement(this->mesh_, this->heh_, this->start_, this->lap_counter_);
@@ -501,7 +514,10 @@ class GenericCirculatorT_DEPRECATED : protected GenericCirculatorBaseT<Mesh> {
         }
 
         /// Post-decrement
-        DEPRECATED("current decrement operator is deprecated. Please use CCW/CW iterators.")
+#ifndef NO_DECREMENT_DEPRECATED_WARNINGS
+        DEPRECATED( DECREMENT_DEPRECATED_WARNINGS_TEXT )
+#undef DECREMENT_DEPRECATED_WARNINGS_TEXT
+#endif //NO_DECREMENT_DEPRECATED_WARNINGS
         GenericCirculatorT_DEPRECATED operator--(int) {
             assert(this->mesh_);
             GenericCirculatorT_DEPRECATED cpy(*this);

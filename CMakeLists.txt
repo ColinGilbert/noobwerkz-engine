@@ -24,6 +24,10 @@ endif()
 
 include (ACGOutput)
 
+# ========================================================================
+# Definitions
+# ========================================================================
+
 if (WIN32)
   add_definitions(
       -D_USE_MATH_DEFINES -DNOMINMAX
@@ -31,6 +35,10 @@ if (WIN32)
   )
 endif ()
 
+set(NO_DECREMENT_DEPRECATED_WARNINGS OFF CACHE BOOL "Disables all deprecated warnings warning about decrement operations on normal circulators.")
+if(NO_DECREMENT_DEPRECATED_WARNINGS)
+  add_definitions( -DNO_DECREMENT_DEPRECATED_WARNINGS )
+endif()
 
 # ========================================================================
 # Windows build style control
