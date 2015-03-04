@@ -347,47 +347,6 @@ class GenericCirculatorT : protected GenericCirculatorBaseT<Mesh> {
             return GenericCirculator_ValueHandleFns::is_valid(this->heh_, this->lap_counter_);
         }
 
-        DEPRECATED("current_halfedge_handle() is an implementation detail and should not be accessed from outside the iterator class.")
-        /**
-         * \deprecated
-         * current_halfedge_handle() is an implementation detail and should not
-         * be accessed from outside the iterator class.
-         */
-        const HalfedgeHandle &current_halfedge_handle() const {
-            return this->heh_;
-        }
-
-        DEPRECATED("Do not use this error prone implicit cast. Compare to end-iterator or use is_valid(), instead.")
-        /**
-         * \deprecated
-         * Do not use this error prone implicit cast. Compare to the
-         * end-iterator or use is_valid() instead.
-         */
-        operator bool() const {
-            return is_valid();
-        }
-
-        /**
-         * \brief Return the handle of the current target.
-         * \deprecated
-         * This function clutters your code. Use dereferencing operators -> and * instead.
-         */
-        DEPRECATED("This function clutters your code. Use dereferencing operators -> and * instead.")
-        value_type handle() const {
-          return **this;
-        }
-
-        /**
-         * \brief Cast to the handle of the current target.
-         * \deprecated
-         * Implicit casts of iterators are unsafe. Use dereferencing operators
-         * -> and * instead.
-         */
-        DEPRECATED("Implicit casts of iterators are unsafe. Use dereferencing operators -> and * instead.")
-        operator value_type() const {
-          return **this;
-        }
-
         template<typename STREAM>
         friend STREAM &operator<< (STREAM &s, const GenericCirculatorT &self) {
             return s << self.mesh_ << ", " << self.start_.idx() << ", " << self.heh_.idx() << ", " << self.lap_counter_;
