@@ -6,16 +6,16 @@
 
 <!-- --------------------------------------------------------------------- -->
 
-<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1228)</td><td>
+<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1234)</td><td>
 
 <b>Core</b>
 <ul>
 <li>Fixed crash when writing with multiple threads to mostream. closes #2293 (Note: This fix is only active with C++11 support) </li>
 <li>fix "relink failed" condition closes #1244. This patch fixes a rare condition in add_face, where a non-manifold configuration could be created. </li>
-<li>Fixed the problem that the end iterator could become valid again if it was incremented.</li>
-<li>Decrementing the start iterator will return an invalid iterator now (Maybe we can implement reverse iterators)</li>
-<li>Removed one check from the circulator iterations, which should result in faster execution of is_valid().</li>
-<li>Added CW and CCW Circulators</li>
+<li>Added CW and CCW Circulators ( These new iterator versions also fix the problems that circulators could get valid again, if iterating past the end,
+    they are also faster, as the require one check less then the old ones.)</li>
+<li>Implement a warning on the operator-- of the old iterators. It was possible to use them to iterate from begin into negative direction. At boundaries,
+    that did not work correctly and visited one entity twice. The warning can be disabled via cmake or define (-DNO_DECREMENT_DEPRECATED_WARNINGS ).</li>
 </ul>
 
 <b>IO</b>
