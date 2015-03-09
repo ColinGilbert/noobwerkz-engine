@@ -48,6 +48,22 @@ TEST_F(OpenMeshReadWriteOBJ, LoadSimpleOBJ) {
 }
 
 /*
+ * Just load a obj file of a cube with degenerated faces
+ */
+TEST_F(OpenMeshReadWriteOBJ, LoadDegeneratedOBJ) {
+
+    mesh_.clear();
+
+    bool ok = OpenMesh::IO::read_mesh(mesh_, "cube-minimal.obj");
+
+    EXPECT_TRUE(ok) << "Unable to load cube-minimal.obj";
+
+    EXPECT_EQ(8u  , mesh_.n_vertices()) << "The number of loaded vertices is not correct!";
+    EXPECT_EQ(18u , mesh_.n_edges()) << "The number of loaded edges is not correct!";
+    EXPECT_EQ(12u , mesh_.n_faces()) << "The number of loaded faces is not correct!";
+}
+
+/*
  * Just load a obj file of a cube and checks the halfedge and vertex normals
  */
 TEST_F(OpenMeshReadWriteOBJ, LoadSimpleOBJCheckHalfEdgeAndVertexNormals) {

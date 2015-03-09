@@ -64,6 +64,10 @@ using std::isspace;
 #include <string.h>
 #endif
 
+#include <set>
+#include <algorithm>
+#include <functional>
+
 //=== NAMESPACES ==============================================================
 
 
@@ -92,6 +96,28 @@ void trimString( std::string& _string) {
     _string = "";
   else
     _string = _string.substr( start, end-start+1 );
+}
+
+//-----------------------------------------------------------------------------
+template<typename Handle>
+class HasSeen : public std::unary_function <Handle, bool>
+{
+public:
+  HasSeen () : seen_ () { }
+
+  bool operator ()(const Handle& i) const
+  {
+    return (!seen_.insert(i.idx()).second);
+  }
+
+private:
+  mutable std::set<int> seen_;
+};
+
+// remove duplicated indices from one face
+void remove_duplicated_vertices(BaseImporter::VHandles& _indices)
+{
+  _indices.erase(std::remove_if(_indices.begin(),_indices.end(),HasSeen<BaseImporter::VHandles::value_type>()),_indices.end());
 }
 
 //-----------------------------------------------------------------------------
@@ -575,7 +601,11 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
       // note that add_face can possibly triangulate the faces, which is why we have to
       // store the current number of faces first
       size_t n_faces = _bi.n_faces();
-      fh = _bi.add_face(faceVertices);
+      remove_duplicated_vertices(faceVertices);
+
+      //A minimum of three vertices are required.
+      if (faceVertices.size() > 2)
+        fh = _bi.add_face(faceVertices);
 
       if (!vhandles.empty() && fh.is_valid() )
         _bi.add_face_texcoords(fh, vhandles[0], face_texcoords);
