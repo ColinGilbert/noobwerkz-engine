@@ -25,8 +25,26 @@ The Python Bindings depend on the following libraries:
 \note Make sure that your Boost Python and Python versions match, i.e. that
 Boost Python was linked against the correct Python version.
 
-The Python Bindings are automatically build with %OpenMesh. For more information
-on how to build %OpenMesh see \ref compiling.
+The Python Bindings are automatically built with %OpenMesh. The generated files are written to the
+Build/python subdirectory of the build tree. For more information on how to build %OpenMesh see
+\ref compiling.
+
+If CMake does not find your Python installation (or finds the wrong one) you can
+explicitly specify an installation by setting the following variables:
+
+\verbatim
+PYTHON_LIBRARY         - Path to the python library
+PYTHON_INCLUDE_DIR     - Path to where Python.h is found
+\endverbatim
+
+Similarly, if CMake does not find your Boost Python installation, set the
+following variables:
+
+\verbatim
+BOOST_ROOT             - Preferred installation prefix
+BOOST_INCLUDEDIR       - Preferred include directory e.g. <prefix>/include
+BOOST_LIBRARYDIR       - Preferred library directory e.g. <prefix>/lib
+\endverbatim
 
 
 

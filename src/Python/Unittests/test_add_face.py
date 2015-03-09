@@ -216,11 +216,12 @@ class AddFace(unittest.TestCase):
         self.mesh.add_face(self.vhandle[0], self.vhandle[5], self.vhandle[6])
         
         # non-manifold!
-        self.mesh.add_face(self.vhandle[3], self.vhandle[0], self.vhandle[4])
+        invalid_fh = self.mesh.add_face(self.vhandle[3], self.vhandle[0], self.vhandle[4])
 
         # Check setup
         self.assertEqual(self.mesh.n_vertices(), 7)
-        self.assertEqual(self.mesh.n_faces(), 4)
+        self.assertEqual(self.mesh.n_faces(), 3)
+        self.assertEqual(invalid_fh, openmesh.TriMesh.InvalidFaceHandle)
         
     def test_add_quad_to_polymesh(self):
         self.mesh = openmesh.PolyMesh()

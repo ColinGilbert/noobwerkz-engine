@@ -12,27 +12,26 @@ ENDIF()
 
 IF(OPENMESH_BUILD_PYTHON_BINDINGS)
 	# Look for the python libs
-	MESSAGE(STATUS "Looking for Python")
+	MESSAGE(STATUS "Looking for PythonLibs")
 	FIND_PACKAGE(PythonLibs ${OPENMESH_PYTHON_VERSION} QUIET)
 
 	IF(PYTHONLIBS_FOUND)
-		MESSAGE(STATUS "Looking for Python -- found")
+		MESSAGE(STATUS "Looking for PythonLibs -- found")
 
 		# Determine the name of the python component
-		STRING(REGEX MATCH "^[0-9]+\\.[0-9]+" PYTHON_VERSION ${PYTHONLIBS_VERSION_STRING})
-		STRING(REGEX REPLACE "\\." "" PYTHON_VERSION ${PYTHON_VERSION})
-
-		SET(BOOST_PYTHON_COMPONENT "python-py${PYTHON_VERSION}")
+		STRING(REGEX MATCH "^[0-9]+\\.[0-9]+" PYTHON_VERSION_MAJOR_MINOR ${PYTHONLIBS_VERSION_STRING})
+		STRING(REGEX REPLACE "\\." "" PYTHON_VERSION_MAJOR_MINOR ${PYTHON_VERSION_MAJOR_MINOR})
+		STRING(REGEX MATCH "^[0-9]" PYTHON_VERSION_MAJOR ${PYTHON_VERSION_MAJOR_MINOR})
 
 		MESSAGE(STATUS "Looking for Boost Python")
 
-		# Look for version specific python component
-        FIND_PACKAGE(Boost QUIET COMPONENTS ${BOOST_PYTHON_COMPONENT})
-		
-		# Look for any other python component
-		IF(NOT Boost_FOUND)
-			FIND_PACKAGE(Boost QUIET COMPONENTS python)
-		ENDIF()
+		SET(BOOST_PYTHON_COMPONENT_NAMES "python-py${PYTHON_VERSION_MAJOR_MINOR}" "python${PYTHON_VERSION_MAJOR}" "python")
+
+		FOREACH(NAME ${BOOST_PYTHON_COMPONENT_NAMES})
+			IF(NOT Boost_FOUND)
+				FIND_PACKAGE(Boost QUIET COMPONENTS ${NAME})
+			ENDIF()
+		ENDFOREACH()
 
 		IF(Boost_FOUND)
 			MESSAGE(STATUS "Looking for Boost Python -- found")
@@ -111,6 +110,9 @@ IF(OPENMESH_BUILD_PYTHON_BINDINGS)
 
 						IF(APPLE)
 							SET_TARGET_PROPERTIES(openmesh PROPERTIES SUFFIX ".so")
+							IF (NOT (CMAKE_MAJOR_VERSION LESS 3))
+								SET_TARGET_PROPERTIES(openmesh PROPERTIES MACOSX_RPATH TRUE)
+							ENDIF()
 						ENDIF()
 
 						IF(WIN32)
@@ -191,6 +193,6 @@ IF(OPENMESH_BUILD_PYTHON_BINDINGS)
 			MESSAGE("Boost Python not found! Skipping Python Bindings.")
 		ENDIF()
 	ELSE()
-		MESSAGE("Python not found! Skipping Python Bindings.")
+		MESSAGE("PythonLibs not found! Skipping Python Bindings.")
 	ENDIF()
 ENDIF()
