@@ -823,11 +823,11 @@ TEST_F(OpenMeshTutorials, flipping_edges) {
   for(Mesh::EdgeIter it = mesh.edges_begin(); it != mesh.edges_end(); ++it) {
     if(!mesh.is_boundary(*it)) {
       // Flip edge
-      EXPECT_EQ(2, mesh.to_vertex_handle(mesh.halfedge_handle(*it,0)).idx()) << "expected vertex handle 2!" << std::endl;
-      EXPECT_EQ(0, mesh.to_vertex_handle(mesh.halfedge_handle(*it,1)).idx()) << "expected vertex handle 0!" << std::endl;
+      EXPECT_EQ(vhandle[2].idx(), mesh.to_vertex_handle(mesh.halfedge_handle(*it,0)).idx()) << "expected vertex handle 2!" ;
+      EXPECT_EQ(vhandle[0].idx(), mesh.to_vertex_handle(mesh.halfedge_handle(*it,1)).idx()) << "expected vertex handle 0!" ;
       mesh.flip(*it);
-      EXPECT_EQ(1, mesh.to_vertex_handle(mesh.halfedge_handle(*it,0)).idx()) << "expected vertex handle 1 (did the flip work?)!" << std::endl;
-      EXPECT_EQ(3, mesh.to_vertex_handle(mesh.halfedge_handle(*it,1)).idx()) << "expected vertex handle 3 (did the flip work?)!" << std::endl;
+      EXPECT_EQ(vhandle[1].idx(), mesh.to_vertex_handle(mesh.halfedge_handle(*it,0)).idx()) << "expected vertex handle 1 (did the flip work?)!" ;
+      EXPECT_EQ(vhandle[3].idx(), mesh.to_vertex_handle(mesh.halfedge_handle(*it,1)).idx()) << "expected vertex handle 3 (did the flip work?)!" ;
     }
   }
   // The edge now connects vertex vhandle[1] and vhandle[3].
