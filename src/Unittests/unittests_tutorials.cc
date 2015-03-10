@@ -796,4 +796,89 @@ TEST_F(OpenMeshTutorials, storing_custom_properties) {
   EXPECT_TRUE(fill_props(mesh, mprop_map, true)) << "property not filled correctly";
 }
 
+/*Testcase for code snippet from flipping edges in triangle meshes
+ * */
+TEST_F(OpenMeshTutorials, flipping_edges) {
+  Mesh mesh;
+  // Add some vertices
+  Mesh::VertexHandle vhandle[4];
+  vhandle[0] = mesh.add_vertex(MyMesh::Point(0, 0, 0));
+  vhandle[1] = mesh.add_vertex(MyMesh::Point(0, 1, 0));
+  vhandle[2] = mesh.add_vertex(MyMesh::Point(1, 1, 0));
+  vhandle[3] = mesh.add_vertex(MyMesh::Point(1, 0, 0));
+  // Add two faces
+  std::vector<Mesh::VertexHandle> face_vhandles;
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[0]);
+  mesh.add_face(face_vhandles);
+  face_vhandles.clear();
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[3]);
+  mesh.add_face(face_vhandles);
+  // Now the edge adjacent to the two faces connects
+  // vertex vhandle[0] and vhandle[2].
+  // Find this edge and then flip it
+  for(Mesh::EdgeIter it = mesh.edges_begin(); it != mesh.edges_end(); ++it) {
+    if(!mesh.is_boundary(*it)) {
+      // Flip edge
+      EXPECT_EQ(2, mesh.to_vertex_handle(mesh.halfedge_handle(*it,0)).idx()) << "expected vertex handle 2!" << std::endl;
+      EXPECT_EQ(0, mesh.to_vertex_handle(mesh.halfedge_handle(*it,1)).idx()) << "expected vertex handle 0!" << std::endl;
+      mesh.flip(*it);
+      EXPECT_EQ(1, mesh.to_vertex_handle(mesh.halfedge_handle(*it,0)).idx()) << "expected vertex handle 1 (did the flip work?)!" << std::endl;
+      EXPECT_EQ(3, mesh.to_vertex_handle(mesh.halfedge_handle(*it,1)).idx()) << "expected vertex handle 3 (did the flip work?)!" << std::endl;
+    }
+  }
+  // The edge now connects vertex vhandle[1] and vhandle[3].
+}
+
+/*Testcase for code snippet from collapsing edges in triangle meshes
+ * */
+TEST_F(OpenMeshTutorials, collapsing_edges) {
+  PolyMesh mesh;
+  mesh.request_vertex_status();
+  mesh.request_edge_status();
+  // Add some vertices as in the illustration above
+  PolyMesh::VertexHandle vhandle[7];
+  vhandle[0] = mesh.add_vertex(MyMesh::Point(-1, 1, 0));
+  vhandle[1] = mesh.add_vertex(MyMesh::Point(-1, 3, 0));
+  vhandle[2] = mesh.add_vertex(MyMesh::Point(0, 0, 0));
+  vhandle[3] = mesh.add_vertex(MyMesh::Point(0, 2, 0));
+  vhandle[4] = mesh.add_vertex(MyMesh::Point(0, 4, 0));
+  vhandle[5] = mesh.add_vertex(MyMesh::Point(1, 1, 0));
+  vhandle[6] = mesh.add_vertex(MyMesh::Point(1, 3, 0));
+  // Add three quad faces
+  std::vector<PolyMesh::VertexHandle> face_vhandles;
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[3]);
+  mesh.add_face(face_vhandles);
+  face_vhandles.clear();
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[3]);
+  face_vhandles.push_back(vhandle[5]);
+  face_vhandles.push_back(vhandle[4]);
+  mesh.add_face(face_vhandles);
+  face_vhandles.clear();
+  face_vhandles.push_back(vhandle[3]);
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[6]);
+  face_vhandles.push_back(vhandle[5]);
+  mesh.add_face(face_vhandles);
+  // Now find the edge between vertex vhandle[2]
+  // and vhandle[3]
+  for(PolyMesh::HalfedgeIter it = mesh.halfedges_begin(); it != mesh.halfedges_end(); ++it) {
+    if( mesh.to_vertex_handle(*it) == vhandle[3] &&
+        mesh.from_vertex_handle(*it) == vhandle[2])
+    {
+      // Collapse edge
+      mesh.collapse(*it);
+      break;
+    }
+  }
+  // Our mesh now looks like in the illustration above after the collapsing.
+}
+
 }
