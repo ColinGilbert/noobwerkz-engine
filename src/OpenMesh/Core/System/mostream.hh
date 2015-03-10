@@ -63,7 +63,7 @@
 #include <string>
 #include <algorithm>
 
-#if __cplusplus > 199711L or __GXX_EXPERIMENTAL_CXX0X__
+#if __cplusplus > 199711L || defined( __GXX_EXPERIMENTAL_CXX0X__ )
   #include <mutex>
 #endif
 
@@ -182,7 +182,7 @@ protected:
   virtual int sync() 
   {
     // If working on multiple threads, we need to serialize the output correctly (requires c++11 headers)
-    #if __cplusplus > 199711L or __GXX_EXPERIMENTAL_CXX0X__
+    #if __cplusplus > 199711L || defined( __GXX_EXPERIMENTAL_CXX0X__ )
        std::lock_guard<std::mutex> lck (serializer_);
     #endif
 
@@ -207,7 +207,7 @@ protected:
     char c = traits_type::to_char_type(_c);
 
     // If working on multiple threads, we need to serialize the output correctly (requires c++11 headers)
-    #if __cplusplus > 199711L or __GXX_EXPERIMENTAL_CXX0X__
+    #if __cplusplus > 199711L || defined( __GXX_EXPERIMENTAL_CXX0X__ )
        {
          std::lock_guard<std::mutex> lck (serializer_);
          buffer_.push_back(c);
@@ -257,7 +257,7 @@ private:
   bool         enabled_;
 
   // If working on multiple threads, we need to serialize the output correctly (requires c++11 headers)
-  #if __cplusplus > 199711L or __GXX_EXPERIMENTAL_CXX0X__
+  #if __cplusplus > 199711L || defined( __GXX_EXPERIMENTAL_CXX0X__ )
      std::mutex serializer_;
   #endif
 
