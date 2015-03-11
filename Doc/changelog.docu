@@ -6,7 +6,7 @@
 
 <!-- --------------------------------------------------------------------- -->
 
-<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1234)</td><td>
+<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1244)</td><td>
 
 <b>Core</b>
 <ul>
@@ -22,6 +22,7 @@
 <ul>
 <li>Writers: Avoid std::endl in various writers to avoid flushing the output stream on every line. (Thanks to Roman Zoller for the hint).</li>
 <li>OBJReader: fix reading mtl files with texture only for obj files</li>
+<li>OBJReader: fix crash, if obj file contains degenerated faces
 </ul>
 
 <b>Tools</b>
@@ -39,12 +40,24 @@
 <li>Example for locking vertices in decimater</li>
 <li>Added extra hint about status flags when collapsing edges</li>
 <li>updated tutorial on reading and writing meshes with python bindings</li>
+<li>updated the tutorial with further information on how to build the python bindings</li>
+<li>added missing requestsfor polyMesh in collapsee docu</li>
+</ul>
+
+<b>Unittests</b>
+<ul>
+<li>fixed a bug in the unit test test_add_face.py</li>
+<li>Added tests for tutorials about flip and collapse</li>
 </ul>
 
 <b>Build System</b>
 <ul>
 <li>Python Bindings: strip pythonlibs version string of possible other characters than 0-9 and .  (e.g. '+')</li>
 <li>Python Bindings: don't require boost-python</li>
+<li>Python Bindings: updated the cmake file so that cmake finds boost python installations with the names python2 and python3</li>
+<li>Python Bindings: fixed a cmake warning on os x (Policy CMP0042: MACOSX_RPATH)</li>
+<li>fix windows warning about unknown preprocessor define</li>
+<li>Default to release build type if not selected via cmake. Only on non Win platforms</li>
 </ul>
 
 
