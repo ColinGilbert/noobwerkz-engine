@@ -9,11 +9,14 @@ we have to extend the default traits for our mesh class.
 Vertices, faces and (half-)edges need the OpenMesh::Attributes::Status attribute
 which is used to hold the flag "deleted" if an element is deleted.
 
-The struct which defines the mesh traits then looks like this:
+Instead of defining the required attributes via traits on compile-time, it is possible to request
+attributes dynamically on run-time by requesting them.
+In this example, we want to delete faces, edges and vertices, therefore requesting the status attribute is required.
+\note You have to request attributes before you use them, if you don't enable them via traits.
 
 \dontinclude delete_geometry.cc
-\skipline struct
-\until };
+\skipline // the request 
+\until mesh.request_vertex_status();
 
 After having created the geometry of the cube one can delete faces and vertices
 by simply calling delete_vertices() (delete_faces() or delete_edges() respectively).
