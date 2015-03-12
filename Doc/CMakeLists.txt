@@ -2,10 +2,6 @@ include (ACGDoxygen)
 
 IF (DOXYGEN_FOUND)
 
-  if (TARGET doc)
-    acg_copy_after_build (doc "${CMAKE_CURRENT_SOURCE_DIR}/html" "${CMAKE_BINARY_DIR}/Build/${ACG_PROJECT_DATADIR}/Doc/html")
-  endif ()
-
   # Add a documentation install target
   add_custom_target(doc-install COMMENT "Installing Documentation" VERBATIM )
 
