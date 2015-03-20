@@ -97,33 +97,38 @@ calc_face_normal(FaceHandle _fh) const
   ConstFaceVertexIter fv_it(this->cfv_iter(_fh));
   
   Point p0 = this->point(*fv_it);
-  Point p0i = p0; //save point of vertex 0
-  ++fv_it;
+  const Point p0i = p0; //save point of vertex 0
+  // Safeguard for 1-gons
+  if (!(++fv_it).is_valid()) return Normal(0, 0, 0);
+
   Point p1 = this->point(*fv_it);
-  Point p1i = p1; //save point of vertex 1
+  const Point p1i = p1; //save point of vertex 1
   ++fv_it;
-  Point p2;
+  // Safeguard for 2-gons
+  if (!(++fv_it).is_valid()) return Normal(0, 0, 0);
   
   //calculate area-weighted average normal of polygon's ears
   Normal n(0,0,0);
   for(; fv_it.is_valid(); ++fv_it)
   {
-    p2 = this->point(*fv_it);
-    n += vector_cast<Normal>(calc_face_normal(p0, p1, p2)); 
+    const Point p2 = this->point(*fv_it);
+    n += vector_cast<Normal>(calc_face_normal(p0, p1, p2));
     p0 = p1;
     p1 = p2;
   }
   
   //two additional steps since we started at vertex 2, not 0
-  n += vector_cast<Normal>(calc_face_normal(p0i, p0, p1)); 
-  n += vector_cast<Normal>(calc_face_normal(p1i, p0i, p1));
+  n += vector_cast<Normal>(calc_face_normal(p0, p1, p0i));
+  n += vector_cast<Normal>(calc_face_normal(p1, p0i, p1i));
 
-  typename vector_traits<Normal>::value_type norm = n.length();
+  const typename vector_traits<Normal>::value_type norm = n.length();
   
   // The expression ((n *= (1.0/norm)),n) is used because the OpenSG
   // vector class does not return self after component-wise
   // self-multiplication with a scalar!!!
-  return (norm != typename vector_traits<Normal>::value_type(0)) ? ((n *= (typename vector_traits<Normal>::value_type(1)/norm)),n) : Normal(0,0,0);
+  return (norm != typename vector_traits<Normal>::value_type(0))
+          ? ((n *= (typename vector_traits<Normal>::value_type(1)/norm)), n)
+          : Normal(0, 0, 0);
 }
 
 //-----------------------------------------------------------------------------
