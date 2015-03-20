@@ -16,6 +16,7 @@
     they are also faster, as the require one check less then the old ones.)</li>
 <li>Implement a warning on the operator-- of the old iterators. It was possible to use them to iterate from begin into negative direction. At boundaries,
     that did not work correctly and visited one entity twice. The warning can be disabled via cmake or define (-DNO_DECREMENT_DEPRECATED_WARNINGS ).</li>
+<li>Fixed wrong normal calculation in calc_face_normal for Poly Meshes. closes #2427</li>
 </ul>
 
 <b>IO</b>
@@ -58,6 +59,7 @@
 <li>Python Bindings: fixed a cmake warning on os x (Policy CMP0042: MACOSX_RPATH)</li>
 <li>fix windows warning about unknown preprocessor define</li>
 <li>Default to release build type if not selected via cmake. Only on non Win platforms</li>
+<li>No copy after build required for doc, as its copied by doxygen anyway</li>
 </ul>
 
 
