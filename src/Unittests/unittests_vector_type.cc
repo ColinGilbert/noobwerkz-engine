@@ -65,6 +65,24 @@ TEST_F(OpenMeshVectorTest, AbsTest) {
 
 }
 
+/* Compute surface area via cross product
+ */
+TEST_F(OpenMeshVectorTest, VectorCasting) {
+
+  OpenMesh::Vec3d vecd(1.0,2.0,3.0);
+  OpenMesh::Vec3f vecf = OpenMesh::vector_cast<OpenMesh::Vec3f>(vecd);
+  EXPECT_EQ(1.f, vecf[0]) << "vector type cast failed on component 0";
+  EXPECT_EQ(2.f, vecf[1]) << "vector type cast failed on component 1";
+  EXPECT_EQ(3.f, vecf[2]) << "vector type cast failed on component 2";
+
+  OpenMesh::Vec4d vecd4(40.0,30.0,20.0,10.0);
+  vecd = OpenMesh::vector_cast<OpenMesh::Vec3d>(vecd4);
+  EXPECT_EQ(40.0, vecd[0]) << "vector dimension cast failed on component 0";
+  EXPECT_EQ(30.0, vecd[1]) << "vector dimension cast failed on component 1";
+  EXPECT_EQ(20.0, vecd[2]) << "vector dimension cast failed on component 2";
+
+}
+
 
 
 }

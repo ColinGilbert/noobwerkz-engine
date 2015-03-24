@@ -82,7 +82,7 @@ struct color_caster
   inline static return_type cast(const src_t& _src)
   {
     dst_t dst;
-    vector_copy(_src, dst, GenProg::Int2Type<vector_traits<dst_t>::size_>());
+    vector_cast(_src, dst, GenProg::Int2Type<vector_traits<dst_t>::size_>());
     return dst;
   }
 };
@@ -219,6 +219,32 @@ struct color_caster<Vec4f,Vec3f>
                   _src[1],
                   _src[2],
                   1.0f );
+  }
+};
+
+template <>
+struct color_caster<Vec4ui,Vec3uc>
+{
+  typedef Vec4ui return_type;
+
+  inline static return_type cast(const Vec3uc& _src)
+  {
+    return Vec4ui(_src[0],
+                  _src[1],
+                  _src[2],
+                  255 );
+  }
+};
+
+template <>
+struct color_caster<Vec4f,Vec3i>
+{
+  typedef Vec4f return_type;
+
+  inline static return_type cast(const Vec3i& _src)
+  {
+    const float f = 1.0f / 255.0f;
+    return Vec4f(_src[0]*f, _src[1]*f, _src[2]*f, 1.0f );
   }
 };
 

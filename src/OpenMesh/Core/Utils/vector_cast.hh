@@ -77,57 +77,33 @@ namespace OpenMesh {
 
 //-----------------------------------------------------------------------------
 
-
-template <typename src_t, typename dst_t>
-inline void vector_copy( const src_t &_src, dst_t &_dst, GenProg::Int2Type<1> )
+template <typename src_t, typename dst_t, int n>
+inline void vector_cast( const src_t &_src, dst_t &_dst, GenProg::Int2Type<n> )
 {
-  _dst[0] = _src[0];
+  GenProg::AssertCompile< (vector_traits<dst_t>::size_ <= vector_traits<src_t>::size_) > vectorCastingToHigherDimension;
+  vector_cast(_src,_dst, GenProg::Int2Type<n-1>());
+  _dst[n-1] = static_cast<typename vector_traits<dst_t>::value_type >(_src[n-1]);
 }
 
 template <typename src_t, typename dst_t>
-inline void vector_copy( const src_t &_src, dst_t &_dst, GenProg::Int2Type<2> )
+inline void vector_cast( const src_t &_src, dst_t &_dst, GenProg::Int2Type<0> )
 {
-  _dst[0] = _src[0];
-  _dst[1] = _src[1];
+}
+
+
+template <typename src_t, typename dst_t, int n>
+inline void vector_copy( const src_t &_src, dst_t &_dst, GenProg::Int2Type<n> )
+{
+  GenProg::AssertCompile< (vector_traits<dst_t>::size_ <= vector_traits<src_t>::size_) > vectorCopyToHigherDimension;
+  vector_copy(_src,_dst, GenProg::Int2Type<n-1>());
+  _dst[n-1] = _src[n-1];
 }
 
 template <typename src_t, typename dst_t>
-inline void vector_copy( const src_t &_src, dst_t &_dst, GenProg::Int2Type<3> )
+inline void vector_copy( const src_t &_src, dst_t &_dst, GenProg::Int2Type<0> )
 {
-  _dst[0] = _src[0];
-  _dst[1] = _src[1];
-  _dst[2] = _src[2];
 }
 
-template <typename src_t, typename dst_t>
-inline void vector_copy( const src_t &_src, dst_t &_dst, GenProg::Int2Type<4> )
-{
-  _dst[0] = _src[0];
-  _dst[1] = _src[1];
-  _dst[2] = _src[2];
-  _dst[3] = _src[3];
-}
-
-template <typename src_t, typename dst_t>
-inline void vector_copy( const src_t &_src, dst_t &_dst, GenProg::Int2Type<5> )
-{
-  _dst[0] = _src[0];
-  _dst[1] = _src[1];
-  _dst[2] = _src[2];
-  _dst[3] = _src[3];
-  _dst[4] = _src[4];
-}
-
-template <typename src_t, typename dst_t>
-inline void vector_copy( const src_t &_src, dst_t &_dst, GenProg::Int2Type<6> )
-{
-  _dst[0] = _src[0];
-  _dst[1] = _src[1];
-  _dst[2] = _src[2];
-  _dst[3] = _src[3];
-  _dst[4] = _src[4];
-  _dst[5] = _src[5];
-}
 
 
 //-----------------------------------------------------------------------------
@@ -141,7 +117,7 @@ struct vector_caster
   inline static return_type cast(const src_t& _src)
   {
     dst_t dst;
-    vector_copy(_src, dst, GenProg::Int2Type<vector_traits<dst_t>::size_>());
+    vector_cast(_src, dst, GenProg::Int2Type<vector_traits<dst_t>::size_>());
     return dst;
   }
 };
