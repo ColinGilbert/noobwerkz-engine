@@ -6,7 +6,7 @@
 
 <!-- --------------------------------------------------------------------- -->
 
-<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1244)</td><td>
+<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1249)</td><td>
 
 <b>Core</b>
 <ul>
@@ -17,6 +17,7 @@
 <li>Implement a warning on the operator-- of the old iterators. It was possible to use them to iterate from begin into negative direction. At boundaries,
     that did not work correctly and visited one entity twice. The warning can be disabled via cmake or define (-DNO_DECREMENT_DEPRECATED_WARNINGS ).</li>
 <li>Fixed wrong normal calculation in calc_face_normal for Poly Meshes. closes #2427</li>
+<li>Fixed various warnings with vector casts</li>
 </ul>
 
 <b>IO</b>
