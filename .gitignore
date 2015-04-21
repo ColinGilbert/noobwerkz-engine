@@ -1,0 +1,6 @@
+**/build/*
+.*.sw*
+**/.git
+**.gitignore
+!.gitignore
+
