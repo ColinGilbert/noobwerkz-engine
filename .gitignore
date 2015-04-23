@@ -3,4 +3,10 @@
 **/.git
 **.gitignore
 !.gitignore
-
+**/obj/*
+**/bin/*
+**/libs/*
+**/jni/*
+**/local.properties
+**/build.xml
+**/proguard-project.txt

@@ -1,0 +1,3 @@
+# name "j" java side of things. Also uploads to device :{
+cd android &&
+ant debug install
