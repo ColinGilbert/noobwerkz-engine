@@ -10,7 +10,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH) \
 	$(LOCAL_PATH)/bgfx/3rdparty/khronos \
 
 LOCAL_SRC_FILES := EngineDroid.cpp \
-	common/Drawing.cpp \
+	common/Graphics.cpp \
 	common/Application.cpp \
 	common/MathFuncs.cpp \
 	common/Camera.cpp \

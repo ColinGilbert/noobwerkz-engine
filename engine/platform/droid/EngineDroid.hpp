@@ -16,12 +16,10 @@
 #include <android/log.h>
 
 #include "Application.hpp"
-#include "Drawing.hpp"
+#include "Graphics.hpp"
 #include "Logger.hpp"
 #include <bgfx.h>
 #include <bgfxplatform.h>
 
-// static ANativeWindow *window = nullptr;
-bool running= false; // = false;
 static EGLint current_context; 
 std::string archiveDir;

@@ -102,15 +102,13 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 		bgfx::renderFrame(); // TODO: Notify BGFX to use single-thread mode. // BGFX_CONFIG_MULTITHREADED=0
 	}
 
-	//noob::drawing::init(width, height);
-
 	app->window_resize(width, height);
 }
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnFrame(JNIEnv* env, jobject obj)
 {
 	// logger::log("JNILib.OnFrame()");
-	noob::drawing::draw(app->get_width(), app->get_height());
+	noob::graphics::draw(app->get_width(), app->get_height());
 }
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnTouch(JNIEnv* env, jobject obj, int pointerID, float x, float y, int action)

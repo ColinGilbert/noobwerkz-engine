@@ -104,10 +104,13 @@ void application::update(double delta)
 void application::draw(double delta)
 {
 
+
+
 }
 
 
 void application::window_resize(int w, int h)
 {
-
+	width = static_cast<float>(w);
+	height = static_cast<float>(h);
 }
