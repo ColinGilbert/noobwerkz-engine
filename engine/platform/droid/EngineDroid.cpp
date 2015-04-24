@@ -2,7 +2,7 @@
 
 extern "C"
 {
-	JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnInit(JNIEnv* env, jobject obj, jobject surface);
+	JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnInit(JNIEnv* env, jobject obj);
 	JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnShutdown(JNIEnv* env, jobject obj);
 	JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env, jobject obj, jint iWidth, jint iHeight);
 	JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnFrame(JNIEnv* env, jobject obj);
@@ -16,7 +16,7 @@ extern "C"
 
 static application* app = nullptr;
 
-JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnInit(JNIEnv* env, jobject obj, jobject surface)
+JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnInit(JNIEnv* env, jobject obj)
 {
 	logger::log("");
 	logger::log("JNILib.OnInit()");
@@ -24,21 +24,6 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnInit(JNIEnv* env, j
 	if (!app)
 	{
 		app = new application();
-	}
-
-	// bgfx::androidSetWindow(window);
-
-	
-	if (surface != 0)
-	{
-		window = ANativeWindow_fromSurface(env, surface);
-		{
-			std::stringstream ss;
-			ss << "JNILib.init(): Got window " << window;
-			logger::log(ss.str());
-		}
-
-		bgfx::androidSetWindow(window);
 	}
 }
 
@@ -56,17 +41,28 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnShutdown(JNIEnv* en
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env, jobject obj, jint width, jint height)
 {
 	logger::log("JNILib.OnResize()");
+
+	bgfx::PlatformData pd;
+	pd.ndt = NULL;
+	pd.nwh = NULL;
+	pd.context = eglGetCurrentContext(); // Pass the EGLContext created by GLSurfaceView.
+	pd.backbuffer = NULL;
+	bgfx::setPlatformData(pd);
+
+	bgfx::renderFrame(); // TODO: Notify BGFX to use single-thread mode.
+
+	noob::drawing::init(width, height);
+
+	// Render loop
+	// bgfx::reset(width, height); // OLD?
+
 	app->window_resize(width, height);
-	// noob::drawing::init(width, height);
-		
 }
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnFrame(JNIEnv* env, jobject obj)
 {
-	//logger::log("JNILib.OnFrame()");
-
-	app->step();
-	//noob::drawing::draw(app->get_width(), app->get_height());
+	// logger::log("JNILib.OnFrame()");
+	noob::drawing::draw(app->get_width(), app->get_height());
 }
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnTouch(JNIEnv* env, jobject obj, int pointerID, float x, float y, int action)
@@ -100,14 +96,15 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResume(JNIEnv* env,
 	{
 		app->resume();
 	}
-	
 }
 
 std::string ConvertJString(JNIEnv* env, jstring str)
 {
 	if (!str) { return std::string(); }
+
 	const jsize len = env->GetStringUTFLength(str);
 	const char* strChars = env->GetStringUTFChars(str,(jboolean*)0);
+
 	std::string Result(strChars, len);
 	env->ReleaseStringUTFChars(str, strChars);
 	{
@@ -115,6 +112,7 @@ std::string ConvertJString(JNIEnv* env, jstring str)
 		ss << "JNILib.ConvertJString(" << Result << ")";
 		logger::log(ss.str());
 	}
+
 	return Result;
 }
 
@@ -128,11 +126,14 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_SetupArchiveDir(JNIEn
 		ss << "JNILib.SetupArchiveDir(" << archiveDir << ")";
 		logger::log(ss.str());
 	}
-	/*	if (app)
-		{
+
+/*
+	 if (app)
+	{
 		app->SetupArchiveDir(archiveDir);
-		}
-		*/
+	}
+*/
+
 }
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_Log(JNIEnv* env, jobject obj, jstring message)
@@ -143,7 +144,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_Log(JNIEnv* env, jobj
 	logger::log(mess);
 }
 
-/*
+
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_NativeSetSurface(JNIEnv* env, jobject obj, jobject surface)
 {
 	if (surface != 0)
@@ -155,11 +156,11 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_NativeSetSurface(JNIE
 			logger::log(ss.str());
 		}
 
-		bgfx::androidSetWindow(window);
 	}
 	else
 	{
-		logger::log("JNILib.NativeSetSurface(): Releasing window");
-		// ANativeWindow_release(window);
+		std::stringstream ss;
+		ss << "JNILib.NativeSetSurface(): No window to get. Aww.... :(";
+		logger::log(ss.str());
 	}
-} */
+}

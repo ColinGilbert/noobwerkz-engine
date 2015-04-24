@@ -12,7 +12,7 @@ import android.view.View.OnClickListener;
 
 public class JNILib
 {
-	public static native void OnInit(Surface surface);
+	public static native void OnInit();
 
 	public static native void OnFrame();
 	public static native void OnResize(int iWidth, int iHeight);

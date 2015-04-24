@@ -14,34 +14,38 @@ public class GameView extends GLSurfaceView
 
 	private static class Renderer implements GLSurfaceView.Renderer 
 	{
-		public void onDrawFrame( GL10 gl ) 
+		public void onDrawFrame(GL10 gl) 
 		{
+			JNILib.Log("(Java) onDrawFrame()");
 			JNILib.OnFrame();
 		}
 
-		public void onSurfaceChanged( GL10 gl, int iWidth, int iHeight ) 
+		public void onSurfaceChanged(GL10 gl, int iWidth, int iHeight) 
 		{
+			JNILib.Log("(Java) onSurfaceChanged()");
+
 			JNILib.OnResize(iWidth, iHeight);
 		}
 
-		public void onSurfaceCreated( GL10 gl, EGLConfig config ) 
+		public void onSurfaceCreated(GL10 gl, EGLConfig config) 
 		{
+			JNILib.Log("(Java) onSurfaceCreated()");
 			//JNILib.OnInit(getHolder().getSurface());
 		}
 	}
 
-	public GameView( Context context ) 
+	public GameView(Context context) 
 	{
-		super( context );
+		super(context);
 
 		// Pick an EGLConfig with RGBA8 color, 16-bit depth, no stencil,
 		// supporting OpenGL ES 3.0 or later backwards-compatible versions.
-		setEGLConfigChooser( 8, 8, 8, 8, 16, 0 );
-		setEGLContextClientVersion( 3 );
+		setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+		setEGLContextClientVersion(3);
 		setRenderer(new Renderer());
-		// JNILib.NativeSetSurface(getHolder().getSurface());
+		JNILib.NativeSetSurface(getHolder().getSurface());
 
-		JNILib.OnInit(getHolder().getSurface());
+		JNILib.OnInit();
 	}
 
 	public void onDestroy()
@@ -127,7 +131,7 @@ public class GameView extends GLSurfaceView
 		}
 
 		// Send the event to the renderer thread
-		queueEvent( new MotionEventRunnable( event ) );
+		queueEvent(new MotionEventRunnable(event));
 
 		return true;
 	}

@@ -2,7 +2,6 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := Engine
-LOCAL_CFLAGS := -DASIO_STANDALONE -frtti -fexceptions -D__STDC_LIMIT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_CONSTANT_MACROS
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH) \
 	$(LOCAL_PATH)/common \
@@ -18,9 +17,9 @@ LOCAL_SRC_FILES := EngineDroid.cpp \
 	bgfx/src/amalgamated.cpp
 
 
-LOCAL_STATIC_LIBRARIES := asio
-LOCAL_LDLIBS := -landroid -llog -lEGL -lGLESv3
+LOCAL_STATIC_LIBRARIES := asio android_native_app_glue
+LOCAL_LDLIBS := -landroid -llog -lEGL -lGLESv2
 
 include $(BUILD_SHARED_LIBRARY)
-
+$(call import-module, android/native_app_glue)
 $(call import-module, asio)
