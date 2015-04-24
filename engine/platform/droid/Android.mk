@@ -7,6 +7,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH) \
 	$(LOCAL_PATH)/common \
 	$(LOCAL_PATH)/bgfx/include \
 	$(LOCAL_PATH)/bx/include \
+	$(LOCAL_PATH)/bgfx/3rdparty/khronos \
 
 LOCAL_SRC_FILES := EngineDroid.cpp \
 	common/Drawing.cpp \
@@ -18,7 +19,7 @@ LOCAL_SRC_FILES := EngineDroid.cpp \
 
 
 LOCAL_STATIC_LIBRARIES := asio android_native_app_glue
-LOCAL_LDLIBS := -landroid -llog -lEGL -lGLESv2
+LOCAL_LDLIBS := -landroid -llog -lEGL -lGLESv3
 
 include $(BUILD_SHARED_LIBRARY)
 $(call import-module, android/native_app_glue)

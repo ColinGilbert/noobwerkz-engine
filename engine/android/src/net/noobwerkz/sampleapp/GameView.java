@@ -23,14 +23,12 @@ public class GameView extends GLSurfaceView
 		public void onSurfaceChanged(GL10 gl, int iWidth, int iHeight) 
 		{
 			JNILib.Log("(Java) onSurfaceChanged()");
-
 			JNILib.OnResize(iWidth, iHeight);
 		}
 
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) 
 		{
 			JNILib.Log("(Java) onSurfaceCreated()");
-			//JNILib.OnInit(getHolder().getSurface());
 		}
 	}
 
@@ -51,10 +49,9 @@ public class GameView extends GLSurfaceView
 	public void onDestroy()
 	{	
 		// Send the event to the renderer thread
-		queueEvent( new Runnable() 
-				{
-					@Override
-					public void run() 
+		queueEvent( new Runnable() {
+			@Override
+			public void run() 
 		{
 			JNILib.OnShutdown();
 		}
@@ -66,10 +63,9 @@ public class GameView extends GLSurfaceView
 		super.onResume();
 
 		// Send the event to the renderer thread
-		queueEvent( new Runnable() 
-				{
-					@Override
-					public void run() 
+		queueEvent( new Runnable() {
+			@Override
+			public void run() 
 		{
 			JNILib.OnResume();
 		}
@@ -79,10 +75,9 @@ public class GameView extends GLSurfaceView
 	public void onPause()
 	{
 		// Send the event to the renderer thread
-		queueEvent( new Runnable() 
-				{
-					@Override
-					public void run() 
+		queueEvent( new Runnable() {
+			@Override
+			public void run() 
 		{
 			JNILib.OnPause();
 		}

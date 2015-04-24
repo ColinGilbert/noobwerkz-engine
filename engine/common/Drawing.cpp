@@ -2,22 +2,6 @@
 
 void noob::drawing::init(uint32_t width, uint32_t height)
 {
-	uint32_t debug = BGFX_DEBUG_TEXT;
-	uint32_t reset = BGFX_RESET_VSYNC;
-
-	bgfx::init();	
-	bgfx::reset(width, height, reset);
-
-	// Enable debug text.
-	bgfx::setDebug(debug);
-
-	// Set view 0 clear state.
-	bgfx::setViewClear(0
-			, BGFX_CLEAR_COLOR|BGFX_CLEAR_DEPTH
-			, 0x703070ff
-			, 1.0f
-			, 0
-			);
 }
 
 void noob::drawing::draw(uint32_t width, uint32_t height)
@@ -36,7 +20,6 @@ void noob::drawing::draw(uint32_t width, uint32_t height)
 
 		// Advance to next frame. Rendering thread will be kicked to
 		// process submitted rendering primitives.
-
 		bgfx::frame();
 
 }

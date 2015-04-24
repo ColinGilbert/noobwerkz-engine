@@ -7,7 +7,7 @@ application::application()
 	app_pointer = this;
 	paused = input_has_started = false;
 	timespec timeNow;
-	clock_gettime( CLOCK_MONOTONIC, &timeNow );
+	clock_gettime(CLOCK_MONOTONIC, &timeNow);
 	time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
 	cam = std::unique_ptr<noob::camera>(new noob::camera());
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
@@ -30,13 +30,13 @@ application& application::get()
 void application::step()
 {
 	timespec timeNow;
-	clock_gettime( CLOCK_MONOTONIC, &timeNow );
+	clock_gettime(CLOCK_MONOTONIC, &timeNow);
 	uint64_t uNowNano = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
-	double delta = (uNowNano - time ) * 0.000000001f;
+	double delta = (uNowNano - time) * 0.000000001f;
 
 	time = uNowNano;
 
-	if ( !paused )
+	if (!paused)
 	{
 		update((float)delta);
 	}
@@ -86,11 +86,11 @@ void application::touch(int pointerID, float x, float y, int action)
 			ss << "Sandbox: Touch - pointerID " << pointerID << ", (" << x << ", " << y << "), action " << action;
 			logger::log(ss.str());
 		}
+
 		if (pointerID < 5)
 		{
 			finger_positions[pointerID] = noob::vec2(x,y);
 		}
-		//	logger::log(finger_positions);
 	}
 	else input_has_started = true;
 }

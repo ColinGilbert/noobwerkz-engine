@@ -31,10 +31,12 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnShutdown(JNIEnv* en
 {
 	logger::log("JNILib.OnShutdown()");
 
+//	bgfx::shutdown();
+
 	if(app)
 	{
 		delete app;
-		app = NULL;
+		app = nullptr;
 	}
 }
 
@@ -42,19 +44,65 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 {
 	logger::log("JNILib.OnResize()");
 
-	bgfx::PlatformData pd;
-	pd.ndt = NULL;
-	pd.nwh = NULL;
-	pd.context = eglGetCurrentContext(); // Pass the EGLContext created by GLSurfaceView.
-	pd.backbuffer = NULL;
-	bgfx::setPlatformData(pd);
+	auto last_context = current_context;
+	current_context = eglGetCurrentContext();
+	{
+		std::stringstream ss;
+		ss << "Last context: " << last_context;
+		logger::log(ss.str());
+	}
 
-	bgfx::renderFrame(); // TODO: Notify BGFX to use single-thread mode.
+	{
+		std::stringstream ss;
+		ss << "Updated context: " << current_context;
+		logger::log(ss.str());
+	}
 
-	noob::drawing::init(width, height);
+	if (current_context != last_context)
+	{
+		if (last_context != 0)
+		{
+			logger::log("bgfx::shutdown()");
+			bgfx::shutdown();
+		}
 
-	// Render loop
-	// bgfx::reset(width, height); // OLD?
+		logger::log("About to set BGFX platform data");
+
+		bgfx::PlatformData pd;
+		pd.ndt = NULL;
+		pd.nwh = NULL;
+		pd.context = (void*)(uintptr_t)current_context; // eglGetCurrentContext(); // Pass the EGLContext created by GLSurfaceView.
+		pd.backbuffer = NULL;
+
+		bgfx::setPlatformData(pd);
+
+		{
+			logger::log("BGFX platform data reset!");
+		}
+
+
+		uint32_t debug = BGFX_DEBUG_TEXT;
+		uint32_t reset = BGFX_RESET_VSYNC;
+
+		bgfx::init();
+
+		bgfx::reset(width, height, reset);
+
+		// Set view 0 clear state.
+		bgfx::setViewClear(0
+				, BGFX_CLEAR_COLOR|BGFX_CLEAR_DEPTH
+				, 0x703070ff
+				, 1.0f
+				, 0
+				);
+
+		// Enable debug text.
+		bgfx::setDebug(debug);
+
+		bgfx::renderFrame(); // TODO: Notify BGFX to use single-thread mode. // BGFX_CONFIG_MULTITHREADED=0
+	}
+
+	//noob::drawing::init(width, height);
 
 	app->window_resize(width, height);
 }
@@ -127,12 +175,12 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_SetupArchiveDir(JNIEn
 		logger::log(ss.str());
 	}
 
-/*
-	 if (app)
-	{
-		app->SetupArchiveDir(archiveDir);
-	}
-*/
+	/*
+	   if (app)
+	   {
+	   app->SetupArchiveDir(archiveDir);
+	   }
+	   */
 
 }
 
@@ -147,6 +195,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_Log(JNIEnv* env, jobj
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_NativeSetSurface(JNIEnv* env, jobject obj, jobject surface)
 {
+/*
 	if (surface != 0)
 	{
 		window = ANativeWindow_fromSurface(env, surface);
@@ -162,5 +211,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_NativeSetSurface(JNIE
 		std::stringstream ss;
 		ss << "JNILib.NativeSetSurface(): No window to get. Aww.... :(";
 		logger::log(ss.str());
+		bgfx::shutdown();
 	}
+*/
 }
