@@ -24,7 +24,6 @@ list(APPEND common_src
 	common/Camera.cpp
 	common/SandboxApp.cpp
 	common/CommonIncludes.cpp
-	# common/Model.cpp
 	common/MathFuncs.cpp
 	)
 

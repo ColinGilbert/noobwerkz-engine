@@ -55,30 +55,28 @@ namespace noob
 
 			uint32_t get_height() const { return static_cast<uint32_t>(height); }
 			uint32_t get_width() const { return static_cast<uint32_t>(width); }
-			void touch(int pointerID, float x, float y, int action);
-			void set_archive_dir(const std::string & filepath);
 
 			// This may soon be changed/removed from API
 			const std::unique_ptr<noob::camera> cam;
 		
-			void draw(double delta);
+			// These three functions are played with by user (aka: programmer)
+			void init();
 			void update(double delta);
+			void draw(double delta);
+
+			// step() is called by the target platform every frame and pause() and resume() are used by whoever needs them :P
 			void step();
 			void pause();
 			void resume();
 
+			// Callbacks from target platform or programmer magic
+			void touch(int pointerID, float x, float y, int action);
+			void set_archive_dir(const std::string & filepath);
 			void window_resize(int w,int h);
+
 		protected:
-	
-			//These two functions are played with by user.
-
-		
-			void init_graphics();
+		//	void init_graphics();
 			void update_cam(double delta);
-			
-
-			void init();
-
 
 			static application* app_pointer;
 			std::unique_ptr<std::string> prefix;

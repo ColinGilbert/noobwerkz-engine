@@ -22,7 +22,7 @@ noob::application::~application()
 
 noob::application& noob::application::get()
 {
-	assert( app_pointer && "application not created!" );
+	assert(app_pointer && "application not created!");
 	return *app_pointer;
 }
 

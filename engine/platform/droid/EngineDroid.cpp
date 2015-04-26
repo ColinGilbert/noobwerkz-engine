@@ -31,7 +31,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnShutdown(JNIEnv* en
 {
 	logger::log("JNILib.OnShutdown()");
 
-//	bgfx::shutdown();
+	//	bgfx::shutdown();
 
 	if(app)
 	{
@@ -80,7 +80,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 			logger::log("BGFX platform data reset!");
 		}
 
-
+/*
 		uint32_t debug = BGFX_DEBUG_TEXT;
 		uint32_t reset = BGFX_RESET_VSYNC;
 
@@ -98,6 +98,10 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 
 		// Enable debug text.
 		bgfx::setDebug(debug);
+*/
+		bgfx::init();
+
+		noob::graphics::init(width, height);
 
 		bgfx::renderFrame(); // TODO: Notify BGFX to use single-thread mode. // BGFX_CONFIG_MULTITHREADED=0
 	}
@@ -166,20 +170,18 @@ std::string ConvertJString(JNIEnv* env, jstring str)
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_SetupArchiveDir(JNIEnv * env, jobject obj, jstring dir)
 {
 	const char* temp = env->GetStringUTFChars(dir, NULL);
-	archiveDir = std::string(temp);
+	archive_dir = std::string(temp);
 
 	{
 		std::stringstream ss;
-		ss << "JNILib.SetupArchiveDir(" << archiveDir << ")";
+		ss << "JNILib.SetupArchiveDir(" << archive_dir << ")";
 		logger::log(ss.str());
 	}
 
-	/*
-	   if (app)
-	   {
-	   app->SetupArchiveDir(archiveDir);
-	   }
-	   */
+	if (app)
+	{
+		app->set_archive_dir(archive_dir);
+	}
 
 }
 
@@ -194,23 +196,23 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_Log(JNIEnv* env, jobj
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_NativeSetSurface(JNIEnv* env, jobject obj, jobject surface)
 {
-/*
-	if (surface != 0)
-	{
-		window = ANativeWindow_fromSurface(env, surface);
-		{
-			std::stringstream ss;
-			ss << "JNILib.NativeSetSurface(): Got window " << window;
-			logger::log(ss.str());
-		}
+	/*
+	   if (surface != 0)
+	   {
+	   window = ANativeWindow_fromSurface(env, surface);
+	   {
+	   std::stringstream ss;
+	   ss << "JNILib.NativeSetSurface(): Got window " << window;
+	   logger::log(ss.str());
+	   }
 
-	}
-	else
-	{
-		std::stringstream ss;
-		ss << "JNILib.NativeSetSurface(): No window to get. Aww.... :(";
-		logger::log(ss.str());
-		bgfx::shutdown();
-	}
-*/
+	   }
+	   else
+	   {
+	   std::stringstream ss;
+	   ss << "JNILib.NativeSetSurface(): No window to get. Aww.... :(";
+	   logger::log(ss.str());
+	   bgfx::shutdown();
+	   }
+	   */
 }

@@ -15,7 +15,7 @@ static uint32_t debug = BGFX_DEBUG_TEXT;
 static uint32_t reset = BGFX_RESET_VSYNC;
 
 static noob::application* app;
-
+/*
 void set_renderer(uint32_t w, uint32_t h)
 {
 
@@ -28,6 +28,7 @@ void set_renderer(uint32_t w, uint32_t h)
 	bgfx::setViewClear(0, BGFX_CLEAR_COLOR|BGFX_CLEAR_DEPTH, 0x703070ff, 1.0f, 0);
 
 }
+*/
 
 void window_close_callback(GLFWwindow* window)
 {
@@ -46,7 +47,7 @@ void framebuffer_size_callback(GLFWwindow* window, int w, int h)
 {
 	width = w;
 	height = h;
-	set_renderer(width, height);
+	noob::graphics::init(width, height);
 	app->window_resize(static_cast<float>(w), static_cast<float>(h));
 }
 
@@ -110,7 +111,7 @@ int main(int /*_argc*/, char** /*_argv*/)
 
 	bgfx::glfwSetWindow(window);
 	bgfx::init();
-	set_renderer(width, height);
+	noob::graphics::init(width, height);
 
 	glfwSetWindowCloseCallback(window, window_close_callback);
 	glfwSetWindowSizeCallback(window, window_size_callback);

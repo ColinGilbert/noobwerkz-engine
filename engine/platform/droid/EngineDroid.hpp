@@ -22,4 +22,4 @@
 #include <bgfxplatform.h>
 
 static EGLint current_context; 
-std::string archiveDir;
+std::string archive_dir;

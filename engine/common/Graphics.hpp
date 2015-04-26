@@ -8,15 +8,13 @@ namespace noob
 	class graphics
 	{
 		public:
-			enum texture_type { DIFFUSE_MAP, SPECULAR_MAP, AMBIENT_MAP, EMISSIVE_MAP, NORMAL_MAP, OPACITY_MAP, DISPLACEMENT_MAP, HEIGHT_MAP, DATA };
-/*
+			// enum texture_type { DIFFUSE_MAP, SPECULAR_MAP, AMBIENT_MAP, EMISSIVE_MAP, NORMAL_MAP, OPACITY_MAP, DISPLACEMENT_MAP, HEIGHT_MAP, DATA };
+
 			static void init(uint32_t width, uint32_t height)
 			{
 
 				uint32_t debug = BGFX_DEBUG_TEXT;
 				uint32_t reset = BGFX_RESET_VSYNC;
-
-				bgfx::init();
 
 				bgfx::reset(width, height, reset);
 
@@ -33,7 +31,7 @@ namespace noob
 
 				// bgfx::renderFrame(); // TODO: Notify BGFX to use single-thread mode. // BGFX_CONFIG_MULTITHREADED=0
 			}
-*/
+
 			static void draw(uint32_t width, uint32_t height)
 			{
 				// Set view 0 default viewport.

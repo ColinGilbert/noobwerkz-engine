@@ -7,7 +7,7 @@ namespace noob
 		public:
 			camera();
 			void update(double elapsed_seconds);
-			noob::mat4 get_view_matrix() { return view_mat; }
+			noob::mat4 get_view_matrix() const { return view_mat; }
 			void move_north();
 			void move_south();
 			void move_east();
@@ -20,7 +20,7 @@ namespace noob
 			void yaw_right(); 
 			void roll_clockwise();
 			void roll_counterclockwise();
-			vec3 get_position();
+			noob::vec3 get_position();
 
 		private:
 			float near, far, fovy, aspect, cam_speed, cam_heading_speed, cam_heading;
