@@ -1,11 +1,12 @@
-//#include <cstdio>
-//#include <cwchar>
-//#include <cstring>
+#pragma once
+
+#include <stdio.h>
+#include <string.h>
+
 #include <map>
 #include <algorithm>
-#include "MathFuncs.hpp"
 
-//#include "glHeaders.h"
+#include "MathFuncs.hpp"
 #include "Logger.hpp"
 #include "NoobUtils.hpp"
 
@@ -20,8 +21,6 @@ namespace noob
 
 			bool init(const std::string& font, int font_sz, float screen_w, float screen_h);
 			void resize_screen(float w, float h);
-			//		void draw_text(const wchar_t* text, float x, float y);
-			//		void draw_text(const char* text, float x, float y);
 			void draw_text(const std::string& text, float x, float y);
 			void set_font_color(float r, float g, float b, float a);
 

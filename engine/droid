@@ -1,5 +1,6 @@
 rsync -av platform/droid/* android/jni --exclude old &&
 rsync -av common android/jni &&
+#rsync -av freetype android/jni &&
 rsync -av bgfx android/jni --exclude .git &&
 rsync -av bx android/jni --exclude .git &&
 cd android &&

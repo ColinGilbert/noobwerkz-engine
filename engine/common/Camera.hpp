@@ -1,3 +1,4 @@
+#pragma once
 #include "MathFuncs.hpp"
 
 namespace noob
@@ -7,7 +8,7 @@ namespace noob
 		public:
 			camera();
 			void update(double elapsed_seconds);
-			noob::mat4 get_view_matrix() const { return view_mat; }
+			const noob::mat4 get_view_matrix() const { return view_mat; }
 			void move_north();
 			void move_south();
 			void move_east();

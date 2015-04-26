@@ -1,5 +1,4 @@
-#ifndef APPLICATION_H_
-#define APPLICATION_H_
+#pragma once
 
 #include <assert.h>
 #include <math.h>
@@ -87,4 +86,3 @@ namespace noob
 			std::vector<noob::vec2> finger_positions;
 	};
 }
-#endif

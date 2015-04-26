@@ -16,12 +16,17 @@ LOCAL_SRC_FILES := EngineDroid.cpp \
 	common/MathFuncs.cpp \
 	common/Camera.cpp \
 	common/Logger.cpp \
+	common/Text.cpp \
 	bgfx/src/amalgamated.cpp
 
+LOCAL_STATIC_LIBRARIES := asio \
+	android_native_app_glue \
+	freetype
 
-LOCAL_STATIC_LIBRARIES := asio android_native_app_glue
 LOCAL_LDLIBS := -landroid -llog -lEGL -lGLESv3
 
 include $(BUILD_SHARED_LIBRARY)
+
+$(call import-module, freetype)
 $(call import-module, android/native_app_glue)
 $(call import-module, asio)

@@ -17,13 +17,13 @@ BX_PRAGMA_DIAGNOSTIC_IGNORED_MSVC(4245) // error C4245: '=' : conversion from 'i
 #pragma push_macro("interface")
 #endif
 #undef interface
-
+#include <freetype/freetype.h>
 #if BX_COMPILER_MSVC || BX_COMPILER_GCC >= 40300
 #pragma pop_macro("interface")
 #endif
 BX_PRAGMA_DIAGNOSTIC_POP();
 
-//#include "../common.h"
+#include "../common.h"
 
 #include <bgfx.h>
 #include <math.h>

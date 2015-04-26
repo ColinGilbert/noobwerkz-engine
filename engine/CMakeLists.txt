@@ -15,20 +15,30 @@ include_directories(glfw/include)
 include_directories(bgfx/3rdparty/khronos)
 include_directories(bgfx/3rdparty)
 include_directories(freetype/include)
-#include_directories(bgfx/examples/common/font)
 include_directories(common)
-#include_directories(common/font)
+include_directories(common/bgfx_related)
+include_directories(common/bgfx_related/font)
+include_directories(common/bgfx_related/nanovg)
+include_directories(common/bgfx_related/imgui)
 
 list(APPEND bgfx_src
 	bgfx/src/amalgamated.cpp
 	)
 
-#list(APPEND bgfx_utils_src
-#	common/font/font_manager.cpp
-#	common/font/text_buffer_manager.cpp
-#	common/font/text_metrics.cpp
-#	common/font/utf8.cpp
-#	)
+list(APPEND bgfx_utils_src
+common/bgfx_related/imgui/imgui.cpp
+common/bgfx_related/imgui/ocornut_imgui.cpp
+common/bgfx_related/cube_atlas.cpp
+common/bgfx_related/nanovg/nanovg_bgfx.cpp
+common/bgfx_related/nanovg/nanovg.cpp
+common/bgfx_related/font/font_manager.cpp
+common/bgfx_related/font/utf8.cpp
+common/bgfx_related/font/text_metrics.cpp
+common/bgfx_related/font/text_buffer_manager.cpp
+common/bgfx_related/bgfx_utils.cpp
+common/bgfx_related/bounds.cpp
+
+	)
 
 list(APPEND common_src
 	common/Graphics.cpp
