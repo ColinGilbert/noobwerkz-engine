@@ -7,15 +7,28 @@ set(CMAKE_CXX_FLAGS "-std=c++11 -fpermissive ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-std=c99 ${CMAKE_C_FLAGS}")
 
 add_subdirectory(glfw)
+add_subdirectory(freetype)
+
 include_directories(bx/include)
 include_directories(bgfx/include)
 include_directories(glfw/include)
 include_directories(bgfx/3rdparty/khronos)
+include_directories(bgfx/3rdparty)
+include_directories(freetype/include)
+#include_directories(bgfx/examples/common/font)
 include_directories(common)
+#include_directories(common/font)
 
 list(APPEND bgfx_src
 	bgfx/src/amalgamated.cpp
 	)
+
+#list(APPEND bgfx_utils_src
+#	common/font/font_manager.cpp
+#	common/font/text_buffer_manager.cpp
+#	common/font/text_metrics.cpp
+#	common/font/utf8.cpp
+#	)
 
 list(APPEND common_src
 	common/Graphics.cpp
@@ -25,12 +38,13 @@ list(APPEND common_src
 	common/SandboxApp.cpp
 	common/CommonIncludes.cpp
 	common/MathFuncs.cpp
+	common/Text.cpp
 	)
 
 list(APPEND main_src EngineDesktop.cpp)
 
 add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ) 
-target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} rt dl pthread)
+target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread)
 
 project(LogServer)
 
