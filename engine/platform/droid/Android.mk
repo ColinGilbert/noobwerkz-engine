@@ -12,6 +12,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH) \
 LOCAL_SRC_FILES := EngineDroid.cpp \
 	common/Graphics.cpp \
 	common/Application.cpp \
+	common/SandboxApp.cpp \
 	common/MathFuncs.cpp \
 	common/Camera.cpp \
 	common/Logger.cpp \
