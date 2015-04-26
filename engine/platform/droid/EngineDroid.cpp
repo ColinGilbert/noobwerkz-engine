@@ -14,7 +14,7 @@ extern "C"
 	JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_NativeSetSurface(JNIEnv* eng, jobject obj, jobject surface);
 };
 
-static application* app = nullptr;
+static noob::application* app = nullptr;
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnInit(JNIEnv* env, jobject obj)
 {
@@ -23,7 +23,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnInit(JNIEnv* env, j
 
 	if (!app)
 	{
-		app = new application();
+		app = new noob::application();
 	}
 }
 
@@ -101,6 +101,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 
 		bgfx::renderFrame(); // TODO: Notify BGFX to use single-thread mode. // BGFX_CONFIG_MULTITHREADED=0
 	}
+
 
 	app->window_resize(width, height);
 }

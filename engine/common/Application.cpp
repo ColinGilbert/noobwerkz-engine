@@ -1,8 +1,8 @@
 #include "Application.hpp"
 
-application* application::app_pointer = nullptr;
+noob::application* noob::application::app_pointer = nullptr;
 
-application::application()
+noob::application::application()
 {
 	app_pointer = this;
 	paused = input_has_started = false;
@@ -14,20 +14,20 @@ application::application()
 }
 
 
-application::~application()
+noob::application::~application()
 {
 	app_pointer = nullptr;
 }
 
 
-application& application::get()
+noob::application& noob::application::get()
 {
 	assert( app_pointer && "application not created!" );
 	return *app_pointer;
 }
 
 
-void application::step()
+void noob::application::step()
 {
 	timespec timeNow;
 	clock_gettime(CLOCK_MONOTONIC, &timeNow);
@@ -45,24 +45,24 @@ void application::step()
 }
 
 
-void application::pause()
+void noob::application::pause()
 {
 	paused = true;
 }
 
 
-void application::resume()
+void noob::application::resume()
 {
 	paused = false;
 }
 
 
-void application::set_archive_dir(const std::string& filepath)
+void noob::application::set_archive_dir(const std::string& filepath)
 {
 
 	{
 		std::stringstream ss;
-		ss << "application: Setting archive dir(\"" << filepath << "\")";
+		ss << "setting archive dir(\"" << filepath << "\")";
 		logger::log(ss.str());
 
 	}	
@@ -71,19 +71,19 @@ void application::set_archive_dir(const std::string& filepath)
 
 	{
 		std::stringstream ss;
-		ss << "application: prefix = " << *prefix;
+		ss << "archive dir = " << *prefix;
 		logger::log(ss.str());
 	}
 }
 
 
-void application::touch(int pointerID, float x, float y, int action)
+void noob::application::touch(int pointerID, float x, float y, int action)
 {
 	if (input_has_started == true)
 	{
 		{
 			std::stringstream ss;
-			ss << "Sandbox: Touch - pointerID " << pointerID << ", (" << x << ", " << y << "), action " << action;
+			ss << "Touch - pointerID " << pointerID << ", (" << x << ", " << y << "), action " << action;
 			logger::log(ss.str());
 		}
 
@@ -95,22 +95,45 @@ void application::touch(int pointerID, float x, float y, int action)
 	else input_has_started = true;
 }
 
-void application::update(double delta)
+void noob::application::update_cam(double delta)
 {
+	cam->update(delta);
+
+	static float cam_x = 0;
+	static float cam_y = 0;
+	static float cam_z = 0;
+
+	noob::vec3 cam_pos = cam->get_position();
+
+	if (cam_x != cam_pos.v[0] || cam_y != cam_pos.v[1] || cam_z != cam_pos.v[2])
+	{
+		cam_x = cam_pos.v[0];
+		cam_y = cam_pos.v[1];
+		cam_z = cam_pos.v[2];
+		std::stringstream ss;
+		ss << "cam_pos = " << cam_x << " " << cam_y << " " << cam_z;
+		logger::log(ss.str());
+	}
 
 }
 
-
-void application::draw(double delta)
-{
-
-
-
-}
-
-
-void application::window_resize(int w, int h)
+void noob::application::window_resize(int w, int h)
 {
 	width = static_cast<float>(w);
 	height = static_cast<float>(h);
+
+	{
+		std::stringstream ss;
+		ss << "window_resize(" << width << ", " << height << ")";
+		logger::log(ss.str());
+	}
+
+	if (height == 0) 
+	{
+		height = 1;
+	}
+
+	float ratio = width/height;
+
+	proj_matrix = noob::perspective(67.0f, ratio, 0.01f, 1000.0f);
 }

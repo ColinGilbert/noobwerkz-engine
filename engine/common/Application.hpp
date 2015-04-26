@@ -1,16 +1,11 @@
 #ifndef APPLICATION_H_
 #define APPLICATION_H_
 
-
-
 #include <assert.h>
 #include <math.h>
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
-
-
-// #include <bgfx.h>
 
 #define PI (float)3.14159265
 
@@ -49,40 +44,49 @@
 #include "MathFuncs.hpp"
 #include "Camera.hpp"
 
-class application
+namespace noob
 {
-	public:
+	class application
+	{
+		public:
+			application();
+			virtual ~application();
+			static application& get();
 
-		application();
-		virtual ~application();
-		static application& get();
-		void init();
-		void step();
-		void pause();
-		void resume();
-		uint32_t get_height() const { return static_cast<uint32_t>(height); }
-		uint32_t get_width() const { return static_cast<uint32_t>(width); }
-		void update(double delta);
-		void draw(double delta);
-		void window_resize(int w,int h);
-		void touch(int pointerID, float x, float y, int action);
-		void set_archive_dir(const std::string & filepath);
-		const std::unique_ptr<noob::camera> cam;
+			uint32_t get_height() const { return static_cast<uint32_t>(height); }
+			uint32_t get_width() const { return static_cast<uint32_t>(width); }
+			void touch(int pointerID, float x, float y, int action);
+			void set_archive_dir(const std::string & filepath);
 
-		bool is_valid(int i)
-		{
-				return (i > 0);
-		}
+			// This may soon be changed/removed from API
+			const std::unique_ptr<noob::camera> cam;
+		
+			void draw(double delta);
+			void update(double delta);
+			void step();
+			void pause();
+			void resume();
 
-	protected:
-		void init_graphics();
+			void window_resize(int w,int h);
+		protected:
+	
+			//These two functions are played with by user.
 
-		static application* app_pointer;
-		std::unique_ptr<std::string> prefix;
-		bool paused, input_has_started;
-		uint64_t time;
-		std::vector<noob::vec2> finger_positions;
-		float width, height;
-		noob::mat4 proj_matrix;
-};
+		
+			void init_graphics();
+			void update_cam(double delta);
+			
+
+			void init();
+
+
+			static application* app_pointer;
+			std::unique_ptr<std::string> prefix;
+			bool paused, input_has_started;
+			uint64_t time;
+			float width, height;
+			noob::mat4 proj_matrix;
+			std::vector<noob::vec2> finger_positions;
+	};
+}
 #endif
