@@ -8,7 +8,10 @@
 **/libs/*
 **/jni/*
 **/gen/**
+**/assets/**
 **/local.properties
 **/build.xml
 **/proguard-project.txt
 **/Untracked.hpp
+**/hlister
+**/clister

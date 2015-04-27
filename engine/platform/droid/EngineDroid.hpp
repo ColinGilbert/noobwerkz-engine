@@ -16,6 +16,7 @@
 #include <android/log.h>
 
 #include "Application.hpp"
+#include "Font.hpp"
 #include "Graphics.hpp"
 #include "Logger.hpp"
 #include <bgfx.h>

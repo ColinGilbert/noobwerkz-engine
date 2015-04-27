@@ -18,7 +18,6 @@ include_directories(freetype/include)
 include_directories(common)
 include_directories(common/bgfx_related)
 include_directories(common/bgfx_related/font)
-include_directories(common/bgfx_related/nanovg)
 
 
 list(APPEND bgfx_src

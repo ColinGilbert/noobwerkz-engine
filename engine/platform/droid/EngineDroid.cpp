@@ -31,12 +31,12 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnShutdown(JNIEnv* en
 {
 	logger::log("JNILib.OnShutdown()");
 
-	//	bgfx::shutdown();
+	// bgfx::shutdown();
 
 	if(app)
 	{
 		delete app;
-		app = nullptr;
+		// app = nullptr;
 	}
 }
 
@@ -62,7 +62,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 	{
 		if (last_context != 0)
 		{
-			logger::log("bgfx::shutdown()");
+			//	logger::log("bgfx::shutdown()");
 			bgfx::shutdown();
 		}
 
@@ -80,30 +80,11 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 			logger::log("BGFX platform data reset!");
 		}
 
-/*
-		uint32_t debug = BGFX_DEBUG_TEXT;
-		uint32_t reset = BGFX_RESET_VSYNC;
-
-		bgfx::init();
-
-		bgfx::reset(width, height, reset);
-
-		// Set view 0 clear state.
-		bgfx::setViewClear(0
-				, BGFX_CLEAR_COLOR|BGFX_CLEAR_DEPTH
-				, 0x703070ff
-				, 1.0f
-				, 0
-				);
-
-		// Enable debug text.
-		bgfx::setDebug(debug);
-*/
 		bgfx::init();
 
 		noob::graphics::init(width, height);
 
-		bgfx::renderFrame(); // TODO: Notify BGFX to use single-thread mode. // BGFX_CONFIG_MULTITHREADED=0
+		bgfx::renderFrame(); // For Android EGL, notify BGFX to use single-thread mode // BGFX_CONFIG_MULTITHREADED=0
 	}
 
 
@@ -134,10 +115,12 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnPause(JNIEnv* env, 
 {
 	logger::log("JNILib.OnPause()");
 
+/*
 	if(app)
 	{
-		app->pause();
+		// app->pause();
 	}
+*/
 }
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResume(JNIEnv* env, jobject obj)

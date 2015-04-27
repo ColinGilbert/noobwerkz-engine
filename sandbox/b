@@ -3,5 +3,5 @@ cd ../engine/build &&
 cmake .. &&
 make -j8 &&
 cp NoobEdit ../../sandbox/e &&
-cp LogServer ../../logger &&
+cp LogServer ../../sandbox/logger &&
 cd ../../sandbox

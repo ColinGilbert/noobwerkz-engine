@@ -7,7 +7,13 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH) \
 	$(LOCAL_PATH)/common \
 	$(LOCAL_PATH)/bgfx/include \
 	$(LOCAL_PATH)/bx/include \
+	$(LOCAL_PATH)/bgfx/3rdparty \
 	$(LOCAL_PATH)/bgfx/3rdparty/khronos \
+	$(LOCAL_PATH)/bgfx/3rdparty/sdf \
+	$(LOCAL_PATH)/bgfx/3rdparty/edtaa3 \
+	$(LOCAL_PATH)/bgfx/3rdparty/forsyth-too \
+	$(LOCAL_PATH)/common/bgfx_related \
+	$(LOCAL_PATH)/common/bgfx_related/font \
 
 LOCAL_SRC_FILES := EngineDroid.cpp \
 	common/Graphics.cpp \
@@ -16,8 +22,15 @@ LOCAL_SRC_FILES := EngineDroid.cpp \
 	common/MathFuncs.cpp \
 	common/Camera.cpp \
 	common/Logger.cpp \
-	common/Text.cpp \
-	bgfx/src/amalgamated.cpp
+	common/Font.cpp \
+	bgfx/3rdparty/edtaa3/edtaa3func.cpp \
+	common/bgfx_related/cube_atlas.cpp \
+	common/bgfx_related/font/font_manager.cpp \
+	common/bgfx_related/font/utf8.cpp \
+	common/bgfx_related/font/text_metrics.cpp \
+	common/bgfx_related/font/text_buffer_manager.cpp \
+	common/bgfx_related/bounds.cpp \
+	bgfx/src/amalgamated.cpp \
 
 LOCAL_STATIC_LIBRARIES := asio \
 	android_native_app_glue \

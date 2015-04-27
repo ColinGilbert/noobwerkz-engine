@@ -1,1 +1,0 @@
-rm -rf android/obj/* android/bin/* android/libs/* android/jni/* android/gen/*

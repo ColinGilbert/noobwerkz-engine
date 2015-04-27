@@ -10,7 +10,7 @@
 
 #include "text_buffer_manager.h"
 #include "utf8.h"
-#include "../cube_atlas.h"
+#include "cube_atlas.h"
 
 #include "vs_font_basic.bin.h"
 #include "fs_font_basic.bin.h"

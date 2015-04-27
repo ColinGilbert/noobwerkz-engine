@@ -4,6 +4,7 @@ noob::application* noob::application::app_pointer = nullptr;
 
 noob::application::application()
 {
+	logger::log("application()");
 	app_pointer = this;
 	paused = input_has_started = false;
 	timespec timeNow;
@@ -17,12 +18,14 @@ noob::application::application()
 
 noob::application::~application()
 {
+	logger::log("~application()");
 	app_pointer = nullptr;
 }
 
 
 noob::application& noob::application::get()
 {
+	logger::log("application::get()");
 	assert(app_pointer && "application not created!");
 	return *app_pointer;
 }

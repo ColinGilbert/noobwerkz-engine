@@ -1,5 +1,4 @@
-cd .. &&
-./purge &&
-cp -R extern desktop &&
-cd sandbox &&
+cd ../engine &&
+./clean &&
+cd ../sandbox &&
 ./b

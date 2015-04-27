@@ -6,7 +6,7 @@
 
 noob::font::~font()
 {
-	text_buffer_manager->destroyTextBuffer(transient_text);
+	// text_buffer_manager->destroyTextBuffer(transient_text);
 	delete font_manager;
 	delete text_buffer_manager;
 }
@@ -61,6 +61,10 @@ void noob::font::init(const std::string& font_path)
 	logger::log("Font init end");
 }
 
+void noob::font::change_colour(uint32_t colour)
+{
+	text_buffer_manager->setTextColor(transient_text, colour);
+}
 
 void noob::font::drawtext(const std::string& str, float x_pos, float y_pos, uint32_t window_width, uint32_t window_height)
 {

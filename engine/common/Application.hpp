@@ -75,7 +75,6 @@ namespace noob
 			void window_resize(int w,int h);
 
 		protected:
-		//	void init_graphics();
 			void update_cam(double delta);
 
 			static application* app_pointer;
