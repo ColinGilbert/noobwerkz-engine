@@ -43,8 +43,6 @@ src/lzw/ftzopen.c \
 src/otvalid/otvalid.c \
 src/cid/type1cid.c \
 
-
-
 LOCAL_CFLAGS += -W -Wall
 LOCAL_CFLAGS += -fPIC -DPIC
 LOCAL_CFLAGS += "-DDARWIN_NO_CARBON"

@@ -14,7 +14,7 @@
 /// More precisely, this is an implementation of the Skyline Bottom-Left
 /// algorithm based on C++ sources provided by Jukka Jylänki at:
 /// http://clb.demon.fi/files/RectangleBinPack/
-
+#include <bx/bx.h>
 #include <bgfx.h>
 
 struct AtlasRegion

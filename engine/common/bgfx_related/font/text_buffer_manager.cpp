@@ -3,8 +3,6 @@
  * License: http://www.opensource.org/licenses/BSD-2-Clause
  */
 
-#include "../common.h"
-
 #include <bgfx.h>
 #include <stddef.h> // offsetof
 #include <memory.h> // memcpy

@@ -38,6 +38,7 @@
 #include <assimp/scene.h>
 */
 
+#include "Font.hpp"
 #include "Logger.hpp"
 #include "Untracked.hpp"
 #include "MathFuncs.hpp"
@@ -84,5 +85,6 @@ namespace noob
 			float width, height;
 			noob::mat4 proj_matrix;
 			std::vector<noob::vec2> finger_positions;
+			std::unique_ptr<noob::font> droid_font;
 	};
 }

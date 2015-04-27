@@ -5,17 +5,14 @@
 
 #include <string.h> // strlen
 
-#include "common.h"
-
 #include <tinystl/allocator.h>
 #include <tinystl/vector.h>
 #include <tinystl/string.h>
 namespace stl = tinystl;
-
+#include <bx/bx.h>
 #include <bgfx.h>
 #include <bx/readerwriter.h>
 #include <bx/fpumath.h>
-#include "entry/entry.h"
 #include <ib-compress/indexbufferdecompression.h>
 
 #include "bgfx_utils.h"
@@ -92,11 +89,6 @@ static bgfx::ShaderHandle loadShader(bx::FileReaderI* _reader, const char* _name
 	strcat(filePath, ".bin");
 
 	return bgfx::createShader(loadMem(_reader, filePath) );
-}
-
-bgfx::ShaderHandle loadShader(const char* _name)
-{
-	return loadShader(entry::getFileReader(), _name);
 }
 
 bgfx::ProgramHandle loadProgram(bx::FileReaderI* _reader, const char* _vsName, const char* _fsName)

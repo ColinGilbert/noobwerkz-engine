@@ -37,6 +37,8 @@ bool noob::text::init(const std::string& font, int font_sz, float screen_w, floa
 
 	glGenBuffers(1, &vbo);
 */
+
+
 }
 
 /*

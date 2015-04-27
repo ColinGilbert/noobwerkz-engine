@@ -23,8 +23,6 @@ BX_PRAGMA_DIAGNOSTIC_IGNORED_MSVC(4245) // error C4245: '=' : conversion from 'i
 #endif
 BX_PRAGMA_DIAGNOSTIC_POP();
 
-#include "../common.h"
-
 #include <bgfx.h>
 #include <math.h>
 

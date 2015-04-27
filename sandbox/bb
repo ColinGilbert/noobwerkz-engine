@@ -1,0 +1,5 @@
+cd .. &&
+./purge &&
+cp -R extern desktop &&
+cd sandbox &&
+./b

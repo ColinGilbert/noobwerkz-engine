@@ -19,25 +19,19 @@ include_directories(common)
 include_directories(common/bgfx_related)
 include_directories(common/bgfx_related/font)
 include_directories(common/bgfx_related/nanovg)
-include_directories(common/bgfx_related/imgui)
+
 
 list(APPEND bgfx_src
 	bgfx/src/amalgamated.cpp
 	)
 
 list(APPEND bgfx_utils_src
-common/bgfx_related/imgui/imgui.cpp
-common/bgfx_related/imgui/ocornut_imgui.cpp
-common/bgfx_related/cube_atlas.cpp
-common/bgfx_related/nanovg/nanovg_bgfx.cpp
-common/bgfx_related/nanovg/nanovg.cpp
-common/bgfx_related/font/font_manager.cpp
-common/bgfx_related/font/utf8.cpp
-common/bgfx_related/font/text_metrics.cpp
-common/bgfx_related/font/text_buffer_manager.cpp
-common/bgfx_related/bgfx_utils.cpp
-common/bgfx_related/bounds.cpp
-
+	common/bgfx_related/cube_atlas.cpp
+	common/bgfx_related/font/font_manager.cpp
+	common/bgfx_related/font/utf8.cpp
+	common/bgfx_related/font/text_metrics.cpp
+	common/bgfx_related/font/text_buffer_manager.cpp
+	common/bgfx_related/bounds.cpp
 	)
 
 list(APPEND common_src
@@ -48,12 +42,12 @@ list(APPEND common_src
 	common/SandboxApp.cpp
 	common/CommonIncludes.cpp
 	common/MathFuncs.cpp
-	common/Text.cpp
+	common/Font.cpp
 	)
 
 list(APPEND main_src EngineDesktop.cpp)
 
-add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ) 
+add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ) 
 target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread)
 
 project(LogServer)

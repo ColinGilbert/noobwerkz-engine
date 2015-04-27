@@ -10,6 +10,7 @@ noob::application::application()
 	clock_gettime(CLOCK_MONOTONIC, &timeNow);
 	time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
 	cam = std::unique_ptr<noob::camera>(new noob::camera());
+	droid_font = std::unique_ptr<noob::font>(new noob::font());
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 }
 

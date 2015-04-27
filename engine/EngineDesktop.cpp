@@ -1,6 +1,7 @@
 #include <atomic>
 
 #include <bgfx.h>
+
 #include "Graphics.hpp"
 #include "Application.hpp"
 #include "Logger.hpp"
@@ -112,6 +113,7 @@ int main(int /*_argc*/, char** /*_argv*/)
 	bgfx::glfwSetWindow(window);
 	bgfx::init();
 	noob::graphics::init(width, height);
+	app->init();
 
 	glfwSetWindowCloseCallback(window, window_close_callback);
 	glfwSetWindowSizeCallback(window, window_size_callback);

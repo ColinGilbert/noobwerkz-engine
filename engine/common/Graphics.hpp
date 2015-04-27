@@ -15,7 +15,7 @@ namespace noob
 			static void init(uint32_t width, uint32_t height)
 			{
 
-				uint32_t debug = BGFX_DEBUG_TEXT;
+			//	uint32_t debug = BGFX_DEBUG_TEXT;
 				uint32_t reset = BGFX_RESET_VSYNC;
 
 				bgfx::reset(width, height, reset);
@@ -29,7 +29,7 @@ namespace noob
 						);
 
 				// Enable debug text.
-				bgfx::setDebug(debug);
+			//	bgfx::setDebug(debug);
 
 				// bgfx::renderFrame(); // TODO: Notify BGFX to use single-thread mode. // BGFX_CONFIG_MULTITHREADED=0
 			}
