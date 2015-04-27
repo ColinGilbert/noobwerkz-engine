@@ -16,7 +16,7 @@ public class GameView extends GLSurfaceView
 	{
 		public void onDrawFrame(GL10 gl) 
 		{
-			JNILib.Log("(Java) onDrawFrame()");
+			// JNILib.Log("(Java) onDrawFrame()");
 			JNILib.OnFrame();
 		}
 

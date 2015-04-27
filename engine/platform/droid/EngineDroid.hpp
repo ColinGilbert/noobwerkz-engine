@@ -19,8 +19,10 @@
 #include "Font.hpp"
 #include "Graphics.hpp"
 #include "Logger.hpp"
+
 #include <bgfx.h>
 #include <bgfxplatform.h>
-
+static uint32_t _width;
+static uint32_t _height;
 static EGLint current_context; 
 std::string archive_dir;

@@ -31,18 +31,20 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnShutdown(JNIEnv* en
 {
 	logger::log("JNILib.OnShutdown()");
 
-	// bgfx::shutdown();
 
 	if(app)
 	{
 		delete app;
-		// app = nullptr;
+		app = nullptr;
 	}
 }
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env, jobject obj, jint width, jint height)
 {
 	logger::log("JNILib.OnResize()");
+
+	_height = height;
+	_width = width;
 
 	auto last_context = current_context;
 	current_context = eglGetCurrentContext();
@@ -94,7 +96,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnFrame(JNIEnv* env, jobject obj)
 {
 	// logger::log("JNILib.OnFrame()");
-	noob::graphics::draw(app->get_width(), app->get_height());
+	noob::graphics::draw(_width, _height);
 }
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnTouch(JNIEnv* env, jobject obj, int pointerID, float x, float y, int action)
@@ -114,13 +116,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnTouch(JNIEnv* env, 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnPause(JNIEnv* env, jobject obj)
 {
 	logger::log("JNILib.OnPause()");
-
-/*
-	if(app)
-	{
-		// app->pause();
-	}
-*/
+	// Pretty much a dead callback as interfering with the app pointer crashes
 }
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResume(JNIEnv* env, jobject obj)
@@ -179,23 +175,5 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_Log(JNIEnv* env, jobj
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_NativeSetSurface(JNIEnv* env, jobject obj, jobject surface)
 {
-	/*
-	   if (surface != 0)
-	   {
-	   window = ANativeWindow_fromSurface(env, surface);
-	   {
-	   std::stringstream ss;
-	   ss << "JNILib.NativeSetSurface(): Got window " << window;
-	   logger::log(ss.str());
-	   }
 
-	   }
-	   else
-	   {
-	   std::stringstream ss;
-	   ss << "JNILib.NativeSetSurface(): No window to get. Aww.... :(";
-	   logger::log(ss.str());
-	   bgfx::shutdown();
-	   }
-	   */
 }
