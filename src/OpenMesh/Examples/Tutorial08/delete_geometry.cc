@@ -6,7 +6,7 @@
 //                                                                            
 //-----------------------------------------------------------------------------
 //                                                                            
-//                                /*===========================================================================*\
+//                                /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
  *           Copyright (c) 2001-2015, RWTH-Aachen University                 *
@@ -44,11 +44,11 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING      *
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS        *
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.              *
- *                                                                           * 
-/*===========================================================================*\                                     
+ *                                                                           *
+ * ========================================================================= */                                     
 //                                                                            
 //   This library is free software; you can redistribute it and/or modify it 
-//   under the terms of the GNU Library General Public /*===========================================================================*\
+//   under the terms of the GNU Library General Public /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
  *           Copyright (c) 2001-2015, RWTH-Aachen University                 *
@@ -86,14 +86,14 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING      *
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS        *
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.              *
- *                                                                           * 
-/*===========================================================================*\ as published  
+ *                                                                           *
+ * ========================================================================= */ as published  
 //   by the Free Software Foundation, version 2.                             
 //                                                                             
 //   This library is distributed in the hope that it will be useful, but       
 //   WITHOUT ANY WARRANTY; without even the implied warranty of                
 //   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU         
-//   Library General Public /*===========================================================================*\
+//   Library General Public /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
  *           Copyright (c) 2001-2015, RWTH-Aachen University                 *
@@ -131,11 +131,11 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING      *
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS        *
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.              *
- *                                                                           * 
-/*===========================================================================*\ for more details.                          
+ *                                                                           *
+ * ========================================================================= */ for more details.                          
 //                                                                            
 //   You should have received a copy of the GNU Library General Public         
-//   /*===========================================================================*\
+//   /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
  *           Copyright (c) 2001-2015, RWTH-Aachen University                 *
@@ -173,8 +173,8 @@
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING      *
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS        *
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.              *
- *                                                                           * 
-/*===========================================================================*\ along with this library; if not, write to the Free Software       
+ *                                                                           *
+ * ========================================================================= */ along with this library; if not, write to the Free Software       
 //   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 
 //                                                                            
 //-----------------------------------------------------------------------------
