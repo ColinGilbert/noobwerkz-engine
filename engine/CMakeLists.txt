@@ -52,7 +52,7 @@ target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRA
 project(LogServer)
 
 set(CMAKE_CC "clang++")
-set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS} -DBGFX_CONFIG_MULTITHREADED=0")
 set(CMAKE_C_FLAGS "-std=c99 ${CMAKE_C_FLAGS}")
 
 include_directories(asio/asio/include)

@@ -44,7 +44,7 @@ LOCAL_STATIC_LIBRARIES := asio \
 	android_native_app_glue \
 	freetype
 
-LOCAL_LDLIBS := -landroid -llog -lEGL -lGLESv3
+LOCAL_LDLIBS := -landroid -llog -lEGL -lGLESv3 -ldl
 
 include $(BUILD_SHARED_LIBRARY)
 

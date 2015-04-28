@@ -64,17 +64,17 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 	{
 		if (last_context != 0)
 		{
-			//	logger::log("bgfx::shutdown()");
+			logger::log("bgfx::shutdown()");
 			bgfx::shutdown();
 		}
 
 		logger::log("About to set BGFX platform data");
 
 		bgfx::PlatformData pd;
-		pd.ndt = NULL;
-		pd.nwh = NULL;
+		pd.ndt = NULL; // Native display type
+		pd.nwh = NULL; // Native window handle
 		pd.context = (void*)(uintptr_t)current_context; // eglGetCurrentContext(); // Pass the EGLContext created by GLSurfaceView.
-		pd.backbuffer = NULL;
+		pd.backbuffer = NULL; // GL backbuffer, or D3D render target view
 
 		bgfx::setPlatformData(pd);
 
@@ -84,12 +84,10 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 
 		bgfx::init();
 		noob::graphics::init(width, height);
-		bgfx::renderFrame(); // For Android EGL, notify BGFX to use single-thread mode // BGFX_CONFIG_MULTITHREADED=0
 		
 		if (app)
 		{
 		app->init();
-		// app->window_resize(width, height);
 		}
 	}
 
