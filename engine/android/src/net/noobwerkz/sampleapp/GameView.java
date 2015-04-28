@@ -11,24 +11,23 @@ import android.view.MotionEvent;
 
 public class GameView extends GLSurfaceView
 {
-
 	private static class Renderer implements GLSurfaceView.Renderer 
 	{
 		public void onDrawFrame(GL10 gl) 
 		{
-			// JNILib.Log("(Java) onDrawFrame()");
+			// JNILib.Log("(Java) onDrawFrame");
 			JNILib.OnFrame();
 		}
 
 		public void onSurfaceChanged(GL10 gl, int iWidth, int iHeight) 
 		{
-			JNILib.Log("(Java) onSurfaceChanged()");
+			JNILib.Log("(Java) GameView - onSurfaceChanged");
 			JNILib.OnResize(iWidth, iHeight);
 		}
 
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) 
 		{
-			JNILib.Log("(Java) onSurfaceCreated()");
+			JNILib.Log("(Java) GameView - onSurfaceCreated");
 		}
 	}
 
@@ -87,7 +86,7 @@ public class GameView extends GLSurfaceView
 	}
 
 	@Override
-	public boolean onTouchEvent( MotionEvent event ) 
+	public boolean onTouchEvent(MotionEvent event) 
 	{
 		// Implement Runnable for MotionEvent parameter
 		class MotionEventRunnable implements Runnable
@@ -119,7 +118,7 @@ public class GameView extends GLSurfaceView
 					}
 					catch(Exception e)
 					{
-						JNILib.Log("GameView.java: OnTouchEvent() - Caught nasty expression");
+						JNILib.Log("(Java) GameView - Caught nasty expression in method onTouchEvent");
 					} // This was necessary, as using too many fingers killed the program.
 				}				
 			}

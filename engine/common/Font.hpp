@@ -4,7 +4,7 @@
 #include <string>
 
 #include <bgfx.h>
-
+#include <bx/fpumath.h>
 #include "font_manager.h"
 #include "text_buffer_manager.h"
 

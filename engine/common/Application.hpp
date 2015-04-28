@@ -62,7 +62,7 @@ namespace noob
 			// These three functions are played with by user (aka: programmer)
 			void init();
 			void update(double delta);
-			void draw(double delta);
+			void draw();
 
 			// step() is called by the target platform every frame and pause() and resume() are used by whoever needs them :P
 			void step();
@@ -72,7 +72,7 @@ namespace noob
 			// Callbacks from target platform or programmer magic
 			void touch(int pointerID, float x, float y, int action);
 			void set_archive_dir(const std::string & filepath);
-			void window_resize(int w,int h);
+			void window_resize(int w, int h);
 
 		protected:
 			void update_cam(double delta);

@@ -4,7 +4,7 @@ noob::application* noob::application::app_pointer = nullptr;
 
 noob::application::application()
 {
-	logger::log("application()");
+	// logger::log("application()");
 	app_pointer = this;
 	paused = input_has_started = false;
 	timespec timeNow;
@@ -13,6 +13,7 @@ noob::application::application()
 	cam = std::unique_ptr<noob::camera>(new noob::camera());
 	droid_font = std::unique_ptr<noob::font>(new noob::font());
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
+	prefix = std::unique_ptr<std::string>(new std::string("."));
 }
 
 
@@ -45,7 +46,7 @@ void noob::application::step()
 		update((float)delta);
 	}
 
-	draw(delta);
+	draw();
 }
 
 

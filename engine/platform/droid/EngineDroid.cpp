@@ -14,7 +14,7 @@ extern "C"
 	JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_NativeSetSurface(JNIEnv* eng, jobject obj, jobject surface);
 };
 
-static noob::application* app = nullptr;
+static std::unique_ptr<noob::application> app; // = nullptr;
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnInit(JNIEnv* env, jobject obj)
 {
@@ -23,7 +23,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnInit(JNIEnv* env, j
 
 	if (!app)
 	{
-		app = new noob::application();
+		app = std::unique_ptr<noob::application>(new noob::application());
 	}
 }
 
@@ -34,7 +34,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnShutdown(JNIEnv* en
 
 	if(app)
 	{
-		delete app;
+		// delete app;
 		app = nullptr;
 	}
 }
@@ -83,10 +83,14 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 		}
 
 		bgfx::init();
-
 		noob::graphics::init(width, height);
-
 		bgfx::renderFrame(); // For Android EGL, notify BGFX to use single-thread mode // BGFX_CONFIG_MULTITHREADED=0
+		
+		if (app)
+		{
+		app->init();
+		// app->window_resize(width, height);
+		}
 	}
 
 
@@ -95,7 +99,8 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnFrame(JNIEnv* env, jobject obj)
 {
-	// logger::log("JNILib.OnFrame()");
+	app->step();
+//	logger::log("(C++) JNILib::OnFrame");
 	noob::graphics::draw(_width, _height);
 }
 
@@ -107,7 +112,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnTouch(JNIEnv* env, 
 		logger::log(ss.str());
 	}
 
-	if(app)
+	if (app)
 	{
 		app->touch(pointerID, x, y, action);
 	}

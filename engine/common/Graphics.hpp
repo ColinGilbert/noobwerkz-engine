@@ -25,9 +25,6 @@ namespace noob
 						, 1.0f
 						, 0
 						);
-
-
-				// bgfx::renderFrame(); // TODO: Notify BGFX to use single-thread mode. // BGFX_CONFIG_MULTITHREADED=0
 			}
 
 			static void draw(uint32_t width, uint32_t height)

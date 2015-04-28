@@ -1,4 +1,2 @@
-cd ../engine &&
 ./clean &&
-cd ../sandbox &&
 ./b

@@ -16,20 +16,6 @@ static uint32_t debug = BGFX_DEBUG_TEXT;
 static uint32_t reset = BGFX_RESET_VSYNC;
 
 static noob::application* app;
-/*
-void set_renderer(uint32_t w, uint32_t h)
-{
-
-	bgfx::reset(w, h, reset);
-
-	// Enable debug text.
-	bgfx::setDebug(debug);
-
-	// Set view 0 clear state.
-	bgfx::setViewClear(0, BGFX_CLEAR_COLOR|BGFX_CLEAR_DEPTH, 0x703070ff, 1.0f, 0);
-
-}
-*/
 
 void window_close_callback(GLFWwindow* window)
 {
@@ -54,7 +40,6 @@ void framebuffer_size_callback(GLFWwindow* window, int w, int h)
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-
 	if (action == GLFW_PRESS)
 	{
 		switch (key)
@@ -80,7 +65,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			case GLFW_KEY_Z:
 				app->cam->roll_counterclockwise();
 		}
-
 		logger::log("GLFW: Key pressed");
 	}
 
@@ -112,6 +96,7 @@ int main(int /*_argc*/, char** /*_argv*/)
 
 	bgfx::glfwSetWindow(window);
 	bgfx::init();
+
 	noob::graphics::init(width, height);
 	app->init();
 
@@ -126,7 +111,6 @@ int main(int /*_argc*/, char** /*_argv*/)
 		app->step();
 		noob::graphics::draw(width, height);
 		glfwPollEvents();
-
 	}
 
 	// Shutdown bgfx.

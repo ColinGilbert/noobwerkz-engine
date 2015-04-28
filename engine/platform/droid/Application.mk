@@ -1,4 +1,4 @@
-#APP_ARM_MODE := arm
 APP_CPPFLAGS += -std=c++11 -frtti -fexceptions -fpermissive -DASIO_STANDALONE -D__STDC_LIMIT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_CONSTANT_MACROS -DBGFX_CONFIG_MULTITHREADED=0
 APP_STL := gnustl_static
-APP_ABI := all
+#APP_ABI := all
+APP_ABI := armeabi-v7a

@@ -2,7 +2,7 @@
 #include "Logger.hpp"
 
 #include <stdio.h>
-#include <bx/fpumath.h>
+
 
 noob::font::~font()
 {
