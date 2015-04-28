@@ -64,12 +64,12 @@ namespace noob
 			void update(double delta);
 			void draw();
 
-			// step() is called by the target platform every frame and pause() and resume() are used by whoever needs them :P
+			// step() is called by the target platform every frame while pause() and resume() are used by whoever needs them :P
 			void step();
 			void pause();
 			void resume();
 
-			// Callbacks from target platform or programmer magic
+			// Callbacks
 			void touch(int pointerID, float x, float y, int action);
 			void set_archive_dir(const std::string & filepath);
 			void window_resize(int w, int h);
