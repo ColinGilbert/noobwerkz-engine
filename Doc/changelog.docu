@@ -6,7 +6,12 @@
 
 <!-- --------------------------------------------------------------------- -->
 
-<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1249)</td><td>
+<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1255)</td><td>
+
+<b>LICENSE</b>
+<ul>
+<li>OpenMesh has been relicensed to BSD-3</li>
+</ul>
 
 <b>Core</b>
 <ul>
@@ -61,6 +66,7 @@
 <li>fix windows warning about unknown preprocessor define</li>
 <li>Default to release build type if not selected via cmake. Only on non Win platforms</li>
 <li>No copy after build required for doc, as its copied by doxygen anyway</li>
+<li>Got rid of the old ACGMakefiles, as they were not maintained anymore</li>
 </ul>
 
 
