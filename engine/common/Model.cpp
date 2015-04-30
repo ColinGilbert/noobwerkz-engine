@@ -1,43 +1,14 @@
 #include "Model.hpp"
+#include "bgfx_utils.h"
 
 noob::model::mesh::~mesh()
 {
-	/*	if(vbo[vert_buff])
-		{
-		glDeleteBuffers(1, &vbo[vert_buff]);
-		}
-
-		if(vbo[uv_buff])
-		{
-		glDeleteBuffers(1, &vbo[uv_buff]);
-		}
-
-		if(vbo[norm_buff]) 
-		{
-		glDeleteBuffers(1, &vbo[norm_buff]);
-		}
-
-		if(vbo[index_buff])
-		{
-		glDeleteBuffers(1, &vbo[index_buff]);
-		}
-		*/
-/*	for (GLuint i : vbo)
-	{
-		glDeleteBuffers(1, &i);
-	}
-
-	glDeleteVertexArrays(1, &vao);
-*/
 }
 
 
 // Renders this mesh
 void noob::model::mesh::render()
 {
-//	glBindVertexArray(vao);
-//	glDrawElements(GL_TRIANGLES, elementCount, GL_UNSIGNED_INT, NULL);
-//	glBindVertexArray(0);
 }
 
 // noob::graphics::Model constructor, loads the specified filename if supported by Assimp
@@ -84,9 +55,6 @@ noob::model::model(const std::string& filename, const std::string& filepath)
 
 noob::model::mesh::mesh(aiScene* scene, aiMesh* mesh, const std::string& filepath)
 {
-//	glGenVertexArrays(1, &vao);
-//	glBindVertexArray(vao);
-
 	//	path = std::unique_ptr<std::string>(new std::string(filepath));
 
 	logger::log("Creating mesh.");
@@ -112,6 +80,9 @@ noob::model::mesh::mesh(aiScene* scene, aiMesh* mesh, const std::string& filepat
 			vertices[i * 3 + 2] = mesh->mVertices[i].z;
 		}
 
+
+		// Add vertices
+
 /*		glGenBuffers(1, &vert_buff);
 		glBindBuffer(GL_ARRAY_BUFFER, vert_buff);
 		glBufferData(GL_ARRAY_BUFFER, 3 * mesh->mNumVertices * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
@@ -134,6 +105,8 @@ noob::model::mesh::mesh(aiScene* scene, aiMesh* mesh, const std::string& filepat
 			texCoords[i * 2] = mesh->mTextureCoords[0][i].x;
 			texCoords[i * 2 + 1] = mesh->mTextureCoords[0][i].y;
 		}
+
+		// Add texcoords
 
 /*		glGenBuffers(1, &uv_buff);
 		glBindBuffer(GL_ARRAY_BUFFER, uv_buff);
@@ -158,6 +131,8 @@ noob::model::mesh::mesh(aiScene* scene, aiMesh* mesh, const std::string& filepat
 			normals[i * 3 + 2] = mesh->mNormals[i].z;
 		}
 
+		// Add normals
+
 /*		glGenBuffers(1, &norm_buff);
 		glBindBuffer(GL_ARRAY_BUFFER, norm_buff);
 		glBufferData(GL_ARRAY_BUFFER, 3 * mesh->mNumVertices * sizeof(GLfloat), normals, GL_STATIC_DRAW);
@@ -179,6 +154,8 @@ noob::model::mesh::mesh(aiScene* scene, aiMesh* mesh, const std::string& filepat
 			indices[i * 3 + 1] = mesh->mFaces[i].mIndices[1];
 			indices[i * 3 + 2] = mesh->mFaces[i].mIndices[2];
 		}
+
+		// Add indices
 
 /*		glGenBuffers(1, &index_buff);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buff);

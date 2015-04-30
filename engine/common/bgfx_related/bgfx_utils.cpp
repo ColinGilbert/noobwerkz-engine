@@ -16,6 +16,7 @@ namespace stl = tinystl;
 #include <ib-compress/indexbufferdecompression.h>
 
 #include "bgfx_utils.h"
+using namepsace bgfx_utils;
 
 void* load(bx::FileReaderI* _reader, const char* _filePath, uint32_t* _size)
 {
