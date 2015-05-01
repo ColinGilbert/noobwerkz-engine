@@ -69,6 +69,9 @@ namespace noob
 					static bgfx::VertexDecl ms_decl;
 				};
 
+			//	bgfx::VertexDecl position_normal_vertex::ms_decl;
+
+
 				mesh();
 				~mesh();
 				void render();
@@ -81,17 +84,15 @@ namespace noob
 				bgfx::VertexBufferHandle vertex_buffer;		
 				bgfx::IndexBufferHandle index_buffer;
 				bgfx::UniformHandle texture_uniform;
-				bgfx::VertexDecl position_normal_vertex::ms_decl;
-				bgfx::TextureHandle texture;
+								bgfx::TextureHandle texture;
 
 				// = bgfx::createVertexBuffer(bgfx::makeRef(s_cubeVertices, sizeof(s_cubeVertices) ), PosNormalTangentTexcoordVertex::ms_decl);
 				// = bgfx::createIndexBuffer(bgfx::makeRef(s_cubeIndices, sizeof(s_cubeIndices) ) );
 				// = bgfx::createUniform("u_gradientMap, bgfx::UniformType::Uniform1iv);
-
-				protected:
-				std::unique_ptr<std::string> path;
-				std::vector<noob::model::mesh*> mesh_entries;
-
 			};
+
+		protected:
+			std::unique_ptr<std::string> path;
+			std::vector<noob::model::mesh*> mesh_entries;
 	};
 }

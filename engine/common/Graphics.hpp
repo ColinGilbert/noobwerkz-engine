@@ -3,8 +3,6 @@
 #include <map>
 #include <bgfx.h>
 
-//#include "Text.hpp"
-
 namespace noob
 {
 	class graphics
