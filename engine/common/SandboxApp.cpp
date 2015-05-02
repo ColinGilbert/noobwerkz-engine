@@ -17,4 +17,5 @@ void noob::application::draw()
 {
 	droid_font->change_colour(0xFFFF00FF);
 	droid_font->drawtext(std::string("Font test"), 50.0f, 50.0f, (int)width, (int)height);
+	droid_font->drawtext(std::string("Font test 2"), 100.0f, 100.0f, (int)width, (int)height);
 }

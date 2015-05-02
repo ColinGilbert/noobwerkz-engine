@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include <map>
 #include <bgfx.h>
 #include <bx/readerwriter.h>
@@ -37,6 +36,7 @@ namespace noob
 						);
 			}
 
+			
 			static void draw(uint32_t width, uint32_t height)
 			{
 				// Set view 0 default viewport.
@@ -51,24 +51,7 @@ namespace noob
 				bgfx::frame();
 			}
 
-			void init()
-			{
-				file_reader = new bx::CrtFileReader;
-				file_writer = new bx::CrtFileWriter;
-
-			}
-
-			bx::FileReaderI* get_file_reader()
-			{
-				return file_reader;
-			}
-
-			bx::FileWriterI* get_file_writer()
-			{
-				return file_writer;
-			}
-
-
+	
 		protected:
 			static bx::FileReaderI* file_reader;
 			static bx::FileWriterI* file_writer;

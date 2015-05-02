@@ -205,7 +205,6 @@ void noob::model::mesh::load_textures(aiMaterial* mat, aiTextureType type, const
 
 		logger::log("Attempting to load texture from " + tex_path);
 
-	
 		noob::graphics::texture tex;
 
 		// Check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
@@ -281,7 +280,7 @@ void noob::model::mesh::load_textures(aiMaterial* mat, aiTextureType type, const
 						break;
 					}
 
-					//	texture = bgfx_utils::loadTexture(tex_path.c_str());
+					// tex.handle = noob::graphics::loadTexture(tex_path.c_str());
 					logger::log(std::string("Loading " ) + s + std::string(" texture at ") + tex_path);
 
 			}

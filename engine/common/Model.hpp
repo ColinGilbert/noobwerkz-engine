@@ -69,8 +69,6 @@ namespace noob
 					static bgfx::VertexDecl ms_decl;
 				};
 
-			//	bgfx::VertexDecl position_normal_vertex::ms_decl;
-
 				mesh();
 				~mesh();
 				void render();
