@@ -205,18 +205,18 @@ void noob::model::mesh::load_textures(aiMaterial* mat, aiTextureType type, const
 
 		logger::log("Attempting to load texture from " + tex_path);
 
-	//	texture = bgfx_utils::loadTexture(tex_path.c_str());
-	//	noob::graphics::texture tex;
+	
+		noob::graphics::texture tex;
 
 		// Check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
-/*
+
 		if(noob::graphics::global_textures.find(tex_path) != noob::graphics::global_textures.end())
 		{
 			tex = noob::graphics::global_textures.find(str)->second;
-			textures.push_back(tex);
+			texture = tex.handle;
 
 			std::stringstream ss;
-			ss << "Found already loaded texture"; // << tex.id;
+			ss << "Found already loaded texture";
 			logger::log(ss.str());
 		}
 		else
@@ -281,11 +281,11 @@ void noob::model::mesh::load_textures(aiMaterial* mat, aiTextureType type, const
 						break;
 					}
 
-
+					//	texture = bgfx_utils::loadTexture(tex_path.c_str());
 					logger::log(std::string("Loading " ) + s + std::string(" texture at ") + tex_path);
 
 			}
 	
-		}*/
+		}
 	}
 }

@@ -1,0 +1,5 @@
+# -*- shell-script -*-
+subdir=tests
+SRCDIR=${top_srcdir}/${subdir}
+. ${top_srcdir}/scripts/tap-functions.shi
+cd ${subdir} || exit 1

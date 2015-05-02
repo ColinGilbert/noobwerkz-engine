@@ -10,7 +10,6 @@
 
 namespace bgfx_utils
 {
-
 	void* load(const char* _filePath, uint32_t* _size = NULL);
 	bgfx::ShaderHandle loadShader(const char* _name);
 	bgfx::ProgramHandle loadProgram(const char* _vsName, const char* _fsName);
@@ -44,5 +43,6 @@ namespace bgfx_utils
 
 	void meshSubmit(const Mesh* _mesh, uint8_t _id, bgfx::ProgramHandle _program, const float* _mtx, uint64_t _state = BGFX_STATE_MASK);
 	void meshSubmit(const Mesh* _mesh, const MeshState*const* _state, uint8_t _numPasses, const float* _mtx, uint16_t _numMatrices = 1);
+
 }
 #endif // BGFX_UTILS_H_HEADER_GUARD

@@ -8,7 +8,9 @@
 #include <tinystl/allocator.h>
 #include <tinystl/vector.h>
 #include <tinystl/string.h>
+
 namespace stl = tinystl;
+
 #include <bx/bx.h>
 #include <bgfx.h>
 #include <bx/readerwriter.h>
@@ -280,7 +282,7 @@ namespace bgfx
 	int32_t read(bx::ReaderI* _reader, bgfx::VertexDecl& _decl);
 }
 
-struct Mesh
+struct bgfx_utils::Mesh
 {
 	void load(bx::ReaderSeekerI* _reader)
 	{

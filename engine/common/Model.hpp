@@ -71,20 +71,23 @@ namespace noob
 
 			//	bgfx::VertexDecl position_normal_vertex::ms_decl;
 
-
 				mesh();
 				~mesh();
 				void render();
 				mesh(aiScene* scene, aiMesh* mesh, const std::string& filepath);
 				void load_textures(aiMaterial* mat, aiTextureType type, const std::string& filepath);
-				// std::vector<noob::model::texture> textures;
+				std::vector<bgfx::TextureHandle> textures;
+
 
 				unsigned int element_count;
 				position_normal_vertex* vertices;
+
 				bgfx::VertexBufferHandle vertex_buffer;		
 				bgfx::IndexBufferHandle index_buffer;
-				bgfx::UniformHandle texture_uniform;
-								bgfx::TextureHandle texture;
+				bgfx::UniformHandle sampler;
+				bgfx::TextureHandle texture;
+				bgfx::ProgramHandle program;
+				uint32_t flags;
 
 				// = bgfx::createVertexBuffer(bgfx::makeRef(s_cubeVertices, sizeof(s_cubeVertices) ), PosNormalTangentTexcoordVertex::ms_decl);
 				// = bgfx::createIndexBuffer(bgfx::makeRef(s_cubeIndices, sizeof(s_cubeIndices) ) );
