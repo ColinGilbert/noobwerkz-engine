@@ -42,7 +42,8 @@ list(APPEND common_src
 	common/CommonIncludes.cpp
 	common/MathFuncs.cpp
 	common/Font.cpp
-	common/Model.cpp
+	common/ModelLoader.cpp
+	common/Drawable.cpp
 	)
 
 list(APPEND main_src platform/nix/EngineDesktop.cpp)

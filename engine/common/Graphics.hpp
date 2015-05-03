@@ -2,7 +2,7 @@
 
 #include <map>
 #include <bgfx.h>
-#include <bx/readerwriter.h>
+#include "NoobUtils.hpp"
 
 namespace noob
 {
@@ -11,16 +11,8 @@ namespace noob
 		public:
 			enum texture_type { DIFFUSE_MAP, SPECULAR_MAP, AMBIENT_MAP, EMISSIVE_MAP, NORMAL_MAP, OPACITY_MAP, DISPLACEMENT_MAP, HEIGHT_MAP, DATA };
 
-			typedef struct
-			{
-				texture_type type;
-				bgfx::TextureHandle handle;
+			static std::map<std::string, bgfx::TextureHandle> global_textures;
 
-
-			} texture;
-
-			static std::map<std::string, noob::graphics::texture> global_textures;
-			
 			static void init(uint32_t width, uint32_t height)
 			{
 
@@ -36,7 +28,6 @@ namespace noob
 						);
 			}
 
-			
 			static void draw(uint32_t width, uint32_t height)
 			{
 				// Set view 0 default viewport.
@@ -51,9 +42,61 @@ namespace noob
 				bgfx::frame();
 			}
 
-	
-		protected:
-			static bx::FileReaderI* file_reader;
-			static bx::FileWriterI* file_writer;
+			static bgfx::TextureHandle load_texture(const std::string& _path)
+			{
+				bgfx::Memory mem;
+
+				std::tuple<const uint8_t*,size_t> data = noob::utils::load_to_memory(_path);
+				mem.data = const_cast<uint8_t*>(std::get<0>(data));
+				mem.size = std::get<1>(data);
+
+				const auto tex_width = 128;
+				const auto tex_height = 128;
+				uint8_t tex_num_mips = 7;
+				return bgfx::createTexture2D(tex_width, tex_height, tex_num_mips, bgfx::TextureFormat::Enum::RGBA8, BGFX_TEXTURE_NONE, &mem); 
+
+				//	bgfx::createTexture(mem, _flags, _skip, _info);
+
+				// bgfx::TextureInfo tex;
+				// bgfx::
+
+				// tex.handle = 
+				// global_textures->insert(std::make_pair<std::string, bgfx::TextureInfo>(_path, ));
+			}
+
+			static bgfx::ShaderHandle load_shader(const std::string& filename)
+			{
+				std::string shader_path = "shaders/dx9/";
+
+				switch (bgfx::getRendererType() )
+				{
+					case bgfx::RendererType::Direct3D11:
+					case bgfx::RendererType::Direct3D12:
+						shader_path = "shaders/dx11/";
+						break;
+
+					case bgfx::RendererType::OpenGL:
+						shader_path = "shaders/glsl/";
+						break;
+
+					case bgfx::RendererType::OpenGLES:
+						shader_path = "shaders/gles/";
+						break;
+
+					default:
+						break;
+				}
+
+				shader_path.append(filename);
+				shader_path.append(".bin");
+
+				const bgfx::Memory* mem = noob::utils::load_to_memory_bgfx(shader_path);
+
+				bgfx::ShaderHandle s = bgfx::createShader(mem);
+				
+				delete mem;
+				
+				return s;
+			}
 	};
 }

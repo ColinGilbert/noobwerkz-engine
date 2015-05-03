@@ -1,3 +1,3 @@
 #include "Graphics.hpp"
 
-static std::map<std::string, noob::graphics::texture> noob::graphics::global_textures;
+std::map<std::string, bgfx::TextureHandle> noob::graphics::global_textures;

@@ -1,4 +1,27 @@
 #include "NoobUtils.hpp"
+
+std::string noob::utils::load_file_as_string(const std::string& filename)
+{
+	std::ifstream input(filename);
+	return std::string((std::istreambuf_iterator<char>(input)),(std::istreambuf_iterator<char>()));
+}
+
+std::tuple<const uint8_t*, size_t> noob::utils::load_to_memory(const std::string& filename)
+{
+
+	std::string str = load_file_as_string(filename);
+	return std::make_tuple(reinterpret_cast<const uint8_t*>(&str[0]), str.size());
+}
+
+const bgfx::Memory* noob::utils::load_to_memory_bgfx(const std::string& filename)
+{
+	std::tuple<const uint8_t*, size_t> t = load_to_memory(filename);
+	const bgfx::Memory* m = new bgfx::Memory();
+	m->data = t.get<0>(t);
+	m->size = t.get<1>(t);
+	return m;
+}
+
 /*
 GLuint noob::utils::load_shader(GLenum type, const std::string &shader_str, bool debug)
 {
@@ -93,11 +116,7 @@ GLuint noob::utils::load_program(const std::string &vert_shader_str, const std::
 	return program_object;
 }
 */
-std::string noob::utils::load_file_as_string(const std::string& filename)
-{
-	std::ifstream input(filename);
-	return std::string((std::istreambuf_iterator<char>(input)),(std::istreambuf_iterator<char>()));
-}
+
 /*
 void noob::utils::log_gl_error(const std::string& message)
 {
