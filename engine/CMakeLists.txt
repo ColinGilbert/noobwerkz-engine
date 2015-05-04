@@ -42,7 +42,7 @@ list(APPEND common_src
 	common/CommonIncludes.cpp
 	common/MathFuncs.cpp
 	common/Font.cpp
-	common/ModelLoader.cpp
+	common/Model.cpp
 	common/Drawable.cpp
 	#common/MeshAsset.cpp
 	#common/GraphicsUtilities.cpp

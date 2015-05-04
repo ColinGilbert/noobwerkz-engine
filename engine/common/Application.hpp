@@ -44,7 +44,7 @@
 #include "MathFuncs.hpp"
 #include "Camera.hpp"
 #include "Graphics.hpp"
-#include "ModelLoader.hpp"
+#include "Model.hpp"
 #include "Drawable.hpp"
 
 

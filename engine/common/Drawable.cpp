@@ -7,10 +7,10 @@ noob::drawable::~drawable()
 	bgfx::destroyVertexBuffer(vertex_buffer);
 	bgfx::destroyIndexBuffer(index_buffer);
 	delete [] vertices;
-	// delete [] indices;
+	delete [] indices;
 }
 
-void noob::drawable::draw(uint8_t view_id, const float* transform)
+void noob::drawable::draw(uint8_t view_id, const float* transform, bgfx::ProgramHandle program_handle)
 {
 
 	bgfx::setTransform(transform);

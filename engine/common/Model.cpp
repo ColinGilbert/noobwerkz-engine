@@ -1,6 +1,6 @@
-#include "ModelLoader.hpp"
+#include "Model.hpp"
 
-noob::model_loader::model_loader(const std::string& filename, const std::string& filepath)
+noob::model::model(const std::string& filename, const std::string& filepath)
 {
 	Assimp::Importer importer;
 
@@ -22,14 +22,14 @@ noob::model_loader::model_loader(const std::string& filename, const std::string&
 
 	{
 		std::stringstream ss;
-		ss << "Attempting to load model_loader " << full_path;
+		ss << "Attempting to load model " << full_path;
 		logger::log(ss.str());
 	}
 
 	if(!scene)
 	{
 		std::stringstream ss;
-		ss << "Unable to load model_loader: Path = " << full_path << "  Error: " << importer.GetErrorString();
+		ss << "Unable to load model: Path = " << full_path << "  Error: " << importer.GetErrorString();
 		logger::log(ss.str());
 	}
 
@@ -41,8 +41,9 @@ noob::model_loader::model_loader(const std::string& filename, const std::string&
 		drawable_entries.push_back(new noob::drawable(const_cast<aiScene*>(scene), scene->mMeshes[i], filepath));
 	}
 }
+
 // Clears all loaded MeshEntries
-noob::model_loader::~model_loader(void)
+noob::model::~model(void)
 {
 	for(int i = 0; i < drawable_entries.size(); ++i)
 	{
@@ -51,13 +52,12 @@ noob::model_loader::~model_loader(void)
 	drawable_entries.clear();
 }
 
-/*
 // Renders all loaded MeshEntries
-void noob::model_loader::draw()
+void noob::model::draw(uint8_t view_id, const float* transform, bgfx::ProgramHandle program_handle)
 {
 	for(int i = 0; i < drawable_entries.size(); ++i)
 	{
-		drawable_entries.at(i)->draw();
+		drawable_entries.at(i)->draw(view_id, transform, program_handle);
 	}
 }
-*/
+

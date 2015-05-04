@@ -3,14 +3,14 @@
 
 struct user_data
 {
-	noob::model_loader* sphere;
+	noob::model* sphere;
 };
 
 
 void noob::application::init()
 {
 	user_data* userdata = new user_data();
-	userdata->sphere = new noob::model_loader("sphere.off","models");
+	userdata->sphere = new noob::model("sphere.off","models");
 	std::string fontfile = *prefix + "/font/droidsans.ttf";
 	droid_font->init(fontfile);
 }
@@ -32,9 +32,15 @@ void noob::application::draw()
 	bx::mtxProj(proj, 60.0f, float(width)/float(height), 0.1f, 100.0f);
 
 	bgfx::setViewTransform(0, view, proj);
-
-	// Set view 0 default viewport.
+	
 	bgfx::setViewRect(0, 0, 0, width, height);
+
+
+
+	noob::mat4 identity(noob::identity_mat4());
+
+
+	//sphere->draw(0, &identity.m[0], program_handle);
 
 
 	droid_font->change_colour(0xFFFF00FF);

@@ -3,7 +3,6 @@
 #include <map>
 #include <bgfx.h>
 #include "NoobUtils.hpp"
-//#include "GraphicsUtilities.hpp"
 
 namespace noob
 {

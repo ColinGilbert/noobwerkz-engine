@@ -1,4 +1,4 @@
-// This class wraps up verts, indices, render flags, and textures. Transform matrices are handled by the programmer in draw loop
+// This class wraps up verts, indices, render flags, and textures. Transform matrices and program handles are handled by the programmer in draw loop
 #pragma once
 
 #include <assimp/Importer.hpp>
@@ -8,7 +8,7 @@
 #include <bgfx.h>
 
 #include "Graphics.hpp"
-#include "ModelLoader.hpp"
+#include "Model.hpp"
 #include "Logger.hpp"
 
 namespace noob
@@ -86,7 +86,7 @@ namespace noob
 		drawable(aiScene* scene, aiMesh* drawable, const std::string& filepath);
 		~drawable();
 
-		void draw(uint8_t, const float*);
+		void draw(uint8_t, const float*, bgfx::ProgramHandle program_handle);
 		
 		// Candidate for refactoring
 		// void load_textures(aiMaterial* mat, aiTextureType type, const std::string& filepath);
@@ -100,7 +100,6 @@ namespace noob
 		bgfx::IndexBufferHandle index_buffer;
 		bgfx::UniformHandle sampler;
 		bgfx::TextureHandle texture;
-		bgfx::ProgramHandle program_handle;
 		uint32_t flags;
 
 		// = bgfx::createVertexBuffer(bgfx::makeRef(s_cubeVertices, sizeof(s_cubeVertices) ), PosNormalTangentTexcoordVertex::ms_decl);
