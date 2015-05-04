@@ -43,6 +43,10 @@
 #include "Untracked.hpp"
 #include "MathFuncs.hpp"
 #include "Camera.hpp"
+#include "Graphics.hpp"
+#include "ModelLoader.hpp"
+#include "Drawable.hpp"
+
 
 namespace noob
 {

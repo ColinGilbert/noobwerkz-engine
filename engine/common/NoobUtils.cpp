@@ -22,7 +22,10 @@ const bgfx::Memory* noob::utils::load_to_memory_bgfx(const std::string& filename
 	return m;
 }
 
+
+
 /*
+
 GLuint noob::utils::load_shader(GLenum type, const std::string &shader_str, bool debug)
 {
 	GLuint shader;
@@ -59,6 +62,7 @@ GLuint noob::utils::load_shader(GLenum type, const std::string &shader_str, bool
 	}
 	return shader;
 }
+
 
 GLuint noob::utils::load_program(const std::string &vert_shader_str, const std::string &frag_shader_str, bool debug)
 {
@@ -115,9 +119,8 @@ GLuint noob::utils::load_program(const std::string &vert_shader_str, const std::
 	glDeleteShader(fragment_shader);
 	return program_object;
 }
-*/
 
-/*
+
 void noob::utils::log_gl_error(const std::string& message)
 {
         GLenum err(glGetError());
@@ -148,4 +151,5 @@ void noob::utils::log_gl_error(const std::string& message)
                 logger::log(ss.str());
         }
 }
+
 */

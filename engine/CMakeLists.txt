@@ -44,6 +44,8 @@ list(APPEND common_src
 	common/Font.cpp
 	common/ModelLoader.cpp
 	common/Drawable.cpp
+	#common/MeshAsset.cpp
+	#common/GraphicsUtilities.cpp
 	)
 
 list(APPEND main_src platform/nix/EngineDesktop.cpp)

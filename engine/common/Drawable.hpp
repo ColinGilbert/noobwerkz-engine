@@ -1,4 +1,4 @@
-// This class wraps up verts, indices, render flags, and textures. Choice of shader programs and transform matrices, are handled by the programmer in draw loop
+// This class wraps up verts, indices, render flags, and textures. Transform matrices are handled by the programmer in draw loop
 #pragma once
 
 #include <assimp/Importer.hpp>
@@ -61,28 +61,46 @@ namespace noob
 
 			static bgfx::VertexDecl ms_decl;
 		};
+/*
+		struct position_normal_uv_vertex
+		{
+			float m_x;
+			float m_y;
+			float m_z;
+			uint32_t m_normal;
 
+			static void init()
+			{
+				ms_decl
+					.begin()
+					.add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
+					.add(bgfx::Attrib::Normal, 4, bgfx::AttribType::Uint8, true, true)
+					.add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Int16, true, true)
+					.end();
+			}
+
+			static bgfx::VertexDecl ms_decl;
+		};
+*/
 		drawable();
 		drawable(aiScene* scene, aiMesh* drawable, const std::string& filepath);
-
 		~drawable();
-		void draw(uint8_t);
-		
 
+		void draw(uint8_t, const float*);
+		
 		// Candidate for refactoring
 		// void load_textures(aiMaterial* mat, aiTextureType type, const std::string& filepath);
-
 		std::vector<bgfx::TextureHandle> textures;
-
 
 		unsigned int element_count;
 		position_normal_vertex* vertices;
+		uint16_t* indices;
 
 		bgfx::VertexBufferHandle vertex_buffer;		
 		bgfx::IndexBufferHandle index_buffer;
 		bgfx::UniformHandle sampler;
 		bgfx::TextureHandle texture;
-		bgfx::ProgramHandle program;
+		bgfx::ProgramHandle program_handle;
 		uint32_t flags;
 
 		// = bgfx::createVertexBuffer(bgfx::makeRef(s_cubeVertices, sizeof(s_cubeVertices) ), PosNormalTangentTexcoordVertex::ms_decl);

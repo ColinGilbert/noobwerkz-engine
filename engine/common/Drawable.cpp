@@ -1,27 +1,25 @@
 #include "Drawable.hpp"
 
-
-
 bgfx::VertexDecl noob::drawable::position_normal_vertex::ms_decl;
-
 
 noob::drawable::~drawable()
 {
 	bgfx::destroyVertexBuffer(vertex_buffer);
 	bgfx::destroyIndexBuffer(index_buffer);
+	delete [] vertices;
+	// delete [] indices;
 }
 
-void noob::drawable::draw(uint8_t view_id)
+void noob::drawable::draw(uint8_t view_id, const float* transform)
 {
 
-//	bgfx::setTransform();
-//	bgfx::setProgram(program_handle);
+	bgfx::setTransform(transform);
+	bgfx::setProgram(program_handle);
 	bgfx::setIndexBuffer(index_buffer);
 	bgfx::setVertexBuffer(vertex_buffer);
 	bgfx::setState(flags);
 	bgfx::submit(view_id);
 }
-
 
 noob::drawable::drawable(aiScene* scene, aiMesh* drawable, const std::string& filepath)
 {
@@ -32,34 +30,33 @@ noob::drawable::drawable(aiScene* scene, aiMesh* drawable, const std::string& fi
 	element_count = drawable->mNumFaces * 3;
 	{
 		std::stringstream ss;
-		ss << "Mesh has " << drawable->mNumFaces << " faces.";
+		ss << "Mesh has " << drawable->mNumFaces << " faces and " << element_count << " indices";
 		logger::log(ss.str());
 	}
 
 	int num_verts = drawable->mNumVertices;
-
 	vertices = new position_normal_vertex[num_verts];
 
 	if(drawable->HasPositions())
 	{
-		logger::log("Mesh has positions");
+		std::stringstream ss;
+		ss << "Mesh has " << num_verts << " vertices.";
+		logger::log(ss.str());
 
-		//float *vertices = new float[num_verts * 3];
+		
 		for(int i = 0; i < num_verts; ++i)
 		{
-			//vertices[i * 3] = drawable->mVertices[i].x;
-			//vertices[i * 3 + 1] = drawable->mVertices[i].y;
-			//vertices[i * 3 + 2] = drawable->mVertices[i].z;
-
+		
 			vertices[i].m_x = drawable->mVertices[i].x;
 			vertices[i].m_y = drawable->mVertices[i].y;
 			vertices[i].m_z = drawable->mVertices[i].z;
 		}
 
-		// delete vertices;
 	}
 
+	// TODO: Convert following old code to bgfx
 	/*
+	   
 	   if(drawable->HasTextureCoords(0))
 	   {
 	   logger::log("Mesh has texcoords");
@@ -70,45 +67,57 @@ noob::drawable::drawable(aiScene* scene, aiMesh* drawable, const std::string& fi
 	   texCoords[i * 2] = drawable->mTextureCoords[0][i].x;
 	   texCoords[i * 2 + 1] = drawable->mTextureCoords[0][i].y;
 	   }
+
 	//	delete texCoords;
+
 	}
 	*/
 
 	if(drawable->HasNormals()) 
 	{
 		logger::log("Mesh has normals");
-		//float *normals = new float[num_verts * 3];
 		for(int i = 0; i < num_verts; ++i)
 		{
-			//normals[i * 3] = drawable->mNormals[i].x;
-			//normals[i * 3 + 1] = drawable->mNormals[i].y;
-			//normals[i * 3 + 2] = drawable->mNormals[i].z;
+
 			vertices[i].m_normal = pack_floats_to_uint32(drawable->mNormals[i].x, drawable->mNormals[i].y, drawable->mNormals[i].z);
 		}
-		//	delete normals;
 	}
 
 
 	if(drawable->HasFaces())
 	{
 		logger::log("Mesh has faces");
-		unsigned int *indices = new unsigned int[drawable->mNumFaces * 3];
+
+		indices = new uint16_t[drawable->mNumFaces * 3];
+
 		for(int i = 0; i < drawable->mNumFaces; ++i)
 		{
-			indices[i * 3] = drawable->mFaces[i].mIndices[0];
-			indices[i * 3 + 1] = drawable->mFaces[i].mIndices[1];
-			indices[i * 3 + 2] = drawable->mFaces[i].mIndices[2];
+			indices[i * 3] = (uint16_t) drawable->mFaces[i].mIndices[0];
+			indices[i * 3 + 1] = (uint16_t) drawable->mFaces[i].mIndices[1];
+			indices[i * 3 + 2] = (uint16_t) drawable->mFaces[i].mIndices[2];
 		}
 
-		index_buffer = bgfx::createIndexBuffer(bgfx::makeRef(indices, sizeof(indices)));
-		delete [] indices;
+		{
+			std::stringstream ss;
+			ss << "Mesh has "<< drawable->mNumFaces * 3 << " indices";
+			logger::log(ss.str());
+		}
 
+		{
+			std::stringstream ss;
+			ss << "sizeof(indices) = " << sizeof(indices); 
+			logger::log(ss.str());
+		}
+
+		const bgfx::Memory* mem = bgfx::makeRef(indices, sizeof(indices));
+		logger::log("Made ref to indices");
+		index_buffer = bgfx::createIndexBuffer(mem);
+		logger::log("Created index buffer");
 	}
 
 	bgfx::createVertexBuffer(bgfx::makeRef(vertices, sizeof(vertices)), position_normal_vertex::ms_decl);
 
-	delete [] vertices;
-/*
+	/*
 	if(drawable->mMaterialIndex >= 0)
 	{
 		{
@@ -135,8 +144,9 @@ noob::drawable::drawable(aiScene* scene, aiMesh* drawable, const std::string& fi
 	*/
 }
 
-/*
+
 // TODO: Find out if this is the best place for this function
+/*
 void noob::drawable::load_textures(aiMaterial* mat, aiTextureType type, const std::string& filepath)
 {
 	for(size_t i = 0; i < mat->GetTextureCount(type); i++)
@@ -166,71 +176,9 @@ void noob::drawable::load_textures(aiMaterial* mat, aiTextureType type, const st
 		else
 		{
 			logger::log(std::string("Could not find texture ") + tex_path + std::string(" in map. Attempting to load."));
-
-			std::string s; // for logging
-			switch (type)
-			{
-				case aiTextureType_DIFFUSE:
-					{
-						// texture.type = noob::graphics::texture_type::DIFFUSE_MAP;
-						s = "diffuse";
-						break;
-					}
-				case aiTextureType_SPECULAR:
-					{
-						// texture.type = noob::graphics::texture_type::SPECULAR_MAP;
-						s = "specular";
-						break;
-					}
-				case aiTextureType_AMBIENT:
-					{
-						// texture.type = noob::graphics::texture_type::AMBIENT_MAP;
-						s = "ambient";
-						break;
-					}
-				case aiTextureType_EMISSIVE:
-					{
-						// texture.type = noob::graphics::texture_type::EMISSIVE_MAP;
-						s = "emissive";
-						break;
-					}
-				case aiTextureType_NORMALS:
-					{
-						// texture.type = noob::graphics::texture_type::NORMAL_MAP;
-						s = "normals";
-						break;
-					}
-				case aiTextureType_OPACITY:
-					{
-						// textype.type = noob::graphics::texture_type::OPACITY_MAP;
-						s = "opacity";
-						break;
-					}
-				case aiTextureType_DISPLACEMENT:
-					{
-						// texture.type = noob::graphics::texture_type::DISPLACEMENT_MAP;
-						s = "displacement";
-						break;
-					}
-				case aiTextureType_HEIGHT:
-					{
-						// texture.type = noob::graphics::texture_type::HEIGHT_MAP;
-						s = "heightmap";
-						break;
-					}
-				default:
-					{
-						// texture.type = noob::graphics::texture_type::DATA;
-						s = "data";
-						break;
-					}
-
-					texture = noob::graphics::load_texture(tex_path);
-					logger::log(std::string("Loading " ) + s + std::string(" texture at ") + tex_path);
-			}
-
+			texture = noob::graphics::load_texture(tex_path);
 		}
-	}
+			
+	}	
 }
-
 */

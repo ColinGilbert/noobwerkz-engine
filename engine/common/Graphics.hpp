@@ -3,6 +3,7 @@
 #include <map>
 #include <bgfx.h>
 #include "NoobUtils.hpp"
+//#include "GraphicsUtilities.hpp"
 
 namespace noob
 {
@@ -42,6 +43,20 @@ namespace noob
 				bgfx::frame();
 			}
 
+
+			static bgfx::TextureInfo* load_texture(const std::string& _name, uint32_t _flags, uint8_t _skip)
+			{
+
+				std::string file_path = "textures/";
+
+				file_path.append(_name);
+				const bgfx::Memory* mem = noob::utils::load_to_memory_bgfx(file_path);
+				bgfx::TextureInfo* _info = new bgfx::TextureInfo();
+				bgfx::createTexture(mem, _flags, _skip, _info);
+				return _info;
+			}
+
+/*
 			static bgfx::TextureHandle load_texture(const std::string& _path)
 			{
 				bgfx::Memory mem;
@@ -63,7 +78,7 @@ namespace noob
 				// tex.handle = 
 				// global_textures->insert(std::make_pair<std::string, bgfx::TextureInfo>(_path, ));
 			}
-
+*/
 			static bgfx::ShaderHandle load_shader(const std::string& filename)
 			{
 				std::string shader_path = "shaders/dx9/";
@@ -93,10 +108,17 @@ namespace noob
 				const bgfx::Memory* mem = noob::utils::load_to_memory_bgfx(shader_path);
 
 				bgfx::ShaderHandle s = bgfx::createShader(mem);
-				
+
 				delete mem;
-				
+
 				return s;
+			}
+
+			static bgfx::ProgramHandle load_program(const std::string& vs_name, const std::string& fs_name)
+			{
+				bgfx::ShaderHandle vsh = load_shader(vs_name);
+				bgfx::ShaderHandle fsh = load_shader(fs_name);
+				return bgfx::createProgram(vsh, fsh, true); // destroy shaders when program is destroyed 
 			}
 	};
 }

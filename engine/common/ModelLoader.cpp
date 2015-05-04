@@ -49,7 +49,6 @@ noob::model_loader::~model_loader(void)
 		delete drawable_entries.at(i);
 	}
 	drawable_entries.clear();
-	// delete path;
 }
 
 /*

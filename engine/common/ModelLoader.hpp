@@ -13,9 +13,9 @@
 
 namespace noob
 {
-	// Forward declaration of drawable. Required for compile.
-	
+	// Forward declaration of drawable. Required to compile.
 	class drawable;
+	
 	class model_loader
 	{
 		public:
