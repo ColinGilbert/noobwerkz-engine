@@ -10,6 +10,42 @@ namespace noob
 	{
 		public:
 			enum texture_type { DIFFUSE_MAP, SPECULAR_MAP, AMBIENT_MAP, EMISSIVE_MAP, NORMAL_MAP, OPACITY_MAP, DISPLACEMENT_MAP, HEIGHT_MAP, DATA };
+			struct PosUVTBNBonesVertex
+			{
+				float m_x;
+				float m_y;
+				float m_z;
+				float m_u;
+				float m_v;
+				float m_tangent_x;
+				float m_tangent_y;
+				float m_tangent_z;
+				float m_bitangent_x;
+				float m_bitangent_y;
+				float m_bitangent_z;
+				float m_normal_x;
+				float m_normal_y;
+				float m_normal_z;
+				uint8_t m_boneindex[4];
+				float m_boneweight[4];
+
+				static void init()
+				{
+					ms_decl
+						.begin()
+						.add(bgfx::Attrib::Position,  3, bgfx::AttribType::Float)
+						.add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float)
+						.add(bgfx::Attrib::Tangent,   3, bgfx::AttribType::Float)
+						.add(bgfx::Attrib::Bitangent, 3, bgfx::AttribType::Float)
+						.add(bgfx::Attrib::Normal,    3, bgfx::AttribType::Float)
+						.add(bgfx::Attrib::Indices,   4, bgfx::AttribType::Uint8, false, true)
+						.add(bgfx::Attrib::Weight,    4, bgfx::AttribType::Float)
+						.end();
+				}
+
+				static bgfx::VertexDecl ms_decl;
+			};
+
 
 			static std::map<std::string, bgfx::TextureHandle> global_textures;
 
@@ -55,31 +91,32 @@ namespace noob
 				return _info;
 			}
 
-/*
-			static bgfx::TextureHandle load_texture(const std::string& _path)
-			{
-				bgfx::Memory mem;
+			/*
+			   static bgfx::TextureHandle load_texture(const std::string& _path)
+			   {
+			   bgfx::Memory mem;
 
-				std::tuple<const uint8_t*,size_t> data = noob::utils::load_to_memory(_path);
-				mem.data = const_cast<uint8_t*>(std::get<0>(data));
-				mem.size = std::get<1>(data);
+			   std::tuple<const uint8_t*,size_t> data = noob::utils::load_to_memory(_path);
+			   mem.data = const_cast<uint8_t*>(std::get<0>(data));
+			   mem.size = std::get<1>(data);
 
-				const auto tex_width = 128;
-				const auto tex_height = 128;
-				uint8_t tex_num_mips = 7;
-				return bgfx::createTexture2D(tex_width, tex_height, tex_num_mips, bgfx::TextureFormat::Enum::RGBA8, BGFX_TEXTURE_NONE, &mem); 
+			   const auto tex_width = 128;
+			   const auto tex_height = 128;
+			   uint8_t tex_num_mips = 7;
+			   return bgfx::createTexture2D(tex_width, tex_height, tex_num_mips, bgfx::TextureFormat::Enum::RGBA8, BGFX_TEXTURE_NONE, &mem); 
 
-				//	bgfx::createTexture(mem, _flags, _skip, _info);
+			//	bgfx::createTexture(mem, _flags, _skip, _info);
 
-				// bgfx::TextureInfo tex;
-				// bgfx::
+			// bgfx::TextureInfo tex;
+			// bgfx::
 
-				// tex.handle = 
-				// global_textures->insert(std::make_pair<std::string, bgfx::TextureInfo>(_path, ));
+			// tex.handle = 
+			// global_textures->insert(std::make_pair<std::string, bgfx::TextureInfo>(_path, ));
 			}
-*/
+			*/
 			static bgfx::ShaderHandle load_shader(const std::string& filename)
 			{
+				logger::log("Loading shader");
 				std::string shader_path = "shaders/dx9/";
 
 				switch (bgfx::getRendererType() )
@@ -104,11 +141,12 @@ namespace noob
 				shader_path.append(filename);
 				shader_path.append(".bin");
 
+				logger::log(shader_path);
 				const bgfx::Memory* mem = noob::utils::load_to_memory_bgfx(shader_path);
 
 				bgfx::ShaderHandle s = bgfx::createShader(mem);
 
-				delete mem;
+				//delete mem;
 
 				return s;
 			}

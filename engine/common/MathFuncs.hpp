@@ -1,7 +1,7 @@
 #ifndef _MATHS_FUNCS_H_
 #define _MATHS_FUNCS_H_
 
-
+#include <assimp/types.h>
 // const used to convert degrees into radians
 #define TAU 2.0 * M_PI
 #define ONE_DEG_IN_RAD (2.0 * M_PI) / 360.0 // 0.017444444
@@ -97,7 +97,7 @@ namespace noob
 				float mm, float n, float o, float p);
 		mat4(float mm[16]);
 		// mat4(const aiMatrix3x3& AssimpMatrix);
-		// mat4(const aiMatrix4x4& AssimpMatrix);	
+		mat4(const aiMatrix4x4& AssimpMatrix);	
 
 		vec4 operator*(const vec4& rhs);
 		mat4 operator*(const mat4& rhs);

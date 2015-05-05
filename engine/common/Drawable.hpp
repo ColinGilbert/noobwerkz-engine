@@ -1,109 +1,102 @@
-// This class wraps up verts, indices, render flags, and textures. Transform matrices and program handles are handled by the programmer in draw loop
+// Drawable - Loads and encapsulates a mesh. Originally part of Torque6
+
+// Torque 6 copyright info:
+//-----------------------------------------------------------------------------
+// Copyright (c) 2015 Andrew Mac
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to
+// deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+// sell copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
+//-----------------------------------------------------------------------------
+
 #pragma once
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-
 #include <bgfx.h>
+#include <assimp/scene.h>
+#include <assimp/quaternion.h>
+#include <assimp/anim.h>
+
+#include <map>
+#include <utility>
+#include <algorithm>
+#include <vector>
 
 #include "Graphics.hpp"
-#include "Model.hpp"
-#include "Logger.hpp"
+#include "MathFuncs.hpp"
 
 namespace noob
 {
-	class drawable
-	{
-		friend class model_loader;
+				class drawable 
+				{
+								public:
+												drawable();
+												virtual ~drawable();
 
-		public:
+												// Mesh Handling.
+												void setMeshFile( const std::string& pMeshFile );
+												inline std::string getMeshFile( void ) const { return mMeshFile; };
+												uint32_t getMeshCount() { return mMeshList.size(); }
+												//Box3F getBoundingBox() { return mBoundingBox; }
 
-		uint32_t pack_four_chars_to_uint32(uint8_t _x, uint8_t _y, uint8_t _z, uint8_t _w)
-		{
-			union
-			{
-				uint32_t ui32;
-				uint8_t arr[4];
-			} un;
-			un.arr[0] = _x;
-			un.arr[1] = _y;
-			un.arr[2] = _z;
-			un.arr[3] = _w;
-			return un.ui32;
-		}
+												// Animation Functions
+												uint32_t getAnimatedTransforms(double TimeInSeconds, float* transformsOut);
 
-		uint32_t pack_floats_to_uint32(float _x, float _y = 0.0f, float _z = 0.0f, float _w = 0.0f)
-		{
-			const uint8_t xx = uint8_t(_x*127.0f + 128.0f);
-			const uint8_t yy = uint8_t(_y*127.0f + 128.0f);
-			const uint8_t zz = uint8_t(_z*127.0f + 128.0f);
-			const uint8_t ww = uint8_t(_w*127.0f + 128.0f);
-			return pack_four_chars_to_uint32(xx, yy, zz, ww);
-		}
+												// Buffers
+												bgfx::VertexBufferHandle getVertexBuffer(uint32_t idx) { return mMeshList[idx].mVertexBuffer; }
+												bgfx::IndexBufferHandle getIndexBuffer(uint32_t idx) { return mMeshList[idx].mIndexBuffer; }
+												uint32_t getMaterialIndex(uint32_t idx) { return mMeshList[idx].mMaterialIndex; }
 
-		struct position_normal_vertex
-		{
-			float m_x;
-			float m_y;
-			float m_z;
-			uint32_t m_normal;
+												void loadMesh();
 
-			static void init()
-			{
-				ms_decl
-					.begin()
-					.add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
-					.add(bgfx::Attrib::Normal, 4, bgfx::AttribType::Uint8, true, true)
-					//.add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Int16, true, true)
-					.end();
-			}
+												typedef struct
+												{
+																std::vector<noob::graphics::PosUVTBNBonesVertex> mRawVerts;
+																std::vector<uint16_t> mRawIndices;
+																bgfx::VertexBufferHandle mVertexBuffer;
+																bgfx::IndexBufferHandle mIndexBuffer;
+																//Box3F mBoundingBox;
+																uint32_t mMaterialIndex;
+												} SubMesh;
 
-			static bgfx::VertexDecl ms_decl;
-		};
-/*
-		struct position_normal_uv_vertex
-		{
-			float m_x;
-			float m_y;
-			float m_z;
-			uint32_t m_normal;
+								protected:
 
-			static void init()
-			{
-				ms_decl
-					.begin()
-					.add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
-					.add(bgfx::Attrib::Normal, 4, bgfx::AttribType::Uint8, true, true)
-					.add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Int16, true, true)
-					.end();
-			}
+												// Mesh Handling
+												
+												void importMesh();
+												void processMesh();
 
-			static bgfx::VertexDecl ms_decl;
-		};
+								/*				// Animation Functions.
+												uint32_t read_node_hierarchy(double AnimationTime, const aiNode* pNode, noob::mat4 ParentTransform, noob::mat4 GlobalInverseTransform, float* transformsOut);
+												aiNodeAnim* _findNodeAnim(const aiAnimation* pAnimation, const std::string& nodeName);
+												void _calcInterpolatedRotation(aiQuaternion& Out, double AnimationTime, const aiNodeAnim* pNodeAnim);
+												uint32_t _findRotation(double AnimationTime, const aiNodeAnim* pNodeAnim);
+												void _calcInterpolatedScaling(aiVector3D& Out, double AnimationTime, const aiNodeAnim* pNodeAnim);
+												uint32_t _findScaling(double AnimationTime, const aiNodeAnim* pNodeAnim);
+												void _calcInterpolatedPosition(aiVector3D& Out, double AnimationTime, const aiNodeAnim* pNodeAnim);
+												uint32_t findPosition(double AnimationTime, const aiNodeAnim* pNodeAnim);
 */
-		drawable();
-		drawable(aiScene* scene, aiMesh* drawable, const std::string& filepath);
-		~drawable();
+								private:
+												std::map<const char* , uint32_t> mBoneMap;
+												std::vector<noob::mat4> mBoneOffsets;
+												std::vector<SubMesh> mMeshList;
+												std::string mMeshFile;
+												const aiScene* mScene;
+												//Box3F mBoundingBox;
+												bool mIsAnimated;
 
-		void draw(uint8_t, const float*, bgfx::ProgramHandle program_handle);
-		
-		// Candidate for refactoring
-		// void load_textures(aiMaterial* mat, aiTextureType type, const std::string& filepath);
-		std::vector<bgfx::TextureHandle> textures;
-
-		unsigned int element_count;
-		position_normal_vertex* vertices;
-		uint16_t* indices;
-
-		bgfx::VertexBufferHandle vertex_buffer;		
-		bgfx::IndexBufferHandle index_buffer;
-		bgfx::UniformHandle sampler;
-		bgfx::TextureHandle texture;
-		uint32_t flags;
-
-		// = bgfx::createVertexBuffer(bgfx::makeRef(s_cubeVertices, sizeof(s_cubeVertices) ), PosNormalTangentTexcoordVertex::ms_decl);
-		// = bgfx::createIndexBuffer(bgfx::makeRef(s_cubeIndices, sizeof(s_cubeIndices) ) );
-		// = bgfx::createUniform("u_gradientMap, bgfx::UniformType::Uniform1iv);
-	};
+				};
 }

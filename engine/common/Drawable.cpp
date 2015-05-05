@@ -1,184 +1,493 @@
+//-----------------------------------------------------------------------------
+// Copyright (c) 2015 Andrew Mac
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to
+// deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+// sell copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
+//-----------------------------------------------------------------------------
+
+// #include "graphics/utilities.h"
+
+#include <bgfx.h>
+#include <bx/fpumath.h>
+#include <bx/timer.h>
+
+// Assimp - Asset Import Library
+#include <assimp/cimport.h>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+#include <assimp/types.h>
+
+#include "Logger.hpp"
 #include "Drawable.hpp"
 
-bgfx::VertexDecl noob::drawable::position_normal_vertex::ms_decl;
+noob::drawable::drawable() : 
+				mMeshFile(std::string("")),
+				mScene ( NULL )
+{
+				//   mBoundingBox.minExtents.set(0, 0, 0);
+				//   mBoundingBox.maxExtents.set(0, 0, 0);
+				mIsAnimated = false;
+}
+
+//------------------------------------------------------------------------------
 
 noob::drawable::~drawable()
 {
-	bgfx::destroyVertexBuffer(vertex_buffer);
-	bgfx::destroyIndexBuffer(index_buffer);
-	delete [] vertices;
-	delete [] indices;
+				for ( int32_t m = 0; m < mMeshList.size(); ++m )
+				{
+								if ( mMeshList[m].mVertexBuffer.idx != bgfx::invalidHandle )
+												bgfx::destroyVertexBuffer(mMeshList[m].mVertexBuffer);
+
+								if ( mMeshList[m].mIndexBuffer.idx != bgfx::invalidHandle )
+												bgfx::destroyIndexBuffer(mMeshList[m].mIndexBuffer);
+				}
+
+				// Clean up.
+				if ( mScene )
+								aiReleaseImport(mScene);
 }
 
-void noob::drawable::draw(uint8_t view_id, const float* transform, bgfx::ProgramHandle program_handle)
+//------------------------------------------------------------------------------
+
+void noob::drawable::setMeshFile( const std::string& pMeshFile ) //;const char* pMeshFile )
 {
-
-	bgfx::setTransform(transform);
-	bgfx::setProgram(program_handle);
-	bgfx::setIndexBuffer(index_buffer);
-	bgfx::setVertexBuffer(vertex_buffer);
-	bgfx::setState(flags);
-	bgfx::submit(view_id);
+				mMeshFile = pMeshFile;
 }
 
-noob::drawable::drawable(aiScene* scene, aiMesh* drawable, const std::string& filepath)
+void noob::drawable::loadMesh()
 {
-	logger::log("Creating drawable.");
+				importMesh();
+				processMesh();
+}
 
-	position_normal_vertex::init();
+void noob::drawable::importMesh()
+{
+				//U64 hpFreq = bx::getHPFrequency() / 1000000.0; // micro-seconds.
+				//U64 startTime = bx::getHPCounter();
 
-	element_count = drawable->mNumFaces * 3;
-	{
-		std::stringstream ss;
-		ss << "Mesh has " << drawable->mNumFaces << " faces and " << element_count << " indices";
-		logger::log(ss.str());
-	}
+				// Use Assimp To Load Mesh
+				mScene = aiImportFile(mMeshFile.c_str(), aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+				if ( !mScene ) return;
 
-	int num_verts = drawable->mNumVertices;
-	vertices = new position_normal_vertex[num_verts];
+				//U64 endTime = bx::getHPCounter();
+				//Con::printf("ASSIMP IMPORT TOOK: %d microseconds. (1 microsecond = 0.001 milliseconds)", (uint32_t)((endTime - startTime) / hpFreq));
 
-	if(drawable->HasPositions())
-	{
-		std::stringstream ss;
-		ss << "Mesh has " << num_verts << " vertices.";
-		logger::log(ss.str());
+				mIsAnimated = mScene->HasAnimations();
 
-		
-		for(int i = 0; i < num_verts; ++i)
-		{
-		
-			vertices[i].m_x = drawable->mVertices[i].x;
-			vertices[i].m_y = drawable->mVertices[i].y;
-			vertices[i].m_z = drawable->mVertices[i].z;
-		}
+				{
+								std::stringstream ss;
+								ss << "Assimp Scene has " << mScene->mNumMeshes << " meshes";
+								logger::log(ss.str());
+				}
 
-	}
+				for( uint32_t m = 0; m < mScene->mNumMeshes; ++m )
+				{
+								aiMesh* mMeshData = mScene->mMeshes[m];
+								SubMesh newSubMesh;
+								mMeshList.push_back(newSubMesh);
+								SubMesh* subMeshData = &mMeshList[mMeshList.size()-1];
 
-	// TODO: Convert following old code to bgfx
-	/*
-	   
-	   if(drawable->HasTextureCoords(0))
-	   {
-	   logger::log("Mesh has texcoords");
+								// Defaults
+								//    subMeshData->mBoundingBox.minExtents.set(0, 0, 0);
+								//    subMeshData->mBoundingBox.maxExtents.set(0, 0, 0);
+								subMeshData->mVertexBuffer.idx = bgfx::invalidHandle;
+								subMeshData->mIndexBuffer.idx = bgfx::invalidHandle;
+								subMeshData->mMaterialIndex = mMeshData->mMaterialIndex;
 
-	   float *texCoords = new float[num_verts * 2];
-	   for(int i = 0; i < num_verts; ++i)
-	   {
-	   texCoords[i * 2] = drawable->mTextureCoords[0][i].x;
-	   texCoords[i * 2 + 1] = drawable->mTextureCoords[0][i].y;
-	   }
-
-	//	delete texCoords;
-
-	}
-	*/
-
-	if(drawable->HasNormals()) 
-	{
-		logger::log("Mesh has normals");
-		for(int i = 0; i < num_verts; ++i)
-		{
-
-			vertices[i].m_normal = pack_floats_to_uint32(drawable->mNormals[i].x, drawable->mNormals[i].y, drawable->mNormals[i].z);
-		}
-	}
+								{
+												std::stringstream ss;
+												ss << "Mesh has " << mMeshData->mNumVertices << " vertices";
+												logger::log(ss.str());
+								}
 
 
-	if(drawable->HasFaces())
-	{
-		logger::log("Mesh has faces");
+								if ( mMeshData->HasTextureCoords(0) ) logger::log("Mesh has texcoords");
+								if ( mMeshData->HasNormals() ) logger::log("Mesh has normals");
+								if ( mMeshData->HasTangentsAndBitangents() ) logger::log("Mesh has tangents and bitangents");
+								{
+												std::stringstream ss;
+												ss << "Mesh has " << mMeshData->mNumBones << " bones";
+												logger::log(ss.str());
 
-		indices = new uint16_t[drawable->mNumFaces * 3];
+								}
+								// Verts/UVs/Bones
+								for ( uint32_t n = 0; n < mMeshData->mNumVertices; ++n)
+								{
+												noob::graphics::PosUVTBNBonesVertex vert;
 
-		for(int i = 0; i < drawable->mNumFaces; ++i)
-		{
-			indices[i * 3] = (uint16_t) drawable->mFaces[i].mIndices[0];
-			indices[i * 3 + 1] = (uint16_t) drawable->mFaces[i].mIndices[1];
-			indices[i * 3 + 2] = (uint16_t) drawable->mFaces[i].mIndices[2];
-		}
+												// Verts
+												aiVector3D pt = mMeshData->mVertices[n];
+												vert.m_x = pt.x;
+												vert.m_y = pt.y;
+												vert.m_z = pt.z;
+												/*
+												// Bounding Box
+												if ( vert.m_x < subMeshData->mBoundingBox.minExtents.x )
+												subMeshData->mBoundingBox.minExtents.x = vert.m_x;
+												if ( vert.m_x > subMeshData->mBoundingBox.maxExtents.x )
+												subMeshData->mBoundingBox.maxExtents.x = vert.m_x;
 
-		{
-			std::stringstream ss;
-			ss << "Mesh has "<< drawable->mNumFaces * 3 << " indices";
-			logger::log(ss.str());
-		}
+												if ( vert.m_y < subMeshData->mBoundingBox.minExtents.y )
+												subMeshData->mBoundingBox.minExtents.y = vert.m_y;
+												if ( vert.m_y > subMeshData->mBoundingBox.maxExtents.y )
+												subMeshData->mBoundingBox.maxExtents.y = vert.m_y;
 
-		{
-			std::stringstream ss;
-			ss << "sizeof(indices) = " << sizeof(indices); 
-			logger::log(ss.str());
-		}
+												if ( vert.m_z < subMeshData->mBoundingBox.minExtents.z )
+												subMeshData->mBoundingBox.minExtents.z = vert.m_z;
+												if ( vert.m_z > subMeshData->mBoundingBox.maxExtents.z )
+												subMeshData->mBoundingBox.maxExtents.z = vert.m_z;
+												*/
+												// UVs
+												if ( mMeshData->HasTextureCoords(0) )
+												{
+																vert.m_u = mMeshData->mTextureCoords[0][n].x;
+																vert.m_v = mMeshData->mTextureCoords[0][n].y;
+												}
 
-		const bgfx::Memory* mem = bgfx::makeRef(indices, sizeof(indices));
-		logger::log("Made ref to indices");
-		index_buffer = bgfx::createIndexBuffer(mem);
-		logger::log("Created index buffer");
-	}
+												// Tangents & Bitangents
+												if ( mMeshData->HasTangentsAndBitangents() )
+												{
+																vert.m_tangent_x = mMeshData->mTangents[n].x;
+																vert.m_tangent_y = mMeshData->mTangents[n].y; 
+																vert.m_tangent_z = mMeshData->mTangents[n].z; 
+																vert.m_bitangent_x = mMeshData->mBitangents[n].x;
+																vert.m_bitangent_y = mMeshData->mBitangents[n].y; 
+																vert.m_bitangent_z = mMeshData->mBitangents[n].z; 
+												} 
+												else
+												{
+																vert.m_tangent_x = 0;
+																vert.m_tangent_y = 0; 
+																vert.m_tangent_z = 0; 
+																vert.m_bitangent_x = 0;
+																vert.m_bitangent_y = 0; 
+																vert.m_bitangent_z = 0; 
+												}
 
-	bgfx::createVertexBuffer(bgfx::makeRef(vertices, sizeof(vertices)), position_normal_vertex::ms_decl);
+												// Normals
+												if ( mMeshData->HasNormals() )
+												{
+																vert.m_normal_x = mMeshData->mNormals[n].x;
+																vert.m_normal_y = mMeshData->mNormals[n].y; 
+																vert.m_normal_z = mMeshData->mNormals[n].z; 
+												}
+												else 
+												{
+																// TODO: Better default than zero?
+																vert.m_normal_x = 0;
+																vert.m_normal_y = 0; 
+																vert.m_normal_z = 0; 
+												}
 
-	/*
-	if(drawable->mMaterialIndex >= 0)
-	{
-		{
-			std::stringstream ss;
-			ss << "Mesh has " << drawable->mMaterialIndex << " materials";
-			logger::log(ss.str());
-		}
+												// Default bone index/weight values.
+												vert.m_boneindex[0] = 0;
+												vert.m_boneindex[1] = 0;
+												vert.m_boneindex[2] = 0;
+												vert.m_boneindex[3] = 0;
+												vert.m_boneweight[0] = 0.0f;
+												vert.m_boneweight[1] = 0.0f;
+												vert.m_boneweight[2] = 0.0f;
+												vert.m_boneweight[3] = 0.0f;
 
-		aiMaterial* material = scene->mMaterials[drawable->mMaterialIndex];
+												subMeshData->mRawVerts.push_back(vert);
+								}
 
-		load_textures(material, aiTextureType_DIFFUSE, filepath);
+								// Process Bones/Nodes
+								for ( uint32_t n = 0; n < mMeshData->mNumBones; ++n )
+								{
+												aiBone* boneData = mMeshData->mBones[n];
 
-		// Those lines below are commented out because gradient mapping uses a single texture + uniforms/vert attributes instead of mutliple textures.
-		
-		// load_textures(material, aiTextureType_SPECULAR, filepath);
-		// load_textures(material, aiTextureType_NORMALS, filepath);
-		// load_textures(material, aiTextureType_AMBIENT, filepath);
-		// load_textures(material, aiTextureType_EMISSIVE, filepath);
-		// load_textures(material, aiTextureType_OPACITY, filepath);
-		// load_textures(material, aiTextureType_HEIGHT, filepath);
-		// load_textures(material, aiTextureType_UNKNOWN, filepath);
-		   
-	}
-	*/
+												// Store bone index by name, and store it's offset matrix.
+												uint32_t boneIndex = 0;
+												if ( mBoneMap.find(boneData->mName.C_Str()) == mBoneMap.end() )
+												{
+																boneIndex = mBoneOffsets.size();
+																mBoneMap.insert(std::make_pair(boneData->mName.C_Str(), boneIndex));
+																mBoneOffsets.push_back(noob::mat4(boneData->mOffsetMatrix));
+												}
+												else
+												{
+																boneIndex = mBoneMap[boneData->mName.C_Str()];
+																mBoneOffsets[boneIndex] = noob::mat4(boneData->mOffsetMatrix);
+												}
+
+												// Store the bone indices and weights in the vert data.
+												for ( uint32_t i = 0; i < boneData->mNumWeights; ++i )
+												{
+																if ( boneData->mWeights[i].mVertexId >= (uint32_t)subMeshData->mRawVerts.size() ) continue;
+																noob::graphics::PosUVTBNBonesVertex* vert = &subMeshData->mRawVerts[boneData->mWeights[i].mVertexId];
+																for ( uint32_t j = 0; j < 4; ++j )
+																{
+																				if ( vert->m_boneindex[j] == 0 && vert->m_boneweight[j] == 0.0f )
+																				{
+																								// TODO: This + 1 is there because we know 0 in the transform table
+																								// is the main transformation. Maybe this should be done in the 
+																								// vertex shader instead?
+																								vert->m_boneindex[j] = boneIndex + 1;
+																								vert->m_boneweight[j] = boneData->mWeights[i].mWeight / (j + 1);
+
+																								// Rescale the previous vert weights.
+																								for ( uint32_t k = 0; k < j; ++k )
+																								{
+																												vert->m_boneweight[k] = vert->m_boneweight[k] * (k + 1);
+																												vert->m_boneweight[k] = vert->m_boneweight[k] / (j + 1);
+																								}
+																								break;
+																				}
+																}
+												}
+								}
+
+								{
+												std::stringstream ss;
+												ss << "Mesh has " << mMeshData->mNumFaces << " faces";
+												logger::log(ss.str());
+								}
+								// Faces
+								for ( uint32_t n = 0; n < mMeshData->mNumFaces; ++n)
+								{
+												const struct aiFace* face = &mMeshData->mFaces[n];
+												if ( face->mNumIndices == 2 )
+												{
+																subMeshData->mRawIndices.push_back(face->mIndices[0]);
+																subMeshData->mRawIndices.push_back(face->mIndices[1]);
+												}
+												else if ( face->mNumIndices == 3 )
+												{
+																subMeshData->mRawIndices.push_back(face->mIndices[0]);
+																subMeshData->mRawIndices.push_back(face->mIndices[1]);
+																subMeshData->mRawIndices.push_back(face->mIndices[2]);
+												}
+												else
+												{
+																logger::log("[ASSIMP] Non-Triangle Face Found.");
+												}
+								}
+				}
+}
+
+void noob::drawable::processMesh()
+{
+				//U64 hpFreq = bx::getHPFrequency() / 1000000.0; // micro-seconds.
+				//U64 startTime = bx::getHPCounter();
+
+				for ( int32_t n = 0; n < mMeshList.size(); ++n)
+				{
+								SubMesh* subMeshData = &mMeshList[n];
+
+								// Load the verts and indices into bgfx buffers
+								subMeshData->mVertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(&subMeshData->mRawVerts[0], subMeshData->mRawVerts.size() * sizeof(noob::graphics::PosUVTBNBonesVertex) ), noob::graphics::PosUVTBNBonesVertex::ms_decl );
+
+								subMeshData->mIndexBuffer = bgfx::createIndexBuffer(bgfx::makeRef(&subMeshData->mRawIndices[0], subMeshData->mRawIndices.size() * sizeof(uint16_t) ));
+
+								// Bounding Box
+								// mBoundingBox.intersect(subMeshData->mBoundingBox);
+				}
+
+				//U64 endTime = bx::getHPCounter();
+				//Con::printf("PROCESS MESH TOOK: %d microseconds. (1 microsecond = 0.001 milliseconds)", (uint32_t)((endTime - startTime) / hpFreq));
 }
 
 
-// TODO: Find out if this is the best place for this function
 /*
-void noob::drawable::load_textures(aiMaterial* mat, aiTextureType type, const std::string& filepath)
+// Returns the number of transformations loaded into transformsOut.
+uint32_t noob::drawable::getAnimatedTransforms(double TimeInSeconds, float* transformsOut)
 {
-	for(size_t i = 0; i < mat->GetTextureCount(type); i++)
-	{
-		aiString ai_str;
-		mat->GetTexture(type, i, &ai_str);
+if ( !mScene ) return 0;
 
-		std::string str(ai_str.C_Str());
-		str = str.erase(0,1);
-		logger::log("Assimp path to texture = " + str);
+noob::mat4 Identity = noob::identity_mat4();
 
-		std::string tex_path(filepath + str);
+aiMatrix4x4t<float> rootTransform = mScene->mRootNode->mTransformation;
+rootTransform.Inverse();
+noob::mat4 GlobalInverseTransform = rootTransform;
 
-		logger::log("Attempting to load texture from " + tex_path);
+double TicksPerSecond = mScene->mAnimations[0]->mTicksPerSecond != 0 ? mScene->mAnimations[0]->mTicksPerSecond : 25.0f;
+double TimeInTicks = TimeInSeconds * TicksPerSecond;
+double AnimationTime = fmod(TimeInTicks, mScene->mAnimations[0]->mDuration);
 
-		// Check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
+return read_node_hierarchy(AnimationTime, mScene->mRootNode, Identity, GlobalInverseTransform, transformsOut);
+}
 
-		if(noob::graphics::global_textures.find(tex_path) != noob::graphics::global_textures.end())
-		{
-			bgfx::TextureHandle tex = noob::graphics::global_textures.find(str)->second;
-			texture = tex;
+uint32_t noob::drawable::read_node_hierarchy(double AnimationTime, const aiNode* pNode, noob::mat4 ParentTransform, noob::mat4 GlobalInverseTransform, float* transformsOut)
+{ 
+uint32_t xfrmCount = 0;
+const char* nodeName = pNode->mName.data;
+const aiAnimation* pAnimation = mScene->mAnimations[0];
+const aiNodeAnim* pNodeAnim = _findNodeAnim(pAnimation, nodeName);
+noob::mat4 NodeTransformation(pNode->mTransformation);
 
-			std::stringstream ss;
-			ss << "Found already loaded texture";
-			logger::log(ss.str());
-		}
-		else
-		{
-			logger::log(std::string("Could not find texture ") + tex_path + std::string(" in map. Attempting to load."));
-			texture = noob::graphics::load_texture(tex_path);
-		}
-			
-	}	
+if ( pNodeAnim ) 
+{
+// Interpolate scaling and generate scaling transformation matrix
+aiVector3D Scaling;
+_calcInterpolatedScaling(Scaling, AnimationTime, pNodeAnim);
+noob::mat4 ScalingM;
+ScalingM.InitScaleTransform(Scaling.x, Scaling.y, Scaling.z);
+
+// Interpolate rotation and generate rotation transformation matrix
+aiQuaternion RotationQ;
+_calcInterpolatedRotation(RotationQ, AnimationTime, pNodeAnim); 
+noob::mat4 RotationM = noob::mat4(RotationQ.GetMatrix());
+
+// Interpolate translation and generate translation transformation matrix
+aiVector3D Translation;
+_calcInterpolatedPosition(Translation, AnimationTime, pNodeAnim);
+noob::mat4 TranslationM;
+TranslationM.InitTranslationTransform(Translation.x, Translation.y, Translation.z);
+
+NodeTransformation = TranslationM * RotationM * ScalingM;
+}
+
+noob::mat4 GlobalTransformation = ParentTransform * NodeTransformation;
+
+if ( mBoneMap.find(nodeName) != mBoneMap.end() ) 
+{
+uint32_t BoneIndex = mBoneMap[nodeName];
+xfrmCount = BoneIndex + 1;
+
+noob::mat4 boneTransform = GlobalInverseTransform * GlobalTransformation * mBoneOffsets[BoneIndex];
+
+// Assimp matrices are row-major, we need to transpose to column-major.
+boneTransform = transpose(boneTransform);
+std::copy(&transformsOut[BoneIndex * 16], &boneTransform.m[0], sizeof(float) * 16); 
+}
+
+for ( uint32_t i = 0 ; i < pNode->mNumChildren ; i++ ) 
+{
+uint32_t childXfrmCount = read_node_hierarchy(AnimationTime, pNode->mChildren[i], GlobalTransformation, GlobalInverseTransform, transformsOut);
+if ( childXfrmCount > xfrmCount )
+xfrmCount = childXfrmCount;
+}
+
+return xfrmCount;
+}
+
+aiNodeAnim* noob::drawable::_findNodeAnim(const aiAnimation* pAnimation, const std::string& nodeName)
+{
+				for ( uint32_t n = 0; n < pAnimation->mNumChannels; ++n )
+				{
+								aiNodeAnim* node = pAnimation->mChannels[n];
+								if ( dStrcmp(node->mNodeName.C_Str(), nodeName.c_str()) == 0 )
+												return node;
+				}
+
+				return NULL;
+}
+
+void noob::drawable::_calcInterpolatedRotation(aiQuaternion& Out, double AnimationTime, const aiNodeAnim* pNodeAnim)
+{
+				// we need at least two values to interpolate...
+				if (pNodeAnim->mNumRotationKeys == 1) {
+								Out = pNodeAnim->mRotationKeys[0].mValue;
+								return;
+				}
+
+				uint32_t RotationIndex = _findRotation(AnimationTime, pNodeAnim);
+				uint32_t NextRotationIndex = (RotationIndex + 1);
+				assert(NextRotationIndex < pNodeAnim->mNumRotationKeys);
+				double DeltaTime = (pNodeAnim->mRotationKeys[NextRotationIndex].mTime - pNodeAnim->mRotationKeys[RotationIndex].mTime);
+				double Factor = (AnimationTime - pNodeAnim->mRotationKeys[RotationIndex].mTime) / DeltaTime;
+				assert(Factor >= 0.0f && Factor <= 1.0f);
+				const aiQuaternion& StartRotationQ = pNodeAnim->mRotationKeys[RotationIndex].mValue;
+				const aiQuaternion& EndRotationQ = pNodeAnim->mRotationKeys[NextRotationIndex].mValue;
+				aiQuaternion::Interpolate(Out, StartRotationQ, EndRotationQ, (float)Factor);
+				Out = Out.Normalize();
+}
+
+uint32_t noob::drawable::_findRotation(double AnimationTime, const aiNodeAnim* pNodeAnim)
+{
+				assert(pNodeAnim->mNumRotationKeys > 0);
+
+				for (uint32_t i = 0 ; i < pNodeAnim->mNumRotationKeys - 1 ; i++) {
+								if (AnimationTime < (float)pNodeAnim->mRotationKeys[i + 1].mTime) {
+												return i;
+								}
+				}
+
+				// TODO: Need Error Handling
+				return 0;
+}
+
+void noob::drawable::_calcInterpolatedScaling(aiVector3D& Out, double AnimationTime, const aiNodeAnim* pNodeAnim)
+{
+				// we need at least two values to interpolate...
+				if (pNodeAnim->mNumScalingKeys == 1) {
+								Out = pNodeAnim->mScalingKeys[0].mValue;
+								return;
+				}
+
+				uint32_t ScalingIndex = _findScaling(AnimationTime, pNodeAnim);
+				uint32_t NextScalingIndex = (ScalingIndex + 1);
+				assert(NextScalingIndex < pNodeAnim->mNumScalingKeys);
+				double DeltaTime = (pNodeAnim->mScalingKeys[NextScalingIndex].mTime - pNodeAnim->mScalingKeys[ScalingIndex].mTime);
+				double Factor = (AnimationTime - pNodeAnim->mScalingKeys[ScalingIndex].mTime) / DeltaTime;
+				assert(Factor >= 0.0f && Factor <= 1.0f);
+				const aiVector3D& Start = pNodeAnim->mScalingKeys[ScalingIndex].mValue;
+				const aiVector3D& End = pNodeAnim->mScalingKeys[NextScalingIndex].mValue;
+				aiVector3D Delta = End - Start;
+				Out = Start + (float)Factor * Delta;
+}
+
+uint32_t noob::drawable::_findScaling(double AnimationTime, const aiNodeAnim* pNodeAnim)
+{
+				assert(pNodeAnim->mNumScalingKeys > 0);
+
+				for (uint32_t i = 0 ; i < pNodeAnim->mNumScalingKeys - 1 ; i++) {
+								if (AnimationTime < (float)pNodeAnim->mScalingKeys[i + 1].mTime) {
+												return i;
+								}
+				}
+
+				// TODO: Need Error Handling
+				return 0;
+}
+
+void noob::drawable::_calcInterpolatedPosition(aiVector3D& Out, double AnimationTime, const aiNodeAnim* pNodeAnim)
+{
+				// we need at least two values to interpolate...
+				if (pNodeAnim->mNumPositionKeys == 1) {
+								Out = pNodeAnim->mPositionKeys[0].mValue;
+								return;
+				}
+
+				uint32_t PositionIndex = _findPosition(AnimationTime, pNodeAnim);
+				uint32_t NextPositionIndex = (PositionIndex + 1);
+				assert(NextPositionIndex < pNodeAnim->mNumPositionKeys);
+				double DeltaTime = (pNodeAnim->mPositionKeys[NextPositionIndex].mTime - pNodeAnim->mPositionKeys[PositionIndex].mTime);
+				double Factor = (AnimationTime - pNodeAnim->mPositionKeys[PositionIndex].mTime) / DeltaTime;
+				assert(Factor >= 0.0f && Factor <= 1.0f);
+				const aiVector3D& Start = pNodeAnim->mPositionKeys[PositionIndex].mValue;
+				const aiVector3D& End = pNodeAnim->mPositionKeys[NextPositionIndex].mValue;
+				aiVector3D Delta = End - Start;
+				Out = Start + (float)Factor * Delta;
+}
+
+uint32_t noob::drawable::_findPosition(double AnimationTime, const aiNodeAnim* pNodeAnim)
+{
+				assert(pNodeAnim->mNumPositionKeys > 0);
+
+				for (uint32_t i = 0 ; i < pNodeAnim->mNumPositionKeys - 1 ; i++) {
+								if (AnimationTime < (float)pNodeAnim->mPositionKeys[i + 1].mTime) {
+												return i;
+								}
+				}
+
+				// TODO: Need Error Handling
+				return 0;
 }
 */

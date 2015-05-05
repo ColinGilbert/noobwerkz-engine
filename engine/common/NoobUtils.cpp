@@ -5,7 +5,7 @@ std::string noob::utils::load_file_as_string(const std::string& filename)
 	std::ifstream input(filename);
 	return std::string((std::istreambuf_iterator<char>(input)),(std::istreambuf_iterator<char>()));
 }
-
+// TODO: Test
 std::tuple<const uint8_t*, size_t> noob::utils::load_to_memory(const std::string& filename)
 {
 
@@ -16,10 +16,11 @@ std::tuple<const uint8_t*, size_t> noob::utils::load_to_memory(const std::string
 const bgfx::Memory* noob::utils::load_to_memory_bgfx(const std::string& filename)
 {
 	std::tuple<const uint8_t*, size_t> t = load_to_memory(filename);
-	const bgfx::Memory* m = new bgfx::Memory();
-	m->data = t.get<0>(t);
-	m->size = t.get<1>(t);
-	return m;
+	bgfx::Memory* m = new bgfx::Memory();
+	const uint8_t dat = std::get<0>(t);
+	m->data = dat; //(const uint8_t*)std::get<0>(t);
+	m->size = std::get<1>(t);
+	return const_cast<const bgfx::Memory*>(m);
 }
 
 

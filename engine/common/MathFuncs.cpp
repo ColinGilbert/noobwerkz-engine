@@ -122,15 +122,12 @@ mat4::mat4(const aiMatrix3x3& AssimpMatrix)
 	m[8] = AssimpMatrix.c1; m[9] = AssimpMatrix.c2; m[10] = AssimpMatrix.c3; m[11] = 0.0f;
 	m[12] = 0.0f ; m[13] = 0.0f ; m[14] = 0.0f ; m[15] = 1.0f;
 }
-
+*/
 mat4::mat4(const aiMatrix4x4& AssimpMatrix)
 {
-	m[0] = AssimpMatrix.a1; m[1] = AssimpMatrix.a2; m[2] = AssimpMatrix.a3; m[3] = AssimpMatrix.a4;
-	m[4] = AssimpMatrix.b1; m[5] = AssimpMatrix.b2; m[6] = AssimpMatrix.b3; m[7] = AssimpMatrix.b4;
-	m[8] = AssimpMatrix.c1; m[9] = AssimpMatrix.c2; m[10] = AssimpMatrix.c3; m[11] = AssimpMatrix.c4;
-	m[12] = AssimpMatrix.d1; m[13] = AssimpMatrix.d2; m[14] = AssimpMatrix.d3; m[15] = AssimpMatrix.d4;
+	mat4(*AssimpMatrix[0], *AssimpMatrix[1], *AssimpMatrix[2], *AssimpMatrix[3], *AssimpMatrix[4], *AssimpMatrix[5], *AssimpMatrix[6], *AssimpMatrix[7], *AssimpMatrix[8], *AssimpMatrix[9], *AssimpMatrix[10], *AssimpMatrix[11], *AssimpMatrix[12], *AssimpMatrix[13], *AssimpMatrix[14], *AssimpMatrix[15]);
 }
-*/
+
 // TODO: Test this shit
 /*
 mat4::mat4(const dMatrix& NewtonMatrix)

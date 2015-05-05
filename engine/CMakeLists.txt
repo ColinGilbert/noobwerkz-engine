@@ -42,10 +42,8 @@ list(APPEND common_src
 	common/CommonIncludes.cpp
 	common/MathFuncs.cpp
 	common/Font.cpp
-	common/Model.cpp
 	common/Drawable.cpp
-	#common/MeshAsset.cpp
-	#common/GraphicsUtilities.cpp
+	common/NoobUtils.cpp
 	)
 
 list(APPEND main_src platform/nix/EngineDesktop.cpp)
