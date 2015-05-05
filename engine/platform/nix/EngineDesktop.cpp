@@ -96,8 +96,8 @@ int main(int /*_argc*/, char** /*_argv*/)
 
 	bgfx::glfwSetWindow(window);
 	bgfx::init();
-
 	noob::graphics::init(width, height);
+	
 	app->init();
 
 	glfwSetWindowCloseCallback(window, window_close_callback);

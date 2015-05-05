@@ -4,4 +4,5 @@ cmake .. &&
 make -j8 &&
 cp NoobEdit ../../sandbox/e &&
 cp LogServer ../../sandbox/logger &&
+cp CrashTest ../../sandbox/crashtest &&
 cd ../../sandbox

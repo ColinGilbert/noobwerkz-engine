@@ -1,4 +1,4 @@
-$input a_position
+$input a_position, a_normal, a_texcoord0
 
 #include "shaders/common.sh"
 

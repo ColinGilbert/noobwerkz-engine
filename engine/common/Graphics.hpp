@@ -63,24 +63,10 @@ namespace noob
 						);
 			}
 
-			static const bgfx::Memory* get_bgfx_mem(const std::string& handle)
+			// Returns bgfx::Memory* from input string
+			static const bgfx::Memory* get_bgfx_mem(const std::string& payload)
 			{
-				auto it = noob::utils::data.find(handle);
-				
-				std::string payload;
-
-				if (it != noob::utils::data.end())
-				{
-					payload = it->second;
-				}
-
-				bgfx::Memory* mem = new bgfx::Memory();
-
-				mem->data = (uint8_t*) &payload[0];
-				mem->size = payload.size();
-
-				return const_cast<const bgfx::Memory*>(mem);
-			
+			return bgfx::makeRef(&payload[0], payload.size());
 			}
 
 
@@ -163,8 +149,9 @@ namespace noob
 				shader_path.append(".bin");
 
 				logger::log(shader_path);
-				const bgfx::Memory* mem = get_bgfx_mem(shader_path);
-
+				noob::utils::data.insert(std::make_pair(shader_path, noob::utils::load_file_as_string(shader_path)));
+				const bgfx::Memory* mem = get_bgfx_mem(noob::utils::data.find(shader_path)->second); //noob::utils::load_file_as_string(shader_path));
+				
 				bgfx::ShaderHandle s = bgfx::createShader(mem);
 				
 				return s;

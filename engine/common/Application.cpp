@@ -100,6 +100,7 @@ void noob::application::touch(int pointerID, float x, float y, int action)
 	else input_has_started = true;
 }
 
+
 void noob::application::update_cam(double delta)
 {
 	cam->update(delta);
