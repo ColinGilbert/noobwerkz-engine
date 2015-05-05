@@ -35,9 +35,7 @@
 #include "Logger.hpp"
 #include "Drawable.hpp"
 
-noob::drawable::drawable() : 
-				mMeshFile(std::string("")),
-				mScene ( NULL )
+noob::drawable::drawable() : mMeshFile(std::string("")), mScene(NULL)
 {
 				//   mBoundingBox.minExtents.set(0, 0, 0);
 				//   mBoundingBox.maxExtents.set(0, 0, 0);
@@ -81,7 +79,7 @@ void noob::drawable::importMesh()
 				//U64 startTime = bx::getHPCounter();
 
 				// Use Assimp To Load Mesh
-				mScene = aiImportFile(mMeshFile.c_str(), aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+				mScene = aiImportFile(mMeshFile.c_str(), aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_Triangulate | aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 				if ( !mScene ) return;
 
 				//U64 endTime = bx::getHPCounter();
@@ -128,7 +126,7 @@ void noob::drawable::importMesh()
 								// Verts/UVs/Bones
 								for ( uint32_t n = 0; n < mMeshData->mNumVertices; ++n)
 								{
-												noob::graphics::PosUVTBNBonesVertex vert;
+												noob::graphics::pos_norm_uv_bones_vertex vert;
 
 												// Verts
 												aiVector3D pt = mMeshData->mVertices[n];
@@ -160,7 +158,7 @@ void noob::drawable::importMesh()
 												}
 
 												// Tangents & Bitangents
-												if ( mMeshData->HasTangentsAndBitangents() )
+										/*		if ( mMeshData->HasTangentsAndBitangents() )
 												{
 																vert.m_tangent_x = mMeshData->mTangents[n].x;
 																vert.m_tangent_y = mMeshData->mTangents[n].y; 
@@ -177,7 +175,7 @@ void noob::drawable::importMesh()
 																vert.m_bitangent_x = 0;
 																vert.m_bitangent_y = 0; 
 																vert.m_bitangent_z = 0; 
-												}
+												} */
 
 												// Normals
 												if ( mMeshData->HasNormals() )
@@ -193,7 +191,7 @@ void noob::drawable::importMesh()
 																vert.m_normal_y = 0; 
 																vert.m_normal_z = 0; 
 												}
-
+/*
 												// Default bone index/weight values.
 												vert.m_boneindex[0] = 0;
 												vert.m_boneindex[1] = 0;
@@ -203,10 +201,10 @@ void noob::drawable::importMesh()
 												vert.m_boneweight[1] = 0.0f;
 												vert.m_boneweight[2] = 0.0f;
 												vert.m_boneweight[3] = 0.0f;
-
+*/
 												subMeshData->mRawVerts.push_back(vert);
 								}
-
+/*
 								// Process Bones/Nodes
 								for ( uint32_t n = 0; n < mMeshData->mNumBones; ++n )
 								{
@@ -230,7 +228,7 @@ void noob::drawable::importMesh()
 												for ( uint32_t i = 0; i < boneData->mNumWeights; ++i )
 												{
 																if ( boneData->mWeights[i].mVertexId >= (uint32_t)subMeshData->mRawVerts.size() ) continue;
-																noob::graphics::PosUVTBNBonesVertex* vert = &subMeshData->mRawVerts[boneData->mWeights[i].mVertexId];
+																noob::graphics::pos_norm_uv_bones_vertex* vert = &subMeshData->mRawVerts[boneData->mWeights[i].mVertexId];
 																for ( uint32_t j = 0; j < 4; ++j )
 																{
 																				if ( vert->m_boneindex[j] == 0 && vert->m_boneweight[j] == 0.0f )
@@ -252,7 +250,7 @@ void noob::drawable::importMesh()
 																}
 												}
 								}
-
+*/
 								{
 												std::stringstream ss;
 												ss << "Mesh has " << mMeshData->mNumFaces << " faces";
@@ -291,7 +289,7 @@ void noob::drawable::processMesh()
 								SubMesh* subMeshData = &mMeshList[n];
 
 								// Load the verts and indices into bgfx buffers
-								subMeshData->mVertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(&subMeshData->mRawVerts[0], subMeshData->mRawVerts.size() * sizeof(noob::graphics::PosUVTBNBonesVertex) ), noob::graphics::PosUVTBNBonesVertex::ms_decl );
+								subMeshData->mVertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(&subMeshData->mRawVerts[0], subMeshData->mRawVerts.size() * sizeof(noob::graphics::pos_norm_uv_bones_vertex)), noob::graphics::pos_norm_uv_bones_vertex::ms_decl);
 
 								subMeshData->mIndexBuffer = bgfx::createIndexBuffer(bgfx::makeRef(&subMeshData->mRawIndices[0], subMeshData->mRawIndices.size() * sizeof(uint16_t) ));
 

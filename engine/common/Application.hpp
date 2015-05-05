@@ -89,9 +89,6 @@ namespace noob
 			noob::mat4 proj_matrix;
 			std::vector<noob::vec2> finger_positions;
 			std::unique_ptr<noob::font> droid_font;
-			bgfx::ProgramHandle program_handle;
-			bgfx::UniformHandle u_norm_matrix; // = bgfx::createUniform("u_normalMatrix", bgfx::UniformType::Uniform4x4fv);
-
-			noob::drawable* sphere;
+			std::unique_ptr<noob::drawable> sphere;
 	};
 }

@@ -64,7 +64,7 @@ namespace noob
 
 												typedef struct
 												{
-																std::vector<noob::graphics::PosUVTBNBonesVertex> mRawVerts;
+																std::vector<noob::graphics::pos_norm_uv_bones_vertex> mRawVerts;
 																std::vector<uint16_t> mRawIndices;
 																bgfx::VertexBufferHandle mVertexBuffer;
 																bgfx::IndexBufferHandle mIndexBuffer;

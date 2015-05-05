@@ -4,20 +4,33 @@
 
 void noob::application::init()
 {
-//	u_norm_matrix = bgfx::createUniform("u_normalMatrix", bgfx::UniformType::Uniform4x4fv);
-//	program_handle = noob::graphics::load_program("vs_facing", "fs_facing");
+	logger::log("");
+
+	bgfx::ProgramHandle program_handle = noob::graphics::load_program("vs_basic", "fs_basic");
+	
 	{
 		std::stringstream ss;
 		ss << "Is program valid? ";
 		if (bgfx::invalidHandle != program_handle.idx)
+		{
 			ss << "true";
-		else ss << false;
+		}
+		else
+		{
+			ss << "false";
+		}
+
 		logger::log(ss.str());
 	}
-	sphere = new noob::drawable(); //model("sphere.off","models");
+
+	noob::graphics::programs.insert(std::make_pair(std::string("basic"), program_handle));
+
+	sphere = std::unique_ptr<noob::drawable>(new noob::drawable());
+
 	std::string meshFile = *prefix + "/models/sphere.off";
 	sphere->setMeshFile(meshFile);
 	sphere->loadMesh();
+
 	std::string fontfile = *prefix + "/font/droidsans.ttf";
 	droid_font->init(fontfile);
 	logger::log("Done init");
@@ -37,18 +50,16 @@ void noob::application::draw()
 	noob::vec3 up(0.0f, 1.0f, 0.0f);
 
 	noob::mat4 view = noob::look_at(eye, at, up);
+	
 	if (height == 0) height = 1;
+	
 	noob::mat4 proj = noob::perspective(60.0f, (float)width/(float)height, 0.1f, 100.f);
 	noob::mat4 model_mat(noob::identity_mat4());
 
 	noob::mat4 model_view_mat = view * model_mat;
-	noob::mat4 normal_mat = noob::transpose(noob::inverse(model_view_mat));
 
-	// logger::log("Setting uniform");
-	bgfx::setUniform(u_norm_matrix, &normal_mat.m[0]);
 	bgfx::setViewTransform(0, &view.m[0], &proj.m[0]);
 
-	// logger::log("Drawing sphere");
 	//sphere->draw(0, &model_mat.m[0], program_handle);
 
 	droid_font->change_colour(0xFFFF00FF);

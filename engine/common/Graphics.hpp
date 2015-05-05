@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+
 #include <bgfx.h>
 #include "NoobUtils.hpp"
 
@@ -9,49 +10,47 @@ namespace noob
 	class graphics
 	{
 		public:
-			enum texture_type { DIFFUSE_MAP, SPECULAR_MAP, AMBIENT_MAP, EMISSIVE_MAP, NORMAL_MAP, OPACITY_MAP, DISPLACEMENT_MAP, HEIGHT_MAP, DATA };
-			struct PosUVTBNBonesVertex
+			struct pos_norm_uv_bones_vertex
 			{
 				float m_x;
 				float m_y;
 				float m_z;
-				float m_u;
-				float m_v;
-				float m_tangent_x;
-				float m_tangent_y;
-				float m_tangent_z;
-				float m_bitangent_x;
-				float m_bitangent_y;
-				float m_bitangent_z;
+				//float m_tangent_x;
+				//float m_tangent_y;
+				//float m_tangent_z;
+				//float m_bitangent_x;
+				//float m_bitangent_y;
+				//float m_bitangent_z;
 				float m_normal_x;
 				float m_normal_y;
 				float m_normal_z;
-				uint8_t m_boneindex[4];
-				float m_boneweight[4];
+				float m_u;
+				float m_v;
+				//uint8_t m_boneindex[4];
+				//float m_boneweight[4];
 
 				static void init()
 				{
 					ms_decl
 						.begin()
 						.add(bgfx::Attrib::Position,  3, bgfx::AttribType::Float)
-						.add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float)
-						.add(bgfx::Attrib::Tangent,   3, bgfx::AttribType::Float)
-						.add(bgfx::Attrib::Bitangent, 3, bgfx::AttribType::Float)
+						//.add(bgfx::Attrib::Tangent,   3, bgfx::AttribType::Float)
+						//.add(bgfx::Attrib::Bitangent, 3, bgfx::AttribType::Float)
 						.add(bgfx::Attrib::Normal,    3, bgfx::AttribType::Float)
-						.add(bgfx::Attrib::Indices,   4, bgfx::AttribType::Uint8, false, true)
-						.add(bgfx::Attrib::Weight,    4, bgfx::AttribType::Float)
+						.add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float)
+						//.add(bgfx::Attrib::Indices,   4, bgfx::AttribType::Uint8, false, true)
+						//.add(bgfx::Attrib::Weight,    4, bgfx::AttribType::Float)
 						.end();
 				}
-
 				static bgfx::VertexDecl ms_decl;
 			};
 
 
-			static std::map<std::string, bgfx::TextureHandle> global_textures;
+			static std::map<std::string, bgfx::TextureInfo*> global_textures;
+			static std::map<std::string, bgfx::ProgramHandle> programs;
 
 			static void init(uint32_t width, uint32_t height)
 			{
-
 				uint32_t reset = BGFX_RESET_VSYNC;
 
 				bgfx::reset(width, height, reset);
@@ -63,6 +62,27 @@ namespace noob
 						, 0
 						);
 			}
+
+			static const bgfx::Memory* get_bgfx_mem(const std::string& handle)
+			{
+				auto it = noob::utils::data.find(handle);
+				
+				std::string payload;
+
+				if (it != noob::utils::data.end())
+				{
+					payload = it->second;
+				}
+
+				bgfx::Memory* mem = new bgfx::Memory();
+
+				mem->data = (uint8_t*) &payload[0];
+				mem->size = payload.size();
+
+				return const_cast<const bgfx::Memory*>(mem);
+			
+			}
+
 
 			static void draw(uint32_t width, uint32_t height)
 			{
@@ -78,10 +98,9 @@ namespace noob
 				bgfx::frame();
 			}
 
-
-			static bgfx::TextureInfo* load_texture(const std::string& _name, uint32_t _flags, uint8_t _skip)
+		/*
+		 	static bgfx::TextureInfo* load_texture(const std::string& _name, uint32_t _flags, uint8_t _skip)
 			{
-
 				std::string file_path = "textures/";
 
 				file_path.append(_name);
@@ -90,6 +109,8 @@ namespace noob
 				bgfx::createTexture(mem, _flags, _skip, _info);
 				return _info;
 			}
+*/
+
 
 			/*
 			   static bgfx::TextureHandle load_texture(const std::string& _path)
@@ -142,12 +163,10 @@ namespace noob
 				shader_path.append(".bin");
 
 				logger::log(shader_path);
-				const bgfx::Memory* mem = noob::utils::load_to_memory_bgfx(shader_path);
+				const bgfx::Memory* mem = get_bgfx_mem(shader_path);
 
 				bgfx::ShaderHandle s = bgfx::createShader(mem);
-
-				//delete mem;
-
+				
 				return s;
 			}
 
@@ -155,7 +174,7 @@ namespace noob
 			{
 				bgfx::ShaderHandle vsh = load_shader(vs_name);
 				bgfx::ShaderHandle fsh = load_shader(fs_name);
-				return bgfx::createProgram(vsh, fsh, true); // destroy shaders when program is destroyed 
+				return bgfx::createProgram(vsh, fsh, true);
 			}
 	};
 }

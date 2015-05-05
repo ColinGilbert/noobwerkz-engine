@@ -1,0 +1,1 @@
+./shaderc -f fs_basic.sc -o shaders/glsl/fs_basic.bin --type f --platform linux -i ../engine/bgfx/src --varyingdef varying.def.sc

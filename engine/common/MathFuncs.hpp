@@ -76,9 +76,7 @@ namespace noob
 	{
 		mat3();
 		// note! this is entering components in ROW-major order
-		mat3(	float a, float b, float c,
-				float d, float e, float f,
-				float g, float h, float i);
+		mat3(float a, float b, float c,	float d, float e, float f, float g, float h, float i);
 		float m[9];
 	};
 
@@ -91,13 +89,10 @@ namespace noob
 	{
 		mat4();
 		// note! this is entering components in ROW-major order
-		mat4(	float a, float b, float c, float d,
-				float e, float f, float g, float h,
-				float i, float j, float k, float l,
-				float mm, float n, float o, float p);
+		mat4(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float mm, float n, float o, float p);
 		mat4(float mm[16]);
 		// mat4(const aiMatrix3x3& AssimpMatrix);
-		mat4(const aiMatrix4x4& AssimpMatrix);	
+		mat4(const aiMatrix4x4&);	
 
 		vec4 operator*(const vec4& rhs);
 		mat4 operator*(const mat4& rhs);
@@ -124,7 +119,7 @@ namespace noob
 	// vector functions
 	float length(const vec3& v);
 	float length2(const vec3& v);
-	vec3 normalise(const vec3& v);
+	vec3 normalize(const vec3& v);
 	float dot(const vec3& a, const vec3& b);
 	vec3 cross(const vec3& a, const vec3& b);
 	float get_squared_dist(vec3 from, vec3 to);
@@ -159,11 +154,11 @@ namespace noob
 	float dot(const versor& q, const versor& r);
 	versor slerp(const versor& q, const versor& r);
 	void create_versor(float* q, float a, float x, float y, float z);
-	void mult_quat_quat (float* result, float* r, float* s);
-	void normalise_quat (float* q);
-	void quat_to_mat4 (float* m, float* q); 
+	void mult_quat_quat(float* result, float* r, float* s);
+	void normalize_quat(float* q);
+	void quat_to_mat4(float* m, float* q); 
 	// stupid overloading wouldn't let me use const
-	versor normalise(versor& q);
+	versor normalize(versor& q);
 	void print(const versor& q);
 	versor slerp(versor& q, versor& r, float t);
 };
