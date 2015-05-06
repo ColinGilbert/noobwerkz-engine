@@ -100,7 +100,11 @@ public:
   /// Return file format's extension.
   virtual std::string get_extensions() const = 0;
 
-  /// Returns true if writer can parse _filename (checks extension)
+  /** \brief Returns true if writer can write _filename (checks extension).
+   * _filename can also provide an extension without a name for a file e.g. _filename == "om" checks, if the writer can write the "om" extension
+   * @param _filename complete name of a file or just the extension
+   * @result true, if writer can write data with the given extension
+   */
   virtual bool can_u_write(const std::string& _filename) const;
 
   /** Write to a file

@@ -90,12 +90,12 @@ can_u_read(const std::string& _filename) const
   std::string::size_type pos(_filename.rfind("."));
 
   if (pos != std::string::npos)
-  { 
     extension = _filename.substr(pos+1, _filename.length()-pos-1);
+  else
+    extension = _filename; //check, if the whole filename defines the extension
 
-    std::transform( extension.begin(), extension.end(), 
-		    extension.begin(), tolower );
-  }
+  std::transform( extension.begin(), extension.end(),
+	  extension.begin(), tolower );
 
   // locate extension in extension string
   return (get_extensions().find(extension) != std::string::npos);

@@ -131,7 +131,11 @@ public:
                     Options& _opt) = 0;
 
 
-  /// Returns true if reader can parse _filename (checks extension)
+  /** \brief Returns true if writer can parse _filename (checks extension).
+   * _filename can also provide an extension without a name for a file e.g. _filename == "om" checks, if the reader can read the "om" extension
+   * @param _filename complete name of a file or just the extension
+   * @result true, if reader can read data with the given extension
+   */
   virtual bool can_u_read(const std::string& _filename) const;
 
 
