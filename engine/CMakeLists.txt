@@ -65,5 +65,4 @@ list(APPEND logger_src
 
 add_executable(LogServer ${logger_src})
 
-
 target_link_libraries(LogServer LINK_PUBLIC pthread)

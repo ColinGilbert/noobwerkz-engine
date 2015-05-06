@@ -75,14 +75,14 @@ void noob::drawable::loadMesh()
 
 void noob::drawable::importMesh()
 {
-				//U64 hpFreq = bx::getHPFrequency() / 1000000.0; // micro-seconds.
-				//U64 startTime = bx::getHPCounter();
+				//uint64_t hpFreq = bx::getHPFrequency() / 1000000.0; // micro-seconds.
+				//uint64_t startTime = bx::getHPCounter();
 
 				// Use Assimp To Load Mesh
 				mScene = aiImportFile(mMeshFile.c_str(), aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_Triangulate | aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 				if ( !mScene ) return;
 
-				//U64 endTime = bx::getHPCounter();
+				//uint64_t endTime = bx::getHPCounter();
 				//Con::printf("ASSIMP IMPORT TOOK: %d microseconds. (1 microsecond = 0.001 milliseconds)", (uint32_t)((endTime - startTime) / hpFreq));
 
 				mIsAnimated = mScene->HasAnimations();
@@ -281,8 +281,8 @@ void noob::drawable::importMesh()
 
 void noob::drawable::processMesh()
 {
-				//U64 hpFreq = bx::getHPFrequency() / 1000000.0; // micro-seconds.
-				//U64 startTime = bx::getHPCounter();
+				//uint64_t hpFreq = bx::getHPFrequency() / 1000000.0; // micro-seconds.
+				//uint64_t startTime = bx::getHPCounter();
 
 				for ( int32_t n = 0; n < mMeshList.size(); ++n)
 				{
@@ -297,7 +297,7 @@ void noob::drawable::processMesh()
 								// mBoundingBox.intersect(subMeshData->mBoundingBox);
 				}
 
-				//U64 endTime = bx::getHPCounter();
+				//uint64_t endTime = bx::getHPCounter();
 				//Con::printf("PROCESS MESH TOOK: %d microseconds. (1 microsecond = 0.001 milliseconds)", (uint32_t)((endTime - startTime) / hpFreq));
 }
 
