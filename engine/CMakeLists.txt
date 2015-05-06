@@ -44,6 +44,7 @@ list(APPEND common_src
 	common/Font.cpp
 	common/Drawable.cpp
 	common/NoobUtils.cpp
+	common/bgfx_related/Shaders.cpp
 	)
 
 list(APPEND main_src platform/nix/EngineDesktop.cpp)

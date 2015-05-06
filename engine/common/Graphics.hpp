@@ -1,8 +1,8 @@
 #pragma once
 
 #include <map>
-
 #include <bgfx.h>
+#include "Shaders.hpp"
 #include "NoobUtils.hpp"
 
 namespace noob
@@ -49,6 +49,9 @@ namespace noob
 			static std::map<std::string, bgfx::TextureInfo*> global_textures;
 			static std::map<std::string, bgfx::ProgramHandle> programs;
 
+			static std::unique_ptr<std::string> shader_include_path;
+			static std::unique_ptr<std::string> shader_varying_path;
+
 			static void init(uint32_t width, uint32_t height)
 			{
 				uint32_t reset = BGFX_RESET_VSYNC;
@@ -63,24 +66,16 @@ namespace noob
 						);
 			}
 
-			// Returns bgfx::Memory* from input string
 			static const bgfx::Memory* get_bgfx_mem(const std::string& payload)
 			{
-			return bgfx::makeRef(&payload[0], payload.size());
+				return bgfx::makeRef(&payload[0], payload.size());
 			}
-
 
 			static void draw(uint32_t width, uint32_t height)
 			{
-				// Set view 0 default viewport.
 				bgfx::setViewRect(0, 0, 0, width, height);
-
-				// This dummy draw call is here to make sure that view 0 is cleared
-				// if no other draw calls are submitted to view 0.
 				bgfx::submit(0);
 
-				// Advance to next frame. Rendering thread will be kicked to
-				// process submitted rendering primitives.
 				bgfx::frame();
 			}
 
@@ -96,7 +91,6 @@ namespace noob
 				return _info;
 			}
 */
-
 
 			/*
 			   static bgfx::TextureHandle load_texture(const std::string& _path)
@@ -121,6 +115,7 @@ namespace noob
 			// global_textures->insert(std::make_pair<std::string, bgfx::TextureInfo>(_path, ));
 			}
 			*/
+
 			static bgfx::ShaderHandle load_shader(const std::string& filename)
 			{
 				logger::log("Loading shader");
