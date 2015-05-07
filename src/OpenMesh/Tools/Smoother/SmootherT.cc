@@ -260,11 +260,11 @@ set_relative_local_error(Scalar _err)
 
     // compute bounding box
     Point  bb_min, bb_max;
-    bb_min = bb_max = mesh_.point(v_it);
+    bb_min = bb_max = mesh_.point(*v_it);
     for (++v_it; v_it!=v_end; ++v_it)
     {
-      bb_min.minimize(mesh_.point(v_it));
-      bb_max.maximize(mesh_.point(v_it));
+      bb_min.minimize(mesh_.point(*v_it));
+      bb_max.maximize(mesh_.point(*v_it));
     }
 
 
