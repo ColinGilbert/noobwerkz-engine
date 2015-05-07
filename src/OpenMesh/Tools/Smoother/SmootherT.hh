@@ -113,37 +113,80 @@ public:
 
 public:
 
+  //===========================================================================
+  /** @name Initialization and algorithm execution
+  * @{ */
+  //===========================================================================
+
   /** Initialize smoother
    * \param _comp Determine component to smooth
    * \param _cont Determine Continuity
    */
   void initialize(Component _comp, Continuity _cont);
 
+  /// Do _n smoothing iterations
+  virtual void smooth(unsigned int _n);
 
-  //@{
-  /// Set local error
+  /** @} */
+
+  //===========================================================================
+  /** @name Error control functions
+  * @{ */
+  //===========================================================================
+
+  /** \brief Set local error relative to bounding box
+   *
+   * This function sets a maximal error tolerance for the smoother as a fraction
+   * of the bounding box of the mesh. First the bounding box diagonal is computed.
+   * Then the error is set as the length of the diagonal multiplied with the
+   * given factor.
+   *
+   * @param _err Factor scaling the bounding box diagonal
+   */
   void set_relative_local_error(Scalar _err);
+
+  /** \brief Set local error as an absolute value
+   *
+   * Set the maximal error tolerance of the smoother to the given value.
+   *
+   * @param _err Maximal error
+   */
   void set_absolute_local_error(Scalar _err);
+
+  /** \brief Disable error control of the smoother
+   *
+   * This function disables the error control of the smoother.
+   */
   void disable_local_error_check();
-  //@}
 
   /** \brief enable or disable feature handling
+   *
+   * This function can be used to control if features on the mesh should be preserved.
+   * If enabled, the smoother will keep features and does not modify them. Features
+   * can be set via OpenMesh status flags (request status and set primitives as features).
+   * Feature flag can be set for vertices edges and faces.
    *
    * @param _state true  : If features are selected on the mesh, they will be left unmodified\n
    *               false : Features will be ignored
    */
   void skip_features( bool _state ){ skip_features_ = _state; };
 
-  /// Do _n smoothing iterations
-  virtual void smooth(unsigned int _n);
 
-
-
-  /// Find active vertices. Resets tagged status !
-  void set_active_vertices();
-
+  /** @} */
 
 private:
+
+  /** \brief  Find active vertices. Resets tagged status !
+     *
+     * This function recomputes the set of active vertices, which will be touched by the smoother.
+     * If nothing on the mesh is selected, all vertices which are not locked, feature or boundary will be
+     * marked as active and moved by the smoother.
+     * If vertices are selected, than only the selected ones, excluding the locked, feature and boundary vertices will be
+     * moved.
+     *
+     * The function is called first when running the smoother.
+     */
+  void set_active_vertices();
 
   // single steps of smoothing
   void compute_new_positions();

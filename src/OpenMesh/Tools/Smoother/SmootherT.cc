@@ -264,12 +264,12 @@ set_relative_local_error(Scalar _err)
     for (++v_it; v_it!=v_end; ++v_it)
     {
       bb_min.minimize(mesh_.point(v_it));
-      bb_max.minimize(mesh_.point(v_it));
+      bb_max.maximize(mesh_.point(v_it));
     }
 
 
     // abs. error = rel. error * bounding-diagonal
-    set_absolute_error(_err * (bb_max-bb_min).norm());
+    set_absolute_local_error(_err * (bb_max-bb_min).norm());
   }
 }
 
