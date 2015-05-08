@@ -1,11 +1,14 @@
+#include "EditorUtils.hpp"
 #include "Application.hpp"
-#include <fstream>
-
 
 void noob::application::init()
 {
+
 	logger::log("");
 
+	noob::editor_utils::blend_channels();
+
+	// noob::graphics::pos_norm_uv_bones_vertex::init();
 	bgfx::ProgramHandle program_handle = noob::graphics::load_program("vs_basic", "fs_basic");
 	
 	{
@@ -28,8 +31,9 @@ void noob::application::init()
 	sphere = std::unique_ptr<noob::drawable>(new noob::drawable());
 
 	std::string meshFile = *prefix + "/models/sphere.off";
-	sphere->setMeshFile(meshFile);
-	sphere->loadMesh();
+
+	sphere->set_mesh_file(meshFile);
+	sphere->load_mesh();
 
 	std::string fontfile = *prefix + "/font/droidsans.ttf";
 	droid_font->init(fontfile);
@@ -46,7 +50,7 @@ void noob::application::draw()
 {
 	// Compute view matrix
 	noob::vec3 at(0.0f, 0.0f, 0.0f);
-	noob::vec3 eye(0.0f, 0.0f, -35.0f);
+	noob::vec3 eye(0.0f, 0.0f, -2.5f);
 	noob::vec3 up(0.0f, 1.0f, 0.0f);
 	noob::mat4 view = noob::look_at(eye, at, up);
 
@@ -56,11 +60,18 @@ void noob::application::draw()
 	
 	// Compute modelview matrix
 	noob::mat4 model_mat(noob::identity_mat4());
-	noob::mat4 model_view_mat = view * model_mat;
+//	noob::mat4 model_view_mat = view * model_mat;
 	bgfx::setViewTransform(0, &view.m[0], &proj.m[0]);
 
-	droid_font->change_colour(0xFFFF00FF);
-	droid_font->drawtext(std::string("Font test"), 50.0f, 50.0f, (int)width, (int)height);
-	droid_font->change_colour(0xFFFFFFFF);
-	droid_font->drawtext(std::string("Font test 2"), 100.0f, 100.0f, (int)width, (int)height);
+
+	// bgfx::setProgram(noob::graphics::programs.find("basic")->second);
+	bgfx::ProgramHandle prog = noob::graphics::programs.find("basic")->second;
+		
+
+//	droid_font->change_colour(0xFFFF00FF);
+//	droid_font->drawtext(std::string("Font test"), 50.0f, 50.0f, (int)width, (int)height);
+//	droid_font->change_colour(0xFFFFFFFF);
+//	droid_font->drawtext(std::string("Font test 2"), 100.0f, 100.0f, (int)width, (int)height);
+
+	sphere->draw(model_mat, prog);
 }

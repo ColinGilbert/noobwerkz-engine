@@ -32,6 +32,7 @@
 #include <assimp/postprocess.h>
 #include <assimp/types.h>
 
+#include "Graphics.hpp"
 #include "Logger.hpp"
 #include "Drawable.hpp"
 
@@ -62,18 +63,19 @@ noob::drawable::~drawable()
 
 //------------------------------------------------------------------------------
 
-void noob::drawable::setMeshFile( const std::string& pMeshFile ) //;const char* pMeshFile )
+void noob::drawable::set_mesh_file( const std::string& pMeshFile ) //;const char* pMeshFile )
 {
 				mMeshFile = pMeshFile;
 }
 
-void noob::drawable::loadMesh()
+void noob::drawable::load_mesh()
 {
-				importMesh();
-				processMesh();
+				noob::graphics::pos_norm_uv_bones_vertex::init();
+				import_mesh();
+				process_mesh();
 }
 
-void noob::drawable::importMesh()
+void noob::drawable::import_mesh()
 {
 				//uint64_t hpFreq = bx::getHPFrequency() / 1000000.0; // micro-seconds.
 				//uint64_t startTime = bx::getHPCounter();
@@ -96,9 +98,9 @@ void noob::drawable::importMesh()
 				for( uint32_t m = 0; m < mScene->mNumMeshes; ++m )
 				{
 								aiMesh* mMeshData = mScene->mMeshes[m];
-								SubMesh newSubMesh;
-								mMeshList.push_back(newSubMesh);
-								SubMesh* subMeshData = &mMeshList[mMeshList.size()-1];
+								submesh newsubmesh;
+								mMeshList.push_back(newsubmesh);
+								submesh* subMeshData = &mMeshList[mMeshList.size()-1];
 
 								// Defaults
 								//    subMeshData->mBoundingBox.minExtents.set(0, 0, 0);
@@ -150,12 +152,14 @@ void noob::drawable::importMesh()
 												if ( vert.m_z > subMeshData->mBoundingBox.maxExtents.z )
 												subMeshData->mBoundingBox.maxExtents.z = vert.m_z;
 												*/
-												// UVs
-												if ( mMeshData->HasTextureCoords(0) )
+												
+												// UV
+
+												/*if ( mMeshData->HasTextureCoords(0) )
 												{
 																vert.m_u = mMeshData->mTextureCoords[0][n].x;
 																vert.m_v = mMeshData->mTextureCoords[0][n].y;
-												}
+												} */
 
 												// Tangents & Bitangents
 										/*		if ( mMeshData->HasTangentsAndBitangents() )
@@ -279,19 +283,43 @@ void noob::drawable::importMesh()
 				}
 }
 
-void noob::drawable::processMesh()
+void noob::drawable::process_mesh()
 {
 				//uint64_t hpFreq = bx::getHPFrequency() / 1000000.0; // micro-seconds.
 				//uint64_t startTime = bx::getHPCounter();
+	
 
 				for ( int32_t n = 0; n < mMeshList.size(); ++n)
 				{
-								SubMesh* subMeshData = &mMeshList[n];
+								submesh* subMeshData = &mMeshList[n];
+
+								{
+												std::stringstream ss;
+
+												auto num_vertz = subMeshData->mRawVerts.size();
+												auto vertz_size = sizeof(noob::graphics::pos_norm_uv_bones_vertex);
+
+												auto num_indicez = subMeshData->mRawIndices.size();
+												auto indicez_size = sizeof(uint16_t);
+
+												auto vertz_data_size = num_vertz * vertz_size;
+												auto indicez_data_size = num_indicez * indicez_size;
+
+												ss << "Submesh " << n << ". Vertices: " << subMeshData->mRawVerts.size() << " sizeof(vertex) = " << sizeof(noob::graphics::pos_norm_uv_bones_vertex) << ", total data size = " << subMeshData->mRawVerts.size() * sizeof(noob::graphics::pos_norm_uv_bones_vertex) << ". Indices: " << subMeshData->mRawIndices.size() << " sizeof(indices) = " << sizeof(uint16_t) << ", total data size = " << subMeshData->mRawIndices.size() * sizeof(uint16_t);
+
+												logger::log(ss.str());
+								}
 
 								// Load the verts and indices into bgfx buffers
 								subMeshData->mVertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(&subMeshData->mRawVerts[0], subMeshData->mRawVerts.size() * sizeof(noob::graphics::pos_norm_uv_bones_vertex)), noob::graphics::pos_norm_uv_bones_vertex::ms_decl);
-
 								subMeshData->mIndexBuffer = bgfx::createIndexBuffer(bgfx::makeRef(&subMeshData->mRawIndices[0], subMeshData->mRawIndices.size() * sizeof(uint16_t) ));
+
+
+							// subMeshData->mVertexBuffer = bgfx::createVertexBuffer(bgfx::copy(&subMeshData->mRawVerts[0], subMeshData->mRawVerts.size() * sizeof(noob::graphics::pos_norm_uv_bones_vertex)), noob::graphics::pos_norm_uv_bones_vertex::ms_decl);
+
+							//	subMeshData->mIndexBuffer = bgfx::createIndexBuffer(bgfx::copy(&subMeshData->mRawIndices[0], subMeshData->mRawIndices.size() * sizeof(uint16_t) ));
+
+
 
 								// Bounding Box
 								// mBoundingBox.intersect(subMeshData->mBoundingBox);
@@ -301,10 +329,30 @@ void noob::drawable::processMesh()
 				//Con::printf("PROCESS MESH TOOK: %d microseconds. (1 microsecond = 0.001 milliseconds)", (uint32_t)((endTime - startTime) / hpFreq));
 }
 
+void noob::drawable::draw(const noob::mat4& model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags = BGFX_STATE_DEFAULT, uint64_t view_id = 0)
+			{
+				uint32_t num_meshes = get_mesh_count();
+
+				bgfx::submit(view_id);
+
+				for (uint32_t i = 0; i < num_meshes; i++)
+				{
+					// logger::log("About to draw");
+					bgfx::setTransform(&model_mat.m[0]);
+					bgfx::setProgram(prog);
+					bgfx::setVertexBuffer(get_vertex_buffer(i));
+					bgfx::setIndexBuffer(get_index_buffer(i));
+					bgfx::setState(bgfx_state_flags);
+					bgfx::submit(view_id);
+				}
+
+			}
+
+
 
 /*
 // Returns the number of transformations loaded into transformsOut.
-uint32_t noob::drawable::getAnimatedTransforms(double TimeInSeconds, float* transformsOut)
+uint32_t noob::drawable::get_animated_transforms(double TimeInSeconds, float* transformsOut)
 {
 if ( !mScene ) return 0;
 

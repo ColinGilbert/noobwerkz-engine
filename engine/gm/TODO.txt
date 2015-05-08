@@ -1,0 +1,54 @@
+.. -*- mode: rst -*-
+ 
+Items large and small which remain to be worked on.
+See website for "wish list".
+--------------------------------------------------------------------
+
+Short Term
+==========
+
+* -random-threshold needs to have gamma 2.2 pre-applied to the pixels
+  for correct appearance.
+
+* Fix browser interoperability issues reported for PNG8.
+
+* AddCompare, and Distortion wrapper functions to
+  the Wand API.
+
+* ctime(), localtime(), and strerror(), all have reentrant
+  forms and are (perhaps) not thread safe under FreeBSD.
+
+    ctime()     -> ctime_r(const time_t *clock, char *buf, int buflen)
+    localtime() -> struct tm *localtime_r(const time_t *clock,  struct tm *res);
+    strerror()  -> strerror_r(int errnum, char *strerrbuf, size_t  buflen)
+
+  The ctime() function is equivalent to asctime(localtime(clock)).
+
+Longer Term
+============
+
+* Fix Scitex RGB reader to handle files written by Photoshop.
+
+* Fix PerlMagick BLOB reading (disable header magic checking if
+  already specified).
+
+* Implement DrawableFillPattern and DrawableStrokePattern drawable
+  objects in order to allow setting the fill and stroke patterns.
+
+* Improve performance of Cineon coder.
+
+To Investigate
+==============
+
+* Fix polyline renderering (improperly closes shape) when line is very thick.
+
+* Look into problem reported by Rick Mabry, "Shear produces artifacts
+  for a 0 y-shear (e.g. 60x0)."
+
+* It appears that SyncImagePixels() silently fails if the region
+  includes parts outside of the underlying image. The API supports
+  requesting areas outside of the image, but then the underlying image
+  is not updated. This was first noted with -lat when the image is
+  entirely disk-based.
+
+

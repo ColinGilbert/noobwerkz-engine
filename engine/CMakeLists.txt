@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.0)
 project(NoobWerkz)
 
 set(CMAKE_CC "clang++")
-set(CMAKE_CXX_FLAGS "-std=c++11 -fpermissive ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++11 -fpermissive -I/usr/local/include/GraphicsMagick ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-std=c99 ${CMAKE_C_FLAGS}")
 
 add_subdirectory(glfw)
@@ -44,13 +44,18 @@ list(APPEND common_src
 	common/Font.cpp
 	common/Drawable.cpp
 	common/NoobUtils.cpp
-	common/bgfx_related/Shaders.cpp
+	common/EditorUtils.cpp
+	#common/bgfx_related/Shaders.cpp
 	)
 
 list(APPEND main_src platform/nix/EngineDesktop.cpp)
 
+
 add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ) 
-target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp)
+target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES}
+	${OPENGL_LIBRARIES} freetype rt dl pthread assimp GraphicsMagick++
+	GraphicsMagick X11 Xext z gomp png bz2 webp jpeg tiff jasper lcms2
+	xml2 z wmflite)
 
 project(LogServer)
 

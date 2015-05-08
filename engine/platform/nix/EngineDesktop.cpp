@@ -109,7 +109,7 @@ int main(int /*_argc*/, char** /*_argv*/)
 	while (!glfwWindowShouldClose(window))
 	{
 		app->step();
-		noob::graphics::draw(width, height);
+		noob::graphics::frame(width, height);
 		glfwPollEvents();
 	}
 

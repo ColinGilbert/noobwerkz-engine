@@ -4,6 +4,7 @@
 #include <bgfx.h>
 #include "Shaders.hpp"
 #include "NoobUtils.hpp"
+//#include "Drawable.hpp"
 
 namespace noob
 {
@@ -24,8 +25,8 @@ namespace noob
 				float m_normal_x;
 				float m_normal_y;
 				float m_normal_z;
-				float m_u;
-				float m_v;
+				//float m_u;
+				//float m_v;
 				//uint8_t m_boneindex[4];
 				//float m_boneweight[4];
 
@@ -37,7 +38,7 @@ namespace noob
 						//.add(bgfx::Attrib::Tangent,   3, bgfx::AttribType::Float)
 						//.add(bgfx::Attrib::Bitangent, 3, bgfx::AttribType::Float)
 						.add(bgfx::Attrib::Normal,    3, bgfx::AttribType::Float)
-						.add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float)
+						//.add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float)
 						//.add(bgfx::Attrib::Indices,   4, bgfx::AttribType::Uint8, false, true)
 						//.add(bgfx::Attrib::Weight,    4, bgfx::AttribType::Float)
 						.end();
@@ -71,13 +72,27 @@ namespace noob
 				return bgfx::makeRef(&payload[0], payload.size());
 			}
 
-			static void draw(uint32_t width, uint32_t height)
+			static void frame(uint32_t width, uint32_t height)
 			{
 				bgfx::setViewRect(0, 0, 0, width, height);
 				bgfx::submit(0);
 
 				bgfx::frame();
 			}
+
+/*
+			static void draw(const noob::drawable& item, const noob::mat4& model_mat)
+			{
+				uint32_t num_meshes = item.get_mesh_count();
+		
+				for (uint32_t i = 0; i < num_meshes; i++)
+				{
+					
+				}
+
+			}
+*/
+
 
 		/*
 		 	static bgfx::TextureInfo* load_texture(const std::string& _name, uint32_t _flags, uint8_t _skip)
