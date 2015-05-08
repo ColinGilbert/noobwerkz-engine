@@ -5,6 +5,6 @@ namespace noob
 	class editor_utils
 	{
 		public:
-		static bool blend_channels();
+			static bool blend_channels();
 	};
 }

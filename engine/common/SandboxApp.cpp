@@ -6,7 +6,7 @@ void noob::application::init()
 
 	logger::log("");
 
-	noob::editor_utils::blend_channels();
+	// noob::editor_utils::blend_channels();
 
 	// noob::graphics::pos_norm_uv_bones_vertex::init();
 	bgfx::ProgramHandle program_handle = noob::graphics::load_program("vs_basic", "fs_basic");
@@ -35,6 +35,8 @@ void noob::application::init()
 	sphere->set_mesh_file(meshFile);
 	sphere->load_mesh();
 
+	noob::graphics::load_texture("blended_textures.tga", "test");
+	noob::graphics::load_texture("blended_textures.tga", "test2");
 	std::string fontfile = *prefix + "/font/droidsans.ttf";
 	droid_font->init(fontfile);
 	logger::log("Done init");

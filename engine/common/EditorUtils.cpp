@@ -49,11 +49,9 @@ bool noob::editor_utils::blend_channels()
 			}
 
 			
-			Magick::Color c(256,256,256,256);
+			Magick::Color c(static_cast<uint8_t>(256),static_cast<uint8_t>(256),static_cast<uint8_t>(256),static_cast<uint8_t>(256));
 			Magick::Geometry geom(output_cols, output_rows);
 			Magick::Image output_image(geom, c);
-			//output_image.resize(geom);
-			//output_image.type(Magick::TrueColorMatteType);
 			for (unsigned int x = 0; x < output_cols; ++x)
 			{
 				for (unsigned int y =0; y < output_rows; ++y)

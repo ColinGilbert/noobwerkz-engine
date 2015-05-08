@@ -25,8 +25,8 @@ namespace noob
 				float m_normal_x;
 				float m_normal_y;
 				float m_normal_z;
-				//float m_u;
-				//float m_v;
+				float m_u;
+				float m_v;
 				//uint8_t m_boneindex[4];
 				//float m_boneweight[4];
 
@@ -38,7 +38,7 @@ namespace noob
 						//.add(bgfx::Attrib::Tangent,   3, bgfx::AttribType::Float)
 						//.add(bgfx::Attrib::Bitangent, 3, bgfx::AttribType::Float)
 						.add(bgfx::Attrib::Normal,    3, bgfx::AttribType::Float)
-						//.add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float)
+						.add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float)
 						//.add(bgfx::Attrib::Indices,   4, bgfx::AttribType::Uint8, false, true)
 						//.add(bgfx::Attrib::Weight,    4, bgfx::AttribType::Float)
 						.end();
@@ -47,7 +47,7 @@ namespace noob
 			};
 
 
-			static std::map<std::string, bgfx::TextureInfo*> global_textures;
+			static std::map<std::string, bgfx::TextureHandle> global_textures;
 			static std::map<std::string, bgfx::ProgramHandle> programs;
 
 			static std::unique_ptr<std::string> shader_include_path;
@@ -79,6 +79,9 @@ namespace noob
 
 				bgfx::frame();
 			}
+
+
+			static bgfx::TextureHandle load_texture(const std::string& filename, const std::string& friendly_name);
 
 /*
 			static void draw(const noob::drawable& item, const noob::mat4& model_mat)
