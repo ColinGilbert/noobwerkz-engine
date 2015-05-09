@@ -6,7 +6,6 @@
 #include "Graphics.hpp"
 
 // Returns true upon success, image is saved to "blended_texture.tga"
-
 bool noob::editor_utils::blend_channels()
 {
 	Magick::InitializeMagick(NULL);
@@ -71,7 +70,6 @@ bool noob::editor_utils::blend_channels()
 					output_colour.green(green_channel_value);
 					output_colour.blue(blue_channel_value);
 					output_colour.alpha(alpha_channel_value);
-					//output_colour(red_channel_value, green_channel_value, blue_channel_value, alpha_channel_value);
 					output_image.pixelColor(x, y, output_colour);
 				}
 			}

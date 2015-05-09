@@ -7,10 +7,10 @@ void noob::application::init()
 	logger::log("");
 
 	// noob::editor_utils::blend_channels();
-
 	// noob::graphics::pos_norm_uv_bones_vertex::init();
-	bgfx::ProgramHandle program_handle = noob::graphics::load_program("vs_basic", "fs_basic");
-	
+
+	bgfx::ProgramHandle program_handle = noob::graphics::load_program("vs_current", "fs_current");
+
 	{
 		std::stringstream ss;
 		ss << "Is program valid? ";
@@ -26,7 +26,7 @@ void noob::application::init()
 		logger::log(ss.str());
 	}
 
-	noob::graphics::programs.insert(std::make_pair(std::string("basic"), program_handle));
+	noob::graphics::programs.insert(std::make_pair(std::string("current"), program_handle));
 
 	sphere = std::unique_ptr<noob::drawable>(new noob::drawable());
 
@@ -36,7 +36,6 @@ void noob::application::init()
 	sphere->load_mesh();
 
 	noob::graphics::load_texture("blended_textures.tga", "test");
-	noob::graphics::load_texture("blended_textures.tga", "test2");
 	std::string fontfile = *prefix + "/font/droidsans.ttf";
 	droid_font->init(fontfile);
 	logger::log("Done init");
@@ -50,7 +49,6 @@ void noob::application::update(double delta)
 
 void noob::application::draw()
 {
-	// Compute view matrix
 	noob::vec3 at(0.0f, 0.0f, 0.0f);
 	noob::vec3 eye(0.0f, 0.0f, -2.5f);
 	noob::vec3 up(0.0f, 1.0f, 0.0f);
@@ -58,22 +56,29 @@ void noob::application::draw()
 
 	// Compute projection matrix
 	if (height == 0) height = 1;
-	noob::mat4 proj = noob::perspective(60.0f, (float)width/(float)height, 0.1f, 100.f);
-	
+	noob::mat4 proj = noob::perspective(60.0f, static_cast<float>(width)/static_cast<float>(height), 0.1f, 100.0f);
+
 	// Compute modelview matrix
 	noob::mat4 model_mat(noob::identity_mat4());
-//	noob::mat4 model_view_mat = view * model_mat;
 	bgfx::setViewTransform(0, &view.m[0], &proj.m[0]);
 
+	noob::mat4 ortho; 
+	bx::mtxOrtho(ortho.m, 0.5f, width + 0.5f, height + 0.5f, 0.5f, -1.0f, 1.0f);
 
-	// bgfx::setProgram(noob::graphics::programs.find("basic")->second);
-	bgfx::ProgramHandle prog = noob::graphics::programs.find("basic")->second;
-		
+	noob::mat4 inverse_ortho(noob::inverse(noob::mat4(ortho)));
+	noob::mat4 inverse_view = noob::inverse(view);
 
-//	droid_font->change_colour(0xFFFF00FF);
-//	droid_font->drawtext(std::string("Font test"), 50.0f, 50.0f, (int)width, (int)height);
-//	droid_font->change_colour(0xFFFFFFFF);
-//	droid_font->drawtext(std::string("Font test 2"), 100.0f, 100.0f, (int)width, (int)height);
+	// noob::mat4 view_proj = view * proj ;
+
+	// bgfx::setTexture(uint8_t _stage, UniformHandle _sampler, TextureHandle _handle, uint32_t _flags = UINT32_MAX);
+
+	bgfx::ProgramHandle prog = noob::graphics::programs.find("current")->second;
 
 	sphere->draw(model_mat, prog);
+/*
+	droid_font->change_colour(0xFFFF00FF);
+	droid_font->drawtext(std::string("Font test"), 50.0f, 50.0f, (int)width, (int)height);
+	droid_font->change_colour(0xFFFFFFFF);
+	droid_font->drawtext(std::string("Font test 2"), 100.0f, 100.0f, (int)width, (int)height);
+*/
 }

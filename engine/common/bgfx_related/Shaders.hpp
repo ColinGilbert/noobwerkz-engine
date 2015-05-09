@@ -1,7 +1,9 @@
 /*
+#pragma once
+
 #include <map>
 #include <bgfx.h>
-#include "../bgfx/tools/shaderc/shaderc.h"
+#include "shaderc.h"
 
 namespace noob
 {
@@ -40,5 +42,4 @@ namespace noob
 
 	};
 }
-
 */

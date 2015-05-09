@@ -2,20 +2,21 @@
 #include "Graphics.hpp"
 #include "Shaders.hpp"
 
-			bgfx::UniformHandle shader::textureUniforms[16];
-			std::map<const char*, bgfx::UniformHandle> shader::uniformMap;
-			shader shaderList[256];
-			uint32_t shaderCount = 0;
+bgfx::UniformHandle shader::textureUniforms[16];
+std::map<const char*, bgfx::UniformHandle> shader::uniformMap;
+shader shaderList[256];
+uint32_t shaderCount = 0;
 
-			char shaderPath[1024];
-			char shaderIncludePath[1024];
-			char shaderVaryingPath[1024];
+char shaderPath[1024];
+char shaderIncludePath[1024];
+char shaderVaryingPath[1024];
 
 void noob::initUniforms()
 {
 	for(int n = 0; n < 16; ++n)
 		shader::textureUniforms[n].idx = bgfx::invalidHandle;
 }
+
 void noob::destroyUniforms()
 {
 	for(int n = 0; n < 16; ++n)
@@ -34,6 +35,7 @@ void noob::destroyUniforms()
 		shaderList[n].unload();
 	}
 }
+
 bgfx::UniformHandle noob::shader::getTextureUniform(uint32_t slot)
 {
 	if ( slot >= 16 )
@@ -50,6 +52,7 @@ bgfx::UniformHandle noob::shader::getTextureUniform(uint32_t slot)
 	}
 	return textureUniforms[slot];
 }
+
 bgfx::UniformHandle noob::shader::getUniform(const char* name, bgfx::UniformType::Enum type, uint32_t count)
 {
 	if ( uniformMap.find(name) == uniformMap.end() )
@@ -59,26 +62,32 @@ bgfx::UniformHandle noob::shader::getUniform(const char* name, bgfx::UniformType
 	}
 	return uniformMap[name];
 }
+
 bgfx::UniformHandle noob::shader::getShadowmapUniform()
 {
 	return getUniform("ShadowMap", bgfx::UniformType::Uniform1i, 1);
 }
+
 bgfx::UniformHandle noob::shader::getUniformVec2(const char* name, uint32_t count)
 {
 	return getUniform(name, bgfx::UniformType::Uniform2fv, count);
 }
+
 bgfx::UniformHandle noob::shader::getUniformVec3(const char* name, uint32_t count)
 {
 	return getUniform(name, bgfx::UniformType::Uniform3fv, count);
 }
+
 bgfx::UniformHandle noob::shader::getUniformVec4(const char* name, uint32_t count)
 {
 	return getUniform(name, bgfx::UniformType::Uniform4fv, count);
 }
+
 bgfx::UniformHandle noob::shader::getUniform4x4Matrix(const char* name, uint32_t count)
 {
 	return getUniform(name, bgfx::UniformType::Uniform4x4fv, count);
 }
+
 noob::shader* noob::getShader(const char* vertex_shader_path, const char* fragment_shader_path)
 {
 	// Create full shader paths

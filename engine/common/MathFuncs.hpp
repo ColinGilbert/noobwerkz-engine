@@ -1,5 +1,4 @@
-#ifndef _MATHS_FUNCS_H_
-#define _MATHS_FUNCS_H_
+#pragma once
 
 #include <assimp/types.h>
 
@@ -163,4 +162,3 @@ namespace noob
 	void print(const versor& q);
 	versor slerp(versor& q, versor& r, float t);
 };
-#endif

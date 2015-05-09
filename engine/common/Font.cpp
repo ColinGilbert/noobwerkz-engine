@@ -74,14 +74,13 @@ void noob::font::drawtext(const std::string& str, float x_pos, float y_pos, uint
 
 	float at[3]  = { 0, 0,  0.0f };
 	float eye[3] = { 0, 0, -1.0f };
-
 	float view[16];
-
 	bx::mtxLookAt(view, eye, at);
 
 	const float centering = 0.5f;
 	float ortho[16];
 	bx::mtxOrtho(ortho, centering, window_width + centering, window_height + centering, centering, -1.0f, 1.0f);
+
 	bgfx::setViewTransform(0, view, ortho);
 	bgfx::setViewRect(0, 0, 0, window_width, window_height);
 	text_buffer_manager->submitTextBuffer(transient_text, 0);

@@ -18,7 +18,7 @@ include_directories(freetype/include)
 include_directories(common)
 include_directories(common/bgfx_related)
 include_directories(common/bgfx_related/font)
-
+include_directories(common/bgfx_related/shaderc)
 
 list(APPEND bgfx_src
 	bgfx/src/amalgamated.cpp
@@ -45,11 +45,11 @@ list(APPEND common_src
 	common/Drawable.cpp
 	common/NoobUtils.cpp
 	common/EditorUtils.cpp
-	#common/bgfx_related/Shaders.cpp
+	common/bgfx_related/Shaders.cpp
+	common/Shader.cpp
 	)
 
 list(APPEND main_src platform/nix/EngineDesktop.cpp)
-
 
 add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ) 
 target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp GraphicsMagick++ GraphicsMagick X11 Xext z gomp png bz2 webp jpeg tiff jasper lcms2	xml2 z wmflite)

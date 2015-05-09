@@ -74,9 +74,7 @@ namespace noob
 
 			void draw(const noob::mat4& model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags = BGFX_STATE_DEFAULT, uint64_t view_id = 0);
 
-
 		protected:
-
 			void import_mesh();
 			void process_mesh();
 

@@ -1,0 +1,15 @@
+:%s/U8/uint8_t/g
+:%s/U16/uint16_t/g
+:%s/U32/uint32_t/g
+:%s/U64/uint64_t/g
+:%s/S8/int8_t/g
+:%s/S16/int16_t/g
+:%s/S32/int32_t/g
+:%s/S64/int64_t/g
+:%s/F32/float/g
+:%s/F64/double/g
+:%s/HashMap/std::map/g
+:%s/Vector/std::vector/g
+:%s/MatrixF/noob::mat4/g
+:%s/StringTableEntry/std::unique_ptr<std::string>>/g
+:$s/Shader shaderList\[256\]std::array<Shader, 256> shaderList/g 
