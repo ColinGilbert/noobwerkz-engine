@@ -62,7 +62,7 @@ namespace noob
 
 			static bgfx::ShaderHandle load_shader(const std::string& filename);
 			static bgfx::ProgramHandle load_program(const std::string& vs_filename, const std::string& fs_filename);
-			static bgfx::ProgramHandle compile_and_load_program(const std::string& vs_source_file, const std::string& fs_source_file, const std::string& varyings_file);
+			static bgfx::ProgramHandle compile_and_load_program(const std::string& vs_source_filename, const std::string& fs_source_filename, const std::string& varyings_filename);
 			static bgfx::TextureHandle load_texture(const std::string& filename, const std::string& name);
 			static bgfx::TextureHandle get_texture(const std::string& name);
 	};
