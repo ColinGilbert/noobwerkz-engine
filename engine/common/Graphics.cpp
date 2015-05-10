@@ -136,7 +136,7 @@ bgfx::TextureHandle noob::graphics::load_texture(const std::string& name, const 
 bool noob::graphics::add_sampler(const std::string& name)
 {
 	// If item doesn't exists
-	if (samplers.find(name) == samplers.end())
+	if (noob::graphics::samplers.find(name) == noob::graphics::samplers.end())
 	{
 		noob::graphics::sampler samp;
 		samp.init(name);
@@ -145,6 +145,20 @@ bool noob::graphics::add_sampler(const std::string& name)
 		return true;
 	}
 	else return false;
+}
+
+bool noob::graphics::add_uniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t count = 1)
+{
+	// If item doesn't exists
+	if (noob::graphics::uniforms.find(name) == noob::graphics::uniforms.end())
+	{
+		noob::graphics::uniform uni;
+		uni.init(name, type, count);
+		noob::graphics::uniforms.insert(std::make_pair(name, uni));
+		return true;
+	}
+	else return false;
+
 }
 
 bool noob::graphics::add_shader_bundle(const std::string& name, const bgfx::ProgramHandle program_handle)
@@ -169,19 +183,19 @@ bool noob::graphics::add_shader_bundle(const std::string& name, const bgfx::Prog
 }
 
 // TODO: Verify validity prior to insertion (and auto-insert into noob::graphics::uniforms, noob::graphics::samplers, and noob::graphics::programs?)
-bool noob::graphics::add_shader_bundle(const std::string& name, const bgfx::ProgramHandle program_handle, const std::vector<noob::graphics::uniform>& uniforms, const std::vector<noob::graphics::sampler>& samplers)
+bool noob::graphics::add_shader_bundle(const std::string& name, const bgfx::ProgramHandle program_handle, const std::vector<noob::graphics::uniform>& _uniforms, const std::vector<noob::graphics::sampler>& _samplers)
 {
 	if (noob::graphics::shader_bundles.find(name) == noob::graphics::shader_bundles.end())
 	{
 		noob::graphics::shader_bundle bundle;
 		bundle.program_handle = program_handle;
 		
-		for (auto it = uniforms.begin(); it !=uniforms.end(); ++it)
+		for (auto it = _uniforms.begin(); it != _uniforms.end(); ++it)
 		{
 			bundle.uniforms.push_back(*it); 
 		}
 		
-		for (auto it = samplers.begin(); it !=samplers.end(); ++it)
+		for (auto it = _samplers.begin(); it != _samplers.end(); ++it)
 		{
 			bundle.samplers.push_back(*it); 
 		}

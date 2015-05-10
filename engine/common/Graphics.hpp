@@ -52,6 +52,13 @@ namespace noob
 
 			struct uniform
 			{
+				void init(const std::string& name, bgfx::UniformType::Enum _type, uint16_t _count = 1)
+				{
+					handle = bgfx::createUniform(name.c_str(), type, _count);
+					type = _type;
+					count = _count;
+				}
+
 				bgfx::UniformHandle handle;
 				bgfx::UniformType::Enum type;
 				uint16_t count;
@@ -63,6 +70,9 @@ namespace noob
 				{
 					handle = bgfx::createUniform(name.c_str(), bgfx::UniformType::Uniform1iv);
 				}
+
+
+
 				bgfx::UniformHandle handle;
 			};
 
@@ -80,31 +90,36 @@ namespace noob
 			static bgfx::ShaderHandle load_shader(const std::string& filename);
 			static bgfx::ProgramHandle load_program(const std::string& vs_filename, const std::string& fs_filename);
 
-			// TODO: Implement 
+			// TODO: Implement this 
 			// static bgfx::ProgramHandle compile_and_load_program(const std::string& vs_source_filename, const std::string& fs_source_filename, const std::string& varyings_filename);
 
 			static bgfx::TextureHandle load_texture(const std::string& name, const std::string& filename);
 		
 			// ---------------- Asset creators (make assets available from getters) ----------------
-			static bool add_sampler(const std::string& name);
-			static bool add_shader_bundle(const std::string& name, const bgfx::ProgramHandle program_handle);
-			static bool add_shader_bundle(const std::string& name, const bgfx::ProgramHandle program_handle, const std::vector<noob::graphics::uniform>& uniforms);
-			static bool add_shader_bundle(const std::string& name, const bgfx::ProgramHandle program_handle, const std::vector<noob::graphics::sampler>& samplers);
-			static bool add_shader_bundle(const std::string& name, const bgfx::ProgramHandle program_handle, const std::vector<noob::graphics::uniform>& uniforms, const std::vector<noob::graphics::sampler>& samplers);
+			static bool add_sampler(const std::string&);
+			static bool add_uniform(const std::string&, bgfx::UniformType::Enum, uint16_t);
+			static bool add_shader_bundle(const std::string&, const bgfx::ProgramHandle);
+			static bool add_shader_bundle(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::uniform>&);
+			static bool add_shader_bundle(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::sampler>&);
+			static bool add_shader_bundle(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::uniform>&, const std::vector<noob::graphics::sampler>&);
 			
 			// ---------------- Getters -----------------
-			static bgfx::TextureHandle get_texture(const std::string& name);
-			static noob::graphics::uniform get_uniform(const std::string& name);
-			static noob::graphics::sampler get_sampler(const std::string& name);
+			static bgfx::TextureHandle get_texture(const std::string&);
+			static noob::graphics::uniform get_uniform(const std::string&);
+			static noob::graphics::sampler get_sampler(const std::string&);
 			
 			// ---------------- Checkers ----------------
-			static bool is_valid(const noob::graphics::uniform& _uniform);
-			static bool is_valid(const noob::graphics::sampler& _sampler);
-			// TODO: Implement
-			// static bool is_valid(const noob::graphics::shader_bundle& _bundle);
-			// static bool is_valid(bgfx::ProgramHandle handle);
-			// static bool is_valid(bgfx::ShaderHandle handle);
-			// static bool is_valid(bgfx::TextureHandle handle);
+			static bool is_valid(const noob::graphics::uniform&);
+			static bool is_valid(const noob::graphics::sampler&);
+
+			// TODO: Implement these
+			// static bool is_valid(const noob::graphics::shader_bundle&);
+			// static bool is_valid(const noob::uniform&);
+			// static bool is_valid(const noob::sampler&);
+			// static bool is_valid(bgfx::ProgramHandle);
+			// static bool is_valid(bgfx::ShaderHandle);
+			// static bool is_valid(bgfx::TextureHandle);
+
 
 			// ---------------- Conveniences ------------
 			static const bgfx::Memory* get_bgfx_mem(const std::string& payload)

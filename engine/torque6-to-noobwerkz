@@ -11,5 +11,5 @@
 :%s/HashMap/std::map/g
 :%s/Vector/std::vector/g
 :%s/MatrixF/noob::mat4/g
-:%s/StringTableEntry/std::unique_ptr<std::string>>/g
-:$s/Shader shaderList\[256\]std::array<Shader, 256> shaderList/g 
+//:%s/StringTableEntry/std::unique_ptr<std::string>>/g
+//:$s/Shader shaderList\[256\]std::array<Shader, 256> shaderList/g 
