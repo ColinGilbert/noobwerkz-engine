@@ -1,4 +1,7 @@
 // Simple abstraction over freetype & bgfx, refactored from bgfx's examples
+
+// TODO: Make this use existing viewproj matrix.
+
 #pragma once
 
 #include <string>
@@ -16,7 +19,8 @@ namespace noob
 			virtual ~font();
 			void init(const std::string& path);
 			void change_colour(uint32_t colour);
-			void drawtext(const std::string& str, float x_pos, float y_pos, uint32_t window_width, uint32_t window_height); 
+			void drawtext(const std::string& str, float x_pos, float y_pos, uint32_t window_width, uint32_t window_height);
+
 		protected:
 			TrueTypeHandle loadTtf(FontManager* _fm, const char* _filePath);
 			FontManager* font_manager; 

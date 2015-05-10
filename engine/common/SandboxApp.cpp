@@ -29,7 +29,7 @@ void noob::application::init()
 	noob::graphics::programs.insert(std::make_pair(std::string("current"), program_handle));
 
 
-	noob::graphics::create_sampler("u_texture");
+	noob::graphics::add_sampler("u_texture");
 
 	sphere = std::unique_ptr<noob::drawable>(new noob::drawable());
 

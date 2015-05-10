@@ -133,7 +133,7 @@ bgfx::TextureHandle noob::graphics::load_texture(const std::string& name, const 
    }
    */
 
-bool noob::graphics::create_sampler(const std::string& name)
+bool noob::graphics::add_sampler(const std::string& name)
 {
 	// If item doesn't exists
 	if (samplers.find(name) == samplers.end())
@@ -147,29 +147,29 @@ bool noob::graphics::create_sampler(const std::string& name)
 	else return false;
 }
 
-bool noob::graphics::create_shader_bundle(const std::string& name, const bgfx::ProgramHandle program_handle)
+bool noob::graphics::add_shader_bundle(const std::string& name, const bgfx::ProgramHandle program_handle)
 {
 	std::vector<noob::graphics::uniform> empty_uniforms;
 	std::vector<noob::graphics::sampler> empty_samplers;
- 	return noob::graphics::create_shader_bundle(name, program_handle, empty_uniforms, empty_samplers);
+ 	return noob::graphics::add_shader_bundle(name, program_handle, empty_uniforms, empty_samplers);
 }
 
-bool noob::graphics::create_shader_bundle(const std::string& name, const bgfx::ProgramHandle program_handle, const std::vector<noob::graphics::uniform>& uniforms)
+bool noob::graphics::add_shader_bundle(const std::string& name, const bgfx::ProgramHandle program_handle, const std::vector<noob::graphics::uniform>& uniforms)
 {
 	std::vector<noob::graphics::sampler> empty_samplers;
-	return noob::graphics::create_shader_bundle(name, program_handle, uniforms, empty_samplers);
+	return noob::graphics::add_shader_bundle(name, program_handle, uniforms, empty_samplers);
 
 }
 
-bool noob::graphics::create_shader_bundle(const std::string& name, const bgfx::ProgramHandle program_handle, const std::vector<noob::graphics::sampler>& samplers)
+bool noob::graphics::add_shader_bundle(const std::string& name, const bgfx::ProgramHandle program_handle, const std::vector<noob::graphics::sampler>& samplers)
 {
 	std::vector<noob::graphics::uniform> empty_uniforms;
-	return noob::graphics::create_shader_bundle(name, program_handle, empty_uniforms, samplers);
+	return noob::graphics::add_shader_bundle(name, program_handle, empty_uniforms, samplers);
 
 }
 
 // TODO: Verify validity prior to insertion (and auto-insert into noob::graphics::uniforms, noob::graphics::samplers, and noob::graphics::programs?)
-bool noob::graphics::create_shader_bundle(const std::string& name, const bgfx::ProgramHandle program_handle, const std::vector<noob::graphics::uniform>& uniforms, const std::vector<noob::graphics::sampler>& samplers)
+bool noob::graphics::add_shader_bundle(const std::string& name, const bgfx::ProgramHandle program_handle, const std::vector<noob::graphics::uniform>& uniforms, const std::vector<noob::graphics::sampler>& samplers)
 {
 	if (noob::graphics::shader_bundles.find(name) == noob::graphics::shader_bundles.end())
 	{
