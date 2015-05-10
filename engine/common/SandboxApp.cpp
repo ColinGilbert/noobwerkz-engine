@@ -28,7 +28,11 @@ void noob::application::init()
 
 	noob::graphics::programs.insert(std::make_pair(std::string("current"), program_handle));
 
+
+	noob::graphics::create_sampler("u_texture");
+
 	sphere = std::unique_ptr<noob::drawable>(new noob::drawable());
+
 
 	std::string meshFile = *prefix + "/models/sphere.off";
 
@@ -62,11 +66,11 @@ void noob::application::draw()
 	noob::mat4 model_mat(noob::identity_mat4());
 	bgfx::setViewTransform(0, &view.m[0], &proj.m[0]);
 
-	noob::mat4 ortho; 
-	bx::mtxOrtho(ortho.m, 0.5f, width + 0.5f, height + 0.5f, 0.5f, -1.0f, 1.0f);
+	// noob::mat4 ortho; 
+	// bx::mtxOrtho(ortho.m, 0.5f, width + 0.5f, height + 0.5f, 0.5f, -1.0f, 1.0f);
 
-	noob::mat4 inverse_ortho(noob::inverse(noob::mat4(ortho)));
-	noob::mat4 inverse_view = noob::inverse(view);
+	//noob::mat4 inverse_ortho(noob::inverse(noob::mat4(ortho)));
+	// noob::mat4 inverse_view = noob::inverse(view);
 
 	// noob::mat4 view_proj = view * proj ;
 

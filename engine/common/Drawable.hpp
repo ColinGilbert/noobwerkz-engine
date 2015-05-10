@@ -30,6 +30,7 @@
 #include <vector>
 
 #include <bgfx.h>
+
 #include <assimp/scene.h>
 #include <assimp/quaternion.h>
 #include <assimp/anim.h>

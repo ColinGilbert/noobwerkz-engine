@@ -22,7 +22,7 @@
 
 #include <bgfx.h>
 
-#include "shaderc.h"
+
 #include "Shader.hpp"
 
 /*

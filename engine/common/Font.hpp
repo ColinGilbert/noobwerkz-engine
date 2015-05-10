@@ -1,4 +1,4 @@
-// Simple abstraction over freetype & bgfx
+// Simple abstraction over freetype & bgfx, refactored from bgfx's examples
 #pragma once
 
 #include <string>
