@@ -71,12 +71,10 @@ namespace noob
 					handle = bgfx::createUniform(name.c_str(), bgfx::UniformType::Uniform1iv);
 				}
 
-
-
 				bgfx::UniformHandle handle;
 			};
 
-			struct shader_bundle
+			struct shader
 			{
 				bgfx::ProgramHandle program_handle;
 				std::vector<noob::graphics::uniform> uniforms;
@@ -98,10 +96,10 @@ namespace noob
 			// ---------------- Asset creators (make assets available from getters) ----------------
 			static bool add_sampler(const std::string&);
 			static bool add_uniform(const std::string&, bgfx::UniformType::Enum, uint16_t);
-			static bool add_shader_bundle(const std::string&, const bgfx::ProgramHandle);
-			static bool add_shader_bundle(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::uniform>&);
-			static bool add_shader_bundle(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::sampler>&);
-			static bool add_shader_bundle(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::uniform>&, const std::vector<noob::graphics::sampler>&);
+			static bool add_shader(const std::string&, const bgfx::ProgramHandle);
+			static bool add_shader(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::uniform>&);
+			static bool add_shader(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::sampler>&);
+			static bool add_shader(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::uniform>&, const std::vector<noob::graphics::sampler>&);
 			
 			// ---------------- Getters -----------------
 			static bgfx::TextureHandle get_texture(const std::string&);
@@ -113,7 +111,7 @@ namespace noob
 			static bool is_valid(const noob::graphics::sampler&);
 
 			// TODO: Implement these
-			// static bool is_valid(const noob::graphics::shader_bundle&);
+			// static bool is_valid(const noob::graphics::shader&);
 			// static bool is_valid(const noob::uniform&);
 			// static bool is_valid(const noob::sampler&);
 			// static bool is_valid(bgfx::ProgramHandle);
@@ -130,7 +128,7 @@ namespace noob
 			// ---------------- Data --------------------
 			static std::map<std::string, bgfx::TextureHandle> global_textures;
 			static std::map<std::string, bgfx::ProgramHandle> programs;
-			static std::map<std::string, noob::graphics::shader_bundle> shader_bundles;
+			static std::map<std::string, noob::graphics::shader> shaders;
 			static std::map<std::string, noob::graphics::uniform> uniforms;
 			static std::map<std::string, noob::graphics::sampler> samplers;
 

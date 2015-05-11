@@ -39,7 +39,7 @@ void noob::application::init()
 	sphere->set_mesh_file(meshFile);
 	sphere->load_mesh();
 
-	noob::graphics::load_texture("blended_textures.tga", "test");
+	noob::graphics::load_texture("test", "blended_textures.tga");
 	std::string fontfile = *prefix + "/font/droidsans.ttf";
 	droid_font->init(fontfile);
 	logger::log("Done init");
@@ -76,6 +76,10 @@ void noob::application::draw()
 
 	// bgfx::setTexture(uint8_t _stage, UniformHandle _sampler, TextureHandle _handle, uint32_t _flags = UINT32_MAX);
 
+	noob::graphics::sampler samp = noob::graphics::get_sampler("u_texture");
+	bgfx::TextureHandle tex = noob::graphics::get_texture("test");
+	
+	bgfx::setTexture(0, samp.handle, tex);
 	bgfx::ProgramHandle prog = noob::graphics::programs.find("current")->second;
 
 	sphere->draw(model_mat, prog);
