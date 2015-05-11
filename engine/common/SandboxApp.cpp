@@ -7,7 +7,6 @@ void noob::application::init()
 	logger::log("");
 
 	// noob::editor_utils::blend_channels();
-	// noob::graphics::pos_norm_uv_bones_vertex::init();
 
 	bgfx::ProgramHandle program_handle = noob::graphics::load_program("vs_current", "fs_current");
 
@@ -26,11 +25,15 @@ void noob::application::init()
 		logger::log(ss.str());
 	}
 
-	noob::graphics::programs.insert(std::make_pair(std::string("current"), program_handle));
-
+	noob::graphics::shader shad;
 
 	noob::graphics::add_sampler("u_texture");
 
+	shad.program = program_handle;
+	shad.samplers.push_back(noob::graphics::get_sampler("u_texture"));
+
+
+	noob::graphics::add_shader("current", shad);
 	sphere = std::unique_ptr<noob::drawable>(new noob::drawable());
 
 
@@ -66,23 +69,12 @@ void noob::application::draw()
 	noob::mat4 model_mat(noob::identity_mat4());
 	bgfx::setViewTransform(0, &view.m[0], &proj.m[0]);
 
-	// noob::mat4 ortho; 
-	// bx::mtxOrtho(ortho.m, 0.5f, width + 0.5f, height + 0.5f, 0.5f, -1.0f, 1.0f);
-
-	//noob::mat4 inverse_ortho(noob::inverse(noob::mat4(ortho)));
-	// noob::mat4 inverse_view = noob::inverse(view);
-
-	// noob::mat4 view_proj = view * proj ;
-
-	// bgfx::setTexture(uint8_t _stage, UniformHandle _sampler, TextureHandle _handle, uint32_t _flags = UINT32_MAX);
-
 	noob::graphics::sampler samp = noob::graphics::get_sampler("u_texture");
 	bgfx::TextureHandle tex = noob::graphics::get_texture("test");
-	
-	bgfx::setTexture(0, samp.handle, tex);
-	bgfx::ProgramHandle prog = noob::graphics::programs.find("current")->second;
 
-	sphere->draw(model_mat, prog);
+	bgfx::setTexture(0, samp.handle, tex);
+	noob::graphics::shader s = noob::graphics::get_shader("current");
+	sphere->draw(model_mat, s.program);
 /*
 	droid_font->change_colour(0xFFFF00FF);
 	droid_font->drawtext(std::string("Font test"), 50.0f, 50.0f, (int)width, (int)height);

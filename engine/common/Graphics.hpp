@@ -76,7 +76,7 @@ namespace noob
 
 			struct shader
 			{
-				bgfx::ProgramHandle program_handle;
+				bgfx::ProgramHandle program;
 				std::vector<noob::graphics::uniform> uniforms;
 				std::vector<noob::graphics::sampler> samplers;	
 			};
@@ -91,17 +91,19 @@ namespace noob
 			// TODO: Implement this 
 			// static bgfx::ProgramHandle compile_and_load_program(const std::string& vs_source_filename, const std::string& fs_source_filename, const std::string& varyings_filename);
 
-			static bgfx::TextureHandle load_texture(const std::string& name, const std::string& filename);
+			static bgfx::TextureHandle load_texture(const std::string& friendly_name, const std::string& filename);
 		
 			// ---------------- Asset creators (make assets available from getters) ----------------
 			static bool add_sampler(const std::string&);
 			static bool add_uniform(const std::string&, bgfx::UniformType::Enum, uint16_t);
-			static bool add_shader(const std::string&, const bgfx::ProgramHandle);
-			static bool add_shader(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::uniform>&);
-			static bool add_shader(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::sampler>&);
-			static bool add_shader(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::uniform>&, const std::vector<noob::graphics::sampler>&);
+			static bool add_shader(const std::string&, const noob::graphics::shader&);
+			//static bool add_shader(const std::string&, const bgfx::ProgramHandle);
+			//static bool add_shader(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::uniform>&);
+			//static bool add_shader(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::sampler>&);
+			//static bool add_shader(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::uniform>&, const std::vector<noob::graphics::sampler>&);
 			
 			// ---------------- Getters -----------------
+			static noob::graphics::shader get_shader(const std::string&);
 			static bgfx::TextureHandle get_texture(const std::string&);
 			static noob::graphics::uniform get_uniform(const std::string&);
 			static noob::graphics::sampler get_sampler(const std::string&);
@@ -127,7 +129,6 @@ namespace noob
 
 			// ---------------- Data --------------------
 			static std::map<std::string, bgfx::TextureHandle> global_textures;
-			static std::map<std::string, bgfx::ProgramHandle> programs;
 			static std::map<std::string, noob::graphics::shader> shaders;
 			static std::map<std::string, noob::graphics::uniform> uniforms;
 			static std::map<std::string, noob::graphics::sampler> samplers;

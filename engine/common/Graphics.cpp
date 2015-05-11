@@ -10,7 +10,6 @@
 bgfx::VertexDecl noob::graphics::pos_norm_uv_bones_vertex::ms_decl;
 
 std::map<std::string, bgfx::TextureHandle> noob::graphics::global_textures;
-std::map<std::string, bgfx::ProgramHandle> noob::graphics::programs;
 std::map<std::string, noob::graphics::uniform> noob::graphics::uniforms;
 std::map<std::string, noob::graphics::sampler> noob::graphics::samplers;
 std::map<std::string, noob::graphics::shader> noob::graphics::shaders;
@@ -30,9 +29,12 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 
 	bgfx::ProgramHandle h;
 	h.idx = bgfx::invalidHandle;
-	noob::graphics::add_shader(std::string("invalid"), h);
+	noob::graphics::shader shad;
+	shad.program = h;
 
-	noob::graphics::add_uniform(std::string("invalid"),bgfx::UniformType::Enum::Uniform1i, 0);
+	noob::graphics::add_shader(std::string("invalid"), shad);
+
+	noob::graphics::add_uniform(std::string("invalid"), bgfx::UniformType::Enum::Uniform1i, 0);
 
 	noob::graphics::add_sampler(std::string("invalid"));
 }
@@ -98,12 +100,18 @@ bgfx::ProgramHandle noob::graphics::load_program(const std::string& vs_filename,
 	return bgfx::createProgram(vsh, fsh, true);
 }
 
-bgfx::TextureHandle noob::graphics::load_texture(const std::string& name, const std::string& filename)
+bgfx::TextureHandle noob::graphics::load_texture(const std::string& friendly_name, const std::string& filename)
 {
 	int width = 0;
 	int height = 0;
 	int channels = 0;
 	uint8_t* tex_data = stbi_load(filename.c_str(), &width, &height, &channels, 0); 
+
+	{
+		std::stringstream ss;
+		ss << "Loading Texture: " << filename << ", width: " << width << ", height: " << height << ", channels: " << channels;
+		logger::log(ss.str());
+	}
 
 	uint16_t smallest_side = std::min(width, height);
 	uint8_t mips;
@@ -115,17 +123,12 @@ bgfx::TextureHandle noob::graphics::load_texture(const std::string& name, const 
 
 	bgfx::TextureHandle tex = bgfx::createTexture2D(width, height, mips, bgfx::TextureFormat::Enum::RGBA8, BGFX_TEXTURE_NONE, bgfx::makeRef(tex_data, sizeof(uint8_t) * width * height * channels));
 
-	noob::graphics::global_textures.insert(std::make_pair(name, tex));
+	noob::graphics::global_textures.insert(std::make_pair(friendly_name, tex));
 
 	return tex;
 }
 
-/*
-   bgfx::ProgramHandle noob::graphics::compile_and_load_program(const std::string& vs_source_filename, const std::string& fs_source_filename, const std::string& varyings_filename)
-   {
-
-   }
-   */
+// bgfx::ProgramHandle noob::graphics::compile_and_load_program(const std::string& vs_source_filename, const std::string& fs_source_filename, const std::string& varyings_filename) {}
 
 bool noob::graphics::add_sampler(const std::string& _name)
 {
@@ -154,35 +157,34 @@ bool noob::graphics::add_uniform(const std::string& _name, bgfx::UniformType::En
 	else return false;
 
 }
-
-bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program_handle)
+/*
+bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program)
 {
 	std::vector<noob::graphics::uniform> empty_uniforms;
 	std::vector<noob::graphics::sampler> empty_samplers;
- 	return noob::graphics::add_shader(_name, _program_handle, empty_uniforms, empty_samplers);
+ 	return noob::graphics::add_shader(_name, _program, empty_uniforms, empty_samplers);
 }
 
-bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program_handle, const std::vector<noob::graphics::uniform>& _uniforms)
+bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program, const std::vector<noob::graphics::uniform>& _uniforms)
 {
 	std::vector<noob::graphics::sampler> empty_samplers;
-	return noob::graphics::add_shader(_name, _program_handle, _uniforms, empty_samplers);
+	return noob::graphics::add_shader(_name, _program, _uniforms, empty_samplers);
 
 }
 
-bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program_handle, const std::vector<noob::graphics::sampler>& _samplers)
+bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program, const std::vector<noob::graphics::sampler>& _samplers)
 {
 	std::vector<noob::graphics::uniform> empty_uniforms;
-	return noob::graphics::add_shader(_name, _program_handle, empty_uniforms, _samplers);
+	return noob::graphics::add_shader(_name, _program, empty_uniforms, _samplers);
 
 }
-
 // TODO: Verify validity prior to insertion (and auto-insert into noob::graphics::uniforms, noob::graphics::samplers, and noob::graphics::programs?)
-bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program_handle, const std::vector<noob::graphics::uniform>& _uniforms, const std::vector<noob::graphics::sampler>& _samplers)
+bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program, const std::vector<noob::graphics::uniform>& _uniforms, const std::vector<noob::graphics::sampler>& _samplers)
 {
 	if (noob::graphics::shaders.find(_name) == noob::graphics::shaders.end())
 	{
 		noob::graphics::shader bundle;
-		bundle.program_handle = _program_handle;
+		bundle.program = _program;
 		
 		for (auto it = _uniforms.begin(); it != _uniforms.end(); ++it)
 		{
@@ -198,6 +200,25 @@ bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHan
 		return true;
 	}
 	else return false;
+}
+*/
+
+bool noob::graphics::add_shader(const std::string& _name, const noob::graphics::shader& _shader)
+{
+	if (noob::graphics::shaders.find(_name) == noob::graphics::shaders.end())
+	{
+		noob::graphics::shaders.insert(std::make_pair(_name, _shader));
+		return true;
+	}
+	else return false;
+
+}
+
+noob::graphics::shader noob::graphics::get_shader(const std::string& name)
+{
+	auto it = noob::graphics::shaders.find(name);
+	if (it != shaders.end()) return it->second;
+	else return noob::graphics::shaders.find("invalid")->second;
 }
 
 noob::graphics::uniform noob::graphics::get_uniform(const std::string& name)
