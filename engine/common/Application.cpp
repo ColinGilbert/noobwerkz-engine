@@ -13,6 +13,7 @@ noob::application::application()
 	droid_font = std::unique_ptr<noob::font>(new noob::font());
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("."));
+	nvg = nullptr;
 }
 
 

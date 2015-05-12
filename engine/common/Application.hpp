@@ -44,7 +44,7 @@
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
 #include "Drawable.hpp"
-
+#include "nanovg/nanovg.h"
 #include <bgfx.h>
 
 namespace noob
@@ -83,5 +83,6 @@ namespace noob
 			std::vector<noob::vec2> finger_positions;
 			std::unique_ptr<noob::font> droid_font;
 			std::unique_ptr<noob::drawable> sphere;
+			NVGcontext* nvg;
 	};
 }
