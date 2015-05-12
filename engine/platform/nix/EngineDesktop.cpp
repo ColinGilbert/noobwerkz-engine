@@ -40,33 +40,33 @@ void framebuffer_size_callback(GLFWwindow* window, int w, int h)
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	if (action == GLFW_PRESS)
+/*	if (action == GLFW_REPEAT || action == GLFW_PRESS)
 	{
 		switch (key)
 		{
 			case GLFW_KEY_UP:
-				app->cam->pitch_up();
+			//	app->cam.pitch_up();
 			case GLFW_KEY_DOWN:
-				app->cam->pitch_down();
+			//	app->cam.pitch_down();
 			case GLFW_KEY_LEFT:
-				app->cam->yaw_left();
+			//	app->cam.yaw_left();
 			case GLFW_KEY_RIGHT:
-				app->cam->yaw_right();
+			//	app->cam.yaw_right();
 			case GLFW_KEY_A:
-				app->cam->move_west();
+			//	app->cam.move_west();
 			case GLFW_KEY_D:
-				app->cam->move_east();
+			//	app->cam.move_east();
 			case GLFW_KEY_W:
-				app->cam->move_north();
+			//	app->cam.move_north();
 			case GLFW_KEY_S:
-				app->cam->move_south();
+			//	app->cam.move_south();
 			case GLFW_KEY_C:
-				app->cam->roll_clockwise();
+			//	app->cam.roll_clockwise();
 			case GLFW_KEY_Z:
-				app->cam->roll_counterclockwise();
+			//	app->cam.roll_counterclockwise();
 		}
-		logger::log("GLFW: Key pressed");
-	}
+		// logger::log("GLFW: Key pressed");
+	} */
 
 }
 
@@ -81,6 +81,7 @@ int main(int /*_argc*/, char** /*_argv*/)
 	/* Create a windowed mode window and its OpenGL context */
 	window = glfwCreateWindow(width, height, "Engine Desktop", NULL, NULL);
 
+
 	if (!window)
 	{
 		glfwTerminate();
@@ -94,10 +95,11 @@ int main(int /*_argc*/, char** /*_argv*/)
 		logger::log("Could not init user app");
 	}
 
+
 	bgfx::glfwSetWindow(window);
+
 	bgfx::init();
 	noob::graphics::init(width, height);
-	
 	app->init();
 
 	glfwSetWindowCloseCallback(window, window_close_callback);

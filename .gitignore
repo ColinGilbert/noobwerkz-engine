@@ -20,4 +20,4 @@
 **/shaderc
 **/geometryc
 **/texturec
-sandbox/*.tga
+#sandbox/*.tga

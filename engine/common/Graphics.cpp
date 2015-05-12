@@ -113,15 +113,8 @@ bgfx::TextureHandle noob::graphics::load_texture(const std::string& friendly_nam
 		logger::log(ss.str());
 	}
 
-	uint16_t smallest_side = std::min(width, height);
-	uint8_t mips;
-
-	for (float tiny = smallest_side; tiny > 1.0; tiny /= 2.0)
-	{
-		mips++;
-	}
-
-	bgfx::TextureHandle tex = bgfx::createTexture2D(width, height, mips, bgfx::TextureFormat::Enum::RGBA8, BGFX_TEXTURE_NONE, bgfx::makeRef(tex_data, sizeof(uint8_t) * width * height * channels));
+	// TODO: Find out why mips break the rendering 
+	bgfx::TextureHandle tex = bgfx::createTexture2D(width, height, 0, bgfx::TextureFormat::Enum::RGBA8, BGFX_TEXTURE_NONE, bgfx::makeRef(tex_data, sizeof(uint8_t) * width * height * channels));
 
 	noob::graphics::global_textures.insert(std::make_pair(friendly_name, tex));
 

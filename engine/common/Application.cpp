@@ -10,7 +10,6 @@ noob::application::application()
 	timespec timeNow;
 	clock_gettime(CLOCK_MONOTONIC, &timeNow);
 	time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
-	cam = std::unique_ptr<noob::camera>(new noob::camera());
 	droid_font = std::unique_ptr<noob::font>(new noob::font());
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("."));
@@ -100,29 +99,6 @@ void noob::application::touch(int pointerID, float x, float y, int action)
 	else input_has_started = true;
 }
 
-
-void noob::application::update_cam(double delta)
-{
-	cam->update(delta);
-
-	static float cam_x = 0;
-	static float cam_y = 0;
-	static float cam_z = 0;
-
-	noob::vec3 cam_pos = cam->get_position();
-
-	if (cam_x != cam_pos.v[0] || cam_y != cam_pos.v[1] || cam_z != cam_pos.v[2])
-	{
-		cam_x = cam_pos.v[0];
-		cam_y = cam_pos.v[1];
-		cam_z = cam_pos.v[2];
-		std::stringstream ss;
-		ss << "cam_pos = " << cam_x << " " << cam_y << " " << cam_z;
-		logger::log(ss.str());
-	}
-
-}
-
 void noob::application::window_resize(int w, int h)
 {
 	width = static_cast<float>(w);
@@ -141,5 +117,4 @@ void noob::application::window_resize(int w, int h)
 
 	float ratio = width/height;
 
-	proj_matrix = noob::perspective(67.0f, ratio, 0.01f, 1000.0f);
 }

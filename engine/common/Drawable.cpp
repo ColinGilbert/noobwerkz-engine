@@ -34,7 +34,7 @@
 #include "Logger.hpp"
 #include "Drawable.hpp"
 
-noob::drawable::drawable() : mMeshFile(std::string("")), mScene(NULL)
+noob::drawable::drawable() : mesh_filename(std::string("")), scene(NULL)
 {
 	//   mBoundingBox.minExtents.set(0, 0, 0);
 	//   mBoundingBox.maxExtents.set(0, 0, 0);
@@ -45,25 +45,25 @@ noob::drawable::drawable() : mMeshFile(std::string("")), mScene(NULL)
 
 noob::drawable::~drawable()
 {
-	for ( int32_t m = 0; m < mMeshList.size(); ++m )
+	for ( int32_t m = 0; m < mesh_list.size(); ++m )
 	{
-		if ( mMeshList[m].mVertexBuffer.idx != bgfx::invalidHandle )
-			bgfx::destroyVertexBuffer(mMeshList[m].mVertexBuffer);
+		if ( mesh_list[m].mVertexBuffer.idx != bgfx::invalidHandle )
+			bgfx::destroyVertexBuffer(mesh_list[m].mVertexBuffer);
 
-		if ( mMeshList[m].mIndexBuffer.idx != bgfx::invalidHandle )
-			bgfx::destroyIndexBuffer(mMeshList[m].mIndexBuffer);
+		if ( mesh_list[m].mIndexBuffer.idx != bgfx::invalidHandle )
+			bgfx::destroyIndexBuffer(mesh_list[m].mIndexBuffer);
 	}
 
 	// Clean up.
-	if ( mScene )
-		aiReleaseImport(mScene);
+	if ( scene )
+		aiReleaseImport(scene);
 }
 
 //------------------------------------------------------------------------------
 
 void noob::drawable::set_mesh_file( const std::string& pMeshFile ) //;const char* pMeshFile )
 {
-	mMeshFile = pMeshFile;
+	mesh_filename = pMeshFile;
 }
 
 void noob::drawable::load_mesh()
@@ -79,26 +79,26 @@ void noob::drawable::import_mesh()
 	//uint64_t startTime = bx::getHPCounter();
 
 	// Use Assimp To Load Mesh
-	mScene = aiImportFile(mMeshFile.c_str(), aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_Triangulate | aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
-	if ( !mScene ) return;
+	scene = aiImportFile(mesh_filename.c_str(), aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_Triangulate | aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+	if ( !scene ) return;
 
 	//uint64_t endTime = bx::getHPCounter();
 	//Con::printf("ASSIMP IMPORT TOOK: %d microseconds. (1 microsecond = 0.001 milliseconds)", (uint32_t)((endTime - startTime) / hpFreq));
 
-	mIsAnimated = mScene->HasAnimations();
+	mIsAnimated = scene->HasAnimations();
 
 	{
 		std::stringstream ss;
-		ss << "Assimp Scene has " << mScene->mNumMeshes << " meshes";
+		ss << "Assimp Scene has " << scene->mNumMeshes << " meshes";
 		logger::log(ss.str());
 	}
 
-	for( uint32_t m = 0; m < mScene->mNumMeshes; ++m )
+	for( uint32_t m = 0; m < scene->mNumMeshes; ++m )
 	{
-		aiMesh* mMeshData = mScene->mMeshes[m];
+		aiMesh* mMeshData = scene->mMeshes[m];
 		submesh newsubmesh;
-		mMeshList.push_back(newsubmesh);
-		submesh* subMeshData = &mMeshList[mMeshList.size()-1];
+		mesh_list.push_back(newsubmesh);
+		submesh* subMeshData = &mesh_list[mesh_list.size()-1];
 
 		// Defaults
 		//    subMeshData->mBoundingBox.minExtents.set(0, 0, 0);
@@ -214,15 +214,15 @@ void noob::drawable::import_mesh()
 
 		// Store bone index by name, and store it's offset matrix.
 		uint32_t boneIndex = 0;
-		if ( mBoneMap.find(boneData->mName.C_Str()) == mBoneMap.end() )
+		if ( bone_map.find(boneData->mName.C_Str()) == bone_map.end() )
 		{
 		boneIndex = mBoneOffsets.size();
-		mBoneMap.insert(std::make_pair(boneData->mName.C_Str(), boneIndex));
+		bone_map.insert(std::make_pair(boneData->mName.C_Str(), boneIndex));
 		mBoneOffsets.push_back(noob::mat4(boneData->mOffsetMatrix));
 		}
 		else
 		{
-		boneIndex = mBoneMap[boneData->mName.C_Str()];
+		boneIndex = bone_map[boneData->mName.C_Str()];
 		mBoneOffsets[boneIndex] = noob::mat4(boneData->mOffsetMatrix);
 		}
 
@@ -287,9 +287,9 @@ void noob::drawable::process_mesh()
 	//uint64_t startTime = bx::getHPCounter();
 
 
-	for ( int32_t n = 0; n < mMeshList.size(); ++n)
+	for ( int32_t n = 0; n < mesh_list.size(); ++n)
 	{
-		submesh* subMeshData = &mMeshList[n];
+		submesh* subMeshData = &mesh_list[n];
 
 		{
 			std::stringstream ss;
@@ -327,7 +327,7 @@ void noob::drawable::process_mesh()
 	//Con::printf("PROCESS MESH TOOK: %d microseconds. (1 microsecond = 0.001 milliseconds)", (uint32_t)((endTime - startTime) / hpFreq));
 }
 
-void noob::drawable::draw(const noob::mat4& model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags = BGFX_STATE_DEFAULT,  uint64_t view_id = 0 )
+void noob::drawable::draw(const noob::mat4& model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags = BGFX_STATE_DEFAULT, uint64_t view_id = 0 )
 {
 	uint32_t num_meshes = get_mesh_count();
 
@@ -352,26 +352,26 @@ void noob::drawable::draw(const noob::mat4& model_mat, const bgfx::ProgramHandle
 // Returns the number of transformations loaded into transformsOut.
 uint32_t noob::drawable::get_animated_transforms(double TimeInSeconds, float* transformsOut)
 {
-if ( !mScene ) return 0;
+if ( !scene ) return 0;
 
 noob::mat4 Identity = noob::identity_mat4();
 
-aiMatrix4x4t<float> rootTransform = mScene->mRootNode->mTransformation;
+aiMatrix4x4t<float> rootTransform = scene->mRootNode->mTransformation;
 rootTransform.Inverse();
 noob::mat4 GlobalInverseTransform = rootTransform;
 
-double TicksPerSecond = mScene->mAnimations[0]->mTicksPerSecond != 0 ? mScene->mAnimations[0]->mTicksPerSecond : 25.0f;
+double TicksPerSecond = scene->mAnimations[0]->mTicksPerSecond != 0 ? scene->mAnimations[0]->mTicksPerSecond : 25.0f;
 double TimeInTicks = TimeInSeconds * TicksPerSecond;
-double AnimationTime = fmod(TimeInTicks, mScene->mAnimations[0]->mDuration);
+double AnimationTime = fmod(TimeInTicks, scene->mAnimations[0]->mDuration);
 
-return read_node_hierarchy(AnimationTime, mScene->mRootNode, Identity, GlobalInverseTransform, transformsOut);
+return read_node_hierarchy(AnimationTime, scene->mRootNode, Identity, GlobalInverseTransform, transformsOut);
 }
 
 uint32_t noob::drawable::read_node_hierarchy(double AnimationTime, const aiNode* pNode, noob::mat4 ParentTransform, noob::mat4 GlobalInverseTransform, float* transformsOut)
 { 
 uint32_t xfrmCount = 0;
 const char* nodeName = pNode->mName.data;
-const aiAnimation* pAnimation = mScene->mAnimations[0];
+const aiAnimation* pAnimation = scene->mAnimations[0];
 const aiNodeAnim* pNodeAnim = _findNodeAnim(pAnimation, nodeName);
 noob::mat4 NodeTransformation(pNode->mTransformation);
 
@@ -399,9 +399,9 @@ NodeTransformation = TranslationM * RotationM * ScalingM;
 
 noob::mat4 GlobalTransformation = ParentTransform * NodeTransformation;
 
-if ( mBoneMap.find(nodeName) != mBoneMap.end() ) 
+if ( bone_map.find(nodeName) != bone_map.end() ) 
 {
-uint32_t BoneIndex = mBoneMap[nodeName];
+uint32_t BoneIndex = bone_map[nodeName];
 xfrmCount = BoneIndex + 1;
 
 noob::mat4 boneTransform = GlobalInverseTransform * GlobalTransformation * mBoneOffsets[BoneIndex];

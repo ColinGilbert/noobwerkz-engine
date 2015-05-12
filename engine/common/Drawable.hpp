@@ -49,17 +49,18 @@ namespace noob
 
 			// Mesh Handling.
 			void set_mesh_file( const std::string& pMeshFile );
-			inline std::string get_mesh_file( void ) const { return mMeshFile; };
-			uint32_t get_mesh_count() { return mMeshList.size(); }
+			inline std::string get_mesh_file( void ) const { return mesh_filename; };
+			uint32_t get_mesh_count() { return mesh_list.size(); }
 			//Box3F getBoundingBox() { return mBoundingBox; }
 
 			// Animation Functions
 			uint32_t get_animated_transforms(double TimeInSeconds, float* transformsOut);
 
 			// Buffers
-			bgfx::VertexBufferHandle get_vertex_buffer(uint32_t idx) { return mMeshList[idx].mVertexBuffer; }
-			bgfx::IndexBufferHandle get_index_buffer(uint32_t idx) { return mMeshList[idx].mIndexBuffer; }
-			uint32_t get_material_index(uint32_t idx) { return mMeshList[idx].mMaterialIndex; }
+			bgfx::VertexBufferHandle get_vertex_buffer(uint32_t idx) { return mesh_list[idx].mVertexBuffer; }
+			bgfx::IndexBufferHandle get_index_buffer(uint32_t idx) { return mesh_list[idx].mIndexBuffer; }
+
+			uint32_t get_material_index(uint32_t idx) { return mesh_list[idx].mMaterialIndex; }
 
 			void load_mesh();
 
@@ -90,11 +91,11 @@ namespace noob
 			   uint32_t findPosition(double AnimationTime, const aiNodeAnim* pNodeAnim);
 			   */
 
-			std::map<const char* , uint32_t> mBoneMap;
-			std::vector<noob::mat4> mBoneOffsets;
-			std::vector<submesh> mMeshList;
-			std::string mMeshFile;
-			const aiScene* mScene;
+			std::map<const char* , uint32_t> bone_map;
+			std::vector<noob::mat4> bone_offsets;
+			std::vector<submesh> mesh_list;
+			std::string mesh_filename;
+			const aiScene* scene;
 			//Box3F mBoundingBox;
 			bool mIsAnimated;
 

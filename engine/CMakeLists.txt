@@ -37,7 +37,6 @@ list(APPEND common_src
 	common/Graphics.cpp
 	common/Logger.cpp
 	common/Application.cpp
-	common/Camera.cpp
 	common/SandboxApp.cpp
 	common/CommonIncludes.cpp
 	common/MathFuncs.cpp

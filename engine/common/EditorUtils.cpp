@@ -5,7 +5,7 @@
 #include "NoobUtils.hpp"
 #include "Graphics.hpp"
 
-// Returns true upon success, image is saved to "blended_texture.tga"
+// Returns true upon success, image is saved to "gradient_map.tga"
 bool noob::editor_utils::blend_channels()
 {
 	Magick::InitializeMagick(NULL);
@@ -16,11 +16,11 @@ bool noob::editor_utils::blend_channels()
 		Magick::Image r("r.tga");
 		Magick::Image g("g.tga");
 		Magick::Image b("b.tga");
-		Magick::Image a("a.tga");
+		// Magick::Image a("a.tga");
 
 		{
 			std::stringstream ss;
-			ss << "Texture blending: red channel rows = " << r.rows() << " columns = " << r.columns() << ", green channel rows = " << g.rows() << " columns = " << g.columns() << ", blue channel rows = " << b.rows() << " columns = " << b.columns() << ", alpha channel rows = " << a.rows() << " columns = " << a.columns();
+			ss << "Texture blending: red channel rows = " << r.rows() << " columns = " << r.columns() << ", blue channel rows = " << b.rows() << " columns = " << b.columns() << ", green channel rows = " << g.rows() << " columns = " << g.columns(); // << ", alpha channel rows = " << a.rows() << " columns = " << a.columns();
 			logger::log(ss.str());
 		}
 
@@ -38,7 +38,7 @@ bool noob::editor_utils::blend_channels()
 			images.push_back(r);
 			images.push_back(g);
 			images.push_back(b);
-			images.push_back(a);
+			//images.push_back(a);
 
 			for (Magick::Image i : images)
 			{
@@ -48,9 +48,10 @@ bool noob::editor_utils::blend_channels()
 			}
 
 			
-			Magick::Color c(static_cast<uint8_t>(256),static_cast<uint8_t>(256),static_cast<uint8_t>(256),static_cast<uint8_t>(256));
+			Magick::Color c(static_cast<uint8_t>(255),static_cast<uint8_t>(255),static_cast<uint8_t>(255),static_cast<uint8_t>(255));
 			Magick::Geometry geom(output_cols, output_rows);
 			Magick::Image output_image(geom, c);
+			output_image.matte(true);
 			for (unsigned int x = 0; x < output_cols; ++x)
 			{
 				for (unsigned int y =0; y < output_rows; ++y)
@@ -58,22 +59,24 @@ bool noob::editor_utils::blend_channels()
 					Magick::ColorGray red_channel = r.pixelColor(x, y);
 					Magick::ColorGray green_channel = g.pixelColor(x, y);
 					Magick::ColorGray blue_channel = b.pixelColor(x, y);
-					Magick::ColorGray alpha_channel = a.pixelColor(x, y);
+					//Magick::ColorGray alpha_channel = a.pixelColor(x, y);
 
 					double red_channel_value = red_channel.shade();
 					double green_channel_value = green_channel.shade();
 					double blue_channel_value = blue_channel.shade(); 
-					double alpha_channel_value = alpha_channel.shade();
+					//double alpha_channel_value = alpha_channel.shade();
 
 					Magick::ColorRGB output_colour;
 					output_colour.red(red_channel_value);
 					output_colour.green(green_channel_value);
 					output_colour.blue(blue_channel_value);
-					output_colour.alpha(alpha_channel_value);
+					output_colour.alpha(0.0);
+					
+					// Write out pixel
 					output_image.pixelColor(x, y, output_colour);
 				}
 			}
-			output_image.write("blended_textures.tga");
+			output_image.write("gradient_map.tga");
 
 			return true;
 

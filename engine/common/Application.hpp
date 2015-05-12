@@ -42,7 +42,6 @@
 #include "Logger.hpp"
 #include "Untracked.hpp"
 #include "MathFuncs.hpp"
-#include "Camera.hpp"
 #include "Graphics.hpp"
 #include "Drawable.hpp"
 
@@ -60,9 +59,6 @@ namespace noob
 			uint32_t get_height() const { return static_cast<uint32_t>(height); }
 			uint32_t get_width() const { return static_cast<uint32_t>(width); }
 
-			// This may soon be changed/removed from API
-			const std::unique_ptr<noob::camera> cam;
-		
 			// These three functions are played with by user (aka: programmer)
 			void init();
 			void update(double delta);
@@ -79,14 +75,11 @@ namespace noob
 			void window_resize(int w, int h);
 
 		protected:
-			void update_cam(double delta);
-
 			static application* app_pointer;
 			std::unique_ptr<std::string> prefix;
 			bool paused, input_has_started;
 			uint64_t time;
 			float width, height;
-			noob::mat4 proj_matrix;
 			std::vector<noob::vec2> finger_positions;
 			std::unique_ptr<noob::font> droid_font;
 			std::unique_ptr<noob::drawable> sphere;
