@@ -320,9 +320,9 @@ class PropertyManager {
          * @param end End iterator. (Exclusive.)
          * @param value The value the range will be set to.
          */
-        template<typename HandleTypeIterator>
+        template<typename HandleTypeIterator, typename PROP_VALUE>
         void set_range(HandleTypeIterator begin, HandleTypeIterator end,
-                typename PROPTYPE::const_reference value) {
+                const PROP_VALUE &value) {
             for (; begin != end; ++begin)
                 (*this)[*begin] = value;
         }
