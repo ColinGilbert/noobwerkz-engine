@@ -6,7 +6,7 @@
 
 <!-- --------------------------------------------------------------------- -->
 
-<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1255)</td><td>
+<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1265)</td><td>
 
 <b>LICENSE</b>
 <ul>
@@ -27,14 +27,24 @@
 
 <b>IO</b>
 <ul>
+<li>Readers/Writers: extend "can_read/can_write" function. returns true, if no explicit filename is given, but just the extension. closes #2431 </li>
 <li>Writers: Avoid std::endl in various writers to avoid flushing the output stream on every line. (Thanks to Roman Zoller for the hint).</li>
 <li>OBJReader: fix reading mtl files with texture only for obj files</li>
-<li>OBJReader: fix crash, if obj file contains degenerated faces
+<li>OBJReader: fix crash, if obj file contains degenerated faces</li>
 </ul>
+
+<b>Utils</b>
+<ul>
+<li>Fixing PropertyManager so that it cooperates with bool properties even on unforgiving implementations (such as clang).</li>
+</ul>
+
 
 <b>Tools</b>
 <ul>
 <li>Don't use auto_ptr when compiler supports C++11. Replaced by unique_ptr.</li>
+<li>Fix for Smoother set_relative error (Thanks to Leonardo Cecchinato for the fix) </li>
+<li>Improved SmootherT.hh Documentation</li>
+<li>Fixed old OM3 port warning in smoother</li>
 </ul>
 
 <b>General</b>
@@ -55,6 +65,8 @@
 <ul>
 <li>fixed a bug in the unit test test_add_face.py</li>
 <li>Added tests for tutorials about flip and collapse</li>
+<li>Added basic smoother compile test</li>
+<li>Added unit test for bool PropertyManager::set_range.</li>
 </ul>
 
 <b>Build System</b>
