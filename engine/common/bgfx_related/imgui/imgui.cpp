@@ -23,16 +23,19 @@
 //
 // Source altered and distributed from https://github.com/AdrienHerubel/imgui
 
+
+
 #include <stdio.h>
 #include <bx/string.h>
 #include <bx/uint32_t.h>
 #include <bx/fpumath.h>
 #include <bx/handlealloc.h>
 
-#include "../entry/dbg.h"
+#include "../stb_impl.h"
+
 #include "imgui.h"
 #include "ocornut_imgui.h"
-#include "../nanovg/nanovg.h"
+#include "nanovg/nanovg.h"
 
 // embedded shaders
 #include "vs_imgui_color.bin.h"

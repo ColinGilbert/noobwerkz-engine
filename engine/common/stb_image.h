@@ -6287,7 +6287,6 @@ STBIDEF int stbi_info_from_callbacks(stbi_io_callbacks const *c, void *user, int
    stbi__start_callbacks(&s, (stbi_io_callbacks *) c, user);
    return stbi__info_main(&s,x,y,comp);
 }
-
 #endif // STB_IMAGE_IMPLEMENTATION
 
 /*

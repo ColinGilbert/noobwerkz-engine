@@ -19,6 +19,9 @@ include_directories(common)
 include_directories(common/bgfx_related)
 include_directories(common/bgfx_related/font)
 include_directories(common/bgfx_related/shaderc)
+include_directories(common/bfgx_related/nanovg)
+include_directories(common/bgfx_related/imgui)
+include_directories(bgfx/3rdparty/ocornut-imgui)
 
 list(APPEND bgfx_src
 	bgfx/src/amalgamated.cpp
@@ -31,6 +34,11 @@ list(APPEND bgfx_utils_src
 	common/bgfx_related/font/text_metrics.cpp
 	common/bgfx_related/font/text_buffer_manager.cpp
 	common/bgfx_related/bounds.cpp
+	common/bgfx_related/nanovg/nanovg.cpp
+	common/bgfx_related/nanovg/nanovg_bgfx.cpp
+	common/bgfx_related/imgui/ocornut_imgui.cpp
+	common/bgfx_related/imgui/imgui.cpp
+	bgfx/3rdparty/ocornut-imgui/imgui.cpp
 	)
 
 list(APPEND common_src
@@ -51,7 +59,10 @@ list(APPEND common_src
 list(APPEND main_src platform/nix/EngineDesktop.cpp)
 
 add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ) 
-target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp GraphicsMagick++ GraphicsMagick X11 Xext z gomp png bz2 webp jpeg tiff jasper lcms2	xml2 z wmflite)
+target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES}
+	${OPENGL_LIBRARIES} freetype rt dl pthread assimp GraphicsMagick++
+	GraphicsMagick X11 Xext z gomp png bz2 webp jpeg tiff jasper lcms2
+	xml2 z wmflite m stdc++)
 
 project(LogServer)
 

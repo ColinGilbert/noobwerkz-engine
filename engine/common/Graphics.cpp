@@ -4,8 +4,8 @@
 #include "Graphics.hpp"
 #include "shaderc.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+//#define STB_IMAGE_IMPLEMENTATION
+#include "stb_impl.h"
 
 bgfx::VertexDecl noob::graphics::pos_norm_uv_bones_vertex::ms_decl;
 
