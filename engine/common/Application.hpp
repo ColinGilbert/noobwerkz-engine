@@ -38,7 +38,6 @@
 #include <assimp/scene.h>
 */
 
-#include "Font.hpp"
 #include "Logger.hpp"
 #include "Untracked.hpp"
 #include "MathFuncs.hpp"
@@ -81,7 +80,6 @@ namespace noob
 			uint64_t time;
 			float width, height;
 			std::vector<noob::vec2> finger_positions;
-			std::unique_ptr<noob::font> droid_font;
 			std::unique_ptr<noob::drawable> sphere;
 			NVGcontext* nvg;
 	};

@@ -2,8 +2,7 @@
 #include <vector>
 
 #include "EditorUtils.hpp"
-#include "NoobUtils.hpp"
-#include "Graphics.hpp"
+#include "Logger.hpp"
 
 // Returns true upon success, image is saved to "gradient_map.tga"
 bool noob::editor_utils::blend_channels()

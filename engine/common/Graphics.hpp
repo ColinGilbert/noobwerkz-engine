@@ -95,6 +95,12 @@ namespace noob
 		
 			// ---------------- Asset creators (make assets available from getters) ----------------
 			static bool add_sampler(const std::string&);
+			
+			// Args: Name, type, count (defaults to 1)
+			inline static bool add_uniform(const std::string& name, bgfx::UniformType::Enum type)
+				{
+					noob::graphics::add_uniform(name, type, 1);
+				}
 			static bool add_uniform(const std::string&, bgfx::UniformType::Enum, uint16_t);
 			static bool add_shader(const std::string&, const noob::graphics::shader&);
 			//static bool add_shader(const std::string&, const bgfx::ProgramHandle);
