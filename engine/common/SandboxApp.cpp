@@ -3,10 +3,13 @@
 
 void noob::application::init()
 {
-
+	
 	logger::log("");
+
 	// TODO: Move out of editor program
 	// noob::editor_utils::blend_channels();
+	
+	ui_enabled = true;
 
 	bgfx::ProgramHandle program_handle = noob::graphics::load_program("vs_current", "fs_current");
 
@@ -27,7 +30,7 @@ void noob::application::init()
 
 	noob::graphics::add_sampler("u_texture");
 
-	noob::graphics::add_uniform(std::string("colour_1"), bgfx::UniformType::Enum::Uniform4fv);// noob::graphics::uniform
+	noob::graphics::add_uniform(std::string("colour_1"), bgfx::UniformType::Enum::Uniform4fv);
 	noob::graphics::add_uniform(std::string("colour_2"), bgfx::UniformType::Enum::Uniform4fv);
 	noob::graphics::add_uniform(std::string("colour_3"), bgfx::UniformType::Enum::Uniform4fv);
 	noob::graphics::add_uniform(std::string("colour_4"), bgfx::UniformType::Enum::Uniform4fv);
@@ -57,8 +60,6 @@ void noob::application::init()
 	// droid_font->init(fontfile);
 
 	nvg = nvgCreate(1, 0);
-	// bgfx::setViewSeq(0, true);
-
 
 	logger::log("Done init");
 }
@@ -69,12 +70,15 @@ void noob::application::update(double delta)
 
 void noob::application::draw()
 {
-	bgfx::setViewSeq(0, true);
-	nvgBeginFrame(nvg, width, height, 1.0f);
-	
-	nvgEndFrame(nvg);
-	bgfx::setViewSeq(0, false);
-	
+	if (ui_enabled)
+	{
+		bgfx::setViewSeq(0, true);
+		nvgBeginFrame(nvg, width, height, 1.0f);
+
+		nvgEndFrame(nvg);
+		bgfx::setViewSeq(0, false);
+	}
+
 	noob::vec3 cam_up(0.0, 1.0, 0.0);
 	noob::vec3 cam_target(0.0, 0.0, 0.0);
 	noob::vec3 cam_pos(0.0, 0.0, 5.0);
@@ -87,14 +91,14 @@ void noob::application::draw()
 	// Compute modelview matrix
 	noob::mat4 model_mat(noob::identity_mat4());
 
-	noob::vec4 colour_1(0.4, 0.4, 0.4, 1.0);
-	noob::vec4 colour_2(1.0, 1.0, 1.0, 1.0);
-	noob::vec4 colour_3(0.2, 0.0, 0.1, 1.0);
-	noob::vec4 colour_4(1.0, 0.1, 0.1, 1.0);
+	noob::vec4 colour_1(0.0, 0.0, 0.0, 1.0);
+	noob::vec4 colour_2(0.3, 0.4, 0.6, 1.0);
+	noob::vec4 colour_3(0.4, 0.4, 0.1, 1.0);
+	noob::vec4 colour_4(0.0, 0.0, 0.0, 1.0);
 
-	noob::vec3 mapping_blend(0.2, 0.3, 1.0);
+	noob::vec3 mapping_blend(0.5, 0.3, 0.3);
 
-	noob::vec2 colour_positions(0.2, 0.5);
+	noob::vec2 colour_positions(0.2, 0.6);
 
 	bgfx::setUniform(noob::graphics::get_uniform("colour_1").handle, &colour_1.v[0]);
 	bgfx::setUniform(noob::graphics::get_uniform("colour_2").handle, &colour_2.v[0]);

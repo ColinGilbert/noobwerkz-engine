@@ -137,14 +137,14 @@ bool noob::graphics::add_sampler(const std::string& _name)
 	else return false;
 }
 
-bool noob::graphics::add_uniform(const std::string& _name, bgfx::UniformType::Enum _type, uint16_t _count = 1)
+bool noob::graphics::add_uniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t count)
 {
 	// If item doesn't exists
-	if (noob::graphics::uniforms.find(_name) == noob::graphics::uniforms.end())
+	if (noob::graphics::uniforms.find(name) == noob::graphics::uniforms.end())
 	{
 		noob::graphics::uniform uni;
-		uni.init(_name, _type, _count);
-		noob::graphics::uniforms.insert(std::make_pair(_name, uni));
+		uni.init(name, type, count);
+		noob::graphics::uniforms.insert(std::make_pair(name, uni));
 		return true;
 	}
 	else return false;

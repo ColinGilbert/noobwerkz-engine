@@ -80,7 +80,7 @@ namespace noob
 				std::vector<noob::graphics::uniform> uniforms;
 				std::vector<noob::graphics::sampler> samplers;	
 			};
-			
+
 			static void init(uint32_t width, uint32_t height);
 			static void frame(uint32_t width, uint32_t height);
 
@@ -92,28 +92,23 @@ namespace noob
 			// static bgfx::ProgramHandle compile_and_load_program(const std::string& vs_source_filename, const std::string& fs_source_filename, const std::string& varyings_filename);
 
 			static bgfx::TextureHandle load_texture(const std::string& friendly_name, const std::string& filename);
-		
+
 			// ---------------- Asset creators (make assets available from getters) ----------------
 			static bool add_sampler(const std::string&);
-			
-			// Args: Name, type, count (defaults to 1)
-			inline static bool add_uniform(const std::string& name, bgfx::UniformType::Enum type)
-				{
-					noob::graphics::add_uniform(name, type, 1);
-				}
-			static bool add_uniform(const std::string&, bgfx::UniformType::Enum, uint16_t);
+
+			static bool add_uniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t count = 1);
 			static bool add_shader(const std::string&, const noob::graphics::shader&);
 			//static bool add_shader(const std::string&, const bgfx::ProgramHandle);
 			//static bool add_shader(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::uniform>&);
 			//static bool add_shader(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::sampler>&);
 			//static bool add_shader(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::uniform>&, const std::vector<noob::graphics::sampler>&);
-			
+
 			// ---------------- Getters -----------------
 			static noob::graphics::shader get_shader(const std::string&);
 			static bgfx::TextureHandle get_texture(const std::string&);
 			static noob::graphics::uniform get_uniform(const std::string&);
 			static noob::graphics::sampler get_sampler(const std::string&);
-			
+
 			// ---------------- Checkers ----------------
 			static bool is_valid(const noob::graphics::uniform&);
 			static bool is_valid(const noob::graphics::sampler&);

@@ -43,8 +43,9 @@
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
 #include "Drawable.hpp"
-#include "nanovg/nanovg.h"
+
 #include <bgfx.h>
+#include "nanovg/nanovg.h"
 
 namespace noob
 {
@@ -76,7 +77,7 @@ namespace noob
 		protected:
 			static application* app_pointer;
 			std::unique_ptr<std::string> prefix;
-			bool paused, input_has_started;
+			bool paused, input_has_started, ui_enabled;
 			uint64_t time;
 			float width, height;
 			std::vector<noob::vec2> finger_positions;

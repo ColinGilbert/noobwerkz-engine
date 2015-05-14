@@ -7,9 +7,6 @@
 #define ONE_DEG_IN_RAD (2.0 * M_PI) / 360.0 // 0.017444444
 #define ONE_RAD_IN_DEG 360.0 / (2.0 * M_PI) //57.2957795
 
-//#include <assimp/Importer.hpp>
-//#include <assimp/cimport.h>
-
 namespace noob
 {
 
