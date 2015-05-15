@@ -9,12 +9,12 @@
 
 void noob::voxel_world::extract_region(int32_t lower_x, int32_t lower_y, int32_t lower_z, int32_t upper_x, int32_t upper_y, int32_t upper_z, const std::string& filename)
 {
-	PolyVox::Region world_region = world_a->getEnclosingRegion();
+	PolyVox::Region world_region = world->getEnclosingRegion();
 
 	PolyVox::Region bounding_box(lower_x, lower_y, lower_z, upper_x, upper_y, upper_z);
 	bounding_box.cropTo(world_region);
 
-	auto mesh = extractMarchingCubesMesh(&*world_a, bounding_box);
+	auto mesh = extractMarchingCubesMesh(&*world, bounding_box);
 	auto decoded_mesh = PolyVox::decodeMesh(mesh);
 
 	auto num_indices = decoded_mesh.getNoOfIndices();
@@ -45,7 +45,7 @@ void noob::voxel_world::extract_region(int32_t lower_x, int32_t lower_y, int32_t
 // ---------------- basic shapes --------------
 void noob::voxel_world::sphere(uint32_t radius, int32_t origin_x, int32_t origin_y, int32_t origin_z, noob::voxel_world::op_type op) 
 {
-	PolyVox::Region world_region = world_a->getEnclosingRegion();
+	PolyVox::Region world_region = world->getEnclosingRegion();
 
 
 	PolyVox::Region bounding_box(origin_x - radius, origin_y - radius, origin_z - radius, origin_x + radius, origin_y + radius, origin_z + radius);
@@ -72,10 +72,10 @@ void noob::voxel_world::sphere(uint32_t radius, int32_t origin_x, int32_t origin
 					switch (op)
 					{
 						case ADD:
-							world_a->setVoxel(x, y, z, 255);
+							world->setVoxel(x, y, z, 255);
 							break;
 						case SUB:
-							world_a->setVoxel(x, y, z, 0);
+							world->setVoxel(x, y, z, 0);
 							break;
 					}
 				}
@@ -86,7 +86,7 @@ void noob::voxel_world::sphere(uint32_t radius, int32_t origin_x, int32_t origin
 
 void noob::voxel_world::cube(int32_t lower_x, int32_t lower_y, int32_t lower_z, int32_t upper_x, int32_t upper_y, int32_t upper_z, noob::voxel_world::op_type op)
 {
-	PolyVox::Region world_region = world_a->getEnclosingRegion();
+	PolyVox::Region world_region = world->getEnclosingRegion();
 
 	PolyVox::Region bounding_box(lower_x, lower_y, lower_z, upper_x, upper_y, upper_z);
 	bounding_box.cropTo(world_region);
@@ -108,10 +108,10 @@ void noob::voxel_world::cube(int32_t lower_x, int32_t lower_y, int32_t lower_z, 
 				switch (op)
 				{
 					case ADD:
-						world_a->setVoxel(x, y, z, 255);
+						world->setVoxel(x, y, z, 255);
 						break;
 					case SUB:
-						world_a->setVoxel(x, y, z, 0);
+						world->setVoxel(x, y, z, 0);
 						break;
 				}
 			}
@@ -122,7 +122,7 @@ void noob::voxel_world::cube(int32_t lower_x, int32_t lower_y, int32_t lower_z, 
 // Cylinder is aligned up/down the y-axis (standing up)
 void noob::voxel_world::cylinder(uint32_t radius, uint32_t height, int32_t origin_x, int32_t origin_y, int32_t origin_z, noob::voxel_world::op_type op)
 {
-	PolyVox::Region world_region = world_a->getEnclosingRegion();
+	PolyVox::Region world_region = world->getEnclosingRegion();
 
 	int32_t safe_height;
 
@@ -160,10 +160,10 @@ void noob::voxel_world::cylinder(uint32_t radius, uint32_t height, int32_t origi
 					switch (op)
 					{
 						case ADD:
-							world_a->setVoxel(x, y, z, 255);
+							world->setVoxel(x, y, z, 255);
 							break;
 						case SUB:
-							world_a->setVoxel(x, y, z, 0);
+							world->setVoxel(x, y, z, 0);
 							break;
 					}
 				}
@@ -174,14 +174,15 @@ void noob::voxel_world::cylinder(uint32_t radius, uint32_t height, int32_t origi
 
 }
 
+/*
 //  ---------- management functions -----------
 // Mostly useful for when you've copied a smaller world into a larger one
 void noob::voxel_world::global_translate(int32_t x_direction, int32_t y_direction, int32_t z_direction)
 {
 	copy_a_to_b();
 
-	// We use world_a's region as world_b is of the same size
-	PolyVox::Region world_region = world_a->getEnclosingRegion();
+	// We use world's region as world_b is of the same size
+	PolyVox::Region world_region = world->getEnclosingRegion();
 
 	int32_t world_width = world_region.getWidthInVoxels();
 	int32_t world_height = world_region.getHeightInVoxels();
@@ -209,21 +210,21 @@ void noob::voxel_world::global_translate(int32_t x_direction, int32_t y_directio
 			{
 				if (new_region.containsPoint(x, y, z))
 				{
-					world_a->setVoxel(x, y, z, world_b->getVoxel(x - x_direction, y - y_direction, z - z_direction));
+					world->setVoxel(x, y, z, world_b->getVoxel(x - x_direction, y - y_direction, z - z_direction));
 				}
 				else
 				{
-					world_a->setVoxel(x, y, z, 0);
+					world->setVoxel(x, y, z, 0);
 				}
 			}
 		}
 	} 
 }
-
+*/
 void noob::voxel_world::init()
 {
-	world_a = std::unique_ptr<PolyVox::RawVolume<uint8_t>>(new PolyVox::RawVolume<uint8_t>(PolyVox::Region(0, 0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_DEPTH)));
-	world_b = std::unique_ptr<PolyVox::RawVolume<uint8_t>>(new PolyVox::RawVolume<uint8_t>(PolyVox::Region(0, 0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_DEPTH)));
+	world = std::unique_ptr<PolyVox::RawVolume<uint8_t>>(new PolyVox::RawVolume<uint8_t>(PolyVox::Region(0, 0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_DEPTH)));
+	// world_b = std::unique_ptr<PolyVox::RawVolume<uint8_t>>(new PolyVox::RawVolume<uint8_t>(PolyVox::Region(0, 0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_DEPTH)));
 }
 /*
    bool noob::voxel_world::load_world(const std::string& name) 
@@ -232,7 +233,7 @@ void noob::voxel_world::init()
 auto it = volumes->find(name);
 if (it != volumes.end())
 {
-main_world = it->second();	
+world = it->second();	
 return true;
 }
 
@@ -243,11 +244,11 @@ void noob::voxel_world::save(const std::string& name)
 {
 
 } */
-
+/*
 void noob::voxel_world::copy_a_to_b()	
 {
 	// Regions are the same size
-	PolyVox::Region region = world_a->getEnclosingRegion();
+	PolyVox::Region region = world->getEnclosingRegion();
 
 	int32_t lower_x = region.getLowerX();
 	int32_t lower_y = region.getLowerY();
@@ -263,10 +264,9 @@ void noob::voxel_world::copy_a_to_b()
 		{
 			for (int32_t z = lower_z; z < upper_z; ++z)
 			{
-				world_b->setVoxel(x, y, z, world_a->getVoxel(x, y, z));
+				world_b->setVoxel(x, y, z, world->getVoxel(x, y, z));
 			}
 		}
-
 	}
-
 }
+*/

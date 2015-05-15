@@ -36,8 +36,10 @@ namespace noob
 			void cylinder(uint32_t radius, uint32_t height, int32_t origin_x, int32_t origin_y, int32_t origin_z, noob::voxel_world::op_type op);
 
 			//  ---------- management functions -----------
+			//  TODO: Determine if needed
 			// Mostly useful for when you've copied a smaller world into a larger one
-			void global_translate(int32_t x_direction, int32_t y_direction, int32_t z_direction);
+			// void global_translate(int32_t x_direction, int32_t y_direction, int32_t z_direction);
+			
 			// bool copy_region(const std::array<int32_t,6>& region_from, const std::array<int32_t,6>& region_to);
 
 			uint64_t memory_consumption();
@@ -52,7 +54,7 @@ namespace noob
 			void copy_a_to_b();
 
 			// Currently-held world 
-			std::unique_ptr<PolyVox::RawVolume<uint8_t>> world_a;
-			std::unique_ptr<PolyVox::RawVolume<uint8_t>> world_b;
+			std::unique_ptr<PolyVox::RawVolume<uint8_t>> world;
+			// std::unique_ptr<PolyVox::RawVolume<uint8_t>> world_b;
 	};
 }

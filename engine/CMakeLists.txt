@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project(NoobWerkz)
 
-set(CMAKE_CXX_FLAGS "-std=c++11  -I/usr/local/include/GraphicsMagick ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++11  -I/usr/local/include/GraphicsMagick -DEIGEN_MPL2_ONLY ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-std=c99 ${CMAKE_C_FLAGS}")
 
 add_subdirectory(lib/glfw)
