@@ -26,6 +26,7 @@ include_directories(common/bgfx_related/shaderc)
 include_directories(common/bfgx_related/nanovg)
 include_directories(common/bgfx_related/imgui)
 
+
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 

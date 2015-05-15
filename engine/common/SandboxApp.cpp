@@ -1,11 +1,6 @@
 #include "EditorUtils.hpp"
 #include "Application.hpp"
 
-#include <gecode/driver.hh>
-
-#include <gecode/int.hh>
-#include <gecode/minimodel.hh>
-
 void noob::application::init()
 {
 	
@@ -52,9 +47,14 @@ void noob::application::init()
 
 	noob::graphics::add_shader("current", shad);
 
+	vox_world.init();
+	// Creates an oddly cubic sphere (because it has resolution 1...)
+	vox_world.sphere(1,1,1,1, noob::voxel_world::op_type::ADD);
+	vox_world.extract_region(0, 0, 0, 4, 4, 4, "models/test.off");
+
 	sphere = std::unique_ptr<noob::drawable>(new noob::drawable());
 
-	std::string meshFile = *prefix + "/models/sphere.off";
+	std::string meshFile = *prefix + "/models/test.off";
 
 	sphere->set_mesh_file(meshFile);
 	sphere->load_mesh();
