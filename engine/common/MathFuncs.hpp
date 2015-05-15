@@ -7,9 +7,14 @@
 #define ONE_DEG_IN_RAD (2.0 * M_PI) / 360.0 // 0.017444444
 #define ONE_RAD_IN_DEG 360.0 / (2.0 * M_PI) //57.2957795
 
+
+
 namespace noob
 {
-
+	template <typename T> int sign(T val)
+{
+    return (T(0) < val) - (val < T(0));
+}
 	struct vec2;
 	struct vec3;
 	struct vec4;

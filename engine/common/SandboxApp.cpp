@@ -1,6 +1,11 @@
 #include "EditorUtils.hpp"
 #include "Application.hpp"
 
+#include <gecode/driver.hh>
+
+#include <gecode/int.hh>
+#include <gecode/minimodel.hh>
+
 void noob::application::init()
 {
 	
