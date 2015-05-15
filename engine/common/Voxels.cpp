@@ -65,7 +65,7 @@ void noob::voxel_world::sphere(uint32_t radius, int32_t origin_x, int32_t origin
 		{
 			for (int32_t z = lower_z; z < upper_z; z++)
 			{
-				uint32_t distance_from_origin = std::sqrt(std::abs(origin_x - x) + std::abs(origin_y - y) + std::abs(origin_z - z));
+				uint32_t distance_from_origin = std::sqrt(std::pow(x - origin_x, 2) + std::pow(y - origin_y, 2) + std::pow(z - origin_z, 2));
 				
 				if (distance_from_origin < radius)
 				{
@@ -135,7 +135,7 @@ void noob::voxel_world::cylinder(uint32_t radius, uint32_t height, int32_t origi
 		safe_height = height;
 	}
 
-	PolyVox::Region bounding_box(origin_x - radius, origin_y - (safe_height / 2), origin_z - radius, origin_x + radius, origin_y + (safe_height / 2), origin_z + radius);
+	PolyVox::Region bounding_box(origin_x - radius, origin_y - (safe_height / 2) - 1, origin_z - radius, origin_x + radius, origin_y + (safe_height / 2) + 1, origin_z + radius);
 
 	bounding_box.cropTo(world_region);
 
@@ -153,9 +153,9 @@ void noob::voxel_world::cylinder(uint32_t radius, uint32_t height, int32_t origi
 		{
 			for (int32_t z = lower_z; z < upper_z; z++)
 			{
-				uint32_t distance_from_origin = std::sqrt(std::abs(origin_x - x) + std::abs(origin_z - z));
+				uint32_t distance_from_origin = std::sqrt(std::pow(x - origin_x, 2) + std::pow(z - origin_z, 2));
 				
-				if (distance_from_origin < radius)
+				if (distance_from_origin <= radius)
 				{
 					switch (op)
 					{
