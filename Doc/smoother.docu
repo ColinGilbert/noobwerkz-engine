@@ -15,10 +15,10 @@ The %OpenMesh library provides tools for smoothing Triangle- and Polymeshes
 The smoothers directly work on an OpenMesh. The following example shows how to use them:
 
 \code
-  #include <OpenMesh/Tools/Smoother/SmootherT.hh>
+  #include <OpenMesh/Tools/Smoother/JacobiLaplaceSmootherT.hh>
 
   // Initialize smoother with input mesh
-  OpenMesh::Smoother::SmootherT<MyMesh> smoother(mesh);
+  OpenMesh::Smoother::JacobiLaplaceSmootherT<MyMesh> smoother(mesh);
 
   smoother.initialize( C0,                      //Continuity
                        Tangential_and_Normal)   //Smooth direction
