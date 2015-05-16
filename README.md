@@ -24,7 +24,6 @@ dlib
 Voro++
 Asio
 Assimp (and a working mesh loader! =P)
-FasTC (to be integrated more deeply)
 csgjs-cpp
 libpd
 RtAudio
@@ -43,16 +42,13 @@ The current setup uses a platform-specific starter program to launch the main ap
 
 As for its future, I plan on continuing work on it quite vigorously. It should be able to port apps to the browser by mid-summer and can trivially be made to work headless. Currently there is a strong focus on making games.
 
-
-
-
 Things to do in the immediate future:
 ```
 Setup more hardware environments (Win, MacOS, iOS, Emscriptem, )
 Change the directory structure a little and rename a few files
 Adopt CMake's ExternalProject_Add in order to integrate third-party more easily
 GUI
-Serialization (Cereal)
+Serialization
 ```
 
 Stuff to choose and integrate:
