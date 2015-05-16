@@ -2,14 +2,16 @@ cmake_minimum_required(VERSION 3.0)
 
 project(NoobWerkz)
 
-set(CMAKE_CXX_FLAGS "-std=c++11  -I/usr/local/include/GraphicsMagick -DEIGEN_MPL2_ONLY ${CMAKE_CXX_FLAGS}")
-set(CMAKE_C_FLAGS "-std=c99  -DSTB_IMAGE_STATIC ${CMAKE_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++11 -I/usr/local/include/GraphicsMagick -DEIGEN_MPL2_ONLY ${CMAKE_CXX_FLAGS}")
+set(CMAKE_C_FLAGS "-std=c99 -DSTB_IMAGE_STATIC ${CMAKE_C_FLAGS}")
 
 add_subdirectory(lib/glfw)
 add_subdirectory(lib/freetype)
 add_subdirectory(lib/polyvox)
 add_subdirectory(lib/rbdl)
 add_subdirectory(lib/shapeop)
+add_subdirectory(lib/FasTC)
+add_subdirectory(lib/dlib/dlib)
 
 include_directories(lib/bx/include)
 include_directories(lib/bgfx/include)

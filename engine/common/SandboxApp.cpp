@@ -1,4 +1,5 @@
 #include <atomic>
+#include <array>
 #include "EditorUtils.hpp"
 #include "Application.hpp"
 
@@ -38,6 +39,8 @@ void noob::application::init()
 
 	noob::graphics::add_uniform(std::string("mapping_blend"), bgfx::UniformType::Enum::Uniform3fv);
 	noob::graphics::add_uniform(std::string("colour_positions"), bgfx::UniformType::Enum::Uniform2fv);
+
+	noob::graphics::add_uniform(std::string("scales"), bgfx::UniformType::Enum::Uniform3fv);
 
 	noob::graphics::shader shad;
 	shad.program = program_handle;
@@ -106,6 +109,9 @@ void noob::application::draw()
 
 	noob::vec2 colour_positions(0.2, 0.5);
 
+	noob::vec3 scales(0.7,0.4,0.5);
+
+
 	bgfx::setUniform(noob::graphics::get_uniform("colour_1").handle, &colour_1.v[0]);
 	bgfx::setUniform(noob::graphics::get_uniform("colour_2").handle, &colour_2.v[0]);
 	bgfx::setUniform(noob::graphics::get_uniform("colour_3").handle, &colour_3.v[0]);
@@ -114,6 +120,8 @@ void noob::application::draw()
 	bgfx::setUniform(noob::graphics::get_uniform("mapping_blend").handle, &mapping_blend.v[0]);
 
 	bgfx::setUniform(noob::graphics::get_uniform("colour_positions").handle, &colour_positions.v[0]);
+
+	bgfx::setUniform(noob::graphics::get_uniform("scales").handle, &scales.v[0]);
 
 	bgfx::setViewTransform(0, &view.m[0], &proj.m[0]);
 
