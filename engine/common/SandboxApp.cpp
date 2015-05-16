@@ -1,3 +1,4 @@
+#include <atomic>
 #include "EditorUtils.hpp"
 #include "Application.hpp"
 
@@ -40,35 +41,37 @@ void noob::application::init()
 
 	noob::graphics::shader shad;
 	shad.program = program_handle;
-
 	shad.samplers.push_back(noob::graphics::get_sampler("u_texture"));
 
 	noob::graphics::add_shader("current", shad);
-
-	vox_world.init();
-
-	vox_world.cylinder(20, 80, 100, 100, 100, noob::voxel_world::op_type::ADD);
-	vox_world.extract_region(0, 0, 0, 255, 255, 255, "models/test.off");
-
-	sphere = std::unique_ptr<noob::drawable>(new noob::drawable());
-
-	std::string meshFile = *prefix + "/models/test.off";
-
-	sphere->set_mesh_file(meshFile);
-	sphere->load_mesh();
-
-	noob::graphics::load_texture("grad_map", "gradient_map.tga");
+	noob::graphics::load_texture("grad_map", "gradient_map.dds");
 
 	std::string fontfile = *prefix + "/font/droidsans.ttf";
 	// droid_font->init(fontfile);
 
 	nvg = nvgCreate(1, 0);
 
+	vox_world.init();
+	vox_world.cylinder(20, 80, 100, 100, 100, noob::voxel_world::op_type::ADD);
+	vox_world.extract_region(0, 0, 0, 255, 255, 255, "models/test.off");
+	
+	sphere = std::unique_ptr<noob::drawable>(new noob::drawable());
+	std::string meshFile = *prefix + "/models/test.off";
+	sphere->set_mesh_file(meshFile);
+	sphere->load_mesh();
+
+
 	logger::log("Done init");
 }
 
 void noob::application::update(double delta)
 {
+	if (started == false)
+	{
+		
+
+	}
+	else started = true;
 }
 
 void noob::application::draw()

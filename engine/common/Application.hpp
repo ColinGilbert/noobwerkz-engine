@@ -44,6 +44,7 @@
 #include "Graphics.hpp"
 #include "Drawable.hpp"
 #include "Voxels.hpp"
+#include <atomic>
 
 #include <bgfx.h>
 #include "nanovg/nanovg.h"
@@ -79,6 +80,7 @@ namespace noob
 			static application* app_pointer;
 			std::unique_ptr<std::string> prefix;
 			bool paused, input_has_started, ui_enabled;
+			std::atomic<bool> started;
 			uint64_t time;
 			float width, height;
 			std::vector<noob::vec2> finger_positions;

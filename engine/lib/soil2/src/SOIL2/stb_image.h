@@ -506,6 +506,21 @@ STBIDEF int   stbi_zlib_decode_buffer(char *obuffer, int olen, const char *ibuff
 STBIDEF char *stbi_zlib_decode_noheader_malloc(const char *buffer, int len, int *outlen);
 STBIDEF int   stbi_zlib_decode_noheader_buffer(char *obuffer, int olen, const char *ibuffer, int ilen);
 
+#ifndef STBI_NO_DDS
+#include "stbi_DDS.h"
+#endif
+
+#ifndef STBI_NO_PVR
+#include "stbi_pvr.h"
+#endif
+
+#ifndef STBI_NO_PKM
+#include "stbi_pkm.h"
+#endif
+
+#ifndef STBI_NO_EXT
+#include "stbi_ext.h"
+#endif
 
 #ifdef __cplusplus
 }
@@ -646,6 +661,13 @@ typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];
 // this is just broken and gcc are jerks for not fixing it properly
 // http://www.virtualdub.org/blog/pivot/entry.php?id=363 )
 #define STBI_NO_SIMD
+#endif
+
+#if defined(__MINGW32__) && !defined(__x86_64__) && !defined(STBI_NO_SIMD)
+#define STBI_MINGW_ENABLE_SSE2
+#define STBI_FORCE_STACK_ALIGN __attribute__((force_align_arg_pointer))
+#else
+#define STBI_FORCE_STACK_ALIGN
 #endif
 
 #if defined(__MINGW32__) && defined(STBI__X86_TARGET) && !defined(STBI_MINGW_ENABLE_SSE2) && !defined(STBI_NO_SIMD)
@@ -869,6 +891,30 @@ static stbi_uc *stbi__pnm_load(stbi__context *s, int *x, int *y, int *comp, int 
 static int      stbi__pnm_info(stbi__context *s, int *x, int *y, int *comp);
 #endif
 
+#ifndef STBI_NO_PNM
+static int      stbi__pnm_test(stbi__context *s);
+static stbi_uc *stbi__pnm_load(stbi__context *s, int *x, int *y, int *comp, int req_comp);
+static int      stbi__pnm_info(stbi__context *s, int *x, int *y, int *comp);
+#endif
+
+#ifndef STBI_NO_DDS
+#include "stbi_DDS.h"
+static int      stbi__dds_test(stbi__context *s);
+static stbi_uc *stbi__dds_load(stbi__context *s, int *x, int *y, int *comp, int req_comp);
+#endif
+
+#ifndef STBI_NO_PVR
+#include "stbi_pvr.h"
+static int      stbi__pvr_test(stbi__context *s);
+static stbi_uc *stbi__pvr_load(stbi__context *s, int *x, int *y, int *comp, int req_comp);
+#endif
+
+#ifndef STBI_NO_PKM
+#include "stbi_pkm.h"
+static int      stbi__pkm_test(stbi__context *s);
+static stbi_uc *stbi__pkm_load(stbi__context *s, int *x, int *y, int *comp, int req_comp);
+#endif
+
 // this is not threadsafe
 static const char *stbi__g_failure_reason;
 
@@ -946,7 +992,15 @@ static unsigned char *stbi__load_main(stbi__context *s, int *x, int *y, int *com
    #ifndef STBI_NO_PNM
    if (stbi__pnm_test(s))  return stbi__pnm_load(s,x,y,comp,req_comp);
    #endif
-
+   #ifndef STBI_NO_DDS
+   if (stbi__dds_test(s))  return stbi__dds_load(s,x,y,comp,req_comp);
+   #endif
+   #ifndef STBI_NO_PVR
+   if (stbi__pvr_test(s))  return stbi__pvr_load(s,x,y,comp,req_comp);
+   #endif
+   #ifndef STBI_NO_PKM
+   if (stbi__pkm_test(s))  return stbi__pkm_load(s,x,y,comp,req_comp);
+   #endif
    #ifndef STBI_NO_HDR
    if (stbi__hdr_test(s)) {
       float *hdr = stbi__hdr_load(s, x,y,comp,req_comp);
@@ -3384,7 +3438,7 @@ static stbi_uc *load_jpeg_image(stbi__jpeg *z, int *out_x, int *out_y, int *comp
    }
 }
 
-static unsigned char *stbi__jpeg_load(stbi__context *s, int *x, int *y, int *comp, int req_comp)
+static unsigned char * STBI_FORCE_STACK_ALIGN stbi__jpeg_load(stbi__context *s, int *x, int *y, int *comp, int req_comp)
 {
    stbi__jpeg j;
    j.s = s;
@@ -5111,7 +5165,7 @@ static stbi_uc *stbi__psd_load(stbi__context *s, int *x, int *y, int *comp, int 
       return stbi__errpuc("bad compression", "PSD has an unknown compression format");
 
    // Create the destination image.
-   out = (stbi_uc *) stbi__malloc(4 * w*h);
+   out = (stbi_uc *) stbi__malloc(channelCount * w*h);
    if (!out) return stbi__errpuc("outofmem", "Out of memory");
    pixelCount = w*h;
 
@@ -5133,13 +5187,13 @@ static stbi_uc *stbi__psd_load(stbi__context *s, int *x, int *y, int *comp, int 
       stbi__skip(s, h * channelCount * 2 );
 
       // Read the RLE data by channel.
-      for (channel = 0; channel < 4; channel++) {
+      for (channel = 0; channel < channelCount; channel++) {
          stbi_uc *p;
 
          p = out+channel;
          if (channel >= channelCount) {
             // Fill this channel with default data.
-            for (i = 0; i < pixelCount; i++) *p = (channel == 3 ? 255 : 0), p += 4;
+            for (i = 0; i < pixelCount; i++) *p = (channel == 3 ? 255 : 0), p += channelCount;
          } else {
             // Read the RLE data.
             count = 0;
@@ -5153,7 +5207,7 @@ static stbi_uc *stbi__psd_load(stbi__context *s, int *x, int *y, int *comp, int 
                   count += len;
                   while (len) {
                      *p = stbi__get8(s);
-                     p += 4;
+                     p += channelCount;
                      len--;
                   }
                } else if (len > 128) {
@@ -5166,7 +5220,7 @@ static stbi_uc *stbi__psd_load(stbi__context *s, int *x, int *y, int *comp, int 
                   count += len;
                   while (len) {
                      *p = val;
-                     p += 4;
+                     p += channelCount;
                      len--;
                   }
                }
@@ -5179,23 +5233,23 @@ static stbi_uc *stbi__psd_load(stbi__context *s, int *x, int *y, int *comp, int 
       // where each channel consists of an 8-bit value for each pixel in the image.
 
       // Read the data by channel.
-      for (channel = 0; channel < 4; channel++) {
+      for (channel = 0; channel < channelCount; channel++) {
          stbi_uc *p;
 
          p = out + channel;
          if (channel > channelCount) {
             // Fill this channel with default data.
-            for (i = 0; i < pixelCount; i++) *p = channel == 3 ? 255 : 0, p += 4;
+            for (i = 0; i < pixelCount; i++) *p = channel == 3 ? 255 : 0, p += channelCount;
          } else {
             // Read the data.
             for (i = 0; i < pixelCount; i++)
-               *p = stbi__get8(s), p += 4;
+               *p = stbi__get8(s), p += channelCount;
          }
       }
    }
 
-   if (req_comp && req_comp != 4) {
-      out = stbi__convert_format(out, 4, req_comp, w, h);
+   if (req_comp && req_comp != channelCount) {
+      out = stbi__convert_format(out, channelCount, req_comp, w, h);
       if (out == NULL) return out; // stbi__convert_format frees input on failure
    }
 
@@ -6287,6 +6341,26 @@ STBIDEF int stbi_info_from_callbacks(stbi_io_callbacks const *c, void *user, int
    stbi__start_callbacks(&s, (stbi_io_callbacks *) c, user);
    return stbi__info_main(&s,x,y,comp);
 }
+
+// add in my DDS loading support
+#ifndef STBI_NO_DDS
+#include "stbi_DDS_c.h"
+#endif
+
+// add in my pvr loading support
+#ifndef STBI_NO_PVR
+#include "stbi_pvr_c.h"
+#endif
+
+// add in my pkm ( ETC1 ) loading support
+#ifndef STBI_NO_PKM
+#include "stbi_pkm_c.h"
+#endif
+
+#ifndef STBI_NO_EXT
+#include "stbi_ext_c.h"
+#endif
+
 #endif // STB_IMAGE_IMPLEMENTATION
 
 /*

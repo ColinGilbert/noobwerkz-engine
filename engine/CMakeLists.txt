@@ -3,11 +3,13 @@ cmake_minimum_required(VERSION 3.0)
 project(NoobWerkz)
 
 set(CMAKE_CXX_FLAGS "-std=c++11  -I/usr/local/include/GraphicsMagick -DEIGEN_MPL2_ONLY ${CMAKE_CXX_FLAGS}")
-set(CMAKE_C_FLAGS "-std=c99 ${CMAKE_C_FLAGS}")
+set(CMAKE_C_FLAGS "-std=c99  -DSTB_IMAGE_STATIC ${CMAKE_C_FLAGS}")
 
 add_subdirectory(lib/glfw)
 add_subdirectory(lib/freetype)
 add_subdirectory(lib/polyvox)
+add_subdirectory(lib/rbdl)
+add_subdirectory(lib/shapeop)
 
 include_directories(lib/bx/include)
 include_directories(lib/bgfx/include)
@@ -18,6 +20,9 @@ include_directories(lib/bgfx/3rdparty/ocornut-imgui)
 include_directories(lib/freetype/include)
 include_directories(lib/polyvox/include)
 include_directories(lib/lemon)
+include_directories(lib/noisepp/core)
+include_directories(lib/eigen/Eigen)
+include_directories(lib/soil2/src/SOIL2)
 
 include_directories(common)
 include_directories(common/bgfx_related)
@@ -29,6 +34,13 @@ include_directories(common/bgfx_related/imgui)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+list(APPEND soil2_src
+	lib/soil2/src/SOIL2/etc1_utils.c
+	lib/soil2/src/SOIL2/image_DXT.c
+	lib/soil2/src/SOIL2/image_helper.c
+	lib/soil2/src/SOIL2/SOIL2.c
+	)
 
 list(APPEND bgfx_src
 	lib/bgfx/src/amalgamated.cpp
@@ -63,7 +75,8 @@ list(APPEND common_src
 
 list(APPEND main_src platform/nix/EngineDesktop.cpp)
 
-add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src}) 
+add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src}
+	${bgfx_utils_src} ${soil2_src}) 
 
 target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES}
 	${OPENGL_LIBRARIES} freetype rt dl pthread assimp GraphicsMagick++

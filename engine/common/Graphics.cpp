@@ -1,11 +1,10 @@
 #include <algorithm>
 #include <bgfx.h>
 
+#include "SOIL2.h"
+
 #include "Graphics.hpp"
 #include "shaderc.h"
-
-//#define STB_IMAGE_IMPLEMENTATION
-#include "stb_impl.h"
 
 bgfx::VertexDecl noob::graphics::pos_norm_uv_bones_vertex::ms_decl;
 
@@ -105,7 +104,7 @@ bgfx::TextureHandle noob::graphics::load_texture(const std::string& friendly_nam
 	int width = 0;
 	int height = 0;
 	int channels = 0;
-	uint8_t* tex_data = stbi_load(filename.c_str(), &width, &height, &channels, 0); 
+	uint8_t* tex_data = SOIL_load_image(filename.c_str(), &width, &height, &channels, SOIL_LOAD_AUTO); 
 
 	{
 		std::stringstream ss;
@@ -113,8 +112,23 @@ bgfx::TextureHandle noob::graphics::load_texture(const std::string& friendly_nam
 		logger::log(ss.str());
 	}
 
-	// TODO: Find out why mips break the rendering 
-	bgfx::TextureHandle tex = bgfx::createTexture2D(width, height, 0, bgfx::TextureFormat::Enum::RGBA8, BGFX_TEXTURE_NONE, bgfx::makeRef(tex_data, sizeof(uint8_t) * width * height * channels));
+	// TODO: Find out why mips break the rendering
+	std::string texture_file = noob::utils::load_file_as_string(filename);
+	
+	{
+		std::stringstream ss;
+		ss << "Loaded texture size = " << texture_file.size();
+		logger::log(ss.str());
+	}
+	
+	bgfx::TextureInfo tex_info;
+	bgfx::TextureHandle tex = bgfx::createTexture(bgfx::copy(&texture_file[0], sizeof(char) * texture_file.size()), BGFX_TEXTURE_NONE, 0, &tex_info);
+
+	{
+		std::stringstream ss;
+		ss << "BGFX texture info: storage size = " << tex_info.storageSize << ", width = " << tex_info.width << ", height = " << tex_info.height << ", depth = " << tex_info.depth << ", mips = " << (int)tex_info.numMips << ", bpp = " << (int)tex_info.bitsPerPixel << ", cube map? " << tex_info.cubeMap;
+		logger::log(ss.str());
+	}
 
 	noob::graphics::global_textures.insert(std::make_pair(friendly_name, tex));
 

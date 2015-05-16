@@ -31,7 +31,7 @@
 #include <bx/fpumath.h>
 #include <bx/handlealloc.h>
 
-#include "../stb_impl.h"
+// #include "../stb_impl.h"
 
 #include "imgui.h"
 #include "ocornut_imgui.h"
