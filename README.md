@@ -6,13 +6,14 @@ This toolkit basically picks up existing libraries with liberal licenses and bri
 
 Specific features:
 ```
-A highly tunable gradient mapping shader by default. Comes with three tileable textures blended into one.
+A highly tunable gradient mapping shader by default. Comes with three XY-tileable ntextures blended into one.
+Triplanar shader for non-UV mapped coordinates.
 No obstacles between the programmer, the core libraries and the data.
 ```
 
 Currently brings in:
 ```
-Bgfx (along with a triplanar shader I ported to it, which is really nice)
+Bgfx
 Eigen 
 ShapeOp
 Noise++
@@ -25,6 +26,9 @@ Asio
 Assimp (and a working mesh loader! =P)
 FasTC (to be integrated more deeply)
 csgjs-cpp
+libpd
+RtAudio
+Cereal
 ```
 
 To clone:
@@ -37,18 +41,21 @@ Program structure:
 The current setup uses a platform-specific starter program to launch the main application. For desktop, www.glfw.org is used as it works unobtrusively. However, I'm up for writing more entrypoints if doing so proves desirable. The rest is graphics management code, much of it delegated to other libraries such as Assimp and the previously-mentioned bgfx. Some drawables are defined and neatly managed, and an editor is being built. However, these components can easily be compiled out; the project is focused on gettings things to work without obstruction and rapid extendability. Compile times are manageable after the first compile. I contend that the little network logger powered by Asio (https://think-async.com/) might be the most important aspect of this toolkit. :P
 ```
 
-As for its future, I plan on continuing work on it quite vigorously. It should be able to port apps to the browser by mid-summer and can trivially be made to work headless. Currently the focus is on making games.
+As for its future, I plan on continuing work on it quite vigorously. It should be able to port apps to the browser by mid-summer and can trivially be made to work headless. Currently there is a strong focus on making games.
 
 
 
 
 Things to do in the immediate future:
 ```
-Setup more hardware environments (Win, MacOS, iOS)
-Change the directory structure a little and rename a few files	
+Setup more hardware environments (Win, MacOS, iOS, Emscriptem, )
+Change the directory structure a little and rename a few files
+Adopt CMake's ExternalProject_Add in order to integrate third-party more easily
+GUI
+Serialization (Cereal)
 ```
 
-Stuff to find/integrate:
+Stuff to choose and integrate:
 ```
 Skeletal animation/IK code
 Constraint solvers - likely Gecode
