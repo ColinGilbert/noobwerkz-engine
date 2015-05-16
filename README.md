@@ -6,7 +6,7 @@ This toolkit basically picks up existing libraries with liberal licenses and bri
 
 Specific features:
 ```
-Using a triplanar shader along with a gradient map of several tileable textures.
+A highly tunable gradient mapping shader by default. Comes with three tileable textures blended into one.
 No obstacles between the programmer, the core libraries and the data.
 ```
 
@@ -25,7 +25,6 @@ Asio
 Assimp (and a working mesh loader! =P)
 FasTC (to be integrated more deeply)
 csgjs-cpp
-cppformat (currently converting all code to use it)
 ```
 
 To clone:

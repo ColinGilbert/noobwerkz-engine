@@ -1,5 +1,6 @@
-cmake_minimum_required(VERSION 3.0)
+include(ExternalProject)
 
+cmake_minimum_required(VERSION 3.0)
 project(NoobWerkz)
 
 set(CMAKE_CXX_FLAGS "-std=c++11 -I/usr/local/include/GraphicsMagick -DEIGEN_MPL2_ONLY ${CMAKE_CXX_FLAGS}")
@@ -11,7 +12,9 @@ add_subdirectory(lib/polyvox)
 add_subdirectory(lib/rbdl)
 add_subdirectory(lib/shapeop)
 #add_subdirectory(lib/FasTC)
+add_subdirectory(lib/libSquish)
 add_subdirectory(lib/dlib/dlib)
+#add_subdirectory(lib/cppformat)
 
 include_directories(lib/bx/include)
 include_directories(lib/bgfx/include)
@@ -32,10 +35,6 @@ include_directories(common/bgfx_related/font)
 include_directories(common/bgfx_related/shaderc)
 include_directories(common/bfgx_related/nanovg)
 include_directories(common/bgfx_related/imgui)
-
-
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 list(APPEND soil2_src
 	lib/soil2/src/SOIL2/etc1_utils.c
