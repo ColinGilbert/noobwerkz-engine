@@ -47,11 +47,11 @@ namespace noob
 
 		protected:
 			// Used to check if the world can receive data without condition checks
-			bool bounds_clean(const std::string& donor, const std::string& target);
+			// bool bounds_clean(const std::string& donor, const std::string& target);
 
-			std::map<std::string, std::shared_ptr<PolyVox::RawVolume<uint8_t>>> volumes;
+			// std::map<std::string, std::shared_ptr<PolyVox::RawVolume<uint8_t>>> volumes;
 	
-			void copy_a_to_b();
+			// void copy_a_to_b();
 
 			// Currently-held world 
 			std::unique_ptr<PolyVox::RawVolume<uint8_t>> world;

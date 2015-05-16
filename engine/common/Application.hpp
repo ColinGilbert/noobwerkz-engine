@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <iostream>
 #include <fstream>
+#include <atomic>
 
 /*
 #include <cereal/access.hpp>
@@ -44,7 +45,7 @@
 #include "Graphics.hpp"
 #include "Drawable.hpp"
 #include "Voxels.hpp"
-#include <atomic>
+
 
 #include <bgfx.h>
 #include "nanovg/nanovg.h"

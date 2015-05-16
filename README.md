@@ -1,42 +1,67 @@
-NOTICE: This project is still early-phase. Specifically, integration plan is still rather shaky and over half of the targeted build systems aren't yet in place. Starting a project now _might_ break code later and require refactoring on the end-user's part. However, if you keep your code within your own directory in sandbox directory, you should be able to avoid a merge conflict.
+NOTICE: This project is still early-phase. Specifically, integration plan is still rather shaky and over half of the targeted build systems aren't yet in place. Starting a project now _might_ break code later and require refactoring on the end-user's part. However, if you keep your code within your own directory in sandbox directory, you should be able to avoid a merge conflict. As a design goal, the legalese is designed to be extremely liberal (Apache 2.0) 
 
+I'm developing a cross-platform game/simulation/dataviz platform, with a focus on pretty front-ends while still trivially being made able to run headless. This toolkit is made specifically to reduce wasted time and to encourage code reuse in (what I hope) is an elegant-enough way. It consists mostly of (more or less) integrating external libraries, most of which are in C++11. It currently runs on Linux and Android. We can expect Windows, Mac, and iOS support within the month. I expect to spend a good portion of my waking life (and some of my dreams) in it, so expect active work.
 
-I'm developing a cross-platform game/simulation/data analysis engine with pretty front-ends. This toolkit is made specifically to reduce wasted time and to encourage code reuse in (what I hope) is an elegant way. It is written mostly in C++ and currently runs on Linux and Android. We can expect Windows, Mac, and iOS support within the month. I expect to spend a good portion of my waking life (and a some of my dreams) in it, so code quality is held at a high standard. This home has the lights on and is being fixed up and vacuumed.
+This toolkit basically picks up existing libraries with liberal licenses and brings them into one repo, with a few very basic tools on top. One big feature is bgfx cross-platform rendering. Most of the work I do on this project consists of searching for good, liberally-licensed libraries. I started developing in C, but then soon learned that if there's a good, fast library in existence to do anything useful, then the implementation is most often in C++. So, as not to waste time I started looking for the best libraries that open-source has to offer. These libraries then become a programmer's playground.
 
-The current focus is on enabling games and simulations. It's still quite young and stupid, but it will eventually contain lots of useful and fast-running C/C++ libraries bundled up in a usable way (especially with regards to games/simulations), with easy access to the underlying data. Due to the early nature of development, documentation is practically non-existent. However, the function names and variables hopefully make sense and should be free of typos, and I do often enough sometimes add explanations for wtf's. However, I try to keep those to a bare minimum. :)
+Specific features:
+```
+Using a triplanar shader along with a gradient map of several tileable textures.
+No obstacles between the programmer, the core libraries and the data.
+```
 
-It integrates the more-than-excellent https://github.com/bkaradzic/bgfx library to provide cross-platform graphics. Currently uses CMake (although Premake/Genie look better on many levels, and I'm up to write my own build system but only if its going to be worthwhile.)
+Currently brings in:
+```
+Bgfx (along with a triplanar shader I ported to it, which is really nice)
+Eigen 
+ShapeOp
+Noise++
+polyvox
+Lemon Graph Library
+rbdl
+dlib
+Voro++
+Asio
+Assimp (and a working mesh loader! =P)
+FasTC (to be integrated more deeply)
+csgjs-cpp
+cppformat (currently converting all code to use it)
+```
 
-As for its future, I plan on continuing work on it quite vigorously. It should be able to port multimedia to the browser by mid-summer and should easily enough be made to do stuff as a console app. Currently the focus is on integrating these cool things as a fast-running mobile environment with a more featureful (due to the difficulty of porting libs) desktop environment. The desktop currently focuses on Linux but I will be porting to Windows, Mac, and iOS soon enough. I am currently looking for a simple, fast, web server with a palatable license to integrate. I'll add a constraint solver and statistical functions probably by September. As a design goal, the legalese is intended to be extremely liberal.
-
+To clone:
+```
+git clone --recursive https://github.com/ColinGilbert/noobwerkz-engine.git
+```
 
 Program structure:
+```
+The current setup uses a platform-specific starter program to launch the main application. For desktop, www.glfw.org is used as it works unobtrusively. However, I'm up for writing more entrypoints if doing so proves desirable. The rest is graphics management code, much of it delegated to other libraries such as Assimp and the previously-mentioned bgfx. Some drawables are defined and neatly managed, and an editor is being built. However, these components can easily be compiled out; the project is focused on gettings things to work without obstruction and rapid extendability. Compile times are manageable after the first compile. I contend that the little network logger powered by Asio (https://think-async.com/) might be the most important aspect of this toolkit. :P
+```
 
-The current setup uses a platform-specific starter program to launch the main application. For desktop, www.glfw.org is used as its non-obtrusive and works nicely on my main environment, which happens to be Linux, but it should port to Mac and Windows nicely. However, I'm up for writing more entrypoints if doing so proves desirable. The rest is graphics management code, much of it delegated to other libraries such as Assimp, the previously-mentioned bgfx, and soon enough some other mesh libraries. THere is a bit of scoping/memory-management glue code, but its very light and focuses on gettings things to work without great obstruction and rapid extendability. Compile times on my system are fast, due to careful header management and (mostly) CMake caching goodness. The rest of the libraries are available within the usual namespaces and there is a network logger powered by Asio (https://think-async.com/) that I use constantly.
+As for its future, I plan on continuing work on it quite vigorously. It should be able to port apps to the browser by mid-summer and can trivially be made to work headless. Currently the focus is on making games.
+
 
 
 
 Things to do in the immediate future:
 ```
 Setup more hardware environments (Win, MacOS, iOS)
-Add:
-	PolyVox (http://www.volumesoffun.com/polyvox-about/)
-	Noise++
-	Mesh CSG
-
+Change the directory structure a little and rename a few files	
 ```
 
-Stuff to find/make:
+Stuff to find/integrate:
 ```
 Skeletal animation/IK code
-Statistics library
-Constraint solvers - (Gecode?)
-Graph library (Lemon?)
+Constraint solvers - likely Gecode
+Functional programming
+Test framework
 ```
 
 Long-term
 ```
-rbdl(?)
-
+Bro integration
+Database backends
+Application builds itself
+Scheme implementation
 
 ```

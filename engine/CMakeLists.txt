@@ -10,7 +10,7 @@ add_subdirectory(lib/freetype)
 add_subdirectory(lib/polyvox)
 add_subdirectory(lib/rbdl)
 add_subdirectory(lib/shapeop)
-add_subdirectory(lib/FasTC)
+#add_subdirectory(lib/FasTC)
 add_subdirectory(lib/dlib/dlib)
 
 include_directories(lib/bx/include)
