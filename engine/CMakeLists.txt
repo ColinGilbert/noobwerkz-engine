@@ -1,5 +1,3 @@
-include(ExternalProject)
-
 cmake_minimum_required(VERSION 3.0)
 project(NoobWerkz)
 
@@ -10,11 +8,11 @@ add_subdirectory(lib/glfw)
 add_subdirectory(lib/freetype)
 add_subdirectory(lib/polyvox)
 add_subdirectory(lib/rbdl)
-add_subdirectory(lib/shapeop)
-add_subdirectory(lib/libSquish)
+#add_subdirectory(lib/shapeop) TODO: Replace simplicial Cholesky (legal)
+#add_subdirectory(lib/FasTC)
+#add_subdirectory(lib/libSquish) TODO: Only upon need
 add_subdirectory(lib/dlib/dlib)
-#add_subdirectory(lib/cppformat)
-#add_subdirectory(lib/cereal)
+#add_subdirectory(lib/ampl-mp)
 
 include_directories(lib/bx/include)
 include_directories(lib/bgfx/include)
@@ -28,6 +26,7 @@ include_directories(lib/lemon)
 include_directories(lib/noisepp/core)
 include_directories(lib/eigen/Eigen)
 include_directories(lib/soil2/src/SOIL2)
+include_directories(lib/cppformat)
 
 include_directories(common)
 include_directories(common/bgfx_related)
@@ -35,6 +34,15 @@ include_directories(common/bgfx_related/font)
 include_directories(common/bgfx_related/shaderc)
 include_directories(common/bfgx_related/nanovg)
 include_directories(common/bgfx_related/imgui)
+
+
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+list(APPEND cppformat_src
+	lib/cppformat/format.cc
+	lib/cppformat/posix.cc
+	)
 
 list(APPEND soil2_src
 	lib/soil2/src/SOIL2/etc1_utils.c

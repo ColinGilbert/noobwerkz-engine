@@ -13,21 +13,20 @@ No obstacles between the programmer, the core libraries and the data.
 
 Currently brings in:
 ```
-Bgfx
-Eigen 
-ShapeOp
-Noise++
-polyvox
-Lemon Graph Library
-rbdl
-dlib
-Voro++
-Asio
-Assimp (and a working mesh loader! =P)
-csgjs-cpp
-libpd
-RtAudio
-Cereal
+Bgfx - Amazing cross-platform graphics solution!
+Eigen - Darn good math library
+Noise++ - Fastest 3D noise library in the world!
+polyvox - For 3D voxel worlds with mesh extraction
+rbdl - For efficient simulation of linked chains of bodies
+dlib - For its collection of machine learning algorithms
+Lemon Graph Library - One of the best graph library around!
+Voro++ - Fast and well-documented Voronoi-regions utility
+Asio for solid networking
+Assimp (and a working mesh loader, too! =P)
+csgjs-cpp for a neat little CSG library (for when voxels are too expensive)
+libpd and RtAudio for sound
+Cereal for serialization
+Castor for logical programming in C++
 ```
 
 To clone:
@@ -37,18 +36,18 @@ git clone --recursive https://github.com/ColinGilbert/noobwerkz-engine.git
 
 Program structure:
 ```
-The current setup uses a platform-specific starter program to launch the main application. For desktop, www.glfw.org is used as it works unobtrusively. However, I'm up for writing more entrypoints if doing so proves desirable. The rest is graphics management code, much of it delegated to other libraries such as Assimp and the previously-mentioned bgfx. Some drawables are defined and neatly managed, and an editor is being built. However, these components can easily be compiled out; the project is focused on gettings things to work without obstruction and rapid extendability. Compile times are manageable after the first compile. I contend that the little network logger powered by Asio (https://think-async.com/) might be the most important aspect of this toolkit. :P
+The current setup uses a platform-specific starter program to launch the main application. For desktop, www.glfw.org is used as it works unobtrusively. However, I'm up for writing more entrypoints if doing so proves desirable. Then, there is a plethora of math and scientific libraries (added as I discover and appraise them.)
+
+For the desktop, there is also graphics and UI code, much of it cheerfully delegated to other libraries such as the aforementioned bgfx, Assimp, and NanoVG. Drawables are minimal, and neatly managed. An editor being built, but most of its features are to also be run headless. This project is focused on gettings things to work without the obstruction caused by massive inheritance hierarchies, and to allow rapid extendability. Compile times are manageable after the first compile due to CMake caching goodness. I contend that the little network logger powered by Asio (https://think-async.com/) might be the most important aspect of this toolkit. :P
 ```
 
 As for its future, I plan on continuing work on it quite vigorously. It should be able to port apps to the browser by mid-summer and can trivially be made to work headless. Currently there is a strong focus on making games.
 
 Things to do in the immediate future:
 ```
-Setup more hardware environments (Win, MacOS, iOS, Emscriptem, )
+Setup more hardware environments (Win, MacOS, iOS, Emscripten, NaCL)
 Change the directory structure a little and rename a few files
-Adopt CMake's ExternalProject_Add in order to integrate third-party more easily
-GUI
-Serialization
+GUI and Serialization
 ```
 
 Stuff to choose and integrate:
@@ -63,7 +62,7 @@ Long-term
 ```
 Bro integration
 Database backends
+Remove dependency on GraphicsMagick for the editor
 Application builds itself
-Scheme implementation
-
+Scheme implementation built on top
 ```
