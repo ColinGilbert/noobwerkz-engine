@@ -49,11 +49,11 @@ Things to do in the immediate future:
 Setup more hardware environments (Win, MacOS, iOS, Emscripten, NaCL)
 Change the directory structure a little and rename a few files
 GUI and Serialization
+Skeletal animation
 ```
 
-Stuff to choose and integrate:
+Medium future
 ```
-Skeletal animation/IK code
 Constraint solvers - likely Gecode
 Functional programming
 Test framework
