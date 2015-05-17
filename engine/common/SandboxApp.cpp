@@ -1,5 +1,7 @@
 #include <atomic>
 #include <array>
+#include <ulmblas/ulmblas.h>
+
 #include "EditorUtils.hpp"
 #include "Application.hpp"
 
