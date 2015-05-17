@@ -6,12 +6,17 @@
 #define DEFAULT_HEIGHT 256
 #define DEFAULT_DEPTH 256
 
+void noob::voxel_world::init()
+{
+	world = std::unique_ptr<PolyVox::RawVolume<uint8_t>>(new PolyVox::RawVolume<uint8_t>(PolyVox::Region(0, 0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_DEPTH)));
+	// world_b = std::unique_ptr<PolyVox::RawVolume<uint8_t>>(new PolyVox::RawVolume<uint8_t>(PolyVox::Region(0, 0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_DEPTH)));
+}
 
-void noob::voxel_world::extract_region(int32_t lower_x, int32_t lower_y, int32_t lower_z, int32_t upper_x, int32_t upper_y, int32_t upper_z, const std::string& filename)
+void noob::voxel_world::extract_region(const noob::voxel_world::region& reg, const std::string& filename)
 {
 	PolyVox::Region world_region = world->getEnclosingRegion();
 
-	PolyVox::Region bounding_box(lower_x, lower_y, lower_z, upper_x, upper_y, upper_z);
+	PolyVox::Region bounding_box(reg.lower_x, reg.lower_y, reg.lower_z, reg.upper_x, reg.upper_y, reg.upper_z);
 	bounding_box.cropTo(world_region);
 
 	auto mesh = extractMarchingCubesMesh(&*world, bounding_box);
@@ -84,11 +89,11 @@ void noob::voxel_world::sphere(uint32_t radius, int32_t origin_x, int32_t origin
 	}
 }
 
-void noob::voxel_world::cube(int32_t lower_x, int32_t lower_y, int32_t lower_z, int32_t upper_x, int32_t upper_y, int32_t upper_z, noob::voxel_world::op_type op)
+void noob::voxel_world::cube(const noob::voxel_world::region& reg, noob::voxel_world::op_type op)
 {
 	PolyVox::Region world_region = world->getEnclosingRegion();
 
-	PolyVox::Region bounding_box(lower_x, lower_y, lower_z, upper_x, upper_y, upper_z);
+	PolyVox::Region bounding_box(reg.lower_x, reg.lower_y, reg.lower_z, reg.upper_x, reg.upper_y, reg.upper_z);
 	bounding_box.cropTo(world_region);
 
 	int32_t bb_lower_x = bounding_box.getLowerX();
@@ -174,6 +179,31 @@ void noob::voxel_world::cylinder(uint32_t radius, uint32_t height, int32_t origi
 
 }
 
+noob::voxel_world::region noob::voxel_world::get_acceptable_region(const noob::voxel_world::region& reg)
+{
+}
+			
+void noob::voxel_world::apply_op(int32_t x, int32_t y, int32_t z, noob::voxel_world::op_type op, uint8_t value)
+{
+}
+
+void noob::voxel_world::clear_world()
+{
+	PolyVox::Region r = world->getEnclosingRegion();
+	noob::voxel_world::region reg;
+	reg.lower_x = r.getLowerX();
+	reg.lower_y = r.getLowerY();
+	reg.lower_z = r.getLowerZ();
+	reg.upper_x = r.getUpperX();
+	reg.upper_y = r.getUpperY();
+	reg.upper_z = r.getUpperZ();
+
+	cube(reg, noob::voxel_world::SUB);
+}
+
+
+
+
 /*
 //  ---------- management functions -----------
 // Mostly useful for when you've copied a smaller world into a larger one
@@ -221,11 +251,7 @@ void noob::voxel_world::global_translate(int32_t x_direction, int32_t y_directio
 	} 
 }
 */
-void noob::voxel_world::init()
-{
-	world = std::unique_ptr<PolyVox::RawVolume<uint8_t>>(new PolyVox::RawVolume<uint8_t>(PolyVox::Region(0, 0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_DEPTH)));
-	// world_b = std::unique_ptr<PolyVox::RawVolume<uint8_t>>(new PolyVox::RawVolume<uint8_t>(PolyVox::Region(0, 0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_DEPTH)));
-}
+
 /*
    bool noob::voxel_world::load_world(const std::string& name) 
    {

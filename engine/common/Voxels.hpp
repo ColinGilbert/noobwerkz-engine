@@ -17,23 +17,39 @@
 
 namespace noob
 {
+	// TODO: Replace long function sigs with structs
 	class voxel_world
 	{
 		public:
+			enum op_type { ADD, SUB };
+			typedef struct
+			{
+				int32_t lower_x;
+				int32_t lower_y;
+				int32_t lower_z;
+				int32_t upper_x;
+				int32_t upper_y;
+				int32_t upper_z;
+			} region;
 			// bool set_world(const std::string& name);
 			void init();
 			// Note: Replaces old saves
 			// void save(const std::string& name);
 
 			// OFF format mesh
-			void extract_region(int32_t lower_x, int32_t lower_y, int32_t lower_z, int32_t upper_x, int32_t upper_y, int32_t upper_z, const std::string& filename);
+			void extract_region(const noob::voxel_world::region& reg, const std::string& filename);
 			// ---------------- basic shapes --------------
-			enum op_type { ADD, SUB };
+			
 
 			void sphere(uint32_t radius, int32_t origin_x, int32_t origin_y, int32_t origin_z, noob::voxel_world::op_type op);
-			void cube(int32_t lower_x, int32_t lower_y, int32_t lower_z, int32_t upper_x, int32_t upper_y, int32_t upper_z, noob::voxel_world::op_type op);
+			void cube(const noob::voxel_world::region& reg, noob::voxel_world::op_type op);
 			// Cylinder is aligned up/down the y-axis (standing up)
 			void cylinder(uint32_t radius, uint32_t height, int32_t origin_x, int32_t origin_y, int32_t origin_z, noob::voxel_world::op_type op);
+
+			noob::voxel_world::region get_acceptable_region(const noob::voxel_world::region& reg);
+			
+			void apply_op(int32_t x, int32_t y, int32_t z, noob::voxel_world::op_type op, uint8_t value);
+			void clear_world();
 
 			//  ---------- management functions -----------
 			//  TODO: Determine if needed

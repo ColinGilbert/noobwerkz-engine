@@ -56,7 +56,14 @@ void noob::application::init()
 
 	vox_world.init();
 	vox_world.cylinder(20, 80, 100, 100, 100, noob::voxel_world::op_type::ADD);
-	vox_world.extract_region(0, 0, 0, 255, 255, 255, "models/test.off");
+	noob::voxel_world::region reg;
+	reg.lower_x = 0;
+	reg.lower_y = 0;
+	reg.lower_z = 0;
+	reg.upper_x = 255;
+	reg.upper_y = 255;
+	reg.upper_z = 255;
+	vox_world.extract_region(reg, "models/test.off");
 	
 	sphere = std::unique_ptr<noob::drawable>(new noob::drawable());
 	std::string meshFile = *prefix + "/models/test.off";
