@@ -27,6 +27,7 @@ csgjs-cpp for a neat little CSG library (for when voxels are too expensive)
 libpd and RtAudio for sound
 Cereal for serialization
 Castor for logical programming in C++
+cppformat - Fastest formatting since printf() but far safer!
 ```
 
 To clone:
