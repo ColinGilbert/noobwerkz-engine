@@ -13,6 +13,7 @@ add_subdirectory(lib/rbdl)
 #add_subdirectory(lib/libSquish) TODO: Only upon need
 add_subdirectory(lib/dlib/dlib)
 #add_subdirectory(lib/armadillo)
+add_subdirectory(lib/openNL)
 
 include_directories(lib/bx/include)
 include_directories(lib/bgfx/include)
