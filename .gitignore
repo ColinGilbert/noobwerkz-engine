@@ -1,6 +1,7 @@
 **/build/*
+!engine/build
 .*.sw*
-**/.git
+#**/.git
 **.gitignore
 !.gitignore
 **/obj/*
