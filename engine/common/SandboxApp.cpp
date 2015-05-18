@@ -1,6 +1,5 @@
 #include <atomic>
 #include <array>
-#include <ulmblas/ulmblas.h>
 
 #include "EditorUtils.hpp"
 #include "Application.hpp"
@@ -112,14 +111,13 @@ void noob::application::draw()
 	noob::vec4 colour_1(0.0, 0.3, 0.3, 1.0);
 	noob::vec4 colour_2(0.0, 0.5, 0.5, 1.0);
 	noob::vec4 colour_3(0.3, 0.3, 0.3, 1.0);
-	noob::vec4 colour_4(1.0, 1.0, 1.0, 1.0);
+	noob::vec4 colour_4(0.2, 0.6, 0.4, 1.0);
 
-	noob::vec3 mapping_blend(0.0, 0.0, 1.0);
+	noob::vec3 mapping_blend(2.0, 1.0, 1.0);
 
 	noob::vec2 colour_positions(0.3, 0.6);
 
-	noob::vec3 scales(3,3,3);
-
+	noob::vec3 scales(4, 4, 4);
 
 	bgfx::setUniform(noob::graphics::get_uniform("colour_1").handle, &colour_1.v[0]);
 	bgfx::setUniform(noob::graphics::get_uniform("colour_2").handle, &colour_2.v[0]);

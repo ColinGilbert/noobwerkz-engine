@@ -9,7 +9,6 @@ add_subdirectory(lib/freetype)
 add_subdirectory(lib/polyvox)
 add_subdirectory(lib/rbdl)
 #add_subdirectory(lib/shapeop) TODO: Replace simplicial Cholesky (legal)
-#add_subdirectory(lib/FasTC)
 #add_subdirectory(lib/libSquish) TODO: Only upon need
 add_subdirectory(lib/dlib/dlib)
 #add_subdirectory(lib/armadillo)
@@ -31,7 +30,8 @@ include_directories(lib/noisepp/utils)
 include_directories(lib/eigen/Eigen)
 include_directories(lib/soil2/src/SOIL2)
 include_directories(lib/cppformat)
-include_directories(lib/ulmBLAS)
+# TODO: Fix/bypass Clang 3.5.11 error
+#include_directories(lib/ulmBLAS)
 include_directories(lib/cereal/include)
 
 include_directories(common)

@@ -26,10 +26,11 @@ void main()
 	normal_blend /= b;
 
 	// Test RGB-only. Uncomment for great wisdom!
-	// vec4 xaxis = vec4(1.0, 0.0, 0.0, 1.0); 
-	// vec4 yaxis = vec4(0.0, 1.0, 0.0, 1.0);
-	// vec4 zaxis = vec4(0.0, 0.0, 1.0, 1.0);
-
+/*
+	vec4 xaxis = vec4(1.0, 0.0, 0.0, 1.0); 
+	vec4 yaxis = vec4(0.0, 1.0, 0.0, 1.0);
+	vec4 zaxis = vec4(0.0, 0.0, 1.0, 1.0);
+*/
 	vec3 tex_rgb_x = vec3(texture2D(u_texture, position.yz * scales.x).rgb);
 	vec3 tex_rgb_y = vec3(texture2D(u_texture, position.xz * scales.y).rgb);
 	vec3 tex_rgb_z = vec3(texture2D(u_texture, position.xy * scales.z).rgb);
@@ -37,13 +38,11 @@ void main()
 	vec4 xaxis = vec4(tex_rgb_x, 1.0);
 	vec4 yaxis = vec4(tex_rgb_y, 1.0);
 	vec4 zaxis = vec4(tex_rgb_z, 1.0);
-
-
-
-	// vec4 xaxis = vec4(texture2D(u_texture, position.yz).rgb, 1.0);
-	// vec4 yaxis = vec4(texture2D(u_texture, position.xz).rgb, 1.0);
-	// vec4 zaxis = vec4(texture2D(u_texture, position.xy).rgb, 1.0);
-
+/*
+	vec4 xaxis = vec4(texture2D(u_texture, position.yz).rgb, 1.0);
+	vec4 yaxis = vec4(texture2D(u_texture, position.xz).rgb, 1.0);
+	vec4 zaxis = vec4(texture2D(u_texture, position.xy).rgb, 1.0);
+*/
 	vec4 tex = xaxis * normal_blend.x + yaxis * normal_blend.y + zaxis * normal_blend.z;
 
 	float tex_r = mapping_blend.x * tex.r;
@@ -51,7 +50,7 @@ void main()
 	float tex_g = mapping_blend.z * tex.b;
 
 	vec4 tex_weighted = vec4(tex_r, tex_g, tex_b, 1.0);
-	float tex_intensity = (tex_r + tex_g + tex_b) * 0.3333;
+	float tex_intensity = (tex_r + tex_g + tex_b) * 0.33333;
 
 	float ratio_1_to_2 = when_le(tex_intensity, colour_positions.x) * ((tex_intensity + colour_positions.x) * 0.5);
 	float ratio_2_to_3 = when_le(tex_intensity, colour_positions.y) * when_gt(tex_intensity, colour_positions.x) * ((tex_intensity + colour_positions.y) * 0.5);
