@@ -65,6 +65,7 @@
 #include <string>
 #include <stdio.h>
 #include <fstream>
+#include <vector>
 
 #include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/Utils/SingletonT.hh>
@@ -92,7 +93,8 @@ class BaseImporter;
 
 /**
     Implementation of the PLY format reader. This class is singleton'ed by
-    SingletonT to OFFReader.
+    SingletonT to OFFReader. It can read custom properties, accessible via the name
+    of the custom properties. List properties has the type std::vector<Type>.
 
 */
 
@@ -136,7 +138,8 @@ private:
   bool read_binary(std::istream& _in, BaseImporter& _bi, bool swap, const Options& _opt) const;
 
   float readToFloatValue(ValueType _type , std::fstream& _in) const;
-  void readCustomProperty(std::istream& _in, BaseImporter& _bi, VertexHandle _vh, const std::string& _propName, const ValueType _valueType) const;
+  template<typename Handle>
+  void readCustomProperty(std::istream& _in, BaseImporter& _bi, Handle _h, const std::string& _propName, const ValueType _valueType, const ValueType _listIndexType) const;
 
   void readValue(ValueType _type , std::istream& _in, float& _value) const;
   void readValue(ValueType _type, std::istream& _in, double& _value) const;
@@ -165,14 +168,11 @@ private:
   mutable ValueType vertexType_;
   mutable uint vertexDimension_;
 
-  mutable ValueType faceIndexType_;
-  mutable ValueType faceEntryType_;
-
-  enum VertexProperty {
+  enum Property {
     XCOORD,YCOORD,ZCOORD,
     TEXX,TEXY,
     COLORRED,COLORGREEN,COLORBLUE,COLORALPHA,
-    XNORM,YNORM,ZNORM, CUSTOM_PROP,
+    XNORM,YNORM,ZNORM, CUSTOM_PROP, VERTEX_INDICES,
     UNSUPPORTED
   };
 
@@ -180,17 +180,18 @@ private:
   mutable std::map<ValueType, int> scalar_size_;
 
   // Number of vertex properties
-  mutable unsigned int vertexPropertyCount_;
-  struct VertexPropertyInfo
+  struct PropertyInfo
   {
-    VertexProperty property;
+    Property       property;
     ValueType      value;
     std::string    name;//for custom properties
-    VertexPropertyInfo():property(UNSUPPORTED),value(Unsupported),name(""){}
-    VertexPropertyInfo(VertexProperty _p, ValueType _v):property(_p),value(_v),name(""){}
-    VertexPropertyInfo(VertexProperty _p, ValueType _v, const std::string& _n):property(_p),value(_v),name(_n){}
+    ValueType      listIndexType;//if type is unsupported, the poerty is not a list. otherwise, it the index type
+    PropertyInfo():property(UNSUPPORTED),value(Unsupported),name(""),listIndexType(Unsupported){}
+    PropertyInfo(Property _p, ValueType _v):property(_p),value(_v),name(""),listIndexType(Unsupported){}
+    PropertyInfo(Property _p, ValueType _v, const std::string& _n):property(_p),value(_v),name(_n),listIndexType(Unsupported){}
   };
-  mutable std::map< int , VertexPropertyInfo > vertexPropertyMap_;
+  mutable std::vector< PropertyInfo > vertexProperties_;
+  mutable std::vector< PropertyInfo > faceProperties_;
 
 };
 
