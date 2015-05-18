@@ -109,27 +109,24 @@ void noob::application::draw()
 	// Compute modelview matrix
 	noob::mat4 model_mat(noob::identity_mat4());
 
-	noob::vec4 colour_1(0.0, 0.0, 0.0, 1.0);
-	noob::vec4 colour_2(0.2, 0.2, 0.2, 1.0);
-	noob::vec4 colour_3(0.5, 0.5, 0.5, 1.0);
+	noob::vec4 colour_1(0.0, 0.3, 0.3, 1.0);
+	noob::vec4 colour_2(0.0, 0.5, 0.5, 1.0);
+	noob::vec4 colour_3(0.3, 0.3, 0.3, 1.0);
 	noob::vec4 colour_4(1.0, 1.0, 1.0, 1.0);
 
-	noob::vec3 mapping_blend(0.5, 0.3, 0.3);
+	noob::vec3 mapping_blend(0.0, 0.0, 1.0);
 
-	noob::vec2 colour_positions(0.2, 0.5);
+	noob::vec2 colour_positions(0.3, 0.6);
 
-	noob::vec3 scales(0.7,0.4,0.5);
+	noob::vec3 scales(3,3,3);
 
 
 	bgfx::setUniform(noob::graphics::get_uniform("colour_1").handle, &colour_1.v[0]);
 	bgfx::setUniform(noob::graphics::get_uniform("colour_2").handle, &colour_2.v[0]);
 	bgfx::setUniform(noob::graphics::get_uniform("colour_3").handle, &colour_3.v[0]);
 	bgfx::setUniform(noob::graphics::get_uniform("colour_4").handle, &colour_4.v[0]);
-	
 	bgfx::setUniform(noob::graphics::get_uniform("mapping_blend").handle, &mapping_blend.v[0]);
-
 	bgfx::setUniform(noob::graphics::get_uniform("colour_positions").handle, &colour_positions.v[0]);
-
 	bgfx::setUniform(noob::graphics::get_uniform("scales").handle, &scales.v[0]);
 
 	bgfx::setViewTransform(0, &view.m[0], &proj.m[0]);

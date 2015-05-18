@@ -22,15 +22,25 @@ namespace noob
 	{
 		public:
 			enum op_type { ADD, SUB };
-			typedef struct
+			struct region
 			{
+				region() {}
+				region(int32_t _lower_x, int32_t _lower_y, int32_t _lower_z, int32_t _upper_x, int32_t _upper_y, int32_t _upper_z)
+				{
+					lower_x = _lower_x;
+					lower_y = _lower_y;
+					lower_z = _lower_z;
+					upper_x = _upper_x;
+					upper_y = _upper_y;
+					upper_z = _upper_z;
+				}
 				int32_t lower_x;
 				int32_t lower_y;
 				int32_t lower_z;
 				int32_t upper_x;
 				int32_t upper_y;
 				int32_t upper_z;
-			} region;
+			};
 			// bool set_world(const std::string& name);
 			void init();
 			// Note: Replaces old saves
@@ -48,7 +58,7 @@ namespace noob
 
 			noob::voxel_world::region get_acceptable_region(const noob::voxel_world::region& reg);
 			
-			void apply_op(int32_t x, int32_t y, int32_t z, noob::voxel_world::op_type op, uint8_t value);
+			void apply_value(int32_t x, int32_t y, int32_t z, int8_t value);
 			void clear_world();
 
 			//  ---------- management functions -----------
@@ -65,12 +75,12 @@ namespace noob
 			// Used to check if the world can receive data without condition checks
 			// bool bounds_clean(const std::string& donor, const std::string& target);
 
-			// std::map<std::string, std::shared_ptr<PolyVox::RawVolume<uint8_t>>> volumes;
+			// std::map<std::string, std::shared_ptr<PolyVox::RawVolume<int8_t>>> volumes;
 	
 			// void copy_a_to_b();
 
 			// Currently-held world 
-			std::unique_ptr<PolyVox::RawVolume<uint8_t>> world;
-			// std::unique_ptr<PolyVox::RawVolume<uint8_t>> world_b;
+			std::unique_ptr<PolyVox::RawVolume<int8_t>> world;
+			// std::unique_ptr<PolyVox::RawVolume<int8_t>> world_b;
 	};
 }

@@ -8,8 +8,8 @@
 
 void noob::voxel_world::init()
 {
-	world = std::unique_ptr<PolyVox::RawVolume<uint8_t>>(new PolyVox::RawVolume<uint8_t>(PolyVox::Region(0, 0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_DEPTH)));
-	// world_b = std::unique_ptr<PolyVox::RawVolume<uint8_t>>(new PolyVox::RawVolume<uint8_t>(PolyVox::Region(0, 0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_DEPTH)));
+	world = std::unique_ptr<PolyVox::RawVolume<int8_t>>(new PolyVox::RawVolume<int8_t>(PolyVox::Region(0, 0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_DEPTH)));
+	// world_b = std::unique_ptr<PolyVox::RawVolume<int8_t>>(new PolyVox::RawVolume<int8_t>(PolyVox::Region(0, 0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_DEPTH)));
 }
 
 void noob::voxel_world::extract_region(const noob::voxel_world::region& reg, const std::string& filename)
@@ -181,10 +181,28 @@ void noob::voxel_world::cylinder(uint32_t radius, uint32_t height, int32_t origi
 
 noob::voxel_world::region noob::voxel_world::get_acceptable_region(const noob::voxel_world::region& reg)
 {
+
+	PolyVox::Region user_region(reg.lower_x, reg.lower_y, reg.lower_z, reg.upper_x, reg.upper_y, reg.upper_z);
+
+	user_region.cropTo(world->getEnclosingRegion());
+
+	noob::voxel_world::region acceptable_region;
+	acceptable_region.lower_x = user_region.getLowerX();
+	acceptable_region.lower_y = user_region.getLowerY();
+	acceptable_region.lower_z = user_region.getLowerZ();
+	acceptable_region.upper_x = user_region.getUpperX();
+	acceptable_region.upper_y = user_region.getUpperY();
+	acceptable_region.upper_z = user_region.getUpperZ();
+
+	return acceptable_region;
 }
-			
-void noob::voxel_world::apply_op(int32_t x, int32_t y, int32_t z, noob::voxel_world::op_type op, uint8_t value)
+	
+void noob::voxel_world::apply_value(int32_t x, int32_t y, int32_t z, int8_t value)
 {
+	if (world->getEnclosingRegion().containsPoint(x, y, z))
+	{
+		world->setVoxel(x, y, z, value);
+	}
 }
 
 void noob::voxel_world::clear_world()
@@ -255,7 +273,7 @@ void noob::voxel_world::global_translate(int32_t x_direction, int32_t y_directio
 /*
    bool noob::voxel_world::load_world(const std::string& name) 
    {
-// std::map<std::string, std::unique_ptr<PolyVox::RawVolume<uint8_t>>> volumes;
+// std::map<std::string, std::unique_ptr<PolyVox::RawVolume<int8_t>>> volumes;
 auto it = volumes->find(name);
 if (it != volumes.end())
 {

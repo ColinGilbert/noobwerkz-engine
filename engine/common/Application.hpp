@@ -25,7 +25,6 @@
 #include <fstream>
 #include <atomic>
 
-/*
 #include <cereal/access.hpp>
 #include <cereal/types/memory.hpp>
 #include <cereal/types/vector.hpp>
@@ -34,10 +33,6 @@
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/binary.hpp>
 
-#include <assimp/Importer.hpp>
-#include <assimp/postprocess.h>
-#include <assimp/scene.h>
-*/
 
 #include "Logger.hpp"
 #include "Untracked.hpp"
