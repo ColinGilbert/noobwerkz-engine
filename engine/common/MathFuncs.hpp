@@ -128,6 +128,13 @@ namespace noob
 	float direction_to_heading(vec3 d);
 	vec3 heading_to_direction(float degrees);
 
+	inline bool linearly_dependent(const noob::vec3& a, const noob::vec3& b, const noob::vec3& c)
+	{
+		// if (a cross b) dot c = 0
+		if (dot(cross(a, b), c) == 0.0) return true;
+		else return false;
+	}
+
 	// matrix functions
 	mat3 zero_mat3();
 	mat3 identity_mat3();

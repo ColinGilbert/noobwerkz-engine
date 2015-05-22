@@ -1,3 +1,5 @@
+// Modified from original. See license info below.
+
 //-----------------------------------------------------------------------------
 // Copyright (c) 2015 Andrew Mac
 //
@@ -20,7 +22,7 @@
 // IN THE SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#include <bgfx.h>
+
 #include <bx/fpumath.h>
 #include <bx/timer.h>
 
@@ -47,16 +49,34 @@ noob::drawable::~drawable()
 {
 	for ( int32_t m = 0; m < mesh_list.size(); ++m )
 	{
-		if ( mesh_list[m].mVertexBuffer.idx != bgfx::invalidHandle )
-			bgfx::destroyVertexBuffer(mesh_list[m].mVertexBuffer);
+		if ( mesh_list[m].vertex_buffer.idx != bgfx::invalidHandle )
+			bgfx::destroyVertexBuffer(mesh_list[m].vertex_buffer);
 
-		if ( mesh_list[m].mIndexBuffer.idx != bgfx::invalidHandle )
-			bgfx::destroyIndexBuffer(mesh_list[m].mIndexBuffer);
+		if ( mesh_list[m].index_buffer.idx != bgfx::invalidHandle )
+			bgfx::destroyIndexBuffer(mesh_list[m].index_buffer);
 	}
 
 	// Clean up.
 	if ( scene )
 		aiReleaseImport(scene);
+}
+
+noob::drawable::drawable(noob::mesh mesh)
+{
+	noob::graphics::mesh_vertex::init();
+	mesh_list.push_back(mesh);
+	process_mesh();
+}
+
+noob::drawable::drawable(std::vector<noob::mesh> mesh_vector)
+{
+	noob::graphics::mesh_vertex::init();
+	for (auto m : mesh_vector)
+	{
+		mesh_list.push_back(m);
+	}
+	process_mesh();
+
 }
 
 //------------------------------------------------------------------------------
@@ -68,7 +88,7 @@ void noob::drawable::set_mesh_file( const std::string& pMeshFile ) //;const char
 
 void noob::drawable::load_mesh()
 {
-	noob::graphics::pos_norm_uv_bones_vertex::init();
+	noob::graphics::mesh_vertex::init();
 	import_mesh();
 	process_mesh();
 }
@@ -96,16 +116,16 @@ void noob::drawable::import_mesh()
 	for( uint32_t m = 0; m < scene->mNumMeshes; ++m )
 	{
 		aiMesh* mMeshData = scene->mMeshes[m];
-		submesh newsubmesh;
-		mesh_list.push_back(newsubmesh);
-		submesh* subMeshData = &mesh_list[mesh_list.size()-1];
+		noob::mesh newest_mesh;
+		mesh_list.push_back(newest_mesh);
+		noob::mesh* subMeshData = &mesh_list[mesh_list.size()-1];
 
 		// Defaults
-		//    subMeshData->mBoundingBox.minExtents.set(0, 0, 0);
-		//    subMeshData->mBoundingBox.maxExtents.set(0, 0, 0);
-		subMeshData->mVertexBuffer.idx = bgfx::invalidHandle;
-		subMeshData->mIndexBuffer.idx = bgfx::invalidHandle;
-		subMeshData->mMaterialIndex = mMeshData->mMaterialIndex;
+		// subMeshData->mBoundingBox.minExtents.set(0, 0, 0);
+		// subMeshData->mBoundingBox.maxExtents.set(0, 0, 0);
+		subMeshData->vertex_buffer.idx = bgfx::invalidHandle;
+		subMeshData->index_buffer.idx = bgfx::invalidHandle;
+		subMeshData->material_index = mMeshData->mMaterialIndex;
 
 		{
 			std::stringstream ss;
@@ -126,13 +146,14 @@ void noob::drawable::import_mesh()
 		// Verts/UVs/Bones
 		for ( uint32_t n = 0; n < mMeshData->mNumVertices; ++n)
 		{
-			noob::graphics::pos_norm_uv_bones_vertex vert;
+			noob::graphics::mesh_vertex vert;
 
 			// Verts
 			aiVector3D pt = mMeshData->mVertices[n];
-			vert.m_x = pt.x;
-			vert.m_y = pt.y;
-			vert.m_z = pt.z;
+			vert.x_pos = pt.x;
+			vert.y_pos = pt.y;
+			vert.z_pos = pt.z;
+			
 			/*
 			// Bounding Box
 			if ( vert.m_x < subMeshData->mBoundingBox.minExtents.x )
@@ -153,11 +174,11 @@ void noob::drawable::import_mesh()
 
 			// UV
 
-			/*if ( mMeshData->HasTextureCoords(0) )
+			if ( mMeshData->HasTextureCoords(0) )
 			  {
-			  vert.m_u = mMeshData->mTextureCoords[0][n].x;
-			  vert.m_v = mMeshData->mTextureCoords[0][n].y;
-			  } */
+			  vert.u_coord = mMeshData->mTextureCoords[0][n].x;
+			  vert.v_coord = mMeshData->mTextureCoords[0][n].y;
+			  }
 
 			// Tangents & Bitangents
 			/*		if ( mMeshData->HasTangentsAndBitangents() )
@@ -182,16 +203,16 @@ void noob::drawable::import_mesh()
 			// Normals
 			if ( mMeshData->HasNormals() )
 			{
-				vert.m_normal_x = mMeshData->mNormals[n].x;
-				vert.m_normal_y = mMeshData->mNormals[n].y; 
-				vert.m_normal_z = mMeshData->mNormals[n].z; 
+				vert.normal_x = mMeshData->mNormals[n].x;
+				vert.normal_y = mMeshData->mNormals[n].y; 
+				vert.normal_z = mMeshData->mNormals[n].z; 
 			}
 			else 
 			{
 				// TODO: Better default than zero?
-				vert.m_normal_x = 0;
-				vert.m_normal_y = 0; 
-				vert.m_normal_z = 0; 
+				vert.normal_x = 0;
+				vert.normal_y = 0; 
+				vert.normal_z = 0; 
 			}
 			/*
 			// Default bone index/weight values.
@@ -204,8 +225,9 @@ void noob::drawable::import_mesh()
 			vert.m_boneweight[2] = 0.0f;
 			vert.m_boneweight[3] = 0.0f;
 			*/
-			subMeshData->mRawVerts.push_back(vert);
+			subMeshData->vertices.push_back(vert);
 		}
+
 		/*
 		// Process Bones/Nodes
 		for ( uint32_t n = 0; n < mMeshData->mNumBones; ++n )
@@ -229,8 +251,8 @@ void noob::drawable::import_mesh()
 		// Store the bone indices and weights in the vert data.
 		for ( uint32_t i = 0; i < boneData->mNumWeights; ++i )
 		{
-		if ( boneData->mWeights[i].mVertexId >= (uint32_t)subMeshData->mRawVerts.size() ) continue;
-		noob::graphics::pos_norm_uv_bones_vertex* vert = &subMeshData->mRawVerts[boneData->mWeights[i].mVertexId];
+		if ( boneData->mWeights[i].mVertexId >= (uint32_t)subMeshData->vertices.size() ) continue;
+		noob::graphics::mesh_vertex* vert = &subMeshData->vertices[boneData->mWeights[i].mVertexId];
 		for ( uint32_t j = 0; j < 4; ++j )
 		{
 		if ( vert->m_boneindex[j] == 0 && vert->m_boneweight[j] == 0.0f )
@@ -253,26 +275,31 @@ void noob::drawable::import_mesh()
 		}
 		}
 		*/
+
 		{
 			std::stringstream ss;
 			ss << "Mesh has " << mMeshData->mNumFaces << " faces";
 			logger::log(ss.str());
 		}
+
 		// Faces
 		for ( uint32_t n = 0; n < mMeshData->mNumFaces; ++n)
 		{
+			// Allows for degenerate triangles. Worth keeping?
 			const struct aiFace* face = &mMeshData->mFaces[n];
 			if ( face->mNumIndices == 2 )
 			{
-				subMeshData->mRawIndices.push_back(face->mIndices[0]);
-				subMeshData->mRawIndices.push_back(face->mIndices[1]);
+				subMeshData->indices.push_back(face->mIndices[0]);
+				subMeshData->indices.push_back(face->mIndices[1]);
 			}
+
 			else if ( face->mNumIndices == 3 )
 			{
-				subMeshData->mRawIndices.push_back(face->mIndices[0]);
-				subMeshData->mRawIndices.push_back(face->mIndices[1]);
-				subMeshData->mRawIndices.push_back(face->mIndices[2]);
+				subMeshData->indices.push_back(face->mIndices[0]);
+				subMeshData->indices.push_back(face->mIndices[1]);
+				subMeshData->indices.push_back(face->mIndices[2]);
 			}
+
 			else
 			{
 				logger::log("[ASSIMP] Non-Triangle Face Found.");
@@ -289,33 +316,33 @@ void noob::drawable::process_mesh()
 
 	for ( int32_t n = 0; n < mesh_list.size(); ++n)
 	{
-		submesh* subMeshData = &mesh_list[n];
+		noob::mesh* subMeshData = &mesh_list[n];
 
 		{
 			std::stringstream ss;
 
-			auto num_vertz = subMeshData->mRawVerts.size();
-			auto vertz_size = sizeof(noob::graphics::pos_norm_uv_bones_vertex);
+			auto num_vertz = subMeshData->vertices.size();
+			auto vertz_size = sizeof(noob::graphics::mesh_vertex);
 
-			auto num_indicez = subMeshData->mRawIndices.size();
+			auto num_indicez = subMeshData->indices.size();
 			auto indicez_size = sizeof(uint16_t);
 
 			auto vertz_data_size = num_vertz * vertz_size;
 			auto indicez_data_size = num_indicez * indicez_size;
 
-			ss << "Submesh " << n << ". Vertices: " << subMeshData->mRawVerts.size() << " sizeof(vertex) = " << sizeof(noob::graphics::pos_norm_uv_bones_vertex) << ", total data size = " << subMeshData->mRawVerts.size() * sizeof(noob::graphics::pos_norm_uv_bones_vertex) << ". Indices: " << subMeshData->mRawIndices.size() << " sizeof(indices) = " << sizeof(uint16_t) << ", total data size = " << subMeshData->mRawIndices.size() * sizeof(uint16_t);
+			ss << "Submesh " << n << ". Vertices: " << subMeshData->vertices.size() << " sizeof(vertex) = " << sizeof(noob::graphics::mesh_vertex) << ", total data size = " << subMeshData->vertices.size() * sizeof(noob::graphics::mesh_vertex) << ". Indices: " << subMeshData->indices.size() << " sizeof(indices) = " << sizeof(uint16_t) << ", total data size = " << subMeshData->indices.size() * sizeof(uint16_t);
 
 			logger::log(ss.str());
 		}
 
 		// Load the verts and indices into bgfx buffers
-		subMeshData->mVertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(&subMeshData->mRawVerts[0], subMeshData->mRawVerts.size() * sizeof(noob::graphics::pos_norm_uv_bones_vertex)), noob::graphics::pos_norm_uv_bones_vertex::ms_decl);
-		subMeshData->mIndexBuffer = bgfx::createIndexBuffer(bgfx::makeRef(&subMeshData->mRawIndices[0], subMeshData->mRawIndices.size() * sizeof(uint16_t) ));
+		subMeshData->vertex_buffer = bgfx::createVertexBuffer(bgfx::makeRef(&subMeshData->vertices[0], subMeshData->vertices.size() * sizeof(noob::graphics::mesh_vertex)), noob::graphics::mesh_vertex::ms_decl);
+		subMeshData->index_buffer = bgfx::createIndexBuffer(bgfx::makeRef(&subMeshData->indices[0], subMeshData->indices.size() * sizeof(uint16_t) ));
 
 
-		// subMeshData->mVertexBuffer = bgfx::createVertexBuffer(bgfx::copy(&subMeshData->mRawVerts[0], subMeshData->mRawVerts.size() * sizeof(noob::graphics::pos_norm_uv_bones_vertex)), noob::graphics::pos_norm_uv_bones_vertex::ms_decl);
+		// subMeshData->vertex_buffer = bgfx::createVertexBuffer(bgfx::copy(&subMeshData->vertices[0], subMeshData->vertices.size() * sizeof(noob::graphics::mesh_vertex)), noob::graphics::mesh_vertex::ms_decl);
 
-		//	subMeshData->mIndexBuffer = bgfx::createIndexBuffer(bgfx::copy(&subMeshData->mRawIndices[0], subMeshData->mRawIndices.size() * sizeof(uint16_t) ));
+		//	subMeshData->index_buffer = bgfx::createIndexBuffer(bgfx::copy(&subMeshData->indices[0], subMeshData->indices.size() * sizeof(uint16_t) ));
 
 
 
@@ -343,7 +370,6 @@ void noob::drawable::draw(const noob::mat4& model_mat, const bgfx::ProgramHandle
 		bgfx::setState(bgfx_state_flags);
 		bgfx::submit(view_id);
 	}
-
 }
 
 

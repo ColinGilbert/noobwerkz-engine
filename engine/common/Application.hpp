@@ -40,10 +40,9 @@
 #include "Graphics.hpp"
 #include "Drawable.hpp"
 #include "Voxels.hpp"
-
+#include "Font.hpp"
 
 #include <bgfx.h>
-#include "nanovg/nanovg.h"
 
 namespace noob
 {
@@ -54,8 +53,8 @@ namespace noob
 			virtual ~application();
 			static application& get();
 
-			uint32_t get_height() const { return static_cast<uint32_t>(height); }
-			uint32_t get_width() const { return static_cast<uint32_t>(width); }
+			uint32_t get_height() const { return static_cast<uint32_t>(window_height); }
+			uint32_t get_width() const { return static_cast<uint32_t>(window_width); }
 
 			// These three functions are played with by user (aka: programmer)
 			void init();
@@ -70,18 +69,18 @@ namespace noob
 			// Callbacks
 			void touch(int pointerID, float x, float y, int action);
 			void set_archive_dir(const std::string & filepath);
-			void window_resize(int w, int h);
+			void window_resize(uint32_t w, uint32_t h);
 
 		protected:
 			static application* app_pointer;
 			std::unique_ptr<std::string> prefix;
 			bool paused, input_has_started, ui_enabled;
 			std::atomic<bool> started;
+			std::unique_ptr<noob::font> droid_font;
 			uint64_t time;
-			float width, height;
+			uint32_t window_width, window_height;
 			std::vector<noob::vec2> finger_positions;
 			std::unique_ptr<noob::drawable> sphere;
-			NVGcontext* nvg;
 			noob::voxel_world vox_world;
 	};
 }

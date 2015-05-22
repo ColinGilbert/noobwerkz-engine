@@ -5,7 +5,9 @@
 #include <vector>
 
 #include <bgfx.h>
-#include "Shaders.hpp"
+
+// #include "Mesh.hpp"
+// #include "Shaders.hpp"
 #include "NoobUtils.hpp"
 
 namespace noob
@@ -13,24 +15,22 @@ namespace noob
 	class graphics
 	{
 		public:
-
-			// ---------------- Structs ------------------
-			struct pos_norm_uv_bones_vertex
+			struct mesh_vertex
 			{
-				float m_x;
-				float m_y;
-				float m_z;
+				float x_pos;
+				float y_pos;
+				float z_pos;
 				//float m_tangent_x;
 				//float m_tangent_y;
 				//float m_tangent_z;
 				//float m_bitangent_x;
 				//float m_bitangent_y;
 				//float m_bitangent_z;
-				float m_normal_x;
-				float m_normal_y;
-				float m_normal_z;
-				float m_u;
-				float m_v;
+				float normal_x;
+				float normal_y;
+				float normal_z;
+				float u_coord;
+				float v_coord;
 				//uint8_t m_boneindex[4];
 				//float m_boneweight[4];
 
@@ -133,6 +133,5 @@ namespace noob
 			static std::map<std::string, noob::graphics::shader> shaders;
 			static std::map<std::string, noob::graphics::uniform> uniforms;
 			static std::map<std::string, noob::graphics::sampler> samplers;
-
 	};
 }

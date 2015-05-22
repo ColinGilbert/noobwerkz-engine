@@ -1,9 +1,9 @@
 #pragma once
-
+#include <dirent.h>
 #include <fstream>
 #include <map>
-
 #include "Logger.hpp"
+
 
 namespace noob
 {
@@ -15,7 +15,9 @@ namespace noob
 			static void load_file_to_memory(const std::string& filename);
 			static const std::string& get_data(const std::string&);
 			static void set_data(const std::string&, const std::string&);
-			
+
+			std::vector<std::string> read_dir(const std::string&);
+
 			static std::map<std::string, std::string> data;
 
 			// These functions are still poentially useful, but unused.

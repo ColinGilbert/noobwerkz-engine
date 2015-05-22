@@ -158,17 +158,19 @@ void noob::voxel_world::cylinder(uint32_t radius, uint32_t height, int32_t origi
 		{
 			for (int32_t z = lower_z; z < upper_z; z++)
 			{
-				uint32_t distance_from_origin = std::sqrt(std::pow(x - origin_x, 2) + std::pow(z - origin_z, 2));
+				int32_t distance_from_origin = std::sqrt(std::pow(x - origin_x, 2) + std::pow(z - origin_z, 2));
 				
 				if (distance_from_origin <= radius)
 				{
+					uint8_t density = static_cast<uint8_t>(std::abs(distance_from_origin - radius));
 					switch (op)
 					{
 						case ADD:
-							world->setVoxel(x, y, z, 255);
+							world->setVoxel(x, y, z, density);
 							break;
 						case SUB:
-							world->setVoxel(x, y, z, 0);
+							int16_t current_voxel = static_cast<int16_t>(world->getVoxel(x, y, z));
+							world->setVoxel(x, y, z, static_cast<uint8_t>(std::max(current_voxel - static_cast<int16_t>(density), 0)));
 							break;
 					}
 				}

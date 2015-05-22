@@ -2,11 +2,10 @@
 #include <bgfx.h>
 
 #include "SOIL2.h"
-
 #include "Graphics.hpp"
-#include "shaderc.h"
+//#include "shaderc.h"
 
-bgfx::VertexDecl noob::graphics::pos_norm_uv_bones_vertex::ms_decl;
+bgfx::VertexDecl noob::graphics::mesh_vertex::ms_decl;
 
 std::map<std::string, bgfx::TextureHandle> noob::graphics::global_textures;
 std::map<std::string, noob::graphics::uniform> noob::graphics::uniforms;
@@ -20,7 +19,7 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	bgfx::reset(width, height, reset);
 
 	bgfx::setViewClear(0
-			, BGFX_CLEAR_COLOR|BGFX_CLEAR_DEPTH
+			, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH
 			, 0x703070ff
 			, 1.0f
 			, 0
@@ -104,7 +103,7 @@ bgfx::TextureHandle noob::graphics::load_texture(const std::string& friendly_nam
 	int width = 0;
 	int height = 0;
 	int channels = 0;
-	uint8_t* tex_data = SOIL_load_image(filename.c_str(), &width, &height, &channels, SOIL_LOAD_AUTO); 
+	uint8_t* tex_data = SOIL_load_image(filename.c_str(), &width, &height, &channels, SOIL_LOAD_AUTO);
 
 	{
 		std::stringstream ss;

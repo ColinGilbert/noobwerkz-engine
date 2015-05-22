@@ -19,7 +19,6 @@ BX_PRAGMA_DIAGNOSTIC_IGNORED_MSVC(4245) // error C4245: '=' : conversion from 'i
 #endif
 #undef interface
 
-#include <freetype/freetype.h>
 
 #if BX_COMPILER_MSVC || BX_COMPILER_GCC >= 40300
 #pragma pop_macro("interface")
@@ -33,7 +32,7 @@ BX_PRAGMA_DIAGNOSTIC_POP();
 #	include <edtaa3/edtaa3func.cpp>
 #else
 #	define SDF_IMPLEMENTATION
-#	include <sdf/sdf.h>
+#	include "../sdf/sdf.h"
 #endif // USE_EDTAA3
 
 #include <wchar.h> // wcslen

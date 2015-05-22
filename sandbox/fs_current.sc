@@ -50,6 +50,7 @@ void main()
 	float tex_g = mapping_blend.z * tex.b;
 
 	vec4 tex_weighted = vec4(tex_r, tex_g, tex_b, 1.0);
+	// float tex_intensity = tex_r * 0.33333 + tex_g * 0.33333 + tex_b * 0.33333;
 	float tex_intensity = (tex_r + tex_g + tex_b) * 0.33333;
 
 	float ratio_1_to_2 = when_le(tex_intensity, colour_positions.x) * ((tex_intensity + colour_positions.x) * 0.5);

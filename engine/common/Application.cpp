@@ -10,10 +10,9 @@ noob::application::application()
 	timespec timeNow;
 	clock_gettime(CLOCK_MONOTONIC, &timeNow);
 	time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
-	// droid_font = std::unique_ptr<noob::font>(new noob::font());
+	droid_font = std::unique_ptr<noob::font>(new noob::font());
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("."));
-	nvg = nullptr;
 }
 
 
@@ -100,22 +99,19 @@ void noob::application::touch(int pointerID, float x, float y, int action)
 	else input_has_started = true;
 }
 
-void noob::application::window_resize(int w, int h)
+void noob::application::window_resize(uint32_t w, uint32_t h)
 {
-	width = static_cast<float>(w);
-	height = static_cast<float>(h);
-
 	{
 		std::stringstream ss;
-		ss << "window_resize(" << width << ", " << height << ")";
+		ss << "window_resize(" << window_width << ", " << window_height << ")";
 		logger::log(ss.str());
 	}
 
-	if (height == 0) 
+	if (window_height == 0) 
 	{
-		height = 1;
+		window_height = 1;
 	}
 
-	float ratio = width/height;
+	float ratio = (float) window_width / (float) window_height;
 
 }
