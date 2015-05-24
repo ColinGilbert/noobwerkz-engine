@@ -49,11 +49,9 @@ endif()
 # Windows build style control
 # ========================================================================
 
-if ( WIN32 )
   if ( NOT DEFINED OPENMESH_BUILD_SHARED )
-    set( OPENMESH_BUILD_SHARED false CACHE BOOL "Build as shared library(DLL)?" )
+    set( OPENMESH_BUILD_SHARED true CACHE BOOL "Build as shared library(DLL)?" )
   endif()
-endif()
 
 # ========================================================================
 # Add bundle targets here

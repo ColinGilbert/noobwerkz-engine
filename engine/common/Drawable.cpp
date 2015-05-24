@@ -354,7 +354,7 @@ void noob::drawable::process_mesh()
 	//Con::printf("PROCESS MESH TOOK: %d microseconds. (1 microsecond = 0.001 milliseconds)", (uint32_t)((endTime - startTime) / hpFreq));
 }
 
-void noob::drawable::draw(const noob::mat4& model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags, uint64_t view_id)
+void noob::drawable::draw(uint8_t view_id, const noob::mat4& model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags)
 {
 	uint32_t num_meshes = get_mesh_count();
 

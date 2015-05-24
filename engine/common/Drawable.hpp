@@ -7,7 +7,7 @@
 #include <vector>
 #include <bgfx.h>
 
-#include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
+// #include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
 
 // TODO: Separate this class into Drawable and mesh loader
 
@@ -47,7 +47,7 @@ namespace noob
 
 			void load_mesh();
 
-			void draw(const noob::mat4& model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags = BGFX_STATE_DEFAULT, uint64_t view_id = 0);
+			void draw(uint8_t view_id, const noob::mat4& model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags = BGFX_STATE_DEFAULT);
 			std::vector<noob::mesh> mesh_list;
 	
 		protected:

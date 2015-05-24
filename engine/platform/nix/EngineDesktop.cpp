@@ -24,18 +24,21 @@ void window_close_callback(GLFWwindow* window)
 
 void window_size_callback(GLFWwindow* window, int w, int h)
 {
-	width = w;
-	height = h;
+//	width = w;
+//	height = h;
 	// set_renderer(width, height); // No difference from calling in framebuffer_size_callback()
-
+	// app->window_resize(width, height);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int w, int h)
 {
-	width = w;
-	height = h;
+	width = std::abs(w);
+	height = std::abs(h);
 	noob::graphics::init(width, height);
-	app->window_resize(static_cast<float>(w), static_cast<float>(h));
+	//std::stringstream ss;
+	//ss << "[glfw] framebuffer_size_callback " << width << ", " << height;
+	//logger::log(ss.str());
+	app->window_resize(width, height);
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)

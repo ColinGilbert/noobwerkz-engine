@@ -1,7 +1,8 @@
 #define CSGJS_HEADER_ONLY
 #include <csgjs.hpp>
-
 #include "Mesh.hpp"
+
+OpenMesh::TriMesh_ArrayKernelT<> half_edge_mesh;
 
 // TODO: Use the same struct and benefit from zero-copy awesomeness
 static noob::mesh noob::csg(const noob::mesh& a, const noob::mesh& b, const noob::csg_op op)

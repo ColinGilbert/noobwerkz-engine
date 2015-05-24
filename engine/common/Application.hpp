@@ -33,6 +33,8 @@
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/binary.hpp>
 
+#include "font_manager.h"
+#include "text_buffer_manager.h"
 
 #include "Logger.hpp"
 #include "Untracked.hpp"
@@ -40,7 +42,11 @@
 #include "Graphics.hpp"
 #include "Drawable.hpp"
 #include "Voxels.hpp"
-#include "Font.hpp"
+// #include "Font.hpp"
+
+#include "nanovg/nanovg.h"
+
+
 
 #include <bgfx.h>
 
@@ -76,11 +82,19 @@ namespace noob
 			std::unique_ptr<std::string> prefix;
 			bool paused, input_has_started, ui_enabled;
 			std::atomic<bool> started;
-			std::unique_ptr<noob::font> droid_font;
+			// std::unique_ptr<noob::font> droid_font;
 			uint64_t time;
 			uint32_t window_width, window_height;
 			std::vector<noob::vec2> finger_positions;
 			std::unique_ptr<noob::drawable> sphere;
 			noob::voxel_world vox_world;
+			
+			FontManager* fontManager; // = new FontManager(512);
+			TextBufferManager* textBufferManager; // = new TextBufferManager(fontManager);
+			TextBufferHandle transientText;
+			TrueTypeHandle ttf_handle;
+			FontHandle font_handle;
+
+			NVGcontext* nvg;
 	};
 }

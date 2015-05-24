@@ -1,0 +1,74 @@
+// Simple abstraction over freetype & bgfx, refactored from bgfx's examples
+
+// TODO: Make this use existing viewproj matrix.
+
+
+#include <map>
+#include <algorithm>
+
+#include <bgfx.h>
+#include "MathFuncs.hpp"
+//#include "Graphics.hpp"
+#include "Drawable.hpp"
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include FT_GLYPH_H
+
+namespace noob
+{
+	class font
+	{
+		public:
+			bool init(const std::string& font, int font_sz, float screen_w, float screen_h);
+			void resize_screen(float w, float h);
+			void draw_text(const std::string& text, float x, float y);
+
+			bgfx::TextureHandle get_texture_atlas() { return atlas_texhandle; }
+			bgfx::UniformHandle get_shader_uniform() { return colour_uniform; }
+			bgfx::ProgramHandle get_shader_program() { return shader_program; }
+			static noob::mat4 get_projection_matrix(float width, float height) { return noob::ortho(0, width, 0, height, -1, 1); }	
+
+		protected:
+			struct text_vertex
+			{
+				float x_pos;
+				float y_pos;
+				float u_coord;
+				float v_coord;
+				static void init()
+				{
+					ms_decl.begin()
+						.add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
+						.add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float)
+						.end();
+				}
+				static bgfx::VertexDecl ms_decl;
+			};
+					
+			struct glyph_handle
+			{
+				float ax; // advance.x
+				float ay; // advance.y
+				float bw; // bitmap.width;
+				float bh; // bitmap.rows;
+				float bl; // bitmap_left;
+				float bt; // bitmap_top;
+				float tx; // x offset of glyph in texture coordinates
+				float ty; // y offset of glyph in texture coordinates
+			};
+
+	void init_graphics();
+	bool pack_atlas(const std::string& characters);
+	bgfx::TextureHandle atlas_texhandle;
+	bgfx::UniformHandle colour_uniform;
+	bgfx::ProgramHandle shader_program;
+	noob::mat4 projection;
+	std::string filename; // Font file
+	float font_size, screen_width, screen_height;
+	uint16_t atlas_width, atlas_height;
+	std::map<char, glyph_handle> atlas;
+	FT_Library ft;
+	FT_Face face;
+
+	};
+}

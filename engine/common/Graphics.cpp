@@ -12,19 +12,18 @@ std::map<std::string, noob::graphics::uniform> noob::graphics::uniforms;
 std::map<std::string, noob::graphics::sampler> noob::graphics::samplers;
 std::map<std::string, noob::graphics::shader> noob::graphics::shaders;
 
+
 void noob::graphics::init(uint32_t width, uint32_t height)
 {
 	uint32_t reset = BGFX_RESET_VSYNC;
 
 	bgfx::reset(width, height, reset);
 
-	bgfx::setViewClear(0
-			, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH
-			, 0x703070ff
-			, 1.0f
-			, 0
-			);
+	bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x703070ff, 1.0f, 0);
 
+	// bgfx::setViewClear(1, BGFX_CLEAR_DISCARD_DEPTH | BGFX_CLEAR_DISCARD_STENCIL, 0x703070ff 1.0f, 0);
+
+	// Add initial defaults (invalid stuff) to map
 	bgfx::ProgramHandle h;
 	h.idx = bgfx::invalidHandle;
 	noob::graphics::shader shad;
@@ -37,12 +36,12 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	noob::graphics::add_sampler(std::string("invalid"));
 }
 
+
 void noob::graphics::frame(uint32_t width, uint32_t height)
 {
-	bgfx::setViewRect(0, 0, 0, width, height);
-	bgfx::submit(0);
 	bgfx::frame();
 }
+
 
 bgfx::TextureHandle noob::graphics::get_texture(const std::string& name)
 {
@@ -54,6 +53,7 @@ bgfx::TextureHandle noob::graphics::get_texture(const std::string& name)
 	}
 	else return global_textures.find(name)->second;
 }
+
 
 bgfx::ShaderHandle noob::graphics::load_shader(const std::string& filename)
 {
@@ -90,6 +90,7 @@ bgfx::ShaderHandle noob::graphics::load_shader(const std::string& filename)
 	return s;
 }
 
+
 bgfx::ProgramHandle noob::graphics::load_program(const std::string& vs_filename, const std::string& fs_filename)
 {
 
@@ -97,6 +98,7 @@ bgfx::ProgramHandle noob::graphics::load_program(const std::string& vs_filename,
 	bgfx::ShaderHandle fsh = load_shader(fs_filename);
 	return bgfx::createProgram(vsh, fsh, true);
 }
+
 
 bgfx::TextureHandle noob::graphics::load_texture(const std::string& friendly_name, const std::string& filename)
 {
@@ -136,6 +138,7 @@ bgfx::TextureHandle noob::graphics::load_texture(const std::string& friendly_nam
 
 // bgfx::ProgramHandle noob::graphics::compile_and_load_program(const std::string& vs_source_filename, const std::string& fs_source_filename, const std::string& varyings_filename) {}
 
+
 bool noob::graphics::add_sampler(const std::string& _name)
 {
 	// If item doesn't exists
@@ -150,6 +153,7 @@ bool noob::graphics::add_sampler(const std::string& _name)
 	else return false;
 }
 
+
 bool noob::graphics::add_uniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t count)
 {
 	// If item doesn't exists
@@ -163,6 +167,7 @@ bool noob::graphics::add_uniform(const std::string& name, bgfx::UniformType::Enu
 	else return false;
 
 }
+
 /*
 bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program)
 {
@@ -209,6 +214,7 @@ bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHan
 }
 */
 
+
 bool noob::graphics::add_shader(const std::string& _name, const noob::graphics::shader& _shader)
 {
 	if (noob::graphics::shaders.find(_name) == noob::graphics::shaders.end())
@@ -220,12 +226,14 @@ bool noob::graphics::add_shader(const std::string& _name, const noob::graphics::
 
 }
 
+
 noob::graphics::shader noob::graphics::get_shader(const std::string& name)
 {
 	auto it = noob::graphics::shaders.find(name);
 	if (it != shaders.end()) return it->second;
 	else return noob::graphics::shaders.find("invalid")->second;
 }
+
 
 noob::graphics::uniform noob::graphics::get_uniform(const std::string& name)
 {
@@ -234,6 +242,7 @@ noob::graphics::uniform noob::graphics::get_uniform(const std::string& name)
 	else return noob::graphics::uniforms.find("invalid")->second;
 }
 
+
 noob::graphics::sampler noob::graphics::get_sampler(const std::string& name)
 {
 	auto it = noob::graphics::samplers.find(name);
@@ -241,10 +250,12 @@ noob::graphics::sampler noob::graphics::get_sampler(const std::string& name)
 	else return noob::graphics::samplers.find("invalid")->second;
 }
 
+
 bool is_valid(const noob::graphics::uniform& _uniform)
 {
 	return (_uniform.handle.idx != bgfx::invalidHandle);
 }
+
 
 bool is_valid(const noob::graphics::sampler& _sampler)
 {
