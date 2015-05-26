@@ -106,25 +106,15 @@ void trimString( std::string& _string) {
 }
 
 //-----------------------------------------------------------------------------
-template<typename Handle>
-class HasSeen : public std::unary_function <Handle, bool>
-{
-public:
-  HasSeen () : seen_ () { }
-
-  bool operator ()(const Handle& i) const
-  {
-    return (!seen_.insert(i.idx()).second);
-  }
-
-private:
-  mutable std::set<int> seen_;
-};
 
 // remove duplicated indices from one face
 void remove_duplicated_vertices(BaseImporter::VHandles& _indices)
 {
-  _indices.erase(std::remove_if(_indices.begin(),_indices.end(),HasSeen<BaseImporter::VHandles::value_type>()),_indices.end());
+  BaseImporter::VHandles::iterator endIter = _indices.end();
+  for (BaseImporter::VHandles::iterator iter = _indices.begin(); iter != endIter; ++iter)
+    endIter = std::remove(iter+1, endIter, *(iter));
+
+  _indices.erase(endIter,_indices.end());
 }
 
 //-----------------------------------------------------------------------------
