@@ -26,15 +26,14 @@ template <> struct binary< std::vector<bool> >
 
     for (idx=0; idx < N; ++idx)
     {
-      bits = 0;
-      bits = bits |  (_v[idx+0] ? 1 : 0);
-      bits = bits | ((_v[idx+1] ? 1 : 0) << 1);
-      bits = bits | ((_v[idx+2] ? 1 : 0) << 2);
-      bits = bits | ((_v[idx+3] ? 1 : 0) << 3);
-      bits = bits | ((_v[idx+4] ? 1 : 0) << 4);
-      bits = bits | ((_v[idx+5] ? 1 : 0) << 5);
-      bits = bits | ((_v[idx+6] ? 1 : 0) << 6);
-      bits = bits | ((_v[idx+7] ? 1 : 0) << 7);
+      bits = static_cast<unsigned char>(_v[idx])
+        | (static_cast<unsigned char>(_v[idx+1]) << 1)
+        | (static_cast<unsigned char>(_v[idx+2]) << 2)
+        | (static_cast<unsigned char>(_v[idx+3]) << 3)
+        | (static_cast<unsigned char>(_v[idx+4]) << 4)
+        | (static_cast<unsigned char>(_v[idx+5]) << 5)
+        | (static_cast<unsigned char>(_v[idx+6]) << 6)
+        | (static_cast<unsigned char>(_v[idx+7]) << 7);
       _ostr << bits;
     }
     bytes = N;
@@ -44,13 +43,13 @@ template <> struct binary< std::vector<bool> >
       bits = 0;
       switch(R)
       {
-	case 7: bits = bits | ((_v[idx+6] ? 1 : 0) << 6);
-	case 6: bits = bits | ((_v[idx+5] ? 1 : 0) << 5);
-	case 5: bits = bits | ((_v[idx+4] ? 1 : 0) << 4);
-	case 4: bits = bits | ((_v[idx+3] ? 1 : 0) << 3);
-	case 3: bits = bits | ((_v[idx+2] ? 1 : 0) << 2);
-	case 2: bits = bits | ((_v[idx+1] ? 1 : 0) << 1);
-	case 1: bits = bits |  (_v[idx+0] ? 1 : 0);
+	case 7: bits |= (static_cast<unsigned char>(_v[idx+6]) << 6);
+	case 6: bits |= (static_cast<unsigned char>(_v[idx+5]) << 5);
+	case 5: bits |= (static_cast<unsigned char>(_v[idx+4]) << 4);
+	case 4: bits |= (static_cast<unsigned char>(_v[idx+3]) << 3);
+	case 3: bits |= (static_cast<unsigned char>(_v[idx+2]) << 2);
+	case 2: bits |= (static_cast<unsigned char>(_v[idx+1]) << 1);
+	case 1: bits |= static_cast<unsigned char>(_v[idx+0]);
       }
       _ostr << bits;
       ++bytes;
