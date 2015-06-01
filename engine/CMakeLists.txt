@@ -123,7 +123,7 @@ list(APPEND common_src
 	common/NoobUtils.cpp
 	common/EditorUtils.cpp
 	common/World.cpp
-	common/Font.cpp
+	common/UIFont.cpp
 	#common/bgfx_related/Shaders.cpp
 	)
 

@@ -11,7 +11,7 @@
 #include <errno.h>
 #include "EditorUtils.hpp"
 #include "Application.hpp"
-
+/*
 TrueTypeHandle loadTtf(FontManager* _fm, const char* _filePath)
 {
 	FILE* file = fopen(_filePath, "rb");
@@ -30,6 +30,7 @@ TrueTypeHandle loadTtf(FontManager* _fm, const char* _filePath)
 	TrueTypeHandle invalid = BGFX_INVALID_HANDLE;
 	return invalid;
 }
+*/
 
 void noob::application::init()
 {
@@ -75,7 +76,7 @@ void noob::application::init()
 	noob::graphics::load_texture("grad_map", "gradient_map.dds");
 
 	std::string fontfile_path = *prefix + "/font/droidsans.ttf";
-
+/*
 	fontManager = new FontManager(1024);
 	textBufferManager = new TextBufferManager(fontManager);
 
@@ -87,9 +88,9 @@ void noob::application::init()
 	fontManager->destroyTtf(ttf_handle);
 
 	transientText = textBufferManager->createTextBuffer(FONT_TYPE_ALPHA, BufferType::Transient);
-
-	// droid_font->init(fontfile, 32, window_width, window_height);
-	// droid_font->change_colour(0xFFFFFFFF);
+*/
+	droid_font->init(fontfile_path, 32, window_width, window_height);
+	droid_font->set_colour(0xFFFFFFFF);
 	world.init();
 
 /*	
@@ -122,6 +123,7 @@ void noob::application::init()
 
 void noob::application::update(double delta)
 {
+	droid_font->set_window_dims(window_width, window_height);
 	if (started == false)
 	{
 
@@ -139,7 +141,7 @@ void noob::application::draw()
 	noob::mat4 proj = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 0.1f, 2000.0f);
 	bgfx::setViewTransform(0, &view_mat.m[0], &proj.m[0]);
 	bgfx::setViewRect(0, 0, 0, window_width, window_height);
-
+/*
 	float at[3] = { 0, 0, 0.0f };
 	float eye[3] = { 0, 0, -1.0f };
 	float view[16];
@@ -149,7 +151,7 @@ void noob::application::draw()
 	bx::mtxOrtho(ortho, centering, window_width + centering, window_height + centering, centering, -1.0f, 1.0f);
 	bgfx::setViewTransform(1, view, ortho);
 	bgfx::setViewRect(1, 0, 0, window_width, window_height);
-
+*/
 	// Compute modelview matrix
 	noob::mat4 model_mat(noob::identity_mat4());
 
@@ -175,6 +177,9 @@ void noob::application::draw()
 	sphere->draw(0, model_mat, s.program);
 	bgfx::submit(0);
 
+
+	droid_font->draw_text(1, "The goat stumbled upon the cheese", 150.0, 50.0);
+/*
 	textBufferManager->clearTextBuffer(transientText);
 	textBufferManager->setPenPosition(transientText, 150.0f, 10.0f);
 	textBufferManager->appendText(transientText, font_handle, L"Transient\n");
@@ -182,4 +187,6 @@ void noob::application::draw()
 	// bgfx::setState(BGFX_STATE_RGB_WRITE |BGFX_STATE_ALPHA_WRITE |BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA));
 	textBufferManager->submitTextBuffer(transientText, 1);
 	bgfx::submit(1);
+*/
 }
+

@@ -10,7 +10,7 @@ noob::application::application()
 	timespec timeNow;
 	clock_gettime(CLOCK_MONOTONIC, &timeNow);
 	time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
-	// droid_font = std::unique_ptr<noob::font>(new noob::font());
+	droid_font = std::unique_ptr<noob::ui_font>(new noob::ui_font());
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("."));
 }
