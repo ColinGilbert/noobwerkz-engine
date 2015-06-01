@@ -455,8 +455,6 @@ bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap
         return false;
     }
 
-    unsigned int i, j, k, l, idx;
-    unsigned int nV;
     OpenMesh::Vec3f        v, n;  // Vertex
     OpenMesh::Vec2f        t;  // TexCoords
     BaseImporter::VHandles vhandles;
@@ -467,7 +465,7 @@ bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap
     _bi.reserve(vertexCount_, 3* vertexCount_ , faceCount_);
 
     // read vertices:
-    for (i = 0; i < vertexCount_ && !_in.eof(); ++i) {
+    for (unsigned int i = 0; i < vertexCount_ && !_in.eof(); ++i) {
         v[0] = 0.0;
         v[1] = 0.0;
         v[2] = 0.0;
@@ -566,12 +564,14 @@ bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap
 
     if(!faceProperties_.empty())
     {
-      for (i = 0; i < faceCount_; ++i) {
+      for (unsigned int i = 0; i < faceCount_; ++i) {
         // Read number of vertices for the current face
+        unsigned int nV;
         readValue(faceProperties_[0].listIndexType, _in, nV);
 
         if (nV == 3) {
           vhandles.resize(3);
+          unsigned int j,k,l;
           readInteger(faceProperties_[0].value, _in, j);
           readInteger(faceProperties_[0].value, _in, k);
           readInteger(faceProperties_[0].value, _in, l);
@@ -581,7 +581,8 @@ bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap
           vhandles[2] = VertexHandle(l);
         } else {
           vhandles.clear();
-          for (j = 0; j < nV; ++j) {
+          for (unsigned int j = 0; j < nV; ++j) {
+            unsigned int idx;
             readInteger(faceProperties_[0].value, _in, idx);
             vhandles.push_back(VertexHandle(idx));
           }
