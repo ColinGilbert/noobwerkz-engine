@@ -68,7 +68,7 @@ namespace noob
 			{
 				void init(const std::string& name)
 				{
-					handle = bgfx::createUniform(name.c_str(), bgfx::UniformType::Uniform1iv);
+					handle = bgfx::createUniform(name.c_str(), bgfx::UniformType::Int1);
 				}
 
 				bgfx::UniformHandle handle;

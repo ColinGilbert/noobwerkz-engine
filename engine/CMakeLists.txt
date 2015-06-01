@@ -93,11 +93,11 @@ list(APPEND bgfx_utils_src
 	common/bgfx_related/font/text_metrics.cpp
 	common/bgfx_related/font/text_buffer_manager.cpp
 	common/bgfx_related/bounds.cpp
-	common/bgfx_related/nanovg/nanovg.cpp
-	common/bgfx_related/nanovg/nanovg_bgfx.cpp
-	common/bgfx_related/imgui/ocornut_imgui.cpp
-	common/bgfx_related/imgui/imgui.cpp
-	lib/bgfx/3rdparty/ocornut-imgui/imgui.cpp
+	#common/bgfx_related/nanovg/nanovg.cpp
+	#common/bgfx_related/nanovg/nanovg_bgfx.cpp
+	#common/bgfx_related/imgui/ocornut_imgui.cpp
+	#common/bgfx_related/imgui/imgui.cpp
+	#lib/bgfx/3rdparty/ocornut-imgui/imgui.cpp
 	)
 
 list(APPEND common_src

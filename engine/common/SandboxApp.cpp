@@ -57,13 +57,13 @@ void noob::application::init()
 		logger::log(ss.str());
 	}
 
-	noob::graphics::add_uniform(std::string("colour_1"), bgfx::UniformType::Enum::Uniform4fv);
-	noob::graphics::add_uniform(std::string("colour_2"), bgfx::UniformType::Enum::Uniform4fv);
-	noob::graphics::add_uniform(std::string("colour_3"), bgfx::UniformType::Enum::Uniform4fv);
-	noob::graphics::add_uniform(std::string("colour_4"), bgfx::UniformType::Enum::Uniform4fv);
-	noob::graphics::add_uniform(std::string("mapping_blend"), bgfx::UniformType::Enum::Uniform3fv);
-	noob::graphics::add_uniform(std::string("colour_positions"), bgfx::UniformType::Enum::Uniform2fv);
-	noob::graphics::add_uniform(std::string("scales"), bgfx::UniformType::Enum::Uniform3fv);
+	noob::graphics::add_uniform(std::string("colour_1"), bgfx::UniformType::Enum::Vec4);
+	noob::graphics::add_uniform(std::string("colour_2"), bgfx::UniformType::Enum::Vec4);
+	noob::graphics::add_uniform(std::string("colour_3"), bgfx::UniformType::Enum::Vec4);
+	noob::graphics::add_uniform(std::string("colour_4"), bgfx::UniformType::Enum::Vec4);
+	noob::graphics::add_uniform(std::string("mapping_blend"), bgfx::UniformType::Enum::Vec4);
+	noob::graphics::add_uniform(std::string("colour_positions"), bgfx::UniformType::Enum::Vec4);
+	noob::graphics::add_uniform(std::string("scales"), bgfx::UniformType::Enum::Vec4);
 
 	noob::graphics::shader shad;
 	shad.program = program_handle;
@@ -159,9 +159,9 @@ void noob::application::draw()
 	noob::vec4 colour_2(0.0, 0.5, 0.5, 1.0);
 	noob::vec4 colour_3(0.3, 0.3, 0.3, 1.0);
 	noob::vec4 colour_4(0.2, 0.6, 0.4, 1.0);
-	noob::vec3 mapping_blend(0.0, 2.0, 1.0);
-	noob::vec2 colour_positions(0.3, 0.6);
-	noob::vec3 scales(4, 4, 4);
+	noob::vec4 mapping_blend(0.0, 2.0, 1.0, 0.0);
+	noob::vec4 colour_positions(0.3, 0.6, 0.0, 0.0);
+	noob::vec4 scales(4, 4, 4, 0);
 
 	bgfx::setUniform(noob::graphics::get_uniform("colour_1").handle, &colour_1.v[0]);
 	bgfx::setUniform(noob::graphics::get_uniform("colour_2").handle, &colour_2.v[0]);

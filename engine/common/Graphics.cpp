@@ -31,7 +31,7 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 
 	noob::graphics::add_shader(std::string("invalid"), shad);
 
-	noob::graphics::add_uniform(std::string("invalid"), bgfx::UniformType::Enum::Uniform1i, 0);
+	noob::graphics::add_uniform(std::string("invalid"), bgfx::UniformType::Enum::Int1, 0);
 
 	noob::graphics::add_sampler(std::string("invalid"));
 }

@@ -6,10 +6,6 @@
 #ifndef FONT_MANAGER_H_HEADER_GUARD
 #define FONT_MANAGER_H_HEADER_GUARD
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
-#include FT_GLYPH_H
-
 #include <bx/handlealloc.h>
 #include <bgfx.h>
 

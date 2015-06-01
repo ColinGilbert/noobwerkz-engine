@@ -3,6 +3,8 @@
  * License: http://www.opensource.org/licenses/BSD-2-Clause
  */
 
+//#include "../common.sh"
+
 #include <bgfx.h>
 #include <stddef.h> // offsetof
 #include <memory.h> // memcpy
@@ -10,7 +12,7 @@
 
 #include "text_buffer_manager.h"
 #include "utf8.h"
-#include "cube_atlas.h"
+#include "../cube_atlas.h"
 
 #include "vs_font_basic.bin.h"
 #include "fs_font_basic.bin.h"
@@ -617,7 +619,7 @@ TextBufferManager::TextBufferManager(FontManager* _fontManager)
 		.add(bgfx::Attrib::Color0,    4, bgfx::AttribType::Uint8, true)
 		.end();
 
-	u_texColor = bgfx::createUniform("u_texColor", bgfx::UniformType::Uniform1iv);
+	u_texColor = bgfx::createUniform("u_texColor", bgfx::UniformType::Int1);
 }
 
 TextBufferManager::~TextBufferManager()
