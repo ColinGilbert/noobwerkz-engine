@@ -2,8 +2,8 @@ include (ExternalProject)
 cmake_minimum_required(VERSION 3.0)
 project(NoobWerkz)
 
-set(CMAKE_CXX_FLAGS "-std=c++11 -fno-strict-aliasing -I/usr/local/include/GraphicsMagick -DEIGEN_MPL2_ONLY -Wall ${CMAKE_CXX_FLAGS}")
-set(CMAKE_C_FLAGS "-std=c99 -Wall -fno-strict-aliasing -DSTB_IMAGE_STATIC -Wall ${CMAKE_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++11 -fno-strict-aliasing -DASIO_STANDALONE -DEIGEN_MPL2_ONLY -Wall ${CMAKE_CXX_FLAGS}")
+set(CMAKE_C_FLAGS "-std=c99 -fno-strict-aliasing -DSTB_IMAGE_STATIC -Wall ${CMAKE_C_FLAGS}")
 
 add_subdirectory(lib/glfw)
 include_directories(lib/glfw/include)
@@ -27,11 +27,11 @@ add_subdirectory(lib/rbdl)
 
 include_directories(lib/openmesh/src)
 add_subdirectory(lib/openmesh)
+
 include_directories(lib/bx/include)
 include_directories(lib/bgfx/include)
 include_directories(lib/bgfx/3rdparty)
 include_directories(lib/bgfx/3rdparty/khronos)
-#include_directories(lib/bgfx/3rdparty/ocornut-imgui)
 
 include_directories(lib/lemon)
 
@@ -50,6 +50,8 @@ list (APPEND vhacd-src
 	lib/v-hacd/src/VHACD_Lib/src/vhacdMesh.cpp
 	lib/v-hacd/src/VHACD_Lib/src/vhacdVolume.cpp
 	)
+
+#add_subdirectory(lib/pcl)
 
 include_directories(lib/csgjs-cpp)
 
@@ -85,14 +87,6 @@ list(APPEND bgfx_src
 	)
 
 list(APPEND bgfx_utils_src
-	# common/bgfx_related/font/font_manager.cpp
-	# common/bgfx_related/font/text_buffer_manager.cpp
-	# common/bgfx_related/font/text_metrics.cpp
-	# common/bgfx_related/font/utf8.cpp
-	# common/bgfx_related/cube_atlas.cpp
-	# common/bgfx_related/bgfx_utils.cpp
-	# common/bgfx_related/bounds.cpp
-
 	common/bgfx_related/cube_atlas.cpp
 	common/bgfx_related/font/font_manager.cpp
 	common/bgfx_related/font/utf8.cpp
@@ -117,7 +111,7 @@ list(APPEND common_src
 	common/NoobUtils.cpp
 	common/EditorUtils.cpp
 	common/Voxels.cpp
-	#common/Font.cpp
+	common/Font.cpp
 	#common/bgfx_related/Shaders.cpp
 	)
 
@@ -125,10 +119,7 @@ list(APPEND main_src platform/nix/EngineDesktop.cpp)
 
 add_executable(NoobEdit ${soil2_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd-src}) 
 
-target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES}
-	${OPENGL_LIBRARIES} freetype rt dl pthread assimp GraphicsMagick++
-	GraphicsMagick X11 Xext z gomp png bz2 webp jpeg tiff jasper lcms2
-	xml2 z wmflite m OpenMeshCore)
+target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m OpenMeshCore)
 
 
 project(LogServer)

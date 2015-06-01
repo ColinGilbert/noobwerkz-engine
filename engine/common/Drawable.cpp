@@ -99,7 +99,7 @@ void noob::drawable::import_mesh()
 	//uint64_t startTime = bx::getHPCounter();
 
 	// Use Assimp To Load Mesh
-	scene = aiImportFile(mesh_filename.c_str(), aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_Triangulate | aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+	scene = aiImportFile(mesh_filename.c_str(), aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_Triangulate | aiProcess_FlipWindingOrder | aiProcess_JoinIdenticalVertices );
 	if ( !scene ) return;
 
 	//uint64_t endTime = bx::getHPCounter();

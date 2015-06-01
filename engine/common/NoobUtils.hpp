@@ -2,8 +2,10 @@
 #include <dirent.h>
 #include <fstream>
 #include <map>
-#include "Logger.hpp"
+#include <stdlib.h>
+#include <stdio.h>
 
+#include "Logger.hpp"
 
 namespace noob
 {
@@ -15,7 +17,7 @@ namespace noob
 			static void load_file_to_memory(const std::string& filename);
 			static const std::string& get_data(const std::string&);
 			static void set_data(const std::string&, const std::string&);
-
+			static long int fsize(FILE* _file);
 			std::vector<std::string> read_dir(const std::string&);
 
 			static std::map<std::string, std::string> data;

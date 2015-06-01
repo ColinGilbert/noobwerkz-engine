@@ -1,4 +1,4 @@
-#include <Magick++.h>
+//#include <Magick++.h>
 #include <vector>
 
 #include "EditorUtils.hpp"
@@ -7,7 +7,7 @@
 // Returns true upon success, image is saved to "gradient_map.tga"
 bool noob::editor_utils::blend_channels()
 {
-	Magick::InitializeMagick(NULL);
+/*	Magick::InitializeMagick(NULL);
 	
 	try 
 	{
@@ -22,14 +22,15 @@ bool noob::editor_utils::blend_channels()
 			ss << "Texture blending: red channel rows = " << r.rows() << " columns = " << r.columns() << ", blue channel rows = " << b.rows() << " columns = " << b.columns() << ", green channel rows = " << g.rows() << " columns = " << g.columns(); // << ", alpha channel rows = " << a.rows() << " columns = " << a.columns();
 			logger::log(ss.str());
 		}
-
+*/
 		/* if ((r.columns() != g.columns() != b.columns() != a.columns()) || (r.rows() != g.rows() != b.rows() != a.rows()))
 		{
 			logger::log("Cannot create blended texture as source images not the same size.");
 			return false;
 		} */
 			// Use the size of any image, as the prior test ensured that they are all the same size
-			unsigned int output_cols = r.columns();
+
+/*			unsigned int output_cols = r.columns();
 			unsigned int output_rows = r.rows();
 
 			// Add to vector in order to loop quickly.
@@ -87,5 +88,6 @@ bool noob::editor_utils::blend_channels()
 		logger::log(ss.str());
 		return false;
 	}
-
+*/
+	return false;
 }

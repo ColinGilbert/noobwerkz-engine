@@ -13,6 +13,15 @@ void noob::utils::load_file_to_memory(const std::string& filename)
 	data.insert(std::make_pair(filename, noob::utils::load_file_as_string(filename)));
 }
 
+long int noob::utils::fsize(FILE* _file)
+{
+	long int pos = ftell(_file);
+	fseek(_file, 0L, SEEK_END);
+	long int size = ftell(_file);
+	fseek(_file, pos, SEEK_SET);
+	return size;
+}
+
 
 /*
    GLuint noob::utils::load_shader(GLenum type, const std::string &shader_str, bool debug)

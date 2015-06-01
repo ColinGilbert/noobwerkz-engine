@@ -9,25 +9,15 @@
 #include <string.h>
 #include <stdio.h>
 #include <errno.h>
-
 #include "EditorUtils.hpp"
 #include "Application.hpp"
-
-long int fsize(FILE* _file)
-{
-	long int pos = ftell(_file);
-	fseek(_file, 0L, SEEK_END);
-	long int size = ftell(_file);
-	fseek(_file, pos, SEEK_SET);
-	return size;
-}
 
 TrueTypeHandle loadTtf(FontManager* _fm, const char* _filePath)
 {
 	FILE* file = fopen(_filePath, "rb");
 	if (NULL != file)
 	{
-		uint32_t size = (uint32_t)fsize(file);
+		uint32_t size = (uint32_t)noob::utils::fsize(file);
 		uint8_t* mem = (uint8_t*)malloc(size+1);
 		size_t ignore = fread(mem, 1, size, file);
 		// BX_UNUSED(ignore);
@@ -43,7 +33,6 @@ TrueTypeHandle loadTtf(FontManager* _fm, const char* _filePath)
 
 void noob::application::init()
 {
-
 	logger::log("");
 
 	// TODO: Move out of editor program
@@ -101,10 +90,10 @@ void noob::application::init()
 
 	// droid_font->init(fontfile, 32, window_width, window_height);
 	// droid_font->change_colour(0xFFFFFFFF);
-	vox_world.init();
+	world.init();
 
 /*	
-	   noob::voxel_world::region cube_reg;
+	   noob::universe::region cube_reg;
 	   cube_reg.lower_x = 70;
 	   cube_reg.lower_y = 70;
 	   cube_reg.lower_z = 70;
@@ -113,9 +102,9 @@ void noob::application::init()
 	   cube_reg.upper_z = 140;
 */
 
-	   vox_world.sphere(50, 50, 50, 50, noob::voxel_world::op_type::ADD);
+	   //turd_universe.sphere(50, 50, 50, 50, noob::universe::op_type::ADD);
 
-	   noob::voxel_world::region reg;
+	   noob::universe::region reg;
 	   reg.lower_x = 0;
 	   reg.lower_y = 0;
 	   reg.lower_z = 0;
@@ -123,7 +112,7 @@ void noob::application::init()
 	   reg.upper_y = 255;
 	   reg.upper_z = 255;
 
-	vox_world.extract_region(reg, "models/test.off");
+	world.extract_region(reg, "models/test.off");
 
 	sphere = std::unique_ptr<noob::drawable>(new noob::drawable());
 	std::string meshFile = *prefix + "/models/test.off";
@@ -145,10 +134,6 @@ void noob::application::update(double delta)
 
 void noob::application::draw()
 {
-
-	// bgfx::setState(BGFX_STATE_BLEND_INDEPENDENT | BGFX_STATE_DEFAULT);
-	// bgfx::setState(BGFX_STATE_BLEND_SCREEN | BGFX_STATE_RGB_WRITE | BGFX_STATE_ALPHA_WRITE | BGFX_STATE_DEPTH_TEST_LESS);
-		
 	noob::vec3 cam_up(0.0, 1.0, 0.0);
 	noob::vec3 cam_target(0.0, 0.0, 0.0);
 	noob::vec3 cam_pos(180.0, 180.0, 400.0);
@@ -167,8 +152,6 @@ void noob::application::draw()
 	bgfx::setViewTransform(1, view, ortho);
 	bgfx::setViewRect(1, 0, 0, window_width, window_height);
 
-
-	
 	// Compute modelview matrix
 	noob::mat4 model_mat(noob::identity_mat4());
 
@@ -194,9 +177,6 @@ void noob::application::draw()
 	sphere->draw(0, model_mat, s.program);
 	bgfx::submit(0);
 
-
-	
-
 	textBufferManager->clearTextBuffer(transientText);
 	textBufferManager->setPenPosition(transientText, 150.0f, 10.0f);
 	textBufferManager->appendText(transientText, font_handle, L"Transient\n");
@@ -204,5 +184,4 @@ void noob::application::draw()
 	// bgfx::setState(BGFX_STATE_RGB_WRITE |BGFX_STATE_ALPHA_WRITE |BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA));
 	textBufferManager->submitTextBuffer(transientText, 1);
 	bgfx::submit(1);
-
 }

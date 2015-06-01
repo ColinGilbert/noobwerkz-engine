@@ -45,9 +45,6 @@
 // #include "Font.hpp"
 
 #include "nanovg/nanovg.h"
-
-
-
 #include <bgfx.h>
 
 namespace noob
@@ -87,7 +84,7 @@ namespace noob
 			uint32_t window_width, window_height;
 			std::vector<noob::vec2> finger_positions;
 			std::unique_ptr<noob::drawable> sphere;
-			noob::voxel_world vox_world;
+			noob::universe world;
 			
 			FontManager* fontManager; // = new FontManager(512);
 			TextBufferManager* textBufferManager; // = new TextBufferManager(fontManager);
