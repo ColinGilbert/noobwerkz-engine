@@ -41,7 +41,7 @@
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
 #include "Drawable.hpp"
-#include "Voxels.hpp"
+#include "World.hpp"
 // #include "Font.hpp"
 
 #include "nanovg/nanovg.h"
@@ -84,7 +84,7 @@ namespace noob
 			uint32_t window_width, window_height;
 			std::vector<noob::vec2> finger_positions;
 			std::unique_ptr<noob::drawable> sphere;
-			noob::universe world;
+			noob::world world;
 			
 			FontManager* fontManager; // = new FontManager(512);
 			TextBufferManager* textBufferManager; // = new TextBufferManager(fontManager);

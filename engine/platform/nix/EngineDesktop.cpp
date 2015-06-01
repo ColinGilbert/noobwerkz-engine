@@ -1,7 +1,6 @@
 #include <atomic>
 
 #include <bgfx.h>
-
 #include "Graphics.hpp"
 #include "Application.hpp"
 #include "Logger.hpp"

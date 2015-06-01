@@ -5,16 +5,29 @@ project(NoobWerkz)
 set(CMAKE_CXX_FLAGS "-std=c++11 -fno-strict-aliasing -DASIO_STANDALONE -DEIGEN_MPL2_ONLY -Wall ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-std=c99 -fno-strict-aliasing -DSTB_IMAGE_STATIC -Wall ${CMAKE_C_FLAGS}")
 
+include_directories(lib/bstrlib)
+
+list(APPEND bstrlib_src
+	lib/bstrlib/bstrlib.c
+	lib/bstrlib/bstraux.c
+	lib/bstrlib/bstrwrap.cpp
+	lib/bstrlib/bsafe.c
+	)
+
+
 add_subdirectory(lib/glfw)
 include_directories(lib/glfw/include)
 
 include_directories(lib/freetype/include)
 add_subdirectory(lib/freetype)
 
-add_subdirectory(lib/polyvox)
-include_directories(lib/polyvox/include)
+#add_subdirectory(lib/polyvox)
+#include_directories(lib/polyvox/include)
 
+include_directories(lib/eigen/Eigen)
 add_subdirectory(lib/rbdl)
+
+include_directories(lib/bstrlib)
 
 # TODO: Replace simplicial Cholesky solver prior to use (for licensing reasons.)
 # add_subdirectory(lib/shapeop)
@@ -55,18 +68,17 @@ list (APPEND vhacd-src
 
 include_directories(lib/csgjs-cpp)
 
-include_directories(lib/eigen/Eigen)
-include_directories(lib/soil2/src/SOIL2)
-list(APPEND soil2_src
-	lib/soil2/src/SOIL2/etc1_utils.c
-	lib/soil2/src/SOIL2/image_DXT.c
-	lib/soil2/src/SOIL2/image_helper.c
-	lib/soil2/src/SOIL2/SOIL2.c
-	)
+#include_directories(lib/soil2/src/SOIL2)
+#list(APPEND soil2_src
+#	lib/soil2/src/SOIL2/etc1_utils.c
+#	lib/soil2/src/SOIL2/image_DXT.c
+#	lib/soil2/src/SOIL2/image_helper.c
+#	lib/soil2/src/SOIL2/SOIL2.c
+#	)
 
 # TODO: Add when needed
 include_directories(lib/cereal/include)
-
+include_directories(lib/stb)
 include_directories(common)
 include_directories(common/bgfx_related)
 include_directories(common/bgfx_related/font)
@@ -110,7 +122,7 @@ list(APPEND common_src
 	common/Drawable.cpp
 	common/NoobUtils.cpp
 	common/EditorUtils.cpp
-	common/Voxels.cpp
+	common/World.cpp
 	common/Font.cpp
 	#common/bgfx_related/Shaders.cpp
 	)

@@ -93,7 +93,7 @@ void noob::application::init()
 	world.init();
 
 /*	
-	   noob::universe::region cube_reg;
+	   noob::world::cubic_region cube_reg;
 	   cube_reg.lower_x = 70;
 	   cube_reg.lower_y = 70;
 	   cube_reg.lower_z = 70;
@@ -102,17 +102,15 @@ void noob::application::init()
 	   cube_reg.upper_z = 140;
 */
 
-	   //turd_universe.sphere(50, 50, 50, 50, noob::universe::op_type::ADD);
+	   //turd_world.sphere(50, 50, 50, 50, noob::world::op_type::ADD);
 
-	   noob::universe::region reg;
+	   noob::world::cubic_region reg;
 	   reg.lower_x = 0;
 	   reg.lower_y = 0;
 	   reg.lower_z = 0;
 	   reg.upper_x = 255;
 	   reg.upper_y = 255;
 	   reg.upper_z = 255;
-
-	world.extract_region(reg, "models/test.off");
 
 	sphere = std::unique_ptr<noob::drawable>(new noob::drawable());
 	std::string meshFile = *prefix + "/models/test.off";

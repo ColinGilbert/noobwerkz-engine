@@ -1,8 +1,10 @@
 #include <algorithm>
 #include <bgfx.h>
 
-#include "SOIL2.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 #include "Graphics.hpp"
+
 //#include "shaderc.h"
 
 bgfx::VertexDecl noob::graphics::mesh_vertex::ms_decl;
@@ -20,8 +22,6 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	bgfx::reset(width, height, reset);
 
 	bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x703070ff, 1.0f, 0);
-
-	// bgfx::setViewClear(1, BGFX_CLEAR_DISCARD_DEPTH | BGFX_CLEAR_DISCARD_STENCIL, 0x703070ff 1.0f, 0);
 
 	// Add initial defaults (invalid stuff) to map
 	bgfx::ProgramHandle h;
@@ -105,7 +105,7 @@ bgfx::TextureHandle noob::graphics::load_texture(const std::string& friendly_nam
 	int width = 0;
 	int height = 0;
 	int channels = 0;
-	uint8_t* tex_data = SOIL_load_image(filename.c_str(), &width, &height, &channels, SOIL_LOAD_AUTO);
+	uint8_t* tex_data = stbi_load(filename.c_str(), &width, &height, &channels, 0);
 
 	{
 		std::stringstream ss;
@@ -165,7 +165,6 @@ bool noob::graphics::add_uniform(const std::string& name, bgfx::UniformType::Enu
 		return true;
 	}
 	else return false;
-
 }
 
 /*
@@ -189,6 +188,7 @@ bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHan
 	return noob::graphics::add_shader(_name, _program, empty_uniforms, _samplers);
 
 }
+
 // TODO: Verify validity prior to insertion (and auto-insert into noob::graphics::uniforms, noob::graphics::samplers, and noob::graphics::programs?)
 bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program, const std::vector<noob::graphics::uniform>& _uniforms, const std::vector<noob::graphics::sampler>& _samplers)
 {
@@ -214,7 +214,6 @@ bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHan
 }
 */
 
-
 bool noob::graphics::add_shader(const std::string& _name, const noob::graphics::shader& _shader)
 {
 	if (noob::graphics::shaders.find(_name) == noob::graphics::shaders.end())
@@ -223,9 +222,7 @@ bool noob::graphics::add_shader(const std::string& _name, const noob::graphics::
 		return true;
 	}
 	else return false;
-
 }
-
 
 noob::graphics::shader noob::graphics::get_shader(const std::string& name)
 {
@@ -234,14 +231,12 @@ noob::graphics::shader noob::graphics::get_shader(const std::string& name)
 	else return noob::graphics::shaders.find("invalid")->second;
 }
 
-
 noob::graphics::uniform noob::graphics::get_uniform(const std::string& name)
 {
 	auto it = noob::graphics::uniforms.find(name);
 	if (it != uniforms.end()) return it->second;
 	else return noob::graphics::uniforms.find("invalid")->second;
 }
-
 
 noob::graphics::sampler noob::graphics::get_sampler(const std::string& name)
 {
@@ -250,12 +245,10 @@ noob::graphics::sampler noob::graphics::get_sampler(const std::string& name)
 	else return noob::graphics::samplers.find("invalid")->second;
 }
 
-
 bool is_valid(const noob::graphics::uniform& _uniform)
 {
 	return (_uniform.handle.idx != bgfx::invalidHandle);
 }
-
 
 bool is_valid(const noob::graphics::sampler& _sampler)
 {
