@@ -14,6 +14,7 @@
 
 void noob::world::init()
 {
+
 }
 
 
@@ -29,7 +30,6 @@ noob::world::cubic_region::cubic_region(int32_t _lower_x, int32_t _lower_y, int3
 
 
 // ---------------- basic shapes --------------
-
 void noob::world::sphere(uint32_t radius, int32_t origin_x, int32_t origin_y, int32_t origin_z, noob::world::op_type op) 
 {
 

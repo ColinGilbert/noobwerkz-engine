@@ -41,25 +41,39 @@
 #include "World.hpp"
 #include "UIFont.hpp"
 
-#include "nanovg/nanovg.h"
 #include <bgfx.h>
+
+#include <RuntimeObjectSystem/IObjectFactorySystem.h>
+#include <RuntimeObjectSystem/ObjectInterface.h>
+#include <RuntimeCompiler/AUArray.h>
+
+#include "StdioLogSystem.h"
+#include "AppState.h"
+#include "InterfaceIds.h"
 
 namespace noob
 {
-	class application
+	class app : public IObjectFactoryListener
 	{
+
 		public:
-			application();
-			virtual ~application();
-			static application& get();
+			app();
+			virtual ~app();
+			static app& get();
 
 			uint32_t get_height() const { return static_cast<uint32_t>(window_height); }
 			uint32_t get_width() const { return static_cast<uint32_t>(window_width); }
+			
+			// May be removed soon
+			bool has_started() const { return started; }
+
+
 
 			// These three functions are played with by user (aka: programmer)
-			void init();
+			bool init();
 			void update(double delta);
-			void draw();
+			// void update(double delta);
+			// void draw(float width, float height, double delta);
 
 			// step() is called by the target platform every frame while pause() and resume() are used by whoever needs them :P
 			void step();
@@ -71,16 +85,22 @@ namespace noob
 			void set_archive_dir(const std::string & filepath);
 			void window_resize(uint32_t w, uint32_t h);
 
+			virtual void OnConstructorsAdded();
+
 		protected:
-			static application* app_pointer;
+			static app* app_pointer;
 			std::unique_ptr<std::string> prefix;
 			bool paused, input_has_started, ui_enabled;
 			std::atomic<bool> started;
-			std::unique_ptr<noob::ui_font> droid_font;
+			//std::unique_ptr<noob::ui_font> droid_font;
 			uint64_t time;
-			uint32_t window_width, window_height;
+			float window_width, window_height;
 			std::vector<noob::vec2> finger_positions;
-			std::unique_ptr<noob::drawable> sphere;
+			// std::unique_ptr<noob::drawable> sphere;
 			noob::world world;
+			ICompilerLogger* m_pCompilerLogger;
+			IRuntimeObjectSystem* m_pRuntimeObjectSystem;
+			AppState* app_state;
+			ObjectId m_ObjectId;
 	};
 }

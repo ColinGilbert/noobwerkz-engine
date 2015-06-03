@@ -1,0 +1,10 @@
+Noobwerkz Report
+June 3
+
+The past week has been spent fixing Noobnet's systems and as such, little progress has been made on software itself. However, I am proud to state that the repairs are done and things are back on track.
+
+There were several decisions that had to be made around various limitations, and I am happy to say that soon I will have received just enough hardware for a reaonably-secure network with self-backups and distributed compiling (for big compile jobs) over five workstations.
+
+On the sofware side of things, progress is finally picking up pace with the ongoing inclusion of a concept/piece of software called "Runtime-Compiled C++" (RTCPP), which will allow me to script changes without need to write bindings in a scripting language. It has already been deployed in an advanced game AI for a popular space strategy shooter, and will allow changes to be seen in real-time as they happen. However, using it requires a number of changes to the codebase. Those changes mostly come from adding the RTCPP harness itself and making sure that business logic remains visible to the RTCPP'd code.
+
+Overall, despite the slowdown things are still mostly on track. Technical problems have caused mixups but have been overcome and new features are being added in order to make future features come in even faster. On paper the original goals remain at about the same levels of progress, but the underlying infrastructure is notably different - it is a far more adequate substrate than the previous iteration of work done and will soon be on-par with the more advanced systems commercially available.

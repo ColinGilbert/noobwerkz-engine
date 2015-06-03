@@ -14,7 +14,7 @@ std::atomic<uint32_t> height(720);
 static uint32_t debug = BGFX_DEBUG_TEXT;
 static uint32_t reset = BGFX_RESET_VSYNC;
 
-static noob::application* app;
+static noob::app* app;
 
 void window_close_callback(GLFWwindow* window)
 {
@@ -90,7 +90,7 @@ int main(int /*_argc*/, char** /*_argv*/)
 		return -1;
 	}
 
-	app = new noob::application();
+	app = new noob::app();
 
 	if (!app)
 	{

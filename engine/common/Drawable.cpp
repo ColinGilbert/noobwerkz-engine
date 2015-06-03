@@ -153,7 +153,7 @@ void noob::drawable::import_mesh()
 			vert.x_pos = pt.x;
 			vert.y_pos = pt.y;
 			vert.z_pos = pt.z;
-			
+
 			/*
 			// Bounding Box
 			if ( vert.m_x < subMeshData->mBoundingBox.minExtents.x )
@@ -175,10 +175,10 @@ void noob::drawable::import_mesh()
 			// UV
 
 			if ( mMeshData->HasTextureCoords(0) )
-			  {
-			  vert.u_coord = mMeshData->mTextureCoords[0][n].x;
-			  vert.v_coord = mMeshData->mTextureCoords[0][n].y;
-			  }
+			{
+				vert.u_coord = mMeshData->mTextureCoords[0][n].x;
+				vert.v_coord = mMeshData->mTextureCoords[0][n].y;
+			}
 
 			// Tangents & Bitangents
 			/*		if ( mMeshData->HasTangentsAndBitangents() )
@@ -282,6 +282,9 @@ void noob::drawable::import_mesh()
 			logger::log(ss.str());
 		}
 
+		static size_t triangles = 0;
+		static size_t degenerates = 0;
+		static size_t non_tri_polys = 0;
 		// Faces
 		for ( uint32_t n = 0; n < mMeshData->mNumFaces; ++n)
 		{
@@ -289,12 +292,14 @@ void noob::drawable::import_mesh()
 			const struct aiFace* face = &mMeshData->mFaces[n];
 			if ( face->mNumIndices == 2 )
 			{
+				degenerates++;
 				subMeshData->indices.push_back(face->mIndices[0]);
 				subMeshData->indices.push_back(face->mIndices[1]);
 			}
 
 			else if ( face->mNumIndices == 3 )
 			{
+				triangles++;
 				subMeshData->indices.push_back(face->mIndices[0]);
 				subMeshData->indices.push_back(face->mIndices[1]);
 				subMeshData->indices.push_back(face->mIndices[2]);
@@ -302,8 +307,14 @@ void noob::drawable::import_mesh()
 
 			else
 			{
-				logger::log("[ASSIMP] Non-Triangle Face Found.");
+				non_tri_polys++;
 			}
+
+		}
+		{
+			std::stringstream ss;
+			ss << "Model loaded. Tris = " << triangles << ", non-tri polys = " << non_tri_polys << ", degenerates = " << degenerates; 
+			logger::log(ss.str());
 		}
 	}
 }

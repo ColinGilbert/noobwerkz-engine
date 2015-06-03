@@ -11,7 +11,7 @@ list(APPEND bstrlib_src
 	lib/bstrlib/bstrlib.c
 	lib/bstrlib/bstraux.c
 	lib/bstrlib/bstrwrap.cpp
-	lib/bstrlib/bsafe.c
+	#lib/bstrlib/bsafe.c
 	)
 
 
@@ -26,8 +26,6 @@ add_subdirectory(lib/freetype)
 
 include_directories(lib/eigen/Eigen)
 add_subdirectory(lib/rbdl)
-
-include_directories(lib/bstrlib)
 
 # TODO: Replace simplicial Cholesky solver prior to use (for licensing reasons.)
 # add_subdirectory(lib/shapeop)
@@ -46,7 +44,9 @@ include_directories(lib/bgfx/include)
 include_directories(lib/bgfx/3rdparty)
 include_directories(lib/bgfx/3rdparty/khronos)
 
-include_directories(lib/lemon)
+#include_directories(lib/lemon/lemon)
+
+#add_subdirectory(lib/lemon)
 
 include_directories(lib/noisepp/core)
 include_directories(lib/noisepp/threadpp)
@@ -117,21 +117,28 @@ list(APPEND common_src
 	common/Graphics.cpp
 	common/Logger.cpp
 	common/Application.cpp
-	common/SandboxApp.cpp
+	# common/SandboxApp.cpp
 	common/MathFuncs.cpp
 	common/Drawable.cpp
 	common/NoobUtils.cpp
 	common/EditorUtils.cpp
 	common/World.cpp
 	common/UIFont.cpp
-	#common/bgfx_related/Shaders.cpp
+	common/UI.cpp
+	common/GUI.cpp
+	common/StdioLogSystem.cpp
+	# common/bgfx_related/Shaders.cpp
+	common/DrawFunc.cpp
+	common/UpdateFunc.cpp
+	common/InitFunc.cpp
 	)
 
 list(APPEND main_src platform/nix/EngineDesktop.cpp)
 
-add_executable(NoobEdit ${soil2_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd-src}) 
+add_executable(NoobEdit ${soil2_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd-src} ${bstrlib_src}) 
 
-target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m OpenMeshCore)
+# NOTE: lemon link opetion breaks convention and calls itself "emon" in order to take advantage of link flags already starting with l
+target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt pthread assimp m OpenMeshCore emon dl	RuntimeObjectSystem RuntimeCompiler) 
 
 
 project(LogServer)
