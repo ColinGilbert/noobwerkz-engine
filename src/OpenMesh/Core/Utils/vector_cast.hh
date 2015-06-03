@@ -87,7 +87,7 @@ namespace OpenMesh {
 template <typename src_t, typename dst_t, int n>
 inline void vector_cast( const src_t &_src, dst_t &_dst, GenProg::Int2Type<n> )
 {
-  GenProg::AssertCompile< (vector_traits<dst_t>::size_ <= vector_traits<src_t>::size_) > vectorCastingToHigherDimension;
+  assert_compile(vector_traits<dst_t>::size_ <= vector_traits<src_t>::size_)
   vector_cast(_src,_dst, GenProg::Int2Type<n-1>());
   _dst[n-1] = static_cast<typename vector_traits<dst_t>::value_type >(_src[n-1]);
 }
@@ -101,7 +101,7 @@ inline void vector_cast( const src_t &_src, dst_t &_dst, GenProg::Int2Type<0> )
 template <typename src_t, typename dst_t, int n>
 inline void vector_copy( const src_t &_src, dst_t &_dst, GenProg::Int2Type<n> )
 {
-  GenProg::AssertCompile< (vector_traits<dst_t>::size_ <= vector_traits<src_t>::size_) > vectorCopyToHigherDimension;
+  assert_compile(vector_traits<dst_t>::size_ <= vector_traits<src_t>::size_)
   vector_copy(_src,_dst, GenProg::Int2Type<n-1>());
   _dst[n-1] = _src[n-1];
 }
