@@ -294,7 +294,7 @@ public:
     {
       bits = 0;
       for (idx=0; idx < R; ++idx)
-        bits |= !!data_[bidx+idx] << idx;
+        bits |= static_cast<unsigned char>(data_[bidx+idx]) << idx;
       _ostr << bits;
       ++bytes;
     }
@@ -335,7 +335,7 @@ public:
     {
       _istr >> bits;
       for (idx=0; idx < R; ++idx)
-        data_[bidx+idx] = !!(bits & (1<<idx));
+        data_[bidx+idx] = (bits & (1<<idx)) != 0;
       ++bytes;
     }
 
