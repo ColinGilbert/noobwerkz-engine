@@ -14,9 +14,9 @@ namespace noob
 		float window_width, window_height;
 		std::unique_ptr<noob::ui_font> droid_font;
 		noob::world world;
-		noob::drawable sphere;
-		bool started;
+		std::unique_ptr<noob::drawable> sphere;
+		bool started = false;
 	};
-}
 
-static std::unique_ptr<noob::user_data> data;
+	static std::unique_ptr<noob::user_data> data;
+}

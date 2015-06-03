@@ -131,6 +131,7 @@ list(APPEND common_src
 	common/DrawFunc.cpp
 	common/UpdateFunc.cpp
 	common/InitFunc.cpp
+	common/UserData.cpp
 	)
 
 list(APPEND main_src platform/nix/EngineDesktop.cpp)
