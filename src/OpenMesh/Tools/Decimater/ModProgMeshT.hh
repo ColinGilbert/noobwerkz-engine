@@ -180,7 +180,7 @@ private:
   void set_binary(bool _b) {}
 
   InfoList          pmi_;
-  VPropHandleT<int> idx_;
+  VPropHandleT<size_t> idx_;
 };
 
 

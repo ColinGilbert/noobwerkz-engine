@@ -171,15 +171,15 @@ float ModAspectRatioT<MeshT>::collapse_priority(const CollapseInfo& _ci) {
 
   if (Base::is_binary()) {
     return
-        ((r1_min > r0_min) || (r1_min > min_aspect_)) ? Base::LEGAL_COLLAPSE :
-            Base::ILLEGAL_COLLAPSE;
+        ((r1_min > r0_min) || (r1_min > min_aspect_)) ? float(Base::LEGAL_COLLAPSE) :
+            float(Base::ILLEGAL_COLLAPSE);
 
   } else {
     if (r1_min > r0_min)
-      return 1.0 - r1_min;
+      return 1.f - float(r1_min);
     else
       return
-          (r1_min > min_aspect_) ? 2.0 - r1_min : float(Base::ILLEGAL_COLLAPSE);
+          (r1_min > min_aspect_) ? 2.f - float(r1_min) : float(Base::ILLEGAL_COLLAPSE);
   }
 }
 
@@ -191,8 +191,8 @@ void ModAspectRatioT<MeshT>::set_error_tolerance_factor(double _factor) {
     // the smaller the factor, the larger min_aspect_ gets
     // thus creating a stricter constraint
     // division by (2.0 - error_tolerance_factor_) is for normalization
-    double min_aspect = min_aspect_ * (2.0 - _factor) / (2.0 - this->error_tolerance_factor_);
-    set_aspect_ratio(1.0/min_aspect);
+    float min_aspect = min_aspect_ * (2.f - float(_factor)) / (2.f - float(this->error_tolerance_factor_));
+    set_aspect_ratio(1.f/min_aspect);
     this->error_tolerance_factor_ = _factor;
   }
 }
