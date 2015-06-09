@@ -62,7 +62,7 @@
 
 
 // STD C++
-#include <iostream>
+#include <iosfwd>
 #include <string>
 
 // OpenMesh

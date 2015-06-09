@@ -60,6 +60,7 @@
 #include <OpenMesh/Core/System/config.h>
 // -------------------- STL
 #include <algorithm>
+#include <iostream>
 // -------------------- OpenMesh
 #include <OpenMesh/Core/IO/BinaryHelper.hh>
 

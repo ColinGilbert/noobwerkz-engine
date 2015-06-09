@@ -60,6 +60,8 @@
 #include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/IO/IOManager.hh>
 
+#include <iostream>
+
 
 //== NAMESPACES ===============================================================
 

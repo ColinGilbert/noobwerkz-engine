@@ -63,6 +63,7 @@
 
 #include <OpenMesh/Core/System/config.hh>
 #include <OpenMesh/Core/System/omstream.hh>
+#include <ostream>
 #include <OpenMesh/Tools/Subdivider/Adaptive/Composite/CompositeT.hh>
 #include <OpenMesh/Tools/Subdivider/Adaptive/Composite/RuleInterfaceT.hh>
 
@@ -135,7 +136,7 @@ initialize( void )
 
   if (n_subdiv_rules_ != 1)
   {
-    std::cerr << "Error! More than one subdivision rules not allowed!\n";
+    ::omerr() << "Error! More than one subdivision rules not allowed!\n";
     return false;
   }
 

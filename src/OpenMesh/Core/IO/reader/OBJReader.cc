@@ -71,7 +71,9 @@ using std::isspace;
 #include <string.h>
 #endif
 
-#include <set>
+#include <istream>
+#include <fstream>
+#include <vector>
 #include <algorithm>
 #include <functional>
 

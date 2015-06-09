@@ -51,6 +51,8 @@
 
 
 //STL
+#include <vector>
+#include <istream>
 #include <fstream>
 
 // OpenMesh

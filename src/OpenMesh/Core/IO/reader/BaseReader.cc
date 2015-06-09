@@ -53,7 +53,6 @@
 #include <OpenMesh/Core/IO/reader/BaseReader.hh>
 #include <algorithm>
 #include <string>
-#include <iterator>
 #if defined(OM_CC_MIPS)
 #  include <ctype.h>
 #else

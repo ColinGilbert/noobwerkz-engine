@@ -53,6 +53,7 @@
 #endif
 
 #include <iomanip>
+#include <iostream>
 #include <sstream>
 #include <algorithm>
 // --------------------
@@ -62,12 +63,11 @@
 #  include <GL/glut.h>
 #endif
 // --------------------
-#include <qnamespace.h>
-#include <qapplication.h>
-#include <qmenu.h>
-#include <qcursor.h>
-#include <qimage.h>
-#include <qdatetime.h>
+#include <QApplication>
+#include <QMenu>
+#include <QCursor>
+#include <QImage>
+#include <QDateTime>
 #include <QMouseEvent>
 // --------------------
 #include <OpenMesh/Apps/QtViewer/QGLViewerWidget.hh>

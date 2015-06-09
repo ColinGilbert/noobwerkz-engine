@@ -66,6 +66,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <iosfwd>
 // --------------------
 #include <OpenMesh/Core/Utils/PropertyContainer.hh>
 
@@ -688,7 +689,9 @@ protected: //------------------------------------------- synchronize properties
 
 public:
 
-  void property_stats(std::ostream& _ostr = std::clog) const;
+  // uses std::clog as output stream
+  void property_stats() const;
+  void property_stats(std::ostream& _ostr) const;
 
   void vprop_stats( std::string& _string ) const;
   void hprop_stats( std::string& _string ) const;
@@ -696,11 +699,18 @@ public:
   void fprop_stats( std::string& _string ) const;
   void mprop_stats( std::string& _string ) const;
 
-  void vprop_stats(std::ostream& _ostr = std::clog) const;
-  void hprop_stats(std::ostream& _ostr = std::clog) const;
-  void eprop_stats(std::ostream& _ostr = std::clog) const;
-  void fprop_stats(std::ostream& _ostr = std::clog) const;
-  void mprop_stats(std::ostream& _ostr = std::clog) const;
+  // uses std::clog as output stream
+  void vprop_stats() const;
+  void hprop_stats() const;
+  void eprop_stats() const;
+  void fprop_stats() const;
+  void mprop_stats() const;
+
+  void vprop_stats(std::ostream& _ostr) const;
+  void hprop_stats(std::ostream& _ostr) const;
+  void eprop_stats(std::ostream& _ostr) const;
+  void fprop_stats(std::ostream& _ostr) const;
+  void mprop_stats(std::ostream& _ostr) const;
 
 public:
 

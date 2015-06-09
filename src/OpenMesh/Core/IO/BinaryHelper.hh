@@ -66,7 +66,7 @@
 #else
 #  include <cstdio>
 #endif
-#include <iostream>
+#include <iosfwd>
 // -------------------- OpenMesh
 
 

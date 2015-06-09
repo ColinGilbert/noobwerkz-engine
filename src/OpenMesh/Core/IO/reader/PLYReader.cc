@@ -61,6 +61,7 @@
 
 //STL
 #include <fstream>
+#include <iostream>
 #include <memory>
 
 #ifndef WIN32

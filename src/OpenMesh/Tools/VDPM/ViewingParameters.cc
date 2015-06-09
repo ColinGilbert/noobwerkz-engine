@@ -56,6 +56,7 @@
 //== INCLUDES =================================================================
 
 #include <OpenMesh/Tools/VDPM/ViewingParameters.hh>
+#include <iostream>
 
 //== NAMESPACES ===============================================================
 

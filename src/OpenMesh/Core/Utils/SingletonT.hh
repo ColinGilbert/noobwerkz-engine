@@ -65,7 +65,6 @@
 
 // STL
 #include <stdexcept>
-#include <iostream>
 
 
 //== NAMESPACES ===============================================================

@@ -58,7 +58,7 @@
 #include <OpenMesh/Core/System/omstream.hh>
 #include <OpenMesh/Core/Utils/GenProg.hh>
 #include <OpenMesh/Core/Mesh/Attributes.hh>
-#include <iostream>
+#include <ostream>
 
 
 //== NAMESPACES ===============================================================

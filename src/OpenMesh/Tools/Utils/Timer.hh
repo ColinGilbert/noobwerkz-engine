@@ -59,7 +59,7 @@
 
 #include <OpenMesh/Core/System/config.hh>
 //
-#include <iostream>
+#include <ostream>
 #include <string>
 #if defined(OM_CC_MIPS)
 #  include <assert.h>

@@ -299,8 +299,6 @@ public:
       ++bytes;
     }
 
-    std::cout << std::endl;
-
     assert( bytes == size_of() );
 
     return bytes;
@@ -338,8 +336,6 @@ public:
         data_[bidx+idx] = (bits & (1<<idx)) != 0;
       ++bytes;
     }
-
-    std::cout << std::endl;
 
     return bytes;
   }

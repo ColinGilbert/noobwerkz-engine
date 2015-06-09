@@ -60,7 +60,7 @@
 
 
 // STL
-#include <iostream>
+#include <iosfwd>
 #include <sstream>
 #include <string>
 #include <set>

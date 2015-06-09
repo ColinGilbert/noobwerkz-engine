@@ -64,8 +64,6 @@
 #include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/Utils/vector_traits.hh>
 #include <OpenMesh/Core/Utils/GenProg.hh>
-#include <iostream>
-#include <algorithm>
 #include <OpenMesh/Core/Geometry/VectorT.hh>
 
 

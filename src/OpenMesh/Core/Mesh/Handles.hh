@@ -53,7 +53,7 @@
 //== INCLUDES =================================================================
 
 #include <OpenMesh/Core/System/config.h>
-#include <iostream>
+#include <ostream>
 
 
 //== NAMESPACES ===============================================================

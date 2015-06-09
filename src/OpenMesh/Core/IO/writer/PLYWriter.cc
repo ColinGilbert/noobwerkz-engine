@@ -59,6 +59,8 @@
 
 #include <OpenMesh/Core/IO/SR_store.hh>
 
+#include <iostream>
+
 //=== NAMESPACES ==============================================================
 
 

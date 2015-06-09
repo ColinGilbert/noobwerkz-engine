@@ -56,6 +56,7 @@
 //== INCLUDES =================================================================
 
 #include <OpenMesh/Core/System/omstream.hh>
+#include <iostream>
 
 
 //== IMPLEMENTATION ========================================================== 

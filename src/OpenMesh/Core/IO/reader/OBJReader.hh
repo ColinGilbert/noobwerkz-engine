@@ -61,11 +61,9 @@
 //=== INCLUDES ================================================================
 
 
-#include <iostream>
+#include <iosfwd>
 #include <string>
-#include <vector>
 #include <map>
-#include <fstream>
 
 #include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/Utils/SingletonT.hh>

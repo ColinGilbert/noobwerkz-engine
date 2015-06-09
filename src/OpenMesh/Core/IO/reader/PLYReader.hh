@@ -61,10 +61,10 @@
 //=== INCLUDES ================================================================
 
 
-#include <iostream>
+
+#include <iosfwd>
 #include <string>
-#include <stdio.h>
-#include <fstream>
+#include <cstdio>
 #include <vector>
 
 #include <OpenMesh/Core/System/config.h>

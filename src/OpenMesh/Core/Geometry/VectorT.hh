@@ -69,7 +69,7 @@
 
 
 #include <OpenMesh/Core/System/config.h>
-#include <iostream>
+#include <ostream>
 #include <cmath>
 #include <cassert>
 #include <cstring>

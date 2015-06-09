@@ -47,9 +47,15 @@
 \*===========================================================================*/
 
 #include <OpenMesh/Core/Mesh/BaseKernel.hh>
+#include <iostream>
+
 namespace OpenMesh
 {
 
+void BaseKernel::property_stats() const
+{
+  property_stats(std::clog);
+}
 void BaseKernel::property_stats(std::ostream& _ostr) const
 {
   const PropertyContainer::Properties& vps = vprops_.properties();
@@ -168,6 +174,10 @@ void BaseKernel::mprop_stats( std::string& _string ) const
 
 }
 
+void BaseKernel::vprop_stats() const
+{
+  vprop_stats(std::clog);
+}
 void BaseKernel::vprop_stats(std::ostream& _ostr ) const
 {
   PropertyContainer::Properties::const_iterator it;
@@ -176,7 +186,10 @@ void BaseKernel::vprop_stats(std::ostream& _ostr ) const
     *it == NULL ? (void)(_ostr << "[deleted]" << "\n") : (*it)->stats(_ostr);
 
 }
-
+void BaseKernel::hprop_stats() const
+{
+  hprop_stats(std::clog);
+}
 void BaseKernel::hprop_stats(std::ostream& _ostr ) const
 {
   PropertyContainer::Properties::const_iterator it;
@@ -184,6 +197,10 @@ void BaseKernel::hprop_stats(std::ostream& _ostr ) const
   for (it=hps.begin(); it!=hps.end(); ++it)
     *it == NULL ? (void)(_ostr << "[deleted]" << "\n") : (*it)->stats(_ostr);
 
+}
+void BaseKernel::eprop_stats() const
+{
+  eprop_stats(std::clog);
 }
 void BaseKernel::eprop_stats(std::ostream& _ostr ) const
 {
@@ -193,6 +210,10 @@ void BaseKernel::eprop_stats(std::ostream& _ostr ) const
     *it == NULL ? (void)(_ostr << "[deleted]" << "\n") : (*it)->stats(_ostr);
 
 }
+void BaseKernel::fprop_stats() const
+{
+  fprop_stats(std::clog);
+}
 void BaseKernel::fprop_stats(std::ostream& _ostr ) const
 {
   PropertyContainer::Properties::const_iterator it;
@@ -200,6 +221,10 @@ void BaseKernel::fprop_stats(std::ostream& _ostr ) const
   for (it=fps.begin(); it!=fps.end(); ++it)
     *it == NULL ? (void)(_ostr << "[deleted]" << "\n") : (*it)->stats(_ostr);
 
+}
+void BaseKernel::mprop_stats() const
+{
+  mprop_stats(std::clog);
 }
 void BaseKernel::mprop_stats(std::ostream& _ostr ) const
 {

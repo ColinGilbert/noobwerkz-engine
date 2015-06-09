@@ -54,7 +54,6 @@
 #include <OpenMesh/Core/IO/writer/BaseWriter.hh>
 #include <algorithm>
 #include <string>
-#include <iterator>
 #if defined(OM_CC_MIPS)
 #  include <ctype.h>
 #else

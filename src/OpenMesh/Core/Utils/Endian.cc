@@ -57,8 +57,6 @@
 //== INCLUDES =================================================================
 
 
-#include <iostream>
-#include <algorithm>
 #include <OpenMesh/Core/Utils/Endian.hh>
 
 

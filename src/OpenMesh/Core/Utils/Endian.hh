@@ -62,7 +62,6 @@
 
 
 #include <OpenMesh/Core/System/config.h>
-#include <iostream>
 
 
 //== NAMESPACES ===============================================================

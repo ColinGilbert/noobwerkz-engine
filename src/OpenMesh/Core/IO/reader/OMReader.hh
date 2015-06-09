@@ -69,7 +69,7 @@
 #include <OpenMesh/Core/IO/reader/BaseReader.hh>
 
 // STD C++
-#include <iostream>
+#include <iosfwd>
 #include <string>
 
 

@@ -59,7 +59,7 @@
 //== INCLUDES =================================================================
 
 #include <OpenMesh/Core/System/config.h>
-#include <iostream>
+#include <ostream>
 #if defined( OM_CC_GCC ) && OM_CC_VERSION < 30000
 #  include <streambuf.h>
 #else

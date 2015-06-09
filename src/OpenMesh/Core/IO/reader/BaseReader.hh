@@ -62,10 +62,11 @@
 
 
 // STD C++
-#include <iostream>
+#include <iosfwd>
 #include <string>
 #include <cctype>
 #include <functional>
+#include <algorithm>
 
 // OpenMesh
 #include <OpenMesh/Core/System/config.h>
