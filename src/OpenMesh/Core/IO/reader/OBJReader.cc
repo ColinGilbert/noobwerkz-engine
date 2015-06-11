@@ -295,10 +295,10 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
   std::string keyWrd;
 
   float                     x, y, z, u, v;
-  int                       r, g, b;
+  float                     r, g, b;
   BaseImporter::VHandles    vhandles;
   std::vector<Vec3f>        normals;
-  std::vector<Vec3uc>       colors;
+  std::vector<Vec3f>        colors;
   std::vector<Vec2f>        texcoords;
   std::vector<Vec2f>        face_texcoords;
   std::vector<VertexHandle> vertexHandles;
@@ -395,7 +395,7 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
         {
           if (  userOptions.vertex_has_color() ) {
             fileOptions += Options::VertexColor;
-            colors.push_back(OpenMesh::Vec3uc((unsigned char)r,(unsigned char)g,(unsigned char)b));
+            colors.push_back(OpenMesh::Vec3f(r,g,b));
           }
         }
       }
@@ -431,7 +431,7 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
 
       if ( !stream.fail()   ){
         if ( userOptions.vertex_has_color() ) {
-          colors.push_back(OpenMesh::Vec3uc((unsigned char)r,(unsigned char)g,(unsigned char)b));
+          colors.push_back(OpenMesh::Vec3f(r,g,b));
           fileOptions += Options::VertexColor;
         }
       }
