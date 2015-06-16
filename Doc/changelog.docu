@@ -6,7 +6,7 @@
 
 <!-- --------------------------------------------------------------------- -->
 
-<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1265)</td><td>
+<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1285)</td><td>
 
 <b>LICENSE</b>
 <ul>
@@ -23,6 +23,7 @@
     that did not work correctly and visited one entity twice. The warning can be disabled via cmake or define (-DNO_DECREMENT_DEPRECATED_WARNINGS ).</li>
 <li>Fixed wrong normal calculation in calc_face_normal for Poly Meshes. closes #2427</li>
 <li>Fixed various warnings with vector casts</li>
+<li>General: Get rid of some compiler warnings</li>
 </ul>
 
 <b>IO</b>
@@ -31,6 +32,10 @@
 <li>Writers: Avoid std::endl in various writers to avoid flushing the output stream on every line. (Thanks to Roman Zoller for the hint).</li>
 <li>OBJReader: fix reading mtl files with texture only for obj files</li>
 <li>OBJReader: fix crash, if obj file contains degenerated faces</li>
+<li>OBJReader: improve performance for small vectors/faces</li>
+<li>OBJReader: load vertex color values as float in range of [0..1] instead of integers [0..255]</li>
+<li>PLY Reader: Ascii reader now supports custom attributes</li>
+<li>PLY Writer: add custom property support for ascii version</li>
 </ul>
 
 <b>Utils</b>
@@ -45,11 +50,13 @@
 <li>Fix for Smoother set_relative error (Thanks to Leonardo Cecchinato for the fix) </li>
 <li>Improved SmootherT.hh Documentation</li>
 <li>Fixed old OM3 port warning in smoother</li>
+<li>Decimater: ModProgMesh - Fixed write on 64-bit systems</li>
 </ul>
 
 <b>General</b>
 <ul>
 <li>Fixed various build warnings</li>
+<li>Moved several iostream includes to cc files or removed them where not necessary (or switched to omlog and omerr)</li>
 </ul>
 
 <b>Documentation</b>
@@ -67,6 +74,8 @@
 <li>Added tests for tutorials about flip and collapse</li>
 <li>Added basic smoother compile test</li>
 <li>Added unit test for bool PropertyManager::set_range.</li>
+<li>Added write unittest for binary stl files</li>
+<li>Added c++11 test file</li>
 </ul>
 
 <b>Build System</b>
