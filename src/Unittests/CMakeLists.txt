@@ -28,7 +28,7 @@ if ( OPENMESH_BUILD_UNIT_TESTS )
 
     # Create new target named unittests_hexmeshing
     FILE(GLOB UNITTEST_SRC *.cc)
-    add_executable(unittests ${UNITTEST_SRC})
+    acg_add_executable(unittests ${UNITTEST_SRC})
 	
 	if ( NOT WIN32)
       # Link against all necessary libraries
