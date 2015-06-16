@@ -64,6 +64,7 @@
 #include <stdio.h>
 #include <string>
 #include <fstream>
+#include <vector>
 
 #include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/Utils/SingletonT.hh>
@@ -109,14 +110,29 @@ public:
   size_t binary_size(BaseExporter& _be, Options _opt) const;
 
   enum ValueType {
-    Unsupported ,
+    Unsupported = 0,
     ValueTypeFLOAT32, ValueTypeFLOAT,
-    ValueTypeUINT8, ValueTypeINT32, ValueTypeINT ,
-    ValueTypeUCHAR
+    ValueTypeINT32, ValueTypeINT , ValueTypeUINT,
+    ValueTypeUCHAR, ValueTypeCHAR, ValueTypeUINT8,
+    ValueTypeUSHORT, ValueTypeSHORT,
+    ValueTypeDOUBLE
   };
 
 private:
   mutable Options options_;
+
+  struct CustomProperty
+  {
+    ValueType type;
+    const BaseProperty*  property;
+    CustomProperty(const BaseProperty* const _p):type(Unsupported),property(_p){}
+  };
+
+  const char* nameOfType_[12];
+
+  /// write custom persistant properties into the header for the current element, returns all properties, which were written sorted
+  std::vector<CustomProperty> writeCustomTypeHeader(std::ostream& _out, BaseKernel::const_prop_iterator _begin, BaseKernel::const_prop_iterator _end) const;
+  void write_customProp_ascii(std::ostream& _our, const CustomProperty& _prop, size_t _index) const;
 
 protected:
   void writeValue(ValueType _type, std::ostream& _out, int value) const;
@@ -125,7 +141,8 @@ protected:
 
   bool write_ascii(std::ostream& _out, BaseExporter&, Options) const;
   bool write_binary(std::ostream& _out, BaseExporter&, Options) const;
-  void write_header(std::ostream& _out, BaseExporter& _be, Options& _opt) const;
+  /// write header into the stream _out. Returns custom properties (vertex and face) which are written into the header
+  void write_header(std::ostream& _out, BaseExporter& _be, Options& _opt, std::vector<CustomProperty>& _ovProps, std::vector<CustomProperty>& _ofProps) const;
 };
 
 
