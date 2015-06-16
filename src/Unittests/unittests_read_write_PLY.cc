@@ -460,14 +460,8 @@ TEST_F(OpenMeshReadWritePLY, LoadSimplePLYWithCustomProps) {
 
     OpenMesh::VPropHandleT<float> qualityProp;
     OpenMesh::VPropHandleT<unsigned int> indexProp;
-    EXPECT_TRUE(mesh.get_property_handle(qualityProp,"quality")) << "Could not access quality property";
-    EXPECT_TRUE(mesh.get_property_handle(indexProp,"index")) << "Could not access index property";
-
-    if (!mesh.get_property_handle(qualityProp,"quality"))
-      return;
-
-    if (!mesh.get_property_handle(indexProp,"index"))
-      return;
+    ASSERT_TRUE(mesh.get_property_handle(qualityProp,"quality")) << "Could not access quality property";
+    ASSERT_TRUE(mesh.get_property_handle(indexProp,"index")) << "Could not access index property";
 
     //check index property
     for (unsigned i = 0; i < mesh.n_vertices(); ++i)
@@ -486,9 +480,7 @@ TEST_F(OpenMeshReadWritePLY, LoadSimplePLYWithCustomProps) {
     //check for custom list properties
 
     OpenMesh::VPropHandleT< std::vector<int> > testValues;
-    EXPECT_TRUE(mesh.get_property_handle(testValues,"test_values")) << "Could not access texcoords per face";
-    if (!mesh.get_property_handle(testValues,"test_values"))
-      return;
+    ASSERT_TRUE(mesh.get_property_handle(testValues,"test_values")) << "Could not access texcoords per face";
 
     EXPECT_EQ(2u,mesh.property(testValues,OpenMesh::VertexHandle(0)).size()) << "Wrong verctor size";
 
@@ -502,10 +494,7 @@ TEST_F(OpenMeshReadWritePLY, LoadSimplePLYWithCustomProps) {
     EXPECT_EQ(16,mesh.property(testValues,OpenMesh::VertexHandle(7))[1]) << "Wrong list value at Vertex 7";
 
     OpenMesh::FPropHandleT< std::vector<float> > texCoordsPerFace;
-    EXPECT_TRUE(mesh.get_property_handle(texCoordsPerFace,"texcoords")) << "Could not access texcoords per face";
-
-    if (!mesh.get_property_handle(texCoordsPerFace,"texcoords"))
-          return;
+    ASSERT_TRUE(mesh.get_property_handle(texCoordsPerFace,"texcoords")) << "Could not access texcoords per face";
 
     for (Mesh::FaceIter f_iter = mesh.faces_begin(); f_iter != mesh.faces_end(); ++f_iter)
     {
@@ -524,7 +513,16 @@ TEST_F(OpenMeshReadWritePLY, LoadSimplePLYWithCustomProps) {
 
     }
 
+    OpenMesh::FPropHandleT< unsigned > faceIndex;
+    ASSERT_TRUE(mesh.get_property_handle(faceIndex,"faceIndex")) << "Could not access faceIndex per face";
 
+    EXPECT_EQ(0u,mesh.property(faceIndex,OpenMesh::FaceHandle(0))) << "Wrong index value at FaceHandle 0";
+    EXPECT_EQ(1u,mesh.property(faceIndex,OpenMesh::FaceHandle(1))) << "Wrong index value at FaceHandle 1";
+    EXPECT_EQ(2u,mesh.property(faceIndex,OpenMesh::FaceHandle(2))) << "Wrong index value at FaceHandle 2";
+    EXPECT_EQ(3u,mesh.property(faceIndex,OpenMesh::FaceHandle(3))) << "Wrong index value at FaceHandle 3";
+    EXPECT_EQ(4u,mesh.property(faceIndex,OpenMesh::FaceHandle(4))) << "Wrong index value at FaceHandle 4";
+    EXPECT_EQ(5u,mesh.property(faceIndex,OpenMesh::FaceHandle(5))) << "Wrong index value at FaceHandle 5";
 
 }
+
 }

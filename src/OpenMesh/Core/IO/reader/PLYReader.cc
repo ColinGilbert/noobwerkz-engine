@@ -239,6 +239,10 @@ void _PLYReader_::readCustomProperty(std::istream& _in, BaseImporter& _bi, Handl
   case ValueTypeCHAR:
       assignCustomProperty<char>(_in,_bi,_h,_propName,isList);
       break;
+  case ValueTypeUINT8:
+  case ValueTypeUCHAR:
+      assignCustomProperty<unsigned char>(_in,_bi,_h,_propName,isList);
+      break;
   case ValueTypeINT16:
   case ValueTypeSHORT:
       assignCustomProperty<short>(_in,_bi,_h,_propName,isList);
@@ -1190,8 +1194,7 @@ bool _PLYReader_::can_u_read(std::istream& _is) const {
                   options_ += Options::Custom;
                 else
                   omerr() << "Custom Properties not supported in binary files. Skipping" << std::endl;
-                PropertyInfo entry(prop, valueType, propertyName);
-                vertexProperties_.push_back(entry);
+                entry  = PropertyInfo(prop, valueType, propertyName);
               }
 
               if (entry.property != UNSUPPORTED)
