@@ -237,7 +237,7 @@ void _PLYReader_::readCustomProperty(std::istream& _in, BaseImporter& _bi, Handl
   {
   case ValueTypeINT8:
   case ValueTypeCHAR:
-      assignCustomProperty<char>(_in,_bi,_h,_propName,isList);
+      assignCustomProperty<signed char>(_in,_bi,_h,_propName,isList);
       break;
   case ValueTypeUINT8:
   case ValueTypeUCHAR:
