@@ -24,34 +24,39 @@ distinguish between
  - Options::FaceColor
  - Options::ColorAlpha
  - Options::ColorFloat
+ - Options::Custom
 
 These bits have different effects when reading or writing. The file
-format itself is selected by the extension of the filename. The IO
-subsystem of the %OpenMesh library supports currently four
-formats. The following table list all formats and indicates whether
-the format supports ASCII/binary storage with the apropiate extension.
+format itself is selected by the extension of the filename. 
+  
+Below in the table you can see what options are suported by which reader/writer (it is possible that the data format can support more).
+ASCII is not a real option and will be selected, if binary was not defined.
 
-<table border=0>
-  <tr>
-    <td>Format</td><td colspan=2>Ascii</td><td>Binary</td>
-  </tr><tr>
-    <td>OFF</td><td>.off</td><td>.off</td>
-  </tr><tr>
-    <td>OBJ</td><td>.obj</td><td></td>
-  </tr><tr>
-    <td>STL</td><td>.stla, .stl</td><td>.stlb, .stl</td>
-  </tr><tr>
-    <td>OM</td><td></td><td>.om</td>
-  </tr>
-</table>
+<TABLE>
+<CAPTION><EM>Reader/Writer Feature Support List</EM></CAPTION>
+<TR><TH>Format/Option<TD>ASCII<TD>Binary<TD>MSB<TD>LSB<TD>Swap<TD>VertexNormal<TD>VertexColor<TD>VertexTexCoord<TD>EdgeColor<TD>FaceNormal<TD>FaceColor<TD>FaceTexCoord<TD>ColorAlpha<TD>ColorFloat<TD>Custom
+<TR><TH>OBJ<TD>x<TD> <TD> <TD> <TD> <TD>x<TD>x *)<TD>x<TD> <TD>x<TD>x<TD>x<TD><TD><TD> 
+<TR><TH>OFF<TD>x<TD>x<TD> <TD>x<TD> <TD>x<TD>x<TD>x<TD> <TD> <TD>x<TD> <TD>x<TD>x<TD> 
+<TR><TH>PLY<TD>x<TD>x<TD>x<TD>x<TD> <TD>x<TD>x<TD>x<TD> <TD> <TD> <TD> <TD>x<TD>x<TD>x **)
+<TR><TH>OM<TD> <TD>x<TD>x<TD>x<TD>x<TD>x<TD>x<TD>x<TD><TD>x<TD>x<TD><TD><TD><TD>x (\ref tutorial_09 )
+<TR><TH>STL<TD>x<TD>x<TD><TD>x<TD><TD><TD><TD><TD><TD>x<TD><TD><TD><TD><TD>
+<TR><TH>VTK ***)<TD>x<TD><TD><TD><TD><TD><TD><TD><TD><TD><TD><TD><TD><TD><TD>
+</TABLE>
+
+\*) can <i>read</i> the non-standard extension vertex colors (floats only): 
+\li defined with vc (e.g. used by meshlab)
+\li colors encoded in a vertex line (v followed by 6 values)
+
+\**) only ascii version and only vertex and face properties with fundamental types
+
+\***) no reader exists
 
 The program does not more than providing a command line based
 interface to select the option bits for reading/writing and to request
 mesh properties. Hence illegal combinations are possible and will
 result in a failure of the program. (The input file won't be damaged
 in this case, but be careful where you put the ouput file!)
-Please note that the Options::ColorFloat is currently only implemented for PLY
-and OFF files.
+
 
 <h5>Reading meshes</h5>
 
