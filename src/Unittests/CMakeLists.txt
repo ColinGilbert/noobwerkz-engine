@@ -52,7 +52,6 @@ if ( OPENMESH_BUILD_UNIT_TESTS )
        else()
 	    # Link against all necessary libraries
 		if ( OPENMESH_BUILD_SHARED )
-			#!!!! Experimental Feature!!!
 			add_definitions( -DOPENMESHDLL )
 
 		endif()
