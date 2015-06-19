@@ -149,6 +149,10 @@ class PropertyManager {
         MeshT &getMesh() const { return *mesh_; }
 
 #if __cplusplus > 199711L or __GXX_EXPERIMENTAL_CXX0X__
+        /// Only for pre C++11 compatibility.
+
+        typedef PropertyManager<PROPTYPE, MeshT> Proxy;
+
         /**
          * Move constructor. Transfers ownership (delete responsibility).
          */
