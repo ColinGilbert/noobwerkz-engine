@@ -139,6 +139,81 @@ TEST_F(OpenMeshIterators, VertexIterStartPosition) {
 
 }
 
+
+/*
+ * Small VertexIterator Test to check if we can continue from the end after adding vertices
+ */
+TEST_F(OpenMeshIterators, VertexIterContinueAfterEnd) {
+
+  mesh_.clear();
+
+  // Add some vertices
+  Mesh::VertexHandle vhandle[4];
+
+  vhandle[0] = mesh_.add_vertex(Mesh::Point(0, 0, 0));
+  vhandle[1] = mesh_.add_vertex(Mesh::Point(0, 1, 0));
+  vhandle[2] = mesh_.add_vertex(Mesh::Point(1, 1, 0));
+  vhandle[3] = mesh_.add_vertex(Mesh::Point(1, 0, 0));
+
+  // Add two faces
+  std::vector<Mesh::VertexHandle> face_vhandles;
+
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[0]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[3]);
+  mesh_.add_face(face_vhandles);
+
+  // Test setup:
+  //  1 === 2
+  //  |   / |
+  //  |  /  |
+  //  | /   |
+  //  0 === 3
+
+
+
+  // Add a double vertex property
+  OpenMesh::VPropHandleT<int> intHandle;
+  EXPECT_FALSE( mesh_.get_property_handle(intHandle,"intProp") );
+  mesh_.add_property(intHandle,"intProp");
+
+  // Initialize existing properties:
+  int i = 0;
+  for (Mesh::VertexIter v_it = mesh_.vertices_begin(); v_it !=  mesh_.vertices_end()  ; ++ v_it) {
+    mesh_.property(intHandle,*v_it) = i;
+    ++i;
+  }
+
+  // Check property
+  EXPECT_TRUE(mesh_.get_property_handle(intHandle,"intProp"));
+
+  // Remember old end iterator
+  Mesh::VertexIter old_end = mesh_.vertices_end();
+
+  // Set properties to perform test
+  for ( unsigned int j = 0 ; j < 4 ; ++j ) {
+    OpenMesh::VertexHandle vh = mesh_.add_vertex(Mesh::Point(1, 0, 0));
+    mesh_.property(intHandle,vh) = i;
+    ++i;
+  }
+
+  // Reset to first expected value
+  i = 4;
+
+  for ( Mesh::VertexIter test = old_end ; test != mesh_.vertices_end() ; ++test ) {
+    EXPECT_EQ( mesh_.property(intHandle,*test) , i);
+    ++i;
+  }
+
+}
+
 /*
  * Small EdgeIterator Test
  */
