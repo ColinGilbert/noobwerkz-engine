@@ -144,13 +144,13 @@ Tvv3<M>::raise(typename M::FaceHandle& _fh, state_t _target_state)
 
       Base::mesh_.split(_fh, vh);
 
-      int  valence = 0;
+      typename M::Scalar valence(0.0);
 
       // calculate display position for new vertex
       for (vv_it = Base::mesh_.vv_iter(vh); vv_it.is_valid(); ++vv_it)
       {
         position += Base::mesh_.point(*vv_it);
-        ++valence;
+        valence += 1.0;
       }
 
       position /= valence;
@@ -848,12 +848,12 @@ void VF<M>::raise(typename M::FaceHandle& _fh, state_t _target_state)
     }
 
     // calculate new position
-    typename M::Point position(0.0, 0.0, 0.0);
-    int                  valence(0);
+    typename M::Point  position(0.0, 0.0, 0.0);
+    typename M::Scalar valence(0.0);
 
     for (fv_it = Base::mesh_.fv_iter(_fh); fv_it.is_valid(); ++fv_it) {
 
-      ++valence;
+      valence  += 1.0;
       position += Base::mesh_.data(*fv_it).position(_target_state - 1);
     }
 
@@ -919,12 +919,12 @@ void FF<M>::raise(typename M::FaceHandle& _fh, state_t _target_state) {
     }
 
     // calculate new position
-    typename M::Point position(0.0, 0.0, 0.0);
-    int                  valence(0);
+    typename M::Point  position(0.0, 0.0, 0.0);
+    typename M::Scalar valence(0.0);
 
     for (ff_it = Base::mesh_.ff_iter(_fh); ff_it.is_valid(); ++ff_it) {
 
-      ++valence;
+      valence  += 1.0;
 
       position += Base::mesh_.data(*ff_it).position(_target_state - 1);
     }
@@ -978,12 +978,12 @@ void FFc<M>::raise(typename M::FaceHandle& _fh, state_t _target_state)
     }
 
     // calculate new position
-    typename M::Point position(0.0, 0.0, 0.0);
-    int                  valence(0);
+    typename M::Point  position(0.0, 0.0, 0.0);
+    typename M::Scalar valence(0.0);
 
     for (ff_it = Base::mesh_.ff_iter(_fh); ff_it.is_valid(); ++ff_it)
     {
-      ++valence;
+      valence += 1.0;
       position += Base::mesh_.data(*ff_it).position(_target_state - 1);
     }
 
@@ -1048,12 +1048,12 @@ void FV<M>::raise(typename M::VertexHandle& _vh, state_t _target_state)
     }
 
     // calculate new position
-    typename M::Point position(0.0, 0.0, 0.0);
-    int                  valence(0);
+    typename M::Point  position(0.0, 0.0, 0.0);
+    typename M::Scalar valence(0.0);
 
     for (vf_it = Base::mesh_.vf_iter(_vh); vf_it.is_valid(); ++vf_it) {
 
-      ++valence;
+      valence  += 1.0;
       position += Base::mesh_.data(*vf_it).position(_target_state - 1);
     }
 
@@ -1291,13 +1291,12 @@ void VV<M>::raise(typename M::VertexHandle& _vh, state_t _target_state)
     }
 
     // calculate new position
-    typename M::Point position(0.0, 0.0, 0.0);
-    int                  valence(0);
+    typename M::Point  position(0.0, 0.0, 0.0);
+    typename M::Scalar valence(0.0);
 
     for (vv_it = Base::mesh_.vv_iter(_vh); vv_it.is_valid(); ++vv_it) {
 
-      ++valence;
-
+      valence  += 1.0;
       position += Base::mesh_.data(*vv_it).position(_target_state - 1);
     }
 
@@ -1361,13 +1360,13 @@ void VVc<M>::raise(typename M::VertexHandle& _vh, state_t _target_state)
     }
 
     // calculate new position
-    typename M::Point position(0.0, 0.0, 0.0);
-    int                  valence(0);
+    typename M::Point  position(0.0, 0.0, 0.0);
+    typename M::Scalar valence(0.0);
     typename M::Scalar c;
 
     for (vv_it = Base::mesh_.vv_iter(_vh); vv_it.is_valid(); ++vv_it)
     {
-      ++valence;
+      valence += 1.0;
       position += Base::mesh_.data(*vv_it).position(_target_state - 1);
     }
 
@@ -1418,10 +1417,9 @@ void VE<M>::raise(typename M::EdgeHandle& _eh, state_t _target_state)
     }
 
     // calculate new position
-    typename M::Point position(0.0, 0.0, 0.0);
-    int                  valence(0);
+    typename M::Point  position(0.0, 0.0, 0.0);
+    const typename M::Scalar valence(2.0);
 
-    valence = 2;
     position += MOBJ(Base::mesh_.TVH(hh1)).position(_target_state - 1);
     position += MOBJ(Base::mesh_.TVH(hh2)).position(_target_state - 1);
 
@@ -1478,27 +1476,26 @@ void VdE<M>::raise(typename M::EdgeHandle& _eh, state_t _target_state)
     }
 
     // calculate new position
-    typename M::Point position(0.0, 0.0, 0.0);
-    int                  valence(0);
+    typename M::Point  position(0.0, 0.0, 0.0);
+    typename M::Scalar valence(2.0);
 
-    valence = 2;
     position += MOBJ(Base::mesh_.TVH(hh1)).position(_target_state - 1);
     position += MOBJ(Base::mesh_.TVH(hh2)).position(_target_state - 1);
 
     if (fh1.is_valid()) {
 
       position += MOBJ(Base::mesh_.TVH(Base::mesh_.NHEH(hh1))).position(_target_state - 1);
-      ++valence;
+      valence += 1.0;
     }
 
     if (fh2.is_valid()) {
       
       position += MOBJ(Base::mesh_.TVH(Base::mesh_.NHEH(hh2))).position(_target_state - 1);
-      ++valence;
+      valence += 1.0;
     }
 
     if (Base::number() == Base::subdiv_rule()->Base::number() + 1) 
-      valence = 4;
+      valence = 4.0;
 
     position /= valence;
 
@@ -1564,14 +1561,13 @@ VdEc<M>::raise(typename M::EdgeHandle& _eh, state_t _target_state)
     }
 
     // calculate new position
-    typename M::Point position(0.0, 0.0, 0.0);
-    int                  valence(0);
+    typename M::Point  position(0.0, 0.0, 0.0);
+    const typename M::Scalar valence(4.0);
     typename M::Scalar c;
 
     // choose coefficient c
     c = Base::coeff();
 
-    valence = 4;
     position += MOBJ(Base::mesh_.TVH(hh1)).position(_target_state - 1) * c;
     position += MOBJ(Base::mesh_.TVH(hh2)).position(_target_state - 1) * c;
     position += MOBJ(Base::mesh_.TVH(Base::mesh_.NHEH(hh1))).position(_target_state - 1) * (0.5 - c);
@@ -1631,14 +1627,14 @@ void EV<M>::raise(typename M::VertexHandle& _vh, state_t _target_state)
     }
 
     // calculate new position
-    typename M::Point position(0.0, 0.0, 0.0);
-    int                  valence(0);
+    typename M::Point  position(0.0, 0.0, 0.0);
+    typename M::Scalar valence(0.0);
 
     for (ve_it = Base::mesh_.ve_iter(_vh); ve_it.is_valid(); ++ve_it) {
 
       if (Base::mesh_.data(*ve_it).final()) {
 
-        ++valence;
+        valence += 1.0;
 
         position += Base::mesh_.data(*ve_it).position(_target_state - 1);
       }
@@ -1828,20 +1824,20 @@ EF<M>::raise(typename M::FaceHandle& _fh, state_t _target_state) {
     }
 
     // calculate new position
-    typename M::Point position(0.0, 0.0, 0.0);
-    int                  valence(0);
+    typename M::Point  position(0.0, 0.0, 0.0);
+    typename M::Scalar valence(0.0);
 
     for (fe_it = Base::mesh_.fe_iter(_fh); fe_it.is_valid(); ++fe_it) {
 
       if (Base::mesh_.data(*fe_it).final()) {
 
-        ++valence;
+        valence += 1.0;
 
         position += Base::mesh_.data(*fe_it).position(_target_state - 1);
       }
     }
 
-    assert (valence == 3);
+    assert (valence == 3.0);
 
     position /= valence;
 
@@ -1881,8 +1877,8 @@ FE<M>::raise(typename M::EdgeHandle& _eh, state_t _target_state) {
     }
 
     // calculate new position
-    typename M::Point position(0.0, 0.0, 0.0);
-    int                  valence(2);
+    typename M::Point  position(0.0, 0.0, 0.0);
+    const typename M::Scalar valence(2.0);
 
     position += MOBJ(Base::mesh_.FH(Base::mesh_.HEH(_eh, 0))).position(_target_state - 1);
     
@@ -1937,8 +1933,8 @@ EdE<M>::raise(typename M::EdgeHandle& _eh, state_t _target_state) {
     }
 
     // calculate new position
-    typename M::Point position(0.0, 0.0, 0.0);
-    int                  valence(4);
+    typename M::Point  position(0.0, 0.0, 0.0);
+    const typename M::Scalar valence(4.0);
 
     position += MOBJ(Base::mesh_.EH(Base::mesh_.NHEH(hh1))).position(_target_state - 1);
     position += MOBJ(Base::mesh_.EH(Base::mesh_.PHEH(hh1))).position(_target_state - 1);
@@ -1995,7 +1991,7 @@ EdEc<M>::raise(typename M::EdgeHandle& _eh, state_t _target_state)
 
     // calculate new position
     typename M::Point  position(0.0, 0.0, 0.0);
-    int                valence(4);
+    const typename M::Scalar valence(4.0);
     typename M::Scalar c;
 
     position += MOBJ(Base::mesh_.EH(Base::mesh_.NHEH(hh1))).position(_target_state - 1);
