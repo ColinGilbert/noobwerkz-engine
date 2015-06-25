@@ -1207,7 +1207,7 @@ void FVc<M>::raise(typename M::VertexHandle& _vh, state_t _target_state)
       }
     } 
 
-    position /= M::Scalar(valence);
+    position /= typename M::Scalar(valence);
 
     MOBJ(_vh).set_position(_target_state, position);
     MOBJ(_vh).inc_state();
