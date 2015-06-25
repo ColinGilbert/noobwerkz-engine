@@ -1173,7 +1173,7 @@ void FVc<M>::raise(typename M::VertexHandle& _vh, state_t _target_state)
     c = _2over3 * ( cos( _2pi / valence) + 1.0);
 #else
     valence = Base::mesh_.valence(_vh);
-    c       = coeff(valence);
+    c       = typename M::Scalar(coeff(valence));
 #endif
 
 
@@ -1193,7 +1193,7 @@ void FVc<M>::raise(typename M::VertexHandle& _vh, state_t _target_state)
 
           position += MOBJ(Base::mesh_.FH(*voh_it)).position(_target_state - 1) * c;
 
-          position += MOBJ(Base::mesh_.FH(Base::mesh_.OHEH(Base::mesh_.NHEH(*voh_it)))).position(_target_state - 1) * (1.0 - c);
+          position += MOBJ(Base::mesh_.FH(Base::mesh_.OHEH(Base::mesh_.NHEH(*voh_it)))).position(_target_state - 1) * ( typename M::Scalar(1.0) - c);
         }
         else {
 
