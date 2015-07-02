@@ -166,7 +166,7 @@ write_stla(const std::string& _filename, BaseExporter& _be, Options /* _opt */) 
 
 
   // header
-  fprintf(out, "solid\n");
+  fprintf(out, "solid \n");
 
 
   // write face set
@@ -220,7 +220,7 @@ write_stla(std::ostream& _out, BaseExporter& _be, Options /* _opt */, std::strea
 
 
   // header
-  _out << "solid\n";
+  _out << "solid \n";
 
 
   // write face set
