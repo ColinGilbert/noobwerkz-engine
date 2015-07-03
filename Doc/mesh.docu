@@ -611,6 +611,8 @@ Step one will give a short example on how to use the %OpenMesh IOManager,
 step two will give some background information on how IOManager works and
 finally step three will show you how to add your own modules to IOManager.
 
+A tutorial with more information regarding file IO can be found here: \ref tutorial_08
+
 \section mesh_io_quick Step 1 - IOManager quick start
 
 For a quick start you can copy the following code directly to your project.
