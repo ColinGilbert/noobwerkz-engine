@@ -6,7 +6,7 @@
 
 <!-- --------------------------------------------------------------------- -->
 
-<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1285)</td><td>
+<tr valign=top><td><b>4.0</b> (?/?/?,Rev.1303)</td><td>
 
 <b>LICENSE</b>
 <ul>
@@ -24,6 +24,7 @@
 <li>Fixed wrong normal calculation in calc_face_normal for Poly Meshes. closes #2427</li>
 <li>Fixed various warnings with vector casts</li>
 <li>General: Get rid of some compiler warnings</li>
+<li>VectorT: fix compile error on vector scalar multiplication when scalar type differs of vector scalar type and the scalar was lhs. closes #2367</li>
 </ul>
 
 <b>IO</b>
@@ -36,6 +37,8 @@
 <li>OBJReader: load vertex color values as float in range of [0..1] instead of integers [0..255]</li>
 <li>PLY Reader: Ascii reader now supports custom attributes</li>
 <li>PLY Writer: add custom property support for ascii version</li>
+<li>PLY Reader: unify int8_t/signed char/char in ply reader and writer. </li>
+<li>STL Writer: Add a space after the solid keyword to make some readers happy. </li>
 </ul>
 
 <b>Utils</b>
@@ -63,9 +66,10 @@
 <ul>
 <li>Example for locking vertices in decimater</li>
 <li>Added extra hint about status flags when collapsing edges</li>
-<li>updated tutorial on reading and writing meshes with python bindings</li>
-<li>updated the tutorial with further information on how to build the python bindings</li>
-<li>added missing requestsfor polyMesh in collapsee docu</li>
+<li>Updated tutorial on reading and writing meshes with python bindings</li>
+<li>Updated the tutorial with further information on how to build the python bindings</li>
+<li>Added missing requestsfor polyMesh in collapsee docu</li>
+<li>Add feature support list for readers/writers</li>
 </ul>
 
 <b>Unittests</b>
@@ -76,6 +80,7 @@
 <li>Added unit test for bool PropertyManager::set_range.</li>
 <li>Added write unittest for binary stl files</li>
 <li>Added c++11 test file</li>
+<li>Use the acg macro to add the unittests to make sure flags are passed through (e.g. to enable c++11)</li>
 </ul>
 
 <b>Build System</b>
