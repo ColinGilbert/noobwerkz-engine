@@ -22,12 +22,28 @@ distinguish between
  - Options::VertexColor
  - Options::FaceNormal
  - Options::FaceColor
+ - Options::FaceTexCoord
  - Options::ColorAlpha
  - Options::ColorFloat
  - Options::Custom
-
+ 
 These bits have different effects when reading or writing. The file
 format itself is selected by the extension of the filename. 
+ 
+Please take into account, each mesh has to <b>request</b> the standard property <b>before loading</b> with the corresponding option.
+For instance, if you enable Options::VertexNormal, your mesh has to request vertex normals. Otherwise, they will not be written into the mesh.
+ 
+\note Face Tex Coords will not be saved as a property per face, but as a property per halfedge. Therefore, you have to request the "halfedge_texcoords2D" property
+
+The OBJ-reader can also read information about the textures in the *.mtl file, if available.
+These texture information (includes texturename and index) will be saved in the property of type:
+\code OpenMesh::MPropHandleT< std::map< int, std::string > > \endcode
+with the name:
+\code "TextureMapping" \endcode
+If you want to use the texture information, you have to request this custom property in your mesh
+before loading it with the obj reader. There is no other option you have to define for reading texture information beside of the request of the property.
+
+
   
 Below in the table you can see what options are suported by which reader/writer (it is possible that the data format can support more).
 ASCII is not a real option and will be selected, if binary was not defined.
@@ -47,7 +63,7 @@ ASCII is not a real option and will be selected, if binary was not defined.
 \li defined with vc (e.g. used by meshlab)
 \li colors encoded in a vertex line (v followed by 6 values)
 
-\**) only ascii version and only vertex and face properties with fundamental types
+\**) only ascii version and only vertex and face properties with fundamental types. Take into account, that you don't have to request these custom properties before loading.
 
 \***) no reader exists
 
