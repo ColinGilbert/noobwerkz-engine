@@ -6,7 +6,7 @@
 
 <!-- --------------------------------------------------------------------- -->
 
-<tr valign=top><td><b>4.0</b> (?/?/?,Rev.1303)</td><td>
+<tr valign=top><td><b>4.0</b> (2015/07/08,Rev.1308)</td><td>
 
 <b>LICENSE</b>
 <ul>
@@ -25,6 +25,7 @@
 <li>Fixed various warnings with vector casts</li>
 <li>General: Get rid of some compiler warnings</li>
 <li>VectorT: fix compile error on vector scalar multiplication when scalar type differs of vector scalar type and the scalar was lhs. closes #2367</li>
+<li>Removed dead and uncompilable code regarding the status set. refs #2511 </li>
 </ul>
 
 <b>IO</b>
@@ -38,6 +39,7 @@
 <li>PLY Reader: Ascii reader now supports custom attributes</li>
 <li>PLY Writer: add custom property support for ascii version</li>
 <li>PLY Reader: unify int8_t/signed char/char in ply reader and writer. </li>
+<li>PLY Reader/Writer Binary: change type int8_t to signed char from type char closes #2499 </li>
 <li>STL Writer: Add a space after the solid keyword to make some readers happy. </li>
 </ul>
 
@@ -70,6 +72,9 @@
 <li>Updated the tutorial with further information on how to build the python bindings</li>
 <li>Added missing requestsfor polyMesh in collapsee docu</li>
 <li>Add feature support list for readers/writers</li>
+<li>add info about requesting standard properties and loading a mesh with options - refs #2512</li>
+<li>add info about texture information in OBJ file format - closes #2369</li>
+<li>add info about texture index property refs #2512</li>
 </ul>
 
 <b>Unittests</b>
