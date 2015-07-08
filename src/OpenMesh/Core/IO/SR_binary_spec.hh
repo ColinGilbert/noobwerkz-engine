@@ -120,6 +120,7 @@ SIMPLE_BINARY(bool);
 SIMPLE_BINARY(float);
 SIMPLE_BINARY(double);
 SIMPLE_BINARY(long double);
+SIMPLE_BINARY(char);
 
 SIMPLE_BINARY(int8_t);
 SIMPLE_BINARY(int16_t);
