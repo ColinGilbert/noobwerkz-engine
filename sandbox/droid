@@ -1,0 +1,10 @@
+rsync -av font ../engine/android/assets &&
+rsync -av shaders ../engine/android/assets &&
+cd ../engine &&
+rsync -av platform/droid/* android/jni --exclude old &&
+rsync -av common android/jni &&
+rsync -av lib/bgfx android/jni --exclude .git &&
+rsync -av lib/bx android/jni --exclude .git &&
+cd android &&
+ndk-build -j8 &&
+cd ../../sandbox

@@ -1,0 +1,3 @@
+cd ../engine &&
+rm -rf android/obj/* android/assets/* android/bin/* android/libs/* android/jni/* android/gen/* build/* &&
+cd ../sandbox

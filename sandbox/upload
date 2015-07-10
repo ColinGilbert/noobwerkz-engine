@@ -1,0 +1,3 @@
+cd ../engine/android &&
+ant debug install &&
+cd ../../sandbox

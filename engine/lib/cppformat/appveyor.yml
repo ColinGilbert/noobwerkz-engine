@@ -1,0 +1,18 @@
+environment:
+  CTEST_OUTPUT_ON_FAILURE: 1
+  matrix:
+  - BUILD: msvc
+    CONFIG: Debug
+  - BUILD: msvc
+    CONFIG: Release
+  - BUILD: mingw
+    CONFIG: Debug
+  - BUILD: mingw
+    CONFIG: Release
+
+build_script:
+  - python support/appveyor-build.py
+
+on_failure:
+  - appveyor PushArtifact Testing/Temporary/LastTest.log
+  - appveyor AddTest test
