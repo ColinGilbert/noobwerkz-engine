@@ -40,12 +40,10 @@ These texture information (includes texturename and index) will be saved in the 
 \code OpenMesh::MPropHandleT< std::map< int, std::string > > \endcode
 with the name:
 \code "TextureMapping" \endcode
-If you want to use the texture information, you have to request this custom property in your mesh
-before loading it with the obj reader. There is no other option you have to define for reading texture information beside of the request of the property.\n
+This property will be automatically created, if textures were found. There is no other option you have to define for reading texture information beside of the request of the property.\n
 Additionally, the OBJ loader writes the texture index per face, if the property "face_texture_index" is requested. The texture index is
 the same index as the index written in the texture mapping. So, it is possible to get the name of the texture from a face via its texture index over the texture mapping property
-to the texture name. But remember, you have to request these properties first before loading to use them. There is no option to check, whether texture mappings were loaded or not,
-but the size of the map of the TextureMapping property shows, if texture names could be loaded or not.  
+to the texture name. But remember, you have to request the face texture index property first before loading the mesh.
 
 
   
