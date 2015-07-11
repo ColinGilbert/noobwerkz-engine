@@ -1,4 +1,6 @@
 #include "Application.hpp"
+#include <boost/filesystem.hpp> ///filesystem.hpp>
+#include <boost/system/error_code.hpp>
 
 noob::application* noob::application::app_pointer = nullptr;
 
@@ -14,35 +16,6 @@ noob::application::application() : chai(chaiscript::Std_Lib::library())
 	prefix = std::unique_ptr<std::string>(new std::string("."));
 
 	using namespace chaiscript;
-/*
-
-	// extraction of useful info from mat4
-//	vec4 rotation_from_mat4(const mat4& m);
-	vec3 translation_from_mat4(const mat4& m);
-	vec3 scale_from_mat4(const mat4& m);
-
-	// camera functions
-	mat4 look_at(const vec3& cam_pos, vec3 targ_pos, const vec3& up);
-	mat4 perspective(float fovy, float aspect, float near, float far);
-	mat4 ortho(float left, float right, float bottom, float top, float near, float far);
-
-	// quaternion functions
-	versor quat_from_axis_rad(float radians, float x, float y, float z);
-	versor quat_from_axis_deg(float degrees, float x, float y, float z);
-	mat4 quat_to_mat4(const versor& q);
-	float dot(const versor& q, const versor& r);
-	versor slerp(const versor& q, const versor& r);
-	void create_versor(float* q, float a, float x, float y, float z);
-	void mult_quat_quat(float* result, float* r, float* s);
-	//void mult_quat_quat(versor results, const versor& r, const versor& s);
-	void normalize_quat(float* q);
-	void quat_to_mat4(float* m, float* q); 
-	// stupid overloading wouldn't let me use const
-	versor normalize(versor& q);
-	void print(const versor& q);
-	versor slerp(versor& q, versor& r, float t);
-*/
-
 
 	chai.add(user_type<noob::drawable>(), "drawable");
 	chai.add(user_type<noob::mesh>(), "mesh");
@@ -211,14 +184,49 @@ void noob::application::init()
 void noob::application::update(double delta)
 {
 	gui.window_dims(window_width, window_height);
-	if (started == false)
+	//if (started == false)
+	//{
+	//}
+	//else started = true;
+	static double time_elapsed = 0.0;
+	time_elapsed += delta;
+	//logger::log(fmt::format("Time elapsed = {0}", time_elapsed));
+	if (time_elapsed > 0.25)
 	{
+		boost::filesystem::path p;
+		p += *prefix;
+		p += "/script.chai";
+		boost::system::error_code ec;
+		
+		static std::time_t last_write = 0;
+		std::time_t t = boost::filesystem::last_write_time(p, ec);
+		
+		if (last_write != t)
+		{
+			std::string s = noob::utils::load_file_as_string(p.generic_string());
+			if (s != "")
+			{
+				eval_script(s);
+			}
+			else 
+			{
+				logger::log(fmt::format("[Application] - update() - {0} is an empty file!", p.generic_string()));
+			}
+			last_write = t;
+		}
+
+		if (ec != 0)
+		{
+			logger::log(fmt::format("[Application] - update() - error reading script.chai: {0}", ec.message()));
+		}
+
+		time_elapsed = 0.0;
 	}
-	else started = true;
+
 }
 
 
-void noob::application::draw() const
+void noob::application::draw()
 {
 	noob::mat4 proj = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 0.1f, 2000.0f);
 
@@ -228,7 +236,7 @@ void noob::application::draw() const
 	// scene.triplanar_render.draw(*t->model.drawable_ptr, noob::identity_mat4(), t->colouring_info);
 
 	gui.text("The goat stumbled upon the cheese", 150.0, 50.0);
-	gui.frame();
+	//gui.frame();
 
 	bgfx::submit(0);
 }

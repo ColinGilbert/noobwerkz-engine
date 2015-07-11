@@ -1,9 +1,15 @@
 cmake_minimum_required(VERSION 3.0)
 project(NoobWerkz)
 
-set(CMAKE_CXX_FLAGS "-std=c++11 -fno-strict-aliasing -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DEIGEN_MPL2_ONLY -Wall ${CMAKE_CXX_FLAGS}") #-DSQLITECPP_ENABLE_ASSERT_HANDLER -Wall ${CMAKE_CXX_FLAGS}")
+#set(CMAKE_BUILD_TYPE "DEBUG")
+#set(CMAKE_BUILD_TYPE "RELEASE")
+
+set(CMAKE_CXX_FLAGS "-std=c++11 -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DEIGEN_MPL2_ONLY -DCHAISCRIPT_NO_THREADS -Wall ${CMAKE_CXX_FLAGS}") #-DSQLITECPP_ENABLE_ASSERT_HANDLER -Wall ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-std=c99 -fno-strict-aliasing -DSQLITE_ENABLE_COLUMN_METADATA -DSTB_IMAGE_STATIC -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -Wall ${CMAKE_C_FLAGS}")
-#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
+
+find_package(Boost COMPONENTS system filesystem REQUIRED)
+#include_directories(${Boost_INCLUDE_DIR})
+
 
 include_directories(lib/chaiscript/include)
 list (APPEND chai-src
@@ -16,40 +22,6 @@ list (APPEND cppformat_src
 	lib/cppformat/format.cc
 	lib/cppformat/posix.cc
 	)
-
-#include_directories(lib/clipper/cpp)
-#list(APPEND clipper_src
-	#lib/clipper/cpp/clipper.cpp
-	#	)
-
-#include_directories(lib/poly2tri/poly2tri/common)
-#include_directories(lib/poly2tri/poly2tri/sweep)
-#include_directories(lib/poly2tri/poly2tri)
-
-#list(APPEND poly2tri_src
-	#	lib/poly2tri/poly2tri/common/shapes.cc
-	#	lib/poly2tri/poly2tri/sweep/advancing_front.cc
-	#	lib/poly2tri/poly2tri/sweep/cdt.cc
-	#	lib/poly2tri/poly2tri/sweep/sweep_context.cc
-	#	lib/poly2tri/poly2tri/sweep/sweep.cc
-	#)
-
-	#include_directories(lib/clip2tri/clip2tri)
-	#include_directories(lib/clip2tri/clipper)
-	#include_directories(lib/clip2tri/polytri)
-	#include_directories(lib/clip2tri/common)
-	#include_directories(lib/clip2tri/sweep)
-
-list(APPEND clip2tri_src
-	lib/clip2tri/clip2tri/clip2tri.cpp
-	lib/clip2tri/clipper/clipper.cpp
-	lib/clip2tri/poly2tri/common/shapes.cc
-	lib/clip2tri/poly2tri/sweep/advancing_front.cc
-	lib/clip2tri/poly2tri/sweep/cdt.cc
-	lib/clip2tri/poly2tri/sweep/sweep.cc
-	lib/clip2tri/poly2tri/sweep/sweep_context.cc
-	)
-
 include_directories(lib/bstrlib)
 list(APPEND bstrlib_src
 	lib/bstrlib/bstrlib.c
@@ -68,17 +40,7 @@ add_subdirectory(lib/polyvox)
 include_directories(lib/polyvox/include)
 
 include_directories(lib/eigen)
-#include_directories(lib/eigen/Eigen)
 add_subdirectory(lib/rbdl)
-
-# TODO: Replace simplicial Cholesky solver prior to use (for licensing reasons.)
-# add_subdirectory(lib/shapeop)
-
-# TODO: Add these when needed.
-# add_subdirectory(lib/dlib/dlib)
-# add_subdirectory(lib/armadillo)
-# add_subdirectory(lib/openNL)
-# include_directories(lib/ulmBLAS)
 
 include_directories(lib/openmesh/src)
 add_subdirectory(lib/openmesh)
@@ -121,8 +83,6 @@ list (APPEND vhacd_src
 	lib/v-hacd/src/VHACD_Lib/src/vhacdVolume.cpp
 	)
 
-#add_subdirectory(lib/pcl)
-
 include_directories(lib/csgjs-cpp)
 
 # TODO: Add when needed
@@ -135,17 +95,6 @@ include_directories(common/bgfx_related)
 include_directories(common/bgfx_related/font)
 include_directories(common/bgfx_related/shaderc)
 include_directories(common/bfgx_related/nanovg)
-
-#include_directories(lib/clipper/cpp)
-#list(APPEND clipper_src
-#	lib/clipper/cpp/clipper.cpp
-#	)
-
-#include_directories(lib/cppformat)
-#list(APPEND cppformat_src
-#	lib/cppformat/format.cc
-#	lib/cppformat/posix.cc
-#	)
 
 list(APPEND bgfx_src
 	lib/bgfx/src/amalgamated.cpp
@@ -163,7 +112,6 @@ list(APPEND bgfx_utils_src
 	)
 
 list(APPEND openmesh_src
-	#lib/openmesh/src/OpenMesh/Tools/Decimater/BaseDecimaterT.cc
 	lib/openmesh/src/OpenMesh/Tools/Decimater/ModQuadricT.cc
 	lib/openmesh/src/OpenMesh/Tools/Decimater/DecimaterT.cc
 	lib/openmesh/src/OpenMesh/Tools/Decimater/Observer.cc
@@ -215,8 +163,7 @@ add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src}
 target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES}
 	${OPENGL_LIBRARIES} freetype rt dl pthread assimp m OpenMeshCore
 	OpenMeshTools emon BulletDynamics BulletCollision BulletSoftBody
-	LinearMath spnav)
-
+	LinearMath spnav ${Boost_LIBRARIES}) # boost_system boost_filesystem)
 
 project(LogServer)
 

@@ -83,7 +83,7 @@ namespace noob
 
 			void init();
 			void update(double delta);
-			void draw() const;
+			void draw();
 			void eval_script(const std::string& script);
 			//void eval_statement(const std::string& statement);
 			
@@ -116,6 +116,6 @@ namespace noob
 			noob::mat4 view_mat;
 			noob::transform_helper current_cam_transform;
 			chaiscript::ChaiScript chai;
-			lemon::static_digraph keystrokes_graph;
+			lemon::StaticDigraph keystrokes_graph;
 	};
 }
