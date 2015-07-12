@@ -88,8 +88,6 @@ namespace noob
 			void pause();
 			void resume();
 
-			void change_view(noob::application::view v);
-			
 			// Callbacks
 			void touch(int pointerID, float x, float y, int action);
 			void set_archive_dir(const std::string & filepath);
@@ -106,8 +104,9 @@ namespace noob
 			uint32_t window_width, window_height;
 			noob::gui gui;
 			std::vector<noob::vec2> finger_positions;
-			noob::scene scene;
 			noob::voxel_world voxels;
+			noob::physics_world physics;
+			noob::scene scene;
 			noob::mat4 view_mat;
 			noob::transform_helper current_cam_transform;
 			chaiscript::ChaiScript chai;

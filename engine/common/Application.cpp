@@ -1,5 +1,5 @@
 #include "Application.hpp"
-#include <boost/filesystem.hpp> ///filesystem.hpp>
+#include <boost/filesystem.hpp>
 #include <boost/system/error_code.hpp>
 
 noob::application* noob::application::app_pointer = nullptr;
@@ -14,6 +14,12 @@ noob::application::application() : chai(chaiscript::Std_Lib::library())
 	time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
+	
+	/*
+	voxels.init();
+	physics.init();
+	scene.init();
+	*/
 
 	using namespace chaiscript;
 
@@ -119,9 +125,9 @@ noob::application::application() : chai(chaiscript::Std_Lib::library())
 	chai.add(fun(static_cast<btCompoundShape* (noob::physics_world::*)(const std::vector<noob::mesh>&)>(&noob::physics_world::compound_shape)), "compound_shape");
 	chai.add(fun(static_cast<btCompoundShape* (noob::physics_world::*)(const std::vector<btCollisionShape*>&)>(&noob::physics_world::compound_shape)), "compound_shape");
 
-
-
-	chai.add(var(&voxels), "voxels");
+	chai.add(fun(&noob::application::physics), "physics");
+	chai.add(fun(&noob::application::voxels), "voxels");
+	chai.add(fun(&noob::application::scene), "scene");
 
 }
 
@@ -143,16 +149,13 @@ noob::application& noob::application::get()
 void noob::application::init()
 {
 	logger::log("");
-	// noob::editor_utils::blend_channels();
 
 	ui_enabled = true;
 	gui.init(*prefix, window_width, window_height);
 	voxels.init();
-	view_mat = noob::look_at(noob::vec3(0.0, 0.0, -500.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
-	// TESTING CODE
+	physics.init();
 	scene.init();
-
-	// noob::scene::terrain_info * t = new noob::scene::terrain_info;
+	view_mat = noob::look_at(noob::vec3(0.0, 0.0, -500.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
 
 	noob::triplanar_renderer::uniform_info info;
 
@@ -164,15 +167,6 @@ void noob::application::init()
 	info.colour_positions = noob::vec2(0.3, 0.7);
 	info.scales = noob::vec3(3.0, 3.0, 3.0);
 
-	// t->colouring_info = info;
-
-	noob::mesh m;
-	m.load("terrain.off");
-	// t->model.drawable = new noob::drawable();
-	// t->model.drawable->init(m);
-
-	// chai.eval("voxels.sphere(30,60,60,60,true);"); //noob::mesh d = chai.eval<noob::mesh>("function(3, 4.75);");
-	// chai.eval("var m = voxels.extract_region(0,0,0,90,90,90);");
 	logger::log("[Sandbox] done init.");
 }
 
@@ -308,7 +302,7 @@ void noob::application::touch(int pointerID, float x, float y, int action)
 			logger::log(ss.str());
 		}
 
-		if (pointerID < 5)
+		if (pointerID < 3)
 		{
 			finger_positions[pointerID] = noob::vec2(x,y);
 		}

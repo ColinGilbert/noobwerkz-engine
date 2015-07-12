@@ -1,1 +1,2 @@
-
+// Currently, ChaiScript causes a segfault if you feed it an all-whitespace file. Ergo the the following placeholder.
+rofl
