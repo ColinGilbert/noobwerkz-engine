@@ -13,7 +13,7 @@ noob::application::application() : chai(chaiscript::Std_Lib::library())
 	clock_gettime(CLOCK_MONOTONIC, &timeNow);
 	time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
-	prefix = std::unique_ptr<std::string>(new std::string("."));
+	prefix = std::unique_ptr<std::string>(new std::string("./"));
 
 	using namespace chaiscript;
 
@@ -32,13 +32,9 @@ noob::application::application() : chai(chaiscript::Std_Lib::library())
 	chai.add(user_type<noob::mat4>(), "mat4");
 	chai.add(user_type<noob::versor>(), "versor");
 	chai.add(user_type<noob::transform_helper>(), "transform_helper");
-	//chai.add(user_type<noob::binary_op>, "binary_op");
-	//chai.add(user_type<noob::csg_op>, "csg_op");
-	//chai.add(user_type<noob::cardinal_axis>, "cardinal_axis");
 
 	chai.add(fun(&noob::length), "length");
 	chai.add(fun(&noob::length2), "length2");
-	// overload normalize for vec3 and versor
 	chai.add(fun(static_cast<noob::versor (*)(const noob::versor&)>(&noob::normalize)), "normalize");
 	chai.add(fun(static_cast<noob::vec3 (*)(const noob::vec3&)>(&noob::normalize)), "normalize");
 	chai.add(fun(static_cast<float (*)(const noob::vec3&, const noob::vec3&)>(&noob::dot)), "dot");
@@ -156,7 +152,7 @@ void noob::application::init()
 	// TESTING CODE
 	scene.init();
 
-	noob::scene::terrain_info * t = new noob::scene::terrain_info;
+	// noob::scene::terrain_info * t = new noob::scene::terrain_info;
 
 	noob::triplanar_renderer::uniform_info info;
 
@@ -168,12 +164,12 @@ void noob::application::init()
 	info.colour_positions = noob::vec2(0.3, 0.7);
 	info.scales = noob::vec3(3.0, 3.0, 3.0);
 
-	t->colouring_info = info;
+	// t->colouring_info = info;
 
 	noob::mesh m;
 	m.load("terrain.off");
-	t->model.drawable = new noob::drawable();
-	t->model.drawable->init(m);
+	// t->model.drawable = new noob::drawable();
+	// t->model.drawable->init(m);
 
 	// chai.eval("voxels.sphere(30,60,60,60,true);"); //noob::mesh d = chai.eval<noob::mesh>("function(3, 4.75);");
 	// chai.eval("var m = voxels.extract_region(0,0,0,90,90,90);");
@@ -184,42 +180,36 @@ void noob::application::init()
 void noob::application::update(double delta)
 {
 	gui.window_dims(window_width, window_height);
-	//if (started == false)
-	//{
-	//}
-	//else started = true;
+	
 	static double time_elapsed = 0.0;
 	time_elapsed += delta;
-	//logger::log(fmt::format("Time elapsed = {0}", time_elapsed));
+	
 	if (time_elapsed > 0.25)
 	{
 		boost::filesystem::path p;
 		p += *prefix;
-		p += "/script.chai";
+		p += "script.chai";
 		boost::system::error_code ec;
 		
 		static std::time_t last_write = 0;
 		std::time_t t = boost::filesystem::last_write_time(p, ec);
-		
-		if (last_write != t)
+		if (ec != 0)
 		{
-			std::string s = noob::utils::load_file_as_string(p.generic_string());
-			if (s != "")
+			logger::log(fmt::format("[Application] - update() - error reading {0}: {1}",p.generic_string(), ec.message()));
+		}	
+		else if (last_write != t)
+		{
+			try
 			{
-				eval_script(s);
+				chai.eval_file(p.generic_string());
 			}
-			else 
+			catch(std::exception e)
 			{
-				logger::log(fmt::format("[Application] - update() - {0} is an empty file!", p.generic_string()));
+				logger::log(fmt::format("[Application]. Caught ChaiScript exception: ", e.what()));
 			}
 			last_write = t;
 		}
-
-		if (ec != 0)
-		{
-			logger::log(fmt::format("[Application] - update() - error reading script.chai: {0}", ec.message()));
-		}
-
+		
 		time_elapsed = 0.0;
 	}
 

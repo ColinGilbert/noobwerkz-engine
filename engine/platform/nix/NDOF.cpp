@@ -8,7 +8,7 @@
 void sig()
 {
 	spnav_close();
-	logger::log("[NDOF] libspav received SIGINT.");
+	logger::log("[NDOF] libsnpav received SIGINT.");
 }
 
 void noob::ndof::run()

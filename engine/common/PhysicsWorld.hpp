@@ -1,13 +1,10 @@
 #pragma once
 
-// #include <Eigen/Dense>
-
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionShapes/btTriangleIndexVertexArray.h>
 
 #include "NoobUtils.hpp"
 #include "Mesh.hpp"
-
 
 #define BIT(x) (1<<(x))
 

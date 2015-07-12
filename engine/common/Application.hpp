@@ -25,6 +25,7 @@
 #include <fstream>
 #include <atomic>
 
+/*
 #include <cereal/access.hpp>
 #include <cereal/types/memory.hpp>
 #include <cereal/types/vector.hpp>
@@ -32,6 +33,7 @@
 #include <cereal/types/map.hpp>
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/binary.hpp>
+*/
 
 #include <lemon/list_graph.h>
 #include <lemon/static_graph.h>
@@ -43,9 +45,9 @@
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
 #include "Drawable.hpp"
-//#include "VoxelWorld.hpp"
+#include "VoxelWorld.hpp"
 #include "GUI.hpp"
-//#include "PhysicsWorld.hpp"
+#include "PhysicsWorld.hpp"
 #include "Mesh.hpp"
 #include "Camera.hpp"
 #include "NDOF.hpp"
@@ -53,11 +55,11 @@
 #include "TransformHelper.hpp"
 // #include "Noise.h"
 
-#include "nanovg/nanovg.h"
+//#include "nanovg/nanovg.h"
 #include <bgfx.h>
 #include "format.h"
 
-#include "TriPlanar.hpp"
+//#include "TriPlanar.hpp"
 #include "HACDRenderer.hpp"
 
 

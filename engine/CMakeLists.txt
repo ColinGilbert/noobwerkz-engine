@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.0)
 project(NoobWerkz)
 
-#set(CMAKE_BUILD_TYPE "DEBUG")
+set(CMAKE_BUILD_TYPE "DEBUG")
 #set(CMAKE_BUILD_TYPE "RELEASE")
 
-set(CMAKE_CXX_FLAGS "-std=c++11 -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DEIGEN_MPL2_ONLY -DCHAISCRIPT_NO_THREADS -Wall ${CMAKE_CXX_FLAGS}") #-DSQLITECPP_ENABLE_ASSERT_HANDLER -Wall ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++11 -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DEIGEN_MPL2_ONLY -Wall ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-std=c99 -fno-strict-aliasing -DSQLITE_ENABLE_COLUMN_METADATA -DSTB_IMAGE_STATIC -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -Wall ${CMAKE_C_FLAGS}")
 
 find_package(Boost COMPONENTS system filesystem REQUIRED)
@@ -52,24 +52,24 @@ include_directories(lib/bgfx/3rdparty/khronos)
 
 include_directories(lib/lemon)
 
-include_directories(lib/noisepp/core)
-include_directories(lib/noisepp/threadpp)
-include_directories(lib/noisepp/utils)
+#include_directories(lib/noisepp/core)
+#include_directories(lib/noisepp/threadpp)
+#include_directories(lib/noisepp/utils)
 
-list (APPEND noisepp_src
-	lib/noisepp/utils/NoiseBuilders.cpp
-	lib/noisepp/utils/NoiseGradientRenderer.cpp
-	lib/noisepp/utils/NoiseJobQueue.cpp
-	lib/noisepp/utils/NoiseOutStream.cpp
-	lib/noisepp/utils/NoiseEndianUtils.cpp
-	lib/noisepp/utils/NoiseInStream.cpp
-	lib/noisepp/utils/NoiseSystem.cpp
-	lib/noisepp/utils/NoiseWriter.cpp
-	lib/noisepp/utils/NoiseColourValue.cpp
-	lib/noisepp/utils/NoiseImage.cpp
-	lib/noisepp/utils/NoiseModules.cpp
-	lib/noisepp/utils/NoiseReader.cpp
-	)
+#list (APPEND noisepp_src
+#	lib/noisepp/utils/NoiseBuilders.cpp
+#	lib/noisepp/utils/NoiseGradientRenderer.cpp
+#	lib/noisepp/utils/NoiseJobQueue.cpp
+#	lib/noisepp/utils/NoiseOutStream.cpp
+#	lib/noisepp/utils/NoiseEndianUtils.cpp
+#	lib/noisepp/utils/NoiseInStream.cpp
+#	lib/noisepp/utils/NoiseSystem.cpp
+#	lib/noisepp/utils/NoiseWriter.cpp
+#	lib/noisepp/utils/NoiseColourValue.cpp
+#	lib/noisepp/utils/NoiseImage.cpp
+#	lib/noisepp/utils/NoiseModules.cpp
+#	lib/noisepp/utils/NoiseReader.cpp
+#	)
 
 include_directories(lib/v-hacd/src/VHACD_Lib/inc)
 include_directories(lib/v-hacd/src/VHACD_Lib/public)
@@ -83,10 +83,10 @@ list (APPEND vhacd_src
 	lib/v-hacd/src/VHACD_Lib/src/vhacdVolume.cpp
 	)
 
-include_directories(lib/csgjs-cpp)
+#include_directories(lib/csgjs-cpp)
 
 # TODO: Add when needed
-include_directories(lib/cereal/include)
+#include_directories(lib/cereal/include)
 include_directories(lib/stb)
 
 include_directories(common)
@@ -94,7 +94,7 @@ include_directories(common/drawing_techniques)
 include_directories(common/bgfx_related)
 include_directories(common/bgfx_related/font)
 include_directories(common/bgfx_related/shaderc)
-include_directories(common/bfgx_related/nanovg)
+#include_directories(common/bfgx_related/nanovg)
 
 list(APPEND bgfx_src
 	lib/bgfx/src/amalgamated.cpp
@@ -107,8 +107,8 @@ list(APPEND bgfx_utils_src
 	common/bgfx_related/font/text_metrics.cpp
 	common/bgfx_related/font/text_buffer_manager.cpp
 	common/bgfx_related/bounds.cpp
-	common/bgfx_related/nanovg/nanovg_bgfx.cpp
-	common/bgfx_related/nanovg/nanovg.cpp
+	#common/bgfx_related/nanovg/nanovg_bgfx.cpp
+	#common/bgfx_related/nanovg/nanovg.cpp
 	)
 
 list(APPEND openmesh_src
@@ -118,18 +118,18 @@ list(APPEND openmesh_src
 	lib/openmesh/src/OpenMesh/Core/Mesh/ArrayKernelT.cc
 	)
 
-include_directories(lib/sqlite)
-list (APPEND sqlite_src
-	lib/sqlite/sqlite3.c
-	)
+#include_directories(lib/sqlite)
+#list (APPEND sqlite_src
+#	lib/sqlite/sqlite3.c
+#	)
 
-include_directories(lib/SQLiteCpp/include)
-list (APPEND sqlitecpp_src
-	lib/SQLiteCpp/src/Column.cpp
-	lib/SQLiteCpp/src/Database.cpp
-	lib/SQLiteCpp/src/Statement.cpp
-	lib/SQLiteCpp/src/Transaction.cpp
-	)
+#include_directories(lib/SQLiteCpp/include)
+#list (APPEND sqlitecpp_src
+#	lib/SQLiteCpp/src/Column.cpp
+#	lib/SQLiteCpp/src/Database.cpp
+#	lib/SQLiteCpp/src/Statement.cpp
+#	lib/SQLiteCpp/src/Transaction.cpp
+#	)
 
 list(APPEND common_src
 	common/Mesh.cpp
@@ -156,14 +156,9 @@ list(APPEND common_src
 include_directories(platform/nix)
 list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 
-add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src}
-	${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src} ${noisepp_src}
-	${sqlite_src} ${sqlitecpp_src})
+add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src} ${noisepp_src} ${sqlite_src} ${sqlitecpp_src})
 
-target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES}
-	${OPENGL_LIBRARIES} freetype rt dl pthread assimp m OpenMeshCore
-	OpenMeshTools emon BulletDynamics BulletCollision BulletSoftBody
-	LinearMath spnav ${Boost_LIBRARIES}) # boost_system boost_filesystem)
+target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m OpenMeshCore OpenMeshTools emon BulletDynamics BulletCollision BulletSoftBody LinearMath spnav ${Boost_LIBRARIES}) # boost_system boost_filesystem)
 
 project(LogServer)
 
