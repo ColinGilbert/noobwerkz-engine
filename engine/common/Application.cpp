@@ -232,18 +232,6 @@ void noob::application::draw()
 }
 
 
-void noob::application::eval_script(const std::string& script)
-{
-	try
-	{
-		chai.eval(script);
-	}
-	catch (std::exception e)
-	{
-		logger::log(fmt::format("[Application] - eval_script() - exception caught: {0}", e.what()));
-	}
-}
-
 void noob::application::accept_ndof_data(const noob::ndof::data& info)
 {
 	if (info.movement == true)

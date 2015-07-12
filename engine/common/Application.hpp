@@ -71,11 +71,6 @@ namespace noob
 	class application
 	{
 		public:
-			enum view
-			{
-				TERRAIN_EDITOR, PHYSICS_DEBUG
-			};
-
 			application();
 			virtual ~application();
 			static application& get();
@@ -86,8 +81,6 @@ namespace noob
 			void init();
 			void update(double delta);
 			void draw();
-			void eval_script(const std::string& script);
-			//void eval_statement(const std::string& statement);
 			
 			// step() is called by the target platform, which calculates the delta-time and calls update().
 			// pause() and resume() are used by whoever needs them :P
