@@ -15,12 +15,6 @@ noob::application::application() : chai(chaiscript::Std_Lib::library())
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
 	
-	/*
-	voxels.init();
-	physics.init();
-	scene.init();
-	*/
-
 	using namespace chaiscript;
 
 	chai.add(user_type<noob::drawable>(), "drawable");
@@ -155,6 +149,7 @@ void noob::application::init()
 	voxels.init();
 	physics.init();
 	scene.init();
+/*
 	view_mat = noob::look_at(noob::vec3(0.0, 0.0, -500.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
 
 	noob::triplanar_renderer::uniform_info info;
@@ -166,7 +161,7 @@ void noob::application::init()
 	info.mapping_blends = noob::vec3(0.5, 0.5, 1.0);
 	info.colour_positions = noob::vec2(0.3, 0.7);
 	info.scales = noob::vec3(3.0, 3.0, 3.0);
-
+*/
 	logger::log("[Sandbox] done init.");
 }
 

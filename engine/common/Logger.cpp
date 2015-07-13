@@ -3,7 +3,7 @@
 void logger::log(const std::string& message)
 		{
 			asio::ip::tcp::iostream s;
-			s.connect(server_address.c_str(), server_port.c_str());
+			s.connect(SERVER_ADDRESS, SERVER_PORT);
 			if (s)
 			{
 				s << message << std::flush;

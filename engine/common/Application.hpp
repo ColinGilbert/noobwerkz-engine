@@ -25,6 +25,9 @@
 #include <fstream>
 #include <atomic>
 
+//#include <bgfx.h>
+
+
 /*
 #include <cereal/access.hpp>
 #include <cereal/types/memory.hpp>
@@ -41,7 +44,6 @@
 #include "Server.hpp"
 #include "Logger.hpp"
 #include "NoobUtils.hpp"
-#include "Untracked.hpp"
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
 #include "Drawable3D.hpp"
@@ -55,13 +57,8 @@
 #include "TransformHelper.hpp"
 // #include "Noise.h"
 
-//#include "nanovg/nanovg.h"
-#include <bgfx.h>
+
 #include "format.h"
-
-//#include "TriPlanar.hpp"
-#include "HACDRenderer.hpp"
-
 
 #include <chaiscript/chaiscript.hpp>
 #include <chaiscript/chaiscript_stdlib.hpp>

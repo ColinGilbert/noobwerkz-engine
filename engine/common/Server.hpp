@@ -7,7 +7,7 @@
 #include <asio.hpp>
 
 // TODO: Cleanup this dependency
-#include "Untracked.hpp"
+#include "Config.hpp"
 
 namespace noob
 {

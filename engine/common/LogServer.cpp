@@ -4,7 +4,7 @@
 #include <string>
 #include <asio.hpp>
 
-#include "Untracked.hpp"
+#include "Config.hpp"
 
 // TODO: port this to using main server class, when fleshed out properly :P
 int main()

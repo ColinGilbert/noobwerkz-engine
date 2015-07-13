@@ -6,10 +6,12 @@
 #include <HACDRenderer.hpp>
 #include <TriplanarGradientMap.hpp>
 #include <TransformHelper.hpp>
+
 #include <boost/variant.hpp>
+#include <boost/intrusive_ptr.hpp>
+
 #include <lemon/list_graph.h>
 #include <lemon/static_graph.h>
-#include <boost/intrusive_ptr.hpp>
 
 
 typedef boost::variant<noob::triplanar_renderer::uniform_info> render_info;
@@ -52,6 +54,8 @@ namespace noob
 
 			noob::hacd_renderer hacd_render;
 			noob::triplanar_renderer triplanar_render;
+
+			std::vector<noob::mat4> view_matrices;
 
 
 	};
