@@ -58,7 +58,7 @@ void noob::drawable::init(const noob::mesh& m)
 	index_buffer = bgfx::createIndexBuffer(bgfx::copy(&indices[0], indices.size() * sizeof(uint32_t)), BGFX_BUFFER_INDEX32);
 
 
-	info = m.get_bbox();
+	bbox = m.get_bbox();
 
 
 	dirty = true;

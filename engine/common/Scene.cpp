@@ -13,6 +13,7 @@ void noob::scene::draw()
 	
 }
 
+
 bool noob::scene::add_to_scene(const noob::scene::node& node_to_add, const std::string& parent_name)
 {
 	return false;

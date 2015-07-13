@@ -29,7 +29,7 @@ namespace noob
 			void init(const noob::mesh& m);
 			void draw(uint8_t view_id, const noob::mat4& model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags = BGFX_STATE_DEFAULT) const;
 			// These are expressed in model space coorsinates.
-			noob::mesh::bbox_info get_bbox() const { return info; }
+			noob::mesh::bbox_info get_bbox() const { return bbox; }
 			// noob::transform get_transform() const;
 			uint32_t material_index;
 
@@ -43,6 +43,6 @@ namespace noob
 			std::vector<uint32_t> indices;
 			std::vector<noob::graphics::mesh_vertex> bgfx_vertices;
 
-			noob::mesh::bbox_info info;
+			noob::mesh::bbox_info bbox;
 	};
 }

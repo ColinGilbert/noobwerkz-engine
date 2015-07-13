@@ -11,19 +11,7 @@
 #include <boost/interprocess/managed_shared_memory.hpp>
 #include <boost/interprocess/streams/vectorstream.hpp>
 */
-#include <OpenMesh/Core/IO/MeshIO.hh>
-#include <OpenMesh/Tools/Decimater/CollapseInfoT.hh>
-#include <OpenMesh/Tools/Decimater/DecimaterT.hh>
-#include <OpenMesh/Tools/Decimater/ModAspectRatioT.hh>
-#include <OpenMesh/Tools/Decimater/ModEdgeLengthT.hh>
-#include <OpenMesh/Tools/Decimater/ModHausdorffT.hh>
-#include <OpenMesh/Tools/Decimater/ModNormalDeviationT.hh>
-#include <OpenMesh/Tools/Decimater/ModNormalFlippingT.hh>
-#include <OpenMesh/Tools/Decimater/ModQuadricT.hh>
-#include <OpenMesh/Tools/Decimater/ModProgMeshT.hh>
-#include <OpenMesh/Tools/Decimater/ModIndependentSetsT.hh>
-#include <OpenMesh/Tools/Decimater/ModRoundnessT.hh>
-#include <OpenMesh/Tools/Subdivider/Uniform/CatmullClarkT.hh>
+
 #include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
 #include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
 

@@ -25,9 +25,6 @@
 #include <fstream>
 #include <atomic>
 
-//#include <bgfx.h>
-
-
 /*
 #include <cereal/access.hpp>
 #include <cereal/types/memory.hpp>

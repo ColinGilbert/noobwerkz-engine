@@ -44,6 +44,12 @@ void noob::graphics::frame(uint32_t width, uint32_t height)
 }
 
 
+void noob::graphics::set_file_prefix(const std::string& p)
+{
+
+}
+
+
 bgfx::TextureHandle noob::graphics::get_texture(const std::string& name)
 {
 	if (global_textures.find(name) == global_textures.end())
@@ -137,8 +143,6 @@ bgfx::TextureHandle noob::graphics::load_texture(const std::string& friendly_nam
 	return tex;
 }
 
-// bgfx::ProgramHandle noob::graphics::compile_and_load_program(const std::string& vs_source_filename, const std::string& fs_source_filename, const std::string& varyings_filename) {}
-
 
 bool noob::graphics::add_sampler(const std::string& _name)
 {
@@ -225,12 +229,14 @@ bool noob::graphics::add_shader(const std::string& _name, const noob::graphics::
 	else return false;
 }
 
+
 noob::graphics::shader noob::graphics::get_shader(const std::string& name)
 {
 	auto it = noob::graphics::shaders.find(name);
 	if (it != shaders.end()) return it->second;
 	else return noob::graphics::shaders.find("invalid")->second;
 }
+
 
 noob::graphics::uniform noob::graphics::get_uniform(const std::string& name)
 {
@@ -239,6 +245,7 @@ noob::graphics::uniform noob::graphics::get_uniform(const std::string& name)
 	else return noob::graphics::uniforms.find("invalid")->second;
 }
 
+
 noob::graphics::sampler noob::graphics::get_sampler(const std::string& name)
 {
 	auto it = noob::graphics::samplers.find(name);
@@ -246,10 +253,12 @@ noob::graphics::sampler noob::graphics::get_sampler(const std::string& name)
 	else return noob::graphics::samplers.find("invalid")->second;
 }
 
+
 bool is_valid(const noob::graphics::uniform& _uniform)
 {
 	return (_uniform.handle.idx != bgfx::invalidHandle);
 }
+
 
 bool is_valid(const noob::graphics::sampler& _sampler)
 {

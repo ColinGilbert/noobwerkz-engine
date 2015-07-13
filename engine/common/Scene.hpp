@@ -1,6 +1,7 @@
 // This class uses two graphs: One for modifying and another for super-fast iterating.
 #pragma once
 
+#include "Graphics.hpp"
 #include <MathFuncs.hpp>
 #include <VoxelWorld.hpp>
 #include <HACDRenderer.hpp>
@@ -24,7 +25,7 @@ namespace noob
 			class node
 			{
 				public:
-					node() : drawable_id(0), name(""), ready_for_drawing(false) {}
+					node() : id(0), drawable_id(0), name(""), ready_for_drawing(false) {}
 					size_t id;
 					size_t drawable_id;
 					noob::transform_helper xform;
@@ -44,7 +45,6 @@ namespace noob
 			// TODO: Find a safer manner to do this. 
 			noob::scene::node get_node(const std::string& name) const;
 
-
 		protected:
 			void dynamic_graph_from_static();
 			void static_graph_from_dynamic();
@@ -56,7 +56,7 @@ namespace noob
 			noob::triplanar_renderer triplanar_render;
 
 			std::vector<noob::mat4> view_matrices;
-
+			
 
 	};
 
