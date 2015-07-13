@@ -25,9 +25,8 @@ namespace noob
 			// Built on-stack to provide easy access to a number of convenient variables
 			struct node
 			{
-					node() : drawable_id(0), ready_to_draw(false) {}
-					size_t drawable_id;
-					noob::transform_helper xform;
+					node() : ready_to_draw(false) {}
+					
 					render_info drawing_info;
 					bool ready_to_draw;
 			};

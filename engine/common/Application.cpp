@@ -101,6 +101,9 @@ noob::application::application() : chai(chaiscript::Std_Lib::library())
 	chai.add(fun(&noob::voxel_world::get), "get");
 	chai.add(fun(&noob::voxel_world::extract_region), "extract_region");
 
+	chai.add(fun(&noob::drawable3d::add), "add_drawable3d");
+	chai.add(fun(&noob::drawable3d::get), "get_drawable3d");
+
 	chai.add(user_type<noob::physics_world>(), "physics_world");
 	chai.add(fun(&noob::physics_world::init), "init");
 	chai.add(fun(&noob::physics_world::step), "step");

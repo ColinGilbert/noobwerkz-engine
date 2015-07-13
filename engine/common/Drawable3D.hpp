@@ -17,8 +17,6 @@
 #include "Graphics.hpp"
 #include "Logger.hpp"
 #include "Mesh.hpp"
-//#include  "IntrusiveReferenceCountingFunctions.hpp"
-//#include "AtomicCounter.hpp"
 
 #include "format.h"
 
