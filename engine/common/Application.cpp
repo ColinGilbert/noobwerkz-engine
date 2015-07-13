@@ -17,7 +17,7 @@ noob::application::application() : chai(chaiscript::Std_Lib::library())
 	
 	using namespace chaiscript;
 
-	chai.add(user_type<noob::drawable>(), "drawable");
+	chai.add(user_type<noob::drawable3d>(), "drawable3d");
 	chai.add(user_type<noob::mesh>(), "mesh");
 	chai.add(user_type<noob::mesh::bbox_info>(), "bbox_info");
 	chai.add(user_type<noob::voxel_world>(), "voxel_world");
@@ -212,7 +212,7 @@ void noob::application::draw()
 	bgfx::setViewTransform(0, &view_mat.m[0], &proj.m[0]);
 	bgfx::setViewRect(0, 0, 0, window_width, window_height);
 
-	// scene.triplanar_render.draw(*t->model.drawable_ptr, noob::identity_mat4(), t->colouring_info);
+	// scene.triplanar_render.draw(*t->model.drawable3d_ptr, noob::identity_mat4(), t->colouring_info);
 
 	gui.text("The goat stumbled upon the cheese", 150.0, 50.0);
 	//gui.frame();

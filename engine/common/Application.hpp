@@ -104,6 +104,5 @@ namespace noob
 			noob::mat4 view_mat;
 			noob::transform_helper current_cam_transform;
 			chaiscript::ChaiScript chai;
-			// lemon::StaticDigraph keystrokes_graph;
 	};
 }

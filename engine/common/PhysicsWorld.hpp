@@ -30,6 +30,14 @@ namespace noob
 				noob::vec3 linear_factor, angular_factor;
 			};
 
+			class character_controller
+			{
+				public:
+
+				protected:
+			};
+
+
 			~physics_world();
 
 			void init();

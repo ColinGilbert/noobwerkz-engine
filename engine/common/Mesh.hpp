@@ -41,7 +41,7 @@ namespace noob
 		public:
 			struct bbox_info
 			{
-				noob::vec3 min, max, bbox_center;//, centroid;
+				noob::vec3 min, max, center;//, centroid;
 			};
 
 			std::vector<noob::vec3> vertices;
@@ -68,7 +68,7 @@ namespace noob
 			// Expensive. Try not calling it too often during actual gameplay
 			std::vector<noob::mesh> convex_decomposition() const;
 
-			noob::mesh::bbox_info get_bbox() const { return info; }
+			noob::mesh::bbox_info get_bbox() const { return bbox; }
 
 			// TODO: Fix
 			//static noob::mesh csg(const noob::mesh& a, const noob::mesh& b, const noob::csg_op op);
@@ -78,6 +78,6 @@ namespace noob
 			static noob::mesh sphere(float radius);
 
 		protected:
-			bbox_info info;
+			bbox_info bbox;
 	};
 }

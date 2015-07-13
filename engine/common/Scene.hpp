@@ -1,7 +1,8 @@
 // This class uses two graphs: One for modifying and another for super-fast iterating.
 #pragma once
 
-#include "Graphics.hpp"
+#include <PhysicsWorld.hpp>
+#include <Graphics.hpp>
 #include <MathFuncs.hpp>
 #include <VoxelWorld.hpp>
 #include <HACDRenderer.hpp>
@@ -9,7 +10,6 @@
 #include <TransformHelper.hpp>
 
 #include <boost/variant.hpp>
-#include <boost/intrusive_ptr.hpp>
 
 #include <lemon/list_graph.h>
 #include <lemon/static_graph.h>
@@ -22,29 +22,25 @@ namespace noob
 	class scene
 	{
 		public:
-			class node
+			// Built on-stack to provide easy access to a number of convenient variables
+			struct node
 			{
-				public:
-					node() : id(0), drawable_id(0), name(""), ready_for_drawing(false) {}
-					size_t id;
+					node() : drawable_id(0), ready_to_draw(false) {}
 					size_t drawable_id;
 					noob::transform_helper xform;
-					std::string name;	
-
-				protected:
-					std::tuple<size_t, render_info> renderpair;
-					std::vector<std::tuple<const std::string, size_t>> name_index;
-					bool ready_for_drawing;
+					render_info drawing_info;
+					bool ready_to_draw;
 			};
 		
 			void init();
 			void loop();
 			void draw();
-			bool add_to_scene(const noob::scene::node& node_to_add, const std::string& parent_name = "");
+			bool add_to_scene(const noob::scene::node& node_to_add, const std::string& node_name, const std::string& parent_name = "");
 
-			// TODO: Find a safer manner to do this. 
 			noob::scene::node get_node(const std::string& name) const;
 
+
+			noob::physics_world physics;
 		protected:
 			void dynamic_graph_from_static();
 			void static_graph_from_dynamic();
@@ -58,6 +54,6 @@ namespace noob
 			std::vector<noob::mat4> view_matrices;
 			
 
+			std::map<const std::string, int> node_names;
 	};
-
 }

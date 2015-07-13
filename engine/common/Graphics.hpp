@@ -147,9 +147,10 @@ namespace noob
 			}
 
 			// ---------------- Data --------------------
-			static std::map<std::string, bgfx::TextureHandle> global_textures;
-			static std::map<std::string, noob::graphics::shader> shaders;
-			static std::map<std::string, noob::graphics::uniform> uniforms;
-			static std::map<std::string, noob::graphics::sampler> samplers;
+			static std::map<const std::string, bgfx::TextureHandle> global_textures;
+			static std::map<const std::string, noob::graphics::shader> shaders;
+			static std::map<const std::string, noob::graphics::uniform> uniforms;
+			static std::map<const std::string, noob::graphics::sampler> samplers;
+
 	};
 }

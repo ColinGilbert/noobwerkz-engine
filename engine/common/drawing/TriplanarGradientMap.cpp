@@ -35,7 +35,7 @@ void noob::triplanar_renderer::init()
 }
 
 
-void noob::triplanar_renderer::draw(const noob::drawable& drawable, const noob::mat4& model_mat, const noob::triplanar_renderer::uniform_info& info, uint8_t view_id) const
+void noob::triplanar_renderer::draw(const noob::drawable3d& drawable3d, const noob::mat4& model_mat, const noob::triplanar_renderer::uniform_info& info, uint8_t view_id) const
 {
 	bgfx::setUniform(noob::graphics::get_uniform("colour_1").handle, &info.colours[0].v[0]);
 	bgfx::setUniform(noob::graphics::get_uniform("colour_2").handle, &info.colours[1].v[0]);
@@ -63,6 +63,6 @@ void noob::triplanar_renderer::draw(const noob::drawable& drawable, const noob::
 	noob::graphics::sampler samp = noob::graphics::get_sampler("u_texture");
 	bgfx::setTexture(0, samp.handle, noob::graphics::get_texture("grad_map"));
 	noob::graphics::shader s = noob::graphics::get_shader("triplanar");
-	drawable.draw(view_id, model_mat, s.program);
+	drawable3d.draw(view_id, model_mat, s.program);
 	bgfx::submit(view_id);
 }

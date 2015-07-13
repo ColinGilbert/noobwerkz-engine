@@ -77,7 +77,14 @@ noob::mesh noob::mesh::normalize() const
 // TODO
 noob::mesh noob::mesh::to_origin() const
 {
-
+	noob::mesh temp;
+	for (noob::vec3 v : vertices)
+	{
+		temp.vertices.push_back(v - bbox.center);
+	}
+	std::copy(normals.begin(), normals.end(), std::back_inserter(temp.normals));
+	std::copy(indices.begin(), indices.end(), std::back_inserter(temp.indices));
+	return temp;
 }
 
 
@@ -152,7 +159,7 @@ bool noob::mesh::load(const aiScene* scene, const std::string& name)
 
 
 	// double accum_x, accum_y, accum_z = 0.0f;
-	info.min = info.max = info.bbox_center = noob::vec3(0.0, 0.0, 0.0);	
+	bbox.min = bbox.max = bbox.center = noob::vec3(0.0, 0.0, 0.0);	
 	
 	for ( size_t n = 0; n < num_verts; ++n)
 	{
@@ -167,13 +174,13 @@ bool noob::mesh::load(const aiScene* scene, const std::string& name)
 		// accum_y += v[1];
 		// accum_z += v[2];
 
-		info.min[0] = std::min(info.min[0], v[0]);
-		info.min[1] = std::min(info.min[1], v[1]);
-		info.min[2] = std::min(info.min[2], v[2]);
+		bbox.min[0] = std::min(bbox.min[0], v[0]);
+		bbox.min[1] = std::min(bbox.min[1], v[1]);
+		bbox.min[2] = std::min(bbox.min[2], v[2]);
 
-		info.max[0] = std::max(info.max[0], v[0]);
-		info.max[1] = std::max(info.max[1], v[1]);
-		info.max[2] = std::max(info.max[2], v[2]);
+		bbox.max[0] = std::max(bbox.max[0], v[0]);
+		bbox.max[1] = std::max(bbox.max[1], v[1]);
+		bbox.max[2] = std::max(bbox.max[2], v[2]);
 
 
 		aiVector3D normal = mesh_data->mNormals[n];
@@ -193,9 +200,9 @@ bool noob::mesh::load(const aiScene* scene, const std::string& name)
 	// double centroid_y = accum_y / static_cast<double>(num_verts);
 	// double centroid_z = accum_z / static_cast<double>(num_verts);
 
-	// info.centroid = noob::vec3(static_cast<float>(centroid_x)/2, static_cast<float>(centroid_y)/2, static_cast<float>(centroid_z)/2);
+	// bbox.centroid = noob::vec3(static_cast<float>(centroid_x)/2, static_cast<float>(centroid_y)/2, static_cast<float>(centroid_z)/2);
 	
-	info.bbox_center = noob::vec3((info.max[0] - info.min[0])/2, (info.max[1] - info.min[1])/2, (info.max[2] - info.min[2])/2);
+	bbox.center = noob::vec3((bbox.max[0] - bbox.min[0])/2, (bbox.max[1] - bbox.min[1])/2, (bbox.max[2] - bbox.min[2])/2);
 
 	logger::log(fmt::format("[Mesh] load({0}) - Mesh has {1} faces", name, num_faces));
 	auto degenerates = 0;
@@ -253,22 +260,22 @@ noob::mesh noob::mesh::transform(const noob::mat4& transform) const
 	std::copy(indices.begin(), indices.end(), std::back_inserter(temp.indices));
 
 
-	noob::vec4 temp_max(info.max, 1.0);
-	noob::vec4 temp_min(info.min, 1.0);
-	noob::vec4 temp_bbox_center(info.bbox_center, 1.0);
-	// noob::vec4 temp_centroid(info.centroid, 1.0);
+	noob::vec4 temp_max(bbox.max, 1.0);
+	noob::vec4 temp_min(bbox.min, 1.0);
+	noob::vec4 temp_bbox_center(bbox.center, 1.0);
+	// noob::vec4 temp_centroid(bbox.centroid, 1.0);
 
 	temp_max = transform * temp_max;
 	temp_min = transform * temp_min;
 	temp_bbox_center = transform * temp_bbox_center;
 	// temp_centroid = transform * temp_centroid;
 
-	temp.info.max = noob::vec3(temp_max);
-	temp.info.min = noob::vec3(temp_min);
-	temp.info.bbox_center = noob::vec3(temp_bbox_center);
-	// temp.info.centroid = noob::vec3(temp_centroid);
+	temp.bbox.max = noob::vec3(temp_max);
+	temp.bbox.min = noob::vec3(temp_min);
+	temp.bbox.center = noob::vec3(temp_bbox_center);
+	// temp.bbox.centroid = noob::vec3(temp_centroid);
 
-	//temp.info = info;
+	//temp.bbox = bbox;
 	
 	return temp;
 }
@@ -288,7 +295,7 @@ TriMesh noob::mesh::to_half_edges() const
 	}
 	// logger::log(fmt::format("[Mesh] to_half_edges() - setting {0} indices", indices.size()));
 
-	// NOTE: The following is mostly for debug info
+	// NOTE: The following is mostly for debug bbox
 	/* size_t max_index_size = 0;
 
 	for (size_t i = 0; i < indices.size(); i++)

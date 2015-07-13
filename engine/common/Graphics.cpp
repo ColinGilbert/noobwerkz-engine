@@ -9,17 +9,17 @@
 
 bgfx::VertexDecl noob::graphics::mesh_vertex::ms_decl;
 
-std::map<std::string, bgfx::TextureHandle> noob::graphics::global_textures;
-std::map<std::string, noob::graphics::uniform> noob::graphics::uniforms;
-std::map<std::string, noob::graphics::sampler> noob::graphics::samplers;
-std::map<std::string, noob::graphics::shader> noob::graphics::shaders;
+std::map<const std::string, bgfx::TextureHandle> noob::graphics::global_textures;
+std::map<const std::string, noob::graphics::uniform> noob::graphics::uniforms;
+std::map<const std::string, noob::graphics::sampler> noob::graphics::samplers;
+std::map<const std::string, noob::graphics::shader> noob::graphics::shaders;
 
 
 void noob::graphics::init(uint32_t width, uint32_t height)
 {
 	uint32_t reset = BGFX_RESET_VSYNC;
 
-	noob::graphics::mesh_vertex::init();
+	//noob::graphics::mesh_vertex::init();
 	bgfx::reset(width, height, reset);
 
 	bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x703070ff, 1.0f, 0);

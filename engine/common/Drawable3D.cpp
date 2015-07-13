@@ -11,19 +11,21 @@
 #include "Logger.hpp"
 #include "Drawable3D.hpp"
 
-noob::drawable::drawable() : dirty(false)
+std::map<const std::string, std::unique_ptr<noob::drawable3d>> noob::drawable3d::globals;
+
+/*noob::drawable3d::drawable3d() : ready(false)
 {
 	noob::graphics::mesh_vertex::init();
 }
+*/
 
-
-noob::drawable::~drawable()
+noob::drawable3d::~drawable3d()
 {
 	kill_videocard_buffers();
 }
 
 
-void noob::drawable::init(const noob::mesh& m)
+void noob::drawable3d::init(const noob::mesh& m)
 {
 	logger::log(fmt::format("[Drawable3D] init. Mesh verts = {0}, indices = {1}, normals = {2}", m.vertices.size(), m.indices.size(), m.normals.size()));
 
@@ -61,11 +63,11 @@ void noob::drawable::init(const noob::mesh& m)
 	bbox = m.get_bbox();
 
 
-	dirty = true;
+	ready = true;
 }
 
 
-void noob::drawable::kill_videocard_buffers()
+void noob::drawable3d::kill_videocard_buffers()
 {
 	if (vertex_buffer.idx != bgfx::invalidHandle)
 	{
@@ -76,14 +78,14 @@ void noob::drawable::kill_videocard_buffers()
 	{
 		bgfx::destroyIndexBuffer(index_buffer);
 	}
-	dirty = false;
+	ready = false;
 }
 
 
-void noob::drawable::draw(uint8_t view_id, const noob::mat4& model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags) const
+void noob::drawable3d::draw(uint8_t view_id, const noob::mat4& model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags) const
 {
 	bgfx::submit(view_id);
-	if (dirty)
+	if (ready)
 	{
 		bgfx::setTransform(&model_mat.m[0]);
 		bgfx::setProgram(prog);
@@ -98,9 +100,21 @@ void noob::drawable::draw(uint8_t view_id, const noob::mat4& model_mat, const bg
 	}
 }
 
-/*
-noob::transform noob::drawable::get_transform() const
+
+std::tuple<bool, const noob::drawable3d*> noob::drawable3d::get(const std::string& name)
 {
-	
+	auto it = globals.find(name);
+	if (it != globals.end())
+	{
+		return std::make_tuple(true, it->second.get());
+	}
+	return std::make_tuple(false,nullptr);
 }
-*/
+
+
+void noob::drawable3d::add(const std::string& name, const noob::mesh& m)
+{
+	std::unique_ptr<noob::drawable3d> d = std::unique_ptr<noob::drawable3d>(new noob::drawable3d());
+	d->init(m);
+	globals.insert(std::make_pair(name, std::move(d)));
+}

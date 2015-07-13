@@ -15,7 +15,7 @@ namespace noob
 			void draw(const noob::mat4& model_mat, uint8_t view_id = 0);
 
 			protected:
-			std::vector<std::unique_ptr<noob::drawable>> drawables;
+			std::vector<std::unique_ptr<noob::drawable3d>> drawable3ds;
 			std::vector<noob::vec4> colours;
 			noob::graphics::shader shader;
 	};
