@@ -9,7 +9,7 @@
 
 #include "Graphics.hpp"
 #include "Logger.hpp"
-#include "Drawable.hpp"
+#include "Drawable3D.hpp"
 
 noob::drawable::drawable() : dirty(false)
 {
@@ -25,7 +25,7 @@ noob::drawable::~drawable()
 
 void noob::drawable::init(const noob::mesh& m)
 {
-	logger::log(fmt::format("[Drawable] init. Mesh verts = {0}, indices = {1}, normals = {2}", m.vertices.size(), m.indices.size(), m.normals.size()));
+	logger::log(fmt::format("[Drawable3D] init. Mesh verts = {0}, indices = {1}, normals = {2}", m.vertices.size(), m.indices.size(), m.normals.size()));
 
 	for ( size_t n = 0; n < m.vertices.size(); ++n)
 	{
@@ -42,7 +42,7 @@ void noob::drawable::init(const noob::mesh& m)
 		bgfx_vertices.push_back(vertex);
 	}
 
-	logger::log(fmt::format("[Drawable] uploaded {0} verts", bgfx_vertices.size()));
+	logger::log(fmt::format("[Drawable3D] uploaded {0} verts", bgfx_vertices.size()));
 	
 	//std::copy(m.indices.begin(), m.indices.end(), std::back_inserter(indices));
 	
@@ -52,7 +52,7 @@ void noob::drawable::init(const noob::mesh& m)
 	}
 
 
-	logger::log(fmt::format("[Drawable] uploaded {0} indices", indices.size()));
+	logger::log(fmt::format("[Drawable3D] uploaded {0} indices", indices.size()));
 
 	vertex_buffer = bgfx::createVertexBuffer(bgfx::copy(&bgfx_vertices[0], bgfx_vertices.size() * sizeof(noob::graphics::mesh_vertex)), noob::graphics::mesh_vertex::ms_decl);
 	index_buffer = bgfx::createIndexBuffer(bgfx::copy(&indices[0], indices.size() * sizeof(uint32_t)), BGFX_BUFFER_INDEX32);

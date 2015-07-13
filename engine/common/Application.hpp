@@ -44,7 +44,7 @@
 #include "Untracked.hpp"
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
-#include "Drawable.hpp"
+#include "Drawable3D.hpp"
 #include "VoxelWorld.hpp"
 #include "GUI.hpp"
 #include "PhysicsWorld.hpp"
@@ -110,6 +110,6 @@ namespace noob
 			noob::mat4 view_mat;
 			noob::transform_helper current_cam_transform;
 			chaiscript::ChaiScript chai;
-			lemon::StaticDigraph keystrokes_graph;
+			// lemon::StaticDigraph keystrokes_graph;
 	};
 }

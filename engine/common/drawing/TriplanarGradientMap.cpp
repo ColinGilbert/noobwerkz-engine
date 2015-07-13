@@ -1,4 +1,4 @@
-#include "TriPlanar.hpp"
+#include "TriplanarGradientMap.hpp"
 
 void noob::triplanar_renderer::init()
 {

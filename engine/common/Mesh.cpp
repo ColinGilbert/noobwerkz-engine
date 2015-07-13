@@ -42,6 +42,7 @@ void noob::mesh::decimate(const std::string& filename, size_t num_verts) const
 	OpenMesh::IO::write_mesh(half_edges, filename);
 }
 
+
 noob::mesh noob::mesh::decimate(size_t num_verts) const
 {
 	decimate("./temp/temp-decimated.off", num_verts);
@@ -56,6 +57,13 @@ noob::mesh noob::mesh::normalize() const
 	noob::mesh temp;
 	temp.load(snapshot());
 	return temp;
+}
+
+
+// TODO
+noob::mesh noob::mesh::to_origin() const
+{
+
 }
 
 

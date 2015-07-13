@@ -57,6 +57,11 @@ void noob::hacd_renderer::set_items(const std::vector<noob::mesh>& hulls)
 }
 
 
+void noob::hacd_renderer::set_items(const std::vector<std::vector<noob::vec3>>& hulls)
+{
+
+}
+
 void noob::hacd_renderer::draw(const noob::mat4& model_mat, uint8_t view_id)
 {
 	for (size_t i = 0; i < drawables.size(); i++)

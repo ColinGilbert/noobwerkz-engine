@@ -2,7 +2,7 @@
 
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
-#include "Drawable.hpp"
+#include "Drawable3D.hpp"
 
 namespace noob
 {

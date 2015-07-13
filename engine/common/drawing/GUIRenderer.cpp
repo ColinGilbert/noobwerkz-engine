@@ -1,4 +1,4 @@
-#include "GUIRenderer.hpp"
+/*#include "GUIRenderer.hpp"
 
 
 void noob::gui_renderer::init(size_t width, size_t height)
@@ -37,7 +37,7 @@ void noob::gui_renderer::init(size_t width, size_t height)
 }
 
 
-void noob::gui_renderer::draw(const noob::drawable& shape, float x, float y, const noob::gui_renderer::uniform_info& info, uint8_t view_id) const
+void noob::gui_renderer::draw(const noob::drawable2d& shape, float x, float y, const noob::gui_renderer::uniform_info& info, uint8_t view_id) const
 {
 	bgfx::setViewTransform(view_id, &view_matrix.m[0], &ortho.m[0]);
 	bgfx::setViewRect(view_id, 0, 0, window_width, window_height);
@@ -84,3 +84,4 @@ void noob::gui_renderer::set_dims(size_t width, size_t height)
 
 
 }
+*/

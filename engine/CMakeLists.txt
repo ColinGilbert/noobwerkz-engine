@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.0)
 project(NoobWerkz)
 
-set(CMAKE_BUILD_TYPE "DEBUG")
-#set(CMAKE_BUILD_TYPE "RELEASE")
+#set(CMAKE_BUILD_TYPE "DEBUG")
+set(CMAKE_BUILD_TYPE "RELEASE")
 
-set(CMAKE_CXX_FLAGS "-std=c++11 -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DEIGEN_MPL2_ONLY -Wall ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++11 -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DEIGEN_MPL2_ONLY -DCHAISCRIPT_NO_THREADS -Wall ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-std=c99 -fno-strict-aliasing -DSQLITE_ENABLE_COLUMN_METADATA -DSTB_IMAGE_STATIC -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -Wall ${CMAKE_C_FLAGS}")
 
 find_package(Boost COMPONENTS system filesystem REQUIRED)
@@ -91,9 +91,9 @@ include_directories(lib/stb)
 
 include_directories(common)
 include_directories(common/drawing_techniques)
-include_directories(common/bgfx_related)
-include_directories(common/bgfx_related/font)
-include_directories(common/bgfx_related/shaderc)
+include_directories(common/drawing)
+include_directories(common/drawing/font)
+include_directories(common/drawing/shaderc)
 #include_directories(common/bfgx_related/nanovg)
 
 list(APPEND bgfx_src
@@ -101,14 +101,14 @@ list(APPEND bgfx_src
 	)
 
 list(APPEND bgfx_utils_src
-	common/bgfx_related/cube_atlas.cpp
-	common/bgfx_related/font/font_manager.cpp
-	common/bgfx_related/font/utf8.cpp
-	common/bgfx_related/font/text_metrics.cpp
-	common/bgfx_related/font/text_buffer_manager.cpp
-	common/bgfx_related/bounds.cpp
-	#common/bgfx_related/nanovg/nanovg_bgfx.cpp
-	#common/bgfx_related/nanovg/nanovg.cpp
+	common/drawing/cube_atlas.cpp
+	common/drawing/font/font_manager.cpp
+	common/drawing/font/utf8.cpp
+	common/drawing/font/text_metrics.cpp
+	common/drawing/font/text_buffer_manager.cpp
+	common/drawing/bounds.cpp
+	#common/drawing/nanovg/nanovg_bgfx.cpp
+	#common/drawing/nanovg/nanovg.cpp
 	)
 
 list(APPEND openmesh_src
@@ -137,7 +137,8 @@ list(APPEND common_src
 	common/Logger.cpp
 	common/Application.cpp
 	common/MathFuncs.cpp
-	common/Drawable.cpp
+	common/Drawable2D.cpp
+	common/Drawable3D.cpp
 	common/NoobUtils.cpp
 	common/EditorUtils.cpp
 	common/VoxelWorld.cpp
@@ -145,12 +146,11 @@ list(APPEND common_src
 	common/PhysicsWorld.cpp
 	common/DebugDraw.cpp
 	common/GUI.cpp
-	common/Scene.cpp
 	common/Camera.cpp
 	common/Scene.cpp
-	common/drawing_techniques/TriPlanar.cpp
-	common/drawing_techniques/HACDRenderer.cpp
-	common/drawing_techniques/GUIRenderer.cpp
+	common/drawing/TriplanarGradientMap.cpp
+	common/drawing/HACDRenderer.cpp
+	common/drawing/GUIRenderer.cpp
 	)
 
 include_directories(platform/nix)

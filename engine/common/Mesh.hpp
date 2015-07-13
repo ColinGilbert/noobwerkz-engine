@@ -63,7 +63,7 @@ namespace noob
 			void decimate(const std::string& filename, size_t num_verts) const;
 			noob::mesh decimate(size_t num_verts) const;
 			noob::mesh normalize() const;
-
+			noob::mesh to_origin() const;
 			TriMesh to_half_edges() const;
 
 			// Returns .OFF files

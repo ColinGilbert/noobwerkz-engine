@@ -1,7 +1,7 @@
 #pragma once
-
+/*
+#include "Drawable2D.hpp"
 #include "Graphics.hpp"
-#include "Drawable.hpp"
 #include "MathFuncs.hpp"
 
 namespace noob
@@ -19,7 +19,7 @@ namespace noob
 			};
 
 			void init(size_t width, size_t height);
-			void draw(const noob::drawable& shape, float x, float y, const noob::gui_renderer::uniform_info& info, uint8_t view_id = 1) const;
+		//	void draw(const noob::drawable2d& shape, float x, float y, const noob::gui_renderer::uniform_info& info, uint8_t view_id = 1) const;
 			void set_dims(size_t width, size_t height);
 		protected:
 			noob::mat4 view_matrix, ortho;
@@ -28,3 +28,4 @@ namespace noob
 
 	};
 }
+*/

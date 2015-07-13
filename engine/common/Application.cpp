@@ -77,7 +77,6 @@ noob::application::application() : chai(chaiscript::Std_Lib::library())
 	chai.add(fun(&noob::transform_helper::scale), "scale");
 	chai.add(fun(&noob::transform_helper::translate), "translate");
 	chai.add(fun(&noob::transform_helper::rotate), "rotate");
-	
 	chai.add(fun(&noob::transform_helper::scaling), "scaling");
 	chai.add(fun(&noob::transform_helper::translation), "translation");
 	chai.add(fun(&noob::transform_helper::rotation), "rotation");
@@ -85,7 +84,8 @@ noob::application::application() : chai(chaiscript::Std_Lib::library())
 	chai.add(fun(&noob::mesh::vertices), "vertices");
 	chai.add(fun(&noob::mesh::normals), "normals");
 	chai.add(fun(&noob::mesh::indices), "indices");
-	//chai.add(fun(&noob::mesh::normalize), "normalize");
+	chai.add(fun(&noob::mesh::normalize), "normalize");
+	chai.add(fun(&noob::mesh::to_origin), "to_origin");
 	chai.add(fun(&noob::mesh::to_half_edges), "to_half_edges");
 	chai.add(fun(&noob::mesh::convex_decomposition), "convex_decomposition");
 	chai.add(fun(&noob::mesh::transform), "transform");
