@@ -63,6 +63,7 @@ IF (NOT OPENMESH_FOUND)
     "${CMAKE_SOURCE_DIR}/OpenMesh/src/OpenMesh"
     "${CMAKE_SOURCE_DIR}/libs_required/OpenMesh/src/OpenMesh"
     "${CMAKE_SOURCE_DIR}/../OpenMesh/src/OpenMesh"
+    "C:/Program Files/OpenMesh 4.1"
     "C:/Program Files/OpenMesh 4.0"
     "C:/Program Files/OpenMesh 3.4"
     "C:/Program Files/OpenMesh 3.3"
