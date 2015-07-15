@@ -147,7 +147,7 @@ list(APPEND common_src
 	common/DebugDraw.cpp
 	common/GUI.cpp
 	common/Camera.cpp
-	common/Scene.cpp
+	common/Scene3D.cpp
 	common/drawing/TriplanarGradientMap.cpp
 	common/drawing/HACDRenderer.cpp
 	common/drawing/GUIRenderer.cpp
@@ -156,9 +156,9 @@ list(APPEND common_src
 include_directories(platform/nix)
 list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 
-add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src} ${noisepp_src} ${sqlite_src} ${sqlitecpp_src})
+add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src})
 
-target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m OpenMeshCore OpenMeshTools emon BulletDynamics BulletCollision BulletSoftBody LinearMath spnav ${Boost_LIBRARIES}) # boost_system boost_filesystem)
+target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m OpenMeshCore OpenMeshToolsStatic emon BulletDynamics BulletCollision BulletSoftBody LinearMath spnav ${Boost_LIBRARIES})
 
 project(LogServer)
 

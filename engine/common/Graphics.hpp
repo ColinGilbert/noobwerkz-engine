@@ -1,9 +1,9 @@
 #pragma once
 
 #include <tuple>
-#include <map>
 #include <vector>
-
+#include <string>
+#include <unordered_map>
 #include <bgfx.h>
 
 // #include "Mesh.hpp"
@@ -113,7 +113,6 @@ namespace noob
 
 			// ---------------- Asset creators (make assets available from getters) ----------------
 			static bool add_sampler(const std::string&);
-
 			static bool add_uniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t count = 1);
 			static bool add_shader(const std::string&, const noob::graphics::shader&);
 			//static bool add_shader(const std::string&, const bgfx::ProgramHandle);
@@ -147,10 +146,10 @@ namespace noob
 			}
 
 			// ---------------- Data --------------------
-			static std::map<const std::string, bgfx::TextureHandle> global_textures;
-			static std::map<const std::string, noob::graphics::shader> shaders;
-			static std::map<const std::string, noob::graphics::uniform> uniforms;
-			static std::map<const std::string, noob::graphics::sampler> samplers;
+			static std::unordered_map<std::string, bgfx::TextureHandle> global_textures;
+			static std::unordered_map<std::string, noob::graphics::shader> shaders;
+			static std::unordered_map<std::string, noob::graphics::uniform> uniforms;
+			static std::unordered_map<std::string, noob::graphics::sampler> samplers;
 
 	};
 }

@@ -364,7 +364,8 @@ std::vector<noob::mesh> noob::mesh::convex_decomposition() const
 			size_t num_indices = num_tris * 3;
 
 			logger::log(fmt::format("[Mesh] convex_decomposition() - Mesh # {0} - num verts = {1}, num triangles = {2}, num indices = {3}", i, num_points, num_tris, num_indices));
-// TODO: Find out why the following commented-out code is broken.
+			
+			// TODO: Find out why the following commented-out code is broken.
 			/*
 			for (size_t j = 0; j < num_points; j++)
 			{
@@ -714,6 +715,7 @@ noob::mesh noob::mesh::cube(float width, float height, float depth, size_t subdi
 	mesh.load("temp/cube.off", "cube-temp");
 	return mesh;
 }
+
 
 noob::mesh noob::mesh::sphere(float radius)
 {

@@ -9,11 +9,10 @@
 
 bgfx::VertexDecl noob::graphics::mesh_vertex::ms_decl;
 
-std::map<const std::string, bgfx::TextureHandle> noob::graphics::global_textures;
-std::map<const std::string, noob::graphics::uniform> noob::graphics::uniforms;
-std::map<const std::string, noob::graphics::sampler> noob::graphics::samplers;
-std::map<const std::string, noob::graphics::shader> noob::graphics::shaders;
-
+std::unordered_map<std::string, bgfx::TextureHandle> noob::graphics::global_textures;
+std::unordered_map<std::string, noob::graphics::uniform> noob::graphics::uniforms;
+std::unordered_map<std::string, noob::graphics::sampler> noob::graphics::samplers;
+std::unordered_map<std::string, noob::graphics::shader> noob::graphics::shaders;
 
 void noob::graphics::init(uint32_t width, uint32_t height)
 {

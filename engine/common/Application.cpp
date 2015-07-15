@@ -122,10 +122,9 @@ noob::application::application() : chai(chaiscript::Std_Lib::library())
 	chai.add(fun(static_cast<btCompoundShape* (noob::physics_world::*)(const std::vector<noob::mesh>&)>(&noob::physics_world::compound_shape)), "compound_shape");
 	chai.add(fun(static_cast<btCompoundShape* (noob::physics_world::*)(const std::vector<btCollisionShape*>&)>(&noob::physics_world::compound_shape)), "compound_shape");
 
-	chai.add(fun(&noob::application::physics), "physics");
+	//chai.add(fun(&noob::application::physics), "physics");
 	chai.add(fun(&noob::application::voxels), "voxels");
 	chai.add(fun(&noob::application::scene), "scene");
-
 }
 
 noob::application::~application()
@@ -150,7 +149,6 @@ void noob::application::init()
 	ui_enabled = true;
 	gui.init(*prefix, window_width, window_height);
 	voxels.init();
-	physics.init();
 	scene.init();
 /*
 	view_mat = noob::look_at(noob::vec3(0.0, 0.0, -500.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));

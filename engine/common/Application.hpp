@@ -50,7 +50,7 @@
 #include "Mesh.hpp"
 #include "Camera.hpp"
 #include "NDOF.hpp"
-#include "Scene.hpp"
+#include "Scene3D.hpp"
 #include "TransformHelper.hpp"
 // #include "Noise.h"
 
@@ -99,8 +99,8 @@ namespace noob
 			noob::gui gui;
 			std::vector<noob::vec2> finger_positions;
 			noob::voxel_world voxels;
-			noob::physics_world physics;
-			noob::scene scene;
+			//noob::physics_world physics;
+			noob::scene3d scene;
 			noob::mat4 view_mat;
 			noob::transform_helper current_cam_transform;
 			chaiscript::ChaiScript chai;

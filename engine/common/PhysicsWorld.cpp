@@ -18,7 +18,10 @@ void noob::physics_world::init()
 	dispatcher = new btCollisionDispatcher(collision_configuration);
 	solver = new btSequentialImpulseConstraintSolver;
 	dynamics_world = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collision_configuration);
-	dynamics_world->setGravity(btVector3(0, -9.81, 0));
+	dynamics_world->setGravity(btVector3(0, -9.8, 0));
+
+	// TODO: Add body and shape 0 (defaults)
+
 }
 
 
@@ -172,48 +175,86 @@ btBvhTriangleMeshShape* noob::physics_world::static_mesh(const noob::mesh& mesh)
 	btBvhTriangleMeshShape* trimesh_shape = new btBvhTriangleMeshShape(mesh_interface, true); // useQuantizedAabbCompression
 	return trimesh_shape;
 }
-/*
 
-bool noob::physics_world::set_shape(const std::string& name, const btCollisionShape* shape)
+
+size_t noob::physics_world::add_shape(const btCollisionShape* shape)
 {
-	if (std::get<0>(get_shape(name)) == false)
+	++shape_counter;
+	shapes.insert(std::make_pair(shape_counter, shape));
+	return shape_counter;
+}
+
+
+size_t noob::physics_world::add_body(const btRigidBody* body)
+{
+	++body_counter;
+	bodies.insert(std::make_pair(body_counter, body));
+	return body_counter;
+}
+
+
+bool noob::physics_world::add_body_name(size_t id, const std::string& name)
+{
+	if (get_body_id(name) == 0)
 	{
-		named_shapes.insert(std::make_pair(name, shape));
+		body_names.insert(std::make_pair(name, id));
 		return true;
 	}
-	return false;
+	else return false;
+
 }
 
 
-bool noob::physics_world::set_body(const std::string& name, const btRigidBody* body)
+bool noob::physics_world::add_shape_name(size_t id, const std::string& name)
 {
-	if (std::get<0>(get_body(name)) == false)
+	if (get_shape_id(name) == 0)
 	{
-		named_bodies.insert(std::make_pair(name, body)); 
+		shape_names.insert(std::make_pair(name, id));
 		return true;
 	}
-	return false;
+	else return false;
 }
 
 
-std::tuple<bool, const btCollisionShape*> noob::physics_world::get_shape(const std::string& name)
+size_t noob::physics_world::get_shape_id(const std::string& name)
 {
-	auto found = named_shapes.find(name);
-	if (found != named_shapes.end())
+	auto found = shape_names.find(name);
+	if (found != shape_names.end())
 	{
-		return std::make_tuple(true, found->second);
+		return found->second;
 	}
-	else return std::make_tuple(false, nullptr);
+	else return 0;
 }
 
 
-std::tuple<bool, const btRigidBody*> noob::physics_world::get_body(const std::string& name)
+const btCollisionShape* noob::physics_world::get_shape(size_t id)
 {
-	auto found = named_bodies.find(name);
-	if (found != named_bodies.end())
+	auto found = shapes.find(id);
+	if (found != shapes.end())
 	{
-		return std::make_tuple(true, found->second);
+		return found->second;
 	}
-	else return std::make_tuple(false, nullptr);
+	else return nullptr;
 }
-*/
+
+
+size_t noob::physics_world::get_body_id(const std::string& name)
+{
+	auto found = body_names.find(name);
+	if(found != body_names.end())
+	{
+		return found->second;
+	}
+	else return 0;
+}
+
+
+const btRigidBody* noob::physics_world::get_body(size_t id)
+{
+	auto found = bodies.find(id);
+	if (found != bodies.end())
+	{
+		return found->second;
+	}
+	else return nullptr;
+}

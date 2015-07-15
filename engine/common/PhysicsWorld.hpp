@@ -2,7 +2,8 @@
 
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionShapes/btTriangleIndexVertexArray.h>
-
+#include <string>
+#include <unordered_map>
 #include "NoobUtils.hpp"
 #include "Mesh.hpp"
 
@@ -36,8 +37,8 @@ namespace noob
 
 				protected:
 			};
-
-
+			
+			physics_world() : body_counter(0), shape_counter(0) {}
 			~physics_world();
 
 			void init();
@@ -66,11 +67,18 @@ namespace noob
 			btBvhTriangleMeshShape* static_mesh(const noob::mesh& mesh);
 
 			// Conveniences
-			//bool set_shape(const std::string&, const btCollisionShape*);
-			//bool set_body(const std::string&, const btRigidBody*);
-			//std::tuple<bool, const btCollisionShape*> get_shape(const std::string&);
-			//std::tuple<bool, const btRigidBody*> get_body(const std::string&);
-			
+			size_t add_shape(const btCollisionShape*);
+			size_t add_body(const btRigidBody*);
+
+			bool add_body_name(size_t id, const std::string& name);
+			bool add_shape_name(size_t id, const std::string& name);
+
+			const btCollisionShape* get_shape(size_t);
+			size_t get_shape_id(const std::string& name);
+
+			const btRigidBody* get_body(size_t id);
+			size_t get_body_id(const std::string& name);
+
 			btDiscreteDynamicsWorld* dynamics_world;
 			btBroadphaseInterface* broadphase;
 			btDefaultCollisionConfiguration* collision_configuration;
@@ -78,9 +86,11 @@ namespace noob
 			btSequentialImpulseConstraintSolver* solver;	
 
 		protected:
-			//std::map<const std::string, const btCollisionShape*> named_shapes;
-			//std::map<const std::string, const btRigidBody*> named_bodies;
-
+			std::unordered_map<std::string, size_t> shape_names;
+			std::unordered_map<size_t, const btCollisionShape*> shapes;
+			std::unordered_map<std::string, size_t> body_names;
+			std::unordered_map<size_t, const btRigidBody*> bodies;
+			size_t body_counter, shape_counter;
 
 	};
 }

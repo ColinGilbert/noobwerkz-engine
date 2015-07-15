@@ -36,13 +36,14 @@ namespace noob
 			void draw(uint8_t view_id, const noob::mat4& model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags = BGFX_STATE_DEFAULT) const;
 			// Bounding boxes are expressed in model space coordinates.
 			noob::mesh::bbox_info get_bbox() const { return bbox; }
-			uint32_t material_index;
 			
-			static std::tuple<bool, const noob::drawable3d*> get(const std::string& name);
-			static void add(const std::string& name, const noob::mesh& m);
-
-			static std::map<const std::string, std::unique_ptr<noob::drawable3d>> globals;
-
+			static bool add(const std::string& name, const noob::mesh& m);
+			static size_t get_id(const std::string& name);
+			static const noob::drawable3d* get(size_t);
+			
+			static std::unordered_map<std::string, size_t> drawable_names;
+			static std::unordered_map<size_t, std::unique_ptr<noob::drawable3d>> drawables;
+			static size_t counter;
 		protected:
 			void kill_videocard_buffers();
 

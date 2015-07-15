@@ -27,7 +27,8 @@ typedef OpenMesh::PolyMesh_ArrayKernelT<> PolyMesh;
 
 #include "MathFuncs.hpp"
 
-// TODO: Template this class to hold different indices
+// TODO: Template this class to hold different kinds of indices
+// TODO: Separate the model loading from this class
 
 #include <Eigen/Geometry>
 #include "Logger.hpp"
