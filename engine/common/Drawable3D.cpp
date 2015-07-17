@@ -11,15 +11,7 @@
 #include "Logger.hpp"
 #include "Drawable3D.hpp"
 
-std::unordered_map<size_t, std::unique_ptr<noob::drawable3d>> noob::drawable3d::drawables;
-std::unordered_map<std::string, size_t> noob::drawable3d::drawable_names;
-size_t noob::drawable3d::counter = 0;
 
-/*noob::drawable3d::drawable3d() : ready(false)
-  {
-  noob::graphics::mesh_vertex::init();
-  }
-  */
 
 noob::drawable3d::~drawable3d()
 {
@@ -100,40 +92,4 @@ void noob::drawable3d::draw(uint8_t view_id, const noob::mat4& model_mat, const 
 	{
 		logger::log("Attempting to draw item with improper state.");
 	}
-}
-
-
-bool noob::drawable3d::add(const std::string& name, const noob::mesh& m)
-{
-	auto it = drawable_names.find(name);
-	if (it != drawable_names.end())
-	{
-		std::unique_ptr<noob::drawable3d> d = std::unique_ptr<noob::drawable3d>(new noob::drawable3d());
-		d->init(m);
-		++counter;
-		drawables.insert(std::make_pair(counter, std::move(d)));
-		drawable_names.insert(std::make_pair(name, counter));
-	}
-}
-
-
-const noob::drawable3d* noob::drawable3d::get(size_t id)
-{
-	auto it = drawables.find(id);
-	if (it != drawables.end())
-	{
-		return it->second.get();
-	}
-	else return nullptr;
-}
-
-
-size_t noob::drawable3d::get_id(const std::string& name)
-{
-	auto it = drawable_names.find(name);
-	if (it != drawable_names.end())
-	{
-		return it->second;
-	}
-	else return 0;
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionShapes/btTriangleIndexVertexArray.h>
 #include <string>
@@ -20,15 +22,30 @@ namespace noob
 				NOTHING = 0,
 				CHARACTER = BIT(0),
 				TERRAIN = BIT(1)
-				// BUILDING = BIT(2)
 			};
 
 			struct body_properties
 			{
-				body_properties() : collision_group(CHARACTER), collides_with(CHARACTER | TERRAIN), mass(1.0), linear_damping(0.0), angular_damping(0.0), linear_factor(1.0, 1.0, 1.0), angular_factor(1.0, 1.0, 1.0) {}
-				short collision_group, collides_with;
+				body_properties() : mass(1.0), linear_damping(0.0), angular_damping(0.0), linear_factor(1.0, 1.0, 1.0), angular_factor(1.0, 1.0, 1.0) {}
 				float mass, linear_damping, angular_damping;
 				noob::vec3 linear_factor, angular_factor;
+				btCollisionShape* shape;
+			};
+			
+			struct generic_constraint_properties
+			{
+				std::array<btRigidBody*, 2> bodies;
+				std::array<bool, 6> spring;
+				std::array<bool, 6> motor;
+				std::array<bool, 6> servo;
+				std::array<float, 6> target_velocity;
+				std::array<float, 6> servo_target;
+				std::array<float, 6> max_motor_force;
+				std::array<float, 6> stiffness;
+				std::array<float, 6> damping;
+				std::array<float, 6> bounce;
+				std::array<noob::vec2, 6> limits;
+				std::array<noob::mat4, 2> frames;
 			};
 
 			class character_controller
@@ -38,16 +55,23 @@ namespace noob
 				protected:
 			};
 			
-			physics_world() : body_counter(0), shape_counter(0) {}
 			~physics_world();
 
 			void init();
 			void cleanup();
 			void step(double delta);
 
-			void apply_global_force(const noob::vec3& force, const btCollisionShape* shape, const noob::vec3& origin);
+			// TODO: Implement
+			void apply_global_force(const noob::vec3& force, btCollisionShape* shape, const noob::vec3& origin);
+			
+			btRigidBody* create_body(const noob::physics_world::body_properties& props, const noob::vec4& rotation, const noob::vec3& translation, btCollisionShape* shape);
+			btGeneric6DofSpring2Constraint* create_constraint(const noob::physics_world::generic_constraint_properties& props);
 
-			btRigidBody* dynamic_body(noob::physics_world::body_properties props, const noob::vec4& rotation, const noob::vec3& translation, btCollisionShape* shape);
+			void add(btRigidBody* body, short collision_group = CHARACTER, short collides_with = CHARACTER | TERRAIN);
+			void add(btGeneric6DofSpring2Constraint* constraint);
+
+			void remove(btRigidBody* body);
+			void remove(btGeneric6DofSpring2Constraint* constraint);
 
 			btSphereShape* sphere(float radius);
 			btBoxShape* box(float width, float height, float depth);
@@ -58,7 +82,8 @@ namespace noob
 			btConvexHullShape* convex_hull(const std::vector<noob::vec3>& points);
 			btConvexHullShape* convex_hull(const noob::mesh& mesh);
 
-			btCompoundShape* compound_shape(const noob::mesh& mesh);
+			// NOTE: This function is slow for large objects, as it calls V-HACD. If possible, use the latter two overloads during gameplay.
+			btCompoundShape* compound_shape_decompose(const noob::mesh& mesh);
 			btCompoundShape* compound_shape(const std::vector<noob::mesh>& convex_meshes);
 			btCompoundShape* compound_shape(const std::vector<btCollisionShape*>& shapes);
 
@@ -66,31 +91,14 @@ namespace noob
 			btStaticPlaneShape* plane(const noob::vec3& normal, float distance);
 			btBvhTriangleMeshShape* static_mesh(const noob::mesh& mesh);
 
-			// Conveniences
-			size_t add_shape(const btCollisionShape*);
-			size_t add_body(const btRigidBody*);
 
-			bool add_body_name(size_t id, const std::string& name);
-			bool add_shape_name(size_t id, const std::string& name);
-
-			const btCollisionShape* get_shape(size_t);
-			size_t get_shape_id(const std::string& name);
-
-			const btRigidBody* get_body(size_t id);
-			size_t get_body_id(const std::string& name);
+		protected:
 
 			btDiscreteDynamicsWorld* dynamics_world;
 			btBroadphaseInterface* broadphase;
 			btDefaultCollisionConfiguration* collision_configuration;
 			btCollisionDispatcher* dispatcher;
 			btSequentialImpulseConstraintSolver* solver;	
-
-		protected:
-			std::unordered_map<std::string, size_t> shape_names;
-			std::unordered_map<size_t, const btCollisionShape*> shapes;
-			std::unordered_map<std::string, size_t> body_names;
-			std::unordered_map<size_t, const btRigidBody*> bodies;
-			size_t body_counter, shape_counter;
 
 	};
 }

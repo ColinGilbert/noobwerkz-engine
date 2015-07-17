@@ -37,13 +37,7 @@ namespace noob
 			// Bounding boxes are expressed in model space coordinates.
 			noob::mesh::bbox_info get_bbox() const { return bbox; }
 			
-			static bool add(const std::string& name, const noob::mesh& m);
-			static size_t get_id(const std::string& name);
-			static const noob::drawable3d* get(size_t);
-			
-			static std::unordered_map<std::string, size_t> drawable_names;
-			static std::unordered_map<size_t, std::unique_ptr<noob::drawable3d>> drawables;
-			static size_t counter;
+		
 		protected:
 			void kill_videocard_buffers();
 

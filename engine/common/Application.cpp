@@ -4,7 +4,7 @@
 
 noob::application* noob::application::app_pointer = nullptr;
 
-noob::application::application() : chai(chaiscript::Std_Lib::library()) 
+noob::application::application() : chai(chaiscript::Std_Lib::library())
 {
 	logger::log("application()");
 	app_pointer = this;
@@ -14,13 +14,15 @@ noob::application::application() : chai(chaiscript::Std_Lib::library())
 	time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
-	
+/*	
 	using namespace chaiscript;
 
 	chai.add(user_type<noob::drawable3d>(), "drawable3d");
 	chai.add(user_type<noob::mesh>(), "mesh");
 	chai.add(user_type<noob::mesh::bbox_info>(), "bbox_info");
 	chai.add(user_type<noob::voxel_world>(), "voxel_world");
+	chai.add(user_type<noob::scene3d>(), "scene3d");
+	chai.add(user_type<noob::physics_world>(), "physics_world");
 	chai.add(user_type<noob::graphics::mesh_vertex>(), "mesh_vertex");
 	chai.add(user_type<noob::graphics::uniform>(), "uniform");
 	chai.add(user_type<noob::graphics::sampler>(), "sampler");
@@ -32,6 +34,8 @@ noob::application::application() : chai(chaiscript::Std_Lib::library())
 	chai.add(user_type<noob::mat4>(), "mat4");
 	chai.add(user_type<noob::versor>(), "versor");
 	chai.add(user_type<noob::transform_helper>(), "transform_helper");
+	chai.add(user_type<noob::triplanar_renderer::uniform_info>(), "triplanar_uniform");
+
 
 	chai.add(fun(&noob::length), "length");
 	chai.add(fun(&noob::length2), "length2");
@@ -101,14 +105,10 @@ noob::application::application() : chai(chaiscript::Std_Lib::library())
 	chai.add(fun(&noob::voxel_world::get), "get");
 	chai.add(fun(&noob::voxel_world::extract_region), "extract_region");
 
-	chai.add(fun(&noob::drawable3d::add), "add_drawable3d");
-	chai.add(fun(&noob::drawable3d::get), "get_drawable3d");
-
-	chai.add(user_type<noob::physics_world>(), "physics_world");
-	chai.add(fun(&noob::physics_world::init), "init");
-	chai.add(fun(&noob::physics_world::step), "step");
 	chai.add(fun(&noob::physics_world::apply_global_force), "apply_global_force");
-	chai.add(fun(&noob::physics_world::dynamic_body), "dynamic_body");
+	chai.add(fun(&noob::physics_world::create_body), "create_body");
+	chai.add(fun(static_cast<void (noob::physics_world::*)(btGeneric6DofSpring2Constraint*)>(&noob::physics_world::add)), "add");
+	chai.add(fun(static_cast<void (noob::physics_world::*)(btRigidBody*, short, short)>(&noob::physics_world::add)), "add");
 	chai.add(fun(&noob::physics_world::sphere), "sphere");
 	chai.add(fun(&noob::physics_world::box), "box");
 	chai.add(fun(&noob::physics_world::cylinder), "cylinder");
@@ -118,11 +118,17 @@ noob::application::application() : chai(chaiscript::Std_Lib::library())
 	chai.add(fun(&noob::physics_world::static_mesh), "static_mesh");
 	chai.add(fun(static_cast<btConvexHullShape* (noob::physics_world::*)(const std::vector<noob::vec3>&)>(&noob::physics_world::convex_hull)), "convex_hull");
 	chai.add(fun(static_cast<btConvexHullShape* (noob::physics_world::*)(const noob::mesh&)>(&noob::physics_world::convex_hull)), "convex_hull");
-	chai.add(fun(static_cast<btCompoundShape* (noob::physics_world::*)(const noob::mesh&)>(&noob::physics_world::compound_shape)), "compound_shape");
+	chai.add(fun(&noob::physics_world::compound_shape_decompose), "compound_shape_decompose");
 	chai.add(fun(static_cast<btCompoundShape* (noob::physics_world::*)(const std::vector<noob::mesh>&)>(&noob::physics_world::compound_shape)), "compound_shape");
 	chai.add(fun(static_cast<btCompoundShape* (noob::physics_world::*)(const std::vector<btCollisionShape*>&)>(&noob::physics_world::compound_shape)), "compound_shape");
 
-	//chai.add(fun(&noob::application::physics), "physics");
+	chai.add(fun(static_cast<void (noob::scene3d::*)(const btRigidBody*, const noob::drawable3d*, const noob::triplanar_renderer::uniform_info&, const std::string&)>(&noob::scene3d::add)), "add");
+	chai.add(fun(static_cast<void (noob::scene3d::*)(const btGeneric6DofSpring2Constraint*, const std::string&)>(&noob::scene3d::add)), "add");
+	chai.add(fun(&noob::scene3d::remove_actors), "remove_actors");
+	chai.add(fun(&noob::scene3d::remove_constraints), "remove_constraints");
+	chai.add(fun(&noob::scene3d::get_bodies), "get_bodies");
+	chai.add(fun(&noob::scene3d::get_constraints), "get_constraints");
+
 	chai.add(fun(&noob::application::voxels), "voxels");
 	chai.add(fun(&noob::application::scene), "scene");
 }
@@ -185,7 +191,7 @@ void noob::application::update(double delta)
 		std::time_t t = boost::filesystem::last_write_time(p, ec);
 		if (ec != 0)
 		{
-			logger::log(fmt::format("[Application] - update() - error reading {0}: {1}",p.generic_string(), ec.message()));
+			logger::log(fmt::format("[Application] - update() - error reading {0}: {1}", p.generic_string(), ec.message()));
 		}	
 		else if (last_write != t)
 		{
@@ -213,6 +219,7 @@ void noob::application::draw()
 	bgfx::setViewTransform(0, &view_mat.m[0], &proj.m[0]);
 	bgfx::setViewRect(0, 0, 0, window_width, window_height);
 
+	scene.draw();
 	// scene.triplanar_render.draw(*t->model.drawable3d_ptr, noob::identity_mat4(), t->colouring_info);
 
 	gui.text("The goat stumbled upon the cheese", 150.0, 50.0);
@@ -249,7 +256,7 @@ void noob::application::step()
 
 	if (!paused)
 	{
-		update((float)delta);
+		update(delta);
 	}
 
 	draw();
@@ -271,20 +278,9 @@ void noob::application::resume()
 void noob::application::set_archive_dir(const std::string& filepath)
 {
 
-	{
-		std::stringstream ss;
-		ss << "setting archive dir(\"" << filepath << "\")";
-		logger::log(ss.str());
-
-	}	
-
+	logger::log(fmt::format("[Application] Setting archive directory (\"{0}\")", filepath));
 	prefix = std::unique_ptr<std::string>(new std::string(filepath));
-
-	{
-		std::stringstream ss;
-		ss << "archive dir = " << *prefix;
-		logger::log(ss.str());
-	}
+	logger::log(fmt::format("[Application] Archive dir = {0}", *prefix));
 }
 
 
@@ -292,11 +288,7 @@ void noob::application::touch(int pointerID, float x, float y, int action)
 {
 	if (input_has_started == true)
 	{
-		{
-			std::stringstream ss;
-			ss << "Touch - pointerID " << pointerID << ", (" << x << ", " << y << "), action " << action;
-			logger::log(ss.str());
-		}
+		logger::log(fmt::format("[Application] Touch - pointer ID = {0}, ({1}, {2}), action = {3}", pointerID, x, y, action));
 
 		if (pointerID < 3)
 		{
@@ -311,14 +303,10 @@ void noob::application::window_resize(uint32_t w, uint32_t h)
 {
 	window_width = w;
 	window_height = h;
-	{
-		std::stringstream ss;
-		ss << "window_resize(" << window_width << ", " << window_height << ")";
-		logger::log(ss.str());
-	}
-
 	if (window_height == 0) 
 	{
 		window_height = 1;
 	}
+
+	logger::log(fmt::format("[Application] Resize window to ({0}, {1})", window_width, window_height));
 }

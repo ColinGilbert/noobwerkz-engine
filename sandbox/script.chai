@@ -1,2 +1,16 @@
 // Currently, ChaiScript causes a segfault if you feed it an all-whitespace file. Ergo the the following placeholder.
 rofl
+//voxels.sphere(40.0, 30.0, 30.0, 30.0, true); //,60,60,60);
+//var m = voxels.extract_region(0.0, 0.0, 0.0, 80.0, 80.0, 80.0);
+//var c = m.convex_decomposition();
+//var s = scene.physics.compound_shape(c);
+//var d = drawable3d(m);
+//var u = triplanar_uniform;
+//u.colours[0] = vec4(1.0, 1.0, 1.0, 1.0);
+//u.colours[1] = vec4(1.0, 1.0, 1.0, 1.0);
+//u.colours[2] = vec4(1.0, 1.0, 1.0, 1.0);
+//u.colours[3] = vec4(1.0, 1.0, 1.0, 1.0);
+//u.mapping_blends = vec3(1.0, 1.0, 1.0);
+//u.scales = vec3(1.0, 1.0, 1.0);
+//u.colour_position = vec2(0.2, 0.4);
+//scene.add(s,d,u, "sample")

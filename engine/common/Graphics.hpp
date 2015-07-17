@@ -97,7 +97,7 @@ namespace noob
 
 			static void init(uint32_t width, uint32_t height);
 			static void frame(uint32_t width, uint32_t height);
-			static void set_file_prefix(const std::string& p);
+			// static void set_file_prefix(const std::string& p);
 			
 			// ---------------- Asset loaders (builds from files and returns handles) -----------------
 			static bgfx::ShaderHandle load_shader(const std::string& filename);

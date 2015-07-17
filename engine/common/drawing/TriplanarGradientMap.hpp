@@ -11,6 +11,7 @@ namespace noob
 		public:
 			struct uniform_info
 			{
+				public:
 				std::array<noob::vec4,4> colours;
 				noob::vec3 mapping_blends;
 				noob::vec3 scales;

@@ -11,6 +11,7 @@ find_package(Boost COMPONENTS system filesystem REQUIRED)
 #include_directories(${Boost_INCLUDE_DIR})
 
 
+
 include_directories(lib/chaiscript/include)
 list (APPEND chai-src
 lib/chaiscript/src/main.cpp
@@ -131,6 +132,12 @@ list(APPEND openmesh_src
 #	lib/SQLiteCpp/src/Transaction.cpp
 #	)
 
+include_directories(lib/es)
+list (APPEND es-src
+	lib/es/es/storage.cpp
+	)
+include_directories(lib/variant)
+
 list(APPEND common_src
 	common/Mesh.cpp
 	common/Graphics.cpp
@@ -156,7 +163,7 @@ list(APPEND common_src
 include_directories(platform/nix)
 list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 
-add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src})
+add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src} ${es-src})
 
 target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m OpenMeshCore OpenMeshToolsStatic emon BulletDynamics BulletCollision BulletSoftBody LinearMath spnav ${Boost_LIBRARIES})
 
