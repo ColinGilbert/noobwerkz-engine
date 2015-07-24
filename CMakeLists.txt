@@ -63,7 +63,7 @@ if ( NOT DEFINED BUILD_APPS )
 endif()
 
 # Only call fixbundle, when we are building OpenMesh standalone
-if(${PROJECT_NAME} MATCHES "OpenMesh")
+if( (${PROJECT_NAME} MATCHES "OpenMesh") AND BUILD_APPS )
 
   if (WIN32)
     if ( NOT "${CMAKE_GENERATOR}" MATCHES "MinGW Makefiles" AND BUILD_APPS )
