@@ -76,7 +76,7 @@ namespace OpenMesh {
  */
 template<typename PROPTYPE, typename MeshT>
 class PropertyManager {
-#if __cplusplus > 199711L or __GXX_EXPERIMENTAL_CXX0X__
+#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
     public:
         PropertyManager(const PropertyManager&) = delete;
         PropertyManager& operator=(const PropertyManager&) = delete;
@@ -148,7 +148,7 @@ class PropertyManager {
 
         MeshT &getMesh() const { return *mesh_; }
 
-#if __cplusplus > 199711L or __GXX_EXPERIMENTAL_CXX0X__
+#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
         /// Only for pre C++11 compatibility.
 
         typedef PropertyManager<PROPTYPE, MeshT> Proxy;

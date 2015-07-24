@@ -131,7 +131,7 @@ public:
 
   bool bind( osg::GeometryPtr geo )
   {
-    #if __cplusplus > 199711L or __GXX_EXPERIMENTAL_CXX0X__
+    #if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
       std::unique_ptr<mesh_t> obj(new mesh_t);
     #else
       std::auto_ptr<mesh_t> obj(new mesh_t);
