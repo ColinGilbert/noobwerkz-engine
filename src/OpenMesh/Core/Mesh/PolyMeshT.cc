@@ -110,7 +110,7 @@ calc_face_normal(FaceHandle _fh) const
 
   Point p1 = this->point(*fv_it);
   const Point p1i = p1; //save point of vertex 1
-  ++fv_it;
+  
   // Safeguard for 2-gons
   if (!(++fv_it).is_valid()) return Normal(0, 0, 0);
   

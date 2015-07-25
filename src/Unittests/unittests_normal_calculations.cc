@@ -23,11 +23,101 @@ class OpenMeshNormals : public OpenMeshBase {
     //Mesh mesh_;  
 };
 
+class OpenMeshNormalsPolyMesh : public OpenMeshBasePoly {
+
+    protected:
+
+        // This function is called before each test is run
+        virtual void SetUp() {
+
+            // Do some initial stuff with the member data here...
+        }
+
+        // This function is called after all tests are through
+        virtual void TearDown() {
+
+            // Do some final stuff with the member data here...
+        }
+
+    // Member already defined in OpenMeshBase
+    //Mesh mesh_;  
+};
+
+
+
 /*
  * ====================================================================
  * Define tests below
  * ====================================================================
  */
+
+/*
+ * Update normals on a single triangle
+ */
+TEST_F(OpenMeshNormals, NormalCalculationSingleFaceTriMesh) {
+
+ mesh_.clear();
+
+  // Add some vertices
+  Mesh::VertexHandle vhandle[4];
+
+  vhandle[0] = mesh_.add_vertex(Mesh::Point(0, 1, 0));
+  vhandle[1] = mesh_.add_vertex(Mesh::Point(0, 0, 0));
+  vhandle[2] = mesh_.add_vertex(Mesh::Point(1, 0, 0));
+
+  std::vector<Mesh::VertexHandle> face_vhandles;
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[2]);
+
+  Mesh::FaceHandle fh = mesh_.add_face(face_vhandles);
+
+
+  mesh_.request_vertex_normals();
+  mesh_.request_halfedge_normals();
+  mesh_.request_face_normals();
+
+  mesh_.update_normals();
+
+  EXPECT_EQ( mesh_.normal(fh)[0] ,0.0f );
+  EXPECT_EQ( mesh_.normal(fh)[1] ,0.0f );
+  EXPECT_EQ( mesh_.normal(fh)[2] ,1.0f );
+}
+
+
+/*
+ * Update normals on a single triangle
+ */
+TEST_F(OpenMeshNormalsPolyMesh, NormalCalculationSingleFacePolyMesh) {
+
+ mesh_.clear();
+
+  // Add some vertices
+  PolyMesh::VertexHandle vhandle[4];
+
+  vhandle[0] = mesh_.add_vertex(PolyMesh::Point(0, 1, 0));
+  vhandle[1] = mesh_.add_vertex(PolyMesh::Point(0, 0, 0));
+  vhandle[2] = mesh_.add_vertex(PolyMesh::Point(1, 0, 0));
+
+  std::vector<Mesh::VertexHandle> face_vhandles;
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[2]);
+
+  PolyMesh::FaceHandle fh = mesh_.add_face(face_vhandles);
+
+
+  mesh_.request_vertex_normals();
+  mesh_.request_halfedge_normals();
+  mesh_.request_face_normals();
+
+  mesh_.update_normals();
+
+  EXPECT_EQ( mesh_.normal(fh)[0] ,0.0f );
+  EXPECT_EQ( mesh_.normal(fh)[1] ,0.0f );
+  EXPECT_EQ( mesh_.normal(fh)[2] ,1.0f );
+
+}
 
 /*
  * Collapsing a tetrahedron
@@ -276,6 +366,7 @@ TEST_F(OpenMeshNormals, NormalCalculations_calc_vertex_normal_loop) {
   mesh_.calc_vertex_normal_loop(vhandle[2],normal);
 
 }
+
 
 
 
