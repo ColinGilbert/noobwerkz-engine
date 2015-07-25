@@ -6,7 +6,17 @@
 
 <!-- --------------------------------------------------------------------- -->
 
-<tr valign=top><td><b>4.1</b> (?/?/?,Rev.1308)</td><td>
+<tr valign=top><td><b>4.1</b> (2015/07/27,Rev.1316)</td><td>
+<b>Core</b>
+<ul>
+<li>Fixed bug in polymesh normal computation. Added more unittests for normal computation.</li>
+<li>Get rid of some windows preprocessor warnings</li>
+</ul>
+
+<b>Build System</b>
+<ul>
+<li>Removed fixbundle calls if not building apps.</li>
+</ul>
 
 
 <tr valign=top><td><b>4.0</b> (2015/07/08,Rev.1308)</td><td>
