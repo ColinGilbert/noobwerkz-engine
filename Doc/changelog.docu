@@ -6,12 +6,18 @@
 
 <!-- --------------------------------------------------------------------- -->
 
-<tr valign=top><td><b>4.1</b> (2015/07/27,Rev.1316)</td><td>
+<tr valign=top><td><b>4.1</b> (2015/07/27,Rev.1318)</td><td>
 <b>Core</b>
 <ul>
 <li>Fixed bug in polymesh normal computation. Added more unittests for normal computation.</li>
 <li>Get rid of some windows preprocessor warnings</li>
 </ul>
+
+<b>IO</b>
+<ul>
+<li>Options: Fixed bad enum</li>
+</ul>
+
 
 <b>Build System</b>
 <ul>
