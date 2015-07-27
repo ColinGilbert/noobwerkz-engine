@@ -1,12 +1,16 @@
-OpenMesh, 4.1
+OpenMesh, 4.2
 ~~~~~~~~~~~~~~~
 
 0. Licence
 ~~~~~~~~~~~~~~~
-   see LICENSE
+   see LICENSE folder.
  
+1. Info
+~~~~~~~~~~~~~~
+All Documentation, binaries and original source code are available at www.openmesh.org
+
   
-1. Installing
+2. Installing
 ~~~~~~~~~~~~~~
 Unpack the tar-ball to a suitable place.
 

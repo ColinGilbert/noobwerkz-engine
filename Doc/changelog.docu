@@ -6,6 +6,13 @@
 
 <!-- --------------------------------------------------------------------- -->
 
+
+<tr valign=top><td><b>4.2</b> (?/?/?,Rev.1318)</td><td>
+
+
+</tr>
+
+
 <tr valign=top><td><b>4.1</b> (2015/07/27,Rev.1318)</td><td>
 <b>Core</b>
 <ul>
@@ -23,6 +30,8 @@
 <ul>
 <li>Removed fixbundle calls if not building apps.</li>
 </ul>
+
+</tr>
 
 
 <tr valign=top><td><b>4.0</b> (2015/07/08,Rev.1308)</td><td>
