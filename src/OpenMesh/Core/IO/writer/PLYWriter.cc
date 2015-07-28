@@ -207,7 +207,7 @@ std::vector<_PLYWriter_::CustomProperty> _PLYWriter_::writeCustomTypeHeader(std:
 
 
     // check, if property is persistant
-    if (!prop->persistent())
+    if (!prop || !prop->persistent())
       continue;
 
 

@@ -538,20 +538,24 @@ TEST_F(OpenMeshReadWritePLY, WriteReadSimplePLYWithCustomProps) {
     OpenMesh::VPropHandleT<unsigned int> nonPersistant;
     OpenMesh::VPropHandleT<double> qualityProp;
     OpenMesh::FPropHandleT<signed int> faceProp;
+    OpenMesh::VPropHandleT<int> removedProp;
 
     const std::string indexPropName = "mySuperIndexProperty";
     const std::string qualityPropName = "quality";
     const std::string facePropName = "anotherPropForFaces";
     const std::string nonPersistantName = "nonPersistant";
+    const std::string removedPropName = "willBeRemoved";
 
     mesh.add_property(indexProp,indexPropName);
     mesh.add_property(qualityProp,qualityPropName);
+    mesh.add_property(removedProp, removedPropName);
     mesh.add_property(faceProp,facePropName);
     mesh.add_property(nonPersistant,nonPersistantName);
 
     mesh.property(indexProp).set_persistent(true);
     mesh.property(qualityProp).set_persistent(true);
     mesh.property(faceProp).set_persistent(true);
+    mesh.remove_property(removedProp);
 
     signed char i=0;
     for (Mesh::VertexIter v_iter = mesh.vertices_begin(); v_iter != mesh.vertices_end(); ++v_iter, ++i)
