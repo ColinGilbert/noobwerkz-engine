@@ -7,7 +7,12 @@
 <!-- --------------------------------------------------------------------- -->
 
 
-<tr valign=top><td><b>4.2</b> (?/?/?,Rev.1318)</td><td>
+<tr valign=top><td><b>4.2</b> (?/?/?,Rev.1323)</td><td>
+
+<b>IO</b>
+<ul>
+<li>PLY Writer: fix crash when saving a mesh and a custom property was removed before, extend unittest for this case</li>
+</ul>
 
 
 </tr>
