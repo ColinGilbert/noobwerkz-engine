@@ -199,7 +199,10 @@ void assignCustomProperty(std::istream& _in, BaseImporter& _bi, Handle _h, const
     //get/add property
     typename Handle2Prop<T,Handle>::PropT prop;
     if (!_bi.kernel()->get_property_handle(prop,_propName))
+    {
       _bi.kernel()->add_property(prop,_propName);
+      _bi.kernel()->property(prop).set_persistent(true);
+    }
 
     //read and assign
     T in;
@@ -211,7 +214,10 @@ void assignCustomProperty(std::istream& _in, BaseImporter& _bi, Handle _h, const
     //get/add property
     typename Handle2Prop<std::vector<T>,Handle>::PropT prop;
     if (!_bi.kernel()->get_property_handle(prop,_propName))
+    {
       _bi.kernel()->add_property(prop,_propName);
+      _bi.kernel()->property(prop).set_persistent(true);
+    }
 
     //init vector
     int numberOfValues;
