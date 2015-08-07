@@ -46,14 +46,14 @@ namespace noob
 		v[1] = vv.v[1];
 		v[2] = vv.v[2];
 	}
-
+/*
 	vec3::vec3(const btVector3& btVec)
 	{
 		v[0] = btVec[0];
 		v[1] = btVec[1];
 		v[2] = btVec[2];
 	}
-
+*/
 	vec4::vec4() {}
 
 	vec4::vec4(float x, float y, float z, float w)

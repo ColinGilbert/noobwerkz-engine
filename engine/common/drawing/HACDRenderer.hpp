@@ -3,7 +3,7 @@
 #include "Graphics.hpp"
 #include "Drawable3D.hpp"
 #include "MathFuncs.hpp"
-
+#include <memory>
 namespace noob
 {
 	class hacd_renderer 

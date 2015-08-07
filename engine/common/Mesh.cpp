@@ -327,6 +327,7 @@ TriMesh noob::mesh::to_half_edges() const
 
 std::vector<noob::mesh> noob::mesh::convex_decomposition() const
 {
+	logger::log("[Mesh] convex_decomposition()");
 	VHACD::IVHACD* interfaceVHACD = VHACD::CreateVHACD();
 	VHACD::IVHACD::Parameters params;
 	params.m_oclAcceleration = false;
@@ -364,7 +365,7 @@ std::vector<noob::mesh> noob::mesh::convex_decomposition() const
 			size_t num_indices = num_tris * 3;
 
 			logger::log(fmt::format("[Mesh] convex_decomposition() - Mesh # {0} - num verts = {1}, num triangles = {2}, num indices = {3}", i, num_points, num_tris, num_indices));
-			
+
 			// TODO: Find out why the following commented-out code is broken.
 			/*
 			for (size_t j = 0; j < num_points; j++)
@@ -390,7 +391,7 @@ std::vector<noob::mesh> noob::mesh::convex_decomposition() const
 
 			logger::log(fmt::format("[Mesh] convex_decomposition() - Final, cleaned mesh # {0} - Stats: num verts = {1}, num indices = {2}", i, final_mesh.vertices.size(), final_mesh.indices.size()));
 			*/
-
+			
 			fmt::MemoryWriter w;
 			size_t nV = num_points * 3;;
 			w << "OFF" << "\n" << num_points << " " << num_tris << " 0" << "\n";
@@ -410,7 +411,8 @@ std::vector<noob::mesh> noob::mesh::convex_decomposition() const
 			final_mesh.load(std::make_tuple(size, mem), "");
 
 			meshes.push_back(final_mesh);
-		}
+
+	}
 	}
 	else 
 	{
@@ -421,10 +423,12 @@ std::vector<noob::mesh> noob::mesh::convex_decomposition() const
 	interfaceVHACD->Release();
 	
 	return meshes;
+
 }
 
-/*
+
 // TODO: Use the same struct and benefit from zero-copy awesomeness
+/*
 noob::mesh noob::mesh::csg(const noob::mesh& a, const noob::mesh& b, const noob::csg_op op)
 {
 	std::vector<csgjs_model> csg_models;

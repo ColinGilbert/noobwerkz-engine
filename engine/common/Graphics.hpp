@@ -31,8 +31,8 @@ namespace noob
 				float z_normal;
 				float u_coord;
 				float v_coord;
-				//uint8_t m_boneindex[4];
-				//float m_boneweight[4];
+				uint8_t m_boneindex[4];
+				float m_boneweight[4];
 				static void init()
 				{
 					ms_decl
@@ -42,8 +42,8 @@ namespace noob
 						//.add(bgfx::Attrib::Bitangent, 3, bgfx::AttribType::Float)
 						.add(bgfx::Attrib::Normal,    3, bgfx::AttribType::Float)
 						.add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float)
-						//.add(bgfx::Attrib::Indices,   4, bgfx::AttribType::Uint8, false, true)
-						//.add(bgfx::Attrib::Weight,    4, bgfx::AttribType::Float)
+						.add(bgfx::Attrib::Indices,   4, bgfx::AttribType::Uint8, false, true)
+						.add(bgfx::Attrib::Weight,    4, bgfx::AttribType::Float)
 						.end();
 				}
 				static bgfx::VertexDecl ms_decl;

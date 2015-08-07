@@ -4,7 +4,7 @@
 
 #include <array>
 #include <assimp/types.h>
-#include <btBulletDynamicsCommon.h>
+//#include <btBulletDynamicsCommon.h>
 
 #include "format.h"
 
@@ -88,7 +88,7 @@ namespace noob
 
 		vec3(const vec3& vv);
 
-		vec3(const btVector3&);
+		// vec3(const btVector3&);
 
 		// add vector to vector
 		vec3 operator+(const vec3& rhs) const;

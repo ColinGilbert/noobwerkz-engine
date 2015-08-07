@@ -23,6 +23,7 @@ list (APPEND cppformat_src
 	lib/cppformat/format.cc
 	lib/cppformat/posix.cc
 	)
+
 include_directories(lib/bstrlib)
 list(APPEND bstrlib_src
 	lib/bstrlib/bstrlib.c
@@ -41,7 +42,7 @@ add_subdirectory(lib/polyvox)
 include_directories(lib/polyvox/include)
 
 include_directories(lib/eigen)
-add_subdirectory(lib/rbdl)
+#add_subdirectory(lib/rbdl)
 
 include_directories(lib/openmesh/src)
 add_subdirectory(lib/openmesh)
@@ -87,10 +88,12 @@ list (APPEND vhacd_src
 #include_directories(lib/csgjs-cpp)
 
 # TODO: Add when needed
-#include_directories(lib/cereal/include)
+
+include_directories(lib/cereal/include)
 include_directories(lib/stb)
 
 include_directories(common)
+include_directories(common/Physics)
 include_directories(common/drawing_techniques)
 include_directories(common/drawing)
 include_directories(common/drawing/font)
@@ -136,6 +139,7 @@ include_directories(lib/es)
 list (APPEND es-src
 	lib/es/es/storage.cpp
 	)
+
 include_directories(lib/variant)
 
 list(APPEND common_src
@@ -150,17 +154,28 @@ list(APPEND common_src
 	common/EditorUtils.cpp
 	common/VoxelWorld.cpp
 	common/UIFont.cpp
-	common/PhysicsWorld.cpp
-	common/DebugDraw.cpp
+	common/Physics/PhysicsBody.cpp
+	common/Physics/PhysicsConstraintGeneric.cpp
+	common/Physics/PhysicsShape.cpp
+	common/Physics/PhysicsWorld.cpp
+	common/Physics/CharacterController.cpp
+	common/Skeleton.cpp
+	common/ModelLoader.cpp
+	# common/DebugDraw.cpp
 	common/GUI.cpp
 	common/Camera.cpp
-	common/Scene3D.cpp
+	common/Stage.cpp
+	common/Scenery.cpp
+	common/Actor.cpp
+	common/Prop.cpp
+	common/AnimatedModel.cpp
 	common/drawing/TriplanarGradientMap.cpp
 	common/drawing/HACDRenderer.cpp
 	common/drawing/GUIRenderer.cpp
 	)
 
 include_directories(platform/nix)
+
 list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 
 add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src} ${es-src})

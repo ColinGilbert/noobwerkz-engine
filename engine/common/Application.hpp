@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define PI (float)3.14159265
+//#define PI (float)3.14159265
 
 #include <time.h>
 #include <assert.h>
@@ -35,8 +35,8 @@
 #include <cereal/archives/binary.hpp>
 */
 
-#include <lemon/list_graph.h>
-#include <lemon/static_graph.h>
+// #include <lemon/list_graph.h>
+// #include <lemon/static_graph.h>
 
 #include "Server.hpp"
 #include "Logger.hpp"
@@ -46,20 +46,16 @@
 #include "Drawable3D.hpp"
 #include "VoxelWorld.hpp"
 #include "GUI.hpp"
-#include "PhysicsWorld.hpp"
 #include "Mesh.hpp"
 #include "Camera.hpp"
 #include "NDOF.hpp"
-#include "Scene3D.hpp"
+#include "Stage.hpp"
 #include "TransformHelper.hpp"
 // #include "Noise.h"
-
-
 #include "format.h"
 
-#include <chaiscript/chaiscript.hpp>
-#include <chaiscript/chaiscript_stdlib.hpp>
-
+// #include <chaiscript/chaiscript.hpp>
+// #include <chaiscript/chaiscript_stdlib.hpp>
 namespace noob
 {
 	class application
@@ -75,7 +71,7 @@ namespace noob
 			void init();
 			void update(double delta);
 			void draw();
-			
+			//void reset_script();
 			// step() is called by the target platform, which calculates the delta-time and calls update().
 			// pause() and resume() are used by whoever needs them :P
 			void step();
@@ -99,9 +95,9 @@ namespace noob
 			noob::gui gui;
 			std::vector<noob::vec2> finger_positions;
 			noob::voxel_world voxels;
-			noob::scene3d scene;
+			noob::stage scene;
 			noob::mat4 view_mat;
-			noob::transform_helper current_cam_transform;
-			chaiscript::ChaiScript chai;
+			// noob::transform_helper current_cam_transform;
+//			std::unique_ptr<chaiscript::ChaiScript> chai;
 	};
 }

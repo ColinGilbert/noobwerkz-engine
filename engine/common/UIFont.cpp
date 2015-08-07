@@ -29,7 +29,7 @@ TrueTypeHandle loadTtf(FontManager* _fm, const char* _filePath)
 }
 
 
-bool noob::ui_font::init(const std::string& filename, size_t font_size, float win_width, float win_height)
+void noob::ui_font::init(const std::string& filename, size_t font_size, float win_width, float win_height)
 {
 	window_width = win_width;
 	window_height = win_height;
