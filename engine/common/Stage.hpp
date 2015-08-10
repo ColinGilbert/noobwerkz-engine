@@ -44,8 +44,8 @@ namespace noob
 
 			noob::mat4 view_mat;
 			noob::mat4 projection_mat;
-			
-			std::unordered_map<std::string, std::unique_ptr<noob::drawable3d>> drawables;
+			std::unordered_map<std::string, std::shared_ptr<noob::drawable3d>> drawables;
+			std::unordered_map<std::string, std::shared_ptr<noob::animated_model>> animations;
 			std::vector<noob::scenery> sceneries;
 			std::vector<noob::prop> props;
 			std::unordered_map<std::string, noob::actor> actors;
