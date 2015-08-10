@@ -43,14 +43,6 @@ void noob::graphics::frame(uint32_t width, uint32_t height)
 }
 
 
-/*
-void noob::graphics::set_file_prefix(const std::string& p)
-{
-
-}
-*/
-
-
 bgfx::TextureHandle noob::graphics::get_texture(const std::string& name)
 {
 	if (global_textures.find(name) == global_textures.end())

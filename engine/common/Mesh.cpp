@@ -727,3 +727,80 @@ noob::mesh noob::mesh::sphere(float radius)
 	noob::mesh mesh = noob::mesh::cube(diameter, diameter, diameter, 3);
 	return mesh;
 }
+
+/*
+noob::mesh noob::mesh::bone()
+{
+	TriMesh half_edges;
+	TriMesh::VertexHandle vhandles[6];
+
+	vhandles[0] = half_edges.add_vertex(TriMesh::Point(1.0, 0.0, 0.0));
+	vhandles[1] = half_edges.add_vertex(TriMesh::Point(0.8, 0.2, 0.2));
+	vhandles[2] = half_edges.add_vertex(TriMesh::Point(0.8, 0.2, -0.2));
+	vhandles[3] = half_edges.add_vertex(TriMesh::Point(0.8, -0.2, -0.2));
+	vhandles[4] = half_edges.add_vertex(TriMesh::Point(0.8, -0.2, 0.2));
+	vhandles[5] = half_edges.add_vertex(TriMesh::Point(-1.0, 0.0, 0.0));
+
+	std::vector<TriMesh::VertexHandle> face_vhandles;
+
+	face_vhandles.clear();
+	face_vhandles.push_back(vhandles[0]);
+	face_vhandles.push_back(vhandles[2]);
+	face_vhandles.push_back(vhandles[1]);
+	half_edges.add_face(face_vhandles);
+
+	face_vhandles.clear();
+	face_vhandles.push_back(vhandles[5]);
+	face_vhandles.push_back(vhandles[1]);
+	face_vhandles.push_back(vhandles[2]);
+	half_edges.add_face(face_vhandles);
+
+	face_vhandles.clear();
+	face_vhandles.push_back(vhandles[0]);
+	face_vhandles.push_back(vhandles[3]);
+	face_vhandles.push_back(vhandles[2]);
+	half_edges.add_face(face_vhandles);
+
+	face_vhandles.clear();
+	face_vhandles.push_back(vhandles[5]);
+	face_vhandles.push_back(vhandles[2]);
+	face_vhandles.push_back(vhandles[3]);
+	half_edges.add_face(face_vhandles);
+
+	face_vhandles.clear();
+	face_vhandles.push_back(vhandles[0]);
+	face_vhandles.push_back(vhandles[4]);
+	face_vhandles.push_back(vhandles[3]);
+	half_edges.add_face(face_vhandles);
+
+	face_vhandles.clear();
+	face_vhandles.push_back(vhandles[5]);
+	face_vhandles.push_back(vhandles[3]);
+	face_vhandles.push_back(vhandles[4]);
+	half_edges.add_face(face_vhandles);
+
+	face_vhandles.clear();
+	face_vhandles.push_back(vhandles[0]);
+	face_vhandles.push_back(vhandles[1]);
+	face_vhandles.push_back(vhandles[4]);
+	half_edges.add_face(face_vhandles);
+
+	face_vhandles.clear();
+	face_vhandles.push_back(vhandles[5]);
+	face_vhandles.push_back(vhandles[4]);
+	face_vhandles.push_back(vhandles[1]);
+	half_edges.add_face(face_vhandles);
+
+	face_vhandles.clear();
+	face_vhandles.push_back(vhandles[0]);
+	face_vhandles.push_back(vhandles[1]);
+	face_vhandles.push_back(vhandles[2]);
+	half_edges.add_face(face_vhandles);
+
+	OpenMesh::IO::write_mesh(half_edges, "temp/bone.off");
+	noob::mesh mesh;
+	mesh.load("temp/bone.off", "bone-temp");
+
+	return mesh;
+}
+*/

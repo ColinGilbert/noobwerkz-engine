@@ -1,17 +1,71 @@
 #include "Actor.hpp"
 #include "Actor.hpp"
 
-
-void noob::actor::add_to_path(const std::vector<noob::vec3>& path_segment, float speed)
+void noob::actor::init(const std::shared_ptr<noob::physics_body>& bod, const std::shared_ptr<noob::drawable3d>& drawable, const std::shared_ptr<noob::animated_model>& anim)
 {
-	path.push_back(std::make_tuple(path_segment,speed));
+
+}
+
+
+void noob::actor::set_position(const noob::vec3&)
+{
+
+}
+
+
+noob::vec3 noob::actor::get_position() const
+{
+
+}
+
+
+void noob::actor::set_orientation(const noob::versor&)
+{
+
+}
+
+
+noob::versor noob::actor::get_orientation() const
+{
+
+}
+
+
+void noob::actor::set_transform(const noob::mat4&)
+{
+
+}
+
+
+noob::mat4 noob::actor::get_transform() const
+{
+
+}
+
+
+void noob::actor::add_to_path(const std::vector<noob::vec3>& path_segment)
+{
+	//path.push_back(path_segment);
+}
+
+
+std::vector<noob::vec3> noob::actor::get_path() const
+{
+	std::vector<noob::vec3> p;
+	for (noob::vec3 v : path)
+	{
+		p.push_back(v);
+	}
+	return p;
+
 }
 
 
 void noob::actor::clear_path()
 {
-	
+	path.clear();
 }
+
 
 
 void noob::actor::face_point(const noob::vec3& point)
@@ -20,13 +74,26 @@ void noob::actor::face_point(const noob::vec3& point)
 }
 
 
-void noob::actor::stop_moving()
+void noob::actor::stop()
 {
 	moving = false;
 }
 
 
-void noob::actor::start_moving()
+void noob::actor::start()
 {
 	moving = true;
+}
+
+
+void noob::actor::draw_skeleton()
+{
+
+}
+
+
+void noob::actor::manual_control(bool)
+{
+
+
 }

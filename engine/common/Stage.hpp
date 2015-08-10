@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "Config.hpp"
@@ -30,11 +29,13 @@ namespace noob
 	{
 		public:
 			void init();
-			void update();
+			void update(double dt);
+			// TODO: Implement
 			void draw();
 
 			// std::array<noob::vec4, 6> extract_planes(const noob::mat4& mvp);
-
+			void add_drawable(const std::string& name, const noob::drawable3d* drawable);
+			void add_actor(const std::string& name, const noob::actor& actor);
 			
 		protected:
 			noob::physics_world world;
@@ -43,10 +44,11 @@ namespace noob
 
 			noob::mat4 view_mat;
 			noob::mat4 projection_mat;
-
+			
+			std::unordered_map<std::string, std::unique_ptr<noob::drawable3d>> drawables;
 			std::vector<noob::scenery> sceneries;
 			std::vector<noob::prop> props;
-			std::vector<noob::actor> actors;
+			std::unordered_map<std::string, noob::actor> actors;
 			
 			// es::storage world;
 	};

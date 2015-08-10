@@ -3,6 +3,7 @@
 #include <tuple>
 #include <vector>
 #include <string>
+//#include <memory>
 #include <unordered_map>
 #include <bgfx.h>
 
@@ -17,31 +18,32 @@ namespace noob
 		public:
 			struct mesh_vertex
 			{
+				mesh_vertex() : x_pos(0.0), y_pos(0.0), z_pos(0.0), x_normal(0.0), y_normal(0.0), z_normal(0.0), u_coord(0.0), v_coord(0.0), tangent_x(0.0), tangent_y(0.0), tangent_z(0.0), bitangent_x(0.0), bitangent_y(0.0), bitangent_z(0.0), bone_index{ 0, 0, 0, 0}, bone_weight{ 0.0, 0.0, 0.0, 0.0 } {}
 				float x_pos;
 				float y_pos;
 				float z_pos;
-				//float m_tangent_x;
-				//float m_tangent_y;
-				//float m_tangent_z;
-				//float m_bitangent_x;
-				//float m_bitangent_y;
-				//float m_bitangent_z;
 				float x_normal;
 				float y_normal;
 				float z_normal;
 				float u_coord;
 				float v_coord;
-				uint8_t m_boneindex[4];
-				float m_boneweight[4];
+				float tangent_x;
+				float tangent_y;
+				float tangent_z;
+				float bitangent_x;
+				float bitangent_y;
+				float bitangent_z;
+				uint8_t bone_index[4];
+				float bone_weight[4];
 				static void init()
 				{
 					ms_decl
 						.begin()
 						.add(bgfx::Attrib::Position,  3, bgfx::AttribType::Float)
-						//.add(bgfx::Attrib::Tangent,   3, bgfx::AttribType::Float)
-						//.add(bgfx::Attrib::Bitangent, 3, bgfx::AttribType::Float)
 						.add(bgfx::Attrib::Normal,    3, bgfx::AttribType::Float)
 						.add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float)
+						.add(bgfx::Attrib::Tangent,   3, bgfx::AttribType::Float)
+						.add(bgfx::Attrib::Bitangent, 3, bgfx::AttribType::Float)
 						.add(bgfx::Attrib::Indices,   4, bgfx::AttribType::Uint8, false, true)
 						.add(bgfx::Attrib::Weight,    4, bgfx::AttribType::Float)
 						.end();
@@ -96,6 +98,7 @@ namespace noob
 			};
 
 			static void init(uint32_t width, uint32_t height);
+			static void destroy();
 			static void frame(uint32_t width, uint32_t height);
 			// static void set_file_prefix(const std::string& p);
 			

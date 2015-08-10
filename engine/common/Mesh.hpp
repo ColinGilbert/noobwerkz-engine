@@ -77,6 +77,7 @@ namespace noob
 			static noob::mesh cube(float width, float height, float depth, size_t subdivides = 0);
 			static noob::mesh cylinder(float radius, float height, size_t subdivides = 0);
 			static noob::mesh sphere(float radius);
+			// static noob::mesh bone();
 
 		protected:
 			bbox_info bbox;

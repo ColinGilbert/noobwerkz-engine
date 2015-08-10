@@ -1,12 +1,25 @@
-// This class represents a humanoid skeletal blend-tree
+// This class represents an animated character. Current only does one animation at a time, in order to learn the system.
 #pragma once
 
 #include <unordered_map>
+#include <math.h>
 
+#include <ozz/animation/offline/raw_skeleton.h>
+#include <ozz/animation/offline/raw_animation.h>
 #include <ozz/animation/runtime/skeleton.h>
 #include <ozz/animation/runtime/animation.h>
 #include <ozz/base/io/archive.h>
 #include <ozz/base/io/stream.h>
+#include <ozz/base/maths/vec_float.h>
+#include <ozz/base/maths/simd_math.h>
+#include <ozz/base/maths/soa_transform.h>
+#include <ozz/animation/runtime/blending_job.h>
+#include <ozz/animation/runtime/sampling_job.h>
+#include <ozz/animation/runtime/local_to_model_job.h>
+#include <ozz/animation/offline/animation_builder.h>
+#include <ozz/animation/offline/animation_optimizer.h>
+#include <ozz/base/memory/allocator.h>
+
 
 #include <cereal/types/string.hpp>
 #include <cereal/types/array.hpp>
@@ -14,83 +27,145 @@
 #include <cereal/types/set.hpp>
 #include <cereal/archives/binary.hpp>
 
+#include <lemon/list_graph.h>
 #include <lemon/static_graph.h>
+
+#include "MathFuncs.hpp"
+#include "Graphics.hpp"
 
 namespace noob
 {
 	class animated_model
 	{
 		public:
-			//animated_model() : blend_weights(blend_tree) {}
-			
-			enum class posture_type
-			{
-				STANDING, CROUCHING, PRONE, SITTING, RIDING, BRACING
-			};
-			
-			enum class equipment_type
-			{
-				UNARMED, SHIELD, SWORD, CLUB, SPEAR, PIKE, BOW
-			};
-			
-			enum class movement_type
-			{
-				STATIONARY, WALK, RUN, CREEP
-			};
-			
-			enum class movement_direction
-			{
-				FORWARD, LEFT, RIGHT, BACKWARD
-			};
-			
-			enum class action_type
-			{
-				IDLE, MELEE, SHOOT, RELOAD, SALUTE, INSULT, COVER, JUMP
-			};
-			
-			struct animation_type
-			{
-				noob::animated_model::equipment_type gear;
-				noob::animated_model::posture_type posture;
-				noob::animated_model::movement_type movement;
-				noob::animated_model::movement_direction direction;
-				noob::animated_model::action_type action;
-			};
-			
-			void load_mesh(const std::string& filename);
-			void load_skeletion(const std::string& filename);
-			// void load_skeleton(const ozz::animation::raw_skeleton& skel);
-			// These functions work as a stack: You set the current stance, posture, movement.
-			// bool load_animation(const ozz::animation::raw_animation& anim);
-			
-			void current_posture(noob::animated_model::posture_type current_posture);
-			void current_equipment(noob::animated_model::equipment_type current_equipment);
-			void current_movement(noob::animated_model::movement_type current_movement);
-			void current_direction(noob::animated_model::movement_direction current_direction);
-			void current_action(noob::animated_model::action_type current_action);
-			
-			// Returns if current state is valid. For example, jumping and lying on the ground at the same time is quite difficult...
-			bool current_state_valid() const;
-			
-			// Return value: <from_anim, to_anim, normalized_blend>
-			std::tuple<noob::animated_model::animation_type,noob::animated_model::animation_type,float> get_current_anim() const;
-			bool set_default(const noob::animated_model::animation_type& anim);
-			bool anim_exists(noob::animated_model::animation_type anim) const;
-			
-			// If the desired animation isn't present, this will go to the most specifid item in the blend tree.
-			void switch_to(noob::animated_model::animation_type anim, float fade);
-			
-			// When there is a filename in the function call, the animation is set as the ozz-animation file.
-			//void weapon(noob::animated_model::equipment_type weapon_state, const std::string& filename = "");
-			//void action(noob::animated_model::action_type action_state, const std::string& filename = "");
-			
+
+			animated_model() : allocator(ozz::memory::default_allocator()) {}
+			~animated_model();
+			// Loads a runtime skeleton. Possibly convert to raw skeleton
+			bool load_skeleton(const std::string& filename);
+			// Loads a raw animation. You then create runtime animations via optimize()
+			bool load_animation(const std::string& filename, const std::string& anim_name);
+			// TODO: Implement
+			bool load_mesh(const std::string& filename);
+			// If name = "" all animations get processed. If all the tolerances == 0.0 it doesn't run an optimization pre-pass prior prior to creating runtime animations. 
+			void optimize(float translation_tolerance = 0.0, float rotation_tolerance = 0.0, float scale_tolerance = 0.0, const std::string& name = "");
+			// TODO: Implement
+			void switch_to(const std::string& name, float fade = 0.0);
+			bool anim_exists(const std::string& name) const;
+			// TODO: Implement
+			void update(float dt);
+			void reset_time(float t = 0.0);
+			std::string get_current_anim() const;
+			// Gets bone matrices. TODO: Replace with a setup that uploads directly into graphics buffer instead of copying.
+			std::vector<noob::mat4> get_matrices() const;
+
+
 		protected:
-			//std::vector<noob::drawable3d> drawables;
-			ozz::animation::Skeleton skeleton;
-			// std::unordered_map<std::string, ozz::animation::Animation> animations;
-			lemon::StaticDigraph blend_tree;
-			lemon::StaticDigraph::ArcMap<float> blend_weights;
+			class playback_controller
+			{
+				public:
+					void update(const ozz::animation::Animation& animation, float dt);
+					void reset();
+
+					bool paused;
+					float time;
+					float playback_speed;
+			};
+
+			class sampler
+			{
+				friend class noob::animated_model;
+
+				public:
+				void update(float dt);
+				// TODO(?) : Return a reference instead of using arguments
+				void get_model_mats(ozz::Range<ozz::math::Float4x4>& models);
+				float weight;
+
+
+				protected:
+				sampler() : weight(1.0), cache(nullptr) {}
+				noob::animated_model::playback_controller controller;
+				ozz::animation::Animation* animation;
+				ozz::animation::Skeleton* skeleton;
+				ozz::animation::SamplingCache* cache;
+				ozz::Range<ozz::math::SoaTransform> locals;
+
+			};
+
+			noob::animated_model::sampler create_sampler(const ozz::animation::Animation& anim);
+			void destroy_sampler(noob::animated_model::sampler&);		
 			
-			//lemon::StaticDigraph::NodeMap<noob::animated_model::anim_state> blend_states;
+			std::string current_anim_name;
+			ozz::animation::Animation* current_anim;
+			float current_time;
+
+			std::unordered_map<std::string, ozz::animation::Animation*> runtime_anims;
+			std::unordered_map<std::string, ozz::animation::offline::RawAnimation> raw_anims;
+			// float threshold;
+			// size_t num_layers;
+			// lemon::StaticDigraph blend_tree;
+			// ozz::Range<ozz::math::SoaTransform> blended_locals;
+			ozz::animation::Skeleton skeleton;
+			ozz::Range<ozz::math::Float4x4> model_matrices;
+			ozz::memory::Allocator* allocator;
 	};
 }
+
+/*	
+	enum class posture_type
+	{
+	STANDING, CROUCHING, PRONE, SITTING, RIDING
+	};
+
+	enum class equipment_type
+	{
+	UNARMED, SHIELD, SWORD, CLUB, SPEAR, PIKE, BOW
+	};
+
+	enum class movement_type
+	{
+	STATIONARY, WALK, RUN, CREEP
+	};
+
+	enum class movement_direction
+	{
+	FORWARD, LEFT, RIGHT, BACKWARD
+	};
+
+	enum class action_type
+	{
+	IDLE, MELEE, SHOOT, RELOAD, SALUTE, INSULT, COVER, JUMP, BRACE
+	};
+
+	struct animation_type
+	{
+	noob::animated_model::equipment_type gear;
+	noob::animated_model::posture_type posture;
+	noob::animated_model::movement_type movement;
+	noob::animated_model::movement_direction direction;
+	noob::animated_model::action_type action;
+	};
+	*/
+
+/*
+   void posture(noob::animated_model::posture_type current_posture);
+   void equipment(noob::animated_model::equipment_type current_equipment);
+   void movement(noob::animated_model::movement_type current_movement);
+   void direction(noob::animated_model::movement_direction current_direction);
+   void action(noob::animated_model::action_type current_action);
+   bool noob::animated_model::load_animation(const std::string& filename, noob::animation_type anim)
+   */
+// Returns if current state is valid. For example, jumping and lying on the ground at the same time is quite difficult...
+//bool current_state_valid() const;
+
+// Return value: <from_anim, to_anim, normalized_blend>
+//std::tuple<noob::animated_model::animation_type,noob::animated_model::animation_type,float> get_current_anim() const;
+
+// Sets the default at the most specific blend tree level possible
+//bool set_default(const noob::animated_model::animation_type& anim);
+//bool anim_exists(noob::animated_model::animation_type anim) const;
+// If the desired animation isn't present, this will go to the most specific valid item in the blend tree.
+
+
+

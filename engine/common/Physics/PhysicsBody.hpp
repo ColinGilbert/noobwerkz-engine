@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MathFuncs.hpp"
-
 #include "PhysicsShape.hpp"
 
 

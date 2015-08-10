@@ -100,6 +100,8 @@ include_directories(common/drawing/font)
 include_directories(common/drawing/shaderc)
 #include_directories(common/bfgx_related/nanovg)
 
+#include_directories(common/libs/ozz-animation/include)
+
 list(APPEND bgfx_src
 	lib/bgfx/src/amalgamated.cpp
 	)
@@ -136,7 +138,7 @@ list(APPEND openmesh_src
 #	)
 
 include_directories(lib/es)
-list (APPEND es-src
+list (APPEND es_src
 	lib/es/es/storage.cpp
 	)
 
@@ -178,9 +180,9 @@ include_directories(platform/nix)
 
 list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 
-add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src} ${es-src})
+add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src} ${es_src})
 
-target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m OpenMeshCore OpenMeshToolsStatic emon BulletDynamics BulletCollision BulletSoftBody LinearMath spnav ${Boost_LIBRARIES})
+target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES}  freetype rt dl pthread assimp m OpenMeshCore OpenMeshToolsStatic emon BulletDynamics BulletCollision BulletSoftBody LinearMath spnav ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r ${Boost_LIBRARIES})
 
 project(LogServer)
 
