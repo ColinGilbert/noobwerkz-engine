@@ -2,6 +2,7 @@
 
 void noob::physics_body::init(const noob::mat4& transform, const noob::physics_shape& shape, float mass, float friction, float rolling_friction, float restitution)
 {
+	dirty = false;
 	btTransform bt_trans;
 	bt_trans.setFromOpenGLMatrix(&transform.m[0]);
 	btDefaultMotionState* motion_state = new btDefaultMotionState(bt_trans);

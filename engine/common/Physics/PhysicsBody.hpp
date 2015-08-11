@@ -28,5 +28,6 @@ namespace noob
 
 		protected:
 			btRigidBody* body;
+			bool dirty;
 	};
 }

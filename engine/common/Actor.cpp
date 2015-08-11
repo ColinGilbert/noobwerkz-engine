@@ -1,12 +1,12 @@
 #include "Actor.hpp"
 #include "Actor.hpp"
-
+/*
 void noob::actor::init(const std::shared_ptr<noob::physics_body>& bod, const std::shared_ptr<noob::drawable3d>& drawable, const std::shared_ptr<noob::animated_model>& anim)
 {
 
 }
-
-
+*/
+/*
 void noob::actor::set_position(const noob::vec3&)
 {
 
@@ -29,7 +29,7 @@ noob::versor noob::actor::get_orientation() const
 {
 
 }
-
+*/
 
 void noob::actor::set_transform(const noob::mat4&)
 {
@@ -37,8 +37,13 @@ void noob::actor::set_transform(const noob::mat4&)
 }
 
 
-noob::mat4 noob::actor::get_transform() const
+noob::mat4 noob::actor::get_transform()
 {
+	if (physics_driven)
+	{
+		xform = body.get_transform();
+	}
+	return xform;
 
 }
 
@@ -74,25 +79,13 @@ void noob::actor::face_point(const noob::vec3& point)
 }
 
 
-void noob::actor::stop()
-{
-	moving = false;
-}
-
-
-void noob::actor::start()
-{
-	moving = true;
-}
-
-
-void noob::actor::draw_skeleton()
+void noob::actor::draw_skeleton() const
 {
 
 }
 
 
-void noob::actor::manual_control(bool)
+void noob::actor::set_physics_control(bool)
 {
 
 

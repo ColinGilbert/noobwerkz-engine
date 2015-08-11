@@ -92,6 +92,8 @@ list (APPEND vhacd_src
 include_directories(lib/cereal/include)
 include_directories(lib/stb)
 
+include_directories(lib/inline_variant_visitor)
+
 include_directories(common)
 include_directories(common/Physics)
 include_directories(common/drawing_techniques)

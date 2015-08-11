@@ -39,7 +39,7 @@ void noob::application::init()
 	ui_enabled = true;
 	gui.init(*prefix, window_width, window_height);
 	voxels.init();
-	scene.init();
+	stage.init();
 /*
 	chai = std::unique_ptr<chaiscript::ChaiScript>(new chaiscript::ChaiScript(chaiscript::Std_Lib::library()));
 	using namespace chaiscript;
@@ -297,8 +297,7 @@ void noob::application::draw()
 //	bgfx::setViewTransform(0, &view_mat.m[0], &proj.m[0]);
 	bgfx::setViewRect(0, 0, 0, window_width, window_height);
 
-	scene.draw();
-	// scene.triplanar_render.draw(*t->model.drawable3d_ptr, noob::identity_mat4(), t->colouring_info);
+	stage.draw();
 
 	gui.text("The goat stumbled upon the cheese", 150.0, 50.0);
 	//gui.frame();

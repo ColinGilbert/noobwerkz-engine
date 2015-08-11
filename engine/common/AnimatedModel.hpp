@@ -51,14 +51,16 @@ namespace noob
 			void optimize(float translation_tolerance = 0.0, float rotation_tolerance = 0.0, float scale_tolerance = 0.0, const std::string& name = "");
 			// TODO: Implement
 			void switch_to(const std::string& name, float fade = 0.0);
-			bool anim_exists(const std::string& name) const;
+
 			// TODO: Implement
 			void update(float dt);
 			void reset_time(float t = 0.0);
+			
+			bool anim_exists(const std::string& name) const;
 			std::string get_current_anim() const;
-			// Gets bone matrices. TODO: Replace with a setup that uploads directly into graphics buffer instead of copying.
+			// Gets bone matrices. TODO: Replace/supplement with a setup that uploads directly into graphics buffer instead of copying.
 			std::vector<noob::mat4> get_matrices() const;
-
+			noob::vec3 get_skeleton_bounds() const;
 
 		protected:
 			class playback_controller

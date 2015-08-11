@@ -14,36 +14,30 @@ namespace noob
 	class actor
 	{
 		//friend class noob::actor_factory;
-		
 		public:
-			void init(const std::shared_ptr<noob::physics_body>&, const std::shared_ptr<noob::drawable3d>&, const std::shared_ptr<noob::animated_model>&);
-
-
-			void set_position(const noob::vec3&);
-			noob::vec3 get_position() const;
-			void set_orientation(const noob::versor&);
-			noob::versor get_orientation() const;
+			actor() : physics_driven(true) {}
+			// void set_position(const noob::vec3&);
+			// noob::vec3 get_position() const;
+			// void set_orientation(const noob::versor&);
+			//noob::versor get_orientation() const;
+			void set_physics_control(bool);
 			void set_transform(const noob::mat4&);
-			noob::mat4 get_transform() const;
+			noob::mat4 get_transform();
 			
 			void add_to_path(const std::vector<noob::vec3>& path_segment);
-			std::vector<noob::vec3> get_path() const;
 			void clear_path();
-			
 			void face_point(const noob::vec3& point);
 			
-			void stop();
-			void start();
-			void draw_skeleton();
-			void manual_control(bool);
+			void draw_skeleton() const;
+			std::vector<noob::vec3> get_path() const;
 
 		protected:
-			std::string drawable_name;
-			std::string animated_model_name;
-			bool moving;
 			float min_speed, max_speed, jump_height;
-			noob::physics_body actor_body, destination;
+			noob::physics_body body, destination;
 			std::shared_ptr<noob::animated_model> model;
+			std::shared_ptr<noob::drawable3d> drawable;
 			std::deque<noob::vec3> path;
+			noob::mat4 xform;
+			bool physics_driven;
 	};
 }
