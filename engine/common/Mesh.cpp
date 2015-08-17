@@ -147,7 +147,7 @@ bool noob::mesh::load(const aiScene* scene, const std::string& name)
 
 	const aiMesh* mesh_data = scene->mMeshes[0];
 
-	logger::log(fmt::format("[Mesh] load({0}) - Attempting to obtain mesh data", name));
+	// logger::log(fmt::format("[Mesh] load({0}) - Attempting to obtain mesh data", name));
 
 	size_t num_verts = mesh_data->mNumVertices;
 	size_t num_faces = mesh_data->mNumFaces;
@@ -155,7 +155,7 @@ bool noob::mesh::load(const aiScene* scene, const std::string& name)
 	// auto num_indices = mesh_data->mNumFaces / 3;
 
 	bool has_normals = mesh_data->HasNormals();
-	logger::log(fmt::format("[Mesh] load({0}) - Mesh has {1} verts, normals? {2}", name, num_verts, has_normals));
+	//logger::log(fmt::format("[Mesh] load({0}) - Mesh has {1} verts, normals? {2}", name, num_verts, has_normals));
 
 
 	// double accum_x, accum_y, accum_z = 0.0f;
@@ -204,7 +204,7 @@ bool noob::mesh::load(const aiScene* scene, const std::string& name)
 	
 	bbox.center = noob::vec3((bbox.max[0] - bbox.min[0])/2, (bbox.max[1] - bbox.min[1])/2, (bbox.max[2] - bbox.min[2])/2);
 
-	logger::log(fmt::format("[Mesh] load({0}) - Mesh has {1} faces", name, num_faces));
+	// logger::log(fmt::format("[Mesh] load({0}) - Mesh has {1} faces", name, num_faces));
 	auto degenerates = 0;
 	auto tris = 0;
 	auto non_tri_polys = 0;
@@ -234,7 +234,7 @@ bool noob::mesh::load(const aiScene* scene, const std::string& name)
 		}
 	}
 	aiReleaseImport(scene);
-	logger::log(fmt::format("[Mesh] load({3}) loaded - tris = {0}, non-tri polys = {1}, degenerates = {2}", tris, non_tri_polys, degenerates, name));
+	// logger::log(fmt::format("[Mesh] load({3}) loaded - tris = {0}, non-tri polys = {1}, degenerates = {2}", tris, non_tri_polys, degenerates, name));
 	return true;
 }
 
@@ -498,24 +498,31 @@ noob::mesh noob::mesh::csg(const noob::mesh& a, const noob::mesh& b, const noob:
 }
 */
 
-noob::mesh noob::mesh::cone(float radius, float height, size_t subdivides)
+noob::mesh noob::mesh::cone(float radius, float height, size_t segments)
 {
 	TriMesh half_edges;
-	size_t _subdivides;
-	if (subdivides == 0) _subdivides= 12;
+	size_t _segments;
+	if (segments == 0)
+	{
+		_segments = 12;
+	}
+	else 
+	{
+		_segments = segments;
+	}
 
 	TriMesh::VertexHandle top = half_edges.add_vertex(TriMesh::Point(0.0f, height, 0.0f));
 	TriMesh::VertexHandle origin = half_edges.add_vertex(TriMesh::Point(0.0f, 0.0f, 0.0f));
 
-	double increment_amount = TWO_PI / _subdivides;
+	double increment_amount = TWO_PI / _segments;
 
 	std::vector<TriMesh::VertexHandle> verts;
 
 	Eigen::Vector3f p(0.0f, 0.0f, radius);
 
-	for (size_t sub = 0; sub < _subdivides; sub++)
+	for (size_t seg = 0; seg < _segments; seg++)
 	{
-		double diff = increment_amount * sub;
+		double diff = increment_amount * seg;
 		Eigen::AngleAxis<float> angle_axis(diff, Eigen::Vector3f::UnitY());
 		Eigen::Vector3f rotated_point = angle_axis * p;
 		verts.push_back(half_edges.add_vertex(TriMesh::Point(rotated_point[0], rotated_point[1], rotated_point[2])));
@@ -553,15 +560,23 @@ noob::mesh noob::mesh::cone(float radius, float height, size_t subdivides)
 	OpenMesh::IO::write_mesh(half_edges, "temp/cone.off");
 	noob::mesh mesh;
 	mesh.load("temp/cone.off","cone-temp");
+	logger::log(fmt::format("Created cone with height = {0}, radius = {1}, and {2} segments.", height, radius, _segments));
 	return mesh;
 }
 
-noob::mesh noob::mesh::cylinder(float radius, float height, size_t subdivides)
+noob::mesh noob::mesh::cylinder(float radius, float height, size_t segments)
 {
 	PolyMesh half_edges;
-	size_t _subdivides;
-	if (subdivides == 0) _subdivides = 12;
-	double increment_amount = TWO_PI / static_cast<double>(_subdivides);
+	size_t _segments;
+	if (segments == 0) 
+	{
+		_segments = 12;
+	}
+	else
+	{
+		_segments = segments;
+	}
+	double increment_amount = TWO_PI / static_cast<double>(_segments);
 
 	std::vector<std::tuple<PolyMesh::VertexHandle, PolyMesh::VertexHandle>> verts;
 
@@ -572,9 +587,9 @@ noob::mesh noob::mesh::cylinder(float radius, float height, size_t subdivides)
 	Eigen::Vector3f p_upper(0.0f, height, radius);
 	Eigen::Vector3f p_lower(0.0f, 0.0f, radius);
 
-	for (size_t sub = 0; sub < _subdivides; sub++)
+	for (size_t seg = 0; seg < _segments; seg++)
 	{
-		double diff = increment_amount * sub;
+		double diff = increment_amount * seg;
 		Eigen::AngleAxis<float> angle_axis(diff, Eigen::Vector3f::UnitY());
 
 		Eigen::Vector3f rotated_point_lower = angle_axis * p_lower;
@@ -636,7 +651,7 @@ noob::mesh noob::mesh::cylinder(float radius, float height, size_t subdivides)
 	OpenMesh::IO::write_mesh(half_edges, "temp/cylinder.off");
 	noob::mesh mesh;
 	mesh.load("temp/cylinder.off","cylinder-temp");
-	logger::log("Finished creating cylinder");
+	logger::log(fmt::format("Created cylinder with height = {0}, radius = {1} with {2} segments.", height, radius, _segments));
 	return mesh;
 }
 
@@ -710,13 +725,14 @@ noob::mesh noob::mesh::cube(float width, float height, float depth, size_t subdi
 		catmull.detach();
 	}
 
-
+//, height, radius, _subdivides
 	half_edges.triangulate();
 	half_edges.garbage_collection();
 	OpenMesh::IO::write_mesh(half_edges, "temp/cube.off");
 
 	noob::mesh mesh;
 	mesh.load("temp/cube.off", "cube-temp");
+	logger::log(fmt::format("Created cube with width = {0}, height = {1}, depth = {2} with {3} subdivides.", width, height, depth, subdivides));
 	return mesh;
 }
 
@@ -725,6 +741,7 @@ noob::mesh noob::mesh::sphere(float radius)
 {
 	float diameter = radius * 2;
 	noob::mesh mesh = noob::mesh::cube(diameter, diameter, diameter, 3);
+	logger::log(fmt::format("Created sphere of radius {0}.", radius));
 	return mesh;
 }
 

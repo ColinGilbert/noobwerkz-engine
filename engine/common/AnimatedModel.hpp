@@ -1,6 +1,7 @@
 // This class represents an animated character. Current only does one animation at a time, in order to learn the system.
 #pragma once
 
+
 #include <unordered_map>
 #include <math.h>
 
@@ -19,7 +20,6 @@
 #include <ozz/animation/offline/animation_builder.h>
 #include <ozz/animation/offline/animation_optimizer.h>
 #include <ozz/base/memory/allocator.h>
-
 
 #include <cereal/types/string.hpp>
 #include <cereal/types/array.hpp>
@@ -50,17 +50,17 @@ namespace noob
 			// If name = "" all animations get processed. If all the tolerances == 0.0 it doesn't run an optimization pre-pass prior prior to creating runtime animations. 
 			void optimize(float translation_tolerance = 0.0, float rotation_tolerance = 0.0, float scale_tolerance = 0.0, const std::string& name = "");
 			// TODO: Implement
-			void switch_to(const std::string& name, float fade = 0.0);
+			void switch_to_anim(const std::string& name);
 
 			// TODO: Implement
-			void update(float dt);
+			void update(float dt = 0.0);
 			void reset_time(float t = 0.0);
 			
 			bool anim_exists(const std::string& name) const;
 			std::string get_current_anim() const;
-			// Gets bone matrices. TODO: Replace/supplement with a setup that uploads directly into graphics buffer instead of copying.
+			// Gets bone matrices.
 			std::vector<noob::mat4> get_matrices() const;
-			noob::vec3 get_skeleton_bounds() const;
+			std::array<noob::vec3,4> get_skeleton_bounds() const;
 
 		protected:
 			class playback_controller
@@ -81,9 +81,9 @@ namespace noob
 				public:
 				void update(float dt);
 				// TODO(?) : Return a reference instead of using arguments
+				ozz::Range<ozz::math::SoaTransform> get_local_mats() const;
 				void get_model_mats(ozz::Range<ozz::math::Float4x4>& models);
 				float weight;
-
 
 				protected:
 				sampler() : weight(1.0), cache(nullptr) {}

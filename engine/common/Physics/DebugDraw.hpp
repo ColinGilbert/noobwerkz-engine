@@ -1,5 +1,6 @@
 #include <btBulletDynamicsCommon.h>
 #include "Mesh.hpp"
+#include "Stage.hpp"
 
 namespace noob
 {
@@ -36,6 +37,7 @@ namespace noob
 				noob::vec3 to;
 				noob::vec3 colour;
 			};
+
 			// Tuple is from point + to point + colour, refreshed every frame. User needs to setup drawing code in app. I recommend using a very thin cylinder shape + instanced drawing
 			std::vector<line_info> debug_lines;
 			std::vector<text_info> debug_text;

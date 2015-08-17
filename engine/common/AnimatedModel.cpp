@@ -3,7 +3,6 @@
 #include "Logger.hpp"
 
 
-
 noob::animated_model::~animated_model()
 {
 	for (auto& it : runtime_anims)
@@ -30,17 +29,21 @@ bool noob::animated_model::load_skeleton(const std::string& filename)
 	ozz::io::File file(filename.c_str(), "rb");
 	if (!file.opened())
 	{
+		logger::log(fmt::format("[AnimatedModel] - load_skeleton({0}) fail. Cannot open file.", filename));
 		return false;
 	}
 
 	ozz::io::IArchive archive(&file);
 	if (!archive.TestTag<ozz::animation::Skeleton>())
 	{
+		logger::log(fmt::format("[AnimatedModel] - load_skeleton({0}) fail. Archive corrupt.", filename));
 		return false;
 	}
 
 	archive >> skeleton;
 	model_matrices = allocator->AllocateRange<ozz::math::Float4x4>(skeleton.num_joints());
+	
+	logger::log(fmt::format("[AnimatedModel] - load_skeleton({0}) success!", filename));
 
 	return true;
 }
@@ -136,14 +139,13 @@ void noob::animated_model::optimize(float translation_tolerance, float rotation_
 }
 
 
-void noob::animated_model::switch_to(const std::string& name, float fade)
+void noob::animated_model::switch_to_anim(const std::string& name)
 {
 	auto search = runtime_anims.find(name);
 	if (search != runtime_anims.end())
 	{
 		current_anim_name = name;
 		current_anim = search->second;
-		current_time = 0.0;
 	}
 }
 	
@@ -200,6 +202,31 @@ std::vector<noob::mat4> noob::animated_model::get_matrices() const
 	return mats;
 }
 
+/*
+void noob::animated_model::get_matrices(std::vector<noob::mat4> mats) const
+{
+	mats.clear();
+	mats.reserve(skeleton.num_joints());
+	
+	size_t num_mats = model_matrices.Size();
+	for (size_t i = 0; i < num_mats; ++i)
+	{
+		noob::mat4 m;
+		ozz::math::Float4x4 ozz_mat = model_matrices[i];
+		for (size_t c = 0; c < 4; ++c)
+		{
+			ozz::math::StorePtr(ozz_mat.cols[c], &m[c*4]);
+		}
+		mats.emplace_back(m);
+	}
+}
+*/
+
+std::array<noob::vec3, 4> noob::animated_model::get_skeleton_bounds() const
+{
+
+}
+
 
 void noob::animated_model::playback_controller::update(const ozz::animation::Animation& animation, float dt)
 {
@@ -236,6 +263,13 @@ void noob::animated_model::sampler::update(float dt)
 	}
 
 }
+
+
+ozz::Range<ozz::math::SoaTransform> noob::animated_model::sampler::get_local_mats() const
+{
+	return locals;
+}
+
 
 
 void noob::animated_model::sampler::get_model_mats(ozz::Range<ozz::math::Float4x4>& models)

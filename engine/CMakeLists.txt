@@ -41,7 +41,7 @@ add_subdirectory(lib/freetype)
 add_subdirectory(lib/polyvox)
 include_directories(lib/polyvox/include)
 
-include_directories(lib/eigen)
+#include_directories(lib/eigen)
 #add_subdirectory(lib/rbdl)
 
 include_directories(lib/openmesh/src)
@@ -97,9 +97,9 @@ include_directories(lib/inline_variant_visitor)
 include_directories(common)
 include_directories(common/Physics)
 include_directories(common/drawing_techniques)
-include_directories(common/drawing)
-include_directories(common/drawing/font)
-include_directories(common/drawing/shaderc)
+include_directories(common/Drawing)
+include_directories(common/Drawing/font)
+include_directories(common/Drawing/shaderc)
 #include_directories(common/bfgx_related/nanovg)
 
 #include_directories(common/libs/ozz-animation/include)
@@ -109,12 +109,12 @@ list(APPEND bgfx_src
 	)
 
 list(APPEND bgfx_utils_src
-	common/drawing/cube_atlas.cpp
-	common/drawing/font/font_manager.cpp
-	common/drawing/font/utf8.cpp
-	common/drawing/font/text_metrics.cpp
-	common/drawing/font/text_buffer_manager.cpp
-	common/drawing/bounds.cpp
+	common/Drawing/cube_atlas.cpp
+	common/Drawing/font/font_manager.cpp
+	common/Drawing/font/utf8.cpp
+	common/Drawing/font/text_metrics.cpp
+	common/Drawing/font/text_buffer_manager.cpp
+	common/Drawing/bounds.cpp
 	#common/drawing/nanovg/nanovg_bgfx.cpp
 	#common/drawing/nanovg/nanovg.cpp
 	)
@@ -173,9 +173,10 @@ list(APPEND common_src
 	common/Actor.cpp
 	common/Prop.cpp
 	common/AnimatedModel.cpp
-	common/drawing/TriplanarGradientMap.cpp
-	common/drawing/HACDRenderer.cpp
-	common/drawing/GUIRenderer.cpp
+	common/Drawing/TriplanarGradientMap.cpp
+	common/Drawing/HACDRenderer.cpp
+	common/Drawing/GUIRenderer.cpp
+	common/Drawing/BasicRenderer.cpp
 	)
 
 include_directories(platform/nix)

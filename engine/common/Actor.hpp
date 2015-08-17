@@ -1,43 +1,35 @@
 #pragma once
 
+
 #include <vector>
 #include <memory>
 #include <deque>
 #include "MathFuncs.hpp"
 #include "AnimatedModel.hpp"
 #include "PhysicsWorld.hpp"
-//#include "ActorFactory.hpp"
 #include "Drawable3D.hpp"
+#include "Graphics.hpp"
+#include "ShaderVariant.hpp"
 
 namespace noob
 {
-	class actor
+	struct actor
 	{
-		//friend class noob::actor_factory;
-		public:
-			actor() : physics_driven(true) {}
-			// void set_position(const noob::vec3&);
-			// noob::vec3 get_position() const;
-			// void set_orientation(const noob::versor&);
-			//noob::versor get_orientation() const;
-			void set_physics_control(bool);
-			void set_transform(const noob::mat4&);
-			noob::mat4 get_transform();
-			
+			actor(const std::shared_ptr<noob::animated_model>& _anim, const std::shared_ptr<noob::drawable3d>& _drawable) : anim(_anim), drawable(_drawable), xform(noob::identity_mat4()), name("placeholder"), current_anim("idle") {}
+
+			void update();
 			void add_to_path(const std::vector<noob::vec3>& path_segment);
 			void clear_path();
-			void face_point(const noob::vec3& point);
+			std::vector<noob::vec3> get_path_vector() const;
 			
-			void draw_skeleton() const;
-			std::vector<noob::vec3> get_path() const;
-
-		protected:
-			float min_speed, max_speed, jump_height;
+			// Public members
 			noob::physics_body body, destination;
-			std::shared_ptr<noob::animated_model> model;
+			std::shared_ptr<noob::animated_model> anim;
 			std::shared_ptr<noob::drawable3d> drawable;
 			std::deque<noob::vec3> path;
 			noob::mat4 xform;
-			bool physics_driven;
+			noob::shaders::info shader_info;
+			std::string name, current_anim;
+			float anim_time;
 	};
 }

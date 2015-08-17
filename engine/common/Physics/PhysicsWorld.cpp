@@ -18,7 +18,7 @@ void noob::physics_world::init()
 	dispatcher = new btCollisionDispatcher(collision_configuration);
 	solver = new btSequentialImpulseConstraintSolver;
 	dynamics_world = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collision_configuration);
-	dynamics_world->setGravity(btVector3(0, -9.8, 0));
+	dynamics_world->setGravity(btVector3(0, -9.81, 0));
 }
 
 
@@ -50,6 +50,12 @@ void noob::physics_world::add(const noob::physics_body& rigid_body, short collis
 void noob::physics_world::add(const noob::physics_constraint_generic& constraint)
 {
 	dynamics_world->addConstraint(constraint.get_raw_ptr());
+}
+
+
+void add(const noob::physics_shape& shape, const std::string& name)
+{
+	
 }
 
 

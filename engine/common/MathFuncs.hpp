@@ -293,6 +293,9 @@ namespace noob
 	// quaternion functions
 	versor quat_from_axis_rad(float radians, float x, float y, float z);
 	versor quat_from_axis_deg(float degrees, float x, float y, float z);
+
+	versor quat_from_mat4(const mat4&);
+
 	mat4 quat_to_mat4(const versor& q);
 	float dot(const versor& q, const versor& r);
 	// TODO: Find out if this was ever in the library, and either replace it or implement it.

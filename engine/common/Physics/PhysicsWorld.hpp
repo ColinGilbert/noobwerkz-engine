@@ -40,6 +40,7 @@ namespace noob
 
 			void add(const noob::physics_body& body, short collision_group, short collides_with);
 			void add(const noob::physics_constraint_generic& constraint);
+			void add(const noob::physics_shape& shape, const std::string& name);
 
 			void remove(const noob::physics_body& body);
 			void remove(const noob::physics_constraint_generic& constraint);
@@ -47,7 +48,6 @@ namespace noob
 			btDynamicsWorld* get_raw_ptr() const;
 
 		protected:
-
 			std::unordered_map<std::string, std::shared_ptr<noob::physics_shape>> shapes;
 			btDiscreteDynamicsWorld* dynamics_world;
 			btBroadphaseInterface* broadphase;

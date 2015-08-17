@@ -48,5 +48,5 @@ int noob::debug_draw::getDebugMode() const
 
 void noob::debug_draw::frame()
 {
-	// debug_info.clear();	
+	debug_info.clear();
 }

@@ -73,9 +73,9 @@ namespace noob
 
 			// TODO: Fix
 			//static noob::mesh csg(const noob::mesh& a, const noob::mesh& b, const noob::csg_op op);
-			static noob::mesh cone(float radius, float height, size_t subdivides = 0);
+			static noob::mesh cone(float radius, float height, size_t segments = 0);
 			static noob::mesh cube(float width, float height, float depth, size_t subdivides = 0);
-			static noob::mesh cylinder(float radius, float height, size_t subdivides = 0);
+			static noob::mesh cylinder(float radius, float height, size_t segments = 0);
 			static noob::mesh sphere(float radius);
 			// static noob::mesh bone();
 

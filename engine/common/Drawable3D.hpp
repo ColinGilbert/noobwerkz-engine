@@ -29,7 +29,11 @@ namespace noob
 			{
 				noob::graphics::mesh_vertex::init();
 			}
-
+			drawable3d(const noob::mesh& m) : ready(false)
+			{
+				noob::graphics::mesh_vertex::init();
+				init(m);
+			}
 			virtual ~drawable3d();
 
 			void init(const noob::mesh& m);

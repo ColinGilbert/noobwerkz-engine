@@ -3,7 +3,10 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-#include <Eigen/Dense>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/quaternion.hpp>
+
+//#include <Eigen/Dense>
 
 
 namespace noob
@@ -966,6 +969,18 @@ namespace noob
 		for (int i = 0; i < 4; i++) {
 			q[i] = q[i] / mag;
 		}
+	}
+
+	versor quat_from_mat4(const mat4& m)
+	{
+		glm::mat4 mm = glm::make_mat4(&m.m[0]);
+		glm::quat q = glm::quat_cast(mm);
+		noob::versor qq;
+		qq.q[0] = q[0];
+		qq.q[1] = q[1];
+		qq.q[2] = q[2];
+		qq.q[3] = q[3];
+		return qq;
 	}
 
 	void quat_to_mat4 (float* m, float* q) {
