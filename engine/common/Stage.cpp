@@ -10,11 +10,15 @@ void noob::stage::init()
 	add_drawable("unit_cube", noob::mesh::cube(1.0, 1.0, 1.0));
 	add_drawable("unit_cylinder", noob::mesh::cylinder(1.0, 1.0));
 	add_drawable("unit_cone", noob::mesh::cone(1.0, 1.0));
+	
 	unit_sphere = get_drawable("unit_sphere");
 	unit_cube = get_drawable("unit_cube");
 	unit_cylinder = get_drawable("unit_cylinder");
 	unit_cone = get_drawable("unit_cone");
+	auto nonexistent = get_drawable("nonexistent");
+	
 	add_skeleton("human", "seymour.skel.ozz");
+	
 	//noob::actor placehold;
 	//add_actor("placeholder", placehold);
 }
@@ -43,11 +47,13 @@ void noob::stage::add_drawable(const std::string& name, const noob::mesh& m)
 	}
 }
 
-std::weak_ptr<noob::drawable3d> noob::stage::get_drawable(const std::string& name) const
+
+std::shared_ptr<noob::drawable3d> noob::stage::get_drawable(const std::string& name) const
 {
 	auto search = drawables.find(name);
 	if (search == drawables.end())
 	{
+		logger::log(fmt::format("[Stage] asking for invalid drawable \"{0}\", returning unit sphere instead.", name));
 		return unit_sphere;
 	}
 	return search->second;
@@ -78,9 +84,7 @@ std::weak_ptr<noob::animated_model> noob::stage::get_skeleton(const std::string&
 	auto search = skeletons.find(name);
 	if (search == skeletons.end())
 	{	
-		return {}; //return std::make_shared<noob::animated_model>(nullptr);//weak_ptr<nullptr>;
-		//auto results = skeletons.insert(std::make_pair(name, std::make_shared<noob::animated_model>()));
-		//(*(results.first)).second->load_skeleton(filename);
+		return {};
 	}
 
 	return search->second;

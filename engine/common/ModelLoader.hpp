@@ -1,88 +1,121 @@
-/*
-#pragma once
+#include <array>
+#include <vector>
+#include <set>
 #include <unordered_map>
-#include <functional>
+#include <iostream>
+#include <fstream>
+
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#include <vector>
+
+#include <lemon/list_graph.h>
+
+#include <ozz/animation/offline/raw_skeleton.h>
+#include <ozz/animation/offline/skeleton_builder.h>
+#include <ozz/animation/runtime/skeleton.h>
+#include <ozz/animation/offline/raw_animation.h>
+#include <ozz/animation/offline/animation_builder.h>
+#include <ozz/animation/runtime/animation.h>
+#include <ozz/base/io/archive.h>
+#include <ozz/base/io/stream.h>
+
+#include <boost/filesystem.hpp>
+
+#include <cereal/types/string.hpp>
+#include <cereal/types/array.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/types/set.hpp>
+#include <cereal/archives/binary.hpp>
+
+#include "format.h"
+
+
 namespace noob
 {
-	class bone
-	{
-		public:
-			aiMatrix4x4 transformation; 
-
-			unsigned int parent_bone_id; 
-			bool has_parent; 
-
-			bone(): has_parent(false) {}
-	}; 
-
-	class bone_weights
-	{
-		public:
-			aiMatrix4x4 offsetMatrix; 
-			std::vector<aiVertexWeight> weights; 
-
-			unsigned int bone_id; 
-	}; 
-	class material
-	{
-		public:
-			material() {}
-			material(const aimaterial* material) {}
-			void bindTexture(aiTextureType textureType, unsigned int textureId) const;
-			bool texture(); const {return false;}
-	};
-
-	class mesh
-	{
-		public:
-			std::vector<aiVector3D> vertices;
-			std::vector<aiVector3D> normals;
-			std::vector<aiVector2D> textureCoords;
-
-			std::vector<aiFace> faces;
-			std::vector<bone_weights> bone_weights; 
-			//In AssImp: one material per mesh
-			unsigned int materialId;
-	};
-
-
-	class animation 
-	{
-		public:
-			class Channel
-			{
-				public:
-					unsigned int bone_id; 
-
-					std::vector<aiVectorKey> positions; 
-					std::vector<aiQuatKey> rotations; 
-					std::vector<aiVectorKey> scales; 
-			}; 
-
-			double duration; 
-			double ticksPerSecond; 
-	};
-
 	class model_loader
 	{
 		public:
+			struct vertex
+			{
+				template <class Archive>
+					void serialize( Archive & ar )
+					{
+						ar(position, normal, uv, bone_names, bone_indices, bone_weights);
+					}
+				vertex() : position({0.0f, 0.0f, 0.0f}), normal({0.0f, 0.0f, 0.0f}), uv({0.0f, 0.0f}), bone_names({"", "", "", ""}), bone_indices({0, 0, 0, 0}), bone_weights({0.0f, 0.0f, 0.0f, 0.0f}) {}
+				std::array<float, 3> position, normal;
+				std::array<float, 2> uv;
+				std::array<std::string, 4> bone_names;
+				std::array<size_t, 4> bone_indices;
+				std::array<float, 4> bone_weights;
+			};
 
-			std::vector<Channel> channels; 
-			void load(const std::string& filename);
+			struct mesh
+			{
+				template <class Archive>
+					void serialize(Archive & ar)
+					{
+						ar(translation, scale, dimensions, rotation, name, vertices, indices, bone_names);
+					}
+				std::array<float, 3> translation, scale, dimensions;
+				std::array<float, 4> rotation;
+				std::string name;
+				std::vector<noob::model_loader::vertex> vertices;
+				std::vector<uint32_t> indices;
+				std::vector<std::string> bone_names;
+			};
+
+			template <class Archive>
+				void serialize(Archive& ar)
+				{
+					ar(meshes);
+				}
+
+			class hierarchy
+			{
+				public:
+
+
+					hierarchy(): _translation(_graph), _scale(_graph), _rotation(_graph), _name(_graph) {}
+
+					void init(const aiScene* scene, const std::set<std::string>& bone_names);
+
+					ozz::animation::offline::RawSkeleton make_raw_skeleton();
+
+					void print_info();
+
+				protected:
+
+					std::vector<lemon::ListDigraph::Node> find_roots();
+
+
+					void recursive_build(aiNode* current, const std::set<std::string>& bone_names);
+
+					void link(aiNode* parent, aiNode* child);
+
+					lemon::ListDigraph::Node add(aiNode* assimp_node);
+
+					void recursive_ozz_helper(const lemon::ListDigraph::Node& n, ozz::animation::offline::RawSkeleton::Joint& caller_joint, size_t index);
+
+					void recursive_print(lemon::ListDigraph::Node n);
+
+					lemon::ListDigraph _graph;
+					lemon::ListDigraph::NodeMap<std::array<float, 3>> _translation, _scale;
+					lemon::ListDigraph::NodeMap<std::array<float, 4>> _rotation;
+					lemon::ListDigraph::NodeMap<std::string> _name; 
+
+					// For easy access
+					std::map<aiNode*, lemon::ListDigraph::Node> nodes;
+			};
+
+
+			bool load(const aiScene* scene, const std::string& name);
+		
+			std::string get_output_path() const;
 
 		protected:
-			read(const aiScene* scene);
-			unsigned int get_bone_id(const aiNode* node);
-			std::vector<animation> animations; 
-			std::vector<bone> bones; 
-			std::unordered_map<std::string, unsigned int> bone_names_to_id; 
-
-	}
+			std::vector<model_loader::mesh> meshes;
+			std::string output_pathname;
+	};
 }
-
-
-*/

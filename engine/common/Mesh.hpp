@@ -42,12 +42,48 @@ namespace noob
 		public:
 			struct bbox_info
 			{
-				noob::vec3 min, max, center;//, centroid;
+				noob::vec3 min, max, center;
 			};
+
+/*
+		vertex
+		{
+			template <class Archive>
+				void serialize( Archive & ar )
+				{
+					ar(position, normal, uv, bone_names, bone_indices, bone_weights);
+				}
+			mesh_vertex() : position( {0.0f, 0.0f, 0.0f }), normal({ 0.0f, 0.0f, 0.0f }), uv({ 0.0f, 0.0f} ), bone_names({ "", "", "", "" }), bone_indices({0, 0, 0, 0}), bone_weights({ 0.0f, 0.0f, 0.0f, 0.0f} ) {}
+			std::array<float, 3> position, normal;
+			std::array<float, 2> uv;
+			std::array<std::string, 4> bone_names;
+			std::array<size_t, 4> bone_indices;
+			std::array<float, 4> bone_weights;
+		};
+
+*/
+/*
+		struct mesh
+		{
+			template <class Archive>
+				void serialize(Archive & ar)
+				{
+					ar(translation, scale, dimensions, rotation, name, vertices, indices, bone_names);
+				}
+			std::array<float, 3> translation, scale, dimensions;
+			std::array<float, 4> rotation;
+			std::string name;
+			std::vector<mesh_vertex> vertices;
+			std::vector<uint32_t> indices;
+			std::vector<std::string> bone_names;
+		};
+*/
 
 			std::vector<noob::vec3> vertices;
 			std::vector<noob::vec3> normals;
 			std::vector<uint32_t> indices;
+
+
 
 			void decimate(const std::string& filename, size_t num_verts) const;
 			noob::mesh decimate(size_t num_verts) const;
