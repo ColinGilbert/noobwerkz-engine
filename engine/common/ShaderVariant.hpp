@@ -22,7 +22,7 @@ namespace noob
 
 			typedef boost::variant<noob::triplanar_renderer::uniform_info, noob::basic_renderer::uniform_info> info;
 			
-			void draw(const shaders::info& uni, const noob::drawable3d& drawable, const noob::mat4& model_mat = noob::identity_mat4(), uint8_t view_id = 0) const
+			void draw(const noob::drawable3d* drawable, const shaders::info& uni, const noob::mat4& model_mat = noob::identity_mat4(), uint8_t view_id = 0) const
 			{
 				match(uni,
 				[this, drawable, model_mat, view_id] (const noob::triplanar_renderer::uniform_info& info) -> void { this->triplanar.draw(drawable, model_mat, info, view_id); },

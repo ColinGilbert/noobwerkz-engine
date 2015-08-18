@@ -17,10 +17,10 @@ void noob::basic_renderer::init()
 }
 
 
-void noob::basic_renderer::draw(const noob::drawable3d& drawable, const noob::mat4& model_mat, const noob::basic_renderer::uniform_info& info, uint8_t view_id) const
+void noob::basic_renderer::draw(const noob::drawable3d* drawable, const noob::mat4& model_mat, const noob::basic_renderer::uniform_info& info, uint8_t view_id) const
 {
 	bgfx::setUniform(noob::graphics::get_uniform("colour_1").handle, &info.colour.v[0]);
 	noob::graphics::shader s = noob::graphics::get_shader("basic");
-	drawable.draw(view_id, model_mat, s.program);
+	drawable->draw(view_id, model_mat, s.program);
 	bgfx::submit(view_id);
 }

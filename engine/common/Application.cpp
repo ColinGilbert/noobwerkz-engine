@@ -14,6 +14,7 @@ noob::application::application()
 	time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
+	view_mat = noob::look_at(noob::vec3(0, 0, -10.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
 }	
 
 
@@ -292,9 +293,10 @@ void noob::application::update(double delta)
 
 void noob::application::draw()
 {
-//	noob::mat4 proj = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 0.1f, 2000.0f);
 
-//	bgfx::setViewTransform(0, &view_mat.m[0], &proj.m[0]);
+	noob::mat4 proj = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 0.1f, 2000.0f);
+
+	bgfx::setViewTransform(0, &view_mat.m[0], &proj.m[0]);
 	bgfx::setViewRect(0, 0, 0, window_width, window_height);
 
 	stage.draw();

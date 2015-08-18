@@ -28,7 +28,7 @@ namespace noob
 			void draw();
 
 			void add_drawable(const std::string& name, const noob::mesh&);
-			std::shared_ptr<noob::drawable3d> get_drawable(const std::string& name) const;
+			std::weak_ptr<noob::drawable3d> get_drawable(const std::string& name) const;
 			void remove_actor(const std::string& name);
 
 			void add_actor(const std::string& name, const noob::actor& actor);
@@ -36,8 +36,6 @@ namespace noob
 
 			void add_skeleton(const std::string& name, const std::string& filename); 
 			std::weak_ptr<noob::animated_model> get_skeleton(const std::string& name) const;
-
-
 			
 			void set_shader(const std::string& name, const noob::shaders::info& info);
 			void set_drawing_technique(const std::string& actor_name, const std::string& shader_name);
@@ -52,11 +50,11 @@ namespace noob
 			// TODO: Bring HACD renderer in line with the rest of the shader types
 			noob::hacd_renderer hacd_render;	
 			noob::shaders shaders;
-			
+			noob::triplanar_renderer triplanar;
 			noob::mat4 view_mat;
 			noob::mat4 projection_mat;
 			
-			std::shared_ptr<noob::drawable3d> unit_cube, unit_sphere, unit_cylinder, unit_cone, unit_square, unit_triangle;
+			std::weak_ptr<noob::drawable3d> unit_cube, unit_sphere, unit_cylinder, unit_cone, unit_square, unit_triangle;
 			
 			std::unordered_map<std::string, noob::shaders::info> uniforms;
 			std::unordered_map<std::string, noob::actor> actors;

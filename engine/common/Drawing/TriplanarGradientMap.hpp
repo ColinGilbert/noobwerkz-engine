@@ -18,8 +18,7 @@ namespace noob
 			};
 
 			void init();
-			void draw(const noob::drawable3d& drawable3d, const noob::mat4& model_mat, const noob::triplanar_renderer::uniform_info& info, uint8_t view_id = 0) const;
-			// TODO: Implement draw instanced
+			void draw(const noob::drawable3d*, const noob::mat4& model_mat, const noob::triplanar_renderer::uniform_info& info, uint8_t view_id = 0) const;
 
 		protected:
 			noob::graphics::shader shader;
