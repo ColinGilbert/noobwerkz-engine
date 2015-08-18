@@ -7,10 +7,10 @@ void noob::stage::init()
 	shaders.init();
 	world.init();
 	// triplanar.init();
-	add_drawable("unit_sphere", noob::mesh::sphere(1.0));
-	add_drawable("unit_cube", noob::mesh::cube(1.0, 1.0, 1.0));
-	add_drawable("unit_cylinder", noob::mesh::cylinder(1.0, 1.0));
-	add_drawable("unit_cone", noob::mesh::cone(1.0, 1.0));
+	add_drawable("unit_sphere", noob::basic_mesh::sphere(1.0));
+	add_drawable("unit_cube", noob::basic_mesh::cube(1.0, 1.0, 1.0));
+	add_drawable("unit_cylinder", noob::basic_mesh::cylinder(1.0, 1.0));
+	add_drawable("unit_cone", noob::basic_mesh::cone(1.0, 1.0));
 	
 	unit_sphere = get_drawable("unit_sphere");
 	unit_cube = get_drawable("unit_cube");
@@ -59,7 +59,7 @@ void noob::stage::draw()
 }
 
 
-void noob::stage::add_drawable(const std::string& name, const noob::mesh& m)
+void noob::stage::add_drawable(const std::string& name, const noob::basic_mesh& m)
 {
 	auto search = drawables.find(name);
 	if (search == drawables.end())

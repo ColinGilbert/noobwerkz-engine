@@ -28,7 +28,7 @@ namespace noob
 
 			// Stateless
 			uint8_t get(size_t x, size_t y, size_t z) const;
-			noob::mesh extract_region(size_t lower_x, size_t lower_y, size_t lower_z, size_t upper_x, size_t upper_y, size_t upper_z) const;
+			noob::basic_mesh extract_region(size_t lower_x, size_t lower_y, size_t lower_z, size_t upper_x, size_t upper_y, size_t upper_z) const;
 			// bool save(const std::string& filename) const;
 			// std::unique_ptr<noob::voxel_world> clone() const;
 		protected:

@@ -19,22 +19,17 @@ noob::drawable3d::~drawable3d()
 }
 
 
-void noob::drawable3d::init(const noob::mesh& m)
+void noob::drawable3d::init(const noob::basic_mesh& m)
 {
 	// logger::log(fmt::format("[Drawable3D] init. Mesh verts = {0}, indices = {1}, normals = {2}", m.vertices.size(), m.indices.size(), m.normals.size()));
 
 	for ( size_t n = 0; n < m.vertices.size(); ++n)
 	{
 		noob::graphics::mesh_vertex vertex;
-		// Verts
-		vertex.x_pos = m.vertices[n].v[0];
-		vertex.y_pos = m.vertices[n].v[1];
-		vertex.z_pos = m.vertices[n].v[2];
-
-		vertex.x_normal = m.normals[n].v[0];
-		vertex.y_normal = m.normals[n].v[1];
-		vertex.z_normal = m.normals[n].v[2];
-
+		
+		vertex.pos = m.vertices[n].v;
+		vertex.normal = m.normals[n].v;
+		
 		bgfx_vertices.push_back(vertex);
 	}
 

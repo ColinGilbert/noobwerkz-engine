@@ -37,7 +37,7 @@ typedef OpenMesh::PolyMesh_ArrayKernelT<> PolyMesh;
 
 namespace noob
 {
-	class mesh 
+	class basic_mesh 
 	{
 		public:
 			struct bbox_info
@@ -86,9 +86,9 @@ namespace noob
 
 
 			void decimate(const std::string& filename, size_t num_verts) const;
-			noob::mesh decimate(size_t num_verts) const;
-			noob::mesh normalize() const;
-			noob::mesh to_origin() const;
+			noob::basic_mesh decimate(size_t num_verts) const;
+			noob::basic_mesh normalize() const;
+			noob::basic_mesh to_origin() const;
 			TriMesh to_half_edges() const;
 
 			// Returns .OFF files
@@ -100,20 +100,20 @@ namespace noob
 			bool load(std::tuple<size_t, const char*>, const std::string& name = "");
 			bool load(const aiScene* scene, const std::string& name);
 			
-			noob::mesh transform(const noob::mat4& transform) const;
+			noob::basic_mesh transform(const noob::mat4& transform) const;
 
 			// Expensive. Try not calling it too often during actual gameplay
-			std::vector<noob::mesh> convex_decomposition() const;
+			std::vector<noob::basic_mesh> convex_decomposition() const;
 
-			noob::mesh::bbox_info get_bbox() const { return bbox; }
+			noob::basic_mesh::bbox_info get_bbox() const { return bbox; }
 
 			// TODO: Fix
-			//static noob::mesh csg(const noob::mesh& a, const noob::mesh& b, const noob::csg_op op);
-			static noob::mesh cone(float radius, float height, size_t segments = 0);
-			static noob::mesh cube(float width, float height, float depth, size_t subdivides = 0);
-			static noob::mesh cylinder(float radius, float height, size_t segments = 0);
-			static noob::mesh sphere(float radius);
-			// static noob::mesh bone();
+			//static noob::basic_mesh csg(const noob::basic_mesh& a, const noob::basic_mesh& b, const noob::csg_op op);
+			static noob::basic_mesh cone(float radius, float height, size_t segments = 0);
+			static noob::basic_mesh cube(float width, float height, float depth, size_t subdivides = 0);
+			static noob::basic_mesh cylinder(float radius, float height, size_t segments = 0);
+			static noob::basic_mesh sphere(float radius);
+			// static noob::basic_mesh bone();
 
 		protected:
 			bbox_info bbox;

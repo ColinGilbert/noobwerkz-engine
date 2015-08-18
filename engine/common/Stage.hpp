@@ -27,7 +27,7 @@ namespace noob
 			void update(double dt);
 			void draw();
 
-			void add_drawable(const std::string& name, const noob::mesh&);
+			void add_drawable(const std::string& name, const noob::basic_mesh&);
 			std::weak_ptr<noob::drawable3d> get_drawable(const std::string& name) const;
 			void remove_actor(const std::string& name);
 
@@ -50,7 +50,7 @@ namespace noob
 			// TODO: Bring HACD renderer in line with the rest of the shader types
 			noob::hacd_renderer hacd_render;	
 			noob::shaders shaders;
-			noob::triplanar_renderer triplanar;
+
 			noob::mat4 view_mat;
 			noob::mat4 projection_mat;
 			

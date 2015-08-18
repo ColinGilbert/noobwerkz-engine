@@ -30,7 +30,7 @@
 
 #include <Eigen/Geometry>
 
-void noob::mesh::decimate(const std::string& filename, size_t num_verts) const
+void noob::basic_mesh::decimate(const std::string& filename, size_t num_verts) const
 {
 	// logger::log("[Mesh] decimating");
 	TriMesh half_edges = to_half_edges();
@@ -57,27 +57,27 @@ void noob::mesh::decimate(const std::string& filename, size_t num_verts) const
 }
 
 
-noob::mesh noob::mesh::decimate(size_t num_verts) const
+noob::basic_mesh noob::basic_mesh::decimate(size_t num_verts) const
 {
 	decimate("./temp/temp-decimated.off", num_verts);
-	noob::mesh temp;
+	noob::basic_mesh temp;
 	temp.load("./temp/temp-decimated.off", "temp-decimated");
 	return temp;
 }
 
 
-noob::mesh noob::mesh::normalize() const 
+noob::basic_mesh noob::basic_mesh::normalize() const 
 {
-	noob::mesh temp;
+	noob::basic_mesh temp;
 	temp.load(snapshot());
 	return temp;
 }
 
 
 // TODO
-noob::mesh noob::mesh::to_origin() const
+noob::basic_mesh noob::basic_mesh::to_origin() const
 {
-	noob::mesh temp;
+	noob::basic_mesh temp;
 	for (noob::vec3 v : vertices)
 	{
 		temp.vertices.push_back(v - bbox.center);
@@ -88,7 +88,7 @@ noob::mesh noob::mesh::to_origin() const
 }
 
 
-std::tuple<size_t, const char*> noob::mesh::snapshot() const
+std::tuple<size_t, const char*> noob::basic_mesh::snapshot() const
 {
 	fmt::MemoryWriter w;
 	w << "OFF" << "\n" << vertices.size() << " " << indices.size() / 3 << " " << 0 <<  "\n";
@@ -108,7 +108,7 @@ std::tuple<size_t, const char*> noob::mesh::snapshot() const
 }
 
 
-void noob::mesh::snapshot(const std::string& filename) const
+void noob::basic_mesh::snapshot(const std::string& filename) const
 {
 	logger::log("[Mesh] - snapshot() - begin");
 	TriMesh half_edges = to_half_edges();
@@ -117,7 +117,7 @@ void noob::mesh::snapshot(const std::string& filename) const
 }
 
 
-bool noob::mesh::load(std::tuple<size_t, const char*> buffer, const std::string& name)
+bool noob::basic_mesh::load(std::tuple<size_t, const char*> buffer, const std::string& name)
 {
 	logger::log(fmt::format("[Mesh] - load({0}) - loading {1} bytes", name, std::get<0>(buffer)));
 	const aiScene* scene = aiImportFileFromMemory(std::get<1>(buffer), std::get<0>(buffer), aiProcessPreset_TargetRealtime_MaxQuality, "");
@@ -125,7 +125,7 @@ bool noob::mesh::load(std::tuple<size_t, const char*> buffer, const std::string&
 }
 
 
-bool noob::mesh::load(const std::string& filename, const std::string& name)
+bool noob::basic_mesh::load(const std::string& filename, const std::string& name)
 {
 	// logger::log(fmt::format("[Mesh] loading file {0}", filename ));
 	const aiScene* scene = aiImportFile(filename.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
@@ -133,7 +133,7 @@ bool noob::mesh::load(const std::string& filename, const std::string& name)
 }
 
 
-bool noob::mesh::load(const aiScene* scene, const std::string& name)
+bool noob::basic_mesh::load(const aiScene* scene, const std::string& name)
 {
 	if (!scene)
 	{
@@ -238,9 +238,9 @@ bool noob::mesh::load(const aiScene* scene, const std::string& name)
 	return true;
 }
 
-noob::mesh noob::mesh::transform(const noob::mat4& transform) const
+noob::basic_mesh noob::basic_mesh::transform(const noob::mat4& transform) const
 {
-	noob::mesh temp;
+	noob::basic_mesh temp;
 	for (size_t i = 0; i < vertices.size(); i++)
 	{
 		noob::vec3 v = vertices[i];
@@ -281,7 +281,7 @@ noob::mesh noob::mesh::transform(const noob::mat4& transform) const
 }
 
 
-TriMesh noob::mesh::to_half_edges() const
+TriMesh noob::basic_mesh::to_half_edges() const
 {
 	TriMesh half_edges;
 	// half_edges.request_vertex_normals();
@@ -325,14 +325,14 @@ TriMesh noob::mesh::to_half_edges() const
 	return half_edges;
 }
 
-std::vector<noob::mesh> noob::mesh::convex_decomposition() const
+std::vector<noob::basic_mesh> noob::basic_mesh::convex_decomposition() const
 {
 	logger::log("[Mesh] convex_decomposition()");
 	VHACD::IVHACD* interfaceVHACD = VHACD::CreateVHACD();
 	VHACD::IVHACD::Parameters params;
 	params.m_oclAcceleration = false;
 	
-	std::vector<noob::mesh> meshes;
+	std::vector<noob::basic_mesh> meshes;
 	std::vector<float> points;
 	std::vector<int> triangles;
 
@@ -358,7 +358,7 @@ std::vector<noob::mesh> noob::mesh::convex_decomposition() const
 		{
 			VHACD::IVHACD::ConvexHull hull;
 			interfaceVHACD->GetConvexHull(i, hull);
-			noob::mesh m;
+			noob::basic_mesh m;
 
 			size_t num_points = hull.m_nPoints;
 			size_t num_tris = hull.m_nTriangles;
@@ -384,7 +384,7 @@ std::vector<noob::mesh> noob::mesh::convex_decomposition() const
 			}
 
 			logger::log(fmt::format("[Mesh] convex_decomposition() - Mesh # {0} - Data copied: num verts = {1}, num indices = {2}", i, m.vertices.size(), m.indices.size()));
-			noob::mesh final_mesh;
+			noob::basic_mesh final_mesh;
 			
 			auto snap = m.snapshot();
 			final_mesh.load(snap, "temp-hacd");
@@ -407,7 +407,7 @@ std::vector<noob::mesh> noob::mesh::convex_decomposition() const
 			const char* mem = w.data();
 			size_t size = w.size();
 
-			noob::mesh final_mesh;
+			noob::basic_mesh final_mesh;
 			final_mesh.load(std::make_tuple(size, mem), "");
 
 			meshes.push_back(final_mesh);
@@ -429,10 +429,10 @@ std::vector<noob::mesh> noob::mesh::convex_decomposition() const
 
 // TODO: Use the same struct and benefit from zero-copy awesomeness
 /*
-noob::mesh noob::mesh::csg(const noob::mesh& a, const noob::mesh& b, const noob::csg_op op)
+noob::basic_mesh noob::basic_mesh::csg(const noob::basic_mesh& a, const noob::basic_mesh& b, const noob::csg_op op)
 {
 	std::vector<csgjs_model> csg_models;
-	std::vector<noob::mesh> meshes;
+	std::vector<noob::basic_mesh> meshes;
 
 	meshes.push_back(a);
 	meshes.push_back(b);
@@ -478,7 +478,7 @@ noob::mesh noob::mesh::csg(const noob::mesh& a, const noob::mesh& b, const noob:
 			break;
 	}
 
-	noob::mesh results;
+	noob::basic_mesh results;
 
 	for (size_t i = 0; i < resulting_csg_model.vertices.size(); i++)
 	{
@@ -498,7 +498,7 @@ noob::mesh noob::mesh::csg(const noob::mesh& a, const noob::mesh& b, const noob:
 }
 */
 
-noob::mesh noob::mesh::cone(float radius, float height, size_t segments)
+noob::basic_mesh noob::basic_mesh::cone(float radius, float height, size_t segments)
 {
 	TriMesh half_edges;
 	size_t _segments;
@@ -558,13 +558,13 @@ noob::mesh noob::mesh::cone(float radius, float height, size_t segments)
 
 	// half_edges.garbage_collection();
 	OpenMesh::IO::write_mesh(half_edges, "temp/cone.off");
-	noob::mesh mesh;
+	noob::basic_mesh mesh;
 	mesh.load("temp/cone.off","cone-temp");
 	logger::log(fmt::format("Created cone with height = {0}, radius = {1}, and {2} segments.", height, radius, _segments));
 	return mesh;
 }
 
-noob::mesh noob::mesh::cylinder(float radius, float height, size_t segments)
+noob::basic_mesh noob::basic_mesh::cylinder(float radius, float height, size_t segments)
 {
 	PolyMesh half_edges;
 	size_t _segments;
@@ -649,14 +649,14 @@ noob::mesh noob::mesh::cylinder(float radius, float height, size_t segments)
 	half_edges.triangulate();
 	half_edges.garbage_collection();
 	OpenMesh::IO::write_mesh(half_edges, "temp/cylinder.off");
-	noob::mesh mesh;
+	noob::basic_mesh mesh;
 	mesh.load("temp/cylinder.off","cylinder-temp");
 	logger::log(fmt::format("Created cylinder with height = {0}, radius = {1} with {2} segments.", height, radius, _segments));
 	return mesh;
 }
 
 
-noob::mesh noob::mesh::cube(float width, float height, float depth, size_t subdivides)
+noob::basic_mesh noob::basic_mesh::cube(float width, float height, float depth, size_t subdivides)
 {
 	PolyMesh half_edges;
 	PolyMesh::VertexHandle vhandle[8];
@@ -730,23 +730,23 @@ noob::mesh noob::mesh::cube(float width, float height, float depth, size_t subdi
 	half_edges.garbage_collection();
 	OpenMesh::IO::write_mesh(half_edges, "temp/cube.off");
 
-	noob::mesh mesh;
+	noob::basic_mesh mesh;
 	mesh.load("temp/cube.off", "cube-temp");
 	logger::log(fmt::format("Created cube with width = {0}, height = {1}, depth = {2} with {3} subdivides.", width, height, depth, subdivides));
 	return mesh;
 }
 
 
-noob::mesh noob::mesh::sphere(float radius)
+noob::basic_mesh noob::basic_mesh::sphere(float radius)
 {
 	float diameter = radius * 2;
-	noob::mesh mesh = noob::mesh::cube(diameter, diameter, diameter, 3);
+	noob::basic_mesh mesh = noob::basic_mesh::cube(diameter, diameter, diameter, 3);
 	logger::log(fmt::format("Created sphere of radius {0}.", radius));
 	return mesh;
 }
 
 /*
-noob::mesh noob::mesh::bone()
+noob::basic_mesh noob::basic_mesh::bone()
 {
 	TriMesh half_edges;
 	TriMesh::VertexHandle vhandles[6];
@@ -815,7 +815,7 @@ noob::mesh noob::mesh::bone()
 	half_edges.add_face(face_vhandles);
 
 	OpenMesh::IO::write_mesh(half_edges, "temp/bone.off");
-	noob::mesh mesh;
+	noob::basic_mesh mesh;
 	mesh.load("temp/bone.off", "bone-temp");
 
 	return mesh;

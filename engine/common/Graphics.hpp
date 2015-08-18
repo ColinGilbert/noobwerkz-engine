@@ -19,23 +19,15 @@ namespace noob
 		public:
 			struct mesh_vertex
 			{
-				mesh_vertex() : x_pos(0.0), y_pos(0.0), z_pos(0.0), x_normal(0.0), y_normal(0.0), z_normal(0.0), u_coord(0.0), v_coord(0.0), tangent_x(0.0), tangent_y(0.0), tangent_z(0.0), bitangent_x(0.0), bitangent_y(0.0), bitangent_z(0.0), bone_index{ 0, 0, 0, 0}, bone_weight{ 0.0, 0.0, 0.0, 0.0 } {}
-				float x_pos;
-				float y_pos;
-				float z_pos;
-				float x_normal;
-				float y_normal;
-				float z_normal;
-				float u_coord;
-				float v_coord;
-				float tangent_x;
-				float tangent_y;
-				float tangent_z;
-				float bitangent_x;
-				float bitangent_y;
-				float bitangent_z;
-				uint8_t bone_index[4];
-				float bone_weight[4];
+				mesh_vertex() : pos({0.0, 0.0, 0.0}), normal({0.0, 0.0, 0.0}), uv({0.0, 0.0}), tangent({0.0, 0.0, 0.0}), bitangent({0.0, 0.0, 0.0}), bone_indices({0, 0, 0, 0}), bone_weights({0.0, 0.0, 0.0, 0.0}) {}
+				std::array<float, 3> pos;
+				std::array<float, 3> normal;
+				std::array<float, 2> uv;
+				std::array<float, 3> tangent;
+				std::array<float, 3> bitangent;
+				std::array<uint8_t, 4> bone_indices;
+				std::array<float, 4> bone_weights;
+
 				static void init()
 				{
 					ms_decl

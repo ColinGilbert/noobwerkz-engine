@@ -43,9 +43,10 @@ namespace noob
 					{
 						ar(position, normal, uv, bone_names, bone_indices, bone_weights);
 					}
-				vertex() : position({0.0f, 0.0f, 0.0f}), normal({0.0f, 0.0f, 0.0f}), uv({0.0f, 0.0f}), bone_names({"", "", "", ""}), bone_indices({0, 0, 0, 0}), bone_weights({0.0f, 0.0f, 0.0f, 0.0f}) {}
+				vertex() : position({0.0f, 0.0f, 0.0f}), normal({0.0f, 0.0f, 0.0f}), uv({0.0f, 0.0f}), tangent({0.0f, 0.0f, 0.0f}), bitangent({0.0f, 0.0f, 0.0f}), bone_names({"", "", "", ""}), bone_indices({0, 0, 0, 0}), bone_weights({0.0f, 0.0f, 0.0f, 0.0f}) {}
 				std::array<float, 3> position, normal;
 				std::array<float, 2> uv;
+				std::array<float, 3> tangent, bitangent;
 				std::array<std::string, 4> bone_names;
 				std::array<size_t, 4> bone_indices;
 				std::array<float, 4> bone_weights;
@@ -80,24 +81,16 @@ namespace noob
 					hierarchy(): _translation(_graph), _scale(_graph), _rotation(_graph), _name(_graph) {}
 
 					void init(const aiScene* scene, const std::set<std::string>& bone_names);
-
 					ozz::animation::offline::RawSkeleton make_raw_skeleton();
-
 					void print_info();
 
 				protected:
 
 					std::vector<lemon::ListDigraph::Node> find_roots();
-
-
 					void recursive_build(aiNode* current, const std::set<std::string>& bone_names);
-
 					void link(aiNode* parent, aiNode* child);
-
 					lemon::ListDigraph::Node add(aiNode* assimp_node);
-
 					void recursive_ozz_helper(const lemon::ListDigraph::Node& n, ozz::animation::offline::RawSkeleton::Joint& caller_joint, size_t index);
-
 					void recursive_print(lemon::ListDigraph::Node n);
 
 					lemon::ListDigraph _graph;

@@ -12,7 +12,7 @@ namespace noob
 	{
 		public:
 			void init();
-			void set_items(const std::vector<noob::mesh>& meshes);
+			void set_items(const std::vector<noob::basic_mesh>& meshes);
 			void set_items(const std::vector<std::vector<noob::vec3>>& hulls);
 			void draw(const noob::mat4& model_mat, uint8_t view_id = 0);
 

@@ -30,17 +30,17 @@ namespace noob
 				noob::graphics::mesh_vertex::init();
 			}
 
-			drawable3d(const noob::mesh& m) : ready(false)
+			drawable3d(const noob::basic_mesh& m) : ready(false)
 			{
 				noob::graphics::mesh_vertex::init();
 				init(m);
 			}
 			virtual ~drawable3d();
 
-			void init(const noob::mesh& m);
+			void init(const noob::basic_mesh& m);
 			void draw(uint8_t view_id, const noob::mat4& model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags = BGFX_STATE_DEFAULT) const;
 			// Bounding boxes are expressed in model space coordinates.
-			noob::mesh::bbox_info get_bbox() const { return bbox; }
+			noob::basic_mesh::bbox_info get_bbox() const { return bbox; }
 			
 		
 		protected:
@@ -51,6 +51,6 @@ namespace noob
 			bgfx::IndexBufferHandle index_buffer;
 			std::vector<uint32_t> indices;
 			std::vector<noob::graphics::mesh_vertex> bgfx_vertices;
-			noob::mesh::bbox_info bbox;
+			noob::basic_mesh::bbox_info bbox;
 	};
 }

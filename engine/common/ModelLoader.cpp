@@ -1,4 +1,5 @@
 #include "ModelLoader.hpp"
+#include "Logger.hpp"
 
 void noob::model_loader::hierarchy::init(const aiScene* scene, const std::set<std::string>& bone_names)
 {
@@ -17,23 +18,24 @@ ozz::animation::offline::RawSkeleton noob::model_loader::hierarchy::make_raw_ske
 {
 	std::vector<lemon::ListDigraph::Node> roots = find_roots();
 
-	std::cout << "Skeleton roots: ";
+	fmt::MemoryWriter w;
+	w << "Skeleton roots: ";
 	for (lemon::ListDigraph::Node r : roots)
 	{
-		std::cout << _name[r] << " ";
+		w << _name[r] << " ";
 	}
-	std::cout << std::endl;
+	logger::log(w.str());
 
 	size_t num_roots = roots.size();
 	ozz::animation::offline::RawSkeleton raw_skeleton;
 	raw_skeleton.roots.resize(num_roots);
 
-	std::cout << "About to start building skeleton." << std::endl;
+	logger::log("About to start building skeleton.");
 	for (size_t i = 0; i < num_roots; i++)
 	{
 		lemon::ListDigraph::Node r = roots[i];
 		ozz::animation::offline::RawSkeleton::Joint& root_joint = raw_skeleton.roots[i];
-		std::cout << "Starting recursive build from root " << _name[r] << std::endl;
+		logger::log(fmt::format("Starting recursive build from root {0}", _name[r]));
 		recursive_ozz_helper(r, root_joint, i);
 	}
 	return raw_skeleton;
@@ -48,10 +50,10 @@ void noob::model_loader::hierarchy::print_info()
 	{
 		count++;
 		lemon::ListDigraph::Node n(it);
-		std::cout << "Node " << count << " name = " << _name[n] << std::endl;
+		logger::log(fmt::format("model_loader::hierarchy::print_info() - node {0} name = {1}", count, _name[n]));
 	}
 
-	std::cout << "Count = " << count << std::endl;
+	logger::log(fmt::format("model_loader::hierarchy::print_info() - Count = {0}", count));
 
 	// recursive_print();
 }
@@ -92,7 +94,7 @@ void noob::model_loader::hierarchy::recursive_build(aiNode* current, const std::
 
 			if (bone_names.find(child_name) != bone_names.end())
 			{
-				std::cout << "Linking parent " << current_node_name << " and child " << child_name << std::endl;
+				logger::log(fmt::format("[ModelLoader] Linking parent {0} and child {1}", current_node_name, child_name));
 				link(current, child);
 			}
 
@@ -100,7 +102,6 @@ void noob::model_loader::hierarchy::recursive_build(aiNode* current, const std::
 		recursive_build(child, bone_names);
 	}
 }
-
 
 
 void noob::model_loader::hierarchy::link(aiNode* parent, aiNode* child)
@@ -146,7 +147,7 @@ void noob::model_loader::hierarchy::recursive_ozz_helper(const lemon::ListDigrap
 		children_count++;
 	}
 
-	std::cout << "Adding joint to skeleton. Name = " << _name[n] << ", number of children = " << children_count << std::endl;
+	logger::log(fmt::format("[ModelLoader] Adding joint to skeleton. Name = {0}, number of children = {1}", _name[n], children_count));
 
 	caller_joint.children.resize(children_count);
 
@@ -167,7 +168,7 @@ void noob::model_loader::hierarchy::recursive_ozz_helper(const lemon::ListDigrap
 
 void noob::model_loader::hierarchy::recursive_print(lemon::ListDigraph::Node n)
 {
-	std::cout << "Node name = " << _name[n] << std::endl;
+	logger::log(fmt::format("[ModelLoader] recursive_print() - Node name = ", _name[n]));
 
 	for (lemon::ListDigraph::OutArcIt it(_graph, n); it != lemon::INVALID; ++it)
 	{
@@ -182,7 +183,7 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 {
 	if (!scene)
 	{
-		std::cout << fmt::format("[Mesh] load({0}) - cannot open\n", name) << std::endl;
+		logger::log(fmt::format("[ModelLoader] load({0}) - cannot open", name));
 		return false;
 	}
 
@@ -194,7 +195,7 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 		const aiMesh* mesh_data = scene->mMeshes[mesh_num];
 		model_loader::mesh temp_mesh;
 		temp_mesh.name = std::string(mesh_data->mName.C_Str());
-		std::cout << fmt::format("Attempting to obtain data for mesh {0}\n", temp_mesh.name);
+		logger::log(fmt::format("Attempting to obtain data for mesh {0}", temp_mesh.name));
 
 		size_t num_verts = mesh_data->mNumVertices;
 		size_t num_faces = mesh_data->mNumFaces;
@@ -202,7 +203,7 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 		bool has_normals = mesh_data->HasNormals();
 		bool has_texcoords = mesh_data->HasTextureCoords(0);
 
-		std::cout << fmt::format("Mesh {0} ({1}) has {2} verts and {3} bones. Normals? {4}\n", name, mesh_num, num_verts, num_bones, has_normals);
+		logger::log(fmt::format("Mesh {0} ({1}) has {2} verts and {3} bones. Normals? {4}", name, mesh_num, num_verts, num_bones, has_normals));
 
 		std::array<float, 3> min_extents, max_extents;
 
@@ -296,16 +297,17 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 		meshes.push_back(temp_mesh);
 	}
 
-	std::cout << "Total of " <<  meshes.size() << " meshes in file " << name << "." << std::endl;
+	logger::log(fmt::format("Total of {0} meshes in file {1}.", meshes.size(), name));
 
 	for (mesh m : meshes)
 	{
-		std::cout << "Bones for mesh " << m.name << ":";
+		fmt::MemoryWriter w;
+		w << "Bones for mesh " << m.name << ":";
 		for (std::string s : m.bone_names)
 		{
-			std::cout << " " << s; 
+			w << " " << s; 
 		}
-		std::cout << std::endl;
+		logger::log(w.str());
 	}
 
 	model_loader::hierarchy bone_hierarchy;
@@ -318,12 +320,12 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 
 	if (!raw_skel.Validate())
 	{
-		std::cout << "Skeleton validation failed!" << std::endl;
+		logger::log("[Mesh Loader] - Raw skeleton validation failed!");
 		return false;
 	}
 	else
 	{
-		std::cout << "Skeleton validation success!" << std::endl;
+		logger::log("Skeleton validation success!");
 	}
 
 	ozz::animation::offline::SkeletonBuilder skel_builder;
@@ -337,7 +339,7 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 	}
 	catch (std::exception& e)
 	{
-		std::cout << "Could not create base path: " << output_base_pathname;
+		logger::log(fmt::format("Could not create base path: {0}.", output_base_pathname));
 		return false;
 	}
 	output_pathname = output_base_pathname + name;
@@ -349,21 +351,25 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 
 	catch (std::exception& e)
 	{
-		std::cout << "Could not create path: " << output_pathname;
+		logger::log(fmt::format("Could not create path: {0}.",output_pathname));
 		return false;
 	}
 
 	// Most of the time, the user will want to use the runtime skeleton, but at this point we give option for both.
 	fmt::MemoryWriter output_raw_skel_filename;
 	output_raw_skel_filename << output_pathname << "/raw-skeleton.ozz";
-	std::cout << "Outputting raw skeleton to " << output_raw_skel_filename.str() << std::endl;
+	
+	logger::log(fmt::format("Outputting raw skeleton to {0}", output_raw_skel_filename.str()));
+	
 	ozz::io::File output_raw_skel_file(output_raw_skel_filename.c_str(), "wb");
 	ozz::io::OArchive raw_skel_archive(&output_raw_skel_file);
 	raw_skel_archive << raw_skel;
 
 	fmt::MemoryWriter output_runtime_skel_filename;
 	output_runtime_skel_filename << output_pathname << "/runtime-skeleton.ozz";
-	std::cout << "Outputting runtime skeleton to " << output_runtime_skel_filename.str() << std::endl;
+
+	logger::log(fmt::format("Outputting runtime skeleton to {0}", output_runtime_skel_filename.str()));
+	
 	ozz::io::File output_runtime_skel_file(output_runtime_skel_filename.c_str(), "wb");
 	ozz::io::OArchive runtime_skel_archive(&output_runtime_skel_file);
 	runtime_skel_archive << *runtime_skel;
@@ -380,7 +386,7 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 		joint_indices.insert(std::make_pair(s, i));
 	}
 
-	std::cout << "Displaying ozz skeleton joint names and indices" << std::endl;
+	logger::log("Displaying ozz skeleton joint names and indices");
 
 	for(auto it = joint_indices.begin(); it != joint_indices.end(); it++)
 	{
@@ -403,11 +409,11 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 					if ( it != joint_indices.end())
 					{
 						v.bone_indices[i] = joint_indices.find(s)->second;
-						std::cout << "Found index " << v.bone_indices[i] << " for bone name " << v.bone_names[i] << std::endl;
+						logger::log(fmt::format("Found index {0} for bone name {1}", v.bone_indices[i], v.bone_names[i]));
 					}
 					else
 					{
-						std::cout << "ERROR! Could not find bone index for " << s << " in joint indices map!!!" << std::endl;
+						logger::log(fmt::format("ERROR! Could not find bone index for {0} in joint indices map!!!", s));
 						return false;
 					}
 				}
@@ -433,8 +439,7 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 		}
 
 		std::string anim_name = std::string(anim->mName.C_Str());
-		std::cout << "Assimp animation " << anim_num + 1 << " out of " << num_anims << ". Name: " << anim_name << ". Ticks = " << ticks << ". Ticks per second = " << ticks_per_sec << ". Number of (unfiltered) channels = " << num_unfiltered_channels << std::endl;
-
+		logger::log(fmt::format("Assimp animation {0} out of {1}. Name: {2}. Ticks = {3}. Ticks per second = {4}. Number of (unfiltered) channels = {5}.", anim_num+1, num_anims, anim_name, ticks, ticks_per_sec, num_unfiltered_channels));
 		ozz::animation::offline::RawAnimation raw_animation;
 		raw_animation.duration = ticks * ticks_per_sec;
 
@@ -452,11 +457,11 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 			{
 				size_t anim_node_skeleton_index = it->second;
 				valid_channels.insert(std::make_tuple(anim_node_skeleton_index, anim_node));
-				std:: cout << "Found node " << anim_node_name << " for animation track " << num << "." << std::endl;
+				logger::log(fmt::format("Found node {0} for animation track {1}.", anim_node_name, num));
 			}
 			else
 			{
-				std::cout << "Could not find node " << anim_node_name << " required to build animation track " << num <<  ". Skipping." << std::endl;
+				logger::log(fmt::format("Could not find node {0} required to build animation track {1}. Skipping.", anim_node_name, num));
 				continue;
 			}
 		}
@@ -471,48 +476,53 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 			size_t num_rotations = anim_node->mNumRotationKeys;
 			size_t num_scales = anim_node->mNumScalingKeys;
 
-			std::cout << "Bone "<< anim_node->mNodeName.C_Str() << ", skeleton index " << track_index << " - Inserting " << num_translations << " translations, " << num_rotations << " rotations, " << num_scales << " scales." << std::endl;
+			logger::log(fmt::format("Bone {0}, skeleton index {1} - Inserting {2} translations, {3} rotations, {4} scales.", anim_node->mNodeName.C_Str(), track_index, num_translations, num_rotations, num_scales));
 
 			for (size_t i = 0; i < num_translations; ++i)
 			{
-				std::cout << "Inserting translation num " << i << ": ";
+				fmt::MemoryWriter w;
+				w << "Inserting translation num " << i << ": ";
 				aiVectorKey k = anim_node->mPositionKeys[i];
 				double t = k.mTime;
 				aiVector3D val = k.mValue;
-				std::cout << " time = " << t << ", (" << val.x << ", " << val.y << ", " << val.z << ")" << std::endl;
+				w << " time = " << t << ", (" << val.x << ", " << val.y << ", " << val.z << ")";
+				logger::log(w.str());
 				const ozz::animation::offline::RawAnimation::TranslationKey trans_key = { static_cast<float>(t), ozz::math::Float3(static_cast<float>(val.x), static_cast<float>(val.y), static_cast<float>(val.z)) };
 				raw_animation.tracks[track_index].translations.push_back(trans_key);
 			}
 			for (size_t i = 0; i < num_rotations; ++i)
 			{
-				std::cout << "Inserting rotation num " << i << ": ";
+				fmt::MemoryWriter w;
+				w << "Inserting rotation num " << i << ": ";
 				aiQuatKey k = anim_node->mRotationKeys[i];
 				double t = k.mTime;
 				aiQuaternion val = k.mValue;
-				std::cout << " time = " << t << ", (" << val.x << ", " << val.y << ", " << val.z << ", " << val.w << ")" << std::endl;
-
+				w << " time = " << t << ", (" << val.x << ", " << val.y << ", " << val.z << ", " << val.w << ")";
+				logger::log(w.str());
 				const ozz::animation::offline::RawAnimation::RotationKey rot_key = { static_cast<float>(t), ozz::math::Quaternion(static_cast<float>(val.x), static_cast<float>(val.y), static_cast<float>(val.z), static_cast<float>(val.w)) };
 				raw_animation.tracks[track_index].rotations.push_back(rot_key);
 			}
 			for (size_t i = 0; i < num_scales; ++i)
 			{
-				std::cout << "Inserting scale num " << i << std::endl;
+				fmt::MemoryWriter w;
+				w << "Inserting scale num " << i << ": ";
 				aiVectorKey k = anim_node->mScalingKeys[i];
 				double t = k.mTime;
 				aiVector3D val = k.mValue;
-				std::cout << " time = " << t << ", (" << val.x << ", " << val.y << ", " << val.z << ")" << std::endl;
+				w << " time = " << t << ", (" << val.x << ", " << val.y << ", " << val.z << ")";
+				logger::log(w.str());
 				const ozz::animation::offline::RawAnimation::ScaleKey scale_key = { static_cast<float>(t), ozz::math::Float3(static_cast<float>(val.x), static_cast<float>(val.y), static_cast<float>(val.z)) };
 				raw_animation.tracks[track_index].scales.push_back(scale_key);
 			}
 		}
 		if (!raw_animation.Validate())
 		{
-			std::cout << "Animation validate failed! :(" << std::endl;
+			logger::log("Animation validate failed! :(");
 			return -3;
 		}
 		else
 		{
-			std::cout << "Animation validate success! :)" << std::endl;
+			logger::log("Animation validate success! :)");
 		}
 
 		fmt::MemoryWriter output_raw_anim_filename;
@@ -524,7 +534,7 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 		{
 			output_raw_anim_filename << output_pathname << "/" << anim_name << "-raw.ozz";
 		}
-		std::cout << "Outputting raw animation to " << output_raw_anim_filename.str() << std::endl;
+		logger::log(fmt::format("Outputting raw animation to {0}", output_raw_anim_filename.str()));
 
 		ozz::io::File output_raw_anim_file(output_raw_anim_filename.c_str(), "wb");
 		ozz::io::OArchive raw_anim_archive(&output_raw_anim_file);
@@ -545,16 +555,17 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 		}
 
 		output_runtime_anim_filename << "-runtime-anim.ozz";
-		std::cout << "Outputting raw animation to " << output_runtime_anim_filename.str() << std::endl;
+		logger::log(fmt::format("Outputting raw animation to {0}", output_runtime_anim_filename.str()));
 
 		ozz::io::File output_runtime_anim_file(output_runtime_anim_filename.c_str(), "wb");
 		ozz::io::OArchive runtime_anim_archive(&output_runtime_anim_file);
 		runtime_anim_archive << *runtime_animation;
 
 		// Mesh save
-		std::cout << "Outputting meshes to " << output_pathname << "/meshes.bin" << std::endl;
+		
 		fmt::MemoryWriter output_mesh_filename;
 		output_mesh_filename << output_pathname << "/meshes.bin";
+		logger::log(fmt::format("Outputting meshes to {0}", output_mesh_filename.str()));
 		std::ofstream os(output_mesh_filename.c_str(), std::ios::binary);
 		cereal::BinaryOutputArchive archive(os);
 		archive(*this);

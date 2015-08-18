@@ -21,11 +21,13 @@ namespace noob
 			void add_to_path(const std::vector<noob::vec3>& path_segment);
 			void clear_path();
 			std::vector<noob::vec3> get_path_vector() const;
-			
+			void draw() const;
+
+
 			// Public members
 			noob::physics_body body, destination;
-			std::shared_ptr<noob::animated_model> anim;
-			std::shared_ptr<noob::drawable3d> drawable;
+			std::weak_ptr<noob::animated_model> anim;
+			std::weak_ptr<noob::drawable3d> drawable;
 			std::deque<noob::vec3> path;
 			noob::mat4 xform;
 			noob::shaders::info shader_info;

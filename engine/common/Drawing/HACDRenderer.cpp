@@ -38,12 +38,12 @@ noob::vec4 compute_random_colour()
 }
 
 
-void noob::hacd_renderer::set_items(const std::vector<noob::mesh>& hulls)
+void noob::hacd_renderer::set_items(const std::vector<noob::basic_mesh>& hulls)
 {
 	drawable3ds.clear();
 	colours.clear();
 
-	for (noob::mesh current_mesh : hulls)
+	for (noob::basic_mesh current_mesh : hulls)
 	{
 		noob::vec4 c = compute_random_colour();
 		current_mesh.snapshot("temp/hull-temp.off");
