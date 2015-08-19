@@ -1,16 +1,16 @@
-#include "AnimatedModel.hpp"
+#include "SkeletalAnim.hpp"
 #include "TransformHelper.hpp"
 #include "Logger.hpp"
 
 
-noob::animated_model::~animated_model()
+noob::skeletal_anim::~skeletal_anim()
 {
 	for (auto& it : runtime_anims)
 	{
 		allocator->Delete(it.second);
 	}
 
-	//for (noob::animated_model::sampler s : samplers)
+	//for (noob::skeletal_anim::sampler s : samplers)
 	//{
 	//	destroy_sampler(s);
 	//}
@@ -18,13 +18,10 @@ noob::animated_model::~animated_model()
 	allocator->Deallocate(model_matrices);
 }
 
-bool noob::animated_model::load_mesh(const std::string& filename)
-{
-	return false;
-}
 
 
-bool noob::animated_model::load_skeleton(const std::string& filename)
+
+bool noob::skeletal_anim::load_skeleton(const std::string& filename)
 {
 	ozz::io::File file(filename.c_str(), "rb");
 	if (!file.opened())
@@ -49,7 +46,7 @@ bool noob::animated_model::load_skeleton(const std::string& filename)
 }
 
 
-bool noob::animated_model::load_animation(const std::string& filename, const std::string& anim_name)
+bool noob::skeletal_anim::load_animation(const std::string& filename, const std::string& anim_name)
 {
 	ozz::animation::offline::RawAnimation _animation;
 	ozz::io::File file(filename.c_str(), "rb");
@@ -73,7 +70,9 @@ bool noob::animated_model::load_animation(const std::string& filename, const std
 }
 
 
-void noob::animated_model::optimize(float translation_tolerance, float rotation_tolerance, float scale_tolerance, const std::string& name)
+
+
+void noob::skeletal_anim::optimize(float translation_tolerance, float rotation_tolerance, float scale_tolerance, const std::string& name)
 {
 	bool optimize = !(translation_tolerance == 0.0 && rotation_tolerance == 0.0 && scale_tolerance == 0.0);
 	ozz::animation::offline::AnimationBuilder builder;
@@ -81,6 +80,7 @@ void noob::animated_model::optimize(float translation_tolerance, float rotation_
 	optimizer.translation_tolerance = translation_tolerance;
 	optimizer.rotation_tolerance = rotation_tolerance;
 	optimizer.scale_tolerance = scale_tolerance;
+	
 	// Do all of them
 	if (name == "")
 	{
@@ -107,6 +107,7 @@ void noob::animated_model::optimize(float translation_tolerance, float rotation_
 			}
 		}
 	}
+	
 	// Do only the named one (if it exists)
 	else
 	{
@@ -139,7 +140,7 @@ void noob::animated_model::optimize(float translation_tolerance, float rotation_
 }
 
 
-void noob::animated_model::switch_to_anim(const std::string& name)
+void noob::skeletal_anim::switch_to_anim(const std::string& name)
 {
 	auto search = runtime_anims.find(name);
 	if (search != runtime_anims.end())
@@ -150,7 +151,7 @@ void noob::animated_model::switch_to_anim(const std::string& name)
 }
 	
 
-bool noob::animated_model::anim_exists(const std::string& name) const
+bool noob::skeletal_anim::anim_exists(const std::string& name) const
 {
 	auto search = runtime_anims.find(name);
 	if (search != runtime_anims.end())
@@ -161,9 +162,9 @@ bool noob::animated_model::anim_exists(const std::string& name) const
 }
 
 
-void noob::animated_model::update(float dt)
+void noob::skeletal_anim::update(float dt)
 {
-	noob::animated_model::sampler current_sampler = create_sampler(*current_anim);
+	noob::skeletal_anim::sampler current_sampler = create_sampler(*current_anim);
 	current_sampler.controller.time = current_time;
 	current_sampler.update(dt);
 	current_time += dt;
@@ -171,19 +172,19 @@ void noob::animated_model::update(float dt)
 }
 
 
-void noob::animated_model::reset_time(float t)
+void noob::skeletal_anim::reset_time(float t)
 {
 	current_time = t;
 }
 
 
-std::string noob::animated_model::get_current_anim() const
+std::string noob::skeletal_anim::get_current_anim() const
 {
 	return current_anim_name;
 }
 
 
-std::vector<noob::mat4> noob::animated_model::get_matrices() const
+std::vector<noob::mat4> noob::skeletal_anim::get_matrices() const
 {
 	std::vector<noob::mat4> mats;
 	mats.reserve(skeleton.num_joints());
@@ -202,8 +203,9 @@ std::vector<noob::mat4> noob::animated_model::get_matrices() const
 	return mats;
 }
 
+
 /*
-void noob::animated_model::get_matrices(std::vector<noob::mat4> mats) const
+void noob::skeletal_anim::get_matrices(std::vector<noob::mat4> mats) const
 {
 	mats.clear();
 	mats.reserve(skeleton.num_joints());
@@ -222,13 +224,16 @@ void noob::animated_model::get_matrices(std::vector<noob::mat4> mats) const
 }
 */
 
-std::array<noob::vec3, 4> noob::animated_model::get_skeleton_bounds() const
+
+/*
+std::array<noob::vec3, 4> noob::skeletal_anim::get_skeleton_bounds() const
 {
 
 }
+*/
 
 
-void noob::animated_model::playback_controller::update(const ozz::animation::Animation& animation, float dt)
+void noob::skeletal_anim::playback_controller::update(const ozz::animation::Animation& animation, float dt)
 {
 	if (!paused)
 	{
@@ -239,7 +244,7 @@ void noob::animated_model::playback_controller::update(const ozz::animation::Ani
 }
 
 
-void noob::animated_model::playback_controller::reset()
+void noob::skeletal_anim::playback_controller::reset()
 {
 	time = 0.0;
 	playback_speed = 1.0;
@@ -248,7 +253,7 @@ void noob::animated_model::playback_controller::reset()
 
 
 
-void noob::animated_model::sampler::update(float dt)
+void noob::skeletal_anim::sampler::update(float dt)
 {
 	ozz::animation::SamplingJob sampling_job;
 	sampling_job.animation = animation;
@@ -258,21 +263,21 @@ void noob::animated_model::sampler::update(float dt)
 	sampling_job.output = locals;
 	if (!sampling_job.Run())
 	{
-		logger::log(fmt::format("[noob::animated_model::sampler.update({0}) - sampling job failed.", dt));
+		logger::log(fmt::format("[noob::skeletal_anim::sampler.update({0}) - sampling job failed.", dt));
 		return;
 	}
 
 }
 
 
-ozz::Range<ozz::math::SoaTransform> noob::animated_model::sampler::get_local_mats() const
+ozz::Range<ozz::math::SoaTransform> noob::skeletal_anim::sampler::get_local_mats() const
 {
 	return locals;
 }
 
 
 
-void noob::animated_model::sampler::get_model_mats(ozz::Range<ozz::math::Float4x4>& models)
+void noob::skeletal_anim::sampler::get_model_mats(ozz::Range<ozz::math::Float4x4>& models)
 {
 	ozz::animation::LocalToModelJob ltm_job;
 	ltm_job.skeleton = skeleton;
@@ -280,15 +285,15 @@ void noob::animated_model::sampler::get_model_mats(ozz::Range<ozz::math::Float4x
 	ltm_job.output = models;
 	if (!ltm_job.Run())
 	{
-		logger::log("noob::animated_model::sampler.get_model_mats() - ltm job failed.");
+		logger::log("noob::skeletal_anim::sampler.get_model_mats() - ltm job failed.");
 		return;
 	}
 }
 
 
-noob::animated_model::sampler noob::animated_model::create_sampler(const ozz::animation::Animation& anim)
+noob::skeletal_anim::sampler noob::skeletal_anim::create_sampler(const ozz::animation::Animation& anim)
 {
-	noob::animated_model::sampler sampler;
+	noob::skeletal_anim::sampler sampler;
 	sampler.animation = const_cast<ozz::animation::Animation*>(&anim);
 	sampler.skeleton = &skeleton;
 	sampler.cache = allocator->New<ozz::animation::SamplingCache>(skeleton.num_joints());
@@ -298,7 +303,7 @@ noob::animated_model::sampler noob::animated_model::create_sampler(const ozz::an
 }
 
 
-void noob::animated_model::destroy_sampler(noob::animated_model::sampler& sampler)
+void noob::skeletal_anim::destroy_sampler(noob::skeletal_anim::sampler& sampler)
 {
 	allocator->Deallocate(sampler.locals);
 	allocator->Delete(sampler.cache);
@@ -307,11 +312,11 @@ void noob::animated_model::destroy_sampler(noob::animated_model::sampler& sample
 
 // TODO: Reintegrate the blended animations into the engine.
 /*
-void noob::animated_model::update(float dt)
+void noob::skeletal_anim::update(float dt)
 {
 	   for (size_t i = 0; i < num_layers; ++i)
 	   {
-	   noob::animated_model::sampler& sampler = samplers[i];
+	   noob::skeletal_anim::sampler& sampler = samplers[i];
 
 	   sampler.controller.update(sampler.animation, dt);
 
@@ -357,5 +362,3 @@ void noob::animated_model::update(float dt)
 	   }
 }
 */
-
-

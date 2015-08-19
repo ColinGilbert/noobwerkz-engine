@@ -2,21 +2,27 @@
 
 
 #include "Config.hpp"
-#include "Drawable3D.hpp"
 
 #include "Graphics.hpp"
 #include "MathFuncs.hpp"
 #include "VoxelWorld.hpp"
-#include "HACDRenderer.hpp"
-#include "ShaderVariant.hpp"
+#include "TriplanarGradientMap.hpp"
+#include "BasicRenderer.hpp"
+
 #include "TransformHelper.hpp"
 
 #include <string>
 #include <tuple>
 
+#include <es/storage.hpp>
+#include <es/entity.hpp>
+#include <es/component.hpp>
+
 #include "Actor.hpp"
 #include "PhysicsWorld.hpp"
-#include "AnimatedModel.hpp"
+#include "SkeletalAnim.hpp"
+#include "Model.hpp"
+
 
 namespace noob
 {
@@ -27,39 +33,42 @@ namespace noob
 			void update(double dt);
 			void draw();
 
-			void add_drawable(const std::string& name, const noob::basic_mesh&);
-			std::weak_ptr<noob::drawable3d> get_drawable(const std::string& name) const;
-			void remove_actor(const std::string& name);
-
-			void add_actor(const std::string& name, const noob::actor& actor);
-			noob::actor get_actor(const std::string& name) const;
-
-			void add_skeleton(const std::string& name, const std::string& filename); 
-			std::weak_ptr<noob::animated_model> get_skeleton(const std::string& name) const;
+			// Loads a serialized model
+			// void add_drawable(const std::string& name, const std::string& filename);
+			// void add_drawable(const std::string& name, const noob::basic_mesh&);
+			// noob::drawable3d* get_drawable(const std::string& name) const;
 			
-			void set_shader(const std::string& name, const noob::shaders::info& info);
-			void set_drawing_technique(const std::string& actor_name, const std::string& shader_name);
-			void face_point(const noob::actor& a, const noob::vec3& point);
-
-			void draw(const noob::actor& a) const;
-			void draw_skeleton(const noob::actor& a) const;
-
+			void add_skeleton(const std::string& name, const std::string& filename); 
+			noob::skeletal_anim* get_skeleton(const std::string& name) const;
 
 		protected:
+			es::storage storage;
 			noob::physics_world world;
+			
 			// TODO: Bring HACD renderer in line with the rest of the shader types
-			noob::hacd_renderer hacd_render;	
-			noob::shaders shaders;
+			noob::triplanar_renderer triplanar_render;
+			noob::basic_renderer basic_render;
 
-			noob::mat4 view_mat;
-			noob::mat4 projection_mat;
-			
-			std::weak_ptr<noob::drawable3d> unit_cube, unit_sphere, unit_cylinder, unit_cone, unit_square, unit_triangle;
-			
-			std::unordered_map<std::string, noob::shaders::info> uniforms;
-			std::unordered_map<std::string, noob::actor> actors;
-			std::unordered_map<std::string, std::shared_ptr<noob::drawable3d>> drawables;
-			std::unordered_map<std::string, std::shared_ptr<noob::animated_model>> skeletons;
+			noob::mat4 view_mat, projection_mat;
+		
+			es::storage::component_id transform;
+			es::storage::component_id body;
+			es::storage::component_id shape;
+			es::storage::component_id model;
+			es::storage::component_id triplanar_shader;
+			es::storage::component_id basic_shader;
+			es::storage::component_id anim_name;
+			es::storage::component_id anim_time;
+			es::storage::component_id name;
+
+			noob::model* unit_cube;
+			noob::model* unit_sphere;
+			noob::model* unit_cylinder;
+			noob::model* unit_cone;
+
+
+			std::unordered_map<std::string, std::unique_ptr<noob::model>> models;
+			std::unordered_map<std::string, std::unique_ptr<noob::skeletal_anim>> skeletons;
 	};
 }
 

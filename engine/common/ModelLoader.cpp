@@ -188,8 +188,6 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 	}
 
 	std::set<std::string> scene_bone_names;
-	//aiNode* scene_root = scene->mRootNode;
-
 	for (size_t mesh_num = 0; mesh_num < scene->mNumMeshes; mesh_num++)
 	{
 		const aiMesh* mesh_data = scene->mMeshes[mesh_num];
@@ -202,16 +200,18 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 		size_t num_bones = mesh_data->mNumBones;
 		bool has_normals = mesh_data->HasNormals();
 		bool has_texcoords = mesh_data->HasTextureCoords(0);
+		bool has_tangents_and_bitangents = mesh_data->HasTangentsAndBitangents();
 
 		logger::log(fmt::format("Mesh {0} ({1}) has {2} verts and {3} bones. Normals? {4}", name, mesh_num, num_verts, num_bones, has_normals));
 
-		std::array<float, 3> min_extents, max_extents;
+		std::array<float, 3> min_extents = { 0.0, 0.0, 0.0}, max_extents = {0.0, 0.0, 0.0};
 
 		for (size_t n = 0; n < num_verts; ++n)
 		{
 			aiVector3D pt = mesh_data->mVertices[n];
 
 			noob::model_loader::vertex v;
+			
 			v.position[0] = pt[0];
 			v.position[1] = pt[1];
 			v.position[2] = pt[2];
@@ -219,6 +219,7 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 			min_extents[0] = std::min(min_extents[0], v.position[0]);
 			min_extents[1] = std::min(min_extents[1], v.position[1]);
 			min_extents[2] = std::min(min_extents[2], v.position[2]);
+			
 			max_extents[0] = std::max(max_extents[0], v.position[0]);
 			max_extents[1] = std::max(max_extents[1], v.position[1]);
 			max_extents[2] = std::max(max_extents[2], v.position[2]);
@@ -232,20 +233,33 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 			}
 			if (has_texcoords)
 			{
-				aiVector3D* uv = mesh_data->mTextureCoords[0];
-				v.uv[0] = uv->x;
-				v.uv[1] = uv->y;
+				aiVector3D uv = mesh_data->mTextureCoords[0][n];
+				v.uv[0] = uv[0];
+				v.uv[1] = uv[1];
+			}
+
+			if (has_tangents_and_bitangents)
+			{
+				aiVector3D tangent = mesh_data->mTangents[n];
+				v.tangent[0] = tangent[0];
+				v.tangent[1] = tangent[1];
+				v.tangent[2] = tangent[2];
+
+				aiVector3D bitangent = mesh_data->mBitangents[n];
+				v.bitangent[0] = bitangent[0];
+				v.bitangent[1] = bitangent[1];
+				v.bitangent[2] = bitangent[2];
 			}
 
 			temp_mesh.vertices.push_back(v);
 		}
 
-		std::array<float, 3> temp_dims;
+		std::array<float, 3> dims;
 		for (size_t i = 0; i < 3; ++i)
 		{
-			temp_dims[i] = max_extents[i] - min_extents[i];
+			dims[i] = max_extents[i] - min_extents[i];
 		}
-		temp_mesh.dimensions = temp_dims;
+		temp_mesh.dimensions = dims;
 
 		for (size_t n = 0; n < num_faces; ++n)
 		{
@@ -271,8 +285,6 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 			for (uint32_t i = 0; i < bone_data->mNumWeights; ++i)
 			{
 				uint32_t bone_vertex_id = bone_data->mWeights[i].mVertexId;
-				//if (bone_vertex_id < static_cast<uint32_t>(mesh_data->mNumVertices))
-				//{
 				auto vert = temp_mesh.vertices[bone_vertex_id];
 				for (size_t j = 0; j < 4; ++j)
 				{
@@ -284,14 +296,6 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 					}
 				}
 				temp_mesh.vertices[bone_vertex_id] = vert;	
-				//}
-
-				//else
-				//{
-				//	std::cout << "Vertex ID of Assimp bone higher than actual vertex count. Skipping." << std::endl;
-				//}
-
-
 			}
 		}
 		meshes.push_back(temp_mesh);
@@ -562,7 +566,6 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 		runtime_anim_archive << *runtime_animation;
 
 		// Mesh save
-		
 		fmt::MemoryWriter output_mesh_filename;
 		output_mesh_filename << output_pathname << "/meshes.bin";
 		logger::log(fmt::format("Outputting meshes to {0}", output_mesh_filename.str()));
@@ -574,8 +577,8 @@ bool noob::model_loader::load(const aiScene* scene, const std::string& name)
 	return true;
 }
 
+
 std::string noob::model_loader::get_output_path() const
 {
 	return output_pathname;
 }
-

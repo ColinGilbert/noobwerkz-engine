@@ -4,7 +4,7 @@ project(NoobWerkz)
 #set(CMAKE_BUILD_TYPE "DEBUG")
 set(CMAKE_BUILD_TYPE "RELEASE")
 
-set(CMAKE_CXX_FLAGS "-std=c++11 -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DEIGEN_MPL2_ONLY -DCHAISCRIPT_NO_THREADS -Wall ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++1y -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DEIGEN_MPL2_ONLY -DCHAISCRIPT_NO_THREADS -Wall ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-std=c99 -fno-strict-aliasing -DSQLITE_ENABLE_COLUMN_METADATA -DSTB_IMAGE_STATIC -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -Wall ${CMAKE_C_FLAGS}")
 
 find_package(Boost COMPONENTS system filesystem REQUIRED)
@@ -165,14 +165,14 @@ list(APPEND common_src
 	common/Physics/CharacterController.cpp
 	common/Skeleton.cpp
 	common/ModelLoader.cpp
-	# common/DebugDraw.cpp
+	common/Model.cpp
 	common/GUI.cpp
 	common/Camera.cpp
 	common/Stage.cpp
 	common/Scenery.cpp
 	common/Actor.cpp
 	common/Prop.cpp
-	common/AnimatedModel.cpp
+	common/SkeletalAnim.cpp
 	common/Drawing/TriplanarGradientMap.cpp
 	common/Drawing/HACDRenderer.cpp
 	common/Drawing/GUIRenderer.cpp

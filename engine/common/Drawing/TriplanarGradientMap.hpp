@@ -2,7 +2,7 @@
 
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
-#include "Drawable3D.hpp"
+#include "Model.hpp"
 
 namespace noob
 {
@@ -18,7 +18,7 @@ namespace noob
 			};
 
 			void init();
-			void draw(const noob::drawable3d*, const noob::mat4& model_mat, const noob::triplanar_renderer::uniform_info& info, uint8_t view_id = 0) const;
+			void draw(const noob::model*, const noob::mat4& model_mat, const noob::triplanar_renderer::uniform_info& info, uint8_t view_id = 0) const;
 
 		protected:
 			noob::graphics::shader shader;

@@ -1,3 +1,4 @@
+/*
 #pragma once
 
 #include "Graphics.hpp"
@@ -22,3 +23,4 @@ namespace noob
 			noob::graphics::shader shader;
 	};
 }
+*/

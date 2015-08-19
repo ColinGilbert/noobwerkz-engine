@@ -58,7 +58,6 @@ namespace noob
 				static bgfx::VertexDecl ms_decl;
 			};
 
-
 			struct uniform
 			{
 				void init(const std::string& name, bgfx::UniformType::Enum _type, uint16_t _count = 1)

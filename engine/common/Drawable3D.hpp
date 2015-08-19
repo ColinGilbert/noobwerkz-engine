@@ -1,5 +1,5 @@
 // Drawable - Loads a mesh to screen.
-
+/*
 #pragma once
 
 #include <map>
@@ -54,3 +54,4 @@ namespace noob
 			noob::basic_mesh::bbox_info bbox;
 	};
 }
+*/

@@ -1,3 +1,4 @@
+/*`
 #include <bx/fpumath.h>
 #include <bx/timer.h>
 
@@ -47,10 +48,7 @@ void noob::drawable3d::init(const noob::basic_mesh& m)
 
 	vertex_buffer = bgfx::createVertexBuffer(bgfx::copy(&bgfx_vertices[0], bgfx_vertices.size() * sizeof(noob::graphics::mesh_vertex)), noob::graphics::mesh_vertex::ms_decl);
 	index_buffer = bgfx::createIndexBuffer(bgfx::copy(&indices[0], indices.size() * sizeof(uint32_t)), BGFX_BUFFER_INDEX32);
-
-
 	bbox = m.get_bbox();
-
 
 	ready = true;
 }
@@ -88,3 +86,4 @@ void noob::drawable3d::draw(uint8_t view_id, const noob::mat4& model_mat, const 
 		logger::log("Attempting to draw item with improper state.");
 	}
 }
+*/

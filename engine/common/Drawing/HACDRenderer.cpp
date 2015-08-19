@@ -1,3 +1,4 @@
+/*
 #include "HACDRenderer.hpp"
 
 void noob::hacd_renderer::init()
@@ -72,3 +73,4 @@ void noob::hacd_renderer::draw(const noob::mat4& model_mat, uint8_t view_id)
 		bgfx::submit(view_id);
 	}
 }
+*/

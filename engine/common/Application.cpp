@@ -302,9 +302,6 @@ void noob::application::draw()
 	stage.draw();
 
 	gui.text("The goat stumbled upon the cheese", 150.0, 50.0);
-	//gui.frame();
-
-	bgfx::submit(0);
 }
 
 

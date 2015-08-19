@@ -28,8 +28,11 @@
 #include <cereal/types/set.hpp>
 #include <cereal/archives/binary.hpp>
 
-#include "format.h"
 
+#include "format.h"
+//#include "Graphics.hpp"
+#include "MathFuncs.hpp"
+#include "TransformHelper.hpp"
 
 namespace noob
 {
@@ -41,7 +44,7 @@ namespace noob
 				template <class Archive>
 					void serialize( Archive & ar )
 					{
-						ar(position, normal, uv, bone_names, bone_indices, bone_weights);
+						ar(position, normal, uv, tangent, bitangent, bone_indices, bone_weights);
 					}
 				vertex() : position({0.0f, 0.0f, 0.0f}), normal({0.0f, 0.0f, 0.0f}), uv({0.0f, 0.0f}), tangent({0.0f, 0.0f, 0.0f}), bitangent({0.0f, 0.0f, 0.0f}), bone_names({"", "", "", ""}), bone_indices({0, 0, 0, 0}), bone_weights({0.0f, 0.0f, 0.0f, 0.0f}) {}
 				std::array<float, 3> position, normal;
@@ -57,14 +60,14 @@ namespace noob
 				template <class Archive>
 					void serialize(Archive & ar)
 					{
-						ar(translation, scale, dimensions, rotation, name, vertices, indices, bone_names);
+						ar(vertices, indices, dimensions, name);
 					}
-				std::array<float, 3> translation, scale, dimensions;
-				std::array<float, 4> rotation;
-				std::string name;
+
 				std::vector<noob::model_loader::vertex> vertices;
-				std::vector<uint32_t> indices;
+				std::vector<uint16_t> indices;
 				std::vector<std::string> bone_names;
+				std::array<float,3> dimensions;
+				std::string name;
 			};
 
 			template <class Archive>
@@ -104,7 +107,7 @@ namespace noob
 
 
 			bool load(const aiScene* scene, const std::string& name);
-		
+			// static noob::graphics::mesh_vertex to_graphics_vert(const noob::model_loader::vertex&);
 			std::string get_output_path() const;
 
 		protected:
@@ -112,3 +115,4 @@ namespace noob
 			std::string output_pathname;
 	};
 }
+

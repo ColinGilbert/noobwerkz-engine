@@ -21,37 +21,32 @@
 #include <ozz/animation/offline/animation_optimizer.h>
 #include <ozz/base/memory/allocator.h>
 
-#include <cereal/types/string.hpp>
-#include <cereal/types/array.hpp>
-#include <cereal/types/vector.hpp>
-#include <cereal/types/set.hpp>
-#include <cereal/archives/binary.hpp>
-
 #include <lemon/list_graph.h>
 #include <lemon/static_graph.h>
 
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
+#include "Drawable3D.hpp"
+
 
 namespace noob
 {
-	class animated_model
+	class skeletal_anim
 	{
 		public:
 
-			animated_model() : allocator(ozz::memory::default_allocator()) {}
-			~animated_model();
+			skeletal_anim() : allocator(ozz::memory::default_allocator()) {}
+			~skeletal_anim();
 			// Loads a runtime skeleton. Possibly convert to raw skeleton
 			bool load_skeleton(const std::string& filename);
 			// Loads a raw animation. You then create runtime animations via optimize()
 			bool load_animation(const std::string& filename, const std::string& anim_name);
-			// TODO: Implement
-			bool load_mesh(const std::string& filename);
+
 			// If name = "" all animations get processed. If all the tolerances == 0.0 it doesn't run an optimization pre-pass prior prior to creating runtime animations. 
 			void optimize(float translation_tolerance = 0.0, float rotation_tolerance = 0.0, float scale_tolerance = 0.0, const std::string& name = "");
 			// TODO: Implement
 			void switch_to_anim(const std::string& name);
-
+			
 			// TODO: Implement
 			void update(float dt = 0.0);
 			void reset_time(float t = 0.0);
@@ -60,7 +55,7 @@ namespace noob
 			std::string get_current_anim() const;
 			// Gets bone matrices.
 			std::vector<noob::mat4> get_matrices() const;
-			std::array<noob::vec3,4> get_skeleton_bounds() const;
+			/// std::array<noob::vec3,4> get_skeleton_bounds() const;
 
 		protected:
 			class playback_controller
@@ -76,7 +71,7 @@ namespace noob
 
 			class sampler
 			{
-				friend class noob::animated_model;
+				friend class noob::skeletal_anim;
 
 				public:
 				void update(float dt);
@@ -87,16 +82,15 @@ namespace noob
 
 				protected:
 				sampler() : weight(1.0), cache(nullptr) {}
-				noob::animated_model::playback_controller controller;
+				noob::skeletal_anim::playback_controller controller;
 				ozz::animation::Animation* animation;
 				ozz::animation::Skeleton* skeleton;
 				ozz::animation::SamplingCache* cache;
 				ozz::Range<ozz::math::SoaTransform> locals;
-
 			};
 
-			noob::animated_model::sampler create_sampler(const ozz::animation::Animation& anim);
-			void destroy_sampler(noob::animated_model::sampler&);		
+			noob::skeletal_anim::sampler create_sampler(const ozz::animation::Animation& anim);
+			void destroy_sampler(noob::skeletal_anim::sampler&);		
 			
 			std::string current_anim_name;
 			ozz::animation::Animation* current_anim;
@@ -142,31 +136,31 @@ namespace noob
 
 	struct animation_type
 	{
-	noob::animated_model::equipment_type gear;
-	noob::animated_model::posture_type posture;
-	noob::animated_model::movement_type movement;
-	noob::animated_model::movement_direction direction;
-	noob::animated_model::action_type action;
+	noob::skeletal_anim::equipment_type gear;
+	noob::skeletal_anim::posture_type posture;
+	noob::skeletal_anim::movement_type movement;
+	noob::skeletal_anim::movement_direction direction;
+	noob::skeletal_anim::action_type action;
 	};
 	*/
 
 /*
-   void posture(noob::animated_model::posture_type current_posture);
-   void equipment(noob::animated_model::equipment_type current_equipment);
-   void movement(noob::animated_model::movement_type current_movement);
-   void direction(noob::animated_model::movement_direction current_direction);
-   void action(noob::animated_model::action_type current_action);
-   bool noob::animated_model::load_animation(const std::string& filename, noob::animation_type anim)
+   void posture(noob::skeletal_anim::posture_type current_posture);
+   void equipment(noob::skeletal_anim::equipment_type current_equipment);
+   void movement(noob::skeletal_anim::movement_type current_movement);
+   void direction(noob::skeletal_anim::movement_direction current_direction);
+   void action(noob::skeletal_anim::action_type current_action);
+   bool noob::skeletal_anim::load_animation(const std::string& filename, noob::animation_type anim)
    */
 // Returns if current state is valid. For example, jumping and lying on the ground at the same time is quite difficult...
 //bool current_state_valid() const;
 
 // Return value: <from_anim, to_anim, normalized_blend>
-//std::tuple<noob::animated_model::animation_type,noob::animated_model::animation_type,float> get_current_anim() const;
+//std::tuple<noob::skeletal_anim::animation_type,noob::skeletal_anim::animation_type,float> get_current_anim() const;
 
 // Sets the default at the most specific blend tree level possible
-//bool set_default(const noob::animated_model::animation_type& anim);
-//bool anim_exists(noob::animated_model::animation_type anim) const;
+//bool set_default(const noob::skeletal_anim::animation_type& anim);
+//bool anim_exists(noob::skeletal_anim::animation_type anim) const;
 // If the desired animation isn't present, this will go to the most specific valid item in the blend tree.
 
 
