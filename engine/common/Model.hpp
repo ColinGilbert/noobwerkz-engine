@@ -12,18 +12,16 @@
 
 #include "format.h"
 #include "MathFuncs.hpp"
+#include "Mesh.hpp"
 
 namespace noob
 {
 	class model
 	{
 		public:
-			model() : ready(false)
-			{
-				noob::model::mesh_vertex::init();
-			}
 
-			virtual ~model();
+
+			~model();
 			
 			template <class Archive>
 				void serialize(Archive& ar)
@@ -79,9 +77,13 @@ namespace noob
 				std::string name;
 
 			};
+			
+			model(const std::string& filename);
+			model(const noob::basic_mesh&);
 
 			// This loads from the cereal binary files prepared by the model_loader class
-			void load(const std::string& filename);
+			void init(const std::string& filename);
+			void init(const noob::basic_mesh&);
 			void draw(uint8_t view_id, const noob::mat4& model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags = BGFX_STATE_DEFAULT) const;
 		
 		protected:

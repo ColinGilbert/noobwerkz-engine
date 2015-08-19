@@ -54,6 +54,5 @@ namespace noob
 		noob::versor rotation;
 		noob::vec3 translation;
 		noob::vec3 scaling;
-		// noob::mat4 matrix;
 	};
 }

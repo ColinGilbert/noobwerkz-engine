@@ -21,7 +21,7 @@ noob::skeletal_anim::~skeletal_anim()
 
 
 
-bool noob::skeletal_anim::load_skeleton(const std::string& filename)
+void noob::skeletal_anim::init(const std::string& filename)
 {
 	ozz::io::File file(filename.c_str(), "rb");
 	if (!file.opened())
@@ -41,7 +41,8 @@ bool noob::skeletal_anim::load_skeleton(const std::string& filename)
 	model_matrices = allocator->AllocateRange<ozz::math::Float4x4>(skeleton.num_joints());
 	
 	logger::log(fmt::format("[AnimatedModel] - load_skeleton({0}) success!", filename));
-
+	
+	// valid = true;
 	return true;
 }
 
@@ -140,14 +141,16 @@ void noob::skeletal_anim::optimize(float translation_tolerance, float rotation_t
 }
 
 
-void noob::skeletal_anim::switch_to_anim(const std::string& name)
+bool noob::skeletal_anim::switch_to_anim(const std::string& name)
 {
 	auto search = runtime_anims.find(name);
 	if (search != runtime_anims.end())
 	{
 		current_anim_name = name;
 		current_anim = search->second;
+		return true;
 	}
+	return false;
 }
 	
 
