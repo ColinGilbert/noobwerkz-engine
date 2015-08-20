@@ -11,7 +11,7 @@
 
 namespace noob
 {
-	class shaders
+	class prepared_shaders
 	{
 		public:
 			void init()
@@ -22,7 +22,7 @@ namespace noob
 
 			typedef boost::variant<noob::triplanar_renderer::uniform_info, noob::basic_renderer::uniform_info> info;
 			
-			void draw(const noob::model* drawable, const shaders::info& uni, const noob::mat4& model_mat = noob::identity_mat4(), uint8_t view_id = 0) const
+			void draw(const noob::model* drawable, const prepared_shaders::info& uni, const noob::mat4& model_mat = noob::identity_mat4(), uint8_t view_id = 0) const
 			{
 				match(uni,
 				[this, drawable, model_mat, view_id] (const noob::triplanar_renderer::uniform_info& info) -> void { this->triplanar.draw(drawable, model_mat, info, view_id); },
@@ -31,7 +31,7 @@ namespace noob
 			}
 
 			// TODO: Implement
-			void draw_instanced(const shaders::info& uni, const noob::model* drawable, const std::vector<std::tuple<size_t, noob::mat4>>& model_mats = { std::make_tuple(0, noob::identity_mat4()) } , uint8_t view_id = 0) const
+			void draw_instanced(const noob::model* drawable, const prepared_shaders::info& uni, const std::vector<noob::mat4>& model_mats = { noob::identity_mat4() }, uint8_t view_id = 0) const
 			{
 				
 			}

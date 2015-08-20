@@ -25,7 +25,6 @@
 #include "SkeletalAnim.hpp"
 #include "Model.hpp"
 
-
 namespace noob
 {
 	class stage
@@ -33,26 +32,43 @@ namespace noob
 		public:
 			stage() : paused(false) {}
 			
+			typedef es::entity actor_id;
+
 			bool init();
 			void update(double dt);
 			void draw();
+			// enum component_type { LIFETIME, TRANSFORM, BODY, SHAPE, MODEL, SHADER, SKELETON; }
+			actor_id get_actor(const std::string& name);
+			// std::vector<actor_id> get_actors_with_type(noob::stage::component_type);
 			
+			float get_lifetime(actor_id) const;
+			noob::mat4 get_transform(actor_id) const;
+			noob::physics_body get_body(actor_id) const;
+			noob::physics_shape get_shape(actor_id) const;
+			std::weak_ptr<noob::model> get_model(actor_id) const;
+			std::weak_ptr<noob::prepared_shaders::info> get_shader(actor_id) const;
+			std::weak_ptr<noob::skeletal_anim> get_skeleton(actor_id) const;
+
+			void set_lifetime(actor_id, float);
+			void set_transform(actor_id, const noob::mat4&);
+			void set_body(actor_id, const noob::physics_body&);
+			void set_shape(actor_id, const noob::physics_shape&);
+			void set_model(actor_id, const std::weak_ptr<noob::model>&);
+			void set_shader(actor_id, const std::weak_ptr<noob::prepared_shaders::info>&);
+			void set_skeleton(actor_id, const std::weak_ptr<noob::skeletal_anim>&);
+
 			// Loads a serialized model (from cereal binary)
 			void add_model(const std::string& name, const std::string& filename);
 			void add_model(const std::string& name, const noob::basic_mesh&);
-			// TODO: Update with bool + raw pointer and shared_ptr with unique_ptr
-			std::weak_ptr<noob::model> get_model(const std::string& name) const;
-			
-			// Load from ozz-anim skeleton. (Runtime. Soon raw.)
 			void add_skeleton(const std::string& name, const std::string& filename);
 
-			// TODO: Update with bool + raw pointer and shared_ptr with unique_ptr
+			std::weak_ptr<noob::model> get_model(const std::string& name) const;
 			std::weak_ptr<noob::skeletal_anim> get_skeleton(const std::string& name) const;
 
 		protected:
 			es::storage storage;
 			noob::physics_world world;
-			noob::shaders shaders;
+			noob::prepared_shaders shaders;
 			bool paused;
 			// TODO: Bring HACD renderer in line with the rest of the shader types
 			noob::triplanar_renderer triplanar_render;
@@ -81,7 +97,7 @@ namespace noob
 			es::storage::component_id actor_name;
 
 			
-			std::unordered_map<std::string, noob::shaders::info> shader_uniforms;
+			std::unordered_map<std::string, std::shared_ptr<noob::prepared_shaders::info>> shader_uniforms;
 			std::unordered_map<std::string, std::shared_ptr<noob::model>> models;
 			std::unordered_map<std::string, std::shared_ptr<noob::skeletal_anim>> skeletons;
 	};

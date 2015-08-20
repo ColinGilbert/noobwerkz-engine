@@ -87,8 +87,6 @@ namespace noob
 				sampler() : weight(1.0), cache(nullptr) {}
 				noob::skeletal_anim::playback_controller controller;
 
-
-
 				ozz::animation::Animation* animation;
 				ozz::animation::Skeleton* skeleton;
 				ozz::animation::SamplingCache* cache;
