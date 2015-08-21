@@ -44,11 +44,13 @@ namespace noob
 
 			void remove(const noob::physics_body& body);
 			void remove(const noob::physics_constraint_generic& constraint);
+			
+			noob::physics_shape get_shape(const std::string& name);
 
 			btDynamicsWorld* get_raw_ptr() const;
 
 		protected:
-			std::unordered_map<std::string, std::shared_ptr<noob::physics_shape>> shapes;
+			std::unordered_map<std::string, noob::physics_shape> shapes;
 			btDiscreteDynamicsWorld* dynamics_world;
 			btBroadphaseInterface* broadphase;
 			btDefaultCollisionConfiguration* collision_configuration;

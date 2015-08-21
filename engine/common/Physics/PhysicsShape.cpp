@@ -81,7 +81,7 @@ void noob::physics_shape::set_compound(const std::vector<noob::physics_shape> sh
 
 		for (noob::physics_shape s : shapes)
 		{
-			btCollisionShape* raw_shape = s.get_shape(); 
+			btCollisionShape* raw_shape = s.get_raw_ptr(); 
 			compound_shape->addChildShape(btTransform::getIdentity(), raw_shape);
 		}
 
@@ -149,10 +149,11 @@ void noob::physics_shape::set_static_plane(const noob::vec3& normal, float const
 }
 
 
-btCollisionShape* noob::physics_shape::get_shape() const
+btCollisionShape* noob::physics_shape::get_raw_ptr() const
 {
 	return shape;
 }
+
 
 noob::physics_shape::shape_type noob::physics_shape::get_type() const
 {

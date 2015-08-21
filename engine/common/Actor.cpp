@@ -1,28 +1,24 @@
-/*
 #include "Actor.hpp"
 //#include "TransformHelper.hpp"
 
-void noob::actor::set_drawable(const std::weak_ptr<noob::drawable3d>& _drawable)
+void noob::actor::set_drawable(const std::weak_ptr<noob::model>& _drawable)
 {
-	drawable = _drawable;
-	validate();
+	drawable = _drawable.lock();
 }
 
 
 void noob::actor::set_skeleton(const std::weak_ptr<noob::skeletal_anim>& _anim)
 {
-	anim = _anim;
-	validate();
+	anim = _anim.lock();
 }
 
 
-void noob::actor::set_shader_info(const std::weak_ptr<noob::shaders::info>& _shader_info)
+void noob::actor::set_shading(const std::weak_ptr<noob::prepared_shaders::info>& _shader_info)
 {
-	shader_info = _shader_info;
-	validate();
+	shader_info = _shader_info.lock();
 }
 
-
+/*
 void noob::actor::validate()
 {
 	if (auto a = anim.lock())
@@ -63,11 +59,8 @@ void noob::actor::validate()
 void noob::actor::invalidate()
 {
 	valid = false;
-	anim_raw = nullptr;
-	drawable_raw = nullptr;
-	shader_info_raw = nullptr;
 }
-
+*/
 
 void noob::actor::update()
 {
@@ -101,4 +94,3 @@ std::vector<noob::vec3> noob::actor::get_path_vector() const
 	return p;
 
 }
-*/

@@ -59,6 +59,12 @@ void add(const noob::physics_shape& shape, const std::string& name)
 }
 
 
+noob::physics_shape get_shape(const std::string& name)
+{
+
+}
+
+
 void noob::physics_world::remove(const noob::physics_body& body)
 {
 	dynamics_world->removeRigidBody(body.get_raw_ptr());

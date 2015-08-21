@@ -1,0 +1,120 @@
+#pragma once
+
+
+#include "Config.hpp"
+
+#include "Graphics.hpp"
+#include "MathFuncs.hpp"
+#include "VoxelWorld.hpp"
+
+#include "ShaderVariant.hpp"
+
+#include "TriplanarGradientMap.hpp"
+#include "BasicRenderer.hpp"
+#include "TransformHelper.hpp"
+
+#include <string>
+#include <tuple>
+
+#include <es/entity.hpp>
+#include <es/component.hpp>
+#include <es/storage.hpp>
+
+
+#include "Actor.hpp"
+#include "PhysicsWorld.hpp"
+#include "SkeletalAnim.hpp"
+#include "Model.hpp"
+
+namespace noob
+{
+	class stage
+	{
+		public:
+			//stage() {}
+
+			bool init();
+			void update(double dt);
+			void draw();
+
+			es::entity get_actor(const std::string& name) const;
+			const es::entity get_invalid() const;
+			bool actor_has_component(es::entity, es::storage::component_id) const;
+			void apply(std::function<void()>);
+
+			float get_lifetime(es::entity) const;
+			noob::mat4 get_transform(es::entity) const;
+			noob::physics_body get_body(es::entity) const;
+			noob::physics_shape get_shape(es::entity) const;
+			std::weak_ptr<noob::model> get_model(es::entity) const;
+			std::weak_ptr<noob::prepared_shaders::info> get_shader(es::entity) const;
+			std::weak_ptr<noob::skeletal_anim> get_skeleton(es::entity) const;
+
+			void set_lifetime(es::entity, float);
+			void set_transform(es::entity, const noob::mat4&);
+			void set_body(es::entity, const noob::physics_body&);
+			void set_shape(es::entity, const noob::physics_shape&);
+			void set_model(es::entity, const std::weak_ptr<noob::model>&);
+			void set_shader(es::entity, const std::weak_ptr<noob::prepared_shaders::info>&);
+			void set_skeleton(es::entity, const std::weak_ptr<noob::skeletal_anim>&);
+
+			// Loads a serialized model (from cereal binary)
+			void add_model(const std::string& name, const std::string& filename);
+			void add_model(const std::string& name, const noob::basic_mesh&);
+			void add_skeleton(const std::string& name, const std::string& filename);
+
+			std::weak_ptr<noob::model> get_model(const std::string& name) const;
+			std::weak_ptr<noob::skeletal_anim> get_skeleton(const std::string& name) const;
+
+			es::storage::component_id lifetime_component() const { return lifetime; }
+			es::storage::component_id transform_component() const { return transform; }
+			es::storage::component_id body_component() const { return body; }
+			es::storage::component_id shape_component() const { return shape; }
+			es::storage::component_id model_component() const { return model; }
+			es::storage::component_id shader_component() const { return shader; }
+			es::storage::component_id anim_skel_component() const { return anim_skel; }
+			es::storage::component_id anim_name_component() const { return anim_name; }
+			es::storage::component_id anim_time_component() const { return anim_time; }
+			es::storage::component_id actor_name_component() const { return actor_name; }
+
+
+		protected:
+			es::storage entity_world;
+			noob::physics_world world;
+			noob::prepared_shaders shaders;
+			bool paused;
+			
+			// Actors without lifetime stay forever.
+			es::storage::component_id lifetime;
+			// For actors that move themselves
+			es::storage::component_id transform;
+			// For actors driven by physics
+			es::storage::component_id body;
+			es::storage::component_id shape;
+			// Drawing info
+			es::storage::component_id model;
+			es::storage::component_id shader;
+			// Animation
+			es::storage::component_id anim_skel;
+			es::storage::component_id anim_name;
+			es::storage::component_id anim_time;
+			// Proper names, for scripting
+			es::storage::component_id actor_name;
+
+			// TODO: Bring HACD renderer in line with the rest of the shader types
+			noob::triplanar_renderer triplanar_render;
+			noob::basic_renderer basic_render;
+
+			noob::mat4 view_mat, projection_mat;
+
+			// For fast access to basic shapes. Test to see difference.
+			std::weak_ptr<noob::model> unit_cube, unit_sphere, unit_cylinder, unit_cone;
+						
+			es::entity invalid_actor;
+			
+			std::unordered_map<std::string, std::shared_ptr<noob::prepared_shaders::info>> shader_uniforms;
+			std::unordered_map<std::string, std::shared_ptr<noob::model>> models;
+			std::unordered_map<std::string, std::shared_ptr<noob::skeletal_anim>> skeletons;
+	};
+}
+

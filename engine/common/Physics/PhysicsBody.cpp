@@ -6,7 +6,7 @@ void noob::physics_body::init(const noob::mat4& transform, const noob::physics_s
 	btTransform bt_trans;
 	bt_trans.setFromOpenGLMatrix(&transform.m[0]);
 	btDefaultMotionState* motion_state = new btDefaultMotionState(bt_trans);
-	btCollisionShape* raw_shape = shape.get_shape();
+	btCollisionShape* raw_shape = shape.get_raw_ptr();
 	btVector3 local_inertia;
 	raw_shape->calculateLocalInertia(mass, local_inertia);
 	btRigidBody::btRigidBodyConstructionInfo construction_info(mass, motion_state, raw_shape, local_inertia);
@@ -18,6 +18,7 @@ void noob::physics_body::set_damping(float linear_damping, float angular_damping
 {
 	body->setDamping(linear_damping, angular_damping);
 }
+
 
 void noob::physics_body::set_sleeping_thresholds(float linear, float angular)
 {

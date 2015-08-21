@@ -1,0 +1,294 @@
+#include "Stage.hpp"
+/*
+   noob::stage::stage() 
+   {
+
+   }
+   */
+bool noob::stage::init()
+{
+	lifetime = entity_world.register_component<float>("lifetime");
+	transform = entity_world.register_component<noob::mat4>("transform");
+	body = entity_world.register_component<noob::physics_body>("body");
+	shape = entity_world.register_component<noob::physics_shape>("shape");
+	model = entity_world.register_component<std::weak_ptr<noob::model>>("model");
+	shader = entity_world.register_component<std::weak_ptr<noob::prepared_shaders::info>>("shader-uniforms");
+	anim_skel = entity_world.register_component<std::weak_ptr<noob::skeletal_anim>>("skel-anim");
+	anim_name = entity_world.register_component<std::string>("anim-name");
+	anim_time = entity_world.register_component<std::string>("anim-time");
+	actor_name = entity_world.register_component<std::string>("actor-name");
+
+	invalid_actor = entity_world.new_entity();
+	entity_world.set(invalid_actor, actor_name, std::string("INVALID"));
+	paused = false;
+
+	//triplanar_render.init();
+	//basic_render.init();
+	world.init();
+	shaders.init();
+
+	add_model("unit-sphere", noob::basic_mesh::sphere(0.5));
+	add_model("unit-cube", noob::basic_mesh::cube(1.0, 1.0, 1.0));
+	add_model("unit-cylinder", noob::basic_mesh::cylinder(1.0, 1.0));
+	add_model("unit-cone", noob::basic_mesh::cone(1.0, 1.0));
+
+	unit_sphere = get_model("unit-sphere");
+	unit_cube = get_model("unit-cube");
+	unit_cylinder = get_model("unit-cylinder");
+	unit_cone = get_model("unit-cone");
+
+	add_skeleton("human", "seymour.skel.ozz");
+
+	logger::log("[Stage] init complete.");
+	return true;
+}
+
+
+void noob::stage::update(double dt)
+{
+	if (!paused)
+	{
+		world.step(dt);
+	}
+
+	entity_world.for_each<float>(lifetime, [dt](es::storage::iterator it, float& f)
+			{
+			f -= static_cast<float>(dt);
+			return true;
+			});
+}
+
+
+void noob::stage::draw()
+{
+	entity_world.for_each<noob::physics_body, std::weak_ptr<noob::prepared_shaders::info>, std::weak_ptr<noob::model>>(body, shader, model, [this](es::storage::iterator, noob::physics_body& bod, std::weak_ptr<noob::prepared_shaders::info>& u, std::weak_ptr<noob::model>& d)
+			{
+			std::shared_ptr<noob::model> model_strong;
+			std::shared_ptr<noob::prepared_shaders::info> uniforms_strong;
+
+			if (!(model_strong = d.lock()))
+			{
+			logger::log("[Stage] attempting to draw with a null model pointer!");
+			return true;
+
+			}
+
+			if(!(uniforms_strong = u.lock()))
+			{
+			logger::log("[Stage] Attempting to draw with null uniforms pointer!");
+			return true;
+			}
+
+			this->shaders.draw(model_strong.get(), *uniforms_strong, bod.get_transform());
+			return true;
+			});
+// TODO: Get rid of second loop. Probably via boost::variant
+	entity_world.for_each<noob::mat4, std::weak_ptr<noob::prepared_shaders::info>, std::weak_ptr<noob::model>>(transform, shader, model, [this](es::storage::iterator, noob::mat4& m, std::weak_ptr<noob::prepared_shaders::info>& u, std::weak_ptr<noob::model>& d)
+			{
+			std::shared_ptr<noob::model> model_strong;
+			std::shared_ptr<noob::prepared_shaders::info> uniforms_strong;
+
+			if (!(model_strong = d.lock()))
+			{
+			logger::log("[Stage] attempting to draw with a null model pointer!");
+			return true;
+
+			}
+
+			if(!(uniforms_strong = u.lock()))
+			{
+			logger::log("[Stage] Attempting to draw with null uniforms pointer!");
+			return true;
+			}
+
+			this->shaders.draw(model_strong.get(), *uniforms_strong, m);
+			return true;
+			});
+
+
+	/*
+	   if (auto d = unit_sphere.lock())
+	   {
+	   noob::triplanar_renderer::uniform_info u;
+	   u.colours[0] = noob::vec4(1.0, 1.0, 1.0, 1.0);
+	   u.colours[1] = noob::vec4(0.8, 0.8, 0.8, 1.0);
+	   u.colours[2] = noob::vec4(0.4, 0.4, 0.4, 1.0);
+	   u.colours[3] = noob::vec4(0.0, 0.0, 0.0, 1.0);
+	   u.mapping_blends = noob::vec3(1.0, 0.5, 0.8);
+	   u.scales = noob::vec3(1.0, 1.0, 1.0);
+	   u.colour_positions = noob::vec2(0.2, 0.7);
+
+	   shaders.draw(d.get(), u, noob::identity_mat4());//, u);
+	   }
+	   else
+	   {
+	   logger::log("[Stage] trying to draw from bad pointer.");
+	   }
+	   */
+	// TODO: Use frustum + physics world collisions to determine which items are visible, and then draw them.
+}
+
+
+es::entity noob::stage::get_actor(const std::string& name) const 
+{
+	return invalid_actor;
+}
+
+
+const es::entity noob::stage::get_invalid() const
+{
+	return invalid_actor;
+}
+
+
+bool noob::stage::actor_has_component(es::entity a_id, es::storage::component_id c_id) const
+{
+	return false;
+}
+
+
+float noob::stage::get_lifetime(es::entity id) const
+{
+	return entity_world.get<float>(id, lifetime);
+}
+
+
+noob::mat4 noob::stage::get_transform(es::entity id) const
+{
+	return entity_world.get<noob::mat4>(id, transform);
+}
+
+
+noob::physics_body noob::stage::get_body(es::entity id) const
+{
+	return entity_world.get<noob::physics_body>(id, body);
+}
+
+
+noob::physics_shape noob::stage::get_shape(es::entity id) const
+{
+	return entity_world.get<noob::physics_shape>(id, shape);
+}
+
+
+std::weak_ptr<noob::model> noob::stage::get_model(es::entity id) const
+{
+	return entity_world.get<std::weak_ptr<noob::model>>(id, model);
+}
+
+
+std::weak_ptr<noob::prepared_shaders::info> noob::stage::get_shader(es::entity id) const
+{
+	return entity_world.get<std::weak_ptr<noob::prepared_shaders::info>>(id, shader);
+}
+
+
+std::weak_ptr<noob::skeletal_anim> noob::stage::get_skeleton(es::entity id) const
+{
+	return entity_world.get<std::weak_ptr<noob::skeletal_anim>>(id, anim_skel);
+}
+
+
+void noob::stage::set_lifetime(es::entity id, float t)
+{
+	entity_world.set<float>(id, lifetime, t);
+}
+
+
+void noob::stage::set_transform(es::entity id, const noob::mat4& m)
+{
+	entity_world.set<noob::mat4>(id, transform, m);
+}
+
+
+void noob::stage::set_body(es::entity id, const noob::physics_body& b)
+{
+	entity_world.set<noob::physics_body>(id, body, b);
+}
+
+
+void noob::stage::set_shape(es::entity id, const noob::physics_shape& s)
+{
+	entity_world.set<noob::physics_shape>(id, shape, s);
+}
+
+
+void noob::stage::set_model(es::entity id, const std::weak_ptr<noob::model>& m)
+{
+	entity_world.set<std::weak_ptr<noob::model>>(id, model, m);
+}
+
+
+void noob::stage::set_shader(es::entity id, const std::weak_ptr<noob::prepared_shaders::info>& i)
+{
+	entity_world.set<std::weak_ptr<noob::prepared_shaders::info>>(id, shader, i);
+}
+
+
+void noob::stage::set_skeleton(es::entity id, const std::weak_ptr<noob::skeletal_anim>& a)
+{
+	entity_world.set<std::weak_ptr<noob::skeletal_anim>>(id, anim_skel, a);
+}
+
+
+void noob::stage::add_model(const std::string& name, const std::string& filename)
+{
+	auto search = models.find(name);
+	if (search == models.end())
+	{
+		logger::log(fmt::format("Adding model: {0}", name));
+		models.insert(std::make_pair(name, std::make_shared<noob::model>(filename)));
+	}
+}
+
+
+void noob::stage::add_model(const std::string& name, const noob::basic_mesh& m)
+{
+	auto search = models.find(name);
+	if (search == models.end())
+	{
+		logger::log(fmt::format("Adding model: {0}", name));
+		models.insert(std::make_pair(name, std::make_shared<noob::model>(m)));
+	}
+}
+
+
+std::weak_ptr<noob::model> noob::stage::get_model(const std::string& name) const
+{
+	auto search = models.find(name);
+
+	if (search == models.end())
+	{
+		logger::log(fmt::format("[Stage] Cannot find requested model: {0}", name));
+		// TODO: Verify if this is proper form
+		return {};
+		//logger::log(fmt::format("[Stage] asking for invalid drawable \"{0}\", returning unit sphere instead.", name));
+		//return unit_sphere;
+	}
+
+	return search->second;
+}
+
+
+void noob::stage::add_skeleton(const std::string& name, const std::string& filename)
+{
+	auto search = skeletons.find(name);
+	if (search == skeletons.end())
+	{
+		auto results = skeletons.insert(std::make_pair(name, std::make_unique<noob::skeletal_anim>()));
+		(*(results.first)).second->init(filename);
+	}
+}
+
+
+std::weak_ptr<noob::skeletal_anim> noob::stage::get_skeleton(const std::string& name) const
+{
+	auto search = skeletons.find(name);
+	if (search == skeletons.end())
+	{
+		// TODO: Verify if this form is proper
+		return {};
+	}
+
+	return search->second;//.get();
+}

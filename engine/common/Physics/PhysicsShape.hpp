@@ -36,9 +36,10 @@ namespace noob
 		
 			void set_static_plane(const noob::vec3& normal, float constant);
 
-			btCollisionShape* get_shape() const;
-
 			noob::physics_shape::shape_type get_type() const;
+
+			btCollisionShape* get_raw_ptr() const;
+
 
 
 		protected:

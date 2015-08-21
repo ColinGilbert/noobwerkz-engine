@@ -19,8 +19,6 @@ namespace noob
 	class model
 	{
 		public:
-
-
 			~model();
 			
 			template <class Archive>
@@ -89,7 +87,6 @@ namespace noob
 		protected:
 			bool ready;
 			std::vector<noob::model::mesh> meshes;
-
 	};
 
 }

@@ -43,7 +43,6 @@
 #include "NoobUtils.hpp"
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
-#include "Drawable3D.hpp"
 #include "VoxelWorld.hpp"
 #include "GUI.hpp"
 #include "Mesh.hpp"

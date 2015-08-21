@@ -19,22 +19,22 @@ noob::skeletal_anim::~skeletal_anim()
 }
 
 
-
-
 void noob::skeletal_anim::init(const std::string& filename)
 {
 	ozz::io::File file(filename.c_str(), "rb");
 	if (!file.opened())
 	{
 		logger::log(fmt::format("[AnimatedModel] - load_skeleton({0}) fail. Cannot open file.", filename));
-		return false;
+		valid = false;
+		return;
 	}
 
 	ozz::io::IArchive archive(&file);
 	if (!archive.TestTag<ozz::animation::Skeleton>())
 	{
 		logger::log(fmt::format("[AnimatedModel] - load_skeleton({0}) fail. Archive corrupt.", filename));
-		return false;
+		valid = false;
+		return;
 	}
 
 	archive >> skeleton;
@@ -42,8 +42,7 @@ void noob::skeletal_anim::init(const std::string& filename)
 	
 	logger::log(fmt::format("[AnimatedModel] - load_skeleton({0}) success!", filename));
 	
-	// valid = true;
-	return true;
+	valid = true;
 }
 
 
@@ -69,8 +68,6 @@ bool noob::skeletal_anim::load_animation(const std::string& filename, const std:
 
 	return true;
 }
-
-
 
 
 void noob::skeletal_anim::optimize(float translation_tolerance, float rotation_tolerance, float scale_tolerance, const std::string& name)

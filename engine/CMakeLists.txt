@@ -152,8 +152,6 @@ list(APPEND common_src
 	common/Logger.cpp
 	common/Application.cpp
 	common/MathFuncs.cpp
-	common/Drawable2D.cpp
-	common/Drawable3D.cpp
 	common/NoobUtils.cpp
 	common/EditorUtils.cpp
 	common/VoxelWorld.cpp
@@ -163,7 +161,6 @@ list(APPEND common_src
 	common/Physics/PhysicsShape.cpp
 	common/Physics/PhysicsWorld.cpp
 	common/Physics/CharacterController.cpp
-	common/Skeleton.cpp
 	common/ModelLoader.cpp
 	common/Model.cpp
 	common/GUI.cpp

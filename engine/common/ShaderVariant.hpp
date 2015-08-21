@@ -4,7 +4,7 @@
 #include "MathFuncs.hpp"
 #include "TriplanarGradientMap.hpp"
 #include "BasicRenderer.hpp"
-#include "Drawable3D.hpp"
+#include "Model.hpp"
 
 #include <boost/variant/variant.hpp>
 #include "inline_variant.hpp"
@@ -40,7 +40,5 @@ namespace noob
 		protected:
 			noob::basic_renderer basic;
 			noob::triplanar_renderer triplanar;
-
-
 	};
 }
