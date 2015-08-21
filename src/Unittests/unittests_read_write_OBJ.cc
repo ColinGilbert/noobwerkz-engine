@@ -1,6 +1,7 @@
 
 #include <gtest/gtest.h>
 #include <Unittests/unittests_common.hh>
+#include <cstdio>
 
 
 namespace {
@@ -339,6 +340,62 @@ TEST_F(OpenMeshReadWriteOBJ, LoadSimpleOBJWithVertexColorsAsVCLines) {
     EXPECT_EQ(255, mesh_.color(mesh_.vertex_handle(7))[2] ) << "Wrong vertex color at vertex 7 component 2";
 
     mesh_.release_vertex_colors();
+
+}
+
+/*
+ * Load, save and load a simple obj
+ */
+TEST_F(OpenMeshReadWriteOBJ, ReadWriteReadSimpleOBJ) {
+
+  mesh_.clear();
+  mesh_.request_vertex_normals();
+
+  OpenMesh::IO::Options options;
+  options += OpenMesh::IO::Options::VertexNormal;
+  bool ok = OpenMesh::IO::read_mesh(mesh_, "cube-minimal.obj", options);
+
+  EXPECT_TRUE(ok) << "Unable to load cube-minimal.obj";
+
+  options.clear();
+  options += OpenMesh::IO::Options::VertexNormal;
+  const char* filename = "cube-minimal_openmeshOutputTestfile.obj";
+  ok = OpenMesh::IO::write_mesh(mesh_, filename, options);
+
+  mesh_.release_vertex_normals();
+  ASSERT_TRUE(ok) << "Unable to write obj mesh";
+
+  Mesh mesh2;
+  mesh2.request_vertex_normals();
+
+  options.clear();
+
+  options += OpenMesh::IO::Options::VertexNormal;
+  ok = OpenMesh::IO::read_mesh(mesh2, filename, options);
+  remove(filename);
+  ASSERT_TRUE(ok) << "Unable to read written mesh";
+
+  EXPECT_EQ(8u  , mesh2.n_vertices()) << "The number of loaded vertices is not correct!";
+  EXPECT_EQ(18u , mesh2.n_edges()) << "The number of loaded edges is not correct!";
+  EXPECT_EQ(12u , mesh2.n_faces()) << "The number of loaded faces is not correct!";
+
+  ///////////////////////////////////////////////
+  //check vertex normals
+  EXPECT_EQ(0,   mesh2.normal(mesh2.vertex_handle(0))[0] ) << "Wrong vertex normal at vertex 0 component 0";
+  EXPECT_EQ(-1,   mesh2.normal(mesh2.vertex_handle(0))[1] ) << "Wrong vertex normal at vertex 0 component 1";
+  EXPECT_EQ(0,   mesh2.normal(mesh2.vertex_handle(0))[2] ) << "Wrong vertex normal at vertex 0 component 2";
+
+  EXPECT_EQ(0,   mesh2.normal(mesh2.vertex_handle(3))[0] ) << "Wrong vertex normal at vertex 3 component 0";
+  EXPECT_EQ(0, mesh2.normal(mesh2.vertex_handle(3))[1] ) << "Wrong vertex normal at vertex 3 component 1";
+  EXPECT_EQ(1, mesh2.normal(mesh2.vertex_handle(3))[2] ) << "Wrong vertex normal at vertex 3 component 2";
+
+  EXPECT_EQ(0, mesh2.normal(mesh2.vertex_handle(4))[0] ) << "Wrong vertex normal at vertex 4 component 0";
+  EXPECT_EQ(-1,   mesh2.normal(mesh2.vertex_handle(4))[1] ) << "Wrong vertex normal at vertex 4 component 1";
+  EXPECT_EQ(0,   mesh2.normal(mesh2.vertex_handle(4))[2] ) << "Wrong vertex normal at vertex 4 component 2";
+
+  EXPECT_EQ(0, mesh2.normal(mesh2.vertex_handle(7))[0] ) << "Wrong vertex normal at vertex 7 component 0";
+  EXPECT_EQ(0, mesh2.normal(mesh2.vertex_handle(7))[1] ) << "Wrong vertex normal at vertex 7 component 1";
+  EXPECT_EQ(1, mesh2.normal(mesh2.vertex_handle(7))[2] ) << "Wrong vertex normal at vertex 7 component 2";
 
 }
 }
