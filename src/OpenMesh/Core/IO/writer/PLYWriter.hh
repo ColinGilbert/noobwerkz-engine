@@ -63,7 +63,7 @@
 
 #include <stdio.h>
 #include <string>
-#include <fstream>
+#include <ostream>
 #include <vector>
 
 #include <OpenMesh/Core/System/config.h>

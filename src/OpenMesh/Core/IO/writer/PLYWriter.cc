@@ -49,7 +49,7 @@
 
 //== INCLUDES =================================================================
 
-
+#include <fstream>
 #include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/System/omstream.hh>
 #include <OpenMesh/Core/Utils/Endian.hh>
@@ -103,6 +103,20 @@ bool
 _PLYWriter_::
 write(const std::string& _filename, BaseExporter& _be, Options _opt, std::streamsize _precision) const
 {
+
+  // open file
+  std::ofstream out(_filename.c_str(), (_opt.check(Options::Binary) ? std::ios_base::binary | std::ios_base::out
+                                                         : std::ios_base::out) );
+  return write(out, _be, _opt, _precision);
+}
+
+//-----------------------------------------------------------------------------
+
+
+bool
+_PLYWriter_::
+write(std::ostream& _os, BaseExporter& _be, Options _opt, std::streamsize _precision) const
+{
   // check exporter features
   if ( !check( _be, _opt ) )
     return false;
@@ -124,48 +138,6 @@ write(const std::string& _filename, BaseExporter& _be, Options _opt, std::stream
     _opt.unset(Options::FaceColor);
     omerr() << "[PLYWriter] : Warning: Face colors are not supported and thus not exported! " << std::endl;
   }
-
-  options_ = _opt;
-
-  // open file
-  std::fstream out(_filename.c_str(), (_opt.check(Options::Binary) ? std::ios_base::binary | std::ios_base::out
-                                                         : std::ios_base::out) );
-  if (!out)
-  {
-    omerr() << "[PLYWriter] : cannot open file "
-    << _filename
-    << std::endl;
-    return false;
-  }
-
-  if (!_opt.check(Options::Binary))
-    out.precision(_precision);
-
-  // write to file
-  bool result = (_opt.check(Options::Binary) ?
-     write_binary(out, _be, _opt) :
-     write_ascii(out, _be, _opt));
-
-  // return result
-  out.close();
-  return result;
-}
-
-//-----------------------------------------------------------------------------
-
-
-bool
-_PLYWriter_::
-write(std::ostream& _os, BaseExporter& _be, Options _opt, std::streamsize _precision) const
-{
-  // check exporter features
-  if ( !check( _be, _opt ) )
-    return false;
-
-
-  // check writer features
-  if ( _opt.check(Options::FaceNormal) || _opt.check(Options::FaceColor) ) // not supported yet
-    return false;
 
   options_ = _opt;
 
