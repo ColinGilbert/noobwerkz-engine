@@ -63,7 +63,7 @@
 
 #include <stdio.h>
 #include <string>
-#include <fstream>
+#include <ostream>
 
 #include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/Utils/SingletonT.hh>
