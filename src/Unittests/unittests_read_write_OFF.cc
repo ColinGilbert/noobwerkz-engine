@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <Unittests/unittests_common.hh>
+#include <cstdio>
 
 
 namespace {
@@ -80,6 +81,7 @@ TEST_F(OpenMeshReadWriteOFF, WriteAndReadVertexColorsToAndFromOFFFile) {
     OpenMesh::IO::Options opt(OpenMesh::IO::Options::VertexColor);
     OpenMesh::IO::write_mesh(mesh_, "temp.off", opt);
     OpenMesh::IO::read_mesh(mesh_, "temp.off", opt);
+    remove("temp.off");
 
     // check if vertices still have the same color
     count = 0;
