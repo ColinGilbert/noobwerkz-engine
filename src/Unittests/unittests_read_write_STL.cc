@@ -162,7 +162,7 @@ TEST_F(OpenMeshReadWriteSTL, ReadWriteSimpleSTLBinaryFile) {
 }
 
 /*
- * Just load a simple mesh file in stlb format and count whether
+ * Just load a simple mesh file in stlb format rewrite and load it again and count whether
  * the right number of entities has been loaded. Also check facet normals.
  */
 TEST_F(OpenMeshReadWriteSTL, ReadWriteSimpleSTLBinaryFileWithNormals) {
@@ -189,6 +189,51 @@ TEST_F(OpenMeshReadWriteSTL, ReadWriteSimpleSTLBinaryFileWithNormals) {
     EXPECT_TRUE(ok);
 
     EXPECT_TRUE(opt.is_binary());
+    EXPECT_TRUE(opt.face_has_normal());
+    EXPECT_FALSE(opt.vertex_has_normal());
+
+    EXPECT_NEAR(-0.038545f, mesh_.normal(mesh_.face_handle(0))[0], 0.0001 ) << "Wrong face normal at face 0 component 0";
+    EXPECT_NEAR(-0.004330f, mesh_.normal(mesh_.face_handle(0))[1], 0.0001 ) << "Wrong face normal at face 0 component 1";
+    EXPECT_NEAR(0.999247f, mesh_.normal(mesh_.face_handle(0))[2], 0.0001 ) << "Wrong face normal at face 0 component 2";
+
+    EXPECT_EQ(7526u  , mesh_.n_vertices()) << "The number of loaded vertices is not correct!";
+    EXPECT_EQ(22572u , mesh_.n_edges()) << "The number of loaded edges is not correct!";
+    EXPECT_EQ(15048u , mesh_.n_faces()) << "The number of loaded faces is not correct!";
+
+    mesh_.release_face_normals();
+    remove(filename);
+}
+
+/*
+ * Just load a simple mesh file in stlb format rewrite and load it again and count whether
+ * the right number of entities has been loaded. Also check facet normals.
+ */
+TEST_F(OpenMeshReadWriteSTL, ReadWriteSimpleSTLAsciiFileWithNormals) {
+
+    mesh_.clear();
+    mesh_.request_face_normals();
+
+    OpenMesh::IO::Options opt;
+    opt += OpenMesh::IO::Options::FaceNormal;
+
+    bool ok = OpenMesh::IO::read_mesh(mesh_, "cube1Binary.stl", opt);
+
+    EXPECT_TRUE(ok);
+    opt.clear();
+    opt += OpenMesh::IO::Options::FaceNormal;
+    const char* filename = "cube1Normal_openmeshWriteTestFile.stl";
+
+    ok = OpenMesh::IO::write_mesh(mesh_, filename, opt);
+
+    EXPECT_TRUE(ok);
+
+    opt.clear();
+    opt += OpenMesh::IO::Options::FaceNormal;
+    ok = OpenMesh::IO::read_mesh(mesh_, filename, opt);
+
+    EXPECT_TRUE(ok);
+
+    EXPECT_FALSE(opt.is_binary());
     EXPECT_TRUE(opt.face_has_normal());
     EXPECT_FALSE(opt.vertex_has_normal());
 
