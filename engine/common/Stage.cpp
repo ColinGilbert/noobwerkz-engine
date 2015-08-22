@@ -61,6 +61,12 @@ void noob::stage::draw()
 }
 
 
+void make_actor(const std::string& name, const std::weak_ptr<noob::model>&, const std::weak_ptr<noob::skeletal_anim>&, const noob::prepared_shaders::info&, const noob::mat4& position = noob::identity_mat4(), const noob::vec3& dims = noob::vec3(0.25, 1.0, 0.25), float mass = 1.0)
+{
+
+}
+
+
 void noob::stage::add_model(const std::string& name, const std::string& filename)
 {
 	auto search = models.find(name);
@@ -83,6 +89,32 @@ void noob::stage::add_model(const std::string& name, const noob::basic_mesh& m)
 }
 
 
+void noob::stage::add_skeleton(const std::string& name, const std::string& filename)
+{
+	auto search = skeletons.find(name);
+	if (search == skeletons.end())
+	{
+		auto results = skeletons.insert(std::make_pair(name, std::make_unique<noob::skeletal_anim>()));
+		(*(results.first)).second->init(filename);
+	}
+}
+
+
+std::weak_ptr<noob::actor> noob::stage::get_actor(const std::string& name) const
+{
+	auto search = actors.find(name);
+
+	if (search == actors.end())
+	{
+		logger::log(fmt::format("[Stage] Cannot find requested actor: {0}", name));
+		// TODO: Verify if this is proper form
+		return {};
+	}
+
+	return search->second;
+}
+
+
 std::weak_ptr<noob::model> noob::stage::get_model(const std::string& name) const
 {
 	auto search = models.find(name);
@@ -97,17 +129,6 @@ std::weak_ptr<noob::model> noob::stage::get_model(const std::string& name) const
 	}
 
 	return search->second;
-}
-
-
-void noob::stage::add_skeleton(const std::string& name, const std::string& filename)
-{
-	auto search = skeletons.find(name);
-	if (search == skeletons.end())
-	{
-		auto results = skeletons.insert(std::make_pair(name, std::make_unique<noob::skeletal_anim>()));
-		(*(results.first)).second->init(filename);
-	}
 }
 
 

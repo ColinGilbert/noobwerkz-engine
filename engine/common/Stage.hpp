@@ -33,13 +33,15 @@ namespace noob
 			bool init();
 			void update(double dt);
 			void draw();
-			void make_actor(const std::weak_ptr<noob::model>&, const std::weak_ptr<noob::skeletal_anim>&, const noob::prepared_shaders::info&, const noob::mat4& position, const noob::vec3& dims, float mass);
+			// Uses std::weak_ptr instead of std::string params in order to speed up creation of large numbers of objects. Might use std::shared_ptr instead.
+			void make_actor(const std::string& name, const std::weak_ptr<noob::model>&, const std::weak_ptr<noob::skeletal_anim>&, const noob::prepared_shaders::info&, const noob::mat4& position = noob::identity_mat4(), const noob::vec3& dims = noob::vec3(0.25, 1.0, 0.25), float mass = 1.0);
 
 			// Loads a serialized model (from cereal binary)
 			void add_model(const std::string& name, const std::string& filename);
 			void add_model(const std::string& name, const noob::basic_mesh&);
 			void add_skeleton(const std::string& name, const std::string& filename);
 
+			std::weak_ptr<noob::actor> get_actor(const std::string& name) const;
 			std::weak_ptr<noob::model> get_model(const std::string& name) const;
 			std::weak_ptr<noob::skeletal_anim> get_skeleton(const std::string& name) const;
 
@@ -55,7 +57,7 @@ namespace noob
 			// For fast access to basic shapes. Test to see difference.
 			std::shared_ptr<noob::model> unit_cube, unit_sphere, unit_cylinder, unit_cone;
 
-			std::unordered_map<std::string, noob::actor> actors;
+			std::unordered_map<std::string, std::shared_ptr<noob::actor>> actors;
 			std::unordered_map<std::string, std::shared_ptr<noob::prepared_shaders::info>> shader_uniforms;
 			std::unordered_map<std::string, std::shared_ptr<noob::model>> models;
 			std::unordered_map<std::string, std::shared_ptr<noob::skeletal_anim>> skeletons;
