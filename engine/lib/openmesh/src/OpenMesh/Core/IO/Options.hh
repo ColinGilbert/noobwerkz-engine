@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 07:07:46 -0600 (Tue, 28 Apr 2015) $                   *
+ *   $Revision: 1318 $                                                         *
+ *   $Date: 2015-07-26 22:22:28 +0200 (So, 26 Jul 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -105,7 +105,7 @@ public:
       Binary         = 0x0001, ///< Set binary mode for r/w
       MSB            = 0x0002, ///< Assume big endian byte ordering
       LSB            = 0x0004, ///< Assume little endian byte ordering
-      Swap           = 0x0006, ///< Swap byte order in binary mode
+      Swap           = 0x0008, ///< Swap byte order in binary mode
       VertexNormal   = 0x0010, ///< Has (r) / store (w) vertex normals
       VertexColor    = 0x0020, ///< Has (r) / store (w) vertex colors
       VertexTexCoord = 0x0040, ///< Has (r) / store (w) texture coordinates

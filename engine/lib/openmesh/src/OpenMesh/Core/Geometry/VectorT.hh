@@ -42,8 +42,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 07:07:46 -0600 (Tue, 28 Apr 2015) $                   *
+ *   $Revision: 1291 $                                                         *
+ *   $Date: 2015-06-18 13:53:05 +0200 (Do, 18 Jun 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -69,7 +69,7 @@
 
 
 #include <OpenMesh/Core/System/config.h>
-#include <iostream>
+#include <ostream>
 #include <cmath>
 #include <cassert>
 #include <cstring>
@@ -250,9 +250,9 @@ VectorT<double,3>::operator%(const VectorT<double,3>& _rhs) const
 
 /// \relates OpenMesh::VectorT
 /// scalar * vector
-template<typename Scalar,int N>
-inline VectorT<Scalar,N> operator*(Scalar _s, const VectorT<Scalar,N>& _v) {
-  return VectorT<Scalar,N>(_v) *= _s;
+template<typename Scalar1, typename Scalar2,int N>
+inline VectorT<Scalar1,N> operator*(Scalar2 _s, const VectorT<Scalar1,N> _v) {
+  return _v*_s;
 }
 
 

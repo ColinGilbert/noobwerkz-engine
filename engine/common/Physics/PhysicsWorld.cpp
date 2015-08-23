@@ -53,17 +53,94 @@ void noob::physics_world::add(const noob::physics_constraint_generic& constraint
 }
 
 
-void add(const noob::physics_shape& shape, const std::string& name)
-{
-	
-}
-
-
-noob::physics_shape get_shape(const std::string& name)
+std::shared_ptr<noob::physics_shape> noob::physics_world::sphere(float radius)
 {
 
 }
 
+std::shared_ptr<noob::physics_shape> noob::physics_world::box(float width, float height, float depth)
+{
+
+}
+
+
+std::shared_ptr<noob::physics_shape> noob::physics_world::cylinder(float radius, float height)
+{
+
+}
+
+
+std::shared_ptr<noob::physics_shape> noob::physics_world::capsule(float radius, float height)
+{
+
+}
+
+
+std::shared_ptr<noob::physics_shape> noob::physics_world::cone(float radius, float height)
+{
+
+}
+
+
+std::shared_ptr<noob::physics_shape> noob::physics_world::set_convex_hull(const std::vector<std::array<float, 3>>& points, const std::string& name)
+{
+
+}
+
+
+std::shared_ptr<noob::physics_shape> noob::physics_world::set_multisphere(const std::vector<std::array<float, 4>>& rad_pos, const std::string& name)
+{
+
+}
+
+
+std::shared_ptr<noob::physics_shape> noob::physics_world::set_compound_shape(const std::vector<const std::shared_ptr<noob::physics_shape>&>& shapes, const std::string& name)
+{
+
+}
+
+
+std::shared_ptr<noob::physics_shape> noob::physics_world::set_trimesh(const std::tuple<std::vector<std::array<float, 3>>, std::vector<uint16_t>>& points, const std::string& name)
+{
+
+}
+
+
+std::weak_ptr<noob::physics_shape> noob::physics_world::get_convex_hull(const std::string& name)
+{
+
+}
+
+
+std::weak_ptr<noob::physics_shape> noob::physics_world::get_multisphere(const std::string& name)
+{
+
+}
+
+
+std::weak_ptr<noob::physics_shape> noob::physics_world::get_compound_shape(const std::string& name)
+{
+
+}
+
+
+std::weak_ptr<noob::physics_shape> noob::physics_world::get_trimesh(const std::string& name)
+{
+
+}
+
+/*
+void noob::physics_world::set_shape_name(const noob::physics_shape& shape, const std::string& name)
+{
+
+}
+
+
+noob::physics_shape noob::physics_world::get_shape(const std::string& name)
+{
+
+}
+*/
 
 void noob::physics_world::remove(const noob::physics_body& body)
 {

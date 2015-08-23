@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 07:07:46 -0600 (Tue, 28 Apr 2015) $                   *
+ *   $Revision: 1278 $                                                         *
+ *   $Date: 2015-06-09 10:58:41 +0200 (Di, 09 Jun 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -64,8 +64,6 @@
 #include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/Utils/vector_traits.hh>
 #include <OpenMesh/Core/Utils/GenProg.hh>
-#include <iostream>
-#include <algorithm>
 #include <OpenMesh/Core/Geometry/VectorT.hh>
 
 
@@ -87,7 +85,7 @@ namespace OpenMesh {
 template <typename src_t, typename dst_t, int n>
 inline void vector_cast( const src_t &_src, dst_t &_dst, GenProg::Int2Type<n> )
 {
-  GenProg::AssertCompile< (vector_traits<dst_t>::size_ <= vector_traits<src_t>::size_) > vectorCastingToHigherDimension;
+  assert_compile(vector_traits<dst_t>::size_ <= vector_traits<src_t>::size_)
   vector_cast(_src,_dst, GenProg::Int2Type<n-1>());
   _dst[n-1] = static_cast<typename vector_traits<dst_t>::value_type >(_src[n-1]);
 }
@@ -101,7 +99,7 @@ inline void vector_cast( const src_t &_src, dst_t &_dst, GenProg::Int2Type<0> )
 template <typename src_t, typename dst_t, int n>
 inline void vector_copy( const src_t &_src, dst_t &_dst, GenProg::Int2Type<n> )
 {
-  GenProg::AssertCompile< (vector_traits<dst_t>::size_ <= vector_traits<src_t>::size_) > vectorCopyToHigherDimension;
+  assert_compile(vector_traits<dst_t>::size_ <= vector_traits<src_t>::size_)
   vector_copy(_src,_dst, GenProg::Int2Type<n-1>());
   _dst[n-1] = _src[n-1];
 }

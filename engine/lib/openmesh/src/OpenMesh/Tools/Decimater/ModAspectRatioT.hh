@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *
- *   $Revision: 1258 $                                                        *
- *   $Date: 2015-04-28 07:07:46 -0600 (Tue, 28 Apr 2015) $                   *
+ *   $Revision: 1276 $                                                        *
+ *   $Date: 2015-06-08 13:44:11 +0200 (Mo, 08 Jun 2015) $                   *
  *                                                                           *
  \*===========================================================================*/
 
@@ -97,7 +97,7 @@ class ModAspectRatioT: public ModBaseT<MeshT> {
     ModAspectRatioT(MeshT& _mesh, float _min_aspect = 5.0, bool _is_binary =
         true) :
         Base(_mesh, _is_binary), mesh_(Base::mesh()), min_aspect_(
-            1.0 / _min_aspect) {
+            1.f / _min_aspect) {
       mesh_.add_property(aspect_);
     }
 
@@ -108,12 +108,12 @@ class ModAspectRatioT: public ModBaseT<MeshT> {
 
     /// get aspect ratio
     float aspect_ratio() const {
-      return 1.0 / min_aspect_;
+      return 1.f / min_aspect_;
     }
 
     /// set aspect ratio
     void set_aspect_ratio(float _f) {
-      min_aspect_ = 1.0 / _f;
+      min_aspect_ = 1.f / _f;
     }
 
     /// precompute face aspect ratio

@@ -8,7 +8,7 @@
 
 // TODO: Cleanup this dependency
 #include "Config.hpp"
-
+/*
 namespace noob
 {
 	class receiver 
@@ -62,3 +62,4 @@ namespace noob
 		}
 	};
 }
+*/

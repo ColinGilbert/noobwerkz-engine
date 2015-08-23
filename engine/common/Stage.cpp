@@ -36,34 +36,49 @@ void noob::stage::update(double dt)
 void noob::stage::draw()
 {
 	// TODO: Remove this test.
-	   //if (auto d = unit_sphere.lock())
-	   //{
-	   noob::triplanar_renderer::uniform_info u;
-	   u.colours[0] = noob::vec4(1.0, 1.0, 1.0, 1.0);
-	   u.colours[1] = noob::vec4(0.8, 0.8, 0.8, 1.0);
-	   u.colours[2] = noob::vec4(0.4, 0.4, 0.4, 1.0);
-	   u.colours[3] = noob::vec4(0.0, 0.0, 0.0, 1.0);
-	   u.mapping_blends = noob::vec3(1.0, 0.5, 0.8);
-	   u.scales = noob::vec3(1.0, 1.0, 1.0);
-	   u.colour_positions = noob::vec2(0.2, 0.7);
+	noob::triplanar_renderer::uniform_info u;
+	u.colours[0] = noob::vec4(1.0, 1.0, 1.0, 1.0);
+	u.colours[1] = noob::vec4(0.8, 0.8, 0.8, 1.0);
+	u.colours[2] = noob::vec4(0.4, 0.4, 0.4, 1.0);
+	u.colours[3] = noob::vec4(0.0, 0.0, 0.0, 1.0);
+	u.mapping_blends = noob::vec3(1.0, 0.5, 0.8);
+	u.scales = noob::vec3(1.0, 1.0, 1.0);
+	u.colour_positions = noob::vec2(0.2, 0.7);
 
-	   shaders.draw(unit_sphere.get(), u, noob::identity_mat4());//, u);
-	   /*
-	   }
-	   else
-	   {
-	   logger::log("[Stage] trying to draw from bad pointer.");
-	   }
-	   */
+	shaders.draw(unit_sphere.get(), u, noob::identity_mat4());//, u);
 
 	// TODO: Use frustum + physics world collisions to determine which items are visible, and then draw them.
-
 }
 
 
-void make_actor(const std::string& name, const std::weak_ptr<noob::model>&, const std::weak_ptr<noob::skeletal_anim>&, const noob::prepared_shaders::info&, const noob::mat4& position = noob::identity_mat4(), const noob::vec3& dims = noob::vec3(0.25, 1.0, 0.25), float mass = 1.0)
+std::shared_ptr<noob::actor> noob::stage::make_actor(const std::string& name, const std::shared_ptr<noob::model>& model, const std::shared_ptr<noob::skeletal_anim>& skel_anim, const std::shared_ptr<noob::prepared_shaders::info>& shader_uniform, const std::shared_ptr<noob::physics_shape>& shape, const noob::mat4& transform, float mass, float max_speed, float step_height)
 {
+	// TODO: Optimize
+	auto a = std::make_shared<noob::actor>();
+	a->set_drawable(model);
+	a->set_skeleton(skel_anim);
+	a->set_shading(shader_uniform);
+	//a->set_transform(position);
+	a->set_controller(shape, transform, mass, max_speed, step_height);
+	actors[name] = std::move(a);
 
+	return actors[name];
+	
+	/*
+	auto search = actors.find(name);
+
+	if (search == actors.end())
+	{
+		//auto aa = std::make_shared<noob::actor>();
+		auto a = actors.insert(std::make_pair(name, std::make_shared<noob::actor>()));
+		&(a.second)->set_drawable(model);
+		&(a.second)->set_skeleton(skel_anim);
+		&(a.second)->set_shader(shader_uniform);
+		//return a.second;
+	}
+
+	return {};
+	*/
 }
 
 
@@ -103,7 +118,6 @@ void noob::stage::add_skeleton(const std::string& name, const std::string& filen
 std::weak_ptr<noob::actor> noob::stage::get_actor(const std::string& name) const
 {
 	auto search = actors.find(name);
-
 	if (search == actors.end())
 	{
 		logger::log(fmt::format("[Stage] Cannot find requested actor: {0}", name));
@@ -113,6 +127,23 @@ std::weak_ptr<noob::actor> noob::stage::get_actor(const std::string& name) const
 
 	return search->second;
 }
+
+
+std::weak_ptr<noob::prepared_shaders::info> noob::stage::get_shader(const std::string& name) const
+{
+	auto search = shader_uniforms.find(name);
+
+	if (search == shader_uniforms.end())
+	{
+		logger::log(fmt::format("[Stage] Cannot find requested shader: {0}", name));
+		// TODO: Verify if this is proper form
+		return {};
+	}
+
+	return search->second;
+	
+}
+
 
 
 std::weak_ptr<noob::model> noob::stage::get_model(const std::string& name) const

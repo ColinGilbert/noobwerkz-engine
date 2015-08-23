@@ -54,9 +54,9 @@ TEST_F(OpenMeshReadWriteOBJ, LoadDegeneratedOBJ) {
 
     mesh_.clear();
 
-    bool ok = OpenMesh::IO::read_mesh(mesh_, "cube-minimal.obj");
+    bool ok = OpenMesh::IO::read_mesh(mesh_, "cube-minimal-degenerated.obj");
 
-    EXPECT_TRUE(ok) << "Unable to load cube-minimal.obj";
+    EXPECT_TRUE(ok) << "Unable to load cube-minimal-degenerated.obj";
 
     EXPECT_EQ(8u  , mesh_.n_vertices()) << "The number of loaded vertices is not correct!";
     EXPECT_EQ(18u , mesh_.n_edges()) << "The number of loaded edges is not correct!";

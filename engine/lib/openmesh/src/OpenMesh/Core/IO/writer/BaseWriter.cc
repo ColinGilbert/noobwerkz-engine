@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1260 $                                                         *
- *   $Date: 2015-05-06 08:08:32 -0600 (Wed, 06 May 2015) $                   *
+ *   $Revision: 1278 $                                                         *
+ *   $Date: 2015-06-09 10:58:41 +0200 (Di, 09 Jun 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -54,7 +54,6 @@
 #include <OpenMesh/Core/IO/writer/BaseWriter.hh>
 #include <algorithm>
 #include <string>
-#include <iterator>
 #if defined(OM_CC_MIPS)
 #  include <ctype.h>
 #else

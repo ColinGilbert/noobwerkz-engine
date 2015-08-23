@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 07:07:46 -0600 (Tue, 28 Apr 2015) $                   *
+ *   $Revision: 1278 $                                                         *
+ *   $Date: 2015-06-09 10:58:41 +0200 (Di, 09 Jun 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -60,6 +60,9 @@
 #endif
 
 #include <fstream>
+#include <ostream>
+#include <vector>
+
 // -------------------- OpenMesh
 #include <OpenMesh/Core/IO/OMFormat.hh>
 #include <OpenMesh/Core/System/omstream.hh>

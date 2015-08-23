@@ -4,7 +4,7 @@ project(NoobWerkz)
 #set(CMAKE_BUILD_TYPE "DEBUG")
 set(CMAKE_BUILD_TYPE "RELEASE")
 
-set(CMAKE_CXX_FLAGS "-std=c++1y -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DEIGEN_MPL2_ONLY -DCHAISCRIPT_NO_THREADS -Wall ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++1y -O2 -fno-strict-aliasing -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DOM_GARBAGE_NO_STATUS_WARNING -DEIGEN_MPL2_ONLY -DCHAISCRIPT_NO_THREADS -Wall ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-std=c99 -fno-strict-aliasing -DSQLITE_ENABLE_COLUMN_METADATA -DSTB_IMAGE_STATIC -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -Wall ${CMAKE_C_FLAGS}")
 
 find_package(Boost COMPONENTS system filesystem REQUIRED)
@@ -139,10 +139,10 @@ list(APPEND openmesh_src
 #	lib/SQLiteCpp/src/Transaction.cpp
 #	)
 
-include_directories(lib/es)
-list (APPEND es_src
-	lib/es/es/storage.cpp
-	)
+#include_directories(lib/es)
+#list (APPEND es_src
+#	lib/es/es/storage.cpp
+#	)
 
 include_directories(lib/variant)
 
@@ -182,7 +182,11 @@ list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 
 add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src} ${es_src})
 
-target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES}  freetype rt dl pthread assimp m OpenMeshCore OpenMeshToolsStatic emon BulletDynamics BulletCollision BulletSoftBody LinearMath spnav ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r ${Boost_LIBRARIES})
+target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES}
+	${OPENGL_LIBRARIES} freetype rt dl pthread assimp m emon
+	BulletDynamics BulletCollision OpenMeshCore OpenMeshToolsStatic BulletSoftBody LinearMath spnav
+	ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r
+	${Boost_LIBRARIES})
 
 project(LogServer)
 

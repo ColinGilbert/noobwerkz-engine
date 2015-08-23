@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 07:07:46 -0600 (Tue, 28 Apr 2015) $                   *
+ *   $Revision: 1283 $                                                         *
+ *   $Date: 2015-06-11 16:20:16 +0200 (Do, 11 Jun 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -71,7 +71,9 @@ using std::isspace;
 #include <string.h>
 #endif
 
-#include <set>
+#include <istream>
+#include <fstream>
+#include <vector>
 #include <algorithm>
 #include <functional>
 
@@ -106,25 +108,15 @@ void trimString( std::string& _string) {
 }
 
 //-----------------------------------------------------------------------------
-template<typename Handle>
-class HasSeen : public std::unary_function <Handle, bool>
-{
-public:
-  HasSeen () : seen_ () { }
-
-  bool operator ()(const Handle& i) const
-  {
-    return (!seen_.insert(i.idx()).second);
-  }
-
-private:
-  mutable std::set<int> seen_;
-};
 
 // remove duplicated indices from one face
 void remove_duplicated_vertices(BaseImporter::VHandles& _indices)
 {
-  _indices.erase(std::remove_if(_indices.begin(),_indices.end(),HasSeen<BaseImporter::VHandles::value_type>()),_indices.end());
+  BaseImporter::VHandles::iterator endIter = _indices.end();
+  for (BaseImporter::VHandles::iterator iter = _indices.begin(); iter != endIter; ++iter)
+    endIter = std::remove(iter+1, endIter, *(iter));
+
+  _indices.erase(endIter,_indices.end());
 }
 
 //-----------------------------------------------------------------------------
@@ -303,10 +295,10 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
   std::string keyWrd;
 
   float                     x, y, z, u, v;
-  int                       r, g, b;
+  float                     r, g, b;
   BaseImporter::VHandles    vhandles;
   std::vector<Vec3f>        normals;
-  std::vector<Vec3uc>       colors;
+  std::vector<Vec3f>        colors;
   std::vector<Vec2f>        texcoords;
   std::vector<Vec2f>        face_texcoords;
   std::vector<VertexHandle> vertexHandles;
@@ -403,7 +395,7 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
         {
           if (  userOptions.vertex_has_color() ) {
             fileOptions += Options::VertexColor;
-            colors.push_back(OpenMesh::Vec3uc((unsigned char)r,(unsigned char)g,(unsigned char)b));
+            colors.push_back(OpenMesh::Vec3f(r,g,b));
           }
         }
       }
@@ -439,7 +431,7 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
 
       if ( !stream.fail()   ){
         if ( userOptions.vertex_has_color() ) {
-          colors.push_back(OpenMesh::Vec3uc((unsigned char)r,(unsigned char)g,(unsigned char)b));
+          colors.push_back(OpenMesh::Vec3f(r,g,b));
           fileOptions += Options::VertexColor;
         }
       }

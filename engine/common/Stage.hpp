@@ -1,5 +1,8 @@
 #pragma once
 
+#include <stack>
+#include <string>
+#include <tuple>
 
 #include "Config.hpp"
 
@@ -13,13 +16,13 @@
 #include "BasicRenderer.hpp"
 #include "TransformHelper.hpp"
 
-#include <string>
-#include <tuple>
+
 /*
 #include <es/entity.hpp>
 #include <es/component.hpp>
 #include <es/storage.hpp>
 */
+
 #include "Actor.hpp"
 #include "PhysicsWorld.hpp"
 #include "SkeletalAnim.hpp"
@@ -30,11 +33,20 @@ namespace noob
 	class stage
 	{
 		public:
+		//	stage() : actor_counter(0) {}
+		/*	
+			struct actor_handle
+			{
+				actor_handle() : valid(false), id(0) {}
+				bool valid;
+				size_t id;
+			};
+		*/	
 			bool init();
 			void update(double dt);
 			void draw();
-			// Uses std::weak_ptr instead of std::string params in order to speed up creation of large numbers of objects. Might use std::shared_ptr instead.
-			void make_actor(const std::string& name, const std::weak_ptr<noob::model>&, const std::weak_ptr<noob::skeletal_anim>&, const noob::prepared_shaders::info&, const noob::mat4& position = noob::identity_mat4(), const noob::vec3& dims = noob::vec3(0.25, 1.0, 0.25), float mass = 1.0);
+			
+			std::shared_ptr<noob::actor> make_actor(const std::string& name, const std::shared_ptr<noob::model>&, const std::shared_ptr<noob::skeletal_anim>&, const std::shared_ptr<noob::prepared_shaders::info>&, const std::shared_ptr<noob::physics_shape>& shape, const noob::mat4& transform = noob::identity_mat4(), float mass = 1.0, float max_speed = 5.0, float step_height = 0.25);
 
 			// Loads a serialized model (from cereal binary)
 			void add_model(const std::string& name, const std::string& filename);
@@ -42,6 +54,7 @@ namespace noob
 			void add_skeleton(const std::string& name, const std::string& filename);
 
 			std::weak_ptr<noob::actor> get_actor(const std::string& name) const;
+			std::weak_ptr<noob::prepared_shaders::info> get_shader(const std::string& name) const;
 			std::weak_ptr<noob::model> get_model(const std::string& name) const;
 			std::weak_ptr<noob::skeletal_anim> get_skeleton(const std::string& name) const;
 

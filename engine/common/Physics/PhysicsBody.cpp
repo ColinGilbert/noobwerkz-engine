@@ -1,12 +1,13 @@
 #include "PhysicsBody.hpp"
 
-void noob::physics_body::init(const noob::mat4& transform, const noob::physics_shape& shape, float mass, float friction, float rolling_friction, float restitution)
+void noob::physics_body::init(const noob::mat4& transform, const std::shared_ptr<noob::physics_shape>& shape, float mass, float friction, float rolling_friction, float restitution)
 {
 	dirty = false;
 	btTransform bt_trans;
 	bt_trans.setFromOpenGLMatrix(&transform.m[0]);
 	btDefaultMotionState* motion_state = new btDefaultMotionState(bt_trans);
-	btCollisionShape* raw_shape = shape.get_raw_ptr();
+	shape_shared = shape;
+	btCollisionShape* raw_shape = shape_shared->get_raw_ptr();
 	btVector3 local_inertia;
 	raw_shape->calculateLocalInertia(mass, local_inertia);
 	btRigidBody::btRigidBodyConstructionInfo construction_info(mass, motion_state, raw_shape, local_inertia);

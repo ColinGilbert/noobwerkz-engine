@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1260 $                                                         *
- *   $Date: 2015-05-06 08:08:32 -0600 (Wed, 06 May 2015) $                   *
+ *   $Revision: 1278 $                                                         *
+ *   $Date: 2015-06-09 10:58:41 +0200 (Di, 09 Jun 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -62,10 +62,11 @@
 
 
 // STD C++
-#include <iostream>
+#include <iosfwd>
 #include <string>
 #include <cctype>
 #include <functional>
+#include <algorithm>
 
 // OpenMesh
 #include <OpenMesh/Core/System/config.h>

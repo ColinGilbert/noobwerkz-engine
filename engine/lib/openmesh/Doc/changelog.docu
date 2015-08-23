@@ -6,7 +6,26 @@
 
 <!-- --------------------------------------------------------------------- -->
 
-<tr valign=top><td><b>3.4</b> (?/?/?,Rev.1265)</td><td>
+<tr valign=top><td><b>4.1</b> (2015/07/27,Rev.1318)</td><td>
+<b>Core</b>
+<ul>
+<li>Fixed bug in polymesh normal computation. Added more unittests for normal computation.</li>
+<li>Get rid of some windows preprocessor warnings</li>
+</ul>
+
+<b>IO</b>
+<ul>
+<li>Options: Fixed bad enum</li>
+</ul>
+
+
+<b>Build System</b>
+<ul>
+<li>Removed fixbundle calls if not building apps.</li>
+</ul>
+
+
+<tr valign=top><td><b>4.0</b> (2015/07/08,Rev.1308)</td><td>
 
 <b>LICENSE</b>
 <ul>
@@ -23,6 +42,9 @@
     that did not work correctly and visited one entity twice. The warning can be disabled via cmake or define (-DNO_DECREMENT_DEPRECATED_WARNINGS ).</li>
 <li>Fixed wrong normal calculation in calc_face_normal for Poly Meshes. closes #2427</li>
 <li>Fixed various warnings with vector casts</li>
+<li>General: Get rid of some compiler warnings</li>
+<li>VectorT: fix compile error on vector scalar multiplication when scalar type differs of vector scalar type and the scalar was lhs. closes #2367</li>
+<li>Removed dead and uncompilable code regarding the status set. refs #2511 </li>
 </ul>
 
 <b>IO</b>
@@ -31,6 +53,13 @@
 <li>Writers: Avoid std::endl in various writers to avoid flushing the output stream on every line. (Thanks to Roman Zoller for the hint).</li>
 <li>OBJReader: fix reading mtl files with texture only for obj files</li>
 <li>OBJReader: fix crash, if obj file contains degenerated faces</li>
+<li>OBJReader: improve performance for small vectors/faces</li>
+<li>OBJReader: load vertex color values as float in range of [0..1] instead of integers [0..255]</li>
+<li>PLY Reader: Ascii reader now supports custom attributes</li>
+<li>PLY Writer: add custom property support for ascii version</li>
+<li>PLY Reader: unify int8_t/signed char/char in ply reader and writer. </li>
+<li>PLY Reader/Writer Binary: change type int8_t to signed char from type char closes #2499 </li>
+<li>STL Writer: Add a space after the solid keyword to make some readers happy. </li>
 </ul>
 
 <b>Utils</b>
@@ -45,20 +74,26 @@
 <li>Fix for Smoother set_relative error (Thanks to Leonardo Cecchinato for the fix) </li>
 <li>Improved SmootherT.hh Documentation</li>
 <li>Fixed old OM3 port warning in smoother</li>
+<li>Decimater: ModProgMesh - Fixed write on 64-bit systems</li>
 </ul>
 
 <b>General</b>
 <ul>
 <li>Fixed various build warnings</li>
+<li>Moved several iostream includes to cc files or removed them where not necessary (or switched to omlog and omerr)</li>
 </ul>
 
 <b>Documentation</b>
 <ul>
 <li>Example for locking vertices in decimater</li>
 <li>Added extra hint about status flags when collapsing edges</li>
-<li>updated tutorial on reading and writing meshes with python bindings</li>
-<li>updated the tutorial with further information on how to build the python bindings</li>
-<li>added missing requestsfor polyMesh in collapsee docu</li>
+<li>Updated tutorial on reading and writing meshes with python bindings</li>
+<li>Updated the tutorial with further information on how to build the python bindings</li>
+<li>Added missing requestsfor polyMesh in collapsee docu</li>
+<li>Add feature support list for readers/writers</li>
+<li>add info about requesting standard properties and loading a mesh with options - refs #2512</li>
+<li>add info about texture information in OBJ file format - closes #2369</li>
+<li>add info about texture index property refs #2512</li>
 </ul>
 
 <b>Unittests</b>
@@ -67,6 +102,9 @@
 <li>Added tests for tutorials about flip and collapse</li>
 <li>Added basic smoother compile test</li>
 <li>Added unit test for bool PropertyManager::set_range.</li>
+<li>Added write unittest for binary stl files</li>
+<li>Added c++11 test file</li>
+<li>Use the acg macro to add the unittests to make sure flags are passed through (e.g. to enable c++11)</li>
 </ul>
 
 <b>Build System</b>

@@ -1,15 +1,15 @@
 #pragma once
+#include <memory>
 
 #include "MathFuncs.hpp"
 #include "PhysicsShape.hpp"
-
 
 namespace noob
 {
 	class physics_body
 	{
 		public:
-			void init(const noob::mat4& transform, const noob::physics_shape& shape, float mass = 1.0f, float friction = 0.2f, float rolling_friction = 0.2f, float restitution = 0.0f);
+			void init(const noob::mat4& transform, const std::shared_ptr<noob::physics_shape>& shape, float mass = 1.0f, float friction = 0.2f, float rolling_friction = 0.2f, float restitution = 0.0f);
 			
 			void set_damping(float linear_damping, float angular_damping);
 			void set_sleeping_thresholds(float linear, float angular);
@@ -27,6 +27,7 @@ namespace noob
 			
 
 		protected:
+			std::shared_ptr<noob::physics_shape> shape_shared;
 			btRigidBody* body;
 			bool dirty;
 	};

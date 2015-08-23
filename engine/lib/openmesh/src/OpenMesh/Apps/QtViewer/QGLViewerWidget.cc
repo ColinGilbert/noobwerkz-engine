@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 07:07:46 -0600 (Tue, 28 Apr 2015) $                   *
+ *   $Revision: 1278 $                                                         *
+ *   $Date: 2015-06-09 10:58:41 +0200 (Di, 09 Jun 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -53,6 +53,7 @@
 #endif
 
 #include <iomanip>
+#include <iostream>
 #include <sstream>
 #include <algorithm>
 // --------------------
@@ -62,12 +63,11 @@
 #  include <GL/glut.h>
 #endif
 // --------------------
-#include <qnamespace.h>
-#include <qapplication.h>
-#include <qmenu.h>
-#include <qcursor.h>
-#include <qimage.h>
-#include <qdatetime.h>
+#include <QApplication>
+#include <QMenu>
+#include <QCursor>
+#include <QImage>
+#include <QDateTime>
 #include <QMouseEvent>
 // --------------------
 #include <OpenMesh/Apps/QtViewer/QGLViewerWidget.hh>

@@ -1,27 +1,18 @@
 #include "CharacterController.hpp"
-noob::character_controller::character_controller(const noob::physics_world& world, const noob::physics_shape& shape, float mass, float step_height, const noob::mat4& position)
-{
-
-}
-
-
-noob::character_controller::~character_controller()
-{
-}
-
-
 /*
-void noob::character_controller::init(const noob::physics_world& world, float mass, float height, float width, float step_height, const noob::mat4& position)
-{
-
-}
-
-
-void noob::character_controller::destroy()
+noob::character_controller::~character_controller()
 {
 
 }
 */
+
+
+void noob::character_controller::init(const noob::physics_world& world, const std::shared_ptr<noob::physics_shape>& shape, const noob::mat4& position, float max_speed, float mass, float step_height)
+{
+
+}
+
+
 
 void noob::character_controller::pre_step()
 {
@@ -44,15 +35,21 @@ void noob::character_controller::jump()
 
 bool noob::character_controller::on_ground() const
 {
-
+	return false;
 }
 
 
-noob::physics_body& noob::character_controller::get_physics_body() const
+noob::mat4 noob::character_controller::get_transform() const
 {
-
+	return body.get_transform();
 }
 
+/*
+noob::physics_body noob::character_controller::get_physics_body() const
+{
+	return body;
+}
+*/
 
 /*
 #include "CharacterController.hpp"

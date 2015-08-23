@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *
- *   $Revision: 1268 $                                                         *
- *   $Date: 2015-05-18 05:52:18 -0600 (Mon, 18 May 2015) $                   *
+ *   $Revision: 1278 $                                                         *
+ *   $Date: 2015-06-09 10:58:41 +0200 (Di, 09 Jun 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -61,10 +61,10 @@
 //=== INCLUDES ================================================================
 
 
-#include <iostream>
+
+#include <iosfwd>
 #include <string>
-#include <stdio.h>
-#include <fstream>
+#include <cstdio>
 #include <vector>
 
 #include <OpenMesh/Core/System/config.h>

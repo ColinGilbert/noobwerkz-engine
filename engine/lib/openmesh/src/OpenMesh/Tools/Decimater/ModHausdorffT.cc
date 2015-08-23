@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *
- *   $Revision: 1258 $                                                        *
- *   $Date: 2015-04-28 07:07:46 -0600 (Tue, 28 Apr 2015) $                   *
+ *   $Revision: 1276 $                                                        *
+ *   $Date: 2015-06-08 13:44:11 +0200 (Mo, 08 Jun 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -273,7 +273,7 @@ void ModHausdorffT<MeshT>::set_error_tolerance_factor(double _factor) {
     // the smaller the factor, the smaller tolerance gets
     // thus creating a stricter constraint
     // division by error_tolerance_factor_ is for normalization
-    Scalar tolerance = tolerance_ * _factor / this->error_tolerance_factor_;
+    Scalar tolerance = tolerance_ * Scalar(_factor / this->error_tolerance_factor_);
     set_tolerance(tolerance);
     this->error_tolerance_factor_ = _factor;
   }

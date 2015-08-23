@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 07:07:46 -0600 (Tue, 28 Apr 2015) $                   *
+ *   $Revision: 1278 $                                                         *
+ *   $Date: 2015-06-09 10:58:41 +0200 (Di, 09 Jun 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -59,7 +59,7 @@
 
 #include <OpenMesh/Core/System/config.hh>
 //
-#include <iostream>
+#include <ostream>
 #include <string>
 #if defined(OM_CC_MIPS)
 #  include <assert.h>
