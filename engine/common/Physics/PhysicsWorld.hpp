@@ -13,6 +13,7 @@
 #include "PhysicsBody.hpp"
 #include "PhysicsConstraintGeneric.hpp"
 #include "PhysicsShape.hpp"
+#include "MathFuncs.hpp"
 
 #define BIT(x) (1<<(x))
 
@@ -47,17 +48,18 @@ namespace noob
 			std::shared_ptr<noob::physics_shape> cylinder(float radius, float height);
 			std::shared_ptr<noob::physics_shape> capsule(float radius, float height);
 			std::shared_ptr<noob::physics_shape> cone(float radius, float height);
+			std::shared_ptr<noob::physics_shape> plane(const noob::vec3& normal, float constant);
 
-			std::shared_ptr<noob::physics_shape> set_convex_hull(const std::vector<std::array<float, 3>>& points, const std::string& name);
-			std::shared_ptr<noob::physics_shape> set_multisphere(const std::vector<std::array<float, 4>>& rad_pos_scales, const std::string& name);
-			std::shared_ptr<noob::physics_shape> set_compound_shape(const std::vector<const std::shared_ptr<noob::physics_shape>&>& shapes, const std::string& name);
-			std::shared_ptr<noob::physics_shape> set_trimesh(const std::tuple<std::vector<std::array<float, 3>>, std::vector<uint16_t>>& points, const std::string& name);
+			std::shared_ptr<noob::physics_shape> set_convex_hull(const std::vector<noob::vec3>& points, const std::string& name);
+			std::shared_ptr<noob::physics_shape> set_multisphere(const std::vector<noob::vec4>& radii_pos, const std::string& name);
+			std::shared_ptr<noob::physics_shape> set_compound_shape(const std::vector<std::shared_ptr<noob::physics_shape>>& shapes, const std::string& name);
+			std::shared_ptr<noob::physics_shape> set_trimesh(const std::vector<noob::vec3>&, const std::vector<uint16_t>&, const std::string& name);
 
 			std::weak_ptr<noob::physics_shape> get_convex_hull(const std::string& name);
 			std::weak_ptr<noob::physics_shape> get_multisphere(const std::string& name);
 			std::weak_ptr<noob::physics_shape> get_compound_shape(const std::string& name);
+			// TODO: Test!
 			std::weak_ptr<noob::physics_shape> get_trimesh(const std::string& name);
-
 			
 			void remove(const noob::physics_body& body);
 			void remove(const noob::physics_constraint_generic& constraint);
@@ -65,16 +67,17 @@ namespace noob
 			btDynamicsWorld* get_raw_ptr() const;
 
 		protected:
-			
+		
 			std::unordered_map<float, std::shared_ptr<noob::physics_shape>> spheres;
 			std::map<std::array<float, 2>, std::shared_ptr<noob::physics_shape>> cylinders;
 			std::map<std::array<float, 2>, std::shared_ptr<noob::physics_shape>> capsules;
 			std::map<std::array<float, 2>, std::shared_ptr<noob::physics_shape>> cones;
 			std::map<std::array<float, 3>, std::shared_ptr<noob::physics_shape>> boxes;
+			std::map<std::array<float, 4>, std::shared_ptr<noob::physics_shape>> planes;
 			std::unordered_map<std::string, std::shared_ptr<noob::physics_shape>> convex_hulls;
 			std::unordered_map<std::string, std::shared_ptr<noob::physics_shape>> multispheres;
 			std::unordered_map<std::string, std::shared_ptr<noob::physics_shape>> compound_shapes;
-			std::unordered_map<std::string, std::tuple<std::shared_ptr<noob::physics_shape>, std::vector<std::array<float, 3>>, std::vector<uint16_t>>> trimeshes;
+			std::unordered_map<std::string, std::tuple<std::shared_ptr<noob::physics_shape>, std::vector<noob::vec3>, std::vector<uint16_t>>> trimeshes;
 			
 			btDiscreteDynamicsWorld* dynamics_world;
 			btBroadphaseInterface* broadphase;

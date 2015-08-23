@@ -1,5 +1,6 @@
 #include "PhysicsShape.hpp"
 
+
 void noob::physics_shape::set_sphere(float radius)
 {
 	if (!created)
@@ -73,15 +74,15 @@ void noob::physics_shape::set_convex_hull(const std::vector<noob::vec3>& points)
 }
 
 
-void noob::physics_shape::set_compound(const std::vector<noob::physics_shape> shapes)
+void noob::physics_shape::set_compound(const std::vector<std::shared_ptr<noob::physics_shape>>& shapes)
 {
 	if (!created)
 	{
 		btCompoundShape* compound_shape = new btCompoundShape();
 
-		for (noob::physics_shape s : shapes)
+		for (std::shared_ptr<noob::physics_shape> s : shapes)
 		{
-			btCollisionShape* raw_shape = s.get_raw_ptr(); 
+			btCollisionShape* raw_shape = s->get_raw_ptr(); 
 			compound_shape->addChildShape(btTransform::getIdentity(), raw_shape);
 		}
 
@@ -91,7 +92,7 @@ void noob::physics_shape::set_compound(const std::vector<noob::physics_shape> sh
 }
 
 
-void noob::physics_shape::set_multisphere(const std::vector<std::tuple<noob::vec3, float>>& pos_radii)
+void noob::physics_shape::set_multisphere(const std::vector<noob::vec4>& pos_radii)
 {
 	if (!created)
 	{
@@ -101,11 +102,11 @@ void noob::physics_shape::set_multisphere(const std::vector<std::tuple<noob::vec
 		for (auto t : pos_radii)
 		{
 			btVector3 pos;
-			pos[0] = std::get<0>(t)[0];
-			pos[1] = std::get<0>(t)[1];
-			pos[2] = std::get<0>(t)[2];
+			pos[0] = t.v[0];
+			pos[1] = t.v[1];
+			pos[2] = t.v[2];
 			positions.push_back(pos);
-			radii.push_back(std::get<1>(t));
+			radii.push_back(t.v[3]);
 		}
 
 		btMultiSphereShape* multisphere_shape = new btMultiSphereShape(&positions[0], &radii[0], pos_radii.size());
