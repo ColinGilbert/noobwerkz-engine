@@ -22,7 +22,7 @@ namespace noob
 			void set_drawable(const std::shared_ptr<noob::model>& _drawable); 
 			void set_skeleton(const std::shared_ptr<noob::skeletal_anim>& _anim);
 			void set_shading(const std::shared_ptr<noob::prepared_shaders::info>& _shader_info);
-			void set_controller(const std::shared_ptr<noob::physics_shape>& shape, const noob::mat4& transform, float mass, float max_speed, float step_height);
+			void set_controller(const std::shared_ptr<noob::physics_shape>& shape, const noob::mat4& transform = noob::identity_mat4(), float mass = 1.0, float max_speed = 10.0, float step_height = 0.25);
 
 			void draw() const;
 			void draw_skeleton() const;

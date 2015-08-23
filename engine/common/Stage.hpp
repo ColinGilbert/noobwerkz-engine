@@ -46,7 +46,7 @@ namespace noob
 			void update(double dt);
 			void draw();
 			
-			std::shared_ptr<noob::actor> make_actor(const std::string& name, const std::shared_ptr<noob::model>&, const std::shared_ptr<noob::skeletal_anim>&, const std::shared_ptr<noob::prepared_shaders::info>&, const std::shared_ptr<noob::physics_shape>& shape, const noob::mat4& transform = noob::identity_mat4(), float mass = 1.0, float max_speed = 5.0, float step_height = 0.25);
+			std::shared_ptr<noob::actor> make_actor(const std::string& name, const std::shared_ptr<noob::model>&, const std::shared_ptr<noob::skeletal_anim>&, const std::shared_ptr<noob::prepared_shaders::info>&, const std::shared_ptr<noob::physics_shape>& shape, const noob::mat4& position = noob::identity_mat4(), float mass = 1.0, float max_speed = 5.0, float step_height = 0.25);
 
 			// Loads a serialized model (from cereal binary)
 			void add_model(const std::string& name, const std::string& filename);
@@ -58,8 +58,10 @@ namespace noob
 			std::weak_ptr<noob::model> get_model(const std::string& name) const;
 			std::weak_ptr<noob::skeletal_anim> get_skeleton(const std::string& name) const;
 
-		protected:
 			noob::physics_world world;
+
+		protected:
+
 			noob::prepared_shaders shaders;
 			bool paused;
 			// TODO: Bring HACD renderer in line with the rest of the shader types

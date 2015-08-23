@@ -60,25 +60,9 @@ std::shared_ptr<noob::actor> noob::stage::make_actor(const std::string& name, co
 	a->set_shading(shader_uniform);
 	//a->set_transform(position);
 	a->set_controller(shape, transform, mass, max_speed, step_height);
-	actors[name] = std::move(a);
+	actors[name] = a;
 
 	return actors[name];
-	
-	/*
-	auto search = actors.find(name);
-
-	if (search == actors.end())
-	{
-		//auto aa = std::make_shared<noob::actor>();
-		auto a = actors.insert(std::make_pair(name, std::make_shared<noob::actor>()));
-		&(a.second)->set_drawable(model);
-		&(a.second)->set_skeleton(skel_anim);
-		&(a.second)->set_shader(shader_uniform);
-		//return a.second;
-	}
-
-	return {};
-	*/
 }
 
 

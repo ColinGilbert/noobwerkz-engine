@@ -7,7 +7,7 @@ namespace noob
 	{
 		public:
 		
-			void init(const noob::physics_world& world, const std::shared_ptr<noob::physics_shape>&, const noob::mat4& position = noob::identity_mat4(), float max_speed = 10.0, float mass = 1.0, float step_height = 0.25);
+			void init(const noob::physics_world& world, const std::shared_ptr<noob::physics_shape>&, const noob::mat4& position, float mass, float max_speed, float step_height);
 			void pre_step();
 			void player_step(float dt, bool forwards, bool backwards, bool left, bool right, bool jump);
 			void jump();

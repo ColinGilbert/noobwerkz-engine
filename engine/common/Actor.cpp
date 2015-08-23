@@ -19,13 +19,6 @@ void noob::actor::set_shading(const std::shared_ptr<noob::prepared_shaders::info
 }
 
 
-/*
-void noob::actor::set_transform(const noob::mat4& transform)
-{
-	xform = transform;
-}
-*/
-
 void noob::actor::set_controller(const std::shared_ptr<noob::physics_shape>& shape, const noob::mat4& transform, float mass, float max_speed, float step_height)
 {
 

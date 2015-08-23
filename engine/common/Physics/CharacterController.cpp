@@ -2,7 +2,7 @@
 
 
 
-void noob::character_controller::init(const noob::physics_world& world, const std::shared_ptr<noob::physics_shape>& shape, const noob::mat4& position, float max_speed, float mass, float step_height)
+void noob::character_controller::init(const noob::physics_world& world, const std::shared_ptr<noob::physics_shape>& shape, const noob::mat4& position, float mass, float max_speed, float step_height)
 {
 
 }
