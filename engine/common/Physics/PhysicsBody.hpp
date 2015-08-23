@@ -9,6 +9,8 @@ namespace noob
 	class physics_body
 	{
 		public:
+			physics_body() : body(nullptr) {}
+
 			void init(const noob::mat4& transform, const std::shared_ptr<noob::physics_shape>& _shape, float mass = 1.0f, float friction = 0.2f, float rolling_friction = 0.2f, float restitution = 0.0f);
 			
 			void set_damping(float linear_damping, float angular_damping);

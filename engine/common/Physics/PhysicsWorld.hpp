@@ -42,7 +42,8 @@ namespace noob
 
 			void add(const noob::physics_body& body, short collision_group, short collides_with);
 			void add(const noob::physics_constraint_generic& constraint);
-			
+		//	noob::physics_body add_body(const noob::mat4& transform, const std::shared_ptr<noob::physics_shape>& _shape, float mass = 1.0f, float friction = 0.2f, float rolling_friction = 0.2f, float restitution = 0.0f);
+
 			std::shared_ptr<noob::physics_shape> sphere(float radius);
 			std::shared_ptr<noob::physics_shape> box(float width, float height, float depth);
 			std::shared_ptr<noob::physics_shape> cylinder(float radius, float height);

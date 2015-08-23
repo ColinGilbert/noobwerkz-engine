@@ -1,5 +1,7 @@
 #include "PhysicsBody.hpp"
 
+
+
 void noob::physics_body::init(const noob::mat4& transform, const std::shared_ptr<noob::physics_shape>& _shape, float mass, float friction, float rolling_friction, float restitution)
 {
 	dirty = false;

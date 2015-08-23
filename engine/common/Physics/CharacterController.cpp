@@ -2,16 +2,53 @@
 
 
 
-void noob::character_controller::init(const noob::physics_world& world, const std::shared_ptr<noob::physics_shape>& shape, const noob::mat4& position, float mass, float max_speed, float step_height)
+void noob::character_controller::init(const noob::physics_world& _world, const noob::mat4& xform, float _height, float _width, float _mass, float _max_speed)
 {
-
+	world = _world;
+	width = _width;
+	height = _height;
+	mass = _mass;
+	max_speed = _max_speed;
+	body.init(xform, world.capsule(width, height), mass);
+	body.set_angular_factor(noob::vec3(0.0, 0.0, 0.0));
+	world.add(body, noob::physics_world::collision_type::CHARACTER, noob::physics_world::collision_type::CHARACTER | noob::physics_world::collision_type::TERRAIN);
 }
 
 
 
 void noob::character_controller::pre_step()
 {
+	noob::vec3 pos(body.get_raw_ptr()->getWorldTransform().getOrigin().x(), body.get_raw_ptr()->getWorldTransform().getOrigin().z(), body.get_raw_ptr()->getWorldTransform().getOrigin().y());
+	noob::vec3 springforce(0.0, 0.0, 0.0);
+	btVector3 from(pos.v[0], pos.v[1], pos.v[2]);
+	btVector3 to(pos.v[0], pos.v[1] - 10, pos.v[2]);
+	btCollisionWorld::AllHitsRayResultCallback res(from, to);
+	world.get_raw_ptr()->rayTest(from, to, res);
 
+	airborne = true;
+	for (int i = 0; i < res.m_hitPointWorld.size(); ++i)
+	{
+		if (res.m_collisionObjects[i] != body.get_raw_ptr())
+		{
+			btVector3 a = res.m_hitPointWorld[i];
+			noob::vec3 hp(a.x(), a.z(), a.y());
+
+			float d = std::sqrt(noob::get_squared_dist(pos, hp));
+			float ideal_distance = 0.5 + height / 2;
+
+			logger::log(fmt::format("[DynamicController] distance from ground = {0}, ideal distance = {1}", d, ideal_distance));
+
+			if (d < ideal_distance)
+			{
+				float stiffness = 8000.0f;
+				springforce = noob::vec3(0.0, 0.0, stiffness * std::max(1.9f - d, -0.05f));
+				airborne = false;
+				break;
+			}
+		}
+	}
+
+	body.get_raw_ptr()->applyCentralForce(btVector3(springforce.v[0], springforce.v[1], springforce.v[2]));
 }
 
 
@@ -30,7 +67,7 @@ void noob::character_controller::jump()
 
 bool noob::character_controller::on_ground() const
 {
-	return false;
+	return !airborne;
 }
 
 
@@ -40,11 +77,11 @@ noob::mat4 noob::character_controller::get_transform() const
 }
 
 /*
-noob::physics_body noob::character_controller::get_physics_body() const
-{
-	return body;
-}
-*/
+   noob::physics_body noob::character_controller::get_physics_body() const
+   {
+   return body;
+   }
+   */
 
 /*
 #include "CharacterController.hpp"

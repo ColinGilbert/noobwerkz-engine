@@ -35,7 +35,7 @@ namespace noob
 			void set_multisphere(const std::vector<noob::vec4>& pos_radii);
 
 			void set_static_mesh(const std::vector<noob::vec3>& vertices, const std::vector<uint16_t>& indices);
-		
+
 			void set_static_plane(const noob::vec3& normal, float constant);
 
 			noob::physics_shape::shape_type get_type() const;

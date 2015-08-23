@@ -16,13 +16,6 @@
 #include "BasicRenderer.hpp"
 #include "TransformHelper.hpp"
 
-
-/*
-#include <es/entity.hpp>
-#include <es/component.hpp>
-#include <es/storage.hpp>
-*/
-
 #include "Actor.hpp"
 #include "PhysicsWorld.hpp"
 #include "SkeletalAnim.hpp"
