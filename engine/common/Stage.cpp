@@ -2,9 +2,7 @@
 
 bool noob::stage::init()
 {
-	paused = false;
-
-	world.init();
+	world.start();
 	shaders.init();
 
 	add_model("unit-sphere", noob::basic_mesh::sphere(0.5));
@@ -18,7 +16,27 @@ bool noob::stage::init()
 	unit_cone = get_model("unit-cone").lock();
 
 	add_skeleton("human", "seymour.skel.ozz");
+/*
+	std::shared_ptr<noob::physics_shape> plane = world.plane(noob::vec3(0.0, 1.0, 0.0), 1.0);;
+	noob::physics_body ground;
+	ground.init(noob::identity_mat4(), plane, 0.0);
+	world.add(ground, noob::physics_world::collision_type::TERRAIN, noob::physics_world::collision_type::NOTHING);
+*/
+	noob::triplanar_renderer::uniform_info u;
+	u.colours[0] = noob::vec4(1.0, 1.0, 1.0, 1.0);
+	u.colours[1] = noob::vec4(0.8, 0.8, 0.8, 1.0);
+	u.colours[2] = noob::vec4(0.4, 0.4, 0.4, 1.0);
+	u.colours[3] = noob::vec4(0.0, 0.0, 0.0, 1.0);
+	u.mapping_blends = noob::vec3(1.0, 0.5, 0.8);
+	u.scales = noob::vec3(1.0, 1.0, 1.0);
+	u.colour_positions = noob::vec2(0.2, 0.7);
+	
+	set_shader("moon", u);
 
+	noob::transform_helper xform;
+	xform.translate(noob::vec3(10.0, 65.0, 10.0));
+
+	std::shared_ptr<noob::actor> test = make_actor("test", unit_cube, get_skeleton("human").lock(), get_shader("moon").lock(), xform.get_matrix(), 1.0, 1.0, 2.0, 5.0);
 	logger::log("[Stage] init complete.");
 	return true;
 }
@@ -28,75 +46,99 @@ void noob::stage::update(double dt)
 {
 	if (!paused)
 	{
-		world.step(dt);
+		static double accum = 0.0;
+		accum += dt;
+		if (accum > 1.0/60.0)
+		{
+			world.update();
+			accum -= 1.0/60.0;
+		}
+		for (auto a : actors)
+		{
+			a.second->update(dt, true);
+			a.second->print_debug_info();
+		}
 	}
 }
 
 
-void noob::stage::draw()
+void noob::stage::draw() const
 {
-	// TODO: Remove this test.
-	noob::triplanar_renderer::uniform_info u;
-	u.colours[0] = noob::vec4(1.0, 1.0, 1.0, 1.0);
-	u.colours[1] = noob::vec4(0.8, 0.8, 0.8, 1.0);
-	u.colours[2] = noob::vec4(0.4, 0.4, 0.4, 1.0);
-	u.colours[3] = noob::vec4(0.0, 0.0, 0.0, 1.0);
-	u.mapping_blends = noob::vec3(1.0, 0.5, 0.8);
-	u.scales = noob::vec3(1.0, 1.0, 1.0);
-	u.colour_positions = noob::vec2(0.2, 0.7);
-
-	shaders.draw(unit_sphere.get(), u, noob::identity_mat4());//, u);
-
+	for (auto a : actors)
+	{
+		draw(a.second);
+		//logger::log(fmt::format("[Stage] Test actor position = {0}", noob::translation_from_mat4(a.second->get_transform()).to_string()));
+	}
 	// TODO: Use frustum + physics world collisions to determine which items are visible, and then draw them.
+	//rp3d::Transform t = test_body->getInterpolatedTransform();
 }
 
 
-std::shared_ptr<noob::actor> noob::stage::make_actor(const std::string& name, const std::shared_ptr<noob::model>& model, const std::shared_ptr<noob::skeletal_anim>& skel_anim, const std::shared_ptr<noob::prepared_shaders::info>& shader_uniform, const std::shared_ptr<noob::physics_shape>& shape, const noob::mat4& transform, float mass, float max_speed, float step_height)
+void noob::stage::draw(const std::shared_ptr<noob::actor>& a) const
+{
+	shaders.draw(a->get_model(), a->get_shading(), a->get_transform());
+}
+
+
+std::shared_ptr<noob::actor> noob::stage::make_actor(const std::string& name, const std::shared_ptr<noob::model>& model, const std::shared_ptr<noob::skeletal_anim>& skel_anim, const std::shared_ptr<noob::prepared_shaders::info>& shader_uniform, const noob::mat4& transform, float mass, float width, float height, float max_speed)
 {
 	// TODO: Optimize
 	auto a = std::make_shared<noob::actor>();
 	a->set_drawable(model);
 	a->set_skeleton(skel_anim);
 	a->set_shading(shader_uniform);
-	//a->set_transform(position);
-	a->set_controller(shape, transform, mass, max_speed, step_height);
+	a->set_controller(&world, transform, mass, width, height, max_speed);
 	actors[name] = a;
 
 	return actors[name];
 }
 
 
-void noob::stage::add_model(const std::string& name, const std::string& filename)
+bool noob::stage::add_model(const std::string& name, const std::string& filename)
 {
 	auto search = models.find(name);
 	if (search == models.end())
 	{
 		logger::log(fmt::format("Adding model: {0}", name));
 		models.insert(std::make_pair(name, std::make_shared<noob::model>(filename)));
+		return true;
 	}
+	else return false;
 }
 
 
-void noob::stage::add_model(const std::string& name, const noob::basic_mesh& m)
+bool noob::stage::add_model(const std::string& name, const noob::basic_mesh& m)
 {
 	auto search = models.find(name);
 	if (search == models.end())
 	{
 		logger::log(fmt::format("Adding model: {0}", name));
 		models.insert(std::make_pair(name, std::make_shared<noob::model>(m)));
+		return true;
 	}
+	else return false;
 }
 
 
-void noob::stage::add_skeleton(const std::string& name, const std::string& filename)
+bool noob::stage::add_skeleton(const std::string& name, const std::string& filename)
 {
 	auto search = skeletons.find(name);
 	if (search == skeletons.end())
 	{
 		auto results = skeletons.insert(std::make_pair(name, std::make_unique<noob::skeletal_anim>()));
 		(*(results.first)).second->init(filename);
+		return true;
 	}
+	else return false;
 }
+
+
+void noob::stage::set_shader(const std::string& name, const noob::prepared_shaders::info& uniforms)
+{
+	auto a = std::make_shared<noob::prepared_shaders::info>(uniforms);
+	shader_uniforms[name] = a;
+}
+
 
 
 std::weak_ptr<noob::actor> noob::stage::get_actor(const std::string& name) const

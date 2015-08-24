@@ -30,8 +30,9 @@ void noob::physics_world::step(double delta)
 	dynamics_world->stepSimulation(seconds, max_substeps, fixed_timestep);
 	if (seconds > max_substeps * fixed_timestep)
 	{
-		logger::log(fmt::format("[GameWorld] Warning: Timestep of {0} seconds is greater than max acceptable {1}", seconds, max_substeps * fixed_timestep));
+		logger::log(fmt::format("[Physicsorld] Warning: Timestep of {0} seconds is greater than max acceptable {1}", seconds, max_substeps * fixed_timestep));
 	}
+	//logger::log("[PhysicsWorld] step()");
 }
 
 
@@ -43,6 +44,7 @@ void noob::physics_world::apply_global_force(const noob::vec3& force, const noob
 
 void noob::physics_world::add(const noob::physics_body& rigid_body, short collision_group, short collides_with)
 {
+	logger::log("[PhysicsWorld] Adding rigid body");
 	dynamics_world->addRigidBody(rigid_body.get_raw_ptr(), collision_group, collides_with);
 }
 
@@ -105,6 +107,7 @@ std::shared_ptr<noob::physics_shape> noob::physics_world::capsule(float radius, 
 	dims[1] = height;
 	if(capsules.find(dims) == capsules.end())
 	{
+		logger::log(fmt::format("[PhysicsWorld] Creating capsule of radius {0} and height {1}", radius, height));
 		auto a = std::make_shared<noob::physics_shape>();
 		a->set_capsule(radius, height);
 		capsules[dims] = a;
@@ -258,6 +261,17 @@ void noob::physics_world::remove(const noob::physics_body& body)
 void noob::physics_world::remove(const noob::physics_constraint_generic& constraint)
 {
 	dynamics_world->removeConstraint(constraint.get_raw_ptr());
+}
+
+
+void noob::physics_world::print_debug_info() const
+{
+	int num_collision_objects = dynamics_world->getNumCollisionObjects();
+	
+	fmt::MemoryWriter w;
+	w << "[PhysicsWorld] Number of collision bodies = " << num_collision_objects;
+	
+	logger::log(w.str());
 }
 
 

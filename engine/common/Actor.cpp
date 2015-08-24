@@ -18,16 +18,14 @@ void noob::actor::set_shading(const std::shared_ptr<noob::prepared_shaders::info
 	shader_info = _shader_info;
 }
 
-
-void noob::actor::set_controller(const std::shared_ptr<noob::physics_shape>& shape, const noob::mat4& transform, float mass, float max_speed, float step_height)
+void noob::actor::set_controller(rp3d::DynamicsWorld* world, const noob::mat4& transform, float mass, float width, float height, float max_speed)
 {
-
+	controller.init(world, transform, mass, width, height, max_speed);
 }
 
-
-void noob::actor::update(double dt)
+void noob::actor::update(double dt, bool forward, bool backward, bool left, bool right, bool jump)
 {
-	xform = controller.get_transform();
+	// controller.step(static_cast<float>(dt), forward, backward, left, right, jump);
 }
 
 

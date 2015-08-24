@@ -17,6 +17,11 @@ namespace noob
 			void set_sleeping_thresholds(float linear, float angular);
 			void set_linear_factor(const noob::vec3& factor);
 			void set_angular_factor(const noob::vec3& factor);
+			// TODO: Implement
+			void set_friction(float);
+			void set_angular_friction(float);
+			void set_mass(float);
+			void set_restitution(float);
 
 			void apply_force(const noob::vec3& force, const noob::vec3& relative_pos = noob::vec3(0.0f, 0.0f, 0.0f));
 			void apply_torque(const noob::vec3& torque);
@@ -27,6 +32,7 @@ namespace noob
 			noob::mat4 get_transform() const;
 			btRigidBody* get_raw_ptr() const;
 			
+			void print_debug_info() const;
 
 		protected:
 			std::shared_ptr<noob::physics_shape> shape;

@@ -65,6 +65,8 @@ namespace noob
 			void remove(const noob::physics_body& body);
 			void remove(const noob::physics_constraint_generic& constraint);
 
+			void print_debug_info() const;
+
 			btDynamicsWorld* get_raw_ptr() const;
 
 		protected:

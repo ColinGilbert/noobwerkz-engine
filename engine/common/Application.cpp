@@ -257,6 +257,9 @@ void noob::application::update(double delta)
 
 	static double time_elapsed = 0.0;
 	time_elapsed += delta;
+
+	stage.update(delta);
+
 /*
 	if (time_elapsed > 0.25)
 	{

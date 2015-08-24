@@ -10,11 +10,6 @@ noob::skeletal_anim::~skeletal_anim()
 		allocator->Delete(it.second);
 	}
 
-	//for (noob::skeletal_anim::sampler s : samplers)
-	//{
-	//	destroy_sampler(s);
-	//}
-
 	allocator->Deallocate(model_matrices);
 }
 

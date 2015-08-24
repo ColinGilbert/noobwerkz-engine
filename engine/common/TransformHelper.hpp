@@ -23,12 +23,12 @@ namespace noob
 		
 		void scale(const noob::vec3& s)
 		{
-			scaling + s;
+			scaling += s;
 		}
 
 		void translate(const noob::vec3& t)
 		{
-			translation + t;
+			translation += t;
 		}
 		
 		void rotate(const noob::versor& quat)

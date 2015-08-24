@@ -9,8 +9,10 @@ void noob::character_controller::init(const noob::physics_world& _world, const n
 	height = _height;
 	mass = _mass;
 	max_speed = _max_speed;
+	walk_speed = max_speed / 2;
+	turn_speed = max_speed / 4;
 	body.init(xform, world.capsule(width, height), mass);
-	body.set_angular_factor(noob::vec3(0.0, 0.0, 0.0));
+	// body.set_angular_factor(noob::vec3(0.0, 0.0, 0.0));
 	world.add(body, noob::physics_world::collision_type::CHARACTER, noob::physics_world::collision_type::CHARACTER | noob::physics_world::collision_type::TERRAIN);
 }
 
@@ -18,12 +20,13 @@ void noob::character_controller::init(const noob::physics_world& _world, const n
 
 void noob::character_controller::pre_step()
 {
+/*
 	noob::vec3 pos(body.get_raw_ptr()->getWorldTransform().getOrigin().x(), body.get_raw_ptr()->getWorldTransform().getOrigin().z(), body.get_raw_ptr()->getWorldTransform().getOrigin().y());
 	noob::vec3 springforce(0.0, 0.0, 0.0);
 	btVector3 from(pos.v[0], pos.v[1], pos.v[2]);
 	btVector3 to(pos.v[0], pos.v[1] - 10, pos.v[2]);
 	btCollisionWorld::AllHitsRayResultCallback res(from, to);
-	world.get_raw_ptr()->rayTest(from, to, res);
+	world->get_raw_ptr()->rayTest(from, to, res);
 
 	airborne = true;
 	for (int i = 0; i < res.m_hitPointWorld.size(); ++i)
@@ -49,21 +52,85 @@ void noob::character_controller::pre_step()
 	}
 
 	body.get_raw_ptr()->applyCentralForce(btVector3(springforce.v[0], springforce.v[1], springforce.v[2]));
+*/
 }
 
 
-void noob::character_controller::player_step(float dt, bool forwards, bool backwards, bool left, bool right, bool jump)
+void noob::character_controller::step(float dt, bool forward, bool backward, bool left, bool right, bool jump)
 {
+/*
+	if (self_control)
+	{
+		pre_step();
+
+		btTransform xform;
+		body.get_raw_ptr()->getMotionState()->getWorldTransform(xform);
+
+		float turn_angle = 0.0;
+
+		// Handle turning
+		if (left)
+		{
+			turn_angle -= dt * turn_speed;
+		}
+		if (right)
+		{
+			turn_angle += dt * turn_speed;
+		}
+
+		xform.setRotation(btQuaternion(btVector3(0.0, 1.0, 0.0), turn_angle));
+
+		btVector3 linear_velocity = body.get_raw_ptr()->getLinearVelocity();
+		btScalar speed = linear_velocity.length();
+
+		btVector3 forward_dir = xform.getBasis()[2];
+
+		forward_dir.normalize();
+		btVector3 walk_direction = btVector3(0.0, 0.0, 0.0);
+		btScalar walk_speed = walk_speed * dt;
+
+		if (forward)
+		{
+			walk_direction += forward_dir;
+		}
+		else if (backward)
+		{
+			walk_direction -= forward_dir;
+		}
 
 
+		if (!forward && !backward && on_ground())
+		{
+			// Dampen when on the ground and not being moved by the player
+			linear_velocity *= btScalar(0.2);
+			body.get_raw_ptr()->setLinearVelocity(linear_velocity);
+		}
+		else
+		{
+			if (speed < max_speed)
+			{
+				btVector3 velocity = linear_velocity + walk_direction * walk_speed;
+				body.get_raw_ptr()->setLinearVelocity(velocity);
+			}
+		}
+
+		body.get_raw_ptr()->getMotionState()->setWorldTransform(xform);
+		body.get_raw_ptr()->setCenterOfMassTransform(xform);
+	}
+*/
 }
 
-
+/*
 void noob::character_controller::jump()
 {
+	if (!on_ground())
+	{
+		return;
+	}
+
 
 }
-
+*/
 
 bool noob::character_controller::on_ground() const
 {
@@ -94,8 +161,8 @@ ray_lambda[1] = 1.0;
 half_height = 1.0;
 turn_angle = 0.0;
 max_linear_velocity = 10.0;
-walk_velocity = 8.0; // meters/sec
-turn_velocity = 1.0; // radians/sec
+walk_speed = 8.0; // meters/sec
+turn_speed = 1.0; // radians/sec
 shape = nullptr;
 rigid_body = nullptr;
 }
@@ -191,11 +258,11 @@ void noob::character_controller::player_step(btScalar dt, bool forward, bool bac
 	// Handle turning
 	if (left)
 	{
-		turn_angle -= dt * turn_velocity;
+		turn_angle -= dt * turn_speed;
 	}
 	if (right)
 	{
-		turn_angle += dt * turn_velocity;
+		turn_angle += dt * turn_speed;
 	}
 
 	xform.setRotation(btQuaternion(btVector3(0.0, 1.0, 0.0), turn_angle));
@@ -206,7 +273,7 @@ void noob::character_controller::player_step(btScalar dt, bool forward, bool bac
 	btVector3 forwardDir = xform.getBasis()[2];
 	forwardDir.normalize();
 	btVector3 walkDirection = btVector3(0.0, 0.0, 0.0);
-	btScalar walkSpeed = walk_velocity * dt;
+	btScalar walkSpeed = walk_speed * dt;
 
 	if (forward)
 	{

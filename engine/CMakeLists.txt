@@ -10,8 +10,6 @@ set(CMAKE_C_FLAGS "-std=c99 -fno-strict-aliasing -DSQLITE_ENABLE_COLUMN_METADATA
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 #include_directories(${Boost_INCLUDE_DIR})
 
-
-
 include_directories(lib/chaiscript/include)
 list (APPEND chai-src
 lib/chaiscript/src/main.cpp
@@ -85,9 +83,8 @@ list (APPEND vhacd_src
 	lib/v-hacd/src/VHACD_Lib/src/vhacdVolume.cpp
 	)
 
-#include_directories(lib/csgjs-cpp)
-
-# TODO: Add when needed
+include_directories(lib/reactphysics3d/src)
+add_subdirectory(lib/reactphysics3d)
 
 include_directories(lib/cereal/include)
 include_directories(lib/stb)
@@ -156,11 +153,12 @@ list(APPEND common_src
 	common/EditorUtils.cpp
 	common/VoxelWorld.cpp
 	common/UIFont.cpp
-	common/Physics/PhysicsBody.cpp
-	common/Physics/PhysicsConstraintGeneric.cpp
-	common/Physics/PhysicsShape.cpp
-	common/Physics/PhysicsWorld.cpp
-	common/Physics/CharacterController.cpp
+	# common/Physics/PhysicsBody.cpp
+	# common/Physics/PhysicsConstraintGeneric.cpp
+	# common/Physics/PhysicsShape.cpp
+	# common/Physics/PhysicsWorld.cpp
+	# common/Physics/CharacterController.cpp
+	common/CharacterController.cpp
 	common/ModelLoader.cpp
 	common/Model.cpp
 	common/GUI.cpp
@@ -182,11 +180,7 @@ list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 
 add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src} ${es_src})
 
-target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES}
-	${OPENGL_LIBRARIES} freetype rt dl pthread assimp m emon
-	BulletDynamics BulletCollision OpenMeshCore OpenMeshToolsStatic BulletSoftBody LinearMath spnav
-	ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r
-	${Boost_LIBRARIES})
+target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m emon OpenMeshCore OpenMeshToolsStatic spnav ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r reactphysics3d ${Boost_LIBRARIES})
 
 project(LogServer)
 

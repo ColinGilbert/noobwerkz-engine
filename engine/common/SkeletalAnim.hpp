@@ -53,6 +53,7 @@ namespace noob
 			std::string get_current_anim() const;
 			// std::weak_ptr<noob::skeletal_anim::sampler> get_sampler(const std::string& anim_name) const;
 			// Gets bone matrices in model space
+			
 			std::vector<noob::mat4> get_matrices() const;
 			/// std::array<noob::vec3,4> get_skeleton_bounds() const;
 
@@ -88,7 +89,8 @@ namespace noob
 				ozz::animation::SamplingCache* cache;
 				ozz::Range<ozz::math::SoaTransform> locals;
 			};
-
+			
+			
 			noob::skeletal_anim::sampler create_sampler(const ozz::animation::Animation& anim);
 			void destroy_sampler(noob::skeletal_anim::sampler&);		
 			
@@ -99,6 +101,8 @@ namespace noob
 
 			std::unordered_map<std::string, ozz::animation::Animation*> runtime_anims;
 			std::unordered_map<std::string, ozz::animation::offline::RawAnimation> raw_anims;
+			std::unordered_map<std::string, noob::skeletal_anim::sampler> samplers;
+
 			// float threshold;
 			// size_t num_layers;
 			// lemon::StaticDigraph blend_tree;
