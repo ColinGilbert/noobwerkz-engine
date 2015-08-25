@@ -30,6 +30,27 @@
 
 #include <Eigen/Geometry>
 
+double noob::basic_mesh::get_volume() const
+{
+// Proudly gleaned from U of R website!
+// http://mathcentral.uregina.ca/QQ/database/QQ.09.09/h/ozen1.html
+// Woot alma mater! (... Soon :P)
+// The volume of the tetrahedron with vertices (0 ,0 ,0), (a1 ,a2 ,a3), (b1, b2, b3) and (c1, c2, c3) is [a1b2c3 + a2b3c1 + a3b1c2 - a1b3c2 - a2b1c3 - a3b2c1] / 6.
+	double accum = 0.0;
+	for (uint32_t i = 0; i < indices.size(); i += 3)
+	{
+		noob::vec3 first = vertices[i];
+		noob::vec3 second = vertices[i+1];
+		noob::vec3 third = vertices[i+2];
+		
+		accum += ((static_cast<double>(first.v[0]) * static_cast<double>(second.v[1]) * static_cast<double>(third.v[2])) + (static_cast<double>(first.v[1]) * static_cast<double>(second.v[2]) * static_cast<double>(third.v[0])) + (static_cast<double>(first.v[2]) * static_cast<double>(second.v[0]) * static_cast<double>(third.v[1])) - (static_cast<double>(first.v[0]) * static_cast<double>(second.v[2]) * static_cast<double>(third.v[1])) - (static_cast<double>(first.v[1]) * static_cast<double>(second.v[0]) * static_cast<double>(third.v[2])) - (static_cast<double>(first.v[2]) * static_cast<double>(second.v[1]) * static_cast<double>(third.v[0]))) / 6.0;
+
+	}
+	
+	return accum;
+}
+
+
 void noob::basic_mesh::decimate(const std::string& filename, size_t num_verts) const
 {
 	// logger::log("[Mesh] decimating");

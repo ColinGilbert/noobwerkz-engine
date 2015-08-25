@@ -83,7 +83,9 @@ namespace noob
 			std::vector<noob::vec3> normals;
 			std::vector<uint32_t> indices;
 
-
+			// Proudly gleaned from U of R website! Alma mater! http://mathcentral.uregina.ca/QQ/database/QQ.09.09/h/ozen1.html
+			// The volume of the tetrahedron with vertices (0,0,0), (a1,a2,a3), (b1,b2,b3) and (c1,c2,c3) is [a1b2c3 +a2b3c1 + a3b1c2 -a1b3c2 -a2b1c3 - a3b2c1]/6.
+			double get_volume() const;
 
 			void decimate(const std::string& filename, size_t num_verts) const;
 			noob::basic_mesh decimate(size_t num_verts) const;

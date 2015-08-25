@@ -51,12 +51,16 @@ namespace noob
 			void set_shader(const std::string& name, const noob::prepared_shaders::info& info);
 
 			std::weak_ptr<noob::actor> get_actor(const std::string& name) const;
-			
 			std::weak_ptr<noob::prepared_shaders::info> get_shader(const std::string& name) const;
-			
 			std::weak_ptr<noob::model> get_model(const std::string& name) const;
-			
 			std::weak_ptr<noob::skeletal_anim> get_skeleton(const std::string& name) const;
+			
+			rp3d::RigidBody* make_sphere(float radius, float mass, float friction, float bouncy);
+			rp3d::RigidBody* make_box(float width, float height, float depth, float mass, float friction, float bouncy);
+			rp3d::RigidBody* make_cylinder(float radius, float height, float mass, float friction, float bouncy);
+			rp3d::RigidBody* make_capsule(float radius, float height, float mass, float friction, float bouncy);
+			rp3d::RigidBody* make_cone(float radius, float height, float mass, float friction, float bouncy);
+			rp3d::RigidBody* make_mesh(const noob::basic_mesh& mesh, float mass, float friction, float bouncy);
 
 			void draw_pose(const std::shared_ptr<noob::skeletal_anim>&);//, const std::string& anim_name, float time);
 			
@@ -69,9 +73,7 @@ namespace noob
 			noob::triplanar_renderer triplanar_render;
 			noob::basic_renderer basic_render;
 			noob::mat4 view_mat, projection_mat;
-			
-			//rp3d::RigidBody test_body;
-			//rp3d::ProxyShape* proxy_shape;
+
 			// For fast access to basic shapes. Test to see difference.
 			std::shared_ptr<noob::model> unit_cube, unit_sphere, unit_cylinder, unit_cone;
 

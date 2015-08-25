@@ -16,12 +16,7 @@ bool noob::stage::init()
 	unit_cone = get_model("unit-cone").lock();
 
 	add_skeleton("human", "seymour.skel.ozz");
-/*
-	std::shared_ptr<noob::physics_shape> plane = world.plane(noob::vec3(0.0, 1.0, 0.0), 1.0);;
-	noob::physics_body ground;
-	ground.init(noob::identity_mat4(), plane, 0.0);
-	world.add(ground, noob::physics_world::collision_type::TERRAIN, noob::physics_world::collision_type::NOTHING);
-*/
+
 	noob::triplanar_renderer::uniform_info u;
 	u.colours[0] = noob::vec4(1.0, 1.0, 1.0, 1.0);
 	u.colours[1] = noob::vec4(0.8, 0.8, 0.8, 1.0);
