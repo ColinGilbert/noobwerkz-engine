@@ -39,40 +39,91 @@ void noob::prop::print_debug_info() const
 }
 
 
-void add_sphere(float radius, float mass, const noob::mat4& local_transform = noob::identity_mat4(), short collision_mask = 1, short collides_with = std::numeric_limits<short>::max())
+void noob::prop::add_sphere(float radius, float mass, const noob::mat4& local_transform, short collision_mask, short collides_with)
 {
-
+	rp3d::Transform t;
+	t.setFromOpenGL(const_cast<reactphysics3d::decimal*>(&local_transform.m[0]));
+	//rp3d::SphereShape capsule(radius);
+	rp3d::ProxyShape* p = body->addCollisionShape(rp3d::SphereShape(radius), t, mass);
+	p->setCollisionCategoryBits(collides_with);
+	p->setCollideWithMaskBits(collision_mask);
 }
 
 
-void add_box(float width, float height, float depth, float mass, const noob::mat4& local_transform = noob::identity_mat4(), short collision_mask = 1, short collides_with = std::numeric_limits<short>::max())
+void noob::prop::add_box(float width, float height, float depth, float mass, const noob::mat4& local_transform, short collision_mask, short collides_with)
 {
-
+	rp3d::Transform t;
+	t.setFromOpenGL(const_cast<reactphysics3d::decimal*>(&local_transform.m[0]));
+	rp3d::ProxyShape* p = 	body->addCollisionShape(rp3d::BoxShape(rp3d::Vector3(width, height, depth)), t, mass);
+	p->setCollisionCategoryBits(collides_with);
+	p->setCollideWithMaskBits(collision_mask);
 }
 
 
-void add_cylinder(float radius, float height, float mass, const noob::mat4& local_transform = noob::identity_mat4(), short collision_mask = 1, short collides_with = std::numeric_limits<short>::max())
+void noob::prop::add_cylinder(float radius, float height, float mass, const noob::mat4& local_transform, short collision_mask, short collides_with)
 {
-
+	rp3d::Transform t;
+	t.setFromOpenGL(const_cast<reactphysics3d::decimal*>(&local_transform.m[0]));
+	rp3d::ProxyShape* p = body->addCollisionShape(rp3d::CylinderShape(radius, height), t, mass);
+	p->setCollisionCategoryBits(collides_with);
+	p->setCollideWithMaskBits(collision_mask);
 }
 
 
-void add_capsule(float radius, float height,  float mass, const noob::mat4& local_transform = noob::identity_mat4(), short collision_mask = 1, short collides_with = std::numeric_limits<short>::max())
+void noob::prop::add_capsule(float radius, float height, float mass, const noob::mat4& local_transform, short collision_mask, short collides_with)
 {
-
+	rp3d::Transform t;
+	t.setFromOpenGL(const_cast<reactphysics3d::decimal*>(&local_transform.m[0]));
+	rp3d::ProxyShape* p = body->addCollisionShape(rp3d::CapsuleShape(radius, height), t, mass);
+	p->setCollisionCategoryBits(collides_with);
+	p->setCollideWithMaskBits(collision_mask);
 }
 
 
-void add_cone(float radius, float height, float mass, const noob::mat4& local_transform = noob::identity_mat4(), short collision_mask = 1, short collides_with = std::numeric_limits<short>::max())
+void noob::prop::add_cone(float radius, float height, float mass, const noob::mat4& local_transform, short collision_mask, short collides_with)
 {
-
+	rp3d::Transform t;
+	t.setFromOpenGL(const_cast<reactphysics3d::decimal*>(&local_transform.m[0]));
+	rp3d::ProxyShape* p = 	body->addCollisionShape(rp3d::ConeShape(radius, height), t, mass);
+	p->setCollisionCategoryBits(collides_with);
+	p->setCollideWithMaskBits(collision_mask);
 }
 
 
-// This one creates a mesh from several convex hulls (ideally created beforehand via the noob::basic_mesh::convex_decomposition() interface.) May bugger up if meshes aren't convex
-void add_mesh(const std::vector<noob::basic_mesh>& mesh, float mass, const noob::mat4& local_transform = noob::identity_mat4(), short collision_mask = 1, short collides_with = std::numeric_limits<short>::max())
+void noob::prop::add_mesh(const std::vector<noob::basic_mesh>& meshes, float mass, const noob::mat4& local_transform, short collision_mask, short collides_with)
 {
+	rp3d::Transform t;
+	t.setFromOpenGL(const_cast<reactphysics3d::decimal*>(&local_transform.m[0]));
+
+	double accum = 0;
+
+	for (noob::basic_mesh m : meshes)
+	{
+		accum += m.get_volume();
+	}
+	
+	for (noob::basic_mesh m : meshes)
+	{
+		double local_mass = static_cast<double>(mass) * m.get_volume() / accum;
+		
+		rp3d::ConvexMeshShape shape(&m.vertices[0].v[0], m.vertices.size(), 3 * sizeof(float));
+		
+		for (size_t i = 0; i < m.indices.size(); i += 3)
+		{
+			float first = m.indices[i];
+			float second = m.indices[i+1];
+			float third = m.indices[i+2];
+
+			shape.addEdge(first, second);
+			shape.addEdge(first, third);
+			shape.addEdge(second, third);
+		}
+		
+		shape.setIsEdgesInformationUsed(true);
+		
+		rp3d::ProxyShape* p = body->addCollisionShape(shape, t, static_cast<float>(local_mass));
+		p->setCollisionCategoryBits(collides_with);
+		p->setCollideWithMaskBits(collision_mask);
+	}
 
 }
-
-
