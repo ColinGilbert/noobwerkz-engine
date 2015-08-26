@@ -1,3 +1,4 @@
+/*
 #pragma once
 
 
@@ -11,7 +12,7 @@ namespace noob
 	{
 		public:
 			character_controller() : self_control(true) {}
-			void init(rp3d::DynamicsWorld* world, const noob::mat4&, float mass, float width, float height, float max_speed);
+			void init(rp3d::DynamicsWorld* world, const noob::prop&, const noob::mat4&, float mass, float width, float height, float max_speed);
 			noob::mat4 get_transform() const;
 			void print_debug_info() const;
 			noob::prop get_prop() const { return prop; }
@@ -24,3 +25,5 @@ namespace noob
 			rp3d::DynamicsWorld* world;
 	};
 }
+
+*/

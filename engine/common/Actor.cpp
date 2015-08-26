@@ -1,26 +1,16 @@
 #include "Actor.hpp"
 //#include "TransformHelper.hpp"
-
-void noob::actor::set_drawable(const std::shared_ptr<noob::model>& _drawable)
-{
-	drawable = _drawable;
-}
-
-
-void noob::actor::set_skeleton(const std::shared_ptr<noob::skeletal_anim>& _anim)
-{
+void noob::actor::init(rp3d::DynamicsWorld* _world, const std::shared_ptr<noob::model>& _model, const std::shared_ptr<noob::skeletal_anim>& _anim, const std::shared_ptr<noob::prepared_shaders::info>& _shader_info, const noob::mat4& _mat, float _mass, float _width, float _height, float _max_speed)
+ {
+	// mass = _mass;
+	// width = _width;
+	// height = _height;
+	max_speed = _max_speed;
 	anim = _anim;
-}
-
-
-void noob::actor::set_shading(const std::shared_ptr<noob::prepared_shaders::info>& _shader_info)
-{
-	shader_info = _shader_info;
-}
-
-void noob::actor::set_controller(rp3d::DynamicsWorld* world, const noob::mat4& transform, float mass, float width, float height, float max_speed)
-{
-	controller.init(world, transform, mass, width, height, max_speed);
+	prop.init(_world, _model, _shader_info, _mat, rp3d::KINEMATIC);
+	rp3d::CapsuleShape capsule(_width / 2, _height);
+	prop.get_body()->addCollisionShape(capsule, rp3d::Transform::identity(), 0.0);//,);// _mass);
+	//destination.init()
 }
 
 void noob::actor::update(double dt, bool forward, bool backward, bool left, bool right, bool jump)

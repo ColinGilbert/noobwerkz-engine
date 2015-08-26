@@ -59,7 +59,7 @@ void noob::stage::update(double dt)
 		for (auto a : actors)
 		{
 			a.second->update(dt, true);
-			// a.second->print_debug_info();
+			a.second->get_prop().print_debug_info();
 		}
 	}
 }
@@ -70,16 +70,14 @@ void noob::stage::draw() const
 	for (auto a : actors)
 	{
 		draw(a.second);
-		//logger::log(fmt::format("[Stage] Test actor position = {0}", noob::translation_from_mat4(a.second->get_transform()).to_string()));
 	}
 	// TODO: Use frustum + physics world collisions to determine which items are visible, and then draw them.
-	//rp3d::Transform t = test_body->getInterpolatedTransform();
 }
 
 
 void noob::stage::draw(const std::shared_ptr<noob::actor>& a) const
 {
-	shaders.draw(a->get_model(), a->get_shading(), a->get_transform());
+	shaders.draw(a->get_prop().get_model().get(), *(a->get_prop().get_shading().get()), a->get_prop().get_transform());
 }
 
 
@@ -87,10 +85,9 @@ std::shared_ptr<noob::actor> noob::stage::make_actor(const std::string& name, co
 {
 	// TODO: Optimize
 	auto a = std::make_shared<noob::actor>();
-	a->set_drawable(model);
-	a->set_skeleton(skel_anim);
-	a->set_shading(shader_uniform);
-	a->set_controller(&world, transform, mass, width, height, max_speed);
+
+	a->init(&world, model, skel_anim, shader_uniform, transform, mass, width, height, max_speed);
+
 	actors[name] = a;
 
 	return actors[name];

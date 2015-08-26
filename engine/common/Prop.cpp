@@ -1,17 +1,14 @@
 #include "Prop.hpp"
 
-void noob::prop::init(rp3d::DynamicsWorld* w, const std::shared_ptr<noob::model>& drawable, const std::shared_ptr<noob::prepared_shaders::info>& uniforms, const noob::mat4& transform, noob::prop::type type)
+void noob::prop::init(rp3d::DynamicsWorld* w, const std::shared_ptr<noob::model>& drawable, const std::shared_ptr<noob::prepared_shaders::info>& uniforms, const noob::mat4& transform, rp3d::BodyType type)
 {
 	this->world = w;
 	rp3d::Transform t;
 	t.setFromOpenGL(const_cast<reactphysics3d::decimal*>(&transform.m[0]));
 	body = world->createRigidBody(t);
+	body->setType(type);
 	shader_info = uniforms;
-	//model = drawable;
-	//body = world->createRigidBody(t)
-	//this->world = w;
-	set_transform(transform);
-
+	model = drawable;
 }
 
 void noob::prop::set_transform(const noob::mat4& transform)
@@ -40,3 +37,42 @@ void noob::prop::print_debug_info() const
 	w << "[Character Controller] Position = (" <<  pos.x << ", " << pos.y << ", " << pos.z << "). Linear velocity = (" << linear_vel.x << ", " << linear_vel.y << ", " << linear_vel.z << "). Angular Velocity = (" << angular_vel.x << ", " << angular_vel.y << ", " << angular_vel.z << ")";
 	logger::log(w.str());
 }
+
+
+void add_sphere(float radius, float mass, const noob::mat4& local_transform = noob::identity_mat4(), short collision_mask = 1, short collides_with = std::numeric_limits<short>::max())
+{
+
+}
+
+
+void add_box(float width, float height, float depth, float mass, const noob::mat4& local_transform = noob::identity_mat4(), short collision_mask = 1, short collides_with = std::numeric_limits<short>::max())
+{
+
+}
+
+
+void add_cylinder(float radius, float height, float mass, const noob::mat4& local_transform = noob::identity_mat4(), short collision_mask = 1, short collides_with = std::numeric_limits<short>::max())
+{
+
+}
+
+
+void add_capsule(float radius, float height,  float mass, const noob::mat4& local_transform = noob::identity_mat4(), short collision_mask = 1, short collides_with = std::numeric_limits<short>::max())
+{
+
+}
+
+
+void add_cone(float radius, float height, float mass, const noob::mat4& local_transform = noob::identity_mat4(), short collision_mask = 1, short collides_with = std::numeric_limits<short>::max())
+{
+
+}
+
+
+// This one creates a mesh from several convex hulls (ideally created beforehand via the noob::basic_mesh::convex_decomposition() interface.) May bugger up if meshes aren't convex
+void add_mesh(const std::vector<noob::basic_mesh>& mesh, float mass, const noob::mat4& local_transform = noob::identity_mat4(), short collision_mask = 1, short collides_with = std::numeric_limits<short>::max())
+{
+
+}
+
+
