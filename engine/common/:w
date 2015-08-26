@@ -57,9 +57,9 @@ namespace noob
 			std::weak_ptr<noob::model> get_model(const std::string& name) const;
 			std::weak_ptr<noob::skeletal_anim> get_skeleton(const std::string& name) const;
 			
-			
+			enum body_type { DYNAMIC, KINEMATIC, STATIC, GHOST };
 
-			//rp3d::CollisionBody* physics_body(float friction, float bouncy, float linear_damping, float angular_damping, noob::mat4 world_transform = noob::identity_mat4(), body_type type = noob::stage::body_type::DYNAMIC, bool gravity = true);
+			rp3d::CollisionBody* physics_body(float friction, float bouncy, float linear_damping, float angular_damping, noob::mat4 world_transform = noob::identity_mat4(), body_type type = noob::stage::body_type::DYNAMIC, bool gravity = true);
 			
 			void add_sphere_to_body(rp3d::CollisionBody* body, float radius, float mass, const noob::mat4& local_transform = noob::identity_mat4(), short collision_mask = 1, short collides_with = std::numeric_limits<short>::max());
 			void add_box_to_body(rp3d::CollisionBody* body, float width, float height, float depth, float mass, const noob::mat4& local_transform = noob::identity_mat4(), short collision_mask = 1, short collides_with = std::numeric_limits<short>::max());

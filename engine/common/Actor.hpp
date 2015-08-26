@@ -26,7 +26,7 @@ namespace noob
 			void set_controller(rp3d::DynamicsWorld* world, const noob::mat4& transform, float mass, float width, float height, float max_speed);
 			
 			void update(double dt, bool forward = false, bool backward = false, bool left = false, bool right = false, bool jump = false);
-			noob::mat4 get_transform() const { return controller.get_transform(); }
+			noob::mat4 get_transform() const { return controller.get_prop().get_transform(); }
 			noob::prepared_shaders::info get_shading() const { return *shader_info; }
 			noob::model* get_model() const { return drawable.get(); }
 
@@ -36,7 +36,7 @@ namespace noob
 			std::vector<noob::vec3> get_path_vector() const;
 
 			void print_debug_info() const { controller.print_debug_info(); }
-			// const noob::physics_body* get_body() const { return &body; }
+			rp3d::RigidBody* get_body() const { return controller.get_prop().get_body(); }
 
 		protected:
 			//rp3d::RigidBody* body;

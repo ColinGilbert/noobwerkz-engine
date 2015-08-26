@@ -2,6 +2,7 @@
 
 bool noob::stage::init()
 {
+	world.setEventListener(&phyz_listener);
 	world.start();
 	shaders.init();
 
@@ -32,6 +33,13 @@ bool noob::stage::init()
 	xform.translate(noob::vec3(10.0, 65.0, 10.0));
 
 	std::shared_ptr<noob::actor> test = make_actor("test", unit_cube, get_skeleton("human").lock(), get_shader("moon").lock(), xform.get_matrix(), 1.0, 1.0, 2.0, 5.0);
+	
+	// rp3d::RigidBody* bod = test->get_body();
+	// rp3d::ProxyShape* proxy = bod->getProxyShapesList();
+	// fmt::MemoryWriter w;
+	// w << "[Stage] default proxy shape collision mask = " << proxy->getCollisionCategoryBits() << ", collides with = " << proxy->getCollideWithMaskBits();
+	// logger::log(w.str());
+
 	logger::log("[Stage] init complete.");
 	return true;
 }
@@ -51,7 +59,7 @@ void noob::stage::update(double dt)
 		for (auto a : actors)
 		{
 			a.second->update(dt, true);
-			a.second->print_debug_info();
+			// a.second->print_debug_info();
 		}
 	}
 }
