@@ -28,12 +28,15 @@ bool noob::stage::init()
 	u.colour_positions = noob::vec2(0.2, 0.7);
 	
 	set_shader("moon", u);
+	noob::basic_renderer::uniform_info dbg_shader;
+	dbg_shader.colour = noob::vec4(0.0, 0.3, 0.3, 1.0);
+	set_shader("basic-debug", dbg_shader);
 
+	debug_shader = get_shader("basic-debug").lock();
 	noob::transform_helper xform;
 	xform.translate(noob::vec3(10.0, 65.0, 10.0));
 
 	std::shared_ptr<noob::actor> test = make_actor("test", unit_cube, get_skeleton("human").lock(), get_shader("moon").lock(), xform.get_matrix(), 1.0, 1.0, 2.0, 5.0);
-	
 	logger::log("[Stage] init complete.");
 	return true;
 }
@@ -53,7 +56,9 @@ void noob::stage::update(double dt)
 		for (auto actor_it : actors)
 		{
 			actor_it.second->update(dt, true);
+			actor_it.second->print_debug_info();
 		}
+
 	}
 }
 
@@ -63,6 +68,7 @@ void noob::stage::draw() const
 	for (auto a : actors)
 	{
 		draw(a.second);
+		debug_draw(a.second);
 	}
 	// TODO: Use frustum + physics world collisions to determine which items are visible, and then draw them.
 }
@@ -70,7 +76,13 @@ void noob::stage::draw() const
 
 void noob::stage::draw(const std::shared_ptr<noob::actor>& a) const
 {
-	shaders.draw(a->get_prop().get_model().get(), *(a->get_prop().get_shading().get()), a->get_prop().get_transform());
+	shaders.draw(a->get_prop().model.get(), *(a->get_prop().shading.get()), a->get_prop().get_transform());
+}
+
+
+void noob::stage::debug_draw(const std::shared_ptr<noob::actor>& a) const
+{
+	shaders.draw(unit_sphere.get(), *(debug_shader.get()), a->destination_prop.get_transform());
 }
 
 
@@ -80,7 +92,9 @@ std::shared_ptr<noob::actor> noob::stage::make_actor(const std::string& name, co
 	auto a = std::make_shared<noob::actor>();
 
 	a->init(&world, model, skel_anim, shader_uniform, transform, mass, width, height, max_speed);
-
+	a->destination_prop.init(&world, unit_sphere, debug_shader, transform);
+	a->destination_prop.add_sphere(1.0, 0.0);
+	a->destination_prop.body->setType(rp3d::KINEMATIC);
 	actors[name] = a;
 
 	return actors[name];

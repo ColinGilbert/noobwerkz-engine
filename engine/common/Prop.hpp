@@ -7,28 +7,27 @@
 #include "Model.hpp"
 #include "ShaderVariant.hpp"
 #include <memory>
+
 namespace noob
 {
-	class prop
+	struct prop
 	{
-		public:
 		//	prop() : model_valid(false), shader_valid(false), body(nullptr), world(nullptr) {}
+
+			struct info
+			{
+				noob::vec3 position;
+				noob::versor orientation;
+			};
 
 			enum type { DYNAMIC, KINEMATIC, STATIC, GHOST };
 
-			void init(rp3d::DynamicsWorld*, const std::shared_ptr<noob::model>&, const std::shared_ptr<noob::prepared_shaders::info>&, const noob::mat4& = noob::identity_mat4(), rp3d::BodyType = rp3d::DYNAMIC);
-			
+			void init(rp3d::DynamicsWorld*, const std::shared_ptr<noob::model>& _actor_model, const std::shared_ptr<noob::prepared_shaders::info>& _actor_shading, const noob::mat4& = noob::identity_mat4(), rp3d::BodyType = rp3d::DYNAMIC);
 			void set_transform(const noob::mat4& transform);
 			noob::mat4 get_transform() const;
 
-			void set_shading(const std::shared_ptr<noob::prepared_shaders::info>& uniforms) { shader_info = uniforms; }
-			std::shared_ptr<noob::prepared_shaders::info> get_shading() const { return shader_info; }
-			
-			void set_model(const std::shared_ptr<noob::model>& m) { model = m; }
-			std::shared_ptr<noob::model> get_model() const { return model; }
-
 			void print_debug_info() const;
-			rp3d::RigidBody* get_body() const { return body; }
+			noob::prop::info get_info() const;
 
 			void add_sphere(float radius, float mass, const noob::mat4& local_transform = noob::identity_mat4(), short collision_mask = 1, short collides_with = std::numeric_limits<short>::max());
 			void add_box(float width, float height, float depth, float mass, const noob::mat4& local_transform = noob::identity_mat4(), short collision_mask = 1, short collides_with = std::numeric_limits<short>::max());
@@ -37,11 +36,11 @@ namespace noob
 			void add_cone(float radius, float height, float mass, const noob::mat4& local_transform = noob::identity_mat4(), short collision_mask = 1, short collides_with = std::numeric_limits<short>::max());
 			// This one creates a mesh from several convex hulls (ideally created beforehand via the noob::basic_mesh::convex_decomposition() interface.) May bugger up if meshes aren't convex
 			void add_mesh(const std::vector<noob::basic_mesh>& mesh, float mass, const noob::mat4& local_transform = noob::identity_mat4(), short collision_mask = 1, short collides_with = std::numeric_limits<short>::max());
-			
-		protected:
+		
 			rp3d::RigidBody* body;
 			rp3d::DynamicsWorld* world;
-			std::shared_ptr<noob::prepared_shaders::info> shader_info;
+			std::shared_ptr<noob::prepared_shaders::info> shading;
 			std::shared_ptr<noob::model> model;
+
 	};
 }

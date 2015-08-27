@@ -7,7 +7,7 @@ void noob::prop::init(rp3d::DynamicsWorld* w, const std::shared_ptr<noob::model>
 	t.setFromOpenGL(const_cast<reactphysics3d::decimal*>(&transform.m[0]));
 	body = world->createRigidBody(t);
 	body->setType(type);
-	shader_info = uniforms;
+	shading = uniforms;
 	model = drawable;
 }
 
@@ -36,6 +36,27 @@ void noob::prop::print_debug_info() const
 	rp3d::Vector3 angular_vel = body->getAngularVelocity();
 	w << "[Character Controller] Position = (" <<  pos.x << ", " << pos.y << ", " << pos.z << "). Linear velocity = (" << linear_vel.x << ", " << linear_vel.y << ", " << linear_vel.z << "). Angular Velocity = (" << angular_vel.x << ", " << angular_vel.y << ", " << angular_vel.z << ")";
 	logger::log(w.str());
+}
+
+
+noob::prop::info noob::prop::get_info() const
+{
+	rp3d::Transform t;
+
+	noob::prop::info inf;
+
+	rp3d::Vector3 p = t.getPosition();
+	inf.position.v[0] = p.x;
+	inf.position.v[1] = p.y;
+	inf.position.v[2] = p.z;
+	
+	rp3d::Quaternion q = t.getOrientation();
+	inf.orientation.q[0] = q.x;
+	inf.orientation.q[1] = q.y;
+	inf.orientation.q[2] = q.z;
+	inf.orientation.q[3] = q.w;
+	
+	return inf;
 }
 
 

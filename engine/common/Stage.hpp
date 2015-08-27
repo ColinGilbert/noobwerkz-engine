@@ -29,6 +29,7 @@
 
 namespace noob
 {
+	class actor;
 	class stage
 	{
 		public:
@@ -40,6 +41,8 @@ namespace noob
 			
 			void draw() const;
 			void draw(const std::shared_ptr<noob::actor>& a) const;
+			void debug_draw(const std::shared_ptr<noob::actor>& a) const;
+			
 			void pause() { paused = true; }
 			void start() { paused = false; }
 
@@ -78,7 +81,7 @@ namespace noob
 
 			// For fast access to basic shapes. Test to see difference.
 			std::shared_ptr<noob::model> unit_cube, unit_sphere, unit_cylinder, unit_cone;
-
+			std::shared_ptr<noob::prepared_shaders::info> debug_shader;
 			
 			std::unordered_map<std::string, std::shared_ptr<noob::actor>> actors;
 			std::forward_list<noob::actor> debug_actors;

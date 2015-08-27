@@ -1,3 +1,4 @@
+// Kinematic, until self_control == false. The it beomes dynamic body
 #pragma once
 
 
