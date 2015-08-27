@@ -12,7 +12,7 @@ namespace noob
 	class prop
 	{
 		public:
-		//	prop() : model_valid(false), shader_valid(false), body(nullptr), world(nullptr) {}
+			prop() : model_valid(false), skel_valid(false), shader_valid(false), debugging(false) {}
 
 			enum type { DYNAMIC, KINEMATIC, STATIC, GHOST };
 
@@ -39,6 +39,8 @@ namespace noob
 			void add_mesh(const std::vector<noob::basic_mesh>& mesh, float mass, const noob::mat4& local_transform = noob::identity_mat4(), short collision_mask = 1, short collides_with = std::numeric_limits<short>::max());
 			
 		protected:
+			bool model_valid, skel_valid, shader_valid, debugging;
+
 			rp3d::RigidBody* body;
 			rp3d::DynamicsWorld* world;
 			std::shared_ptr<noob::prepared_shaders::info> shader_info;

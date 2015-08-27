@@ -34,12 +34,6 @@ bool noob::stage::init()
 
 	std::shared_ptr<noob::actor> test = make_actor("test", unit_cube, get_skeleton("human").lock(), get_shader("moon").lock(), xform.get_matrix(), 1.0, 1.0, 2.0, 5.0);
 	
-	// rp3d::RigidBody* bod = test->get_body();
-	// rp3d::ProxyShape* proxy = bod->getProxyShapesList();
-	// fmt::MemoryWriter w;
-	// w << "[Stage] default proxy shape collision mask = " << proxy->getCollisionCategoryBits() << ", collides with = " << proxy->getCollideWithMaskBits();
-	// logger::log(w.str());
-
 	logger::log("[Stage] init complete.");
 	return true;
 }
@@ -56,10 +50,9 @@ void noob::stage::update(double dt)
 			world.update();
 			accum -= 1.0/60.0;
 		}
-		for (auto a : actors)
+		for (auto actor_it : actors)
 		{
-			a.second->update(dt, true);
-			a.second->get_prop().print_debug_info();
+			actor_it.second->update(dt, true);
 		}
 	}
 }

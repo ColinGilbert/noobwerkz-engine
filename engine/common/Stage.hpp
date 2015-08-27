@@ -3,7 +3,8 @@
 #include <stack>
 #include <string>
 #include <tuple>
-
+#include <list>
+#include <forward_list>
 #include "Config.hpp"
 
 #include "Graphics.hpp"
@@ -78,7 +79,9 @@ namespace noob
 			// For fast access to basic shapes. Test to see difference.
 			std::shared_ptr<noob::model> unit_cube, unit_sphere, unit_cylinder, unit_cone;
 
+			
 			std::unordered_map<std::string, std::shared_ptr<noob::actor>> actors;
+			std::forward_list<noob::actor> debug_actors;
 			std::unordered_map<std::string, std::shared_ptr<noob::prepared_shaders::info>> shader_uniforms;
 			std::unordered_map<std::string, std::shared_ptr<noob::model>> models;
 			std::unordered_map<std::string, std::shared_ptr<noob::skeletal_anim>> skeletons;
