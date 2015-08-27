@@ -37,6 +37,7 @@ bool noob::stage::init()
 	xform.translate(noob::vec3(10.0, 65.0, 10.0));
 
 	std::shared_ptr<noob::actor> test = make_actor("test", unit_cube, get_skeleton("human").lock(), get_shader("moon").lock(), xform.get_matrix(), 1.0, 1.0, 2.0, 5.0);
+	test->set_destination(noob::vec3(0.0, 0.0, 0.0));
 	logger::log("[Stage] init complete.");
 	return true;
 }
