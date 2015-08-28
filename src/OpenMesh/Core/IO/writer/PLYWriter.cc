@@ -490,7 +490,7 @@ void _PLYWriter_::writeValue(ValueType _type, std::ostream& _out, float value) c
 
 void _PLYWriter_::writeValue(ValueType _type, std::ostream& _out, double value) const {
 
-  double_t tmp;
+  float64_t tmp;
 
   switch (_type) {
     case ValueTypeDOUBLE:
