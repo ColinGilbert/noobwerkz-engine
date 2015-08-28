@@ -14,8 +14,8 @@ namespace noob
 		noob::mat4 get_matrix() const
 		{
 			noob::mat4 m = noob::identity_mat4();
-			m = noob::scale(m, scaling);
 			m = m * noob::quat_to_mat4(rotation);
+			m = noob::scale(m, scaling);
 			m = noob::translate(m, translation);
 
 			return m;

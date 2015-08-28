@@ -33,22 +33,25 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() : world(rp3d::Vector3(0.0, -9.81, 0.0)), paused(false) {}
+			stage() : world(rp3d::Vector3(0.0, -9.81, 0.0), rp3d::decimal(1.0 / 60.0)), paused(false) {}
 
 			bool init();
 			
 			void update(double dt);
 			
 			void draw() const;
-			void draw(const std::shared_ptr<noob::actor>& a) const;
+			void draw(noob::prop*) const;
+			void draw(const std::shared_ptr<noob::actor>&) const;
 			
 			void debug_draw(noob::prop*) const;
-			void debug_draw(const std::shared_ptr<noob::actor>& a) const;
+			void debug_draw(const std::shared_ptr<noob::actor>&) const;
 			
 			void pause() { paused = true; }
 			void start() { paused = false; }
 
 			std::shared_ptr<noob::actor> make_actor(const std::string& name, const std::shared_ptr<noob::model>&, const std::shared_ptr<noob::skeletal_anim>&, const std::shared_ptr<noob::prepared_shaders::info>&, const noob::mat4& transform, float mass = 2.0, float width = 0.25, float height = 1.0, float max_speed = 5.0);
+			
+			std::shared_ptr<noob::prop> make_prop(const std::string& name, const std::shared_ptr<noob::model>&, const std::shared_ptr<noob::prepared_shaders::info>&, const noob::mat4& transform);
 
 			// Loads a serialized model (from cereal binary)
 			bool add_model(const std::string& name, const std::string& filename);
@@ -57,6 +60,7 @@ namespace noob
 			void set_shader(const std::string& name, const noob::prepared_shaders::info& info);
 
 			std::weak_ptr<noob::actor> get_actor(const std::string& name) const;
+			std::weak_ptr<noob::prop> get_prop(const std::string& name) const;
 			std::weak_ptr<noob::prepared_shaders::info> get_shader(const std::string& name) const;
 			std::weak_ptr<noob::model> get_model(const std::string& name) const;
 			std::weak_ptr<noob::skeletal_anim> get_skeleton(const std::string& name) const;
@@ -83,6 +87,7 @@ namespace noob
 			std::shared_ptr<noob::model> unit_cube, unit_sphere, unit_cylinder, unit_cone;
 			std::shared_ptr<noob::prepared_shaders::info> debug_shader;
 			
+			std::unordered_map<std::string, std::shared_ptr<noob::prop>> props;
 			std::unordered_map<std::string, std::shared_ptr<noob::actor>> actors;
 			std::forward_list<noob::actor> debug_actors;
 			std::unordered_map<std::string, std::shared_ptr<noob::prepared_shaders::info>> shader_uniforms;

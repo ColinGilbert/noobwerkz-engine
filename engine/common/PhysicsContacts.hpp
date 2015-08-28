@@ -41,7 +41,7 @@ namespace noob
 			std::string log_info(const rp3d::ContactPointInfo& contact)
 			{
 				fmt::MemoryWriter w;
-				w << "Normal = (" << contact.normal.x << ", " << contact.normal.y << ", " << contact.normal.z << "). Penetration depth = " << contact.penetrationDepth << ". Point 1 (local) = (" << contact.localPoint1.x << ", " << contact.localPoint1.y << ", " << contact.localPoint1.z << "). Point 2 (local) = (" << contact.localPoint2.x << ", " << contact.localPoint2.y << ", " << contact.localPoint2.z << ")";
+				w << "[Contact] Normal = (" << contact.normal.x << ", " << contact.normal.y << ", " << contact.normal.z << "). Penetration depth = " << contact.penetrationDepth << ". Point 1 (local) = (" << contact.localPoint1.x << ", " << contact.localPoint1.y << ", " << contact.localPoint1.z << "). Point 2 (local) = (" << contact.localPoint2.x << ", " << contact.localPoint2.y << ", " << contact.localPoint2.z << ")";
 				return w.str();
 			}
 	};

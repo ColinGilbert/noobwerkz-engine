@@ -3,7 +3,9 @@
 bool noob::stage::init()
 {
 	world.setEventListener(&phyz_listener);
-	//world.start();
+	//world.setNbIterationsVelocitySolver(20);
+	//world.setNbIterationsPositionSolver(20);
+	world.start();
 	shaders.init();
 
 	add_model("unit-sphere", noob::basic_mesh::sphere(0.5));
@@ -24,7 +26,7 @@ bool noob::stage::init()
 	u.colours[2] = noob::vec4(0.4, 0.4, 0.4, 1.0);
 	u.colours[3] = noob::vec4(0.0, 0.0, 0.0, 1.0);
 	u.mapping_blends = noob::vec3(1.0, 0.5, 0.8);
-	u.scales = noob::vec3(1.0, 1.0, 1.0);
+	u.scales = noob::vec3(15.0, 5.0, 2.0);
 	u.colour_positions = noob::vec2(0.2, 0.7);
 
 	set_shader("moon", u);
@@ -34,12 +36,16 @@ bool noob::stage::init()
 
 	debug_shader = get_shader("basic-debug").lock();
 	noob::transform_helper xform;
-	xform.translate(noob::vec3(10.0, 65.0, 10.0));
+	xform.translate(noob::vec3(0.0, 120.0, 0.0));
 
-	std::shared_ptr<noob::actor> test = make_actor("test", unit_cube, get_skeleton("human").lock(), get_shader("moon").lock(), xform.get_matrix(), 1.0, 1.0, 2.0, 5.0); //xform.get_matrix(), 1.0, 1.0, 2.0, 5.0);
+	std::shared_ptr<noob::actor> test = make_actor("test", unit_cube, get_skeleton("human").lock(), get_shader("moon").lock(), xform.get_matrix(), 1.0, 1.0, 2.0, 5.0);
 	
+	std::shared_ptr<noob::prop> ground = make_prop("ground", unit_cube, get_shader("moon").lock(), noob::identity_mat4());
+	ground->add_box(1000.0, 1.0, 1000.0, 0.0);
+	ground->scale = noob::vec3(1000.0, 1.0, 1000.0);
+	ground->body->setType(rp3d::STATIC);
+
 	test->set_destination(noob::vec3(0.0, 0.0, 0.0));
-	//test->get_prop()->set_drawing_scale(noob::vec3(100.0, 0.5, 100.0));
 	
 	logger::log("[Stage] init complete.");
 	return true;
@@ -54,13 +60,14 @@ void noob::stage::update(double dt)
 		accum += dt;
 		if (accum > 1.0/60.0)
 		{
-			world.update(static_cast<rp3d::decimal>(accum));
+			world.update();
+			//world.update(static_cast<rp3d::decimal>(accum));
 			accum -= 1.0/60.0;
 		}
 		for (auto actor_it : actors)
 		{
-			actor_it.second->update(dt, true);
-			 actor_it.second->print_debug_info();
+			actor_it.second->update(dt);//, true, false, true);
+			actor_it.second->print_debug_info();
 		}
 
 	}
@@ -71,17 +78,29 @@ void noob::stage::draw() const
 {
 	for (auto a : actors)
 	{
-		//draw(a.second);
-		debug_draw(a.second);
+		draw(a.second);
+		//debug_draw(a.second);
+	}
+	for (auto p : props)
+	{
+		draw(p.second.get());
 	}
 	// TODO: Use frustum + physics world collisions to determine which items are visible, and then draw them.
 }
 
 
+void noob::stage::draw(noob::prop* p) const
+{
+	shaders.draw(p->model.get(), *(p->shading.get()), noob::scale(p->get_transform(), p->scale));
+}
+
+
 void noob::stage::draw(const std::shared_ptr<noob::actor>& a) const
 {
-	shaders.draw(a->get_prop()->model.get(), *(a->get_prop()->shading.get()), a->get_prop()->get_transform());
+	draw(a->get_prop());
+	//shaders.draw(a->get_prop()->model.get(), *(a->get_prop()->shading.get()), a->get_prop()->get_transform());
 }
+
 
 void noob::stage::debug_draw(noob::prop* p) const
 {
@@ -115,11 +134,11 @@ void noob::stage::debug_draw(noob::prop* p) const
 
 
 		rp3d::Vector3 _pos = p->body->getTransform().getPosition();
-		
+/*	
 		fmt::MemoryWriter w;
 		w << "noob::stage::debug_draw(prop*) - Position = (" << _pos.x << ", " << _pos.y << ", " << _pos.z << ")";
 		logger::log(w.str());
-
+*/
 		switch (collision_shape->getType())
 		{
 			case rp3d::BOX:
@@ -152,8 +171,8 @@ void noob::stage::debug_draw(noob::prop* p) const
 
 void noob::stage::debug_draw(const std::shared_ptr<noob::actor>& a) const
 {
-	logger::log("noob::stage::debug_draw(const std::shared_ptr<noob::actor>&)");
-	//shaders.draw(unit_sphere.get(), *(debug_shader.get()), a->destination_prop.get_transform());
+	// logger::log("noob::stage::debug_draw(const std::shared_ptr<noob::actor>&)");
+	// shaders.draw(unit_sphere.get(), *(debug_shader.get()), a->destination_prop.get_transform());
 	debug_draw(a->get_prop());
 }
 
@@ -170,6 +189,15 @@ std::shared_ptr<noob::actor> noob::stage::make_actor(const std::string& name, co
 	actors[name] = a;
 
 	return actors[name];
+}
+
+
+std::shared_ptr<noob::prop> noob::stage::make_prop(const std::string& name, const std::shared_ptr<noob::model>& drawable, const std::shared_ptr<noob::prepared_shaders::info>& uniforms, const noob::mat4& transform)
+{
+	auto p = std::make_shared<noob::prop>();
+	p->init(&world, drawable, uniforms, transform);
+	props[name] = p;
+	return props[name];
 }
 
 

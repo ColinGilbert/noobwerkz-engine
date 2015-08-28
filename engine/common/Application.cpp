@@ -14,7 +14,7 @@ noob::application::application()
 	time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
-	view_mat = noob::look_at(noob::vec3(0, 0, -10.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
+	view_mat = noob::look_at(noob::vec3(0, 100.0, -500.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
 }	
 
 

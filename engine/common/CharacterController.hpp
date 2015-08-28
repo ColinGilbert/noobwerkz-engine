@@ -11,37 +11,39 @@ namespace noob
 	class character_controller
 	{
 		public:
-			character_controller() : self_control(true) {}
+			character_controller() : resting(false), self_control(true), time_on_ground(0.0), slope(0.0, 0.0, 0.0) {}
 
 			void init(rp3d::DynamicsWorld* _world, const std::shared_ptr<noob::model>&, const std::shared_ptr<noob::prepared_shaders::info>&, const noob::mat4&, float _mass, float _width, float _height, float _max_speed);
 
-			void update();
+
 
 			void step(float dt, bool forward, bool back, bool left, bool right, bool jump);
-			
+
 			noob::mat4 get_transform() const { return prop.get_transform(); }
 			//void print_debug_info() const;
 			noob::prop* get_prop() const { return const_cast<noob::prop*>(&prop); }
 
 		protected:
 
-			class raycast_callback : public rp3d::RaycastCallback
-			{
-				public:
-					raycast_callback(noob::prop* _prop_ptr) : prop_ptr(_prop_ptr) {}
-					virtual rp3d::decimal notifyRaycastHit(const rp3d::RaycastInfo& info)
-					{
-						fmt::MemoryWriter w;
-						w << "[CharacterController] raycast hit point = (" << info.worldPoint.x << ", " << info.worldPoint.y << ", " << info.worldPoint.z << ")";
-						logger::log(w.str());
-						return rp3d::decimal(1.0);
-					}
-				protected:
-					noob::prop* prop_ptr;
-			};
+			class groundcast_callback : public rp3d::RaycastCallback
+		{
+			public:
+				groundcast_callback(float prop_height, noob::prop* _prop_ptr, noob::vec3 _from, noob::vec3 _to) : ideal_distance((prop_height / 2.0) + 0.5), airborne(true), prop_ptr(_prop_ptr), from(_from), to(_to), slope(0.0, 0.0, 0.0) {}
+				virtual rp3d::decimal notifyRaycastHit(const rp3d::RaycastInfo& info);
+				bool is_grounded() const { return !airborne; }
+				noob::vec3 get_slope() const { return slope; }
 
-			bool self_control;
-			float width, mass, height, current_speed, max_speed;
+			protected:
+
+				float ideal_distance;
+				bool airborne;
+				noob::prop* prop_ptr;
+				noob::vec3 from, to, slope;				
+		};
+			void update(float dt);
+			bool resting, self_control;
+			float width, mass, height, current_speed, max_speed, time_on_ground;
+			noob::vec3 slope;
 			noob::prop prop;
 			rp3d::ProxyShape* proxy_shape;
 			rp3d::DynamicsWorld* world;

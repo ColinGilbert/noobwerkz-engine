@@ -12,7 +12,7 @@ void noob::actor::init(rp3d::DynamicsWorld* _world, const std::shared_ptr<noob::
 
 void noob::actor::update(double dt, bool forward, bool backward, bool left, bool right, bool jump)
 {
-
+	controller.step(static_cast<float>(dt), forward, backward, left, right, jump);
 }
 
 
