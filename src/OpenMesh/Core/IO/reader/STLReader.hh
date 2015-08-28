@@ -68,10 +68,6 @@
 #include <OpenMesh/Core/Utils/SingletonT.hh>
 #include <OpenMesh/Core/IO/reader/BaseReader.hh>
 
-#ifndef WIN32
-#include <string.h>
-#endif
-
 
 //== NAMESPACES ===============================================================
 

@@ -61,11 +61,7 @@
 //=== INCLUDES ================================================================
 
 // -------------------- STL
-#if defined( OM_CC_MIPS )
-#  include <stdio.h>
-#else
-#  include <cstdio>
-#endif
+#include <iosfwd>
 #include <string>
 // -------------------- OpenMesh
 #include <OpenMesh/Core/System/config.h>

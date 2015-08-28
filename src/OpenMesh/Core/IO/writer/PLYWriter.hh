@@ -60,8 +60,6 @@
 
 //=== INCLUDES ================================================================
 
-
-#include <stdio.h>
 #include <string>
 #include <ostream>
 #include <vector>

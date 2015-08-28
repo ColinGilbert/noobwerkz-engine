@@ -72,9 +72,6 @@
 #include <OpenMesh/Core/IO/reader/BaseReader.hh>
 #include <OpenMesh/Core/Utils/GenProg.hh>
 
-#ifndef WIN32
-#include <string.h>
-#endif
 
 //== NAMESPACES ===============================================================
 
