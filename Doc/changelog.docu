@@ -7,11 +7,22 @@
 <!-- --------------------------------------------------------------------- -->
 
 
-<tr valign=top><td><b>4.2</b> (?/?/?,Rev.1323)</td><td>
+<tr valign=top><td><b>4.2</b> (?/?/?,Rev.1333)</td><td>
 
 <b>IO</b>
 <ul>
+<li>loaded properties are presistant per default</li>
+<li>remove unnecessary c headers</li>
 <li>PLY Writer: fix crash when saving a mesh and a custom property was removed before, extend unittest for this case</li>
+<li>PLY Writer: add custom property (with pod data type) support for binary ply files closes #2496</li>
+<li>remove redundant code refs #2525</li>
+<li>Off Writer: Removed redundant code</li>
+</ul>
+
+<b>Unittests</b>
+<ul>
+<li>add obj writer unittest</li>
+<li>add unittest for write stla</li>
 </ul>
 
 
