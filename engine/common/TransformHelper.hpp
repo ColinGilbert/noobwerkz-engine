@@ -14,16 +14,18 @@ namespace noob
 		noob::mat4 get_matrix() const
 		{
 			noob::mat4 m = noob::identity_mat4();
-			m = m * noob::quat_to_mat4(rotation);
-
-			m = noob::translate(m, translation);
 			m = noob::scale(m, scaling);
+			m = m * noob::quat_to_mat4(rotation);
+			m = noob::translate(m, translation);
+
 			return m;
 		}
 		
 		void scale(const noob::vec3& s)
 		{
-			scaling += s;
+			scaling.v[0] *= s.v[0];
+			scaling.v[1] *= s.v[1];
+			scaling.v[2] *= s.v[2];
 		}
 
 		void translate(const noob::vec3& t)

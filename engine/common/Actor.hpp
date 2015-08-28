@@ -32,6 +32,7 @@ namespace noob
 			void update(double dt, bool forward = false, bool backward = false, bool left = false, bool right = false, bool jump = false);
 			
 			bool set_destination(const noob::vec3&);
+			
 			noob::mat4 get_transform() const;
 			//noob::prop get_destination() const;
 
@@ -39,8 +40,8 @@ namespace noob
 			void clear_path();
 			std::vector<noob::vec3> get_path_vector() const;
 
-			void print_debug_info() const { controller.get_prop().print_debug_info(); }
-			noob::prop get_prop() const { return controller.get_prop(); }
+			void print_debug_info() const { controller.get_prop()->print_debug_info(); }
+			noob::prop* get_prop() const { return controller.get_prop(); }
 			noob::prop::info get_destination() const { return destination_prop.get_info(); }
 		
 		protected:

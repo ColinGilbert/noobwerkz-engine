@@ -12,7 +12,7 @@ namespace noob
 {
 	struct prop
 	{
-		//	prop() : model_valid(false), shader_valid(false), body(nullptr), world(nullptr) {}
+			prop() : body(nullptr), world(nullptr), scale(noob::vec3(1.0, 1.0, 1.0)) {}
 
 			struct info
 			{
@@ -23,9 +23,11 @@ namespace noob
 			enum type { DYNAMIC, KINEMATIC, STATIC, GHOST };
 
 			void init(rp3d::DynamicsWorld*, const std::shared_ptr<noob::model>& _actor_model, const std::shared_ptr<noob::prepared_shaders::info>& _actor_shading, const noob::mat4& = noob::identity_mat4(), rp3d::BodyType = rp3d::DYNAMIC);
-			void set_transform(const noob::mat4& transform);
+			//void set_transform(const noob::mat4& transform);
 			noob::mat4 get_transform() const;
 
+			void set_drawing_scale(const noob::vec3&);
+			
 			void print_debug_info() const;
 			noob::prop::info get_info() const;
 
@@ -42,5 +44,6 @@ namespace noob
 			std::shared_ptr<noob::prepared_shaders::info> shading;
 			std::shared_ptr<noob::model> model;
 
+			noob::vec3 scale;
 	};
 }

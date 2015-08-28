@@ -1,20 +1,18 @@
 #include "Actor.hpp"
-//#include "TransformHelper.hpp"
+
+
 void noob::actor::init(rp3d::DynamicsWorld* _world, const std::shared_ptr<noob::model>& _model, const std::shared_ptr<noob::skeletal_anim>& _anim, const std::shared_ptr<noob::prepared_shaders::info>& _shader_info, const noob::mat4& _mat, float _mass, float _width, float _height, float _max_speed)
  {
 	max_speed = _max_speed;
 	world = _world;
 	anim = _anim;
-	controller.init( world, _model, _shader_info, _mat, _mass, _width, _height, _max_speed);
-	//controller.get_prop().body->setType(rp3d::KINEMATIC);
-	//controller.get_prop().add_capsule(_width, _height, mass);
+	controller.init(world, _model, _shader_info, _mat, _mass, _width, _height, _max_speed);
 }
+
 
 void noob::actor::update(double dt, bool forward, bool backward, bool left, bool right, bool jump)
 {
-	noob::transform_helper t;
-	t.translate(path.front());
-	destination_prop.set_transform(t.get_matrix());// controller.step(static_cast<float>(dt), forward, backward, left, right, jump);
+
 }
 
 
@@ -28,7 +26,7 @@ bool noob::actor::set_destination(const noob::vec3& pos)
 
 noob::mat4 noob::actor::get_transform() const
 {
-	return controller.get_prop().get_transform();
+	return controller.get_prop()->get_transform();
 	
 }
 

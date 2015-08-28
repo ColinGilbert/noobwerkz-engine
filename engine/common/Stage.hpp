@@ -33,7 +33,7 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() : world(rp3d::Vector3(0.0, -9.81, 0.0), rp3d::decimal(1.0/60.0)), paused(false) {}
+			stage() : world(rp3d::Vector3(0.0, -9.81, 0.0)), paused(false) {}
 
 			bool init();
 			
@@ -41,6 +41,8 @@ namespace noob
 			
 			void draw() const;
 			void draw(const std::shared_ptr<noob::actor>& a) const;
+			
+			void debug_draw(noob::prop*) const;
 			void debug_draw(const std::shared_ptr<noob::actor>& a) const;
 			
 			void pause() { paused = true; }
@@ -51,9 +53,7 @@ namespace noob
 			// Loads a serialized model (from cereal binary)
 			bool add_model(const std::string& name, const std::string& filename);
 			bool add_model(const std::string& name, const noob::basic_mesh&);
-
 			bool add_skeleton(const std::string& name, const std::string& filename);
-			
 			void set_shader(const std::string& name, const noob::prepared_shaders::info& info);
 
 			std::weak_ptr<noob::actor> get_actor(const std::string& name) const;

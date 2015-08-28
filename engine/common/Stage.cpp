@@ -3,7 +3,7 @@
 bool noob::stage::init()
 {
 	world.setEventListener(&phyz_listener);
-	world.start();
+	//world.start();
 	shaders.init();
 
 	add_model("unit-sphere", noob::basic_mesh::sphere(0.5));
@@ -26,7 +26,7 @@ bool noob::stage::init()
 	u.mapping_blends = noob::vec3(1.0, 0.5, 0.8);
 	u.scales = noob::vec3(1.0, 1.0, 1.0);
 	u.colour_positions = noob::vec2(0.2, 0.7);
-	
+
 	set_shader("moon", u);
 	noob::basic_renderer::uniform_info dbg_shader;
 	dbg_shader.colour = noob::vec4(0.0, 0.3, 0.3, 1.0);
@@ -36,8 +36,11 @@ bool noob::stage::init()
 	noob::transform_helper xform;
 	xform.translate(noob::vec3(10.0, 65.0, 10.0));
 
-	std::shared_ptr<noob::actor> test = make_actor("test", unit_cube, get_skeleton("human").lock(), get_shader("moon").lock(), xform.get_matrix(), 1.0, 1.0, 2.0, 5.0);
+	std::shared_ptr<noob::actor> test = make_actor("test", unit_cube, get_skeleton("human").lock(), get_shader("moon").lock(), xform.get_matrix(), 1.0, 1.0, 2.0, 5.0); //xform.get_matrix(), 1.0, 1.0, 2.0, 5.0);
+	
 	test->set_destination(noob::vec3(0.0, 0.0, 0.0));
+	//test->get_prop()->set_drawing_scale(noob::vec3(100.0, 0.5, 100.0));
+	
 	logger::log("[Stage] init complete.");
 	return true;
 }
@@ -51,13 +54,13 @@ void noob::stage::update(double dt)
 		accum += dt;
 		if (accum > 1.0/60.0)
 		{
-			world.update();
+			world.update(static_cast<rp3d::decimal>(accum));
 			accum -= 1.0/60.0;
 		}
 		for (auto actor_it : actors)
 		{
 			actor_it.second->update(dt, true);
-			actor_it.second->print_debug_info();
+			 actor_it.second->print_debug_info();
 		}
 
 	}
@@ -68,7 +71,7 @@ void noob::stage::draw() const
 {
 	for (auto a : actors)
 	{
-		draw(a.second);
+		//draw(a.second);
 		debug_draw(a.second);
 	}
 	// TODO: Use frustum + physics world collisions to determine which items are visible, and then draw them.
@@ -77,13 +80,81 @@ void noob::stage::draw() const
 
 void noob::stage::draw(const std::shared_ptr<noob::actor>& a) const
 {
-	shaders.draw(a->get_prop().model.get(), *(a->get_prop().shading.get()), a->get_prop().get_transform());
+	shaders.draw(a->get_prop()->model.get(), *(a->get_prop()->shading.get()), a->get_prop()->get_transform());
+}
+
+void noob::stage::debug_draw(noob::prop* p) const
+{
+	
+	const rp3d::ProxyShape* proxy_shape = p->body->getProxyShapesList();
+
+	noob::mat4 t;
+
+	p->body->getTransform().getOpenGLMatrix(&t.m[0]);
+
+	while (proxy_shape != NULL)
+	{
+		noob::vec3 scale(1.0, 1.0, 1.0);
+
+		const rp3d::CollisionShape* collision_shape = proxy_shape->getCollisionShape();
+
+		if(collision_shape->getType() != rp3d::CONVEX_MESH)
+		{
+			rp3d::Vector3 min, max;
+			collision_shape->getLocalBounds(min, max);
+			scale = max - min;
+		}
+
+		noob::transform_helper t_local;
+		t_local.scale(scale);
+		t_local.translate(proxy_shape->getLocalToBodyTransform().getPosition());
+		t_local.rotate(proxy_shape->getLocalToBodyTransform().getOrientation());
+		
+		noob::mat4 t_global = p->get_transform();
+		noob::mat4 t_final = t_global * t_local.get_matrix();
+
+
+		rp3d::Vector3 _pos = p->body->getTransform().getPosition();
+		
+		fmt::MemoryWriter w;
+		w << "noob::stage::debug_draw(prop*) - Position = (" << _pos.x << ", " << _pos.y << ", " << _pos.z << ")";
+		logger::log(w.str());
+
+		switch (collision_shape->getType())
+		{
+			case rp3d::BOX:
+				shaders.draw(unit_cube.get(), *(debug_shader.get()), t_final);
+				break;
+			case rp3d::SPHERE:
+				shaders.draw(unit_sphere.get(), *(debug_shader.get()), t_final);
+				break;
+			case rp3d::CYLINDER:
+				shaders.draw(unit_cylinder.get(), *(debug_shader.get()), t_final);
+				break;
+			case rp3d::CONE:
+				shaders.draw(unit_cone.get(), *(debug_shader.get()), t_final);
+				break;
+			case rp3d::CAPSULE:
+				logger::log("stage::debug_draw(prop*) - no unit capsule model (yet)");
+				break;
+			case rp3d::CONVEX_MESH:
+				logger::log("stage::debug_draw(prop*) - Haven't yet figured out how to do debug draw for convex mesh.");
+				break;
+			default:
+				logger::log("noob::stage::debug_draw(noob::prop*) - default statement reached. Should not happen");
+				break;
+		}
+		
+		proxy_shape = proxy_shape->getNext();
+	}
 }
 
 
 void noob::stage::debug_draw(const std::shared_ptr<noob::actor>& a) const
 {
-	shaders.draw(unit_sphere.get(), *(debug_shader.get()), a->destination_prop.get_transform());
+	logger::log("noob::stage::debug_draw(const std::shared_ptr<noob::actor>&)");
+	//shaders.draw(unit_sphere.get(), *(debug_shader.get()), a->destination_prop.get_transform());
+	debug_draw(a->get_prop());
 }
 
 
@@ -148,7 +219,6 @@ void noob::stage::set_shader(const std::string& name, const noob::prepared_shade
 }
 
 
-
 std::weak_ptr<noob::actor> noob::stage::get_actor(const std::string& name) const
 {
 	auto search = actors.find(name);
@@ -175,9 +245,8 @@ std::weak_ptr<noob::prepared_shaders::info> noob::stage::get_shader(const std::s
 	}
 
 	return search->second;
-	
-}
 
+}
 
 
 std::weak_ptr<noob::model> noob::stage::get_model(const std::string& name) const

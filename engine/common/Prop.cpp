@@ -1,4 +1,5 @@
 #include "Prop.hpp"
+#include "TransformHelper.hpp"
 
 void noob::prop::init(rp3d::DynamicsWorld* w, const std::shared_ptr<noob::model>& drawable, const std::shared_ptr<noob::prepared_shaders::info>& uniforms, const noob::mat4& transform, rp3d::BodyType type)
 {
@@ -11,30 +12,49 @@ void noob::prop::init(rp3d::DynamicsWorld* w, const std::shared_ptr<noob::model>
 	model = drawable;
 }
 
+/*
 void noob::prop::set_transform(const noob::mat4& transform)
 {
 	rp3d::Transform _transform;
 	_transform.setFromOpenGL(const_cast<rp3d::decimal*>(&transform.m[0]));
 	body->setTransform(_transform);	
 }
-
+*/
 
 noob::mat4 noob::prop::get_transform() const
 {
-	noob::mat4 transform;
-	body->getInterpolatedTransform().getOpenGLMatrix(&transform.m[0]);//transform();
-	return transform;
+	//rp3d::Vector3 rp = body->getInterpolatedTransform().getPosition();
+	rp3d::Vector3 rp = body->getTransform().getPosition();
+	//rp3d::Quaternion rq = body->getInterpolatedTransform().getOrientation();
+	rp3d::Quaternion rq = body->getTransform().getOrientation();
+	noob::vec3 p(rp.x, rp.y, rp.z);
+	noob::versor q(rq.x, rq.y, rq.z, rq.w);
+	noob::transform_helper t;
+	t.translate(p);
+	t.rotate(q);
+	t.scale(scale);
+	return t.get_matrix();
+}
+
+
+void noob::prop::set_drawing_scale(const noob::vec3& s)
+{
+	scale = s;
 }
 
 
 void noob::prop::print_debug_info() const
 {
-	rp3d::Transform t = body->getInterpolatedTransform();
+	//rp3d::Transform t = body->getInterpolatedTransform();
+	rp3d::Transform t = body->getTransform();
 	fmt::MemoryWriter w;
 	rp3d::Vector3 pos = t.getPosition();
 	rp3d::Vector3 linear_vel = body->getLinearVelocity();
 	rp3d::Vector3 angular_vel = body->getAngularVelocity();
-	w << "[Character Controller] Position = (" <<  pos.x << ", " << pos.y << ", " << pos.z << "). Linear velocity = (" << linear_vel.x << ", " << linear_vel.y << ", " << linear_vel.z << "). Angular Velocity = (" << angular_vel.x << ", " << angular_vel.y << ", " << angular_vel.z << ")";
+	noob::mat4 noob_transform = get_transform();
+	noob::vec3 noob_pos = noob::translation_from_mat4(noob_transform);
+	noob::vec3 noob_scale = noob::scale_from_mat4(noob_transform);
+	w << "[Prop] rp3d::pos = (" << pos.x << ", " << pos.y << ", " << pos.z << "), noob::pos = "  <<  noob_pos.v[0] << ", " << noob_pos.v[1] << ", " << noob_pos.v[2] << "). Linear velocity = (" << linear_vel.x << ", " << linear_vel.y << ", " << linear_vel.z << "). Angular Velocity = (" << angular_vel.x << ", " << angular_vel.y << ", " << angular_vel.z << "). Drawing scale = " << noob_scale.v[0] << ", " << noob_scale.v[1] << ", " << noob_scale.v[2] << "). Scaling member variable = (" << scale.v[0] << ", " << scale.v[1] << ", " << scale.v[2] << ")";
 	logger::log(w.str());
 }
 
@@ -64,8 +84,7 @@ void noob::prop::add_sphere(float radius, float mass, const noob::mat4& local_tr
 {
 	rp3d::Transform t;
 	t.setFromOpenGL(const_cast<reactphysics3d::decimal*>(&local_transform.m[0]));
-	//rp3d::SphereShape capsule(radius);
-	rp3d::ProxyShape* p = body->addCollisionShape(rp3d::SphereShape(radius), t, mass);
+	rp3d::ProxyShape* p = body->addCollisionShape(rp3d::SphereShape(radius), t, rp3d::decimal(mass));
 	p->setCollisionCategoryBits(collides_with);
 	p->setCollideWithMaskBits(collision_mask);
 }
