@@ -191,10 +191,11 @@ struct Handle2Prop<T,FaceHandle>
   typedef OpenMesh::FPropHandleT<T> PropT;
 };
 
-template<typename T, typename Handle>
-void assignCustomProperty(std::istream& _in, BaseImporter& _bi, Handle _h, const std::string& _propName, bool isList)
+//read and assign custom properties with the given type. Also creates property, if not exist
+template<bool binary, typename T, typename Handle>
+void _PLYReader_::readCreateCustomProperty(std::istream& _in, BaseImporter& _bi, Handle _h, const std::string& _propName, const _PLYReader_::ValueType _valueType, const _PLYReader_::ValueType _listType) const
 {
-  if (!isList)
+  if (_listType == Unsupported) //no list type defined -> property is not a list
   {
     //get/add property
     typename Handle2Prop<T,Handle>::PropT prop;
@@ -206,7 +207,7 @@ void assignCustomProperty(std::istream& _in, BaseImporter& _bi, Handle _h, const
 
     //read and assign
     T in;
-    _in >> in;
+    read(_valueType, _in, in, OpenMesh::GenProg::Bool2Type<binary>());
     _bi.kernel()->property(prop,_h) = in;
   }
   else
@@ -221,57 +222,56 @@ void assignCustomProperty(std::istream& _in, BaseImporter& _bi, Handle _h, const
 
     //init vector
     int numberOfValues;
-    _in >> numberOfValues;
+    read(_listType, _in, numberOfValues, OpenMesh::GenProg::Bool2Type<binary>());
     std::vector<T> vec;
     vec.reserve(numberOfValues);
     //read and assign
     for (int i = 0; i < numberOfValues; ++i)
     {
       T in;
-      _in >> in;
+      read(_valueType, _in, in, OpenMesh::GenProg::Bool2Type<binary>());
       vec.push_back(in);
     }
     _bi.kernel()->property(prop,_h) = vec;
   }
 }
 
-template<typename Handle>
-void _PLYReader_::readCustomProperty(std::istream& _in, BaseImporter& _bi, Handle _h, const std::string& _propName, const ValueType _valueType, const ValueType _listIndexType) const
+template<bool binary, typename Handle>
+void _PLYReader_::readCustomProperty(std::istream& _in, BaseImporter& _bi, Handle _h, const std::string& _propName, const _PLYReader_::ValueType _valueType, const _PLYReader_::ValueType _listIndexType) const
 {
-  const bool isList = _listIndexType != Unsupported;
   switch (_valueType)
   {
   case ValueTypeINT8:
   case ValueTypeCHAR:
-      assignCustomProperty<signed char>(_in,_bi,_h,_propName,isList);
+      readCreateCustomProperty<binary,signed char>(_in,_bi,_h,_propName,_valueType,_listIndexType);
       break;
   case ValueTypeUINT8:
   case ValueTypeUCHAR:
-      assignCustomProperty<unsigned char>(_in,_bi,_h,_propName,isList);
+      readCreateCustomProperty<binary,unsigned char>(_in,_bi,_h,_propName,_valueType,_listIndexType);
       break;
   case ValueTypeINT16:
   case ValueTypeSHORT:
-      assignCustomProperty<short>(_in,_bi,_h,_propName,isList);
+      readCreateCustomProperty<binary,short>(_in,_bi,_h,_propName,_valueType,_listIndexType);
       break;
   case ValueTypeUINT16:
   case ValueTypeUSHORT:
-      assignCustomProperty<unsigned short>(_in,_bi,_h,_propName,isList);
+      readCreateCustomProperty<binary,unsigned short>(_in,_bi,_h,_propName,_valueType,_listIndexType);
       break;
   case ValueTypeINT32:
   case ValueTypeINT:
-      assignCustomProperty<int>(_in,_bi,_h,_propName,isList);
+      readCreateCustomProperty<binary,int>(_in,_bi,_h,_propName,_valueType,_listIndexType);
       break;
   case ValueTypeUINT32:
   case ValueTypeUINT:
-      assignCustomProperty<unsigned int>(_in,_bi,_h,_propName,isList);
+      readCreateCustomProperty<binary,unsigned int>(_in,_bi,_h,_propName,_valueType,_listIndexType);
       break;
   case ValueTypeFLOAT32:
   case ValueTypeFLOAT:
-      assignCustomProperty<float>(_in,_bi,_h,_propName,isList);
+      readCreateCustomProperty<binary,float>(_in,_bi,_h,_propName,_valueType,_listIndexType);
       break;
   case ValueTypeFLOAT64:
   case ValueTypeDOUBLE:
-      assignCustomProperty<double>(_in,_bi,_h,_propName,isList);
+      readCreateCustomProperty<binary,double>(_in,_bi,_h,_propName,_valueType,_listIndexType);
       break;
   default:
       std::cerr << "unsupported type" << std::endl;
@@ -387,7 +387,7 @@ bool _PLYReader_::read_ascii(std::istream& _in, BaseImporter& _bi, const Options
                 break;
             case CUSTOM_PROP:
                 if (_opt.check(Options::Custom))
-                  readCustomProperty(_in, _bi, vh, vertexProperties_[propertyIndex].name, vertexProperties_[propertyIndex].value, vertexProperties_[propertyIndex].listIndexType);
+                  readCustomProperty<false>(_in, _bi, vh, vertexProperties_[propertyIndex].name, vertexProperties_[propertyIndex].value, vertexProperties_[propertyIndex].listIndexType);
                 else
                   _in >> trash;
                 break;
@@ -439,7 +439,7 @@ bool _PLYReader_::read_ascii(std::istream& _in, BaseImporter& _bi, const Options
 
         case CUSTOM_PROP:
           if (_opt.check(Options::Custom) && fh.is_valid())
-            readCustomProperty(_in, _bi, fh, prop.name, prop.value, prop.listIndexType);
+            readCustomProperty<false>(_in, _bi, fh, prop.name, prop.value, prop.listIndexType);
           else
             _in >> trash;
           break;
@@ -477,6 +477,8 @@ bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap
 
     // read vertices:
     for (unsigned int i = 0; i < vertexCount_ && !_in.eof(); ++i) {
+        vh = _bi.add_vertex();
+
         v[0] = 0.0;
         v[1] = 0.0;
         v[2] = 0.0;
@@ -556,6 +558,12 @@ bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap
                     readInteger(vertexProperties_[propertyIndex].value, _in, c[3]);
 
                 break;
+            case CUSTOM_PROP:
+              if (_opt.check(Options::Custom))
+                readCustomProperty<true>(_in, _bi, vh, vertexProperties_[propertyIndex].name, vertexProperties_[propertyIndex].value, vertexProperties_[propertyIndex].listIndexType);
+              else
+                consume_input(_in, scalar_size_[vertexProperties_[propertyIndex].value]);
+              break;
             default:
                 // Read unsupported property
                 consume_input(_in, scalar_size_[vertexProperties_[propertyIndex].value]);
@@ -564,7 +572,7 @@ bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap
 
         }
 
-        vh = _bi.add_vertex(v);
+        _bi.set_point(vh,v);
         if (_opt.vertex_has_normal())
           _bi.set_normal(vh, n);
         if (_opt.vertex_has_texcoord())
@@ -573,33 +581,51 @@ bool _PLYReader_::read_binary(std::istream& _in, BaseImporter& _bi, bool /*_swap
           _bi.set_color(vh, Vec4uc(c));
     }
 
-    if(!faceProperties_.empty())
-    {
-      for (unsigned int i = 0; i < faceCount_; ++i) {
-        // Read number of vertices for the current face
-        unsigned int nV;
-        readValue(faceProperties_[0].listIndexType, _in, nV);
+    for (unsigned i = 0; i < faceCount_; ++i) {
+      FaceHandle fh;
+      for (size_t propertyIndex = 0; propertyIndex < faceProperties_.size(); ++propertyIndex)
+      {
+        PropertyInfo prop = faceProperties_[propertyIndex];
+        switch (prop.property) {
 
-        if (nV == 3) {
-          vhandles.resize(3);
-          unsigned int j,k,l;
-          readInteger(faceProperties_[0].value, _in, j);
-          readInteger(faceProperties_[0].value, _in, k);
-          readInteger(faceProperties_[0].value, _in, l);
+        case VERTEX_INDICES:
+          // nV = number of Vertices for current face
+          unsigned int nV;
+          readValue(prop.listIndexType, _in, nV);
 
-          vhandles[0] = VertexHandle(j);
-          vhandles[1] = VertexHandle(k);
-          vhandles[2] = VertexHandle(l);
-        } else {
-          vhandles.clear();
-          for (unsigned int j = 0; j < nV; ++j) {
-            unsigned int idx;
-            readInteger(faceProperties_[0].value, _in, idx);
-            vhandles.push_back(VertexHandle(idx));
+          if (nV == 3) {
+            vhandles.resize(3);
+            unsigned int j,k,l;
+            readInteger(prop.value, _in, j);
+            readInteger(prop.value, _in, k);
+            readInteger(prop.value, _in, l);
+
+            vhandles[0] = VertexHandle(j);
+            vhandles[1] = VertexHandle(k);
+            vhandles[2] = VertexHandle(l);
+          } else {
+            vhandles.clear();
+            for (unsigned j = 0; j < nV; ++j) {
+              unsigned int idx;
+              readInteger(prop.value, _in, idx);
+              vhandles.push_back(VertexHandle(idx));
+            }
           }
-        }
 
-        _bi.add_face(vhandles);
+          fh = _bi.add_face(vhandles);
+          break;
+
+        case CUSTOM_PROP:
+          if (_opt.check(Options::Custom) && fh.is_valid())
+            readCustomProperty<true>(_in, _bi, fh, prop.name, prop.value, prop.listIndexType);
+          else
+            consume_input(_in, scalar_size_[vertexProperties_[propertyIndex].value]);
+          break;
+
+        default:
+          consume_input(_in, scalar_size_[vertexProperties_[propertyIndex].value]);
+          break;
+        }
       }
     }
 
@@ -656,7 +682,38 @@ void _PLYReader_::readValue(ValueType _type, std::istream& _in, double& _value) 
 
 //-----------------------------------------------------------------------------
 
+void _PLYReader_::readValue(ValueType _type, std::istream& _in, unsigned char& _value) const{
+  unsigned int tmp;
+  readValue(_type,_in,tmp);
+  _value = tmp;
+}
 
+//-----------------------------------------------------------------------------
+
+void _PLYReader_::readValue(ValueType _type, std::istream& _in, unsigned short& _value) const{
+  unsigned int tmp;
+  readValue(_type,_in,tmp);
+  _value = tmp;
+}
+
+//-----------------------------------------------------------------------------
+
+void _PLYReader_::readValue(ValueType _type, std::istream& _in, signed char& _value) const{
+  int tmp;
+  readValue(_type,_in,tmp);
+  _value = tmp;
+}
+
+//-----------------------------------------------------------------------------
+
+void _PLYReader_::readValue(ValueType _type, std::istream& _in, short& _value) const{
+  int tmp;
+  readValue(_type,_in,tmp);
+  _value = tmp;
+}
+
+
+//-----------------------------------------------------------------------------
 void _PLYReader_::readValue(ValueType _type, std::istream& _in, unsigned int& _value) const {
 
     uint32_t tmp_uint32_t;
@@ -1088,13 +1145,13 @@ bool _PLYReader_::can_u_read(std::istream& _is) const {
                 property.listIndexType = indexType;
 
                 // just 2 elements supported by now
-                if (elementName == "vertex" && !options_.is_binary())
+                if (elementName == "vertex")
                 {
                   vertexProperties_.push_back(property);
                 }
                 else if (elementName == "face")
                 {
-                  // special case for vertex indices, also needed by the binary version
+                  // special case for vertex indices
                   if (propertyName == "vertex_index" || propertyName == "vertex_indices")
                   {
                     property.property = VERTEX_INDICES;
@@ -1103,14 +1160,8 @@ bool _PLYReader_::can_u_read(std::istream& _is) const {
                       omerr() << "Custom face Properties defined, before 'vertex_indices' property was defined. They will be skipped" << std::endl;
                       faceProperties_.clear();
                     }
-                    faceProperties_.push_back(property);
-                  }else
-                  {
-                    if (!options_.is_binary())
-                      faceProperties_.push_back(property);
-                    else
-                      omerr() << "Custom list properties per face not supported with binary files" << std::endl;
                   }
+                  faceProperties_.push_back(property);
 
                 }
                 else
@@ -1195,11 +1246,8 @@ bool _PLYReader_::can_u_read(std::istream& _is) const {
 
               //not a special property, load as custom
               if (entry.value == Unsupported){
-                Property prop = (!options_.is_binary()) ? CUSTOM_PROP : UNSUPPORTED; // loading vertex properties is not yet supported by the binary loader
-                if (prop != UNSUPPORTED)
-                  options_ += Options::Custom;
-                else
-                  omerr() << "Custom Properties not supported in binary files. Skipping" << std::endl;
+                Property prop =  CUSTOM_PROP;
+                options_ += Options::Custom;
                 entry  = PropertyInfo(prop, valueType, propertyName);
               }
 

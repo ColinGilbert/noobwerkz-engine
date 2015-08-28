@@ -70,6 +70,7 @@
 #include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/Utils/SingletonT.hh>
 #include <OpenMesh/Core/IO/reader/BaseReader.hh>
+#include <OpenMesh/Core/Utils/GenProg.hh>
 
 #ifndef WIN32
 #include <string.h>
@@ -138,13 +139,15 @@ private:
   bool read_binary(std::istream& _in, BaseImporter& _bi, bool swap, const Options& _opt) const;
 
   float readToFloatValue(ValueType _type , std::fstream& _in) const;
-  template<typename Handle>
-  void readCustomProperty(std::istream& _in, BaseImporter& _bi, Handle _h, const std::string& _propName, const ValueType _valueType, const ValueType _listIndexType) const;
 
   void readValue(ValueType _type , std::istream& _in, float& _value) const;
-  void readValue(ValueType _type, std::istream& _in, double& _value) const;
+  void readValue(ValueType _type , std::istream& _in, double& _value) const;
   void readValue(ValueType _type , std::istream& _in, unsigned int& _value) const;
+  void readValue(ValueType _type , std::istream& _in, unsigned short& _value) const;
+  void readValue(ValueType _type , std::istream& _in, unsigned char& _value) const;
   void readValue(ValueType _type , std::istream& _in, int& _value) const;
+  void readValue(ValueType _type , std::istream& _in, short& _value) const;
+  void readValue(ValueType _type , std::istream& _in, signed char& _value) const;
 
   void readInteger(ValueType _type, std::istream& _in, int& _value) const;
   void readInteger(ValueType _type, std::istream& _in, unsigned int& _value) const;
@@ -193,6 +196,24 @@ private:
   mutable std::vector< PropertyInfo > vertexProperties_;
   mutable std::vector< PropertyInfo > faceProperties_;
 
+  template<typename T>
+  inline void read(_PLYReader_::ValueType _type, std::istream& _in, T& _value, OpenMesh::GenProg::TrueType /*_binary*/) const
+  {
+    readValue(_type, _in, _value);
+  }
+
+  template<typename T>
+  inline void read(_PLYReader_::ValueType _type, std::istream& _in, T& _value, OpenMesh::GenProg::FalseType /*_binary*/) const
+  {
+    _in >> _value;
+  }
+
+  //read and assign custom properties with the given type. Also creates property, if not exist
+  template<bool binary, typename T, typename Handle>
+  void readCreateCustomProperty(std::istream& _in, BaseImporter& _bi, Handle _h, const std::string& _propName, const ValueType _valueType, const ValueType _listType) const;
+
+  template<bool binary, typename Handle>
+  void readCustomProperty(std::istream& _in, BaseImporter& _bi, Handle _h, const std::string& _propName, const _PLYReader_::ValueType _valueType, const _PLYReader_::ValueType _listIndexType) const;
 };
 
 

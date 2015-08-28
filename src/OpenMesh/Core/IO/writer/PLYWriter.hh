@@ -70,6 +70,7 @@
 #include <OpenMesh/Core/Utils/SingletonT.hh>
 #include <OpenMesh/Core/IO/exporter/BaseExporter.hh>
 #include <OpenMesh/Core/IO/writer/BaseWriter.hh>
+#include <OpenMesh/Core/Utils/GenProg.hh>
 
 
 //== NAMESPACES ===============================================================
@@ -132,12 +133,28 @@ private:
 
   /// write custom persistant properties into the header for the current element, returns all properties, which were written sorted
   std::vector<CustomProperty> writeCustomTypeHeader(std::ostream& _out, BaseKernel::const_prop_iterator _begin, BaseKernel::const_prop_iterator _end) const;
-  void write_customProp_ascii(std::ostream& _our, const CustomProperty& _prop, size_t _index) const;
+  template<bool binary>
+  void write_customProp(std::ostream& _our, const CustomProperty& _prop, size_t _index) const;
+  template<typename T>
+  void writeProxy(ValueType _type, std::ostream& _out, T _value, OpenMesh::GenProg::TrueType /*_binary*/) const
+  {
+    writeValue(_type, _out, _value);
+  }
+  template<typename T>
+  void writeProxy(ValueType _type, std::ostream& _out, T _value, OpenMesh::GenProg::FalseType /*_binary*/) const
+  {
+    _out << " " << _value;
+  }
 
 protected:
+  void writeValue(ValueType _type, std::ostream& _out, signed char value) const;
+  void writeValue(ValueType _type, std::ostream& _out, unsigned char value) const;
+  void writeValue(ValueType _type, std::ostream& _out, short value) const;
+  void writeValue(ValueType _type, std::ostream& _out, unsigned short value) const;
   void writeValue(ValueType _type, std::ostream& _out, int value) const;
   void writeValue(ValueType _type, std::ostream& _out, unsigned int value) const;
   void writeValue(ValueType _type, std::ostream& _out, float value) const;
+  void writeValue(ValueType _type, std::ostream& _out, double value) const;
 
   bool write_ascii(std::ostream& _out, BaseExporter&, Options) const;
   bool write_binary(std::ostream& _out, BaseExporter&, Options) const;

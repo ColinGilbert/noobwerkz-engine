@@ -65,7 +65,7 @@ ASCII is not a real option and will be selected, if binary was not defined.
 \li defined with vc (e.g. used by meshlab)
 \li colors encoded in a vertex line (v followed by 6 values)
 
-\**) only ascii version and only vertex and face properties with fundamental types. Take into account, that you don't have to request these custom properties before loading.
+\**) only vertex and face properties with fundamental types. Take into account, that you don't have to request these custom properties before loading.
 
 \***) no reader exists
 

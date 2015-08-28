@@ -242,25 +242,25 @@ std::vector<_PLYWriter_::CustomProperty> _PLYWriter_::writeCustomTypeHeader(std:
 
 //-----------------------------------------------------------------------------
 
-
-void _PLYWriter_::write_customProp_ascii(std::ostream& _out, const CustomProperty& _prop, size_t _index) const
+template<bool binary>
+void _PLYWriter_::write_customProp(std::ostream& _out, const CustomProperty& _prop, size_t _index) const
 {
   if (_prop.type == ValueTypeCHAR)
-    _out << " " << castProperty<signed char>(_prop.property)->data()[_index];
+    writeProxy(_prop.type,_out, castProperty<signed char>(_prop.property)->data()[_index], OpenMesh::GenProg::Bool2Type<binary>());
   else if (_prop.type == ValueTypeUCHAR || _prop.type == ValueTypeUINT8)
-    _out << " " << castProperty<unsigned char>(_prop.property)->data()[_index];
+    writeProxy(_prop.type,_out, castProperty<unsigned char>(_prop.property)->data()[_index], OpenMesh::GenProg::Bool2Type<binary>());
   else if (_prop.type == ValueTypeSHORT)
-    _out << " " << castProperty<signed short>(_prop.property)->data()[_index];
+    writeProxy(_prop.type,_out, castProperty<signed short>(_prop.property)->data()[_index], OpenMesh::GenProg::Bool2Type<binary>());
   else if (_prop.type == ValueTypeUSHORT)
-    _out << " " << castProperty<unsigned short>(_prop.property)->data()[_index];
+    writeProxy(_prop.type,_out, castProperty<unsigned short>(_prop.property)->data()[_index], OpenMesh::GenProg::Bool2Type<binary>());
   else if (_prop.type == ValueTypeUINT)
-    _out << " " << castProperty<unsigned int>(_prop.property)->data()[_index];
+    writeProxy(_prop.type,_out, castProperty<unsigned int>(_prop.property)->data()[_index], OpenMesh::GenProg::Bool2Type<binary>());
   else if (_prop.type == ValueTypeINT || _prop.type == ValueTypeINT32)
-    _out << " " << castProperty<signed int>(_prop.property)->data()[_index];
+    writeProxy(_prop.type,_out, castProperty<signed int>(_prop.property)->data()[_index], OpenMesh::GenProg::Bool2Type<binary>());
   else if (_prop.type == ValueTypeFLOAT || _prop.type == ValueTypeFLOAT32)
-    _out << " " << castProperty<float>(_prop.property)->data()[_index] ;
+    writeProxy(_prop.type,_out, castProperty<float>(_prop.property)->data()[_index], OpenMesh::GenProg::Bool2Type<binary>());
   else if (_prop.type == ValueTypeDOUBLE)
-    _out << " " << castProperty<double>(_prop.property)->data()[_index];
+    writeProxy(_prop.type,_out, castProperty<double>(_prop.property)->data()[_index], OpenMesh::GenProg::Bool2Type<binary>());
 }
 
 
@@ -317,14 +317,12 @@ void _PLYWriter_::write_header(std::ostream& _out, BaseExporter& _be, Options& _
     }
   }
 
-  if (!_opt.is_binary()) // binary not supported yet
-    _ovProps = writeCustomTypeHeader(_out, _be.kernel()->vprops_begin(), _be.kernel()->vprops_end());
+  _ovProps = writeCustomTypeHeader(_out, _be.kernel()->vprops_begin(), _be.kernel()->vprops_end());
 
   _out << "element face " << _be.n_faces() << '\n';
   _out << "property list uchar int vertex_indices" << '\n';
 
-  if (!_opt.is_binary()) // binary not supported yet
-    _ofProps = writeCustomTypeHeader(_out, _be.kernel()->fprops_begin(), _be.kernel()->fprops_end());
+  _ofProps = writeCustomTypeHeader(_out, _be.kernel()->fprops_begin(), _be.kernel()->fprops_end());
 
   _out << "end_header" << '\n';
 }
@@ -403,7 +401,7 @@ write_ascii(std::ostream& _out, BaseExporter& _be, Options _opt) const
 
     // write custom properties for vertices
     for (std::vector<CustomProperty>::iterator iter = vProps.begin(); iter < vProps.end(); ++iter)
-      write_customProp_ascii(_out,*iter,i);
+      write_customProp<false>(_out,*iter,i);
 
     _out << "\n";
   }
@@ -419,7 +417,7 @@ write_ascii(std::ostream& _out, BaseExporter& _be, Options _opt) const
 
     // write custom props
     for (std::vector<CustomProperty>::iterator iter = fProps.begin(); iter < fProps.end(); ++iter)
-      write_customProp_ascii(_out,*iter,i);
+      write_customProp<false>(_out,*iter,i);
     _out << "\n";
   }
 
@@ -490,6 +488,78 @@ void _PLYWriter_::writeValue(ValueType _type, std::ostream& _out, float value) c
   }
 }
 
+void _PLYWriter_::writeValue(ValueType _type, std::ostream& _out, double value) const {
+
+  double_t tmp;
+
+  switch (_type) {
+    case ValueTypeDOUBLE:
+      tmp = value;
+      store( _out , tmp, options_.check(Options::MSB) );
+      break;
+    default :
+      std::cerr << "unsupported conversion type to float: " << _type << std::endl;
+      break;
+  }
+}
+
+void _PLYWriter_::writeValue(ValueType _type, std::ostream& _out, signed char value) const{
+
+  int8_t tmp;
+
+  switch (_type) {
+  case ValueTypeCHAR:
+    tmp = value;
+    store(_out, tmp, options_.check(Options::MSB) );
+    break;
+  default :
+    std::cerr << "unsupported conversion type to int: " << _type << std::endl;
+    break;
+  }
+}
+void _PLYWriter_::writeValue(ValueType _type, std::ostream& _out, unsigned char value) const{
+
+  uint8_t tmp;
+
+  switch (_type) {
+  case ValueTypeUCHAR:
+    tmp = value;
+    store(_out, tmp, options_.check(Options::MSB) );
+    break;
+  default :
+    std::cerr << "unsupported conversion type to int: " << _type << std::endl;
+    break;
+  }
+}
+void _PLYWriter_::writeValue(ValueType _type, std::ostream& _out, short value) const{
+
+  int16_t tmp;
+
+  switch (_type) {
+  case ValueTypeSHORT:
+    tmp = value;
+    store(_out, tmp, options_.check(Options::MSB) );
+    break;
+  default :
+    std::cerr << "unsupported conversion type to int: " << _type << std::endl;
+    break;
+  }
+}
+void _PLYWriter_::writeValue(ValueType _type, std::ostream& _out, unsigned short value) const{
+
+  uint16_t tmp;
+
+  switch (_type) {
+  case ValueTypeUSHORT:
+    tmp = value;
+    store(_out, tmp, options_.check(Options::MSB) );
+    break;
+  default :
+    std::cerr << "unsupported conversion type to int: " << _type << std::endl;
+    break;
+  }
+}
+
 bool
 _PLYWriter_::
 write_binary(std::ostream& _out, BaseExporter& _be, Options _opt) const
@@ -555,53 +625,22 @@ write_binary(std::ostream& _out, BaseExporter& _be, Options _opt) const
             writeValue(ValueTypeUCHAR, _out, (int)c[3]);
         }
     }
+
+    for (std::vector<CustomProperty>::iterator iter = vProps.begin(); iter < vProps.end(); ++iter)
+      write_customProp<true>(_out,*iter,i);
   }
 
-  // faces (indices starting at 0)
-  if (_be.is_triangle_mesh())
-  {
-    for (i=0, nF=int(_be.n_faces()); i<nF; ++i)
-    {
-      //face
-      _be.get_vhandles(FaceHandle(i), vhandles);
-      writeValue(ValueTypeUINT8, _out, 3);
-      writeValue(ValueTypeINT32, _out, vhandles[0].idx());
-      writeValue(ValueTypeINT32, _out, vhandles[1].idx());
-      writeValue(ValueTypeINT32, _out, vhandles[2].idx());
 
-//       //face color
-//       if ( _opt.face_has_color() ){
-//         c  = _be.colorA( FaceHandle(i) );
-//         writeValue(_out, c[0]);
-//         writeValue(_out, c[1]);
-//         writeValue(_out, c[2]);
-//
-//         if ( _opt.color_has_alpha() )
-//           writeValue(_out, c[3]);
-//       }
-    }
-  }
-  else
+  for (i=0, nF=int(_be.n_faces()); i<nF; ++i)
   {
-    for (i=0, nF=int(_be.n_faces()); i<nF; ++i)
-    {
-      //face
-      nV = _be.get_vhandles(FaceHandle(i), vhandles);
-      writeValue(ValueTypeUINT8, _out, nV);
-      for (size_t j=0; j<vhandles.size(); ++j)
-        writeValue(ValueTypeINT32, _out, vhandles[j].idx() );
+    //face
+    nV = _be.get_vhandles(FaceHandle(i), vhandles);
+    writeValue(ValueTypeUINT8, _out, nV);
+    for (size_t j=0; j<vhandles.size(); ++j)
+      writeValue(ValueTypeINT32, _out, vhandles[j].idx() );
 
-//       //face color
-//       if ( _opt.face_has_color() ){
-//         c  = _be.colorA( FaceHandle(i) );
-//         writeValue(_out, c[0]);
-//         writeValue(_out, c[1]);
-//         writeValue(_out, c[2]);
-//
-//         if ( _opt.color_has_alpha() )
-//           writeValue(_out, c[3]);
-//       }
-    }
+    for (std::vector<CustomProperty>::iterator iter = fProps.begin(); iter < fProps.end(); ++iter)
+      write_customProp<true>(_out,*iter,i);
   }
 
   return true;

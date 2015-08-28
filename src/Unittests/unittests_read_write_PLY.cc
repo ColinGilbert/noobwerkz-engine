@@ -607,4 +607,89 @@ TEST_F(OpenMeshReadWritePLY, WriteReadSimplePLYWithCustomProps) {
     remove(outFilename);
 
 }
+
+TEST_F(OpenMeshReadWritePLY, WriteReadBinaryPLYWithCustomProps) {
+
+    PolyMesh mesh;
+
+    OpenMesh::IO::Options options;
+    bool ok = OpenMesh::IO::read_mesh(mesh, "cube-minimal.ply", options);
+
+
+    OpenMesh::VPropHandleT<unsigned short> indexProp;
+    OpenMesh::VPropHandleT<unsigned int> nonPersistant;
+    OpenMesh::VPropHandleT<double> qualityProp;
+    OpenMesh::FPropHandleT<signed int> faceProp;
+    OpenMesh::VPropHandleT<int> removedProp;
+
+    const std::string indexPropName = "mySuperIndexProperty";
+    const std::string qualityPropName = "quality";
+    const std::string facePropName = "anotherPropForFaces";
+    const std::string nonPersistantName = "nonPersistant";
+    const std::string removedPropName = "willBeRemoved";
+
+    mesh.add_property(indexProp,indexPropName);
+    mesh.add_property(qualityProp,qualityPropName);
+    mesh.add_property(removedProp, removedPropName);
+    mesh.add_property(faceProp,facePropName);
+    mesh.add_property(nonPersistant,nonPersistantName);
+
+    mesh.property(indexProp).set_persistent(true);
+    mesh.property(qualityProp).set_persistent(true);
+    mesh.property(faceProp).set_persistent(true);
+    mesh.remove_property(removedProp);
+
+    signed char i=0;
+    for (Mesh::VertexIter v_iter = mesh.vertices_begin(); v_iter != mesh.vertices_end(); ++v_iter, ++i)
+    {
+      mesh.property(indexProp, *v_iter) = i;
+      mesh.property(qualityProp, *v_iter) = 3.5*i;
+    }
+
+    i = 0;
+    for (Mesh::FaceIter f_iter = mesh.faces_begin(); f_iter != mesh.faces_end(); ++f_iter, ++i)
+    {
+      mesh.property(faceProp, *f_iter) = -i;
+    }
+
+    const char* outFilename = "cube-minimal-customprops_openmeshOutputTestfileBinary.ply";
+    options += OpenMesh::IO::Options::Binary;
+    ok = OpenMesh::IO::write_mesh(mesh, outFilename, options);
+
+    ASSERT_TRUE(ok);
+
+    PolyMesh loadedMesh;
+
+    EXPECT_FALSE(loadedMesh.get_property_handle(indexProp,indexPropName)) << "Could access to property which was deleted";
+
+    options.clear();
+    options += OpenMesh::IO::Options::Custom;
+    options += OpenMesh::IO::Options::Binary;
+    ok = OpenMesh::IO::read_mesh(loadedMesh, outFilename, options);
+
+    ASSERT_TRUE(ok);
+
+
+    ASSERT_TRUE(loadedMesh.get_property_handle(indexProp,indexPropName)) << "Could not access index property";
+    ASSERT_TRUE(loadedMesh.get_property_handle(qualityProp,qualityPropName)) << "Could not access quality property";
+    ASSERT_TRUE(loadedMesh.get_property_handle(faceProp,facePropName)) << "Could not access face property";
+    EXPECT_FALSE(loadedMesh.get_property_handle(nonPersistant,nonPersistantName)) << "Could access non persistant property";
+
+    i=0;
+    for (Mesh::VertexIter v_iter = loadedMesh.vertices_begin(); v_iter != loadedMesh.vertices_end(); ++v_iter, ++i)
+    {
+      EXPECT_EQ(loadedMesh.property(indexProp, *v_iter), static_cast<unsigned>(i));
+      EXPECT_EQ(loadedMesh.property(qualityProp, *v_iter),3.5*i);
+    }
+
+    i = 0;
+    for (Mesh::FaceIter f_iter = loadedMesh.faces_begin(); f_iter != loadedMesh.faces_end(); ++f_iter, ++i)
+    {
+      EXPECT_EQ(loadedMesh.property(faceProp, *f_iter),-i);
+    }
+
+
+    //remove(outFilename);
+
+}
 }
