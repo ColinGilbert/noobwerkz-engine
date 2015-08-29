@@ -30,8 +30,8 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() : world(rp3d::Vector3(0.0, -9.81, 0.0), rp3d::decimal(1.0 / 60.0)), paused(false) {}
-
+			//stage() : world(rp3d::Vector3(0.0, -9.81, 0.0), rp3d::decimal(1.0 / 60.0)), paused(false) {}
+			stage() : world(rp3d::Vector3(0.0, -9.81, 0.0)) {}
 			bool init();
 			
 			void update(double dt);

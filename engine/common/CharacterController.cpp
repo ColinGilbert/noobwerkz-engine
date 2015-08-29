@@ -16,10 +16,11 @@ void noob::character_controller::init(rp3d::DynamicsWorld* _world, const std::sh
 	rp3d::Material& material = prop.body->getMaterial();
 
 	logger::log(fmt::format("[Character] bounce = {0}, friction = {1} ", material.getBounciness(), material.getFrictionCoefficient()));
-	prop.body->setType(rp3d::KINEMATIC);
+
 	material.setBounciness(rp3d::decimal(0.0));
 	rp3d::CapsuleShape capsule(width, height);
 	prop.body->addCollisionShape(capsule, rp3d::Transform::identity(), mass);
+//	prop.body->setType(rp3d::KINEMATIC);
 	//rp3d::SphereShape s(height);
 	//prop.body->addCollisionShape(s, rp3d::Transform::identity(), mass);
 }
@@ -40,7 +41,6 @@ void noob::character_controller::update(float dt)
 	rp3d::Ray ray(rp3d::Vector3(from.v[0], from.v[1], from.v[2]), rp3d::Vector3(to.v[0], to.v[1], to.v[2]));
 	noob::character_controller::groundcast_callback ground_cb(height, &prop, from, to);
 	world->raycast(ray, &ground_cb);
-	//on_ground = ;
 
 	if (ground_cb.is_grounded()) 
 	{
@@ -72,10 +72,13 @@ void noob::character_controller::step(float dt, bool forward, bool back, bool le
 
 	// TODO: Replace nested conditionals with something more succinct
 
+	prop.body->setTransform(rp3d::Transform(prop.body->getTransform().getPosition(), rp3d::Quaternion(0.0, 0.0, 0.0, 1.0)));	
+	
 	float move_factor = dt * 200.0;
 	float jump_force = 20.0;
 	if (self_control)
 	{
+
 		prop.body->setLinearVelocity(rp3d::Vector3(0.0, 0.0, 0.0));
 		prop.body->setAngularVelocity(rp3d::Vector3(0.0, 0.0, 0.0));
 		noob::vec3 current_vel(0.0, 0.0, 0.0);

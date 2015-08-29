@@ -3,9 +3,10 @@
 bool noob::stage::init()
 {
 	world.setEventListener(&phyz_listener);
-	//world.setNbIterationsVelocitySolver(20);
-	//world.setNbIterationsPositionSolver(20);
-	world.start();
+	// world.setNbIterationsVelocitySolver(20);
+	// world.setNbIterationsPositionSolver(20);
+	
+	// world.start();
 	shaders.init();
 
 	add_model("unit-sphere", noob::basic_mesh::sphere(0.5));
@@ -65,8 +66,8 @@ void noob::stage::update(double dt)
 		accum += dt;
 		if (accum > 1.0/60.0)
 		{
-			world.update();
-			//world.update(static_cast<rp3d::decimal>(accum));
+			// world.update();
+			world.update(static_cast<rp3d::decimal>(accum));
 			accum -= 1.0/60.0;
 		}
 		for (auto actor_it : actors)

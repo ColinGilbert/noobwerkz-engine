@@ -41,6 +41,7 @@ void noob::application::init()
 	gui.init(*prefix, window_width, window_height);
 	voxels.init();
 	stage.init();
+	/*
 	chai = std::unique_ptr<chaiscript::ChaiScript>(new chaiscript::ChaiScript(chaiscript::Std_Lib::library()));
 	using namespace chaiscript;
 
@@ -198,7 +199,7 @@ void noob::application::init()
 	chai->add(fun(&noob::voxel_world::cylinder), "cylinder");
 	chai->add(fun(&noob::voxel_world::get), "get");
 	chai->add(fun(&noob::voxel_world::extract_region), "extract_region");
-
+*/
 	logger::log("[Sandbox] done init.");
 }
 

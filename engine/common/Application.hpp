@@ -54,8 +54,9 @@
 // #include "Noise.h"
 #include "format.h"
 #include "Model.hpp"
-#include <chaiscript/chaiscript.hpp>
-#include <chaiscript/chaiscript_stdlib.hpp>
+
+//#include <chaiscript/chaiscript.hpp>
+//#include <chaiscript/chaiscript_stdlib.hpp>
 namespace noob
 {
 	class application
@@ -98,6 +99,6 @@ namespace noob
 			noob::stage stage;
 			noob::mat4 view_mat;
 			// noob::transform_helper current_cam_transform;
-			std::unique_ptr<chaiscript::ChaiScript> chai;
+			//std::unique_ptr<chaiscript::ChaiScript> chai;
 	};
 }
