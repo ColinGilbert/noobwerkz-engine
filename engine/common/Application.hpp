@@ -25,7 +25,7 @@
 #include <fstream>
 #include <atomic>
 
-/*
+
 #include <cereal/access.hpp>
 #include <cereal/types/memory.hpp>
 #include <cereal/types/vector.hpp>
@@ -33,10 +33,13 @@
 #include <cereal/types/map.hpp>
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/binary.hpp>
-*/
 
-// #include <lemon/list_graph.h>
-// #include <lemon/static_graph.h>
+
+#include <lemon/list_graph.h>
+#include <lemon/static_graph.h>
+
+#include <boost/filesystem.hpp>
+#include <boost/system/error_code.hpp>
 
 #include "Server.hpp"
 #include "Logger.hpp"
@@ -51,12 +54,15 @@
 #include "Stage.hpp"
 #include "TransformHelper.hpp"
 #include "Keys.hpp"
-// #include "Noise.h"
 #include "format.h"
 #include "Model.hpp"
+#include "ShaderVariant.hpp"
 
-//#include <chaiscript/chaiscript.hpp>
-//#include <chaiscript/chaiscript_stdlib.hpp>
+
+// #include <chaiscript/chaiscript.hpp>
+// #include <chaiscript/chaiscript_stdlib.hpp>
+
+
 namespace noob
 {
 	class application
@@ -72,6 +78,10 @@ namespace noob
 			void init();
 			void update(double delta);
 			void draw();
+
+			void user_init();
+			void user_update(double);
+
 			//void reset_script();
 			// step() is called by the target platform, which calculates the delta-time and calls update().
 			// pause() and resume() are used by whoever needs them :P
@@ -87,6 +97,7 @@ namespace noob
 			void accept_ndof_data(const noob::ndof::data& info);
 
 		protected:
+
 			static application* app_pointer;
 			std::unique_ptr<std::string> prefix;
 			bool paused, input_has_started, ui_enabled;
@@ -99,6 +110,6 @@ namespace noob
 			noob::stage stage;
 			noob::mat4 view_mat;
 			// noob::transform_helper current_cam_transform;
-			//std::unique_ptr<chaiscript::ChaiScript> chai;
+			// std::unique_ptr<chaiscript::ChaiScript> chai;
 	};
 }

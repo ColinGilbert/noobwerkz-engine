@@ -91,7 +91,7 @@ void noob::prop::add_box(float width, float height, float depth, float mass, con
 {
 	rp3d::Transform t;
 	t.setFromOpenGL(const_cast<reactphysics3d::decimal*>(&local_transform.m[0]));
-	rp3d::ProxyShape* p = 	body->addCollisionShape(rp3d::BoxShape(rp3d::Vector3(width, height, depth)), t, mass);
+	rp3d::ProxyShape* p = 	body->addCollisionShape(rp3d::BoxShape(rp3d::Vector3(width, height, depth)), t, rp3d::decimal(mass));
 	p->setCollisionCategoryBits(collides_with);
 	p->setCollideWithMaskBits(collision_mask);
 }

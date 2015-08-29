@@ -40,19 +40,19 @@ void noob::gui::text(const std::string& text, float x, float y, noob::gui::font_
 {
 	switch (size)
 	{
-		case (reading):
+		case (noob::gui::font_size::reading):
 			_reading->set_colour(colour);
 			_reading->draw_text(GUI_TEXT_LAYER, text, x, y);
 			break;
-		case (header):
+		case (noob::gui::font_size::header):
 			_header->set_colour(colour);
 			_header->draw_text(GUI_TEXT_LAYER, text, x, y);
 			break;
-		case (title):
+		case (noob::gui::font_size::title):
 			_title->set_colour(colour);
 			_title->draw_text(GUI_TEXT_LAYER, text, x, y);
 			break;
-		case (banner):
+		case (noob::gui::font_size::banner):
 			_banner->set_colour(colour);
 			_banner->draw_text(GUI_TEXT_LAYER, text, x, y);
 			break;

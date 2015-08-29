@@ -12,7 +12,7 @@ namespace noob
 	class gui
 	{
 		public:
-			enum font_size
+			enum class font_size
 			{
 				banner, title, header, reading
 			};

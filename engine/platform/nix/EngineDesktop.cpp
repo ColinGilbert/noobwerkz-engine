@@ -17,6 +17,7 @@ static uint32_t reset = BGFX_RESET_VSYNC;
 
 static noob::application* app;
 static noob::ndof ndof;
+
 void window_close_callback(GLFWwindow* window)
 {
 	bgfx::shutdown();

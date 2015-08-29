@@ -1,6 +1,4 @@
 #include "Application.hpp"
-#include <boost/filesystem.hpp>
-#include <boost/system/error_code.hpp>
 
 noob::application* noob::application::app_pointer = nullptr;
 
@@ -41,7 +39,7 @@ void noob::application::init()
 	gui.init(*prefix, window_width, window_height);
 	voxels.init();
 	stage.init();
-	/*
+/*
 	chai = std::unique_ptr<chaiscript::ChaiScript>(new chaiscript::ChaiScript(chaiscript::Std_Lib::library()));
 	using namespace chaiscript;
 
@@ -56,6 +54,18 @@ void noob::application::init()
 	chai->add(user_type<noob::versor>(), "versor");
 	chai->add(user_type<noob::transform_helper>(), "transform_helper");
 	chai->add(user_type<noob::triplanar_renderer::uniform_info>(), "triplanar_uniform");
+	chai->add(user_type<noob::prepared_shaders::info>(), "prepared_shaders_info");
+
+	chaiscript::ModulePtr prepped_shaders = chaiscript::ModulePtr(new chaiscript::Module());
+	chaiscript::utility::add_class<noob::prepared_shaders>(*prepped_shaders, "prepared_shaders",
+			{
+			constructor<noob::prepared_shaders()>(),
+			},
+			{
+			{fun(&noob::prepared_shaders::init), "init" },
+			{fun(&noob::prepared_shaders::draw), "draw"}
+			});
+	chai->add(prepped_shaders);
 
 	chaiscript::ModulePtr vec2 = chaiscript::ModulePtr(new chaiscript::Module());
 	chaiscript::utility::add_class<noob::vec2>(*vec2, "vec2",
@@ -172,23 +182,23 @@ void noob::application::init()
 	chaiscript::ModulePtr model = chaiscript::ModulePtr(new chaiscript::Module());
 	chaiscript::utility::add_class<noob::model>(*model, "model",
 			{ constructor<noob::model(const std::string&)>(),
-			 constructor<noob::model(const noob::basic_mesh&)>() },
+			constructor<noob::model(const noob::basic_mesh&)>() },
 			{
 			{fun(&noob::model::draw), "draw"},
 			//{fun(&noob::model::get_bbox), "get_bbox"}
 			});
 	chai->add(model);
 
-//	chaiscript::ModulePtr triplanar_uniform = chaiscript::ModulePtr(new chaiscript::Module());
-//	chaiscript::utility::add_class<noob::triplanar_renderer::uniform_info>(*triplanar_uniform, "triplanar_uniform",
-//			{ constructor<noob::triplanar_renderer::uniform_info()>() },
-//			{
-//			{ fun(&noob::triplanar_renderer::uniform_info::set_colour), "set_colour" },
-//			{ fun(&noob::triplanar_renderer::uniform_info::set_mapping_blends), "set_mapping_blends" },
-//			{ fun(&noob::triplanar_renderer::uniform_info::set_scales), "set_scales" },
-//			{ fun(&noob::triplanar_renderer::uniform_info::set_colour_positions), "set_colour_positions" }
-//			});
-//	chai->add(triplanar_uniform);
+	//	chaiscript::ModulePtr triplanar_uniform = chaiscript::ModulePtr(new chaiscript::Module());
+	//	chaiscript::utility::add_class<noob::triplanar_renderer::uniform_info>(*triplanar_uniform, "triplanar_uniform",
+	//			{ constructor<noob::triplanar_renderer::uniform_info()>() },
+	//			{
+	//			{ fun(&noob::triplanar_renderer::uniform_info::set_colour), "set_colour" },
+	//			{ fun(&noob::triplanar_renderer::uniform_info::set_mapping_blends), "set_mapping_blends" },
+	//			{ fun(&noob::triplanar_renderer::uniform_info::set_scales), "set_scales" },
+	//			{ fun(&noob::triplanar_renderer::uniform_info::set_colour_positions), "set_colour_positions" }
+	//			});
+	//	chai->add(triplanar_uniform);
 
 	chai->add(var(&voxels), "voxels");
 	chai->add(fun(&noob::voxel_world::clear_world), "clear_world");
@@ -200,50 +210,49 @@ void noob::application::init()
 	chai->add(fun(&noob::voxel_world::get), "get");
 	chai->add(fun(&noob::voxel_world::extract_region), "extract_region");
 */
-	logger::log("[Sandbox] done init.");
+	logger::log("[Application] done init.");
+	user_init();
 }
 
 
 void noob::application::update(double delta)
 {
 	gui.window_dims(window_width, window_height);
-
-	static double time_elapsed = 0.0;
-	time_elapsed += delta;
-
+	user_update(delta);
+	// static double time_elapsed = 0.0;
+	// time_elapsed += delta;
 	stage.update(delta);
+/*
+	if (time_elapsed > 0.25)
+	{
+		boost::filesystem::path p;
+		p += *prefix;
+		p += "script.chai";
+		boost::system::error_code ec;
 
-	/*
-	   if (time_elapsed > 0.25)
-	   {
-	   boost::filesystem::path p;
-	   p += *prefix;
-	   p += "script.chai";
-	   boost::system::error_code ec;
+		static std::time_t last_write = 0;
+		std::time_t t = boost::filesystem::last_write_time(p, ec);
+		if (ec != 0)
+		{
+			logger::log(fmt::format("[Application] - update() - error reading {0}: {1}", p.generic_string(), ec.message()));
+		}	
+		else if (last_write != t)
+		{
+			init();
 
-	   static std::time_t last_write = 0;
-	   std::time_t t = boost::filesystem::last_write_time(p, ec);
-	   if (ec != 0)
-	   {
-	   logger::log(fmt::format("[Application] - update() - error reading {0}: {1}", p.generic_string(), ec.message()));
-	   }	
-	   else if (last_write != t)
-	   {
-	   init();
-
-	   try
-	   {
-	   chai->eval_file(p.generic_string());
-	   }
-	   catch(std::exception e)
-	   {
-	   logger::log(fmt::format("[Application]. Caught ChaiScript exception: ", e.what()));
-	   }
-	   last_write = t;
-	   }
-	   time_elapsed = 0.0;
-	   }
-	   */
+			try
+			{
+				chai->eval_file(p.generic_string());
+			}
+			catch(std::exception e)
+			{
+				logger::log(fmt::format("[Application]. Caught ChaiScript exception: ", e.what()));
+			}
+			last_write = t;
+		}
+		time_elapsed = 0.0;
+	}
+*/
 }
 
 
@@ -257,7 +266,7 @@ void noob::application::draw()
 
 	stage.draw();
 
-	gui.text("The goat stumbled upon the cheese", 150.0, 50.0);
+	// gui.text("The goat stumbled upon the cheese", 150.0, 50.0);
 }
 
 

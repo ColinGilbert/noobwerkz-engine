@@ -32,6 +32,7 @@ namespace noob
 		public:
 			//stage() : world(rp3d::Vector3(0.0, -9.81, 0.0), rp3d::decimal(1.0 / 60.0)), paused(false) {}
 			stage() : world(rp3d::Vector3(0.0, -9.81, 0.0)) {}
+
 			bool init();
 			
 			void update(double dt);
@@ -61,9 +62,13 @@ namespace noob
 			std::weak_ptr<noob::prepared_shaders::info> get_shader(const std::string& name) const;
 			std::weak_ptr<noob::model> get_model(const std::string& name) const;
 			std::weak_ptr<noob::skeletal_anim> get_skeleton(const std::string& name) const;
+		
+			std::shared_ptr<noob::model> get_unit_cube() const { return unit_cube; }
+			std::shared_ptr<noob::model> get_unit_sphere() const { return unit_sphere; }
+			std::shared_ptr<noob::model> get_unit_cylinder() const { return unit_cylinder; }
+			std::shared_ptr<noob::model> get_unit_cone() const { return unit_cone; }
 			
-			
-
+			std::shared_ptr<noob::prepared_shaders::info> get_debug_shader() const { return debug_shader; }
 			//rp3d::CollisionBody* physics_body(float friction, float bouncy, float linear_damping, float angular_damping, noob::mat4 world_transform = noob::identity_mat4(), body_type type = noob::stage::body_type::DYNAMIC, bool gravity = true);
 			
 

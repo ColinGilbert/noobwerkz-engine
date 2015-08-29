@@ -21,6 +21,13 @@ bool noob::stage::init()
 
 	add_skeleton("human", "seymour.skel.ozz");
 
+	noob::basic_renderer::uniform_info dbg_shader;
+	dbg_shader.colour = noob::vec4(0.0, 0.3, 0.3, 1.0);
+	set_shader("basic-debug", dbg_shader);
+	debug_shader = get_shader("basic-debug").lock();
+
+
+/*
 	noob::triplanar_renderer::uniform_info u;
 	u.colours[0] = noob::vec4(1.0, 1.0, 1.0, 1.0);
 	u.colours[1] = noob::vec4(0.8, 0.8, 0.8, 1.0);
@@ -31,28 +38,24 @@ bool noob::stage::init()
 	u.colour_positions = noob::vec2(0.2, 0.7);
 
 	set_shader("moon", u);
-	noob::basic_renderer::uniform_info dbg_shader;
-	dbg_shader.colour = noob::vec4(0.0, 0.3, 0.3, 1.0);
-	set_shader("basic-debug", dbg_shader);
 
 	noob::basic_renderer::uniform_info red;
 	red.colour = noob::vec4(1.0, 0.0, 0.0, 1.0);
 	set_shader("red", red);
 
-	debug_shader = get_shader("basic-debug").lock();
 	noob::transform_helper xform;
 	xform.translate(noob::vec3(0.0, 20.0, 0.0));
 
 	std::shared_ptr<noob::actor> test = make_actor("test", unit_cube, get_skeleton("human").lock(), get_shader("red").lock(), xform.get_matrix(), 1.0, 1.0, 2.0, 5.0);
 	
 	std::shared_ptr<noob::prop> ground = make_prop("ground", unit_cube, get_shader("moon").lock(), noob::identity_mat4());
-	ground->add_box(1000.0, 1.0, 1000.0, 0.0);
+	ground->add_box(1000.0, 1.0, 1000.0, 1.0);
 	ground->scale = noob::vec3(1000.0, 1.0, 1000.0);
 	rp3d::Material& mat = ground->body->getMaterial();
 	ground->body->setType(rp3d::STATIC);
 	mat.setBounciness(0.0);
 	test->set_destination(noob::vec3(0.0, 0.0, 0.0));
-	
+	*/
 	logger::log("[Stage] init complete.");
 	return true;
 }
@@ -62,20 +65,21 @@ void noob::stage::update(double dt)
 {
 	if (!paused)
 	{
-		static double accum = 0.0;
-		accum += dt;
-		if (accum > 1.0/60.0)
-		{
+		//static double accum = 0.0;
+		//accum += dt;
+		//if (accum > 1.0/60.0)
+		//{
 			// world.update();
-			world.update(static_cast<rp3d::decimal>(accum));
-			accum -= 1.0/60.0;
-		}
-		for (auto actor_it : actors)
+		//	world.update(static_cast<rp3d::decimal>(accum));
+		//	accum -= 1.0/60.0;
+			world.update(static_cast<rp3d::decimal>(dt));
+		//}
+	/*	for (auto actor_it : actors)
 		{
-			actor_it.second->update(dt, true, false, true, false, true);
-			actor_it.second->print_debug_info();
+			//actor_it.second->update(dt, true, false, true, false, false);//true);
+			//actor_it.second->print_debug_info();
 		}
-
+*/
 	}
 }
 

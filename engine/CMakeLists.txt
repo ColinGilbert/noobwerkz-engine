@@ -10,12 +10,6 @@ set(CMAKE_C_FLAGS "-std=c99 -fno-strict-aliasing -DSQLITE_ENABLE_COLUMN_METADATA
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 #include_directories(${Boost_INCLUDE_DIR})
 
-include_directories(lib/chaiscript/include)
-list (APPEND chai-src
-lib/chaiscript/src/main.cpp
-lib/chaiscript/src/stl_extra.cpp
-)
-
 include_directories(lib/cppformat)
 list (APPEND cppformat_src
 	lib/cppformat/format.cc
@@ -142,13 +136,17 @@ list(APPEND common_src
 	common/Drawing/BasicRenderer.cpp
 	)
 
+list(APPEND user_src
+	../sandbox/UserApp.cpp
+	)
+
 include_directories(platform/nix)
 
 list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 
-add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src} ${es_src})
+add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src} ${es_src} ${user_src}) 
 
-target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m emon reactphysics3d OpenMeshCore OpenMeshToolsStatic spnav ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r  ${Boost_LIBRARIES})
+target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m emon reactphysics3d OpenMeshCore OpenMeshToolsStatic spnav ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r ${Boost_LIBRARIES})
 
 project(LogServer)
 
