@@ -15,10 +15,8 @@ namespace noob
 
 			void init(rp3d::DynamicsWorld* _world, const std::shared_ptr<noob::model>&, const std::shared_ptr<noob::prepared_shaders::info>&, const noob::mat4&, float _mass, float _width, float _height, float _max_speed);
 
-
-
 			void step(float dt, bool forward, bool back, bool left, bool right, bool jump);
-
+			void stop();
 			noob::mat4 get_transform() const { return prop.get_transform(); }
 			//void print_debug_info() const;
 			noob::prop* get_prop() const { return const_cast<noob::prop*>(&prop); }

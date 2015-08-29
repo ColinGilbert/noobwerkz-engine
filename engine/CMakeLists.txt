@@ -4,7 +4,7 @@ project(NoobWerkz)
 #set(CMAKE_BUILD_TYPE "DEBUG")
 set(CMAKE_BUILD_TYPE "RELEASE")
 
-set(CMAKE_CXX_FLAGS "-std=c++1y -O2 -fno-strict-aliasing -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DOM_GARBAGE_NO_STATUS_WARNING -DEIGEN_MPL2_ONLY -DCHAISCRIPT_NO_THREADS -Wall ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++1y -O2 -fno-strict-aliasing -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DOM_GARBAGE_NO_STATUS_WARNING -DEIGEN_MPL2_ONLY -Wall ${CMAKE_CXX_FLAGS}") # -DCHAISCRIPT_NO_THREADS
 set(CMAKE_C_FLAGS "-std=c99 -fno-strict-aliasing -DSQLITE_ENABLE_COLUMN_METADATA -DSTB_IMAGE_STATIC -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -Wall ${CMAKE_C_FLAGS}")
 
 find_package(Boost COMPONENTS system filesystem REQUIRED)
@@ -20,14 +20,6 @@ include_directories(lib/cppformat)
 list (APPEND cppformat_src
 	lib/cppformat/format.cc
 	lib/cppformat/posix.cc
-	)
-
-include_directories(lib/bstrlib)
-list(APPEND bstrlib_src
-	lib/bstrlib/bstrlib.c
-	lib/bstrlib/bstraux.c
-	lib/bstrlib/bstrwrap.cpp
-	#lib/bstrlib/bsafe.c
 	)
 
 add_subdirectory(lib/glfw)
@@ -51,25 +43,6 @@ include_directories(lib/bgfx/3rdparty)
 include_directories(lib/bgfx/3rdparty/khronos)
 
 include_directories(lib/lemon)
-
-#include_directories(lib/noisepp/core)
-#include_directories(lib/noisepp/threadpp)
-#include_directories(lib/noisepp/utils)
-
-#list (APPEND noisepp_src
-#	lib/noisepp/utils/NoiseBuilders.cpp
-#	lib/noisepp/utils/NoiseGradientRenderer.cpp
-#	lib/noisepp/utils/NoiseJobQueue.cpp
-#	lib/noisepp/utils/NoiseOutStream.cpp
-#	lib/noisepp/utils/NoiseEndianUtils.cpp
-#	lib/noisepp/utils/NoiseInStream.cpp
-#	lib/noisepp/utils/NoiseSystem.cpp
-#	lib/noisepp/utils/NoiseWriter.cpp
-#	lib/noisepp/utils/NoiseColourValue.cpp
-#	lib/noisepp/utils/NoiseImage.cpp
-#	lib/noisepp/utils/NoiseModules.cpp
-#	lib/noisepp/utils/NoiseReader.cpp
-#	)
 
 include_directories(lib/v-hacd/src/VHACD_Lib/inc)
 include_directories(lib/v-hacd/src/VHACD_Lib/public)
@@ -153,11 +126,6 @@ list(APPEND common_src
 	common/EditorUtils.cpp
 	common/VoxelWorld.cpp
 	common/UIFont.cpp
-	# common/Physics/PhysicsBody.cpp
-	# common/Physics/PhysicsConstraintGeneric.cpp
-	# common/Physics/PhysicsShape.cpp
-	# common/Physics/PhysicsWorld.cpp
-	# common/Physics/CharacterController.cpp
 	common/CharacterController.cpp
 	common/ModelLoader.cpp
 	common/Model.cpp

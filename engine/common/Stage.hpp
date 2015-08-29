@@ -5,19 +5,16 @@
 #include <tuple>
 #include <list>
 #include <forward_list>
-#include "Config.hpp"
+#include <boost/variant.hpp>
 
+#include "Config.hpp"
 #include "Graphics.hpp"
 #include "MathFuncs.hpp"
 #include "VoxelWorld.hpp"
-
-#include <boost/variant.hpp>
 #include "ShaderVariant.hpp"
-
 #include "TriplanarGradientMap.hpp"
 #include "BasicRenderer.hpp"
 #include "TransformHelper.hpp"
-
 #include "Actor.hpp"
 #include "SkeletalAnim.hpp"
 #include "Model.hpp"

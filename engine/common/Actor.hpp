@@ -8,13 +8,13 @@
 #include <deque>
 #include "MathFuncs.hpp"
 #include "SkeletalAnim.hpp"
-//#include "PhysicsWorld.hpp"
 #include "CharacterController.hpp"
 #include "Model.hpp"
 #include "Graphics.hpp"
 #include "ShaderVariant.hpp"
-#include "reactphysics3d.h"
 #include "Prop.hpp"
+
+#include "reactphysics3d.h"
 
 
 namespace noob

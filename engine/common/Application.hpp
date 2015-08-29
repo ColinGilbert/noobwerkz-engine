@@ -50,11 +50,12 @@
 #include "NDOF.hpp"
 #include "Stage.hpp"
 #include "TransformHelper.hpp"
+#include "Keys.hpp"
 // #include "Noise.h"
 #include "format.h"
-
-// #include <chaiscript/chaiscript.hpp>
-// #include <chaiscript/chaiscript_stdlib.hpp>
+#include "Model.hpp"
+#include <chaiscript/chaiscript.hpp>
+#include <chaiscript/chaiscript_stdlib.hpp>
 namespace noob
 {
 	class application
@@ -81,7 +82,7 @@ namespace noob
 			void touch(int pointerID, float x, float y, int action);
 			void set_archive_dir(const std::string & filepath);
 			void window_resize(uint32_t w, uint32_t h);
-			void character_input(char c);
+			void key_input(char c);
 			void accept_ndof_data(const noob::ndof::data& info);
 
 		protected:
@@ -97,6 +98,6 @@ namespace noob
 			noob::stage stage;
 			noob::mat4 view_mat;
 			// noob::transform_helper current_cam_transform;
-//			std::unique_ptr<chaiscript::ChaiScript> chai;
+			std::unique_ptr<chaiscript::ChaiScript> chai;
 	};
 }

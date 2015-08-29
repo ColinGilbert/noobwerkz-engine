@@ -75,13 +75,11 @@ namespace noob
 				std::string name;
 
 			};
-			
+
+			// This loads from the cereal binary files prepared by the model_loader class
 			model(const std::string& filename);
 			model(const noob::basic_mesh&);
 
-			// This loads from the cereal binary files prepared by the model_loader class
-			void init(const std::string& filename);
-			void init(const noob::basic_mesh&);
 			void draw(uint8_t view_id, const noob::mat4& model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags = BGFX_STATE_DEFAULT) const;
 		
 		protected:

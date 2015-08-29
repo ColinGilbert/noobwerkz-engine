@@ -20,17 +20,17 @@
 namespace noob
 {
 
-	enum binary_op
+	enum class binary_op
 	{
 		ADD, SUBTRACT
 	};
 
-	enum csg_op
+	enum class csg_op
 	{
 		UNION, DIFFERENCE, INTERSECTION
 	};
 
-	enum cardinal_axis
+	enum class cardinal_axis
 	{
 		X, Y, Z
 	};
