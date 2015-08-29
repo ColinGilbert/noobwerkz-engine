@@ -110,7 +110,8 @@ There are some additional targets:<br>
 <b>doc</b>: Builds the Documentation<br>
 <b>doc-install</b>: Builds the Documentation and installs it<br>
 <br>
-<br>
+\note When you link against the static libraries of OpenMesh and get the error "can not be used when making a
+shared object; recompile with -fPIC" you need to add "-fPIC" to the CMAKE_CXX_FLAGS. (This is usually added automatically)
 
 \section sec_compiling_windows Windows
 

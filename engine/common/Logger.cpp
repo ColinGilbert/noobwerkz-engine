@@ -1,5 +1,11 @@
 #include "Logger.hpp"
+<<<<<<< HEAD
 #include <iostream>
+=======
+//#include <asio/ip/tcp.hpp>
+#include <iostream>
+
+>>>>>>> dev
 void logger::log(const std::string& message)
 {
 //			asio::ip::tcp::iostream s;
@@ -8,5 +14,6 @@ void logger::log(const std::string& message)
 //			{
 //				s << message << std::flush;
 //			}
-std::cout << message << std::endl;
+//			else std::cout << "Could not init logger :(" << std::endl;
+	std::cout << message << std::endl;
 }

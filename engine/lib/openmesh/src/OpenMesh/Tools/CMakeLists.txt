@@ -57,15 +57,14 @@ IF( NOT WIN32 )
   target_link_libraries (OpenMeshToolsStatic OpenMeshCoreStatic)
 ENDIF(NOT WIN32)
 
-if ( ${PROJECT_NAME} MATCHES "OpenMesh")
+if ( (${PROJECT_NAME} MATCHES "OpenMesh") AND BUILD_APPS )
 
-  if ( WIN32 AND BUILD_APPS)
+  if ( WIN32 )
     if ( NOT "${CMAKE_GENERATOR}" MATCHES "MinGW Makefiles" )
       # let bundle generation depend on target
       add_dependencies (fixbundle OpenMeshTools)
     endif()
   endif()
-
 
   # Add tools as dependency before fixbundle 
   if (APPLE)

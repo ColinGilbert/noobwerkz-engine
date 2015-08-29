@@ -28,19 +28,30 @@ if ( OPENMESH_BUILD_UNIT_TESTS )
 
     # Create new target named unittests_hexmeshing
     FILE(GLOB UNITTEST_SRC *.cc)
-    add_executable(unittests ${UNITTEST_SRC})
+          # Create unittest executable
+          acg_add_executable(unittests ${UNITTEST_SRC})
+ 
+          # For the unittest we don't want the install rpath as set by acg_add_executable 
+          set_target_properties ( unittests PROPERTIES  BUILD_WITH_INSTALL_RPATH 0 )
+
+   # Set output directory to ${BINARY_DIR}/Unittests
+    set (OUTPUT_DIR "${CMAKE_BINARY_DIR}/Unittests")
+      set_target_properties(unittests PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_DIR}) 
+      foreach(CONFIG ${CMAKE_CONFIGURATION_TYPES})
+        string(TOUPPER ${CONFIG} UPCONFIG)
+        set_target_properties(unittests PROPERTIES RUNTIME_OUTPUT_DIRECTORY_${UPCONFIG} ${OUTPUT_DIR})
+    endforeach()
+
 	
 	if ( NOT WIN32)
-      # Link against all necessary libraries
-      target_link_libraries(unittests OpenMeshCore OpenMeshTools ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread)
+           # Link against all necessary libraries
+           target_link_libraries(unittests OpenMeshCore OpenMeshTools ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread)
 	  
-	    # Set output directory to ${BINARY_DIR}/Unittests
-      set_target_properties(unittests PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Unittests)
+	  
 	
-    else()
+       else()
 	    # Link against all necessary libraries
 		if ( OPENMESH_BUILD_SHARED )
-			#!!!! Experimental Feature!!!
 			add_definitions( -DOPENMESHDLL )
 
 		endif()
@@ -55,15 +66,6 @@ if ( OPENMESH_BUILD_UNIT_TESTS )
 	else()
 	    # Set compiler flags
       set_target_properties(unittests PROPERTIES COMPILE_FLAGS "" )
-
-	  #-------- copy exe file to "Build" directory --------
-      # Visual studio will create this file in a subdirectory so we can't use
-      # RUNTIME_OUTPUT_DIRECTORY directly here
-      add_custom_command (TARGET unittests POST_BUILD
-                          COMMAND ${CMAKE_COMMAND} -E
-                                  copy_if_different
-                                    ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/unittests.exe
-                                    ${CMAKE_BINARY_DIR}/Unittests/unittests.exe)
 
     endif()
     

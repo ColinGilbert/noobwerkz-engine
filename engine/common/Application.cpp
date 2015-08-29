@@ -4,7 +4,7 @@
 
 noob::application* noob::application::app_pointer = nullptr;
 
-noob::application::application() : chai(chaiscript::Std_Lib::library()) 
+noob::application::application() 
 {
 	logger::log("application()");
 	app_pointer = this;
@@ -14,118 +14,9 @@ noob::application::application() : chai(chaiscript::Std_Lib::library())
 	time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
-	
-	using namespace chaiscript;
+	view_mat = noob::look_at(noob::vec3(0, 50.0, -100.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
+}	
 
-	chai.add(user_type<noob::drawable3d>(), "drawable3d");
-	chai.add(user_type<noob::mesh>(), "mesh");
-	chai.add(user_type<noob::mesh::bbox_info>(), "bbox_info");
-	chai.add(user_type<noob::voxel_world>(), "voxel_world");
-	chai.add(user_type<noob::graphics::mesh_vertex>(), "mesh_vertex");
-	chai.add(user_type<noob::graphics::uniform>(), "uniform");
-	chai.add(user_type<noob::graphics::sampler>(), "sampler");
-	chai.add(user_type<noob::graphics::shader>(), "shader");
-	chai.add(user_type<noob::vec2>(), "vec2");
-	chai.add(user_type<noob::vec3>(), "vec3");
-	chai.add(user_type<noob::vec4>(), "vec4");
-	chai.add(user_type<noob::mat3>(), "mat3");
-	chai.add(user_type<noob::mat4>(), "mat4");
-	chai.add(user_type<noob::versor>(), "versor");
-	chai.add(user_type<noob::transform_helper>(), "transform_helper");
-
-	chai.add(fun(&noob::length), "length");
-	chai.add(fun(&noob::length2), "length2");
-	chai.add(fun(static_cast<noob::versor (*)(const noob::versor&)>(&noob::normalize)), "normalize");
-	chai.add(fun(static_cast<noob::vec3 (*)(const noob::vec3&)>(&noob::normalize)), "normalize");
-	chai.add(fun(static_cast<float (*)(const noob::vec3&, const noob::vec3&)>(&noob::dot)), "dot");
-	chai.add(fun(static_cast<float (*)(const noob::versor&, const noob::versor&)>(&noob::dot)), "dot");
-	chai.add(fun(&noob::cross), "cross");
-	chai.add(fun(&noob::get_squared_dist), "get_squared_dist");
-	chai.add(fun(&noob::direction_to_heading), "direction_to_heading");
-	chai.add(fun(&noob::heading_to_direction), "heading_to_direction");
-	chai.add(fun(&noob::linearly_dependent), "linearly_dependent");
-	chai.add(fun(&noob::zero_mat3), "zero_mat3");
-	chai.add(fun(&noob::identity_mat3), "identity_mat3");
-	chai.add(fun(&noob::zero_mat4), "zero_mat4");
-	chai.add(fun(&noob::identity_mat4), "identity_mat4");
-	chai.add(fun(&noob::determinant), "determinant");
-	chai.add(fun(&noob::inverse), "inverse");
-	chai.add(fun(&noob::transpose), "transpose");
-	chai.add(fun(&noob::translate), "translate");
-	chai.add(fun(&noob::rotate_x_deg), "rotate_x_deg");
-	chai.add(fun(&noob::rotate_y_deg), "rotate_y_deg");
-	chai.add(fun(&noob::rotate_z_deg), "rotate_z_deg");
-	chai.add(fun(&noob::scale), "scale");
-	chai.add(fun(&noob::translation_from_mat4), "translation_from_mat4");
-	chai.add(fun(&noob::scale_from_mat4), "scale_from_mat4");
-	chai.add(fun(&noob::look_at), "look_at");
-	chai.add(fun(&noob::perspective), "perspective");
-	chai.add(fun(&noob::ortho), "ortho");
-	chai.add(fun(&noob::quat_from_axis_rad), "quat_from_axis_rad");
-	chai.add(fun(&noob::quat_from_axis_deg), "quat_from_axis_deg");
-	chai.add(fun(static_cast<noob::mat4 (*)(const noob::versor&)>(&noob::quat_to_mat4)), "quat_to_mat4");
-	//chai.add(fun(static_cast<noob::versor (*)(const noob::versor&, const noob::versor&)>(&noob::slerp)), "slerp");
-	chai.add(fun(static_cast<noob::versor (*)(noob::versor&, noob::versor&, float t)>(&noob::slerp)), "slerp");
-
-	chai.add(fun(&noob::transform_helper::get_matrix), "get_matrix");
-	chai.add(fun(&noob::transform_helper::scale), "scale");
-	chai.add(fun(&noob::transform_helper::translate), "translate");
-	chai.add(fun(&noob::transform_helper::rotate), "rotate");
-	chai.add(fun(&noob::transform_helper::scaling), "scaling");
-	chai.add(fun(&noob::transform_helper::translation), "translation");
-	chai.add(fun(&noob::transform_helper::rotation), "rotation");
-
-	chai.add(fun(&noob::mesh::vertices), "vertices");
-	chai.add(fun(&noob::mesh::normals), "normals");
-	chai.add(fun(&noob::mesh::indices), "indices");
-	chai.add(fun(&noob::mesh::normalize), "normalize");
-	chai.add(fun(&noob::mesh::to_origin), "to_origin");
-	chai.add(fun(&noob::mesh::to_half_edges), "to_half_edges");
-	chai.add(fun(&noob::mesh::convex_decomposition), "convex_decomposition");
-	chai.add(fun(&noob::mesh::transform), "transform");
-	chai.add(fun(&noob::mesh::get_bbox), "get_bbox");
-	chai.add(fun(static_cast<void (noob::mesh::*)(const std::string&, size_t) const>(&noob::mesh::decimate)), "decimate");
-	chai.add(fun(static_cast<noob::mesh (noob::mesh::*)(size_t) const>(&noob::mesh::decimate)), "decimate");
-	chai.add(fun(static_cast<bool (noob::mesh::*)(const std::string&, const std::string&)>(&noob::mesh::load)), "load");
-	chai.add(fun(static_cast<bool (noob::mesh::*)(std::tuple<size_t, const char*>, const std::string&)>(&noob::mesh::load)), "load");
-	chai.add(fun(static_cast<std::tuple<size_t, const char*> (noob::mesh::*)() const>(&noob::mesh::snapshot)), "snapshot");
-	chai.add(fun(static_cast<void (noob::mesh::*)(const std::string&) const>(&noob::mesh::snapshot)), "snapshot");
-
-	chai.add(fun(&noob::voxel_world::init), "init");
-	chai.add(fun(&noob::voxel_world::clear_world), "clear_world");
-	chai.add(fun(&noob::voxel_world::set), "set");
-	chai.add(fun(&noob::voxel_world::apply_to_region), "apply_to_region");
-	chai.add(fun(&noob::voxel_world::sphere), "sphere");
-	chai.add(fun(&noob::voxel_world::cube), "cube");
-	chai.add(fun(&noob::voxel_world::cylinder), "cylinder");
-	chai.add(fun(&noob::voxel_world::get), "get");
-	chai.add(fun(&noob::voxel_world::extract_region), "extract_region");
-
-	chai.add(fun(&noob::drawable3d::add), "add_drawable3d");
-	chai.add(fun(&noob::drawable3d::get), "get_drawable3d");
-
-	chai.add(user_type<noob::physics_world>(), "physics_world");
-	chai.add(fun(&noob::physics_world::init), "init");
-	chai.add(fun(&noob::physics_world::step), "step");
-	chai.add(fun(&noob::physics_world::apply_global_force), "apply_global_force");
-	chai.add(fun(&noob::physics_world::dynamic_body), "dynamic_body");
-	chai.add(fun(&noob::physics_world::sphere), "sphere");
-	chai.add(fun(&noob::physics_world::box), "box");
-	chai.add(fun(&noob::physics_world::cylinder), "cylinder");
-	chai.add(fun(&noob::physics_world::capsule), "capsule");
-	chai.add(fun(&noob::physics_world::cone), "cone");
-	chai.add(fun(&noob::physics_world::plane), "plane");
-	chai.add(fun(&noob::physics_world::static_mesh), "static_mesh");
-	chai.add(fun(static_cast<btConvexHullShape* (noob::physics_world::*)(const std::vector<noob::vec3>&)>(&noob::physics_world::convex_hull)), "convex_hull");
-	chai.add(fun(static_cast<btConvexHullShape* (noob::physics_world::*)(const noob::mesh&)>(&noob::physics_world::convex_hull)), "convex_hull");
-	chai.add(fun(static_cast<btCompoundShape* (noob::physics_world::*)(const noob::mesh&)>(&noob::physics_world::compound_shape)), "compound_shape");
-	chai.add(fun(static_cast<btCompoundShape* (noob::physics_world::*)(const std::vector<noob::mesh>&)>(&noob::physics_world::compound_shape)), "compound_shape");
-	chai.add(fun(static_cast<btCompoundShape* (noob::physics_world::*)(const std::vector<btCollisionShape*>&)>(&noob::physics_world::compound_shape)), "compound_shape");
-
-	//chai.add(fun(&noob::application::physics), "physics");
-	chai.add(fun(&noob::application::voxels), "voxels");
-	chai.add(fun(&noob::application::scene), "scene");
-}
 
 noob::application::~application()
 {
@@ -149,20 +40,165 @@ void noob::application::init()
 	ui_enabled = true;
 	gui.init(*prefix, window_width, window_height);
 	voxels.init();
-	scene.init();
-/*
-	view_mat = noob::look_at(noob::vec3(0.0, 0.0, -500.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
+	stage.init();
+	chai = std::unique_ptr<chaiscript::ChaiScript>(new chaiscript::ChaiScript(chaiscript::Std_Lib::library()));
+	using namespace chaiscript;
 
-	noob::triplanar_renderer::uniform_info info;
+	chai->add(user_type<noob::graphics::uniform>(), "uniform");
+	chai->add(user_type<noob::graphics::sampler>(), "sampler");
+	chai->add(user_type<noob::graphics::shader>(), "shader");
+	chai->add(user_type<noob::vec2>(), "vec2");
+	chai->add(user_type<noob::vec3>(), "vec3");
+	chai->add(user_type<noob::vec4>(), "vec4");
+	chai->add(user_type<noob::mat3>(), "mat3");
+	chai->add(user_type<noob::mat4>(), "mat4");
+	chai->add(user_type<noob::versor>(), "versor");
+	chai->add(user_type<noob::transform_helper>(), "transform_helper");
+	chai->add(user_type<noob::triplanar_renderer::uniform_info>(), "triplanar_uniform");
 
-	info.colours[0] = noob::vec4(0.0, 0.0, 0.0, 1.0);
-	info.colours[1] = noob::vec4(0.0, 0.5, 0.5, 1.0);
-	info.colours[2] = noob::vec4(0.5, 0.5, 0.5, 1.0);
-	info.colours[3] = noob::vec4(1.0, 1.0, 1.0, 1.0);
-	info.mapping_blends = noob::vec3(0.5, 0.5, 1.0);
-	info.colour_positions = noob::vec2(0.3, 0.7);
-	info.scales = noob::vec3(3.0, 3.0, 3.0);
-*/
+	chaiscript::ModulePtr vec2 = chaiscript::ModulePtr(new chaiscript::Module());
+	chaiscript::utility::add_class<noob::vec2>(*vec2, "vec2",
+			{
+			constructor<noob::vec2()>(),
+			constructor<noob::vec2(float, float)>()
+			},
+			{
+			{fun(&noob::vec2::operator[]), "[]" },
+			{fun(&noob::vec2::to_string), "to_string"}
+			});
+	chai->add(vec2);
+
+	chaiscript::ModulePtr vec3 = chaiscript::ModulePtr(new chaiscript::Module());
+	chaiscript::utility::add_class<noob::vec3>(*vec3, "vec3",
+			{
+			constructor<noob::vec3()>(),
+			constructor<noob::vec3(float, float, float)>(),
+			constructor<noob::vec3(const noob::vec2&, float)>(),
+			constructor<noob::vec3(const noob::vec4&)>(),
+			constructor<noob::vec3(const noob::vec3&)>(),
+			},
+			{
+			{ fun(static_cast<noob::vec3 (noob::vec3::*)(const noob::vec3&) const>(&noob::vec3::operator+)), "+"},
+			{ fun(static_cast<noob::vec3 (noob::vec3::*)(float) const>(&noob::vec3::operator+)), "+"},
+			{ fun(&noob::vec3::operator+=), "+=" },
+			{ fun(static_cast<noob::vec3 (noob::vec3::*)(const noob::vec3&) const>(&noob::vec3::operator-)), "-"},
+			{ fun(static_cast<noob::vec3 (noob::vec3::*)(float) const>(&noob::vec3::operator-)), "-"},
+			{ fun(&noob::vec3::operator-=), "-=" },
+			{ fun(&noob::vec3::operator*), "*" },
+			{ fun(&noob::vec3::operator*=), "*=" },
+			{ fun(&noob::vec3::operator/), "/" },
+			{ fun(&noob::vec3::operator=), "=" },
+			{fun(&noob::vec3::operator[]), "[]" },
+			{fun(&noob::vec3::to_string), "to_string"}
+			});
+	chai->add(vec3);
+
+	chaiscript::ModulePtr vec4 = chaiscript::ModulePtr(new chaiscript::Module());
+	chaiscript::utility::add_class<noob::vec4>(*vec4, "vec4",
+			{
+			constructor<noob::vec4()>(),
+			constructor<noob::vec4(float, float, float, float)>(),
+			constructor<noob::vec4(const noob::vec2&, float, float)>(),
+			constructor<noob::vec4(const noob::vec3&, float)>()
+			},
+			{
+			{fun(&noob::vec4::operator[]), "[]" },
+			{fun(&noob::vec4::to_string), "to_string"}
+			});
+	chai->add(vec4);
+
+	chai->add(fun(&noob::length), "length");
+	chai->add(fun(&noob::length2), "length2");
+	chai->add(fun(static_cast<noob::versor (*)(const noob::versor&)>(&noob::normalize)), "normalize");
+	chai->add(fun(static_cast<noob::vec3 (*)(const noob::vec3&)>(&noob::normalize)), "normalize");
+	chai->add(fun(static_cast<float (*)(const noob::vec3&, const noob::vec3&)>(&noob::dot)), "dot");
+	chai->add(fun(static_cast<float (*)(const noob::versor&, const noob::versor&)>(&noob::dot)), "dot");
+	chai->add(fun(&noob::cross), "cross");
+	chai->add(fun(&noob::get_squared_dist), "get_squared_dist");
+	chai->add(fun(&noob::direction_to_heading), "direction_to_heading");
+	chai->add(fun(&noob::heading_to_direction), "heading_to_direction");
+	chai->add(fun(&noob::linearly_dependent), "linearly_dependent");
+	chai->add(fun(&noob::zero_mat3), "zero_mat3");
+	chai->add(fun(&noob::identity_mat3), "identity_mat3");
+	chai->add(fun(&noob::zero_mat4), "zero_mat4");
+	chai->add(fun(&noob::identity_mat4), "identity_mat4");
+	chai->add(fun(&noob::determinant), "determinant");
+	chai->add(fun(&noob::inverse), "inverse");
+	chai->add(fun(&noob::transpose), "transpose");
+	chai->add(fun(&noob::translate), "translate");
+	chai->add(fun(&noob::rotate_x_deg), "rotate_x_deg");
+	chai->add(fun(&noob::rotate_y_deg), "rotate_y_deg");
+	chai->add(fun(&noob::rotate_z_deg), "rotate_z_deg");
+	chai->add(fun(&noob::scale), "scale");
+	chai->add(fun(&noob::translation_from_mat4), "translation_from_mat4");
+	chai->add(fun(&noob::scale_from_mat4), "scale_from_mat4");
+	chai->add(fun(&noob::look_at), "look_at");
+	chai->add(fun(&noob::perspective), "perspective");
+	chai->add(fun(&noob::ortho), "ortho");
+	chai->add(fun(&noob::quat_from_axis_rad), "quat_from_axis_rad");
+	chai->add(fun(&noob::quat_from_axis_deg), "quat_from_axis_deg");
+	chai->add(fun(static_cast<noob::mat4 (*)(const noob::versor&)>(&noob::quat_to_mat4)), "quat_to_mat4");
+	// chai->add(fun(static_cast<noob::versor (*)(const noob::versor&, const noob::versor&)>(&noob::slerp)), "slerp");
+	chai->add(fun(static_cast<noob::versor (*)(noob::versor&, noob::versor&, float t)>(&noob::slerp)), "slerp");
+
+	chai->add(fun(&noob::transform_helper::get_matrix), "get_matrix");
+	chai->add(fun(&noob::transform_helper::scale), "scale");
+	chai->add(fun(&noob::transform_helper::translate), "translate");
+	chai->add(fun(&noob::transform_helper::rotate), "rotate");
+
+	chaiscript::ModulePtr mesh = chaiscript::ModulePtr(new chaiscript::Module());
+	chaiscript::utility::add_class<noob::basic_mesh>(*mesh, "mesh",
+			{ constructor<noob::basic_mesh()>() },
+			{
+			{ fun(&noob::basic_mesh::vertices), "vertices" },
+			{ fun(&noob::basic_mesh::normals), "normals" },
+			{ fun(&noob::basic_mesh::indices), "indices" },
+			{ fun(&noob::basic_mesh::normalize), "normalize" },
+			{ fun(&noob::basic_mesh::to_origin), "to_origin" },
+			{ fun(&noob::basic_mesh::to_half_edges), "to_half_edges" },
+			{ fun(static_cast<std::vector<noob::basic_mesh>(noob::basic_mesh::*)(void) const>(&noob::basic_mesh::convex_decomposition)), "convex_decomposition" },
+			{ fun(&noob::basic_mesh::transform), "transform" },
+			{ fun(&noob::basic_mesh::get_bbox), "get_bbox" },
+			{ fun(static_cast<void (noob::basic_mesh::*)(const std::string&, size_t) const>(&noob::basic_mesh::decimate)), "decimate" },
+			{ fun(static_cast<noob::basic_mesh (noob::basic_mesh::*)(size_t) const>(&noob::basic_mesh::decimate)), "decimate" }, 
+			{ fun(static_cast<bool (noob::basic_mesh::*)(const std::string&, const std::string&)>(&noob::basic_mesh::load)), "load" }, 
+			{ fun(static_cast<bool (noob::basic_mesh::*)(std::tuple<size_t, const char*>, const std::string&)>(&noob::basic_mesh::load)), "load" },
+			{ fun(static_cast<std::tuple<size_t, const char*> (noob::basic_mesh::*)() const>(&noob::basic_mesh::snapshot)), "snapshot" },
+			{ fun(static_cast<void (noob::basic_mesh::*)(const std::string&) const>(&noob::basic_mesh::snapshot)), "snapshot" }
+			});
+	chai->add(mesh);
+
+	chaiscript::ModulePtr model = chaiscript::ModulePtr(new chaiscript::Module());
+	chaiscript::utility::add_class<noob::model>(*model, "model",
+			{ constructor<noob::model(const std::string&)>(),
+			 constructor<noob::model(const noob::basic_mesh&)>() },
+			{
+			{fun(&noob::model::draw), "draw"},
+			//{fun(&noob::model::get_bbox), "get_bbox"}
+			});
+	chai->add(model);
+
+//	chaiscript::ModulePtr triplanar_uniform = chaiscript::ModulePtr(new chaiscript::Module());
+//	chaiscript::utility::add_class<noob::triplanar_renderer::uniform_info>(*triplanar_uniform, "triplanar_uniform",
+//			{ constructor<noob::triplanar_renderer::uniform_info()>() },
+//			{
+//			{ fun(&noob::triplanar_renderer::uniform_info::set_colour), "set_colour" },
+//			{ fun(&noob::triplanar_renderer::uniform_info::set_mapping_blends), "set_mapping_blends" },
+//			{ fun(&noob::triplanar_renderer::uniform_info::set_scales), "set_scales" },
+//			{ fun(&noob::triplanar_renderer::uniform_info::set_colour_positions), "set_colour_positions" }
+//			});
+//	chai->add(triplanar_uniform);
+
+	chai->add(var(&voxels), "voxels");
+	chai->add(fun(&noob::voxel_world::clear_world), "clear_world");
+	chai->add(fun(&noob::voxel_world::set), "set");
+	chai->add(fun(&noob::voxel_world::apply_to_region), "apply_to_region");
+	chai->add(fun(&noob::voxel_world::sphere), "sphere");
+	chai->add(fun(&noob::voxel_world::cube), "cube");
+	chai->add(fun(&noob::voxel_world::cylinder), "cylinder");
+	chai->add(fun(&noob::voxel_world::get), "get");
+	chai->add(fun(&noob::voxel_world::extract_region), "extract_region");
+
 	logger::log("[Sandbox] done init.");
 }
 
@@ -170,55 +206,57 @@ void noob::application::init()
 void noob::application::update(double delta)
 {
 	gui.window_dims(window_width, window_height);
-	
+
 	static double time_elapsed = 0.0;
 	time_elapsed += delta;
-	
-	if (time_elapsed > 0.25)
-	{
-		boost::filesystem::path p;
-		p += *prefix;
-		p += "script.chai";
-		boost::system::error_code ec;
-		
-		static std::time_t last_write = 0;
-		std::time_t t = boost::filesystem::last_write_time(p, ec);
-		if (ec != 0)
-		{
-			logger::log(fmt::format("[Application] - update() - error reading {0}: {1}",p.generic_string(), ec.message()));
-		}	
-		else if (last_write != t)
-		{
-			try
-			{
-				chai.eval_file(p.generic_string());
-			}
-			catch(std::exception e)
-			{
-				logger::log(fmt::format("[Application]. Caught ChaiScript exception: ", e.what()));
-			}
-			last_write = t;
-		}
-		
-		time_elapsed = 0.0;
-	}
 
+	stage.update(delta);
+
+	/*
+	   if (time_elapsed > 0.25)
+	   {
+	   boost::filesystem::path p;
+	   p += *prefix;
+	   p += "script.chai";
+	   boost::system::error_code ec;
+
+	   static std::time_t last_write = 0;
+	   std::time_t t = boost::filesystem::last_write_time(p, ec);
+	   if (ec != 0)
+	   {
+	   logger::log(fmt::format("[Application] - update() - error reading {0}: {1}", p.generic_string(), ec.message()));
+	   }	
+	   else if (last_write != t)
+	   {
+	   init();
+
+	   try
+	   {
+	   chai->eval_file(p.generic_string());
+	   }
+	   catch(std::exception e)
+	   {
+	   logger::log(fmt::format("[Application]. Caught ChaiScript exception: ", e.what()));
+	   }
+	   last_write = t;
+	   }
+	   time_elapsed = 0.0;
+	   }
+	   */
 }
 
 
 void noob::application::draw()
 {
+
 	noob::mat4 proj = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 0.1f, 2000.0f);
 
 	bgfx::setViewTransform(0, &view_mat.m[0], &proj.m[0]);
 	bgfx::setViewRect(0, 0, 0, window_width, window_height);
 
-	// scene.triplanar_render.draw(*t->model.drawable3d_ptr, noob::identity_mat4(), t->colouring_info);
+	stage.draw();
 
 	gui.text("The goat stumbled upon the cheese", 150.0, 50.0);
-	//gui.frame();
-
-	bgfx::submit(0);
 }
 
 
@@ -249,7 +287,7 @@ void noob::application::step()
 
 	if (!paused)
 	{
-		update((float)delta);
+		update(delta);
 	}
 
 	draw();
@@ -271,20 +309,9 @@ void noob::application::resume()
 void noob::application::set_archive_dir(const std::string& filepath)
 {
 
-	{
-		std::stringstream ss;
-		ss << "setting archive dir(\"" << filepath << "\")";
-		logger::log(ss.str());
-
-	}	
-
+	logger::log(fmt::format("[Application] Setting archive directory (\"{0}\")", filepath));
 	prefix = std::unique_ptr<std::string>(new std::string(filepath));
-
-	{
-		std::stringstream ss;
-		ss << "archive dir = " << *prefix;
-		logger::log(ss.str());
-	}
+	logger::log(fmt::format("[Application] Archive dir = {0}", *prefix));
 }
 
 
@@ -292,11 +319,7 @@ void noob::application::touch(int pointerID, float x, float y, int action)
 {
 	if (input_has_started == true)
 	{
-		{
-			std::stringstream ss;
-			ss << "Touch - pointerID " << pointerID << ", (" << x << ", " << y << "), action " << action;
-			logger::log(ss.str());
-		}
+		logger::log(fmt::format("[Application] Touch - pointer ID = {0}, ({1}, {2}), action = {3}", pointerID, x, y, action));
 
 		if (pointerID < 3)
 		{
@@ -311,14 +334,16 @@ void noob::application::window_resize(uint32_t w, uint32_t h)
 {
 	window_width = w;
 	window_height = h;
-	{
-		std::stringstream ss;
-		ss << "window_resize(" << window_width << ", " << window_height << ")";
-		logger::log(ss.str());
-	}
-
 	if (window_height == 0) 
 	{
 		window_height = 1;
 	}
+
+	logger::log(fmt::format("[Application] Resize window to ({0}, {1})", window_width, window_height));
+}
+
+
+void noob::application::key_input(char c)
+{
+
 }

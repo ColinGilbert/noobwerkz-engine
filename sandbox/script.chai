@@ -1,2 +1,31 @@
 // Currently, ChaiScript causes a segfault if you feed it an all-whitespace file. Ergo the the following placeholder.
-rofl
+//rofl
+
+voxels.sphere(40, 30, 30, 30, true);//, true); //,60,60,60);
+var m = voxels.extract_region(0.0, 0.0, 0.0, 80.0, 80.0, 80.0);
+var c = m.convex_decomposition();
+var s = physics.compound_shape(c);
+var p = body_properties();
+p.mass = 10.0;
+p.linear_damping = 0.2;
+p.angular_damping = 0.2;
+p.linear_factor = vec3(1.0, 1.0, 1.0);
+p.angular_factor = vec3(1.0, 1.0, 1.0);
+//p.shape = physics.compound_shapes(c);
+
+var rot = vec4(0.0, 0.0, 0.0, 1.0);
+var trans = vec3(0.0, 0.0, 0.0);
+//var b = physics.create_body(p, rot, trans, (btCollisionShape*)s);
+var d = drawable3d();
+d.init(m);
+
+var v2 = vec2(0.2, 0.4);
+var u = triplanar_uniform();
+u.set_colour(0, vec4(1.0, 1.0, 1.0, 1.0));
+u.set_colour(1, vec4(1.0, 1.0, 1.0, 1.0));
+u.set_colour(2, vec4(1.0, 1.0, 1.0, 1.0));
+u.set_colour(3, vec4(1.0, 1.0, 1.0, 1.0));
+u.set_mapping_blends(vec3(1.0, 1.0, 1.0));
+u.set_scales(vec3(1.0, 1.0, 1.0));
+u.set_colour_positions(vec2(0.2, 0.4));//v2);
+//scene.add(b,d,u, "sample")

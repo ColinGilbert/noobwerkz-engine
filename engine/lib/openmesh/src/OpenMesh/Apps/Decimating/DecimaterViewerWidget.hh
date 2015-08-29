@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 07:07:46 -0600 (Tue, 28 Apr 2015) $                   *
+ *   $Revision: 1315 $                                                         *
+ *   $Date: 2015-07-24 15:19:40 +0200 (Fr, 24 Jul 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -114,7 +114,7 @@ public:
   typedef Decimater::ModNormalFlippingT< mesh_t >::Handle mod_nf_t;
 
   // object types
-#if __cplusplus > 199711L or __GXX_EXPERIMENTAL_CXX0X__
+#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
   typedef std::unique_ptr< decimater_t   >   decimater_o;
 #else
   typedef std::auto_ptr< decimater_t   >   decimater_o;

@@ -49,6 +49,5 @@ void main()
 	
 	vec4 tex_final = ((colour_1 + colour_2) * ratio_1_to_2) + ((colour_2 + colour_3) * ratio_2_to_3) + ((colour_3 + colour_4) * ratio_3_to_4);
 
-
 	gl_FragColor = tex_final; 
 }

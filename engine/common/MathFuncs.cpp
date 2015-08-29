@@ -3,7 +3,10 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-#include <Eigen/Dense>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/quaternion.hpp>
+
+//#include <Eigen/Dense>
 
 
 namespace noob
@@ -46,12 +49,19 @@ namespace noob
 		v[1] = vv.v[1];
 		v[2] = vv.v[2];
 	}
-
+/*
 	vec3::vec3(const btVector3& btVec)
 	{
 		v[0] = btVec[0];
 		v[1] = btVec[1];
 		v[2] = btVec[2];
+	}
+*/
+	vec3::vec3(const rp3d::Vector3& vv)
+	{
+		v[0] = vv.x;
+		v[1] = vv.y;
+		v[2] = vv.z;
 	}
 
 	vec4::vec4() {}
@@ -151,6 +161,22 @@ namespace noob
 	   m[12] = NewtonMatrix[3][0]; m[13] = NewtonMatrix[3][1]; m[14] = NewtonMatrix[3][2]; m[15] = NewtonMatrix[3][3];
 	   }
 	   */
+
+	
+	mat4::mat4(const glm::mat4& mm)
+	{
+		const float *source = (const float*)glm::value_ptr(mm);
+		for (size_t i = 0; i < 16; ++i)
+		{
+			m[i] = source[i];
+		}
+	}
+
+
+	mat4::mat4(const rp3d::Transform& t)
+	{
+		t.getOpenGLMatrix(&m[0]);
+	}
 
 	/*-----------------------------PRINT FUNCTIONS--------------------------------*/
 	void print(const vec2& v)
@@ -614,7 +640,7 @@ namespace noob
 	// scale a matrix by [x, y, z]
 	mat4 scale(const mat4& m, const vec3& v)
 	{
-		mat4 a = identity_mat4 ();
+		mat4 a = identity_mat4();
 		a.m[0] = v.v[0];
 		a.m[5] = v.v[1];
 		a.m[10] = v.v[2];
@@ -628,7 +654,6 @@ namespace noob
 
 		}
 		*/	
-
 	vec3 translation_from_mat4(const mat4& m)
 	{
 		vec3 v;
@@ -647,7 +672,6 @@ namespace noob
 		v.v[2] = m.m[10];
 		return v;
 	}
-
 
 	/*-----------------------VIRTUAL CAMERA MATRIX FUNCTIONS----------------------*/
 	// returns a view matrix using the opengl lookAt style. COLUMN ORDER.
@@ -758,6 +782,14 @@ namespace noob
 		//q[1] = v[1];
 		//q[2] = v[2];
 		//q[3] = v[3];
+	}
+
+	versor::versor(const rp3d::Quaternion& qq)
+	{
+		q[0] = qq.x;
+		q[1] = qq.y;
+		q[2] = qq.z;
+		q[3] = qq.w;
 	}
 
 	versor versor::operator/(float rhs)
@@ -966,6 +998,18 @@ namespace noob
 		for (int i = 0; i < 4; i++) {
 			q[i] = q[i] / mag;
 		}
+	}
+
+	versor quat_from_mat4(const mat4& m)
+	{
+		glm::mat4 mm = glm::make_mat4(&m.m[0]);
+		glm::quat q = glm::quat_cast(mm);
+		noob::versor qq;
+		qq.q[0] = q[0];
+		qq.q[1] = q[1];
+		qq.q[2] = q[2];
+		qq.q[3] = q[3];
+		return qq;
 	}
 
 	void quat_to_mat4 (float* m, float* q) {

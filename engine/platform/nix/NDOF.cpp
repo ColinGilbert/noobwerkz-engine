@@ -2,7 +2,8 @@
 #include "Logger.hpp"
 #include <thread>
 #include <stdlib.h>
-#include <signal.h>
+//#include <signal.h>
+#include <csignal>
 #include <spnav.h>
 
 void sig()
@@ -21,7 +22,7 @@ void noob::ndof::run()
 
 	std::thread t([this]()//, x, y, z, rx, ry, rz, sev]()
 			{
-			signal(SIGINT, sig);
+			// std::signal(SIGINT, SIG_DFL);
 			spnav_event sev;
 			while(spnav_wait_event(&sev))
 			{

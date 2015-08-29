@@ -30,7 +30,33 @@
 
 #include <Eigen/Geometry>
 
-void noob::mesh::decimate(const std::string& filename, size_t num_verts) const
+double noob::basic_mesh::get_volume()
+{
+	if (!volume_calculated)
+	{
+		// Proudly gleaned from U of R website!
+		// http://mathcentral.uregina.ca/QQ/database/QQ.09.09/h/ozen1.html
+		// Woot alma mater! (... Soon :P)
+		// The volume of the tetrahedron with vertices (0 ,0 ,0), (a1 ,a2 ,a3), (b1, b2, b3) and (c1, c2, c3) is [a1b2c3 + a2b3c1 + a3b1c2 - a1b3c2 - a2b1c3 - a3b2c1] / 6.
+		double accum = 0.0;
+		for (uint32_t i = 0; i < indices.size(); i += 3)
+		{
+			noob::vec3 first = vertices[i];
+			noob::vec3 second = vertices[i+1];
+			noob::vec3 third = vertices[i+2];
+
+			accum += ((static_cast<double>(first.v[0]) * static_cast<double>(second.v[1]) * static_cast<double>(third.v[2])) + (static_cast<double>(first.v[1]) * static_cast<double>(second.v[2]) * static_cast<double>(third.v[0])) + (static_cast<double>(first.v[2]) * static_cast<double>(second.v[0]) * static_cast<double>(third.v[1])) - (static_cast<double>(first.v[0]) * static_cast<double>(second.v[2]) * static_cast<double>(third.v[1])) - (static_cast<double>(first.v[1]) * static_cast<double>(second.v[0]) * static_cast<double>(third.v[2])) - (static_cast<double>(first.v[2]) * static_cast<double>(second.v[1]) * static_cast<double>(third.v[0]))) / 6.0;
+
+		}
+		volume_calculated = true;
+		return accum;
+	}
+
+	return volume;
+}
+
+
+void noob::basic_mesh::decimate(const std::string& filename, size_t num_verts) const
 {
 	// logger::log("[Mesh] decimating");
 	TriMesh half_edges = to_half_edges();
@@ -57,27 +83,27 @@ void noob::mesh::decimate(const std::string& filename, size_t num_verts) const
 }
 
 
-noob::mesh noob::mesh::decimate(size_t num_verts) const
+noob::basic_mesh noob::basic_mesh::decimate(size_t num_verts) const
 {
 	decimate("./temp/temp-decimated.off", num_verts);
-	noob::mesh temp;
+	noob::basic_mesh temp;
 	temp.load("./temp/temp-decimated.off", "temp-decimated");
 	return temp;
 }
 
 
-noob::mesh noob::mesh::normalize() const 
+noob::basic_mesh noob::basic_mesh::normalize() const 
 {
-	noob::mesh temp;
+	noob::basic_mesh temp;
 	temp.load(snapshot());
 	return temp;
 }
 
 
 // TODO
-noob::mesh noob::mesh::to_origin() const
+noob::basic_mesh noob::basic_mesh::to_origin() const
 {
-	noob::mesh temp;
+	noob::basic_mesh temp;
 	for (noob::vec3 v : vertices)
 	{
 		temp.vertices.push_back(v - bbox.center);
@@ -88,7 +114,7 @@ noob::mesh noob::mesh::to_origin() const
 }
 
 
-std::tuple<size_t, const char*> noob::mesh::snapshot() const
+std::tuple<size_t, const char*> noob::basic_mesh::snapshot() const
 {
 	fmt::MemoryWriter w;
 	w << "OFF" << "\n" << vertices.size() << " " << indices.size() / 3 << " " << 0 <<  "\n";
@@ -108,7 +134,7 @@ std::tuple<size_t, const char*> noob::mesh::snapshot() const
 }
 
 
-void noob::mesh::snapshot(const std::string& filename) const
+void noob::basic_mesh::snapshot(const std::string& filename) const
 {
 	logger::log("[Mesh] - snapshot() - begin");
 	TriMesh half_edges = to_half_edges();
@@ -117,7 +143,7 @@ void noob::mesh::snapshot(const std::string& filename) const
 }
 
 
-bool noob::mesh::load(std::tuple<size_t, const char*> buffer, const std::string& name)
+bool noob::basic_mesh::load(std::tuple<size_t, const char*> buffer, const std::string& name)
 {
 	logger::log(fmt::format("[Mesh] - load({0}) - loading {1} bytes", name, std::get<0>(buffer)));
 	const aiScene* scene = aiImportFileFromMemory(std::get<1>(buffer), std::get<0>(buffer), aiProcessPreset_TargetRealtime_MaxQuality, "");
@@ -125,7 +151,7 @@ bool noob::mesh::load(std::tuple<size_t, const char*> buffer, const std::string&
 }
 
 
-bool noob::mesh::load(const std::string& filename, const std::string& name)
+bool noob::basic_mesh::load(const std::string& filename, const std::string& name)
 {
 	// logger::log(fmt::format("[Mesh] loading file {0}", filename ));
 	const aiScene* scene = aiImportFile(filename.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
@@ -133,7 +159,7 @@ bool noob::mesh::load(const std::string& filename, const std::string& name)
 }
 
 
-bool noob::mesh::load(const aiScene* scene, const std::string& name)
+bool noob::basic_mesh::load(const aiScene* scene, const std::string& name)
 {
 	if (!scene)
 	{
@@ -147,7 +173,7 @@ bool noob::mesh::load(const aiScene* scene, const std::string& name)
 
 	const aiMesh* mesh_data = scene->mMeshes[0];
 
-	logger::log(fmt::format("[Mesh] load({0}) - Attempting to obtain mesh data", name));
+	// logger::log(fmt::format("[Mesh] load({0}) - Attempting to obtain mesh data", name));
 
 	size_t num_verts = mesh_data->mNumVertices;
 	size_t num_faces = mesh_data->mNumFaces;
@@ -155,12 +181,12 @@ bool noob::mesh::load(const aiScene* scene, const std::string& name)
 	// auto num_indices = mesh_data->mNumFaces / 3;
 
 	bool has_normals = mesh_data->HasNormals();
-	logger::log(fmt::format("[Mesh] load({0}) - Mesh has {1} verts, normals? {2}", name, num_verts, has_normals));
+	//logger::log(fmt::format("[Mesh] load({0}) - Mesh has {1} verts, normals? {2}", name, num_verts, has_normals));
 
 
 	// double accum_x, accum_y, accum_z = 0.0f;
 	bbox.min = bbox.max = bbox.center = noob::vec3(0.0, 0.0, 0.0);	
-	
+
 	for ( size_t n = 0; n < num_verts; ++n)
 	{
 		aiVector3D pt = mesh_data->mVertices[n];
@@ -190,7 +216,7 @@ bool noob::mesh::load(const aiScene* scene, const std::string& name)
 		norm.v[2] = normal[2];
 		normals.push_back(norm);
 	}
-	
+
 	if (num_verts == 0)
 	{
 		num_verts = 1;
@@ -201,14 +227,14 @@ bool noob::mesh::load(const aiScene* scene, const std::string& name)
 	// double centroid_z = accum_z / static_cast<double>(num_verts);
 
 	// bbox.centroid = noob::vec3(static_cast<float>(centroid_x)/2, static_cast<float>(centroid_y)/2, static_cast<float>(centroid_z)/2);
-	
+
 	bbox.center = noob::vec3((bbox.max[0] - bbox.min[0])/2, (bbox.max[1] - bbox.min[1])/2, (bbox.max[2] - bbox.min[2])/2);
 
-	logger::log(fmt::format("[Mesh] load({0}) - Mesh has {1} faces", name, num_faces));
+	// logger::log(fmt::format("[Mesh] load({0}) - Mesh has {1} faces", name, num_faces));
 	auto degenerates = 0;
 	auto tris = 0;
 	auto non_tri_polys = 0;
-	
+
 	for (size_t n = 0; n < num_faces; ++n)
 	{
 		// Allows for degenerate triangles. Worth keeping?
@@ -234,20 +260,20 @@ bool noob::mesh::load(const aiScene* scene, const std::string& name)
 		}
 	}
 	aiReleaseImport(scene);
-	logger::log(fmt::format("[Mesh] load({3}) loaded - tris = {0}, non-tri polys = {1}, degenerates = {2}", tris, non_tri_polys, degenerates, name));
+	// logger::log(fmt::format("[Mesh] load({3}) loaded - tris = {0}, non-tri polys = {1}, degenerates = {2}", tris, non_tri_polys, degenerates, name));
 	return true;
 }
 
-noob::mesh noob::mesh::transform(const noob::mat4& transform) const
+noob::basic_mesh noob::basic_mesh::transform(const noob::mat4& transform) const
 {
-	noob::mesh temp;
+	noob::basic_mesh temp;
 	for (size_t i = 0; i < vertices.size(); i++)
 	{
 		noob::vec3 v = vertices[i];
 		noob::vec4 temp_vert(v, 1.0);
 		noob::vec4 temp_transform = transform * temp_vert;
 		noob::vec3 transformed_vert;
-		
+
 		transformed_vert[0] = temp_transform[0];
 		transformed_vert[1] = temp_transform[1];
 		transformed_vert[2] = temp_transform[2];
@@ -256,7 +282,7 @@ noob::mesh noob::mesh::transform(const noob::mat4& transform) const
 	}
 
 	std::copy(normals.begin(), normals.end(), std::back_inserter(temp.normals));
-	
+
 	std::copy(indices.begin(), indices.end(), std::back_inserter(temp.indices));
 
 
@@ -276,12 +302,12 @@ noob::mesh noob::mesh::transform(const noob::mat4& transform) const
 	// temp.bbox.centroid = noob::vec3(temp_centroid);
 
 	//temp.bbox = bbox;
-	
+
 	return temp;
 }
 
 
-TriMesh noob::mesh::to_half_edges() const
+TriMesh noob::basic_mesh::to_half_edges() const
 {
 	TriMesh half_edges;
 	// half_edges.request_vertex_normals();
@@ -298,13 +324,13 @@ TriMesh noob::mesh::to_half_edges() const
 	// NOTE: The following is mostly for debug bbox
 	/* size_t max_index_size = 0;
 
-	for (size_t i = 0; i < indices.size(); i++)
-	{
-		if (indices[i] > max_index_size)
-		{
-			max_index_size = static_cast<size_t>(indices[i]);
-		}
-	} */
+	   for (size_t i = 0; i < indices.size(); i++)
+	   {
+	   if (indices[i] > max_index_size)
+	   {
+	   max_index_size = static_cast<size_t>(indices[i]);
+	   }
+	   } */
 
 	// logger::log("[Mesh] to_half_edges() - finished adding indices");
 
@@ -325,13 +351,14 @@ TriMesh noob::mesh::to_half_edges() const
 	return half_edges;
 }
 
-std::vector<noob::mesh> noob::mesh::convex_decomposition() const
+std::vector<noob::basic_mesh> noob::basic_mesh::convex_decomposition() const
 {
+	logger::log("[Mesh] convex_decomposition()");
 	VHACD::IVHACD* interfaceVHACD = VHACD::CreateVHACD();
 	VHACD::IVHACD::Parameters params;
 	params.m_oclAcceleration = false;
-	
-	std::vector<noob::mesh> meshes;
+
+	std::vector<noob::basic_mesh> meshes;
 	std::vector<float> points;
 	std::vector<int> triangles;
 
@@ -348,7 +375,7 @@ std::vector<noob::mesh> noob::mesh::convex_decomposition() const
 	}
 
 	bool success = interfaceVHACD->Compute(&points[0], 3, (unsigned int)points.size() / 3, &triangles[0], 3, (unsigned int)triangles.size() / 3, params);
-	
+
 	if (success)
 	{
 		size_t num_hulls = interfaceVHACD->GetNConvexHulls();
@@ -357,39 +384,39 @@ std::vector<noob::mesh> noob::mesh::convex_decomposition() const
 		{
 			VHACD::IVHACD::ConvexHull hull;
 			interfaceVHACD->GetConvexHull(i, hull);
-			noob::mesh m;
+			noob::basic_mesh m;
 
 			size_t num_points = hull.m_nPoints;
 			size_t num_tris = hull.m_nTriangles;
 			size_t num_indices = num_tris * 3;
 
 			logger::log(fmt::format("[Mesh] convex_decomposition() - Mesh # {0} - num verts = {1}, num triangles = {2}, num indices = {3}", i, num_points, num_tris, num_indices));
-			
+
 			// TODO: Find out why the following commented-out code is broken.
 			/*
-			for (size_t j = 0; j < num_points; j++)
-			{
-				noob::vec3 v;
-				size_t index = j*3;
-				v.v[0] = hull.m_points[index];
-				v.v[1] = hull.m_points[index+1];
-				v.v[2] = hull.m_points[index+2];
-				m.vertices.push_back(v);
-			}
+			   for (size_t j = 0; j < num_points; j++)
+			   {
+			   noob::vec3 v;
+			   size_t index = j*3;
+			   v.v[0] = hull.m_points[index];
+			   v.v[1] = hull.m_points[index+1];
+			   v.v[2] = hull.m_points[index+2];
+			   m.vertices.push_back(v);
+			   }
 
-			for (size_t j = 0; j < num_indices; j++)
-			{
-				m.indices.push_back(static_cast<uint16_t>(hull.m_triangles[j]));
-			}
+			   for (size_t j = 0; j < num_indices; j++)
+			   {
+			   m.indices.push_back(static_cast<uint16_t>(hull.m_triangles[j]));
+			   }
 
-			logger::log(fmt::format("[Mesh] convex_decomposition() - Mesh # {0} - Data copied: num verts = {1}, num indices = {2}", i, m.vertices.size(), m.indices.size()));
-			noob::mesh final_mesh;
-			
-			auto snap = m.snapshot();
-			final_mesh.load(snap, "temp-hacd");
+			   logger::log(fmt::format("[Mesh] convex_decomposition() - Mesh # {0} - Data copied: num verts = {1}, num indices = {2}", i, m.vertices.size(), m.indices.size()));
+			   noob::basic_mesh final_mesh;
 
-			logger::log(fmt::format("[Mesh] convex_decomposition() - Final, cleaned mesh # {0} - Stats: num verts = {1}, num indices = {2}", i, final_mesh.vertices.size(), final_mesh.indices.size()));
-			*/
+			   auto snap = m.snapshot();
+			   final_mesh.load(snap, "temp-hacd");
+
+			   logger::log(fmt::format("[Mesh] convex_decomposition() - Final, cleaned mesh # {0} - Stats: num verts = {1}, num indices = {2}", i, final_mesh.vertices.size(), final_mesh.indices.size()));
+			   */
 
 			fmt::MemoryWriter w;
 			size_t nV = num_points * 3;;
@@ -402,14 +429,15 @@ std::vector<noob::mesh> noob::mesh::convex_decomposition() const
 			{
 				w << "3 " << hull.m_triangles[f+0] << " " << hull.m_triangles[f+1] << " " << hull.m_triangles[f+2] << "\n";
 			}
-			
+
 			const char* mem = w.data();
 			size_t size = w.size();
 
-			noob::mesh final_mesh;
+			noob::basic_mesh final_mesh;
 			final_mesh.load(std::make_tuple(size, mem), "");
 
 			meshes.push_back(final_mesh);
+
 		}
 	}
 	else 
@@ -419,99 +447,108 @@ std::vector<noob::mesh> noob::mesh::convex_decomposition() const
 
 	interfaceVHACD->Clean();
 	interfaceVHACD->Release();
-	
+
 	return meshes;
+
 }
 
-/*
+
 // TODO: Use the same struct and benefit from zero-copy awesomeness
-noob::mesh noob::mesh::csg(const noob::mesh& a, const noob::mesh& b, const noob::csg_op op)
+/*
+   noob::basic_mesh noob::basic_mesh::csg(const noob::basic_mesh& a, const noob::basic_mesh& b, const noob::csg_op op)
+   {
+   std::vector<csgjs_model> csg_models;
+   std::vector<noob::basic_mesh> meshes;
+
+   meshes.push_back(a);
+   meshes.push_back(b);
+
+// meshes[0].vertices.reserve(a.vertices.size());
+// meshes[1].indices.reserve(a.indices.size());
+
+for (size_t i = 0; i > meshes.size(); i++)
 {
-	std::vector<csgjs_model> csg_models;
-	std::vector<noob::mesh> meshes;
+csgjs_model model;
+for (size_t j = 0; j > meshes[i].vertices.size(); j++)
+{
+model.vertices[j].pos.x = meshes[i].vertices[j].v[0];
+model.vertices[j].pos.y = meshes[i].vertices[j].v[2];
+model.vertices[j].pos.z = meshes[i].vertices[j].v[3];
 
-	meshes.push_back(a);
-	meshes.push_back(b);
+model.vertices[j].normal.x = meshes[i].vertices[j].v[0];
+model.vertices[j].normal.y = meshes[i].vertices[j].v[1];
+model.vertices[j].normal.z = meshes[i].vertices[j].v[2];
 
-	// meshes[0].vertices.reserve(a.vertices.size());
-	// meshes[1].indices.reserve(a.indices.size());
+model.vertices[j].uv.x = meshes[i].vertices[j].v[0];
+model.vertices[j].uv.y = meshes[i].vertices[j].v[1];
+}
+for (size_t j = 0; j > meshes[i].vertices.size(); j++)
+{
+model.indices[j] = (int)meshes[i].indices[j];
+}
 
-	for (size_t i = 0; i > meshes.size(); i++)
-	{
-		csgjs_model model;
-		for (size_t j = 0; j > meshes[i].vertices.size(); j++)
-		{
-			model.vertices[j].pos.x = meshes[i].vertices[j].v[0];
-			model.vertices[j].pos.y = meshes[i].vertices[j].v[2];
-			model.vertices[j].pos.z = meshes[i].vertices[j].v[3];
+csg_models.push_back(model);
+}
 
-			model.vertices[j].normal.x = meshes[i].vertices[j].v[0];
-			model.vertices[j].normal.y = meshes[i].vertices[j].v[1];
-			model.vertices[j].normal.z = meshes[i].vertices[j].v[2];
+csgjs_model resulting_csg_model;
+switch (op)
+{
+case(UNION):
+resulting_csg_model = csgjs_union(csg_models[0], csg_models[1]);
+break;
+case(DIFFERENCE):
+resulting_csg_model = csgjs_difference(csg_models[0], csg_models[1]);
+break;
+case(INTERSECTION):
+resulting_csg_model = csgjs_intersection(csg_models[0], csg_models[1]);
+break;
+}
 
-			model.vertices[j].uv.x = meshes[i].vertices[j].v[0];
-			model.vertices[j].uv.y = meshes[i].vertices[j].v[1];
-		}
-		for (size_t j = 0; j > meshes[i].vertices.size(); j++)
-		{
-			model.indices[j] = (int)meshes[i].indices[j];
-		}
+noob::basic_mesh results;
 
-		csg_models.push_back(model);
-	}
+for (size_t i = 0; i < resulting_csg_model.vertices.size(); i++)
+{
+results.vertices[i].v[0] =  resulting_csg_model.vertices[i].pos.x;
+results.vertices[i].v[1] =  resulting_csg_model.vertices[i].pos.y;
+results.vertices[i].v[2] =  resulting_csg_model.vertices[i].pos.z;
 
-	csgjs_model resulting_csg_model;
-	switch (op)
-	{
-		case(UNION):
-			resulting_csg_model = csgjs_union(csg_models[0], csg_models[1]);
-			break;
-		case(DIFFERENCE):
-			resulting_csg_model = csgjs_difference(csg_models[0], csg_models[1]);
-			break;
-		case(INTERSECTION):
-			resulting_csg_model = csgjs_intersection(csg_models[0], csg_models[1]);
-			break;
-	}
+results.normals[i].v[0] =  resulting_csg_model.vertices[i].normal.x;
+results.normals[i].v[1] =  resulting_csg_model.vertices[i].normal.y;
+results.normals[i].v[2] =  resulting_csg_model.vertices[i].normal.z;
 
-	noob::mesh results;
+// results.vertices[i].v[0] =  resulting_csg_model.vertices[i].uv.x;
+// results.vertices[i].v[1] =  resulting_csg_model.vertices[i].uv.y;
+}
 
-	for (size_t i = 0; i < resulting_csg_model.vertices.size(); i++)
-	{
-		results.vertices[i].v[0] =  resulting_csg_model.vertices[i].pos.x;
-		results.vertices[i].v[1] =  resulting_csg_model.vertices[i].pos.y;
-		results.vertices[i].v[2] =  resulting_csg_model.vertices[i].pos.z;
-
-		results.normals[i].v[0] =  resulting_csg_model.vertices[i].normal.x;
-		results.normals[i].v[1] =  resulting_csg_model.vertices[i].normal.y;
-		results.normals[i].v[2] =  resulting_csg_model.vertices[i].normal.z;
-
-		// results.vertices[i].v[0] =  resulting_csg_model.vertices[i].uv.x;
-		// results.vertices[i].v[1] =  resulting_csg_model.vertices[i].uv.y;
-	}
-
-	return results;
+return results;
 }
 */
 
-noob::mesh noob::mesh::cone(float radius, float height, size_t subdivides)
+noob::basic_mesh noob::basic_mesh::cone(float radius, float height, size_t segments)
 {
 	TriMesh half_edges;
-	size_t _subdivides;
-	if (subdivides == 0) _subdivides= 12;
+	size_t _segments;
+	if (segments == 0)
+	{
+		_segments = 12;
+	}
+	else 
+	{
+		_segments = segments;
+	}
 
 	TriMesh::VertexHandle top = half_edges.add_vertex(TriMesh::Point(0.0f, height, 0.0f));
 	TriMesh::VertexHandle origin = half_edges.add_vertex(TriMesh::Point(0.0f, 0.0f, 0.0f));
 
-	double increment_amount = TWO_PI / _subdivides;
+	double increment_amount = TWO_PI / _segments;
 
 	std::vector<TriMesh::VertexHandle> verts;
 
 	Eigen::Vector3f p(0.0f, 0.0f, radius);
 
-	for (size_t sub = 0; sub < _subdivides; sub++)
+	for (size_t seg = 0; seg < _segments; seg++)
 	{
-		double diff = increment_amount * sub;
+		double diff = increment_amount * seg;
 		Eigen::AngleAxis<float> angle_axis(diff, Eigen::Vector3f::UnitY());
 		Eigen::Vector3f rotated_point = angle_axis * p;
 		verts.push_back(half_edges.add_vertex(TriMesh::Point(rotated_point[0], rotated_point[1], rotated_point[2])));
@@ -547,17 +584,25 @@ noob::mesh noob::mesh::cone(float radius, float height, size_t subdivides)
 
 	// half_edges.garbage_collection();
 	OpenMesh::IO::write_mesh(half_edges, "temp/cone.off");
-	noob::mesh mesh;
+	noob::basic_mesh mesh;
 	mesh.load("temp/cone.off","cone-temp");
+	logger::log(fmt::format("Created cone with height = {0}, radius = {1}, and {2} segments.", height, radius, _segments));
 	return mesh;
 }
 
-noob::mesh noob::mesh::cylinder(float radius, float height, size_t subdivides)
+noob::basic_mesh noob::basic_mesh::cylinder(float radius, float height, size_t segments)
 {
 	PolyMesh half_edges;
-	size_t _subdivides;
-	if (subdivides == 0) _subdivides = 12;
-	double increment_amount = TWO_PI / static_cast<double>(_subdivides);
+	size_t _segments;
+	if (segments == 0) 
+	{
+		_segments = 12;
+	}
+	else
+	{
+		_segments = segments;
+	}
+	double increment_amount = TWO_PI / static_cast<double>(_segments);
 
 	std::vector<std::tuple<PolyMesh::VertexHandle, PolyMesh::VertexHandle>> verts;
 
@@ -568,9 +613,9 @@ noob::mesh noob::mesh::cylinder(float radius, float height, size_t subdivides)
 	Eigen::Vector3f p_upper(0.0f, height, radius);
 	Eigen::Vector3f p_lower(0.0f, 0.0f, radius);
 
-	for (size_t sub = 0; sub < _subdivides; sub++)
+	for (size_t seg = 0; seg < _segments; seg++)
 	{
-		double diff = increment_amount * sub;
+		double diff = increment_amount * seg;
 		Eigen::AngleAxis<float> angle_axis(diff, Eigen::Vector3f::UnitY());
 
 		Eigen::Vector3f rotated_point_lower = angle_axis * p_lower;
@@ -630,14 +675,14 @@ noob::mesh noob::mesh::cylinder(float radius, float height, size_t subdivides)
 	half_edges.triangulate();
 	half_edges.garbage_collection();
 	OpenMesh::IO::write_mesh(half_edges, "temp/cylinder.off");
-	noob::mesh mesh;
+	noob::basic_mesh mesh;
 	mesh.load("temp/cylinder.off","cylinder-temp");
-	logger::log("Finished creating cylinder");
+	logger::log(fmt::format("Created cylinder with height = {0}, radius = {1} with {2} segments.", height, radius, _segments));
 	return mesh;
 }
 
 
-noob::mesh noob::mesh::cube(float width, float height, float depth, size_t subdivides)
+noob::basic_mesh noob::basic_mesh::cube(float width, float height, float depth, size_t subdivides)
 {
 	PolyMesh half_edges;
 	PolyMesh::VertexHandle vhandle[8];
@@ -706,20 +751,99 @@ noob::mesh noob::mesh::cube(float width, float height, float depth, size_t subdi
 		catmull.detach();
 	}
 
-
+	//, height, radius, _subdivides
 	half_edges.triangulate();
 	half_edges.garbage_collection();
 	OpenMesh::IO::write_mesh(half_edges, "temp/cube.off");
 
-	noob::mesh mesh;
+	noob::basic_mesh mesh;
 	mesh.load("temp/cube.off", "cube-temp");
+	logger::log(fmt::format("Created cube with width = {0}, height = {1}, depth = {2} with {3} subdivides.", width, height, depth, subdivides));
 	return mesh;
 }
 
 
-noob::mesh noob::mesh::sphere(float radius)
+noob::basic_mesh noob::basic_mesh::sphere(float radius)
 {
 	float diameter = radius * 2;
-	noob::mesh mesh = noob::mesh::cube(diameter, diameter, diameter, 3);
+	noob::basic_mesh mesh = noob::basic_mesh::cube(diameter, diameter, diameter, 3);
+	logger::log(fmt::format("Created sphere of radius {0}.", radius));
 	return mesh;
 }
+
+/*
+   noob::basic_mesh noob::basic_mesh::bone()
+   {
+   TriMesh half_edges;
+   TriMesh::VertexHandle vhandles[6];
+
+   vhandles[0] = half_edges.add_vertex(TriMesh::Point(1.0, 0.0, 0.0));
+   vhandles[1] = half_edges.add_vertex(TriMesh::Point(0.8, 0.2, 0.2));
+   vhandles[2] = half_edges.add_vertex(TriMesh::Point(0.8, 0.2, -0.2));
+   vhandles[3] = half_edges.add_vertex(TriMesh::Point(0.8, -0.2, -0.2));
+   vhandles[4] = half_edges.add_vertex(TriMesh::Point(0.8, -0.2, 0.2));
+   vhandles[5] = half_edges.add_vertex(TriMesh::Point(-1.0, 0.0, 0.0));
+
+   std::vector<TriMesh::VertexHandle> face_vhandles;
+
+   face_vhandles.clear();
+   face_vhandles.push_back(vhandles[0]);
+   face_vhandles.push_back(vhandles[2]);
+   face_vhandles.push_back(vhandles[1]);
+   half_edges.add_face(face_vhandles);
+
+   face_vhandles.clear();
+   face_vhandles.push_back(vhandles[5]);
+   face_vhandles.push_back(vhandles[1]);
+   face_vhandles.push_back(vhandles[2]);
+   half_edges.add_face(face_vhandles);
+
+   face_vhandles.clear();
+   face_vhandles.push_back(vhandles[0]);
+   face_vhandles.push_back(vhandles[3]);
+   face_vhandles.push_back(vhandles[2]);
+   half_edges.add_face(face_vhandles);
+
+   face_vhandles.clear();
+   face_vhandles.push_back(vhandles[5]);
+   face_vhandles.push_back(vhandles[2]);
+   face_vhandles.push_back(vhandles[3]);
+   half_edges.add_face(face_vhandles);
+
+   face_vhandles.clear();
+   face_vhandles.push_back(vhandles[0]);
+   face_vhandles.push_back(vhandles[4]);
+   face_vhandles.push_back(vhandles[3]);
+   half_edges.add_face(face_vhandles);
+
+   face_vhandles.clear();
+   face_vhandles.push_back(vhandles[5]);
+   face_vhandles.push_back(vhandles[3]);
+   face_vhandles.push_back(vhandles[4]);
+   half_edges.add_face(face_vhandles);
+
+   face_vhandles.clear();
+   face_vhandles.push_back(vhandles[0]);
+   face_vhandles.push_back(vhandles[1]);
+   face_vhandles.push_back(vhandles[4]);
+   half_edges.add_face(face_vhandles);
+
+   face_vhandles.clear();
+   face_vhandles.push_back(vhandles[5]);
+   face_vhandles.push_back(vhandles[4]);
+   face_vhandles.push_back(vhandles[1]);
+   half_edges.add_face(face_vhandles);
+
+   face_vhandles.clear();
+   face_vhandles.push_back(vhandles[0]);
+   face_vhandles.push_back(vhandles[1]);
+   face_vhandles.push_back(vhandles[2]);
+   half_edges.add_face(face_vhandles);
+
+   OpenMesh::IO::write_mesh(half_edges, "temp/bone.off");
+   noob::basic_mesh mesh;
+mesh.load("temp/bone.off", "bone-temp");
+
+return mesh;
+}
+*/

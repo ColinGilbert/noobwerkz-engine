@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 07:07:46 -0600 (Tue, 28 Apr 2015) $                   *
+ *   $Revision: 1315 $                                                         *
+ *   $Date: 2015-07-24 15:19:40 +0200 (Fr, 24 Jul 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -131,7 +131,7 @@ public:
 
   bool bind( osg::GeometryPtr geo )
   {
-    #if __cplusplus > 199711L or __GXX_EXPERIMENTAL_CXX0X__
+    #if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
       std::unique_ptr<mesh_t> obj(new mesh_t);
     #else
       std::auto_ptr<mesh_t> obj(new mesh_t);

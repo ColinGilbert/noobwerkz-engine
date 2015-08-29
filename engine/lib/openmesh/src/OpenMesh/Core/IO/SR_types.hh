@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 07:07:46 -0600 (Tue, 28 Apr 2015) $                   *
+ *   $Revision: 1305 $                                                         *
+ *   $Date: 2015-07-08 10:16:59 +0200 (Mi, 08 Jul 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -82,7 +82,7 @@ typedef unsigned char    uchar;
 typedef unsigned short   ushort;
 typedef unsigned long    ulong;
 
-typedef char           int8_t;  typedef unsigned char      uint8_t;
+typedef signed char    int8_t;  typedef unsigned char      uint8_t;
 typedef short          int16_t; typedef unsigned short     uint16_t;
 
 // Int should be 32 bit on all archs.

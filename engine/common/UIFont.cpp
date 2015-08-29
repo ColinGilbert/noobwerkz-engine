@@ -29,7 +29,7 @@ TrueTypeHandle loadTtf(FontManager* _fm, const char* _filePath)
 }
 
 
-bool noob::ui_font::init(const std::string& filename, size_t font_size, float win_width, float win_height)
+void noob::ui_font::init(const std::string& filename, size_t font_size, float win_width, float win_height)
 {
 	window_width = win_width;
 	window_height = win_height;
@@ -66,7 +66,6 @@ void noob::ui_font::draw_text(uint8_t view_id, const std::string& message, float
 	textBufferManager->appendText(transientText, font_handle, message.c_str());
 	// bgfx::setState(BGFX_STATE_RGB_WRITE |BGFX_STATE_ALPHA_WRITE |BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA));
 	textBufferManager->submitTextBuffer(transientText, view_id);
-	bgfx::submit(view_id);
 }
 
 

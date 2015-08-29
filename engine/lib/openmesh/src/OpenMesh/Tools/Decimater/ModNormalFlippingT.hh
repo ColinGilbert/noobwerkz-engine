@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 07:07:46 -0600 (Tue, 28 Apr 2015) $                   *
+ *   $Revision: 1279 $                                                         *
+ *   $Date: 2015-06-09 11:42:12 +0200 (Di, 09 Jun 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -99,7 +99,7 @@ public:
 
     if (!mesh_has_normals)
     {
-      std::cerr << "Mesh has no face normals. Compute them automatically." << std::endl;
+      omerr() << "Mesh has no face normals. Compute them automatically." << std::endl;
       _mesh.update_face_normals();
     }
   }

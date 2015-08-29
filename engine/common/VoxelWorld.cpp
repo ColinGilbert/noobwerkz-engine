@@ -57,6 +57,7 @@ void noob::voxel_world::apply_to_region(size_t lower_x, size_t lower_y, size_t l
 
 void noob::voxel_world::sphere(size_t radius, size_t origin_x, size_t origin_y, size_t origin_z, bool fill)
 {
+	logger::log(fmt::format("[VoxelWorld] sphere({0}, {1}, {2}, {3}, {4})", radius, origin_x, origin_y, origin_z, fill));
 	PolyVox::Region bounding_box(origin_x - radius, origin_y - radius, origin_z - radius, origin_x + radius, origin_y + radius, origin_z + radius);
 	PolyVox::Region world_region = world->getEnclosingRegion();
 	bounding_box.cropTo(world_region);
@@ -164,9 +165,9 @@ uint8_t noob::voxel_world::get(size_t x, size_t y, size_t z) const
 }
 
 
-noob::mesh noob::voxel_world::extract_region(size_t lower_x, size_t lower_y, size_t lower_z, size_t upper_x, size_t upper_y, size_t upper_z) const
+noob::basic_mesh noob::voxel_world::extract_region(size_t lower_x, size_t lower_y, size_t lower_z, size_t upper_x, size_t upper_y, size_t upper_z) const
 {
-	noob::mesh noob_mesh;
+	noob::basic_mesh noob_mesh;
 	PolyVox::Region bounding_box(lower_x, lower_y, lower_z, upper_x, upper_y, upper_z);
 	PolyVox::Region world_region = world->getEnclosingRegion();
 	bounding_box.cropTo(world_region);
@@ -189,7 +190,7 @@ noob::mesh noob::voxel_world::extract_region(size_t lower_x, size_t lower_y, siz
 		noob_mesh.indices.push_back(decoded_mesh.getIndex(i));
 	}
 
-	noob::mesh normalized;
+	noob::basic_mesh normalized;
 
 	noob_mesh.snapshot("temp/extracted-temp.off");
 	normalized.load("temp/extracted-temp.off", "extracted-temp");

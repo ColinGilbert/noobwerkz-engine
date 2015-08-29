@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 07:07:46 -0600 (Tue, 28 Apr 2015) $                   *
+ *   $Revision: 1280 $                                                         *
+ *   $Date: 2015-06-09 11:45:06 +0200 (Di, 09 Jun 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -160,9 +160,9 @@ write( const std::string& _ofname )
     {
       typename Mesh::ConstFaceVertexIter fv_it(Base::mesh(), *f_it);
       
-      IO::store( out, Base::mesh().property( idx_,   *fv_it ) );
-      IO::store( out, Base::mesh().property( idx_, *(++fv_it )) );
-      IO::store( out, Base::mesh().property( idx_, *(++fv_it )) );
+      IO::store( out, static_cast<unsigned int>(Base::mesh().property( idx_,   *fv_it )) );
+      IO::store( out, static_cast<unsigned int>(Base::mesh().property( idx_, *(++fv_it ))) );
+      IO::store( out, static_cast<unsigned int>(Base::mesh().property( idx_, *(++fv_it ))) );
     }
   }
   
@@ -172,11 +172,11 @@ write( const std::string& _ofname )
   { 
     // store v0.pos, v1.idx, vl.idx, vr.idx
     IO::store( out, vector_cast<Vec3f>(Base::mesh().point(r_it->v0)));
-    IO::store( out, Base::mesh().property( idx_, r_it->v1 ) );
+    IO::store(out, static_cast<unsigned int>(Base::mesh().property(idx_, r_it->v1)));
     IO::store( out, 
-	       r_it->vl.is_valid() ? Base::mesh().property(idx_, r_it->vl) : -1 );
+        r_it->vl.is_valid() ? static_cast<unsigned int>(Base::mesh().property(idx_, r_it->vl)) : -1);
     IO::store( out, 
-	       r_it->vr.is_valid() ? Base::mesh().property(idx_, r_it->vr) : -1 );
+        r_it->vr.is_valid() ? static_cast<unsigned int>(Base::mesh().property(idx_, r_it->vr)) : -1);
   }
 
   return true;

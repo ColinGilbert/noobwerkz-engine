@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 07:07:46 -0600 (Tue, 28 Apr 2015) $                   *
+ *   $Revision: 1278 $                                                         *
+ *   $Date: 2015-06-09 10:58:41 +0200 (Di, 09 Jun 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -278,14 +278,14 @@ public:
 
     for (bidx=idx=0; idx < N; ++idx, bidx+=8)
     {
-      bits = !!data_[bidx]
-        | (!!data_[bidx+1] << 1)
-        | (!!data_[bidx+2] << 2)
-        | (!!data_[bidx+3] << 3)
-        | (!!data_[bidx+4] << 4)
-        | (!!data_[bidx+5] << 5)
-        | (!!data_[bidx+6] << 6)
-        | (!!data_[bidx+7] << 7);
+      bits = static_cast<unsigned char>(data_[bidx])
+        | (static_cast<unsigned char>(data_[bidx+1]) << 1)
+        | (static_cast<unsigned char>(data_[bidx+2]) << 2)
+        | (static_cast<unsigned char>(data_[bidx+3]) << 3)
+        | (static_cast<unsigned char>(data_[bidx+4]) << 4)
+        | (static_cast<unsigned char>(data_[bidx+5]) << 5)
+        | (static_cast<unsigned char>(data_[bidx+6]) << 6)
+        | (static_cast<unsigned char>(data_[bidx+7]) << 7);
       _ostr << bits;
     }
     bytes = N;
@@ -294,12 +294,10 @@ public:
     {
       bits = 0;
       for (idx=0; idx < R; ++idx)
-        bits |= !!data_[bidx+idx] << idx;
+        bits |= static_cast<unsigned char>(data_[bidx+idx]) << idx;
       _ostr << bits;
       ++bytes;
     }
-
-    std::cout << std::endl;
 
     assert( bytes == size_of() );
 
@@ -320,14 +318,14 @@ public:
     for (bidx=idx=0; idx < N; ++idx, bidx+=8)
     {
       _istr >> bits;
-      data_[bidx+0] = !!(bits & 0x01);
-      data_[bidx+1] = !!(bits & 0x02);
-      data_[bidx+2] = !!(bits & 0x04);
-      data_[bidx+3] = !!(bits & 0x08);
-      data_[bidx+4] = !!(bits & 0x10);
-      data_[bidx+5] = !!(bits & 0x20);
-      data_[bidx+6] = !!(bits & 0x40);
-      data_[bidx+7] = !!(bits & 0x80);
+      data_[bidx+0] = (bits & 0x01) != 0;
+      data_[bidx+1] = (bits & 0x02) != 0;
+      data_[bidx+2] = (bits & 0x04) != 0;
+      data_[bidx+3] = (bits & 0x08) != 0;
+      data_[bidx+4] = (bits & 0x10) != 0;
+      data_[bidx+5] = (bits & 0x20) != 0;
+      data_[bidx+6] = (bits & 0x40) != 0;
+      data_[bidx+7] = (bits & 0x80) != 0;
     }
     bytes = N;
 
@@ -335,11 +333,9 @@ public:
     {
       _istr >> bits;
       for (idx=0; idx < R; ++idx)
-        data_[bidx+idx] = !!(bits & (1<<idx));
+        data_[bidx+idx] = (bits & (1<<idx)) != 0;
       ++bytes;
     }
-
-    std::cout << std::endl;
 
     return bytes;
   }

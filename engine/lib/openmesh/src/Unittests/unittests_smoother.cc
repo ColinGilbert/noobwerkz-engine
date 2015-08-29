@@ -71,10 +71,10 @@ TEST_F(OpenMeshSmoother_Triangle, Smoother_Poly_Laplace) {
   OpenMesh::Smoother::JacobiLaplaceSmootherT<Mesh> smoother(mesh_);
 
   // Just call function to instanciate template
-  smoother.set_absolute_local_error(0.5);
+  smoother.set_absolute_local_error(0.5f);
 
   // Set an error
-  smoother.set_relative_local_error(0.1);
+  smoother.set_relative_local_error(0.1f);
 
   // Run algorithm with 5 steps
   smoother.smooth(5);

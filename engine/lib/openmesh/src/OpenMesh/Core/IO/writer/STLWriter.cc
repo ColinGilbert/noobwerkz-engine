@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 07:07:46 -0600 (Tue, 28 Apr 2015) $                   *
+ *   $Revision: 1302 $                                                         *
+ *   $Date: 2015-07-02 16:52:32 +0200 (Do, 02 Jul 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -166,7 +166,7 @@ write_stla(const std::string& _filename, BaseExporter& _be, Options /* _opt */) 
 
 
   // header
-  fprintf(out, "solid\n");
+  fprintf(out, "solid \n");
 
 
   // write face set
@@ -220,7 +220,7 @@ write_stla(std::ostream& _out, BaseExporter& _be, Options /* _opt */, std::strea
 
 
   // header
-  _out << "solid\n";
+  _out << "solid \n";
 
 
   // write face set

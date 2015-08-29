@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 07:07:46 -0600 (Tue, 28 Apr 2015) $                   *
+ *   $Revision: 1316 $                                                         *
+ *   $Date: 2015-07-25 21:28:39 +0200 (Sa, 25 Jul 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -110,7 +110,7 @@ calc_face_normal(FaceHandle _fh) const
 
   Point p1 = this->point(*fv_it);
   const Point p1i = p1; //save point of vertex 1
-  ++fv_it;
+  
   // Safeguard for 2-gons
   if (!(++fv_it).is_valid()) return Normal(0, 0, 0);
   

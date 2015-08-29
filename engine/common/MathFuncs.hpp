@@ -4,9 +4,10 @@
 
 #include <array>
 #include <assimp/types.h>
-#include <btBulletDynamicsCommon.h>
-
+//#include <btBulletDynamicsCommon.h>
+#include <glm/glm.hpp>
 #include "format.h"
+#include "reactphysics3d.h"
 
 // const used to convert degrees into radians
 #define TAU 2.0 * M_PI
@@ -19,17 +20,17 @@
 namespace noob
 {
 
-	enum binary_op
+	enum class binary_op
 	{
 		ADD, SUBTRACT
 	};
 
-	enum csg_op
+	enum class csg_op
 	{
 		UNION, DIFFERENCE, INTERSECTION
 	};
 
-	enum cardinal_axis
+	enum class cardinal_axis
 	{
 		X, Y, Z
 	};
@@ -87,9 +88,9 @@ namespace noob
 		vec3(const vec4& vv);
 
 		vec3(const vec3& vv);
-
-		vec3(const btVector3&);
-
+		
+		// vec3(const btVector3&);
+		vec3(const rp3d::Vector3&);
 		// add vector to vector
 		vec3 operator+(const vec3& rhs) const;
 		// add scalar to vector
@@ -188,8 +189,9 @@ namespace noob
 		mat4(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float mm, float n, float o, float p);
 		mat4(std::array<float,16> mm);
 		// mat4(const aiMatrix3x3& AssimpMatrix);
-		mat4(const aiMatrix4x4&);	
-
+		mat4(const aiMatrix4x4&);
+		mat4(const glm::mat4&);
+		mat4(const rp3d::Transform&);
 		vec4 operator*(const vec4& rhs) const;
 		mat4 operator*(const mat4& rhs) const;
 		mat4& operator=(const mat4& rhs);
@@ -214,6 +216,7 @@ namespace noob
 		versor();
 		versor(float,float,float,float);
 		versor(const vec4& v);
+		versor(const rp3d::Quaternion&);
 		versor operator/(float rhs);
 		versor operator*(float rhs);
 		versor operator*(const versor& rhs);
@@ -293,6 +296,9 @@ namespace noob
 	// quaternion functions
 	versor quat_from_axis_rad(float radians, float x, float y, float z);
 	versor quat_from_axis_deg(float degrees, float x, float y, float z);
+
+	versor quat_from_mat4(const mat4&);
+
 	mat4 quat_to_mat4(const versor& q);
 	float dot(const versor& q, const versor& r);
 	// TODO: Find out if this was ever in the library, and either replace it or implement it.

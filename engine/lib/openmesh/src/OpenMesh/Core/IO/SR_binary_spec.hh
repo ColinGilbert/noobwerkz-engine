@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 07:07:46 -0600 (Tue, 28 Apr 2015) $                   *
+ *   $Revision: 1305 $                                                         *
+ *   $Date: 2015-07-08 10:16:59 +0200 (Mi, 08 Jul 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -120,6 +120,7 @@ SIMPLE_BINARY(bool);
 SIMPLE_BINARY(float);
 SIMPLE_BINARY(double);
 SIMPLE_BINARY(long double);
+SIMPLE_BINARY(char);
 
 SIMPLE_BINARY(int8_t);
 SIMPLE_BINARY(int16_t);

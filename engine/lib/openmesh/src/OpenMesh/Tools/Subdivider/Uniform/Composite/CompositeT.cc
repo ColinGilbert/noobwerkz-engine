@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 07:07:46 -0600 (Tue, 28 Apr 2015) $                   *
+ *   $Revision: 1275 $                                                         *
+ *   $Date: 2015-06-03 20:38:35 +0200 (Mi, 03 Jun 2015) $                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -167,7 +167,7 @@ void CompositeT<MeshType,RealType>::Tvv4()
   typename MeshType::EdgeIter         e_it;
   typename MeshType::VertexIter       v_it;
   typename MeshType::Point            zero_point(0.0, 0.0, 0.0);
-  unsigned int                    n_edges, n_faces, n_vertices, j;
+  size_t                              n_edges, n_faces, n_vertices, j;
 
   // Store number of original edges
   n_faces    = mesh_.n_faces();
@@ -225,7 +225,7 @@ void CompositeT<MeshType,RealType>::Tfv()
   typename MeshType::FaceFaceIter     ff_it;
   typename MeshType::Point            cog;
   const typename MeshType::Point      zero_point(0.0, 0.0, 0.0);
-  unsigned int                    n_edges, n_faces, n_vertices, j, valence;
+  size_t                              n_edges, n_faces, n_vertices, j, valence;
 
   // Store number of original edges
   n_faces = mesh_.n_faces();
