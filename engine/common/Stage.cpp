@@ -2,11 +2,12 @@
 
 bool noob::stage::init()
 {
-	world.setEventListener(&phyz_listener);
-	// world.setNbIterationsVelocitySolver(20);
-	// world.setNbIterationsPositionSolver(20);
-	
-	// world.start();
+	broadphase = new btDbvtBroadphase();
+	collision_configuration = new btDefaultCollisionConfiguration();
+	collision_dispatcher = new btCollisionDispatcher(collision_configuration);
+	solver = new btSequentialImpulseConstraintSolver();
+	dynamics_world = new btDiscreteDynamicsWorld(collision_dispatcher, broadphase, solver, collision_configuration);
+
 	shaders.init();
 
 	add_model("unit-sphere", noob::basic_mesh::sphere(0.5));
@@ -26,40 +27,39 @@ bool noob::stage::init()
 	set_shader("basic-debug", dbg_shader);
 	debug_shader = get_shader("basic-debug").lock();
 
-
-/*
-	noob::triplanar_renderer::uniform_info u;
-	u.colours[0] = noob::vec4(1.0, 1.0, 1.0, 1.0);
-	u.colours[1] = noob::vec4(0.8, 0.8, 0.8, 1.0);
-	u.colours[2] = noob::vec4(0.4, 0.4, 0.4, 1.0);
-	u.colours[3] = noob::vec4(0.0, 0.0, 0.0, 1.0);
-	u.mapping_blends = noob::vec3(1.0, 0.5, 0.8);
-	u.scales = noob::vec3(15.0, 5.0, 2.0);
-	u.colour_positions = noob::vec2(0.2, 0.7);
-
-	set_shader("moon", u);
-
-	noob::basic_renderer::uniform_info red;
-	red.colour = noob::vec4(1.0, 0.0, 0.0, 1.0);
-	set_shader("red", red);
-
-	noob::transform_helper xform;
-	xform.translate(noob::vec3(0.0, 20.0, 0.0));
-
-	std::shared_ptr<noob::actor> test = make_actor("test", unit_cube, get_skeleton("human").lock(), get_shader("red").lock(), xform.get_matrix(), 1.0, 1.0, 2.0, 5.0);
-	
-	std::shared_ptr<noob::prop> ground = make_prop("ground", unit_cube, get_shader("moon").lock(), noob::identity_mat4());
-	ground->add_box(1000.0, 1.0, 1000.0, 1.0);
-	ground->scale = noob::vec3(1000.0, 1.0, 1000.0);
-	rp3d::Material& mat = ground->body->getMaterial();
-	ground->body->setType(rp3d::STATIC);
-	mat.setBounciness(0.0);
-	test->set_destination(noob::vec3(0.0, 0.0, 0.0));
-	*/
 	logger::log("[Stage] init complete.");
 	return true;
 }
 
+void noob::stage::tear_down()
+{
+	for (auto s : spheres)
+	{
+		delete s.second;
+	}
+	for (auto  s : boxes)
+	{
+		delete s.second;	
+	}
+	for (auto s : cylinders)
+	{
+		delete s.second;
+	}
+	for (auto s : cones)
+	{
+		delete s.second;
+	}
+	for (auto s : capsules)
+	{
+		delete s.second;
+	}
+
+	delete dynamics_world;
+	delete solver;
+	delete collision_configuration;
+	delete collision_dispatcher;
+	delete broadphase;
+}
 
 void noob::stage::update(double dt)
 {
@@ -71,7 +71,7 @@ void noob::stage::update(double dt)
 			actor_it.second->update();//dt);//, true, false, true, false, false);//true);
 			//actor_it.second->print_debug_info();
 		}
-		world.update(static_cast<rp3d::decimal>(dt));
+		//world.update(static_cast<rp3d::decimal>(dt));
 	}
 }
 
@@ -106,75 +106,11 @@ void noob::stage::draw(const std::shared_ptr<noob::actor>& a) const
 
 void noob::stage::debug_draw(noob::prop* p) const
 {
-	
-	const rp3d::ProxyShape* proxy_shape = p->body->getProxyShapesList();
-
-	noob::mat4 t;
-
-	p->body->getTransform().getOpenGLMatrix(&t.m[0]);
-
-	while (proxy_shape != NULL)
-	{
-		noob::vec3 scale(1.0, 1.0, 1.0);
-
-		const rp3d::CollisionShape* collision_shape = proxy_shape->getCollisionShape();
-
-		if(collision_shape->getType() != rp3d::CONVEX_MESH)
-		{
-			rp3d::Vector3 min, max;
-			collision_shape->getLocalBounds(min, max);
-			scale = max - min;
-		}
-
-		noob::transform_helper t_local;
-		t_local.scale(scale);
-		t_local.translate(proxy_shape->getLocalToBodyTransform().getPosition());
-		t_local.rotate(proxy_shape->getLocalToBodyTransform().getOrientation());
-		
-		noob::mat4 t_global = p->get_transform();
-		noob::mat4 t_final = t_global * t_local.get_matrix();
-
-
-		rp3d::Vector3 _pos = p->body->getTransform().getPosition();
-/*	
-		fmt::MemoryWriter w;
-		w << "noob::stage::debug_draw(prop*) - Position = (" << _pos.x << ", " << _pos.y << ", " << _pos.z << ")";
-		logger::log(w.str());
-*/
-		switch (collision_shape->getType())
-		{
-			case rp3d::BOX:
-				shaders.draw(unit_cube.get(), *(debug_shader.get()), t_final);
-				break;
-			case rp3d::SPHERE:
-				shaders.draw(unit_sphere.get(), *(debug_shader.get()), t_final);
-				break;
-			case rp3d::CYLINDER:
-				shaders.draw(unit_cylinder.get(), *(debug_shader.get()), t_final);
-				break;
-			case rp3d::CONE:
-				shaders.draw(unit_cone.get(), *(debug_shader.get()), t_final);
-				break;
-			case rp3d::CAPSULE:
-				logger::log("stage::debug_draw(prop*) - no unit capsule model (yet)");
-				break;
-			case rp3d::CONVEX_MESH:
-				logger::log("stage::debug_draw(prop*) - Haven't yet figured out how to do debug draw for convex mesh.");
-				break;
-			default:
-				logger::log("noob::stage::debug_draw(noob::prop*) - default statement reached. Should not happen");
-				break;
-		}
-		
-		proxy_shape = proxy_shape->getNext();
-	}
 }
 
 
 void noob::stage::debug_draw(const std::shared_ptr<noob::actor>& a) const
 {
-	// logger::log("noob::stage::debug_draw(const std::shared_ptr<noob::actor>&)");
-	// shaders.draw(unit_sphere.get(), *(debug_shader.get()), a->destination_prop.get_transform());
 	debug_draw(a->get_prop());
 }
 
@@ -182,24 +118,27 @@ void noob::stage::debug_draw(const std::shared_ptr<noob::actor>& a) const
 std::shared_ptr<noob::actor> noob::stage::make_actor(const std::string& name, const std::shared_ptr<noob::model>& model, const std::shared_ptr<noob::skeletal_anim>& skel_anim, const std::shared_ptr<noob::prepared_shaders::info>& shader_uniform, const noob::mat4& transform, float mass, float width, float height, float max_speed)
 {
 	// TODO: Optimize
-	auto a = std::make_shared<noob::actor>();
+//	auto a = std::make_shared<noob::actor>();
 
-	a->init(&world, model, skel_anim, shader_uniform, transform, mass, width, height, max_speed);
-	a->destination_prop.init(&world, unit_sphere, debug_shader, transform);
-	a->destination_prop.add_sphere(1.0, 0.0);
-	a->destination_prop.body->setType(rp3d::KINEMATIC);
-	actors[name] = a;
+//	a->init(&world, model, skel_anim, shader_uniform, transform, mass, width, height, max_speed);
+//	a->destination_prop.init(&world, unit_sphere, debug_shader, transform);
+//	a->destination_prop.add_sphere(1.0, 0.0);
+//	a->destination_prop.body->setType(rp3d::KINEMATIC);
+//	actors[name] = a;
 
-	return actors[name];
+//	return actors[name];
+
 }
 
 
 std::shared_ptr<noob::prop> noob::stage::make_prop(const std::string& name, const std::shared_ptr<noob::model>& drawable, const std::shared_ptr<noob::prepared_shaders::info>& uniforms, const noob::mat4& transform)
 {
+/*
 	auto p = std::make_shared<noob::prop>();
 	p->init(&world, drawable, uniforms, transform);
 	props[name] = p;
 	return props[name];
+*/
 }
 
 
@@ -306,4 +245,65 @@ std::weak_ptr<noob::skeletal_anim> noob::stage::get_skeleton(const std::string& 
 	}
 
 	return search->second;//.get();
+}
+
+
+btSphereShape* noob::stage::sphere(float r)
+{
+	auto search = spheres.find(r);
+	if (search == spheres.end())
+	{
+		spheres[r] = new btSphereShape(r);
+		return spheres[r];
+	}
+	else return spheres[r];
+}
+
+
+btBoxShape* noob::stage::box(float x, float y, float z)
+{
+	auto search = boxes.find(std::make_tuple(x,y,z));
+	if (search == boxes.end())
+	{
+		auto results = boxes.insert(std::make_pair(std::make_tuple(x,y,z), new btBoxShape(btVector3(x, y, z))));
+		return (results.first)->second;
+	}
+	else return boxes[std::make_tuple(x,y,z)];
+
+}
+
+
+btCylinderShape* noob::stage::cylinder(float r, float h)
+{
+	auto search = cylinders.find(std::make_tuple(r, h));
+	if (search == cylinders.end())
+	{
+		auto results = cylinders.insert(std::make_pair(std::make_tuple(r, h), new btCylinderShape(btVector3(r, h / 2, r))));
+		return (results.first)->second;
+	}
+	else return cylinders[std::make_tuple(r, h)];
+}
+
+
+btConeShape* noob::stage::cone(float r, float h)
+{
+	auto search = cones.find(std::make_tuple(r, h));
+	if (search == cones.end())
+	{
+		auto results = cones.insert(std::make_pair(std::make_tuple(r, h), new btConeShape(r, h)));
+		return (results.first)->second;
+	}
+	else return cones[std::make_tuple(r, h)];
+}
+
+
+btCapsuleShape* noob::stage::capsule(float r, float h)
+{
+	auto search = capsules.find(std::make_tuple(r, h));
+	if (search == capsules.end())
+	{
+		auto results = capsules.insert(std::make_pair(std::make_tuple(r, h), new btCapsuleShape(r, h)));
+		return (results.first)->second;
+	}
+	else return capsules[std::make_tuple(r, h)];
 }

@@ -49,20 +49,20 @@ namespace noob
 		v[1] = vv.v[1];
 		v[2] = vv.v[2];
 	}
-/*
+
 	vec3::vec3(const btVector3& btVec)
 	{
 		v[0] = btVec[0];
 		v[1] = btVec[1];
 		v[2] = btVec[2];
 	}
-*/
-	vec3::vec3(const rp3d::Vector3& vv)
-	{
-		v[0] = vv.x;
-		v[1] = vv.y;
-		v[2] = vv.z;
-	}
+
+	// vec3::vec3(const rp3d::Vector3& vv)
+	//{
+	//	v[0] = vv.x;
+	//	v[1] = vv.y;
+	//	v[2] = vv.z;
+	//}
 
 	vec4::vec4() {}
 
@@ -173,10 +173,10 @@ namespace noob
 	}
 
 
-	mat4::mat4(const rp3d::Transform& t)
-	{
-		t.getOpenGLMatrix(&m[0]);
-	}
+	// mat4::mat4(const rp3d::Transform& t)
+	// {
+	//	t.getOpenGLMatrix(&m[0]);
+	// }
 
 	/*-----------------------------PRINT FUNCTIONS--------------------------------*/
 	void print(const vec2& v)
@@ -784,13 +784,13 @@ namespace noob
 		//q[3] = v[3];
 	}
 
-	versor::versor(const rp3d::Quaternion& qq)
-	{
-		q[0] = qq.x;
-		q[1] = qq.y;
-		q[2] = qq.z;
-		q[3] = qq.w;
-	}
+	//versor::versor(const rp3d::Quaternion& qq)
+	//{
+	//	q[0] = qq.x;
+	//	q[1] = qq.y;
+	//	q[2] = qq.z;
+	//	q[3] = qq.w;
+	//}
 
 	versor versor::operator/(float rhs)
 	{

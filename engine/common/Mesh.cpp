@@ -2,11 +2,11 @@
 //#define CSGJS_HEADER_ONLY
 //#include <csgjs.hpp>
 //
-#include <vtkBooleanOperationPolyDataFilter.h>
+
  
 #include <vtkPLYReader.h>
 #include <vtkPLYWriter.h>
-
+#include <vtkBooleanOperationPolyDataFilter.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkPolyDataReader.h>
 #include <vtkPolyDataMapper.h>
@@ -533,7 +533,6 @@ return m;
 //vtkSmartPointer<vtkPolyDataMapper> boolean_operation_mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
 //boolean_operation_mapper->SetInputConnection(boolean_operation->GetOutputPort());
 //boolean_operation_mapper->ScalarVisibilityOff();
-
 
 
 }

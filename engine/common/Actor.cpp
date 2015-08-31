@@ -1,5 +1,5 @@
 #include "Actor.hpp"
-
+/*
 
 void noob::actor::init(rp3d::DynamicsWorld* _world, const std::shared_ptr<noob::model>& _model, const std::shared_ptr<noob::skeletal_anim>& _anim, const std::shared_ptr<noob::prepared_shaders::info>& _shader_info, const noob::mat4& _mat, float _mass, float _width, float _height, float _max_speed)
  {
@@ -8,7 +8,7 @@ void noob::actor::init(rp3d::DynamicsWorld* _world, const std::shared_ptr<noob::
 	anim = _anim;
 	controller.init(world, _model, _shader_info, _mat, _mass, _width, _height, _max_speed);
 }
-
+*/
 void noob::actor::update()
 {
 	controller.update();//static_cast<float>(dt));

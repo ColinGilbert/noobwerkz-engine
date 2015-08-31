@@ -1,4 +1,5 @@
 #pragma once
+/*
 #include "Logger.hpp"
 #include "reactphysics3d.h"
 
@@ -9,20 +10,20 @@ namespace noob
 		public:
 			virtual void beginContact(const rp3d::ContactPointInfo& contact)
 			{
-			/*
-				fmt::MemoryWriter w;
-				w << "[PhysicsEventListener] beginContact() - " << log_info(contact);
-				logger::log(w.str());
-			*/
+			
+				// fmt::MemoryWriter w;
+				// w << "[PhysicsEventListener] beginContact() - " << log_info(contact);
+				//logger::log(w.str());
+			
 			}
 
 			virtual void newContact(const rp3d::ContactPointInfo& contact)
 			{
-			/*
-				fmt::MemoryWriter w;
-				w << "[PhysicsEventListener] newContact() - " << log_info(contact);
-				logger::log(w.str());
-			*/
+			
+				//fmt::MemoryWriter w;
+				//w << "[PhysicsEventListener] newContact() - " << log_info(contact);
+				//logger::log(w.str());
+			
 			}
 
 			virtual void beginInternalTick()
@@ -46,3 +47,4 @@ namespace noob
 			}
 	};
 }
+*/

@@ -1,6 +1,6 @@
 #include "Prop.hpp"
 #include "TransformHelper.hpp"
-
+/*
 void noob::prop::init(rp3d::DynamicsWorld* w, const std::shared_ptr<noob::model>& drawable, const std::shared_ptr<noob::prepared_shaders::info>& uniforms, const noob::mat4& transform, rp3d::BodyType type)
 {
 	this->world = w;
@@ -11,7 +11,7 @@ void noob::prop::init(rp3d::DynamicsWorld* w, const std::shared_ptr<noob::model>
 	shading = uniforms;
 	model = drawable;
 }
-
+*/
 /*
 void noob::prop::set_transform(const noob::mat4& transform)
 {
@@ -23,7 +23,7 @@ void noob::prop::set_transform(const noob::mat4& transform)
 
 noob::mat4 noob::prop::get_transform() const
 {
-	//rp3d::Vector3 rp = body->getInterpolatedTransform().getPosition();
+/*	//rp3d::Vector3 rp = body->getInterpolatedTransform().getPosition();
 	rp3d::Vector3 rp = body->getTransform().getPosition();
 	//rp3d::Quaternion rq = body->getInterpolatedTransform().getOrientation();
 	rp3d::Quaternion rq = body->getTransform().getOrientation();
@@ -34,6 +34,7 @@ noob::mat4 noob::prop::get_transform() const
 	t.rotate(q);
 	//t.scale(scale);
 	return t.get_matrix();
+*/
 }
 
 
@@ -46,18 +47,20 @@ void noob::prop::set_drawing_scale(const noob::vec3& s)
 void noob::prop::print_debug_info() const
 {
 	//rp3d::Transform t = body->getInterpolatedTransform();
-	rp3d::Transform t = body->getTransform();
+/*	rp3d::Transform t = body->getTransform();
 	fmt::MemoryWriter w;
 	rp3d::Vector3 pos = t.getPosition();
 	rp3d::Vector3 linear_vel = body->getLinearVelocity();
 	rp3d::Vector3 angular_vel = body->getAngularVelocity();
 	w << "[Prop] Position: (" << pos.x << ", " << pos.y << ", " << pos.z << "). Linear velocity: (" << linear_vel.x << ", " << linear_vel.y << ", " << linear_vel.z << "). Angular Velocity: (" << angular_vel.x << ", " << angular_vel.y << ", " << angular_vel.z << ")";
 	logger::log(w.str());
+*/
 }
 
 
 noob::prop::info noob::prop::get_info() const
 {
+/*
 	rp3d::Transform t = body->getTransform();
 
 	noob::prop::info inf;
@@ -74,99 +77,5 @@ noob::prop::info noob::prop::get_info() const
 	inf.orientation.q[3] = q.w;
 	
 	return inf;
-}
-
-
-void noob::prop::add_sphere(float radius, float mass, const noob::mat4& local_transform, short collision_mask, short collides_with)
-{
-	rp3d::Transform t;
-	t.setFromOpenGL(const_cast<reactphysics3d::decimal*>(&local_transform.m[0]));
-	rp3d::ProxyShape* p = body->addCollisionShape(rp3d::SphereShape(radius), t, rp3d::decimal(mass));
-	p->setCollisionCategoryBits(collides_with);
-	p->setCollideWithMaskBits(collision_mask);
-}
-
-
-void noob::prop::add_box(float width, float height, float depth, float mass, const noob::mat4& local_transform, short collision_mask, short collides_with)
-{
-	rp3d::Transform t;
-	t.setFromOpenGL(const_cast<reactphysics3d::decimal*>(&local_transform.m[0]));
-	rp3d::ProxyShape* p = 	body->addCollisionShape(rp3d::BoxShape(rp3d::Vector3(width, height, depth)), t, rp3d::decimal(mass));
-	p->setCollisionCategoryBits(collides_with);
-	p->setCollideWithMaskBits(collision_mask);
-}
-
-
-void noob::prop::add_cylinder(float radius, float height, float mass, const noob::mat4& local_transform, short collision_mask, short collides_with)
-{
-	rp3d::Transform t;
-	t.setFromOpenGL(const_cast<reactphysics3d::decimal*>(&local_transform.m[0]));
-	rp3d::ProxyShape* p = body->addCollisionShape(rp3d::CylinderShape(radius, height), t, mass);
-	p->setCollisionCategoryBits(collides_with);
-	p->setCollideWithMaskBits(collision_mask);
-}
-
-
-void noob::prop::add_capsule(float radius, float height, float mass, const noob::mat4& local_transform, short collision_mask, short collides_with)
-{
-	rp3d::Transform t;
-	t.setFromOpenGL(const_cast<reactphysics3d::decimal*>(&local_transform.m[0]));
-	rp3d::ProxyShape* p = body->addCollisionShape(rp3d::CapsuleShape(radius, height), t, mass);
-	p->setCollisionCategoryBits(collides_with);
-	p->setCollideWithMaskBits(collision_mask);
-}
-
-
-void noob::prop::add_cone(float radius, float height, float mass, const noob::mat4& local_transform, short collision_mask, short collides_with)
-{
-	rp3d::Transform t;
-	t.setFromOpenGL(const_cast<reactphysics3d::decimal*>(&local_transform.m[0]));
-	rp3d::ProxyShape* p = 	body->addCollisionShape(rp3d::ConeShape(radius, height), t, mass);
-	p->setCollisionCategoryBits(collides_with);
-	p->setCollideWithMaskBits(collision_mask);
-}
-
-
-void noob::prop::add_mesh(const std::vector<noob::basic_mesh>& meshes, float mass, const noob::mat4& local_transform, short collision_mask, short collides_with)
-{
-	rp3d::Transform t;
-	t.setFromOpenGL(const_cast<reactphysics3d::decimal*>(&local_transform.m[0]));
-
-	double accum = 0;
-
-	for (noob::basic_mesh m : meshes)
-	{
-		accum += m.get_volume();
-	}
-	
-	for (noob::basic_mesh m : meshes)
-	{
-		if (accum == 0.0)
-		{
-			accum = 1.0;
-		}
-		
-		double local_mass = static_cast<double>(mass) * m.get_volume() / accum;
-		
-		rp3d::ConvexMeshShape shape(&m.vertices[0].v[0], m.vertices.size(), 3 * sizeof(float));
-		
-		for (size_t i = 0; i < m.indices.size(); i += 3)
-		{
-			float first = m.indices[i];
-			float second = m.indices[i+1];
-			float third = m.indices[i+2];
-
-			shape.addEdge(first, second);
-			shape.addEdge(first, third);
-			shape.addEdge(second, third);
-		}
-		
-		shape.setIsEdgesInformationUsed(true);
-		
-		rp3d::ProxyShape* p = body->addCollisionShape(shape, t, static_cast<float>(local_mass));
-		p->setCollisionCategoryBits(collides_with);
-		p->setCollideWithMaskBits(collision_mask);
-		//logger::log("[Prop] Mesh added");
-	}
-
+	*/
 }

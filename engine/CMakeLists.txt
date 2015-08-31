@@ -52,9 +52,6 @@ list (APPEND vhacd_src
 	lib/v-hacd/src/VHACD_Lib/src/vhacdVolume.cpp
 	)
 
-include_directories(lib/reactphysics3d/src)
-add_subdirectory(lib/reactphysics3d)
-
 include_directories(lib/cereal/include)
 include_directories(lib/stb)
 
@@ -124,12 +121,7 @@ list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 
 add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src} ${es_src} ${user_src}) 
 
-target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES}
-	${OPENGL_LIBRARIES} freetype rt dl pthread assimp m emon
-	reactphysics3d OpenMeshCore OpenMeshToolsStatic spnav
-	ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r
-	${Boost_LIBRARIES} ${VTK_LIBRARIES})
-
+target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m emon OpenMeshCore OpenMeshToolsStatic spnav ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r BulletDynamics BulletCollision BulletSoftBody LinearMath ${Boost_LIBRARIES} ${VTK_LIBRARIES})
 project(LogServer)
 
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")

@@ -1,7 +1,7 @@
 #include "CharacterController.hpp"
 #include "Logger.hpp"
 #include <cmath>
-
+/*
 void noob::character_controller::init(rp3d::DynamicsWorld* _world, const std::shared_ptr<noob::model>& _model, const std::shared_ptr<noob::prepared_shaders::info>& _info, const noob::mat4& _transform, float _mass, float _width, float _height, float _max_speed)
 {
 	world = _world;
@@ -24,11 +24,11 @@ void noob::character_controller::init(rp3d::DynamicsWorld* _world, const std::sh
 	//rp3d::SphereShape s(height);
 	//prop.body->addCollisionShape(s, rp3d::Transform::identity(), mass);
 }
-
+*/
 
 void noob::character_controller::update()
 {
-	noob::prop::info inf = prop.get_info();
+/*	noob::prop::info inf = prop.get_info();
 	noob::vec3 from(inf.position.v[0], inf.position.v[1], inf.position.v[2]);
 	noob::vec3 to(from.v[0], from.v[1] - ((height+1)/2.0), from.v[2]);//((height+1)/2.0), from.v[2]);
 
@@ -54,11 +54,6 @@ void noob::character_controller::update()
 		slope = noob::vec3(0.0, 0.0, 0.0);
 		self_control = false;
 	}
-/*
-	if (time_on_ground > 0.0) 
-	{
-		self_control = true;
-	}
 */
 }
 
@@ -68,7 +63,7 @@ void noob::character_controller::step(bool forward, bool back, bool left, bool r
 
 	// TODO: Replace nested conditionals with something more succinct
 
-	
+/*	
 	
 	float move_factor = 10.0;
 	float jump_force = 20.0;
@@ -115,15 +110,16 @@ void noob::character_controller::step(bool forward, bool back, bool left, bool r
 		
 		prop.body->setLinearVelocity(rp3d::Vector3(current_vel.v[0], current_vel.v[1], current_vel.v[2]));
 	}
+*/
 }
 
 void noob::character_controller::stop()
 {
-	prop.body->setLinearVelocity(rp3d::Vector3(0.0, 0.0, 0.0));		
-	prop.body->setAngularVelocity(rp3d::Vector3(0.0, 0.0, 0.0));
+//	prop.body->setLinearVelocity(rp3d::Vector3(0.0, 0.0, 0.0));		
+//	prop.body->setAngularVelocity(rp3d::Vector3(0.0, 0.0, 0.0));
 }
 
-
+/*
 rp3d::decimal noob::character_controller::groundcast_callback::notifyRaycastHit(const rp3d::RaycastInfo& info)
 {
 	grounded = true;
@@ -137,3 +133,4 @@ rp3d::decimal noob::character_controller::groundcast_callback::notifyRaycastHit(
 	//}
 	return 0.0;
 }
+*/

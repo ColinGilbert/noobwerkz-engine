@@ -6,21 +6,19 @@ std::shared_ptr<noob::prop> ground;
 void noob::application::user_init()
 {
 
-	// voxels.box(5,5,5,300,50,300);
-	// voxels.sphere(200,256,256,256);
-	// voxels.sphere(50, 400, 400,400,false);
-	// voxels.sphere(50, 50,50,50, false);
-	// voxels.sphere(50, 75,50,75,false);
-	// voxels.box(200,45,200,220,100,220);
-	// noob::basic_mesh m = voxels.extract_region(0,0,0,512,512,512);
-	// m.decimate(15000);
-	// noob::physics_mesh terrain;
-	// terrain.init(m);
+	noob::triplanar_renderer::uniform_info u;
+	u.colours[0] = noob::vec4(1.0, 1.0, 1.0, 1.0);
+	u.colours[1] = noob::vec4(0.8, 0.8, 0.8, 1.0);
+	u.colours[2] = noob::vec4(0.4, 0.4, 0.4, 1.0);
+	u.colours[3] = noob::vec4(0.0, 0.0, 0.0, 1.0);
+	u.mapping_blends = noob::vec3(1.0, 0.5, 0.8);
+	u.scales = noob::vec3(15.0, 5.0, 2.0);
+	u.colour_positions = noob::vec2(0.2, 0.7);
+
+	stage.set_shader("moon", u);
 
 
-
-
-
+/*
 	noob::transform_helper actor_transform;
 	actor_transform.translate(noob::vec3(0.0, 20.0, 0.0));
 	player_character = stage.make_actor("player-character", stage.get_unit_cube(), stage.get_skeleton("human").lock(), stage.get_debug_shader(), actor_transform.get_matrix());
@@ -47,7 +45,7 @@ void noob::application::user_init()
 	ground->add_mesh(terrain.hulls, 1);
 	//ground->set_drawing_scale(noob::vec3(1000.0, 1.0, 1000.0));
 	ground->body->setType(rp3d::STATIC);
-
+*/
 
 	//fmt::MemoryWriter output_mesh_filename;
 	//output_mesh_filename << "./terrain.bin";
@@ -69,6 +67,6 @@ void noob::application::user_update(double dt)
 {
 	gui.text("THE NIMBLE MONKEY GRABS THE APRICOT", 50.0, 50.0, noob::gui::font_size::header);
 	//player_character->move(true, false, false, false, false);//true);
-	stage.draw(player_character);
+//	stage.draw(player_character);
 	//player_character->print_debug_info();
 }
