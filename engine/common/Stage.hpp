@@ -71,6 +71,8 @@ namespace noob
 			std::shared_ptr<noob::prepared_shaders::info> get_debug_shader() const { return debug_shader; }
 			//rp3d::CollisionBody* physics_body(float friction, float bouncy, float linear_damping, float angular_damping, noob::mat4 world_transform = noob::identity_mat4(), body_type type = noob::stage::body_type::DYNAMIC, bool gravity = true);
 
+			btRigidBody* body(btCollisionShape*, float mass, const noob::vec3& pos, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0));
+
 			btSphereShape* sphere(float r);
 			btBoxShape* box(float x, float y, float z);
 			btCylinderShape* cylinder(float r, float h);

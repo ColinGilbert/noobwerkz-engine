@@ -248,6 +248,18 @@ std::weak_ptr<noob::skeletal_anim> noob::stage::get_skeleton(const std::string& 
 }
 
 
+btRigidBody* noob::stage::body(btCollisionShape* shape, float mass, const noob::vec3& pos, const noob::versor& orientation)
+{
+	btDefaultMotionState* motion_state = new btDefaultMotionState(btTransform(btQuaternion(orientation.q[0], orientation.q[1], orientation.q[2], orientation.q[3]), btVector3(pos.v[0], pos.v[1], pos.v[2])));
+	btVector3 inertia(0.0, 0.0, 0.0);
+	shape->calculateLocalInertia(mass, inertia);
+	btRigidBody::btRigidBodyConstructionInfo ci(mass, motion_state, shape, inertia);
+	btRigidBody* body = new btRigidBody(ci);
+	dynamics_world->addRigidBody(body);
+	return body;
+}
+
+
 btSphereShape* noob::stage::sphere(float r)
 {
 	auto search = spheres.find(r);
