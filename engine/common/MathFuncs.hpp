@@ -1,6 +1,10 @@
 #pragma once
 #include <cmath>
 
+#include <cereal/access.hpp>
+#include <cereal/types/array.hpp>
+#include <cereal/archives/portable_binary.hpp>
+#include <cereal/archives/binary.hpp>
 
 #include <array>
 #include <assimp/types.h>
@@ -52,6 +56,13 @@ namespace noob
 		vec2();
 		vec2(float x, float y);
 
+		template <class Archive>
+		void serialize( Archive & ar )
+		{
+			ar(v);
+		}
+
+
 		std::array<float,2> v;
 		
 		float& operator[](int x) 
@@ -86,11 +97,16 @@ namespace noob
 		vec3(const vec2& vv, float z);
 		// create from truncated vec4
 		vec3(const vec4& vv);
-
 		vec3(const vec3& vv);
-		
 		// vec3(const btVector3&);
 		vec3(const rp3d::Vector3&);
+
+		template <class Archive>
+		void serialize( Archive & ar )
+		{
+			ar(v);
+		}
+
 		// add vector to vector
 		vec3 operator+(const vec3& rhs) const;
 		// add scalar to vector
@@ -135,6 +151,13 @@ namespace noob
 		vec4(const vec2& vv, float z, float w);
 		vec4(const vec3& vv, float w);
 
+		template <class Archive>
+		void serialize( Archive & ar )
+		{
+			ar(v);
+		}
+
+
 		std::array<float,4> v;
 	
 		float& operator[](int x)
@@ -160,6 +183,15 @@ namespace noob
 		mat3();
 		// note! this is entering components in ROW-major order
 		mat3(float a, float b, float c,	float d, float e, float f, float g, float h, float i);
+
+		template <class Archive>
+		void serialize( Archive & ar )
+		{
+			ar(m);
+		}
+
+
+
 		std::array<float,9> m;
 
 		float& operator[](int x) 
@@ -192,6 +224,13 @@ namespace noob
 		mat4(const aiMatrix4x4&);
 		mat4(const glm::mat4&);
 		mat4(const rp3d::Transform&);
+
+		template <class Archive>
+		void serialize( Archive & ar )
+		{
+			ar(m);
+		}
+
 		vec4 operator*(const vec4& rhs) const;
 		mat4 operator*(const mat4& rhs) const;
 		mat4& operator=(const mat4& rhs);
@@ -217,6 +256,14 @@ namespace noob
 		versor(float,float,float,float);
 		versor(const vec4& v);
 		versor(const rp3d::Quaternion&);
+		template <class Archive>
+		void serialize( Archive & ar )
+		{
+			ar(q);
+		}
+
+
+
 		versor operator/(float rhs);
 		versor operator*(float rhs);
 		versor operator*(const versor& rhs);
@@ -232,6 +279,12 @@ namespace noob
 
 	struct cubic_region
 	{
+		template <class Archive>
+		void serialize( Archive & ar )
+		{
+			ar(lower_corner, upper_corner);
+		}
+
 		vec3 lower_corner, upper_corner;
 	};
 

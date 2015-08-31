@@ -31,7 +31,7 @@ namespace noob
 	{
 		public:
 			//stage() : world(rp3d::Vector3(0.0, -9.81, 0.0), rp3d::decimal(1.0 / 60.0)), paused(false) {}
-			stage() : world(rp3d::Vector3(0.0, -9.81, 0.0)) {}
+			stage() : world(rp3d::Vector3(0.0, -9.81, 0.0)), paused(false) {}
 
 			bool init();
 			
@@ -48,7 +48,6 @@ namespace noob
 			void start() { paused = false; }
 
 			std::shared_ptr<noob::actor> make_actor(const std::string& name, const std::shared_ptr<noob::model>&, const std::shared_ptr<noob::skeletal_anim>&, const std::shared_ptr<noob::prepared_shaders::info>&, const noob::mat4& transform, float mass = 2.0, float width = 0.25, float height = 1.0, float max_speed = 5.0);
-			
 			std::shared_ptr<noob::prop> make_prop(const std::string& name, const std::shared_ptr<noob::model>&, const std::shared_ptr<noob::prepared_shaders::info>&, const noob::mat4& transform);
 
 			// Loads a serialized model (from cereal binary)
@@ -70,8 +69,6 @@ namespace noob
 			
 			std::shared_ptr<noob::prepared_shaders::info> get_debug_shader() const { return debug_shader; }
 			//rp3d::CollisionBody* physics_body(float friction, float bouncy, float linear_damping, float angular_damping, noob::mat4 world_transform = noob::identity_mat4(), body_type type = noob::stage::body_type::DYNAMIC, bool gravity = true);
-			
-
 
 			void draw_pose(const std::shared_ptr<noob::skeletal_anim>&);//, const std::string& anim_name, float time);
 			

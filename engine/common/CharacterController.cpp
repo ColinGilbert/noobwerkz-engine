@@ -20,38 +20,35 @@ void noob::character_controller::init(rp3d::DynamicsWorld* _world, const std::sh
 	material.setBounciness(rp3d::decimal(0.0));
 	rp3d::CapsuleShape capsule(width, height);
 	prop.body->addCollisionShape(capsule, rp3d::Transform::identity(), mass);
-//	prop.body->setType(rp3d::KINEMATIC);
+	prop.body->setType(rp3d::DYNAMIC);
 	//rp3d::SphereShape s(height);
 	//prop.body->addCollisionShape(s, rp3d::Transform::identity(), mass);
 }
 
 
-void noob::character_controller::update(float dt)
+void noob::character_controller::update()
 {
 	noob::prop::info inf = prop.get_info();
 	noob::vec3 from(inf.position.v[0], inf.position.v[1], inf.position.v[2]);
-	noob::vec3 to(from.v[0], from.v[1] - 5.0, from.v[2]);
-
-	/*
-	   fmt::MemoryWriter ww;
-	   ww << "[CharacterController] Raycasting from (" << from.v[0] << ", " << from.v[1] << ", " << from.v[2] << ") to (" << to.v[0] << ", " << to.v[1] << ", " << to.v[2] << ")";
-	   logger::log(ww.str());
-	   */
+	noob::vec3 to(from.v[0], from.v[1] - ((height+1)/2.0), from.v[2]);//((height+1)/2.0), from.v[2]);
 
 	rp3d::Ray ray(rp3d::Vector3(from.v[0], from.v[1], from.v[2]), rp3d::Vector3(to.v[0], to.v[1], to.v[2]));
-	noob::character_controller::groundcast_callback ground_cb(height, &prop, from, to);
+	//noob::character_controller::groundcast_callback ground_cb(height/2, &prop, from, to);
+	noob::character_controller::groundcast_callback ground_cb(&prop, from, to);
 	world->raycast(ray, &ground_cb);
-
+	//logger::log("Raycasting!");
 	if (ground_cb.is_grounded()) 
 	{
+		//logger::log("Grounded");
 		stop();
-		time_on_ground += dt;
+		// time_on_ground += dt;
 		slope = ground_cb.get_slope();
 		prop.body->setType(rp3d::KINEMATIC);
 		self_control = true;
 	}
 	else 
 	{
+		logger::log("Not grounded");
 		prop.body->setType(rp3d::DYNAMIC);
 		time_on_ground = 0.0;
 		slope = noob::vec3(0.0, 0.0, 0.0);
@@ -66,19 +63,18 @@ void noob::character_controller::update(float dt)
 }
 
 
-void noob::character_controller::step(float dt, bool forward, bool back, bool left, bool right, bool jump)
+void noob::character_controller::step(bool forward, bool back, bool left, bool right, bool jump)
 {
-	update(dt);
 
 	// TODO: Replace nested conditionals with something more succinct
 
-	prop.body->setTransform(rp3d::Transform(prop.body->getTransform().getPosition(), rp3d::Quaternion(0.0, 0.0, 0.0, 1.0)));	
 	
-	float move_factor = dt * 200.0;
+	
+	float move_factor = 10.0;
 	float jump_force = 20.0;
 	if (self_control)
 	{
-
+		prop.body->setTransform(rp3d::Transform(prop.body->getTransform().getPosition(), rp3d::Quaternion(0.0, 0.0, 0.0, 1.0)));	
 		prop.body->setLinearVelocity(rp3d::Vector3(0.0, 0.0, 0.0));
 		prop.body->setAngularVelocity(rp3d::Vector3(0.0, 0.0, 0.0));
 		noob::vec3 current_vel(0.0, 0.0, 0.0);
@@ -130,13 +126,14 @@ void noob::character_controller::stop()
 
 rp3d::decimal noob::character_controller::groundcast_callback::notifyRaycastHit(const rp3d::RaycastInfo& info)
 {
-	noob::vec3 hit_point = noob::vec3(info.worldPoint.x, info.worldPoint.z, info.worldPoint.y);
+	grounded = true;
+	//noob::vec3 hit_point = noob::vec3(info.worldPoint.x, info.worldPoint.z, info.worldPoint.y);
 	slope = info.worldNormal;
-	float d = std::sqrt(noob::get_squared_dist(from, hit_point));
-	if (d > ideal_distance)
-	{
-		airborne = false;
+	//float d = std::sqrt(noob::get_squared_dist(from, hit_point));
+	//if (std::fabs(d) > std::fabs(cast_distance))
+	//{
+	//	airborne = false;
 		logger::log("[Character] touching ground");
-	}
+	//}
 	return 0.0;
 }

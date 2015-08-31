@@ -65,21 +65,13 @@ void noob::stage::update(double dt)
 {
 	if (!paused)
 	{
-		//static double accum = 0.0;
-		//accum += dt;
-		//if (accum > 1.0/60.0)
-		//{
-			// world.update();
-		//	world.update(static_cast<rp3d::decimal>(accum));
-		//	accum -= 1.0/60.0;
-			world.update(static_cast<rp3d::decimal>(dt));
-		//}
-	/*	for (auto actor_it : actors)
+		//world.update();
+		for (auto actor_it : actors)
 		{
-			//actor_it.second->update(dt, true, false, true, false, false);//true);
+			actor_it.second->update();//dt);//, true, false, true, false, false);//true);
 			//actor_it.second->print_debug_info();
 		}
-*/
+		world.update(static_cast<rp3d::decimal>(dt));
 	}
 }
 

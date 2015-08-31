@@ -1,6 +1,18 @@
 // TODO: Remove the following comment if it works across all builds
 //#define CSGJS_HEADER_ONLY
 //#include <csgjs.hpp>
+//
+#include <vtkBooleanOperationPolyDataFilter.h>
+ 
+#include <vtkPLYReader.h>
+#include <vtkPLYWriter.h>
+
+#include <vtkPolyDataMapper.h>
+#include <vtkPolyDataReader.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkProperty.h>
+#include <vtkSmartPointer.h>
+
 
 #include <stdlib.h>
 #include <string.h>
@@ -58,7 +70,7 @@ double noob::basic_mesh::get_volume()
 
 void noob::basic_mesh::decimate(const std::string& filename, size_t num_verts) const
 {
-	// logger::log("[Mesh] decimating");
+	logger::log("[Mesh] decimating");
 	TriMesh half_edges = to_half_edges();
 	// logger::log(fmt::format("[Mesh] decimating - Half edges generated. num verts = {0}", half_edges.n_vertices()));
 
@@ -77,9 +89,9 @@ void noob::basic_mesh::decimate(const std::string& filename, size_t num_verts) c
 	size_t verts_removed = decimator.decimate_to(num_verts);
 	logger::log(fmt::format("[Mesh] decimate() - Vertices removed = {0}", verts_removed));
 	decimator.mesh().garbage_collection();
-
 	half_edges.garbage_collection();
 	OpenMesh::IO::write_mesh(half_edges, filename);
+	logger::log("[Mesh] decimate() - done");
 }
 
 
@@ -87,7 +99,7 @@ noob::basic_mesh noob::basic_mesh::decimate(size_t num_verts) const
 {
 	decimate("./temp/temp-decimated.off", num_verts);
 	noob::basic_mesh temp;
-	temp.load("./temp/temp-decimated.off", "temp-decimated");
+	temp.load_assimp("./temp/temp-decimated.off", "temp-decimated");
 	return temp;
 }
 
@@ -95,7 +107,8 @@ noob::basic_mesh noob::basic_mesh::decimate(size_t num_verts) const
 noob::basic_mesh noob::basic_mesh::normalize() const 
 {
 	noob::basic_mesh temp;
-	temp.load(snapshot());
+	save("normalize-temp.stl");
+	temp.load_assimp("normalize_temp.stl");
 	return temp;
 }
 
@@ -113,8 +126,8 @@ noob::basic_mesh noob::basic_mesh::to_origin() const
 	return temp;
 }
 
-
-std::tuple<size_t, const char*> noob::basic_mesh::snapshot() const
+/*
+std::tuple<size_t, const char*> noob::basic_mesh::save() const
 {
 	fmt::MemoryWriter w;
 	w << "OFF" << "\n" << vertices.size() << " " << indices.size() / 3 << " " << 0 <<  "\n";
@@ -132,38 +145,39 @@ std::tuple<size_t, const char*> noob::basic_mesh::snapshot() const
 
 	return std::make_tuple(size, mem);
 }
+*/
 
-
-void noob::basic_mesh::snapshot(const std::string& filename) const
+void noob::basic_mesh::save(const std::string& filename) const
 {
-	logger::log("[Mesh] - snapshot() - begin");
+	logger::log("[Mesh] - save() - begin");
 	TriMesh half_edges = to_half_edges();
-	logger::log("[Mesh] - snapshot() - half-edges created");
+	logger::log("[Mesh] - save() - half-edges created");
 	OpenMesh::IO::write_mesh(half_edges, filename);
 }
 
 
-bool noob::basic_mesh::load(std::tuple<size_t, const char*> buffer, const std::string& name)
+bool noob::basic_mesh::load_assimp(std::tuple<size_t, const char*> buffer, const std::string& name)
 {
-	logger::log(fmt::format("[Mesh] - load({0}) - loading {1} bytes", name, std::get<0>(buffer)));
+	logger::log(fmt::format("[Mesh] - load_assimp({0}) - load_assimp {1} bytes", name, std::get<0>(buffer)));
 	const aiScene* scene = aiImportFileFromMemory(std::get<1>(buffer), std::get<0>(buffer), aiProcessPreset_TargetRealtime_MaxQuality, "");
-	return load(scene, name);
+	return load_assimp(scene, name);
 }
 
 
-bool noob::basic_mesh::load(const std::string& filename, const std::string& name)
+bool noob::basic_mesh::load_assimp(const std::string& filename, const std::string& name)
 {
-	// logger::log(fmt::format("[Mesh] loading file {0}", filename ));
+	// logger::log(fmt::format("[Mesh] load_assimping file {0}", filename ));
 	const aiScene* scene = aiImportFile(filename.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
-	return load(scene, name);	
+	return load_assimp(scene, name);	
 }
 
 
-bool noob::basic_mesh::load(const aiScene* scene, const std::string& name)
+bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name)
 {
+	logger::log("[Mesh] load_assimp() - begin");
 	if (!scene)
 	{
-		logger::log(fmt::format("[Mesh] load({0}) - cannot open", name));
+		logger::log(fmt::format("[Mesh] load_assimp({0}) - cannot open", name));
 		return false;
 	}
 
@@ -173,7 +187,7 @@ bool noob::basic_mesh::load(const aiScene* scene, const std::string& name)
 
 	const aiMesh* mesh_data = scene->mMeshes[0];
 
-	// logger::log(fmt::format("[Mesh] load({0}) - Attempting to obtain mesh data", name));
+	// logger::log(fmt::format("[Mesh] load_assimp({0}) - Attempting to obtain mesh data", name));
 
 	size_t num_verts = mesh_data->mNumVertices;
 	size_t num_faces = mesh_data->mNumFaces;
@@ -181,7 +195,7 @@ bool noob::basic_mesh::load(const aiScene* scene, const std::string& name)
 	// auto num_indices = mesh_data->mNumFaces / 3;
 
 	bool has_normals = mesh_data->HasNormals();
-	//logger::log(fmt::format("[Mesh] load({0}) - Mesh has {1} verts, normals? {2}", name, num_verts, has_normals));
+	//logger::log(fmt::format("[Mesh] load_assimp({0}) - Mesh has {1} verts, normals? {2}", name, num_verts, has_normals));
 
 
 	// double accum_x, accum_y, accum_z = 0.0f;
@@ -208,15 +222,16 @@ bool noob::basic_mesh::load(const aiScene* scene, const std::string& name)
 		bbox.max[1] = std::max(bbox.max[1], v[1]);
 		bbox.max[2] = std::max(bbox.max[2], v[2]);
 
-
-		aiVector3D normal = mesh_data->mNormals[n];
-		noob::vec3 norm;
-		norm.v[0] = normal[0];
-		norm.v[1] = normal[1];
-		norm.v[2] = normal[2];
-		normals.push_back(norm);
+		if (has_normals)
+		{
+			aiVector3D normal = mesh_data->mNormals[n];
+			noob::vec3 norm;
+			norm.v[0] = normal[0];
+			norm.v[1] = normal[1];
+			norm.v[2] = normal[2];
+			normals.push_back(norm);
+		}
 	}
-
 	if (num_verts == 0)
 	{
 		num_verts = 1;
@@ -230,7 +245,7 @@ bool noob::basic_mesh::load(const aiScene* scene, const std::string& name)
 
 	bbox.center = noob::vec3((bbox.max[0] - bbox.min[0])/2, (bbox.max[1] - bbox.min[1])/2, (bbox.max[2] - bbox.min[2])/2);
 
-	// logger::log(fmt::format("[Mesh] load({0}) - Mesh has {1} faces", name, num_faces));
+	// logger::log(fmt::format("[Mesh] load_assimp({0}) - Mesh has {1} faces", name, num_faces));
 	auto degenerates = 0;
 	auto tris = 0;
 	auto non_tri_polys = 0;
@@ -260,7 +275,8 @@ bool noob::basic_mesh::load(const aiScene* scene, const std::string& name)
 		}
 	}
 	aiReleaseImport(scene);
-	// logger::log(fmt::format("[Mesh] load({3}) loaded - tris = {0}, non-tri polys = {1}, degenerates = {2}", tris, non_tri_polys, degenerates, name));
+	// logger::log(fmt::format("[Mesh] load_assimp({3}) load_assimped - tris = {0}, non-tri polys = {1}, degenerates = {2}", tris, non_tri_polys, degenerates, name));
+	logger::log("[Mesh] load_assimp() - done");
 	return true;
 }
 
@@ -356,7 +372,10 @@ std::vector<noob::basic_mesh> noob::basic_mesh::convex_decomposition() const
 	logger::log("[Mesh] convex_decomposition()");
 	VHACD::IVHACD* interfaceVHACD = VHACD::CreateVHACD();
 	VHACD::IVHACD::Parameters params;
-	params.m_oclAcceleration = false;
+	//params.m_resolution = 16000000;
+	//params.m_depth = 8;
+	// params.m_concavity = 0.00025;
+	params.m_oclAcceleration = false;//true;
 
 	std::vector<noob::basic_mesh> meshes;
 	std::vector<float> points;
@@ -384,7 +403,6 @@ std::vector<noob::basic_mesh> noob::basic_mesh::convex_decomposition() const
 		{
 			VHACD::IVHACD::ConvexHull hull;
 			interfaceVHACD->GetConvexHull(i, hull);
-			noob::basic_mesh m;
 
 			size_t num_points = hull.m_nPoints;
 			size_t num_tris = hull.m_nTriangles;
@@ -412,8 +430,8 @@ std::vector<noob::basic_mesh> noob::basic_mesh::convex_decomposition() const
 			   logger::log(fmt::format("[Mesh] convex_decomposition() - Mesh # {0} - Data copied: num verts = {1}, num indices = {2}", i, m.vertices.size(), m.indices.size()));
 			   noob::basic_mesh final_mesh;
 
-			   auto snap = m.snapshot();
-			   final_mesh.load(snap, "temp-hacd");
+			   auto snap = m.save();
+			   final_mesh.load_assimp(snap, "temp-hacd");
 
 			   logger::log(fmt::format("[Mesh] convex_decomposition() - Final, cleaned mesh # {0} - Stats: num verts = {1}, num indices = {2}", i, final_mesh.vertices.size(), final_mesh.indices.size()));
 			   */
@@ -433,10 +451,10 @@ std::vector<noob::basic_mesh> noob::basic_mesh::convex_decomposition() const
 			const char* mem = w.data();
 			size_t size = w.size();
 
-			noob::basic_mesh final_mesh;
-			final_mesh.load(std::make_tuple(size, mem), "");
+			noob::basic_mesh m;
+			m.load_assimp(std::make_tuple(size, mem), "");
 
-			meshes.push_back(final_mesh);
+			meshes.push_back(m);
 
 		}
 	}
@@ -452,6 +470,73 @@ std::vector<noob::basic_mesh> noob::basic_mesh::convex_decomposition() const
 
 }
 
+
+noob::basic_mesh noob::basic_mesh::csg(const noob::basic_mesh& a, const noob::basic_mesh& b, const noob::csg_op op)
+{
+	vtkSmartPointer<vtkPolyData> input1;
+	vtkSmartPointer<vtkPolyData> input2;
+
+	std::string input_filename_a("./temp/temp_csg_input_a.ply");
+	std::string input_filename_b("./temp/temp_csg_input_b.ply");
+
+	a.save(input_filename_a);
+	b.save(input_filename_b);
+
+	vtkSmartPointer<vtkPLYReader> reader1 = vtkSmartPointer<vtkPLYReader>::New();
+	reader1->SetFileName(input_filename_a.c_str());
+	reader1->Update();
+	input1 = reader1->GetOutput();
+
+	vtkSmartPointer<vtkPLYReader> reader2 = vtkSmartPointer<vtkPLYReader>::New();
+	reader2->SetFileName(input_filename_b.c_str());
+	reader2->Update();
+	input2 = reader2->GetOutput();
+
+	vtkSmartPointer<vtkPolyDataMapper> input1Mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+	input1Mapper->SetInputData(input1);
+	input1Mapper->ScalarVisibilityOff();
+
+	vtkSmartPointer<vtkPolyDataMapper> input2Mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+	input2Mapper->SetInputData(input2);
+	input2Mapper->ScalarVisibilityOff();
+
+	vtkSmartPointer<vtkBooleanOperationPolyDataFilter> boolean_operation = vtkSmartPointer<vtkBooleanOperationPolyDataFilter>::New();
+	if (op == noob::csg_op::UNION)
+	{
+		boolean_operation->SetOperationToUnion();
+	}
+	else if (op == noob::csg_op::INTERSECTION)
+	{
+		boolean_operation->SetOperationToIntersection();
+	}
+	else if (op == noob::csg_op::DIFFERENCE)
+	{
+		boolean_operation->SetOperationToDifference();
+	}
+
+vtkSmartPointer<vtkPolyData> booleaned_mesh;
+
+boolean_operation->SetInputData(0, input1);
+boolean_operation->SetInputData(1, input2);
+
+boolean_operation->Update();
+booleaned_mesh = boolean_operation->GetOutput();
+
+vtkSmartPointer<vtkPLYWriter> writer = vtkSmartPointer<vtkPLYWriter>::New();
+writer->SetInputDataObject(booleaned_mesh);
+writer->SetFileName("./temp/bool_results.ply");
+writer->Update();
+
+noob::basic_mesh m;
+m.load_assimp("./temp/bool_results.ply");
+return m;
+//vtkSmartPointer<vtkPolyDataMapper> boolean_operation_mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+//boolean_operation_mapper->SetInputConnection(boolean_operation->GetOutputPort());
+//boolean_operation_mapper->ScalarVisibilityOff();
+
+
+
+}
 
 // TODO: Use the same struct and benefit from zero-copy awesomeness
 /*
@@ -585,7 +670,7 @@ noob::basic_mesh noob::basic_mesh::cone(float radius, float height, size_t segme
 	// half_edges.garbage_collection();
 	OpenMesh::IO::write_mesh(half_edges, "temp/cone.off");
 	noob::basic_mesh mesh;
-	mesh.load("temp/cone.off","cone-temp");
+	mesh.load_assimp("temp/cone.off","cone-temp");
 	logger::log(fmt::format("Created cone with height = {0}, radius = {1}, and {2} segments.", height, radius, _segments));
 	return mesh;
 }
@@ -676,7 +761,7 @@ noob::basic_mesh noob::basic_mesh::cylinder(float radius, float height, size_t s
 	half_edges.garbage_collection();
 	OpenMesh::IO::write_mesh(half_edges, "temp/cylinder.off");
 	noob::basic_mesh mesh;
-	mesh.load("temp/cylinder.off","cylinder-temp");
+	mesh.load_assimp("temp/cylinder.off","cylinder-temp");
 	logger::log(fmt::format("Created cylinder with height = {0}, radius = {1} with {2} segments.", height, radius, _segments));
 	return mesh;
 }
@@ -757,7 +842,7 @@ noob::basic_mesh noob::basic_mesh::cube(float width, float height, float depth, 
 	OpenMesh::IO::write_mesh(half_edges, "temp/cube.off");
 
 	noob::basic_mesh mesh;
-	mesh.load("temp/cube.off", "cube-temp");
+	mesh.load_assimp("temp/cube.off", "cube-temp");
 	logger::log(fmt::format("Created cube with width = {0}, height = {1}, depth = {2} with {3} subdivides.", width, height, depth, subdivides));
 	return mesh;
 }
@@ -842,7 +927,7 @@ noob::basic_mesh noob::basic_mesh::sphere(float radius)
 
    OpenMesh::IO::write_mesh(half_edges, "temp/bone.off");
    noob::basic_mesh mesh;
-mesh.load("temp/bone.off", "bone-temp");
+mesh.load_assimp("temp/bone.off", "bone-temp");
 
 return mesh;
 }

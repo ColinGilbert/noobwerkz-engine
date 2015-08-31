@@ -9,10 +9,15 @@ void noob::actor::init(rp3d::DynamicsWorld* _world, const std::shared_ptr<noob::
 	controller.init(world, _model, _shader_info, _mat, _mass, _width, _height, _max_speed);
 }
 
-
-void noob::actor::update(double dt, bool forward, bool backward, bool left, bool right, bool jump)
+void noob::actor::update()
 {
-	controller.step(static_cast<float>(dt), forward, backward, left, right, jump);
+	controller.update();//static_cast<float>(dt));
+}
+
+
+void noob::actor::move(bool forward, bool backward, bool left, bool right, bool jump)
+{
+	controller.step(forward, backward, left, right, jump);
 }
 
 

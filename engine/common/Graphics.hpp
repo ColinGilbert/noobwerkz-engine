@@ -17,6 +17,7 @@ namespace noob
 	class graphics
 	{
 		public:
+		/*
 			struct mesh_vertex
 			{
 				mesh_vertex() : pos({0.0, 0.0, 0.0}), normal({0.0, 0.0, 0.0}), uv({0.0, 0.0}), tangent({0.0, 0.0, 0.0}), bitangent({0.0, 0.0, 0.0}), bone_indices({0, 0, 0, 0}), bone_weights({0.0, 0.0, 0.0, 0.0}) {}
@@ -57,7 +58,7 @@ namespace noob
 				}
 				static bgfx::VertexDecl ms_decl;
 			};
-
+		*/
 			struct uniform
 			{
 				void init(const std::string& name, bgfx::UniformType::Enum _type, uint16_t _count = 1)
@@ -110,10 +111,7 @@ namespace noob
 			static bool add_sampler(const std::string&);
 			static bool add_uniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t count = 1);
 			static bool add_shader(const std::string&, const noob::graphics::shader&);
-			//static bool add_shader(const std::string&, const bgfx::ProgramHandle);
-			//static bool add_shader(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::uniform>&);
-			//static bool add_shader(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::sampler>&);
-			//static bool add_shader(const std::string&, const bgfx::ProgramHandle, const std::vector<noob::graphics::uniform>&, const std::vector<noob::graphics::sampler>&);
+
 
 			// ---------------- Getters -----------------
 			static noob::graphics::shader get_shader(const std::string&);
@@ -127,8 +125,6 @@ namespace noob
 
 			// TODO: Implement these
 			// static bool is_valid(const noob::graphics::shader&);
-			// static bool is_valid(const noob::uniform&);
-			// static bool is_valid(const noob::sampler&);
 			// static bool is_valid(bgfx::ProgramHandle);
 			// static bool is_valid(bgfx::ShaderHandle);
 			// static bool is_valid(bgfx::TextureHandle);

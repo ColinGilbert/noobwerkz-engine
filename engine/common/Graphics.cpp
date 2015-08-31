@@ -7,7 +7,7 @@
 
 //#include "shaderc.h"
 
-bgfx::VertexDecl noob::graphics::mesh_vertex::ms_decl;
+// bgfx::VertexDecl noob::graphics::mesh_vertex::ms_decl;
 
 std::unordered_map<std::string, bgfx::TextureHandle> noob::graphics::global_textures;
 std::unordered_map<std::string, noob::graphics::uniform> noob::graphics::uniforms;

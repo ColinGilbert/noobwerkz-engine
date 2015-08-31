@@ -9,6 +9,8 @@ set(CMAKE_C_FLAGS "-std=c99 -fno-strict-aliasing -DSQLITE_ENABLE_COLUMN_METADATA
 
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 #include_directories(${Boost_INCLUDE_DIR})
+find_package(VTK REQUIRED)
+include(${VTK_USE_FILE})
 
 include_directories(lib/cppformat)
 list (APPEND cppformat_src
@@ -59,13 +61,9 @@ include_directories(lib/stb)
 include_directories(lib/inline_variant_visitor)
 
 include_directories(common)
-include_directories(common/Physics)
-include_directories(common/drawing_techniques)
 include_directories(common/Drawing)
 include_directories(common/Drawing/font)
 include_directories(common/Drawing/shaderc)
-#include_directories(common/bfgx_related/nanovg)
-
 #include_directories(common/libs/ozz-animation/include)
 
 list(APPEND bgfx_src
@@ -79,8 +77,6 @@ list(APPEND bgfx_utils_src
 	common/Drawing/font/text_metrics.cpp
 	common/Drawing/font/text_buffer_manager.cpp
 	common/Drawing/bounds.cpp
-	#common/drawing/nanovg/nanovg_bgfx.cpp
-	#common/drawing/nanovg/nanovg.cpp
 	)
 
 list(APPEND openmesh_src
@@ -89,24 +85,6 @@ list(APPEND openmesh_src
 	lib/openmesh/src/OpenMesh/Tools/Decimater/Observer.cc
 	lib/openmesh/src/OpenMesh/Core/Mesh/ArrayKernelT.cc
 	)
-
-#include_directories(lib/sqlite)
-#list (APPEND sqlite_src
-#	lib/sqlite/sqlite3.c
-#	)
-
-#include_directories(lib/SQLiteCpp/include)
-#list (APPEND sqlitecpp_src
-#	lib/SQLiteCpp/src/Column.cpp
-#	lib/SQLiteCpp/src/Database.cpp
-#	lib/SQLiteCpp/src/Statement.cpp
-#	lib/SQLiteCpp/src/Transaction.cpp
-#	)
-
-#include_directories(lib/es)
-#list (APPEND es_src
-#	lib/es/es/storage.cpp
-#	)
 
 include_directories(lib/variant)
 
@@ -146,7 +124,11 @@ list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 
 add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src} ${es_src} ${user_src}) 
 
-target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m emon reactphysics3d OpenMeshCore OpenMeshToolsStatic spnav ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r ${Boost_LIBRARIES})
+target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES}
+	${OPENGL_LIBRARIES} freetype rt dl pthread assimp m emon
+	reactphysics3d OpenMeshCore OpenMeshToolsStatic spnav
+	ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r
+	${Boost_LIBRARIES} ${VTK_LIBRARIES})
 
 project(LogServer)
 

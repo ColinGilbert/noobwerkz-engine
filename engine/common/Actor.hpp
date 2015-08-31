@@ -28,8 +28,8 @@ namespace noob
 			void init(rp3d::DynamicsWorld*, const std::shared_ptr<noob::model>&, const std::shared_ptr<noob::skeletal_anim>&, const std::shared_ptr<noob::prepared_shaders::info>&, const noob::mat4& = noob::identity_mat4(), float _mass = 10.0, float _width = 1.0, float _height = 1.0, float _max_speed = 10.0);
 			
 			void set_skeleton(const std::shared_ptr<noob::skeletal_anim>& _anim);
-			
-			void update(double dt, bool forward = false, bool backward = false, bool left = false, bool right = false, bool jump = false);
+			void update();
+			void move(bool forward = false, bool backward = false, bool left = false, bool right = false, bool jump = false);
 			
 			bool set_destination(const noob::vec3&);
 			
