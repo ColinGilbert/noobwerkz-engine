@@ -307,3 +307,14 @@ btCapsuleShape* noob::stage::capsule(float r, float h)
 	}
 	else return capsules[std::make_tuple(r, h)];
 }
+
+btStaticPlaneShape* noob::stage::plane(const noob::vec3& normal, float offset)
+{
+	auto search = planes.find(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset));
+	if (search == planes.end())
+	{
+		auto results = planes.insert(std::make_pair(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset), new btStaticPlaneShape(btVector3(normal.v[0], normal.v[1], normal.v[2]), offset)));
+		return (results.first)->second;
+	}
+	else return planes[std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset)];
+}

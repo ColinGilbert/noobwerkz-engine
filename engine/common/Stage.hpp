@@ -76,7 +76,7 @@ namespace noob
 			btCylinderShape* cylinder(float r, float h);
 			btConeShape* cone(float r, float h);
 			btCapsuleShape* capsule(float r, float h);
-
+			btStaticPlaneShape* plane(const noob::vec3& normal, float offset);
 			//void draw_pose(const std::shared_ptr<noob::skeletal_anim>&);//, const std::string& anim_name, float time);
 			
 		protected:
@@ -110,6 +110,7 @@ namespace noob
 			std::map<std::tuple<float, float>, btCylinderShape*> cylinders;
 			std::map<std::tuple<float, float>, btConeShape*> cones;
 			std::map<std::tuple<float, float>, btCapsuleShape*> capsules;
+			std::map<std::tuple<float,float,float,float>, btStaticPlaneShape*> planes;
 
 	};
 }
