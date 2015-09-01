@@ -14,7 +14,7 @@
 #include "ShaderVariant.hpp"
 #include "Prop.hpp"
 
-#include <btBulletDynamicsCommon.h>
+#include "reactphysics3d.h"
 
 namespace noob
 {
@@ -24,7 +24,7 @@ namespace noob
 		public:
 			actor() : anim_time(0.0) {}
 			
-			void init(btDynamicsWorld*, const std::shared_ptr<noob::prop>&, const std::shared_ptr<noob::skeletal_anim>&);
+			void init(rp3d::DynamicsWorld*, const std::shared_ptr<noob::prop>&, const std::shared_ptr<noob::skeletal_anim>&, float width, float height);
 			
 			void set_skeleton(const std::shared_ptr<noob::skeletal_anim>& _anim);
 			void update();

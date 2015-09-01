@@ -1,5 +1,4 @@
 #pragma once
-/*
 #include "Logger.hpp"
 #include "reactphysics3d.h"
 
@@ -47,4 +46,3 @@ namespace noob
 			}
 	};
 }
-*/

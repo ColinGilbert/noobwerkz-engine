@@ -8,7 +8,7 @@
 
 #include <array>
 #include <assimp/types.h>
-#include <btBulletDynamicsCommon.h>
+#include "reactphysics3d.h"
 #include <glm/glm.hpp>
 #include "format.h"
 
@@ -97,8 +97,13 @@ namespace noob
 		// create from truncated vec4
 		vec3(const vec4& vv);
 		vec3(const vec3& vv);
-		vec3(const btVector3&);
-
+		//vec3(const btVector3&);
+		vec3(const rp3d::Vector3& vv)
+		{
+			v[0] = vv.x;
+			v[1] = vv.y;
+			v[2] = vv.z;
+		}
 		template <class Archive>
 		void serialize( Archive & ar )
 		{
@@ -252,8 +257,14 @@ namespace noob
 		versor();
 		versor(float,float,float,float);
 		versor(const vec4& v);
-		versor(const btQuaternion&);
-		
+		//versor(const btQuaternion&);
+		versor(const rp3d::Quaternion& qq)
+		{
+			q[0] = qq.x;
+			q[1] = qq.y;
+			q[2] = qq.z;
+			q[3] = qq.w;
+		}
 		template <class Archive>
 		void serialize( Archive & ar )
 		{

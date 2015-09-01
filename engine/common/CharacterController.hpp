@@ -1,10 +1,10 @@
-// Kinematic, until self_control == false. The it beomes dynamic body
+// Kinematic, until self_control == false. Then it beomes dynamic body
 #pragma once
 
 
 #include "MathFuncs.hpp"
 #include "Prop.hpp"
-#include <btBulletDynamicsCommon.h>
+#include "reactphysics3d.h"
 #include <memory>
 
 namespace noob
@@ -12,9 +12,9 @@ namespace noob
 	class character_controller
 	{
 		public:
-			character_controller() : resting(false), self_control(false), time_on_ground(0.0), slope(0.0, 0.0, 0.0), world(nullptr) {}
+			character_controller() : self_control(false), slope(0.0, 0.0, 0.0), world(nullptr) {}
 
-			void init(btDynamicsWorld*, const std::shared_ptr<noob::prop>&);
+			void init(rp3d::DynamicsWorld*, const std::shared_ptr<noob::prop>&, float height, float width);
 			void update();
 			void step(bool forward, bool back, bool left, bool right, bool jump);
 			void stop();
@@ -25,10 +25,28 @@ namespace noob
 			noob::prop* get_prop() const { return prop.get(); }
 
 		protected:
-			bool resting, self_control;
-			float width, mass, height, current_speed, max_speed, time_on_ground;
+
+	class groundcast_callback : public rp3d::RaycastCallback
+		{
+			public:
+				//groundcast_callback(float _cast_distance, noob::prop* _prop_ptr, noob::vec3 _from, noob::vec3 _to) : cast_distance(_cast_distance), airborne(true), prop_ptr(_prop_ptr), from(_from), to(_to), slope(0.0, 0.0, 0.0) {}
+				groundcast_callback(noob::prop* _prop_ptr, noob::vec3 _from, noob::vec3 _to) : grounded(false), prop_ptr(_prop_ptr), from(_from), to(_to), slope(0.0, 0.0, 0.0) {}
+				virtual rp3d::decimal notifyRaycastHit(const rp3d::RaycastInfo& info);
+				bool is_grounded() const { return grounded; }
+				noob::vec3 get_slope() const { return slope; }
+
+			protected:
+
+				//float cast_distance;
+				bool grounded;
+				noob::prop* prop_ptr;
+				noob::vec3 from, to, slope;				
+		};
+
+			bool self_control;
+			float width, mass, height;
 			noob::vec3 slope;
 			std::shared_ptr<noob::prop> prop;
-			btDynamicsWorld* world;
+			rp3d::DynamicsWorld* world;
 	};
 }

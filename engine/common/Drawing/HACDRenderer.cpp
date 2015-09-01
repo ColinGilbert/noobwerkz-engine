@@ -1,4 +1,3 @@
-/*
 #include "HACDRenderer.hpp"
 
 void noob::hacd_renderer::init()
@@ -41,36 +40,27 @@ noob::vec4 compute_random_colour()
 
 void noob::hacd_renderer::set_items(const std::vector<noob::basic_mesh>& hulls)
 {
-	drawable3ds.clear();
+	models.clear();
 	colours.clear();
 
 	for (noob::basic_mesh current_mesh : hulls)
 	{
 		noob::vec4 c = compute_random_colour();
-		current_mesh.snapshot("temp/hull-temp.off");
-		std::unique_ptr<noob::drawable3d> d = std::unique_ptr<noob::drawable3d>(new noob::drawable3d());
-		d->init(current_mesh);//"temp/hull-temp.off", "");
+		std::unique_ptr<noob::model> d = std::unique_ptr<noob::model>(new noob::model(current_mesh));
 
-		// info.drawable3d.load(current_mesh.snapshot(), "hull-temp");
-		drawable3ds.push_back(std::move(d));
+		models.push_back(std::move(d));
 		colours.push_back(c);
 	}
 }
 
 
-void noob::hacd_renderer::set_items(const std::vector<std::vector<noob::vec3>>& hulls)
-{
-
-}
-
 void noob::hacd_renderer::draw(const noob::mat4& model_mat, uint8_t view_id)
 {
-	for (size_t i = 0; i < drawable3ds.size(); i++)
+	for (size_t i = 0; i < models.size(); i++)
 	{
 		bgfx::setUniform(noob::graphics::get_uniform("colour_1").handle, &colours[i].v[0]);
 		noob::graphics::shader s = noob::graphics::get_shader("basic");
-		drawable3ds[i]->draw(view_id, model_mat, s.program);
-		bgfx::submit(view_id);
+		models[i]->draw(view_id, model_mat, s.program);
+		bgfx::submit(view_id, shader.program);
 	}
 }
-*/

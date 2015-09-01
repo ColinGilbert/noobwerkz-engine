@@ -2,13 +2,6 @@
 
 bool noob::stage::init()
 {
-	broadphase = new btDbvtBroadphase();
-	collision_configuration = new btDefaultCollisionConfiguration();
-	collision_dispatcher = new btCollisionDispatcher(collision_configuration);
-	solver = new btSequentialImpulseConstraintSolver();
-	dynamics_world = new btDiscreteDynamicsWorld(collision_dispatcher, broadphase, solver, collision_configuration);
-	dynamics_world->setGravity(btVector3(0, -10, 0));
-	
 	shaders.init();
 
 	add_model("unit-sphere", noob::basic_mesh::sphere(0.5));
@@ -32,53 +25,17 @@ bool noob::stage::init()
 	return true;
 }
 
-void noob::stage::tear_down()
-{
-	for (auto s : spheres)
-	{
-		delete s.second;
-	}
-	for (auto  s : boxes)
-	{
-		delete s.second;	
-	}
-	for (auto s : cylinders)
-	{
-		delete s.second;
-	}
-	for (auto s : cones)
-	{
-		delete s.second;
-	}
-	for (auto s : capsules)
-	{
-		delete s.second;
-	}
-
-	delete dynamics_world;
-	delete solver;
-	delete collision_configuration;
-	delete collision_dispatcher;
-	delete broadphase;
-}
 
 void noob::stage::update(double dt)
 {
-	static double accum = 0.0;
 	if (!paused)
 	{
-		accum += dt;
-		if (accum >= 1.0 / 60.0)
-		{
-			dynamics_world->stepSimulation(1.0/60.0, 10);
-			accum -= 1.0/60;
-		}
+		dynamics_world.update(static_cast<rp3d::decimal>(dt));
 		for (auto actor_it : actors)
 		{
-			actor_it.second->update();//dt);//, true, false, true, false, false);//true);
+			actor_it.second->update();
 			//actor_it.second->print_debug_info();
 		}
-		//world.update(static_cast<rp3d::decimal>(dt));
 	}
 }
 
@@ -122,18 +79,18 @@ void noob::stage::debug_draw(const std::shared_ptr<noob::actor>& a) const
 }
 
 
-std::shared_ptr<noob::actor> noob::stage::make_actor(const std::string& name, const std::shared_ptr<noob::prop>& _prop, const std::shared_ptr<noob::skeletal_anim>& _skel_anim)
+std::shared_ptr<noob::actor> noob::stage::make_actor(const std::string& name, const std::shared_ptr<noob::prop>& _prop, const std::shared_ptr<noob::skeletal_anim>& _skel_anim, float width, float height)
 {
 	// TODO: Optimize
 	auto a = std::make_shared<noob::actor>();
-	a->init(dynamics_world, _prop, _skel_anim);
+	a->init(&dynamics_world, _prop, _skel_anim, width, height);
 	actors[name] = a;
 	return actors[name];
 
 }
 
 
-std::shared_ptr<noob::prop> noob::stage::make_prop(const std::string& _name, btRigidBody* _body, const std::shared_ptr<noob::model>& _model, const std::shared_ptr<noob::prepared_shaders::info>& _uniforms)
+std::shared_ptr<noob::prop> noob::stage::make_prop(const std::string& _name, rp3d::RigidBody* _body, const std::shared_ptr<noob::model>& _model, const std::shared_ptr<noob::prepared_shaders::info>& _uniforms)
 {
 	auto p = std::make_shared<noob::prop>();
 	p->init(_body, _model, _uniforms);
@@ -227,8 +184,6 @@ std::weak_ptr<noob::model> noob::stage::get_model(const std::string& name) const
 		logger::log(fmt::format("[Stage] Cannot find requested model: {0}", name));
 		// TODO: Verify if this is proper form
 		return {};
-		//logger::log(fmt::format("[Stage] asking for invalid drawable \"{0}\", returning unit sphere instead.", name));
-		//return unit_sphere;
 	}
 
 	return search->second;
@@ -244,136 +199,10 @@ std::weak_ptr<noob::skeletal_anim> noob::stage::get_skeleton(const std::string& 
 		return {};
 	}
 
-	return search->second;//.get();
+	return search->second;
 }
 
-
-btRigidBody* noob::stage::body(btCollisionShape* shape, float mass, const noob::vec3& pos, const noob::versor& orientation)
+rp3d::RigidBody* noob::stage::body(const noob::vec3& position, const noob::versor& orientation)
 {
-	btDefaultMotionState* motion_state = new btDefaultMotionState(btTransform(btQuaternion(orientation.q[0], orientation.q[1], orientation.q[2], orientation.q[3]), btVector3(pos.v[0], pos.v[1], pos.v[2])));
-	btVector3 inertia(0.0, 0.0, 0.0);
-	shape->calculateLocalInertia(mass, inertia);
-	btRigidBody::btRigidBodyConstructionInfo ci(mass, motion_state, shape, inertia);
-	btRigidBody* body = new btRigidBody(ci);
-	dynamics_world->addRigidBody(body);
-	return body;
+	return dynamics_world.createRigidBody(rp3d::Transform(rp3d::Vector3(position.v[0], position.v[1], position.v[2]), rp3d::Quaternion(orientation.q[0], orientation.q[1], orientation.q[2], orientation.q[3])));
 }
-
-
-btSphereShape* noob::stage::sphere(float r)
-{
-	auto search = spheres.find(r);
-	if (search == spheres.end())
-	{
-		spheres[r] = new btSphereShape(r);
-		return spheres[r];
-	}
-	else return spheres[r];
-}
-
-
-btBoxShape* noob::stage::box(float x, float y, float z)
-{
-	auto search = boxes.find(std::make_tuple(x,y,z));
-	if (search == boxes.end())
-	{
-		auto results = boxes.insert(std::make_pair(std::make_tuple(x,y,z), new btBoxShape(btVector3(x, y, z))));
-		return (results.first)->second;
-	}
-	else return boxes[std::make_tuple(x,y,z)];
-
-}
-
-
-btCylinderShape* noob::stage::cylinder(float r, float h)
-{
-	auto search = cylinders.find(std::make_tuple(r, h));
-	if (search == cylinders.end())
-	{
-		auto results = cylinders.insert(std::make_pair(std::make_tuple(r, h), new btCylinderShape(btVector3(r, h / 2, r))));
-		return (results.first)->second;
-	}
-	else return cylinders[std::make_tuple(r, h)];
-}
-
-
-btConeShape* noob::stage::cone(float r, float h)
-{
-	auto search = cones.find(std::make_tuple(r, h));
-	if (search == cones.end())
-	{
-		auto results = cones.insert(std::make_pair(std::make_tuple(r, h), new btConeShape(r, h)));
-		return (results.first)->second;
-	}
-	else return cones[std::make_tuple(r, h)];
-}
-
-
-btCapsuleShape* noob::stage::capsule(float r, float h)
-{
-	auto search = capsules.find(std::make_tuple(r, h));
-	if (search == capsules.end())
-	{
-		auto results = capsules.insert(std::make_pair(std::make_tuple(r, h), new btCapsuleShape(r, h)));
-		return (results.first)->second;
-	}
-	else return capsules[std::make_tuple(r, h)];
-}
-
-
-btStaticPlaneShape* noob::stage::plane(const noob::vec3& normal, float offset)
-{
-	auto search = planes.find(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset));
-	if (search == planes.end())
-	{
-		auto results = planes.insert(std::make_pair(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset), new btStaticPlaneShape(btVector3(normal.v[0], normal.v[1], normal.v[2]), offset)));
-		return (results.first)->second;
-	}
-	else return planes[std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset)];
-}
-
-
-btConvexHullShape* noob::stage::hull(const std::vector<noob::vec3>& points)
-{
-	btConvexHullShape* temp = new btConvexHullShape();
-	for (noob::vec3 p : points)
-	{
-		temp->addPoint(btVector3(p.v[0], p.v[1], p.v[2]));
-	}
-	return temp;
-}
-
-
-btCompoundShape* noob::stage::breakable_mesh(const noob::basic_mesh& _mesh)
-{
-	std::vector<noob::basic_mesh> convex_meshes;
-	return breakable_mesh(_mesh.convex_decomposition());
-}
-
-
-btCompoundShape* noob::stage::breakable_mesh(const std::vector<noob::basic_mesh>& _meshes)
-{
-	btCompoundShape* result = new btCompoundShape();
-	for (noob::basic_mesh m : _meshes)
-	{
-		btConvexHullShape* temp = hull(m.vertices); 
-		btTransform t;
-		t.setIdentity();
-		result->addChildShape(t,temp);
-	}
-	return result; 
-}
-
-
-/*
-btBvhTriangleMeshShape*> noob::stage::static_mesh(const noob::basic_mesh&)
-{
-	btBvhTriangleMeshShape* temp = new btBvhTriangleMeshShape();
-	for (noob::vec3 p : points)
-	{
-		temp->addPoint(btVector3(p.v[0], p.v[1], p.v[2]));
-	}
-	return temp;
-
-}
-*/

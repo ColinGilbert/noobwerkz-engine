@@ -19,8 +19,13 @@ void noob::application::user_init()
 	basic_shader_info.colour = noob::vec4(1.0, 0.0, 0.0, 1.0);
 	stage.set_shader("red", basic_shader_info);
 
-	btRigidBody* actor_bod = stage.body(stage.cylinder(0.5, 2.0), 1.5, noob::vec3(0.0, 55.0, 0.0));
+	rp3d::RigidBody* actor_bod = stage.body(noob::vec3(0.0, 50.0, 0.0));
+	float actor_width = 0.5;
+	float actor_height = 1.0;
 	std::shared_ptr<noob::prop> actor_prop = stage.make_prop("actor-prop", actor_bod, stage.get_unit_sphere(), stage.get_shader("red").lock());
+	actor_prop->attach_capsule(actor_width/2.0, actor_height, 1.0);
+
+	player_character = stage.make_actor("player-character", actor_prop, stage.get_skeleton("human").lock(), actor_width, actor_height);
 
 	noob::basic_mesh a = noob::basic_mesh::sphere(10);
 	noob::basic_mesh b = noob::basic_mesh::cone(30, 35);
@@ -29,19 +34,18 @@ void noob::application::user_init()
 	b = b.transform(t.get_matrix());
 	noob::basic_mesh c = noob::basic_mesh::csg(a, b, noob::csg_op::DIFFERENCE);
 
-	btRigidBody* plane_bod = stage.body(stage.breakable_mesh(c), 0.0, noob::vec3(0.0, 0.0, 0.0));
+	rp3d::RigidBody* ground_bod = stage.body(noob::vec3(0.0, 0.0, 0.0));
+	ground_bod->setType(rp3d::STATIC);
+
 	stage.add_model("ground", c);
-	std::shared_ptr<noob::prop> plane_prop = stage.make_prop("ground", plane_bod, stage.get_model("ground").lock(), stage.get_shader("moon").lock());
-	//plane_prop->drawing_scale = noob::vec3(1000.0, 0.5, 1000.0);
+	
+	std::shared_ptr<noob::prop> ground_prop = stage.make_prop("ground", ground_bod, stage.get_model("ground").lock(), stage.get_shader("moon").lock());
 
+	for (noob::basic_mesh temp : c.convex_decomposition())
+	{
+		ground_prop->attach_hull(temp, 0.0);
+	}
 
-/*
-	noob::transform_helper actor_transform;
-	actor_transform.translate(noob::vec3(0.0, 20.0, 0.0));
-	player_character = stage.make_actor("player-character", stage.get_unit_cube(), stage.get_skeleton("human").lock(), stage.get_debug_shader(), actor_transform.get_matrix());
-
-
-*/
 
 	//fmt::MemoryWriter output_mesh_filename;
 	//output_mesh_filename << "./terrain.bin";

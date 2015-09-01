@@ -1,16 +1,16 @@
 #include "Actor.hpp"
 
 
-void noob::actor::init(btDynamicsWorld* _world, const std::shared_ptr<noob::prop>& _prop, const std::shared_ptr<noob::skeletal_anim>& _anim)
+void noob::actor::init(rp3d::DynamicsWorld* _world, const std::shared_ptr<noob::prop>& _prop, const std::shared_ptr<noob::skeletal_anim>& _anim, float width, float height)
 {
-	controller.init(_world, _prop);
+	controller.init(_world, _prop, width, height);
 	anim = _anim;
 }
 
 
 void noob::actor::update()
 {
-	controller.update();//static_cast<float>(dt));
+	controller.update();
 }
 
 
