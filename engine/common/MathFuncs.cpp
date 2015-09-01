@@ -784,6 +784,14 @@ namespace noob
 		//q[3] = v[3];
 	}
 
+	versor::versor(const btQuaternion& quat)
+	{
+		q[0] = quat.x();
+		q[1] = quat.y();
+		q[2] = quat.z();
+		q[3] = quat.w();
+	}
+
 	//versor::versor(const rp3d::Quaternion& qq)
 	//{
 	//	q[0] = qq.x;

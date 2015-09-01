@@ -98,7 +98,6 @@ namespace noob
 		vec3(const vec4& vv);
 		vec3(const vec3& vv);
 		vec3(const btVector3&);
-		//vec3(const rp3d::Vector3&);
 
 		template <class Archive>
 		void serialize( Archive & ar )
@@ -222,7 +221,6 @@ namespace noob
 		// mat4(const aiMatrix3x3& AssimpMatrix);
 		mat4(const aiMatrix4x4&);
 		mat4(const glm::mat4&);
-		// mat4(const rp3d::Transform&);
 
 		template <class Archive>
 		void serialize( Archive & ar )
@@ -254,7 +252,8 @@ namespace noob
 		versor();
 		versor(float,float,float,float);
 		versor(const vec4& v);
-		//versor(const rp3d::Quaternion&);
+		versor(const btQuaternion&);
+		
 		template <class Archive>
 		void serialize( Archive & ar )
 		{

@@ -14,12 +14,13 @@ Currently brings in (among others):
 ```
 Bgfx
 glfw
-reactphysics3d
+Bullet Physics
 Freetype
 polyvox
 Lemon Graph Library 
 Assimp (and a working mesh loader, too! =P)
 cppformat
+Cereal
 ```
 
 To clone:

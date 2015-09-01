@@ -58,6 +58,7 @@
 #include "ShaderVariant.hpp"
 #include "PhysicsUtils.hpp"
 
+#include <btBulletDynamicsCommon.h>
 // #include <chaiscript/chaiscript.hpp>
 // #include <chaiscript/chaiscript_stdlib.hpp>
 

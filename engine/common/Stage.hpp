@@ -20,10 +20,10 @@
 #include "Model.hpp"
 #include "TransformHelper.hpp"
 #include "CharacterController.hpp"
-//#include "PhysicsContacts.hpp"
 #include "Prop.hpp"
-// #include "reactphysics3d.h"
-//#include <btDynamicsCommon.h>
+
+#include <btBulletDynamicsCommon.h>
+
 namespace noob
 {
 	struct prop;
@@ -31,9 +31,6 @@ namespace noob
 	class stage
 	{
 		public:
-			//stage() : world(rp3d::Vector3(0.0, -9.81, 0.0), rp3d::decimal(1.0 / 60.0)), paused(false) {}
-			//stage() : world(rp3d::Vector3(0.0, -9.81, 0.0)), paused(false) {}
-
 			bool init();
 			void tear_down();
 			void update(double dt);
@@ -42,14 +39,14 @@ namespace noob
 			void draw(noob::prop*) const;
 			void draw(const std::shared_ptr<noob::actor>&) const;
 			
-			void debug_draw(noob::prop*) const;
+			//void debug_draw(noob::prop*) const;
 			void debug_draw(const std::shared_ptr<noob::actor>&) const;
 			
 			void pause() { paused = true; }
 			void start() { paused = false; }
 
-			std::shared_ptr<noob::actor> make_actor(const std::string& name, const std::shared_ptr<noob::model>&, const std::shared_ptr<noob::skeletal_anim>&, const std::shared_ptr<noob::prepared_shaders::info>&, const noob::mat4& transform, float mass = 2.0, float width = 0.25, float height = 1.0, float max_speed = 5.0);
-			std::shared_ptr<noob::prop> make_prop(const std::string& name, const std::shared_ptr<noob::model>&, const std::shared_ptr<noob::prepared_shaders::info>&, const noob::mat4& transform);
+			std::shared_ptr<noob::actor> make_actor(const std::string& name, const std::shared_ptr<noob::prop>&, const std::shared_ptr<noob::skeletal_anim>&);
+			std::shared_ptr<noob::prop> make_prop(const std::string& name, btRigidBody*, const std::shared_ptr<noob::model>&, const std::shared_ptr<noob::prepared_shaders::info>&);
 
 			// Loads a serialized model (from cereal binary)
 			bool add_model(const std::string& name, const std::string& filename);
@@ -69,16 +66,23 @@ namespace noob
 			std::shared_ptr<noob::model> get_unit_cone() const { return unit_cone; }
 			
 			std::shared_ptr<noob::prepared_shaders::info> get_debug_shader() const { return debug_shader; }
-			//rp3d::CollisionBody* physics_body(float friction, float bouncy, float linear_damping, float angular_damping, noob::mat4 world_transform = noob::identity_mat4(), body_type type = noob::stage::body_type::DYNAMIC, bool gravity = true);
 
-			btRigidBody* body(btCollisionShape*, float mass, const noob::vec3& pos, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0));
-
+			btRigidBody* body(btCollisionShape*,float mass, const noob::vec3& pos, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0));
+			
+			// These cache the shape for reuse, as they are simple parametrics
 			btSphereShape* sphere(float r);
 			btBoxShape* box(float x, float y, float z);
 			btCylinderShape* cylinder(float r, float h);
 			btConeShape* cone(float r, float h);
 			btCapsuleShape* capsule(float r, float h);
 			btStaticPlaneShape* plane(const noob::vec3& normal, float offset);
+			
+			// These don't cache the shape for reuse, as they are rather difficult to index inexpensively.
+			btConvexHullShape* hull(const std::vector<noob::vec3>& point);
+			btCompoundShape* breakable_mesh(const noob::basic_mesh&);
+			btCompoundShape* breakable_mesh(const std::vector<noob::basic_mesh>&);
+
+			//btBvhTriangleMeshShape* static_mesh(const noob::basic_mesh&);
 			//void draw_pose(const std::shared_ptr<noob::skeletal_anim>&);//, const std::string& anim_name, float time);
 			
 		protected:
@@ -107,13 +111,12 @@ namespace noob
 			std::unordered_map<std::string, std::shared_ptr<noob::model>> models;
 			std::unordered_map<std::string, std::shared_ptr<noob::skeletal_anim>> skeletons;
 
-			std::map<float, btSphereShape*> spheres;
+			std::unordered_map<float, btSphereShape*> spheres;
 			std::map<std::tuple<float, float, float>, btBoxShape*> boxes;
 			std::map<std::tuple<float, float>, btCylinderShape*> cylinders;
 			std::map<std::tuple<float, float>, btConeShape*> cones;
 			std::map<std::tuple<float, float>, btCapsuleShape*> capsules;
 			std::map<std::tuple<float,float,float,float>, btStaticPlaneShape*> planes;
-
 	};
 }
 

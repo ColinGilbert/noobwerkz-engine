@@ -7,7 +7,8 @@ bool noob::stage::init()
 	collision_dispatcher = new btCollisionDispatcher(collision_configuration);
 	solver = new btSequentialImpulseConstraintSolver();
 	dynamics_world = new btDiscreteDynamicsWorld(collision_dispatcher, broadphase, solver, collision_configuration);
-
+	dynamics_world->setGravity(btVector3(0, -10, 0));
+	
 	shaders.init();
 
 	add_model("unit-sphere", noob::basic_mesh::sphere(0.5));
@@ -63,9 +64,15 @@ void noob::stage::tear_down()
 
 void noob::stage::update(double dt)
 {
+	static double accum = 0.0;
 	if (!paused)
 	{
-		//world.update();
+		accum += dt;
+		if (accum >= 1.0 / 60.0)
+		{
+			dynamics_world->stepSimulation(1.0/60.0, 10);
+			accum -= 1.0/60;
+		}
 		for (auto actor_it : actors)
 		{
 			actor_it.second->update();//dt);//, true, false, true, false, false);//true);
@@ -93,7 +100,7 @@ void noob::stage::draw() const
 
 void noob::stage::draw(noob::prop* p) const
 {
-	shaders.draw(p->model.get(), *(p->shading.get()), noob::scale(p->get_transform(), p->scale));
+	shaders.draw(p->model.get(), *(p->shading.get()), p->get_transform());
 }
 
 
@@ -103,42 +110,35 @@ void noob::stage::draw(const std::shared_ptr<noob::actor>& a) const
 	//shaders.draw(a->get_prop()->model.get(), *(a->get_prop()->shading.get()), a->get_prop()->get_transform());
 }
 
-
+/*
 void noob::stage::debug_draw(noob::prop* p) const
 {
 }
-
+*/
 
 void noob::stage::debug_draw(const std::shared_ptr<noob::actor>& a) const
 {
-	debug_draw(a->get_prop());
+//	debug_draw(a->get_prop());
 }
 
 
-std::shared_ptr<noob::actor> noob::stage::make_actor(const std::string& name, const std::shared_ptr<noob::model>& model, const std::shared_ptr<noob::skeletal_anim>& skel_anim, const std::shared_ptr<noob::prepared_shaders::info>& shader_uniform, const noob::mat4& transform, float mass, float width, float height, float max_speed)
+std::shared_ptr<noob::actor> noob::stage::make_actor(const std::string& name, const std::shared_ptr<noob::prop>& _prop, const std::shared_ptr<noob::skeletal_anim>& _skel_anim)
 {
 	// TODO: Optimize
-//	auto a = std::make_shared<noob::actor>();
-
-//	a->init(&world, model, skel_anim, shader_uniform, transform, mass, width, height, max_speed);
-//	a->destination_prop.init(&world, unit_sphere, debug_shader, transform);
-//	a->destination_prop.add_sphere(1.0, 0.0);
-//	a->destination_prop.body->setType(rp3d::KINEMATIC);
-//	actors[name] = a;
-
-//	return actors[name];
+	auto a = std::make_shared<noob::actor>();
+	a->init(dynamics_world, _prop, _skel_anim);
+	actors[name] = a;
+	return actors[name];
 
 }
 
 
-std::shared_ptr<noob::prop> noob::stage::make_prop(const std::string& name, const std::shared_ptr<noob::model>& drawable, const std::shared_ptr<noob::prepared_shaders::info>& uniforms, const noob::mat4& transform)
+std::shared_ptr<noob::prop> noob::stage::make_prop(const std::string& _name, btRigidBody* _body, const std::shared_ptr<noob::model>& _model, const std::shared_ptr<noob::prepared_shaders::info>& _uniforms)
 {
-/*
 	auto p = std::make_shared<noob::prop>();
-	p->init(&world, drawable, uniforms, transform);
-	props[name] = p;
-	return props[name];
-*/
+	p->init(_body, _model, _uniforms);
+	props[_name] = p;
+	return props[_name];
 }
 
 
@@ -320,6 +320,7 @@ btCapsuleShape* noob::stage::capsule(float r, float h)
 	else return capsules[std::make_tuple(r, h)];
 }
 
+
 btStaticPlaneShape* noob::stage::plane(const noob::vec3& normal, float offset)
 {
 	auto search = planes.find(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset));
@@ -330,3 +331,49 @@ btStaticPlaneShape* noob::stage::plane(const noob::vec3& normal, float offset)
 	}
 	else return planes[std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset)];
 }
+
+
+btConvexHullShape* noob::stage::hull(const std::vector<noob::vec3>& points)
+{
+	btConvexHullShape* temp = new btConvexHullShape();
+	for (noob::vec3 p : points)
+	{
+		temp->addPoint(btVector3(p.v[0], p.v[1], p.v[2]));
+	}
+	return temp;
+}
+
+
+btCompoundShape* noob::stage::breakable_mesh(const noob::basic_mesh& _mesh)
+{
+	std::vector<noob::basic_mesh> convex_meshes;
+	return breakable_mesh(_mesh.convex_decomposition());
+}
+
+
+btCompoundShape* noob::stage::breakable_mesh(const std::vector<noob::basic_mesh>& _meshes)
+{
+	btCompoundShape* result = new btCompoundShape();
+	for (noob::basic_mesh m : _meshes)
+	{
+		btConvexHullShape* temp = hull(m.vertices); 
+		btTransform t;
+		t.setIdentity();
+		result->addChildShape(t,temp);
+	}
+	return result; 
+}
+
+
+/*
+btBvhTriangleMeshShape*> noob::stage::static_mesh(const noob::basic_mesh&)
+{
+	btBvhTriangleMeshShape* temp = new btBvhTriangleMeshShape();
+	for (noob::vec3 p : points)
+	{
+		temp->addPoint(btVector3(p.v[0], p.v[1], p.v[2]));
+	}
+	return temp;
+
+}
+*/
