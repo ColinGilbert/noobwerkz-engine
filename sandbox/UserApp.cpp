@@ -1,4 +1,5 @@
 #include "Application.hpp"
+// TODO: Cleanup
 
 std::shared_ptr<noob::actor> player_character;
 std::shared_ptr<noob::prop> ground;
