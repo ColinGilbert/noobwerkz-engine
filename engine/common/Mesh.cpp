@@ -373,8 +373,8 @@ std::vector<noob::basic_mesh> noob::basic_mesh::convex_decomposition() const
 	VHACD::IVHACD* interfaceVHACD = VHACD::CreateVHACD();
 	VHACD::IVHACD::Parameters params;
 	//params.m_resolution = 16000000;
-	//params.m_depth = 8;
-	// params.m_concavity = 0.00025;
+	params.m_depth = 8;
+	params.m_concavity = 0.00025;
 	params.m_oclAcceleration = false;//true;
 
 	std::vector<noob::basic_mesh> meshes;

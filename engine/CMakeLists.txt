@@ -18,6 +18,12 @@ list (APPEND cppformat_src
 	lib/cppformat/posix.cc
 	)
 
+include_directories(lib/jl_signal/src)
+list (APPEND signals_src
+	lib/jl_signal/src/SignalBase.cpp
+	lib/jl_signal/src/ObjectPool.cpp
+	)
+
 include_directories(lib/reactphysics3d/src)
 add_subdirectory(lib/reactphysics3d)
 
@@ -43,6 +49,7 @@ include_directories(lib/bgfx/3rdparty/khronos)
 
 include_directories(lib/lemon)
 
+
 include_directories(lib/v-hacd/src/VHACD_Lib/inc)
 include_directories(lib/v-hacd/src/VHACD_Lib/public)
 list (APPEND vhacd_src
@@ -64,7 +71,6 @@ include_directories(common)
 include_directories(common/Drawing)
 include_directories(common/Drawing/font)
 include_directories(common/Drawing/shaderc)
-#include_directories(common/libs/ozz-animation/include)
 
 list(APPEND bgfx_src
 	lib/bgfx/src/amalgamated.cpp
@@ -122,7 +128,9 @@ include_directories(platform/nix)
 
 list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 
-add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src} ${es_src} ${user_src}) 
+add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src}
+	${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src}
+	${es_src} ${signals_src} ${user_src}) 
 
 target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m emon OpenMeshCore OpenMeshToolsStatic spnav ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r reactphysics3d ${Boost_LIBRARIES} ${VTK_LIBRARIES})
 

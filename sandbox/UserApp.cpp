@@ -33,18 +33,24 @@ void noob::application::user_init()
 	t.translate(noob::vec3(0.0, 25.0, 0.0));
 	b = b.transform(t.get_matrix());
 	noob::basic_mesh c = noob::basic_mesh::csg(a, b, noob::csg_op::DIFFERENCE);
-
-	rp3d::RigidBody* ground_bod = stage.body(noob::vec3(0.0, 0.0, 0.0));
+	noob::basic_mesh d = noob::basic_mesh::cube(100.0, 5.0, 100.0);
+	t.translate(noob::vec3(0.0, -35.0, 0.0));
+	noob::transform_helper t2;
+	t2.translate(noob::vec3(0.0, -2.0, 0.0));
+	d = d.transform(t2.get_matrix());
+	noob::basic_mesh e = noob::basic_mesh::csg(c, d, noob::csg_op::UNION);
+	rp3d::RigidBody* ground_bod = stage.body(noob::vec3(0.0, -20.0, 0.0));
 	ground_bod->setType(rp3d::STATIC);
 
-	stage.add_model("ground", c);
+	stage.add_model("ground", e);
 	
 	std::shared_ptr<noob::prop> ground_prop = stage.make_prop("ground", ground_bod, stage.get_model("ground").lock(), stage.get_shader("moon").lock());
-
-	for (noob::basic_mesh temp : c.convex_decomposition())
-	{
-		ground_prop->attach_hull(temp, 0.0);
-	}
+	ground_prop->attach_hull(c, 0.0);
+	ground_prop->attach_hull(e, 0.0);
+	//for (noob::basic_mesh temp : c.convex_decomposition())
+	//{
+	//	ground_prop->attach_hull(temp, 0.0);
+	//}
 
 
 	//fmt::MemoryWriter output_mesh_filename;
@@ -66,7 +72,6 @@ void noob::application::user_init()
 void noob::application::user_update(double dt)
 {
 	gui.text("THE NIMBLE MONKEY GRABS THE APRICOT", 50.0, 50.0, noob::gui::font_size::header);
-	//player_character->move(true, false, false, false, false);//true);
-//	stage.draw(player_character);
+	player_character->move(true, false, false, false, true);//false);//true);
 	//player_character->print_debug_info();
 }

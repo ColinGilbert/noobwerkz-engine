@@ -24,7 +24,7 @@ void noob::character_controller::update()
 	rp3d::Ray ray(rp3d::Vector3(from.v[0], from.v[1], from.v[2]), rp3d::Vector3(to.v[0], to.v[1], to.v[2]));
 	noob::character_controller::groundcast_callback ground_cb(prop.get(), from, to);
 	world->raycast(ray, &ground_cb);
-	logger::log("Raycasting!");
+	//logger::log("Raycasting!");
 	if (ground_cb.is_grounded()) 
 	{
 		//logger::log("Grounded");
@@ -53,35 +53,35 @@ void noob::character_controller::step(bool forward, bool back, bool left, bool r
 		noob::vec3 current_vel(0.0, 0.0, 0.0);
 		if (forward)
 		{
-			logger::log("[Character] going forward");
+			//logger::log("[Character] going forward");
 			noob::vec3 direction = noob::cross(noob::vec3(0.0, 0.0, -move_factor), slope);
 			current_vel += direction;
 		}
 
 		if (back)
 		{
-			logger::log("[Character] going backward");
+			//logger::log("[Character] going backward");
 			noob::vec3 direction = noob::cross(noob::vec3(0.0, 0.0, move_factor), slope);
 			current_vel += direction;
 		}
 
 		if (left)
 		{
-			logger::log("[Character] going left");
+			//logger::log("[Character] going left");
 			noob::vec3 direction = noob::cross(noob::vec3(-move_factor, 0.0, 0.0), slope);
 			current_vel += direction;
 		}
 
 		if (right)
 		{
-			logger::log("[Character] going right");
+			//logger::log("[Character] going right");
 			noob::vec3 direction = noob::cross(noob::vec3(move_factor, 0.0, 0.0), slope);
 			current_vel += direction;
 		}
 
 		if (jump)
 		{
-			logger::log("[Character] jumping");
+			//logger::log("[Character] jumping");
 			current_vel += noob::vec3(0.0, jump_force, 0.0);
 		}
 		
@@ -106,7 +106,7 @@ rp3d::decimal noob::character_controller::groundcast_callback::notifyRaycastHit(
 	//if (std::fabs(d) > std::fabs(cast_distance))
 	//{
 	//	airborne = false;
-		logger::log("[Character] touching ground");
+		//logger::log("[Character] touching ground");
 	//}
 	return 0.0;
 }
