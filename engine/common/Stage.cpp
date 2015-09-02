@@ -3,7 +3,7 @@
 bool noob::stage::init()
 {
 	shaders.init();
-
+	//cam.init(10.0, 5.0, noob::vec3(0.0, 20.0, 0.0));
 	add_model("unit-sphere", noob::basic_mesh::sphere(0.5));
 	add_model("unit-cube", noob::basic_mesh::cube(1.0, 1.0, 1.0));
 	add_model("unit-cylinder", noob::basic_mesh::cylinder(1.0, 1.0));

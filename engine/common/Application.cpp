@@ -12,7 +12,6 @@ noob::application::application()
 	time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
-	view_mat = noob::look_at(noob::vec3(0, 50.0, -100.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
 }	
 
 
@@ -50,7 +49,6 @@ void noob::application::update(double delta)
 	gui.window_dims(window_width, window_height);
 	user_update(delta);
 	stage.update(delta);
-
 }
 
 
@@ -145,9 +143,4 @@ void noob::application::window_resize(uint32_t w, uint32_t h)
 	}
 
 	logger::log(fmt::format("[Application] Resize window to ({0}, {1})", window_width, window_height));
-}
-
-void noob::application::key_input(noob::key_type, noob::key_state)
-{
-
 }

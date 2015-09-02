@@ -13,7 +13,7 @@
 #include "Graphics.hpp"
 #include "ShaderVariant.hpp"
 #include "Prop.hpp"
-
+#include "Camera.hpp"
 #include "reactphysics3d.h"
 
 namespace noob
@@ -44,7 +44,7 @@ namespace noob
 			std::string get_debug_info() const { return controller.get_debug_info(); }
 			noob::prop* get_prop() const { return controller.get_prop(); }
 			
-		
+			noob::camera cam;
 		protected:
 			noob::character_controller controller;
 			std::shared_ptr<noob::skeletal_anim> anim;

@@ -1,5 +1,6 @@
 **/build/*
 engine/build/*
+engine/clangbuild/*
 **.*.sw*
 *.*.sw*
 #**/.git

@@ -1,4 +1,3 @@
-/*
 #include "Camera.hpp"
 
 void noob::camera::init(float move_speed, float heading_speed, const noob::vec3& initial_pos)
@@ -169,4 +168,3 @@ void noob::camera::update(double delta, const noob::camera::cam_movement& moveme
 		view_mat = noob::inverse(R) * noob::inverse(T);
 	}
 }
-*/

@@ -21,7 +21,7 @@
 #include "TransformHelper.hpp"
 #include "CharacterController.hpp"
 #include "Prop.hpp"
-
+//#include "Camera.hpp"
 
 namespace noob
 {
@@ -69,7 +69,7 @@ namespace noob
 
 			rp3d::RigidBody* body(const noob::vec3& position, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0));
 
-			
+		//	noob::camera cam;	
 		protected:
 			rp3d::DynamicsWorld dynamics_world;
 			noob::prepared_shaders shaders;
