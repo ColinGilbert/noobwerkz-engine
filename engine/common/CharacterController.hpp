@@ -29,8 +29,7 @@ namespace noob
 	class groundcast_callback : public rp3d::RaycastCallback
 		{
 			public:
-				//groundcast_callback(float _cast_distance, noob::prop* _prop_ptr, noob::vec3 _from, noob::vec3 _to) : cast_distance(_cast_distance), airborne(true), prop_ptr(_prop_ptr), from(_from), to(_to), slope(0.0, 0.0, 0.0) {}
-				groundcast_callback(noob::prop* _prop_ptr, noob::vec3 _from, noob::vec3 _to) : grounded(false), prop_ptr(_prop_ptr), from(_from), to(_to), slope(0.0, 0.0, 0.0) {}
+				groundcast_callback(noob::vec3 _from, noob::vec3 _to) : grounded(false), from(_from), to(_to), slope(0.0, 0.0, 0.0) {}
 				virtual rp3d::decimal notifyRaycastHit(const rp3d::RaycastInfo& info);
 				bool is_grounded() const { return grounded; }
 				noob::vec3 get_slope() const { return slope; }
@@ -39,7 +38,6 @@ namespace noob
 
 				//float cast_distance;
 				bool grounded;
-				noob::prop* prop_ptr;
 				noob::vec3 from, to, slope;				
 		};
 

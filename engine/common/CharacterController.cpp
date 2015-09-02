@@ -22,7 +22,7 @@ void noob::character_controller::update()
 	noob::vec3 to(from.v[0], from.v[1] - ((height+1)/2.0), from.v[2]);
 
 	rp3d::Ray ray(rp3d::Vector3(from.v[0], from.v[1], from.v[2]), rp3d::Vector3(to.v[0], to.v[1], to.v[2]));
-	noob::character_controller::groundcast_callback ground_cb(prop.get(), from, to);
+	noob::character_controller::groundcast_callback ground_cb(from, to);
 	world->raycast(ray, &ground_cb);
 	//logger::log("Raycasting!");
 	if (ground_cb.is_grounded()) 
@@ -100,13 +100,7 @@ void noob::character_controller::stop()
 rp3d::decimal noob::character_controller::groundcast_callback::notifyRaycastHit(const rp3d::RaycastInfo& info)
 {
 	grounded = true;
-	//noob::vec3 hit_point = noob::vec3(info.worldPoint.x, info.worldPoint.z, info.worldPoint.y);
 	slope = info.worldNormal;
-	//float d = std::sqrt(noob::get_squared_dist(from, hit_point));
-	//if (std::fabs(d) > std::fabs(cast_distance))
-	//{
-	//	airborne = false;
-		//logger::log("[Character] touching ground");
-	//}
+
 	return 0.0;
 }
