@@ -47,17 +47,6 @@ void noob::application::user_init()
 	std::shared_ptr<noob::prop> ground_prop = stage.make_prop("ground", ground_bod, stage.get_model("ground").lock(), stage.get_shader("moon").lock());
 	ground_prop->attach_hull(c, 0.0);
 	ground_prop->attach_hull(e, 0.0);
-	//for (noob::basic_mesh temp : c.convex_decomposition())
-	//{
-	//	ground_prop->attach_hull(temp, 0.0);
-	//}
-
-
-	//fmt::MemoryWriter output_mesh_filename;
-	//output_mesh_filename << "./terrain.bin";
-	//std::ofstream os(output_mesh_filename.c_str(), std::ios::binary);
-	//cereal::BinaryOutputArchive archive(os);
-	//archive(terrain);
 
 /*	
  	noob::physics_mesh terrain;

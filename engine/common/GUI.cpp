@@ -6,27 +6,7 @@
 #define GUI_FILL_LAYER_2 2
 #define GUI_FILL_LAYER_3 3
 #define GUI_TEXT_LAYER 4
-/*
-noob::vec2 noob::gui::element::to_topleft(const noob::vec2& position, const noob::vec2& window_dims, noob::gui::element::anchor coords)
-{
-	switch (coords)
-	{
-		case noob::gui::element::anchor_type::TOP_LEFT:
-			
-			break;
-		case noob::gui::element::anchor_type::TOP_RIGHT:
 
-			break;
-		case noob::gui::element::anchor_type::BOTTOM_LEFT:
-
-			break;
-		case noob::gui::element::anchor_type::TOP_RIGHT:
-
-			break;
-	}
-}
-
-*/
 void noob::gui::init(const std::string& prefix, size_t width, size_t height)
 {
 	_reading = std::unique_ptr<noob::ui_font>(new noob::ui_font());

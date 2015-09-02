@@ -58,10 +58,6 @@
 #include "ShaderVariant.hpp"
 #include "PhysicsUtils.hpp"
 
-// #include <chaiscript/chaiscript.hpp>
-// #include <chaiscript/chaiscript_stdlib.hpp>
-
-
 namespace noob
 {
 	class application
@@ -92,7 +88,7 @@ namespace noob
 			void touch(int pointerID, float x, float y, int action);
 			void set_archive_dir(const std::string & filepath);
 			void window_resize(uint32_t w, uint32_t h);
-			void key_input(char c);
+			void key_input(noob::key_type, noob::key_state);
 			void accept_ndof_data(const noob::ndof::data& info);
 
 		protected:
@@ -108,7 +104,5 @@ namespace noob
 			noob::voxel_world voxels;
 			noob::stage stage;
 			noob::mat4 view_mat;
-			// noob::transform_helper current_cam_transform;
-			// std::unique_ptr<chaiscript::ChaiScript> chai;
 	};
 }
