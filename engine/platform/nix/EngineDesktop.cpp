@@ -50,7 +50,9 @@ noob::key_state to_keystate(int action)
 			return noob::key_state::REPEAT;
 		case GLFW_PRESS:
 			return noob::key_state::PRESS;
-	}
+		default:
+			return noob::key_state::UNKNOWN;
+}
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
