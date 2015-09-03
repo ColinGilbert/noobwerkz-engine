@@ -1,9 +1,17 @@
 #include "Actor.hpp"
 
-
+/*
 void noob::actor::init(btDynamicsWorld* _world, const std::shared_ptr<noob::prop>& _prop, const std::shared_ptr<noob::skeletal_anim>& _anim)
 {
 	controller.init(_world, _prop);
+	anim = _anim;
+}
+*/
+void noob::actor::init(btDynamicsWorld* _world, const std::shared_ptr<noob::model>& _model, const std::shared_ptr<noob::prepared_shaders::info>& _uniforms, const std::shared_ptr<noob::skeletal_anim>& _anim)
+{
+	controller.init(_world);
+	model = _model;
+	uniforms = _uniforms;
 	anim = _anim;
 }
 
@@ -35,13 +43,6 @@ noob::vec3 noob::actor::get_destination() const
 	}
 	else return get_position();
 
-}
-
-
-noob::mat4 noob::actor::get_transform() const
-{
-	return controller.get_prop()->get_transform();
-	
 }
 
 

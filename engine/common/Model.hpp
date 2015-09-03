@@ -14,10 +14,13 @@
 #include "MathFuncs.hpp"
 #include "Mesh.hpp"
 
+
 namespace noob
 {
 	class model
 	{
+		friend class scenery;
+		//friend class scenery;
 		public:
 			~model();
 			

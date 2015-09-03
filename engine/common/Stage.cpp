@@ -65,14 +65,14 @@ void noob::stage::tear_down()
 void noob::stage::update(double dt)
 {
 	static double accum = 0.0;
-	if (!paused)
-	{
-		accum += dt;
-		if (accum >= 1.0 / 60.0)
+	//if (!paused)
+	//{
+	//	accum += dt;
+	//	if (accum >= 1.0 / 60.0)
 		{
 			dynamics_world->stepSimulation(1.0/60.0, 10);
-			accum -= 1.0/60;
-		}
+	//		accum -= 1.0/60;
+	//	}
 		for (auto actor_it : actors)
 		{
 			actor_it.second->update();//dt);//, true, false, true, false, false);//true);
@@ -88,15 +88,22 @@ void noob::stage::draw() const
 	for (auto a : actors)
 	{
 		draw(a.second);
-		//debug_draw(a.second);
 	}
 	for (auto p : props)
 	{
 		draw(p.second.get());
 	}
+	for (auto s : sceneries)
+	{
+		draw(s.second);
+	}
 	// TODO: Use frustum + physics world collisions to determine which items are visible, and then draw them.
 }
 
+void noob::stage::draw(const std::shared_ptr<noob::scenery>& s) const
+{
+	shaders.draw(s->get_model(),*(s->get_shading()), s->get_transform());
+}
 
 void noob::stage::draw(noob::prop* p) const
 {
@@ -106,7 +113,7 @@ void noob::stage::draw(noob::prop* p) const
 
 void noob::stage::draw(const std::shared_ptr<noob::actor>& a) const
 {
-	draw(a->get_prop());
+	shaders.draw(a->get_model(), *(a->get_shading()), a->get_transform());
 	//shaders.draw(a->get_prop()->model.get(), *(a->get_prop()->shading.get()), a->get_prop()->get_transform());
 }
 
@@ -116,17 +123,24 @@ void noob::stage::debug_draw(noob::prop* p) const
 }
 */
 
+std::shared_ptr<noob::scenery> noob::stage::make_scenery(const std::string& name, const noob::basic_mesh& _mesh, const std::shared_ptr<noob::prepared_shaders::info>& _uniforms, const noob::vec3& _position, const noob::versor& _orientation)
+{
+	sceneries[name] = std::make_shared<noob::scenery>(noob::scenery(dynamics_world, _mesh, _uniforms, _position, _orientation));
+	return sceneries[name];
+}
+
+
 void noob::stage::debug_draw(const std::shared_ptr<noob::actor>& a) const
 {
 //	debug_draw(a->get_prop());
 }
 
 
-std::shared_ptr<noob::actor> noob::stage::make_actor(const std::string& name, const std::shared_ptr<noob::prop>& _prop, const std::shared_ptr<noob::skeletal_anim>& _skel_anim)
+std::shared_ptr<noob::actor> noob::stage::make_actor(const std::string& name, const std::shared_ptr<noob::model>& _model, const std::shared_ptr<noob::prepared_shaders::info>& _shading, const std::shared_ptr<noob::skeletal_anim>& _skel_anim)
 {
 	// TODO: Optimize
 	auto a = std::make_shared<noob::actor>();
-	a->init(dynamics_world, _prop, _skel_anim);
+	a->init(dynamics_world, _model, _shading, _skel_anim);
 	actors[name] = a;
 	return actors[name];
 

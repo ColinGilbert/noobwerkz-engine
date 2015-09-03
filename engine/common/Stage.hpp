@@ -21,6 +21,7 @@
 #include "TransformHelper.hpp"
 #include "CharacterController.hpp"
 #include "Prop.hpp"
+#include "Scenery.hpp"
 
 #include <btBulletDynamicsCommon.h>
 
@@ -36,6 +37,7 @@ namespace noob
 			void update(double dt);
 			
 			void draw() const;
+			void draw(const std::shared_ptr<noob::scenery>& s) const;
 			void draw(noob::prop*) const;
 			void draw(const std::shared_ptr<noob::actor>&) const;
 			
@@ -45,8 +47,9 @@ namespace noob
 			void pause() { paused = true; }
 			void start() { paused = false; }
 
-			std::shared_ptr<noob::actor> make_actor(const std::string& name, const std::shared_ptr<noob::prop>&, const std::shared_ptr<noob::skeletal_anim>&);
+			std::shared_ptr<noob::actor> make_actor(const std::string& name, const std::shared_ptr<noob::model>&, const std::shared_ptr<noob::prepared_shaders::info>&, const std::shared_ptr<noob::skeletal_anim>&);
 			std::shared_ptr<noob::prop> make_prop(const std::string& name, btRigidBody*, const std::shared_ptr<noob::model>&, const std::shared_ptr<noob::prepared_shaders::info>&);
+			std::shared_ptr<noob::scenery> make_scenery(const std::string& _name, const noob::basic_mesh&, const std::shared_ptr<noob::prepared_shaders::info>&, const noob::vec3&, const noob::versor&);
 
 			// Loads a serialized model (from cereal binary)
 			bool add_model(const std::string& name, const std::string& filename);
@@ -106,6 +109,7 @@ namespace noob
 			
 			std::unordered_map<std::string, std::shared_ptr<noob::prop>> props;
 			std::unordered_map<std::string, std::shared_ptr<noob::actor>> actors;
+			std::unordered_map<std::string, std::shared_ptr<noob::scenery>> sceneries;
 			std::forward_list<noob::actor> debug_actors;
 			std::unordered_map<std::string, std::shared_ptr<noob::prepared_shaders::info>> shader_uniforms;
 			std::unordered_map<std::string, std::shared_ptr<noob::model>> models;

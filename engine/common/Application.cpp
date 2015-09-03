@@ -218,10 +218,11 @@ void noob::application::init()
 void noob::application::update(double delta)
 {
 	gui.window_dims(window_width, window_height);
-	user_update(delta);
+
 	// static double time_elapsed = 0.0;
 	// time_elapsed += delta;
 	stage.update(delta);
+	user_update(delta);
 /*
 	if (time_elapsed > 0.25)
 	{
