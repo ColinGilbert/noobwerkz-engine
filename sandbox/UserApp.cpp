@@ -36,7 +36,7 @@ void noob::application::user_init()
 void noob::application::user_update(double dt)
 {
 	gui.text("THE NIMBLE MONKEY GRABS THE APRICOT", 50.0, 50.0, noob::gui::font_size::header);
-	player_character->move(false, false, false, false, true);//true);
+	player_character->move(true, false, false, false, false);//true);
 //	stage.draw(player_character);
 	logger::log(player_character->get_debug_info());//player_character->print_debug_info();
 }

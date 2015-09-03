@@ -117,7 +117,7 @@ if (on_ground())
 	//btVector3 forward_dir = xform.getBasis()[2];
 	//forward_dir.normalize();
 	btVector3 walk_direction = btVector3(0.0, 0.0, 0.0);
-	btScalar walk_speed = 2.0 * dt;
+	btScalar walk_speed = 2.0;
 
 	
 	btVector3 forward_dir(walk_speed, 0.0, 0.0);
