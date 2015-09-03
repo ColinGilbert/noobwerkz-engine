@@ -7,13 +7,6 @@
 
 void noob::character_controller::init(btDynamicsWorld* _dynamics_world, btScalar _height, btScalar _width, btScalar _step_height, float _timestep)
 {
-	//std::array<btVector3, 2> spherePositions;
-	//std::array<btScalar, 2> sphereRadii;
-
-	//sphereRadii[0] = width;
-	//sphereRadii[1] = width;
-	//spherePositions[0] = btVector3(0.0, (height/btScalar(2.0) - width), 0.0);
-	//spherePositions[1] = btVector3(0.0, (-height/btScalar(2.0) + width), 0.0);
 	dynamics_world = _dynamics_world;
 	height = _height;
 	width = _width;
@@ -50,10 +43,10 @@ void noob::character_controller::destroy(btDynamicsWorld* dynamics_world)
 }
 
 
-btRigidBody* noob::character_controller::get_body()
-{
-	return rigid_body;
-}
+//btRigidBody* noob::character_controller::get_body()
+//{
+//	return rigid_body;
+//}
 
 
 void noob::character_controller::set_position(const noob::vec3& pos)
@@ -86,7 +79,7 @@ void noob::character_controller::update()
 	ray_source[1] = xform.getOrigin();
 
 
-	ray_target[0] = ray_source[0] + btVector3(0.0, -2.0, 0.0);
+	ray_target[0] = ray_source[0] + btVector3(0.0, -(half_height+1.0), 0.0);
 	ray_target[1] = ray_source[1] + btVector3(2.0, 0.0, 0.0);
 
 
@@ -114,12 +107,54 @@ void noob::character_controller::update()
 
 void noob::character_controller::step(bool forward, bool backward, bool left, bool right, bool jump)
 {
+if (on_ground())
+{
+	btTransform xform;
+	rigid_body->getMotionState()->getWorldTransform(xform);
+
+	btVector3 linear_velocity = rigid_body->getLinearVelocity();
+	btScalar speed = rigid_body->getLinearVelocity().length();
+	//btVector3 forward_dir = xform.getBasis()[2];
+	//forward_dir.normalize();
+	btVector3 walk_direction = btVector3(0.0, 0.0, 0.0);
+	btScalar walk_speed = 2.0 * dt;
+
+	
+	btVector3 forward_dir(walk_speed, 0.0, 0.0);
+
+
+	if (forward) walk_direction += forward_dir;
+	if (backward) walk_direction -= forward_dir;
+
+	if (!forward && !backward && !left && !right && !jump && on_ground())
+	{
+		// Dampen when on the ground and not being moved by the player
+		linear_velocity *= btScalar(0.2);
+		//rigid_body->setLinearVelocity(linear_velocity);
+	}
+	else
+	{
+		if (speed < max_linear_velocity)
+		{
+			linear_velocity = linear_velocity + walk_direction * walk_speed;
+			//rigid_body->setLinearVelocity(velocity);
+		}
+	}
+	if (jump)
+	{
+		linear_velocity = linear_velocity + btVector3(0.0, 6.0, 0.0);
+	}
+
+	rigid_body->setLinearVelocity(linear_velocity);
+}
+}
+//rigid_body->getMotionState()->setWorldTransform(xform);
+	//rigid_body->setCenterOfMassTransform(xform);
+
 /*
 	if (on_ground())
 	{
-		btTransform xform;
-		rigid_body->getMotionState()->getWorldTransform(xform);
-
+	
 		// Handle turning
 		//if (left) turn_angle -= dt * turn_velocity;
 		//if (right) turn_angle += dt * turn_velocity;
@@ -156,8 +191,8 @@ void noob::character_controller::step(bool forward, bool backward, bool left, bo
 		rigid_body->setCenterOfMassTransform(xform);
 	}
 	*/
-}
 
+/*
 bool noob::character_controller::can_jump() const
 {
 	return on_ground();
@@ -174,10 +209,12 @@ void noob::character_controller::jump()
 	btScalar magnitude = (btScalar(1.0)/rigid_body->getInvMass()) * btScalar(8.0);
 	rigid_body->applyCentralImpulse(up * magnitude);
 }
+*/
+
 
 bool noob::character_controller::on_ground() const
 {
-	return !airborne;
+	return (!(airborne && obstacle));
 	//	return ray_lambda[0] < btScalar(1.0);
 }
 

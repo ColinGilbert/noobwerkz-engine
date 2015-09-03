@@ -17,7 +17,7 @@ namespace noob
 			void init(btDynamicsWorld* _dynamics_world, btScalar _height = 2.0, btScalar _width = 0.25, btScalar _step_height = 0.25, float _timestep = 1.0 / 60.0);
 			void destroy(btDynamicsWorld* dynamics_world);
 
-			btRigidBody* get_body();
+			// btRigidBody* get_body();
 
 			void update();
 			void step(bool forward, bool backward, bool left, bool right, bool jump);
