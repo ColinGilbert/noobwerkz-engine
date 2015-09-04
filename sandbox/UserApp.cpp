@@ -42,11 +42,17 @@ void noob::application::user_init()
 	noob::basic_mesh f = e.transform(t.get_matrix());
 	noob::basic_mesh g = noob::basic_mesh::csg(d, f, noob::csg_op::UNION);
 	stage.add_model("ground", g);
+
+	// This is fine:
+	std::shared_ptr<noob::drawable> drawable_pointer = stage.make_drawable("ground", stage.get_model("ground").lock(), stage.light("default").lock(), stage.reflectance("default").lock(), stage.get_shader("moon").lock());
+	std::shared_ptr<noob::scenery> ground = stage.make_scenery("ground", drawable_pointer, noob::vec3(0.0, 0.0, 0.0));
+
 	
-	std::shared_ptr<noob::drawable> d2 = stage.make_drawable("ground", stage.get_model("ground").lock(), stage.light("default").lock(), stage.reflectance("default").lock(), stage.get_shader("moon").lock());
-	
-	//std::shared_ptr<noob::drawable> d3 = stage.get_drawable("ground").lock();
-	std::shared_ptr<noob::scenery> ground = stage.make_scenery("ground", d2, noob::vec3(0.0, 0.0, 0.0));
+	// This cannot seem to find the drawable object in the std::unoredered_map. WTF?
+	// if (std::shared_ptr<noob::drawable> drawable_pointer_two = stage.get_drawable("ground").lock())
+	// {
+	//	std::shared_ptr<noob::scenery> ground = stage.make_scenery("ground", drawable_pointer_two, noob::vec3(0.0, 0.0, 0.0));
+	// }
 }
 
 
@@ -54,5 +60,4 @@ void noob::application::user_update(double dt)
 {
 	gui.text("THE NIMBLE MONKEY GRABS THE APRICOT", 50.0, 50.0, noob::gui::font_size::header);
 	player_character->move(true, false, false, false, true);
-	//logger::log(player_character->get_debug_info());
 }
