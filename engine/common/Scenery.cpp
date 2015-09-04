@@ -2,16 +2,24 @@
 
 #include "TransformHelper.hpp"
 
-noob::scenery::scenery(btDiscreteDynamicsWorld* _world, const noob::basic_mesh& _mesh, const std::shared_ptr<noob::prepared_shaders::info>& _uniforms, const noob::vec3& _position, const noob::versor& _orientation) : world(_world), uniforms(_uniforms)
+noob::scenery::scenery(btDiscreteDynamicsWorld* _world, const std::shared_ptr<noob::drawable>& _drawable, const noob::vec3& _position, const noob::versor& _orientation)
 {
-	model = std::make_unique<noob::model>(_mesh);
+	logger::log("scenery - contructing");
+	world = _world;
+	logger::log("scenery - world pointer copied");
+	drawable = _drawable;
+	logger::log("scenery - drawable pointer copied");
+	noob::model* model  = drawable->get_model();
+	logger::log("scenery - got model");
 	btTriangleMesh* phyz_mesh = new btTriangleMesh();
+	logger::log("scenery - got trimesh");
 
 	for (size_t i = 0; i < model->meshes[0].indices.size(); i += 3)
 	{
 		uint16_t index_1 = model->meshes[0].indices[i];
 		uint16_t index_2 = model->meshes[0].indices[i+1];
 		uint16_t index_3 = model->meshes[0].indices[i+2];
+
 		std::array<float, 3> v1 = model->meshes[0].vertices[index_1].position;
 		std::array<float, 3> v2 = model->meshes[0].vertices[index_2].position;
 		std::array<float, 3> v3 = model->meshes[0].vertices[index_3].position;

@@ -3,12 +3,14 @@
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
 #include "Model.hpp"
+#include "Light.hpp"
 
 namespace noob
 {
 	class triplanar_renderer
 	{
 		public:
+			
 			struct uniform_info
 			{
 				std::array<noob::vec4,4> colours;

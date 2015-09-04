@@ -17,48 +17,6 @@ namespace noob
 	class graphics
 	{
 		public:
-		/*
-			struct mesh_vertex
-			{
-				mesh_vertex() : pos({0.0, 0.0, 0.0}), normal({0.0, 0.0, 0.0}), uv({0.0, 0.0}), tangent({0.0, 0.0, 0.0}), bitangent({0.0, 0.0, 0.0}), bone_indices({0, 0, 0, 0}), bone_weights({0.0, 0.0, 0.0, 0.0}) {}
-				std::array<float, 3> pos;
-				std::array<float, 3> normal;
-				std::array<float, 2> uv;
-				std::array<float, 3> tangent;
-				std::array<float, 3> bitangent;
-				std::array<uint8_t, 4> bone_indices;
-				std::array<float, 4> bone_weights;
-
-				static void init()
-				{
-					ms_decl
-						.begin()
-						.add(bgfx::Attrib::Position,  3, bgfx::AttribType::Float)
-						.add(bgfx::Attrib::Normal,    3, bgfx::AttribType::Float)
-						.add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float)
-						.add(bgfx::Attrib::Tangent,   3, bgfx::AttribType::Float)
-						.add(bgfx::Attrib::Bitangent, 3, bgfx::AttribType::Float)
-						.add(bgfx::Attrib::Indices,   4, bgfx::AttribType::Uint8, false, true)
-						.add(bgfx::Attrib::Weight,    4, bgfx::AttribType::Float)
-						.end();
-				}
-				static bgfx::VertexDecl ms_decl;
-			};
-
-			struct vertex2d
-			{
-				float x;
-				float y;
-				static void init()
-				{
-					ms_decl
-						.begin()
-						.add(bgfx::Attrib::Position, 2, bgfx::AttribType::Float)
-						.end();
-				}
-				static bgfx::VertexDecl ms_decl;
-			};
-		*/
 			struct uniform
 			{
 				void init(const std::string& name, bgfx::UniformType::Enum _type, uint16_t _count = 1)
@@ -93,14 +51,10 @@ namespace noob
 			static void init(uint32_t width, uint32_t height);
 			static void destroy();
 			static void frame(uint32_t width, uint32_t height);
-			// static void set_file_prefix(const std::string& p);
 			
 			// ---------------- Asset loaders (builds from files and returns handles) -----------------
 			static bgfx::ShaderHandle load_shader(const std::string& filename);
 			static bgfx::ProgramHandle load_program(const std::string& vs_filename, const std::string& fs_filename);
-
-			//static bgfx::ShaderHandle load_shader(const char* c);
-
 
 			// TODO: Implement this 
 			// static bgfx::ProgramHandle compile_and_load_program(const std::string& vs_source_filename, const std::string& fs_source_filename, const std::string& varyings_filename);

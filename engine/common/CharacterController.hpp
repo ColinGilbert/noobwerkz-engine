@@ -12,7 +12,7 @@ namespace noob
 	class character_controller 
 	{
 		public:
-				character_controller() : half_height(1.0), shape(nullptr), rigid_body(nullptr), dynamics_world(nullptr), ray_lambda({ 1.0, 1.0 }), airborne(true), obstacle(true), turn_angle(1.0), dt(1.0/60.0), max_linear_velocity(10.0), walk_velocity(8.0), turn_velocity(1.0) {}
+				character_controller() : half_height(1.0), shape(nullptr), rigid_body(nullptr), dynamics_world(nullptr), ray_lambda(1.0), airborne(true), obstacle(true), turn_angle(1.0), dt(1.0/60.0), max_linear_velocity(10.0), walk_velocity(8.0), turn_velocity(1.0) {}
 
 			void init(btDynamicsWorld* _dynamics_world, btScalar _height = 2.0, btScalar _width = 0.25, btScalar _step_height = 0.25, float _timestep = 1.0 / 60.0);
 			void destroy(btDynamicsWorld* dynamics_world);
@@ -43,10 +43,10 @@ namespace noob
 			btRigidBody* rigid_body;
 			btDynamicsWorld* dynamics_world;
 
-			std::array<btVector3, 2> ray_source;
-			std::array<btVector3, 2> ray_target;
-			std::array<btScalar, 2> ray_lambda;
-			std::array<btVector3, 2> ray_normal;
+			btVector3 ray_source;
+			btVector3 ray_target;
+			btScalar ray_lambda;
+			btVector3 ray_normal;
 
 			bool airborne, obstacle;
 

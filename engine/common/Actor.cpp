@@ -7,11 +7,10 @@ void noob::actor::init(btDynamicsWorld* _world, const std::shared_ptr<noob::prop
 	anim = _anim;
 }
 */
-void noob::actor::init(btDynamicsWorld* _world, const std::shared_ptr<noob::model>& _model, const std::shared_ptr<noob::prepared_shaders::info>& _uniforms, const std::shared_ptr<noob::skeletal_anim>& _anim)
+void noob::actor::init(btDynamicsWorld* _world, const std::shared_ptr<noob::drawable>& _drawable, const std::shared_ptr<noob::skeletal_anim>& _anim)
 {
 	controller.init(_world);
-	model = _model;
-	uniforms = _uniforms;
+	drawable = _drawable;
 	anim = _anim;
 }
 
@@ -62,7 +61,7 @@ void noob::actor::clear_path()
 }
 
 
-std::vector<noob::vec3> noob::actor::get_path_vector() const
+std::vector<noob::vec3> noob::actor::get_path() const
 {
 	std::vector<noob::vec3> p;
 	p.reserve(path.size());

@@ -5,6 +5,7 @@
 #include "stb_image.h"
 #include "Graphics.hpp"
 
+#include "format.h"
 //#include "shaderc.h"
 
 // bgfx::VertexDecl noob::graphics::mesh_vertex::ms_decl;
@@ -30,9 +31,7 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	shad.program = h;
 
 	noob::graphics::add_shader(std::string("invalid"), shad);
-
 	noob::graphics::add_uniform(std::string("invalid"), bgfx::UniformType::Enum::Int1, 0);
-
 	noob::graphics::add_sampler(std::string("invalid"));
 }
 
@@ -108,27 +107,27 @@ bgfx::TextureHandle noob::graphics::load_texture(const std::string& friendly_nam
 	uint8_t* tex_data = stbi_load(filename.c_str(), &width, &height, &channels, 0);
 
 	{
-		std::stringstream ss;
-		ss << "Loading Texture: " << filename << ", width: " << width << ", height: " << height << ", channels: " << channels;
-		logger::log(ss.str());
+		fmt::MemoryWriter ww;
+		ww << "Loading Texture: " << filename << ", width: " << width << ", height: " << height << ", channels: " << channels;
+		logger::log(ww.str());
 	}
 
 	// TODO: Find out why mips break the rendering
 	std::string texture_file = noob::utils::load_file_as_string(filename);
 	
 	{
-		std::stringstream ss;
-		ss << "Loaded texture size = " << texture_file.size();
-		logger::log(ss.str());
+		fmt::MemoryWriter ww;
+		ww << "Loaded texture size = " << texture_file.size();
+		logger::log(ww.str());
 	}
 	
 	bgfx::TextureInfo tex_info;
 	bgfx::TextureHandle tex = bgfx::createTexture(bgfx::copy(&texture_file[0], sizeof(char) * texture_file.size()), BGFX_TEXTURE_NONE, 0, &tex_info);
 
 	{
-		std::stringstream ss;
-		ss << "BGFX texture info: storage size = " << tex_info.storageSize << ", width = " << tex_info.width << ", height = " << tex_info.height << ", depth = " << tex_info.depth << ", mips = " << (int)tex_info.numMips << ", bpp = " << (int)tex_info.bitsPerPixel << ", cube map? " << tex_info.cubeMap;
-		logger::log(ss.str());
+		fmt::MemoryWriter ww;
+		ww << "BGFX texture info: storage size = " << tex_info.storageSize << ", width = " << tex_info.width << ", height = " << tex_info.height << ", depth = " << tex_info.depth << ", mips = " << (int)tex_info.numMips << ", bpp = " << (int)tex_info.bitsPerPixel << ", cube map? " << tex_info.cubeMap;
+		logger::log(ww.str());
 	}
 
 	noob::graphics::global_textures.insert(std::make_pair(friendly_name, tex));

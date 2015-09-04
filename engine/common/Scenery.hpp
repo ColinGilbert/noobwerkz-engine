@@ -6,24 +6,23 @@
 #include "Model.hpp"
 #include "MathFuncs.hpp"
 #include <btBulletDynamicsCommon.h>
-#include "ShaderVariant.hpp"
+#include "Drawable.hpp"
+
 namespace noob
 {
 	class scenery
 	{
 		public:
-			scenery(btDiscreteDynamicsWorld* _world, const noob::basic_mesh& _mesh, const std::shared_ptr<noob::prepared_shaders::info>& _uniforms, const noob::vec3& _position, const noob::versor& _orientation);			
-			void set_shader(const std::shared_ptr<noob::prepared_shaders::info>& _uniforms) { uniforms = _uniforms; }
-			noob::prepared_shaders::info* get_shading() const { return uniforms.get(); }
+			scenery(btDiscreteDynamicsWorld* _world, const std::shared_ptr<noob::drawable>&, const noob::vec3& _position, const noob::versor& _orientation);
+
+			noob::drawable* get_drawable() const { return drawable.get(); }
 			noob::mat4 get_transform() const { return transform; }
-			noob::model* get_model() const { return const_cast<noob::model*>(model.get()); }	
+
 		protected:
 			btRigidBody* body;
 			btBvhTriangleMeshShape* shape;
 			btDiscreteDynamicsWorld* world;
-
-			std::shared_ptr<noob::prepared_shaders::info> uniforms;
-			std::unique_ptr<noob::model> model;
+			std::shared_ptr<noob::drawable> drawable;
 			noob::mat4 transform;
 
 	};
