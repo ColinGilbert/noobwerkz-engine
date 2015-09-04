@@ -11,16 +11,17 @@ bool noob::stage::init()
 
 	shaders.init();
 
-	size_t sphere = add_model(noob::basic_mesh::sphere(0.5));
-	size_t cube = add_model(noob::basic_mesh::cube(1.0, 1.0, 1.0));
-	size_t cylinder = add_model(noob::basic_mesh::cylinder(1.0, 1.0));
-	size_t cone = add_model(noob::basic_mesh::cone(1.0, 1.0));
+	set_model_name(add_model(noob::basic_mesh::sphere(0.5)), "unit-sphere");
+	set_model_name(add_model(noob::basic_mesh::cube(1.0, 1.0, 1.0)), "unit-cube");
+	set_model_name(add_model(noob::basic_mesh::cylinder(0.5, 1.0)), "unit-cylinder");
+	set_model_name(add_model(noob::basic_mesh::cone(0.5, 1.0)), "unit-cone");
 
-	size_t skeleton = add_skeleton("seymour.skel.ozz");
-
+	set_skeleton_name(add_skeleton("seymour.skel.ozz"), "human");
+	
 	noob::basic_renderer::uniform_info dbg_shader;
 	dbg_shader.colour = noob::vec4(0.0, 0.3, 0.3, 1.0);
-	size_t debug_shader_id = add_shader(dbg_shader);
+	
+	set_shader_name(add_shader(dbg_shader),"debug");
 
 	logger::log("[Stage] init complete.");
 	return true;
@@ -84,14 +85,7 @@ void noob::stage::draw() const
 		noob::scenery* s = sceneries[i].get();
 		draw(s->drawable, s->get_transform());
 	}
-	/*for (auto p : props)
-	  {
-	  draw(p->get_drawable(), p->get_transform());
-	  }
-	  for (auto s : sceneries)
-	  {
-	  draw(s->get_drawable(), s->get_transform());
-	  }*/
+
 	// TODO: Use frustum + physics world collisions to determine which items are visible, and then draw them.
 }
 
@@ -104,13 +98,15 @@ void noob::stage::draw(noob::drawable* d, const noob::mat4& transform) const
 
 size_t noob::stage::add_model(const std::string& filename)
 {
-	return 0;
+	models.push_back(std::make_unique<noob::model>(filename));
+	return models.size();
 }
 
 
-size_t noob::stage::add_model(const noob::basic_mesh&)
+size_t noob::stage::add_model(const noob::basic_mesh& _mesh)
 {
-	return 0;
+	models.push_back(std::make_unique<noob::model>(_mesh));
+	return models.size();
 }
 
 
@@ -146,148 +142,377 @@ size_t noob::stage::add_scenery(size_t drawable, const noob::vec3& _position, co
 
 size_t noob::stage::add_light(const noob::light& arg)
 {
-	return 0;
+	lights.push_back(arg);
+	return lights.size();
 }
 
 
 size_t noob::stage::add_reflectance(const noob::reflectance& arg)
 {
-	return 0;
+	reflectances.push_back(arg);
+	return reflectances.size();
 }
 
 
 size_t noob::stage::add_shader(const noob::prepared_shaders::info& arg)
 {
-	return 0;
+	shader_uniforms.push_back(arg);
+	return shader_uniforms.size();
 }
 
 
 void noob::stage::set_light(size_t index, const noob::light& arg)
 {
-
+	if (index < lights.size())
+	{
+		lights[index] = arg;
+	}
 }
 
 
 void noob::stage::set_reflectance(size_t index, const noob::reflectance& arg)
 {
-
+	if (index < reflectances.size())
+	{
+		reflectances[index] = arg;
+	}
 }
 
 
 void noob::stage::set_shader(size_t index, const noob::prepared_shaders::info& arg)
 {
-
+	if (index < shader_uniforms.size())
+	{
+		shader_uniforms[index] = arg;
+	}
 }
 
 
-
-size_t noob::stage::get_model_id(const std::string&) const
+void noob::stage::set_model_name(size_t index, const std::string& name)
 {
-	return 0;
+	if (model_exists(index))
+	{
+		model_names[name] = index;
+	}
 }
 
 
-size_t noob::stage::get_drawable_id(const std::string&) const
+void noob::stage::set_drawable_name(size_t index, const std::string& name)
 {
-	return 0;
+	if (drawable_exists(index))
+	{
+		drawable_names[name] = index;
+	}
 }
 
 
-size_t noob::stage::get_skeleton_id(const std::string&) const
+void noob::stage::set_skeleton_name(size_t index, const std::string& name)
 {
-	return 0;
+	if (skeleton_exists(index))
+	{
+		skeleton_names[name] = index;
+	}
 }
 
 
-size_t noob::stage::get_actor_id(const std::string&) const
+void noob::stage::set_actor_name(size_t index, const std::string& name)
 {
-	return 0;
+	if (actor_exists(index))
+	{
+		actor_names[name] = index;
+	}
 }
 
 
-size_t noob::stage::get_prop_id(const std::string&) const
+void noob::stage::set_prop_name(size_t index, const std::string& name)
 {
-	return 0;
+	if (prop_exists(index))
+	{
+		prop_names[name] = index;
+	}
 }
 
 
-size_t noob::stage::get_scenery_id(const std::string&) const
+void noob::stage::set_scenery_name(size_t index, const std::string& name)
 {
-	return 0;
+	if (scenery_exists(index))
+	{
+		scenery_names[name] = index;
+	}
 }
 
 
-size_t noob::stage::get_light_id(const std::string&) const
+void noob::stage::set_light_name(size_t index, const std::string& name)
 {
-	return 0;
+	if (light_exists(index))
+	{
+		light_names[name] = index;
+	}
 }
 
 
-size_t noob::stage::get_reflectance_id(const std::string&) const
+void noob::stage::set_reflectance_name(size_t index, const std::string& name)
 {
-	return 0;
+	if (reflectance_exists(index))
+	{
+		reflectance_names[name] = index;
+	}
 }
 
 
-size_t noob::stage::get_shader_id(const std::string&) const
+void noob::stage::set_shader_name(size_t index, const std::string& name)
 {
-	return 0;
+	if (shader_exists(index))
+	{
+		shading_names[name] = index;
+	}
 }
 
 
-noob::model* noob::stage::get_model(size_t) const
+size_t noob::stage::get_model_id(const std::string& name) const
 {
-	return nullptr;
+	auto search = model_names.find(name);
+	if (search == model_names.end())
+	{
+		return 0;
+	}
+	return search->second;
 }
 
 
-noob::drawable* noob::stage::get_drawable(size_t) const
+size_t noob::stage::get_drawable_id(const std::string& name) const
 {
-	return nullptr;
+	auto search = drawable_names.find(name);
+	if (search == drawable_names.end())
+	{
+		return 0;
+	}
+	return search->second;
 }
 
 
-noob::skeletal_anim* noob::stage::get_skeleton(size_t) const
+size_t noob::stage::get_skeleton_id(const std::string& name) const
 {
-	return nullptr;
+	auto search = skeleton_names.find(name);
+	if (search == skeleton_names.end())
+	{
+		return 0;
+	}
+	return search->second;
 }
 
 
-noob::actor* noob::stage::get_actor(size_t) const
+size_t noob::stage::get_actor_id(const std::string& name) const
 {
-	return nullptr;
+	auto search = actor_names.find(name);
+	if (search == actor_names.end())
+	{
+		return 0;
+	}
+	return search->second;
 }
 
 
-noob::prop* noob::stage::get_prop(size_t) const
+size_t noob::stage::get_prop_id(const std::string& name) const
 {
-	return nullptr;
+	auto search = prop_names.find(name);
+	if (search == prop_names.end())
+	{
+		return 0;
+	}
+	return search->second;
 }
 
 
-noob::scenery* noob::stage::get_scenery(size_t) const
+size_t noob::stage::get_scenery_id(const std::string& name) const
 {
-	return nullptr;
+	auto search = scenery_names.find(name);
+	if (search == scenery_names.end())
+	{
+		return 0;
+	}
+	return search->second;
+
 }
 
 
-noob::light* noob::stage::get_light(size_t) const
+size_t noob::stage::get_light_id(const std::string& name) const
 {
-	return nullptr;
+	auto search = light_names.find(name);
+	if (search == light_names.end())
+	{
+		return 0;
+	}
+	return search->second;
 }
 
-
-noob::reflectance* noob::stage::get_reflectance(size_t) const
+size_t noob::stage::get_reflectance_id(const std::string& name) const
 {
-	return nullptr;
+	auto search = reflectance_names.find(name);
+	if (search == reflectance_names.end())
+	{
+		return 0;
+	}
+	return search->second;
 }
 
 
-noob::prepared_shaders::info* noob::stage::get_shader(size_t) const
+size_t noob::stage::get_shader_id(const std::string& name) const
 {
-	return nullptr;
+	auto search = shading_names.find(name);
+	if (search == shading_names.end())
+	{
+		return 0;
+	}
+	return search->second;
 }
 
+
+noob::model* noob::stage::get_model(size_t _index) const
+{
+	if (model_exists(_index))
+	{
+		return models[0].get();
+	}
+	return models[_index].get();
+}
+
+
+noob::drawable* noob::stage::get_drawable(size_t _index) const
+{
+	if (drawable_exists(_index))
+	{
+		return drawables[0].get();
+	}
+	return drawables[_index].get();
+
+}
+
+
+noob::skeletal_anim* noob::stage::get_skeleton(size_t _index) const
+{
+	if (skeleton_exists(_index))
+	{
+		return skeletons[0].get();
+	}
+	return skeletons[_index].get();
+
+}
+
+
+noob::actor* noob::stage::get_actor(size_t _index) const
+{
+	if (actor_exists(_index))
+	{
+		return actors[0].get();
+	}
+	return actors[_index].get();
+}
+
+
+noob::prop* noob::stage::get_prop(size_t _index) const
+{
+	if (prop_exists(_index))
+	{
+		return props[0].get();
+	}
+	return props[_index].get();
+
+}
+
+
+noob::scenery* noob::stage::get_scenery(size_t _index) const
+{
+	if (scenery_exists(_index))
+	{
+		return sceneries[0].get();
+	}
+	return sceneries[_index].get();
+}
+
+
+const noob::light* noob::stage::get_light(size_t _index) const
+{
+	if (light_exists(_index))
+	{
+		return &lights[0];
+	}
+	return &lights[_index];
+}
+
+
+const noob::reflectance* noob::stage::get_reflectance(size_t _index) const
+{
+	if (reflectance_exists(_index))
+	{
+		return &reflectances[0];
+	}
+	return &reflectances[_index];
+}
+
+
+const noob::prepared_shaders::info* noob::stage::get_shader(size_t _index) const
+{
+	if (shader_exists(_index))
+	{
+		return &shader_uniforms[0];
+	}
+	return &shader_uniforms[_index];
+}
+
+
+bool noob::stage::model_exists(size_t index) const
+{
+	return (index <= models.size());
+}
+
+
+bool noob::stage::drawable_exists(size_t index) const
+{
+	return (index <= drawables.size());
+}
+
+
+bool noob::stage::skeleton_exists(size_t index) const
+{
+	return (index <= skeletons.size());
+}
+
+
+bool noob::stage::actor_exists(size_t index) const
+{
+	return (index <= actors.size());
+}
+
+
+bool noob::stage::prop_exists(size_t index) const
+{
+	return (index <= props.size());
+}
+
+
+bool noob::stage::scenery_exists(size_t index) const
+{
+	return (index <= sceneries.size());
+}
+
+
+bool noob::stage::light_exists(size_t index) const
+{
+	return (index <= lights.size());
+}
+
+
+bool noob::stage::reflectance_exists(size_t index) const 
+{
+	return (index <= reflectances.size());
+}
+
+
+bool noob::stage::shader_exists(size_t index) const
+{
+	return (index <= shader_uniforms.size());
+}
 
 
 btRigidBody* noob::stage::body(btCollisionShape* shape, float mass, const noob::vec3& pos, const noob::versor& orientation)

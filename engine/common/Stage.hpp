@@ -39,7 +39,7 @@ namespace noob
 			void update(double dt);
 			
 			void draw() const;
-
+			// TODO: Replace many of these functions with type-safe, templated code
 			// Loads a serialized model (from cereal binary)
 			size_t add_model(const std::string& filename);
 			size_t add_model(const noob::basic_mesh&);
@@ -87,10 +87,19 @@ namespace noob
 			noob::actor* get_actor(size_t) const;
 			noob::prop* get_prop(size_t) const;
 			noob::scenery* get_scenery(size_t) const;
-			noob::light* get_light(size_t) const;
-			noob::reflectance* get_reflectance(size_t) const;
-			noob::prepared_shaders::info* get_shader(size_t) const;
+			const noob::light* get_light(size_t) const;
+			const noob::reflectance* get_reflectance(size_t) const;
+			const noob::prepared_shaders::info* get_shader(size_t) const;
 
+			bool model_exists(size_t) const;
+			bool drawable_exists(size_t) const;
+			bool skeleton_exists(size_t) const;
+			bool actor_exists(size_t) const;
+			bool prop_exists(size_t) const;
+			bool scenery_exists(size_t) const;
+			bool light_exists(size_t) const;
+			bool reflectance_exists(size_t) const;
+			bool shader_exists(size_t) const;
 
 			// TODO: Replace with tags(?)
 			btRigidBody* body(btCollisionShape*, float mass, const noob::vec3& pos, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0));
