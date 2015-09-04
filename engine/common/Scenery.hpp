@@ -12,17 +12,17 @@ namespace noob
 {
 	class scenery
 	{
+		friend class stage;
 		public:
-			scenery(btDiscreteDynamicsWorld* _world, const std::shared_ptr<noob::drawable>&, const noob::vec3& _position, const noob::versor& _orientation);
+			void init(btDiscreteDynamicsWorld* _world, noob::drawable*, const noob::vec3& _position, const noob::versor& _orientation);
 
-			noob::drawable* get_drawable() const { return drawable.get(); }
 			noob::mat4 get_transform() const { return transform; }
 
 		protected:
 			btRigidBody* body;
 			btBvhTriangleMeshShape* shape;
 			btDiscreteDynamicsWorld* world;
-			std::shared_ptr<noob::drawable> drawable;
+			noob::drawable* drawable;
 			noob::mat4 transform;
 
 	};

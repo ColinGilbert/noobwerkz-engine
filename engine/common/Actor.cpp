@@ -7,7 +7,7 @@ void noob::actor::init(btDynamicsWorld* _world, const std::shared_ptr<noob::prop
 	anim = _anim;
 }
 */
-void noob::actor::init(btDynamicsWorld* _world, const std::shared_ptr<noob::drawable>& _drawable, const std::shared_ptr<noob::skeletal_anim>& _anim)
+void noob::actor::init(btDynamicsWorld* _world, noob::drawable* _drawable, noob::skeletal_anim* _anim)
 {
 	controller.init(_world);
 	drawable = _drawable;

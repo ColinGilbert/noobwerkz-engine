@@ -6,18 +6,19 @@
 
 #include "MathFuncs.hpp"
 #include "Drawable.hpp"
-
+#include "Stage.hpp"
 
 namespace noob
 {
 	class prop
 	{
+		friend class stage;
 		public:
 			prop() : body(nullptr), drawing_scale(noob::vec3(1.0, 1.0, 1.0)) {}
 
-			void init(btRigidBody*, const std::shared_ptr<drawable>&);
+			void init(btRigidBody*, noob::drawable*);
 		
-			noob::drawable* get_drawable() const { return drawable.get(); }
+			// noob::drawable* get_drawable() const { return drawable; }
 
 			void set_position(const noob::vec3&);
 			void set_orientation(const noob::versor&);
@@ -32,7 +33,7 @@ namespace noob
 		protected:	
 			btRigidBody* body;
 			
-			std::shared_ptr<noob::drawable> drawable;
+			noob::drawable* drawable;
 			noob::vec3 drawing_scale;
 	};
 }

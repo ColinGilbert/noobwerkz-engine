@@ -2,7 +2,7 @@
 
 #include "TransformHelper.hpp"
 
-noob::scenery::scenery(btDiscreteDynamicsWorld* _world, const std::shared_ptr<noob::drawable>& _drawable, const noob::vec3& _position, const noob::versor& _orientation)
+void noob::scenery::init(btDiscreteDynamicsWorld* _world, noob::drawable* _drawable, const noob::vec3& _position, const noob::versor& _orientation)
 {
 	logger::log("scenery - contructing");
 	world = _world;

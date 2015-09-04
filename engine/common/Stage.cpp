@@ -8,25 +8,19 @@ bool noob::stage::init()
 	solver = new btSequentialImpulseConstraintSolver();
 	dynamics_world = new btDiscreteDynamicsWorld(collision_dispatcher, broadphase, solver, collision_configuration);
 	dynamics_world->setGravity(btVector3(0, -10, 0));
-	
+
 	shaders.init();
 
-	add_model("unit-sphere", noob::basic_mesh::sphere(0.5));
-	add_model("unit-cube", noob::basic_mesh::cube(1.0, 1.0, 1.0));
-	add_model("unit-cylinder", noob::basic_mesh::cylinder(1.0, 1.0));
-	add_model("unit-cone", noob::basic_mesh::cone(1.0, 1.0));
+	size_t sphere = add_model(noob::basic_mesh::sphere(0.5));
+	size_t cube = add_model(noob::basic_mesh::cube(1.0, 1.0, 1.0));
+	size_t cylinder = add_model(noob::basic_mesh::cylinder(1.0, 1.0));
+	size_t cone = add_model(noob::basic_mesh::cone(1.0, 1.0));
 
-	unit_sphere = get_model("unit-sphere").lock();
-	unit_cube = get_model("unit-cube").lock();
-	unit_cylinder = get_model("unit-cylinder").lock();
-	unit_cone = get_model("unit-cone").lock();
-
-	add_skeleton("human", "seymour.skel.ozz");
+	size_t skeleton = add_skeleton("seymour.skel.ozz");
 
 	noob::basic_renderer::uniform_info dbg_shader;
 	dbg_shader.colour = noob::vec4(0.0, 0.3, 0.3, 1.0);
-	set_shader("basic-debug", dbg_shader);
-	debug_shader = get_shader("basic-debug").lock();
+	size_t debug_shader_id = add_shader(dbg_shader);
 
 	logger::log("[Stage] init complete.");
 	return true;
@@ -62,41 +56,42 @@ void noob::stage::tear_down()
 	delete broadphase;
 }
 
+
 void noob::stage::update(double dt)
 {
-	//static double accum = 0.0;
-	//if (!paused)
-	//{
-	//	accum += dt;
-	//	if (accum >= 1.0 / 60.0)
-		{
-			dynamics_world->stepSimulation(1.0/60.0, 10);
-	//		accum -= 1.0/60;
-	//	}
-		for (auto actor_it : actors)
-		{
-			actor_it.second->update();//dt);//, true, false, true, false, false);//true);
-			//actor_it.second->print_debug_info();
-		}
-		//world.update(static_cast<rp3d::decimal>(dt));
-	}
+	dynamics_world->stepSimulation(1.0/60.0, 10);
+	/*for (auto actor_it : actors)
+	  {
+	  actor_it->update();//dt);//, true, false, true, false, false);//true);
+	  }*/
 }
 
 
 void noob::stage::draw() const
 {
-	for (auto a : actors)
+	for (size_t i = 0; i < actors.size(); ++i)
 	{
-		draw(a.second->get_drawable(), a.second->get_transform());
+		noob::actor* a = actors[i].get();
+		draw(a->drawable, a->get_transform());
 	}
-	for (auto p : props)
+	for (size_t i = 0; i < props.size(); ++i)
 	{
-		draw(p.second->get_drawable(), p.second->get_transform());
+		noob::prop* p = props[i].get();
+		draw(p->drawable, p->get_transform());
 	}
-	for (auto s : sceneries)
+	for (size_t i = 0; i < sceneries.size(); ++i)
 	{
-		draw(s.second->get_drawable(), s.second->get_transform());
+		noob::scenery* s = sceneries[i].get();
+		draw(s->drawable, s->get_transform());
 	}
+	/*for (auto p : props)
+	  {
+	  draw(p->get_drawable(), p->get_transform());
+	  }
+	  for (auto s : sceneries)
+	  {
+	  draw(s->get_drawable(), s->get_transform());
+	  }*/
 	// TODO: Use frustum + physics world collisions to determine which items are visible, and then draw them.
 }
 
@@ -107,194 +102,192 @@ void noob::stage::draw(noob::drawable* d, const noob::mat4& transform) const
 }
 
 
-std::shared_ptr<noob::actor> noob::stage::make_actor(const std::string& _name, const std::shared_ptr<noob::drawable>& _drawable, const std::shared_ptr<noob::skeletal_anim>& _anim, const noob::vec3& _position, const noob::versor& _orientation)
+size_t noob::stage::add_model(const std::string& filename)
 {
-	auto a = std::make_shared<noob::actor>();
-	a->init(dynamics_world, _drawable, _anim);
-	a->set_position(_position);
-	a->set_orientation(_orientation);
-	actors[_name] = a;
-	return a;
+	return 0;
 }
 
 
-std::shared_ptr<noob::prop> noob::stage::make_prop(const std::string& _name, btRigidBody* _body, const std::shared_ptr<noob::drawable>& _drawable, const noob::vec3& _position, const noob::versor& _orientation)
+size_t noob::stage::add_model(const noob::basic_mesh&)
 {
-	auto p = std::make_shared<noob::prop>();
-	p->init(_body, _drawable);
-	p->set_position(_position);
-	p->set_orientation(_orientation);
-	props[_name] = p;
-	return p;
-
+	return 0;
 }
 
 
-std::shared_ptr<noob::scenery> noob::stage::make_scenery(const std::string& _name, const std::shared_ptr<noob::drawable>& _drawable, const noob::vec3& _position, const noob::versor& _orientation)
+size_t noob::stage::add_drawable(size_t model, size_t light, size_t reflectance, size_t shading, const noob::vec3& _scale)
 {
-	std::shared_ptr<noob::scenery> s = std::make_shared<noob::scenery>(noob::scenery(dynamics_world, _drawable, _position, _orientation));
-	sceneries[_name] = s;
-	return s;
+	return 0;
 }
 
 
-std::shared_ptr<noob::drawable> noob::stage::make_drawable(const std::string& _name, const std::shared_ptr<noob::model>& _model, const std::shared_ptr<noob::light>& _light, const std::shared_ptr<noob::reflectance>& _reflectance, const std::shared_ptr<noob::prepared_shaders::info>& _shading, const noob::vec3& _scale) 
+size_t noob::stage::add_skeleton(const std::string& filename)
 {
-	std::shared_ptr<noob::drawable> d = std::make_shared<noob::drawable>(_model, _light, _reflectance, _shading, _scale);
-	drawables[_name];
-	return d;	
+	return 0;
 }
 
 
-std::shared_ptr<noob::reflectance> noob::stage::reflectance(const std::string& _name, const noob::reflectance& _reflectance)
+size_t noob::stage::add_actor(size_t drawable, size_t skeletal_anim, const noob::vec3& _position, const noob::versor& _orientation)
 {
-	std::shared_ptr<noob::reflectance> r = std::make_shared<noob::reflectance>(_reflectance);
-	reflectances[_name] = r;
-	return r;
+	return 0;
 }
 
 
-std::weak_ptr<noob::reflectance> noob::stage::reflectance(const std::string& _name) const
+size_t noob::stage::add_prop(btRigidBody*, size_t drawable, const noob::vec3& _position, const noob::versor& _orientation)
 {
-	auto search = reflectances.find(_name);
-	if (search == reflectances.end())
-	{
-		return {};
-	}
-	return reflectances[_name];
+	return 0;
 }
 
 
-std::shared_ptr<noob::light> noob::stage::light(const std::string& _name, const noob::light& _light)
+size_t noob::stage::add_scenery(size_t drawable, const noob::vec3& _position, const noob::versor& _orientation)
 {
-	std::shared_ptr<noob::light> l = std::make_shared<noob::light>(_light);
-	lights[_name] = l;
-	return l;
-
+	return 0;
 }
 
 
-std::weak_ptr<noob::light> noob::stage::light(const std::string& _name) const
+size_t noob::stage::add_light(const noob::light& arg)
 {
-	auto search = lights.find(_name);
-	if (search == lights.end())
-	{
-		return {};
-	}
-	return lights[_name];
+	return 0;
 }
 
 
-bool noob::stage::add_model(const std::string& name, const std::string& filename)
+size_t noob::stage::add_reflectance(const noob::reflectance& arg)
 {
-	auto search = models.find(name);
-	if (search == models.end())
-	{
-		logger::log(fmt::format("Adding model: {0}", name));
-		models.insert(std::make_pair(name, std::make_shared<noob::model>(filename)));
-		return true;
-	}
-	else return false;
+	return 0;
 }
 
 
-bool noob::stage::add_model(const std::string& name, const noob::basic_mesh& m)
+size_t noob::stage::add_shader(const noob::prepared_shaders::info& arg)
 {
-	auto search = models.find(name);
-	if (search == models.end())
-	{
-		logger::log(fmt::format("Adding model: {0}", name));
-		models.insert(std::make_pair(name, std::make_shared<noob::model>(m)));
-		return true;
-	}
-	else return false;
+	return 0;
 }
 
 
-bool noob::stage::add_skeleton(const std::string& name, const std::string& filename)
+void noob::stage::set_light(size_t index, const noob::light& arg)
 {
-	auto search = skeletons.find(name);
-	if (search == skeletons.end())
-	{
-		auto results = skeletons.insert(std::make_pair(name, std::make_unique<noob::skeletal_anim>()));
-		(*(results.first)).second->init(filename);
-		return true;
-	}
-	else return false;
-}
-
-
-void noob::stage::set_shader(const std::string& name, const noob::prepared_shaders::info& uniforms)
-{
-	auto a = std::make_shared<noob::prepared_shaders::info>(uniforms);
-	shader_uniforms[name] = a;
-}
-
-
-std::weak_ptr<noob::actor> noob::stage::get_actor(const std::string& name) const
-{
-	auto search = actors.find(name);
-	if (search == actors.end())
-	{
-		logger::log(fmt::format("[Stage] Cannot find requested actor: {0}", name));
-		// TODO: Verify if this is proper form
-		return {};
-	}
-
-	return search->second;
-}
-
-
-std::weak_ptr<noob::prepared_shaders::info> noob::stage::get_shader(const std::string& name) const
-{
-	auto search = shader_uniforms.find(name);
-
-	if (search == shader_uniforms.end())
-	{
-		logger::log(fmt::format("[Stage] Cannot find requested shader: {0}", name));
-		// TODO: Verify if this is proper form
-		return {};
-	}
-
-	return search->second;
 
 }
 
 
-std::weak_ptr<noob::model> noob::stage::get_model(const std::string& name) const
+void noob::stage::set_reflectance(size_t index, const noob::reflectance& arg)
 {
-	auto search = models.find(name);
 
-	if (search == models.end())
-	{
-		logger::log(fmt::format("[Stage] Cannot find requested model: {0}", name));
-		// TODO: Verify if this is proper form
-		return {};
-		//logger::log(fmt::format("[Stage] asking for invalid drawable \"{0}\", returning unit sphere instead.", name));
-		//return unit_sphere;
-	}
-
-	return search->second;
 }
 
 
-std::weak_ptr<noob::skeletal_anim> noob::stage::get_skeleton(const std::string& name) const
+void noob::stage::set_shader(size_t index, const noob::prepared_shaders::info& arg)
 {
-	auto search = skeletons.find(name);
-	if (search == skeletons.end())
-	{
-		// TODO: Verify if this form is proper
-		return {};
-	}
 
-	return search->second;//.get();
 }
 
 
-std::weak_ptr<noob::drawable> noob::stage::get_drawable(const std::string& _name) const
+
+size_t noob::stage::get_model_id(const std::string&) const
 {
-	return drawables[_name];
+	return 0;
 }
+
+
+size_t noob::stage::get_drawable_id(const std::string&) const
+{
+	return 0;
+}
+
+
+size_t noob::stage::get_skeleton_id(const std::string&) const
+{
+	return 0;
+}
+
+
+size_t noob::stage::get_actor_id(const std::string&) const
+{
+	return 0;
+}
+
+
+size_t noob::stage::get_prop_id(const std::string&) const
+{
+	return 0;
+}
+
+
+size_t noob::stage::get_scenery_id(const std::string&) const
+{
+	return 0;
+}
+
+
+size_t noob::stage::get_light_id(const std::string&) const
+{
+	return 0;
+}
+
+
+size_t noob::stage::get_reflectance_id(const std::string&) const
+{
+	return 0;
+}
+
+
+size_t noob::stage::get_shader_id(const std::string&) const
+{
+	return 0;
+}
+
+
+noob::model* noob::stage::get_model(size_t) const
+{
+	return nullptr;
+}
+
+
+noob::drawable* noob::stage::get_drawable(size_t) const
+{
+	return nullptr;
+}
+
+
+noob::skeletal_anim* noob::stage::get_skeleton(size_t) const
+{
+	return nullptr;
+}
+
+
+noob::actor* noob::stage::get_actor(size_t) const
+{
+	return nullptr;
+}
+
+
+noob::prop* noob::stage::get_prop(size_t) const
+{
+	return nullptr;
+}
+
+
+noob::scenery* noob::stage::get_scenery(size_t) const
+{
+	return nullptr;
+}
+
+
+noob::light* noob::stage::get_light(size_t) const
+{
+	return nullptr;
+}
+
+
+noob::reflectance* noob::stage::get_reflectance(size_t) const
+{
+	return nullptr;
+}
+
+
+noob::prepared_shaders::info* noob::stage::get_shader(size_t) const
+{
+	return nullptr;
+}
+
 
 
 btRigidBody* noob::stage::body(btCollisionShape* shape, float mass, const noob::vec3& pos, const noob::versor& orientation)
@@ -393,36 +386,36 @@ btConvexHullShape* noob::stage::hull(const std::vector<noob::vec3>& points)
 }
 
 /*
-btCompoundShape* noob::stage::breakable_mesh(const noob::basic_mesh& _mesh)
-{
-	std::vector<noob::basic_mesh> convex_meshes;
-	return breakable_mesh(_mesh.convex_decomposition());
-}
+   btCompoundShape* noob::stage::breakable_mesh(const noob::basic_mesh& _mesh)
+   {
+   std::vector<noob::basic_mesh> convex_meshes;
+   return breakable_mesh(_mesh.convex_decomposition());
+   }
 
 
-btCompoundShape* noob::stage::breakable_mesh(const std::vector<noob::basic_mesh>& _meshes)
-{
-	btCompoundShape* result = new btCompoundShape();
-	for (noob::basic_mesh m : _meshes)
-	{
-		btConvexHullShape* temp = hull(m.vertices); 
-		btTransform t;
-		t.setIdentity();
-		result->addChildShape(t,temp);
-	}
-	return result; 
-}
-*/
+   btCompoundShape* noob::stage::breakable_mesh(const std::vector<noob::basic_mesh>& _meshes)
+   {
+   btCompoundShape* result = new btCompoundShape();
+   for (noob::basic_mesh m : _meshes)
+   {
+   btConvexHullShape* temp = hull(m.vertices); 
+   btTransform t;
+   t.setIdentity();
+   result->addChildShape(t,temp);
+   }
+   return result; 
+   }
+   */
 
 /*
-btBvhTriangleMeshShape*> noob::stage::static_mesh(const noob::basic_mesh&)
-{
-	btBvhTriangleMeshShape* temp = new btBvhTriangleMeshShape();
-	for (noob::vec3 p : points)
-	{
-		temp->addPoint(btVector3(p.v[0], p.v[1], p.v[2]));
-	}
-	return temp;
+   btBvhTriangleMeshShape*> noob::stage::static_mesh(const noob::basic_mesh&)
+   {
+   btBvhTriangleMeshShape* temp = new btBvhTriangleMeshShape();
+   for (noob::vec3 p : points)
+   {
+   temp->addPoint(btVector3(p.v[0], p.v[1], p.v[2]));
+   }
+   return temp;
 
-}
-*/
+   }
+   */

@@ -1,7 +1,7 @@
 #include "Prop.hpp"
 #include "TransformHelper.hpp"
 
-void noob::prop::init(btRigidBody* _body, const std::shared_ptr<noob::drawable>& _drawable)
+void noob::prop::init(btRigidBody* _body, noob::drawable* _drawable)
 {
 	body = _body;
 	drawable = _drawable;
