@@ -20,7 +20,7 @@ void noob::application::user_init()
 	// stage.set_shader_name(stage.add_shader(basic_shader_info), "debug");
 	
 	size_t actor_id = stage.add_actor(stage.add_drawable(stage.get_model_id("unit-cylinder"), stage.get_light_id("default"), stage.get_reflectance_id("default"), stage.get_shader_id("debug")), stage.get_skeleton_id("human"), noob::vec3(0.0, 60.0, 0.0));
-	player_character = stage.get_actor(actor_id);
+	player_character = stage.get_actor_ptr(actor_id);
 	
 
 	noob::basic_mesh a = noob::basic_mesh::sphere(10);
@@ -40,13 +40,13 @@ void noob::application::user_init()
 	stage.set_model_name(stage.add_model(g), "ground");
 	
 	stage.set_drawable_name(stage.add_drawable(stage.get_model_id("ground"), stage.get_light_id("default"), stage.get_reflectance_id("default"), stage.get_shader_id("moon")), "ground");
-	size_t scenery = stage.add_scenery(stage.get_drawable_id("ground"), noob::vec3(0.0, 0.0, 0.0));
+	stage.add_scenery(stage.get_drawable_id("ground"), noob::vec3(0.0, 0.0, 0.0));
 }
 
 
 void noob::application::user_update(double dt)
 {
 	gui.text("THE NIMBLE MONKEY GRABS THE APRICOT", 50.0, 50.0, noob::gui::font_size::header);
-	// player_character->move(true, false, false, false, true);
+	player_character->move(true, false, false, false, true);
 	//logger::log(player_character->get_debug_info());
 }

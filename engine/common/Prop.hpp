@@ -17,9 +17,7 @@ namespace noob
 			prop() : body(nullptr), drawing_scale(noob::vec3(1.0, 1.0, 1.0)) {}
 
 			void init(btRigidBody*, noob::drawable*);
-		
-			// noob::drawable* get_drawable() const { return drawable; }
-
+			
 			void set_position(const noob::vec3&);
 			void set_orientation(const noob::versor&);
 

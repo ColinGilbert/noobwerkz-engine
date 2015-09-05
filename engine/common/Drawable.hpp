@@ -11,10 +11,10 @@ namespace noob
 		public:
 			drawable(noob::model* _model, noob::light* _light, noob::reflectance* _reflectance, noob::prepared_shaders::info* _shading, const noob::vec3& _scale) :  model(_model), light(_light), reflectance(_reflectance), shading(_shading), scale(_scale) {}
 		
-			noob::model* get_model() const { return model; }
-			noob::light* get_light() const { return light; }
-			noob::reflectance* get_reflectance() const { return reflectance; }
-			noob::prepared_shaders::info* get_shading() const { return shading; }
+			noob::model* get_model_ptr() const { return model; }
+			noob::light* get_light_ptr() const { return light; }
+			noob::reflectance* get_reflectance_ptr() const { return reflectance; }
+			noob::prepared_shaders::info* get_shading_ptr() const { return shading; }
 			noob::vec3 get_scale() const { return scale; }
 
 			//void set_model(const std::shared_ptr<noob::model>& _model) { model = _model; }

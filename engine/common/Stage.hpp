@@ -81,15 +81,15 @@ namespace noob
 			size_t get_reflectance_id(const std::string&) const;
 			size_t get_shader_id(const std::string&) const;
 
-			noob::model* get_model(size_t) const;
-			noob::drawable* get_drawable(size_t) const;
-			noob::skeletal_anim* get_skeleton(size_t) const;
-			noob::actor* get_actor(size_t) const;
-			noob::prop* get_prop(size_t) const;
-			noob::scenery* get_scenery(size_t) const;
-			const noob::light* get_light(size_t) const;
-			const noob::reflectance* get_reflectance(size_t) const;
-			const noob::prepared_shaders::info* get_shader(size_t) const;
+			noob::model* get_model_ptr(size_t) const;
+			noob::drawable* get_drawable_ptr(size_t) const;
+			noob::skeletal_anim* get_skeleton_ptr(size_t) const;
+			noob::actor* get_actor_ptr(size_t) const;
+			noob::prop* get_prop_ptr(size_t) const;
+			noob::scenery* get_scenery_ptr(size_t) const;
+			const noob::light* get_light_ptr(size_t) const;
+			const noob::reflectance* get_reflectance_ptr(size_t) const;
+			const noob::prepared_shaders::info* get_shader_ptr(size_t) const;
 
 			bool model_exists(size_t) const;
 			bool drawable_exists(size_t) const;
@@ -125,7 +125,13 @@ namespace noob
 		protected:
 			// Protected function(s):
 			void draw(noob::drawable*, const noob::mat4&) const;
-			
+		
+
+
+			const noob::light* get_light(size_t) const;
+			const noob::reflectance* get_reflectance(size_t) const;
+			const noob::prepared_shaders::info* get_shader(size_t) const;
+
 			// Protected members:
 			noob::prepared_shaders shaders;
 

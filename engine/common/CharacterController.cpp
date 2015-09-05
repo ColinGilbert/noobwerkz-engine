@@ -107,28 +107,27 @@ void noob::character_controller::step(bool forward, bool backward, bool left, bo
 		btVector3 linear_velocity = rigid_body->getLinearVelocity();
 		btScalar speed = rigid_body->getLinearVelocity().length();
 		btVector3 walk_direction = btVector3(0.0, 0.0, 0.0);
-		btScalar walk_speed = 2.0;
-
+		
+		btScalar walk_speed = 0.5;
 		btVector3 forward_dir(walk_speed, 0.0, 0.0);
-
+		
 		if (forward) walk_direction += forward_dir;
 		if (backward) walk_direction -= forward_dir;
+		
 		if (jump)
 		{
-			linear_velocity = linear_velocity + btVector3(0.0, 4.0, 0.0);
+			linear_velocity += btVector3(0.0, 1.5, 0.0);
 		}
 		if (!forward && !backward && !left && !right && !jump && on_ground())
 		{
 			// Dampen when on the ground and not being moved by the player
 			linear_velocity *= btScalar(0.2);
-			//rigid_body->setLinearVelocity(linear_velocity);
 		}
 		else
 		{
 			if (speed < max_linear_velocity)
 			{
 				linear_velocity = linear_velocity + walk_direction * walk_speed;
-				//rigid_body->setLinearVelocity(velocity);
 			}
 		}
 		rigid_body->setLinearVelocity(linear_velocity);
