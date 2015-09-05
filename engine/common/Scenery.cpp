@@ -4,15 +4,15 @@
 
 void noob::scenery::init(btDiscreteDynamicsWorld* _world, noob::drawable* _drawable, const noob::vec3& _position, const noob::versor& _orientation)
 {
-	logger::log("scenery - contructing");
+	// logger::log("scenery - contructing");
 	world = _world;
-	logger::log("scenery - world pointer copied");
+	// logger::log("scenery - world pointer copied");
 	drawable = _drawable;
-	logger::log("scenery - drawable pointer copied");
+	// logger::log("scenery - drawable pointer copied");
 	noob::model* model  = drawable->get_model();
-	logger::log("scenery - got model");
+	// logger::log("scenery - got model");
 	btTriangleMesh* phyz_mesh = new btTriangleMesh();
-	logger::log("scenery - got trimesh");
+	// logger::log("scenery - got trimesh");
 
 	for (size_t i = 0; i < model->meshes[0].indices.size(); i += 3)
 	{
@@ -31,6 +31,9 @@ void noob::scenery::init(btDiscreteDynamicsWorld* _world, noob::drawable* _drawa
 	}        
 
 	shape = new btBvhTriangleMeshShape(phyz_mesh, true);
+	//float margin = shape->getMargin();
+	shape->setMargin(0.1);
+	//logger::log(fmt::format("[Scenery] margin = {0}", margin));//shape->getMargin());
 	btDefaultMotionState* motion_state = new btDefaultMotionState(btTransform(btQuaternion(_orientation.q[0], _orientation.q[1], _orientation.q[2], _orientation.q[3]), btVector3(_position.v[0], _position.v[1], _position.v[2])));
 	btRigidBody::btRigidBodyConstructionInfo ci(0.0, motion_state, shape);
 	body = new btRigidBody(ci);

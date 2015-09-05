@@ -23,7 +23,7 @@ void noob::character_controller::init(btDynamicsWorld* _dynamics_world, btScalar
 	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
 	btRigidBody::btRigidBodyConstructionInfo ci(mass, motion_state, shape, inertia);
 	rigid_body = new btRigidBody(ci);
-	rigid_body->setSleepingThresholds(0.0, 0.0);
+	//rigid_body->setSleepingThresholds(0.0, 0.0);
 	rigid_body->setAngularFactor(0.0);
 	dynamics_world->addRigidBody(rigid_body);
 	dt = _timestep;

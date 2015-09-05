@@ -15,16 +15,12 @@ void noob::application::user_init()
 	u.colour_positions = noob::vec2(0.2, 0.7);
 	stage.set_shader_name(stage.add_shader(u), "moon");
 	
-	//noob::basic_renderer::uniform_info basic_shader_info;
-	//basic_shader_info.colour = noob::vec4(1.0, 0.0, 0.0, 1.0);
-	//stage.set_shader_name(stage.add_shader(basic_shader_info), "debug");
+	// noob::basic_renderer::uniform_info basic_shader_info;
+	// basic_shader_info.colour = noob::vec4(1.0, 0.0, 0.0, 1.0);
+	// stage.set_shader_name(stage.add_shader(basic_shader_info), "debug");
 	
-	stage.set_light_name(stage.add_light(noob::light()), "default");
-	stage.set_reflectance_name(stage.add_reflectance(noob::reflectance()), "default");
-
-	//std::shared_ptr<noob::drawable> drw = stage.make_drawable("character", stage.get_unit_cylinder(), stage.light("default").lock(), stage.reflectance("default").lock(), stage.get_shader("red").lock());
-	//player_character = stage.make_actor("actor-prop", drw, stage.get_skeleton("human").lock(), noob::vec3(0.0, 60.0, 0.0));
-
+	size_t actor_id = stage.add_actor(stage.add_drawable(stage.get_model_id("unit-cylinder"), stage.get_light_id("default"), stage.get_reflectance_id("default"), stage.get_shader_id("debug")), stage.get_skeleton_id("human"), noob::vec3(0.0, 60.0, 0.0));
+	player_character = stage.get_actor(actor_id);
 	
 
 	noob::basic_mesh a = noob::basic_mesh::sphere(10);
@@ -37,22 +33,20 @@ void noob::application::user_init()
 	noob::basic_mesh c = b.transform(t.get_matrix());
 	noob::basic_mesh d = noob::basic_mesh::csg(a, c, noob::csg_op::DIFFERENCE);
 	noob::basic_mesh e = noob::basic_mesh::cube(1000.0, 15.0, 1000.0);
-	t.translate(noob::vec3(0.0, -40.0, 0.0));
+	t.translate(noob::vec3(0.0, -30.0, 0.0));
 	noob::basic_mesh f = e.transform(t.get_matrix());
-	noob::basic_mesh g = noob::basic_mesh::csg(d, f, noob::csg_op::UNION);
+	noob::basic_mesh g = noob::basic_mesh::csg(f, d, noob::csg_op::UNION);
 	
-	//stage.add_model("ground", g);
+	stage.set_model_name(stage.add_model(g), "ground");
 	
-	//std::shared_ptr<noob::drawable> d2 = stage.make_drawable("ground", stage.get_model("ground").lock(), stage.light("default").lock(), stage.reflectance("default").lock(), stage.get_shader("moon").lock());
-	
-	//std::shared_ptr<noob::drawable> d3 = stage.get_drawable("ground").lock();
-	//std::shared_ptr<noob::scenery> ground = stage.make_scenery("ground", d2, noob::vec3(0.0, 0.0, 0.0));
+	stage.set_drawable_name(stage.add_drawable(stage.get_model_id("ground"), stage.get_light_id("default"), stage.get_reflectance_id("default"), stage.get_shader_id("moon")), "ground");
+	size_t scenery = stage.add_scenery(stage.get_drawable_id("ground"), noob::vec3(0.0, 0.0, 0.0));
 }
 
 
 void noob::application::user_update(double dt)
 {
 	gui.text("THE NIMBLE MONKEY GRABS THE APRICOT", 50.0, 50.0, noob::gui::font_size::header);
-	//player_character->move(true, false, false, false, true);
+	// player_character->move(true, false, false, false, true);
 	//logger::log(player_character->get_debug_info());
 }
