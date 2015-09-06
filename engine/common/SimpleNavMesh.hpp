@@ -107,7 +107,6 @@ namespace noob
 			rcConfig m_cfg;	
 			rcPolyMeshDetail* m_dmesh;
 			dtNavMesh* m_navMesh;
-			//const int* m_vertsPerPoly;
 			
 			InputGeom* m_geom;
 			dtNavMeshQuery* m_navQuery;
