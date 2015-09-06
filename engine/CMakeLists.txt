@@ -84,6 +84,66 @@ list(APPEND openmesh_src
 	)
 
 include_directories(lib/variant)
+include_directories(lib/recastnavigation/Detour/Include)
+include_directories(lib/recastnavigation/Recast/Include)
+include_directories(lib/recastnavigation/RecastDemo/Include)
+include_directories(lib/recastnavigation/DebugUtils/Include)
+include_directories(lib/recastnavigation/DetourTileCache/Include)
+include_directories(lib/recastnavigation/DetourCrowd/Include)
+
+list (APPEND recast_src
+lib/recastnavigation/Recast/Source/RecastAlloc.cpp
+lib/recastnavigation/Recast/Source/RecastLayers.cpp
+lib/recastnavigation/Recast/Source/RecastContour.cpp
+lib/recastnavigation/Recast/Source/RecastArea.cpp
+lib/recastnavigation/Recast/Source/RecastMeshDetail.cpp
+lib/recastnavigation/Recast/Source/RecastRasterization.cpp
+lib/recastnavigation/Recast/Source/RecastMesh.cpp
+lib/recastnavigation/Recast/Source/RecastFilter.cpp
+lib/recastnavigation/Recast/Source/Recast.cpp
+lib/recastnavigation/Recast/Source/RecastRegion.cpp
+lib/recastnavigation/DetourTileCache/Source/DetourTileCacheBuilder.cpp
+lib/recastnavigation/DetourTileCache/Source/DetourTileCache.cpp
+#lib/recastnavigation/DebugUtils/Source/DetourDebugDraw.cpp
+#lib/recastnavigation/DebugUtils/Source/RecastDebugDraw.cpp
+#lib/recastnavigation/DebugUtils/Source/RecastDump.cpp
+#lib/recastnavigation/DebugUtils/Source/DebugDraw.cpp
+#lib/recastnavigation/RecastDemo/Source/CrowdTool.cpp
+#lib/recastnavigation/RecastDemo/Source/Sample_TempObstacles.cpp
+#lib/recastnavigation/RecastDemo/Source/main.cpp
+#lib/recastnavigation/RecastDemo/Source/imguiRenderGL.cpp
+#lib/recastnavigation/RecastDemo/Source/Sample.cpp
+#lib/recastnavigation/RecastDemo/Source/Filelist.cpp
+#lib/recastnavigation/RecastDemo/Source/ConvexVolumeTool.cpp
+#lib/recastnavigation/RecastDemo/Source/imgui.cpp
+#lib/recastnavigation/RecastDemo/Source/Sample_Debug.cpp
+#lib/recastnavigation/RecastDemo/Source/SlideShow.cpp
+#lib/recastnavigation/RecastDemo/Source/NavMeshPruneTool.cpp
+#lib/recastnavigation/RecastDemo/Source/PerfTimer.cpp
+#lib/recastnavigation/RecastDemo/Source/InputGeom.cpp
+#lib/recastnavigation/RecastDemo/Source/NavMeshTesterTool.cpp
+#lib/recastnavigation/RecastDemo/Source/MeshLoaderObj.cpp
+#lib/recastnavigation/RecastDemo/Source/ChunkyTriMesh.cpp
+#lib/recastnavigation/RecastDemo/Source/Sample_SoloMesh.cpp
+#lib/recastnavigation/RecastDemo/Source/Sample_TileMesh.cpp
+#lib/recastnavigation/RecastDemo/Source/SampleInterfaces.cpp
+#lib/recastnavigation/RecastDemo/Source/OffMeshConnectionTool.cpp
+#lib/recastnavigation/RecastDemo/Source/TestCase.cpp
+#lib/recastnavigation/RecastDemo/Source/ValueHistory.cpp
+#lib/recastnavigation/RecastDemo/Contrib/fastlz/fastlz.c
+lib/recastnavigation/Detour/Source/DetourCommon.cpp
+lib/recastnavigation/Detour/Source/DetourNavMesh.cpp
+lib/recastnavigation/Detour/Source/DetourNavMeshBuilder.cpp
+lib/recastnavigation/Detour/Source/DetourAlloc.cpp
+lib/recastnavigation/Detour/Source/DetourNode.cpp
+lib/recastnavigation/Detour/Source/DetourNavMeshQuery.cpp
+lib/recastnavigation/DetourCrowd/Source/DetourPathQueue.cpp
+lib/recastnavigation/DetourCrowd/Source/DetourObstacleAvoidance.cpp
+lib/recastnavigation/DetourCrowd/Source/DetourProximityGrid.cpp
+lib/recastnavigation/DetourCrowd/Source/DetourPathCorridor.cpp
+lib/recastnavigation/DetourCrowd/Source/DetourCrowd.cpp
+lib/recastnavigation/DetourCrowd/Source/DetourLocalBoundary.cpp
+)
 
 list(APPEND common_src
 	common/Mesh.cpp
@@ -109,6 +169,7 @@ list(APPEND common_src
 	common/Drawing/HACDRenderer.cpp
 	common/Drawing/GUIRenderer.cpp
 	common/Drawing/BasicRenderer.cpp
+	common/SimpleNavMesh.cpp
 	)
 
 list(APPEND user_src
@@ -119,7 +180,7 @@ include_directories(platform/nix)
 
 list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 
-add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src} ${es_src} ${user_src}) 
+add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src} ${es_src} ${user_src} ${recast_src}) 
 
 target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m emon OpenMeshCore OpenMeshToolsStatic spnav ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r BulletDynamics BulletCollision BulletSoftBody LinearMath ${Boost_LIBRARIES} ${VTK_LIBRARIES})
 project(LogServer)

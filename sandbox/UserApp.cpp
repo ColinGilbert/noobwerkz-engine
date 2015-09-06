@@ -22,14 +22,11 @@ void noob::application::user_init()
 	size_t actor_id = stage.add_actor(stage.add_drawable(stage.get_model_id("unit-cylinder"), stage.get_light_id("default"), stage.get_reflectance_id("default"), stage.get_shader_id("debug")), stage.get_skeleton_id("human"), noob::vec3(0.0, 60.0, 0.0));
 	player_character = stage.get_actor_ptr(actor_id);
 	
-
 	noob::basic_mesh a = noob::basic_mesh::sphere(10);
 	noob::basic_mesh b = noob::basic_mesh::cone(30, 35);
 	
 	noob::transform_helper t;
-	
 	t.translate(noob::vec3(0.0, 25.0, 0.0));
-	
 	noob::basic_mesh c = b.transform(t.get_matrix());
 	noob::basic_mesh d = noob::basic_mesh::csg(a, c, noob::csg_op::DIFFERENCE);
 	noob::basic_mesh e = noob::basic_mesh::cube(1000.0, 15.0, 1000.0);

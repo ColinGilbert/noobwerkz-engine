@@ -83,15 +83,15 @@ void noob::character_controller::update()
 	if (ray_callback.hasHit())
 	{
 		airborne = false;
-		//if (i == 0) airborne = false;
-		//if (i == 1) obstacle = false;
-		logger::log("[Character] - ray hit!");
+		// if (i == 0) airborne = false;
+		// if (i == 1) obstacle = false;
+		// logger::log("[Character] - ray hit!");
 		ray_lambda = ray_callback.m_closestHitFraction;
 	}
 	else
 	{
 		airborne = true;
-		logger::log("[Character] - no hit");
+		// logger::log("[Character] - no hit");
 		ray_lambda = 1.0;
 	}
 }
@@ -108,7 +108,8 @@ void noob::character_controller::step(bool forward, bool backward, bool left, bo
 		btScalar speed = rigid_body->getLinearVelocity().length();
 		btVector3 walk_direction = btVector3(0.0, 0.0, 0.0);
 		
-		btScalar walk_speed = 0.5;
+		btScalar walk_speed = 0.5;// / 3.0;
+		
 		btVector3 forward_dir(walk_speed, 0.0, 0.0);
 		
 		if (forward) walk_direction += forward_dir;
