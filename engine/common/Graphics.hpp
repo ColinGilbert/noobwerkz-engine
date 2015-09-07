@@ -59,7 +59,8 @@ namespace noob
 			// TODO: Implement this 
 			// static bgfx::ProgramHandle compile_and_load_program(const std::string& vs_source_filename, const std::string& fs_source_filename, const std::string& varyings_filename);
 
-			static bgfx::TextureHandle load_texture(const std::string& friendly_name, const std::string& filename);
+			static bgfx::TextureHandle load_texture(const std::string& friendly_name, const std::string& filename, uint32_t flags);
+
 
 			// ---------------- Asset creators (make assets available from getters) ----------------
 			static bool add_sampler(const std::string&);

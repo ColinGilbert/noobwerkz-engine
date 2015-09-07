@@ -31,7 +31,7 @@ void noob::triplanar_renderer::init()
 	shader.samplers.push_back(noob::graphics::get_sampler("u_texture"));
 
 	noob::graphics::add_shader("triplanar", shader);
-	noob::graphics::load_texture("grad_map", "gradient_map.dds");
+	noob::graphics::load_texture("grad_map", "gradient_map.dds", BGFX_TEXTURE_NONE);
 }
 
 
@@ -50,7 +50,7 @@ void noob::triplanar_renderer::draw(const noob::model* model, const noob::mat4& 
 
 	bgfx::setUniform(noob::graphics::get_uniform("colour_positions").handle, &colour_pos.v[0]);
 	
-	noob::vec4 scalings(info.scales, 0.0);
+	noob::vec4 scalings(info.scales, 1.0);
 
 	bgfx::setUniform(noob::graphics::get_uniform("scales").handle, &scalings.v[0]);
 

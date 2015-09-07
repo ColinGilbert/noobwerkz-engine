@@ -1,14 +1,15 @@
 cmake_minimum_required(VERSION 3.0)
 project(NoobWerkz)
 
-set(CMAKE_BUILD_TYPE "DEBUG")
-#set(CMAKE_BUILD_TYPE "RELEASE")
+#set(CMAKE_BUILD_TYPE "DEBUG")
+set(CMAKE_BUILD_TYPE "RELEASE")
 
 set(CMAKE_CXX_FLAGS "-std=c++1y -O2 -fno-strict-aliasing -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DOM_GARBAGE_NO_STATUS_WARNING -DEIGEN_MPL2_ONLY -Wall ${CMAKE_CXX_FLAGS}") # -DCHAISCRIPT_NO_THREADS
 set(CMAKE_C_FLAGS "-std=c99 -fno-strict-aliasing -DSQLITE_ENABLE_COLUMN_METADATA -DSTB_IMAGE_STATIC -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -Wall ${CMAKE_C_FLAGS}")
 
 find_package(Boost COMPONENTS system filesystem REQUIRED)
-#include_directories(${Boost_INCLUDE_DIR})
+include_directories(${Boost_INCLUDE_DIR})
+
 find_package(VTK REQUIRED)
 include(${VTK_USE_FILE})
 
@@ -164,6 +165,7 @@ list(APPEND common_src
 	common/Scenery.cpp
 	common/Actor.cpp
 	common/Prop.cpp
+	common/MeshCSG.cpp
 	common/SkeletalAnim.cpp
 	common/Drawing/TriplanarGradientMap.cpp
 	common/Drawing/HACDRenderer.cpp

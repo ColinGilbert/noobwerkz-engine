@@ -99,7 +99,7 @@ bgfx::ProgramHandle noob::graphics::load_program(const std::string& vs_filename,
 }
 
 
-bgfx::TextureHandle noob::graphics::load_texture(const std::string& friendly_name, const std::string& filename)
+bgfx::TextureHandle noob::graphics::load_texture(const std::string& friendly_name, const std::string& filename, uint32_t flags)
 {
 	int width = 0;
 	int height = 0;
@@ -122,7 +122,9 @@ bgfx::TextureHandle noob::graphics::load_texture(const std::string& friendly_nam
 	}
 	
 	bgfx::TextureInfo tex_info;
-	bgfx::TextureHandle tex = bgfx::createTexture(bgfx::copy(&texture_file[0], sizeof(char) * texture_file.size()), BGFX_TEXTURE_NONE, 0, &tex_info);
+	bgfx::TextureHandle tex = bgfx::createTexture(bgfx::copy(&texture_file[0], sizeof(char) * texture_file.size()), flags, 0, &tex_info);
+
+	// bgfx::TextureHandle tex = bgfx::createTexture2D(static_cast<uint16_t>(width), static_cast<uint16_t>(height), static_cast<uint8_t>(0), bgfx::TextureFormat::RGBA32, static_cast<uint32_t>(flags), bgfx::copy(&texture_file[0], sizeof(char) * texture_file.size()));
 
 	{
 		fmt::MemoryWriter ww;

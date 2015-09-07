@@ -39,7 +39,7 @@ namespace noob
 					}
 				mesh_vertex() : position({0.0f, 0.0f, 0.0f}), normal({0.0f, 0.0f, 0.0f}), uv({0.0f, 0.0f} ), tangent({ 0.0f, 0.0f, 0.0f }), bitangent({0.0f, 0.0f, 0.0f}), bone_indices({ 0, 0, 0, 0 }), bone_weights({ 0.0f, 0.0f, 0.0f, 0.0f}) {}
 				std::array<float, 3> position, normal;
-				std::array<float, 2> uv;
+				std::array<float, 3> uv;
 				std::array<float, 3> tangent, bitangent;
 				std::array<uint8_t, 4> bone_indices;
 				std::array<float, 4> bone_weights;
@@ -50,7 +50,7 @@ namespace noob
 						.begin()
 						.add(bgfx::Attrib::Position,  3, bgfx::AttribType::Float)
 						.add(bgfx::Attrib::Normal,    3, bgfx::AttribType::Float)
-						.add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float)
+						.add(bgfx::Attrib::TexCoord0, 3, bgfx::AttribType::Float)
 						.add(bgfx::Attrib::Tangent,   3, bgfx::AttribType::Float)
 						.add(bgfx::Attrib::Bitangent, 3, bgfx::AttribType::Float)
 						.add(bgfx::Attrib::Indices,   4, bgfx::AttribType::Uint8, false, true)

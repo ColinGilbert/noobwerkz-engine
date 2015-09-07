@@ -3,16 +3,6 @@
 //#include <csgjs.hpp>
 //
 
- 
-#include <vtkPLYReader.h>
-#include <vtkPLYWriter.h>
-#include <vtkBooleanOperationPolyDataFilter.h>
-#include <vtkPolyDataMapper.h>
-#include <vtkPolyDataReader.h>
-#include <vtkPolyDataMapper.h>
-#include <vtkProperty.h>
-#include <vtkSmartPointer.h>
-
 
 #include <stdlib.h>
 #include <string.h>
@@ -104,28 +94,29 @@ noob::basic_mesh noob::basic_mesh::decimate(size_t num_verts) const
 }
 
 
-noob::basic_mesh noob::basic_mesh::normalize() const 
+void noob::basic_mesh::normalize() 
 {
-	noob::basic_mesh temp;
-	save("normalize-temp.stl");
-	temp.load_assimp("normalize_temp.stl");
-	return temp;
+	save("temp/normalize_temp.stl");
+	//noob::basic_mesh temp;
+	//load_assimp(save());
+	load_assimp("temp/normalize_temp.stl");
+	//return temp;
 }
 
 
 // TODO
-noob::basic_mesh noob::basic_mesh::to_origin() const
+void noob::basic_mesh::to_origin()
 {
-	noob::basic_mesh temp;
-	for (noob::vec3 v : vertices)
+	// noob::basic_mesh temp;
+	for (size_t i = 0; i < vertices.size(); ++i)
 	{
-		temp.vertices.push_back(v - bbox.center);
+		vertices[i] = (vertices[i] - bbox.center);
 	}
-	std::copy(normals.begin(), normals.end(), std::back_inserter(temp.normals));
-	std::copy(indices.begin(), indices.end(), std::back_inserter(temp.indices));
-	return temp;
+	normalize();
+	// std::copy(normals.begin(), normals.end(), std::back_inserter(temp.normals));
+	// std::copy(indices.begin(), indices.end(), std::back_inserter(temp.indices));
+	// return temp;
 }
-
 /*
 std::tuple<size_t, const char*> noob::basic_mesh::save() const
 {
@@ -159,7 +150,7 @@ void noob::basic_mesh::save(const std::string& filename) const
 bool noob::basic_mesh::load_assimp(std::tuple<size_t, const char*> buffer, const std::string& name)
 {
 	logger::log(fmt::format("[Mesh] - load_assimp({0}) - load_assimp {1} bytes", name, std::get<0>(buffer)));
-	const aiScene* scene = aiImportFileFromMemory(std::get<1>(buffer), std::get<0>(buffer), aiProcessPreset_TargetRealtime_MaxQuality, "");
+	const aiScene* scene = aiImportFileFromMemory(std::get<1>(buffer), std::get<0>(buffer), aiProcessPreset_TargetRealtime_Fast, "");
 	return load_assimp(scene, name);
 }
 
@@ -167,7 +158,7 @@ bool noob::basic_mesh::load_assimp(std::tuple<size_t, const char*> buffer, const
 bool noob::basic_mesh::load_assimp(const std::string& filename, const std::string& name)
 {
 	// logger::log(fmt::format("[Mesh] load_assimping file {0}", filename ));
-	const aiScene* scene = aiImportFile(filename.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
+	const aiScene* scene = aiImportFile(filename.c_str(), aiProcessPreset_TargetRealtime_Fast);
 	return load_assimp(scene, name);	
 }
 
@@ -243,8 +234,8 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 
 	// bbox.centroid = noob::vec3(static_cast<float>(centroid_x)/2, static_cast<float>(centroid_y)/2, static_cast<float>(centroid_z)/2);
 
-	bbox.center = noob::vec3((bbox.max[0] - bbox.min[0])/2, (bbox.max[1] - bbox.min[1])/2, (bbox.max[2] - bbox.min[2])/2);
-
+	bbox.center = noob::vec3((bbox.max[0] + bbox.min[0])/2, (bbox.max[1] + bbox.min[1])/2, (bbox.max[2] + bbox.min[2])/2);
+	// bbox.center = bbox.max - bbox.min;
 	// logger::log(fmt::format("[Mesh] load_assimp({0}) - Mesh has {1} faces", name, num_faces));
 	auto degenerates = 0;
 	auto tris = 0;
@@ -275,14 +266,15 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 		}
 	}
 	aiReleaseImport(scene);
-	// logger::log(fmt::format("[Mesh] load_assimp({3}) load_assimped - tris = {0}, non-tri polys = {1}, degenerates = {2}", tris, non_tri_polys, degenerates, name));
+	logger::log(fmt::format("[Mesh] load_assimp({0}) load_assimp - tris = {1}, non-tri polys = {2}, degenerates = {3}, verts = {4}, indices = {5}, min pos = {6}, max pos = {7}, center = {8}, dims = {9}", name, tris, non_tri_polys, degenerates, vertices.size(), indices.size(), bbox.min.to_string(), bbox.max.to_string(), bbox.center.to_string(), (bbox.max - bbox.min).to_string()));
+	calculate_texcoords();
 	logger::log("[Mesh] load_assimp() - done");
 	return true;
 }
 
-noob::basic_mesh noob::basic_mesh::transform(const noob::mat4& transform) const
+void noob::basic_mesh::transform(const noob::mat4& transform)
 {
-	noob::basic_mesh temp;
+
 	for (size_t i = 0; i < vertices.size(); i++)
 	{
 		noob::vec3 v = vertices[i];
@@ -294,32 +286,51 @@ noob::basic_mesh noob::basic_mesh::transform(const noob::mat4& transform) const
 		transformed_vert[1] = temp_transform[1];
 		transformed_vert[2] = temp_transform[2];
 
-		temp.vertices.push_back(transformed_vert);
+		vertices[i] = temp_transform;
+		//temp_vertices.push_back(transformed_vert);
 	}
 
-	std::copy(normals.begin(), normals.end(), std::back_inserter(temp.normals));
-
-	std::copy(indices.begin(), indices.end(), std::back_inserter(temp.indices));
-
-
+	// std::copy(normals.begin(), normals.end(), std::back_inserter(temp.normals));
+	//std::copy(indices.begin(), indices.end(), std::back_inserter(temp.indices));
+	normalize();
+/*
 	noob::vec4 temp_max(bbox.max, 1.0);
 	noob::vec4 temp_min(bbox.min, 1.0);
 	noob::vec4 temp_bbox_center(bbox.center, 1.0);
-	// noob::vec4 temp_centroid(bbox.centroid, 1.0);
 
 	temp_max = transform * temp_max;
 	temp_min = transform * temp_min;
 	temp_bbox_center = transform * temp_bbox_center;
-	// temp_centroid = transform * temp_centroid;
 
 	temp.bbox.max = noob::vec3(temp_max);
 	temp.bbox.min = noob::vec3(temp_min);
 	temp.bbox.center = noob::vec3(temp_bbox_center);
-	// temp.bbox.centroid = noob::vec3(temp_centroid);
+	bbox = temp.bbox;
+*/
+}
 
-	//temp.bbox = bbox;
+void noob::basic_mesh::translate(const noob::vec3& translation)
+{
+	noob::transform_helper t;
+	t.translate(translation);
+	transform(t.get_matrix());
+}
 
-	return temp;
+
+void noob::basic_mesh::rotate(const noob::versor& orientation)
+{
+	noob::transform_helper t;
+	t.rotate(orientation);
+	transform(t.get_matrix());
+}
+
+
+void noob::basic_mesh::scale(const noob::vec3& scale)
+{
+	noob::transform_helper t;
+	t.scale(scale);
+	transform(t.get_matrix());
+
 }
 
 
@@ -471,72 +482,103 @@ std::vector<noob::basic_mesh> noob::basic_mesh::convex_decomposition() const
 }
 
 
-noob::basic_mesh noob::basic_mesh::csg(const noob::basic_mesh& a, const noob::basic_mesh& b, const noob::csg_op op)
+void noob::basic_mesh::calculate_texcoords()
 {
-	vtkSmartPointer<vtkPolyData> input1;
-	vtkSmartPointer<vtkPolyData> input2;
-
-	std::string input_filename_a("./temp/temp_csg_input_a.ply");
-	std::string input_filename_b("./temp/temp_csg_input_b.ply");
-
-	a.save(input_filename_a);
-	b.save(input_filename_b);
-
-	vtkSmartPointer<vtkPLYReader> reader1 = vtkSmartPointer<vtkPLYReader>::New();
-	reader1->SetFileName(input_filename_a.c_str());
-	reader1->Update();
-	input1 = reader1->GetOutput();
-
-	vtkSmartPointer<vtkPLYReader> reader2 = vtkSmartPointer<vtkPLYReader>::New();
-	reader2->SetFileName(input_filename_b.c_str());
-	reader2->Update();
-	input2 = reader2->GetOutput();
-
-	vtkSmartPointer<vtkPolyDataMapper> input1Mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-	input1Mapper->SetInputData(input1);
-	input1Mapper->ScalarVisibilityOff();
-
-	vtkSmartPointer<vtkPolyDataMapper> input2Mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-	input2Mapper->SetInputData(input2);
-	input2Mapper->ScalarVisibilityOff();
-
-	vtkSmartPointer<vtkBooleanOperationPolyDataFilter> boolean_operation = vtkSmartPointer<vtkBooleanOperationPolyDataFilter>::New();
-	if (op == noob::csg_op::UNION)
+	noob::vec3 bbox_dims = bbox.max - bbox.min;
+	//logger::log(fmt::format("BasicMesh - Bounding box dims = {0}", bbox_dims.to_string()));
+	//noob::vec3 ratios(bbox_dims.v[0]);
+	if (bbox_dims.v[0] < 0.001)
 	{
-		boolean_operation->SetOperationToUnion();
+		logger::log("Basic Mesh - Bounding box x too small. Setting to 1");
+		bbox_dims.v[0] = 1.0;
 	}
-	else if (op == noob::csg_op::INTERSECTION)
+	if (bbox_dims.v[1] < 0.001)
 	{
-		boolean_operation->SetOperationToIntersection();
+		logger::log("Basic Mesh - Bounding box y too small. Setting to 1");
+		bbox_dims.v[1] = 1.0;
 	}
-	else if (op == noob::csg_op::DIFFERENCE)
+	if (bbox_dims.v[2] < 0.001)
 	{
-		boolean_operation->SetOperationToDifference();
+		logger::log("Basic Mesh - Bounding box z too small. Setting to 1");
+		bbox_dims.v[2] = 1.0;
 	}
 
-vtkSmartPointer<vtkPolyData> booleaned_mesh;
+	for (size_t i = 0; i < vertices.size(); ++i)
+	{
+		noob::vec3 temp;
+		temp.v[0]= vertices[i].v[0] / bbox_dims.v[0];
+		temp.v[1] = vertices[i].v[1] / bbox_dims.v[1];
+		temp.v[2] = vertices[i].v[2] / bbox_dims.v[2];
+		texcoords.push_back(temp);
+	}
+}
 
-boolean_operation->SetInputData(0, input1);
-boolean_operation->SetInputData(1, input2);
+/*
+   noob::basic_mesh noob::basic_mesh::csg(const noob::basic_mesh& a, const noob::basic_mesh& b, const noob::csg_op op)
+   {
+   vtkSmartPointer<vtkPolyData> input1;
+   vtkSmartPointer<vtkPolyData> input2;
 
-boolean_operation->Update();
-booleaned_mesh = boolean_operation->GetOutput();
+   std::string input_filename_a("./temp/temp_csg_input_a.ply");
+   std::string input_filename_b("./temp/temp_csg_input_b.ply");
 
-vtkSmartPointer<vtkPLYWriter> writer = vtkSmartPointer<vtkPLYWriter>::New();
-writer->SetInputDataObject(booleaned_mesh);
-writer->SetFileName("./temp/bool_results.ply");
-writer->Update();
+   a.save(input_filename_a);
+   b.save(input_filename_b);
 
-noob::basic_mesh m;
-m.load_assimp("./temp/bool_results.ply");
-return m;
+   vtkSmartPointer<vtkPLYReader> reader1 = vtkSmartPointer<vtkPLYReader>::New();
+   reader1->SetFileName(input_filename_a.c_str());
+   reader1->Update();
+   input1 = reader1->GetOutput();
+
+   vtkSmartPointer<vtkPLYReader> reader2 = vtkSmartPointer<vtkPLYReader>::New();
+   reader2->SetFileName(input_filename_b.c_str());
+   reader2->Update();
+   input2 = reader2->GetOutput();
+
+   vtkSmartPointer<vtkPolyDataMapper> input1Mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+   input1Mapper->SetInputData(input1);
+   input1Mapper->ScalarVisibilityOff();
+
+   vtkSmartPointer<vtkPolyDataMapper> input2Mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+   input2Mapper->SetInputData(input2);
+   input2Mapper->ScalarVisibilityOff();
+
+   vtkSmartPointer<vtkBooleanOperationPolyDataFilter> boolean_operation = vtkSmartPointer<vtkBooleanOperationPolyDataFilter>::New();
+   if (op == noob::csg_op::UNION)
+   {
+   boolean_operation->SetOperationToUnion();
+   }
+   else if (op == noob::csg_op::INTERSECTION)
+   {
+   boolean_operation->SetOperationToIntersection();
+   }
+   else if (op == noob::csg_op::DIFFERENCE)
+   {
+   boolean_operation->SetOperationToDifference();
+   }
+
+   vtkSmartPointer<vtkPolyData> booleaned_mesh;
+
+   boolean_operation->SetInputData(0, input1);
+   boolean_operation->SetInputData(1, input2);
+
+   boolean_operation->Update();
+   booleaned_mesh = boolean_operation->GetOutput();
+
+   vtkSmartPointer<vtkPLYWriter> writer = vtkSmartPointer<vtkPLYWriter>::New();
+   writer->SetInputDataObject(booleaned_mesh);
+   writer->SetFileName("./temp/bool_results.ply");
+   writer->Update();
+
+   noob::basic_mesh m;
+   m.load_assimp("./temp/bool_results.ply");
+   return m;
 //vtkSmartPointer<vtkPolyDataMapper> boolean_operation_mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
 //boolean_operation_mapper->SetInputConnection(boolean_operation->GetOutputPort());
 //boolean_operation_mapper->ScalarVisibilityOff();
-
-
 }
 
+*/
 // TODO: Use the same struct and benefit from zero-copy awesomeness
 /*
    noob::basic_mesh noob::basic_mesh::csg(const noob::basic_mesh& a, const noob::basic_mesh& b, const noob::csg_op op)
@@ -782,7 +824,6 @@ noob::basic_mesh noob::basic_mesh::cube(float width, float height, float depth, 
 
 
 	// generate (quadrilateral) faces
-
 	std::vector<PolyMesh::VertexHandle> face_vhandles;
 
 	face_vhandles.clear();
@@ -854,6 +895,7 @@ noob::basic_mesh noob::basic_mesh::sphere(float radius)
 	logger::log(fmt::format("Created sphere of radius {0}.", radius));
 	return mesh;
 }
+
 
 /*
    noob::basic_mesh noob::basic_mesh::bone()

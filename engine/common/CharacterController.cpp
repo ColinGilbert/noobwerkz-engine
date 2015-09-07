@@ -85,13 +85,13 @@ void noob::character_controller::update()
 		airborne = false;
 		// if (i == 0) airborne = false;
 		// if (i == 1) obstacle = false;
-		// logger::log("[Character] - ray hit!");
+		//logger::log("[Character] - ray hit!");
 		ray_lambda = ray_callback.m_closestHitFraction;
 	}
 	else
 	{
 		airborne = true;
-		// logger::log("[Character] - no hit");
+		//logger::log("[Character] - no hit");
 		ray_lambda = 1.0;
 	}
 }

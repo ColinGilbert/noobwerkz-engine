@@ -57,6 +57,7 @@
 #include "Model.hpp"
 #include "ShaderVariant.hpp"
 #include "PhysicsUtils.hpp"
+#include "MeshCSG.hpp"
 
 #include <btBulletDynamicsCommon.h>
 // #include <chaiscript/chaiscript.hpp>
