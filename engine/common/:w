@@ -9,21 +9,21 @@ bool noob::stage::init()
 	dynamics_world = new btDiscreteDynamicsWorld(collision_dispatcher, broadphase, solver, collision_configuration);
 	dynamics_world->setGravity(btVector3(0, -10, 0));
 
-	shaders.init();
+	renderer.init();
 
-	set_model_name(add_model(noob::basic_mesh::sphere(0.5)), "unit-sphere");
-	set_model_name(add_model(noob::basic_mesh::cube(1.0, 1.0, 1.0)), "unit-cube");
-	set_model_name(add_model(noob::basic_mesh::cylinder(0.5, 1.0)), "unit-cylinder");
-	set_model_name(add_model(noob::basic_mesh::cone(0.5, 1.0)), "unit-cone");
+//	set_model_name(add_model(noob::basic_mesh::sphere(0.5)), "unit-sphere");
+//	set_model_name(add_model(noob::basic_mesh::cube(1.0, 1.0, 1.0)), "unit-cube");
+//	set_model_name(add_model(noob::basic_mesh::cylinder(0.5, 1.0)), "unit-cylinder");
+//	set_model_name(add_model(noob::basic_mesh::cone(0.5, 1.0)), "unit-cone");
 
-	set_skeleton_name(add_skeleton("seymour.skel.ozz"), "human");
-
-	set_light_name(add_light(noob::light()), "default");
-	set_reflectance_name(add_reflectance(noob::reflectance()), "default");
-
-	noob::basic_renderer::uniform_info dbg_shader;
-	dbg_shader.colour = noob::vec4(0.0, 0.3, 0.3, 1.0);	
-	set_shader_name(add_shader(dbg_shader), "debug");
+//	set_skeleton_name(add_skeleton("seymour.skel.ozz"), "human");
+	
+//	noob::basic_renderer::uniform_info dbg_shader;
+//	dbg_shader.colour = noob::vec4(0.0, 0.3, 0.3, 1.0);
+//	set_light_name(add_light(noob::light()), "default");
+//	set_reflectance_name(add_reflectance(noob::reflectance()), "default");
+	
+//	set_shader_name(add_shader(dbg_shader),"debug");
 
 	logger::log("[Stage] init complete.");
 	return true;
@@ -59,21 +59,22 @@ void noob::stage::tear_down()
 	delete broadphase;
 }
 
-
 void noob::stage::update(double dt)
 {
+/*
 	dynamics_world->stepSimulation(1.0/60.0, 10);
 	for (size_t i = 0; i < actors.size(); ++i)
 	{
 		noob::actor* a = actors[i].get();
 		a->update();
 	}
-
+*/
 }
 
 
 void noob::stage::draw() const
 {
+/*
 	for (size_t i = 0; i < actors.size(); ++i)
 	{
 		noob::actor* a = actors[i].get();
@@ -89,14 +90,14 @@ void noob::stage::draw() const
 		noob::scenery* s = sceneries[i].get();
 		draw(s->drawable, s->get_transform());
 	}
-
+*/
 	// TODO: Use frustum + physics world collisions to determine which items are visible, and then draw them.
 }
-
+/*
 
 void noob::stage::draw(noob::drawable* d, const noob::mat4& transform) const
 {
-	shaders.draw(d->get_model_ptr(),*(d->get_shading_ptr()), transform);
+	renderer.draw(d->get_model_ptr(),*(d->get_shading_ptr()), transform);
 }
 
 
@@ -406,6 +407,7 @@ noob::drawable* noob::stage::get_drawable_ptr(size_t _index) const
 		return drawables[0].get();
 	}
 	return drawables[_index].get();
+
 }
 
 
@@ -533,7 +535,7 @@ bool noob::stage::shader_exists(size_t index) const
 {
 	return (index <= shader_uniforms.size());
 }
-
+*/
 
 btRigidBody* noob::stage::body(btCollisionShape* shape, float mass, const noob::vec3& pos, const noob::versor& orientation)
 {

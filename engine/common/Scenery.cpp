@@ -8,8 +8,7 @@ void noob::scenery::init(btDiscreteDynamicsWorld* _world, noob::drawable* _drawa
 	drawable = _drawable;
 	noob::model* model  = drawable->get_model_ptr();
 	btTriangleMesh* phyz_mesh = new btTriangleMesh();
-
-	for (size_t i = 0; i < model->meshes[0].indices.size(); i += 3)
+	for (size_t i = 0; i < model->meshes[0].indices.size(); i = i + 3)
 	{
 		uint16_t index_1 = model->meshes[0].indices[i];
 		uint16_t index_2 = model->meshes[0].indices[i+1];
@@ -22,6 +21,7 @@ void noob::scenery::init(btDiscreteDynamicsWorld* _world, noob::drawable* _drawa
 		btVector3 bv1 = btVector3(v1[0], v1[1], v1[2]);
 		btVector3 bv2 = btVector3(v2[0], v2[1], v2[2]);
 		btVector3 bv3 = btVector3(v3[0], v3[1], v3[2]);
+
 		phyz_mesh->addTriangle(bv1, bv2, bv3);
 	}        
 

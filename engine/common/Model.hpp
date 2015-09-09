@@ -84,10 +84,11 @@ namespace noob
 			model(const noob::basic_mesh&);
 
 			void draw(uint8_t view_id, const noob::mat4& model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags = BGFX_STATE_DEFAULT) const;
-		
+
+
 		protected:
 			bool ready;
-			std::vector<noob::model::mesh> meshes;
+			std::vector<noob::model::mesh> meshes;	
 	};
 
 }

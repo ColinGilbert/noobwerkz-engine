@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 project(NoobWerkz)
 
 #set(CMAKE_BUILD_TYPE "DEBUG")
-set(CMAKE_BUILD_TYPE "RELEASE")
+#set(CMAKE_BUILD_TYPE "RELEASE")
 
 set(CMAKE_CXX_FLAGS "-std=c++1y -O2 -fno-strict-aliasing -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DOM_GARBAGE_NO_STATUS_WARNING -DEIGEN_MPL2_ONLY -Wall ${CMAKE_CXX_FLAGS}") # -DCHAISCRIPT_NO_THREADS
 set(CMAKE_C_FLAGS "-std=c99 -fno-strict-aliasing -DSQLITE_ENABLE_COLUMN_METADATA -DSTB_IMAGE_STATIC -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -Wall ${CMAKE_C_FLAGS}")
@@ -10,8 +10,8 @@ set(CMAKE_C_FLAGS "-std=c99 -fno-strict-aliasing -DSQLITE_ENABLE_COLUMN_METADATA
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 
-find_package(VTK REQUIRED)
-include(${VTK_USE_FILE})
+#find_package(VTK REQUIRED)
+#include(${VTK_USE_FILE})
 
 include_directories(lib/cppformat)
 list (APPEND cppformat_src
@@ -30,6 +30,11 @@ include_directories(lib/polyvox/include)
 
 #include_directories(lib/eigen)
 #add_subdirectory(lib/rbdl)
+
+include_directories(lib/csgjs-cpp)
+list (APPEND csgjs_src
+	lib/csgjs-cpp/csgjs.cpp
+	)
 
 include_directories(lib/openmesh/src)
 add_subdirectory(lib/openmesh)
@@ -182,9 +187,13 @@ include_directories(platform/nix)
 
 list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 
-add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src} ${es_src} ${user_src} ${recast_src}) 
+add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${csgjs_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src} ${es_src} ${user_src} ${recast_src}) 
 
-target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m emon OpenMeshCore OpenMeshToolsStatic spnav ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r BulletDynamics BulletCollision BulletSoftBody LinearMath ${Boost_LIBRARIES} ${VTK_LIBRARIES})
+target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES}
+	${OPENGL_LIBRARIES} freetype rt dl pthread assimp m emon OpenMeshCore
+	OpenMeshToolsStatic spnav ozz_animation_offline_r ozz_animation_r
+	ozz_geometry_r ozz_base_r BulletDynamics BulletCollision
+	BulletSoftBody LinearMath ${Boost_LIBRARIES})# ${VTK_LIBRARIES})
 project(LogServer)
 
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")

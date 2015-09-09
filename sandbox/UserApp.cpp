@@ -22,7 +22,7 @@ void noob::application::user_init()
 	// basic_shader_info.colour = noob::vec4(1.0, 0.0, 0.0, 1.0);
 	// stage.set_shader_name(stage.add_shader(basic_shader_info), "debug");
 	
-	size_t actor_id = stage.add_actor(stage.add_drawable(stage.get_model_id("unit-cylinder"), stage.get_light_id("default"), stage.get_reflectance_id("default"), stage.get_shader_id("debug")), stage.get_skeleton_id("human"), noob::vec3(0.0, 60.0, 0.0));
+	size_t actor_id = stage.add_actor(stage.add_drawable(stage.get_model_id("unit-sphere"), stage.get_light_id("default"), stage.get_reflectance_id("default"), stage.get_shader_id("debug")), stage.get_skeleton_id("human"), noob::vec3(0.0, 80.0, 0.0));
 	player_character = stage.get_actor_ptr(actor_id);
 	/*
 	voxels.sphere(20, 50, 50, 50);
@@ -39,12 +39,12 @@ void noob::application::user_init()
 	noob::basic_mesh d = noob::basic_mesh::cube(1000.0, 15.0, 1000.0);
 	d.translate(noob::vec3(0.0, -20.0, 0.0));
 	noob::basic_mesh e = noob::mesh_csg(c, d, noob::csg_op::UNION);
-	stage.set_model_name(stage.add_model(e), "ground");
+	size_t ground_model_id = stage.add_model(e);//, "ground");
 
 
 	
-	stage.set_drawable_name(stage.add_drawable(stage.get_model_id("ground"), stage.get_light_id("default"), stage.get_reflectance_id("default"), stage.get_shader_id("moon")), "ground");
-	stage.add_scenery(stage.get_drawable_id("ground"), noob::vec3(0.0, 0.0, 0.0));
+	size_t ground_drawable_id = stage.add_drawable(ground_model_id, stage.get_light_id("default"), stage.get_reflectance_id("default"), stage.get_shader_id("moon"));//, "ground");
+	stage.add_scenery(ground_drawable_id, noob::vec3(0.0, 0.0, 0.0));
 }
 
 
