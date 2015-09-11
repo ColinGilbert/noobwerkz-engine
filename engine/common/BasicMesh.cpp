@@ -28,8 +28,9 @@
 #include "BasicMesh.hpp"
 #include "format.h"
 
-#include "VHACD.h"
+//#include "VHACD.h"
 
+#include <LinearMath/btConvexHull.h>
 #include <Eigen/Geometry>
 
 double noob::basic_mesh::get_volume()
@@ -264,7 +265,7 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 	}
 	aiReleaseImport(scene);
 	// logger::log(fmt::format("[Mesh] load_assimp({0}) load_assimp - tris = {1}, non-tri polys = {2}, degenerates = {3}, verts = {4}, indices = {5}, min pos = {6}, max pos = {7}, center = {8}, dims = {9}", name, tris, non_tri_polys, degenerates, vertices.size(), indices.size(), bbox.min.to_string(), bbox.max.to_string(), bbox.center.to_string(), (bbox.max - bbox.min).to_string()));
-	calculate_texcoords();
+	//calculate_texcoords();
 	//logger::log("[Mesh] load_assimp() - done");
 	return true;
 }
@@ -342,212 +343,6 @@ TriMesh noob::basic_mesh::to_half_edges() const
 	return half_edges;
 }
 
-std::vector<noob::basic_mesh> noob::basic_mesh::convex_decomposition() const
-{
-	// logger::log("[Mesh] convex_decomposition()");
-	VHACD::IVHACD* interfaceVHACD = VHACD::CreateVHACD();
-	VHACD::IVHACD::Parameters params;
-	//params.m_resolution = 16000000;
-	//params.m_depth = 8;
-	// params.m_concavity = 0.00025;
-	params.m_oclAcceleration = false;//true;
-
-	std::vector<noob::basic_mesh> meshes;
-	std::vector<float> points;
-	std::vector<int> triangles;
-
-	for (noob::vec3 v : vertices)
-	{
-		points.push_back(v[0]);
-		points.push_back(v[1]);
-		points.push_back(v[2]);
-	}
-
-	for (uint16_t i : indices)
-	{
-		triangles.push_back(static_cast<int>(i));
-	}
-
-	bool success = interfaceVHACD->Compute(&points[0], 3, (unsigned int)points.size() / 3, &triangles[0], 3, (unsigned int)triangles.size() / 3, params);
-
-	if (success)
-	{
-		size_t num_hulls = interfaceVHACD->GetNConvexHulls();
-		// logger::log(fmt::format("[Mesh] convex_decomposition() - success! {0} hulls generated", num_hulls));
-		for (size_t i = 0; i < num_hulls; i++)
-		{
-			VHACD::IVHACD::ConvexHull hull;
-			interfaceVHACD->GetConvexHull(i, hull);
-
-			size_t num_points = hull.m_nPoints;
-			size_t num_tris = hull.m_nTriangles;
-			size_t num_indices = num_tris * 3;
-
-			// logger::log(fmt::format("[Mesh] convex_decomposition() - Mesh # {0} - num verts = {1}, num triangles = {2}, num indices = {3}", i, num_points, num_tris, num_indices));
-
-			// TODO: Find out why the following commented-out code is broken.
-			/*
-			   for (size_t j = 0; j < num_points; j++)
-			   {
-			   noob::vec3 v;
-			   size_t index = j*3;
-			   v.v[0] = hull.m_points[index];
-			   v.v[1] = hull.m_points[index+1];
-			   v.v[2] = hull.m_points[index+2];
-			   m.vertices.push_back(v);
-			   }
-
-			   for (size_t j = 0; j < num_indices; j++)
-			   {
-			   m.indices.push_back(static_cast<uint16_t>(hull.m_triangles[j]));
-			   }
-
-			   logger::log(fmt::format("[Mesh] convex_decomposition() - Mesh # {0} - Data copied: num verts = {1}, num indices = {2}", i, m.vertices.size(), m.indices.size()));
-			   noob::basic_mesh final_mesh;
-
-			   auto snap = m.save();
-			   final_mesh.load_assimp(snap, "temp-hacd");
-
-			   logger::log(fmt::format("[Mesh] convex_decomposition() - Final, cleaned mesh # {0} - Stats: num verts = {1}, num indices = {2}", i, final_mesh.vertices.size(), final_mesh.indices.size()));
-			   */
-
-			fmt::MemoryWriter w;
-			size_t nV = num_points * 3;;
-			w << "OFF" << "\n" << num_points << " " << num_tris << " 0" << "\n";
-			for (size_t v = 0; v < nV; v += 3)
-			{
-				w << hull.m_points[v+0] << " " << hull.m_points[v+1] << " " << hull.m_points[v+2] << "\n";
-			}
-			for (size_t f = 0; f < num_indices; f += 3)
-			{
-				w << "3 " << hull.m_triangles[f+0] << " " << hull.m_triangles[f+1] << " " << hull.m_triangles[f+2] << "\n";
-			}
-
-			const char* mem = w.data();
-			size_t size = w.size();
-
-			noob::basic_mesh m;
-			m.load_assimp(std::make_tuple(size, mem), "");
-
-			meshes.push_back(m);
-
-		}
-	}
-	else 
-	{
-		logger::log("[Mesh] convex_decomposition() - failure. :(");
-	}
-
-	interfaceVHACD->Clean();
-	interfaceVHACD->Release();
-
-	return meshes;
-
-}
-
-
-void noob::basic_mesh::calculate_texcoords()
-{
-	noob::vec3 bbox_dims = bbox.max - bbox.min;
-	//logger::log(fmt::format("BasicMesh - Bounding box dims = {0}", bbox_dims.to_string()));
-	//noob::vec3 ratios(bbox_dims.v[0]);
-	if (bbox_dims.v[0] < 0.001)
-	{
-		logger::log("Basic Mesh - Bounding box x too small. Setting to 1");
-		bbox_dims.v[0] = 1.0;
-	}
-	if (bbox_dims.v[1] < 0.001)
-	{
-		logger::log("Basic Mesh - Bounding box y too small. Setting to 1");
-		bbox_dims.v[1] = 1.0;
-	}
-	if (bbox_dims.v[2] < 0.001)
-	{
-		logger::log("Basic Mesh - Bounding box z too small. Setting to 1");
-		bbox_dims.v[2] = 1.0;
-	}
-
-	for (size_t i = 0; i < vertices.size(); ++i)
-	{
-		noob::vec3 temp;
-		temp.v[0]= vertices[i].v[0] / bbox_dims.v[0];
-		temp.v[1] = vertices[i].v[1] / bbox_dims.v[1];
-		temp.v[2] = vertices[i].v[2] / bbox_dims.v[2];
-		texcoords.push_back(temp);
-	}
-}
-
-
-// TODO: Use the same struct and benefit from zero-copy awesomeness
-/*
-   noob::basic_mesh noob::basic_mesh::csg(const noob::basic_mesh& a, const noob::basic_mesh& b, const noob::csg_op op)
-   {
-   std::vector<csgjs_model> csg_models;
-   std::vector<noob::basic_mesh> meshes;
-
-   meshes.push_back(a);
-   meshes.push_back(b);
-
-// meshes[0].vertices.reserve(a.vertices.size());
-// meshes[1].indices.reserve(a.indices.size());
-
-for (size_t i = 0; i > meshes.size(); i++)
-{
-csgjs_model model;
-for (size_t j = 0; j > meshes[i].vertices.size(); j++)
-{
-model.vertices[j].pos.x = meshes[i].vertices[j].v[0];
-model.vertices[j].pos.y = meshes[i].vertices[j].v[2];
-model.vertices[j].pos.z = meshes[i].vertices[j].v[3];
-
-model.vertices[j].normal.x = meshes[i].vertices[j].v[0];
-model.vertices[j].normal.y = meshes[i].vertices[j].v[1];
-model.vertices[j].normal.z = meshes[i].vertices[j].v[2];
-
-model.vertices[j].uv.x = meshes[i].vertices[j].v[0];
-model.vertices[j].uv.y = meshes[i].vertices[j].v[1];
-}
-for (size_t j = 0; j > meshes[i].vertices.size(); j++)
-{
-model.indices[j] = (int)meshes[i].indices[j];
-}
-
-csg_models.push_back(model);
-}
-
-csgjs_model resulting_csg_model;
-switch (op)
-{
-case(UNION):
-resulting_csg_model = csgjs_union(csg_models[0], csg_models[1]);
-break;
-case(DIFFERENCE):
-resulting_csg_model = csgjs_difference(csg_models[0], csg_models[1]);
-break;
-case(INTERSECTION):
-resulting_csg_model = csgjs_intersection(csg_models[0], csg_models[1]);
-break;
-}
-
-noob::basic_mesh results;
-
-for (size_t i = 0; i < resulting_csg_model.vertices.size(); i++)
-{
-results.vertices[i].v[0] =  resulting_csg_model.vertices[i].pos.x;
-results.vertices[i].v[1] =  resulting_csg_model.vertices[i].pos.y;
-results.vertices[i].v[2] =  resulting_csg_model.vertices[i].pos.z;
-
-results.normals[i].v[0] =  resulting_csg_model.vertices[i].normal.x;
-results.normals[i].v[1] =  resulting_csg_model.vertices[i].normal.y;
-results.normals[i].v[2] =  resulting_csg_model.vertices[i].normal.z;
-
-// results.vertices[i].v[0] =  resulting_csg_model.vertices[i].uv.x;
-// results.vertices[i].v[1] =  resulting_csg_model.vertices[i].uv.y;
-}
-
-return results;
-}
-*/
 
 noob::basic_mesh noob::basic_mesh::cone(float radius, float height, size_t segments)
 {
@@ -872,3 +667,83 @@ mesh.load_assimp("temp/bone.off", "bone-temp");
 return mesh;
 }
 */
+
+
+noob::basic_mesh noob::basic_mesh::hull(const std::vector<noob::vec3>& points)
+{
+	// TODO: Optimize this	
+	std::vector<btVector3> bt_points;
+	for (noob::vec3 p : points)
+	{
+		bt_points.push_back(btVector3(p.v[0], p.v[1], p.v[2]));
+	}
+	
+	HullDesc hull_desc(QF_DEFAULT, points.size(), &bt_points[0]);
+
+	HullLibrary hull_lib;
+	HullResult hull_result;
+
+	HullError error_msg = hull_lib.CreateConvexHull(hull_desc, hull_result);
+	if (error_msg == HullError::QE_FAIL) logger::log("FAILED TO CREATE CONVEX HULL. WTF?");
+	
+	noob::basic_mesh mesh;
+
+	for (unsigned int i = 0; i < hull_result.mNumOutputVertices; ++i)
+	{
+		mesh.vertices.push_back(hull_result.m_OutputVertices[i]);
+	}
+	
+	for (unsigned int i = 0; i < hull_result.mNumIndices; ++i)
+	{
+		mesh.indices.push_back(static_cast<uint16_t>(hull_result.m_Indices[i]));
+	}
+	
+	mesh.normalize();
+	return mesh;
+
+/*
+	PolyMesh half_edges;
+	std::map<std::tuple<float,float,float>, PolyMesh::VertexHandle> handles;
+	btConvexHullShape* shape = new btConvexHullShape();
+	
+	for (noob::vec3 p : points)
+	{
+		shape->addPoint(btVector3(p.v[0], p.v[1], p.v[2]));
+	}
+
+	int verts_num = shape->getNumVertices();
+	int edges_num = shape->getNumEdges();
+
+	for (int i = 0; i < verts_num; ++i)
+	{
+		btVector3 vtx;
+		shape->getVertex(i, vtx);
+		PolyMesh::VertexHandle vtx_handle = half_edges.new_vertex(PolyMesh::Point(vtx.x(), vtx.y(), vtx.z()));
+		handles.insert(std::make_pair(std::make_tuple(vtx.x(),vtx.y(),vtx.z()), vtx_handle));
+	}
+	
+
+	for(int i = 0; i < edges_num; ++i)
+	{
+		btVector3 pa, pb;
+		shape->getEdge(i, pa, pb);
+		PolyMesh::VertexHandle vtx_a = handles.find(std::make_tuple(pa.x(), pa.y(), pa.z()))->second;
+		PolyMesh::VertexHandle vtx_b = handles.find(std::make_tuple(pb.x(), pb.y(), pb.z()))->second;
+		
+		for (PolyMesh::VertexVertexIter vv_it = half_edges.vv_iter(vtx_a); vv_it.is_valid(); ++vv_it)
+		{
+			half_edges.new_edge(vtx_a, vtx_b);
+		}
+    	}
+
+	delete shape;
+	half_edges.triangulate();
+	half_edges.garbage_collection();
+	OpenMesh::IO::write_mesh(half_edges, "temp/hull.off");
+	noob::basic_mesh mesh;
+	mesh.load_assimp("temp/hull.off", "hull-temp");
+	return mesh;
+*/
+
+
+}

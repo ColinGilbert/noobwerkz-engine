@@ -96,15 +96,13 @@ namespace noob
 			void rotate(const noob::versor&);
 			void scale(const noob::vec3&);
 
-			// Expensive. Try not calling it during actual gameplay
-			std::vector<noob::basic_mesh> convex_decomposition() const;
-			void calculate_texcoords();
 			noob::basic_mesh::bbox_info get_bbox() const { return bbox; }
 
 			static noob::basic_mesh cone(float radius, float height, size_t segments = 0);
 			static noob::basic_mesh cube(float width, float height, float depth, size_t subdivides = 0);
 			static noob::basic_mesh cylinder(float radius, float height, size_t segments = 0);
 			static noob::basic_mesh sphere(float radius);
+			static noob::basic_mesh hull(const std::vector<noob::vec3>& points);
 			// static noob::basic_mesh bone();
 
 		protected:

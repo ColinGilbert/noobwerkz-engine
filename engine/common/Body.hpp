@@ -1,17 +1,18 @@
 #pragma once
-#include "MathFuncs.hpp"
-#include "TransformHelper.hpp"
 
+#include <vector>
 #include <btBulletDynamicsCommon.h>
+
+#include "MathFuncs.hpp"
+#include "Stage.hpp"
 
 namespace noob
 {
-	class physics_node
+	class body
 	{
+		friend class stage;
 		public:
-			enum class shape_type { SPHERE, BOX, CONE, CAPSULE, CONVEX };
-		
-			void init(btRigidBody*);
+			void init(float mass = 1.0, float friction = -1.0, float restitution = -1.0);
 			
 			void set_position(const noob::vec3&);
 			void set_orientation(const noob::versor&);
@@ -21,15 +22,10 @@ namespace noob
 			noob::mat4 get_transform() const;
 			
 			std::string get_debug_info() const;
-			
+
 			btRigidBody* get_body() const;
-			noob::physics_node::shape_type get_shape() const;
 
 		protected:
-
 			btRigidBody* body;
-			noob::physics_node::shape_type shape;
-			std::vector<float> dims;
-
 	};
 }

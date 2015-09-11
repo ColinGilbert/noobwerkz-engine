@@ -10,9 +10,9 @@ namespace noob
 		noob::vec3 position, specular, diffuse, ambient;
 	};
 
-	struct reflectance
+	struct reflection
 	{
-		reflectance() : specular(1.0, 1.0, 1.0), diffuse(1.0, 1.0, 1.0), ambient(1.0, 1.0, 1.0), exponent(100.0) {}
+		reflection() : specular(1.0, 1.0, 1.0), diffuse(1.0, 1.0, 1.0), ambient(1.0, 1.0, 1.0), exponent(100.0) {}
 		noob::vec3 specular, diffuse, ambient;
 		float exponent;
 	};

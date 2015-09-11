@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Mesh.hpp"
+#include "BasicMesh.hpp"
 #include "MathFuncs.hpp"
 
 //#define CSGJS_HEADER_ONLY

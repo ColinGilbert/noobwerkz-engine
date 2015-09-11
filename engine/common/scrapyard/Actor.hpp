@@ -7,21 +7,17 @@
 #include <deque>
 #include <btBulletDynamicsCommon.h>
 
-#include "Stage.hpp"
-
 #include "MathFuncs.hpp"
 #include "SkeletalAnim.hpp"
 #include "CharacterController.hpp"
 #include "Graphics.hpp"
 #include "ShaderVariant.hpp"
-//#include "Light.hpp"
 #include "Drawable.hpp"
 
 namespace noob
 {
 	class actor
 	{
-		friend class stage;
 		public:
 			actor() : anim_time(0.0) {}
 			

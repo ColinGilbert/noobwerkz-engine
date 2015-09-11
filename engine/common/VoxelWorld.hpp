@@ -8,7 +8,7 @@
 #include <PolyVox/RawVolume.h>
 
 #include "MathFuncs.hpp"
-#include "Mesh.hpp"
+#include "BasicMesh.hpp"
 
 
 namespace noob

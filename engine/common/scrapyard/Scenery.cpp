@@ -10,6 +10,7 @@ void noob::scenery::init(btDiscreteDynamicsWorld* _world, noob::drawable* _drawa
 	btTriangleMesh* phyz_mesh = new btTriangleMesh();
 	for (size_t i = 0; i < model->meshes[0].indices.size(); i = i + 3)
 	{
+		logger::log("loop");
 		uint16_t index_1 = model->meshes[0].indices[i];
 		uint16_t index_2 = model->meshes[0].indices[i+1];
 		uint16_t index_3 = model->meshes[0].indices[i+2];

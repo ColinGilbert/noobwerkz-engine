@@ -12,15 +12,13 @@
 
 #include "format.h"
 #include "MathFuncs.hpp"
-#include "Mesh.hpp"
+#include "BasicMesh.hpp"
 
 
 namespace noob
 {
 	class model
 	{
-		friend class scenery;
-		//friend class scenery;
 		public:
 			~model();
 			

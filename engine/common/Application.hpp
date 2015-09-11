@@ -47,7 +47,7 @@
 #include "Graphics.hpp"
 #include "VoxelWorld.hpp"
 #include "GUI.hpp"
-#include "Mesh.hpp"
+#include "BasicMesh.hpp"
 #include "Camera.hpp"
 #include "NDOF.hpp"
 #include "Stage.hpp"
@@ -56,7 +56,7 @@
 #include "format.h"
 #include "Model.hpp"
 #include "ShaderVariant.hpp"
-#include "PhysicsUtils.hpp"
+// #include "PhysicsUtils.hpp"
 #include "MeshCSG.hpp"
 
 #include <btBulletDynamicsCommon.h>
