@@ -28,13 +28,7 @@ namespace noob
 				convex(const std::vector<noob::vec3> _points) : points(_points)
 			{	
 				inner_shape = new btConvexHullShape(&points[0].v[0], points.size());
-				//	inner_shape = new btConvexHullShape();
-				/*
-				   for ( noob::vec3 p : points)
-				   {
-				   inner_shape.addPoint(btVector3(p.v[0], p.v[1], pv.[2]));
-				   }
-				   */
+
 			}
 
 			protected:
