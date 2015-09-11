@@ -182,16 +182,18 @@ _OFFReader_::read_ascii(std::istream& _in, BaseImporter& _bi, Options& _opt) con
 {
 
 
-  unsigned int            i, j, k, l, idx;
-  unsigned int            nV, nF, dummy;
-  OpenMesh::Vec3f         v, n;
-  OpenMesh::Vec2f         t;
-  OpenMesh::Vec3i         c3;
-  OpenMesh::Vec3f         c3f;
-  OpenMesh::Vec4i         c4;
-  OpenMesh::Vec4f         c4f;
-  BaseImporter::VHandles  vhandles;
-  VertexHandle            vh;
+  unsigned int              i, j, k, l, idx;
+  unsigned int              nV, nF, dummy;
+  OpenMesh::Vec3f           v, n;
+  OpenMesh::Vec2f           t;
+  OpenMesh::Vec3i           c3;
+  OpenMesh::Vec3f           c3f;
+  OpenMesh::Vec4i           c4;
+  OpenMesh::Vec4f           c4f;
+  BaseImporter::VHandles    vhandles;
+  VertexHandle              vh;
+  static std::stringstream  stream;
+  static std::string        trash;
 
   // read header line
   std::string header;
@@ -227,12 +229,11 @@ _OFFReader_::read_ascii(std::istream& _in, BaseImporter& _bi, Options& _opt) con
 
     int colorType = getColorType(line, options_.vertex_has_texcoord() );
 
-    std::stringstream stream( line );
+    stream.str(line);
+    stream.clear();
 
     //perhaps read COLOR
     if ( options_.vertex_has_color() ){
-
-      std::string trash;
 
       switch (colorType){
         case 0 : break; //no color
@@ -315,9 +316,8 @@ _OFFReader_::read_ascii(std::istream& _in, BaseImporter& _bi, Options& _opt) con
 
       int colorType = getColorType(line, false );
 
-      std::stringstream stream( line );
-
-      std::string trash;
+      stream.str(line);
+      stream.clear();
 
       switch (colorType){
         case 0 : break; //no color
