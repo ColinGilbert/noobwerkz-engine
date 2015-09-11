@@ -172,6 +172,8 @@ read_material(std::fstream& _in)
   std::string keyWrd;
   std::string textureName;
 
+  static std::stringstream  stream;
+
   std::string key;
   Material    mat;
   float       f1,f2,f3;
@@ -193,7 +195,8 @@ read_material(std::fstream& _in)
     if ( line.empty() )
       continue;
 
-    std::stringstream stream(line);
+    stream.str(line);
+    stream.clear();
 
     stream >> keyWrd;
 
@@ -305,6 +308,8 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
 
   std::string               matname;
 
+  static std::stringstream  stream, lineData, tmp;
+
 
   // Options supplied by the user
   Options userOptions = _opt;
@@ -329,7 +334,8 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
       continue;
     }
 
-    std::stringstream stream(line);
+    stream.str(line);
+    stream.clear();
 
     stream >> keyWrd;
 
@@ -463,7 +469,8 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
       // read full line after detecting a face
       std::string faceLine;
       std::getline(stream,faceLine);
-      std::stringstream lineData( faceLine );
+      lineData.str( faceLine );
+      lineData.clear();
 
       FaceHandle fh;
       BaseImporter::VHandles faceVertices;
@@ -484,7 +491,8 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
           if( found != std::string::npos ){
 
             // read the index value
-            std::stringstream tmp( vertex.substr(0,found) );
+            tmp.str( vertex.substr(0,found) );
+            tmp.clear();
 
             // If we get an empty string this property is undefined in the file
             if ( vertex.substr(0,found).empty() ) {
@@ -507,7 +515,8 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
           } else {
 
             // last component of the vertex, read it.
-            std::stringstream tmp( vertex );
+            tmp.str( vertex );
+            tmp.clear();
             tmp >> value;
 
             // Clear vertex after finished reading the line
