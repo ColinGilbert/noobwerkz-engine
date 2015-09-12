@@ -2,7 +2,7 @@
 
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
-#include "Model.hpp"
+#include "AnimatedModel.hpp"
 
 namespace noob
 {
@@ -16,7 +16,7 @@ namespace noob
 			};
 			
 			void init();
-			void draw(const noob::model* model, const noob::mat4& model_mat, const noob::basic_renderer::uniform_info& info, uint8_t view_id = 0) const;
+			void draw(const noob::animated_model* animated_model, const noob::mat4& world_matrix, const noob::basic_renderer::uniform_info& info, uint8_t view_id = 0) const;
 
 		protected:
 			noob::graphics::shader shader;

@@ -17,10 +17,10 @@
 
 namespace noob
 {
-	class model
+	class animated_model
 	{
 		public:
-			~model();
+			~animated_model();
 			
 			template <class Archive>
 				void serialize(Archive& ar)
@@ -77,16 +77,16 @@ namespace noob
 
 			};
 
-			// This loads from the cereal binary files prepared by the model_loader class
-			model(const std::string& filename);
-			model(const noob::basic_mesh&);
+			// This loads from the cereal binary files prepared by the animated_model_loader class
+			animated_model(const std::string& filename);
+			animated_model(const noob::basic_mesh&);
 
-			void draw(uint8_t view_id, const noob::mat4& model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags = BGFX_STATE_DEFAULT) const;
+			void draw(uint8_t view_id, const noob::mat4& animated_model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags = BGFX_STATE_DEFAULT) const;
 
 
 		protected:
 			bool ready;
-			std::vector<noob::model::mesh> meshes;	
+			std::vector<noob::animated_model::mesh> meshes;	
 	};
 
 }

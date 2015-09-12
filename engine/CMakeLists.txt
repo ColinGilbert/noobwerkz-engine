@@ -148,7 +148,7 @@ list(APPEND common_src
 	common/UIFont.cpp
 	common/CharacterController.cpp
 	common/ModelLoader.cpp
-	common/Model.cpp
+	common/AnimatedModel.cpp
 	common/GUI.cpp
 	common/Camera.cpp
 	common/Stage.cpp

@@ -31,6 +31,7 @@ bool noob::stage::init()
 
 void noob::stage::tear_down()
 {
+	/*
 	for (auto s : spheres)
 	{
 		delete s.second;
@@ -51,7 +52,7 @@ void noob::stage::tear_down()
 	{
 		delete s.second;
 	}
-
+	*/
 	delete dynamics_world;
 	delete solver;
 	delete collision_configuration;
@@ -182,6 +183,8 @@ size_t noob::stage::make_shader(const noob::prepared_shaders::info& arg)
 }
 */
 
+
+/*
 btRigidBody* noob::stage::body(btCollisionShape* shape, float mass, const noob::vec3& pos, const noob::versor& orientation)
 {
 	btDefaultMotionState* motion_state = new btDefaultMotionState(btTransform(btQuaternion(orientation.q[0], orientation.q[1], orientation.q[2], orientation.q[3]), btVector3(pos.v[0], pos.v[1], pos.v[2])));
@@ -276,3 +279,4 @@ btConvexHullShape* noob::stage::hull(const std::vector<noob::vec3>& points)
 	}
 	return temp;
 }
+*/

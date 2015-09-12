@@ -54,7 +54,7 @@
 #include "TransformHelper.hpp"
 #include "Keys.hpp"
 #include "format.h"
-#include "Model.hpp"
+#include "AnimatedModel.hpp"
 #include "ShaderVariant.hpp"
 // #include "PhysicsUtils.hpp"
 #include "MeshCSG.hpp"
