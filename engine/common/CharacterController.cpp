@@ -5,67 +5,32 @@
 
 #include <cmath>
 
-void noob::character_controller::init(btDynamicsWorld* _dynamics_world, btScalar _height, btScalar _width, btScalar _step_height, float _timestep)
+void noob::character_controller::init(btDynamicsWorld* _dynamics_world, noob::body* _rigid_body, float _timestep)
 {
 	dynamics_world = _dynamics_world;
-	height = _height;
-	width = _width;
-	half_height = height / btScalar(2.0);
-
-	shape = new btCapsuleShape(width / 2.0, height);//new btMultiSphereShape(btVector3(width/btScalar(2.0), height/btScalar(2.0), width/btScalar(2.0)), &spherePositions[0], &sphereRadii[0], 2);
-
-	btTransform start_transform;
-	start_transform.setIdentity();
-	start_transform.setOrigin(btVector3(0.0, 2.0, 0.0));
-	btVector3 inertia(0, 0, 0);
-	btScalar mass = 1.0;
-	shape->calculateLocalInertia(mass, inertia);
-	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
-	btRigidBody::btRigidBodyConstructionInfo ci(mass, motion_state, shape, inertia);
-	rigid_body = new btRigidBody(ci);
-	//rigid_body->setSleepingThresholds(0.0, 0.0);
-	rigid_body->setAngularFactor(0.0);
-	dynamics_world->addRigidBody(rigid_body);
+	rigid_body = _rigid_body;
+	rigid_body->get_raw_ptr()->setSleepingThresholds(0.0, 0.0);
+	rigid_body->get_raw_ptr()->setAngularFactor(0.0);
 	dt = _timestep;
-}
-
-
-void noob::character_controller::destroy(btDynamicsWorld* dynamics_world)
-{
-	if (shape)
-	{
-		delete shape;
-	}
-
-	if (rigid_body)
-	{
-		dynamics_world->removeRigidBody(rigid_body);
-		delete rigid_body;
-	}
 }
 
 
 void noob::character_controller::set_position(const noob::vec3& pos)
 {
-	btTransform t = rigid_body->getCenterOfMassTransform();
-	t.setOrigin(btVector3(pos.v[0], pos.v[1], pos.v[2]));
-	rigid_body->setCenterOfMassTransform(t);
+	rigid_body->set_position(pos);
 }
 
 
 void noob::character_controller::set_orientation(const noob::versor& orient)
 {
-	btTransform t = rigid_body->getCenterOfMassTransform();
-	t.setRotation(btQuaternion(orient.q[0], orient.q[1], orient.q[2], orient.q[3]));
-	rigid_body->setCenterOfMassTransform(t);
-
+	rigid_body->set_orientation(orient);
 }
 
 
 void noob::character_controller::update() 
 {
 	btTransform xform;
-	rigid_body->getMotionState()->getWorldTransform(xform);
+	rigid_body->get_raw_ptr()->getMotionState()->getWorldTransform(xform);
 	btVector3 down = -xform.getBasis()[1];
 	btVector3 forward = xform.getBasis()[2];
 	down.normalize();
@@ -102,10 +67,10 @@ void noob::character_controller::step(bool forward, bool backward, bool left, bo
 	if (on_ground())
 	{
 		btTransform xform;
-		rigid_body->getMotionState()->getWorldTransform(xform);
+		rigid_body->get_raw_ptr()->getMotionState()->getWorldTransform(xform);
 
-		btVector3 linear_velocity = rigid_body->getLinearVelocity();
-		btScalar speed = rigid_body->getLinearVelocity().length();
+		btVector3 linear_velocity = rigid_body->get_raw_ptr()->getLinearVelocity();
+		btScalar speed = rigid_body->get_raw_ptr()->getLinearVelocity().length();
 		btVector3 walk_direction = btVector3(0.0, 0.0, 0.0);
 		
 		btScalar walk_speed = 0.5;// / 3.0;
@@ -131,7 +96,7 @@ void noob::character_controller::step(bool forward, bool backward, bool left, bo
 				linear_velocity = linear_velocity + walk_direction * walk_speed;
 			}
 		}
-		rigid_body->setLinearVelocity(linear_velocity);
+		rigid_body->get_raw_ptr()->setLinearVelocity(linear_velocity);
 	}
 }
 
@@ -145,32 +110,37 @@ bool noob::character_controller::on_ground() const
 
 noob::vec3 noob::character_controller::get_position() const
 {
-	btTransform xform;
-	rigid_body->getMotionState()->getWorldTransform(xform);
-	return xform.getOrigin();
+//	btTransform xform;
+//	rigid_body->get_raw_ptr()->getMotionState()->getWorldTransform(xform);
+//	return xform.getOrigin();
+	return rigid_body->get_position();
 }
 
 
 noob::versor noob::character_controller::get_orientation() const
 {
-	btTransform xform;
-	rigid_body->getMotionState()->getWorldTransform(xform);
-	return xform.getRotation();
+//	btTransform xform;
+//	rigid_body->get_raw_ptr()->getMotionState()->getWorldTransform(xform);
+//	return xform.getRotation();
+	return rigid_body->get_orientation();
 }
 
 
 noob::mat4 noob::character_controller::get_transform() const
 {
+/*
 	btTransform xform;
-	rigid_body->getMotionState()->getWorldTransform(xform);
+	rigid_body->get_raw_ptr()->getMotionState()->getWorldTransform(xform);
 	noob::transform_helper t;
 	t.translate(get_position());
 	t.rotate(get_orientation());
 	return t.get_matrix();
+*/
+return rigid_body->get_transform();
 }
 
 
-std::string noob::character_controller::get_debug_info() const
+std::string noob::character_controller::get_debug_string() const
 {
 	fmt::MemoryWriter w;
 	w << "[Character] position " << get_position().to_string() << ", orientation " << get_orientation().to_string() << " on ground? " << on_ground() << " ray lambda  = " << ray_lambda; //<< " ray lambda # 2 = " << ray_lambda[1];

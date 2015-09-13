@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "Model.hpp"
+#include "BasicModel.hpp"
 #include "MathFuncs.hpp"
 #include <btBulletDynamicsCommon.h>
 #include "Drawable.hpp"

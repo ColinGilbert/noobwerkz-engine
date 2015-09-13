@@ -1,8 +1,10 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 #include <cereal/types/array.hpp>
+#include <cereal/types/memory.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/archives/portable_binary.hpp>
 
@@ -10,16 +12,20 @@
 #include "BasicMesh.hpp"
 #include "MathFuncs.hpp"
 
+#include <boost/variant/variant.hpp>
+#include "inline_variant.hpp"
+
 namespace noob
 {
 	class shape
 	{
+		public:
 		enum class type { SPHERE, BOX, CAPSULE, CYLINDER, CONE, CONVEX, TRIMESH, PLANE };
 
-		public:
 		shape() : valid(false), margin(-1.0) {}
 		~shape() { delete inner_shape; }
-
+		
+		// For manual init
 		void sphere(float radius);
 		void box(float width, float height, float depth);
 		void cylinder(float radius, float height);
@@ -29,22 +35,13 @@ namespace noob
 		void trimesh(const noob::basic_mesh&);
 		void plane(const noob::vec3& normal, float offset);
 
-		btCollisionShape* get_shape() const { return inner_shape; }
-		
 		void set_margin(float);
 		float get_margin() const;
 
+		btCollisionShape* get_raw_ptr() const;
+
 		protected:
-		union info
-		{
-			noob::shape::type type;
-			noob::vec2 radius_height;
-			noob::vec3 width_height_depth;
-			std::tuple<noob::vec3, float> normal_offset;
-			std::unique_ptr<noob::basic_mesh> mesh;
-		};
-		
-		noob::shape::type _type;
+		noob::shape::type shape_type;
 		bool valid;
 		float margin;
 		btCollisionShape* inner_shape;

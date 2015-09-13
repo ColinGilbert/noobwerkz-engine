@@ -49,22 +49,23 @@ namespace noob
 					ar(info);
 				}
 
-			void init(const noob::shape*, float mass, const noob::vec3& position, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0));
-			void init(const noob::shape*, const noob::body::info&);
+			void init(btDynamicsWorld*, const noob::shape*, float mass, const noob::vec3& position, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0));
+			void init(btDynamicsWorld*, const noob::shape*, const noob::body::info&);
+			
 			// Common usefuls:
 			void set_position(const noob::vec3&);
 			void set_orientation(const noob::versor&);
 			noob::vec3 get_position() const;
 			noob::versor get_orientation() const;
 			noob::mat4 get_transform() const;
-
-			std::string get_debug_info() const;
-
-			btRigidBody* get_body() const;
-			
+			noob::vec3 get_linear_velocity() const;
+			noob::vec3 get_angular_velocity() const;
+			std::string get_debug_string() const;
+			btRigidBody* get_raw_ptr() const;
 			noob::body::info get_info() const;
 
 			protected:
+			
 			btRigidBody* inner_body;
 	};
 }

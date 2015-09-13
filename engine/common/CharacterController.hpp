@@ -1,22 +1,21 @@
 // Kinematic, until self_control == false. The it beomes dynamic body
 #pragma once
 
-
-#include "MathFuncs.hpp"
 #include <btBulletDynamicsCommon.h>
 #include <memory>
+
+#include "Body.hpp"
+#include "MathFuncs.hpp"
+
 
 namespace noob
 {
 	class character_controller 
 	{
 		public:
-			character_controller() : half_height(1.0), shape(nullptr), rigid_body(nullptr), dynamics_world(nullptr), ray_lambda(1.0), airborne(true), obstacle(true), turn_angle(1.0), dt(1.0/60.0), max_linear_velocity(10.0), walk_velocity(8.0), turn_velocity(1.0) {}
+			character_controller() : half_height(0.0), shape(nullptr), rigid_body(nullptr), dynamics_world(nullptr), ray_lambda(1.0), airborne(true), obstacle(true), turn_angle(1.0), dt(1.0/60.0), max_linear_velocity(10.0), walk_velocity(8.0), turn_velocity(1.0) {}
 
-			void init(btDynamicsWorld* _dynamics_world, btScalar _height = 2.0, btScalar _width = 0.25, btScalar _step_height = 0.25, float _timestep = 1.0 / 60.0);
-			void destroy(btDynamicsWorld* dynamics_world);
-
-			// btRigidBody* get_body();
+			void init(btDynamicsWorld*, noob::body*, float _timestep = 1.0 / 60.0);
 
 			void update();
 			void step(bool forward, bool backward, bool left, bool right, bool jump);
@@ -32,14 +31,15 @@ namespace noob
 			noob::versor get_orientation() const;
 			noob::mat4 get_transform() const;
 			
-			std::string get_debug_info() const;
+			std::string get_debug_string() const;
 
 		protected:
 			btScalar height;
 			btScalar half_height;
 			btScalar width;
 			btCollisionShape* shape;
-			btRigidBody* rigid_body;
+			
+			noob::body* rigid_body;
 			btDynamicsWorld* dynamics_world;
 
 			btVector3 ray_source;
@@ -48,7 +48,7 @@ namespace noob
 			btVector3 ray_normal;
 
 			bool airborne, obstacle;
-
+			btScalar step_height;
 			btScalar turn_angle;
 			btScalar dt;
 			btScalar max_linear_velocity;

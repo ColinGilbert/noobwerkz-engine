@@ -1,15 +1,41 @@
 #include "Body.hpp"
 
 
-noob::body(const noob::shape* _shape, float mass, const noob::vec3& position, const noob::versor& orientation)
+void noob::body::init(btDynamicsWorld* _dynamics_world, const noob::shape* _shape, float mass, const noob::vec3& position, const noob::versor& orientation)
 {
-	
+	btTransform start_transform;
+ 	start_transform.setIdentity();
+ 	start_transform.setOrigin(btVector3(position.v[0], position.v[1], position.v[2]));
+	start_transform.setRotation(btQuaternion(orientation.q[0], orientation.q[1], orientation.q[2], orientation.q[3]));
+ 	btVector3 inertia(0, 0, 0);
+	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
+	_shape->get_raw_ptr()->calculateLocalInertia(mass, inertia);
+ 	btRigidBody::btRigidBodyConstructionInfo ci(mass, motion_state, _shape->get_raw_ptr(), inertia);
+	inner_body = new btRigidBody(ci);
+	_dynamics_world->addRigidBody(inner_body);
 }
 
 
-noob::body(const noob::shape* _shape, const noob::body::info&)
+void noob::body::init(btDynamicsWorld* _dynamics_world, const noob::shape* _shape, const noob::body::info& _info)
 {
 
+	btTransform start_transform;
+ 	start_transform.setIdentity();
+ 	start_transform.setOrigin(btVector3(_info.position.v[0], _info.position.v[1], _info.position.v[2]));
+	start_transform.setRotation(btQuaternion(_info.orientation.q[0], _info.orientation.q[1], _info.orientation.q[2], _info.orientation.q[3]));
+ 	btVector3 inertia(0, 0, 0);
+	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
+	_shape->get_raw_ptr()->calculateLocalInertia(_info.mass, inertia);
+ 	btRigidBody::btRigidBodyConstructionInfo ci(_info.mass, motion_state, _shape->get_raw_ptr(), inertia);
+	inner_body = new btRigidBody(ci);
+	_dynamics_world->addRigidBody(inner_body);
+
+	inner_body->setFriction(_info.friction);
+	inner_body->setRestitution(_info.restitution);
+	inner_body->setAngularFactor(btVector3(_info.angular_factor.v[0], _info.angular_factor.v[1], _info.angular_factor.v[2]));
+	inner_body->setLinearFactor(btVector3(_info.linear_factor.v[0], _info.linear_factor.v[1], _info.linear_factor.v[2]));
+	inner_body->setLinearVelocity(btVector3(_info.linear_velocity.v[0], _info.linear_velocity.v[1], _info.linear_velocity.v[2]));
+	inner_body->setAngularVelocity(btVector3(_info.angular_velocity.v[0], _info.angular_velocity.v[1], _info.angular_velocity.v[2]));
 }
 
 
@@ -34,7 +60,6 @@ noob::mat4 noob::body::get_transform() const
 	noob::transform_helper t;
 	t.translate(get_position());
 	t.rotate(get_orientation());
-	t.scale(drawing_scale);
 	return t.get_matrix();
 }
 
@@ -55,7 +80,19 @@ noob::versor noob::body::get_orientation() const
 }
 
 
-std::string noob::body::get_debug_info() const
+noob::vec3 noob::body::get_linear_velocity() const
+{
+	return inner_body->getLinearVelocity();
+}
+
+
+noob::vec3 noob::body::get_angular_velocity() const
+{
+	return inner_body->getAngularVelocity();
+}
+
+
+std::string noob::body::get_debug_string() const
 {
 	fmt::MemoryWriter w;
 	noob::vec3 pos = get_position();
@@ -66,7 +103,7 @@ std::string noob::body::get_debug_info() const
 }
 
 
-btRigidBody* noob::body::get_body() const
+btRigidBody* noob::body::get_raw_ptr() const
 {
 	return inner_body;
 }

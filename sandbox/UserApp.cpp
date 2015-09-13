@@ -30,13 +30,13 @@ void noob::application::user_init()
 	//	noob::basic_mesh g = a.to_origin();
 
 
-	// 	noob::basic_mesh a = noob::basic_mesh::sphere(10);
-	// 	noob::basic_mesh b = noob::basic_mesh::cone(30, 35);
+	// 	noob::basic_mesh a = noob::mesh_utils::sphere(10);
+	// 	noob::basic_mesh b = noob::mesh_utils::cone(30, 35);
 
 	// 	b.translate(noob::vec3(0.0, 25.0, 0.0));
 	// 	noob::basic_mesh c = noob::mesh_csg(a, b, noob::csg_op::DIFFERENCE);
-	//	noob::basic_mesh c = noob::basic_mesh::cube(20.0, 60.0, 20.0);
-	//	noob::basic_mesh d = noob::basic_mesh::cube(1000.0, 15.0, 1000.0);
+	//	noob::basic_mesh c = noob::mesh_utils::cube(20.0, 60.0, 20.0);
+	//	noob::basic_mesh d = noob::mesh_utils::cube(1000.0, 15.0, 1000.0);
 	//	d.translate(noob::vec3(0.0, -20.0, 0.0));
 	//	noob::basic_mesh e = noob::mesh_csg(c, d, noob::csg_op::UNION);
 	//	size_t ground_model_id = stage.add_model(e);//, "ground");
@@ -53,7 +53,7 @@ void noob::application::user_init()
 	points.push_back(noob::vec3(7.0, 1.5, 2.0));
 
 	// TODO: Fix crash!
-	noob::basic_mesh h = noob::basic_mesh::hull(points);
+	noob::basic_mesh h = noob::mesh_utils::hull(points);
 
 		//	size_t ground_drawable_id = stage.add_drawable(ground_model_id, stage.get_light_id("default"), stage.get_reflectance_id("default"), stage.get_shader_id("moon"));//, "ground");
 		//	stage.add_scenery(ground_drawable_id, noob::vec3(0.0, 0.0, 0.0));

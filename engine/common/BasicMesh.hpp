@@ -21,8 +21,23 @@
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/binary.hpp>
 
+#include <OpenMesh/Core/IO/MeshIO.hh>
 #include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
 #include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
+#include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
+#include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
+#include <OpenMesh/Tools/Decimater/CollapseInfoT.hh>
+#include <OpenMesh/Tools/Decimater/DecimaterT.hh>
+#include <OpenMesh/Tools/Decimater/ModAspectRatioT.hh>
+#include <OpenMesh/Tools/Decimater/ModEdgeLengthT.hh>
+#include <OpenMesh/Tools/Decimater/ModHausdorffT.hh>
+#include <OpenMesh/Tools/Decimater/ModNormalDeviationT.hh>
+#include <OpenMesh/Tools/Decimater/ModNormalFlippingT.hh>
+#include <OpenMesh/Tools/Decimater/ModQuadricT.hh>
+#include <OpenMesh/Tools/Decimater/ModProgMeshT.hh>
+#include <OpenMesh/Tools/Decimater/ModIndependentSetsT.hh>
+#include <OpenMesh/Tools/Decimater/ModRoundnessT.hh>
+#include <OpenMesh/Tools/Subdivider/Uniform/CatmullClarkT.hh>
 
 #include <assimp/quaternion.h>
 #include <assimp/anim.h>
@@ -36,13 +51,11 @@ typedef OpenMesh::PolyMesh_ArrayKernelT<> PolyMesh;
 
 #include "MathFuncs.hpp"
 #include "TransformHelper.hpp"
-// TODO: Template this class to hold different kinds of indices
-// TODO: Separate the model loading from this class
 
 #include <Eigen/Geometry>
 #include "Logger.hpp"
 #include "format.h"
-
+#include <bgfx.h>
 
 namespace noob
 {
@@ -68,7 +81,7 @@ namespace noob
 
 				noob::vec3 min, max, center;
 			};
-
+			
 			std::vector<noob::vec3> vertices;
 			std::vector<noob::vec3> normals;
 			std::vector<noob::vec3> texcoords;
@@ -79,11 +92,10 @@ namespace noob
 			void decimate(const std::string& filename, size_t num_verts) const;
 			noob::basic_mesh decimate(size_t num_verts) const;
 
-
 			TriMesh to_half_edges() const;
 
 			// Returns .OFF files
-			//std::tuple<size_t,const char*> save() const;
+			std::tuple<size_t,const char*> save() const;
 			void save(const std::string& filename) const;
 			// Takes any file Assimp can. First mesh of file only. No bones.
 			bool load_assimp(const std::string& filename, const std::string& name = "");
@@ -95,19 +107,16 @@ namespace noob
 			void translate(const noob::vec3&);
 			void rotate(const noob::versor&);
 			void scale(const noob::vec3&);
+			
+			void verts_to_buffer();
 
 			noob::basic_mesh::bbox_info get_bbox() const { return bbox; }
 
-			static noob::basic_mesh cone(float radius, float height, size_t segments = 0);
-			static noob::basic_mesh cube(float width, float height, float depth, size_t subdivides = 0);
-			static noob::basic_mesh cylinder(float radius, float height, size_t segments = 0);
-			static noob::basic_mesh sphere(float radius);
-			static noob::basic_mesh hull(const std::vector<noob::vec3>& points);
-			// static noob::basic_mesh bone();
 
 		protected:
 			bbox_info bbox;
 			bool volume_calculated;
 			double volume;
+
 	};
 }

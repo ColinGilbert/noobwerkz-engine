@@ -57,7 +57,7 @@
 #include "AnimatedModel.hpp"
 #include "ShaderVariant.hpp"
 // #include "PhysicsUtils.hpp"
-#include "MeshCSG.hpp"
+#include "MeshUtils.hpp"
 
 #include <btBulletDynamicsCommon.h>
 // #include <chaiscript/chaiscript.hpp>

@@ -39,32 +39,32 @@ namespace noob
 			void update(double dt);
 
 			void draw() const;
-/*
+			
+			
+			basic_model_component::handle add_basic_model(const noob::basic_mesh&);	
 			// Loads a serialized model (from cereal binary)
-			animated_model_handle model(const std::string& filename);
-			mesh_handle mesh(const noob::basic_mesh&);
-			skeleton_handle make_skeleton(const std::string& filename);
-			actor_handle actor(model_handle, skeleton_handle, const noob::vec3&, const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0));
-			prop_handle prop(mesh_handle, const noob::vec3&, const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0));
-			scenery_handle scenery(mesh_handle, const noob::vec3&, const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0));
-			light_handle light(const noob::light&);
-			reflection_handle reflection(const noob::reflection&);
-			shader_handle shader(const noob::prepared_shaders::info&);
-*/
-
+			animated_model_component::handle add_animated_model(const std::string& filename);
+			skeleton_component::handle add_skeleton(const std::string& filename);
+			//actor_component::handle actor(basic_model_component::handle, skeleton_component::handle, const noob::vec3&, const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0));
+			//prop_component::handle prop(mesh_component::handle, const noob::vec3&, const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0));
+			//scenery_component::handle scenery(mesh_component::handle, const noob::vec3&, const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0));
+			light_component::handle add_light(const noob::light&);
+			reflection_component::handle add_reflection(const noob::reflection&);
+			shader_component::handle add_shader(const noob::prepared_shaders::info&);
 			
 			// These cache the shape for reuse, as they are simple parametrics.
 			// TODO: Since these are globals, make them static, and/or separate from the stage class.
-/*			
-			btSphereShape* sphere(float r);
-			btBoxShape* box(float x, float y, float z);
-			btCylinderShape* cylinder(float r, float h);
-			btConeShape* cone(float r, float h);
-			btCapsuleShape* capsule(float r, float h);
-			btStaticPlaneShape* plane(const noob::vec3& normal, float offset);
+		
+			noob::shape_component::handle sphere(float r);
+			noob::shape_component::handle box(float x, float y, float z);
+			noob::shape_component::handle cylinder(float r, float h);
+			noob::shape_component::handle cone(float r, float h);
+			noob::shape_component::handle capsule(float r, float h);
+			noob::shape_component::handle plane(const noob::vec3& normal, float offset);
 			// These don't cache the shape for reuse, as they are rather difficult to index inexpensively. Might provide a way to cache frequently-used ones if needed.
-			btConvexHullShape* hull(const std::vector<noob::vec3>& point);
-*/
+			noob::shape_component::handle hull(const std::vector<noob::vec3>& point);
+
+			
 			
 			// scenery_component sceneries;
 			light_component lights;
@@ -72,8 +72,8 @@ namespace noob
 			shader_component shaders;
 			shape_component shapes;
 			body_component bodies;
-			model_component models;
-			mesh_component meshes;
+			basic_model_component basic_models;
+			animated_model_component animated_models;
 			skeleton_component skeletons;
 
 			bool paused;
@@ -81,8 +81,6 @@ namespace noob
 		protected:
 			// Protected function(s):
 			// void draw(noob::drawable*, const noob::mat4&) const;
-
-			// btRigidBody* body(btCollisionShape*, float mass, const noob::vec3& pos, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0));
 
 			// Protected members:
 			noob::prepared_shaders renderer;
@@ -92,14 +90,13 @@ namespace noob
 			btCollisionDispatcher* collision_dispatcher;
 			btSequentialImpulseConstraintSolver* solver;
 			btDiscreteDynamicsWorld* dynamics_world;
-/*
-			std::unordered_map<float, btSphereShape*> spheres;
-			std::map<std::tuple<float, float, float>, btBoxShape*> boxes;
-			std::map<std::tuple<float, float>, btCylinderShape*> cylinders;
-			std::map<std::tuple<float, float>, btConeShape*> cones;
-			std::map<std::tuple<float, float>, btCapsuleShape*> capsules;
-			std::map<std::tuple<float,float,float,float>, btStaticPlaneShape*> planes;
-*/
+
+			std::unordered_map<float, noob::shape_component::handle> spheres;
+			std::map<std::tuple<float, float, float>, noob::shape_component::handle> boxes;
+			std::map<std::tuple<float, float>, noob::shape_component::handle> cylinders;
+			std::map<std::tuple<float, float>, noob::shape_component::handle> cones;
+			std::map<std::tuple<float, float>, noob::shape_component::handle> capsules;
+			std::map<std::tuple<float,float,float,float>, noob::shape_component::handle> planes;
 
 	};
 }

@@ -147,16 +147,19 @@ list(APPEND common_src
 	common/VoxelWorld.cpp
 	common/UIFont.cpp
 	common/CharacterController.cpp
-	common/ModelLoader.cpp
-	common/AnimatedModel.cpp
 	common/GUI.cpp
 	common/Camera.cpp
 	common/Stage.cpp
 	#common/Scenery.cpp
 	#common/Actor.cpp
 	#common/Prop.cpp
-	common/MeshCSG.cpp
+	common/Body.cpp
+	common/Shape.cpp
+	common/MeshUtils.cpp
+	common/BasicModel.cpp
+	common/AnimatedModel.cpp
 	common/SkeletalAnim.cpp
+	common/ModelLoader.cpp
 	common/Drawing/TriplanarGradientMap.cpp
 	common/Drawing/HACDRenderer.cpp
 	common/Drawing/GUIRenderer.cpp

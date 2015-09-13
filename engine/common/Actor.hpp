@@ -1,0 +1,7 @@
+namespace noob
+{
+	class actor
+	{
+		
+	};
+}
