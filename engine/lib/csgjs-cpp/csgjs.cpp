@@ -1,23 +1,9 @@
-// Original CSG.JS library by Evan Wallace (http://madebyevan.com), under the MIT license.
-// GitHub: https://github.com/evanw/csg.js/
-// 
-// C++ port by Tomasz Dabrowski (http://28byteslater.com), under the MIT license.
-// GitHub: https://github.com/dabroz/csgjs-cpp/
-// 
-// Constructive Solid Geometry (CSG) is a modeling technique that uses Boolean
-// operations like union and intersection to combine 3D solids. This library
-// implements CSG operations on meshes elegantly and concisely using BSP trees,
-// and is meant to serve as an easily understandable implementation of the
-// algorithm. All edge cases involving overlapping coplanar polygons in both
-// solids are correctly handled.
-//
-// To use this as a header file, define CSGJS_HEADER_ONLY before including this file.
-//
 #include "csgjs.hpp"
-#include <vector>
-#include <algorithm>
-#include <math.h>
-#include "Logger.hpp"
+
+// IMPLEMENTATION BELOW ---------------------------------------------------------------------------
+
+//#ifndef CSGJS_HEADER_ONLY
+
 // `CSG.Plane.EPSILON` is the tolerance used by `splitPolygon()` to decide if a
 // point is on the plane.
 static const float csgjs_EPSILON = 0.00001f;
@@ -356,21 +342,11 @@ csgjs_csgnode * csgjs_csgnode::clone() const
 // (no heuristic is used to pick a good split).
 void csgjs_csgnode::build(const std::vector<csgjs_polygon> & list)
 {
-	logger::log("Building csg node");
-	if (!list.size()) 
-	{
-		logger::log("CSG !list.size()");
-		return;
-	}
-	if (!this->plane.ok())
-	{
-		logger::log("CSG !plane.ok()");
-		this->plane = list[0].plane;
-	}
+	if (!list.size()) return;
+	if (!this->plane.ok()) this->plane = list[0].plane;
 	std::vector<csgjs_polygon> list_front, list_back;
 	for (size_t i = 0; i < list.size(); i++) 
 	{
-		logger::log("CSG polygon split");
 		this->plane.splitPolygon(list[i], this->polygons, this->polygons, list_front, list_back);
 	}
 	if (list_front.size()) 
@@ -404,7 +380,6 @@ csgjs_csgnode::~csgjs_csgnode()
 
 inline static std::vector<csgjs_polygon> csgjs_modelToPolygons(const csgjs_model & model)
 {
-	logger::log(fmt::format("CSG model to polygon, num vertices = {0}, num indices = {1}", model.vertices.size(),  model.indices.size()));
 	std::vector<csgjs_polygon> list;
 	for (size_t i = 0; i < model.indices.size(); i+= 3)
 	{
@@ -416,7 +391,6 @@ inline static std::vector<csgjs_polygon> csgjs_modelToPolygons(const csgjs_model
 		}
 		list.push_back(csgjs_polygon(triangle));
 	}
-	logger::log("CSG model to polygon - done");
 	return list;
 }
 
@@ -441,11 +415,8 @@ typedef csgjs_csgnode * csg_function(const csgjs_csgnode * a1, const csgjs_csgno
 
 inline static csgjs_model csgjs_operation(const csgjs_model & a, const csgjs_model & b, csg_function fun)
 {
-	logger::log("CSG operation");
 	csgjs_csgnode * A = new csgjs_csgnode(csgjs_modelToPolygons(a));
-	logger::log("CSG node A built");
 	csgjs_csgnode * B = new csgjs_csgnode(csgjs_modelToPolygons(b));
-	logger::log("CSG node B built");
 	csgjs_csgnode * AB = fun(A, B);
 	std::vector<csgjs_polygon> polygons = AB->allPolygons();
 	delete A; A = 0;
@@ -468,3 +439,5 @@ csgjs_model csgjs_difference(const csgjs_model & a, const csgjs_model & b)
 {
 	return csgjs_operation(a, b, csg_subtract);
 }
+
+//#endif

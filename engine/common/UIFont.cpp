@@ -37,13 +37,13 @@ void noob::ui_font::init(const std::string& filename, size_t font_size, float wi
 	textBufferManager = new TextBufferManager(fontManager);
 
 	ttf_handle = loadTtf(fontManager, filename.c_str());
-	font_handle = fontManager->createFontByPixelSize(ttf_handle, 0, font_size);
+	font_handle = fontManager->createFontByPixelSize(ttf_handle, 0, font_size, FONT_TYPE_DISTANCE);
 
 	fontManager->preloadGlyph(font_handle, L"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!1234567890-=_+[]{}!@#$%^&*()`~,<>/?\\'\";:. \n");
 
 	fontManager->destroyTtf(ttf_handle);
 
-	transientText = textBufferManager->createTextBuffer(FONT_TYPE_ALPHA, BufferType::Transient);
+	transientText = textBufferManager->createTextBuffer(FONT_TYPE_DISTANCE, BufferType::Transient);//FONT_TYPE_ALPHA, BufferType::Transient);
 
 }
 

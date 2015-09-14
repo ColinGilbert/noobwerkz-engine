@@ -2,207 +2,197 @@
 
 bool noob::stage::init()
 {
-	shaders.init();
-	//cam.init(10.0, 5.0, noob::vec3(0.0, 20.0, 0.0));
-	add_model("unit-sphere", noob::basic_mesh::sphere(0.5));
-	add_model("unit-cube", noob::basic_mesh::cube(1.0, 1.0, 1.0));
-	add_model("unit-cylinder", noob::basic_mesh::cylinder(1.0, 1.0));
-	add_model("unit-cone", noob::basic_mesh::cone(1.0, 1.0));
+	broadphase = new btDbvtBroadphase();
+	collision_configuration = new btDefaultCollisionConfiguration();
+	collision_dispatcher = new btCollisionDispatcher(collision_configuration);
+	solver = new btSequentialImpulseConstraintSolver();
+	dynamics_world = new btDiscreteDynamicsWorld(collision_dispatcher, broadphase, solver, collision_configuration);
+	dynamics_world->setGravity(btVector3(0, -10, 0));
 
-	unit_sphere = get_model("unit-sphere").lock();
-	unit_cube = get_model("unit-cube").lock();
-	unit_cylinder = get_model("unit-cylinder").lock();
-	unit_cone = get_model("unit-cone").lock();
+	renderer.init();
+/*
+	set_model_name(make_model(noob::basic_mesh::sphere(0.5)), "unit-sphere");
+	set_model_name(make_model(noob::basic_mesh::cube(1.0, 1.0, 1.0)), "unit-cube");
+	set_model_name(make_model(noob::basic_mesh::cylinder(0.5, 1.0)), "unit-cylinder");
+	set_model_name(make_model(noob::basic_mesh::cone(0.5, 1.0)), "unit-cone");
 
-	add_skeleton("human", "seymour.skel.ozz");
 
-	noob::basic_renderer::uniform_info dbg_shader;
-	dbg_shader.colour = noob::vec4(0.0, 0.3, 0.3, 1.0);
-	set_shader("basic-debug", dbg_shader);
-	debug_shader = get_shader("basic-debug").lock();
 
+	set_skeleton_name(make_skeleton("seymour.skel.ozz"), "human");
+
+	set_light_name(make_light(noob::light()), "default");
+	set_reflectance_name(make_reflectance(noob::reflectance()), "default");
+
+	noob::basic_rendererr::uniform_info dbg_shader;
+	dbg_shader.colour = noob::vec4(0.0, 0.3, 0.3, 1.0);	
+	set_shader_name(make_shader(dbg_shader), "debug");
+*/
 	logger::log("[Stage] init complete.");
 	return true;
+}
+
+void noob::stage::tear_down()
+{
+	delete dynamics_world;
+	delete solver;
+	delete collision_configuration;
+	delete collision_dispatcher;
+	delete broadphase;
 }
 
 
 void noob::stage::update(double dt)
 {
-	if (!paused)
-	{
-		dynamics_world.update(static_cast<rp3d::decimal>(dt));
-		for (auto actor_it : actors)
-		{
-			actor_it.second->update();
-			//actor_it.second->print_debug_info();
-		}
-	}
+	dynamics_world->stepSimulation(1.0/60.0, 10);
 }
 
 
 void noob::stage::draw() const
 {
-	for (auto a : actors)
-	{
-		draw(a.second);
-		//debug_draw(a.second);
-	}
-	for (auto p : props)
-	{
-		draw(p.second.get());
-	}
 	// TODO: Use frustum + physics world collisions to determine which items are visible, and then draw them.
 }
 
 
-void noob::stage::draw(noob::prop* p) const
-{
-	shaders.draw(p->model.get(), *(p->shading.get()), p->get_transform());
-}
-
-
-void noob::stage::draw(const std::shared_ptr<noob::actor>& a) const
-{
-	draw(a->get_prop());
-	//shaders.draw(a->get_prop()->model.get(), *(a->get_prop()->shading.get()), a->get_prop()->get_transform());
-}
-
 /*
-void noob::stage::debug_draw(noob::prop* p) const
+void noob::stage::draw(noob::drawable* d, const noob::mat4& transform) const
 {
 }
+
+
 */
-
-void noob::stage::debug_draw(const std::shared_ptr<noob::actor>& a) const
+noob::basic_model_component::handle noob::stage::add_basic_model(const noob::basic_mesh& m)
 {
-//	debug_draw(a->get_prop());
+	return basic_models.add(std::make_unique<noob::basic_model>(m));
 }
 
 
-std::shared_ptr<noob::actor> noob::stage::make_actor(const std::string& name, const std::shared_ptr<noob::prop>& _prop, const std::shared_ptr<noob::skeletal_anim>& _skel_anim, float width, float height)
+noob::animated_model_component::handle noob::stage::add_animated_model(const std::string& filename)
 {
-	// TODO: Optimize
-	auto a = std::make_shared<noob::actor>();
-	a->init(&dynamics_world, _prop, _skel_anim, width, height);
-	actors[name] = a;
-	return actors[name];
-
+	return animated_models.add(std::make_unique<noob::animated_model>(filename));
 }
 
 
-std::shared_ptr<noob::prop> noob::stage::make_prop(const std::string& _name, rp3d::RigidBody* _body, const std::shared_ptr<noob::model>& _model, const std::shared_ptr<noob::prepared_shaders::info>& _uniforms)
+noob::skeleton_component::handle noob::stage::add_skeleton(const std::string& filename)
 {
-	auto p = std::make_shared<noob::prop>();
-	p->init(_body, _model, _uniforms);
-	props[_name] = p;
-	return props[_name];
+	std::unique_ptr<noob::skeletal_anim> temp = std::make_unique<noob::skeletal_anim>();
+	temp->init(filename);
+	return skeletons.add(std::move(temp));
 }
 
 
-bool noob::stage::add_model(const std::string& name, const std::string& filename)
+noob::light_component::handle noob::stage::add_light(const noob::light& arg)
 {
-	auto search = models.find(name);
-	if (search == models.end())
+	return lights.add(arg);
+}
+
+
+noob::reflection_component::handle noob::stage::add_reflection(const noob::reflection& arg)
+{
+	return reflections.add(arg);
+}
+
+
+noob::shader_component::handle noob::stage::add_shader(const noob::prepared_shaders::info& arg)
+{
+	return shaders.add(arg);
+}
+
+
+noob::shape_component::handle noob::stage::sphere(float r)
+{
+	auto search = spheres.find(r);
+	if (search == spheres.end())
 	{
-		logger::log(fmt::format("Adding model: {0}", name));
-		models.insert(std::make_pair(name, std::make_shared<noob::model>(filename)));
-		return true;
+		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+		temp->sphere(r);
+		spheres[r] = shapes.add(std::move(temp));
+		return spheres[r];
 	}
-	else return false;
+	else return spheres[r];
+
 }
 
 
-bool noob::stage::add_model(const std::string& name, const noob::basic_mesh& m)
+noob::shape_component::handle noob::stage::box(float x, float y, float z)
 {
-	auto search = models.find(name);
-	if (search == models.end())
+	auto search = boxes.find(std::make_tuple(x,y,z));
+	if (search == boxes.end())
 	{
-		logger::log(fmt::format("Adding model: {0}", name));
-		models.insert(std::make_pair(name, std::make_shared<noob::model>(m)));
-		return true;
+		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+		temp->box(x, y, z);
+		auto results = boxes.insert(std::make_pair(std::make_tuple(x,y,z), shapes.add(std::move(temp))));
+		return (results.first)->second;
 	}
-	else return false;
+	else return boxes[std::make_tuple(x,y,z)];
 }
 
-
-bool noob::stage::add_skeleton(const std::string& name, const std::string& filename)
+noob::shape_component::handle noob::stage::cylinder(float r, float h)
 {
-	auto search = skeletons.find(name);
-	if (search == skeletons.end())
+	auto search = cylinders.find(std::make_tuple(r, h));
+	if (search == cylinders.end())
 	{
-		auto results = skeletons.insert(std::make_pair(name, std::make_unique<noob::skeletal_anim>()));
-		(*(results.first)).second->init(filename);
-		return true;
+		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+		temp->cylinder(r, h);
+		auto results = cylinders.insert(std::make_pair(std::make_tuple(r, h), shapes.add(std::move(temp))));
+		return (results.first)->second;
 	}
-	else return false;
+	else return cylinders[std::make_tuple(r, h)];
 }
 
 
-void noob::stage::set_shader(const std::string& name, const noob::prepared_shaders::info& uniforms)
+noob::shape_component::handle noob::stage::cone(float r, float h)
 {
-	auto a = std::make_shared<noob::prepared_shaders::info>(uniforms);
-	shader_uniforms[name] = a;
-}
-
-
-std::weak_ptr<noob::actor> noob::stage::get_actor(const std::string& name) const
-{
-	auto search = actors.find(name);
-	if (search == actors.end())
+	auto search = cones.find(std::make_tuple(r, h));
+	if (search == cones.end())
 	{
-		logger::log(fmt::format("[Stage] Cannot find requested actor: {0}", name));
-		// TODO: Verify if this is proper form
-		return {};
+		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+		temp->cone(r, h);
+		auto results = cones.insert(std::make_pair(std::make_tuple(r, h), shapes.add(std::move(temp))));
+		return (results.first)->second;
 	}
-
-	return search->second;
+	else return cones[std::make_tuple(r, h)];
 }
 
 
-std::weak_ptr<noob::prepared_shaders::info> noob::stage::get_shader(const std::string& name) const
+noob::shape_component::handle noob::stage::capsule(float r, float h)
 {
-	auto search = shader_uniforms.find(name);
-
-	if (search == shader_uniforms.end())
+	auto search = capsules.find(std::make_tuple(r, h));
+	if (search == capsules.end())
 	{
-		logger::log(fmt::format("[Stage] Cannot find requested shader: {0}", name));
-		// TODO: Verify if this is proper form
-		return {};
+		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+		temp->capsule(r, h);
+		auto results = capsules.insert(std::make_pair(std::make_tuple(r, h), shapes.add(std::move(temp))));
+		return (results.first)->second;
 	}
-
-	return search->second;
-
+	else return capsules[std::make_tuple(r, h)];
 }
 
 
-std::weak_ptr<noob::model> noob::stage::get_model(const std::string& name) const
+noob::shape_component::handle noob::stage::plane(const noob::vec3& normal, float offset)
 {
-	auto search = models.find(name);
-
-	if (search == models.end())
+	auto search = planes.find(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset));
+	if (search == planes.end())
 	{
-		logger::log(fmt::format("[Stage] Cannot find requested model: {0}", name));
-		// TODO: Verify if this is proper form
-		return {};
+		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+		temp->plane(normal, offset);
+		auto results = planes.insert(std::make_pair(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset), shapes.add(std::move(temp))));
+		return (results.first)->second;
 	}
-
-	return search->second;
+	else return planes[std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset)];
 }
 
 
-std::weak_ptr<noob::skeletal_anim> noob::stage::get_skeleton(const std::string& name) const
+noob::shape_component::handle noob::stage::hull(const std::vector<noob::vec3>& points)
 {
-	auto search = skeletons.find(name);
-	if (search == skeletons.end())
-	{
-		// TODO: Verify if this form is proper
-		return {};
-	}
-
-	return search->second;
+	std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+	temp->convex(points);
+	return shapes.add(std::move(temp));
 }
 
-rp3d::RigidBody* noob::stage::body(const noob::vec3& position, const noob::versor& orientation)
+
+noob::shape_component::handle noob::stage::trimesh(const noob::basic_mesh& mesh)
 {
-	return dynamics_world.createRigidBody(rp3d::Transform(rp3d::Vector3(position.v[0], position.v[1], position.v[2]), rp3d::Quaternion(orientation.q[0], orientation.q[1], orientation.q[2], orientation.q[3])));
+	std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+	temp->trimesh(mesh);
+	return shapes.add(std::move(temp));
 }

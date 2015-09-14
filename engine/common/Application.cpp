@@ -47,8 +47,42 @@ void noob::application::init()
 void noob::application::update(double delta)
 {
 	gui.window_dims(window_width, window_height);
-	user_update(delta);
+
+	// static double time_elapsed = 0.0;
+	// time_elapsed += delta;
 	stage.update(delta);
+	user_update(delta);
+/*
+	if (time_elapsed > 0.25)
+	{
+		boost::filesystem::path p;
+		p += *prefix;
+		p += "script.chai";
+		boost::system::error_code ec;
+
+		static std::time_t last_write = 0;
+		std::time_t t = boost::filesystem::last_write_time(p, ec);
+		if (ec != 0)
+		{
+			logger::log(fmt::format("[Application] - update() - error reading {0}: {1}", p.generic_string(), ec.message()));
+		}	
+		else if (last_write != t)
+		{
+			init();
+
+			try
+			{
+				chai->eval_file(p.generic_string());
+			}
+			catch(std::exception e)
+			{
+				logger::log(fmt::format("[Application]. Caught ChaiScript exception: ", e.what()));
+			}
+			last_write = t;
+		}
+		time_elapsed = 0.0;
+	}
+*/
 }
 
 

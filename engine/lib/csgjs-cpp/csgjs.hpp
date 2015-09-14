@@ -13,7 +13,7 @@
 //
 // To use this as a header file, define CSGJS_HEADER_ONLY before including this file.
 //
-#pragma once
+
 #include <vector>
 #include <algorithm>
 #include <math.h>
@@ -46,4 +46,3 @@ struct csgjs_model
 csgjs_model csgjs_union(const csgjs_model & a, const csgjs_model & b);
 csgjs_model csgjs_intersection(const csgjs_model & a, const csgjs_model & b);
 csgjs_model csgjs_difference(const csgjs_model & a, const csgjs_model & b);
-

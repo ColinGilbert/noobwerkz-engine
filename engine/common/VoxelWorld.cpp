@@ -5,13 +5,15 @@
 #include <PolyVox/Mesh.h>
 
 #include "Logger.hpp"
-
+const size_t world_width = 512;
+const size_t world_height = 512;
+const size_t world_depth = 512;
 
 void noob::voxel_world::init()
 {
 //	pager = std::unique_ptr<PolyVox::FilePager<uint8_t>>(new PolyVox::FilePager<uint8_t>("./temp/volumetric"));
 //	world = std::unique_ptr<PolyVox::PagedVolume<uint8_t>>(new PolyVox::PagedVolume<uint8_t>(pager.get()));
-	world = std::unique_ptr<PolyVox::RawVolume<uint8_t>>(new PolyVox::RawVolume<uint8_t>(PolyVox::Region(0, 0, 0, 512, 512, 512)));
+	world = std::unique_ptr<PolyVox::RawVolume<uint8_t>>(new PolyVox::RawVolume<uint8_t>(PolyVox::Region(0, 0, 0, world_width, world_height, world_depth)));
 }
 
 
@@ -164,6 +166,13 @@ uint8_t noob::voxel_world::get(size_t x, size_t y, size_t z) const
 {
 	return world->getVoxel(x, y, z);
 }
+
+
+noob::basic_mesh noob::voxel_world::extract() const
+{
+	return extract_region(0, 0, 0, world_width, world_height, world_depth);
+}
+
 
 
 noob::basic_mesh noob::voxel_world::extract_region(size_t lower_x, size_t lower_y, size_t lower_z, size_t upper_x, size_t upper_y, size_t upper_z) const

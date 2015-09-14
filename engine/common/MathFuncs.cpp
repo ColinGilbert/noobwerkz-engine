@@ -820,11 +820,19 @@ namespace noob
 		return result;
 	}
 
+	std::string versor::to_string() const
+	{
+		fmt::MemoryWriter w;
+		w << "(" << q[0] << ", " << q[1] << ", " << q[2] << ", " << q[3] << ")";
+		return w.str();
+	}
+
+/*
 	void print(const versor& q)
 	{
 		printf ("[%.2f ,%.2f, %.2f, %.2f]\n", q.q[0], q.q[1], q.q[2], q.q[3]);
 	}
-
+*/
 	versor versor::operator*(const versor& rhs)
 	{
 		versor result;

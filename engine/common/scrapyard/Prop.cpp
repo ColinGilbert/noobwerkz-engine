@@ -1,11 +1,25 @@
 #include "Prop.hpp"
 #include "TransformHelper.hpp"
 
-void noob::prop::init(rp3d::RigidBody* _body, const std::shared_ptr<noob::model>& _model, const std::shared_ptr<noob::prepared_shaders::info>& _shading)
+void noob::prop::init(btRigidBody* _body, noob::drawable* _drawable)
 {
-	body = _body;	
-	shading = _shading;
-	model = _model;
+	body = _body;
+	drawable = _drawable;
+}
+
+void noob::prop::set_position(const noob::vec3& _pos)
+{
+	btTransform t = body->getWorldTransform();
+	t.setOrigin(btVector3(_pos.v[0], _pos.v[1], _pos.v[2]));
+	body->setWorldTransform(t);
+}
+
+
+void noob::prop::set_orientation(const noob::versor& _orient)
+{
+	btTransform t = body->getWorldTransform();
+	t.setRotation(btQuaternion(_orient.q[0], _orient.q[1], _orient.q[2], _orient.q[3]));
+	body->setWorldTransform(t);
 }
 
 
@@ -28,19 +42,6 @@ noob::vec3 noob::prop::get_position() const
 noob::versor noob::prop::get_orientation() const
 {
 	return body->getTransform().getOrientation();
-}
-
-
-noob::vec3 noob::prop::get_linear_velocity() const
-{
-	return body->getLinearVelocity();
-}
-
-
-
-noob::vec3 noob::prop::get_angular_velocity() const
-{
-	return body->getAngularVelocity();
 }
 
 

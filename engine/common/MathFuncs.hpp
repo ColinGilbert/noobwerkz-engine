@@ -284,6 +284,8 @@ namespace noob
 			return q[x];
 		}
 
+		std::string to_string() const;
+
 	};
 
 	struct cubic_region

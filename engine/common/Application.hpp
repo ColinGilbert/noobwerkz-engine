@@ -47,16 +47,17 @@
 #include "Graphics.hpp"
 #include "VoxelWorld.hpp"
 #include "GUI.hpp"
-#include "Mesh.hpp"
+#include "BasicMesh.hpp"
 #include "Camera.hpp"
 #include "NDOF.hpp"
 #include "Stage.hpp"
 #include "TransformHelper.hpp"
 #include "Keys.hpp"
 #include "format.h"
-#include "Model.hpp"
+#include "AnimatedModel.hpp"
 #include "ShaderVariant.hpp"
-#include "PhysicsUtils.hpp"
+// #include "PhysicsUtils.hpp"
+#include "MeshUtils.hpp"
 
 namespace noob
 {

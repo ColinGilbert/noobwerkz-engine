@@ -35,7 +35,7 @@ typedef OpenMesh::TriMesh_ArrayKernelT<> TriMesh;
 typedef OpenMesh::PolyMesh_ArrayKernelT<> PolyMesh;
 
 #include "MathFuncs.hpp"
-
+#include "TransformHelper.hpp"
 // TODO: Template this class to hold different kinds of indices
 // TODO: Separate the model loading from this class
 
@@ -71,34 +71,36 @@ namespace noob
 
 			std::vector<noob::vec3> vertices;
 			std::vector<noob::vec3> normals;
+			std::vector<noob::vec3> texcoords;
 			std::vector<uint32_t> indices;
 
 			double get_volume();
 
 			void decimate(const std::string& filename, size_t num_verts) const;
 			noob::basic_mesh decimate(size_t num_verts) const;
-			noob::basic_mesh normalize() const;
-			noob::basic_mesh to_origin() const;
+
 
 			TriMesh to_half_edges() const;
 
 			// Returns .OFF files
-			std::tuple<size_t,const char*> save() const;
+			//std::tuple<size_t,const char*> save() const;
 			void save(const std::string& filename) const;
 			// Takes any file Assimp can. First mesh of file only. No bones.
 			bool load_assimp(const std::string& filename, const std::string& name = "");
 			bool load_assimp(std::tuple<size_t, const char*>, const std::string& name = "");
 			bool load_assimp(const aiScene* scene, const std::string& name);
-
-			noob::basic_mesh transform(const noob::mat4& transform) const;
+			void normalize();
+			void transform(const noob::mat4& transform);
+			void to_origin();
+			void translate(const noob::vec3&);
+			void rotate(const noob::versor&);
+			void scale(const noob::vec3&);
 
 			// Expensive. Try not calling it during actual gameplay
 			std::vector<noob::basic_mesh> convex_decomposition() const;
-
+			void calculate_texcoords();
 			noob::basic_mesh::bbox_info get_bbox() const { return bbox; }
 
-			// TODO: Fix
-			static noob::basic_mesh csg(const noob::basic_mesh& a, const noob::basic_mesh& b, const noob::csg_op op);
 			static noob::basic_mesh cone(float radius, float height, size_t segments = 0);
 			static noob::basic_mesh cube(float width, float height, float depth, size_t subdivides = 0);
 			static noob::basic_mesh cylinder(float radius, float height, size_t segments = 0);

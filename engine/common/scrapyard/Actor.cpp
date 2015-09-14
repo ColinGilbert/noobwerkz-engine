@@ -1,9 +1,16 @@
 #include "Actor.hpp"
 
-
-void noob::actor::init(rp3d::DynamicsWorld* _world, const std::shared_ptr<noob::prop>& _prop, const std::shared_ptr<noob::skeletal_anim>& _anim, float width, float height)
+/*
+void noob::actor::init(btDynamicsWorld* _world, const std::shared_ptr<noob::prop>& _prop, const std::shared_ptr<noob::skeletal_anim>& _anim)
 {
 	controller.init(_world, _prop, width, height);
+	anim = _anim;
+}
+*/
+void noob::actor::init(btDynamicsWorld* _world, noob::drawable* _drawable, noob::skeletal_anim* _anim)
+{
+	controller.init(_world);
+	drawable = _drawable;
 	anim = _anim;
 }
 
@@ -38,13 +45,6 @@ noob::vec3 noob::actor::get_destination() const
 }
 
 
-noob::mat4 noob::actor::get_transform() const
-{
-	return controller.get_prop()->get_transform();
-	
-}
-
-
 bool noob::actor::add_to_path(const std::vector<noob::vec3>& path_segment)
 {
 	for (noob::vec3 p : path_segment)
@@ -61,7 +61,7 @@ void noob::actor::clear_path()
 }
 
 
-std::vector<noob::vec3> noob::actor::get_path_vector() const
+std::vector<noob::vec3> noob::actor::get_path() const
 {
 	std::vector<noob::vec3> p;
 	p.reserve(path.size());
