@@ -3,74 +3,78 @@
 
 void noob::shape::sphere(float radius)
 {
-	if (!valid)
+	if (!physics_valid)
 	{
 		shape_type = noob::shape::type::SPHERE;
 		inner_shape = new btSphereShape(radius);
 	}
-	valid = true;
+	physics_valid = true;
 }
 
 
 void noob::shape::box(float width, float height, float depth)
 {
-	if (!valid)
+	if (!physics_valid)
 	{
 		shape_type = noob::shape::type::BOX;
 		inner_shape = new btBoxShape(btVector3(width, height, depth));
 	}
-	valid = true;
+	physics_valid = true;
 }
 
 
 void noob::shape::cylinder(float radius, float height)
 {
-	if (!valid)
+	if (!physics_valid)
 	{
 		shape_type = noob::shape::type::CYLINDER;
 		inner_shape = new btCylinderShape(btVector3(radius, height/2.0, radius));
 	}
-	valid = true;
+	physics_valid = true;
 }
 
 
 void noob::shape::capsule(float radius, float height)
 {
-	if (!valid)
+	if (!physics_valid)
 	{
 		shape_type = noob::shape::type::CAPSULE;
 		inner_shape = new btCapsuleShape(radius, height);
 	}
-	valid = true;
+	physics_valid = true;
 }
 
 
 void noob::shape::cone(float radius, float height)
 {
-	if (!valid)
+	if (!physics_valid)
 	{
 		shape_type = noob::shape::type::CONE;	
 		inner_shape = new btConeShape(radius, height);
 	}
-	valid = true;
+	physics_valid = true;
 }
 
 
 void noob::shape::convex(const std::vector<noob::vec3>& points)
 {
-	if (!valid)
+	if (!physics_valid)
 	{
+		inner_mesh = noob::mesh_utils::hull(points);
+		mesh_initialized = true;
 		shape_type = noob::shape::type::CONVEX;
-		inner_shape = new btConvexHullShape(&points[0].v[0], points.size());
+		inner_shape = new btConvexHullShape(&inner_mesh.vertices[0].v[0], inner_mesh.vertices.size());
 	}
-	valid = true;
+	physics_valid = true;
 }
 
 
 void noob::shape::trimesh(const noob::basic_mesh& mesh)
 {
-	if (!valid)
+	if (!physics_valid)
 	{
+		inner_mesh = mesh;
+		mesh_initialized = true;
 		shape_type = noob::shape::type::TRIMESH;
 		btTriangleMesh* phyz_mesh = new btTriangleMesh();
 		
@@ -93,23 +97,24 @@ void noob::shape::trimesh(const noob::basic_mesh& mesh)
 		inner_shape = new btBvhTriangleMeshShape(phyz_mesh, true);
 		set_margin(0.1);
 	}
-	valid = true;
+	physics_valid = true;
 }
 
 
 void noob::shape::plane(const noob::vec3& normal, float offset)
 {
-	if (!valid)
+	if (!physics_valid)
 	{
 		shape_type = noob::shape::type::PLANE;
 		inner_shape = new btStaticPlaneShape(btVector3(normal.v[0], normal.v[1], normal.v[2]), offset);
 	}
-	valid = true;
+	physics_valid = true;
 }
 
 
 void noob::shape::set_margin(float m)
 {
+	margin = m;
 	inner_shape->setMargin(m);
 }
 

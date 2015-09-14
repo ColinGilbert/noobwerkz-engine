@@ -10,6 +10,7 @@
 
 #include <btBulletDynamicsCommon.h>
 #include "BasicMesh.hpp"
+#include "MeshUtils.hpp"
 #include "MathFuncs.hpp"
 
 #include <boost/variant/variant.hpp>
@@ -21,8 +22,7 @@ namespace noob
 	{
 		public:
 		enum class type { SPHERE, BOX, CAPSULE, CYLINDER, CONE, CONVEX, TRIMESH, PLANE };
-
-		shape() : valid(false), margin(-1.0) {}
+		shape() : physics_valid(false), mesh_initialized(false), dims({ 0.0, 0.0, 0.0, 0.0 }), margin(-1.0) {}
 		~shape() { delete inner_shape; }
 		
 		// For manual init
@@ -42,8 +42,10 @@ namespace noob
 
 		protected:
 		noob::shape::type shape_type;
-		bool valid;
+		bool physics_valid, mesh_initialized;
+		std::array<float, 4> dims;
 		float margin;
 		btCollisionShape* inner_shape;
+		noob::basic_mesh inner_mesh;
 	};
 }

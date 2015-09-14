@@ -103,9 +103,9 @@ noob::shape_component::handle noob::stage::sphere(float r)
 	auto search = spheres.find(r);
 	if (search == spheres.end())
 	{
-		noob::shape temp;
-		temp.sphere(r);
-		spheres[r] = shapes.add(temp);
+		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+		temp->sphere(r);
+		spheres[r] = shapes.add(std::move(temp));
 		return spheres[r];
 	}
 	else return spheres[r];
@@ -118,9 +118,9 @@ noob::shape_component::handle noob::stage::box(float x, float y, float z)
 	auto search = boxes.find(std::make_tuple(x,y,z));
 	if (search == boxes.end())
 	{
-		noob::shape temp;
-		temp.box(x, y, z);
-		auto results = boxes.insert(std::make_pair(std::make_tuple(x,y,z), shapes.add(temp)));
+		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+		temp->box(x, y, z);
+		auto results = boxes.insert(std::make_pair(std::make_tuple(x,y,z), shapes.add(std::move(temp))));
 		return (results.first)->second;
 	}
 	else return boxes[std::make_tuple(x,y,z)];
@@ -131,9 +131,9 @@ noob::shape_component::handle noob::stage::cylinder(float r, float h)
 	auto search = cylinders.find(std::make_tuple(r, h));
 	if (search == cylinders.end())
 	{
-		noob::shape temp;
-		temp.cylinder(r, h);
-		auto results = cylinders.insert(std::make_pair(std::make_tuple(r, h), shapes.add(temp)));
+		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+		temp->cylinder(r, h);
+		auto results = cylinders.insert(std::make_pair(std::make_tuple(r, h), shapes.add(std::move(temp))));
 		return (results.first)->second;
 	}
 	else return cylinders[std::make_tuple(r, h)];
@@ -145,9 +145,9 @@ noob::shape_component::handle noob::stage::cone(float r, float h)
 	auto search = cones.find(std::make_tuple(r, h));
 	if (search == cones.end())
 	{
-		noob::shape temp;
-		temp.cone(r, h);
-		auto results = cones.insert(std::make_pair(std::make_tuple(r, h), shapes.add(temp)));
+		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+		temp->cone(r, h);
+		auto results = cones.insert(std::make_pair(std::make_tuple(r, h), shapes.add(std::move(temp))));
 		return (results.first)->second;
 	}
 	else return cones[std::make_tuple(r, h)];
@@ -159,9 +159,9 @@ noob::shape_component::handle noob::stage::capsule(float r, float h)
 	auto search = capsules.find(std::make_tuple(r, h));
 	if (search == capsules.end())
 	{
-		noob::shape temp;
-		temp.capsule(r, h);
-		auto results = capsules.insert(std::make_pair(std::make_tuple(r, h), shapes.add(temp)));
+		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+		temp->capsule(r, h);
+		auto results = capsules.insert(std::make_pair(std::make_tuple(r, h), shapes.add(std::move(temp))));
 		return (results.first)->second;
 	}
 	else return capsules[std::make_tuple(r, h)];
@@ -173,10 +173,26 @@ noob::shape_component::handle noob::stage::plane(const noob::vec3& normal, float
 	auto search = planes.find(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset));
 	if (search == planes.end())
 	{
-		noob::shape temp;
-		temp.plane(normal, offset);
-		auto results = planes.insert(std::make_pair(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset), shapes.add(temp)));
+		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+		temp->plane(normal, offset);
+		auto results = planes.insert(std::make_pair(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset), shapes.add(std::move(temp))));
 		return (results.first)->second;
 	}
 	else return planes[std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset)];
+}
+
+
+noob::shape_component::handle noob::stage::hull(const std::vector<noob::vec3>& points)
+{
+	std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+	temp->convex(points);
+	return shapes.add(std::move(temp));
+}
+
+
+noob::shape_component::handle noob::stage::trimesh(const noob::basic_mesh& mesh)
+{
+	std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+	temp->trimesh(mesh);
+	return shapes.add(std::move(temp));
 }

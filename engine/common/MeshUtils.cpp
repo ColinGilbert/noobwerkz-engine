@@ -2,6 +2,116 @@
 
 #include <LinearMath/btConvexHull.h>
 
+#include <tinympl/functional.hpp>
+
+/*
+noob::basic_mesh noob::mesh_utils::swept_sphere(float radius, size_t x_segments, size_t _y_segments)
+{
+	PolyMesh half_edges;
+	size_t _x_segments, _y_segments, _radius;
+	if (radius 0.0 )
+	{
+		_radius = 1.0;
+	}
+
+	if (x_segments == 0) 
+	{
+		_x_segments = 12;
+	}
+	else
+	{
+		_x_segments = x_segments;
+	}
+
+	if (y_segments == 0)
+	{
+		_y_segments = 12;
+	}
+	else
+	{
+		_x_segments = x_segments;
+	}
+	
+	double increment_amount = TWO_PI / static_cast<double>(_x_segments);
+	std::vector<std::tuple<PolyMesh::VertexHandle, PolyMesh::VertexHandle>> verts;
+	
+	// TODO: Center on origin
+	PolyMesh::VertexHandle top = half_edges.add_vertex(PolyMesh::Point(0.0f, height, 0.0f));
+	PolyMesh::VertexHandle origin = half_edges.add_vertex(PolyMesh::Point(0.0f, 0.0f, 0.0f));
+
+	Eigen::Vector3f p_upper(0.0f, height, radius);
+	Eigen::Vector3f p_lower(0.0f, 0.0f, radius);
+
+	for (size_t seg = 0; seg < _segments; seg++)
+	{
+		double diff = increment_amount * seg;
+		Eigen::AngleAxis<float> angle_axis(diff, Eigen::Vector3f::UnitY());
+
+		Eigen::Vector3f rotated_point_lower = angle_axis * p_lower;
+		Eigen::Vector3f rotated_point_upper = angle_axis * p_upper;
+
+		PolyMesh::VertexHandle v1 = half_edges.add_vertex(PolyMesh::Point(rotated_point_lower[0], rotated_point_lower[1], rotated_point_lower[2]));
+		PolyMesh::VertexHandle v2 = half_edges.add_vertex(PolyMesh::Point(rotated_point_upper[0], rotated_point_upper[1], rotated_point_upper[2]));
+		verts.push_back(std::make_tuple(v1, v2));
+	}
+
+	std::vector<PolyMesh::VertexHandle> face_verts;	
+	for(size_t i = 1; i < verts.size(); i++)
+	{
+		std::tuple<PolyMesh::VertexHandle, PolyMesh::VertexHandle> previous_verts = verts[i-1];
+		std::tuple<PolyMesh::VertexHandle, PolyMesh::VertexHandle> current_verts = verts[i];
+
+		face_verts.clear();
+		face_verts.push_back(top);
+		face_verts.push_back(std::get<1>(current_verts));
+		face_verts.push_back(std::get<1>(previous_verts));
+		half_edges.add_face(face_verts);
+
+		face_verts.clear();	
+		face_verts.push_back(std::get<0>(previous_verts));
+		face_verts.push_back(std::get<1>(previous_verts));
+		face_verts.push_back(std::get<1>(current_verts));
+		face_verts.push_back(std::get<0>(current_verts));
+		half_edges.add_face(face_verts);
+
+		face_verts.clear();
+		face_verts.push_back(origin);
+		face_verts.push_back(std::get<0>(previous_verts));
+		face_verts.push_back(std::get<0>(current_verts));
+		half_edges.add_face(face_verts);
+	}
+
+	face_verts.clear();
+	face_verts.push_back(top);
+	face_verts.push_back(std::get<1>(verts[0]));
+	face_verts.push_back(std::get<1>(verts[verts.size()-1]));
+	half_edges.add_face(face_verts);
+
+	face_verts.clear();	
+	face_verts.push_back(std::get<0>(verts[verts.size()-1]));
+	face_verts.push_back(std::get<1>(verts[verts.size()-1]));
+	face_verts.push_back(std::get<1>(verts[0]));
+	face_verts.push_back(std::get<0>(verts[0]));
+	half_edges.add_face(face_verts);
+
+	face_verts.clear();
+	face_verts.push_back(origin);
+	face_verts.push_back(std::get<0>(verts[verts.size()-1]));
+	face_verts.push_back(std::get<0>(verts[0]));
+	half_edges.add_face(face_verts);
+
+
+	half_edges.triangulate();
+	half_edges.garbage_collection();
+	OpenMesh::IO::write_mesh(half_edges, "temp/swept_sphere.off");
+	noob::basic_mesh mesh;
+	mesh.load_assimp("temp/sphere.off","cylinder-temp");
+	// logger::log(fmt::format("Created cylinder with height = {0}, radius = {1} with {2} segments.", height, radius, _segments));
+	return mesh;
+}
+
+*/
+
 noob::basic_mesh noob::mesh_utils::cone(float radius, float height, size_t segments)
 {
 	TriMesh half_edges;
@@ -239,7 +349,7 @@ noob::basic_mesh noob::mesh_utils::cube(float width, float height, float depth, 
 }
 
 
-noob::basic_mesh noob::mesh_utils::sphere(float radius)
+noob::basic_mesh noob::mesh_utils::catmull_sphere(float radius)
 {
 	float diameter = radius * 2;
 	noob::basic_mesh mesh = noob::mesh_utils::cube(diameter, diameter, diameter, 3);
@@ -329,7 +439,6 @@ noob::basic_mesh noob::mesh_utils::csg(const noob::basic_mesh& a, const noob::ba
 	}
 
 	return results;
-
 }
 
 

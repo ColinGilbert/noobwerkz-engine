@@ -34,11 +34,11 @@ void noob::application::user_init()
 	// 	noob::basic_mesh b = noob::mesh_utils::cone(30, 35);
 
 	// 	b.translate(noob::vec3(0.0, 25.0, 0.0));
-	// 	noob::basic_mesh c = noob::mesh_csg(a, b, noob::csg_op::DIFFERENCE);
+	// 	noob::basic_mesh c = noob::mesh_utils::csg(a, b, noob::csg_op::DIFFERENCE);
 	//	noob::basic_mesh c = noob::mesh_utils::cube(20.0, 60.0, 20.0);
 	//	noob::basic_mesh d = noob::mesh_utils::cube(1000.0, 15.0, 1000.0);
 	//	d.translate(noob::vec3(0.0, -20.0, 0.0));
-	//	noob::basic_mesh e = noob::mesh_csg(c, d, noob::csg_op::UNION);
+	//	noob::basic_mesh e = noob::mesh_utils::csg(c, d, noob::csg_op::UNION);
 	//	size_t ground_model_id = stage.add_model(e);//, "ground");
 
 	std::vector<noob::vec3> points;

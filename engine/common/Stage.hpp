@@ -61,9 +61,10 @@ namespace noob
 			noob::shape_component::handle cone(float r, float h);
 			noob::shape_component::handle capsule(float r, float h);
 			noob::shape_component::handle plane(const noob::vec3& normal, float offset);
+
 			// These don't cache the shape for reuse, as they are rather difficult to index inexpensively. Might provide a way to cache frequently-used ones if needed.
 			noob::shape_component::handle hull(const std::vector<noob::vec3>& point);
-
+			noob::shape_component::handle trimesh(const noob::basic_mesh& mesh);
 			
 			
 			// scenery_component sceneries;

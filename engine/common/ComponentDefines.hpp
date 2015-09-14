@@ -23,7 +23,7 @@ namespace noob
 	typedef noob::component<noob::light> light_component;
 	typedef noob::component<noob::reflection> reflection_component;
 	typedef noob::component<noob::prepared_shaders::info> shader_component;
-	typedef noob::component<noob::shape> shape_component;
+	typedef noob::component<std::unique_ptr<noob::shape>> shape_component;
 	typedef noob::component<noob::body> body_component;
 	// typedef noob::component<noob::prop> prop_component;	
 	// typedef noob::component<noob::actor> actor_component;
