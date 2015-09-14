@@ -192,8 +192,8 @@ _OFFReader_::read_ascii(std::istream& _in, BaseImporter& _bi, Options& _opt) con
   OpenMesh::Vec4f           c4f;
   BaseImporter::VHandles    vhandles;
   VertexHandle              vh;
-  static std::stringstream  stream;
-  static std::string        trash;
+  std::stringstream         stream;
+  std::string               trash;
 
   // read header line
   std::string header;

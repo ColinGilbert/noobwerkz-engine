@@ -172,7 +172,7 @@ read_material(std::fstream& _in)
   std::string keyWrd;
   std::string textureName;
 
-  static std::stringstream  stream;
+  std::stringstream  stream;
 
   std::string key;
   Material    mat;
@@ -308,7 +308,7 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
 
   std::string               matname;
 
-  static std::stringstream  stream, lineData, tmp;
+  std::stringstream         stream, lineData, tmp;
 
 
   // Options supplied by the user

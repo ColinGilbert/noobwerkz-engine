@@ -249,8 +249,8 @@ read_stla(std::istream& _in, BaseImporter& _bi, Options& _opt) const
 
   std::string line;
 
-  static std::string        garbage;
-  static std::stringstream  strstream;
+  std::string        garbage;
+  std::stringstream  strstream;
 
   bool facet_normal(false);
 
