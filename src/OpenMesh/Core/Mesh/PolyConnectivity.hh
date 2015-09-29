@@ -1198,10 +1198,10 @@ public:
 
   typedef CirculatorRange<
           const PolyConnectivity,
-          ConstVertexVertexIter,
+          ConstVertexVertexCWIter,
           VertexHandle,
-          &PolyConnectivity::cvv_begin,
-          &PolyConnectivity::cvv_end> ConstVertexVertexRange;
+          &PolyConnectivity::cvv_cwbegin,
+          &PolyConnectivity::cvv_cwend> ConstVertexVertexRange;
   typedef CirculatorRange<
           const PolyConnectivity,
           ConstVertexIHalfedgeIter,
