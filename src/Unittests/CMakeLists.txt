@@ -62,7 +62,7 @@ if ( OPENMESH_BUILD_UNIT_TESTS )
     
 	if ( NOT WIN32 )
 	    # Set compiler flags
-      set_target_properties(unittests PROPERTIES COMPILE_FLAGS "-g -pedantic -ansi -Wno-long-long")
+      set_target_properties(unittests PROPERTIES COMPILE_FLAGS "-g -pedantic -Wno-long-long")
 	else()
 	    # Set compiler flags
       set_target_properties(unittests PROPERTIES COMPILE_FLAGS "" )
