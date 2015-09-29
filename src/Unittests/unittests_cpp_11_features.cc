@@ -67,6 +67,25 @@ TEST_F(OpenMesh_Triangle, cpp11_initializer_test) {
 
 }
 
+TEST_F(OpenMesh_Triangle, cpp11_vvrange_test) {
+  //check empty vvrange
+  mesh_.clear();
+  Mesh::VertexHandle vh = mesh_.add_vertex(Mesh::Point(0, 1, 0));
+  for(auto t : mesh_.vv_range(vh))
+  {
+    FAIL() << "The vvrange for a single vertex is not empty";
+  }
+}
+
+TEST_F(OpenMesh_Poly, cpp11_vvrange_test) {
+  mesh_.clear();
+  PolyMesh::VertexHandle vh = mesh_.add_vertex(PolyMesh::Point(0, 1, 0));
+  for(auto t : mesh_.vv_range(vh))
+  {
+    FAIL() << "The vvrange for a single vertex is not empty";
+  }
+}
+
 #endif
 
 }
