@@ -5,8 +5,10 @@
 All Documentation, binaries and original source code are available at www.openmesh.org  
 
 The main git repository is available at:  
-http://www.openmesh.org:9000/OpenMesh/OpenMesh
+https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh.git  
 
+The gitlab site can be found here:  
+https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh  
 
 ## Installing
 Unpack the tar-ball to a suitable place.  
