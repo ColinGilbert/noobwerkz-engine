@@ -1,7 +1,7 @@
 
 #include <gtest/gtest.h>
 #include <Unittests/unittests_common.hh>
-#include <OpenMesh/Tools/Smoother/JacobiLaplaceSmootherT.hh>
+//#include <OpenMesh/Tools/Smoother/JacobiLaplaceSmootherT.hh>
 
 namespace {
 
@@ -67,23 +67,182 @@ TEST_F(OpenMesh_Triangle, cpp11_initializer_test) {
 
 }
 
-TEST_F(OpenMesh_Triangle, cpp11_vvrange_test) {
-  //check empty vvrange
+
+// ////////////////////////////////////////////////////////////////////
+// C++11 Range tests
+// ////////////////////////////////////////////////////////////////////
+
+
+/**
+ * @brief TEST_F test the vertexrange behaviour on trimeshes
+ */
+TEST_F(OpenMesh_Triangle, cpp11_vertexrange_test) {
+  //check empty vertexrange
   mesh_.clear();
-  Mesh::VertexHandle vh = mesh_.add_vertex(Mesh::Point(0, 1, 0));
-  for(auto t : mesh_.vv_range(vh))
+  for(Mesh::VertexHandle t : mesh_.vertices())
   {
-    FAIL() << "The vvrange for a single vertex is not empty";
+    FAIL() << "The Vertexrange for an empty Mesh is not empty";
   }
+
+  //add vertices to mesh
+  mesh_.add_vertex(Mesh::Point(0, 1, 0));
+  mesh_.add_vertex(Mesh::Point(1, 0, 0));
+  mesh_.add_vertex(Mesh::Point(2, 1, 0));
+  mesh_.add_vertex(Mesh::Point(0,-1, 0));
+  mesh_.add_vertex(Mesh::Point(2,-1, 0));
+
+  //check nonempty mesh vertexrange
+  int iteration_counter = 0;
+  for(Mesh::VertexHandle t : mesh_.vertices())
+  {
+    EXPECT_TRUE(t.is_valid());
+    ++iteration_counter;
+  }
+  EXPECT_EQ(iteration_counter,5);
 }
 
-TEST_F(OpenMesh_Poly, cpp11_vvrange_test) {
+/**
+ * @brief TEST_F test the vertexrange behaviour on polymeshes
+ */
+TEST_F(OpenMesh_Poly, cpp11_vertexrange_test) {
+  //check empty vertexrange
   mesh_.clear();
-  PolyMesh::VertexHandle vh = mesh_.add_vertex(PolyMesh::Point(0, 1, 0));
-  for(auto t : mesh_.vv_range(vh))
+  for(PolyMesh::VertexHandle t : mesh_.vertices())
   {
-    FAIL() << "The vvrange for a single vertex is not empty";
+    FAIL() << "The Vertexrange for an empty Mesh is not empty";
   }
+
+  //add vertices to mesh
+  mesh_.add_vertex(PolyMesh::Point(0, 1, 0));
+  mesh_.add_vertex(PolyMesh::Point(1, 0, 0));
+  mesh_.add_vertex(PolyMesh::Point(2, 1, 0));
+  mesh_.add_vertex(PolyMesh::Point(0,-1, 0));
+  mesh_.add_vertex(PolyMesh::Point(2,-1, 0));
+
+  //check nonempty mesh vertexrange
+  int iteration_counter = 0;
+  for(PolyMesh::VertexHandle t : mesh_.vertices())
+  {
+    EXPECT_TRUE(t.is_valid());
+    ++iteration_counter;
+  }
+  EXPECT_EQ(iteration_counter,5);
+}
+
+/**
+ * @brief TEST_F test vvrange behaviour on trimeshes
+ */
+TEST_F(OpenMesh_Triangle, cpp11_vvrange_test) {
+  //check empty vv_range
+  mesh_.clear();
+  Mesh::VertexHandle vhandle[5];
+  vhandle[0] = mesh_.add_vertex(Mesh::Point(0, 1, 0));
+  for(Mesh::VertexHandle t : mesh_.vv_range(vhandle[0]))
+  {
+    FAIL() << "The vvrange for a single vertex in a TriMesh is not empty";
+  }
+
+  //add more vertices
+  vhandle[1] = mesh_.add_vertex(Mesh::Point(1, 0, 0));
+  vhandle[2] = mesh_.add_vertex(Mesh::Point(2, 1, 0));
+  vhandle[3] = mesh_.add_vertex(Mesh::Point(0,-1, 0));
+  vhandle[4] = mesh_.add_vertex(Mesh::Point(2,-1, 0));
+
+  // Add 4 faces
+  std::vector<Mesh::VertexHandle> face_vhandles;
+
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[2]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[3]);
+  face_vhandles.push_back(vhandle[4]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[3]);
+  face_vhandles.push_back(vhandle[1]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[4]);
+  mesh_.add_face(face_vhandles);
+
+  //check nonempty vvrange
+  int iteration_counter = 0;
+  for(Mesh::VertexHandle t : mesh_.vv_range(vhandle[1]))
+  {
+    EXPECT_TRUE(t.is_valid());
+    ++iteration_counter;
+  }
+  EXPECT_EQ(iteration_counter,4);
+}
+
+/**
+ * @brief TEST_F test the vvrange behaviour on polymeshes
+ */
+TEST_F(OpenMesh_Poly, cpp11_vvrange_test) {
+  //check empty vv_range
+  mesh_.clear();
+  Mesh::VertexHandle vhandle[5];
+  vhandle[0] = mesh_.add_vertex(PolyMesh::Point(0, 1, 0));
+  for(PolyMesh::VertexHandle t : mesh_.vv_range(vhandle[0]))
+  {
+    FAIL() << "The vvrange for a single vertex in a PolyMesh is not empty";
+  }
+
+  //add more vertices
+  vhandle[1] = mesh_.add_vertex(PolyMesh::Point(1, 0, 0));
+  vhandle[2] = mesh_.add_vertex(PolyMesh::Point(2, 1, 0));
+  vhandle[3] = mesh_.add_vertex(PolyMesh::Point(0,-1, 0));
+  vhandle[4] = mesh_.add_vertex(PolyMesh::Point(2,-1, 0));
+
+  // Add 4 faces
+  std::vector<PolyMesh::VertexHandle> face_vhandles;
+
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[2]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[3]);
+  face_vhandles.push_back(vhandle[4]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[0]);
+  face_vhandles.push_back(vhandle[3]);
+  face_vhandles.push_back(vhandle[1]);
+  mesh_.add_face(face_vhandles);
+
+  face_vhandles.clear();
+
+  face_vhandles.push_back(vhandle[2]);
+  face_vhandles.push_back(vhandle[1]);
+  face_vhandles.push_back(vhandle[4]);
+  mesh_.add_face(face_vhandles);
+
+  //check nonempty vvrange
+  int iteration_counter = 0;
+  for(PolyMesh::VertexHandle t : mesh_.vv_range(vhandle[1]))
+  {
+    EXPECT_TRUE(t.is_valid());
+    ++iteration_counter;
+  }
+  EXPECT_EQ(iteration_counter,4);
 }
 
 #endif
