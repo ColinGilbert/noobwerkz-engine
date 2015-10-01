@@ -7,11 +7,16 @@
 <!-- --------------------------------------------------------------------- -->
 
 
-<tr valign=top><td><b>4.2</b> (?/?/?,Rev.1333)</td><td>
+<tr valign=top><td><b>4.2</b> (?/?/?)</td><td>
 
 <b>General</b>
 <ul>
 <li>Moved repository to git</li>
+</ul>
+
+<b>Core</b>
+<ul>
+<li>Fixed bug where range iterators contained an invalid element when the range was empty</li>
 </ul>
 
 <b>IO</b>
@@ -30,6 +35,7 @@
 <li>add obj writer unittest</li>
 <li>add unittest for write stla</li>
 <li>Fixed bug where Some C++11 unittests were not build and used</li>
+<li>Added more unittests c++11 ranges vvrange and vertexrange</li>
 </ul>
 
 
