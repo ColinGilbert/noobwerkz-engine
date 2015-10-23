@@ -577,7 +577,7 @@ public:
   Implements a set of connectivity entities (vertex, edge, face, halfedge) 
   using the available bits in the corresponding mesh status field. 
 
-  Status-based sets are much faster using std::set<> and equivalent 
+  Status-based sets are much faster than std::set<> and equivalent 
   in performance to std::vector<bool>, but much more convenient. 
   */
   template <class HandleT>
@@ -637,7 +637,7 @@ public:
   friend class StatusSetT<FaceHandle>;
   friend class StatusSetT<HalfedgeHandle>;
 
-  //! AutoStatusSetT: A status set that automatically picks a free bit to use
+  //! AutoStatusSetT: A status set that automatically picks a status bit 
   template <class HandleT>
   class AutoStatusSetT : public StatusSetT<HandleT>
   {
