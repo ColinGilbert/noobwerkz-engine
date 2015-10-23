@@ -573,54 +573,62 @@ public:
 
   /// --- StatusSet API ---
 
-  template <class Handle>
+  /*! 
+  Implements a set of connectivity entities (vertex, edge, face, halfedge) 
+  using the available bits in the corresponding mesh status field. 
+
+  Status-based sets are much faster using std::set<> and equivalent 
+  in performance to std::vector<bool>, but much more convenient. 
+  */
+  template <class HandleT>
   class StatusSetT
   {
+  public: 
+    typedef HandleT Handle;
+
   protected:
-    ArrayKernel&                            kernel_;
+    ArrayKernel& kernel_;
 
   public:
-    const unsigned int                      bit_mask_;
+    const unsigned int bit_mask_;
 
   public:
-    StatusSetT(ArrayKernel& _kernel, unsigned int _bit_mask)
+    StatusSetT(ArrayKernel& _kernel, const unsigned int _bit_mask)
     : kernel_(_kernel), bit_mask_(_bit_mask)
     {}
 
     ~StatusSetT()
     {}
 
-    inline bool                             is_in(Handle _hnd) const
+    inline bool is_in(Handle _hnd) const
     { return kernel_.status(_hnd).is_bit_set(bit_mask_); }
 
-    inline void                             insert(Handle _hnd)
+    inline void insert(Handle _hnd)
     { kernel_.status(_hnd).set_bit(bit_mask_); }
 
-    inline void                             erase(Handle _hnd)
+    inline void erase(Handle _hnd)
     { kernel_.status(_hnd).unset_bit(bit_mask_); }
 
-    /// Note: 0(n) complexity
-    unsigned int                            size() const
+    //! Note: 0(n) complexity
+    size_t size() const
     {
-      unsigned int n_elements = kernel_.status_pph(Handle()).is_valid() ?
-                                kernel_.property(kernel_.status_pph(Handle())).n_elements() : 0;
-      unsigned int sz = 0;
-      for (unsigned int i = 0; i < n_elements; ++i)
-      {
-        sz += (unsigned int)is_in(Handle(i));
-      }
+      const int n = kernel_.status_pph(Handle()).is_valid() ?
+       (int)kernel_.property(kernel_.status_pph(Handle())).n_elements() : 0;
+ 
+      size_t sz = 0;
+      for (int i = 0; i < n; ++i)
+        sz += (size_t)is_in(Handle(i));
       return sz;
     }
 
-    /// Note: O(n) complexity
-    void                                    clear()
+    //! Note: O(n) complexity
+    void clear()
     {
-      unsigned int n_elements = kernel_.status_pph(Handle()).is_valid() ?
-                                kernel_.property(kernel_.status_pph(Handle())).n_elements() : 0;
-      for (unsigned int i = 0; i < n_elements; ++i)
-      {
+      const int n = kernel_.status_pph(Handle()).is_valid() ?
+       (int)kernel_.property(kernel_.status_pph(Handle())).n_elements() : 0;
+
+      for (int i = 0; i < n; ++i)
         erase(Handle(i));
-      }
     }
   };
 
@@ -629,13 +637,14 @@ public:
   friend class StatusSetT<FaceHandle>;
   friend class StatusSetT<HalfedgeHandle>;
 
-  /// --- AutoStatusSet API ---
-
-  template <class Handle>
-  class AutoStatusSetT : public StatusSetT<Handle>
+  //! AutoStatusSetT: A status set that automatically picks a free bit to use
+  template <class HandleT>
+  class AutoStatusSetT : public StatusSetT<HandleT>
   {
   private:
-    typedef StatusSetT<Handle>              Base;
+    typedef StatusSetT<Handle> Base;
+    typedef HandleT Handle;
+
   public:
     AutoStatusSetT(ArrayKernel& _kernel)
     : StatusSetT<Handle>(_kernel, _kernel.pop_bit_mask(Handle()))
@@ -658,13 +667,13 @@ public:
   typedef AutoStatusSetT<FaceHandle>        FaceStatusSet;
   typedef AutoStatusSetT<HalfedgeHandle>    HalfedgeStatusSet;
 
-  /// --- ExtStatusSet API --- (hybrid between a set and an array)
-
-  template <class Handle>
-  class ExtStatusSetT : public AutoStatusSetT<Handle>
+  //! ExtStatusSet: A status set augmented with an array
+  template <class HandleT>
+  class ExtStatusSetT : public AutoStatusSetT<HandleT>
   {
   public:
-    typedef AutoStatusSetT<Handle>          Base;
+    typedef HandleT Handle;
+    typedef AutoStatusSetT<Handle> Base;
 
   protected:
     typedef std::vector<Handle>             HandleContainer;
@@ -683,9 +692,8 @@ public:
     ~ExtStatusSetT()
     { clear(); }
 
-    //set API
     // Complexity: O(1)
-    inline void                             insert(Handle _hnd)
+    inline void insert(Handle _hnd)
     {
       if (!is_in(_hnd))
       {
@@ -694,8 +702,8 @@ public:
       }
     }
 
-    // Complexity: O(k), (k - number of the elements in the set)
-    inline void                             erase(Handle _hnd)
+    //! Complexity: O(k), (k - number of the elements in the set)
+    inline void erase(Handle _hnd)
     {
       if (is_in(_hnd))
       {
@@ -704,16 +712,16 @@ public:
       }
     }
 
-    // Complexity: O(1)
-    inline void                             erase(iterator _it)
+    //! Complexity: O(1)
+    inline void erase(iterator _it)
     {
       assert(_it != end() && is_in(*_it));
-      clear(*_it);
+      Base::erase(*_it);
       *_it = handles_.back();
       _it.pop_back();
     }
 
-    inline void                             clear()
+    inline void clear()
     {
       for (iterator it = begin(); it != end(); ++it)
       {
@@ -724,30 +732,30 @@ public:
     }
 
     /// Complexity: 0(1)
-    inline unsigned int                     size() const
+    inline unsigned int size() const
     { return handles_.size(); }
-    inline bool                             empty() const
+    inline bool empty() const
     { return handles_.empty(); }
 
     //Vector API
-    inline iterator                         begin()
+    inline iterator begin()
     { return handles_.begin(); }
-    inline const_iterator                   begin() const
+    inline const_iterator begin() const
     { return handles_.begin(); }
 
-    inline iterator                         end()
+    inline iterator end()
     { return handles_.end(); }
-    inline const_iterator                   end() const
+    inline const_iterator end() const
     { return handles_.end(); }
 
-    inline Handle&                          front()
+    inline Handle& front()
     { return handles_.front(); }
-    inline const Handle&                    front() const
+    inline const Handle& front() const
     { return handles_.front(); }
 
-    inline Handle&                          back()
+    inline Handle& back()
     { return handles_.back(); }
-    inline const Handle&                    back() const
+    inline const Handle& back() const
     { return handles_.back(); }
   };
 
