@@ -425,7 +425,7 @@ public:
 
 
   HalfedgeHandle opposite_halfedge_handle(HalfedgeHandle _heh) const
-  { return HalfedgeHandle((_heh.idx() & 1) ? _heh.idx()-1 : _heh.idx()+1); }
+  { return HalfedgeHandle(_heh.idx() ^ 1); }
 
 
   HalfedgeHandle ccw_rotated_halfedge_handle(HalfedgeHandle _heh) const
