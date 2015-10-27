@@ -17,6 +17,8 @@
 <b>Core</b>
 <ul>
 <li>Fixed bug where range iterators contained an invalid element when the range was empty</li>
+<li>Reintroduced and polished the StatusSet API (Thanks to Martin Marinov)</li>
+<li>More efficient implementation of opposite_halfedge_handle (Less instructions required)</li>
 </ul>
 
 <b>IO</b>
