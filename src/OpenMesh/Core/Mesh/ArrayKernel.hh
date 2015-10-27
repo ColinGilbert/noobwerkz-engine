@@ -642,8 +642,8 @@ public:
   class AutoStatusSetT : public StatusSetT<HandleT>
   {
   private:
-    typedef StatusSetT<Handle> Base;
     typedef HandleT Handle;
+    typedef StatusSetT<Handle> Base;
 
   public:
     AutoStatusSetT(ArrayKernel& _kernel)
