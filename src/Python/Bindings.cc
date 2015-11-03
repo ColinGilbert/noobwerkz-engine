@@ -5,6 +5,7 @@
 #include "Python/Circulator.hh"
 #include "Python/PropertyManager.hh"
 #include "Python/InputOutput.hh"
+#include "Python/Decimater.hh"
 
 namespace OpenMesh {
 namespace Python {
@@ -142,6 +143,9 @@ BOOST_PYTHON_MODULE(openmesh) {
 	expose_property_manager<FPropHandleT<object>, FaceHandle, FaceIterWrapper>("FPropertyManager");
 
 	expose_io();
+
+	expose_decimater<PolyMesh>("PolyMesh");
+	expose_decimater<TriMesh>("TriMesh");
 }
 
 } // namespace Python
