@@ -103,30 +103,31 @@ calc_face_normal(FaceHandle _fh) const
   assert(this->halfedge_handle(_fh).is_valid());
   ConstFaceVertexIter fv_it(this->cfv_iter(_fh));
   
-  Point p0 = this->point(*fv_it);
-  const Point p0i = p0; //save point of vertex 0
   // Safeguard for 1-gons
   if (!(++fv_it).is_valid()) return Normal(0, 0, 0);
 
-  Point p1 = this->point(*fv_it);
-  const Point p1i = p1; //save point of vertex 1
-  
   // Safeguard for 2-gons
   if (!(++fv_it).is_valid()) return Normal(0, 0, 0);
-  
-  //calculate area-weighted average normal of polygon's ears
+
+  // use Newell's Method to compute the surface normal
   Normal n(0,0,0);
-  for(; fv_it.is_valid(); ++fv_it)
+  for(fv_it = this->cfv_iter(_fh); fv_it.is_valid(); ++fv_it)
   {
-    const Point p2 = this->point(*fv_it);
-    n += vector_cast<Normal>(calc_face_normal(p0, p1, p2));
-    p0 = p1;
-    p1 = p2;
+    // next vertex
+    ConstFaceVertexIter fv_itn = fv_it;
+    ++fv_itn;
+
+    if (!fv_itn.is_valid())
+      fv_itn = this->cfv_iter(_fh);
+
+    // http://www.opengl.org/wiki/Calculating_a_Surface_Normal
+    const Point a = this->point(*fv_it) - this->point(*fv_itn);
+    const Point b = this->point(*fv_it) + this->point(*fv_itn);
+
+    n[0] += a[1] * b[2];
+    n[1] += a[2] * b[0];
+    n[2] += a[0] * b[1];
   }
-  
-  //two additional steps since we started at vertex 2, not 0
-  n += vector_cast<Normal>(calc_face_normal(p0, p1, p0i));
-  n += vector_cast<Normal>(calc_face_normal(p1, p0i, p1i));
 
   const typename vector_traits<Normal>::value_type norm = n.length();
   
