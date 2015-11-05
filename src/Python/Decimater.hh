@@ -32,6 +32,16 @@ void expose_module_handle(const char *_name) {
 		;
 }
 
+template <class Module>
+list infolist(Module& _self) {
+	const typename Module::InfoList& infos = _self.infolist();
+	list res;
+	for (size_t i = 0; i < infos.size(); ++i) {
+		res.append(infos[i]);
+	}
+	return res;
+}
+
 template <class Mesh>
 void expose_decimater(const char *_name) {
 
@@ -58,6 +68,9 @@ void expose_decimater(const char *_name) {
 
 	typedef Decimater::BaseDecimaterT<Mesh> BaseDecimater;
 	typedef Decimater::DecimaterT<Mesh> Decimater;
+
+	typedef typename ModProgMesh::Info Info;
+	typedef std::vector<Info> InfoList;
 
 	bool (BaseDecimater::*add1)(ModAspectRatioHandle&) = &Decimater::add;
 	bool (BaseDecimater::*add2)(ModEdgeLengthHandle&) = &Decimater::add;
@@ -228,7 +241,23 @@ void expose_decimater(const char *_name) {
 	// ModProgMesh
 	// ----------------------------------------
 
-	// TODO
+	class_<Info>("Info", no_init)
+		.def_readwrite("v0", &Info::v0)
+		.def_readwrite("v1", &Info::v1)
+		.def_readwrite("vl", &Info::vl)
+		.def_readwrite("vr", &Info::vr)
+		;
+
+	snprintf(buffer, sizeof buffer, "%s%s", _name, "ModProgMesh");
+
+	class_<ModProgMesh, bases<ModBase>, boost::noncopyable>(buffer, init<Mesh&>())
+		.def("pmi", &infolist<ModProgMesh>)
+		.def("infolist", &infolist<ModProgMesh>)
+		.def("write", &ModProgMesh::write)
+		;
+
+	snprintf(buffer, sizeof buffer, "%s%s", _name, "ModProgMeshHandle");
+	expose_module_handle<ModProgMeshHandle>(buffer);
 
 	// ModQuadric
 	// ----------------------------------------
