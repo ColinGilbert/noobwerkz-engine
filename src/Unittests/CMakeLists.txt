@@ -22,6 +22,16 @@ if ( OPENMESH_BUILD_UNIT_TESTS )
     # set additional link directories
     link_directories(${GTEST_LIBRARY_DIR} )
 
+    set(INHIBIT_CXX11_SUPPORT OFF CACHE BOOL "Do not use C++11 even if it is available. (This is mainly useful for unit testing.)")
+
+    if (NOT INHIBIT_CXX11_SUPPORT)
+    find_package (CXX11)
+
+    if (CXX11_FOUND)
+      add_definitions(${CXX11_FLAGS} -DCPP11_ENABLED)
+    endif (CXX11_FOUND)
+    endif (NOT INHIBIT_CXX11_SUPPORT)
+
     if ( CMAKE_GENERATOR MATCHES "^Visual Studio 11.*" ) 
       add_definitions( /D _VARIADIC_MAX=10 )
     endif()

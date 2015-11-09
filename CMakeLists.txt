@@ -33,6 +33,16 @@ include (ACGOutput)
 # Definitions
 # ========================================================================
 
+set(INHIBIT_CXX11_SUPPORT OFF CACHE BOOL "Do not use C++11 even if it is available. (This is mainly useful for unit testing.)")
+
+if (NOT INHIBIT_CXX11_SUPPORT)
+find_package (CXX11)
+
+if (CXX11_FOUND)
+  add_definitions(${CXX11_FLAGS} -DCPP11_ENABLED)
+endif (CXX11_FOUND)
+endif (NOT INHIBIT_CXX11_SUPPORT)
+
 if (WIN32)
   add_definitions(
       -D_USE_MATH_DEFINES -DNOMINMAX
