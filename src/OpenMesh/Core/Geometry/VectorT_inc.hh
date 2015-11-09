@@ -98,11 +98,11 @@ public:
   inline VectorT() {}
 
 #ifdef CPP11_ENABLED
-  explicit inline VectorT(const Scalar& v) {
+  explicit inline VectorT(const Scalar &v) {
       vectorize(v);
   }
 
-  template<typename... T>
+  template<typename... T, typename = typename std::enable_if<sizeof...(T) == DIM>::type>
   constexpr VectorT(T... vs) : Base {vs...}
   { }
 #else
@@ -154,9 +154,10 @@ public:
   }
 #endif
 #endif
+
   /// construct from a value array (explicit)
   explicit inline VectorT(const Scalar _values[DIM]) {
-    memcpy(Base::values_, _values, DIM*sizeof(Scalar));
+    memcpy(data(), _values, DIM*sizeof(Scalar));
   }
 
 
@@ -196,11 +197,19 @@ public:
 //   /// cast to const Scalar array
 //   inline operator const Scalar*() const { return Base::values_; }
 
+#ifdef CPP11_ENABLED
+  /// access to Scalar array
+  inline Scalar* data() { return Base::values_.data(); }
+
+  /// access to const Scalar array
+  inline const Scalar*data() const { return Base::values_.data(); }
+#else
   /// access to Scalar array
   inline Scalar* data() { return Base::values_; }
 
   /// access to const Scalar array
   inline const Scalar*data() const { return Base::values_; }
+#endif
 
 
 

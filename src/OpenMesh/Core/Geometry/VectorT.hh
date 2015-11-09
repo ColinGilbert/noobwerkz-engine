@@ -80,6 +80,7 @@
 #ifdef CPP11_ENABLED
 #include <array>
 #include <initializer_list>
+#include <type_traits>
 #endif
 
 //== NAMESPACES ===============================================================
