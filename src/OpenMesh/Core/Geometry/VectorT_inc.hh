@@ -97,6 +97,15 @@ public:
   /// default constructor creates uninitialized values.
   inline VectorT() {}
 
+#ifdef CPP11_ENABLED
+  explicit inline VectorT(const Scalar& v) {
+      vectorize(v);
+  }
+
+  template<typename... T>
+  constexpr VectorT(T... vs) : Base {vs...}
+  { }
+#else
   /// special constructor for 1D vectors
   explicit inline VectorT(const Scalar& v) {
 //     assert(DIM==1);
@@ -124,6 +133,8 @@ public:
      const Scalar v2, const Scalar v3) {
     Base::values_[0]=v0; Base::values_[1]=v1; Base::values_[2]=v2; Base::values_[3]=v3;
   }
+
+  VectorT homogenized() { return VectorT(Base::values_[0]/Base::values_[3], Base::values_[1]/Base::values_[3], Base::values_[2]/Base::values_[3], 1); }
 #endif
 
 #if DIM == 5
@@ -142,7 +153,7 @@ public:
     Base::values_[3]=v3; Base::values_[4]=v4; Base::values_[5]=v5;
   }
 #endif
-
+#endif
   /// construct from a value array (explicit)
   explicit inline VectorT(const Scalar _values[DIM]) {
     memcpy(Base::values_, _values, DIM*sizeof(Scalar));

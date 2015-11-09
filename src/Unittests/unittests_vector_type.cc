@@ -83,6 +83,34 @@ TEST_F(OpenMeshVectorTest, VectorCasting) {
 
 }
 
+#ifdef CPP11_ENABLED
+TEST_F(OpenMeshVectorTest, cpp11_constructors) {
+    OpenMesh::Vec3d vec1 { 1.2, 2.0, 3.0 };
 
+    EXPECT_EQ(1.2, vec1[0]);
+    EXPECT_EQ(2.0, vec1[1]);
+    EXPECT_EQ(3.0, vec1[2]);
+
+    OpenMesh::Vec4f vec2 { 1.2f, 3.5f, 1.0f, 0.0f };
+
+    EXPECT_EQ(1.2f, vec2[0]);
+    EXPECT_EQ(3.5f, vec2[1]);
+    EXPECT_EQ(1.0f, vec2[2]);
+    EXPECT_EQ(0.0f, vec2[3]);
+
+    OpenMesh::Vec4f vec2b { vec2 };
+
+    EXPECT_EQ(1.2f, vec2b[0]);
+    EXPECT_EQ(3.5f, vec2b[1]);
+    EXPECT_EQ(1.0f, vec2b[2]);
+    EXPECT_EQ(0.0f, vec2b[3]);
+
+    OpenMesh::Vec4d vec4d { 1.23 };
+    EXPECT_EQ(1.23, vec4d[0]);
+    EXPECT_EQ(1.23, vec4d[1]);
+    EXPECT_EQ(1.23, vec4d[2]);
+    EXPECT_EQ(1.23, vec4d[3]);
+}
+#endif
 
 }

@@ -67,7 +67,6 @@
 
 //== INCLUDES =================================================================
 
-
 #include <OpenMesh/Core/System/config.h>
 #include <ostream>
 #include <cmath>
@@ -78,6 +77,10 @@
 #include <xmmintrin.h>
 #endif
 
+#ifdef CPP11_ENABLED
+#include <array>
+#include <initializer_list>
+#endif
 
 //== NAMESPACES ===============================================================
 
@@ -98,22 +101,45 @@ namespace OpenMesh {
     aligned, so that aligned SSE instructions can be used on these
     vectors.
 */
-template <typename Scalar,int N> struct VectorDataT
-{
-  Scalar values_[N];
+template<typename Scalar, int N> class VectorDataT {
+    public:
+#ifdef CPP11_ENABLED
+        VectorDataT() {}
+
+        template<typename... T>
+        constexpr VectorDataT(T... vs) : values_ {vs...} {
+            static_assert(sizeof...(vs) == N,
+                    "Incorrect number of vector components supplied.");
+        }
+        std::array<Scalar, N> values_;
+#else
+        Scalar values_[N];
+#endif
 };
 
 
 #if defined(__GNUC__) && defined(__SSE__)
 
 /// This specialization enables us to use aligned SSE instructions.
-template <> struct VectorDataT<float, 4>
-{
-  union 
-  {
-    __m128  m128;
-    float   values_[4];
-  };
+template<> class VectorDataT<float, 4> {
+    public:
+#ifdef CPP11_ENABLED
+        VectorDataT() {}
+
+        template<typename... T>
+        constexpr VectorDataT(T... vs) : values_ {vs...} {
+            static_assert(sizeof...(vs) == 4,
+                    "Incorrect number of vector components supplied.");
+        }
+#endif
+        union {
+            __m128 m128;
+#ifdef CPP11_ENABLED
+            std::array<float, 4> values_;
+#else
+            float values_[4];
+#endif
+        };
 };
 
 #endif
