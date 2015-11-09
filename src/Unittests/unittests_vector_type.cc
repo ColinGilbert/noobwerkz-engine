@@ -111,6 +111,18 @@ TEST_F(OpenMeshVectorTest, cpp11_constructors) {
     EXPECT_EQ(1.23, vec4d[2]);
     EXPECT_EQ(1.23, vec4d[3]);
 }
+
+TEST_F(OpenMeshVectorTest, cpp11_htmlColorLiteral) {
+    const OpenMesh::Vec4f light_blue = 0x1FCFFFFF_htmlColor;
+    EXPECT_LE((OpenMesh::Vec4f(0.1215686274f, 0.8117647058f, 1.0f, 1.0f)
+        - light_blue).sqrnorm(), 1e-10);
+
+    const auto light_blue_2 = 0x1FCFFFFF_htmlColor;
+    // Check whether auto type deduction works as expected.
+    static_assert(std::is_same<decltype(light_blue_2), decltype(light_blue)>
+        ::value, "Bad type deduced from _htmlColor literal.");
+    EXPECT_EQ(light_blue, light_blue_2);
+}
 #endif
 
 }

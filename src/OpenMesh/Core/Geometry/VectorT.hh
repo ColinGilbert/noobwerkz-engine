@@ -412,6 +412,26 @@ typedef VectorT<double,6> Vec6d;
 //=============================================================================
 } // namespace OpenMesh
 //=============================================================================
+
+
+#ifdef CPP11_ENABLED
+/**
+ * Literal operator for inline specification of colors in HTML syntax.
+ *
+ * Example:
+ * \code{.cpp}
+ * OpenMesh::Vec4f light_blue = 0x1FCFFFFF_htmlColor;
+ * \endcode
+ */
+constexpr OpenMesh::Vec4f operator"" _htmlColor(unsigned long long raw_color) {
+    return OpenMesh::Vec4f(
+            ((raw_color >> 24) & 0xFF) / 255.0f,
+            ((raw_color >> 16) & 0xFF) / 255.0f,
+            ((raw_color >>  8) & 0xFF) / 255.0f,
+            ((raw_color >>  0) & 0xFF) / 255.0f);
+}
+#endif
+
 #endif // OPENMESH_VECTOR_HH defined
 //=============================================================================
 #endif // DOXYGEN
