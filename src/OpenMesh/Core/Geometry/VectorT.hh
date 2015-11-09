@@ -92,6 +92,23 @@ namespace OpenMesh {
 //== CLASS DEFINITION =========================================================
 
 
+#if CPP11_ENABLED
+/*
+ * Helpers for VectorT
+ */
+namespace {
+template<typename... Ts>
+struct are_convertible_to;
+
+template<typename To, typename From, typename... Froms>
+struct are_convertible_to<To, From, Froms...> {
+    static constexpr bool value = std::is_convertible<From, To>::value && are_convertible_to<To, Froms...>::value;
+};
+template<typename To, typename From>
+struct are_convertible_to<To, From> : public std::is_convertible<From, To> {};
+}
+#endif
+
 
 /** The N values of the template Scalar type are the only data members
     of the class VectorT<Scalar,N>. This guarantees 100% compatibility
