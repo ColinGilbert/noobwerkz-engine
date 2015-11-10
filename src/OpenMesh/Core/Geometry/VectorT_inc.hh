@@ -107,6 +107,17 @@ public:
       typename = typename std::enable_if<are_convertible_to<float, T...>::value>::type>
   constexpr VectorT(T... vs) : Base { static_cast<Scalar>(vs)...}
   { }
+
+  template<int D = DIM, typename = typename std::enable_if<D == DIM>::type>
+  typename std::enable_if<D==4, VectorT>::type
+  homogenized() const {
+      return VectorT(
+              Base::values_[0]/Base::values_[3],
+              Base::values_[1]/Base::values_[3],
+              Base::values_[2]/Base::values_[3],
+              1);
+  }
+
 #else
   /// special constructor for 1D vectors
   explicit inline VectorT(const Scalar& v) {
@@ -136,7 +147,7 @@ public:
     Base::values_[0]=v0; Base::values_[1]=v1; Base::values_[2]=v2; Base::values_[3]=v3;
   }
 
-  VectorT homogenized() { return VectorT(Base::values_[0]/Base::values_[3], Base::values_[1]/Base::values_[3], Base::values_[2]/Base::values_[3], 1); }
+  VectorT homogenized() const { return VectorT(Base::values_[0]/Base::values_[3], Base::values_[1]/Base::values_[3], Base::values_[2]/Base::values_[3], 1); }
 #endif
 
 #if DIM == 5
