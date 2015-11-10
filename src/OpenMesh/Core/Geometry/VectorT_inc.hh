@@ -97,7 +97,7 @@ public:
   /// default constructor creates uninitialized values.
   inline VectorT() {}
 
-#ifdef CPP11_ENABLED
+#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
   explicit inline VectorT(const Scalar &v) {
       vectorize(v);
   }
@@ -199,7 +199,7 @@ public:
 //   /// cast to const Scalar array
 //   inline operator const Scalar*() const { return Base::values_; }
 
-#ifdef CPP11_ENABLED
+#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
   /// access to Scalar array
   inline Scalar* data() { return Base::values_.data(); }
 

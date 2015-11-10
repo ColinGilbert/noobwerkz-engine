@@ -33,16 +33,6 @@ include (ACGOutput)
 # Definitions
 # ========================================================================
 
-set(INHIBIT_CXX11_SUPPORT OFF CACHE BOOL "Do not use C++11 even if it is available. (This is mainly useful for unit testing.)")
-
-if (NOT INHIBIT_CXX11_SUPPORT)
-find_package (CXX11)
-
-if (CXX11_FOUND)
-  add_definitions(${CXX11_FLAGS} -DCPP11_ENABLED)
-endif (CXX11_FOUND)
-endif (NOT INHIBIT_CXX11_SUPPORT)
-
 if (WIN32)
   add_definitions(
       -D_USE_MATH_DEFINES -DNOMINMAX
@@ -107,12 +97,6 @@ else()
 	set (OPENMESH_FOUND true PARENT_SCOPE)
 	set (OPENMESH_LIBRARIES OpenMeshCore OpenMeshTools PARENT_SCOPE)
 	set (OPENMESH_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/src" PARENT_SCOPE)
-	set (OPENMESH_FLAGS "" PARENT_SCOPE)
-	if (NOT INHIBIT_CXX11_SUPPORT)
-	  if (CXX11_FOUND)
-		set(OPENMESH_FLAGS "${CXX11_FLAGS};-DCPP11_ENABLED" PARENT_SCOPE)
-	  endif (CXX11_FOUND)
-	endif (NOT INHIBIT_CXX11_SUPPORT)
 
 	# Also define variables provided by the old legacy finder.
 	set (OPENMESH_CORE_LIBRARY OpenMeshCore PARENT_SCOPE)

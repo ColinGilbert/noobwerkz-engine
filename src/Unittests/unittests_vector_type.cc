@@ -83,7 +83,7 @@ TEST_F(OpenMeshVectorTest, VectorCasting) {
 
 }
 
-#ifdef CPP11_ENABLED
+#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 TEST_F(OpenMeshVectorTest, cpp11_constructors) {
     OpenMesh::Vec3d vec1 { 1.2, 2.0, 3.0 };
 
@@ -113,6 +113,8 @@ TEST_F(OpenMeshVectorTest, cpp11_constructors) {
 }
 
 TEST_F(OpenMeshVectorTest, cpp11_htmlColorLiteral) {
+    static constexpr OpenMesh::Vec4f rose = 0xFFC7F1FF_htmlColor;
+
     const OpenMesh::Vec4f light_blue = 0x1FCFFFFF_htmlColor;
     EXPECT_LE((OpenMesh::Vec4f(0.1215686274f, 0.8117647058f, 1.0f, 1.0f)
         - light_blue).sqrnorm(), 1e-10);

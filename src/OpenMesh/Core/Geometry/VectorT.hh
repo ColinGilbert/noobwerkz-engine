@@ -77,7 +77,7 @@
 #include <xmmintrin.h>
 #endif
 
-#ifdef CPP11_ENABLED
+#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 #include <array>
 #include <initializer_list>
 #include <type_traits>
@@ -92,7 +92,7 @@ namespace OpenMesh {
 //== CLASS DEFINITION =========================================================
 
 
-#if CPP11_ENABLED
+#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 /*
  * Helpers for VectorT
  */
@@ -121,7 +121,7 @@ struct are_convertible_to<To, From> : public std::is_convertible<From, To> {};
 */
 template<typename Scalar, int N> class VectorDataT {
     public:
-#ifdef CPP11_ENABLED
+#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
         VectorDataT() {}
 
         template<typename... T>
@@ -141,7 +141,7 @@ template<typename Scalar, int N> class VectorDataT {
 /// This specialization enables us to use aligned SSE instructions.
 template<> class VectorDataT<float, 4> {
     public:
-#ifdef CPP11_ENABLED
+#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
         VectorDataT() {}
 
         template<typename... T>
@@ -152,7 +152,7 @@ template<> class VectorDataT<float, 4> {
 #endif
         union {
             __m128 m128;
-#ifdef CPP11_ENABLED
+#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
             std::array<float, 4> values_;
 #else
             float values_[4];
@@ -432,7 +432,7 @@ typedef VectorT<double,6> Vec6d;
 //=============================================================================
 
 
-#ifdef CPP11_ENABLED
+#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 /**
  * Literal operator for inline specification of colors in HTML syntax.
  *
