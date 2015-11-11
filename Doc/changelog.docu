@@ -7,7 +7,7 @@
 <!-- --------------------------------------------------------------------- -->
 
 
-<tr valign=top><td><b>4.2</b> (?/?/?)</td><td>
+<tr valign=top><td><b>5.0</b> (?/?/?)</td><td>
 
 <b>General</b>
 <ul>
@@ -19,6 +19,14 @@
 <li>Fixed bug where range iterators contained an invalid element when the range was empty</li>
 <li>Reintroduced and polished the StatusSet API (Thanks to Martin Marinov)</li>
 <li>More efficient implementation of opposite_halfedge_handle (Less instructions required)</li>
+<li>PolyMeshes: More robust algorithm for computing surface normals (Fixes bad normals on concave polygons)</li>
+</ul>
+
+<b>VectorT</b>
+<ul>
+<li>Modernized VectorT constructors for C++11 (Less redundancy, make some of the VectorT constructors constexpr)</li>
+<li>C++11: Added _htmlColor literal operator.</li>
+<li>C++11: Added explicit static_cast along with static SFINAE checks to VectorT constructor.</li>
 </ul>
 
 <b>IO</b>
