@@ -1,9 +1,7 @@
 #!/bin/bash
 
-if [ $(uname) == Darwin ]; then
-        PATH=$PATH:/opt/local/bin
-        export PATH
-fi
+PATH=$PATH:/opt/local/bin
+export PATH
 
 #########################################
 # Build release version
