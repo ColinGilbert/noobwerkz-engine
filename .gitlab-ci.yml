@@ -10,3 +10,5 @@ gcc-c++98:
 clang-c++98:
   script: "CI/ci-linux.sh clang C++98"
 
+macos:
+  script: "CI/ci-mac.sh"
