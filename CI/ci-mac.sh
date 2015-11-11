@@ -1,7 +1,19 @@
 #!/bin/bash
 
+LANGUAGE=$1
+
 PATH=$PATH:/opt/local/bin
 export PATH
+
+OPTIONS=""
+
+if [ "$LANGUAGE" == "C++98" ]; then
+  echo "Building with C++98";
+elif [ "$LANGUAGE" == "C++11" ]; then
+  echo "Building with C++11";
+  OPTIONS="$OPTIONS -DCMAKE_CXX_FLAGS='-std=c++11' "
+fi
+
 
 #########################################
 # Build release version
@@ -13,7 +25,7 @@ fi
 
 cd build-release
 
-cmake -DCMAKE_BUILD_TYPE=Release -DOPENMESH_BUILD_UNIT_TESTS=TRUE ../
+cmake -DCMAKE_BUILD_TYPE=Release -DOPENMESH_BUILD_UNIT_TESTS=TRUE $OPTIONS ../
 
 #build it
 make
@@ -44,7 +56,7 @@ fi
 
 cd build-debug
 
-cmake -DCMAKE_BUILD_TYPE=Debug -DOPENMESH_BUILD_UNIT_TESTS=TRUE ../
+cmake -DCMAKE_BUILD_TYPE=Debug -DOPENMESH_BUILD_UNIT_TESTS=TRUE $OPTIONS ../
 
 #build the unit tests
 make unittests
