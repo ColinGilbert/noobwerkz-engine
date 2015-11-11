@@ -3,8 +3,6 @@
 COMPILER=$1
 LANGUAGE=$2
 
-#!/bin/bash
-
 OPTIONS=""
 
 if [ "$COMPILER" == "gcc" ]; then
