@@ -417,7 +417,7 @@ TEST_F(OpenMeshTrimeshCirculatorVertexOHalfEdge, CWAndCCWCheck) {
   face_vhandles.push_back(vhandle[0]);
   face_vhandles.push_back(vhandle[1]);
   face_vhandles.push_back(vhandle[2]);
-  Mesh::FaceHandle fh0 = mesh_.add_face(face_vhandles);
+  mesh_.add_face(face_vhandles);
 
   face_vhandles.clear();
 
