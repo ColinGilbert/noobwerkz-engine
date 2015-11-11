@@ -1,14 +1,19 @@
 gcc-c++11:
   script: "CI/ci-linux.sh gcc C++11"
+  only: Linux
 
 clang-c++11:
   script: "CI/ci-linux.sh clang C++11"
+  only: Linux
 
 gcc-c++98:
   script: "CI/ci-linux.sh gcc C++98"
+  only: Linux
 
 clang-c++98:
   script: "CI/ci-linux.sh clang C++98"
+  only: Linux
 
 macos:
   script: "CI/ci-mac.sh"
+  only: Apple
