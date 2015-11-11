@@ -97,6 +97,28 @@ public:
   /// default constructor creates uninitialized values.
   inline VectorT() {}
 
+#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+  explicit inline VectorT(const Scalar &v) {
+      vectorize(v);
+  }
+
+  template<typename... T,
+      typename = typename std::enable_if<sizeof...(T) == DIM>::type,
+      typename = typename std::enable_if<are_convertible_to<float, T...>::value>::type>
+  constexpr VectorT(T... vs) : Base { static_cast<Scalar>(vs)...}
+  { }
+
+  template<int D = DIM, typename = typename std::enable_if<D == DIM>::type>
+  typename std::enable_if<D==4, VectorT>::type
+  homogenized() const {
+      return VectorT(
+              Base::values_[0]/Base::values_[3],
+              Base::values_[1]/Base::values_[3],
+              Base::values_[2]/Base::values_[3],
+              1);
+  }
+
+#else
   /// special constructor for 1D vectors
   explicit inline VectorT(const Scalar& v) {
 //     assert(DIM==1);
@@ -124,6 +146,8 @@ public:
      const Scalar v2, const Scalar v3) {
     Base::values_[0]=v0; Base::values_[1]=v1; Base::values_[2]=v2; Base::values_[3]=v3;
   }
+
+  VectorT homogenized() const { return VectorT(Base::values_[0]/Base::values_[3], Base::values_[1]/Base::values_[3], Base::values_[2]/Base::values_[3], 1); }
 #endif
 
 #if DIM == 5
@@ -142,10 +166,11 @@ public:
     Base::values_[3]=v3; Base::values_[4]=v4; Base::values_[5]=v5;
   }
 #endif
+#endif
 
   /// construct from a value array (explicit)
   explicit inline VectorT(const Scalar _values[DIM]) {
-    memcpy(Base::values_, _values, DIM*sizeof(Scalar));
+    memcpy(data(), _values, DIM*sizeof(Scalar));
   }
 
 
@@ -185,11 +210,19 @@ public:
 //   /// cast to const Scalar array
 //   inline operator const Scalar*() const { return Base::values_; }
 
+#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+  /// access to Scalar array
+  inline Scalar* data() { return Base::values_.data(); }
+
+  /// access to const Scalar array
+  inline const Scalar*data() const { return Base::values_.data(); }
+#else
   /// access to Scalar array
   inline Scalar* data() { return Base::values_; }
 
   /// access to const Scalar array
   inline const Scalar*data() const { return Base::values_; }
+#endif
 
 
 
