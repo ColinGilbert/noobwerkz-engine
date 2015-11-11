@@ -18,7 +18,12 @@ clang-c++98:
   tags: 
     - Linux
 
-macos:
-  script: "CI/ci-mac.sh"
+macos-c++11:
+  script: "CI/ci-mac.sh C++11"
+  tags:
+    - Apple
+
+macos-c++98:
+  script: "CI/ci-mac.sh C++98"
   tags:
     - Apple
