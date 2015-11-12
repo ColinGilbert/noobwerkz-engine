@@ -125,7 +125,7 @@ template<typename Scalar, int N> class VectorDataT {
         VectorDataT() {}
 
         template<typename... T>
-        constexpr VectorDataT(T... vs) : values_ {vs...} {
+        constexpr VectorDataT(T... vs) : values_ {{vs...}} {
             static_assert(sizeof...(vs) == N,
                     "Incorrect number of vector components supplied.");
         }
@@ -145,7 +145,7 @@ template<> class VectorDataT<float, 4> {
         VectorDataT() {}
 
         template<typename... T>
-        constexpr VectorDataT(T... vs) : values_ {vs...} {
+        constexpr VectorDataT(T... vs) : values_ {{vs...}} {
             static_assert(sizeof...(vs) == 4,
                     "Incorrect number of vector components supplied.");
         }
