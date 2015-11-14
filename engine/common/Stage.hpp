@@ -60,9 +60,9 @@ namespace noob
 			// Loads a serialized model (from cereal binary)
 			animated_model_component::handle add_animated_model(const std::string& filename);
 			skeleton_component::handle add_skeleton(const std::string& filename);
-			//actor_component::handle add_actor(basic_model_component::handle, skeleton_component::handle, const noob::vec3&, const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0));
-			//prop_component::handle add_prop(mesh_component::handle, const noob::vec3&, const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0));
-			//scenery_component::handle add_scenery(mesh_component::handle, const noob::vec3&, const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0));
+			actor_component::handle add_actor(const basic_model_component::handle, const skeleton_component::handle, const noob::vec3&, const noob::versor&);
+			prop_component::handle add_prop(const basic_model_component::handle, const noob::vec3&, const noob::versor&);
+			scenery_component::handle add_scenery(const basic_model_component::handle, const noob::vec3&, const noob::versor&);
 			light_component::handle add_light(const noob::light&);
 			reflection_component::handle add_reflection(const noob::reflection&);
 			shader_component::handle add_shader(const noob::prepared_shaders::info&);

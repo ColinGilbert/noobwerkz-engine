@@ -79,6 +79,21 @@ noob::skeleton_component::handle noob::stage::add_skeleton(const std::string& fi
 	return skeletons.add(std::move(temp));
 }
 
+noob::actor_component::handle noob::stage::add_actor(basic_model_component::handle, skeleton_component::handle, const noob::vec3& = noob::vec3(0.0, 0.0, 0.0), const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0))
+{
+}
+
+
+noob::prop_component::handle noob::stage::add_prop(basic_model_component::handle, const noob::vec3& = noob::vec3(0.0, 0.0, 0.0), const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0))
+{
+}
+
+
+noob::scenery_component::handle noob::stage::add_scenery(basic_model_component::handle, const noob::vec3& = noob::vec3(0.0, 0.0, 0.0), const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0))
+{
+
+}
+
 
 noob::light_component::handle noob::stage::add_light(const noob::light& arg)
 {
