@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 //#define PI (float)3.14159265
-
+#include <tuple>
 #include <time.h>
 #include <assert.h>
 #include <memory>
@@ -89,7 +89,8 @@ namespace noob
 			void step();
 			void pause();
 			void resume();
-
+			
+			typedef std::tuple<const std::array<int, 2>&, const std::array<float,2>&> touch_t;
 			// Callbacks
 			void touch(int pointerID, float x, float y, int action);
 			void set_archive_dir(const std::string & filepath);
@@ -98,7 +99,6 @@ namespace noob
 			void accept_ndof_data(const noob::ndof::data& info);
 
 		protected:
-
 			static application* app_pointer;
 			std::unique_ptr<std::string> prefix;
 			bool paused, input_has_started, ui_enabled;

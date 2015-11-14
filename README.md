@@ -38,8 +38,22 @@ Most engine code written in engine/common directory.
 
 ```
 
-For the future, I plan on continuing work on it quite vigorously.
+Platforms:
+```
+Current setup uses linux as main controller, but overall aim is awesome devops. Future goals include adding configs + binary packages (likely Xen+Gentoo Hardened or Exherbo) for: Very secure virtualization system config, multimedia workstation, network filtering (with Bro IDS + others), network gateway/v-switch node with secure and well-configured management, wifi controller node, keyserver node, secure terminal, and fileserver node (but that last one is very likely to be based on FreeBSD-Hardened.) Will also include middleware for a using proper, dedicated OpenBSD firewall. Goal is to enable small-medium (and even large) businesses on tight integration without sacrificing flexibility and moddability. Focus is for people wanting to set up a proper lab, with a specific minimum hardware investment being the established, proper norm. Will also include support for interfacing with Windows and Apple ecosystems. I intend on obtaining the LPIC-3's, an MCSA (or two), the CCNP, and the CWNP certs so this investement of time and effort suits me well and might benefit others some day. 
 
+```
+
+Readiness
+``
+Not yet recommended for use. See later.
+``
+
+Documentation:
+```
+Documentation is rather sparse at the moment, but this is still a fledgeling endeavour and my plans are to begin really working on it during the winter months. More progress will be coming soon.
+For the future, I plan on continuing work on it quite vigorously.
+```
 
 Things to do in the immediate future:
 ```

@@ -1,4 +1,5 @@
-// TODO: implement creation functiona nd move the components back in. Blargh
+// TODO: Implement all creation functions (add_*) and ensure that they take constructor args
+
 
 #pragma once
 
@@ -54,7 +55,6 @@ namespace noob
 			void update(double dt);
 
 			void draw() const;
-			
 			
 			basic_model_component::handle add_basic_model(const noob::basic_mesh&);	
 			// Loads a serialized model (from cereal binary)
