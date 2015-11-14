@@ -13,8 +13,10 @@
 
 namespace noob
 {
+	class character_controller;
 	class body
 	{
+		friend class character_controller;
 		public:
 			struct info
 			{
@@ -61,11 +63,11 @@ namespace noob
 			noob::vec3 get_linear_velocity() const;
 			noob::vec3 get_angular_velocity() const;
 			std::string get_debug_string() const;
-			btRigidBody* get_raw_ptr() const;
+
 			noob::body::info get_info() const;
 
 			protected:
-			
+			btRigidBody* get_raw_ptr() const;	
 			btRigidBody* inner_body;
 	};
 }

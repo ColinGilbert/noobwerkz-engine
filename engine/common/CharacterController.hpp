@@ -10,6 +10,7 @@
 
 namespace noob
 {
+
 	class character_controller 
 	{
 		public:

@@ -103,15 +103,14 @@ std::string noob::body::get_debug_string() const
 }
 
 
-btRigidBody* noob::body::get_raw_ptr() const
-{
-	return inner_body;
-}
-
-
 noob::body::info noob::body::get_info() const
 {
 	noob::body::info results;
 	results.init(inner_body);
 	return results;
+}
+
+btRigidBody* noob::body::get_raw_ptr() const
+{
+	return inner_body;
 }

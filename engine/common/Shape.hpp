@@ -12,7 +12,6 @@
 #include "BasicMesh.hpp"
 #include "MeshUtils.hpp"
 #include "MathFuncs.hpp"
-
 #include <boost/variant/variant.hpp>
 #include "inline_variant.hpp"
 
@@ -20,6 +19,7 @@ namespace noob
 {
 	class shape
 	{
+		friend class body;
 		public:
 		enum class type { SPHERE, BOX, CAPSULE, CYLINDER, CONE, CONVEX, TRIMESH, PLANE };
 		shape() : physics_valid(false), mesh_initialized(false), dims({ 0.0, 0.0, 0.0, 0.0 }), margin(-1.0) {}
@@ -38,9 +38,9 @@ namespace noob
 		void set_margin(float);
 		float get_margin() const;
 
-		btCollisionShape* get_raw_ptr() const;
-
+	//	
 		protected:
+		btCollisionShape* get_raw_ptr() const;
 		noob::shape::type shape_type;
 		bool physics_valid, mesh_initialized;
 		std::array<float, 4> dims;
