@@ -29,7 +29,6 @@ void noob::application::user_init()
 	//	noob::basic_mesh a = voxels.extract();
 	//	noob::basic_mesh g = a.to_origin();
 
-
 	// 	noob::basic_mesh a = noob::mesh_utils::sphere(10);
 	// 	noob::basic_mesh b = noob::mesh_utils::cone(30, 35);
 
