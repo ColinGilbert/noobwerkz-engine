@@ -1,0 +1,25 @@
+Refresh in prep for more updates
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch dev
+# Changes to be committed:
+#	modified:   engine/CMakeLists.txt
+#	modified:   engine/common/Actor.hpp
+#	modified:   engine/common/Body.cpp
+#	modified:   engine/common/Body.hpp
+#	modified:   engine/common/CharacterController.cpp
+#	modified:   engine/common/CharacterController.hpp
+#	modified:   engine/common/Component.hpp
+#	modified:   engine/common/ComponentDefines.hpp
+#	modified:   engine/common/MeshUtils.cpp
+#	modified:   engine/common/MeshUtils.hpp
+#	modified:   engine/common/Prop.hpp
+#	modified:   engine/common/Scenery.hpp
+#	modified:   engine/common/Shape.hpp
+#	new file:   engine/common/ShapeStorage.cpp
+#	new file:   engine/common/ShapeStorage.hpp
+#	modified:   engine/common/Stage.cpp
+#	modified:   engine/common/Stage.hpp
+#	new file:   engine/lib/bullet3
+#	deleted:    engine/lib/reactphysics3d
+#
