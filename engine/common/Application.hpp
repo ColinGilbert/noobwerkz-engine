@@ -93,6 +93,7 @@ namespace noob
 			typedef std::tuple<const std::array<int, 2>&, const std::array<float,2>&> touch_t;
 			// Callbacks
 			void touch(int pointerID, float x, float y, int action);
+			void touch(const touch_t& t);
 			void set_archive_dir(const std::string & filepath);
 			void window_resize(uint32_t w, uint32_t h);
 			void key_input(char c);
