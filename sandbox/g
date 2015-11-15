@@ -1,1 +1,1 @@
-cd ../ && git add && git commit
+cd ../ && git add . && git commit
