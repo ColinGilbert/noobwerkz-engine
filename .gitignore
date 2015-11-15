@@ -19,9 +19,14 @@ engine/build/*
 **/clister
 **/logger
 sandbox/temp/*
+#sandbox/shaders/glsl/*
+#sandbox/shaders/gles/*
+#sandbox/shaders/dx9/*
+#sandbox/shaders/dx11/*
 sandbox/temp/volumetric/*
 **/e
 **/shaderc
+
 **/geometryc
 **/texturec
 #sandbox/*.tga
