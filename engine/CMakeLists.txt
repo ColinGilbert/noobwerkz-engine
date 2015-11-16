@@ -137,6 +137,92 @@ list (APPEND recast_src
 	lib/recastnavigation/DetourCrowd/Source/DetourLocalBoundary.cpp
 	)
 
+include_directories(lib/angelscript-sdk/angelscript/include)
+
+list(APPEND angelscript_src
+	lib/angelscript-sdk/angelscript/source/as_array.h
+	lib/angelscript-sdk/angelscript/source/as_atomic.cpp
+	lib/angelscript-sdk/angelscript/source/as_atomic.h
+	lib/angelscript-sdk/angelscript/source/as_builder.cpp
+	lib/angelscript-sdk/angelscript/source/as_builder.h
+	lib/angelscript-sdk/angelscript/source/as_bytecode.cpp
+	lib/angelscript-sdk/angelscript/source/as_bytecode.h
+	lib/angelscript-sdk/angelscript/source/as_callfunc.cpp
+	lib/angelscript-sdk/angelscript/source/as_callfunc.h
+	lib/angelscript-sdk/angelscript/source/as_callfunc_arm.cpp
+	lib/angelscript-sdk/angelscript/source/as_callfunc_arm_gcc.S
+	lib/angelscript-sdk/angelscript/source/as_callfunc_arm_msvc.asm
+	lib/angelscript-sdk/angelscript/source/as_callfunc_arm_vita.S
+	lib/angelscript-sdk/angelscript/source/as_callfunc_arm_xcode.S
+	lib/angelscript-sdk/angelscript/source/as_callfunc_mips.cpp
+	lib/angelscript-sdk/angelscript/source/as_callfunc_ppc.cpp
+	lib/angelscript-sdk/angelscript/source/as_callfunc_ppc_64.cpp
+	lib/angelscript-sdk/angelscript/source/as_callfunc_sh4.cpp
+	lib/angelscript-sdk/angelscript/source/as_callfunc_x64_gcc.cpp
+	lib/angelscript-sdk/angelscript/source/as_callfunc_x64_mingw.cpp
+	lib/angelscript-sdk/angelscript/source/as_callfunc_x64_msvc.cpp
+	lib/angelscript-sdk/angelscript/source/as_callfunc_x64_msvc_asm.asm
+	lib/angelscript-sdk/angelscript/source/as_callfunc_x86.cpp
+	lib/angelscript-sdk/angelscript/source/as_callfunc_xenon.cpp
+	lib/angelscript-sdk/angelscript/source/as_compiler.cpp
+	lib/angelscript-sdk/angelscript/source/as_compiler.h
+	lib/angelscript-sdk/angelscript/source/as_config.h
+	lib/angelscript-sdk/angelscript/source/as_configgroup.cpp
+	lib/angelscript-sdk/angelscript/source/as_configgroup.h
+	lib/angelscript-sdk/angelscript/source/as_context.cpp
+	lib/angelscript-sdk/angelscript/source/as_context.h
+	lib/angelscript-sdk/angelscript/source/as_criticalsection.h
+	lib/angelscript-sdk/angelscript/source/as_datatype.cpp
+	lib/angelscript-sdk/angelscript/source/as_datatype.h
+	lib/angelscript-sdk/angelscript/source/as_debug.h
+	lib/angelscript-sdk/angelscript/source/as_gc.cpp
+	lib/angelscript-sdk/angelscript/source/as_gc.h
+	lib/angelscript-sdk/angelscript/source/as_generic.cpp
+	lib/angelscript-sdk/angelscript/source/as_generic.h
+	lib/angelscript-sdk/angelscript/source/as_globalproperty.cpp
+	lib/angelscript-sdk/angelscript/source/as_map.h
+	lib/angelscript-sdk/angelscript/source/as_memory.cpp
+	lib/angelscript-sdk/angelscript/source/as_memory.h
+	lib/angelscript-sdk/angelscript/source/as_module.cpp
+	lib/angelscript-sdk/angelscript/source/as_module.h
+	lib/angelscript-sdk/angelscript/source/as_namespace.h
+	lib/angelscript-sdk/angelscript/source/as_objecttype.cpp
+	lib/angelscript-sdk/angelscript/source/as_objecttype.h
+	lib/angelscript-sdk/angelscript/source/as_outputbuffer.cpp
+	lib/angelscript-sdk/angelscript/source/as_outputbuffer.h
+	lib/angelscript-sdk/angelscript/source/as_parser.cpp
+	lib/angelscript-sdk/angelscript/source/as_parser.h
+	lib/angelscript-sdk/angelscript/source/as_property.h
+	lib/angelscript-sdk/angelscript/source/as_restore.cpp
+	lib/angelscript-sdk/angelscript/source/as_restore.h
+	lib/angelscript-sdk/angelscript/source/as_scriptcode.cpp
+	lib/angelscript-sdk/angelscript/source/as_scriptcode.h
+	lib/angelscript-sdk/angelscript/source/as_scriptengine.cpp
+	lib/angelscript-sdk/angelscript/source/as_scriptengine.h
+	lib/angelscript-sdk/angelscript/source/as_scriptfunction.cpp
+	lib/angelscript-sdk/angelscript/source/as_scriptfunction.h
+	lib/angelscript-sdk/angelscript/source/as_scriptnode.cpp
+	lib/angelscript-sdk/angelscript/source/as_scriptnode.h
+	lib/angelscript-sdk/angelscript/source/as_scriptobject.cpp
+	lib/angelscript-sdk/angelscript/source/as_scriptobject.h
+	lib/angelscript-sdk/angelscript/source/as_string.cpp
+	lib/angelscript-sdk/angelscript/source/as_string.h
+	lib/angelscript-sdk/angelscript/source/as_string_util.cpp
+	lib/angelscript-sdk/angelscript/source/as_string_util.h
+	lib/angelscript-sdk/angelscript/source/as_symboltable.h
+	lib/angelscript-sdk/angelscript/source/as_texts.h
+	lib/angelscript-sdk/angelscript/source/as_thread.cpp
+	lib/angelscript-sdk/angelscript/source/as_thread.h
+	lib/angelscript-sdk/angelscript/source/as_tokendef.h
+	lib/angelscript-sdk/angelscript/source/as_tokenizer.cpp
+	lib/angelscript-sdk/angelscript/source/as_tokenizer.h
+	lib/angelscript-sdk/angelscript/source/as_typeinfo.cpp
+	lib/angelscript-sdk/angelscript/source/as_typeinfo.h
+	lib/angelscript-sdk/angelscript/source/as_variablescope.cpp
+	lib/angelscript-sdk/angelscript/source/as_variablescope.h
+
+	)
+
 list(APPEND common_src
 	common/BasicMesh.cpp
 	common/Graphics.cpp
@@ -178,7 +264,7 @@ list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 
 add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${csgjs_src}
 	${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src}
-	${es_src} ${user_src} ${recast_src}) 
+	${es_src} ${user_src} ${recast_src} ${angelscript_src}) 
 
 target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES}
 	${OPENGL_LIBRARIES} freetype rt dl pthread assimp m emon OpenMeshCore
