@@ -18,6 +18,7 @@ engine/build/*
 **/hlister
 **/clister
 **/logger
+sandbox/*.bin
 sandbox/temp/*
 sandbox/shaders/glsl/*
 sandbox/shaders/gles/*
