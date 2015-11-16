@@ -2,7 +2,6 @@ I'm developing a rather minimalistic cross-platform game/simulation engine. This
 
 Still WIP.
 
-
 Specific features:
 ```
 A highly tunable gradient mapping shader by default. Comes with three XY-tileable ntextures blended into one.
@@ -21,6 +20,7 @@ Lemon Graph Library
 Assimp (and a working mesh loader, too! =P)
 cppformat
 Cereal
+AngelScript
 ```
 
 To clone:
@@ -28,7 +28,7 @@ To clone:
 git clone --recursive https://github.com/ColinGilbert/noobwerkz-engine.git
 ```
 
-Program structure:
+Structure:
 ```
 The current setup uses a platform-specific starter program to launch the main application.
 
@@ -36,12 +36,22 @@ There are many libraries - mostly math and scientific libraries - in the engine/
 
 Most engine code written in engine/common directory.
 
+Short scripts with tiny names are used to do routine work (compiles, archivals, cleanups.) Will eventually bring it into C++ and AngelScript.
 ```
 
 Platforms:
 ```
-Current setup uses linux as main controller, but overall aim is awesome devops. Future goals include adding configs + binary packages (likely Xen+Gentoo Hardened or Exherbo) for: Very secure virtualization system config, multimedia workstation, network filtering (with Bro IDS + others), network gateway/v-switch node with secure and well-configured management, wifi controller node, keyserver node, secure terminal, and fileserver node (but that last one is very likely to be based on FreeBSD-Hardened.) Will also include middleware for a using proper, dedicated OpenBSD firewall. Goal is to enable small-medium (and even large) businesses on tight integration without sacrificing flexibility and moddability. Focus is for people wanting to set up a proper lab, with a specific minimum hardware investment being the established, proper norm. Will also include support for interfacing with Windows and Apple ecosystems. I intend on obtaining the LPIC-3's, an MCSA (or two), the CCNP, and the CWNP certs so this investement of time and effort suits me well and might benefit others some day. 
+Current setup uses linux as main controller.
+Ports soon.
+```
 
+
+Little Unix scripts:
+```
+sandbox/b for build. Attempts to build source.
+sandbox/bb for big build. Wipes the binaries and builds from scratch.
+sandbox/s for shaders. Builds the full set of shaders from sandbox/shader_src and places them into the sandbox/shaders directory
+sandbox/g for git. Adds changes to git and commits them.
 ```
 
 Readiness
@@ -72,6 +82,8 @@ Destructible worlds
 
 Long-term
 ```
-Dataviz
+Middleware between disparate OS'es: Overall aim is awesome devops. Future goals include adding a custom Linux distribution, with configs + binary packages (likely Xen+Gentoo Hardened or Exherbo) for: Very secure virtualization system config, multimedia workstation, network filtering (with Bro IDS + others), network gateway/v-switch node with secure and well-configured management, wifi controller node, keyserver node, secure terminal, and fileserver node (but that last one is very likely to be based on FreeBSD-Hardened.) Will also include middleware for a using proper, dedicated OpenBSD firewall. Goal is to enable small-medium (and even large) businesses on tight integration without sacrificing flexibility and moddability. Focus is for people wanting to set up a proper lab, with a specific minimum hardware investment being the established norm. Will include support for interfacing with Windows and Apple ecosystems. I intend on obtaining a whole bunch certs so this investement of time and effort suits me well and might benefit others some day. Shall come with a basic template for network layout.
+
+Data Analysis/DataViz
 Cutting edge/esoteric programming idioms
 ```
