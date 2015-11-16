@@ -1,6 +1,6 @@
 $input v_position
 
-#include "shaders/common.sh"
+#include "common.sh"
 
 uniform vec4 colour_1;
 

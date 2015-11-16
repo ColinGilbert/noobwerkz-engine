@@ -79,8 +79,7 @@ namespace noob
 			// These don't cache the shape for reuse, as they are rather difficult to index inexpensively. Will provide name soon.
 			noob::shape_component::handle hull(const std::vector<noob::vec3>& point);
 			noob::shape_component::handle trimesh(const noob::basic_mesh& mesh);
-			
-			
+
 			// scenery_component sceneries;
 			light_component lights;
 			reflection_component reflections;
@@ -96,7 +95,7 @@ namespace noob
 		protected:
 			// Protected function(s):
 			// void draw(noob::drawable*, const noob::mat4&) const;
-
+			std::unordered_map<std::string, noob::shape_component::handle> names;
 			// Protected members:
 			noob::prepared_shaders renderer;
 
