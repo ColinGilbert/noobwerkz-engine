@@ -124,7 +124,6 @@ float noob::shape::get_margin() const
 	return inner_shape->getMargin();
 }
 
-
 btCollisionShape* noob::shape::get_raw_ptr() const
 {
 	return inner_shape;
