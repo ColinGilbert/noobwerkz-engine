@@ -110,7 +110,5 @@ namespace noob
 			noob::voxel_world voxels;
 			noob::stage stage;
 			noob::mat4 view_mat;
-			// noob::transform_helper current_cam_transform;
-			// std::unique_ptr<chaiscript::ChaiScript> chai;
 	};
 }
