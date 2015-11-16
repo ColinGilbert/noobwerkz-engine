@@ -10,7 +10,6 @@
 #include <forward_list>
 #include <boost/variant.hpp>
 
-//#include "Drawable.hpp"
 #include "Config.hpp"
 #include "Graphics.hpp"
 #include "MathFuncs.hpp"
