@@ -38,7 +38,6 @@ namespace noob
 		void set_margin(float);
 		float get_margin() const;
 
-	//	
 		protected:
 		btCollisionShape* get_raw_ptr() const;
 		noob::shape::type shape_type;

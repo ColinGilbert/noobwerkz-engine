@@ -59,7 +59,7 @@ namespace noob
 				return h;
 			}
 
-			bool name_exists(std::string& name)
+			bool name_exists(const std::string& name)
 			{
 				return (names.find(name) != names.end());
 			}
@@ -125,7 +125,7 @@ namespace noob
 				return h;
 			}
 
-			bool name_exists(std::string& name)
+			bool name_exists(const std::string& name)
 			{
 				return (names.find(name) != names.end());
 			}

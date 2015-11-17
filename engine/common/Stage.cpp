@@ -12,7 +12,14 @@ bool noob::stage::init()
 	renderer.init();
 
 	// TODO: Add stage default components
+	noob::basic_renderer::uniform_info basic_shader_info;
+	
+	basic_shader_info.colour = noob::vec4(1.0, 0.0, 0.0, 1.0);
+	
+	auto s = shaders.add(basic_shader_info);
+	shaders.set_name(s, "debug");
 
+	
 	logger::log("[Stage] init complete.");
 	return true;
 }
@@ -69,7 +76,7 @@ noob::skeleton_component::handle noob::stage::add_skeleton(const std::string& fi
 }
 
 
-noob::actor_component::handle noob::stage::add_actor(basic_model_component::handle, skeleton_component::handle, const noob::vec3& = noob::vec3(0.0, 0.0, 0.0), const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0))
+noob::actor_component::handle noob::stage::add_actor(basic_model_component::handle, skeleton_component::handle, const noob::vec3& = noob::vec3(0.0, 0.0, 0.0), const noob::versor& v)// = noob::versor(0.0, 0.0, 0.0, 1.0))
 {
 
 }
@@ -99,9 +106,15 @@ noob::reflection_component::handle noob::stage::add_reflection(const noob::refle
 }
 
 
-noob::shader_component::handle noob::stage::add_shader(const noob::prepared_shaders::info& arg)
+noob::shader_component::handle noob::stage::add_shader(const noob::prepared_shaders::info& arg, const std::string& name)
 {
-	return shaders.add(arg);
+	noob::shader_component::handle h;
+	if (shaders.name_exists(name))
+	{
+		h = shaders.add(arg);
+		shaders.set_name(h, name);
+	}
+	return h;
 }
 
 
@@ -111,7 +124,7 @@ noob::shape_component::handle noob::stage::sphere(float r)
 	if (search == spheres.end())
 	{
 		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
-		temp->sphere(r);
+		temp->sphere(r/2.0);
 		spheres[r] = shapes.add(std::move(temp));
 		return spheres[r];
 	}
@@ -189,17 +202,29 @@ noob::shape_component::handle noob::stage::plane(const noob::vec3& normal, float
 }
 
 
-noob::shape_component::handle noob::stage::hull(const std::vector<noob::vec3>& points)
+noob::shape_component::handle noob::stage::hull(const std::vector<noob::vec3>& points, const std::string& name)
 {
-	std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
-	temp->convex(points);
-	return shapes.add(std::move(temp));
+	noob::shape_component::handle h;
+	if (shapes.name_exists(name))
+	{
+		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+		temp->convex(points);
+		h = shapes.add(std::move(temp));
+		shapes.set_name(h,name);
+	}
+	return h;
 }
 
 
-noob::shape_component::handle noob::stage::trimesh(const noob::basic_mesh& mesh)
+noob::shape_component::handle noob::stage::trimesh(const noob::basic_mesh& mesh, const std::string& name)
 {
-	std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
-	temp->trimesh(mesh);
-	return shapes.add(std::move(temp));
+	noob::shape_component::handle h;
+	if (shapes.name_exists(name))
+	{
+		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+		temp->trimesh(mesh);
+		h = shapes.add(std::move(temp));
+		shapes.set_name(h, name);
+	}
+	return h;
 }
