@@ -26,7 +26,7 @@ void noob::application::user_init()
 	points.push_back(noob::vec3(8.0, 3.9, -5.0));
 	points.push_back(noob::vec3(7.0, 1.5, 2.0));
 
-	auto hull = stage.add_hull(points, "points");
+	auto hull = stage.hull(points, "points");
 
 }
 
