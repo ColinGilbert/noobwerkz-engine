@@ -1,4 +1,4 @@
-// TODO: Implement all creation functions (add_*) and ensure that they take constructor args
+// TODO: Implement all creation functions (*) and ensure that they take constructor args
 
 
 #pragma once
@@ -55,19 +55,19 @@ namespace noob
 
 			void draw() const;
 			
-			basic_model_component::handle add_basic_model(const noob::basic_mesh&);	
+			basic_model_component::handle basic_model(const noob::basic_mesh&);	
+			//basic_model_component::handle basic_model(const noob::shape_component::handle);
 			// Loads a serialized model (from cereal binary)
-			animated_model_component::handle add_animated_model(const std::string& filename);
-			skeleton_component::handle add_skeleton(const std::string& filename);
-			actor_component::handle add_actor(const basic_model_component::handle, const skeleton_component::handle, const noob::vec3&, const noob::versor& v = noob::versor(0.0, 0.0, 0.0, 1.0));
-			prop_component::handle add_prop(const basic_model_component::handle, const noob::vec3&, const noob::versor&);
-			scenery_component::handle add_scenery(const basic_model_component::handle, const noob::vec3&, const noob::versor&);
-			light_component::handle add_light(const noob::light&);
-			reflection_component::handle add_reflection(const noob::reflection&);
-			shader_component::handle add_shader(const noob::prepared_shaders::info&, const std::string& name);
+			animated_model_component::handle animated_model(const std::string& filename);
+			skeleton_component::handle skeleton(const std::string& filename);
+			actor_component::handle actor(const basic_model_component::handle, const skeleton_component::handle, const noob::vec3&, const noob::versor& v = noob::versor(0.0, 0.0, 0.0, 1.0));
+			prop_component::handle prop(const basic_model_component::handle, const noob::vec3&, const noob::versor&);
+			scenery_component::handle scenery(const basic_model_component::handle, const noob::vec3&, const noob::versor&);
+			light_component::handle light(const noob::light&);
+			reflection_component::handle reflection(const noob::reflection&);
+			shader_component::handle shader(const noob::prepared_shaders::info&, const std::string& name);
 			
 			// These cache the shape for reuse, as they are simple parametrics.
-			// TODO: Since these are globals, make them static, and/or separate from the stage class.
 		
 			noob::shape_component::handle sphere(float r);
 			noob::shape_component::handle box(float x, float y, float z);
@@ -76,7 +76,7 @@ namespace noob
 			noob::shape_component::handle capsule(float r, float h);
 			noob::shape_component::handle plane(const noob::vec3& normal, float offset);
 
-			// These don't cache the shape for reuse, as they are rather difficult to index inexpensively. Will provide name soon.
+			// These use a stringhash. TODO: Optimize?
 			noob::shape_component::handle hull(const std::vector<noob::vec3>& points, const std::string& name);
 			noob::shape_component::handle trimesh(const noob::basic_mesh& mesh, const std::string& name);
 
@@ -93,10 +93,6 @@ namespace noob
 			bool paused;
 
 		protected:
-			// Protected function(s):
-			// void draw(noob::drawable*, const noob::mat4&) const;
-			std::unordered_map<std::string, noob::shape_component::handle> names;
-			// Protected members:
 			noob::prepared_shaders renderer;
 
 			btBroadphaseInterface* broadphase;

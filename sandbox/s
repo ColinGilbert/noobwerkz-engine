@@ -1,15 +1,13 @@
 cp shaders/glsl/vs_current.bin shaders/glsl/vs_shaders_old.bin &&
 
 ./shaderc -f shader_src/fs_basic.sc -o shaders/glsl/fs_basic.bin --type f --platform linux -i ../engine/lib/bgfx/src --varyingdef shader_src/varying.def.sc &&
-./shaderc -f shader_src/vs_basic.sc -o shaders/glsl/vs_basic.bin --type v --platform linux -i ../engine/lib/bgfx/src --varyingdef shader_src/varying.def.sc # &&
+./shaderc -f shader_src/vs_basic.sc -o shaders/glsl/vs_basic.bin --type v --platform linux -i ../engine/lib/bgfx/src --varyingdef shader_src/varying.def.sc &&
 
-# TODO: The other shaders
+./shaderc -f shader_src/fs_triplanar.sc -o shaders/glsl/fs_triplanar.bin --type f --platform linux -i ../engine/lib/bgfx/src --varyingdef shader_src/varying.def.sc &&
+./shaderc -f shader_src/vs_triplanar.sc -o shaders/glsl/vs_triplanar.bin --type v --platform linux -i ../engine/lib/bgfx/src --varyingdef shader_src/varying.def.sc &&
 
-#./shaderc -f shader_src/fs_basic.sc -o shaders/glsl/fs_basic.bin --type f --platform linux -i ../engine/lib/bgfx/src --varyingdef shader_src/varying.def.sc &&
-#./shaderc -f shader_src/vs_basic.sc -o shaders/glsl/vs_basic.bin --type v --platform linux -i ../engine/lib/bgfx/src --varyingdef shader_src/varying.def.sc # &&
-
-#./shaderc -f shader_src/fs_basic.sc -o shaders/glsl/fs_basic.bin --type f --platform linux -i ../engine/lib/bgfx/src --varyingdef shader_src/varying.def.sc &&
-#./shaderc -f shader_src/vs_basic.sc -o shaders/glsl/vs_basic.bin --type v --platform linux -i ../engine/lib/bgfx/src --varyingdef shader_src/varying.def.sc # &&
+./shaderc -f shader_src/fs_gradient_map_triplanar.sc -o shaders/glsl/fs_gradient_map_triplanar.bin --type f --platform linux -i ../engine/lib/bgfx/src --varyingdef shader_src/varying.def.sc &&
+./shaderc -f shader_src/vs_gradient_map_triplanar.sc -o shaders/glsl/vs_gradient_map_triplanar.bin --type v --platform linux -i ../engine/lib/bgfx/src --varyingdef shader_src/varying.def.sc # &&
 
 #./shaderc -f shader_src/fs_basic.sc -o shaders/glsl/fs_basic.bin --type f --platform linux -i ../engine/lib/bgfx/src --varyingdef shader_src/varying.def.sc &&
 #./shaderc -f shader_src/vs_basic.sc -o shaders/glsl/vs_basic.bin --type v --platform linux -i ../engine/lib/bgfx/src --varyingdef shader_src/varying.def.sc # &&

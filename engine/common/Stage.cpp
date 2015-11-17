@@ -56,19 +56,19 @@ void noob::stage::draw(noob::drawable* d, const noob::mat4& transform) const
 */
 
 
-noob::basic_model_component::handle noob::stage::add_basic_model(const noob::basic_mesh& m)
+noob::basic_model_component::handle noob::stage::basic_model(const noob::basic_mesh& m)
 {
 	return basic_models.add(std::make_unique<noob::basic_model>(m));
 }
 
 
-noob::animated_model_component::handle noob::stage::add_animated_model(const std::string& filename)
+noob::animated_model_component::handle noob::stage::animated_model(const std::string& filename)
 {
 	return animated_models.add(std::make_unique<noob::animated_model>(filename));
 }
 
 
-noob::skeleton_component::handle noob::stage::add_skeleton(const std::string& filename)
+noob::skeleton_component::handle noob::stage::skeleton(const std::string& filename)
 {
 	std::unique_ptr<noob::skeletal_anim> temp = std::make_unique<noob::skeletal_anim>();
 	temp->init(filename);
@@ -76,37 +76,37 @@ noob::skeleton_component::handle noob::stage::add_skeleton(const std::string& fi
 }
 
 
-noob::actor_component::handle noob::stage::add_actor(basic_model_component::handle, skeleton_component::handle, const noob::vec3& = noob::vec3(0.0, 0.0, 0.0), const noob::versor& v)// = noob::versor(0.0, 0.0, 0.0, 1.0))
+noob::actor_component::handle noob::stage::actor(basic_model_component::handle, skeleton_component::handle, const noob::vec3& = noob::vec3(0.0, 0.0, 0.0), const noob::versor& v)// = noob::versor(0.0, 0.0, 0.0, 1.0))
 {
 
 }
 
 
-noob::prop_component::handle noob::stage::add_prop(basic_model_component::handle, const noob::vec3& = noob::vec3(0.0, 0.0, 0.0), const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0))
+noob::prop_component::handle noob::stage::prop(basic_model_component::handle, const noob::vec3& = noob::vec3(0.0, 0.0, 0.0), const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0))
 {
 
 }
 
 
-noob::scenery_component::handle noob::stage::add_scenery(basic_model_component::handle, const noob::vec3& = noob::vec3(0.0, 0.0, 0.0), const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0))
+noob::scenery_component::handle noob::stage::scenery(basic_model_component::handle, const noob::vec3& = noob::vec3(0.0, 0.0, 0.0), const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0))
 {
 
 }
 
 
-noob::light_component::handle noob::stage::add_light(const noob::light& arg)
+noob::light_component::handle noob::stage::light(const noob::light& arg)
 {
 	return lights.add(arg);
 }
 
 
-noob::reflection_component::handle noob::stage::add_reflection(const noob::reflection& arg)
+noob::reflection_component::handle noob::stage::reflection(const noob::reflection& arg)
 {
 	return reflections.add(arg);
 }
 
 
-noob::shader_component::handle noob::stage::add_shader(const noob::prepared_shaders::info& arg, const std::string& name)
+noob::shader_component::handle noob::stage::shader(const noob::prepared_shaders::info& arg, const std::string& name)
 {
 	noob::shader_component::handle h;
 	if (shaders.name_exists(name))

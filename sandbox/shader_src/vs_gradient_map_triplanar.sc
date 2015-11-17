@@ -1,7 +1,7 @@
 $input a_position, a_normal
 $output v_position, v_normal
 
-#include "shaders/common.sh"
+#include "common.sh"
 
 void main()
 {
