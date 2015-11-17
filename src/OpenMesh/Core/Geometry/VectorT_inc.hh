@@ -104,7 +104,7 @@ public:
 
   template<typename... T,
       typename = typename std::enable_if<sizeof...(T) == DIM>::type,
-      typename = typename std::enable_if<are_convertible_to<float, T...>::value>::type>
+      typename = typename std::enable_if<are_convertible_to<Scalar, T...>::value>::type>
   constexpr VectorT(T... vs) : Base { static_cast<Scalar>(vs)...}
   { }
 
