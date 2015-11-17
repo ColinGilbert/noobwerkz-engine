@@ -56,7 +56,9 @@ namespace noob
 			void draw() const;
 			
 			basic_model_component::handle basic_model(const noob::basic_mesh&);	
+			// TODO: Implement
 			//basic_model_component::handle basic_model(const noob::shape_component::handle);
+			
 			// Loads a serialized model (from cereal binary)
 			animated_model_component::handle animated_model(const std::string& filename);
 			skeleton_component::handle skeleton(const std::string& filename);
@@ -68,7 +70,6 @@ namespace noob
 			shader_component::handle shader(const noob::prepared_shaders::info&, const std::string& name);
 			
 			// These cache the shape for reuse, as they are simple parametrics.
-		
 			noob::shape_component::handle sphere(float r);
 			noob::shape_component::handle box(float x, float y, float z);
 			noob::shape_component::handle cylinder(float r, float h);

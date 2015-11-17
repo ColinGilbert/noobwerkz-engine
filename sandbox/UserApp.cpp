@@ -2,7 +2,7 @@
 
 void noob::application::user_init()
 {
-	noob::triplanar_renderer::uniform_info u;
+	noob::triplanar_gradient_map_renderer::uniform_info u;
 	u.colours[0] = noob::vec4(1.0, 0.0, 0.0, 1.0);
 	u.colours[1] = noob::vec4(0.0, 1.0, 0.0, 1.0);
 	u.colours[2] = noob::vec4(0.0, 0.0, 1.0, 1.0);
