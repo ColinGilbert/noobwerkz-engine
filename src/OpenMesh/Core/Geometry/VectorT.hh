@@ -59,6 +59,10 @@
 // bugreport: https://bugzilla.gnome.org/show_bug.cgi?id=629182)
 // macro expansion and preprocessor defines
 // don't work properly.
+
+#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+#include "Vector11T.hh"
+#else
 #ifndef DOXYGEN
 
 #ifndef OPENMESH_VECTOR_HH
@@ -77,12 +81,6 @@
 #include <xmmintrin.h>
 #endif
 
-#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
-#include <array>
-#include <initializer_list>
-#include <type_traits>
-#endif
-
 //== NAMESPACES ===============================================================
 
 
@@ -90,24 +88,6 @@ namespace OpenMesh {
 
 
 //== CLASS DEFINITION =========================================================
-
-
-#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
-/*
- * Helpers for VectorT
- */
-namespace {
-template<typename... Ts>
-struct are_convertible_to;
-
-template<typename To, typename From, typename... Froms>
-struct are_convertible_to<To, From, Froms...> {
-    static constexpr bool value = std::is_convertible<From, To>::value && are_convertible_to<To, Froms...>::value;
-};
-template<typename To, typename From>
-struct are_convertible_to<To, From> : public std::is_convertible<From, To> {};
-}
-#endif
 
 
 /** The N values of the template Scalar type are the only data members
@@ -121,18 +101,7 @@ struct are_convertible_to<To, From> : public std::is_convertible<From, To> {};
 */
 template<typename Scalar, int N> class VectorDataT {
     public:
-#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
-        VectorDataT() {}
-
-        template<typename... T>
-        constexpr VectorDataT(T... vs) : values_ {{vs...}} {
-            static_assert(sizeof...(vs) == N,
-                    "Incorrect number of vector components supplied.");
-        }
-        std::array<Scalar, N> values_;
-#else
         Scalar values_[N];
-#endif
 };
 
 
@@ -141,22 +110,9 @@ template<typename Scalar, int N> class VectorDataT {
 /// This specialization enables us to use aligned SSE instructions.
 template<> class VectorDataT<float, 4> {
     public:
-#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
-        VectorDataT() {}
-
-        template<typename... T>
-        constexpr VectorDataT(T... vs) : values_ {{vs...}} {
-            static_assert(sizeof...(vs) == 4,
-                    "Incorrect number of vector components supplied.");
-        }
-#endif
         union {
             __m128 m128;
-#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
-            std::array<float, 4> values_;
-#else
             float values_[4];
-#endif
         };
 };
 
@@ -432,24 +388,7 @@ typedef VectorT<double,6> Vec6d;
 //=============================================================================
 
 
-#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
-/**
- * Literal operator for inline specification of colors in HTML syntax.
- *
- * Example:
- * \code{.cpp}
- * OpenMesh::Vec4f light_blue = 0x1FCFFFFF_htmlColor;
- * \endcode
- */
-constexpr OpenMesh::Vec4f operator"" _htmlColor(unsigned long long raw_color) {
-    return OpenMesh::Vec4f(
-            ((raw_color >> 24) & 0xFF) / 255.0f,
-            ((raw_color >> 16) & 0xFF) / 255.0f,
-            ((raw_color >>  8) & 0xFF) / 255.0f,
-            ((raw_color >>  0) & 0xFF) / 255.0f);
-}
-#endif
-
 #endif // OPENMESH_VECTOR_HH defined
 //=============================================================================
 #endif // DOXYGEN
+#endif // C++11
