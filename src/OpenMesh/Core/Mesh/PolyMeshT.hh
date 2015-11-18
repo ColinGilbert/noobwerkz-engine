@@ -248,7 +248,7 @@ public:
 
   /// Update normal for halfedge _heh
   void update_normal(HalfedgeHandle _heh, const double _feature_angle = 0.8)
-  { this->set_normal(_heh, calc_halfedge_normal(_heh)); }
+  { this->set_normal(_heh, calc_halfedge_normal(_heh,_feature_angle)); }
 
   /** \brief Update normal vectors for all halfedges.
    *
