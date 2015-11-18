@@ -357,8 +357,7 @@ class VectorT {
         template<typename OtherScalar,
             typename ResultScalar = decltype(
                 std::declval<Scalar>() * std::declval<const OtherScalar &>())>
-        typename std::enable_if<DIM == 3, ResultScalar>::type
-        operator|(const VectorT<OtherScalar, DIM>& _rhs) const {
+        ResultScalar operator|(const VectorT<OtherScalar, DIM>& _rhs) const {
             ResultScalar p = values_[0] * _rhs[0];
             for (int i = 1; i < DIM; ++i) {
                 p += values_[i] * _rhs[i];
@@ -603,7 +602,7 @@ operator<<(std::ostream& os, const VectorT<Scalar, DIM> &_vec) {
 /// read the space-separated components of a vector from a stream
 template<typename Scalar, int DIM>
 typename std::enable_if<sizeof(decltype(
-        std::declval<std::ostream>() >>
+        std::declval<std::istream>() >>
         std::declval<const Scalar &>())) >= 0, std::istream&>::type
 operator>> (std::istream& is, VectorT<Scalar, DIM> &_vec) {
     for (int i = 0; i < DIM; ++i)
