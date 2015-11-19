@@ -158,8 +158,11 @@ class VectorT {
         }
 
         /// construct from a value array or any other iterator
-        template<typename Iterator>
-        explicit inline VectorT(Iterator it) {
+        template<typename Iterator,
+            typename = decltype(
+                    *std::declval<Iterator&>(), void(),
+                    ++std::declval<Iterator&>(), void())>
+        explicit VectorT(Iterator it) {
             std::copy_n(it, DIM, values_.begin());
         }
 
@@ -167,7 +170,7 @@ class VectorT {
         template<typename otherScalarType,
             typename = typename std::enable_if<
                 std::is_convertible<otherScalarType, Scalar>::value>>
-        explicit inline VectorT(const VectorT<otherScalarType, DIM>& _rhs) {
+        explicit VectorT(const VectorT<otherScalarType, DIM>& _rhs) {
             operator=(_rhs);
         }
 
@@ -376,7 +379,7 @@ class VectorT {
         /// \see OpenMesh::dot
         template<typename OtherScalar>
         auto operator|(const VectorT<OtherScalar, DIM>& _rhs) const ->
-            decltype(*data() * *_rhs.data()) {
+            decltype(*this->data() * *_rhs.data()) {
 
             return std::inner_product(data() + 1, data() + DIM, _rhs.data() + 1,
                     *data() * *_rhs.data());

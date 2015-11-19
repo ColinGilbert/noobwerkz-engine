@@ -214,6 +214,9 @@ TEST_F(OpenMeshVectorTest, array_init) {
     float a[3]; a[0] = 1.0; a[1] = 2.0; a[2] = 3.0;
     OpenMesh::Vec3f v(a);
     EXPECT_EQ(OpenMesh::Vec3f(1.0, 2.0, 3.0), v);
+
+    // This should not invoke the array constructor.
+    OpenMesh::Vec3d v2(3.0f);
 }
 
 TEST_F(OpenMeshVectorTest, normalized_cond) {
