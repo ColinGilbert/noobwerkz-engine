@@ -45,6 +45,7 @@
 #include <array>
 #include <utility>
 #include <algorithm>
+#include <numeric>
 #include <type_traits>
 #include <cmath>
 #include <ostream>
@@ -203,11 +204,10 @@ class VectorT {
 
         /// component-wise self-multiplication with scalar
         template<typename OtherScalar>
-        typename std::enable_if<std::is_convertible<
-                decltype(std::declval<Scalar>() * std::declval<OtherScalar>()),
-                Scalar>::value,
-            VectorT<Scalar, DIM>&>::type
-        operator*=(const OtherScalar& _s) {
+        auto operator*=(const OtherScalar& _s) ->
+            typename std::enable_if<std::is_convertible<
+                decltype(this->values_[0] * _s), Scalar>::value,
+                VectorT<Scalar, DIM>&>::type {
             std::transform(values_.begin(), values_.end(), values_.begin(),
                     [&_s](const Scalar & c) { return c * _s; });
             return *this;
@@ -216,23 +216,16 @@ class VectorT {
         /** component-wise self-division by scalar
          \attention v *= (1/_s) is much faster than this  */
         template<typename OtherScalar>
-        typename std::enable_if<std::is_convertible<
-                decltype(std::declval<Scalar>() / std::declval<OtherScalar>()),
-                Scalar>::value,
-            VectorT<Scalar, DIM>&>::type
-        operator/=(const OtherScalar& _s) {
+        auto operator/=(const OtherScalar& _s) ->
+            typename std::enable_if<std::is_convertible<
+                decltype(this->values_[0] / _s), Scalar>::value,
+                VectorT<Scalar, DIM>&>::type {
             std::transform(values_.begin(), values_.end(), values_.begin(),
                     [&_s](const Scalar & c) { return c / _s; });
             return *this;
         }
 
         /// component-wise multiplication with scalar
-        //template<typename OtherScalar,
-        //    typename ResultScalar = decltype(std::declval<Scalar>() *
-        //                                     std::declval<OtherScalar>())>
-        //VectorT<ResultScalar, DIM> operator*(const OtherScalar& _s) const {
-        //    return vector_type(*this) *= _s;
-        //}
         template<typename OtherScalar>
         typename std::enable_if<std::is_convertible<
                 decltype(std::declval<Scalar>() * std::declval<OtherScalar>()),
@@ -255,10 +248,12 @@ class VectorT {
         //---------------------------------------------------------- vector operators
 
         /// component-wise self-multiplication
-        template<typename OtherScalar,
-            typename = decltype(std::declval<Scalar>() *
-                                std::declval<OtherScalar>())>
-        vector_type& operator*=(const VectorT<OtherScalar, DIM>& _rhs) {
+        template<typename OtherScalar>
+        auto operator*=(const VectorT<OtherScalar, DIM>& _rhs) ->
+            typename std::enable_if<
+                sizeof(decltype(this->values_[0] * *_rhs.data())) >= 0,
+                vector_type&>::type {
+
             std::transform(data(), data() + DIM,
                     _rhs.data(), data(),
                     [](const Scalar &l, const OtherScalar &r) { return l * r; });
@@ -266,10 +261,11 @@ class VectorT {
         }
 
         /// component-wise self-division
-        template<typename OtherScalar,
-            typename = decltype(std::declval<Scalar>() /
-                                std::declval<OtherScalar>())>
-        vector_type& operator/=(const VectorT<OtherScalar, DIM>& _rhs) {
+        template<typename OtherScalar>
+        auto operator/=(const VectorT<OtherScalar, DIM>& _rhs) ->
+            typename std::enable_if<
+                sizeof(decltype(this->values_[0] / *_rhs.data())) >= 0,
+                vector_type&>::type {
             std::transform(data(), data() + DIM,
                     _rhs.data(), data(),
                     [](const Scalar &l, const OtherScalar &r) { return l / r; });
@@ -277,10 +273,11 @@ class VectorT {
         }
 
         /// vector difference from this
-        template<typename OtherScalar,
-            typename = decltype(std::declval<Scalar>() -
-                                std::declval<OtherScalar>())>
-        vector_type& operator-=(const VectorT<OtherScalar, DIM>& _rhs) {
+        template<typename OtherScalar>
+        auto operator-=(const VectorT<OtherScalar, DIM>& _rhs) ->
+            typename std::enable_if<
+                sizeof(decltype(this->values_[0] - *_rhs.data())) >= 0,
+                vector_type&>::type {
             std::transform(data(), data() + DIM,
                     _rhs.data(), data(),
                     [](const Scalar &l, const OtherScalar &r) { return l - r; });
@@ -288,10 +285,11 @@ class VectorT {
         }
 
         /// vector self-addition
-        template<typename OtherScalar,
-            typename = decltype(std::declval<Scalar>() +
-                                std::declval<OtherScalar>())>
-        vector_type& operator+=(const VectorT<OtherScalar, DIM>& _rhs) {
+        template<typename OtherScalar>
+        auto operator+=(const VectorT<OtherScalar, DIM>& _rhs) ->
+            typename std::enable_if<
+                sizeof(decltype(this->values_[0] + *_rhs.data())) >= 0,
+                vector_type&>::type {
             std::transform(data(), data() + DIM,
                     _rhs.data(), data(),
                     [](const Scalar &l, const OtherScalar &r) { return l + r; });
@@ -299,66 +297,71 @@ class VectorT {
         }
 
         /// component-wise vector multiplication
-        template<typename OtherScalar,
-            typename = decltype(std::declval<vector_type>() *=
-                            std::declval<const VectorT<OtherScalar, DIM>&>())>
-        vector_type operator*(const VectorT<OtherScalar, DIM>& _rhs) const {
+        template<typename OtherScalar>
+        auto operator*(const VectorT<OtherScalar, DIM>& _rhs) const ->
+            typename std::enable_if<
+                sizeof(decltype(this->values_[0] * *_rhs.data())) >= 0,
+                vector_type>::type {
             return vector_type(*this) *= _rhs;
         }
 
         /// component-wise vector division
-        template<typename OtherScalar,
-            typename = decltype(std::declval<vector_type>() /=
-                            std::declval<const VectorT<OtherScalar, DIM>&>())>
-        vector_type operator/(const VectorT<OtherScalar, DIM>& _rhs) const {
+        template<typename OtherScalar>
+        auto operator/(const VectorT<OtherScalar, DIM>& _rhs) const ->
+            typename std::enable_if<
+                sizeof(decltype(this->values_[0] / *_rhs.data())) >= 0,
+                vector_type>::type {
             return vector_type(*this) /= _rhs;
         }
 
         /// component-wise vector addition
-        template<typename OtherScalar,
-            typename = decltype(std::declval<vector_type>() +=
-                            std::declval<const VectorT<OtherScalar, DIM>&>())>
-        vector_type operator+(const VectorT<OtherScalar, DIM>& _rhs) const {
+        template<typename OtherScalar>
+        auto operator+(const VectorT<OtherScalar, DIM>& _rhs) const ->
+            typename std::enable_if<
+                sizeof(decltype(this->values_[0] + *_rhs.data())) >= 0,
+                vector_type>::type {
             return vector_type(*this) += _rhs;
         }
 
         /// component-wise vector difference
-        template<typename OtherScalar,
-            typename = decltype(std::declval<vector_type>() -=
-                            std::declval<const VectorT<OtherScalar, DIM>&>())>
-        vector_type operator-(const VectorT<OtherScalar, DIM>& _rhs) const {
+        template<typename OtherScalar>
+        auto operator-(const VectorT<OtherScalar, DIM>& _rhs) const ->
+            typename std::enable_if<
+                sizeof(decltype(this->values_[0] - *_rhs.data())) >= 0,
+                vector_type>::type {
             return vector_type(*this) -= _rhs;
         }
 
         /// unary minus
         vector_type operator-(void) const {
             vector_type v;
-            std::transform(v.values_.begin(), v.values_.end(), v.values_.begin(),
+            std::transform(values_.begin(), values_.end(), v.values_.begin(),
                     [](const Scalar &s) { return -s; });
             return v;
         }
 
         /// cross product: only defined for Vec3* as specialization
         /// \see OpenMesh::cross
-        template<typename OtherScalar,
-            typename ResultScalar = decltype(
-                std::declval<Scalar>() * std::declval<const OtherScalar &>() -
-                std::declval<Scalar>() * std::declval<const OtherScalar &>())>
-        typename std::enable_if<DIM == 3, VectorT<ResultScalar, DIM>>::type
-        operator% (const VectorT<OtherScalar, DIM> &_rhs) const {
-            return VectorT<ResultScalar, DIM>(
-                values_[1] * _rhs.values_[2] - values_[2] * _rhs.values_[1],
-                values_[2] * _rhs.values_[0] - values_[0] * _rhs.values_[2],
-                values_[0] * _rhs.values_[1] - values_[1] * _rhs.values_[0]);
+        template<typename OtherScalar>
+        auto operator% (const VectorT<OtherScalar, DIM> &_rhs) const ->
+            typename std::enable_if<DIM == 3,
+                VectorT<decltype(this->values_[0] * _rhs[0] -
+                                 this->values_[0] * _rhs[0]),
+                        DIM>>::type {
+            return {
+                values_[1] * _rhs[2] - values_[2] * _rhs[1],
+                values_[2] * _rhs[0] - values_[0] * _rhs[2],
+                values_[0] * _rhs[1] - values_[1] * _rhs[0]
+            };
         }
 
         /// compute scalar product
         /// \see OpenMesh::dot
-        template<typename OtherScalar,
-            typename ResultScalar = decltype(
-                std::declval<Scalar>() * std::declval<const OtherScalar &>())>
-        ResultScalar operator|(const VectorT<OtherScalar, DIM>& _rhs) const {
-            ResultScalar p = values_[0] * _rhs[0];
+        template<typename OtherScalar>
+        auto operator|(const VectorT<OtherScalar, DIM>& _rhs) const ->
+            decltype(this->values_[0] * _rhs[0]) {
+
+            auto p = values_[0] * _rhs[0];
             for (int i = 1; i < DIM; ++i) {
                 p += values_[i] * _rhs[i];
             }
@@ -379,11 +382,11 @@ class VectorT {
         }
 
         /// compute euclidean norm
-        decltype(std::sqrt(std::declval<vector_type>().sqrnorm())) norm() const {
+        auto norm() const -> decltype(std::sqrt(this->sqrnorm())) {
             return std::sqrt(sqrnorm());
         }
 
-        decltype(std::declval<vector_type>().norm()) length() const {
+        auto length() const -> decltype(this->norm()) {
             return norm();
         }
 
@@ -396,8 +399,7 @@ class VectorT {
 
         /** return normalized vector
          */
-        decltype(std::declval<vector_type>() / std::declval<vector_type>().norm())
-        normalized() const {
+        auto normalized() const -> decltype((*this) / this->norm()) {
             return *this / norm();
         }
 
@@ -575,23 +577,22 @@ class VectorT {
                     values_.begin(), values_.end(),
                     _rhs.values_.begin(), _rhs.values_.end());
         }
-
-    public:
-        /// Component wise multiplication from the left
-        template<typename OtherScalar>
-        friend
-        decltype(std::declval<const vector_type &>().operator*(std::declval<OtherScalar>()))
-        operator*(const OtherScalar& _s, const vector_type &rhs) {
-            return rhs * _s;
-        }
 };
+
+/// Component wise multiplication from the left
+template<typename Scalar, int DIM, typename OtherScalar>
+auto operator*(const OtherScalar& _s, const VectorT<Scalar, DIM> &rhs) ->
+    decltype(rhs.operator*(_s)) {
+
+    return rhs * _s;
+}
 
 /// output a vector by printing its space-separated compontens
 template<typename Scalar, int DIM>
-typename std::enable_if<sizeof(decltype(
-        std::declval<std::ostream>() <<
-        std::declval<const Scalar &>())) >= 0, std::ostream&>::type
-operator<<(std::ostream& os, const VectorT<Scalar, DIM> &_vec) {
+auto operator<<(std::ostream& os, const VectorT<Scalar, DIM> &_vec) ->
+    typename std::enable_if<
+        sizeof(decltype(os << _vec[0])) >= 0, std::ostream&>::type {
+
     os << _vec[0];
     for (int i = 1; i < DIM; ++i) {
         os << " " << _vec[i];
@@ -601,10 +602,9 @@ operator<<(std::ostream& os, const VectorT<Scalar, DIM> &_vec) {
 
 /// read the space-separated components of a vector from a stream
 template<typename Scalar, int DIM>
-typename std::enable_if<sizeof(decltype(
-        std::declval<std::istream>() >>
-        std::declval<const Scalar &>())) >= 0, std::istream&>::type
-operator>> (std::istream& is, VectorT<Scalar, DIM> &_vec) {
+auto operator>> (std::istream& is, VectorT<Scalar, DIM> &_vec) ->
+    typename std::enable_if<
+        sizeof(decltype(is >> _vec[0])) >= 0, std::istream &>::type {
     for (int i = 0; i < DIM; ++i)
         is >> _vec[i];
     return is;
@@ -613,8 +613,7 @@ operator>> (std::istream& is, VectorT<Scalar, DIM> &_vec) {
 /// \relates OpenMesh::VectorT
 /// symmetric version of the dot product
 template<typename Scalar, int DIM>
-Scalar
-dot(const VectorT<Scalar, DIM>& _v1, const VectorT<Scalar, DIM>& _v2) {
+Scalar dot(const VectorT<Scalar, DIM>& _v1, const VectorT<Scalar, DIM>& _v2) {
   return (_v1 | _v2);
 }
 
@@ -622,9 +621,9 @@ dot(const VectorT<Scalar, DIM>& _v1, const VectorT<Scalar, DIM>& _v2) {
 /// \relates OpenMesh::VectorT
 /// symmetric version of the cross product
 template<typename LScalar, typename RScalar, int DIM>
-decltype(std::declval<const VectorT<LScalar, DIM>&>() %
-         std::declval<const VectorT<RScalar, DIM>&>())
-cross(const VectorT<LScalar, DIM>& _v1, const VectorT<RScalar, DIM>& _v2) {
+auto
+cross(const VectorT<LScalar, DIM>& _v1, const VectorT<RScalar, DIM>& _v2) ->
+    decltype(_v1 % _v2) {
   return (_v1 % _v2);
 }
 
