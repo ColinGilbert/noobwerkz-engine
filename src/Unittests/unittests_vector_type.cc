@@ -115,6 +115,8 @@ TEST_F(OpenMeshVectorTest, cpp11_constructors) {
 TEST_F(OpenMeshVectorTest, cpp11_htmlColorLiteral) {
     static constexpr OpenMesh::Vec4f rose = 0xFFC7F1FF_htmlColor;
 
+    EXPECT_EQ(0xFFC7F1FF_htmlColor, rose);
+
     const OpenMesh::Vec4f light_blue = 0x1FCFFFFF_htmlColor;
     EXPECT_LE((OpenMesh::Vec4f(0.1215686274f, 0.8117647058f, 1.0f, 1.0f)
         - light_blue).sqrnorm(), 1e-10);
