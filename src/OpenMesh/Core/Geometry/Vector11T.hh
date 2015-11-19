@@ -376,13 +376,10 @@ class VectorT {
         /// \see OpenMesh::dot
         template<typename OtherScalar>
         auto operator|(const VectorT<OtherScalar, DIM>& _rhs) const ->
-            decltype(this->values_[0] * _rhs[0]) {
+            decltype(*data() * *_rhs.data()) {
 
-            auto p = values_[0] * _rhs[0];
-            for (int i = 1; i < DIM; ++i) {
-                p += values_[i] * _rhs[i];
-            }
-            return p;
+            return std::inner_product(data() + 1, data() + DIM, _rhs.data() + 1,
+                    *data() * *_rhs.data());
         }
 
         //------------------------------------------------------------ euclidean norm
