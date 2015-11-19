@@ -95,12 +95,12 @@ class VectorT {
         typedef VectorT<Scalar, DIM> vector_type;
 
         /// returns dimension of the vector (deprecated)
-        static inline int dim() {
+        static constexpr int dim() {
             return DIM;
         }
 
         /// returns dimension of the vector
-        static inline size_t size() {
+        static constexpr size_t size() {
             return DIM;
         }
 
