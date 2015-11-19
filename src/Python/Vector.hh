@@ -151,12 +151,12 @@ void expose_vec(const char *_name) {
 		.def("vectorize", &Vector::vectorize, return_internal_reference<>())
 		.def(self < self)
 
-		.def("norm", &Vector::norm)
-		.def("length", &Vector::length)
-		.def("sqrnorm", &Vector::sqrnorm)
-		.def("normalize", &Vector::normalize, return_internal_reference<>())
-		.def("normalized", &Vector::normalized)
-		.def("normalize_cond", &Vector::normalize_cond, return_internal_reference<>())
+		.def("norm", &Vector::template norm<Scalar>)
+		.def("length", &Vector::template length<Scalar>)
+		.def("sqrnorm", &Vector::template sqrnorm<Scalar>)
+		.def("normalize", &Vector::template normalize<Scalar>, return_internal_reference<>())
+		.def("normalized", &Vector::template normalized<Scalar>)
+		.def("normalize_cond", &Vector::template normalize_cond<Scalar>, return_internal_reference<>())
 
 		.def("l1_norm", &Vector::l1_norm)
 		.def("l8_norm", &Vector::l8_norm)
