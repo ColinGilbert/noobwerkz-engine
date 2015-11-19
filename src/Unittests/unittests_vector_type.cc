@@ -127,4 +127,31 @@ TEST_F(OpenMeshVectorTest, cpp11_htmlColorLiteral) {
 }
 #endif
 
+
+TEST_F(OpenMeshVectorTest, BasicLinearAlgebra) {
+    OpenMesh::Vec3d v(1, 2, 3);
+    EXPECT_EQ(v[0], 1.0);
+    EXPECT_EQ(v[1], 2.0);
+    EXPECT_EQ(v[2], 3.0);
+
+    EXPECT_EQ(OpenMesh::Vec3d(-1, -2, -3), -v);
+    EXPECT_EQ(3, OpenMesh::Vec3d(1, 3, 2).max());
+    EXPECT_EQ(3, OpenMesh::Vec3d(1, 2, 3).max());
+    EXPECT_EQ(3, OpenMesh::Vec3d(1, 3, -4).max());
+    EXPECT_EQ(3, OpenMesh::Vec3d(-4, 2, 3).max());
+    EXPECT_EQ(4, OpenMesh::Vec3d(1, 3, -4).max_abs());
+    EXPECT_EQ(4, OpenMesh::Vec3d(-4, 2, 3).max_abs());
+
+    EXPECT_EQ(1, OpenMesh::Vec3d(1, 3, 2).min());
+    EXPECT_EQ(1, OpenMesh::Vec3d(1, 2, 3).min());
+    EXPECT_EQ(-4, OpenMesh::Vec3d(1, 3, -4).min());
+    EXPECT_EQ(-4, OpenMesh::Vec3d(-4, 2, 3).min());
+    EXPECT_EQ(1, OpenMesh::Vec3d(1, 3, -4).min_abs());
+    EXPECT_EQ(2, OpenMesh::Vec3d(-4, 2, 3).min_abs());
+
+    EXPECT_NEAR(14, OpenMesh::Vec3d(1, 2, 3) | OpenMesh::Vec3d(1, 2, 3), 1e-6);
+    EXPECT_NEAR(-14, OpenMesh::Vec3d(1, 2, 3) | OpenMesh::Vec3d(-1, -2, -3), 1e-6);
+    EXPECT_NEAR(14, OpenMesh::Vec3d(-1, -2, -3) | OpenMesh::Vec3d(-1, -2, -3), 1e-6);
+}
+
 }
