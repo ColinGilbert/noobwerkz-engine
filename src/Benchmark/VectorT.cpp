@@ -106,3 +106,21 @@ MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_norm), OpenMesh::Vec3d);
 MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_norm), OpenMesh::Vec3f);
 MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_norm), OpenMesh::Vec4d);
 MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_norm), OpenMesh::Vec4f);
+
+template<class Vec>
+static void ASSEMBLE(BMPOSTFIX, Vec_times_scalar)(benchmark::State& state) {
+    Vec v1(0.0);
+    while (state.KeepRunning()) {
+        v1 += testVec<Vec>();
+        v1 *= static_cast<decltype(v1.norm())>(1.0)/v1[0];
+        v1 *= v1[1];
+    }
+    // Otherwise GCC will optimize everything away.
+    static double dummy;
+    dummy = v1.norm();
+}
+
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_times_scalar), OpenMesh::Vec3d);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_times_scalar), OpenMesh::Vec3f);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_times_scalar), OpenMesh::Vec4d);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_times_scalar), OpenMesh::Vec4f);
