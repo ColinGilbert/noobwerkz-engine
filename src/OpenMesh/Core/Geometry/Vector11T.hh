@@ -414,10 +414,17 @@ class VectorT {
 
         /** normalize vector, return normalized vector and avoids div by zero
          */
-        vector_type& normalize_cond() {
-            Scalar n = norm();
-            if (n != (Scalar)0.0)
-            {
+        template<typename S = typename std::result_of<
+                    decltype(&VectorT::norm)(VectorT)>::type>
+        typename std::enable_if<
+            sizeof(static_cast<S>(0)) >= 0,
+            vector_type&>::type
+        normalize_cond() {
+            static_assert(sizeof(static_cast<decltype(norm())>(0)) >= 0,
+                    "normalize_cond() only works with Scalar types that can "
+                    "be statically casted from 0.");
+            auto n = norm();
+            if (n != static_cast<decltype(norm())>(0)) {
                 *this /= n;
             }
             return *this;
