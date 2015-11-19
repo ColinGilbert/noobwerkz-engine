@@ -5,12 +5,14 @@
  *      Author: ebke
  */
 
-#ifndef BMPREFIX
+#ifndef BMPOSTFIX
 #error "Do not compile directly."
 #endif
 
-#define ASSEMBLE_(PREFIX, SUFFIX) PREFIX ## SUFFIX
-#define ASSEMBLE(PREFIX, SUFFIX) ASSEMBLE_(PREFIX, SUFFIX)
+#include <type_traits>
+
+#define ASSEMBLE_(POSTFIX, PREFIX) PREFIX ## POSTFIX
+#define ASSEMBLE(POSTFIX, PREFIX) ASSEMBLE_(POSTFIX, PREFIX)
 #define MYBENCHMARK(NAME) BENCHMARK(NAME)
 #define MYBENCHMARK_TEMPLATE(NAME, TYPE) BENCHMARK_TEMPLATE(NAME, TYPE)
 
@@ -29,7 +31,7 @@ testVec() {
 }
 
 template<class Vec>
-static void ASSEMBLE(BMPREFIX, Vec_add_compare)(benchmark::State& state) {
+static void ASSEMBLE(BMPOSTFIX, Vec_add_compare)(benchmark::State& state) {
     Vec v1(0.0);
     Vec v2(1000.0);
     while (state.KeepRunning()) {
@@ -45,13 +47,13 @@ static void ASSEMBLE(BMPREFIX, Vec_add_compare)(benchmark::State& state) {
     dummy = v1.norm() + v2.norm();
 }
 
-MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_add_compare), OpenMesh::Vec3d);
-MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_add_compare), OpenMesh::Vec3f);
-MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_add_compare), OpenMesh::Vec4d);
-MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_add_compare), OpenMesh::Vec4f);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_add_compare), OpenMesh::Vec3d);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_add_compare), OpenMesh::Vec3f);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_add_compare), OpenMesh::Vec4d);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_add_compare), OpenMesh::Vec4f);
 
 template<class Vec>
-static void ASSEMBLE(BMPREFIX, Vec_cross_product)(benchmark::State& state) {
+static void ASSEMBLE(BMPOSTFIX, Vec_cross_product)(benchmark::State& state) {
     Vec v1(0.0);
     Vec v2(1000.0);
     while (state.KeepRunning()) {
@@ -64,11 +66,11 @@ static void ASSEMBLE(BMPREFIX, Vec_cross_product)(benchmark::State& state) {
     dummy = v1.norm() + v2.norm();
 }
 
-MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_cross_product), OpenMesh::Vec3d);
-MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_cross_product), OpenMesh::Vec3f);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_cross_product), OpenMesh::Vec3d);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_cross_product), OpenMesh::Vec3f);
 
 template<class Vec>
-static void ASSEMBLE(BMPREFIX, Vec_scalar_product)(benchmark::State& state) {
+static void ASSEMBLE(BMPOSTFIX, Vec_scalar_product)(benchmark::State& state) {
     Vec v1(0.0);
     Vec v2(1000.0);
     double acc = 0;
@@ -82,13 +84,13 @@ static void ASSEMBLE(BMPREFIX, Vec_scalar_product)(benchmark::State& state) {
     dummy = acc;
 }
 
-MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_scalar_product), OpenMesh::Vec3d);
-MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_scalar_product), OpenMesh::Vec3f);
-MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_scalar_product), OpenMesh::Vec4d);
-MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_scalar_product), OpenMesh::Vec4f);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_scalar_product), OpenMesh::Vec3d);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_scalar_product), OpenMesh::Vec3f);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_scalar_product), OpenMesh::Vec4d);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_scalar_product), OpenMesh::Vec4f);
 
 template<class Vec>
-static void ASSEMBLE(BMPREFIX, Vec_norm)(benchmark::State& state) {
+static void ASSEMBLE(BMPOSTFIX, Vec_norm)(benchmark::State& state) {
     Vec v1(0.0);
     double acc = 0;
     while (state.KeepRunning()) {
@@ -100,7 +102,7 @@ static void ASSEMBLE(BMPREFIX, Vec_norm)(benchmark::State& state) {
     dummy = acc;
 }
 
-MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_norm), OpenMesh::Vec3d);
-MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_norm), OpenMesh::Vec3f);
-MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_norm), OpenMesh::Vec4d);
-MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_norm), OpenMesh::Vec4f);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_norm), OpenMesh::Vec3d);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_norm), OpenMesh::Vec3f);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_norm), OpenMesh::Vec4d);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_norm), OpenMesh::Vec4f);

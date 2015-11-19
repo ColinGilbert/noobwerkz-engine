@@ -8,5 +8,5 @@
 #include <benchmark/benchmark_api.h>
 #include <OpenMesh/Core/Geometry/VectorT.hh>
 
-#define BMPREFIX CPP11_
+#define BMPOSTFIX _CPP11
 #include "VectorT.cpp"

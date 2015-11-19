@@ -10,5 +10,5 @@
 #define OPENMESH_VECTOR_LEGACY
 #include <OpenMesh/Core/Geometry/VectorT.hh>
 
-#define BMPREFIX Legacy_
+#define BMPOSTFIX _Legacy
 #include "VectorT.cpp"
