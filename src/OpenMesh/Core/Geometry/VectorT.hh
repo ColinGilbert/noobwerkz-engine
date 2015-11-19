@@ -60,7 +60,7 @@
 // macro expansion and preprocessor defines
 // don't work properly.
 
-#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+#if (__cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)) && !defined(OPENMESH_VECTOR_LEGACY)
 #include "Vector11T.hh"
 #else
 #ifndef DOXYGEN
