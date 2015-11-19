@@ -127,7 +127,51 @@ TEST_F(OpenMeshVectorTest, cpp11_htmlColorLiteral) {
         ::value, "Bad type deduced from _htmlColor literal.");
     EXPECT_EQ(light_blue, light_blue_2);
 }
-#endif
+
+
+namespace {
+class C {
+    public:
+        C() {}
+        C(const C &rhs) { ADD_FAILURE() << "Copy constructor used."; }
+        C(C &&rhs) { ++copy_con; }
+        C &operator= (const C &rhs) {
+            ADD_FAILURE() << "Copy assignemnt used.";
+            return *this;
+        }
+        C &operator= (C &&rhs) { ++copy_ass; return *this; }
+
+        static int copy_con;
+        static int copy_ass;
+};
+
+int C::copy_con = 0;
+int C::copy_ass = 0;
+}
+
+/**
+ * Checks two things:
+ *   1) Whether VectorT works with a non-arithmetic type.
+ *   2) Whether move construction and assignment works.
+ */
+TEST_F(OpenMeshVectorTest, move_constructor_assignment) {
+
+    C::copy_con = 0;
+    C::copy_ass = 0;
+
+    // Test move assigning.
+    OpenMesh::VectorT<C, 3> x, y;
+    x = std::move(y);
+    EXPECT_EQ(3, C::copy_ass);
+    EXPECT_EQ(0, C::copy_con);
+
+    // Test move constructing.
+    OpenMesh::VectorT<C, 3> z(std::move(x));
+    EXPECT_EQ(3, C::copy_ass);
+    EXPECT_EQ(3, C::copy_con);
+}
+
+#endif // C++11
 
 
 TEST_F(OpenMeshVectorTest, BasicLinearAlgebra) {
@@ -176,48 +220,6 @@ TEST_F(OpenMeshVectorTest, size_dim) {
     EXPECT_EQ(3, v3f.dim());
     EXPECT_EQ(2u, v2i.size());
     EXPECT_EQ(2, v2i.dim());
-}
-
-namespace {
-class C {
-    public:
-        C() {}
-        C(const C &rhs) { ADD_FAILURE() << "Copy constructor used."; }
-        C(C &&rhs) { ++copy_con; }
-        C &operator= (const C &rhs) {
-            ADD_FAILURE() << "Copy assignemnt used.";
-            return *this;
-        }
-        C &operator= (C &&rhs) { ++copy_ass; return *this; }
-
-        static int copy_con;
-        static int copy_ass;
-};
-
-int C::copy_con = 0;
-int C::copy_ass = 0;
-}
-
-/**
- * Checks two things:
- *   1) Whether VectorT works with a non-arithmetic type.
- *   2) Whether move construction and assignment works.
- */
-TEST_F(OpenMeshVectorTest, move_constructor_assignment) {
-
-    C::copy_con = 0;
-    C::copy_ass = 0;
-
-    // Test move assigning.
-    OpenMesh::VectorT<C, 3> x, y;
-    x = std::move(y);
-    EXPECT_EQ(3, C::copy_ass);
-    EXPECT_EQ(0, C::copy_con);
-
-    // Test move constructing.
-    OpenMesh::VectorT<C, 3> z(std::move(x));
-    EXPECT_EQ(3, C::copy_ass);
-    EXPECT_EQ(3, C::copy_con);
 }
 
 }
