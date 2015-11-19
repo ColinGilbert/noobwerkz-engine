@@ -158,9 +158,22 @@ TEST_F(OpenMeshVectorTest, normalized_cond) {
     OpenMesh::Vec3d v1(1, -2, 3), v2(0, 0, 0);
     EXPECT_EQ(OpenMesh::Vec3d(0, 0, 0), v2.normalize_cond());
     const auto r1 = OpenMesh::Vec3d(0.2672612419124244, -0.5345224838248488, 0.8017837257372732) - v1.normalize_cond();
-    EXPECT_NEAR(r1[0], 0.0, 1e-6);
-    EXPECT_NEAR(r1[1], 0.0, 1e-6);
-    EXPECT_NEAR(r1[2], 0.0, 1e-6);
+    EXPECT_NEAR(r1[0], 0.0, 1e-12);
+    EXPECT_NEAR(r1[1], 0.0, 1e-12);
+    EXPECT_NEAR(r1[2], 0.0, 1e-12);
+}
+
+TEST_F(OpenMeshVectorTest, size_dim) {
+    OpenMesh::Vec3d v3d(1, 2, 3);
+    OpenMesh::Vec3f v3f(1, 2, 3);
+    OpenMesh::Vec2i v2i(1, 2);
+
+    EXPECT_EQ(3u, v3d.size());
+    EXPECT_EQ(3, v3d.dim());
+    EXPECT_EQ(3u, v3f.size());
+    EXPECT_EQ(3, v3f.dim());
+    EXPECT_EQ(2u, v2i.size());
+    EXPECT_EQ(2, v2i.dim());
 }
 
 }
