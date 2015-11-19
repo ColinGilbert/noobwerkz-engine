@@ -125,6 +125,11 @@ class VectorT {
         constexpr VectorT(T... vs) : values_ { {static_cast<Scalar>(vs)...} }
         {}
 
+        VectorT(const VectorT &rhs) = default;
+        VectorT(VectorT &&rhs) = default;
+        VectorT &operator=(const VectorT &rhs) = default;
+        VectorT &operator=(VectorT &&rhs) = default;
+
         /**
          * Only for 4-component vectors with division operator on their
          * Scalar: Dehomogenization.
