@@ -122,8 +122,12 @@ class VectorT {
             typename = typename std::enable_if<sizeof...(T) == DIM>::type,
             typename = typename std::enable_if<
                 are_convertible_to<Scalar, T...>::value>::type>
-        constexpr VectorT(T... vs) : values_ { {static_cast<Scalar>(vs)...} }
-        {}
+        constexpr VectorT(T... vs) : values_ { {static_cast<Scalar>(vs)...} } {
+            static_assert(sizeof...(T) == DIM,
+                    "Invalid number of components specified in constructor.");
+            static_assert(are_convertible_to<Scalar, T...>::value,
+                    "Not all components are convertible to Scalar.");
+        }
 
         VectorT(const VectorT &rhs) = default;
         VectorT(VectorT &&rhs) = default;
