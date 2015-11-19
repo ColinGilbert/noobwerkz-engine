@@ -27,3 +27,18 @@ static void ASSEMBLE(BMPREFIX, Vec3f_add_compare)(benchmark::State& state) {
 }
 
 MYBENCHMARK (ASSEMBLE(BMPREFIX, Vec3f_add_compare));
+
+static void ASSEMBLE(BMPREFIX, Vec3d_add_compare)(benchmark::State& state) {
+    OpenMesh::Vec3d v1(0, 0, 0);
+    OpenMesh::Vec3d v2(1000, 1000, 1000);
+    while (state.KeepRunning()) {
+        v1 += OpenMesh::Vec3d(1.1, 1.2, 1.3);
+        v2 -= OpenMesh::Vec3d(1.1, 1.2, 1.3);
+        if (v1 == v2) {
+            v1 -= v2;
+            v2 += v1;
+        }
+    }
+}
+
+MYBENCHMARK (ASSEMBLE(BMPREFIX, Vec3d_add_compare));
