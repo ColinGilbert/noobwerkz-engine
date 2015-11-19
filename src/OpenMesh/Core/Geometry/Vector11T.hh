@@ -107,7 +107,7 @@ class VectorT {
             return DIM;
         }
 
-        static const size_t size_ = DIM;
+        static constexpr const size_t size_ = DIM;
 
         //-------------------------------------------------------------- constructors
 
