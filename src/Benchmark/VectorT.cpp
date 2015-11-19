@@ -12,63 +12,75 @@
 #define ASSEMBLE_(PREFIX, SUFFIX) PREFIX ## SUFFIX
 #define ASSEMBLE(PREFIX, SUFFIX) ASSEMBLE_(PREFIX, SUFFIX)
 #define MYBENCHMARK(NAME) BENCHMARK(NAME)
+#define MYBENCHMARK_TEMPLATE(NAME, TYPE) BENCHMARK_TEMPLATE(NAME, TYPE)
 
-static void ASSEMBLE(BMPREFIX, Vec3f_add_compare)(benchmark::State& state) {
-    OpenMesh::Vec3f v1(0, 0, 0);
-    OpenMesh::Vec3f v2(1000, 1000, 1000);
+template<class Vec>
+static void ASSEMBLE(BMPREFIX, Vec_add_compare)(benchmark::State& state) {
+    Vec v1(0, 0, 0);
+    Vec v2(1000, 1000, 1000);
     while (state.KeepRunning()) {
-        v1 += OpenMesh::Vec3f(1.1, 1.2, 1.3);
-        v2 -= OpenMesh::Vec3f(1.1, 1.2, 1.3);
+        v1 += Vec(1.1, 1.2, 1.3);
+        v2 -= Vec(1.1, 1.2, 1.3);
         if (v1 == v2) {
             v1 -= v2;
             v2 += v1;
         }
     }
+    // Just so nothing gets optimized away.
+    static double dummy;
+    dummy = v1.norm() + v2.norm();
 }
 
-MYBENCHMARK (ASSEMBLE(BMPREFIX, Vec3f_add_compare));
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_add_compare), OpenMesh::Vec3d);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_add_compare), OpenMesh::Vec3f);
 
-static void ASSEMBLE(BMPREFIX, Vec3d_add_compare)(benchmark::State& state) {
-    OpenMesh::Vec3d v1(0, 0, 0);
-    OpenMesh::Vec3d v2(1000, 1000, 1000);
+template<class Vec>
+static void ASSEMBLE(BMPREFIX, Vec_cross_product)(benchmark::State& state) {
+    Vec v1(0, 0, 0);
+    Vec v2(1000, 1000, 1000);
     while (state.KeepRunning()) {
-        v1 += OpenMesh::Vec3d(1.1, 1.2, 1.3);
-        v2 -= OpenMesh::Vec3d(1.1, 1.2, 1.3);
-        if (v1 == v2) {
-            v1 -= v2;
-            v2 += v1;
-        }
+        v1 += Vec(1.1, 1.2, 1.3);
+        v2 -= Vec(1.1, 1.2, 1.3);
+        v1 = (v1 % v2);
     }
+    // Just so nothing gets optimized away.
+    static double dummy;
+    dummy = v1.norm() + v2.norm();
 }
 
-MYBENCHMARK (ASSEMBLE(BMPREFIX, Vec3d_add_compare));
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_cross_product), OpenMesh::Vec3d);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_cross_product), OpenMesh::Vec3f);
 
-static void ASSEMBLE(BMPREFIX, Vec3d_cross_product)(benchmark::State& state) {
-    OpenMesh::Vec3d v1(0, 0, 0);
-    OpenMesh::Vec3d v2(1000, 1000, 1000);
+template<class Vec>
+static void ASSEMBLE(BMPREFIX, Vec_scalar_product)(benchmark::State& state) {
+    Vec v1(0, 0, 0);
+    Vec v2(1000, 1000, 1000);
+    double acc = 0;
     while (state.KeepRunning()) {
-        v1 += OpenMesh::Vec3d(1.1, 1.2, 1.3);
-        v2 -= OpenMesh::Vec3d(1.1, 1.2, 1.3);
-        if ((v1 % v2) == (v2 % v1)) {
-            v1 -= v2;
-            v2 += v1;
-        }
+        v1 += Vec(1.1, 1.2, 1.3);
+        v2 -= Vec(1.1, 1.2, 1.3);
+        acc += (v1 | v2);
     }
+    // Otherwise GCC will optimize everything away.
+    static double dummy;
+    dummy = acc;
 }
 
-MYBENCHMARK (ASSEMBLE(BMPREFIX, Vec3d_cross_product));
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_scalar_product), OpenMesh::Vec3d);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_scalar_product), OpenMesh::Vec3f);
 
-static void ASSEMBLE(BMPREFIX, Vec3d_scalar_product)(benchmark::State& state) {
-    OpenMesh::Vec3d v1(0, 0, 0);
-    OpenMesh::Vec3d v2(1000, 1000, 1000);
+template<class Vec>
+static void ASSEMBLE(BMPREFIX, Vec_norm)(benchmark::State& state) {
+    Vec v1(0, 0, 0);
+    double acc = 0;
     while (state.KeepRunning()) {
-        v1 += OpenMesh::Vec3d(1.1, 1.2, 1.3);
-        v2 -= OpenMesh::Vec3d(1.1, 1.2, 1.3);
-        if ((v1 | v2) > 0) {
-            v1 -= v2;
-            v2 += v1;
-        }
+        v1 += Vec(1.1, 1.2, 1.3);
+        acc += v1.norm();
     }
+    // Otherwise GCC will optimize everything away.
+    static double dummy;
+    dummy = acc;
 }
 
-MYBENCHMARK (ASSEMBLE(BMPREFIX, Vec3d_scalar_product));
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_norm), OpenMesh::Vec3d);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPREFIX, Vec_norm), OpenMesh::Vec3f);
