@@ -82,6 +82,7 @@ TEST_F(OpenMesh_Triangle, cpp11_vertexrange_test) {
   for(Mesh::VertexHandle t : mesh_.vertices())
   {
     FAIL() << "The Vertexrange for an empty Mesh is not empty";
+    EXPECT_TRUE(t.is_valid()); // Just so we don't get an unused variable warning.
   }
 
   //add vertices to mesh
@@ -110,6 +111,7 @@ TEST_F(OpenMesh_Poly, cpp11_vertexrange_test) {
   for(PolyMesh::VertexHandle t : mesh_.vertices())
   {
     FAIL() << "The Vertexrange for an empty Mesh is not empty";
+    EXPECT_TRUE(t.is_valid()); // Just so we don't get an unused variable warning.
   }
 
   //add vertices to mesh
@@ -140,6 +142,7 @@ TEST_F(OpenMesh_Triangle, cpp11_vvrange_test) {
   for(Mesh::VertexHandle t : mesh_.vv_range(vhandle[0]))
   {
     FAIL() << "The vvrange for a single vertex in a TriMesh is not empty";
+    EXPECT_TRUE(t.is_valid()); // Just so we don't get an unused variable warning.
   }
 
   //add more vertices
@@ -198,6 +201,7 @@ TEST_F(OpenMesh_Poly, cpp11_vvrange_test) {
   for(PolyMesh::VertexHandle t : mesh_.vv_range(vhandle[0]))
   {
     FAIL() << "The vvrange for a single vertex in a PolyMesh is not empty";
+    EXPECT_TRUE(t.is_valid()); // Just so we don't get an unused variable warning.
   }
 
   //add more vertices
