@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <Unittests/unittests_common.hh>
 #include <iostream>
+#include <list>
 
 namespace {
 
@@ -171,6 +172,15 @@ TEST_F(OpenMeshVectorTest, move_constructor_assignment) {
     EXPECT_EQ(3, C::copy_con);
 }
 
+TEST_F(OpenMeshVectorTest, iterator_init) {
+    std::list<float> a;
+    a.push_back(1.0);
+    a.push_back(2.0);
+    a.push_back(3.0);
+    OpenMesh::Vec3f v(a.begin());
+    EXPECT_EQ(OpenMesh::Vec3f(1.0, 2.0, 3.0), v);
+}
+
 #endif // C++11
 
 
@@ -198,6 +208,12 @@ TEST_F(OpenMeshVectorTest, BasicLinearAlgebra) {
     EXPECT_NEAR(14, OpenMesh::Vec3d(1, 2, 3) | OpenMesh::Vec3d(1, 2, 3), 1e-6);
     EXPECT_NEAR(-14, OpenMesh::Vec3d(1, 2, 3) | OpenMesh::Vec3d(-1, -2, -3), 1e-6);
     EXPECT_NEAR(14, OpenMesh::Vec3d(-1, -2, -3) | OpenMesh::Vec3d(-1, -2, -3), 1e-6);
+}
+
+TEST_F(OpenMeshVectorTest, array_init) {
+    float a[3]; a[0] = 1.0; a[1] = 2.0; a[2] = 3.0;
+    OpenMesh::Vec3f v(a);
+    EXPECT_EQ(OpenMesh::Vec3f(1.0, 2.0, 3.0), v);
 }
 
 TEST_F(OpenMeshVectorTest, normalized_cond) {

@@ -81,6 +81,9 @@ namespace OpenMesh {
 
 template<typename Scalar, int DIM>
 class VectorT {
+
+        static_assert(DIM >= 1, "VectorT requires positive dimensionality.");
+
     private:
         std::array<Scalar, DIM> values_;
 
@@ -154,9 +157,10 @@ class VectorT {
                     1);
         }
 
-        /// construct from a value array (explicit)
-        explicit inline VectorT(const Scalar _values[DIM]) {
-            std::copy(_values, _values + DIM, values_.begin());
+        /// construct from a value array or any other iterator
+        template<typename Iterator>
+        explicit inline VectorT(Iterator it) {
+            std::copy_n(it, DIM, values_.begin());
         }
 
         /// copy & cast constructor (explicit)
