@@ -138,11 +138,15 @@ class VectorT {
          * Only for 4-component vectors with division operator on their
          * Scalar: Dehomogenization.
          */
-        template<int D = DIM,
-            typename = typename std::enable_if<D == DIM>::type,
-            typename = decltype(values_[0]/values_[3])>
-        typename std::enable_if<D==4, VectorT>::type
-        homogenized() const {
+        template<typename S = Scalar, int D = DIM>
+        auto homogenized() const ->
+            typename std::enable_if<D == 4,
+                VectorT<decltype(std::declval<S>()/std::declval<S>()), DIM>>::type {
+            static_assert(D == DIM, "D and DIM need to be identical. (Never "
+                    "override the default template arguments.)");
+            static_assert(std::is_same<S, Scalar>::value, "S and Scalar need "
+                    "to be the same type. (Never override the default template "
+                    "arguments.)");
             return VectorT(
                     values_[0]/values_[3],
                     values_[1]/values_[3],
@@ -383,7 +387,11 @@ class VectorT {
         //@{
 
         /// compute squared euclidean norm
-        decltype(values_[0] * values_[0]) sqrnorm() const {
+        template<typename S = Scalar>
+        decltype(std::declval<S>() * std::declval<S>()) sqrnorm() const {
+            static_assert(std::is_same<S, Scalar>::value, "S and Scalar need "
+                    "to be the same type. (Never override the default template "
+                    "arguments.)");
             typedef decltype(values_[0] * values_[0]) RESULT;
             return std::accumulate(values_.cbegin() + 1, values_.cend(),
                     values_[0] * values_[0],
@@ -391,38 +399,58 @@ class VectorT {
         }
 
         /// compute euclidean norm
-        auto norm() const -> decltype(std::sqrt(this->sqrnorm())) {
+        template<typename S = Scalar>
+        auto norm() const ->
+            decltype(std::sqrt(std::declval<VectorT<S, DIM>>().sqrnorm())) {
+            static_assert(std::is_same<S, Scalar>::value, "S and Scalar need "
+                    "to be the same type. (Never override the default template "
+                    "arguments.)");
             return std::sqrt(sqrnorm());
         }
 
-        auto length() const -> decltype(this->norm()) {
+        template<typename S = Scalar>
+        auto length() const ->
+            decltype(std::declval<VectorT<S, DIM>>().norm()) {
+            static_assert(std::is_same<S, Scalar>::value, "S and Scalar need "
+                    "to be the same type. (Never override the default template "
+                    "arguments.)");
             return norm();
         }
 
         /** normalize vector, return normalized vector
          */
-        vector_type& normalize() {
-            *this /= norm();
-            return *this;
+        template<typename S = Scalar>
+        auto normalize() ->
+            decltype(*this /= std::declval<VectorT<S, DIM>>().norm()) {
+            static_assert(std::is_same<S, Scalar>::value, "S and Scalar need "
+                    "to be the same type. (Never override the default template "
+                    "arguments.)");
+            return *this /= norm();
         }
 
         /** return normalized vector
          */
-        auto normalized() const -> decltype((*this) / this->norm()) {
+        template<typename S = Scalar>
+        auto normalized() const ->
+            decltype(*this / std::declval<VectorT<S, DIM>>().norm()) {
+            static_assert(std::is_same<S, Scalar>::value, "S and Scalar need "
+                    "to be the same type. (Never override the default template "
+                    "arguments.)");
             return *this / norm();
         }
 
         /** normalize vector, return normalized vector and avoids div by zero
          */
-        template<typename S = typename std::result_of<
-                    decltype(&VectorT::norm)(VectorT)>::type>
+        template<typename S = Scalar>
         typename std::enable_if<
-            sizeof(static_cast<S>(0)) >= 0,
+            sizeof(decltype(
+                static_cast<S>(0),
+                std::declval<VectorT<S, DIM>>().norm())) >= 0,
             vector_type&>::type
         normalize_cond() {
-            static_assert(sizeof(static_cast<decltype(norm())>(0)) >= 0,
-                    "normalize_cond() only works with Scalar types that can "
-                    "be statically casted from 0.");
+            static_assert(std::is_same<S, Scalar>::value, "S and Scalar need "
+                    "to be the same type. (Never override the default template "
+                    "arguments.)");
             auto n = norm();
             if (n != static_cast<decltype(norm())>(0)) {
                 *this /= n;
