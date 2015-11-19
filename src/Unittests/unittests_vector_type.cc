@@ -203,7 +203,11 @@ TEST_F(OpenMeshVectorTest, BasicLinearAlgebra) {
 TEST_F(OpenMeshVectorTest, normalized_cond) {
     OpenMesh::Vec3d v1(1, -2, 3), v2(0, 0, 0);
     EXPECT_EQ(OpenMesh::Vec3d(0, 0, 0), v2.normalize_cond());
-    const auto r1 = OpenMesh::Vec3d(0.2672612419124244, -0.5345224838248488, 0.8017837257372732) - v1.normalize_cond();
+    const OpenMesh::Vec3d r1 =
+            OpenMesh::Vec3d(
+                     0.2672612419124244,
+                    -0.5345224838248488,
+                     0.8017837257372732) - v1.normalize_cond();
     EXPECT_NEAR(r1[0], 0.0, 1e-12);
     EXPECT_NEAR(r1[1], 0.0, 1e-12);
     EXPECT_NEAR(r1[2], 0.0, 1e-12);
