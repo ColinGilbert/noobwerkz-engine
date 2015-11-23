@@ -520,6 +520,13 @@ public:
   inline void split(EdgeHandle _eh, VertexHandle _vh)
   { Kernel::split_edge(_eh, _vh); }
   
+private:
+  struct PointIs3DTag {};
+  struct PointIsNot3DTag {};
+  Normal calc_face_normal_impl(FaceHandle, PointIs3DTag) const;
+  Normal calc_face_normal_impl(FaceHandle, PointIsNot3DTag) const;
+  Normal calc_face_normal_impl(const Point&, const Point&, const Point&, PointIs3DTag) const;
+  Normal calc_face_normal_impl(const Point&, const Point&, const Point&, PointIsNot3DTag) const;
 };
 
 /**
