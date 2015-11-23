@@ -85,7 +85,8 @@ class VectorT {
         static_assert(DIM >= 1, "VectorT requires positive dimensionality.");
 
     private:
-        std::array<Scalar, DIM> values_;
+        using container = std::array<Scalar, DIM>;
+        container values_;
 
     public:
 
@@ -625,6 +626,34 @@ class VectorT {
                     values_.begin(), values_.end(),
                     _rhs.values_.begin(), _rhs.values_.end());
         }
+
+        //------------------------------------------------------------ component iterators
+
+        /// \name Component iterators
+        //@{
+
+        using iterator               = typename container::iterator;
+        using const_iterator         = typename container::const_iterator;
+        using reverse_iterator       = typename container::reverse_iterator;
+        using const_reverse_iterator = typename container::const_reverse_iterator;
+
+        iterator               begin()         noexcept { return values_.begin();   }
+        const_iterator         begin()   const noexcept { return values_.cbegin();  }
+        const_iterator         cbegin()  const noexcept { return values_.cbegin();  }
+
+        iterator               end()           noexcept { return values_.end();     }
+        const_iterator         end()     const noexcept { return values_.cend();    }
+        const_iterator         cend()    const noexcept { return values_.cend();    }
+
+        reverse_iterator       rbegin()        noexcept { return values_.rbegin();  }
+        const_reverse_iterator rbegin()  const noexcept { return values_.crbegin(); }
+        const_reverse_iterator crbegin() const noexcept { return values_.crbegin(); }
+
+        reverse_iterator       rend()          noexcept { return values_.rend();    }
+        const_reverse_iterator rend()    const noexcept { return values_.crend();   }
+        const_reverse_iterator crend()   const noexcept { return values_.crend();   }
+
+        //@}
 };
 
 /// Component wise multiplication from the left
