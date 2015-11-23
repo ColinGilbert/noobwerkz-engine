@@ -65,7 +65,7 @@ template<typename Vector>
 struct VectorDimensionsT {};
 
 template<typename Scalar, int Dim>
-struct VectorDimensionsT<OpenMesh::VectorT<Scalar, Dim>> {
+struct VectorDimensionsT< OpenMesh::VectorT<Scalar, Dim> > {
   enum {
     value = Dim
   };
