@@ -129,3 +129,35 @@ MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_times_scalar), OpenMesh::Vec3d);
 MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_times_scalar), OpenMesh::Vec3f);
 MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_times_scalar), OpenMesh::Vec4d);
 MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_times_scalar), OpenMesh::Vec4f);
+
+#include "VectorT_dummy_data.hpp"
+
+template<class Vec>
+static void ASSEMBLE(BMPOSTFIX, Vec_add_in_place)(benchmark::State& state) {
+    auto v = make_dummy_vector<Vec>();
+    while (state.KeepRunning()) {
+        v += v;
+    }
+    // Otherwise GCC will optimize everything away.
+    static double dummy = observe_dummy_vector(v);
+    static_cast<void>(dummy);
+}
+
+template<class Vec>
+static void ASSEMBLE(BMPOSTFIX, Vec_add_temporary)(benchmark::State& state) {
+    auto v = make_dummy_vector<Vec>();
+    while (state.KeepRunning()) {
+        v = v + v;
+    }
+    // Otherwise GCC will optimize everything away.
+    static double dummy = observe_dummy_vector(v);
+    static_cast<void>(dummy);
+}
+
+typedef OpenMesh::VectorT<std::valarray<double>, 3> Vec3VAd;
+typedef OpenMesh::VectorT<std::complex<double>, 3> Vec3Cd;
+
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_add_in_place), Vec3VAd);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_add_temporary), Vec3VAd);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_add_in_place), Vec3Cd);
+MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_add_temporary), Vec3Cd);

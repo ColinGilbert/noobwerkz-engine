@@ -3,6 +3,7 @@ list (APPEND SOURCES
 	main.cpp
 	VectorT_new.cpp
 	VectorT_legacy.cpp
+        VectorT_dummy_data.cpp
 )
 
 add_executable(OMBenchmark ${SOURCES})
