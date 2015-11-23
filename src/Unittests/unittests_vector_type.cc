@@ -184,6 +184,84 @@ TEST_F(OpenMeshVectorTest, iterator_init) {
 #endif // C++11
 
 
+TEST_F(OpenMeshVectorTest, BasicArithmeticInPlace) {
+    OpenMesh::Vec3d v1(1, 2, 3);
+    double s1 = 2;
+    const double epsilon = 1e-6;
+
+    OpenMesh::Vec3d v2add (3, 4, 6); v2add  += v1;
+    OpenMesh::Vec3d v2sub (3, 4, 6); v2sub  -= v1;
+    OpenMesh::Vec3d v2cmul(3, 4, 6); v2cmul *= v1;
+    OpenMesh::Vec3d v2cdiv(3, 4, 6); v2cdiv /= v1;
+    OpenMesh::Vec3d v2smul(3, 4, 6); v2smul *= s1;
+    OpenMesh::Vec3d v2sdiv(3, 4, 6); v2sdiv /= s1;
+
+    EXPECT_NEAR(4, v2add[0], epsilon);
+    EXPECT_NEAR(6, v2add[1], epsilon);
+    EXPECT_NEAR(9, v2add[2], epsilon);
+
+    EXPECT_NEAR(2, v2sub[0], epsilon);
+    EXPECT_NEAR(2, v2sub[1], epsilon);
+    EXPECT_NEAR(3, v2sub[2], epsilon);
+
+    EXPECT_NEAR( 3, v2cmul[0], epsilon);
+    EXPECT_NEAR( 8, v2cmul[1], epsilon);
+    EXPECT_NEAR(18, v2cmul[2], epsilon);
+
+    EXPECT_NEAR(3, v2cdiv[0], epsilon);
+    EXPECT_NEAR(2, v2cdiv[1], epsilon);
+    EXPECT_NEAR(2, v2cdiv[2], epsilon);
+
+    EXPECT_NEAR( 6, v2smul[0], epsilon);
+    EXPECT_NEAR( 8, v2smul[1], epsilon);
+    EXPECT_NEAR(12, v2smul[2], epsilon);
+
+    EXPECT_NEAR(1.5, v2sdiv[0], epsilon);
+    EXPECT_NEAR(2.0, v2sdiv[1], epsilon);
+    EXPECT_NEAR(3.0, v2sdiv[2], epsilon);
+}
+
+TEST_F(OpenMeshVectorTest, BasicArithmeticImmutable) {
+    OpenMesh::Vec3d v1(1, 2, 3);
+    const double epsilon = 1e-6;
+
+    OpenMesh::Vec3d v2add  = v1 + OpenMesh::Vec3d(2, 4, 6);
+    OpenMesh::Vec3d v2sub  = v1 - OpenMesh::Vec3d(2, 4, 6);
+    OpenMesh::Vec3d v2cmul = v1 * OpenMesh::Vec3d(2, 4, 6);
+    OpenMesh::Vec3d v2cdiv = v1 / OpenMesh::Vec3d(2, 4, 6);
+    OpenMesh::Vec3d v2smul = v1 * 2.0;
+    OpenMesh::Vec3d v2sdiv = v1 / 2.0;
+    OpenMesh::Vec3d v2neg  = -v1;
+
+    EXPECT_NEAR(3, v2add[0], epsilon);
+    EXPECT_NEAR(6, v2add[1], epsilon);
+    EXPECT_NEAR(9, v2add[2], epsilon);
+
+    EXPECT_NEAR(-1, v2sub[0], epsilon);
+    EXPECT_NEAR(-2, v2sub[1], epsilon);
+    EXPECT_NEAR(-3, v2sub[2], epsilon);
+
+    EXPECT_NEAR( 2, v2cmul[0], epsilon);
+    EXPECT_NEAR( 8, v2cmul[1], epsilon);
+    EXPECT_NEAR(18, v2cmul[2], epsilon);
+
+    EXPECT_NEAR(0.5, v2cdiv[0], epsilon);
+    EXPECT_NEAR(0.5, v2cdiv[1], epsilon);
+    EXPECT_NEAR(0.5, v2cdiv[2], epsilon);
+
+    EXPECT_NEAR(2, v2smul[0], epsilon);
+    EXPECT_NEAR(4, v2smul[1], epsilon);
+    EXPECT_NEAR(6, v2smul[2], epsilon);
+
+    EXPECT_NEAR(0.5, v2sdiv[0], epsilon);
+    EXPECT_NEAR(1.0, v2sdiv[1], epsilon);
+    EXPECT_NEAR(1.5, v2sdiv[2], epsilon);
+
+    EXPECT_NEAR(-1, v2neg[0], epsilon);
+    EXPECT_NEAR(-2, v2neg[1], epsilon);
+    EXPECT_NEAR(-3, v2neg[2], epsilon);
+}
+
 TEST_F(OpenMeshVectorTest, BasicLinearAlgebra) {
     OpenMesh::Vec3d v(1, 2, 3);
     EXPECT_EQ(v[0], 1.0);
