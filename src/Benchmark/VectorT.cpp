@@ -45,6 +45,7 @@ static void ASSEMBLE(BMPOSTFIX, Vec_add_compare)(benchmark::State& state) {
     // Just so nothing gets optimized away.
     static double dummy;
     dummy = v1.norm() + v2.norm();
+    static_cast<void>(dummy);
 }
 
 MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_add_compare), OpenMesh::Vec3d);
@@ -64,6 +65,7 @@ static void ASSEMBLE(BMPOSTFIX, Vec_cross_product)(benchmark::State& state) {
     // Just so nothing gets optimized away.
     static double dummy;
     dummy = v1.norm() + v2.norm();
+    static_cast<void>(dummy);
 }
 
 MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_cross_product), OpenMesh::Vec3d);
@@ -82,6 +84,7 @@ static void ASSEMBLE(BMPOSTFIX, Vec_scalar_product)(benchmark::State& state) {
     // Otherwise GCC will optimize everything away.
     static double dummy;
     dummy = acc;
+    static_cast<void>(dummy);
 }
 
 MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_scalar_product), OpenMesh::Vec3d);
@@ -100,6 +103,7 @@ static void ASSEMBLE(BMPOSTFIX, Vec_norm)(benchmark::State& state) {
     // Otherwise GCC will optimize everything away.
     static double dummy;
     dummy = acc;
+    static_cast<void>(dummy);
 }
 
 MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_norm), OpenMesh::Vec3d);
@@ -118,6 +122,7 @@ static void ASSEMBLE(BMPOSTFIX, Vec_times_scalar)(benchmark::State& state) {
     // Otherwise GCC will optimize everything away.
     static double dummy;
     dummy = v1.norm();
+    static_cast<void>(dummy);
 }
 
 MYBENCHMARK_TEMPLATE (ASSEMBLE(BMPOSTFIX, Vec_times_scalar), OpenMesh::Vec3d);
