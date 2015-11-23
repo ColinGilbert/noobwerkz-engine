@@ -61,6 +61,7 @@
 
 #include <OpenMesh/Core/Mesh/PolyMeshT.hh>
 #include <OpenMesh/Core/Geometry/LoopSchemeMaskT.hh>
+#include <OpenMesh/Core/Geometry/VectorDimensionsT.hh>
 #include <OpenMesh/Core/Utils/GenProg.hh>
 #include <OpenMesh/Core/Utils/vector_cast.hh>
 #include <OpenMesh/Core/System/omstream.hh>
@@ -101,7 +102,7 @@ typename PolyMeshT<Kernel>::Normal
 PolyMeshT<Kernel>::calc_face_normal(FaceHandle _fh) const
 {
   return calc_face_normal_impl(_fh, typename GenProg::IF<
-    PolyMeshT<Kernel>::Point::size() == 3,
+    VectorDimensionsT<PolyMeshT<Kernel>::Point>::value == 3,
     PointIs3DTag,
     PointIsNot3DTag
   >::Result());
@@ -155,7 +156,7 @@ typename PolyMeshT<Kernel>::Normal
 PolyMeshT<Kernel>::calc_face_normal_impl(FaceHandle, PointIsNot3DTag) const
 {
   // Dummy fallback implementation
-  return Normal(0);
+  return Normal(typename Normal::value_type(0));
 }
 
 //-----------------------------------------------------------------------------
@@ -168,7 +169,7 @@ calc_face_normal(const Point& _p0,
      const Point& _p2) const
 {
   return calc_face_normal_impl(_p0, _p1, _p2, typename GenProg::IF<
-    PolyMeshT<Kernel>::Point::size() == 3,
+    VectorDimensionsT<PolyMeshT<Kernel>::Point>::value == 3,
     PointIs3DTag,
     PointIsNot3DTag
   >::Result());
@@ -209,10 +210,9 @@ calc_face_normal_impl(const Point& _p0,
 
 template <class Kernel>
 typename PolyMeshT<Kernel>::Normal
-PolyMeshT<Kernel>::
-calc_face_normal_impl(const Point&, const Point&, const Point&, PointIsNot3DTag) const
+PolyMeshT<Kernel>::calc_face_normal_impl(const Point&, const Point&, const Point&, PointIsNot3DTag) const
 {
-    return Normal(0);
+  return Normal(typename Normal::value_type(0));
 }
 
 //-----------------------------------------------------------------------------
@@ -241,7 +241,7 @@ PolyMeshT<Kernel>::
 update_normals()
 {
   // Face normals are required to compute the vertex and the halfedge normals
-  if (Kernel::has_face_normals() ) {     
+  if (Kernel::has_face_normals() ) {
     update_face_normals();
 
     if (Kernel::has_vertex_normals() ) update_vertex_normals();
