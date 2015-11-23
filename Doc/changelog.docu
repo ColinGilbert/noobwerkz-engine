@@ -10,6 +10,19 @@
 <tr valign=top><td><b>6.0</b> (?/?/?)</td><td>
 
 
+<b>VectorT</b>
+<ul>
+<li>Full C++11 rewrite of VectorT (Keeping C++98 backward compatibility)</li>
+<li>Split VectorT implementation into two files (One c++98 and one c++11)</li>
+</ul>
+
+<b>Unittests</b>
+<ul>
+<li>Added several unittests for VectorT</li>
+<li>Added Benchmarks for VectorT</li>
+</ul>
+
+
 </tr>
 
 
