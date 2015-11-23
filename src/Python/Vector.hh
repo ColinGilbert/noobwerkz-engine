@@ -38,6 +38,71 @@ Scalar get_item(Vector& _vec, int _index) {
 	return 0.0;
 }
 
+namespace {
+template<class Scalar>
+struct Factory {
+    typedef OpenMesh::VectorT<Scalar, 2> Vector2;
+    typedef OpenMesh::VectorT<Scalar, 3> Vector3;
+    typedef OpenMesh::VectorT<Scalar, 4> Vector4;
+
+    static Vector2 *vec2_default() {
+        return new Vector2(Scalar(), Scalar());
+    }
+    static Vector2 *vec2_user_defined(const Scalar& _v0, const Scalar& _v1) {
+        return new Vector2(_v0, _v1);
+    }
+    static Vector3 *vec3_default() {
+        return new Vector3(Scalar(), Scalar(), Scalar());
+    }
+    static Vector3 *vec3_user_defined(const Scalar& _v0, const Scalar& _v1, const Scalar& _v2) {
+        return new Vector3(_v0, _v1, _v2);
+    }
+    static Vector4 *vec4_default() {
+        return new Vector4(Scalar(), Scalar(), Scalar(), Scalar());
+    }
+    static Vector4 *vec4_user_defined(const Scalar& _v0, const Scalar& _v1, const Scalar& _v2, const Scalar& _v3) {
+        return new Vector4(_v0, _v1, _v2, _v3);
+    }
+};
+}
+
+template<class Scalar, int N>
+void defInitMod(class_<OpenMesh::VectorT<Scalar, N>> &classVector);
+
+template<class Scalar>
+void defInitMod(class_<OpenMesh::VectorT<Scalar, 2>> &classVector) {
+    classVector
+        .def("__init__", make_constructor(&Factory<Scalar>::vec2_default))
+        .def("__init__", make_constructor(&Factory<Scalar>::vec2_user_defined))
+        ;
+
+    typedef OpenMesh::VectorT<Scalar, 2> Vector;
+    def("dot", &Vector::operator|);
+}
+template<class Scalar>
+void defInitMod(class_<OpenMesh::VectorT<Scalar, 3>> &classVector) {
+    classVector
+        .def("__init__", make_constructor(&Factory<Scalar>::vec3_default))
+        .def("__init__", make_constructor(&Factory<Scalar>::vec3_user_defined))
+        .def("__mod__", &Factory<Scalar>::Vector3::operator%)
+        ;
+
+    def("cross", &Factory<Scalar>::Vector3::operator%);
+
+    typedef OpenMesh::VectorT<Scalar, 3> Vector;
+    def("dot", &Vector::operator|);
+}
+template<class Scalar>
+void defInitMod(class_<OpenMesh::VectorT<Scalar, 4>> &classVector) {
+    classVector
+        .def("__init__", make_constructor(&Factory<Scalar>::vec4_default))
+        .def("__init__", make_constructor(&Factory<Scalar>::vec4_user_defined))
+        ;
+
+    typedef OpenMesh::VectorT<Scalar, 4> Vector;
+    def("dot", &Vector::operator|);
+}
+
 /**
  * Expose a vector type to %Python.
  *
@@ -86,12 +151,12 @@ void expose_vec(const char *_name) {
 		.def("vectorize", &Vector::vectorize, return_internal_reference<>())
 		.def(self < self)
 
-		.def("norm", &Vector::norm)
-		.def("length", &Vector::length)
-		.def("sqrnorm", &Vector::sqrnorm)
-		.def("normalize", &Vector::normalize, return_internal_reference<>())
-		.def("normalized", &Vector::normalized)
-		.def("normalize_cond", &Vector::normalize_cond, return_internal_reference<>())
+		.def("norm", &Vector::template norm<Scalar>)
+		.def("length", &Vector::template length<Scalar>)
+		.def("sqrnorm", &Vector::template sqrnorm<Scalar>)
+		.def("normalize", &Vector::template normalize<Scalar>, return_internal_reference<>())
+		.def("normalized", &Vector::template normalized<Scalar>)
+		.def("normalize_cond", &Vector::template normalize_cond<Scalar>, return_internal_reference<>())
 
 		.def("l1_norm", &Vector::l1_norm)
 		.def("l8_norm", &Vector::l8_norm)
@@ -115,56 +180,7 @@ void expose_vec(const char *_name) {
 		.staticmethod("vectorized")
 		;
 
-	typedef OpenMesh::VectorT<Scalar, 2> Vector2;
-	typedef OpenMesh::VectorT<Scalar, 3> Vector3;
-	typedef OpenMesh::VectorT<Scalar, 4> Vector4;
-
-	struct Factory {
-		static Vector2 *vec2_default() {
-			return new Vector2(Scalar(), Scalar());
-		}
-		static Vector2 *vec2_user_defined(const Scalar& _v0, const Scalar& _v1) {
-			return new Vector2(_v0, _v1);
-		}
-		static Vector3 *vec3_default() {
-			return new Vector3(Scalar(), Scalar(), Scalar());
-		}
-		static Vector3 *vec3_user_defined(const Scalar& _v0, const Scalar& _v1, const Scalar& _v2) {
-			return new Vector3(_v0, _v1, _v2);
-		}
-		static Vector4 *vec4_default() {
-			return new Vector4(Scalar(), Scalar(), Scalar(), Scalar());
-		}
-		static Vector4 *vec4_user_defined(const Scalar& _v0, const Scalar& _v1, const Scalar& _v2, const Scalar& _v3) {
-			return new Vector4(_v0, _v1, _v2, _v3);
-		}
-	};
-
-	if (N == 2) {
-		classVector
-			.def("__init__", make_constructor(&Factory::vec2_default))
-			.def("__init__", make_constructor(&Factory::vec2_user_defined))
-			;
-	}
-
-	if (N == 3) {
-		classVector
-			.def("__init__", make_constructor(&Factory::vec3_default))
-			.def("__init__", make_constructor(&Factory::vec3_user_defined))
-			.def("__mod__", &Vector3::operator%)
-			;
-
-		def("cross", &Vector3::operator%);
-	}
-
-	if (N == 4) {
-		classVector
-			.def("__init__", make_constructor(&Factory::vec4_default))
-			.def("__init__", make_constructor(&Factory::vec4_user_defined))
-			;
-	}
-
-	def("dot", &Vector::operator|);
+	defInitMod<Scalar, N>(classVector);
 }
 
 } // namespace OpenMesh

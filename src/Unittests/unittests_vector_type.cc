@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <Unittests/unittests_common.hh>
 #include <iostream>
+#include <list>
 
 namespace {
 
@@ -115,6 +116,8 @@ TEST_F(OpenMeshVectorTest, cpp11_constructors) {
 TEST_F(OpenMeshVectorTest, cpp11_htmlColorLiteral) {
     static constexpr OpenMesh::Vec4f rose = 0xFFC7F1FF_htmlColor;
 
+    EXPECT_EQ(0xFFC7F1FF_htmlColor, rose);
+
     const OpenMesh::Vec4f light_blue = 0x1FCFFFFF_htmlColor;
     EXPECT_LE((OpenMesh::Vec4f(0.1215686274f, 0.8117647058f, 1.0f, 1.0f)
         - light_blue).sqrnorm(), 1e-10);
@@ -125,6 +128,199 @@ TEST_F(OpenMeshVectorTest, cpp11_htmlColorLiteral) {
         ::value, "Bad type deduced from _htmlColor literal.");
     EXPECT_EQ(light_blue, light_blue_2);
 }
-#endif
+
+
+namespace {
+class C {
+    public:
+        C() {}
+        C(const C &rhs) { ADD_FAILURE() << "Copy constructor used."; }
+        C(C &&rhs) { ++copy_con; }
+        C &operator= (const C &rhs) {
+            ADD_FAILURE() << "Copy assignemnt used.";
+            return *this;
+        }
+        C &operator= (C &&rhs) { ++copy_ass; return *this; }
+
+        static int copy_con;
+        static int copy_ass;
+};
+
+int C::copy_con = 0;
+int C::copy_ass = 0;
+}
+
+/**
+ * Checks two things:
+ *   1) Whether VectorT works with a non-arithmetic type.
+ *   2) Whether move construction and assignment works.
+ */
+TEST_F(OpenMeshVectorTest, move_constructor_assignment) {
+
+    C::copy_con = 0;
+    C::copy_ass = 0;
+
+    // Test move assigning.
+    OpenMesh::VectorT<C, 3> x, y;
+    x = std::move(y);
+    EXPECT_EQ(3, C::copy_ass);
+    EXPECT_EQ(0, C::copy_con);
+
+    // Test move constructing.
+    OpenMesh::VectorT<C, 3> z(std::move(x));
+    EXPECT_EQ(3, C::copy_ass);
+    EXPECT_EQ(3, C::copy_con);
+}
+
+TEST_F(OpenMeshVectorTest, iterator_init) {
+    std::list<float> a;
+    a.push_back(1.0);
+    a.push_back(2.0);
+    a.push_back(3.0);
+    OpenMesh::Vec3f v(a.begin());
+    EXPECT_EQ(OpenMesh::Vec3f(1.0, 2.0, 3.0), v);
+}
+
+#endif // C++11
+
+
+TEST_F(OpenMeshVectorTest, BasicArithmeticInPlace) {
+    OpenMesh::Vec3d v1(1, 2, 3);
+    double s1 = 2;
+    const double epsilon = 1e-6;
+
+    OpenMesh::Vec3d v2add (3, 4, 6); v2add  += v1;
+    OpenMesh::Vec3d v2sub (3, 4, 6); v2sub  -= v1;
+    OpenMesh::Vec3d v2cmul(3, 4, 6); v2cmul *= v1;
+    OpenMesh::Vec3d v2cdiv(3, 4, 6); v2cdiv /= v1;
+    OpenMesh::Vec3d v2smul(3, 4, 6); v2smul *= s1;
+    OpenMesh::Vec3d v2sdiv(3, 4, 6); v2sdiv /= s1;
+
+    EXPECT_NEAR(4, v2add[0], epsilon);
+    EXPECT_NEAR(6, v2add[1], epsilon);
+    EXPECT_NEAR(9, v2add[2], epsilon);
+
+    EXPECT_NEAR(2, v2sub[0], epsilon);
+    EXPECT_NEAR(2, v2sub[1], epsilon);
+    EXPECT_NEAR(3, v2sub[2], epsilon);
+
+    EXPECT_NEAR( 3, v2cmul[0], epsilon);
+    EXPECT_NEAR( 8, v2cmul[1], epsilon);
+    EXPECT_NEAR(18, v2cmul[2], epsilon);
+
+    EXPECT_NEAR(3, v2cdiv[0], epsilon);
+    EXPECT_NEAR(2, v2cdiv[1], epsilon);
+    EXPECT_NEAR(2, v2cdiv[2], epsilon);
+
+    EXPECT_NEAR( 6, v2smul[0], epsilon);
+    EXPECT_NEAR( 8, v2smul[1], epsilon);
+    EXPECT_NEAR(12, v2smul[2], epsilon);
+
+    EXPECT_NEAR(1.5, v2sdiv[0], epsilon);
+    EXPECT_NEAR(2.0, v2sdiv[1], epsilon);
+    EXPECT_NEAR(3.0, v2sdiv[2], epsilon);
+}
+
+TEST_F(OpenMeshVectorTest, BasicArithmeticImmutable) {
+    OpenMesh::Vec3d v1(1, 2, 3);
+    const double epsilon = 1e-6;
+
+    OpenMesh::Vec3d v2add  = v1 + OpenMesh::Vec3d(2, 4, 6);
+    OpenMesh::Vec3d v2sub  = v1 - OpenMesh::Vec3d(2, 4, 6);
+    OpenMesh::Vec3d v2cmul = v1 * OpenMesh::Vec3d(2, 4, 6);
+    OpenMesh::Vec3d v2cdiv = v1 / OpenMesh::Vec3d(2, 4, 6);
+    OpenMesh::Vec3d v2smul = v1 * 2.0;
+    OpenMesh::Vec3d v2sdiv = v1 / 2.0;
+    OpenMesh::Vec3d v2neg  = -v1;
+
+    EXPECT_NEAR(3, v2add[0], epsilon);
+    EXPECT_NEAR(6, v2add[1], epsilon);
+    EXPECT_NEAR(9, v2add[2], epsilon);
+
+    EXPECT_NEAR(-1, v2sub[0], epsilon);
+    EXPECT_NEAR(-2, v2sub[1], epsilon);
+    EXPECT_NEAR(-3, v2sub[2], epsilon);
+
+    EXPECT_NEAR( 2, v2cmul[0], epsilon);
+    EXPECT_NEAR( 8, v2cmul[1], epsilon);
+    EXPECT_NEAR(18, v2cmul[2], epsilon);
+
+    EXPECT_NEAR(0.5, v2cdiv[0], epsilon);
+    EXPECT_NEAR(0.5, v2cdiv[1], epsilon);
+    EXPECT_NEAR(0.5, v2cdiv[2], epsilon);
+
+    EXPECT_NEAR(2, v2smul[0], epsilon);
+    EXPECT_NEAR(4, v2smul[1], epsilon);
+    EXPECT_NEAR(6, v2smul[2], epsilon);
+
+    EXPECT_NEAR(0.5, v2sdiv[0], epsilon);
+    EXPECT_NEAR(1.0, v2sdiv[1], epsilon);
+    EXPECT_NEAR(1.5, v2sdiv[2], epsilon);
+
+    EXPECT_NEAR(-1, v2neg[0], epsilon);
+    EXPECT_NEAR(-2, v2neg[1], epsilon);
+    EXPECT_NEAR(-3, v2neg[2], epsilon);
+}
+
+TEST_F(OpenMeshVectorTest, BasicLinearAlgebra) {
+    OpenMesh::Vec3d v(1, 2, 3);
+    EXPECT_EQ(v[0], 1.0);
+    EXPECT_EQ(v[1], 2.0);
+    EXPECT_EQ(v[2], 3.0);
+
+    EXPECT_EQ(OpenMesh::Vec3d(-1, -2, -3), -v);
+    EXPECT_EQ(3, OpenMesh::Vec3d(1, 3, 2).max());
+    EXPECT_EQ(3, OpenMesh::Vec3d(1, 2, 3).max());
+    EXPECT_EQ(3, OpenMesh::Vec3d(1, 3, -4).max());
+    EXPECT_EQ(3, OpenMesh::Vec3d(-4, 2, 3).max());
+    EXPECT_EQ(4, OpenMesh::Vec3d(1, 3, -4).max_abs());
+    EXPECT_EQ(4, OpenMesh::Vec3d(-4, 2, 3).max_abs());
+
+    EXPECT_EQ(1, OpenMesh::Vec3d(1, 3, 2).min());
+    EXPECT_EQ(1, OpenMesh::Vec3d(1, 2, 3).min());
+    EXPECT_EQ(-4, OpenMesh::Vec3d(1, 3, -4).min());
+    EXPECT_EQ(-4, OpenMesh::Vec3d(-4, 2, 3).min());
+    EXPECT_EQ(1, OpenMesh::Vec3d(1, 3, -4).min_abs());
+    EXPECT_EQ(2, OpenMesh::Vec3d(-4, 2, 3).min_abs());
+
+    EXPECT_NEAR(14, OpenMesh::Vec3d(1, 2, 3) | OpenMesh::Vec3d(1, 2, 3), 1e-6);
+    EXPECT_NEAR(-14, OpenMesh::Vec3d(1, 2, 3) | OpenMesh::Vec3d(-1, -2, -3), 1e-6);
+    EXPECT_NEAR(14, OpenMesh::Vec3d(-1, -2, -3) | OpenMesh::Vec3d(-1, -2, -3), 1e-6);
+}
+
+TEST_F(OpenMeshVectorTest, array_init) {
+    float a[3]; a[0] = 1.0; a[1] = 2.0; a[2] = 3.0;
+    OpenMesh::Vec3f v(a);
+    EXPECT_EQ(OpenMesh::Vec3f(1.0, 2.0, 3.0), v);
+
+    // This should not invoke the array constructor.
+    OpenMesh::Vec3d v2(3.0f);
+}
+
+TEST_F(OpenMeshVectorTest, normalized_cond) {
+    OpenMesh::Vec3d v1(1, -2, 3), v2(0, 0, 0);
+    EXPECT_EQ(OpenMesh::Vec3d(0, 0, 0), v2.normalize_cond());
+    const OpenMesh::Vec3d r1 =
+            OpenMesh::Vec3d(
+                     0.2672612419124244,
+                    -0.5345224838248488,
+                     0.8017837257372732) - v1.normalize_cond();
+    EXPECT_NEAR(r1[0], 0.0, 1e-12);
+    EXPECT_NEAR(r1[1], 0.0, 1e-12);
+    EXPECT_NEAR(r1[2], 0.0, 1e-12);
+}
+
+TEST_F(OpenMeshVectorTest, size_dim) {
+    OpenMesh::Vec3d v3d(1, 2, 3);
+    OpenMesh::Vec3f v3f(1, 2, 3);
+    OpenMesh::Vec2i v2i(1, 2);
+
+    EXPECT_EQ(3u, v3d.size());
+    EXPECT_EQ(3, v3d.dim());
+    EXPECT_EQ(3u, v3f.size());
+    EXPECT_EQ(3, v3f.dim());
+    EXPECT_EQ(2u, v2i.size());
+    EXPECT_EQ(2, v2i.dim());
+}
 
 }

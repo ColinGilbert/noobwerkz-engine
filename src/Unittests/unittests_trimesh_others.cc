@@ -169,7 +169,7 @@ TEST_F(OpenMeshOthers, CalcDihedralAngre ) {
 
   double difference = fabs( 1.36944 - mesh_.calc_dihedral_angle(eh) );
 
-  EXPECT_TRUE( (difference < 0.00001 ) ) << "Wrong Dihedral angle, Difference is to big!" << std::endl;
+  EXPECT_LT(difference, 0.00001) << "Wrong Dihedral angle, Difference is to big!" << std::endl;
 
 }
 }

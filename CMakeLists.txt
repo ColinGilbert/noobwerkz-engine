@@ -88,6 +88,12 @@ add_subdirectory (src/OpenMesh/Core)
 add_subdirectory (src/OpenMesh/Tools)
 add_subdirectory (src/OpenMesh/Apps)
 
+set(OPENMESH_BENCHMARK_DIR CACHE PATH "Source path of benchmark (https://github.com/google/benchmark).")
+if (OPENMESH_BENCHMARK_DIR)
+	add_subdirectory(${OPENMESH_BENCHMARK_DIR} benchmark)
+	add_subdirectory(src/Benchmark)
+endif()
+
 # Do not build unit tests when build as external library
 if(${PROJECT_NAME} MATCHES "OpenMesh")
     add_subdirectory (src/Unittests)
