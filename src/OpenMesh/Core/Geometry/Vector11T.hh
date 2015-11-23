@@ -229,20 +229,21 @@ class VectorT {
             typename std::enable_if<std::is_convertible<
                 decltype(this->values_[0] * _s), Scalar>::value,
                 VectorT<Scalar, DIM>&>::type {
-            std::transform(values_.begin(), values_.end(), values_.begin(),
-                    [&_s](const Scalar & c) { return c * _s; });
+            for (auto& e : *this) {
+                e *= _s;
+            }
             return *this;
         }
 
-        /** component-wise self-division by scalar
-         \attention v *= (1/_s) is much faster than this  */
+        /// component-wise self-division by scalar
         template<typename OtherScalar>
         auto operator/=(const OtherScalar& _s) ->
             typename std::enable_if<std::is_convertible<
                 decltype(this->values_[0] / _s), Scalar>::value,
                 VectorT<Scalar, DIM>&>::type {
-            std::transform(values_.begin(), values_.end(), values_.begin(),
-                    [&_s](const Scalar & c) { return c / _s; });
+            for (auto& e : *this) {
+                e /= _s;
+            }
             return *this;
         }
 
@@ -274,10 +275,9 @@ class VectorT {
             typename std::enable_if<
                 sizeof(decltype(this->values_[0] * *_rhs.data())) >= 0,
                 vector_type&>::type {
-
-            std::transform(data(), data() + DIM,
-                    _rhs.data(), data(),
-                    [](const Scalar &l, const OtherScalar &r) { return l * r; });
+            for (int i = 0; i < DIM; ++i) {
+                data()[i] *= _rhs.data()[i];
+            }
             return *this;
         }
 
@@ -287,9 +287,9 @@ class VectorT {
             typename std::enable_if<
                 sizeof(decltype(this->values_[0] / *_rhs.data())) >= 0,
                 vector_type&>::type {
-            std::transform(data(), data() + DIM,
-                    _rhs.data(), data(),
-                    [](const Scalar &l, const OtherScalar &r) { return l / r; });
+            for (int i = 0; i < DIM; ++i) {
+                data()[i] /= _rhs.data()[i];
+            }
             return *this;
         }
 
@@ -299,9 +299,9 @@ class VectorT {
             typename std::enable_if<
                 sizeof(decltype(this->values_[0] - *_rhs.data())) >= 0,
                 vector_type&>::type {
-            std::transform(data(), data() + DIM,
-                    _rhs.data(), data(),
-                    [](const Scalar &l, const OtherScalar &r) { return l - r; });
+            for (int i = 0; i < DIM; ++i) {
+                data()[i] -= _rhs.data()[i];
+            }
             return *this;
         }
 
@@ -311,9 +311,9 @@ class VectorT {
             typename std::enable_if<
                 sizeof(decltype(this->values_[0] + *_rhs.data())) >= 0,
                 vector_type&>::type {
-            std::transform(data(), data() + DIM,
-                    _rhs.data(), data(),
-                    [](const Scalar &l, const OtherScalar &r) { return l + r; });
+            for (int i = 0; i < DIM; ++i) {
+                data()[i] += _rhs.data()[i];
+            }
             return *this;
         }
 
