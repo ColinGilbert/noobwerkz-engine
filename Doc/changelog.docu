@@ -16,6 +16,16 @@
 
 <tr valign=top><td><b>5.1</b> (?/?/?)</td><td>
 
+<b>General</b>
+<ul>
+<li>Fixed bug preventing from building with 2 dimensional vectors (e.g. vec2i) </li>
+</ul>
+
+<b>Unittests</b>
+<ul>
+<li>Added some basic linear algebra tests for VectorT</li>
+<li>Added tests for vec2x construction</li>
+</ul>
 
 </tr>
 
