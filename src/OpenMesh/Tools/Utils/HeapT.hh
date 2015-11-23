@@ -79,6 +79,7 @@
 #include "Config.hh"
 #include <vector>
 #include <OpenMesh/Core/System/omstream.hh>
+#include <utility>
 
 //== NAMESPACE ================================================================
 
@@ -148,13 +149,20 @@ public:
   HeapT() : HeapVector() {}
   
   /// Construct with a given \c HeapIterface. 
-  HeapT(const HeapInterface& _interface)
-  : HeapVector(),  interface_(_interface)
+  HeapT(HeapInterface _interface)
+  : HeapVector(),  interface_(std::move(_interface))
   {}
   
   /// Destructor.
   ~HeapT(){};
 
+  HeapInterface &getInterface() {
+      return interface_;
+  }
+
+  const HeapInterface &getInterface() const {
+      return interface_;
+  }
 
   /// clear the heap
   void clear() { HeapVector::clear(); }
@@ -187,14 +195,14 @@ public:
   HeapEntry front() const
   { 
     assert(!empty()); 
-    return entry(0); 
+    return HeapVector::front();
   }
 
   /// delete the first entry
   void pop_front()
   {    
     assert(!empty());
-    reset_heap_position(entry(0));
+    reset_heap_position(HeapVector::front());
     if (size() > 1)
     {
       entry(0, entry(size()-1));
@@ -338,9 +346,9 @@ void
 HeapT<HeapEntry, HeapInterface>::
 downheap(size_t _idx)
 {
-  HeapEntry     h = entry(_idx);
+  const HeapEntry     h = entry(_idx);
   size_t        childIdx;
-  size_t        s = size();
+  const size_t        s = size();
   
   while(_idx < s)
   {
