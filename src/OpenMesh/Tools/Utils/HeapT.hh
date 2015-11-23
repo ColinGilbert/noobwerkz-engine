@@ -79,7 +79,9 @@
 #include "Config.hh"
 #include <vector>
 #include <OpenMesh/Core/System/omstream.hh>
+#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 #include <utility>
+#endif
 
 //== NAMESPACE ================================================================
 
@@ -148,11 +150,18 @@ public:
   /// Constructor
   HeapT() : HeapVector() {}
   
+#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
   /// Construct with a given \c HeapIterface. 
   HeapT(HeapInterface _interface)
   : HeapVector(),  interface_(std::move(_interface))
   {}
-  
+#else
+  /// Construct with a given \c HeapIterface.
+  HeapT(const HeapInterface &_interface)
+  : HeapVector(),  interface_(_interface)
+  {}
+#endif
+
   /// Destructor.
   ~HeapT(){};
 
