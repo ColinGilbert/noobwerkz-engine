@@ -306,6 +306,14 @@ public:
    */
   void clean();
 
+  /** \brief Reset the whole mesh
+   *
+   *  This will remove all elements from the mesh but keeps the properties.
+   *  In contrast to clean() the memory used for the elements will remain
+   *  allocated.
+   */
+  void clean_keep_reservation();
+
   // --- number of items ---
   size_t n_vertices()  const { return vertices_.size(); }
   size_t n_halfedges() const { return 2*edges_.size(); }
