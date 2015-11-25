@@ -148,7 +148,7 @@ void expose_vec(const char *_name) {
 		.def("vectorize", &Vector::vectorize, return_internal_reference<>())
 		.def(self < self)
 
-#if (__cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)) && !defined(OPENMESH_VECTOR_LEGACY)
+#if (_MSC_VER >= 1900 || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)) && !defined(OPENMESH_VECTOR_LEGACY)
         .def("norm", &Vector::template norm<Scalar>)
         .def("length", &Vector::template length<Scalar>)
         .def("sqrnorm", &Vector::template sqrnorm<Scalar>)
