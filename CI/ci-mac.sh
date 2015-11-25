@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#Exit on any error
+set -e
+
 LANGUAGE=$1
 
 PATH=$PATH:/opt/local/bin
