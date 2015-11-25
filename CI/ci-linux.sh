@@ -3,6 +3,9 @@
 COMPILER=$1
 LANGUAGE=$2
 
+# Exit script on any error
+set -e 
+
 OPTIONS=""
 
 if [ "$COMPILER" == "gcc" ]; then
