@@ -51,21 +51,21 @@ include_directories(lib/stb)
 include_directories(lib/inline_variant_visitor)
 
 include_directories(common)
-include_directories(common/Drawing)
-include_directories(common/Drawing/font)
-include_directories(common/Drawing/shaderc)
+include_directories(common/drawing)
+include_directories(common/drawing/font)
+include_directories(common/drawing/shaderc)
 
 list(APPEND bgfx_src
 	lib/bgfx/src/amalgamated.cpp
 	)
 
 list(APPEND bgfx_utils_src
-	common/Drawing/cube_atlas.cpp
-	common/Drawing/font/font_manager.cpp
-	common/Drawing/font/utf8.cpp
-	common/Drawing/font/text_metrics.cpp
-	common/Drawing/font/text_buffer_manager.cpp
-	common/Drawing/bounds.cpp
+	common/drawing/cube_atlas.cpp
+	common/drawing/font/font_manager.cpp
+	common/drawing/font/utf8.cpp
+	common/drawing/font/text_metrics.cpp
+	common/drawing/font/text_buffer_manager.cpp
+	common/drawing/bounds.cpp
 	)
 
 list(APPEND openmesh_src
@@ -138,22 +138,15 @@ list (APPEND recast_src
 	)
 
 include_directories(lib/angelscript-sdk/angelscript/include)
+include_directories(lib/angelscript-sdk/add_on/scriptbuilder)
+include_directories(lib/angelscript-sdk/add_on/scriptstdstring)
 
 list(APPEND angelscript_src
-	lib/angelscript-sdk/angelscript/source/as_array.h
 	lib/angelscript-sdk/angelscript/source/as_atomic.cpp
-	lib/angelscript-sdk/angelscript/source/as_atomic.h
 	lib/angelscript-sdk/angelscript/source/as_builder.cpp
-	lib/angelscript-sdk/angelscript/source/as_builder.h
 	lib/angelscript-sdk/angelscript/source/as_bytecode.cpp
-	lib/angelscript-sdk/angelscript/source/as_bytecode.h
 	lib/angelscript-sdk/angelscript/source/as_callfunc.cpp
-	lib/angelscript-sdk/angelscript/source/as_callfunc.h
 	lib/angelscript-sdk/angelscript/source/as_callfunc_arm.cpp
-	lib/angelscript-sdk/angelscript/source/as_callfunc_arm_gcc.S
-	lib/angelscript-sdk/angelscript/source/as_callfunc_arm_msvc.asm
-	lib/angelscript-sdk/angelscript/source/as_callfunc_arm_vita.S
-	lib/angelscript-sdk/angelscript/source/as_callfunc_arm_xcode.S
 	lib/angelscript-sdk/angelscript/source/as_callfunc_mips.cpp
 	lib/angelscript-sdk/angelscript/source/as_callfunc_ppc.cpp
 	lib/angelscript-sdk/angelscript/source/as_callfunc_ppc_64.cpp
@@ -161,66 +154,50 @@ list(APPEND angelscript_src
 	lib/angelscript-sdk/angelscript/source/as_callfunc_x64_gcc.cpp
 	lib/angelscript-sdk/angelscript/source/as_callfunc_x64_mingw.cpp
 	lib/angelscript-sdk/angelscript/source/as_callfunc_x64_msvc.cpp
-	lib/angelscript-sdk/angelscript/source/as_callfunc_x64_msvc_asm.asm
 	lib/angelscript-sdk/angelscript/source/as_callfunc_x86.cpp
 	lib/angelscript-sdk/angelscript/source/as_callfunc_xenon.cpp
 	lib/angelscript-sdk/angelscript/source/as_compiler.cpp
-	lib/angelscript-sdk/angelscript/source/as_compiler.h
-	lib/angelscript-sdk/angelscript/source/as_config.h
 	lib/angelscript-sdk/angelscript/source/as_configgroup.cpp
-	lib/angelscript-sdk/angelscript/source/as_configgroup.h
 	lib/angelscript-sdk/angelscript/source/as_context.cpp
-	lib/angelscript-sdk/angelscript/source/as_context.h
-	lib/angelscript-sdk/angelscript/source/as_criticalsection.h
 	lib/angelscript-sdk/angelscript/source/as_datatype.cpp
-	lib/angelscript-sdk/angelscript/source/as_datatype.h
-	lib/angelscript-sdk/angelscript/source/as_debug.h
 	lib/angelscript-sdk/angelscript/source/as_gc.cpp
-	lib/angelscript-sdk/angelscript/source/as_gc.h
 	lib/angelscript-sdk/angelscript/source/as_generic.cpp
-	lib/angelscript-sdk/angelscript/source/as_generic.h
 	lib/angelscript-sdk/angelscript/source/as_globalproperty.cpp
-	lib/angelscript-sdk/angelscript/source/as_map.h
 	lib/angelscript-sdk/angelscript/source/as_memory.cpp
-	lib/angelscript-sdk/angelscript/source/as_memory.h
 	lib/angelscript-sdk/angelscript/source/as_module.cpp
-	lib/angelscript-sdk/angelscript/source/as_module.h
-	lib/angelscript-sdk/angelscript/source/as_namespace.h
 	lib/angelscript-sdk/angelscript/source/as_objecttype.cpp
-	lib/angelscript-sdk/angelscript/source/as_objecttype.h
 	lib/angelscript-sdk/angelscript/source/as_outputbuffer.cpp
-	lib/angelscript-sdk/angelscript/source/as_outputbuffer.h
 	lib/angelscript-sdk/angelscript/source/as_parser.cpp
-	lib/angelscript-sdk/angelscript/source/as_parser.h
-	lib/angelscript-sdk/angelscript/source/as_property.h
 	lib/angelscript-sdk/angelscript/source/as_restore.cpp
-	lib/angelscript-sdk/angelscript/source/as_restore.h
 	lib/angelscript-sdk/angelscript/source/as_scriptcode.cpp
-	lib/angelscript-sdk/angelscript/source/as_scriptcode.h
 	lib/angelscript-sdk/angelscript/source/as_scriptengine.cpp
-	lib/angelscript-sdk/angelscript/source/as_scriptengine.h
 	lib/angelscript-sdk/angelscript/source/as_scriptfunction.cpp
-	lib/angelscript-sdk/angelscript/source/as_scriptfunction.h
 	lib/angelscript-sdk/angelscript/source/as_scriptnode.cpp
-	lib/angelscript-sdk/angelscript/source/as_scriptnode.h
 	lib/angelscript-sdk/angelscript/source/as_scriptobject.cpp
-	lib/angelscript-sdk/angelscript/source/as_scriptobject.h
 	lib/angelscript-sdk/angelscript/source/as_string.cpp
-	lib/angelscript-sdk/angelscript/source/as_string.h
 	lib/angelscript-sdk/angelscript/source/as_string_util.cpp
-	lib/angelscript-sdk/angelscript/source/as_string_util.h
-	lib/angelscript-sdk/angelscript/source/as_symboltable.h
-	lib/angelscript-sdk/angelscript/source/as_texts.h
 	lib/angelscript-sdk/angelscript/source/as_thread.cpp
-	lib/angelscript-sdk/angelscript/source/as_thread.h
-	lib/angelscript-sdk/angelscript/source/as_tokendef.h
 	lib/angelscript-sdk/angelscript/source/as_tokenizer.cpp
-	lib/angelscript-sdk/angelscript/source/as_tokenizer.h
 	lib/angelscript-sdk/angelscript/source/as_typeinfo.cpp
-	lib/angelscript-sdk/angelscript/source/as_typeinfo.h
 	lib/angelscript-sdk/angelscript/source/as_variablescope.cpp
-	lib/angelscript-sdk/angelscript/source/as_variablescope.h
-
+	lib/angelscript-sdk/add_on/scriptany/scriptany.cpp
+	lib/angelscript-sdk/add_on/scriptdictionary/scriptdictionary.cpp
+	lib/angelscript-sdk/add_on/scriptmath/scriptmathcomplex.cpp
+	lib/angelscript-sdk/add_on/scriptmath/scriptmath.cpp
+	lib/angelscript-sdk/add_on/debugger/debugger.cpp
+	lib/angelscript-sdk/add_on/contextmgr/contextmgr.cpp
+	#lib/angelscript-sdk/add_on/autowrapper/generator/generateheader.cpp
+	lib/angelscript-sdk/add_on/serializer/serializer.cpp
+	lib/angelscript-sdk/add_on/weakref/weakref.cpp
+	lib/angelscript-sdk/add_on/scriptbuilder/scriptbuilder.cpp
+	lib/angelscript-sdk/add_on/scriptarray/scriptarray.cpp
+	lib/angelscript-sdk/add_on/scriptgrid/scriptgrid.cpp
+	#lib/angelscript-sdk/add_on/scriptfile/scriptfilesystem.cpp
+	#lib/angelscript-sdk/add_on/scriptfile/scriptfile.cpp
+	lib/angelscript-sdk/add_on/scripthelper/scripthelper.cpp
+	lib/angelscript-sdk/add_on/scripthandle/scripthandle.cpp
+	lib/angelscript-sdk/add_on/scriptstdstring/scriptstdstring.cpp
+	lib/angelscript-sdk/add_on/scriptstdstring/scriptstdstring_utils.cpp
 	)
 
 list(APPEND common_src
@@ -247,10 +224,11 @@ list(APPEND common_src
 	common/AnimatedModel.cpp
 	common/SkeletalAnim.cpp
 	common/ModelLoader.cpp
-	common/Drawing/TriplanarGradientMap.cpp
-	common/Drawing/HACDRenderer.cpp
-	common/Drawing/GUIRenderer.cpp
-	common/Drawing/BasicRenderer.cpp
+	common/drawing/cube_atlas.cpp
+	common/drawing/TriplanarGradientMap.cpp
+	common/drawing/HACDRenderer.cpp
+	common/drawing/GUIRenderer.cpp
+	common/drawing/BasicRenderer.cpp
 	common/SimpleNavMesh.cpp
 	)
 

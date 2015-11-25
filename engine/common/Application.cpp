@@ -12,6 +12,9 @@ noob::application::application()
 	time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
+	script_engine = asCreateScriptEngine();
+	if (script_engine == 0) logger::log("[ERROR]: Failed to create script engine.");
+	set_init_script("init.as");
 	view_mat = noob::look_at(noob::vec3(0, 50.0, -100.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
 }	
 
@@ -19,6 +22,7 @@ noob::application::application()
 noob::application::~application()
 {
 	logger::log("~application()");
+	script_engine->ShutDownAndRelease();
 	app_pointer = nullptr;
 }
 
@@ -28,6 +32,43 @@ noob::application& noob::application::get()
 	logger::log("application::get()");
 	assert(app_pointer && "application not created!");
 	return *app_pointer;
+}
+
+void noob::application::set_init_script(const std::string& name)
+{
+	script_name = name;
+}
+
+
+void noob::application::eval(const std::string& string_to_eval)
+{
+
+}
+
+void angel_message_callback(const asSMessageInfo *msg, void *param)
+{
+	std::string message_type;
+	switch (msg->type)
+	{
+		case (asMSGTYPE_WARNING):
+			{
+				message_type = "WARN";
+				break;
+			}
+		case (asMSGTYPE_INFORMATION):
+			{
+				message_type = "INFO";
+				break;
+			}
+
+		default:
+			{
+				message_type = "ERR";
+			}
+	}
+	fmt::MemoryWriter ww;
+	ww << msg->section << ", " << msg->row << ", " << msg->col << ", " << message_type << ", " << msg->message;
+	logger::log(ww.str());
 }
 
 
@@ -40,7 +81,8 @@ void noob::application::init()
 	voxels.init();
 	stage.init();
 
-// TODO: AngelScript bindings
+	//r = script_engine->RegisterGlobalFunction("", asFUNCTION(func_name), asCALL_CDECL);
+	script_engine->SetMessageCallback(asFUNCTION(angel_message_callback), 0, asCALL_CDECL);
 
 	logger::log("[Application] done init.");
 	user_init();
@@ -50,17 +92,21 @@ void noob::application::init()
 void noob::application::update(double delta)
 {
 	gui.window_dims(window_width, window_height);
-
-	// static double time_elapsed = 0.0;
-	// time_elapsed += delta;
 	stage.update(delta);
 	user_update(delta);
-/*
+
+	static double time_elapsed = 0.0;
+	time_elapsed += delta;
+
+
+	// TODO: Replace with AngelScript
 	if (time_elapsed > 0.25)
 	{
 		boost::filesystem::path p;
+
 		p += *prefix;
-		p += "script.chai";
+		p += script_name;
+
 		boost::system::error_code ec;
 
 		static std::time_t last_write = 0;
@@ -75,17 +121,16 @@ void noob::application::update(double delta)
 
 			try
 			{
-				chai->eval_file(p.generic_string());
+				// chai->eval_file(p.generic_string());
 			}
 			catch(std::exception e)
 			{
-				logger::log(fmt::format("[Application]. Caught ChaiScript exception: ", e.what()));
+				logger::log(fmt::format("[Application]. Caught AngelScript exception: ", e.what()));
 			}
 			last_write = t;
 		}
 		time_elapsed = 0.0;
 	}
-*/
 }
 
 
@@ -162,7 +207,9 @@ void noob::application::touch(int pointerID, float x, float y, int action)
 {
 	if (input_has_started == true)
 	{
-		logger::log(fmt::format("[Application] Touch - pointer ID = {0}, ({1}, {2}), action = {3}", pointerID, x, y, action));
+		fmt::MemoryWriter w;
+		w << "[Application] Touch - pointer ID = " << pointerID << ", " << x << ", " << y << ", action = " << action;
+		logger::log(w.str());
 
 		if (pointerID < 3)
 		{
@@ -182,7 +229,9 @@ void noob::application::window_resize(uint32_t w, uint32_t h)
 		window_height = 1;
 	}
 
-	logger::log(fmt::format("[Application] Resize window to ({0}, {1})", window_width, window_height));
+	fmt::MemoryWriter ww;
+	ww << "[Application] Resize window to (" << window_width << ", " << window_height << ")";
+	logger::log(ww.str());
 }
 
 

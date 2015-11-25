@@ -62,7 +62,7 @@
 #include <btBulletDynamicsCommon.h>
 // #include <chaiscript/chaiscript.hpp>
 // #include <chaiscript/chaiscript_stdlib.hpp>
-
+#include <angelscript.h>
 
 namespace noob
 {
@@ -73,33 +73,39 @@ namespace noob
 			virtual ~application();
 			static application& get();
 
+			void set_init_script(const std::string& name);
+			void eval(const std::string& string_to_eval);
+
 			uint32_t get_height() const { return static_cast<uint32_t>(window_height); }
 			uint32_t get_width() const { return static_cast<uint32_t>(window_width); }
 
 			void init();
-			void update(double delta);
-			void draw();
-
-			void user_init();
-			void user_update(double);
-
-			//void reset_script();
-			// step() is called by the target platform, which calculates the delta-time and calls update().
-			// pause() and resume() are used by whoever needs them :P
-			void step();
 			void pause();
 			void resume();
 			
-			typedef std::tuple<const std::array<int, 2>&, const std::array<float,2>&> touch_t;
+			typedef std::tuple<const std::array<int, 2>&, const std::array<float,2>&> touch_instance;
+			
 			// Callbacks
 			void touch(int pointerID, float x, float y, int action);
-			void touch(const touch_t& t);
+			void touch(const touch_instance& t);
 			void set_archive_dir(const std::string & filepath);
 			void window_resize(uint32_t w, uint32_t h);
 			void key_input(char c);
 			void accept_ndof_data(const noob::ndof::data& info);
 
+			// step() is called by the target platform, which calculates the delta-time and drives the update() function. It is an ugly hack that had to be made public in order to be callable from the main app.
+			void step();
+
+
 		protected:
+			void update(double delta);
+			void draw();
+			
+			// Overload these if you're writing a game that is setup and/or updated in C++.
+			void user_init();
+			void user_update(double);
+			
+			asIScriptEngine* script_engine;
 			static application* app_pointer;
 			std::unique_ptr<std::string> prefix;
 			bool paused, input_has_started, ui_enabled;
@@ -111,5 +117,6 @@ namespace noob
 			noob::voxel_world voxels;
 			noob::stage stage;
 			noob::mat4 view_mat;
+			std::string script_name;
 	};
 }
