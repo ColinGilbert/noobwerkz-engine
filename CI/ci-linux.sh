@@ -7,30 +7,35 @@ LANGUAGE=$2
 set -e 
 
 OPTIONS=""
+BUILDPATH=""
 
 if [ "$COMPILER" == "gcc" ]; then
   echo "Building with GCC";
+  BUILDPATH="gcc"
 elif [ "$COMPILER" == "clang" ]; then
 
   OPTIONS="$OPTIONS -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang"
   echo "Building with CLANG";
+  BUILDPATH="clang"  
 fi  
 
 if [ "$LANGUAGE" == "C++98" ]; then
   echo "Building with C++98";
+  BUILDPATH="$BUILDPATH-cpp98"
 elif [ "$LANGUAGE" == "C++11" ]; then
   echo "Building with C++11";
   OPTIONS="$OPTIONS -DCMAKE_CXX_FLAGS='-std=c++11' "
+  BUILDPATH="$BUILDPATH-cpp98"  
 fi  
 
 #########################################
 
 # Make release build folder
-if [ ! -d build-release ]; then
-  mkdir build-release
+if [ ! -d build-release-$BUILDPATH ]; then
+  mkdir build-release-$BUILDPATH
 fi
 
-cd build-release
+cd build-release-$BUILDPATH
 
 cmake -DCMAKE_BUILD_TYPE=Release -DOPENMESH_BUILD_UNIT_TESTS=TRUE -DSTL_VECTOR_CHECKS=ON -DOPENMESH_BUILD_PYTHON_UNIT_TESTS=ON $OPTIONS ../
 
@@ -63,11 +68,11 @@ cd ..
 # Build Debug version and Unittests
 #########################################
 
-if [ ! -d build-debug ]; then
-  mkdir build-debug
+if [ ! -d build-debug-$BUILDPATH ]; then
+  mkdir build-debug-$BUILDPATH
 fi
 
-cd build-debug
+cd build-debug-$BUILDPATH
 
 cmake -DCMAKE_BUILD_TYPE=Debug -DOPENMESH_BUILD_UNIT_TESTS=TRUE -DSTL_VECTOR_CHECKS=ON -DOPENMESH_BUILD_PYTHON_UNIT_TESTS=ON $OPTIONS ../
 
