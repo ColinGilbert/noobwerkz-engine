@@ -177,6 +177,16 @@ void ArrayKernel::garbage_collection(bool _v, bool _e, bool _f)
   garbage_collection( empty_vh,empty_hh,empty_fh,_v, _e, _f);
 }
 
+void ArrayKernel::clean_keep_reservation()
+{
+    vertices_.clear();
+
+    edges_.clear();
+
+    faces_.clear();
+
+}
+
 void ArrayKernel::clean()
 {
 

@@ -67,10 +67,10 @@ struct Factory {
 }
 
 template<class Scalar, int N>
-void defInitMod(class_<OpenMesh::VectorT<Scalar, N>> &classVector);
+void defInitMod(class_< OpenMesh::VectorT<Scalar, N> > &classVector);
 
 template<class Scalar>
-void defInitMod(class_<OpenMesh::VectorT<Scalar, 2>> &classVector) {
+void defInitMod(class_< OpenMesh::VectorT<Scalar, 2> > &classVector) {
     classVector
         .def("__init__", make_constructor(&Factory<Scalar>::vec2_default))
         .def("__init__", make_constructor(&Factory<Scalar>::vec2_user_defined))
@@ -80,7 +80,7 @@ void defInitMod(class_<OpenMesh::VectorT<Scalar, 2>> &classVector) {
     def("dot", &Vector::operator|);
 }
 template<class Scalar>
-void defInitMod(class_<OpenMesh::VectorT<Scalar, 3>> &classVector) {
+void defInitMod(class_< OpenMesh::VectorT<Scalar, 3> > &classVector) {
     classVector
         .def("__init__", make_constructor(&Factory<Scalar>::vec3_default))
         .def("__init__", make_constructor(&Factory<Scalar>::vec3_user_defined))
@@ -93,7 +93,7 @@ void defInitMod(class_<OpenMesh::VectorT<Scalar, 3>> &classVector) {
     def("dot", &Vector::operator|);
 }
 template<class Scalar>
-void defInitMod(class_<OpenMesh::VectorT<Scalar, 4>> &classVector) {
+void defInitMod(class_< OpenMesh::VectorT<Scalar, 4> > &classVector) {
     classVector
         .def("__init__", make_constructor(&Factory<Scalar>::vec4_default))
         .def("__init__", make_constructor(&Factory<Scalar>::vec4_user_defined))

@@ -1,4 +1,4 @@
-/* \page om_changelog Changelog
+/** \page om_changelog Changelog
 
 \htmlonly
 
@@ -10,12 +10,35 @@
 <tr valign=top><td><b>6.0</b> (?/?/?)</td><td>
 
 
+<b>VectorT</b>
+<ul>
+<li>Full C++11 rewrite of VectorT (Keeping C++98 backward compatibility)</li>
+<li>Split VectorT implementation into two files (One c++98 and one c++11)</li>
+</ul>
+
+<b>Unittests</b>
+<ul>
+<li>Added several unittests for VectorT</li>
+<li>Added Benchmarks for VectorT</li>
+</ul>
+
+
 </tr>
 
 
 
 <tr valign=top><td><b>5.1</b> (?/?/?)</td><td>
 
+<b>General</b>
+<ul>
+<li>Fixed bug preventing from building with 2 dimensional vectors (e.g. vec2i) </li>
+</ul>
+
+<b>Unittests</b>
+<ul>
+<li>Added some basic linear algebra tests for VectorT</li>
+<li>Added tests for vec2x construction</li>
+</ul>
 
 </tr>
 
