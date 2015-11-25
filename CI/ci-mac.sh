@@ -55,7 +55,6 @@ python -m unittest discover -v
 
 cd ..
 cd ..
-cd ..
 
 
 #########################################
