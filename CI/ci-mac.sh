@@ -45,6 +45,7 @@ cd Unittests
 #execute tests
 ./unittests --gtest_color=yes --gtest_output=xml
 
+cd ..
 # Execute Python unittests
 cd Python-Unittests
 
