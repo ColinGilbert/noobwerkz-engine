@@ -25,7 +25,7 @@ if [ "$LANGUAGE" == "C++98" ]; then
 elif [ "$LANGUAGE" == "C++11" ]; then
   echo "Building with C++11";
   OPTIONS="$OPTIONS -DCMAKE_CXX_FLAGS='-std=c++11' "
-  BUILDPATH="$BUILDPATH-cpp98"  
+  BUILDPATH="$BUILDPATH-cpp11"  
 fi  
 
 #########################################
