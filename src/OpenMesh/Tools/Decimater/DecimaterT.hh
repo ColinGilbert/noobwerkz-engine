@@ -173,7 +173,7 @@ private: //------------------------------------------------------- private data
   Mesh&      mesh_;
 
   // heap
-  #if __cplusplus > 199711L || defined( __GXX_EXPERIMENTAL_CXX0X__ )
+  #if _MSC_VER >= 1900 || __cplusplus > 199711L || defined( __GXX_EXPERIMENTAL_CXX0X__ )
     std::unique_ptr<DeciHeap> heap_;
   #else
     std::auto_ptr<DeciHeap> heap_;
