@@ -72,9 +72,6 @@ void defInitMod(class_< OpenMesh::VectorT<Scalar, 2> > &classVector) {
         .def("__init__", make_constructor(&Factory<Scalar>::vec2_default))
         .def("__init__", make_constructor(&Factory<Scalar>::vec2_user_defined))
         ;
-
-    typedef OpenMesh::VectorT<Scalar, 2> Vector;
-    def("dot", &Vector::operator|);
 }
 template<class Scalar>
 void defInitMod(class_< OpenMesh::VectorT<Scalar, 3> > &classVector) {
@@ -85,9 +82,6 @@ void defInitMod(class_< OpenMesh::VectorT<Scalar, 3> > &classVector) {
         ;
 
     def("cross", &Factory<Scalar>::Vector3::operator%);
-
-    typedef OpenMesh::VectorT<Scalar, 3> Vector;
-    def("dot", &Vector::operator|);
 }
 template<class Scalar>
 void defInitMod(class_< OpenMesh::VectorT<Scalar, 4> > &classVector) {
@@ -95,9 +89,6 @@ void defInitMod(class_< OpenMesh::VectorT<Scalar, 4> > &classVector) {
         .def("__init__", make_constructor(&Factory<Scalar>::vec4_default))
         .def("__init__", make_constructor(&Factory<Scalar>::vec4_user_defined))
         ;
-
-    typedef OpenMesh::VectorT<Scalar, 4> Vector;
-    def("dot", &Vector::operator|);
 }
 
 /**
@@ -149,6 +140,7 @@ void expose_vec(const char *_name) {
 		.def(self < self)
 
 #if (_MSC_VER >= 1900 || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)) && !defined(OPENMESH_VECTOR_LEGACY)
+        .def("dot", &Vector::template operator|<Scalar>)
         .def("norm", &Vector::template norm<Scalar>)
         .def("length", &Vector::template length<Scalar>)
         .def("sqrnorm", &Vector::template sqrnorm<Scalar>)
@@ -156,6 +148,7 @@ void expose_vec(const char *_name) {
         .def("normalized", &Vector::template normalized<Scalar>)
         .def("normalize_cond", &Vector::template normalize_cond<Scalar>, return_internal_reference<>())
 #else
+        .def("dot", &Vector::operator|)
         .def("norm", &Vector::norm)
         .def("length", &Vector::length)
         .def("sqrnorm", &Vector::sqrnorm)
