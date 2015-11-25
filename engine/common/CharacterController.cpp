@@ -62,7 +62,7 @@ void noob::character_controller::update()
 }
 
 
-void noob::character_controller::step(bool forward, bool backward, bool left, bool right, bool jump)
+void noob::character_controller::move(bool forward, bool backward, bool left, bool right, bool jump)
 {
 	if (on_ground())
 	{

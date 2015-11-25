@@ -18,8 +18,8 @@ namespace noob
 
 			void init(btDynamicsWorld*, noob::body*, float _timestep = 1.0 / 60.0);
 
-			void update();
-			void step(bool forward, bool backward, bool left, bool right, bool jump);
+
+			void move(bool forward, bool backward, bool left, bool right, bool jump);
 			void jump();
 
 			bool can_jump() const;
@@ -35,6 +35,8 @@ namespace noob
 			std::string get_debug_string() const;
 
 		protected:
+			void update();
+
 			btScalar height;
 			btScalar half_height;
 			btScalar width;
@@ -100,7 +102,7 @@ namespace noob
 
    void init(btDynamicsWorld*, const std::shared_ptr<noob::prop>&);
    void update();
-   void step(bool forward, bool back, bool left, bool right, bool jump);
+   void move(bool forward, bool back, bool left, bool right, bool jump);
    void stop();
    noob::mat4 get_transform() const { return prop->get_transform(); }
    noob::vec3 get_position() const { return prop->get_position(); }
