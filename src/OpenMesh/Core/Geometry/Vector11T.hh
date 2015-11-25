@@ -627,6 +627,12 @@ class VectorT {
                     _rhs.values_.begin(), _rhs.values_.end());
         }
 
+        /// swap with another vector
+        void swap(VectorT& _other)
+        noexcept(noexcept(std::swap(values_, _other.values_))) {
+            std::swap(values_, _other.values_);
+        }
+
         //------------------------------------------------------------ component iterators
 
         /// \name Component iterators
@@ -694,7 +700,6 @@ Scalar dot(const VectorT<Scalar, DIM>& _v1, const VectorT<Scalar, DIM>& _v2) {
   return (_v1 | _v2);
 }
 
-
 /// \relates OpenMesh::VectorT
 /// symmetric version of the cross product
 template<typename LScalar, typename RScalar, int DIM>
@@ -704,6 +709,13 @@ cross(const VectorT<LScalar, DIM>& _v1, const VectorT<RScalar, DIM>& _v2) ->
   return (_v1 % _v2);
 }
 
+/// \relates OpenMesh::VectorT
+/// non-member swap
+template<typename Scalar, int DIM>
+void swap(VectorT<Scalar, DIM>& _v1, VectorT<Scalar, DIM>& _v2)
+noexcept(noexcept(_v1.swap(_v2))) {
+    _v1.swap(_v2);
+}
 
 //== TYPEDEFS =================================================================
 
