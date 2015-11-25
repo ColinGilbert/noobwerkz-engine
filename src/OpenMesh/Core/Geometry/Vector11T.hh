@@ -628,7 +628,8 @@ class VectorT {
         }
 
         /// swap with another vector
-        void swap(VectorT& _other) noexcept(noexcept(std::swap(values_, _other.values_))) {
+        void swap(VectorT& _other)
+        noexcept(noexcept(std::swap(values_, _other.values_))) {
             std::swap(values_, _other.values_);
         }
 
@@ -712,8 +713,7 @@ cross(const VectorT<LScalar, DIM>& _v1, const VectorT<RScalar, DIM>& _v2) ->
 /// non-member swap
 template<typename Scalar, int DIM>
 void swap(VectorT<Scalar, DIM>& _v1, VectorT<Scalar, DIM>& _v2)
-noexcept(noexcept(_v1.swap(_v2)))
-{
+noexcept(noexcept(_v1.swap(_v2))) {
     _v1.swap(_v2);
 }
 
