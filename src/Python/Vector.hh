@@ -66,9 +66,6 @@ struct Factory {
 };
 }
 
-template<class Scalar, int N>
-void defInitMod(class_< OpenMesh::VectorT<Scalar, N> > &classVector);
-
 template<class Scalar>
 void defInitMod(class_< OpenMesh::VectorT<Scalar, 2> > &classVector) {
     classVector
@@ -189,7 +186,7 @@ void expose_vec(const char *_name) {
 		.staticmethod("vectorized")
 		;
 
-	defInitMod<Scalar, N>(classVector);
+    defInitMod<Scalar>(classVector);
 }
 
 } // namespace OpenMesh
