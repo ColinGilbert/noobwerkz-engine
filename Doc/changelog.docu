@@ -22,6 +22,10 @@
 <li>Added Benchmarks for VectorT</li>
 </ul>
 
+<b>Build System</b>
+<ul>
+<li>Updated c++11 ifdefs to use c++11 (starting with VS1015)</li>
+</ul>
 
 </tr>
 
