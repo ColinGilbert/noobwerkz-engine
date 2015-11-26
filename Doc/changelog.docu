@@ -42,6 +42,7 @@
 <ul>
 <li>Fixed bug preventing from building with 2 dimensional vectors (e.g. vec2i) </li>
 <li>Heap: Minor cleanup (some consts)</li>
+<li>Added static versions of ArrayKernel::edge_handle and ...::halfedge_handle</li>
 </ul>
 
 
