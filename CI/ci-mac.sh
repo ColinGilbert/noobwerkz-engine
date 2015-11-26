@@ -69,6 +69,9 @@ cd build-debug
 
 cmake -DCMAKE_BUILD_TYPE=Debug -DOPENMESH_BUILD_UNIT_TESTS=TRUE -DSTL_VECTOR_CHECKS=ON -DOPENMESH_BUILD_PYTHON_UNIT_TESTS=ON $OPTIONS ../
 
+#build it
+make
+
 #build the unit tests
 make unittests
 
