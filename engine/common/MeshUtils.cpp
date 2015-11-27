@@ -105,7 +105,7 @@ noob::basic_mesh noob::mesh_utils::swept_sphere(float radius, size_t x_segments,
 	half_edges.garbage_collection();
 	OpenMesh::IO::write_mesh(half_edges, "temp/swept_sphere.off");
 	noob::basic_mesh mesh;
-	mesh.load_assimp("temp/sphere.off","cylinder-temp");
+	mesh.load("temp/sphere.off","cylinder-temp");
 	// logger::log(fmt::format("Created cylinder with height = {0}, radius = {1} with {2} segments.", height, radius, _segments));
 	return mesh;
 }
@@ -173,7 +173,7 @@ noob::basic_mesh noob::mesh_utils::cone(float radius, float height, size_t segme
 	// half_edges.garbage_collection();
 	OpenMesh::IO::write_mesh(half_edges, "temp/cone.off");
 	noob::basic_mesh mesh;
-	mesh.load_assimp("temp/cone.off","cone-temp");
+	mesh.load("temp/cone.off","cone-temp");
 	// logger::log(fmt::format("Created cone with height = {0}, radius = {1}, and {2} segments.", height, radius, _segments));
 	return mesh;
 }
@@ -264,7 +264,7 @@ noob::basic_mesh noob::mesh_utils::cylinder(float radius, float height, size_t s
 	half_edges.garbage_collection();
 	OpenMesh::IO::write_mesh(half_edges, "temp/cylinder.off");
 	noob::basic_mesh mesh;
-	mesh.load_assimp("temp/cylinder.off","cylinder-temp");
+	mesh.load("temp/cylinder.off","cylinder-temp");
 	// logger::log(fmt::format("Created cylinder with height = {0}, radius = {1} with {2} segments.", height, radius, _segments));
 	return mesh;
 }
@@ -343,7 +343,7 @@ noob::basic_mesh noob::mesh_utils::cube(float width, float height, float depth, 
 	OpenMesh::IO::write_mesh(half_edges, "temp/cube.off");
 
 	noob::basic_mesh mesh;
-	mesh.load_assimp("temp/cube.off", "cube-temp");
+	mesh.load("temp/cube.off", "cube-temp");
 	// logger::log(fmt::format("Created cube with width = {0}, height = {1}, depth = {2} with {3} subdivides.", width, height, depth, subdivides));
 	return mesh;
 }

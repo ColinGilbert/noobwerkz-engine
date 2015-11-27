@@ -178,37 +178,6 @@ namespace noob
 	//	t.getOpenGLMatrix(&m[0]);
 	// }
 
-	/*-----------------------------PRINT FUNCTIONS--------------------------------*/
-	void print(const vec2& v)
-	{
-		printf ("[%.2f, %.2f]\n", v.v[0], v.v[1]);
-	}
-
-	void print(const vec3& v)
-	{
-		printf ("[%.2f, %.2f, %.2f]\n", v.v[0], v.v[1], v.v[2]);
-	}
-
-	void print(const vec4& v) {
-		printf ("[%.2f, %.2f, %.2f, %.2f]\n", v.v[0], v.v[1], v.v[2], v.v[3]);
-	}
-
-	void print(const mat3& m)
-	{
-		printf("\n");
-		printf ("[%.2f][%.2f][%.2f]\n", m.m[0], m.m[3], m.m[6]);
-		printf ("[%.2f][%.2f][%.2f]\n", m.m[1], m.m[4], m.m[7]);
-		printf ("[%.2f][%.2f][%.2f]\n", m.m[2], m.m[5], m.m[8]);
-	}
-
-	void print(const mat4& m)
-	{
-		printf("\n");
-		printf ("[%.2f][%.2f][%.2f][%.2f]\n", m.m[0], m.m[4], m.m[8], m.m[12]);
-		printf ("[%.2f][%.2f][%.2f][%.2f]\n", m.m[1], m.m[5], m.m[9], m.m[13]);
-		printf ("[%.2f][%.2f][%.2f][%.2f]\n", m.m[2], m.m[6], m.m[10], m.m[14]);
-		printf ("[%.2f][%.2f][%.2f][%.2f]\n", m.m[3], m.m[7], m.m[11], m.m[15]);
-	}
 
 	/*------------------------------VECTOR FUNCTIONS------------------------------*/
 	float length(const vec3& v) 
@@ -217,7 +186,7 @@ namespace noob
 	}
 
 	// squared length
-	float length2(const vec3& v) 
+	float length_squared(const vec3& v) 
 	{
 		return v.v[0] * v.v[0] + v.v[1] * v.v[1] + v.v[2] * v.v[2];
 	}

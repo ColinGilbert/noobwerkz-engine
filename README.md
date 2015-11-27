@@ -1,10 +1,14 @@
 I'm developing a rather minimalistic cross-platform game/simulation engine. This toolkit is made specifically to reduce wasted time (*cough cough* aside from the time it took to design and build this software *cough cough*.) Much of it consists of integrating external libraries, most of which are in C++11. It currently runs on Linux and Android. We can expect Windows, Mac, and iOS support quite soon. As a design goal, the legalese is designed to be extremely liberal (Apache 2.0.)
 
-Still WIP.
+Still WIP. Not yet recommended for use, as this is still a fledgeling do-it-right software architecture endeavour. :) Please come by later and feel free to bookmark this repo because it's living with me and cool stuff will soon enough come out of it.  Progress comes at a rather steady pace; I plan on using this to back many of my own efforts. Writing this makes me happy so I plan a part of my life around being able to do this.
+
+
+Documentation is rather sparse at the moment, but both that and unit tests will come soon. :P
+
 
 Specific features:
 ```
-A highly tunable gradient mapping shader by default. Comes with three XY-tileable ntextures blended into one.
+A highly tunable gradient mapping shader by default. Comes with three XY-tileable textures blended into one.
 Triplanar shader for non-UV mapped objects. Texture reads are kept to a minimum (3) by using the gradient mapping technique.
 No significant obstacles between the programmer, the lower-level libraries and the data.
 ```
@@ -52,17 +56,6 @@ sandbox/b for build. Attempts to build source.
 sandbox/bb for big build. Wipes the binaries and builds from scratch.
 sandbox/s for shaders. Builds the full set of shaders from sandbox/shader_src and places them into the sandbox/shaders directory
 sandbox/g for git. Adds changes to git and commits them.
-```
-
-Readiness
-``
-Not yet recommended for use. See later.
-``
-
-Documentation:
-```
-Documentation is rather sparse at the moment, but this is still a fledgeling endeavour and my plans are to begin really working on it during the winter months. More progress will be coming soon.
-For the future, I plan on continuing work on it quite vigorously.
 ```
 
 Things to do in the immediate future:

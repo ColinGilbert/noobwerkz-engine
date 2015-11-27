@@ -90,17 +90,17 @@ namespace noob
 			double get_volume();
 
 			void decimate(const std::string& filename, size_t num_verts) const;
-			noob::basic_mesh decimate(size_t num_verts) const;
-
-			TriMesh to_half_edges() const;
+			//noob::basic_mesh decimate(size_t num_verts) const;
 
 			// Returns .OFF files
 			std::tuple<size_t,const char*> save() const;
 			void save(const std::string& filename) const;
+			
 			// Takes any file Assimp can. First mesh of file only. No bones.
-			bool load_assimp(const std::string& filename, const std::string& name = "");
-			bool load_assimp(std::tuple<size_t, const char*>, const std::string& name = "");
-			bool load_assimp(const aiScene* scene, const std::string& name);
+			bool load(const std::string& filename, const std::string& name = "");
+			bool load(std::tuple<size_t, const char*>, const std::string& name = "");
+			bool load(const aiScene* scene, const std::string& name);
+			
 			void normalize();
 			void transform(const noob::mat4& transform);
 			void to_origin();
@@ -114,6 +114,9 @@ namespace noob
 
 
 		protected:
+			TriMesh to_half_edges() const;
+
+
 			bbox_info bbox;
 			bool volume_calculated;
 			double volume;

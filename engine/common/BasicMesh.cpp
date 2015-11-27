@@ -86,20 +86,20 @@ void noob::basic_mesh::decimate(const std::string& filename, size_t num_verts) c
 	// logger::log("[Mesh] decimate() - done");
 }
 
-
+/*
 noob::basic_mesh noob::basic_mesh::decimate(size_t num_verts) const
 {
 	//decimate("./temp/temp-decimated.off", num_verts);
 	noob::basic_mesh temp;
-	//temp.load_assimp("./temp/temp-decimated.off", "temp-decimated");
+	//temp.load("./temp/temp-decimated.off", "temp-decimated");
 	return temp;
 }
-
+*/
 
 void noob::basic_mesh::normalize() 
 {
 	save("temp/normalize_temp.stl");
-	load_assimp("temp/normalize_temp.stl");
+	load("temp/normalize_temp.stl");
 }
 
 
@@ -144,28 +144,28 @@ void noob::basic_mesh::save(const std::string& filename) const
 }
 
 
-bool noob::basic_mesh::load_assimp(std::tuple<size_t, const char*> buffer, const std::string& name)
+bool noob::basic_mesh::load(std::tuple<size_t, const char*> buffer, const std::string& name)
 {
-	// logger::log(fmt::format("[Mesh] - load_assimp({0}) - load_assimp {1} bytes", name, std::get<0>(buffer)));
+	// logger::log(fmt::format("[Mesh] - load({0}) - load {1} bytes", name, std::get<0>(buffer)));
 	const aiScene* scene = aiImportFileFromMemory(std::get<1>(buffer), std::get<0>(buffer), aiProcessPreset_TargetRealtime_Fast, "");
-	return load_assimp(scene, name);
+	return load(scene, name);
 }
 
 
-bool noob::basic_mesh::load_assimp(const std::string& filename, const std::string& name)
+bool noob::basic_mesh::load(const std::string& filename, const std::string& name)
 {
-	// logger::log(fmt::format("[Mesh] load_assimping file {0}", filename ));
+	// logger::log(fmt::format("[Mesh] loading file {0}", filename ));
 	const aiScene* scene = aiImportFile(filename.c_str(), aiProcessPreset_TargetRealtime_Fast);
-	return load_assimp(scene, name);	
+	return load(scene, name);	
 }
 
 
-bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name)
+bool noob::basic_mesh::load(const aiScene* scene, const std::string& name)
 {
-	// logger::log("[Mesh] load_assimp() - begin");
+	// logger::log("[Mesh] load() - begin");
 	if (!scene)
 	{
-		logger::log(fmt::format("[Mesh] load_assimp({0}) - cannot open", name));
+		logger::log(fmt::format("[Mesh] load({0}) - cannot open", name));
 		return false;
 	}
 
@@ -175,7 +175,7 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 
 	const aiMesh* mesh_data = scene->mMeshes[0];
 
-	// logger::log(fmt::format("[Mesh] load_assimp({0}) - Attempting to obtain mesh data", name));
+	// logger::log(fmt::format("[Mesh] load({0}) - Attempting to obtain mesh data", name));
 
 	size_t num_verts = mesh_data->mNumVertices;
 	size_t num_faces = mesh_data->mNumFaces;
@@ -183,7 +183,7 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 	// auto num_indices = mesh_data->mNumFaces / 3;
 
 	bool has_normals = mesh_data->HasNormals();
-	//logger::log(fmt::format("[Mesh] load_assimp({0}) - Mesh has {1} verts, normals? {2}", name, num_verts, has_normals));
+	//logger::log(fmt::format("[Mesh] load({0}) - Mesh has {1} verts, normals? {2}", name, num_verts, has_normals));
 
 
 	// double accum_x, accum_y, accum_z = 0.0f;
@@ -377,7 +377,7 @@ TriMesh noob::basic_mesh::to_half_edges() const
 
    OpenMesh::IO::write_mesh(half_edges, "temp/bone.off");
    noob::basic_mesh mesh;
-mesh.load_assimp("temp/bone.off", "bone-temp");
+mesh.load("temp/bone.off", "bone-temp");
 
 return mesh;
 }

@@ -77,11 +77,10 @@ namespace noob
 			noob::shape_component::handle capsule(float r, float h);
 			noob::shape_component::handle plane(const noob::vec3& normal, float offset);
 
-			// These use a stringhash. TODO: Optimize?
 			noob::shape_component::handle hull(const std::vector<noob::vec3>& points, const std::string& name);
 			noob::shape_component::handle trimesh(const noob::basic_mesh& mesh, const std::string& name);
 
-			// scenery_component sceneries;
+			scenery_component sceneries;
 			light_component lights;
 			reflection_component reflections;
 			shader_component shaders;
@@ -90,8 +89,6 @@ namespace noob
 			basic_model_component basic_models;
 			animated_model_component animated_models;
 			skeleton_component skeletons;
-
-			bool paused;
 
 		protected:
 			noob::prepared_shaders renderer;

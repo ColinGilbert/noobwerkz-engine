@@ -204,7 +204,7 @@ noob::basic_mesh noob::voxel_world::extract_region(size_t lower_x, size_t lower_
 	noob::basic_mesh normalized;
 
 	noob_mesh.save("temp/extracted-temp.off");
-	normalized.load_assimp("temp/extracted-temp.off", "extracted-temp");
+	normalized.load("temp/extracted-temp.off", "extracted-temp");
 	logger::log("[Voxels] Region extracted");
 	return normalized;
 }

@@ -289,15 +289,6 @@ namespace noob
 	};
 
 
-	
-
-
-	void print(const vec2& v);
-	void print(const vec3& v);
-	void print(const vec4& v);
-	void print(const mat3& m);
-	void print(const mat4& m);
-
 	// vector functions
 	float length(const vec3& v);
 	float length2(const vec3& v);
