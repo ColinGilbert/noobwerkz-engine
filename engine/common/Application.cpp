@@ -154,7 +154,7 @@ void noob::application::init()
 	// versor slerp(versor& q, versor& r, float t);
 
 	r = script_engine->RegisterObjectType("basic_mesh", 0, asOBJ_REF); assert( r >= 0 );
-	
+
 	// TODO: Constructors, functionsfor basic_mesh
 	// std::vector<noob::vec3> basic_mesh::vertices;
 	// std::vector<noob::vec3> basic_mesh::normals;
@@ -196,7 +196,7 @@ void noob::application::init()
 
 	// basic_model_component::handle basic_model(const noob::basic_mesh&);	
 	// Loads a serialized model (from cereal binary)
-	
+
 	animated_model_component::handle animated_model(const std::string& filename);
 	skeleton_component::handle skeleton(const std::string& filename);
 	actor_component::handle actor(const basic_model_component::handle, const skeleton_component::handle, const noob::vec3&, const noob::versor& v = noob::versor(0.0, 0.0, 0.0, 1.0));
