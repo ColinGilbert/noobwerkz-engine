@@ -40,7 +40,6 @@
 #include <boost/filesystem.hpp>
 #include <boost/system/error_code.hpp>
 
-#include "Server.hpp"
 #include "Logger.hpp"
 #include "NoobUtils.hpp"
 #include "MathFuncs.hpp"
@@ -56,7 +55,6 @@
 #include "format.h"
 #include "AnimatedModel.hpp"
 #include "ShaderVariant.hpp"
-// #include "PhysicsUtils.hpp"
 #include "MeshUtils.hpp"
 
 #include <btBulletDynamicsCommon.h>

@@ -249,18 +249,3 @@ target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES}
 	OpenMeshToolsStatic spnav ozz_animation_offline_r ozz_animation_r
 	ozz_geometry_r ozz_base_r BulletDynamics BulletCollision
 	BulletSoftBody LinearMath ${Boost_LIBRARIES})
-
-project(LogServer)
-
-set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
-set(CMAKE_C_FLAGS "-std=c99 ${CMAKE_C_FLAGS}")
-
-include_directories(lib/asio/asio/include)
-
-list(APPEND logger_src
-	common/LogServer.cpp
-	)
-
-add_executable(LogServer ${logger_src})
-
-target_link_libraries(LogServer LINK_PUBLIC pthread)

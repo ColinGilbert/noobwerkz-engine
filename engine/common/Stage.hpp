@@ -1,6 +1,5 @@
 // TODO: Implement all creation functions (*) and ensure that they take constructor args
 
-
 #pragma once
 
 #include <stack>
@@ -10,7 +9,6 @@
 #include <forward_list>
 #include <boost/variant.hpp>
 
-#include "Config.hpp"
 #include "Graphics.hpp"
 #include "MathFuncs.hpp"
 #include "VoxelWorld.hpp"
