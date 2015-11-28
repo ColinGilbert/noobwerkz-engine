@@ -3,7 +3,7 @@ I'm developing a rather minimalistic cross-platform game/simulation engine. This
 Still WIP. Not yet recommended for use, as this is still a fledgeling do-it-right software architecture endeavour. :) Please come by later and feel free to bookmark this repo because it's living with me and cool stuff will soon enough come out of it.  Progress comes at a rather steady pace; I plan on using this to back many of my own efforts. Writing this makes me happy so I plan a part of my life around being able to do this.
 
 
-Documentation is rather sparse at the moment, but both that and unit tests will come soon. :P
+Documentation is rather sparse at the moment, and consists of code comments, this page, and issues on the tracker. However, high-quality tutorials and unit tests will come when things are more or less set in stone.
 
 
 Specific features:
