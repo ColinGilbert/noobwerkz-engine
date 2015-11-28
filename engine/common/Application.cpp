@@ -2,9 +2,9 @@
 
 noob::application* noob::application::app_pointer = nullptr;
 
+
 noob::application::application() 
 {
-	logger::log("application()");
 	app_pointer = this;
 	paused = input_has_started = false;
 	timespec timeNow;
@@ -13,7 +13,7 @@ noob::application::application()
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
 	script_engine = asCreateScriptEngine();
-	if (script_engine == 0) logger::log("[ERROR]: Failed to create script engine.");
+	assert(script_engine == 0); // TODO: Look into a little.
 	set_init_script("init.as");
 	view_mat = noob::look_at(noob::vec3(0, 50.0, -100.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
 }	
@@ -21,7 +21,6 @@ noob::application::application()
 
 noob::application::~application()
 {
-	logger::log("~application()");
 	script_engine->ShutDownAndRelease();
 	app_pointer = nullptr;
 }
@@ -34,6 +33,7 @@ noob::application& noob::application::get()
 	return *app_pointer;
 }
 
+
 void noob::application::set_init_script(const std::string& name)
 {
 	script_name = name;
@@ -44,6 +44,7 @@ void noob::application::eval(const std::string& string_to_eval)
 {
 
 }
+
 
 void angel_message_callback(const asSMessageInfo *msg, void *param)
 {
@@ -74,8 +75,6 @@ void angel_message_callback(const asSMessageInfo *msg, void *param)
 
 void noob::application::init()
 {
-	logger::log("");
-
 	ui_enabled = true;
 	gui.init(*prefix, window_width, window_height);
 	voxels.init();
@@ -154,8 +153,8 @@ void noob::application::init()
 	// void print(const versor& q);
 	// versor slerp(versor& q, versor& r, float t);
 
-
 	r = script_engine->RegisterObjectType("basic_mesh", 0, asOBJ_REF); assert( r >= 0 );
+	
 	// TODO: Constructors, functionsfor basic_mesh
 	// std::vector<noob::vec3> basic_mesh::vertices;
 	// std::vector<noob::vec3> basic_mesh::normals;
@@ -197,6 +196,7 @@ void noob::application::init()
 
 	// basic_model_component::handle basic_model(const noob::basic_mesh&);	
 	// Loads a serialized model (from cereal binary)
+	
 	animated_model_component::handle animated_model(const std::string& filename);
 	skeleton_component::handle skeleton(const std::string& filename);
 	actor_component::handle actor(const basic_model_component::handle, const skeleton_component::handle, const noob::vec3&, const noob::versor& v = noob::versor(0.0, 0.0, 0.0, 1.0));
