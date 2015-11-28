@@ -261,7 +261,7 @@ void noob::application::update(double delta)
 		}	
 		else if (last_write != t)
 		{
-			init();
+			// init();
 
 			try
 			{
