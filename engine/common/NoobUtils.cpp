@@ -1,7 +1,7 @@
 #include "NoobUtils.hpp"
-#include <algorithm>
+// #include <algorithm>
 
-std::map<std::string, std::string> noob::utils::data;
+// std::map<std::string, std::string> noob::utils::data;
 
 
 std::string noob::utils::load_file_as_string(const std::string& filename)
@@ -9,13 +9,6 @@ std::string noob::utils::load_file_as_string(const std::string& filename)
 	std::ifstream input(filename);
 	return std::string(std::istreambuf_iterator<char>(input), std::istreambuf_iterator<char>());
 }
-
-
-void noob::utils::load_file_to_memory(const std::string& filename)
-{
-	data.insert(std::make_pair(filename, noob::utils::load_file_as_string(filename)));
-}
-
 
 long int noob::utils::fsize(FILE* _file)
 {
@@ -27,6 +20,11 @@ long int noob::utils::fsize(FILE* _file)
 }
 
 /*
+void noob::utils::load_file_to_memory(const std::string& filename)
+{
+	data.insert(std::make_pair(filename, noob::utils::load_file_as_string(filename)));
+}
+
 noob::indexed_triangles noob::utils::index_triangles(const std::vector<std::vector<std::array<float,3>>>& triangles)
 {
 	// First pass removes uniques and places every vert into a slot
