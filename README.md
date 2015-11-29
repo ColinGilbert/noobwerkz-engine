@@ -6,6 +6,9 @@ Still WIP. Not yet recommended for use, as this is still a fledgeling do-it-righ
 Documentation is rather sparse at the moment, and consists of code comments, this page, and issues on the tracker. However, high-quality tutorials and unit tests will come when things are more or less set in stone.
 
 
+Current version: 0.0.1, AKA: Fresh "Beginnings"
+
+
 Specific features:
 ```
 A highly tunable gradient mapping shader by default. Comes with three XY-tileable textures blended into one.
