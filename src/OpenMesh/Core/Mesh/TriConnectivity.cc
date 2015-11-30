@@ -50,7 +50,6 @@
 //  CLASS TriMeshT - IMPLEMENTATION
 
 #include <OpenMesh/Core/Mesh/TriConnectivity.hh>
-#include <OpenMesh/Core/System/omstream.hh>
 
 namespace OpenMesh
 {

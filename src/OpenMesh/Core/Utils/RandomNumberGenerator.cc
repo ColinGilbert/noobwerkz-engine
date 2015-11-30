@@ -59,7 +59,6 @@
 
 
 #include <OpenMesh/Core/Utils/RandomNumberGenerator.hh>
-#include <cstdlib>
 
 
 //== NAMESPACES ===============================================================

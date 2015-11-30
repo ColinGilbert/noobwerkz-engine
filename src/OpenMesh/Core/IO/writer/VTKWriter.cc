@@ -3,11 +3,9 @@
 #include <fstream>
 #include <limits>
 
-#include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/IO/BinaryHelper.hh>
 #include <OpenMesh/Core/IO/writer/VTKWriter.hh>
 #include <OpenMesh/Core/IO/IOManager.hh>
-#include <OpenMesh/Core/System/omstream.hh>
 #include <OpenMesh/Core/Utils/color_cast.hh>
 
 //=== NAMESPACES ==============================================================

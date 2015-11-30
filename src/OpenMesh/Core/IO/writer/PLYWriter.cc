@@ -50,15 +50,11 @@
 //== INCLUDES =================================================================
 
 #include <fstream>
-#include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/System/omstream.hh>
 #include <OpenMesh/Core/Utils/Endian.hh>
 #include <OpenMesh/Core/IO/IOManager.hh>
 #include <OpenMesh/Core/IO/BinaryHelper.hh>
 #include <OpenMesh/Core/IO/writer/PLYWriter.hh>
-#include <OpenMesh/Core/Utils/GenProg.hh>
-
-#include <OpenMesh/Core/IO/SR_store.hh>
 
 #include <iostream>
 

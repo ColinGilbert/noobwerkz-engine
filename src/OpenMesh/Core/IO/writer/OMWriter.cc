@@ -60,13 +60,10 @@
 #endif
 
 #include <fstream>
-#include <ostream>
 #include <vector>
 
 // -------------------- OpenMesh
 #include <OpenMesh/Core/IO/OMFormat.hh>
-#include <OpenMesh/Core/System/omstream.hh>
-#include <OpenMesh/Core/Utils/Endian.hh>
 #include <OpenMesh/Core/IO/exporter/BaseExporter.hh>
 #include <OpenMesh/Core/IO/writer/OMWriter.hh>
 

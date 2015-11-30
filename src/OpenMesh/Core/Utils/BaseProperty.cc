@@ -47,7 +47,6 @@
 \*===========================================================================*/
 
 #include <OpenMesh/Core/Utils/BaseProperty.hh>
-#include <ostream>
 
 namespace OpenMesh
 {

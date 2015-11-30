@@ -56,12 +56,9 @@
 #include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/System/omstream.hh>
 #include <OpenMesh/Core/IO/reader/OFFReader.hh>
-#include <OpenMesh/Core/IO/importer/BaseImporter.hh>
 #include <OpenMesh/Core/IO/IOManager.hh>
 #include <OpenMesh/Core/Utils/color_cast.hh>
 // #include <OpenMesh/Core/IO/BinaryHelper.hh>
-
-#include <OpenMesh/Core/IO/SR_store.hh>
 
 //STL
 #include <iostream>
@@ -74,12 +71,10 @@
 #elif defined(_STLPORT_VERSION) && (_STLPORT_VERSION==0x460)
 #  include <cctype>
 #else
-#  include <cctype>
 using std::isspace;
 #endif
 
 #ifndef WIN32
-#include <string.h>
 #endif
 
 //=== NAMESPACES ==============================================================
