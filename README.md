@@ -1,5 +1,6 @@
 I am developing a solid, small-API, easy-to-use cross-platform game engine. This toolkit is made specifically to reduce wasted time (*cough cough* aside from the time it took to design and build this software *cough cough*.) Much of it consists of integrating external libraries, most of which are in C++11. It currently runs on Linux and Android. We can expect Windows, Mac, and iOS support quite soon. As a design goal, the legalese is designed to be extremely liberal (Apache 2.0.)
 
+
 Still WIP. Not yet recommended for use, as this project is currently having major features implemented and it's being done in what I feel is the right way (TM.) Please feel free to bookmark this repo and come by later because this thing is living with me and cool stuff will soon come out of it. :) Progress comes at a rather steady pace; I plan on using this to back many of my own efforts and code quality reflects this fact. Writing my own code makes me happy so part of my life revolves around being able to do this.
 
 Documentation is rather sparse at the moment, and consists of code comments, this page, and issues on the tracker (of which there are many.) The issues are well-modularized and specific, thoughtfully labeled, and properly organized into milestones. High-quality tutorials and real unit tests will come when things are more or less set in stone.
@@ -74,14 +75,22 @@ Destructible worlds
 
 Long-term:
 ```
-Middleware between disparate OS'es: Overall aim is awesome devops.
-I intend on splitting this project into two parts: A middleware platform and a 3D/console engine.
-The focus is for people wanting to set up a proper lab, with a specific minimum hardware investment being the established norm. Will include support for interfacing with *nix, Android, Windows, Apple, and Steam ecosystems (as well as others, possibly.)
-Also, as I obtain a whole bunch of networking certs and learn secure coding, the code here will also become a facet of those learning experiences.
-Shall come with blueprints for suggested network layouts.
+I intend on splitting out the platform-specific code from this project into it's own middleware platform, and running the game engine on top of it.
+The focus is for people wanting to set up a proper coding lab, with a specific minimum hardware investment being the established norm. 
+Shall also come with blueprints for suggested network layouts.
+```
 
+Short-term uses:
+```
+Game engine and content creation.
+```
+
+Long-term uses:
+```
+Middleware between disparate OS'es and their ecosystems: Will include support for interfacing with *nix, Android, Windows, Apple, and Steam ecosystems (not just the base OS.)
 Automated testing/simulation
 Controlling state across networks
 Data Analysis/DataViz
+Accounting (both network events and finances.)
 Other business needs
 ```
