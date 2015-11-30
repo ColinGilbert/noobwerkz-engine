@@ -53,7 +53,6 @@
 // OpenMesh
 #include <OpenMesh/Core/IO/reader/OBJReader.hh>
 #include <OpenMesh/Core/IO/IOManager.hh>
-#include <OpenMesh/Core/System/omstream.hh>
 #include <OpenMesh/Core/Utils/vector_cast.hh>
 #include <OpenMesh/Core/Utils/color_cast.hh>
 // STL
@@ -63,19 +62,13 @@
 #elif defined(_STLPORT_VERSION) && (_STLPORT_VERSION==0x460)
 #  include <cctype>
 #else
-#  include <cctype>
 using std::isspace;
 #endif
 
 #ifndef WIN32
-#include <string.h>
 #endif
 
-#include <istream>
 #include <fstream>
-#include <vector>
-#include <algorithm>
-#include <functional>
 
 //=== NAMESPACES ==============================================================
 

@@ -54,7 +54,6 @@
 #include <fstream>
 
 // OpenMesh
-#include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/System/omstream.hh>
 #include <OpenMesh/Core/Geometry/VectorT.hh>
 #include <OpenMesh/Core/IO/BinaryHelper.hh>

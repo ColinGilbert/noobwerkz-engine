@@ -57,7 +57,6 @@
 //== INCLUDES =================================================================
 
 
-#include <OpenMesh/Core/System/config.h>
 // -------------------- STL
 #include <algorithm>
 #include <iostream>
