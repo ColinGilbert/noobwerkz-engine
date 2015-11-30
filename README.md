@@ -1,12 +1,10 @@
-I'm developing a rather minimalistic cross-platform game/simulation engine. This toolkit is made specifically to reduce wasted time (*cough cough* aside from the time it took to design and build this software *cough cough*.) Much of it consists of integrating external libraries, most of which are in C++11. It currently runs on Linux and Android. We can expect Windows, Mac, and iOS support quite soon. As a design goal, the legalese is designed to be extremely liberal (Apache 2.0.)
+I am developing a solid, small-API, easy-to-use cross-platform game engine. This toolkit is made specifically to reduce wasted time (*cough cough* aside from the time it took to design and build this software *cough cough*.) Much of it consists of integrating external libraries, most of which are in C++11. It currently runs on Linux and Android. We can expect Windows, Mac, and iOS support quite soon. As a design goal, the legalese is designed to be extremely liberal (Apache 2.0.)
 
-Still WIP. Not yet recommended for use, as this is still a fledgeling do-it-right software architecture endeavour. :) Please feel free to bookmark this repo and come by later because this thing is living with me and cool stuff will soon come out of it.  Progress comes at a rather steady pace; I plan on using this to back many of my own efforts. Writing my own code makes me happy so part of my life revolves around being able to do this.
+Still WIP. Not yet recommended for use, as this is still fledgeling. Please feel free to bookmark this repo and come by later because this thing is living with me and cool stuff will soon come out of it. :) Progress comes at a rather steady pace; we plan on using this to back many of my own efforts, so . Writing my own code makes me happy so part of my life revolves around being able to do this.
 
-Documentation is rather sparse at the moment, and consists of code comments, this page, and issues on the tracker. There are many well-modularized to-do's on the tracker, organized into milestones. High-quality tutorials and unit tests will come when things are more or less set in stone but that should be soon enough.
+Documentation is rather sparse at the moment, and consists of code comments, this page, and issues on the tracker (of which there are many.) The issues are well-modularized and specific, thoughtfully labeled, and properly organized into milestones. High-quality tutorials and real unit tests will come when things are more or less set in stone.
 
-
-Current version: 0.0.1, AKA: Fresh "Beginnings"
-
+Current version: 0.0.1.1, AKA: Fresh "Beginnings"
 
 Specific features:
 ```
