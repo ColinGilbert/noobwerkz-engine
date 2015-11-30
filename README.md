@@ -1,6 +1,6 @@
 I am developing a solid, small-API, easy-to-use cross-platform game engine. This toolkit is made specifically to reduce wasted time (*cough cough* aside from the time it took to design and build this software *cough cough*.) Much of it consists of integrating external libraries, most of which are in C++11. It currently runs on Linux and Android. We can expect Windows, Mac, and iOS support quite soon. As a design goal, the legalese is designed to be extremely liberal (Apache 2.0.)
 
-Still WIP. Not yet recommended for use. Please feel free to bookmark this repo and come by later because this thing is living with me and awesome thimgs will soon come out of it. :) Progress comes at a rather steady pace; I plan on using this to back many of my own efforts and code quality reflects this fact. Writing my own code makes me happy so part of my life revolves around being able to do this.
+Still WIP. Not yet recommended for use. Please feel free to bookmark this repo and come by later because this thing is living with me and awesome things will soon come out of it. :) Progress comes at a rather steady pace; I plan on using this to back many of my own efforts and code quality reflects this fact. Writing my own code makes me happy so part of my life revolves around being able to do this.
 
 Documentation is rather sparse at the moment, and consists of code comments, this page, and issues on the tracker. The issues are well-written, thoughtfully labeled, and organized into the right milestones:
 
@@ -97,5 +97,6 @@ Automated testing/simulation
 Controlling state across networks
 Data Analysis/DataViz
 Accounting (both network events and finances.)
+Secure smart homes
 Other business needs
 ```
