@@ -65,7 +65,7 @@ list(APPEND bgfx_utils_src
 	common/drawing/font/utf8.cpp
 	common/drawing/font/text_metrics.cpp
 	common/drawing/font/text_buffer_manager.cpp
-	common/drawing/bounds.cpp
+	#common/drawing/bounds.cpp
 	)
 
 list(APPEND openmesh_src
