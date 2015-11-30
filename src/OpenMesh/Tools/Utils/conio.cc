@@ -46,7 +46,6 @@
  *                                                                           *
 \*===========================================================================*/
 
-#include <OpenMesh/Core/System/config.hh>
 #include <OpenMesh/Tools/Utils/conio.hh>
 
 // ----------------------------------------------------------------- MSVC Compiler ----
@@ -92,7 +91,6 @@ int getche() { return ::getche(); }
 #endif
 #include <termios.h>   /* tcsetattr()    */
 #include <sys/ioctl.h> /* ioctl()        */
-#include <sys/time.h>  /* struct timeval */
 
 namespace OpenMesh {
 namespace Utils {

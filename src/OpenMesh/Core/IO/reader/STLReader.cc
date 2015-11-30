@@ -57,12 +57,9 @@
 #include <fstream>
 
 // OpenMesh
-#include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/IO/BinaryHelper.hh>
 #include <OpenMesh/Core/IO/reader/STLReader.hh>
 #include <OpenMesh/Core/IO/IOManager.hh>
-#include <OpenMesh/Core/System/omstream.hh>
-#include <OpenMesh/Core/IO/importer/BaseImporter.hh>
 
 
 //=== NAMESPACES ==============================================================

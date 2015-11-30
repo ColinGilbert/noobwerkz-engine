@@ -58,7 +58,7 @@ cd ..
 
 # Execute Python unittests
 cd Python-Unittests
-python -m unittest discover -v
+#python -m unittest discover -v
 
 cd ..
 cd ..
