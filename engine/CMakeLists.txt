@@ -60,12 +60,11 @@ list(APPEND bgfx_src
 	)
 
 list(APPEND bgfx_utils_src
-	common/drawing/cube_atlas.cpp
 	common/drawing/font/font_manager.cpp
 	common/drawing/font/utf8.cpp
 	common/drawing/font/text_metrics.cpp
 	common/drawing/font/text_buffer_manager.cpp
-	common/drawing/bounds.cpp
+	common/drawing/font/cube_atlas.cpp
 	)
 
 list(APPEND openmesh_src
@@ -224,10 +223,9 @@ list(APPEND common_src
 	common/AnimatedModel.cpp
 	common/SkeletalAnim.cpp
 	common/ModelLoader.cpp
-	common/drawing/cube_atlas.cpp
 	common/drawing/TriplanarGradientMap.cpp
 	common/drawing/HACDRenderer.cpp
-	common/drawing/GUIRenderer.cpp
+	common/drawing/OverlayRenderer.cpp
 	common/drawing/BasicRenderer.cpp
 	common/SimpleNavMesh.cpp
 	)

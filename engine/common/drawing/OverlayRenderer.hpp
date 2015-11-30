@@ -1,12 +1,13 @@
 #pragma once
+// TODO: Fix implementation.
 /*
-#include "Drawable2D.hpp"
+
 #include "Graphics.hpp"
 #include "MathFuncs.hpp"
 
 namespace noob
 {
-	class gui_renderer
+	class overlay_renderer
 	{
 		public:
 			// Shader is gradient-mapped. Currently uses the default texture
