@@ -227,7 +227,7 @@ list(APPEND common_src
 	common/drawing/cube_atlas.cpp
 	common/drawing/TriplanarGradientMap.cpp
 	common/drawing/HACDRenderer.cpp
-	common/drawing/GUIRenderer.cpp
+	common/drawing/OverlayRenderer.cpp
 	common/drawing/BasicRenderer.cpp
 	common/SimpleNavMesh.cpp
 	)
