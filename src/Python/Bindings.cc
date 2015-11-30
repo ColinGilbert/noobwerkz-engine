@@ -4,6 +4,8 @@
 #include "Python/PropertyManager.hh"
 #include "Python/InputOutput.hh"
 
+#include <memory>
+
 namespace OpenMesh {
 namespace Python {
 
