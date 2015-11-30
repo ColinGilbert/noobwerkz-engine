@@ -60,11 +60,11 @@ list(APPEND bgfx_src
 	)
 
 list(APPEND bgfx_utils_src
-	common/drawing/cube_atlas.cpp
 	common/drawing/font/font_manager.cpp
 	common/drawing/font/utf8.cpp
 	common/drawing/font/text_metrics.cpp
 	common/drawing/font/text_buffer_manager.cpp
+	common/drawing/font/cube_atlas.cpp
 	)
 
 list(APPEND openmesh_src

@@ -42,7 +42,7 @@ BX_PRAGMA_DIAGNOSTIC_POP();
 namespace stl = tinystl;
 
 #include "font_manager.h"
-#include "../cube_atlas.h"
+#include "cube_atlas.h"
 
 struct FTHolder
 {
