@@ -64,6 +64,7 @@
 #include <iostream>
 #include <fstream>
 #include <memory>
+#include <cstring>
 
 #if defined(OM_CC_MIPS)
 #  include <ctype.h>
