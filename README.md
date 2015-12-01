@@ -1,3 +1,5 @@
+Hi,
+
 I am developing a solid, small-API, easy-to-use cross-platform game engine. This toolkit is made specifically to reduce wasted time (*cough cough* aside from the time it took to design and build this software *cough cough*.) Much of it consists of integrating external libraries, most of which are in C++11. It currently runs on Linux and Android. We can expect Windows, Mac, and iOS support quite soon. As a design goal, the legalese is designed to be extremely liberal (Apache 2.0.)
 
 Still WIP. Not yet recommended for use. Please feel free to bookmark this repo and come by later because this thing is living with me and awesome things will soon come out of it. :)
