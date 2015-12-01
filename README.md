@@ -46,15 +46,15 @@ The current setup uses a platform-specific starter program to launch the main ap
 
 There are many libraries - mostly utility libraries - in the engine/lib directory. Not all of them are being used. This needs a cleanup, but at the moment this is still my personal dev repo. Will modularize out someday.
 
-Most engine code written in engine/common directory.
+Most engine code is written in engine/common directory, with user-defined functionality linked-in from the sandbox directory. I know it's not correct, but in the current context it's fine.
 
 Short scripts with tiny names are used to do routine work (compiles, archivals, cleanups.) Will eventually bring it into C++ and AngelScript.
 ```
 
 Platforms:
 ```
-Current setup uses linux as main controller.
-Ports soon.
+Current setup uses linux as main controller
+Ports soon
 ```
 
 Little *nix scripts (currently runs on bash but I don't believe it uses any bashisms):
