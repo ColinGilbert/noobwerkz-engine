@@ -1,6 +1,6 @@
 Hi,
 
-I am developing a solid, small-API, easy-to-use cross-platform game engine. This toolkit is made specifically to reduce wasted time (*cough cough* aside from the time it took to design and build this software *cough cough*.) Much of it consists of integrating external libraries, most of which are in C++11. It currently runs on Linux and Android. We can expect Windows, Mac, and iOS support quite soon. As a design goal, the legalese is designed to be extremely liberal (Apache 2.0.)
+I am developing a solid, small-API, easy-to-use cross-platform game engine. This toolkit is made specifically to reduce wasted time (*cough cough* aside from the time it took to design and build this software *cough cough*.) Much of it consists of integrating external libraries, most of which are in C++11 and using their neat+useful inputs/outputs along with a super-efficient, templated component system and then more useful built on top of those. It currently runs on Linux and Android. We can expect Windows, OSX, and iOS support quite soon. As a design goal, the legalese is designed to be extremely liberal (Apache 2.0.)
 
 Still WIP. Not yet recommended for use. Please feel free to bookmark this repo and come by later because this thing is living with me and awesome things will soon come out of it. :)
 
@@ -23,16 +23,18 @@ Provides clean interfaces over to those libraries and tools on top, with varying
 
 Currently brings in (among others):
 ```
-Bgfx
-glfw
+BGFX
+GLFW'
 Bullet Physics
-Freetype
-polyvox
+FreeType
+PolyVox
 Lemon Graph Library 
 Assimp (and a working mesh loader, too! =P)
-cppformat
+cppformat - the others are self-evident, but thank heavens for this little guy...
 Cereal
 AngelScript
+Boost (Asio, Filesystem, SPSC Queue)
+Voro++
 ```
 
 To clone:
@@ -54,7 +56,7 @@ Short scripts with tiny names are used to do routine work (compiles, archivals, 
 Platforms:
 ```
 Current setup uses linux as main controller
-Ports soon
+Ports coming soon
 ```
 
 Little *nix scripts (currently runs on bash but I don't believe it uses any bashisms):
@@ -76,7 +78,7 @@ Scripting
 
 Medium future:
 ```
-Ports to Win, MacOS, iOS, Emscripten, NaCL
+Ports to Android, iOS, Windows, OSX, Emscripten, Steam
 Test framework
 Destructible worlds
 Basic AI
@@ -89,18 +91,13 @@ The focus is for people wanting to set up a proper coding lab, with a specific m
 Shall also come with blueprints for suggested network layouts.
 ```
 
-Short-term uses:
+Future cool use-cases:
 ```
-Game engine and content creation
-```
-
-Long-term uses:
-```
-Middleware between disparate OS'es and their ecosystems: Will include support for interfacing with *nix, Android, Windows, Apple, and Steam ecosystems (not just the base OSes)
 Automated testing/simulation
-Controlling state across networks
+Network management
+Decision support
 Data Analysis/DataViz
-Accounting (both network events and finances)
+Accounting of all sorts
 Secure smart homes
-Other business needs
+Other business (general and not-so-general logic-transaction) needs
 ```
