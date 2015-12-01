@@ -91,7 +91,7 @@ Shall also come with blueprints for suggested network layouts.
 
 Short-term uses:
 ```
-Game engine and content creation.
+Game engine and content creation
 ```
 
 Long-term uses:
