@@ -1,6 +1,7 @@
 Hi,
 
-I am developing a solid, small-API, easy-to-use cross-platform game engine. This toolkit is made specifically to reduce wasted time (*cough cough* aside from the time it took to design and build this software *cough cough*.) Much of it consists of integrating external libraries, most of which are in C++11 and using their neat+useful inputs/outputs along with a super-efficient, templated component system and then more useful built on top of those. It currently runs on Linux and Android. We can expect Windows, OSX, and iOS support quite soon. As a design goal, the legalese is designed to be extremely liberal (Apache 2.0.)
+
+I am developing a solid, fast, easy-to-use cross-platform game engine. This toolkit is made specifically to reduce wasted time (*cough cough* aside from the time it took to design and build this software *cough cough*.) Much of it consists of integrating external libraries, most of which are in C++11 and using their useful features along with a super-efficient, templated component system. It currently runs on Linux and Android. We can expect Windows, OSX, and iOS support quite soon. As a design goal, the legalese is designed to be extremely liberal (Apache 2.0.)
 
 Still WIP. Not yet recommended for use. Please feel free to bookmark this repo and come by later because this thing is living with me and awesome things will soon come out of it. :)
 
@@ -8,9 +9,9 @@ Documentation is rather sparse at the moment, and consists of code comments, thi
 
 https://github.com/ColinGilbert/noobwerkz-engine/milestones
 
-These can provide a sense of direction as to the direction of the project; I encourage you to browse in there.
+These can provide a sense of direction as to the direction of the project; I encourage you to browse in there (or the source code.)
 
-High-quality tutorials and real unit tests will come when the implementation is set in stone.
+High-quality tutorials and real unit tests will come when the implementation is more or less set in stone.
 
 Current version: 0.0.1.1, AKA: Fresh "beginnings."
 
@@ -87,8 +88,6 @@ Basic AI
 Long-term:
 ```
 I intend on splitting out the platform-specific code from this project into it's own middleware platform, and running the game engine on top of it.
-The focus is for people wanting to set up a proper coding lab, with a specific minimum hardware investment being the established norm. 
-Shall also come with blueprints for suggested network layouts.
 ```
 
 Future cool use-cases:
