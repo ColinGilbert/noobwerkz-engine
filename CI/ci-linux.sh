@@ -29,8 +29,8 @@ elif [ "$LANGUAGE" == "C++11" ]; then
 fi  
 
 
-echo "\n"
-echo "\n"
+echo ""
+echo ""
 echo "======================================================================"
 echo "Building Release version with vectorchecks enabled"
 echo "====================================================================== \n"
@@ -50,8 +50,8 @@ make
 #build the unit tests
 make unittests
 
-echo "\n"
-echo "\n"
+echo ""
+echo ""
 echo "======================================================================"
 echo "Running unittests Release version with vectorchecks enabled"
 echo "====================================================================== \n"
@@ -65,8 +65,8 @@ cd Unittests
 cd ..
 cd ..
 
-echo "\n"
-echo "\n"
+echo ""
+echo ""
 echo "======================================================================"
 echo "Building Release version with vectorchecks disabled for python tests"
 echo "====================================================================== \n"
@@ -82,8 +82,8 @@ cmake -DCMAKE_BUILD_TYPE=Release -DOPENMESH_BUILD_PYTHON_UNIT_TESTS=ON -DBUILD_A
 #build it
 make
 
-echo "\n"
-echo "\n"
+echo ""
+echo ""
 echo "======================================================================"
 echo "Running Python unittests Release version "
 echo "====================================================================== \n"
@@ -99,8 +99,8 @@ cd ..
 
 
 
-echo "\n"
-echo "\n"
+echo ""
+echo ""
 echo "======================================================================"
 echo "Building Debug version with vectorchecks enabled"
 echo "====================================================================== \n"
@@ -120,8 +120,8 @@ make
 #build the unit tests
 make unittests
 
-echo "\n"
-echo "\n"
+echo ""
+echo ""
 echo "======================================================================"
 echo "Running unittests Debug version with vectorchecks enabled"
 echo "====================================================================== \n"
@@ -135,8 +135,8 @@ cd Unittests
 cd ..
 cd ..
 
-echo "\n"
-echo "\n"
+echo ""
+echo ""
 echo "======================================================================"
 echo "Building Debug version with vectorchecks disabled for python tests"
 echo "====================================================================== \n"
@@ -152,8 +152,8 @@ cmake -DCMAKE_BUILD_TYPE=DEBUG -DOPENMESH_BUILD_PYTHON_UNIT_TESTS=ON -DBUILD_APP
 #build it
 make
 
-echo "\n"
-echo "\n"
+echo ""
+echo ""
 echo "======================================================================"
 echo "Running Python unittests Debug version "
 echo "====================================================================== \n"
