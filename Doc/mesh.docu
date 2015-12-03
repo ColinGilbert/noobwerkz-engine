@@ -768,6 +768,25 @@ as deleted and OpenMesh::ArrayKernel::garbage_collection() has not yet been call
 After garbage_collection() has been called the elements are reorganized and their handles and
 iterators are guaranteed to be consecutive numbers again.
 
+OpenMesh uses a lazy deletion scheme to avoid unnecessary updates to the data structure. The 
+halfedge data structure will always be updated directly to ensure that following algorithms 
+will have the correct iterator setups.
+
+So if you delete a face, The face itself will still exist but the halfedges which are now located at
+the hole will be updated directly, which means that circulators on the adjacent vertices will not
+come across the face anymore.
+
+If an edge is deleted, the adjacent faces will be removed as well (flagging them deleted and updating
+the surrounding halfedges). The edge itself will also be flagged as deleted. Again the circulators will 
+not see the deleted primitives anymore.
+
+For a vertex, all adjacent faces and edges are deleted with the schemes above and the vertex flagged as deleted.
+
+The iterators, going across vertices edges and faces will still enumerate all primitives (including deleted ones).
+Except if you use the skipping iterators, which will skip deleted primitives. The circulators always only enumerate 
+primitives which are not deleted.
+
+
 \note
 <ul>
 <li>If you delete elements on the mesh, they will still be
