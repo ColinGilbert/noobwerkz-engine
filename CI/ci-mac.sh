@@ -27,12 +27,12 @@ NC='\033[0m'
 OUTPUT='\033[0;32m'
 
 
-echo "${OUTPUT}"
+echo -e "${OUTPUT}"
 echo ""
 echo "======================================================================"
 echo "Building Release version with vectorchecks enabled"
 echo "======================================================================"
-echo "${NC}"
+echo -e "${NC}"
 
 
 if [ ! -d build-release-$BUILDPATH-Vector-Checks ]; then
@@ -49,12 +49,12 @@ make
 #build the unit tests
 make unittests
 
-echo "${OUTPUT}"
+echo -e "${OUTPUT}"
 echo ""
 echo "======================================================================"
 echo "Running unittests Release version with vectorchecks enabled"
 echo "======================================================================"
-echo "${NC}"
+echo -e "${NC}"
 
 cd Unittests
 
@@ -64,12 +64,12 @@ cd Unittests
 cd ..
 cd ..
 
-echo "${OUTPUT}"
+echo -e "${OUTPUT}"
 echo ""
 echo "======================================================================"
 echo "Building Release version with vectorchecks disabled for python tests"
 echo "======================================================================"
-echo "${NC}"
+echo -e "${NC}"
 
 if [ ! -d build-release-$BUILDPATH ]; then
   mkdir build-release-$BUILDPATH
@@ -82,12 +82,12 @@ cmake -DCMAKE_BUILD_TYPE=Release -DOPENMESH_BUILD_PYTHON_UNIT_TESTS=ON -DBUILD_A
 #build it
 make
 
-echo "${OUTPUT}"
+echo -e "${OUTPUT}"
 echo ""
 echo "======================================================================"
 echo "Running Python unittests Release version "
 echo "======================================================================"
-echo "${NC}"
+echo -e "${NC}"
 
 
 # Execute Python unittests
@@ -102,12 +102,12 @@ cd ..
 
 
 
-echo "${OUTPUT}"
+echo -e "${OUTPUT}"
 echo ""
 echo "======================================================================"
 echo "Building Debug version with vectorchecks enabled"
 echo "======================================================================"
-echo "${NC}"
+echo -e "${NC}"
 
 
 if [ ! -d build-debug-$BUILDPATH-Vector-Checks ]; then
@@ -124,12 +124,12 @@ make
 #build the unit tests
 make unittests
 
-echo "${OUTPUT}"
+echo -e "${OUTPUT}"
 echo ""
 echo "======================================================================"
 echo "Running unittests Debug version with vectorchecks enabled"
 echo "======================================================================"
-echo "${NC}"
+echo -e "${NC}"
 
 
 cd Unittests
@@ -140,12 +140,12 @@ cd Unittests
 cd ..
 cd ..
 
-echo "${OUTPUT}"
+echo -e "${OUTPUT}"
 echo ""
 echo "======================================================================"
 echo "Building Debug version with vectorchecks disabled for python tests"
 echo "======================================================================"
-echo "${NC}"
+echo -e "${NC}"
 
 if [ ! -d build-debug-$BUILDPATH ]; then
   mkdir build-debug-$BUILDPATH
@@ -158,12 +158,12 @@ cmake -DCMAKE_BUILD_TYPE=DEBUG -DOPENMESH_BUILD_PYTHON_UNIT_TESTS=ON -DBUILD_APP
 #build it
 make
 
-echo "${OUTPUT}"
+echo -e "${OUTPUT}"
 echo ""
 echo "======================================================================"
 echo "Running Python unittests Debug version "
 echo "======================================================================"
-echo "${NC}"
+echo -e "${NC}"
 
 
 # Execute Python unittests
