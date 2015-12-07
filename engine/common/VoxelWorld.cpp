@@ -178,7 +178,7 @@ noob::basic_mesh noob::voxel_world::extract() const
 noob::basic_mesh noob::voxel_world::extract_region(size_t lower_x, size_t lower_y, size_t lower_z, size_t upper_x, size_t upper_y, size_t upper_z) const
 {
 	logger::log("[VoxelWorld] extracting region");
-	noob::basic_mesh noob_mesh;
+	noob::basic_mesh world_mesh;
 	PolyVox::Region bounding_box(lower_x, lower_y, lower_z, upper_x, upper_y, upper_z);
 	PolyVox::Region world_region = world->getEnclosingRegion();
 	bounding_box.cropTo(world_region);
@@ -191,22 +191,23 @@ noob::basic_mesh noob::voxel_world::extract_region(size_t lower_x, size_t lower_
 	for (size_t i = 0; i < num_vertices; i++)
 	{
 		auto vertex = decoded_mesh.getVertex(i);
-		noob_mesh.vertices.push_back(noob::vec3(vertex.position.getX(), vertex.position.getY(), vertex.position.getZ()));
+		world_mesh.vertices.push_back(noob::vec3(vertex.position.getX(), vertex.position.getY(), vertex.position.getZ()));
 		//auto vert = half_edges.add_vertex(TriMesh::Point(vertex.position.getX(), vertex.position.getY(), vertex.position.getZ()));
 		//verts.push_back(vert);
 	}
 
 	for (size_t i = 0; i < num_indices; i++)
 	{
-		noob_mesh.indices.push_back(decoded_mesh.getIndex(i));
+		world_mesh.indices.push_back(decoded_mesh.getIndex(i));
 	}
 
-	noob::basic_mesh normalized;
-
-	noob_mesh.save("temp/extracted-temp.off");
-	normalized.load("temp/extracted-temp.off", "extracted-temp");
-	logger::log("[Voxels] Region extracted");
-	return normalized;
+	//noob::basic_mesh normalized;
+	//world_mesh.save("temp/extracted-temp.off");
+	//normalized.load("temp/extracted-temp.off", "extracted-temp");
+	//logger::log("[Voxels] Region extracted");
+	//return normalized;
+	world_mesh.normalize();
+	return world_mesh;
 }
 
 /*

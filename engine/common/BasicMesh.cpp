@@ -87,19 +87,19 @@ void noob::basic_mesh::decimate(const std::string& filename, size_t num_verts) c
 }
 
 /*
-noob::basic_mesh noob::basic_mesh::decimate(size_t num_verts) const
-{
-	//decimate("./temp/temp-decimated.off", num_verts);
-	noob::basic_mesh temp;
-	//temp.load("./temp/temp-decimated.off", "temp-decimated");
-	return temp;
+   noob::basic_mesh noob::basic_mesh::decimate(size_t num_verts) const
+   {
+//decimate("./temp/temp-decimated.off", num_verts);
+noob::basic_mesh temp;
+//temp.load("./temp/temp-decimated.off", "temp-decimated");
+return temp;
 }
 */
 
 void noob::basic_mesh::normalize() 
 {
-	save("temp/normalize_temp.stl");
-	load("temp/normalize_temp.stl");
+	std::string temp = save();
+	load_mem(temp);
 }
 
 
@@ -114,8 +114,28 @@ void noob::basic_mesh::to_origin()
 	normalize();
 
 }
+/*
+   std::tuple<size_t, const char*> noob::basic_mesh::save() const
+   {
+   fmt::MemoryWriter w;
+   w << "OFF" << "\n" << vertices.size() << " " << indices.size() / 3 << " " << 0 <<  "\n";
+   for (auto v : vertices)
+   {
+   w << v.v[0] << " " << v.v[1] << " " << v.v[2] <<  "\n";
+   }
+   for (size_t i = 0; i < indices.size(); i = i + 3)
+   {
+   w << 3 << " " << indices[i] << " " << indices[i+1] << " " << indices[i+2] << "\n";
+   }
 
-std::tuple<size_t, const char*> noob::basic_mesh::save() const
+   const char* mem = w.data();
+   size_t size = w.size();
+
+   return std::make_tuple(size, mem);
+   }
+   */
+
+std::string noob::basic_mesh::save() const
 {
 	fmt::MemoryWriter w;
 	w << "OFF" << "\n" << vertices.size() << " " << indices.size() / 3 << " " << 0 <<  "\n";
@@ -128,12 +148,8 @@ std::tuple<size_t, const char*> noob::basic_mesh::save() const
 		w << 3 << " " << indices[i] << " " << indices[i+1] << " " << indices[i+2] << "\n";
 	}
 
-	const char* mem = w.data();
-	size_t size = w.size();
-
-	return std::make_tuple(size, mem);
+	return w.str();
 }
-
 
 void noob::basic_mesh::save(const std::string& filename) const
 {
@@ -144,23 +160,22 @@ void noob::basic_mesh::save(const std::string& filename) const
 }
 
 
-bool noob::basic_mesh::load(std::tuple<size_t, const char*> buffer, const std::string& name)
+bool noob::basic_mesh::load_mem(const std::string& file, const std::string& name)
 {
-	// logger::log(fmt::format("[Mesh] - load({0}) - load {1} bytes", name, std::get<0>(buffer)));
-	const aiScene* scene = aiImportFileFromMemory(std::get<1>(buffer), std::get<0>(buffer), aiProcessPreset_TargetRealtime_Fast, "");
-	return load(scene, name);
+	const aiScene* scene = aiImportFileFromMemory(file.c_str(), file.size(), aiProcessPreset_TargetRealtime_Fast, "");
+	return load_assimp(scene, name);
 }
 
 
-bool noob::basic_mesh::load(const std::string& filename, const std::string& name)
+bool noob::basic_mesh::load_file(const std::string& filename, const std::string& name)
 {
 	// logger::log(fmt::format("[Mesh] loading file {0}", filename ));
 	const aiScene* scene = aiImportFile(filename.c_str(), aiProcessPreset_TargetRealtime_Fast);
-	return load(scene, name);	
+	return load_assimp(scene, name);	
 }
 
 
-bool noob::basic_mesh::load(const aiScene* scene, const std::string& name)
+bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name)
 {
 	// logger::log("[Mesh] load() - begin");
 	if (!scene)
@@ -303,6 +318,37 @@ TriMesh noob::basic_mesh::to_half_edges() const
 	}
 
 	return half_edges;
+}
+
+void noob::basic_mesh::from_half_edges(TriMesh half_edges)
+{
+	std::ostringstream oss;
+	if (!OpenMesh::IO::write_mesh(half_edges, oss, "temp.off")) 
+	{
+		logger::log("[BasicMesh] Could not import from OpenMesh!");
+	}
+	else
+	{
+		load_mem(oss.str());
+	}
+}
+
+
+void noob::basic_mesh::from_half_edges(PolyMesh half_edges)
+{
+	std::ostringstream oss;
+	PolyMesh _half_edges = half_edges;
+	_half_edges.triangulate();
+	_half_edges.garbage_collection();
+	
+	if (!OpenMesh::IO::write_mesh(half_edges, oss, "temp.off")) 
+	{
+		logger::log("[BasicMesh] Could not import from OpenMesh!");
+	}
+	else
+	{
+		load_mem(oss.str());
+	}
 }
 
 

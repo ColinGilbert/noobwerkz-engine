@@ -18,6 +18,8 @@ namespace noob
 		static noob::basic_mesh catmull_sphere(float radius);
 		static noob::basic_mesh hull(const std::vector<noob::vec3>& points);
 		static noob::basic_mesh csg(const noob::basic_mesh& a, const noob::basic_mesh& b, const noob::csg_op op);
+
+
 		protected:
 		static csgjs_model get_csg_model(const noob::basic_mesh& m);
 	};

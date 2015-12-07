@@ -43,8 +43,6 @@ namespace noob
 			// If name = "" all animations get processed. If all the tolerances == 0.0 it doesn't run an optimization pre-pass prior prior to creating runtime animations. 
 			void optimize(float translation_tolerance = 0.0, float rotation_tolerance = 0.0, float scale_tolerance = 0.0, const std::string& name = "");
 
-			
-			// TODO: Implement
 			void update(float dt = 0.0);
 			void reset_time(float t = 0.0);
 			

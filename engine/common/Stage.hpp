@@ -31,6 +31,7 @@
 
 namespace noob
 {
+
 	typedef noob::component<std::unique_ptr<noob::basic_model>> basic_model_component;	
 	typedef noob::component<std::unique_ptr<noob::animated_model>> animated_model_component;
 	// typedef noob::component<std::unique_ptr<noob::basic_mesh>> mesh_component;
@@ -43,7 +44,8 @@ namespace noob
 	typedef noob::component<noob::prop> prop_component;	
 	typedef noob::component<noob::actor> actor_component;
 	typedef noob::component<noob::scenery> scenery_component;
-	
+
+
 	class stage
 	{
 		public:

@@ -92,15 +92,15 @@ namespace noob
 			void decimate(const std::string& filename, size_t num_verts) const;
 			//noob::basic_mesh decimate(size_t num_verts) const;
 
-			// Returns .OFF files
-			std::tuple<size_t,const char*> save() const;
+			std::string save() const;
 			void save(const std::string& filename) const;
 			
 			// Takes any file Assimp can. First mesh of file only. No bones.
-			bool load(const std::string& filename, const std::string& name = "");
-			bool load(std::tuple<size_t, const char*>, const std::string& name = "");
-			bool load(const aiScene* scene, const std::string& name);
-			
+			bool load_mem(const std::string& file, const std::string& name = "");
+			bool load_file(const std::string& filename, const std::string& name = "");
+			bool load_assimp(const aiScene* scene, const std::string& name);
+
+
 			void normalize();
 			void transform(const noob::mat4& transform);
 			void to_origin();
@@ -108,15 +108,13 @@ namespace noob
 			void rotate(const noob::versor&);
 			void scale(const noob::vec3&);
 			
-			void verts_to_buffer();
-
 			noob::basic_mesh::bbox_info get_bbox() const { return bbox; }
 
+			TriMesh to_half_edges() const;
+			void from_half_edges(TriMesh);
+			void from_half_edges(PolyMesh);
 
 		protected:
-			TriMesh to_half_edges() const;
-
-
 			bbox_info bbox;
 			bool volume_calculated;
 			double volume;

@@ -27,7 +27,13 @@ void noob::application::user_init()
 	points.push_back(noob::vec3(7.0, 1.5, 2.0));
 
 	auto hull = stage.hull(points, "points");
-
+	
+	noob::basic_mesh m = noob::mesh_utils::cone(1.0, 2.0);
+	m.from_half_edges(m.to_half_edges());
+	std::string s = m.save();
+	std::ofstream of("temp-test.off");
+	of << s;
+	of.close();
 }
 
 
