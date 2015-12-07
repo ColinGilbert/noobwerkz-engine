@@ -81,7 +81,7 @@ noob::actor_component::handle noob::stage::actor(basic_model_component::handle, 
 
 }
 
-
+/*
 noob::prop_component::handle noob::stage::prop(basic_model_component::handle, const noob::vec3& = noob::vec3(0.0, 0.0, 0.0), const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0))
 {
 
@@ -92,7 +92,7 @@ noob::scenery_component::handle noob::stage::scenery(basic_model_component::hand
 {
 
 }
-
+*/
 
 noob::light_component::handle noob::stage::light(const noob::light& arg)
 {

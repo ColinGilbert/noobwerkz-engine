@@ -197,25 +197,26 @@ void noob::application::init()
 	// basic_model_component::handle basic_model(const noob::basic_mesh&);	
 	// Loads a serialized model (from cereal binary)
 
-	animated_model_component::handle animated_model(const std::string& filename);
-	skeleton_component::handle skeleton(const std::string& filename);
-	actor_component::handle actor(const basic_model_component::handle, const skeleton_component::handle, const noob::vec3&, const noob::versor& v = noob::versor(0.0, 0.0, 0.0, 1.0));
-	prop_component::handle prop(const basic_model_component::handle, const noob::vec3&, const noob::versor&);
-	scenery_component::handle scenery(const basic_model_component::handle, const noob::vec3&, const noob::versor&);
-	light_component::handle light(const noob::light&);
-	reflection_component::handle reflection(const noob::reflection&);
-	shader_component::handle shader(const noob::prepared_shaders::info&, const std::string& name);
+	// animated_model_component::handle stage.animated_model(const std::string& filename);
+	// skeleton_component::handle stage.skeleton(const std::string& filename);
+	// actor_component::handle stage.actor(const basic_model_component::handle, const skeleton_component::handle, const noob::vec3&, const noob::versor& v = noob::versor(0.0, 0.0, 0.0, 1.0));
+	// body_component::handle stage.body(const shape_component::handle, float mass, const noob::vec3&, const noob::versor& v = noob::versor(0.0, 0.0, 0.0, 1.0));
+	// prop_component::handle prop(const basic_model_component::handle, const noob::vec3&, const noob::versor&);
+	// scenery_component::handle scenery(const basic_model_component::handle, const noob::vec3&, const noob::versor&);
+	// light_component::handle stage.light(const noob::light&);
+	// reflection_component::handle stage.reflection(const noob::reflection&);
+	// shader_component::handle stage.shader(const noob::prepared_shaders::info&, const std::string& name);
 
 	// These cache the shape for reuse, as they are simple parametrics.
-	noob::shape_component::handle sphere(float r);
-	noob::shape_component::handle box(float x, float y, float z);
-	noob::shape_component::handle cylinder(float r, float h);
-	noob::shape_component::handle cone(float r, float h);
-	noob::shape_component::handle capsule(float r, float h);
-	noob::shape_component::handle plane(const noob::vec3& normal, float offset);
+	// noob::shape_component::handle stage.sphere(float r);
+	// noob::shape_component::handle stage.box(float x, float y, float z);
+	// noob::shape_component::handle stage.cylinder(float r, float h);
+	// noob::shape_component::handle stage.cone(float r, float h);
+	// noob::shape_component::handle stage.capsule(float r, float h);
+	// noob::shape_component::handle stage.plane(const noob::vec3& normal, float offset);
 
-	noob::shape_component::handle hull(const std::vector<noob::vec3>& points, const std::string& name);
-	noob::shape_component::handle trimesh(const noob::basic_mesh& mesh, const std::string& name);
+	// noob::shape_component::handle stage.hull(const std::vector<noob::vec3>& points, const std::string& name);
+	// noob::shape_component::handle stage.trimesh(const noob::basic_mesh& mesh, const std::string& name);
 
 	// stage,scenery_component sceneries;
 	// stage,light_component lights;
@@ -244,7 +245,6 @@ void noob::application::update(double delta)
 	time_elapsed += delta;
 
 
-	// TODO: Replace with AngelScript
 	if (time_elapsed > 0.25)
 	{
 		boost::filesystem::path p;
@@ -266,6 +266,7 @@ void noob::application::update(double delta)
 
 			try
 			{
+				// TODO: Replace with AngelScript
 				// chai->eval_file(p.generic_string());
 			}
 			catch(std::exception e)

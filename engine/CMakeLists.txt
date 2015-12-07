@@ -228,6 +228,7 @@ list(APPEND common_src
 	common/drawing/OverlayRenderer.cpp
 	common/drawing/BasicRenderer.cpp
 	common/SimpleNavMesh.cpp
+	common/FileSystem.cpp
 	)
 
 list(APPEND user_src
