@@ -41,9 +41,9 @@ namespace noob
 	typedef noob::component<noob::prepared_shaders::info> shader_component;
 	typedef noob::component<std::unique_ptr<noob::shape>> shape_component;
 	typedef noob::component<noob::body> body_component;
-	// typedef noob::component<noob::prop> prop_component;	
+	typedef noob::component<noob::prop> prop_component;	
 	typedef noob::component<noob::actor> actor_component;
-	// typedef noob::component<noob::scenery> scenery_component;
+	typedef noob::component<noob::scenery> scenery_component;
 
 
 	class stage
@@ -62,10 +62,11 @@ namespace noob
 			// Loads a serialized model (from cereal binary)
 			animated_model_component::handle animated_model(const std::string& filename);
 			skeleton_component::handle skeleton(const std::string& filename);
-			actor_component::handle actor(const basic_model_component::handle, const skeleton_component::handle, const noob::vec3&, const noob::versor& v = noob::versor(0.0, 0.0, 0.0, 1.0));
+			// actor_component::handle actor(const basic_model_component::handle, const skeleton_component::handle, const noob::vec3&, const noob::versor& v = noob::versor(0.0, 0.0, 0.0, 1.0));
+			// prop_component::handle prop(const basic_model_component::handle, const noob::vec3&, const noob::versor&);
+			// scenery_component::handle scenery(const basic_model_component::handle, const noob::vec3&, const noob::versor&);
+
 			body_component::handle body(const shape_component::handle, float mass, const noob::vec3&, const noob::versor& v = noob::versor(0.0, 0.0, 0.0, 1.0));
-			//prop_component::handle prop(const basic_model_component::handle, const noob::vec3&, const noob::versor&);
-			//scenery_component::handle scenery(const basic_model_component::handle, const noob::vec3&, const noob::versor&);
 			light_component::handle light(const noob::light&);
 			reflection_component::handle reflection(const noob::reflection&);
 			shader_component::handle shader(const noob::prepared_shaders::info&, const std::string& name);
@@ -81,7 +82,8 @@ namespace noob
 			noob::shape_component::handle hull(const std::vector<noob::vec3>& points, const std::string& name);
 			noob::shape_component::handle trimesh(const noob::basic_mesh& mesh, const std::string& name);
 
-			// scenery_component sceneries;
+			scenery_component sceneries;
+			prop_component props;
 			actor_component actors;
 			light_component lights;
 			reflection_component reflections;

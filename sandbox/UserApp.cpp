@@ -14,7 +14,7 @@ void noob::application::user_init()
 	// 	u.scales = noob::vec3(1/10,1/10,1/10);
 	u.colour_positions = noob::vec2(0.2, 0.7);
 	auto shader_id = stage.shader(u, "moon");
-	auto actor_id = stage.actor(stage.basic_models.get_handle("unit-sphere"), stage.skeletons.get_handle("null"), noob::vec3(0.0, 80.0, 0.0));
+	// auto actor_id = stage.actor(stage.basic_models.get_handle("unit-sphere"), stage.skeletons.get_handle("null"), noob::vec3(0.0, 80.0, 0.0));
 	std::vector<noob::vec3> points;
 
 	points.push_back(noob::vec3(-1.0, 0.0, 1.0));

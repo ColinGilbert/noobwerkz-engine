@@ -75,13 +75,13 @@ noob::skeleton_component::handle noob::stage::skeleton(const std::string& filena
 	return skeletons.add(std::move(temp));
 }
 
-
+/*
 noob::actor_component::handle noob::stage::actor(basic_model_component::handle, skeleton_component::handle, const noob::vec3& = noob::vec3(0.0, 0.0, 0.0), const noob::versor& v)// = noob::versor(0.0, 0.0, 0.0, 1.0))
 {
 
 }
 
-/*
+
 noob::prop_component::handle noob::stage::prop(basic_model_component::handle, const noob::vec3& = noob::vec3(0.0, 0.0, 0.0), const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0))
 {
 
