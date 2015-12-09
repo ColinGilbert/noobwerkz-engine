@@ -115,6 +115,6 @@ namespace noob
 			std::map<std::tuple<float, float>, noob::shape_component::handle> capsules;
 			std::map<std::tuple<float,float,float,float>, noob::shape_component::handle> planes;
 			std::map<shape_component::handle, body_component::handle> dependents_of_shape;
-			std::map<basic_model_component::handle, std::tuple<light_component::handle, reflection_component::handle>> dependents_of_model;
+			std::map<model_variant, std::tuple<light_component::handle, reflection_component::handle>> dependents_of_model;
 	};
 }
