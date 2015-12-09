@@ -46,6 +46,7 @@ namespace noob
 	typedef noob::component<noob::scenery> scenery_component;
 
 
+
 	class stage
 	{
 		public:
@@ -56,17 +57,17 @@ namespace noob
 			void draw() const;
 			
 			basic_model_component::handle basic_model(const noob::basic_mesh&);	
-			// TODO: Implement
-			//basic_model_component::handle basic_model(const noob::shape_component::handle);
+			basic_model_component::handle basic_model(const noob::shape_component::handle);
 			
 			// Loads a serialized model (from cereal binary)
 			animated_model_component::handle animated_model(const std::string& filename);
 			skeleton_component::handle skeleton(const std::string& filename);
-			// actor_component::handle actor(const basic_model_component::handle, const skeleton_component::handle, const noob::vec3&, const noob::versor& v = noob::versor(0.0, 0.0, 0.0, 1.0));
-			// prop_component::handle prop(const basic_model_component::handle, const noob::vec3&, const noob::versor&);
-			// scenery_component::handle scenery(const basic_model_component::handle, const noob::vec3&, const noob::versor&);
 
-			body_component::handle body(const shape_component::handle, float mass, const noob::vec3&, const noob::versor& v = noob::versor(0.0, 0.0, 0.0, 1.0));
+			actor_component::handle actor(const body_component::handle, const basic_model_component::handle, const skeleton_component::handle, const noob::vec3& pos = noob::vec3(0.0, 0.0, 0.0), const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
+			prop_component::handle prop(const body_component::handle, const basic_model_component::handle, const noob::vec3& pos = noob::vec3(0.0, 0.0, 0.0), const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
+			scenery_component::handle scenery(const basic_model_component::handle, const noob::vec3& pos = noob::vec3(0.0, 0.0, 0.0), const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
+			body_component::handle body(const shape_component::handle, float mass, const noob::vec3& pos = noob::vec3(0.0, 0.0, 0.0), const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
+
 			light_component::handle light(const noob::light&);
 			reflection_component::handle reflection(const noob::reflection&);
 			shader_component::handle shader(const noob::prepared_shaders::info&, const std::string& name);
@@ -95,6 +96,9 @@ namespace noob
 			skeleton_component skeletons;
 
 		protected:
+
+			typedef boost::variant<noob::basic_model_component::handle, noob::animated_model_component::handle> model_variant;
+
 			noob::prepared_shaders renderer;
 
 			btBroadphaseInterface* broadphase;
@@ -103,13 +107,14 @@ namespace noob
 			btSequentialImpulseConstraintSolver* solver;
 			btDiscreteDynamicsWorld* dynamics_world;
 
+			// TODO: Test other data structures.
 			std::unordered_map<float, noob::shape_component::handle> spheres;
 			std::map<std::tuple<float, float, float>, noob::shape_component::handle> boxes;
 			std::map<std::tuple<float, float>, noob::shape_component::handle> cylinders;
 			std::map<std::tuple<float, float>, noob::shape_component::handle> cones;
 			std::map<std::tuple<float, float>, noob::shape_component::handle> capsules;
 			std::map<std::tuple<float,float,float,float>, noob::shape_component::handle> planes;
-
+			std::map<shape_component::handle, body_component::handle> dependents_of_shape;
+			std::map<basic_model_component::handle, std::tuple<light_component::handle, reflection_component::handle>> dependents_of_model;
 	};
 }
-

@@ -62,6 +62,12 @@ noob::basic_model_component::handle noob::stage::basic_model(const noob::basic_m
 }
 
 
+noob::basic_model_component::handle noob::stage::basic_model(const noob::shape_component::handle)
+{
+
+}
+
+
 noob::animated_model_component::handle noob::stage::animated_model(const std::string& filename)
 {
 	return animated_models.add(std::make_unique<noob::animated_model>(filename));
@@ -75,24 +81,30 @@ noob::skeleton_component::handle noob::stage::skeleton(const std::string& filena
 	return skeletons.add(std::move(temp));
 }
 
-/*
-noob::actor_component::handle noob::stage::actor(basic_model_component::handle, skeleton_component::handle, const noob::vec3& = noob::vec3(0.0, 0.0, 0.0), const noob::versor& v)// = noob::versor(0.0, 0.0, 0.0, 1.0))
+
+noob::actor_component::handle noob::stage::actor(const body_component::handle body_handle, const basic_model_component::handle model_handle, const skeleton_component::handle, const noob::vec3& pos, const noob::versor& orient)
 {
 
 }
 
 
-noob::prop_component::handle noob::stage::prop(basic_model_component::handle, const noob::vec3& = noob::vec3(0.0, 0.0, 0.0), const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0))
+noob::prop_component::handle noob::stage::prop(const body_component::handle body_handle, const basic_model_component::handle model_handle, const noob::vec3& pos, const noob::versor& orient)
 {
 
 }
 
 
-noob::scenery_component::handle noob::stage::scenery(basic_model_component::handle, const noob::vec3& = noob::vec3(0.0, 0.0, 0.0), const noob::versor& = noob::versor(0.0, 0.0, 0.0, 1.0))
+noob::scenery_component::handle noob::stage::scenery(const basic_model_component::handle model_handle, const noob::vec3& pos, const noob::versor& orient)
 {
 
 }
-*/
+
+
+noob::body_component::handle noob::stage::body(const shape_component::handle shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient)
+{
+
+}
+
 
 noob::light_component::handle noob::stage::light(const noob::light& arg)
 {
