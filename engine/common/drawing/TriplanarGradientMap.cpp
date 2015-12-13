@@ -3,19 +3,19 @@
 void noob::triplanar_gradient_map_renderer::init()
 {
 
-	bgfx::ProgramHandle program_handle = noob::graphics::load_program("fs_gradient_map_triplanar", "fs_gradient_map_triplanar");
+	bgfx::ProgramHandle program_handle = noob::graphics::load_program("vs_gradient_map_triplanar", "fs_gradient_map_triplanar");
 
-	std::string ss;
-	if (bgfx::invalidHandle != program_handle.idx)
-	{
-		ss =  "true";
-	}
-	else
-	{
-		ss = "false";
-	}
+	// std::string ss;
+	// if (bgfx::invalidHandle != program_handle.idx)
+	// {
+	//	ss =  "true";
+	// }
+	// else
+	// {
+	//	ss = "false";
+	// }
 
-	logger::log(fmt::format("[TriPlanar] is program valid? {0}", ss));
+	logger::log(fmt::format("[TriPlanar] is program valid? {0}", bgfx::invalidHandle != program_handle.idx));
 
 	noob::graphics::add_uniform(std::string("colour_1"), bgfx::UniformType::Enum::Vec4);
 	noob::graphics::add_uniform(std::string("colour_2"), bgfx::UniformType::Enum::Vec4);
