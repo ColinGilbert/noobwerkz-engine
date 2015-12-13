@@ -10,6 +10,31 @@ bool noob::stage::init()
 	dynamics_world->setGravity(btVector3(0, -10, 0));
 	
 	renderer.init();
+	
+	auto s (pool.register_component<noob::shape>("shape"));
+	shape_component = s;
+	
+	auto b (pool.register_component<noob::body>("body"));
+	body_component = b;
+
+	auto bm (pool.register_component<std::shared_ptr<noob::basic_model>>("basic-model"));
+	basic_model_component = bm;
+
+	auto am (pool.register_component<std::shared_ptr<noob::animated_model>>("animated-model"));
+	animated_model_component = am;
+
+	auto sa (pool.register_component<std::shared_ptr<noob::skeletal_anim>>("skeletal-anim"));
+	skeletal_anim_component = sa;
+
+	auto bsu (pool.register_component<noob::basic_renderer::uniform_info>("basic-renderer-uniform"));
+	basic_shader_component = bsu;
+
+	auto tsu (pool.register_component<noob::triplanar_gradient_map_renderer::uniform_info>("triplanar-renderer-uniform"));
+	triplanar_shader_component = tsu;
+
+
+	
+
 
 	// TODO: Add stage default components
 	// noob::basic_renderer::uniform_info basic_shader_info;
@@ -42,102 +67,107 @@ void noob::stage::update(double dt)
 
 void noob::stage::draw() const
 {
-// TODO: Use culling to determine which items are visible, and then draw them.
+	// TODO: Use culling to determine which items are visible, and then draw them.
 
 }
 
 
 /*
-
-noob::basic_model noob::stage::basic_model(const noob::basic_mesh& m)
+std::shared_ptr<noob::basic_model> noob::stage::basic_model(const noob::basic_mesh& m)
 {
-	//return basic_models.add(std::make_unique<noob::basic_model>(m));
+	// return basic_models.add(std::make_unique<noob::basic_model>(m));
 }
 
 
-noob::basic_model noob::stage::basic_model(const noob::shape)
-{
-
-}
-
-
-noob::animated_model noob::stage::animated_model(const std::string& filename)
-{
-	//return animated_models.add(std::make_unique<noob::animated_model>(filename));
-}
-
-
-noob::skeleton noob::stage::skeleton(const std::string& filename)
-{
-	//std::unique_ptr<noob::skeletal_anim> temp = std::make_unique<noob::skeletal_anim>();
-	//temp->init(filename);
-	//return skeletons.add(std::move(temp));
-}
-
-
-noob::actor noob::stage::actor(const body body_handle, const basic_model model_handle, const skeleton, const noob::vec3& pos, const noob::versor& orient)
+std::shared_ptr<noob::basic_model> noob::stage::basic_model(const std::shared_ptr<noob::shape>& input_shape)
 {
 
 }
 
 
-noob::prop noob::stage::prop(const body body_handle, const basic_model model_handle, const noob::vec3& pos, const noob::versor& orient)
+std::shared_ptr<noob::animated_model> noob::stage::animated_model(const std::string& filename, const std::string& friendly_name)
+{
+	// return animated_models.add(std::make_unique<noob::animated_model>(filename));
+}
+
+
+std::shared_ptr<noob::skeletal_anim> noob::stage::skeleton(const std::string& filename, const std::string& friendly_name)
+{
+	// std::shared_ptr<noob::skeletal_anim> temp = std::make_shared<noob::skeletal_anim>();
+	// temp->init(filename);
+	// return temp;
+}
+
+
+noob::actor noob::stage::actor(const noob::prop& _prop, const std::shared_ptr<noob::animated_model>& _skeleton, const std::string& friendly_name)
 {
 
 }
 
 
-noob::prop noob::stage::scenery(const basic_model model_handle, const noob::vec3& pos, const noob::versor& orient)
+noob::prop noob::stage::prop(const noob::body& _body, const std::shared_ptr<noob::basic_model>& _model, const std::string& friendly_name)
 {
 
 }
 
 
-noob::body noob::stage::body(const shape shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient)
+noob::scenery noob::stage::scenery(const std::shared_ptr<noob::basic_model>&, const noob::vec3& pos, const noob::versor& orient, const std::string& friendly_name)
 {
 
 }
 
 
-noob::light noob::stage::light(const noob::light& arg)
+noob::body noob::stage::body(const std::shared_ptr<noob::shape>&, float mass, const noob::vec3& pos, const noob::versor& orient)
+{
+
+}
+
+
+std::shared_ptr<noob::light> noob::stage::light(const noob::light& arg)
 {
 	// return lights.add(arg);
 }
 
 
-noob::reflection noob::stage::reflection(const noob::reflection& arg)
+std::shared_ptr<noob::reflection> noob::stage::reflection(const noob::reflection& arg)
 {
 	// return reflections.add(arg);
 }
 
 
-noob::shader noob::stage::shader(const noob::prepared_shaders::info& arg, const std::string& name)
+std::shared_ptr<noob::shader> noob::stage::shader(const noob::prepared_shaders::info& arg, const std::string& name)
 {
-	noob::shader h;
-	if (shaders.name_exists(name))
-	{
-		h = shaders.add(arg);
-		shaders.set_name(h, name);
-	 }
-	return h;
+	// noob::shader h;
+	// if (shaders.name_exists(name))
+	// {
+	//	h = shaders.add(arg);
+	//	shaders.set_name(h, name);
+	// }
+	// return h;
 
 }
 
-noob::shape noob::stage::sphere(float r)
+
+std::shared_ptr<noob::shape> noob::stage::sphere(float r)
 {
 	auto search = spheres.find(r);
 	if (search == spheres.end())
 	{
-		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
-		temp->sphere(r/2.0);
-		spheres[r] = shapes.add(std::move(temp));
-		return spheres[r];
+		//std::shared_ptr<noob::shape> temp = std::make_shared<noob::shape>();
+		//temp->sphere(r/2.0);
+		//spheres[r] = temp;
+		//return spheres[r];
+		spheres[r] = std::make_shared<noob::shape>();
+		auto temp = spheres[r];
+		temp->sphere(r);
+		return temp;
+
 	}
 	return spheres[r];
 }
 
 
-noob::shape noob::stage::box(float x, float y, float z)
+std::shared_ptr<noob::shape> noob::stage::box(float x, float y, float z)
 {
 	auto search = boxes.find(std::make_tuple(x,y,z));
 	if (search == boxes.end())
@@ -151,7 +181,7 @@ noob::shape noob::stage::box(float x, float y, float z)
 }
 
 
-noob::shape noob::stage::cylinder(float r, float h)
+std::shared_ptr<noob::shape> noob::stage::cylinder(float r, float h)
 {
 	auto search = cylinders.find(std::make_tuple(r, h));
 	if (search == cylinders.end())
@@ -165,7 +195,7 @@ noob::shape noob::stage::cylinder(float r, float h)
 }
 
 
-noob::shape noob::stage::cone(float r, float h)
+std::shared_ptr<noob::shape> noob::stage::cone(float r, float h)
 {
 	auto search = cones.find(std::make_tuple(r, h));
 	if (search == cones.end())
@@ -179,7 +209,7 @@ noob::shape noob::stage::cone(float r, float h)
 }
 
 
-noob::shape noob::stage::capsule(float r, float h)
+std::shared_ptr<noob::shape> noob::stage::capsule(float r, float h)
 {
 	auto search = capsules.find(std::make_tuple(r, h));
 	if (search == capsules.end())
@@ -193,7 +223,7 @@ noob::shape noob::stage::capsule(float r, float h)
 }
 
 
-noob::shape noob::stage::plane(const noob::vec3& normal, float offset)
+std::shared_ptr<noob::shape> noob::stage::plane(const noob::vec3& normal, float offset)
 {
 	auto search = planes.find(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset));
 	if (search == planes.end())
@@ -207,7 +237,7 @@ noob::shape noob::stage::plane(const noob::vec3& normal, float offset)
 }
 
 
-noob::shape noob::stage::hull(const std::vector<noob::vec3>& points, const std::string& name)
+std::shared_ptr<noob::shape> noob::stage::hull(const std::vector<noob::vec3>& points, const std::string& name)
 {
 	noob::shape h;
 	if (shapes.name_exists(name))
@@ -221,7 +251,7 @@ noob::shape noob::stage::hull(const std::vector<noob::vec3>& points, const std::
 }
 
 
-noob::shape noob::stage::trimesh(const noob::basic_mesh& mesh, const std::string& name)
+std::shared_ptr<noob::shape> noob::stage::trimesh(const noob::basic_mesh& mesh, const std::string& name)
 {
 	noob::shape h;
 	if (shapes.name_exists(name))
@@ -233,4 +263,5 @@ noob::shape noob::stage::trimesh(const noob::basic_mesh& mesh, const std::string
 	}
 	return h;
 }
+
 */

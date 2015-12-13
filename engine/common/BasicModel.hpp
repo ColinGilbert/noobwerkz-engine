@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Drawable.hpp"
 #include "BasicMesh.hpp"
 
