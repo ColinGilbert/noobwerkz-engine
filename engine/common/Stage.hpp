@@ -9,6 +9,7 @@
 #include <forward_list>
 #include <boost/variant.hpp>
 #include <btBulletDynamicsCommon.h>
+#include "es/storage.hpp"
 
 #include "Graphics.hpp"
 #include "MathFuncs.hpp"
@@ -53,16 +54,16 @@ namespace noob
 
 			void draw() const;
 			
-			// basic_model_component::handle basic_model(const noob::basic_mesh&);	
-			// basic_model_component::handle basic_model(const noob::shape);
+			// basic_model basic_model(const noob::basic_mesh&);	
+			// basic_model basic_model(const noob::shape);
 			
 			// Loads a serialized model (from cereal binary)
 			// animated_model_component::handle animated_model(const std::string& filename);
 			// skeleton_component::handle skeleton(const std::string& filename);
 
-			// actor_component::handle actor(const body, const basic_model_component::handle, const skeleton_component::handle, const noob::vec3& pos = noob::vec3(0.0, 0.0, 0.0), const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
-			// prop_component::handle prop(const body, const basic_model_component::handle, const noob::vec3& pos = noob::vec3(0.0, 0.0, 0.0), const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
-			// scenery_component::handle scenery(const basic_model_component::handle, const noob::vec3& pos = noob::vec3(0.0, 0.0, 0.0), const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
+			// actor_component::handle actor(const body, const basic_model, const skeleton_component::handle, const noob::vec3& pos = noob::vec3(0.0, 0.0, 0.0), const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
+			// prop_component::handle prop(const body, const basic_model, const noob::vec3& pos = noob::vec3(0.0, 0.0, 0.0), const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
+			// scenery_component::handle scenery(const basic_model, const noob::vec3& pos = noob::vec3(0.0, 0.0, 0.0), const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
 			// body body(const shape, float mass, const noob::vec3& pos = noob::vec3(0.0, 0.0, 0.0), const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
 
 			// light_component::handle light(const noob::light&);
@@ -109,5 +110,9 @@ namespace noob
 			std::map<std::tuple<float, float>, noob::shape> cones;
 			std::map<std::tuple<float, float>, noob::shape> capsules;
 			std::map<std::tuple<float,float,float,float>, noob::shape> planes;
+
+			es::storage pool;
+
+			//auto s;
 	};
 }

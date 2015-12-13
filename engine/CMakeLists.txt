@@ -13,6 +13,9 @@ include_directories(${Boost_INCLUDE_DIR})
 #include_directories(lib/tinympl)
 
 include_directories(lib/es)
+list (APPEND es_src
+	lib/es/es/storage.cpp
+	)
 
 include_directories(lib/cppformat)
 list (APPEND cppformat_src
@@ -244,7 +247,7 @@ list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 
 add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${csgjs_src}
 	${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src}
-	${es_src} ${user_src} ${recast_src} ${angelscript_src}) 
+	${es_src} ${user_src} ${recast_src} ${angelscript_src} ${es_src} ) 
 
 target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES}
 	${OPENGL_LIBRARIES} freetype rt dl pthread assimp m emon OpenMeshCore
