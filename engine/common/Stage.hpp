@@ -87,7 +87,7 @@ namespace noob
 			// std::map<std::tuple<float,float,float,float>, std::shared_ptr<noob::shape>> planes;
 			// std::unordered_map<std::string, std::shared_ptr<noob::shape>> hulls;
 			// std::unordered_map<std::string, std::shared_ptr<noob::shape>> trimeshes;
-			unsigned char shape_component, body_component, basic_model_component, animated_model_component, skeletal_anim_component, basic_shader_component, triplanar_shader_component;
+			unsigned char shape, body, basic_model, animated_model, skeletal_anim, basic_shader, triplanar_shader, sphere, box;
 
 
 

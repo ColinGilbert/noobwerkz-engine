@@ -12,25 +12,25 @@ bool noob::stage::init()
 	renderer.init();
 	
 	auto s (pool.register_component<noob::shape>("shape"));
-	shape_component = s;
+	shape = s;
 	
 	auto b (pool.register_component<noob::body>("body"));
-	body_component = b;
+	body = b;
 
 	auto bm (pool.register_component<std::shared_ptr<noob::basic_model>>("basic-model"));
-	basic_model_component = bm;
+	basic_model = bm;
 
 	auto am (pool.register_component<std::shared_ptr<noob::animated_model>>("animated-model"));
-	animated_model_component = am;
+	animated_model = am;
 
 	auto sa (pool.register_component<std::shared_ptr<noob::skeletal_anim>>("skeletal-anim"));
-	skeletal_anim_component = sa;
+	skeletal_anim = sa;
 
 	auto bsu (pool.register_component<noob::basic_renderer::uniform_info>("basic-renderer-uniform"));
-	basic_shader_component = bsu;
+	basic_shader = bsu;
 
 	auto tsu (pool.register_component<noob::triplanar_gradient_map_renderer::uniform_info>("triplanar-renderer-uniform"));
-	triplanar_shader_component = tsu;	
+	triplanar_shader = tsu;	
 
 
 	// TODO: Add stage default components

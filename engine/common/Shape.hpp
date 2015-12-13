@@ -15,8 +15,8 @@
 #include "BasicMesh.hpp"
 #include "MeshUtils.hpp"
 #include "MathFuncs.hpp"
-#include <boost/variant/variant.hpp>
-#include "inline_variant.hpp"
+
+
 
 namespace noob
 {
