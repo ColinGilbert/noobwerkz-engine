@@ -10,6 +10,7 @@
 
 #include "MathFuncs.hpp"
 #include "Shape.hpp"
+#include "Logger.hpp"
 
 namespace noob
 {

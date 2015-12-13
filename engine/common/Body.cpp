@@ -1,8 +1,8 @@
 #include "Body.hpp"
 
-
 void noob::body::init(btDynamicsWorld* _dynamics_world, const noob::shape* _shape, float mass, const noob::vec3& position, const noob::versor& orientation)
 {
+	logger::log("[Body] init()");
 	btTransform start_transform;
  	start_transform.setIdentity();
  	start_transform.setOrigin(btVector3(position.v[0], position.v[1], position.v[2]));
@@ -13,6 +13,7 @@ void noob::body::init(btDynamicsWorld* _dynamics_world, const noob::shape* _shap
  	btRigidBody::btRigidBodyConstructionInfo ci(mass, motion_state, _shape->get_raw_ptr(), inertia);
 	inner_body = new btRigidBody(ci);
 	_dynamics_world->addRigidBody(inner_body);
+	logger::log("[Body] end init()");
 }
 
 
