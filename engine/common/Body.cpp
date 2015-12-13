@@ -18,7 +18,6 @@ void noob::body::init(btDynamicsWorld* _dynamics_world, const noob::shape* _shap
 
 void noob::body::init(btDynamicsWorld* _dynamics_world, const noob::shape* _shape, const noob::body::info& _info)
 {
-
 	btTransform start_transform;
  	start_transform.setIdentity();
  	start_transform.setOrigin(btVector3(_info.position.v[0], _info.position.v[1], _info.position.v[2]));
