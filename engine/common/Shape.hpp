@@ -27,7 +27,7 @@ namespace noob
 		enum class type { SPHERE, BOX, CAPSULE, CYLINDER, CONE, CONVEX, TRIMESH, PLANE };
 		shape() : physics_valid(false), mesh_initialized(false), dims({ 0.0, 0.0, 0.0, 0.0 }), margin(-1.0) {}
 		~shape() { delete inner_shape; }
-		
+
 		// TODO: Make it able to swap shapes at runtime
 		void sphere(float radius);
 		void box(float width, float height, float depth);

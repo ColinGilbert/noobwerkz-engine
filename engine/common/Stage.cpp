@@ -30,10 +30,7 @@ bool noob::stage::init()
 	basic_shader_component = bsu;
 
 	auto tsu (pool.register_component<noob::triplanar_gradient_map_renderer::uniform_info>("triplanar-renderer-uniform"));
-	triplanar_shader_component = tsu;
-
-
-	
+	triplanar_shader_component = tsu;	
 
 
 	// TODO: Add stage default components

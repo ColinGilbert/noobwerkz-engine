@@ -22,7 +22,7 @@ namespace noob
 
 			typedef boost::variant<noob::triplanar_gradient_map_renderer::uniform_info, noob::basic_renderer::uniform_info> info;
 			
-			void draw(const noob::animated_model* drawable, const prepared_shaders::info& uni, const noob::mat4& world_mat = noob::identity_mat4(), uint8_t view_id = 0) const
+			void draw(const noob::drawable* drawable, const prepared_shaders::info& uni, const noob::mat4& world_mat = noob::identity_mat4(), uint8_t view_id = 0) const
 			{
 				match(uni,
 				[this, drawable, world_mat, view_id] (const noob::triplanar_gradient_map_renderer::uniform_info& info) -> void { this->triplanar.draw(drawable, world_mat, info, view_id); },
@@ -31,7 +31,7 @@ namespace noob
 			}
 
 			// TODO: Implement
-			void draw_instanced(const noob::animated_model* drawable, const prepared_shaders::info& uni, const std::vector<noob::mat4>& world_mats = { noob::identity_mat4() }, uint8_t view_id = 0) const
+			void draw_instanced(const noob::drawable* drawable, const prepared_shaders::info& uni, const std::vector<noob::mat4>& world_mats = { noob::identity_mat4() }, uint8_t view_id = 0) const
 			{
 				
 			}

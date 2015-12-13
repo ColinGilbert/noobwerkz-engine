@@ -298,7 +298,7 @@ void noob::application::accept_ndof_data(const noob::ndof::data& info)
 {
 	if (info.movement == true)
 	{
-		// logger::log(fmt::format("[Sandbox] NDOF data: T({0}, {1}, {2}) R({3}, {4}, {5})", info.translation[0], info.translation[1], info.translation[2], info.rotation[0], info.rotation[1], info.rotation[2]));
+		//logger::log(fmt::format("[Sandbox] NDOF data: T({0}, {1}, {2}) R({3}, {4}, {5})", info.translation[0], info.translation[1], info.translation[2], info.rotation[0], info.rotation[1], info.rotation[2]));
 		float damping = 360.0;
 		noob::vec3 rotation(info.rotation);
 		noob::vec3 translation(info.translation);

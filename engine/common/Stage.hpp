@@ -66,6 +66,8 @@ namespace noob
 			// std::shared_ptr<noob::shape> hull(const std::vector<noob::vec3>& points, const std::string& name);
 			// std::shared_ptr<noob::shape> trimesh(const noob::basic_mesh& mesh, const std::string& name);
 
+			es::storage pool;
+
 		protected:
 
 			noob::prepared_shaders renderer;
@@ -87,7 +89,7 @@ namespace noob
 			// std::unordered_map<std::string, std::shared_ptr<noob::shape>> trimeshes;
 			unsigned char shape_component, body_component, basic_model_component, animated_model_component, skeletal_anim_component, basic_shader_component, triplanar_shader_component;
 
-			es::storage pool;
+
 
 	};
 }

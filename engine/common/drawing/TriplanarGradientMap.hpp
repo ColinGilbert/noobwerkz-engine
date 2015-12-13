@@ -20,7 +20,7 @@ namespace noob
 			};
 
 			void init();
-			void draw(const noob::animated_model*, const noob::mat4& world_mat, const noob::triplanar_gradient_map_renderer::uniform_info& info, uint8_t view_id = 0) const;
+			void draw(const noob::drawable*, const noob::mat4& world_mat, const noob::triplanar_gradient_map_renderer::uniform_info& info, uint8_t view_id = 0) const;
 
 		protected:
 			noob::graphics::shader shader;
