@@ -1,12 +1,12 @@
 #pragma once
 
+#include <boost/variant/variant.hpp>
 
 #include "MathFuncs.hpp"
 #include "TriplanarGradientMap.hpp"
 #include "BasicRenderer.hpp"
 #include "AnimatedModel.hpp"
 
-#include <boost/variant/variant.hpp>
 #include "inline_variant.hpp"
 
 namespace noob

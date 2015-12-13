@@ -10,7 +10,9 @@ set(CMAKE_C_FLAGS "-std=c99 -fno-strict-aliasing -DSQLITE_ENABLE_COLUMN_METADATA
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 
-include_directories(lib/tinympl)
+#include_directories(lib/tinympl)
+
+include_directories(lib/es)
 
 include_directories(lib/cppformat)
 list (APPEND cppformat_src
@@ -46,6 +48,7 @@ include_directories(lib/bgfx/3rdparty/khronos)
 include_directories(lib/lemon)
 
 include_directories(lib/cereal/include)
+
 include_directories(lib/stb)
 
 include_directories(lib/inline_variant_visitor)

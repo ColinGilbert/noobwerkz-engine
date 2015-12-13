@@ -2,7 +2,7 @@
 
 #include <LinearMath/btConvexHull.h>
 
-#include <tinympl/functional.hpp>
+// #include <tinympl/functional.hpp>
 
 /*
    noob::basic_mesh noob::mesh_utils::swept_sphere(float radius, size_t x_segments, size_t _y_segments)
