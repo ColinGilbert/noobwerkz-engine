@@ -1,8 +1,7 @@
 #include "MeshUtils.hpp"
 
 #include <LinearMath/btConvexHull.h>
-
-#include <tinympl/functional.hpp>
+#include <set>
 
 /*
    noob::basic_mesh noob::mesh_utils::swept_sphere(float radius, size_t x_segments, size_t _y_segments)
@@ -194,6 +193,7 @@ noob::basic_mesh noob::mesh_utils::cylinder(float radius, float height, size_t s
 	{
 		_segments = segments;
 	}
+
 	double increment_amount = TWO_PI / static_cast<double>(_segments);
 
 	std::vector<std::tuple<PolyMesh::VertexHandle, PolyMesh::VertexHandle>> verts;
@@ -217,7 +217,8 @@ noob::basic_mesh noob::mesh_utils::cylinder(float radius, float height, size_t s
 		verts.push_back(std::make_tuple(v1, v2));
 	}
 
-	std::vector<PolyMesh::VertexHandle> face_verts;	
+	std::vector<PolyMesh::VertexHandle> face_verts;
+
 	for(size_t i = 1; i < verts.size(); i++)
 	{
 		std::tuple<PolyMesh::VertexHandle, PolyMesh::VertexHandle> previous_verts = verts[i-1];
@@ -265,17 +266,111 @@ noob::basic_mesh noob::mesh_utils::cylinder(float radius, float height, size_t s
 
 	half_edges.triangulate();
 	half_edges.garbage_collection();
-	//OpenMesh::IO::write_mesh(half_edges, "temp/cylinder.off");
+
 	noob::basic_mesh mesh;
 	mesh.from_half_edges(half_edges);
 
-	//mesh.load_file("temp/cylinder.off","cylinder-temp");
-	// logger::log(fmt::format("Created cylinder with height = {0}, radius = {1} with {2} segments.", height, radius, _segments));
 	return mesh;
 }
 
 
-noob::basic_mesh noob::mesh_utils::cube(float width, float height, float depth, size_t subdivides)
+noob::basic_mesh noob::mesh_utils::swept_shape(const std::vector<noob::vec2>& points, size_t segments)
+{
+	// TODO: Sort line of points by Y-value, descending order.
+	PolyMesh half_edges;
+
+	std::vector<noob::vec3> _points;
+	for (noob::vec2 p : points)
+	{
+		_points.push_back(noob::vec3(p.v[0], p.v[1], 0.0));
+	}
+
+	size_t _segments;
+
+	if (segments == 0) 
+	{
+		_segments = 12;
+	}
+	else
+	{
+		_segments = segments;
+	}
+
+	double increment_amount = TWO_PI / static_cast<double>(_segments);
+
+	std::vector<std::vector<PolyMesh::VertexHandle>> topology_verts;
+
+	for (size_t i = 0; i < _points.size(); ++i)
+	{
+		Eigen::Vector3f p(_points[i].v[0], _points[i].v[1], _points[i].v[2]);
+
+		std::vector<PolyMesh::VertexHandle> current_ring;
+
+		for (size_t seg = 0; seg < _segments; ++seg)
+		{
+			double diff = increment_amount * seg;
+			Eigen::AngleAxis<float> angle_axis(diff, Eigen::Vector3f::UnitY());
+			Eigen::Vector3f p_rotated = angle_axis * p;
+			PolyMesh::VertexHandle v_handle = half_edges.add_vertex(PolyMesh::Point(p_rotated[0], p_rotated[1], p_rotated[2]));
+			current_ring.push_back(v_handle);
+		}
+
+		topology_verts.push_back(current_ring);
+	}
+
+	std::vector<PolyMesh::VertexHandle> face_verts;
+
+	// face_verts.clear();	
+	// face_verts.push_back(std::get<0>(verts[verts.size()-1]));
+	// face_verts.push_back(std::get<1>(verts[verts.size()-1]));
+	// face_verts.push_back(std::get<1>(verts[0]));
+	// face_verts.push_back(std::get<0>(verts[0]));
+	// half_edges.add_face(face_verts);
+
+	for (size_t i = 1; i < topology_verts.size(); ++i)
+	{
+		std::vector<PolyMesh::VertexHandle> previous_ring = topology_verts[i - 1];
+		std::vector<PolyMesh::VertexHandle> current_ring = topology_verts[i];
+		// TODO: Enforce at the language level that both vectors must have the same number of elements.
+		// Currently it's secured by mathematics, which is quite solid but still rather sloppy from a C++ standpoint.
+		for (size_t k = 0; k < std::min(previous_ring.size(), current_ring.size()); ++k)
+		{
+			std::vector<PolyMesh::VertexHandle> face_verts;
+
+		}
+	}
+
+	noob::basic_mesh results;
+	return results;
+}
+
+
+noob::basic_mesh noob::mesh_utils::capsule(float radius, float height, size_t segments)
+{
+	noob::basic_mesh s_top = catmull_sphere(radius);
+	noob::basic_mesh s_bottom;
+	s_bottom.load_mem(s_top.save());
+
+	s_top.translate(noob::vec3(0.0, height - radius, 0.0));
+	s_bottom.translate(noob::vec3(0.0, -(height - radius), 0.0));
+
+	std::vector<noob::vec3> points;
+
+	for (noob::vec3 p : s_top.vertices)
+	{
+		points.push_back(p);
+	}
+
+	for (noob::vec3 p : s_bottom.vertices)
+	{
+		points.push_back(p);
+	}
+
+	return noob::mesh_utils::hull(points);
+}
+
+
+noob::basic_mesh noob::mesh_utils::box(float width, float height, float depth, size_t subdivides)
 {
 	PolyMesh half_edges;
 	PolyMesh::VertexHandle vhandle[8];
@@ -358,7 +453,7 @@ noob::basic_mesh noob::mesh_utils::cube(float width, float height, float depth, 
 noob::basic_mesh noob::mesh_utils::catmull_sphere(float radius)
 {
 	float diameter = radius * 2;
-	noob::basic_mesh mesh = noob::mesh_utils::cube(diameter, diameter, diameter, 3);
+	noob::basic_mesh mesh = noob::mesh_utils::box(diameter, diameter, diameter, 3);
 	// logger::log(fmt::format("Created sphere of radius {0}.", radius));
 	return mesh;
 }

@@ -35,7 +35,7 @@ void noob::triplanar_gradient_map_renderer::init()
 }
 
 
-void noob::triplanar_gradient_map_renderer::draw(const noob::animated_model* model, const noob::mat4& world_mat, const noob::triplanar_gradient_map_renderer::uniform_info& info, uint8_t view_id) const
+void noob::triplanar_gradient_map_renderer::draw(const noob::model* model, const noob::mat4& world_mat, const noob::triplanar_gradient_map_renderer::uniform_info& info, uint8_t view_id) const
 {
 	bgfx::setUniform(noob::graphics::get_uniform("colour_1").handle, &info.colours[0].v[0]);
 	bgfx::setUniform(noob::graphics::get_uniform("colour_2").handle, &info.colours[1].v[0]);

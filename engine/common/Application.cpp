@@ -6,6 +6,7 @@ noob::application* noob::application::app_pointer = nullptr;
 noob::application::application() 
 {
 	app_pointer = this;
+	// noob::graphics::init(800,600);
 	paused = input_has_started = false;
 	timespec timeNow;
 	clock_gettime(CLOCK_MONOTONIC, &timeNow);
@@ -13,9 +14,9 @@ noob::application::application()
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
 	script_engine = asCreateScriptEngine();
-	assert(script_engine == 0); // TODO: Look into a little.
-	set_init_script("init.as");
-	view_mat = noob::look_at(noob::vec3(0, 50.0, -100.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
+	//assert(script_engine == 0); // TODO: Look into a little.
+	//set_init_script("init.as");
+	view_mat = noob::look_at(noob::vec3(0, 100.0, -1000.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
 }	
 
 
@@ -244,7 +245,7 @@ void noob::application::update(double delta)
 	static double time_elapsed = 0.0;
 	time_elapsed += delta;
 
-
+/*
 	if (time_elapsed > 0.25)
 	{
 		boost::filesystem::path p;
@@ -277,20 +278,19 @@ void noob::application::update(double delta)
 		}
 		time_elapsed = 0.0;
 	}
+	*/
 }
 
 
 void noob::application::draw()
 {
-
+	// logger::log("[Application] draw");
 	noob::mat4 proj = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 0.1f, 2000.0f);
 
 	bgfx::setViewTransform(0, &view_mat.m[0], &proj.m[0]);
 	bgfx::setViewRect(0, 0, 0, window_width, window_height);
 
 	stage.draw();
-
-	// gui.text("The goat stumbled upon the cheese", 150.0, 50.0);
 }
 
 
@@ -312,6 +312,7 @@ void noob::application::accept_ndof_data(const noob::ndof::data& info)
 
 void noob::application::step()
 {
+	// logger::log("[Application] step");
 	timespec timeNow;
 	clock_gettime(CLOCK_MONOTONIC, &timeNow);
 	uint64_t uNowNano = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;

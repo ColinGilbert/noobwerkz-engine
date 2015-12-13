@@ -1,4 +1,3 @@
-// This class represents an animated character. Current only does one animation at a time, in order to learn the system.
 #pragma once
 
 
@@ -34,7 +33,7 @@ namespace noob
 	{
 		public:
 			skeletal_anim(): valid(false), current_time(0.0), allocator(ozz::memory::default_allocator()) {}
-			
+
 			~skeletal_anim();
 			// Loads a runtime skeleton. Possibly convert to raw skeleton
 			void init(const std::string& filename);
@@ -45,13 +44,13 @@ namespace noob
 
 			void update(float dt = 0.0);
 			void reset_time(float t = 0.0);
-			
+
 			bool anim_exists(const std::string& name) const;
 			bool switch_to_anim(const std::string& name);
 			std::string get_current_anim() const;
 			// std::weak_ptr<noob::skeletal_anim::sampler> get_sampler(const std::string& anim_name) const;
 			// Gets bone matrices in model space
-			
+
 			std::vector<noob::mat4> get_matrices() const;
 			/// std::array<noob::vec3,4> get_skeleton_bounds() const;
 
@@ -77,7 +76,7 @@ namespace noob
 
 				ozz::Range<ozz::math::SoaTransform> get_local_mats() const;
 				void get_model_mats(ozz::Range<ozz::math::Float4x4>& models);
-				
+
 				protected:
 				sampler() : weight(1.0), cache(nullptr) {}
 				noob::skeletal_anim::playback_controller controller;
@@ -87,11 +86,11 @@ namespace noob
 				ozz::animation::SamplingCache* cache;
 				ozz::Range<ozz::math::SoaTransform> locals;
 			};
-			
-			
+
+
 			noob::skeletal_anim::sampler create_sampler(const ozz::animation::Animation& anim);
 			void destroy_sampler(noob::skeletal_anim::sampler&);		
-			
+
 			bool valid;
 			std::string current_anim_name;
 			ozz::animation::Animation* current_anim;

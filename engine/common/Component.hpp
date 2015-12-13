@@ -9,15 +9,18 @@ namespace noob
 	template<typename T>
 		class component 
 		{
+			friend class stage;
+
 			public:
 				class handle
 				{
 					friend class component;
+					friend class stage;
 					public:
-					handle() : valid(false), inner(0) {}
+						handle() : valid(false), inner(0) {}
 					protected:
-					bool valid;
-					size_t inner;
+						bool valid;
+						size_t inner;
 				};
 
 				T* get(component<T>::handle h)
@@ -63,8 +66,7 @@ namespace noob
 				{
 					return (names.find(name) != names.end());
 				}
-
-
+				
 			protected:
 
 				std::vector<T> items;
@@ -75,6 +77,7 @@ namespace noob
 	template<typename T>
 		class component<std::unique_ptr<T>> 
 		{
+			friend class stage;
 			public:
 				class handle
 				{
@@ -127,6 +130,8 @@ namespace noob
 				{
 					return (names.find(name) != names.end());
 				}
+
+
 
 			protected:
 

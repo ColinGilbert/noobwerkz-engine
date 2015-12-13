@@ -27,7 +27,7 @@ void noob::application::user_init()
 	points.push_back(noob::vec3(7.0, 1.5, 2.0));
 
 	auto hull = stage.hull(points, "points");
-	
+	//auto hull_model = stage.basic_model(hull);	
 	noob::basic_mesh m = noob::mesh_utils::cone(1.0, 2.0);
 	m.from_half_edges(m.to_half_edges());
 }
@@ -35,7 +35,8 @@ void noob::application::user_init()
 
 void noob::application::user_update(double dt)
 {
-	gui.text("THE NIMBLE MONKEY GRABS THE APRICOT", 50.0, 50.0, noob::gui::font_size::HEADER);
+//	logger::log("About to draw text");
+	// gui.text("The goat stumbled upon the cheese", 150.0, 50.0);
 	// player_character->move(true, false, false, false, true);
 	// logger::log(player_character->get_debug_info());
 }

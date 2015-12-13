@@ -1,4 +1,5 @@
 #include "Stage.hpp"
+#include "inline_variant.hpp"
 
 bool noob::stage::init()
 {
@@ -11,15 +12,32 @@ bool noob::stage::init()
 	
 	renderer.init();
 
+	prop_counter = scenery_counter = 0;
+
 	// TODO: Add stage default components
+	logger::log("Creating sphere");	
+	auto temp_shape = sphere(1.0);
+	logger::log("Creating body");
+	auto temp_body = body(temp_shape, 1.0, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
+	logger::log("Creating model");
+	auto temp_model = model(temp_shape);
+	logger::log("Creating shader info");
 	noob::basic_renderer::uniform_info basic_shader_info;
-	
 	basic_shader_info.colour = noob::vec4(1.0, 0.0, 0.0, 1.0);
-	
 	auto s = shaders.add(basic_shader_info);
 	shaders.set_name(s, "debug");
+	logger::log("Creating prop");
+	auto temp_prop = prop(temp_body, temp_model, s);
+	logger::log("Creating boxmesh");
+	noob::basic_mesh temp_mesh = noob::mesh_utils::box(1000.0, 1.0, 1000.0);
+	logger::log("Creating scenery");
+	auto temp_scenery = scenery(temp_mesh, noob::vec3(0.0, -1.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0), s);
+	fmt::MemoryWriter ww;
+	ww << "Scenery created. ID = " << temp_scenery.inner;
+	logger::log(ww.str());
+	// auto temp_light = light(temp_lighting_info);
+	// auto temp_reflection = reflection(temp_reflect_info);
 
-	
 	logger::log("[Stage] init complete.");
 	return true;
 }
@@ -43,34 +61,39 @@ void noob::stage::update(double dt)
 
 void noob::stage::draw() const
 {
-// TODO: Use frustum + physics world collisions to determine which items are visible, and then draw them.
+	// TODO: Use frustum + physics world collisions to determine which items are visible, and then draw them.
+	for (auto p : props.items)
+	{
+		renderer.draw(p.get_model(), *(p.get_shading()), p.get_body()->get_transform());
+	}
 
 }
 
 
-/*
-void noob::stage::draw(noob::drawable* d, const noob::mat4& transform) const
+noob::model_component::handle noob::stage::model(const noob::basic_mesh& m)
 {
-
-}
-*/
-
-
-noob::basic_model_component::handle noob::stage::basic_model(const noob::basic_mesh& m)
-{
-	return basic_models.add(std::make_unique<noob::basic_model>(m));
+	noob::model temp(m);
+	return models.add(std::make_unique<noob::model>(temp));
 }
 
 
-noob::basic_model_component::handle noob::stage::basic_model(const noob::shape_component::handle)
+noob::model_component::handle noob::stage::model(const noob::shape_component::handle h)
+{
+	noob::model m(shapes.get(h)->get_mesh());
+	return models.add(std::make_unique<noob::model>(m));
+}
+
+
+noob::basic_mesh noob::stage::make_mesh(const noob::shape_component::handle h)
 {
 
 }
 
 
-noob::animated_model_component::handle noob::stage::animated_model(const std::string& filename)
+noob::model_component::handle noob::stage::model(const std::string& filename)
 {
-	return animated_models.add(std::make_unique<noob::animated_model>(filename));
+	noob::model temp(filename);
+	return models.add(std::make_unique<noob::model>(temp));
 }
 
 
@@ -81,29 +104,66 @@ noob::skeleton_component::handle noob::stage::skeleton(const std::string& filena
 	return skeletons.add(std::move(temp));
 }
 
-
-noob::actor_component::handle noob::stage::actor(const body_component::handle body_handle, const basic_model_component::handle model_handle, const skeleton_component::handle, const noob::vec3& pos, const noob::versor& orient)
+/*
+noob::actor_component::handle noob::stage::actor(const noob::body_component::handle body_handle, const noob::model_component::handle model_handle, const skeleton_component::handle skeleton_handle)
 {
+	noob::actor temp_actor;
+	temp_actor.init(bodies.get(body_handle), models.get(model_handle));
+}
+*/
 
+
+noob::prop_component::handle noob::stage::prop(const noob::body_component::handle body_handle, const noob::model_component::handle model_handle, const noob::shader_component::handle shader_handle)
+{
+	// Gives a name + number in order to look up.
+	std::string temp_name = "noob-prop";
+	
+	temp_name.append(std::to_string(prop_counter));
+
+	++prop_counter;
+
+	noob::prop temp_prop;
+	
+	temp_prop.init(bodies.get(body_handle), models.get(model_handle), shaders.get(shader_handle));
+	
+	return props.add(temp_prop);
 }
 
 
-noob::prop_component::handle noob::stage::prop(const body_component::handle body_handle, const basic_model_component::handle model_handle, const noob::vec3& pos, const noob::versor& orient)
+noob::prop_component::handle noob::stage::scenery(const noob::basic_mesh& mesh, const noob::vec3& pos, const noob::versor& orient, const noob::shader_component::handle shader_handle)
 {
+	std::string temp_name = "noob-scenery";
 
-}
+	temp_name.append(std::to_string(scenery_counter));
 
+	++scenery_counter;
 
-noob::scenery_component::handle noob::stage::scenery(const basic_model_component::handle model_handle, const noob::vec3& pos, const noob::versor& orient)
-{
-
+	noob::shape_component::handle shape_handle = trimesh(mesh, temp_name);
+	
+	noob::body_component::handle body_handle = body(shape_handle, 1.0, pos, orient);
+	
+	noob::model_component::handle model_handle = model(mesh);
+	
+	// Creates prop from method properly defined in scene :)
+	return prop(body_handle, model_handle, shader_handle);
 }
 
 
 noob::body_component::handle noob::stage::body(const shape_component::handle shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient)
 {
-
+	noob::body temp_bod;
+	temp_bod.init(dynamics_world, shapes.get(shape_handle), mass, pos, orient);
+	return bodies.add(temp_bod);
 }
+
+
+void noob::stage::change_shading(noob::prop_component::handle prop_handle, noob::shader_component::handle shader_handle)
+{
+	noob::prop* p = props.get(prop_handle);
+	noob::prepared_shaders::info* s = shaders.get(shader_handle);
+	p->set_shading(s);
+}
+
 
 
 noob::light_component::handle noob::stage::light(const noob::light& arg)

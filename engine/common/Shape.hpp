@@ -25,10 +25,11 @@ namespace noob
 		friend class body;
 		public:
 		enum class type { SPHERE, BOX, CAPSULE, CYLINDER, CONE, CONVEX, TRIMESH, PLANE };
-		shape() : physics_valid(false), mesh_initialized(false), dims({ 0.0, 0.0, 0.0, 0.0 }), margin(-1.0) {}
+		shape() : physics_valid(false), mesh_initialized(false), margin(-1.0) {}
 		~shape() { delete inner_shape; }
+
+		noob::shape::type get_type() const;
 		
-		// TODO: Make it able to swap shapes at runtime
 		void sphere(float radius);
 		void box(float width, float height, float depth);
 		void cylinder(float radius, float height);
@@ -41,13 +42,15 @@ namespace noob
 		void set_margin(float);
 		float get_margin() const;
 
+		noob::basic_mesh get_mesh() const;
+
 		protected:
 		btCollisionShape* get_raw_ptr() const;
 		noob::shape::type shape_type;
 		bool physics_valid, mesh_initialized;
-		std::array<float, 4> dims;
+		//std::array<float, 4> dims;
 		float margin;
 		btCollisionShape* inner_shape;
-		noob::basic_mesh inner_mesh;
+		std::unique_ptr<noob::basic_mesh> inner_mesh;
 	};
 }

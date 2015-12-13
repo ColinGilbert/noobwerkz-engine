@@ -9,6 +9,7 @@
 //#include "shaderc.h"
 
 // bgfx::VertexDecl noob::graphics::mesh_vertex::ms_decl;
+noob::graphics::init_info noob::graphics::info;
 
 std::unordered_map<std::string, bgfx::TextureHandle> noob::graphics::global_textures;
 std::unordered_map<std::string, noob::graphics::uniform> noob::graphics::uniforms;
@@ -17,22 +18,32 @@ std::unordered_map<std::string, noob::graphics::shader> noob::graphics::shaders;
 
 void noob::graphics::init(uint32_t width, uint32_t height)
 {
-	uint32_t reset = BGFX_RESET_VSYNC;
+	if (info.initialized == false)
+	{
+		logger::log("[Graphics] - Initializing!");
+		uint32_t reset = BGFX_RESET_VSYNC;
 
-	//noob::graphics::mesh_vertex::init();
-	bgfx::reset(width, height, reset);
+		//noob::graphics::mesh_vertex::init();
+		bgfx::reset(width, height, reset);
 
-	bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x00000000, 1.0f, 0);
+		bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x00000000, 1.0f, 0);
 
-	// Add initial defaults (invalid stuff) to map
-	bgfx::ProgramHandle h;
-	h.idx = bgfx::invalidHandle;
-	noob::graphics::shader shad;
-	shad.program = h;
+		// Add initial defaults (invalid stuff) to map
+		bgfx::ProgramHandle h;
+		h.idx = bgfx::invalidHandle;
+		noob::graphics::shader shad;
+		shad.program = h;
 
-	noob::graphics::add_shader(std::string("invalid"), shad);
-	noob::graphics::add_uniform(std::string("invalid"), bgfx::UniformType::Enum::Int1, 0);
-	noob::graphics::add_sampler(std::string("invalid"));
+		noob::graphics::add_shader(std::string("invalid"), shad);
+		noob::graphics::add_uniform(std::string("invalid"), bgfx::UniformType::Enum::Int1, 0);
+		noob::graphics::add_sampler(std::string("invalid"));
+
+		info.initialized = true;
+	}
+	else
+	{
+		logger::log("[Graphics] - Cannot init multiple times.");
+	}
 }
 
 
@@ -114,13 +125,13 @@ bgfx::TextureHandle noob::graphics::load_texture(const std::string& friendly_nam
 
 	// TODO: Find out why mips break the rendering
 	std::string texture_file = noob::utils::load_file_as_string(filename);
-	
+
 	{
 		fmt::MemoryWriter ww;
 		ww << "Loaded texture size = " << texture_file.size();
 		logger::log(ww.str());
 	}
-	
+
 	bgfx::TextureInfo tex_info;
 	bgfx::TextureHandle tex = bgfx::createTexture(bgfx::copy(&texture_file[0], sizeof(char) * texture_file.size()), flags, 0, &tex_info);
 
@@ -167,49 +178,49 @@ bool noob::graphics::add_uniform(const std::string& name, bgfx::UniformType::Enu
 }
 
 /*
-bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program)
-{
-	std::vector<noob::graphics::uniform> empty_uniforms;
-	std::vector<noob::graphics::sampler> empty_samplers;
- 	return noob::graphics::add_shader(_name, _program, empty_uniforms, empty_samplers);
-}
+   bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program)
+   {
+   std::vector<noob::graphics::uniform> empty_uniforms;
+   std::vector<noob::graphics::sampler> empty_samplers;
+   return noob::graphics::add_shader(_name, _program, empty_uniforms, empty_samplers);
+   }
 
-bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program, const std::vector<noob::graphics::uniform>& _uniforms)
-{
-	std::vector<noob::graphics::sampler> empty_samplers;
-	return noob::graphics::add_shader(_name, _program, _uniforms, empty_samplers);
+   bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program, const std::vector<noob::graphics::uniform>& _uniforms)
+   {
+   std::vector<noob::graphics::sampler> empty_samplers;
+   return noob::graphics::add_shader(_name, _program, _uniforms, empty_samplers);
 
-}
+   }
 
-bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program, const std::vector<noob::graphics::sampler>& _samplers)
-{
-	std::vector<noob::graphics::uniform> empty_uniforms;
-	return noob::graphics::add_shader(_name, _program, empty_uniforms, _samplers);
+   bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program, const std::vector<noob::graphics::sampler>& _samplers)
+   {
+   std::vector<noob::graphics::uniform> empty_uniforms;
+   return noob::graphics::add_shader(_name, _program, empty_uniforms, _samplers);
 
-}
+   }
 
 // TODO: Verify validity prior to insertion (and auto-insert into noob::graphics::uniforms, noob::graphics::samplers, and noob::graphics::programs?)
 bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program, const std::vector<noob::graphics::uniform>& _uniforms, const std::vector<noob::graphics::sampler>& _samplers)
 {
-	if (noob::graphics::shaders.find(_name) == noob::graphics::shaders.end())
-	{
-		noob::graphics::shader bundle;
-		bundle.program = _program;
-		
-		for (auto it = _uniforms.begin(); it != _uniforms.end(); ++it)
-		{
-			bundle.uniforms.push_back(*it); 
-		}
-		
-		for (auto it = _samplers.begin(); it != _samplers.end(); ++it)
-		{
-			bundle.samplers.push_back(*it); 
-		}
+if (noob::graphics::shaders.find(_name) == noob::graphics::shaders.end())
+{
+noob::graphics::shader bundle;
+bundle.program = _program;
 
-		noob::graphics::shaders.insert(std::make_pair(_name, bundle));
-		return true;
-	}
-	else return false;
+for (auto it = _uniforms.begin(); it != _uniforms.end(); ++it)
+{
+bundle.uniforms.push_back(*it); 
+}
+
+for (auto it = _samplers.begin(); it != _samplers.end(); ++it)
+{
+bundle.samplers.push_back(*it); 
+}
+
+noob::graphics::shaders.insert(std::make_pair(_name, bundle));
+return true;
+}
+else return false;
 }
 */
 

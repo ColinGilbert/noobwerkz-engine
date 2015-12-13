@@ -6,7 +6,7 @@
 #include <memory>
 #include <unordered_map>
 #include <bgfx.h>
-
+#include <atomic>
 #include <boost/variant/variant.hpp>
 
 
@@ -97,5 +97,13 @@ namespace noob
 			static std::unordered_map<std::string, noob::graphics::uniform> uniforms;
 			static std::unordered_map<std::string, noob::graphics::sampler> samplers;
 
+		protected:
+			struct init_info
+			{
+				init_info() : initialized(false) {}
+				std::atomic<bool> initialized;
+			};
+
+			static init_info info;
 	};
 }

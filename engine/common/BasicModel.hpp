@@ -1,3 +1,5 @@
+#pragma once
+/*
 #include "Drawable.hpp"
 #include "BasicMesh.hpp"
 
@@ -47,3 +49,4 @@ namespace noob
 
 	};
 }
+*/

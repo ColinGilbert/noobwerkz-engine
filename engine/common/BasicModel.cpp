@@ -1,5 +1,5 @@
 #include "BasicModel.hpp"
-
+/*
 bgfx::VertexDecl noob::basic_model::vertex::ms_decl;
 
 noob::basic_model::basic_model(const noob::basic_mesh& input_mesh)
@@ -59,3 +59,4 @@ void noob::basic_model::draw(uint8_t view_id, const noob::mat4& model_mat, const
 		logger::log("Attempting to draw item with improper state.");
 	}
 }
+*/

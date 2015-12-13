@@ -51,7 +51,7 @@ namespace noob
 					ar(info);
 				}
 
-			void init(btDynamicsWorld*, const noob::shape*, float mass, const noob::vec3& position, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0));
+			void init(btDynamicsWorld*, const noob::shape*, float mass, const noob::vec3& position, const noob::versor& orientation);
 			void init(btDynamicsWorld*, const noob::shape*, const noob::body::info&);
 			
 			// Common usefuls:

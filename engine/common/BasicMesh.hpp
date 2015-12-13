@@ -1,16 +1,6 @@
-// TODO: Add code to generate normals via assimp
-// TODO: Replace hard-coded cylinder, cone, sphere functions with more generic swept shape algorithm. Low priority.
-
 #pragma once
 
 #define OM_STATIC_BUILD 1
-/*
-#include <boost/interprocess/containers/vector.hpp>
-#include <boost/interprocess/containers/string.hpp>
-#include <boost/interprocess/allocators/allocator.hpp>
-#include <boost/interprocess/managed_shared_memory.hpp>
-#include <boost/interprocess/streams/vectorstream.hpp>
-*/
 
 #include <cereal/access.hpp>
 #include <cereal/types/array.hpp>
@@ -73,15 +63,15 @@ namespace noob
 
 			struct bbox_info
 			{
-			template <class Archive>
-				void serialize( Archive & ar )
-				{
-					ar(min, max, center);
-				}
+				template <class Archive>
+					void serialize( Archive & ar )
+					{
+						ar(min, max, center);
+					}
 
 				noob::vec3 min, max, center;
 			};
-			
+
 			std::vector<noob::vec3> vertices;
 			std::vector<noob::vec3> normals;
 			std::vector<noob::vec3> texcoords;
@@ -92,9 +82,10 @@ namespace noob
 			void decimate(const std::string& filename, size_t num_verts) const;
 			//noob::basic_mesh decimate(size_t num_verts) const;
 
+			// Saves to OFF file. First function returns string.
 			std::string save() const;
 			void save(const std::string& filename) const;
-			
+
 			// Takes any file Assimp can. First mesh of file only. No bones.
 			bool load_mem(const std::string& file, const std::string& name = "");
 			bool load_file(const std::string& filename, const std::string& name = "");
@@ -107,7 +98,7 @@ namespace noob
 			void translate(const noob::vec3&);
 			void rotate(const noob::versor&);
 			void scale(const noob::vec3&);
-			
+
 			noob::basic_mesh::bbox_info get_bbox() const { return bbox; }
 
 			TriMesh to_half_edges() const;

@@ -53,7 +53,7 @@
 #include "TransformHelper.hpp"
 #include "Keys.hpp"
 #include "format.h"
-#include "AnimatedModel.hpp"
+#include "Model.hpp"
 #include "ShaderVariant.hpp"
 #include "MeshUtils.hpp"
 #include "FileSystem.hpp"

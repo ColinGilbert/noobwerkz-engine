@@ -1,36 +1,5 @@
-// TODO: Remove the following comment if it works across all builds
-//#define CSGJS_HEADER_ONLY
-//#include <csgjs.hpp>
-//
-
-
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
-#include <string>
-#include <iostream>
-/*
-#include <OpenMesh/Core/IO/MeshIO.hh>
-#include <OpenMesh/Tools/Decimater/CollapseInfoT.hh>
-#include <OpenMesh/Tools/Decimater/DecimaterT.hh>
-#include <OpenMesh/Tools/Decimater/ModAspectRatioT.hh>
-#include <OpenMesh/Tools/Decimater/ModEdgeLengthT.hh>
-#include <OpenMesh/Tools/Decimater/ModHausdorffT.hh>
-#include <OpenMesh/Tools/Decimater/ModNormalDeviationT.hh>
-#include <OpenMesh/Tools/Decimater/ModNormalFlippingT.hh>
-#include <OpenMesh/Tools/Decimater/ModQuadricT.hh>
-#include <OpenMesh/Tools/Decimater/ModProgMeshT.hh>
-#include <OpenMesh/Tools/Decimater/ModIndependentSetsT.hh>
-#include <OpenMesh/Tools/Decimater/ModRoundnessT.hh>
-#include <OpenMesh/Tools/Subdivider/Uniform/CatmullClarkT.hh>
-*/
-
 #include "Logger.hpp"
 #include "BasicMesh.hpp"
-#include "format.h"
-
-//#include "VHACD.h"
-
 
 #include <Eigen/Geometry>
 
@@ -340,7 +309,7 @@ void noob::basic_mesh::from_half_edges(PolyMesh half_edges)
 	PolyMesh _half_edges = half_edges;
 	_half_edges.triangulate();
 	_half_edges.garbage_collection();
-	
+
 	if (!OpenMesh::IO::write_mesh(half_edges, oss, "temp.off")) 
 	{
 		logger::log("[BasicMesh] Could not import from OpenMesh!");
