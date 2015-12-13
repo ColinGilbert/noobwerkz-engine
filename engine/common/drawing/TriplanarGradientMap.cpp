@@ -3,7 +3,7 @@
 void noob::triplanar_gradient_map_renderer::init()
 {
 
-	bgfx::ProgramHandle program_handle = noob::graphics::load_program("fs_gradient_map_triplanar", "fs_gradient_map_triplanar");
+	bgfx::ProgramHandle program_handle = noob::graphics::load_program("vs_gradient_map_triplanar", "fs_gradient_map_triplanar");
 
 	std::string ss;
 	if (bgfx::invalidHandle != program_handle.idx)
