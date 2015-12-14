@@ -1,5 +1,6 @@
 #include "Stage.hpp"
 
+
 bool noob::stage::init()
 {
 	broadphase = new btDbvtBroadphase();
@@ -8,16 +9,15 @@ bool noob::stage::init()
 	solver = new btSequentialImpulseConstraintSolver();
 	dynamics_world = new btDiscreteDynamicsWorld(collision_dispatcher, broadphase, solver, collision_configuration);
 	dynamics_world->setGravity(btVector3(0, -10, 0));
-	
-	renderer.init();
 
+	renderer.init();
 
 	auto temp_path (pool.register_component<std::vector<noob::vec3>>("path"));
 	path_tag.inner = temp_path;
 
 	auto temp_shape (pool.register_component<noob::shapes::handle>("shape"));
 	shape_tag.inner = temp_shape;
-	
+
 	auto temp_shape_type (pool.register_component<noob::shape::type>("shape-type"));
 	shape_type_tag.inner = temp_shape_type;
 
@@ -45,11 +45,11 @@ bool noob::stage::init()
 
 	// TODO: Add stage default components
 	// noob::basic_renderer::uniform_info basic_shader_info;
-	
+
 	// basic_shader_info.colour = noob::vec4(1.0, 0.0, 0.0, 1.0);
-	
+
 	// auto s = shaders.add(basic_shader_info);
-	// shaders.set_name(s, "debug");
+	// shaders.set(s, "debug");
 
 	logger::log("[Stage] init complete.");
 	return true;
@@ -75,84 +75,15 @@ void noob::stage::update(double dt)
 void noob::stage::draw() const
 {
 	// TODO: Use culling to determine which items are visible, and then draw them.
-
 }
 
 
-noob::basic_models::handle noob::stage::basic_model(const noob::basic_mesh& m)
+noob::bodies::handle noob::stage::make_body(const noob::shapes::handle& h, float mass, const noob::vec3& pos, const noob::versor& orient)
 {
-	// return basic_models.add(std::make_unique<noob::basic_model>(m));
-}
-
-
-noob::basic_models::handle noob::stage::basic_model(const noob::shapes::handle& input_shape)
-{
-
-}
-
-
-noob::animated_models::handle noob::stage::animated_model(const std::string& filename, const std::string& friendly_name)
-{
-	// return animated_models.add(std::make_unique<noob::animated_model>(filename));
-}
-
-
-noob::skeletal_anims::handle noob::stage::skeleton(const std::string& filename, const std::string& friendly_name)
-{
-	// noob::skeletal_anims::handle temp = std::make_shared<noob::skeletal_anim>();
-	// temp->init(filename);
-	// return temp;
-}
-
-
-/*
-noob::actor noob::stage::actor(const noob::prop& _prop, const noob::animated_models::handle& _skeleton, const std::string& friendly_name)
-{
-
-}
-
-
-noob::prop noob::stage::prop(const noob::bodies::handle& _body, const noob::basic_models::handle& _model, const std::string& friendly_name)
-{
-
-}
-
-
-noob::scenery noob::stage::scenery(const noob::basic_models::handle&, const noob::vec3& pos, const noob::versor& orient, const std::string& friendly_name)
-{
-
-}
-*/
-
-
-noob::bodies::handle noob::stage::body(const noob::shapes::handle&, float mass, const noob::vec3& pos, const noob::versor& orient)
-{
-
-}
-
-
-noob::lights::handle noob::stage::light(const noob::light& arg)
-{
-	// return lights.add(arg);
-}
-
-
-noob::reflections::handle noob::stage::reflection(const noob::reflection& arg)
-{
-	// return reflections.add(arg);
-}
-
-
-noob::shaders::handle noob::stage::shader(const noob::prepared_shaders::info& arg, const std::string& name)
-{
-	//noob::shaders::handle h;
-	//if (shaders_holder.name_exists(name))
-	//{
-	//	h = shaders_holder.add(arg);
-	//	shaders_holder.set_name(h, name);
-	//}
-	//return h;
-
+	noob::body b;
+	b.init(dynamics_world, shapes_holder.get(h), mass, pos, orient);
+	return bodies_holder.add(b);
+	//return bodies_holder.add(shapes_holder.get(h), mass, pos, orient);
 }
 
 
@@ -241,35 +172,62 @@ noob::shapes::handle noob::stage::plane(const noob::vec3& normal, float offset)
 }
 
 
-noob::shapes::handle noob::stage::hull(const std::vector<noob::vec3>& points, const std::string& name)
+noob::shapes::handle noob::stage::make_hull(const std::vector<noob::vec3>& points)
 {
-	if (shapes_holder.name_exists(name))
-	{
-		return shapes_holder.get_handle(name);
-	}
-	else
-	{
-		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
-		temp->convex(points);
-		noob::shapes::handle h = shapes_holder.add(std::move(temp));
-		shapes_holder.set_name(h, name);
-		return h;
-	}
+	std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+	temp->convex(points);
+	return shapes_holder.add(std::move(temp));
 }
 
 
-noob::shapes::handle noob::stage::trimesh(const noob::basic_mesh& mesh, const std::string& name)
+noob::shapes::handle noob::stage::make_trimesh(const noob::basic_mesh& mesh)
 {
-	if (shapes_holder.name_exists(name))
-	{
-		return shapes_holder.get_handle(name);
-	}
-	else
-	{
-		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
-		temp->trimesh(mesh);
-		noob::shapes::handle h = shapes_holder.add(std::move(temp));
-		shapes_holder.set_name(h, name);
-		return h;
-	}
+	std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+	temp->trimesh(mesh);
+	return shapes_holder.add(std::move(temp));
 }
+
+
+noob::basic_models::handle noob::stage::make_basic_model(const noob::basic_mesh& input_mesh)
+{
+	std::unique_ptr<noob::basic_model> temp = std::make_unique<noob::basic_model>();
+	temp->init(input_mesh);
+	return basic_models_holder.add(std::move(temp));
+}
+
+
+noob::animated_models::handle noob::stage::make_animated_model(const std::string& filename)
+{
+	std::unique_ptr<noob::animated_model> temp = std::make_unique<noob::animated_model>();
+	temp->init(filename);
+	return animated_models_holder.add(std::move(temp));
+}
+
+
+noob::skeletal_anims::handle noob::stage::make_skeleton(const std::string& filename)
+{
+	std::unique_ptr<noob::skeletal_anim> temp = std::make_unique<noob::skeletal_anim>();
+	temp->init(filename);
+	return skeletal_anims_holder.add(std::move(temp));
+}
+
+
+/*
+   noob::actor noob::stage::actor(const noob::prop& _prop, const noob::animated_models::handle& _skeleton, const std::string& friendly_name)
+   {
+
+   }
+
+
+   noob::prop noob::stage::prop(const noob::bodies::handle& _body, const noob::basic_models::handle& _model, const std::string& friendly_name)
+   {
+
+   }
+
+
+   noob::scenery noob::stage::scenery(const noob::basic_models::handle&, const noob::vec3& pos, const noob::versor& orient, const std::string& friendly_name)
+   {
+
+   }
+   */
+

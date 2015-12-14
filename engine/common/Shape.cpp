@@ -74,7 +74,6 @@ void noob::shape::trimesh(const noob::basic_mesh& mesh)
 	if (!physics_valid)
 	{
 		inner_mesh = mesh;
-		mesh_initialized = true;
 		shape_type = noob::shape::type::TRIMESH;
 		btTriangleMesh* phyz_mesh = new btTriangleMesh();
 		
@@ -96,6 +95,7 @@ void noob::shape::trimesh(const noob::basic_mesh& mesh)
 		}        
 		inner_shape = new btBvhTriangleMeshShape(phyz_mesh, true);
 		set_margin(0.1);
+		mesh_initialized = true;
 	}
 	physics_valid = true;
 }

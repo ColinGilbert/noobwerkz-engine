@@ -40,7 +40,7 @@ namespace noob
 					return (h.inner < items.size());
 				}
 
-				void set_name(component<T>::handle h, const std::string& name)
+				void set(component<T>::handle h, const std::string& name)
 				{
 					if (exists(h))
 					{
@@ -60,7 +60,7 @@ namespace noob
 					return h;
 				}
 
-				bool name_exists(const std::string& name)
+				bool exists(const std::string& name)
 				{
 					return (names.find(name) != names.end());
 				}
@@ -99,12 +99,30 @@ namespace noob
 					return h;
 				}
 
+				component<std::unique_ptr<T>>::handle add(std::unique_ptr<T>&& t, const std::string& name)
+				{
+					handle h;
+					auto search = names.find(name);
+					if (search != names.end())
+					{
+						h.inner = search->second;
+						items[h.inner] = std::move(t);
+						h.valid = true;
+						return h;
+					}
+
+					items.emplace_back(std::move(t));
+					h.inner = items.size() - 1;
+					return h;
+				}
+
+
 				bool exists(component<std::unique_ptr<T>>::handle h)
 				{
 					return (h.inner < items.size());
 				}
 
-				void set_name(component<std::unique_ptr<T>>::handle h, const std::string& name)
+				void set(component<std::unique_ptr<T>>::handle h, const std::string& name)
 				{
 					if (exists(h))
 					{
@@ -124,7 +142,7 @@ namespace noob
 					return h;
 				}
 
-				bool name_exists(const std::string& name)
+				bool exists(const std::string& name)
 				{
 					return (names.find(name) != names.end());
 				}
