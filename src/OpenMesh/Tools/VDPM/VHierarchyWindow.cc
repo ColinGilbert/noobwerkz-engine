@@ -57,9 +57,9 @@
 
 #include <OpenMesh/Tools/VDPM/VHierarchyWindow.hh>
 
+#include <cstring>
+
 #ifndef WIN32
-#include <string.h>
-#include <cstdlib>
 #else
   #if defined(__MINGW32__)
     #include <stdlib.h>

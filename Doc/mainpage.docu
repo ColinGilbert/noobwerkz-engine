@@ -101,6 +101,7 @@ in the following tutorial:
 \li \ref mesh_cpp
 \li \ref mesh_members
 \li \ref naming_conventions
+\li \ref mesh_speedup
 \li \ref om_changelog
 
 \page mesh_docu Using and understanding OpenMesh
@@ -119,7 +120,7 @@ in the following tutorial:
 \li \subpage mesh_cpp
 \li \subpage mesh_members
 \li \subpage naming_conventions
+\li \subpage mesh_speedup
 \li \subpage om_changelog
-
 
 **/

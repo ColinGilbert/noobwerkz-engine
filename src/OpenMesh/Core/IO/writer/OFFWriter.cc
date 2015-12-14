@@ -57,8 +57,6 @@
 #include <OpenMesh/Core/IO/BinaryHelper.hh>
 #include <OpenMesh/Core/IO/writer/OFFWriter.hh>
 
-#include <OpenMesh/Core/IO/SR_store.hh>
-
 //=== NAMESPACES ==============================================================
 
 

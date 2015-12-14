@@ -49,14 +49,11 @@
 
 //=== INCLUDES ================================================================
 
-#include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/IO/reader/BaseReader.hh>
-#include <algorithm>
-#include <string>
+
 #if defined(OM_CC_MIPS)
 #  include <ctype.h>
 #else
-#  include <cctype>
 #endif
 
 
