@@ -212,22 +212,19 @@ noob::skeletal_anims::handle noob::stage::make_skeleton(const std::string& filen
 }
 
 
-/*
-   noob::actor noob::stage::actor(const noob::prop& _prop, const noob::animated_models::handle& _skeleton, const std::string& friendly_name)
-   {
+es::entity noob::stage::actor(const noob::bodies::handle _body, const noob::movement_controllers::handle _controller, const noob::animated_models::handle _skeleton, const std::string& friendly_name)
+{
 
-   }
-
-
-   noob::prop noob::stage::prop(const noob::bodies::handle& _body, const noob::basic_models::handle& _model, const std::string& friendly_name)
-   {
-
-   }
+}
 
 
-   noob::scenery noob::stage::scenery(const noob::basic_models::handle&, const noob::vec3& pos, const noob::versor& orient, const std::string& friendly_name)
-   {
+es::entity noob::stage::prop(const noob::bodies::handle _body, const std::string& friendly_name)
+{
 
-   }
-   */
+}
 
+
+es::entity noob::stage::scenery(const noob::basic_mesh& _mesh, const noob::vec3& pos, const noob::versor& orient, const std::string& friendly_name)
+{
+
+}
