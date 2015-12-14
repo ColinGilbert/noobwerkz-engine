@@ -248,7 +248,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
   }
 
   // ---------- write vertex color
-  if (_opt.check( Options::VertexColor ) && _be.has_vertex_colors() )
+  if (_be.n_vertices() && _opt.check( Options::VertexColor ) && _be.has_vertex_colors() )
   {
     Vec3uc c = _be.color(VertexHandle(0));
 
