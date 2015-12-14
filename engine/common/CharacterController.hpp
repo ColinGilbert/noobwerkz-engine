@@ -1,12 +1,12 @@
 // Kinematic, until self_control == false. The it beomes dynamic body
 #pragma once
 
+
 #include <btBulletDynamicsCommon.h>
 #include <memory>
 
 #include "Body.hpp"
 #include "MathFuncs.hpp"
-
 
 namespace noob
 {
@@ -14,11 +14,13 @@ namespace noob
 	class character_controller 
 	{
 		public:
-			character_controller() : half_height(0.0), shape(nullptr), rigid_body(nullptr), dynamics_world(nullptr), ray_lambda(1.0), airborne(true), obstacle(true), turn_angle(1.0), dt(1.0/60.0), max_linear_velocity(10.0), walk_velocity(8.0), turn_velocity(1.0) {}
+			character_controller() : height(0.0), width(0.0), step_height(0.1), ray_lambda(1.0), turn_angle(1.0), dt(1.0/60.0), max_linear_velocity(10.0), walk_speed(0.5), jump_force(1.5),airborne(true), obstacle(true), references(0) {}
 
 			void init(btDynamicsWorld*, noob::body*, float _timestep = 1.0 / 60.0);
 
-
+			void set_walk_speed(float s);
+			void set_jump_force(float j);
+			
 			void move(bool forward, bool backward, bool left, bool right, bool jump);
 			void jump();
 
@@ -34,30 +36,26 @@ namespace noob
 			
 			std::string get_debug_string() const;
 
+			float height, width, step_height, ray_lambda, turn_angle, dt, max_linear_velocity, walk_speed, jump_force; 
+			bool airborne, obstacle;
+			
+			size_t references;
+
 		protected:
 			void update();
 
-			btScalar height;
-			btScalar half_height;
-			btScalar width;
-			btCollisionShape* shape;
-			
+			btCollisionShape* shape;			
 			noob::body* rigid_body;
 			btDynamicsWorld* dynamics_world;
 
-			btVector3 ray_source;
-			btVector3 ray_target;
-			btScalar ray_lambda;
-			btVector3 ray_normal;
-
-			bool airborne, obstacle;
-			btScalar step_height;
-			btScalar turn_angle;
-			btScalar dt;
-			btScalar max_linear_velocity;
-			btScalar walk_velocity;
-			btScalar turn_velocity;
-		
+			// btScalar step_height;
+			// btScalar turn_angle;
+			// btScalar dt;
+			// btScalar max_linear_velocity;
+			// btScalar walk_velocity;
+			// btScalar turn_velocity;
+			// btScalar walk_speed;
+			// btScalar jump_force;
 	};
 }
 

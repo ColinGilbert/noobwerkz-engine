@@ -114,7 +114,6 @@ void noob::shape::plane(const noob::vec3& normal, float offset)
 
 void noob::shape::set_margin(float m)
 {
-	margin = m;
 	inner_shape->setMargin(m);
 }
 
@@ -124,7 +123,3 @@ float noob::shape::get_margin() const
 	return inner_shape->getMargin();
 }
 
-btCollisionShape* noob::shape::get_raw_ptr() const
-{
-	return inner_shape;
-}

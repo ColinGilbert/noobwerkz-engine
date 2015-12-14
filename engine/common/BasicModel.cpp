@@ -1,8 +1,25 @@
 #include "BasicModel.hpp"
 
+
 bgfx::VertexDecl noob::basic_model::vertex::ms_decl;
 
-noob::basic_model::basic_model(const noob::basic_mesh& input_mesh)
+
+noob::basic_model::~basic_model()
+{
+	if (vertex_buffer.idx != bgfx::invalidHandle)
+	{
+		bgfx::destroyVertexBuffer(vertex_buffer);
+	}
+
+	if (index_buffer.idx != bgfx::invalidHandle)
+	{
+		bgfx::destroyIndexBuffer(index_buffer);
+	}
+	ready = false;
+}
+
+
+void noob::basic_model::init(const noob::basic_mesh& input_mesh)
 {
 	ready = false;
 	noob::basic_model::vertex::init();
@@ -26,21 +43,6 @@ noob::basic_model::basic_model(const noob::basic_mesh& input_mesh)
 	dimensions = (bbox.max - bbox.min).v;
 	ready = true;
 //	logger::log("[[Model] - load successful :)");
-}
-
-
-noob::basic_model::~basic_model()
-{
-	if (vertex_buffer.idx != bgfx::invalidHandle)
-	{
-		bgfx::destroyVertexBuffer(vertex_buffer);
-	}
-
-	if (index_buffer.idx != bgfx::invalidHandle)
-	{
-		bgfx::destroyIndexBuffer(index_buffer);
-	}
-	ready = false;
 }
 
 

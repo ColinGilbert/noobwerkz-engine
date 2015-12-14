@@ -11,15 +11,46 @@ bool noob::stage::init()
 	
 	renderer.init();
 
-	// TODO: Add stage default components
-	noob::basic_renderer::uniform_info basic_shader_info;
-	
-	basic_shader_info.colour = noob::vec4(1.0, 0.0, 0.0, 1.0);
-	
-	auto s = shaders.add(basic_shader_info);
-	shaders.set_name(s, "debug");
 
+	auto temp_path (pool.register_component<std::vector<noob::vec3>>("path"));
+	path_tag.inner = temp_path;
+
+	auto temp_shape (pool.register_component<noob::shapes::handle>("shape"));
+	shape_tag.inner = temp_shape;
 	
+	auto temp_shape_type (pool.register_component<noob::shape::type>("shape-type"));
+	shape_type_tag.inner = temp_shape_type;
+
+	auto temp_body (pool.register_component<std::shared_ptr<noob::body>>("body"));
+	body_tag.inner = temp_body;
+
+	auto temp_movement_controller (pool.register_component<noob::character_controller>("movement-controller"));
+	movement_controller_tag.inner = temp_movement_controller;
+
+	auto temp_basic_model (pool.register_component<noob::basic_models::handle>("basic-model"));
+	basic_model_tag.inner = temp_basic_model;
+
+	auto temp_animated_model (pool.register_component<noob::animated_models::handle>("animated-model"));
+	animated_model_tag.inner = temp_animated_model;
+
+	auto temp_skeletal_anim (pool.register_component<noob::skeletal_anims::handle>("skeletal-anim"));
+	skeletal_anim_tag.inner = temp_skeletal_anim;
+
+	auto temp_basic_shader (pool.register_component<noob::basic_renderer::uniform_info>("basic-renderer-uniform"));
+	basic_shader_tag.inner = temp_basic_shader;
+
+	auto temp_triplanar_shader (pool.register_component<noob::triplanar_gradient_map_renderer::uniform_info>("triplanar-renderer-uniform"));
+	triplanar_shader_tag.inner = temp_triplanar_shader;	
+
+
+	// TODO: Add stage default components
+	// noob::basic_renderer::uniform_info basic_shader_info;
+	
+	// basic_shader_info.colour = noob::vec4(1.0, 0.0, 0.0, 1.0);
+	
+	// auto s = shaders.add(basic_shader_info);
+	// shaders.set_name(s, "debug");
+
 	logger::log("[Stage] init complete.");
 	return true;
 }
@@ -43,200 +74,202 @@ void noob::stage::update(double dt)
 
 void noob::stage::draw() const
 {
-// TODO: Use frustum + physics world collisions to determine which items are visible, and then draw them.
+	// TODO: Use culling to determine which items are visible, and then draw them.
 
 }
 
 
+noob::basic_models::handle noob::stage::basic_model(const noob::basic_mesh& m)
+{
+	// return basic_models.add(std::make_unique<noob::basic_model>(m));
+}
+
+
+noob::basic_models::handle noob::stage::basic_model(const noob::shapes::handle& input_shape)
+{
+
+}
+
+
+noob::animated_models::handle noob::stage::animated_model(const std::string& filename, const std::string& friendly_name)
+{
+	// return animated_models.add(std::make_unique<noob::animated_model>(filename));
+}
+
+
+noob::skeletal_anims::handle noob::stage::skeleton(const std::string& filename, const std::string& friendly_name)
+{
+	// noob::skeletal_anims::handle temp = std::make_shared<noob::skeletal_anim>();
+	// temp->init(filename);
+	// return temp;
+}
+
+
 /*
-void noob::stage::draw(noob::drawable* d, const noob::mat4& transform) const
+noob::actor noob::stage::actor(const noob::prop& _prop, const noob::animated_models::handle& _skeleton, const std::string& friendly_name)
+{
+
+}
+
+
+noob::prop noob::stage::prop(const noob::bodies::handle& _body, const noob::basic_models::handle& _model, const std::string& friendly_name)
+{
+
+}
+
+
+noob::scenery noob::stage::scenery(const noob::basic_models::handle&, const noob::vec3& pos, const noob::versor& orient, const std::string& friendly_name)
 {
 
 }
 */
 
 
-noob::basic_model_component::handle noob::stage::basic_model(const noob::basic_mesh& m)
-{
-	return basic_models.add(std::make_unique<noob::basic_model>(m));
-}
-
-
-noob::basic_model_component::handle noob::stage::basic_model(const noob::shape_component::handle)
+noob::bodies::handle noob::stage::body(const noob::shapes::handle&, float mass, const noob::vec3& pos, const noob::versor& orient)
 {
 
 }
 
 
-noob::animated_model_component::handle noob::stage::animated_model(const std::string& filename)
+noob::lights::handle noob::stage::light(const noob::light& arg)
 {
-	return animated_models.add(std::make_unique<noob::animated_model>(filename));
+	// return lights.add(arg);
 }
 
 
-noob::skeleton_component::handle noob::stage::skeleton(const std::string& filename)
+noob::reflections::handle noob::stage::reflection(const noob::reflection& arg)
 {
-	std::unique_ptr<noob::skeletal_anim> temp = std::make_unique<noob::skeletal_anim>();
-	temp->init(filename);
-	return skeletons.add(std::move(temp));
+	// return reflections.add(arg);
 }
 
 
-noob::actor_component::handle noob::stage::actor(const body_component::handle body_handle, const basic_model_component::handle model_handle, const skeleton_component::handle, const noob::vec3& pos, const noob::versor& orient)
+noob::shaders::handle noob::stage::shader(const noob::prepared_shaders::info& arg, const std::string& name)
 {
-
-}
-
-
-noob::prop_component::handle noob::stage::prop(const body_component::handle body_handle, const basic_model_component::handle model_handle, const noob::vec3& pos, const noob::versor& orient)
-{
-
-}
-
-
-noob::scenery_component::handle noob::stage::scenery(const basic_model_component::handle model_handle, const noob::vec3& pos, const noob::versor& orient)
-{
+	//noob::shaders::handle h;
+	//if (shaders_holder.name_exists(name))
+	//{
+	//	h = shaders_holder.add(arg);
+	//	shaders_holder.set_name(h, name);
+	//}
+	//return h;
 
 }
 
 
-noob::body_component::handle noob::stage::body(const shape_component::handle shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient)
-{
-
-}
-
-
-noob::light_component::handle noob::stage::light(const noob::light& arg)
-{
-	return lights.add(arg);
-}
-
-
-noob::reflection_component::handle noob::stage::reflection(const noob::reflection& arg)
-{
-	return reflections.add(arg);
-}
-
-
-noob::shader_component::handle noob::stage::shader(const noob::prepared_shaders::info& arg, const std::string& name)
-{
-	noob::shader_component::handle h;
-	if (shaders.name_exists(name))
-	{
-		h = shaders.add(arg);
-		shaders.set_name(h, name);
-	}
-	return h;
-}
-
-
-noob::shape_component::handle noob::stage::sphere(float r)
+noob::shapes::handle noob::stage::sphere(float r)
 {
 	auto search = spheres.find(r);
 	if (search == spheres.end())
 	{
 		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
-		temp->sphere(r/2.0);
-		spheres[r] = shapes.add(std::move(temp));
-		return spheres[r];
+		temp->sphere(r);
+		auto results = spheres.insert(std::make_pair(r, shapes_holder.add(std::move(temp))));
+		return (results.first)->second;
+
 	}
 	return spheres[r];
 }
 
 
-noob::shape_component::handle noob::stage::box(float x, float y, float z)
+noob::shapes::handle noob::stage::box(float x, float y, float z)
 {
 	auto search = boxes.find(std::make_tuple(x,y,z));
 	if (search == boxes.end())
 	{
 		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
 		temp->box(x, y, z);
-		auto results = boxes.insert(std::make_pair(std::make_tuple(x,y,z), shapes.add(std::move(temp))));
+		auto results = boxes.insert(std::make_pair(std::make_tuple(x,y,z), shapes_holder.add(std::move(temp))));
 		return (results.first)->second;
 	}
 	return boxes[std::make_tuple(x,y,z)];
 }
 
 
-noob::shape_component::handle noob::stage::cylinder(float r, float h)
+noob::shapes::handle noob::stage::cylinder(float r, float h)
 {
 	auto search = cylinders.find(std::make_tuple(r, h));
 	if (search == cylinders.end())
 	{
 		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
 		temp->cylinder(r, h);
-		auto results = cylinders.insert(std::make_pair(std::make_tuple(r, h), shapes.add(std::move(temp))));
+		auto results = cylinders.insert(std::make_pair(std::make_tuple(r, h), shapes_holder.add(std::move(temp))));
 		return (results.first)->second;
 	}
 	return cylinders[std::make_tuple(r, h)];
 }
 
 
-noob::shape_component::handle noob::stage::cone(float r, float h)
+noob::shapes::handle noob::stage::cone(float r, float h)
 {
 	auto search = cones.find(std::make_tuple(r, h));
 	if (search == cones.end())
 	{
 		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
 		temp->cone(r, h);
-		auto results = cones.insert(std::make_pair(std::make_tuple(r, h), shapes.add(std::move(temp))));
+		auto results = cones.insert(std::make_pair(std::make_tuple(r, h), shapes_holder.add(std::move(temp))));
 		return (results.first)->second;
 	}
 	return cones[std::make_tuple(r, h)];
 }
 
 
-noob::shape_component::handle noob::stage::capsule(float r, float h)
+noob::shapes::handle noob::stage::capsule(float r, float h)
 {
 	auto search = capsules.find(std::make_tuple(r, h));
 	if (search == capsules.end())
 	{
 		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
 		temp->capsule(r, h);
-		auto results = capsules.insert(std::make_pair(std::make_tuple(r, h), shapes.add(std::move(temp))));
+		auto results = capsules.insert(std::make_pair(std::make_tuple(r, h), shapes_holder.add(std::move(temp))));
 		return (results.first)->second;
 	}
 	return capsules[std::make_tuple(r, h)];
 }
 
 
-noob::shape_component::handle noob::stage::plane(const noob::vec3& normal, float offset)
+noob::shapes::handle noob::stage::plane(const noob::vec3& normal, float offset)
 {
 	auto search = planes.find(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset));
 	if (search == planes.end())
 	{
 		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
 		temp->plane(normal, offset);
-		auto results = planes.insert(std::make_pair(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset), shapes.add(std::move(temp))));
+		auto results = planes.insert(std::make_pair(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset), shapes_holder.add(std::move(temp))));
 		return (results.first)->second;
 	}
 	return planes[std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset)];
 }
 
 
-noob::shape_component::handle noob::stage::hull(const std::vector<noob::vec3>& points, const std::string& name)
+noob::shapes::handle noob::stage::hull(const std::vector<noob::vec3>& points, const std::string& name)
 {
-	noob::shape_component::handle h;
-	if (shapes.name_exists(name))
+	if (shapes_holder.name_exists(name))
+	{
+		return shapes_holder.get_handle(name);
+	}
+	else
 	{
 		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
 		temp->convex(points);
-		h = shapes.add(std::move(temp));
-		shapes.set_name(h,name);
+		noob::shapes::handle h = shapes_holder.add(std::move(temp));
+		shapes_holder.set_name(h, name);
+		return h;
 	}
-	return h;
 }
 
 
-noob::shape_component::handle noob::stage::trimesh(const noob::basic_mesh& mesh, const std::string& name)
+noob::shapes::handle noob::stage::trimesh(const noob::basic_mesh& mesh, const std::string& name)
 {
-	noob::shape_component::handle h;
-	if (shapes.name_exists(name))
+	if (shapes_holder.name_exists(name))
+	{
+		return shapes_holder.get_handle(name);
+	}
+	else
 	{
 		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
 		temp->trimesh(mesh);
-		h = shapes.add(std::move(temp));
-		shapes.set_name(h, name);
+		noob::shapes::handle h = shapes_holder.add(std::move(temp));
+		shapes_holder.set_name(h, name);
+		return h;
 	}
-	return h;
 }

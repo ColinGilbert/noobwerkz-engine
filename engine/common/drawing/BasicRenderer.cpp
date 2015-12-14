@@ -17,7 +17,7 @@ void noob::basic_renderer::init()
 }
 
 
-void noob::basic_renderer::draw(const noob::animated_model* model, const noob::mat4& world_mat, const noob::basic_renderer::uniform_info& info, uint8_t view_id) const
+void noob::basic_renderer::draw(const noob::drawable* model, const noob::mat4& world_mat, const noob::basic_renderer::uniform_info& info, uint8_t view_id) const
 {
 	bgfx::setUniform(noob::graphics::get_uniform("colour_1").handle, &info.colour.v[0]);
 	noob::graphics::shader s = noob::graphics::get_shader("basic");

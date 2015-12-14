@@ -1,10 +1,13 @@
 #pragma once
+/*
+#include <memory>
 
 #include "MathFuncs.hpp"
-#include "Body.hpp"
+#include "Prop.hpp"
 #include "Shape.hpp"
 #include "Drawable.hpp"
 #include "AnimatedModel.hpp"
+#include "SkeletalAnim.hpp"
 
 namespace noob
 {
@@ -12,16 +15,15 @@ namespace noob
 	{
 		public:
 			// TODO: Replace animated_model with drawable
-			void init(noob::body* body_ptr, noob::shape* shape_ptr, noob::animated_model* drawable_ptr)
+			void init(const noob::prop& _prop, const std::shared_ptr<noob::skeletal_anim> _anim)
 			{
-				_body_ptr = body_ptr;
-				_shape_ptr = shape_ptr;
-				_drawable_ptr = drawable_ptr;
+				prop = _prop;
+				anim_ptr = _anim; 
 			}
 
-		protected:
-			noob::body* _body_ptr;
-			noob::shape* _shape_ptr;
-			noob::animated_model* _drawable_ptr;
+			noob::prop prop;
+			std::shared_ptr<noob::skeletal_anim> anim_ptr;
 	};
 }
+
+*/

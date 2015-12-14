@@ -10,6 +10,7 @@
 
 #include "MathFuncs.hpp"
 #include "Shape.hpp"
+#include "Logger.hpp"
 
 namespace noob
 {
@@ -50,7 +51,8 @@ namespace noob
 					info.init(inner_body);
 					ar(info);
 				}
-
+			body() : references(0) {}
+			
 			void init(btDynamicsWorld*, const noob::shape*, float mass, const noob::vec3& position, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0));
 			void init(btDynamicsWorld*, const noob::shape*, const noob::body::info&);
 			
@@ -66,8 +68,9 @@ namespace noob
 
 			noob::body::info get_info() const;
 
+			size_t references;
+
 			protected:
-			btRigidBody* get_raw_ptr() const;	
 			btRigidBody* inner_body;
 	};
 }

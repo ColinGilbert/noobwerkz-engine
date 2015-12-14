@@ -1,7 +1,7 @@
 // This represents a conceptual geometric shape.
 // Tied into the physics engine.
-
 #pragma once
+
 
 #include <vector>
 #include <memory>
@@ -15,19 +15,21 @@
 #include "BasicMesh.hpp"
 #include "MeshUtils.hpp"
 #include "MathFuncs.hpp"
-#include <boost/variant/variant.hpp>
-#include "inline_variant.hpp"
+#include "IntrusiveBase.hpp"
+
 
 namespace noob
 {
-	class shape
+	class shape 
 	{
 		friend class body;
+		// friend class boost::intrusive_ptr<noob::shape>;
+
 		public:
 		enum class type { SPHERE, BOX, CAPSULE, CYLINDER, CONE, CONVEX, TRIMESH, PLANE };
-		shape() : physics_valid(false), mesh_initialized(false), dims({ 0.0, 0.0, 0.0, 0.0 }), margin(-1.0) {}
-		~shape() { delete inner_shape; }
-		
+		shape() : references(0), physics_valid(false), mesh_initialized(false), dims({ 0.0, 0.0, 0.0, 0.0 }) {}
+		virtual ~shape() { delete inner_shape; }
+
 		// TODO: Make it able to swap shapes at runtime
 		void sphere(float radius);
 		void box(float width, float height, float depth);
@@ -37,16 +39,18 @@ namespace noob
 		void convex(const std::vector<noob::vec3>& points);
 		void trimesh(const noob::basic_mesh&);
 		void plane(const noob::vec3& normal, float offset);
-
+		
 		void set_margin(float);
 		float get_margin() const;
 
+		size_t references;
+
 		protected:
+
 		btCollisionShape* get_raw_ptr() const;
 		noob::shape::type shape_type;
 		bool physics_valid, mesh_initialized;
 		std::array<float, 4> dims;
-		float margin;
 		btCollisionShape* inner_shape;
 		noob::basic_mesh inner_mesh;
 	};

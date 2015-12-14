@@ -1,5 +1,6 @@
 #include "Application.hpp"
 
+
 void noob::application::user_init()
 {
 	noob::triplanar_gradient_map_renderer::uniform_info u;
@@ -13,7 +14,7 @@ void noob::application::user_init()
 	// u.scales = noob::vec3(1.0, 1.0, 1.0);
 	// u.scales = noob::vec3(1/10,1/10,1/10);
 	u.colour_positions = noob::vec2(0.2, 0.7);
-	auto shader_id = stage.shader(u, "moon");
+	// auto shader_id = stage.shader(u, "moon");
 	// auto actor_id = stage.actor(stage.basic_models.get_handle("unit-sphere"), stage.skeletons.get_handle("null"), noob::vec3(0.0, 80.0, 0.0));
 	std::vector<noob::vec3> points;
 
@@ -26,7 +27,7 @@ void noob::application::user_init()
 	points.push_back(noob::vec3(8.0, 3.9, -5.0));
 	points.push_back(noob::vec3(7.0, 1.5, 2.0));
 
-	auto hull = stage.hull(points, "points");
+	// auto hull = stage.hull(points, "points");
 	
 	noob::basic_mesh m = noob::mesh_utils::cone(1.0, 2.0);
 	m.from_half_edges(m.to_half_edges());
