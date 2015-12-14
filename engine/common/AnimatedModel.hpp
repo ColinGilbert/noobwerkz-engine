@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include <fstream>
 
 #include <cereal/types/string.hpp>
@@ -14,15 +15,14 @@
 #include "Drawable.hpp"
 #include "MathFuncs.hpp"
 #include "BasicMesh.hpp"
-
+#include "IntrusiveBase.hpp"
 
 namespace noob
 {
 	class animated_model : public drawable
 	{
+		// friend class boost::intrusive_ptr<noob::animated_model>;
 		public:
-			~animated_model();
-
 			template <class Archive>
 				void serialize(Archive& ar)
 				{
@@ -77,16 +77,20 @@ namespace noob
 
 			};
 
+			animated_model() : references(0) {}
+			~animated_model();
 			// This loads from the cereal binary files prepared by the animated_model_loader class
-			animated_model(const std::string& filename);
+			void init(const std::string& filename);
 			// animated_model(const noob::basic_mesh&);
 
 			void draw(uint8_t view_id, const noob::mat4& animated_model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags = BGFX_STATE_DEFAULT) const;
 
+			size_t references;
 
 		protected:
 			bool ready;
 			std::vector<noob::animated_model::mesh> meshes;	
+
 	};
 
 }

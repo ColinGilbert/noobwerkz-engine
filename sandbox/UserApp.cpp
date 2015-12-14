@@ -1,5 +1,6 @@
 #include "Application.hpp"
 
+
 void noob::application::user_init()
 {
 	noob::triplanar_gradient_map_renderer::uniform_info u;

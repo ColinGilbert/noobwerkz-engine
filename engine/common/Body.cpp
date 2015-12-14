@@ -8,8 +8,8 @@ void noob::body::init(btDynamicsWorld* _dynamics_world, const noob::shape* _shap
 	start_transform.setRotation(btQuaternion(orientation.q[0], orientation.q[1], orientation.q[2], orientation.q[3]));
  	btVector3 inertia(0, 0, 0);
 	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
-	_shape->get_raw_ptr()->calculateLocalInertia(mass, inertia);
- 	btRigidBody::btRigidBodyConstructionInfo ci(mass, motion_state, _shape->get_raw_ptr(), inertia);
+	_shape->inner_shape->calculateLocalInertia(mass, inertia);
+ 	btRigidBody::btRigidBodyConstructionInfo ci(mass, motion_state, _shape->inner_shape, inertia);
 	inner_body = new btRigidBody(ci);
 	_dynamics_world->addRigidBody(inner_body);
 }
@@ -23,8 +23,8 @@ void noob::body::init(btDynamicsWorld* _dynamics_world, const noob::shape* _shap
 	start_transform.setRotation(btQuaternion(_info.orientation.q[0], _info.orientation.q[1], _info.orientation.q[2], _info.orientation.q[3]));
  	btVector3 inertia(0, 0, 0);
 	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
-	_shape->get_raw_ptr()->calculateLocalInertia(_info.mass, inertia);
- 	btRigidBody::btRigidBodyConstructionInfo ci(_info.mass, motion_state, _shape->get_raw_ptr(), inertia);
+	_shape->inner_shape->calculateLocalInertia(_info.mass, inertia);
+ 	btRigidBody::btRigidBodyConstructionInfo ci(_info.mass, motion_state, _shape->inner_shape, inertia);
 	inner_body = new btRigidBody(ci);
 	_dynamics_world->addRigidBody(inner_body);
 
@@ -96,7 +96,7 @@ std::string noob::body::get_debug_string() const
 	noob::vec3 pos = get_position();
 	noob::vec3 linear_vel = get_linear_velocity();
 	noob::vec3 angular_vel = get_angular_velocity();
-	w << "[Prop] Position: (" << pos.v[0] << ", " << pos.v[1] << ", " << pos.v[2] << "). Linear velocity: (" << linear_vel.v[0] << ", " << linear_vel.v[1] << ", " << linear_vel.v[2] << "). Angular Velocity: (" << angular_vel.v[0] << ", " << angular_vel.v[1] << ", " << angular_vel.v[2] << ")";
+	w << "[Body] Position: (" << pos.v[0] << ", " << pos.v[1] << ", " << pos.v[2] << "). Linear velocity: (" << linear_vel.v[0] << ", " << linear_vel.v[1] << ", " << linear_vel.v[2] << "). Angular Velocity: (" << angular_vel.v[0] << ", " << angular_vel.v[1] << ", " << angular_vel.v[2] << ")";
 	return w.str();
 }
 
@@ -106,9 +106,4 @@ noob::body::info noob::body::get_info() const
 	noob::body::info results;
 	results.init(inner_body);
 	return results;
-}
-
-btRigidBody* noob::body::get_raw_ptr() const
-{
-	return inner_body;
 }

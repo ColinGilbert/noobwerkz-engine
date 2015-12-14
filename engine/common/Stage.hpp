@@ -1,6 +1,7 @@
 // TODO: Implement all creation functions (*) and ensure that they take constructor args
 #pragma once
 
+
 #include <stack>
 #include <string>
 #include <tuple>
@@ -30,10 +31,12 @@
 #include "Body.hpp"
 #include "Shape.hpp"
 #include "Component.hpp"
+#include "IntrusiveBase.hpp"
+
 
 namespace noob
 {
-	typedef noob::component<std::unique_ptr<noob::basic_model>> basic_models;	
+	typedef noob::component<boost::intrusive_ptr<noob::basic_model>> basic_models;	
 	typedef noob::component<std::unique_ptr<noob::animated_model>> animated_models;
 	typedef noob::component<std::unique_ptr<noob::shape>> shapes;
 	typedef noob::component<std::unique_ptr<noob::skeletal_anim>> skeletal_anims;
