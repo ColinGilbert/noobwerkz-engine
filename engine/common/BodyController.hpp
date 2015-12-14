@@ -86,7 +86,8 @@ namespace noob
 		protected:
 			void update();
 			bool airborne, obstacle, self_control;
-			btCollisionShape* shape;			
+			noob::shape* shape;
+			// btCollisionShape* inner_shape;			
 			btDynamicsWorld* dynamics_world;
 			btRigidBody* inner_body;
 	};

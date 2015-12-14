@@ -5,7 +5,7 @@
 
 #include <cmath>
 
-void noob::body_controller::init(btDynamicsWorld* _dynamics_world, const noob::shape* shape, float mass, const noob::vec3& pos, const noob::versor& orient)
+void noob::body_controller::init(btDynamicsWorld* _dynamics_world, const noob::shape* _shape, float mass, const noob::vec3& pos, const noob::versor& orient)
 {
 	dynamics_world = _dynamics_world;
 	btTransform start_transform;
@@ -14,10 +14,11 @@ void noob::body_controller::init(btDynamicsWorld* _dynamics_world, const noob::s
 	start_transform.setRotation(btQuaternion(orient.q[0], orient.q[1], orient.q[2], orient.q[3]));
 	btVector3 inertia(0.0, 0.0, 0.0);
 	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
+	shape = const_cast<noob::shape*>(_shape);
 	shape->inner_shape->calculateLocalInertia(mass, inertia);
 	btRigidBody::btRigidBodyConstructionInfo ci(mass, motion_state, shape->inner_shape, inertia);
 	inner_body = new btRigidBody(ci);
-	_dynamics_world->addRigidBody(inner_body);
+	dynamics_world->addRigidBody(inner_body);
 }
 
 void noob::body_controller::init(btDynamicsWorld* _dynamics_world, const noob::shape* _shape, const noob::body_controller::info& _info)
@@ -29,10 +30,11 @@ void noob::body_controller::init(btDynamicsWorld* _dynamics_world, const noob::s
 	start_transform.setRotation(btQuaternion(_info.orientation.q[0], _info.orientation.q[1], _info.orientation.q[2], _info.orientation.q[3]));
 	btVector3 inertia(0, 0, 0);
 	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
-	_shape->inner_shape->calculateLocalInertia(_info.mass, inertia);
-	btRigidBody::btRigidBodyConstructionInfo ci(_info.mass, motion_state, _shape->inner_shape, inertia);
+	shape = const_cast<noob::shape*>(_shape);
+	shape->inner_shape->calculateLocalInertia(_info.mass, inertia);
+	btRigidBody::btRigidBodyConstructionInfo ci(_info.mass, motion_state, shape->inner_shape, inertia);
 	inner_body = new btRigidBody(ci);
-	_dynamics_world->addRigidBody(inner_body);
+	dynamics_world->addRigidBody(inner_body);
 
 	inner_body->setFriction(_info.friction);
 	inner_body->setRestitution(_info.restitution);
@@ -40,7 +42,6 @@ void noob::body_controller::init(btDynamicsWorld* _dynamics_world, const noob::s
 	inner_body->setLinearFactor(btVector3(_info.linear_factor.v[0], _info.linear_factor.v[1], _info.linear_factor.v[2]));
 	inner_body->setLinearVelocity(btVector3(_info.linear_velocity.v[0], _info.linear_velocity.v[1], _info.linear_velocity.v[2]));
 	inner_body->setAngularVelocity(btVector3(_info.angular_velocity.v[0], _info.angular_velocity.v[1], _info.angular_velocity.v[2]));
-
 }
 
 /*
