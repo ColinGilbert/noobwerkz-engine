@@ -47,7 +47,6 @@ namespace noob
 
 		protected:
 
-		btCollisionShape* get_raw_ptr() const;
 		noob::shape::type shape_type;
 		bool physics_valid, mesh_initialized;
 		std::array<float, 4> dims;
