@@ -36,7 +36,7 @@
 
 namespace noob
 {
-	typedef noob::component<boost::intrusive_ptr<noob::basic_model>> basic_models;	
+	typedef noob::component<std::unique_ptr<noob::basic_model>> basic_models;	
 	typedef noob::component<std::unique_ptr<noob::animated_model>> animated_models;
 	typedef noob::component<std::unique_ptr<noob::shape>> shapes;
 	typedef noob::component<std::unique_ptr<noob::skeletal_anim>> skeletal_anims;

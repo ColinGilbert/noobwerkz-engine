@@ -23,7 +23,6 @@ namespace noob
 	class shape 
 	{
 		friend class body;
-		// friend class boost::intrusive_ptr<noob::shape>;
 
 		public:
 		enum class type { SPHERE, BOX, CAPSULE, CYLINDER, CONE, CONVEX, TRIMESH, PLANE };
