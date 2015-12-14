@@ -53,9 +53,9 @@
 #include "TransformHelper.hpp"
 #include "Keys.hpp"
 #include "format.h"
-#include "AnimatedModel.hpp"
-#include "ShaderVariant.hpp"
-#include "MeshUtils.hpp"
+//#include "AnimatedModel.hpp"
+//#include "ShaderVariant.hpp"
+//#include "MeshUtils.hpp"
 #include "FileSystem.hpp"
 
 #include <btBulletDynamicsCommon.h>

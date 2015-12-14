@@ -21,10 +21,10 @@ namespace noob
 					size_t inner;
 				};
 
-				T* get(component<T>::handle h)
+				T get(component<T>::handle h)
 				{
-					if (exists(h)) return &items[h.inner];
-					else return &items[0];
+					if (exists(h)) return items[h.inner];
+					else return items[0];
 				}
 
 				component<T>::handle add(const T& t)

@@ -1,5 +1,5 @@
 #include "Body.hpp"
-
+/*
 void noob::body::init(btDynamicsWorld* _dynamics_world, const noob::shape* _shape, float mass, const noob::vec3& position, const noob::versor& orientation)
 {
 	btTransform start_transform;
@@ -107,3 +107,4 @@ noob::body::info noob::body::get_info() const
 	results.init(inner_body);
 	return results;
 }
+*/

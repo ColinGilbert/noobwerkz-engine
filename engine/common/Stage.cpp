@@ -11,6 +11,9 @@ bool noob::stage::init()
 	dynamics_world->setGravity(btVector3(0, -10, 0));
 
 	renderer.init();
+	
+	auto temp_mesh (pool.register_component<boost::intrusive_ptr<noob::basic_mesh>>("mesh"));
+	mesh_tag.inner = temp_mesh;
 
 	auto temp_path (pool.register_component<std::vector<noob::vec3>>("path"));
 	path_tag.inner = temp_path;
@@ -21,11 +24,8 @@ bool noob::stage::init()
 	auto temp_shape_type (pool.register_component<noob::shape::type>("shape-type"));
 	shape_type_tag.inner = temp_shape_type;
 
-	auto temp_body (pool.register_component<std::shared_ptr<noob::body>>("body"));
+	auto temp_body (pool.register_component<noob::body_controller>("movement-controller"));
 	body_tag.inner = temp_body;
-
-	auto temp_movement_controller (pool.register_component<noob::character_controller>("movement-controller"));
-	movement_controller_tag.inner = temp_movement_controller;
 
 	auto temp_basic_model (pool.register_component<noob::basic_models::handle>("basic-model"));
 	basic_model_tag.inner = temp_basic_model;
@@ -80,7 +80,7 @@ void noob::stage::draw() const
 
 noob::bodies::handle noob::stage::make_body(const noob::shapes::handle& h, float mass, const noob::vec3& pos, const noob::versor& orient)
 {
-	std::unique_ptr<noob::body> b = std::make_unique<noob::body>();
+	std::unique_ptr<noob::body_controller> b = std::make_unique<noob::body_controller>();
 	b->init(dynamics_world, shapes_holder.get(h), mass, pos, orient);
 	return bodies_holder.add(std::move(b));
 	//return bodies_holder.add(shapes_holder.get(h), mass, pos, orient);
@@ -182,8 +182,11 @@ noob::shapes::handle noob::stage::make_hull(const std::vector<noob::vec3>& point
 
 noob::shapes::handle noob::stage::make_trimesh(const noob::basic_mesh& mesh)
 {
+	auto m = boost::intrusive_ptr<noob::basic_mesh>();
+	*m = mesh;
+	auto m_tag = meshes_holder.add(m);//boost::intrusive_ptr<noob::basic_mesh>())
 	std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
-	temp->trimesh(mesh);
+	temp->trimesh(meshes_holder.get(m_tag));
 	return shapes_holder.add(std::move(temp));
 }
 
@@ -212,19 +215,29 @@ noob::skeletal_anims::handle noob::stage::make_skeleton(const std::string& filen
 }
 
 
-es::entity noob::stage::actor(const noob::bodies::handle _body, const noob::movement_controllers::handle _controller, const noob::animated_models::handle _skeleton, const std::string& friendly_name)
+es::entity noob::stage::actor(const noob::bodies::handle _bod, noob::animated_models::handle _model)
+{
+	es::entity temp (pool.new_entity());
+	pool.set(temp, body_tag.inner, _bod);
+	pool.set(temp, animated_model_tag.inner, _model);
+	return temp;
+}
+
+
+es::entity noob::stage::prop(const noob::bodies::handle _bod)
+{
+	noob::body_controller* body = bodies_holder.get(_bod);
+	
+}
+
+
+es::entity noob::stage::prop(const noob::bodies::handle _bod, noob::basic_models::handle _model)
 {
 
 }
 
 
-es::entity noob::stage::prop(const noob::bodies::handle _body, const std::string& friendly_name)
-{
-
-}
-
-
-es::entity noob::stage::scenery(const noob::basic_mesh& _mesh, const noob::vec3& pos, const noob::versor& orient, const std::string& friendly_name)
+es::entity noob::stage::scenery(const noob::basic_mesh& _mesh, const noob::vec3& pos, const noob::versor& orient)
 {
 
 }

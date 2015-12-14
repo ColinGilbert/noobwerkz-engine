@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 
 #include <cereal/types/array.hpp>
 #include <cereal/types/vector.hpp>
@@ -17,7 +17,6 @@ namespace noob
 	class character_controller;
 	class body
 	{
-		friend class character_controller;
 		public:
 			struct info
 			{
@@ -74,3 +73,4 @@ namespace noob
 			btRigidBody* inner_body;
 	};
 }
+*/

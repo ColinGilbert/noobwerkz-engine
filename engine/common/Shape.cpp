@@ -1,6 +1,7 @@
 #include "Shape.hpp"
 
 
+
 void noob::shape::sphere(float radius)
 {
 	if (!physics_valid)
@@ -60,32 +61,35 @@ void noob::shape::convex(const std::vector<noob::vec3>& points)
 {
 	if (!physics_valid)
 	{
-		inner_mesh = noob::mesh_utils::hull(points);
+		//noob::basic_mesh temp = noob::mesh_utils::hull(points);
+		inner_mesh = boost::intrusive_ptr<noob::basic_mesh>();//temp);
+		*inner_mesh = noob::mesh_utils::hull(points);
 		mesh_initialized = true;
 		shape_type = noob::shape::type::CONVEX;
-		inner_shape = new btConvexHullShape(&inner_mesh.vertices[0].v[0], inner_mesh.vertices.size());
+		inner_shape = new btConvexHullShape(&inner_mesh->vertices[0].v[0], inner_mesh->vertices.size());
 	}
 	physics_valid = true;
 }
 
 
-void noob::shape::trimesh(const noob::basic_mesh& mesh)
+void noob::shape::trimesh(const boost::intrusive_ptr<noob::basic_mesh>& mesh)
 {
 	if (!physics_valid)
 	{
+		// inner_mesh = boost::intrusive_ptr<noob::basic_mesh>();
 		inner_mesh = mesh;
 		shape_type = noob::shape::type::TRIMESH;
 		btTriangleMesh* phyz_mesh = new btTriangleMesh();
 		
-		for (size_t i = 0; i < mesh.indices.size(); i = i + 3)
+		for (size_t i = 0; i < inner_mesh->indices.size(); i = i + 3)
 		{
-			uint16_t index_1 = mesh.indices[i];
-			uint16_t index_2 = mesh.indices[i+1];
-			uint16_t index_3 = mesh.indices[i+2];
+			uint16_t index_1 = inner_mesh->indices[i];
+			uint16_t index_2 = inner_mesh->indices[i+1];
+			uint16_t index_3 = inner_mesh->indices[i+2];
 
-			std::array<float, 3> v1 = mesh.vertices[index_1].v;
-			std::array<float, 3> v2 = mesh.vertices[index_2].v;
-			std::array<float, 3> v3 = mesh.vertices[index_3].v;
+			std::array<float, 3> v1 = inner_mesh->vertices[index_1].v;
+			std::array<float, 3> v2 = inner_mesh->vertices[index_2].v;
+			std::array<float, 3> v3 = inner_mesh->vertices[index_3].v;
 
 			btVector3 bv1 = btVector3(v1[0], v1[1], v1[2]);
 			btVector3 bv2 = btVector3(v2[0], v2[1], v2[2]);
@@ -122,4 +126,3 @@ float noob::shape::get_margin() const
 {
 	return inner_shape->getMargin();
 }
-

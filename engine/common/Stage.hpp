@@ -15,7 +15,7 @@
 #include "Graphics.hpp"
 #include "MathFuncs.hpp"
 #include "VoxelWorld.hpp"
-#include "ShaderVariant.hpp"
+#include "PreparedShaders.hpp"
 #include "TriplanarGradientMap.hpp"
 #include "BasicRenderer.hpp"
 #include "TransformHelper.hpp"
@@ -24,29 +24,29 @@
 #include "BasicModel.hpp"
 #include "AnimatedModel.hpp"
 #include "TransformHelper.hpp"
-#include "CharacterController.hpp"
+#include "BodyController.hpp"
 #include "Prop.hpp"
 #include "Scenery.hpp"
-#include "Body.hpp"
+//#include "Body.hpp"
 #include "Shape.hpp"
 #include "Component.hpp"
-
+#include "IntrusiveBase.hpp"
 
 namespace noob
 {
+	typedef noob::component<boost::intrusive_ptr<noob::basic_mesh>> meshes;
 	typedef noob::component<std::unique_ptr<noob::basic_model>> basic_models;	
 	typedef noob::component<std::unique_ptr<noob::animated_model>> animated_models;
 	typedef noob::component<std::unique_ptr<noob::shape>> shapes;
 	typedef noob::component<std::unique_ptr<noob::skeletal_anim>> skeletal_anims;
-	typedef noob::component<std::unique_ptr<noob::body>> bodies;
-	typedef noob::component<noob::character_controller> movement_controllers;
+	typedef noob::component<std::unique_ptr<noob::body_controller>> bodies;
 	typedef noob::component<noob::light> lights;
 	typedef noob::component<noob::reflection> reflections;
 	typedef noob::component<noob::prepared_shaders::info> shaders;
 
 	class stage;
 
-	class es_wrapper
+	class component_tag
 	{
 		friend class stage;
 
@@ -70,7 +70,7 @@ namespace noob
 			void draw() const;
 
 			// Creates physics body. Those get made lots.
-			noob::bodies::handle make_body(const noob::shapes::handle&, float mass, const noob::vec3& pos, const noob::versor& orient);
+			noob::bodies::handle make_body(const noob::shapes::handle&, float mass, const noob::vec3& pos, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
 
 			// Parametric shapes. These get cached for reuse by the physics engine.
 			noob::shapes::handle sphere(float r);
@@ -114,14 +114,14 @@ namespace noob
 			es::storage pool;
 
 			// Tags that are used for faster access to our tag-tracker
-			noob::es_wrapper path_tag, shape_tag, shape_type_tag, body_tag, movement_controller_tag, basic_model_tag, animated_model_tag, skeletal_anim_tag, basic_shader_tag, triplanar_shader_tag;
+			noob::component_tag mesh_tag, path_tag, shape_tag, shape_type_tag, body_tag, basic_model_tag, animated_model_tag, skeletal_anim_tag, basic_shader_tag, triplanar_shader_tag;
 
 			// Indexable object tracking
+			noob::meshes meshes_holder;
 			noob::basic_models basic_models_holder;
 			noob::animated_models animated_models_holder;
 			noob::shapes shapes_holder;
 			noob::bodies bodies_holder;
-			noob::movement_controllers movement_controllers_holder;
 			noob::skeletal_anims skeletal_anims_holder;
 			noob::lights lights_holder;
 			noob::reflections reflections_holder;
@@ -129,13 +129,14 @@ namespace noob
 
 			// Functions to create commonly-used configurations:
 			// Actors have character controllers and weighted models. They can be animated and can apply movement to themselves.
-			es::entity actor(const noob::bodies::handle, const noob::movement_controllers::handle, const noob::animated_models::handle, const std::string& friendly_name);
+			es::entity actor(const noob::bodies::handle, const noob::animated_models::handle);
 			// Props are simple rigid-body objects with leaned-down 3d models that cannot be animated via vertex weights. They also cannot apply movement to themselves.
-			// Trimeshes passed into this function get turned into scenery
-			es::entity prop(const noob::bodies::handle, const std::string& friendly_name);
-			
-			// Scenery cannot be moved. It also
-			es::entity scenery(const noob::basic_mesh&, const noob::vec3& pos, const noob::versor& orient, const std::string& friendly_name);
+			// Bullet doesn't support movable trimeshes, so trimeshes passed into this function get implicitly turned into scenery.
+			// TODO: Switch to Newton?
+			es::entity prop(const noob::bodies::handle);
+			es::entity prop(const noob::bodies::handle, const noob::basic_models::handle);
+			// Scenery is a non-movable item that is also made with a leaned-down mesh. Uses trimeshes as input. 
+			es::entity scenery(const noob::basic_mesh&, const noob::vec3& pos, const noob::versor& orient);
 
 		protected:
 

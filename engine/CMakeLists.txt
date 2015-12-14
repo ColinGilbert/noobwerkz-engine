@@ -215,14 +215,10 @@ list(APPEND common_src
 	common/EditorUtils.cpp
 	common/VoxelWorld.cpp
 	common/UIFont.cpp
-	common/CharacterController.cpp
 	common/GUI.cpp
 	common/Camera.cpp
 	common/Stage.cpp
-	#common/Scenery.cpp
-	#common/Actor.cpp
-	#common/Prop.cpp
-	common/Body.cpp
+	common/BodyController.cpp
 	common/Shape.cpp
 	common/MeshUtils.cpp
 	common/BasicModel.cpp

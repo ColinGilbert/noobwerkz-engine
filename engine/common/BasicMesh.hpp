@@ -63,7 +63,7 @@ namespace noob
 	{
 		public:
 
-			basic_mesh() : volume_calculated(false), volume(0.0) {}
+			basic_mesh() : references(0), volume_calculated(false), volume(0.0) {}
 
 			template <class Archive>
 				void serialize( Archive & ar )
@@ -113,6 +113,8 @@ namespace noob
 			TriMesh to_half_edges() const;
 			void from_half_edges(TriMesh);
 			void from_half_edges(PolyMesh);
+
+			size_t references;
 
 		protected:
 			bbox_info bbox;
