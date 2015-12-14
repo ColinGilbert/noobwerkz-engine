@@ -170,6 +170,37 @@ class GenericIteratorT {
             return cpy;
         }
 
+#if (_MSC_VER >= 1900 || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)) && !defined(OPENMESH_VECTOR_LEGACY)
+        template<class T = value_handle>
+        auto operator+=(int amount) ->
+            typename std::enable_if<
+                sizeof(decltype(std::declval<T>().__increment(amount))) >= 0,
+                GenericIteratorT&>::type {
+            static_assert(std::is_same<T, value_handle>::value,
+                    "Template parameter must not deviate from default.");
+            if (skip_bits_)
+                throw std::logic_error("Skipping iterators do not support "
+                        "random access.");
+            hnd_.__increment(amount);
+            return *this;
+        }
+
+        template<class T = value_handle>
+        auto operator+(int rhs) ->
+            typename std::enable_if<
+                sizeof(decltype(std::declval<T>().__increment(rhs), void (), int {})) >= 0,
+                GenericIteratorT>::type {
+            static_assert(std::is_same<T, value_handle>::value,
+                    "Template parameter must not deviate from default.");
+            if (skip_bits_)
+                throw std::logic_error("Skipping iterators do not support "
+                        "random access.");
+            GenericIteratorT result = *this;
+            result.hnd_.__increment(rhs);
+            return result;
+        }
+#endif
+
         /// Standard pre-decrement operator
         GenericIteratorT& operator--() {
             hnd_.__decrement();

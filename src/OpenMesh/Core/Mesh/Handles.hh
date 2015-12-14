@@ -98,6 +98,8 @@ public:
   void __increment() { ++idx_; }
   void __decrement() { --idx_; }
 
+  void __increment(int amount) { idx_ += amount; }
+  void __decrement(int amount) { idx_ += amount; }
 
 private:
 
