@@ -38,7 +38,7 @@ namespace noob
 	typedef noob::component<std::unique_ptr<noob::animated_model>> animated_models;
 	typedef noob::component<std::unique_ptr<noob::shape>> shapes;
 	typedef noob::component<std::unique_ptr<noob::skeletal_anim>> skeletal_anims;
-	typedef noob::component<noob::body> bodies;
+	typedef noob::component<std::unique_ptr<noob::body>> bodies;
 	typedef noob::component<noob::character_controller> movement_controllers;
 	typedef noob::component<noob::light> lights;
 	typedef noob::component<noob::reflection> reflections;

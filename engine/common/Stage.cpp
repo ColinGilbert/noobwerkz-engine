@@ -80,9 +80,9 @@ void noob::stage::draw() const
 
 noob::bodies::handle noob::stage::make_body(const noob::shapes::handle& h, float mass, const noob::vec3& pos, const noob::versor& orient)
 {
-	noob::body b;
-	b.init(dynamics_world, shapes_holder.get(h), mass, pos, orient);
-	return bodies_holder.add(b);
+	std::unique_ptr<noob::body> b = std::make_unique<noob::body>();
+	b->init(dynamics_world, shapes_holder.get(h), mass, pos, orient);
+	return bodies_holder.add(std::move(b));
 	//return bodies_holder.add(shapes_holder.get(h), mass, pos, orient);
 }
 
