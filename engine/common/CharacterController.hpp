@@ -14,11 +14,13 @@ namespace noob
 	class character_controller 
 	{
 		public:
-			character_controller() : half_height(0.0), shape(nullptr), rigid_body(nullptr), dynamics_world(nullptr), ray_lambda(1.0), airborne(true), obstacle(true), turn_angle(1.0), dt(1.0/60.0), max_linear_velocity(10.0), walk_velocity(8.0), turn_velocity(1.0) {}
+			character_controller() : half_height(0.0), shape(nullptr), rigid_body(nullptr), dynamics_world(nullptr), ray_lambda(1.0), airborne(true), obstacle(true), turn_angle(1.0), dt(1.0/60.0), max_linear_velocity(10.0) {} //, walk_velocity(8.0), turn_velocity(1.0) {}
 
 			void init(btDynamicsWorld*, noob::body*, float _timestep = 1.0 / 60.0);
 
-
+			void set_walk_speed(float s);
+			void set_jump_force(float j);
+			
 			void move(bool forward, bool backward, bool left, bool right, bool jump);
 			void jump();
 
@@ -55,9 +57,10 @@ namespace noob
 			btScalar turn_angle;
 			btScalar dt;
 			btScalar max_linear_velocity;
-			btScalar walk_velocity;
-			btScalar turn_velocity;
-		
+			// btScalar walk_velocity;
+			// btScalar turn_velocity;
+			btScalar walk_speed;
+			btScalar jump_force;
 	};
 }
 
