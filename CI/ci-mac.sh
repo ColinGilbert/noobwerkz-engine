@@ -25,6 +25,7 @@ fi
 #=====================================
 NC='\033[0m'
 OUTPUT='\033[0;32m'
+WARNING='\033[0;93m'
 
 
 echo -e "${OUTPUT}"
@@ -102,7 +103,9 @@ if [ "$LANGUAGE" == "C++11" ]; then
   cd ..
 
 else
+  echo -e "${WARNING}"
   echo "WARNING! Python unittests disabled for clang on Mac with c++98 !!"
+  echo -e "${NC}"
 fi
 
 
@@ -182,5 +185,9 @@ if [ "$LANGUAGE" == "C++11" ]; then
   cp ../Build/python/openmesh.so .
   python -m unittest discover -v
 else
+
+  echo -e "${WARNING}"
   echo "WARNING! Python unittests disabled for clang on Mac with c++98 !!"
+  echo -e "${NC}"
+
 fi

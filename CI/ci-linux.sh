@@ -33,6 +33,7 @@ fi
 #=====================================
 NC='\033[0m'
 OUTPUT='\033[0;32m'
+WARNING='\033[0;93m'
 
 
 echo -e "${OUTPUT}"
@@ -97,13 +98,22 @@ echo "Running Python unittests Release version "
 echo "======================================================================"
 echo -e "${NC}"
 
+if [ "$LANGUAGE" == "C++11"  ] || [ "$COMPILER" == "gcc" ] ; then
 
-# Execute Python unittests
-cd Python-Unittests
+  # Execute Python unittests
+  cd Python-Unittests
 
-python -m unittest discover -v
+  python -m unittest discover -v
 
-cd ..
+  cd ..
+
+else
+  echo -e "${WARNING}"
+  echo "WARNING! Python unittests disabled !!"
+  echo -e "${NC}"
+fi
+
+
 cd ..
 
 
@@ -171,8 +181,16 @@ echo "Running Python unittests Debug version "
 echo "======================================================================"
 echo -e "${NC}"
 
+if [ "$LANGUAGE" == "C++11"  ] || [ "$COMPILER" == "gcc" ] ; then
 
-# Execute Python unittests
-cd Python-Unittests
+  # Execute Python unittests
+  cd Python-Unittests
 
-python -m unittest discover -v
+  python -m unittest discover -v
+else
+
+  echo -e "${WARNING}"
+  echo "WARNING! Python unittests disabled !!"
+  echo -e "${NC}"
+
+fi
