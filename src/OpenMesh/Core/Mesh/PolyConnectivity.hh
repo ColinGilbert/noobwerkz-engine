@@ -1185,66 +1185,66 @@ public:
   class CirculatorRange {
       public:
           CirculatorRange(
-                  CONTAINER_TYPE &container,
+                  const CONTAINER_TYPE &container,
                   CENTER_ENTITY_TYPE center) :
               container_(container), center_(center) {}
           ITER_TYPE begin() { return (container_.*begin_fn)(center_); }
           ITER_TYPE end() { return (container_.*end_fn)(center_); }
 
       private:
-          CONTAINER_TYPE &container_;
+          const CONTAINER_TYPE &container_;
           CENTER_ENTITY_TYPE center_;
   };
 
   typedef CirculatorRange<
-          const PolyConnectivity,
+          PolyConnectivity,
           ConstVertexVertexCWIter,
           VertexHandle,
           &PolyConnectivity::cvv_cwbegin,
           &PolyConnectivity::cvv_cwend> ConstVertexVertexRange;
   typedef CirculatorRange<
-          const PolyConnectivity,
+          PolyConnectivity,
           ConstVertexIHalfedgeIter,
           VertexHandle,
           &PolyConnectivity::cvih_begin,
           &PolyConnectivity::cvih_end> ConstVertexIHalfedgeRange;
   typedef CirculatorRange<
-          const PolyConnectivity,
+          PolyConnectivity,
           ConstVertexOHalfedgeIter, VertexHandle,
           &PolyConnectivity::cvoh_begin,
           &PolyConnectivity::cvoh_end> ConstVertexOHalfedgeRange;
   typedef CirculatorRange<
-          const PolyConnectivity,
+          PolyConnectivity,
           ConstVertexEdgeIter,
           VertexHandle,
           &PolyConnectivity::cve_begin,
           &PolyConnectivity::cve_end> ConstVertexEdgeRange;
   typedef CirculatorRange<
-          const PolyConnectivity,
+          PolyConnectivity,
           ConstVertexFaceIter,
           VertexHandle,
           &PolyConnectivity::cvf_begin,
           &PolyConnectivity::cvf_end> ConstVertexFaceRange;
   typedef CirculatorRange<
-          const PolyConnectivity,
+          PolyConnectivity,
           ConstFaceVertexIter,
           FaceHandle,
           &PolyConnectivity::cfv_begin,
           &PolyConnectivity::cfv_end> ConstFaceVertexRange;
   typedef CirculatorRange<
-          const PolyConnectivity,
+          PolyConnectivity,
           ConstFaceHalfedgeIter,
           FaceHandle,
           &PolyConnectivity::cfh_begin,
           &PolyConnectivity::cfh_end> ConstFaceHalfedgeRange;
   typedef CirculatorRange<
-          const PolyConnectivity,
+          PolyConnectivity,
           ConstFaceEdgeIter,
           FaceHandle,
           &PolyConnectivity::cfe_begin,
           &PolyConnectivity::cfe_end> ConstFaceEdgeRange;
   typedef CirculatorRange<
-          const PolyConnectivity,
+          PolyConnectivity,
           ConstFaceFaceIter,
           FaceHandle,
           &PolyConnectivity::cff_begin,
