@@ -90,14 +90,22 @@ echo "======================================================================"
 echo -e "${NC}"
 
 
-# Execute Python unittests
-cd Python-Unittests
+if [ "$LANGUAGE" == "C++11" ]; then
 
-rm -f openmesh.so
-cp ../Build/python/openmesh.so .
-python -m unittest discover -v
+  # Execute Python unittests
+  cd Python-Unittests
 
-cd ..
+  rm -f openmesh.so
+  cp ../Build/python/openmesh.so .
+  python -m unittest discover -v
+
+  cd ..
+
+else
+  echo "WARNING! Python unittests disabled for clang on Mac with c++98 !!"
+fi
+
+
 cd ..
 
 
@@ -167,12 +175,12 @@ echo -e "${NC}"
 
 if [ "$LANGUAGE" == "C++11" ]; then
 
-# Execute Python unittests
-cd Python-Unittests
+  # Execute Python unittests
+  cd Python-Unittests
 
-rm -f openmesh.so
-cp ../Build/python/openmesh.so .
-python -m unittest discover -v
+  rm -f openmesh.so
+  cp ../Build/python/openmesh.so .
+  python -m unittest discover -v
 else
   echo "WARNING! Python unittests disabled for clang on Mac with c++98 !!"
 fi
