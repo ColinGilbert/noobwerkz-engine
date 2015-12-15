@@ -1577,7 +1577,6 @@ private: // Working storage for add_face()
        };
        std::vector<AddFaceEdgeInfo> edgeData_; //
        std::vector<std::pair<HalfedgeHandle, HalfedgeHandle> > next_cache_; // cache for set_next_halfedge and vertex' set_halfedge
-       uint next_cache_count_;
 
 };
 
