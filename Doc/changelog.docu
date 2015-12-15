@@ -36,6 +36,7 @@
 <b>Core</b>
 <ul>
 <li>Added clean_keep_reservation() (remove all elements from the mesh but keeps the properties. In contrast to clean() the memory used for the elements will remain allocated</li>
+<li>Reduced number of include statements to speedup compilation</li>
 </ul>
 
 <b>General</b>
@@ -46,6 +47,10 @@
 <li>Reduced number of includes</li>
 </ul>
 
+<b>IO</b>
+<ul>
+<li>OMWriter: fix crash in OMWriter when writing an empty mesh with colors</li>
+</ul>
 
 <b>VectorT</b>
 <ul>
@@ -58,11 +63,20 @@
 <li>Added tests for vec2x construction</li>
 </ul>
 
+<b>Documentation</b>
+<ul>
+<li>Add some more documentation about primitive deletion. Closes #14</li>
+</ul>
+
 <b>Build System</b>
 <ul>
 <li>Fixed missing debug dll for autobuilders</li>
 </ul>
 
+<b>Python Interface</b>
+<ul>
+<li>Exposed Decimater to python</li>
+</ul>
 
 </tr>
 
