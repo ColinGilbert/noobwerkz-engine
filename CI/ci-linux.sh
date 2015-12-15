@@ -7,11 +7,18 @@ LANGUAGE=$2
 set -e 
 
 OPTIONS=""
+MAKE_OPTIONS=""
 BUILDPATH=""
 
 if [ "$COMPILER" == "gcc" ]; then
   echo "Building with GCC";
   BUILDPATH="gcc"
+
+  # without icecc: no options required
+  OPTIONS="-DCMAKE_CXX_COMPILER=/usr/lib/icecc/bin/g++ -DCMAKE_C_COMPILER=/usr/lib/icecc/bin/gcc"
+  MAKE_OPTIONS="-j16"
+  export ICECC_CXX=/usr/bin/g++ ; export ICECC_CC=/usr/bin/gcc
+
 elif [ "$COMPILER" == "clang" ]; then
 
   OPTIONS="$OPTIONS -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang"
@@ -53,10 +60,10 @@ cd build-release-$BUILDPATH-Vector-Checks
 cmake -DCMAKE_BUILD_TYPE=Release -DOPENMESH_BUILD_UNIT_TESTS=TRUE -DSTL_VECTOR_CHECKS=ON -DOPENMESH_BUILD_PYTHON_BINDINGS=OFF $OPTIONS ../
 
 #build it
-make
+make $MAKE_OPTIONS
 
 #build the unit tests
-make unittests
+make  $MAKE_OPTIONS unittests
 
 echo -e "${OUTPUT}"
 echo ""
@@ -89,7 +96,7 @@ cd build-release-$BUILDPATH
 cmake -DCMAKE_BUILD_TYPE=Release -DOPENMESH_BUILD_PYTHON_UNIT_TESTS=ON -DBUILD_APPS=OFF $OPTIONS ../
 
 #build it
-make
+make $MAKE_OPTIONS
 
 echo -e "${OUTPUT}"
 echo ""
@@ -135,10 +142,10 @@ cd build-debug-$BUILDPATH-Vector-Checks
 cmake -DCMAKE_BUILD_TYPE=Debug -DOPENMESH_BUILD_UNIT_TESTS=TRUE -DSTL_VECTOR_CHECKS=ON -DOPENMESH_BUILD_PYTHON_BINDINGS=OFF $OPTIONS ../
 
 #build it
-make
+make $MAKE_OPTIONS
 
 #build the unit tests
-make unittests
+make  $MAKE_OPTIONS unittests
 
 echo -e "${OUTPUT}"
 echo ""
@@ -172,7 +179,7 @@ cd build-debug-$BUILDPATH
 cmake -DCMAKE_BUILD_TYPE=DEBUG -DOPENMESH_BUILD_PYTHON_UNIT_TESTS=ON -DBUILD_APPS=OFF $OPTIONS ../
 
 #build it
-make
+make $MAKE_OPTIONS
 
 echo -e "${OUTPUT}"
 echo ""
