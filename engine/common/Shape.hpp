@@ -45,7 +45,8 @@ namespace noob
 		void cylinder(float radius, float height);
 		void capsule(float radius, float height);
 		void cone(float radius, float height);
-		void convex(const noob::basic_mesh*);
+		void hull(const std::vector<noob::vec3>&);
+		// TODO: Test without inner_mesh
 		void trimesh(const noob::basic_mesh*);
 		
 		// In this engine, we don't really use planes. This is due to the fact that their representation doesn't jive with the other parametrics.
@@ -59,7 +60,5 @@ namespace noob
 		noob::vec3 scales;
 		btCollisionShape* inner_shape;
 		noob::basic_mesh* inner_mesh;
-		// noob::basic_model* inner_model;
-		//noob::basic_mesh inner_mesh;
 	};
 }

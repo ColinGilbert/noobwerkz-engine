@@ -69,14 +69,15 @@ void noob::shape::cone(float radius, float height)
 }
 
 
-void noob::shape::convex(const noob::basic_mesh* mesh)
+void noob::shape::hull(const std::vector<noob::vec3>& points)
 {
 	if (!physics_valid)
 	{
-		inner_mesh = const_cast<noob::basic_mesh*>(mesh);
 		shape_type = noob::shape::type::CONVEX;
 		scales = noob::vec3(1.0, 1.0, 1.0);
-		inner_shape = new btConvexHullShape(&inner_mesh->vertices[0].v[0], inner_mesh->vertices.size());
+		inner_shape = new btConvexHullShape(&points[0].v[0], points.size());
+		// size_t num_p = static_cast<btConvexHullShape*>(inner_shape)->getNumPoints();
+		// const btVector3* points = static_cast<btConvexHullShape*>(inner_shape)->getPoints(); 
 	}
 	physics_valid = true;
 }

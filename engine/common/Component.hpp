@@ -18,7 +18,17 @@ namespace noob
 
 					handle() : valid(false), inner(0) {}
 
-					size_t get_handle() const 
+					bool operator==(const noob::component<T>::handle other)
+					{
+						return (inner == other.inner);
+					}
+
+					bool operator<(const noob::component<T>::handle other)
+					{
+						return (inner < other.inner); 
+					}
+
+					size_t get_inner() const 
 					{
 						return inner;
 					}
@@ -73,7 +83,7 @@ namespace noob
 					}
 				}
 
-				component<T>::handle get_handle(const std::string& name)
+				component<T>::handle get_inner(const std::string& name)
 				{
 					handle h;
 					auto search = names.find(name);
@@ -104,7 +114,18 @@ namespace noob
 					public:
 					handle() : valid(false), inner(0) {}
 
-					size_t get_handle() const 
+
+					bool operator==(const noob::component<std::unique_ptr<T>>::handle other)
+					{
+						return (inner == other.inner);
+					}
+
+					bool operator<(const noob::component<std::unique_ptr<T>>::handle other)
+					{
+						return (inner < other.inner); 
+					}
+
+					size_t get_inner() const 
 					{
 						return inner;
 					}
@@ -118,7 +139,6 @@ namespace noob
 					bool valid;
 					size_t inner;
 				};
-
 
 				T* get(component<std::unique_ptr<T>>::handle h)
 				{
@@ -177,7 +197,7 @@ namespace noob
 					}
 				}
 
-				component<std::unique_ptr<T>>::handle get_handle(const std::string& name)
+				component<std::unique_ptr<T>>::handle get_inner(const std::string& name)
 				{
 					handle h;
 					auto search = names.find(name);

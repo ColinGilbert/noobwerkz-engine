@@ -81,15 +81,15 @@ namespace noob
 			// noob::shapes::handle plane(const noob::vec3& normal, float offset);
 
 			// Point-based shapes
-			noob::shapes::handle hull(noob::meshes::handle);
-			noob::shapes::handle static_trimesh(noob::meshes::handle);
+			noob::shapes::handle hull(const std::vector<noob::vec3>&);
+			noob::shapes::handle static_trimesh(const noob::meshes::handle);
 
 			// Adds a mesh to the scene.
-			noob::meshes::handle add_mesh(std::unique_ptr<noob::basic_mesh> h);
+			noob::meshes::handle add_mesh(const noob::basic_mesh& h);
 
 			// Basic model creation. Those don't have bone weights built-in, so its lighter on the video card. Great for non-animated meshes and also scenery.
 			// TODO: Provide mesh creation function from noob::shapes::handle
-			noob::basic_models::handle basic_model(noob::meshes::handle);
+			noob::basic_models::handle basic_model(const noob::meshes::handle);
 
 			// Loads a serialized model (from cereal binary)
 			// TODO: Expand all such functions to load from cereal binary and also sqlite
@@ -144,11 +144,10 @@ namespace noob
 			es::entity prop(const noob::bodies::handle);
 			es::entity prop(const noob::bodies::handle, const noob::basic_models::handle);
 			// Scenery is a non-movable item that is also made with a leaned-down mesh. Uses trimeshes as input. 
-			es::entity scenery(const noob::basic_mesh& m, const noob::vec3& pos, const noob::versor& orient);
+			es::entity scenery(const noob::meshes::handle, const noob::vec3& pos, const noob::versor& orient);
 
 
 			// Utilities:
-			
 			noob::basic_mesh make_mesh(const noob::shapes::handle);
 			// For parametrics, this one will return a normalized model that gets 
 			std::tuple<noob::basic_models::handle,noob::vec3> get_model(const noob::shapes::handle);
@@ -171,19 +170,31 @@ namespace noob
 			btDiscreteDynamicsWorld* dynamics_world;
 
 			// TODO: Test other data structures.
-			std::map<float, shapes::handle> spheres;
-			std::map<std::tuple<float, float, float>, shapes::handle> boxes;
-			std::map<std::tuple<float, float>, shapes::handle> cylinders;
-			std::map<std::tuple<float, float>, shapes::handle> cones;
-			std::map<std::tuple<float, float>, shapes::handle> capsules;
+			// Benchmark, benchmark, benchmark!!! Multiplatform, too!!!
+			std::map<float, shapes::handle> sphere_shapes;
+			std::map<std::tuple<float, float, float>, shapes::handle> box_shapes;
+			std::map<std::tuple<float, float>, shapes::handle> cylinder_shapes;
+			std::map<std::tuple<float, float>, shapes::handle> cone_shapes;
+			std::map<std::tuple<float, float>, shapes::handle> capsule_shapes;
 			// std::map<std::tuple<float,float,float,float>, shapes::handle> planes;
-			std::unordered_map<std::string, shapes::handle> hulls;
-			std::unordered_map<std::string, shapes::handle> trimeshes;
+			std::map<std::vector<std::array<float, 3>>, shapes::handle> hull_shapes;
+			std::map<std::vector<std::array<float, 3>>, shapes::handle> trimesh_shapes;
 
-			// These index the inner handle # of shape components that are either hulls or trimeshes to their respective mesh.
-			std::unordered_map<size_t, noob::meshes::handle> shape_to_mesh;
-			std::unordered_map<size_t, noob::basic_models::handle> shape_to_model;
+			// std::map<float, basic_models::handle> sphere_models;
+			// std::map<std::tuple<float, float, float>, basic_models::handle> box_models;
+			// std::map<std::tuple<float, float>, basic_models::handle> cylinder_models;
+			// std::map<std::tuple<float, float>, basic_models::handle> cone_models;
+			// std::map<std::tuple<float, float>, basic_models::handle> capsule_models;
+			// std::map<std::tuple<float,float,float,float>, basic_models::handle> planes;
+			// std::map<std::vector<std::array<float,3>>, basic_models::handle> hull_models;
+			// std::unordered_map<std::string, basic_models::handle> trimesh_models;
 
+			std::unordered_map<size_t, noob::meshes::handle> shapes_to_meshes;
+			std::unordered_map<size_t, noob::basic_models::handle> meshes_to_models;
+			std::unordered_map<size_t, noob::shapes::handle> meshes_to_shapes;
+
+			// std::unordered_map<size_t, noob::basic_models::handle> models_for_parametrics;
+			
 			std::unordered_map<std::string, noob::shaders::handle> shader_names;
 			std::unordered_map<std::string, noob::lights::handle> light_names;
 			std::unordered_map<std::string, noob::reflections::handle> reflection_names;
