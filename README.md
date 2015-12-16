@@ -13,7 +13,7 @@ These can provide a sense of direction as to the direction of the project; I enc
 
 High-quality tutorials and real unit tests will come when the implementation is more or less set in stone.
 
-Current version: 0.0.1.1, AKA: Fresh "beginnings."
+Current version: 0.0.2, AKA: "Starting to pull together"
 
 Specific features:
 ```
