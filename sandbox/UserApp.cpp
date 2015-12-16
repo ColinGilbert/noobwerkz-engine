@@ -21,9 +21,9 @@ void noob::application::user_init()
 
 	noob::triplanar_gradient_map_renderer::uniform_info blue_shader;
 	blue_shader.colours[0] = noob::vec4(1.0, 1.0, 1.0, 1.0);
-	blue_shader.colours[1] = noob::vec4(0.0, 0.0, 0.7, 1.0);
-	blue_shader.colours[2] = noob::vec4(0.0, 0.0, 0.5, 1.0);
-	blue_shader.colours[3] = noob::vec4(0.0, 0.0, 0.2, 1.0);
+	blue_shader.colours[1] = noob::vec4(1.0, 0.0, 1.0, 1.0);
+	blue_shader.colours[2] = noob::vec4(1.0, 0.0, 1.0, 1.0);
+	blue_shader.colours[3] = noob::vec4(0.0, 0.0, 1.0, 1.0);
 	blue_shader.mapping_blends = noob::vec3(0.2, 0.0, 0.5);
 	// blue_shader.scales = noob::vec3(1.0,1.0,1.0);
 	blue_shader.scales = noob::vec3(1.0/40.0, 1.0/40.0, 1.0/40.0);
@@ -38,7 +38,7 @@ void noob::application::user_init()
 	temp_2.translate(noob::vec3(0.0, -30.0, 0.0));
 	noob::basic_mesh scene_mesh = noob::mesh_utils::csg(temp_1, temp_2, noob::csg_op::UNION);
 	
-	auto scenery_h = stage.scenery(stage.add_mesh(scene_mesh), noob::vec3(0.0, 0.0, 0.0), "debug");
+	auto scenery_h = stage.scenery(stage.add_mesh(scene_mesh), noob::vec3(0.0, 0.0, 0.0), "moon");
 
 	// Now, drop randomly-shaped hull objects all over it.
 	std::random_device rd;
@@ -52,7 +52,7 @@ void noob::application::user_init()
 		//	points.push_back(noob::vec3(dis(gen)+3, dis(gen)+5, dis(gen)+3));
 		//}
 		// auto h = stage.hull(points);
-		stage.prop(stage.body(stage.unit_sphere_shape, 1.0, noob::vec3(std::abs(dis(gen)*10.0), std::abs(dis(gen)*10.0), std::abs(dis(gen)*10.0))), "debug");
+		stage.prop(stage.body(stage.unit_sphere_shape, 1.0, noob::vec3(std::abs(dis(gen)*10.0), std::abs(dis(gen)*10.0), std::abs(dis(gen)*10.0))), "blue");
 	}
 }
 

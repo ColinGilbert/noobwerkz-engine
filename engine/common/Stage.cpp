@@ -107,7 +107,7 @@ void noob::stage::init()
 	triplanar_info.scales = noob::vec3(1.0, 1.0, 1.0);
 	triplanar_info.colour_positions = noob::vec2(0.3, 0.6);
 	set_shader(triplanar_info, "default-triplanar");
-	default_triplanar_shader = get_shader("default_triplanar");
+	default_triplanar_shader = get_shader("default-triplanar");
 
 	logger::log("[Stage] init complete.");
 }
@@ -390,42 +390,42 @@ noob::basic_mesh noob::stage::make_mesh(const noob::shapes::handle h)
 	{
 		case(noob::shape::type::SPHERE):
 			{
-				logger::log("[Stage] making sphere mesh");
+				// logger::log("[Stage] making sphere mesh");
 				return noob::mesh_utils::sphere(static_cast<btSphereShape*>(s->inner_shape)->getRadius());
 			}
 		case(noob::shape::type::BOX):
 			{
-				logger::log("[Stage] making box mesh");
+				// logger::log("[Stage] making box mesh");
 				noob::vec3 half_extents = static_cast<btBoxShape*>(s->inner_shape)->getHalfExtentsWithoutMargin();
 				return noob::mesh_utils::box(half_extents.v[0]*2, half_extents.v[1]*2, half_extents.v[2]*2);
 			}
 		case(noob::shape::type::CAPSULE):
 			{
-				logger::log("[Stage] making capsule mesh");
+				// logger::log("[Stage] making capsule mesh");
 				btCapsuleShape* temp = static_cast<btCapsuleShape*>(s->inner_shape);
 				return noob::mesh_utils::capsule(temp->getRadius(), temp->getHalfHeight()*2);
 			}
 		case(noob::shape::type::CYLINDER):
 			{
-				logger::log("[Stage] making cylinder mesh");
+				// logger::log("[Stage] making cylinder mesh");
 				btCylinderShape* temp = static_cast<btCylinderShape*>(s->inner_shape);// return std::make_tuple(unit_cylinder_model, s->scales);
 				noob::vec3 half_extents = temp->getHalfExtentsWithoutMargin();
 				return noob::mesh_utils::cylinder(temp->getRadius(), half_extents.v[1]*2);
 			}
 		case(noob::shape::type::CONE):
 			{
-				logger::log("[Stage] making cone mesh");
+				// logger::log("[Stage] making cone mesh");
 				btConeShape* temp = static_cast<btConeShape*>(s->inner_shape);
 				return noob::mesh_utils::cone(temp->getRadius(), temp->getHeight());
 			}
 		case(noob::shape::type::CONVEX):
 			{
-				logger::log("[Stage] making convex mesh");
+				// logger::log("[Stage] making convex mesh");
 				return noob::mesh_utils::copy(*meshes_holder.get(shapes_to_meshes[h.get_inner()]));
 			}
 		case(noob::shape::type::TRIMESH):
 			{
-				logger::log("[Stage] making trimesh");
+				// logger::log("[Stage] making trimesh");
 				return noob::mesh_utils::copy(*meshes_holder.get(shapes_to_meshes[h.get_inner()]));
 			}
 		default:
@@ -442,26 +442,26 @@ std::tuple<noob::basic_models::handle, noob::vec3> noob::stage::get_model(const 
 	switch(s->shape_type)
 	{
 		case(noob::shape::type::SPHERE):
-			logger::log("[Stage] sphere shape to model");
+			// logger::log("[Stage] sphere shape to model");
 			return std::make_tuple(unit_sphere_model, s->scales);
 		case(noob::shape::type::BOX):
-			logger::log("[Stage] box shape to model");
+			// logger::log("[Stage] box shape to model");
 			return std::make_tuple(unit_cube_model, s->scales);
 		case(noob::shape::type::CAPSULE):
-			logger::log("[Stage] capsule shape to model");
+			// logger::log("[Stage] capsule shape to model");
 			return std::make_tuple(unit_capsule_model, s->scales);
 		case(noob::shape::type::CYLINDER):
-			logger::log("[Stage] cylinder shape to model");
+			// logger::log("[Stage] cylinder shape to model");
 			return std::make_tuple(unit_cylinder_model, s->scales);
 		case(noob::shape::type::CONE):
-			logger::log("[Stage] cone shape to model");
+			// logger::log("[Stage] cone shape to model");
 			return std::make_tuple(unit_cone_model, s->scales);
 		case(noob::shape::type::CONVEX):
 		{
 			auto mesh = make_mesh(h);
 			auto mesh_h = add_mesh(mesh);
 			auto model_h = basic_model(mesh_h);
-			logger::log("[Stage] convex hull to model");
+			// logger::log("[Stage] convex hull to model");
 			return std::make_tuple(model_h, noob::vec3(1.0, 1.0, 1.0));
 		}
 		case(noob::shape::type::TRIMESH):
@@ -469,7 +469,7 @@ std::tuple<noob::basic_models::handle, noob::vec3> noob::stage::get_model(const 
 			auto mesh = make_mesh(h);
 			auto mesh_h = add_mesh(mesh);
 			auto model_h = basic_model(mesh_h);
-			logger::log("[Stage] convex hull to model");
+			// logger::log("[Stage] convex hull to model");
 			return std::make_tuple(model_h, noob::vec3(1.0, 1.0, 1.0));
 		}
 		default:

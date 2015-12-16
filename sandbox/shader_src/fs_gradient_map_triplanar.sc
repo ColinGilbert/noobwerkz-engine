@@ -12,10 +12,12 @@ uniform vec4 colour_4;
 uniform vec3 mapping_blend;
 
 // Positions are only required for the two mid-gradient colours, as the other two are at the ends
-uniform vec2 colour_positions;
+uniform vec4 colour_positions;
 
-// Scaling factor (for the texture)
-// uniform float scale;
+// Scaling factors (for the texture)
+uniform vec4 scale;
+
+//uniform u_texture;
 
 void main()
 {
