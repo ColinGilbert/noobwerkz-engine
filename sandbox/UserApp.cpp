@@ -19,6 +19,7 @@ void noob::application::user_init()
 	stage.set_shader(moon_shader, "moon");
 	// auto actor_id = stage.actor(stage.basic_models.get_handle("unit-sphere"), stage.skeletons.get_handle("null"), noob::vec3(0.0, 80.0, 0.0));
 
+	// THis shader isn't really blue, but bear with me :P
 	noob::triplanar_gradient_map_renderer::uniform_info blue_shader;
 	blue_shader.colours[0] = noob::vec4(1.0, 1.0, 1.0, 1.0);
 	blue_shader.colours[1] = noob::vec4(1.0, 0.0, 1.0, 1.0);
