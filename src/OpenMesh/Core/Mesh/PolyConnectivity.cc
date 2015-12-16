@@ -135,7 +135,8 @@ PolyConnectivity::add_face(const VertexHandle* _vertex_handles, size_t _vhs_size
     edgeData_.resize(n);
     next_cache_.resize(6*n);
   }
-  int next_cache_count = 0;
+
+  size_t next_cache_count = 0;
 
   // don't allow degenerated faces
   assert (n > 2);
