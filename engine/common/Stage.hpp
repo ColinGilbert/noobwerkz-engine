@@ -51,22 +51,25 @@ namespace noob
 		friend class stage;
 
 		public:
-		unsigned char get() const { return inner; }
+		es::storage::component_id get() const { return inner; }
 		private:
-		unsigned char inner;
+		es::storage::component_id inner;
 	};
 
 	class stage
 	{
 		public:
-			// This one must always be called before anything starts. Hard constraint.
-			bool init();
+			~stage();
 
-			// This one provides a way to bring everything back to scratch without shutting down the main application.
+			// This one must be called by the application. It really sucks but that's because the graphics API is (currently) static. This may well change soon enough.
+			void init();
+
+			// This one provides a way to bring everything back to scratch 
 			void tear_down();
 
-			// Call those whever you need to.
+			// Call those every frame or so.
 			void update(double dt);
+			// TODO: Implement
 			void draw() const;
 
 			// Creates physics body. Those get made lots.
@@ -88,7 +91,6 @@ namespace noob
 			noob::meshes::handle add_mesh(const noob::basic_mesh& h);
 
 			// Basic model creation. Those don't have bone weights built-in, so its lighter on the video card. Great for non-animated meshes and also scenery.
-			// TODO: Provide mesh creation function from noob::shapes::handle
 			noob::basic_models::handle basic_model(const noob::meshes::handle);
 
 			// Loads a serialized model (from cereal binary)
@@ -108,13 +110,13 @@ namespace noob
 
 			// Shader setting
 			void set_shader(const noob::prepared_shaders::info&, const std::string& name);
-			noob::prepared_shaders::info get_shader(const std::string& name);
+			noob::shaders::handle get_shader(const std::string& name);
 
 			// Our component-entity system: The super-efficient handle-swapping fast-iterating dynamic magic enabler
 			es::storage pool;
 
 			// Tags that are used for faster access to our tag-tracker
-			noob::component_tag mesh_tag, path_tag, shape_tag, shape_type_tag, body_tag, basic_model_tag, animated_model_tag, skeletal_anim_tag, basic_shader_tag, triplanar_shader_tag;
+			noob::component_tag mesh_tag, path_tag, shape_tag, shape_type_tag, body_tag, basic_model_tag, animated_model_tag, skeletal_anim_tag, shader_tag;
 
 			// Indexable object tracking
 			noob::meshes meshes_holder;
@@ -129,22 +131,25 @@ namespace noob
 
 			// The following are basic, commonly-used objects that we class provide as a convenience.
 			// noob::shape objects are a wrapper to Bullet shapes that provide a basic API to the rest of the app
-			noob::shapes::handle unit_sphere_shape, unit_cube_shape, unit_capsule_shape, unit_cylinder_shape, unit_cone_shape;
+			const noob::shapes::handle unit_sphere_shape, unit_cube_shape, unit_capsule_shape, unit_cylinder_shape, unit_cone_shape;
 			// noob:basic_mesh objects are holders for an indexed trimesh
-			noob::meshes::handle unit_sphere_mesh, unit_cube_mesh, unit_capsule_mesh, unit_cylinder_mesh, unit_cone_mesh;
+			const noob::meshes::handle unit_sphere_mesh, unit_cube_mesh, unit_capsule_mesh, unit_cylinder_mesh, unit_cone_mesh;
 			// noob:basic_nodel objects like these represent models in the graphics card's buffer
-			noob::basic_models::handle unit_sphere_model, unit_cube_model, unit_capsule_model, unit_cylinder_model, unit_cone_model;
+			const noob::basic_models::handle unit_sphere_model, unit_cube_model, unit_capsule_model, unit_cylinder_model, unit_cone_model;
+
+			const noob::shaders::handle debug_shader, default_triplanar_shader, uv_shader;
 
 			// Functions to create commonly-used configurations:
 			// Actors have weighted models and their body_controller is set to apply movement to itself.
-			es::entity actor(const noob::bodies::handle, const noob::animated_models::handle);
+			es::entity actor(const noob::bodies::handle, const noob::animated_models::handle, const std::string& shading);
 			// Props are simple rigid-body objects with leaned-down 3d models that cannot be animated via vertex weights. They also cannot apply movement to themselves.
 			// Note: Bullet doesn't support movable trimeshes, so trimeshes passed into this function get implicitly turned into scenery.
 			// TODO: Switch to Newton?
-			es::entity prop(const noob::bodies::handle);
-			es::entity prop(const noob::bodies::handle, const noob::basic_models::handle);
+			es::entity prop(const noob::bodies::handle, const std::string& shading);
+			// es::entity prop(const noob::bodies::handle, const std::string& shading);
+			es::entity prop(const noob::bodies::handle, const noob::basic_models::handle, const std::string& shading);
 			// Scenery is a non-movable item that uses indexed triangle meshes as input.
-			es::entity scenery(const noob::meshes::handle, const noob::vec3& pos, const noob::versor& orient);
+			es::entity scenery(const noob::meshes::handle, const noob::vec3& pos, const std::string& shading, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0) );
 
 			// Utilities:
 			noob::basic_mesh make_mesh(const noob::shapes::handle);
@@ -152,7 +157,6 @@ namespace noob
 			std::tuple<noob::basic_models::handle,noob::vec3> get_model(const noob::shapes::handle);
 
 		protected:
-
 			// template<typename T>
 			// unsigned char register_es_component(T t, const std::string& friendly_name)
 			// {
@@ -188,14 +192,15 @@ namespace noob
 			// std::map<std::vector<std::array<float,3>>, basic_models::handle> hull_models;
 			// std::unordered_map<std::string, basic_models::handle> trimesh_models;
 
+			std::unordered_map<size_t, noob::shapes::handle> bodies_to_shapes;
 			std::unordered_map<size_t, noob::meshes::handle> shapes_to_meshes;
 			std::unordered_map<size_t, noob::basic_models::handle> meshes_to_models;
 			std::unordered_map<size_t, noob::shapes::handle> meshes_to_shapes;
 
 			// std::unordered_map<size_t, noob::basic_models::handle> models_for_parametrics;
 			
-			std::unordered_map<std::string, noob::shaders::handle> shader_names;
-			std::unordered_map<std::string, noob::lights::handle> light_names;
-			std::unordered_map<std::string, noob::reflections::handle> reflection_names;
+			std::unordered_map<std::string, noob::shaders::handle> names_to_shaders;
+			std::unordered_map<std::string, noob::lights::handle> names_to_lights;
+			std::unordered_map<std::string, noob::reflections::handle> names_to_reflections;
 	};
 }

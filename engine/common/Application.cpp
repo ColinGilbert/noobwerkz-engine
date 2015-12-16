@@ -13,7 +13,7 @@ noob::application::application()
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
 	script_engine = asCreateScriptEngine();
-	assert(script_engine == 0); // TODO: Look into a little.
+	// assert(script_engine == 0); // TODO: Look into a little.
 	set_init_script("init.as");
 	view_mat = noob::look_at(noob::vec3(0, 50.0, -100.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
 }	
@@ -77,8 +77,8 @@ void noob::application::init()
 {
 	ui_enabled = true;
 	gui.init(*prefix, window_width, window_height);
-	voxels.init();
 	stage.init();
+	voxels.init();
 
 	// Used by ANgelScript to capture the result of the last registering.
 	int r;

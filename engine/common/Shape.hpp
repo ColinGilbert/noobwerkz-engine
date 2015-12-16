@@ -58,6 +58,7 @@ namespace noob
 		noob::shape::type shape_type;
 		bool physics_valid;
 		noob::vec3 scales;
+		std::array<float, 4> dims;
 		btCollisionShape* inner_shape;
 		noob::basic_mesh* inner_mesh;
 	};

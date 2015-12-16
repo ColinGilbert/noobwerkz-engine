@@ -52,7 +52,7 @@ namespace noob
 
 		std::vector<noob::basic_model::vertex> vertices;
 		std::vector<uint16_t> indices;
-		std::array<float, 3> dimensions;
+		noob::vec3 dimensions;
 		bgfx::VertexBufferHandle vertex_buffer;
 		bgfx::IndexBufferHandle index_buffer;
 		bool ready;

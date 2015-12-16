@@ -175,6 +175,19 @@ noob::versor noob::body_controller::get_orientation() const
 }
 
 
+noob::vec3 noob::body_controller::get_linear_velocity() const
+{
+	return inner_body->getLinearVelocity();
+}
+
+
+noob::vec3 noob::body_controller::get_angular_velocity() const
+{
+	return inner_body->getAngularVelocity();	
+}
+
+
+
 noob::mat4 noob::body_controller::get_transform() const
 {
 	btTransform xform;
@@ -189,6 +202,6 @@ noob::mat4 noob::body_controller::get_transform() const
 std::string noob::body_controller::get_debug_string() const
 {
 	fmt::MemoryWriter w;
-	w << "[Character] position " << get_position().to_string() << ", orientation " << get_orientation().to_string() << " on ground? " << on_ground() << " ray lambda  = " << ray_lambda; //<< " ray lambda # 2 = " << ray_lambda[1];
+	w << "[Body] position " << get_position().to_string() << ", orientation " << get_orientation().to_string() << ", linear velocity " << get_linear_velocity().to_string() << ", angular velocity " << get_angular_velocity().to_string() << ", on ground? " << on_ground() << ", ray lambda  = " << ray_lambda; //<< " ray lambda # 2 = " << ray_lambda[1];
 	return w.str();
 }

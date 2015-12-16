@@ -1,36 +1,59 @@
 #include "Application.hpp"
 
+#include <random>
 
 void noob::application::user_init()
 {
-	noob::triplanar_gradient_map_renderer::uniform_info u;
-	u.colours[0] = noob::vec4(1.0, 0.0, 0.0, 1.0);
-	u.colours[1] = noob::vec4(0.0, 1.0, 0.0, 1.0);
-	u.colours[2] = noob::vec4(0.0, 0.0, 1.0, 1.0);
-	u.colours[3] = noob::vec4(0.0, 0.0, 0.0, 1.0);
-	u.mapping_blends = noob::vec3(0.2, 0.0, 0.5);
-	// u.scales = noob::vec3(1.0,1.0,1.0);
-	u.scales = noob::vec3(1.0/40.0, 1.0/40.0, 1.0/40.0);
-	// u.scales = noob::vec3(1.0, 1.0, 1.0);
-	// u.scales = noob::vec3(1/10,1/10,1/10);
-	u.colour_positions = noob::vec2(0.2, 0.7);
-	// auto shader_id = stage.shader(u, "moon");
+	view_mat = noob::look_at(noob::vec3(0.0, 20.0, -50.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0)); //look_at(const vec3& cam_pos, vec3 targ_pos, const vec3& up)
+	noob::triplanar_gradient_map_renderer::uniform_info moon_shader;
+	moon_shader.colours[0] = noob::vec4(1.0, 0.0, 0.0, 1.0);
+	moon_shader.colours[1] = noob::vec4(0.0, 1.0, 0.0, 1.0);
+	moon_shader.colours[2] = noob::vec4(0.0, 0.0, 1.0, 1.0);
+	moon_shader.colours[3] = noob::vec4(0.0, 0.0, 0.0, 1.0);
+	moon_shader.mapping_blends = noob::vec3(0.2, 0.0, 0.5);
+	// moon_shader.scales = noob::vec3(1.0,1.0,1.0);
+	moon_shader.scales = noob::vec3(1.0/40.0, 1.0/40.0, 1.0/40.0);
+	// moon_shader.scales = noob::vec3(1.0, 1.0, 1.0);
+	// moon_shader.scales = noob::vec3(1/10,1/10,1/10);
+	moon_shader.colour_positions = noob::vec2(0.2, 0.7);
+	stage.set_shader(moon_shader, "moon");
 	// auto actor_id = stage.actor(stage.basic_models.get_handle("unit-sphere"), stage.skeletons.get_handle("null"), noob::vec3(0.0, 80.0, 0.0));
-	std::vector<noob::vec3> points;
 
-	points.push_back(noob::vec3(-1.0, 0.0, 1.0));
-	points.push_back(noob::vec3(2.0, 1.0, 2.0));
-	points.push_back(noob::vec3(0.0, -2.0, -2.0));
-	points.push_back(noob::vec3(6.0, 5.4, 3.0));
-	points.push_back(noob::vec3(3.0, 5.0, 2.0));
-	points.push_back(noob::vec3(0.1, 9.8, 6.0));
-	points.push_back(noob::vec3(8.0, 3.9, -5.0));
-	points.push_back(noob::vec3(7.0, 1.5, 2.0));
+	noob::triplanar_gradient_map_renderer::uniform_info blue_shader;
+	blue_shader.colours[0] = noob::vec4(1.0, 1.0, 1.0, 1.0);
+	blue_shader.colours[1] = noob::vec4(0.0, 0.0, 0.7, 1.0);
+	blue_shader.colours[2] = noob::vec4(0.0, 0.0, 0.5, 1.0);
+	blue_shader.colours[3] = noob::vec4(0.0, 0.0, 0.2, 1.0);
+	blue_shader.mapping_blends = noob::vec3(0.2, 0.0, 0.5);
+	// blue_shader.scales = noob::vec3(1.0,1.0,1.0);
+	blue_shader.scales = noob::vec3(1.0/40.0, 1.0/40.0, 1.0/40.0);
+	// blue_shader.scales = noob::vec3(1.0, 1.0, 1.0);
+	// blue_shader.scales = noob::vec3(1/10,1/10,1/10);
+	blue_shader.colour_positions = noob::vec2(0.2, 0.7);
+	stage.set_shader(blue_shader, "blue");
 
-	// auto hull = stage.hull(points, "points");
+	// Make a basic scenery
+	noob::basic_mesh temp_1 = noob::mesh_utils::box(500.0, 20.0, 500.0);
+	noob::basic_mesh temp_2 = noob::mesh_utils::cone(15.0, 60.0);
+	temp_2.translate(noob::vec3(0.0, -30.0, 0.0));
+	noob::basic_mesh scene_mesh = noob::mesh_utils::csg(temp_1, temp_2, noob::csg_op::UNION);
 	
-	noob::basic_mesh m = noob::mesh_utils::cone(1.0, 2.0);
-	m.from_half_edges(m.to_half_edges());
+	auto scenery_h = stage.scenery(stage.add_mesh(scene_mesh), noob::vec3(0.0, 0.0, 0.0), "debug");
+
+	// Now, drop randomly-shaped hull objects all over it.
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<> dis(-10, 10);
+	for (size_t i = 0 ; i < 500; ++i )
+	{
+		//std::vector<noob::vec3> points;
+		//for (size_t k = 0; k < 5; ++k)
+		//{
+		//	points.push_back(noob::vec3(dis(gen)+3, dis(gen)+5, dis(gen)+3));
+		//}
+		// auto h = stage.hull(points);
+		stage.prop(stage.body(stage.unit_sphere_shape, 1.0, noob::vec3(std::abs(dis(gen)*10.0), std::abs(dis(gen)*10.0), std::abs(dis(gen)*10.0))), "debug");
+	}
 }
 
 

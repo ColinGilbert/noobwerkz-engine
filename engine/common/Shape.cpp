@@ -17,6 +17,7 @@ void noob::shape::sphere(float radius)
 		inner_shape = new btSphereShape(radius);
 	}
 	scales = noob::vec3(radius*2, radius*2, radius*2);
+	// dims[0] = radius;
 	physics_valid = true;
 }
 

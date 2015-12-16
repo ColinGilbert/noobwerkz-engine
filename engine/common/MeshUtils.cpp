@@ -411,8 +411,13 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 }
 
 
-noob::basic_mesh noob::mesh_utils::csg(const noob::basic_mesh& a, const noob::basic_mesh& b, const noob::csg_op op)
+noob::basic_mesh noob::mesh_utils::csg(const noob::basic_mesh& _a, const noob::basic_mesh& _b, const noob::csg_op op)
 {
+	noob::basic_mesh a = _a;
+	noob::basic_mesh b = _b;
+	a.normalize();
+	b.normalize();
+
 	csgjs_model model_a = get_csg_model(a);
 	csgjs_model model_b = get_csg_model(b);
 
@@ -508,8 +513,8 @@ csgjs_model noob::mesh_utils::get_csg_model(const noob::basic_mesh& m)
 		vert.normal.y = m.normals[j].v[1];
 		vert.normal.z = m.normals[j].v[2];
 
-		vert.uv.x = m.texcoords[j].v[0];
-		vert.uv.y = m.texcoords[j].v[1];
+		// vert.uv.x = m.texcoords[j].v[0];
+		// vert.uv.y = m.texcoords[j].v[1];
 
 		model.vertices.push_back(vert);
 	}
