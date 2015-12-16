@@ -22,42 +22,44 @@ namespace noob
 {
 	class shape 
 	{
+		friend class stage;
 		friend class body_controller;
 
 		public:
-		enum class type { SPHERE, BOX, CAPSULE, CYLINDER, CONE, CONVEX, TRIMESH, PLANE };
+		enum class type { SPHERE, BOX, CAPSULE, CYLINDER, CONE, CONVEX, TRIMESH };//, PLANE };
 
-		shape() : references(0), physics_valid(false), mesh_initialized(false), dims({ 0.0, 0.0, 0.0} ) {}
-		virtual ~shape() { delete inner_shape; }
+		shape() : physics_valid(false) {}
+		virtual ~shape();
 		
+		void set_margin(float);
+		float get_margin() const;
+
+		noob::shape::type get_type() const;
+
+		// size_t references;
+
+		protected:
+		// Initializers. Used by noob::stage
 		void sphere(float radius);
 		void box(float width, float height, float depth);
 		void cylinder(float radius, float height);
 		void capsule(float radius, float height);
 		void cone(float radius, float height);
-		void convex(const std::vector<noob::vec3>& points);
-		void trimesh(const boost::intrusive_ptr<noob::basic_mesh>&);
-		void plane(const noob::vec3& normal, float offset);
-
-		void set_margin(float);
-		float get_margin() const;
-
-		// TODO: See how the following can be implemented in the stage
-		// noob::vec3 get_render_dims() const;
-		// Render transform is scaled from a the 1x1 matrix for drawing purposes (only one copy of the mesh gets kept in-buffer, which is supremely useful optimization for parametric shapes)
-		// noob::mat4 get_render_mat4() const;
-		// Physics transform doesn't include scale. Only really useful for plane shapes.
-		// noob::mat4 get_physics_mat4() const;
-		size_t references;
-
-		protected:
+		void convex(const noob::basic_mesh*);
+		void trimesh(const noob::basic_mesh*);
 		
+		// In this engine, we don't really use planes. This is due to the fact that their representation doesn't jive with the other parametrics.
+	//	void plane(const noob::vec3& normal, float offset);
+		
+		// Used to calculate scale of world transform for drawing purposes (so that only one copy of the mesh gets kept in-buffer, which is a supremely useful optimization for parametric shapes)
+		noob::vec3 get_scales() const;
+
 		noob::shape::type shape_type;
-		bool physics_valid, mesh_initialized;
-		// Used as multiplier for drawing coordinates.
-		std::array<float, 3> dims;
+		bool physics_valid;
+		noob::vec3 scales;
 		btCollisionShape* inner_shape;
-		boost::intrusive_ptr<noob::basic_mesh> inner_mesh;
+		noob::basic_mesh* inner_mesh;
+		// noob::basic_model* inner_model;
 		//noob::basic_mesh inner_mesh;
 	};
 }

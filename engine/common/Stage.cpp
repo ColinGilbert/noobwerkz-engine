@@ -11,8 +11,8 @@ bool noob::stage::init()
 	dynamics_world->setGravity(btVector3(0, -10, 0));
 
 	renderer.init();
-	
-	auto temp_mesh (pool.register_component<boost::intrusive_ptr<noob::basic_mesh>>("mesh"));
+
+	auto temp_mesh (pool.register_component<noob::meshes::handle>("mesh"));
 	mesh_tag.inner = temp_mesh;
 
 	auto temp_path (pool.register_component<std::vector<noob::vec3>>("path"));
@@ -43,13 +43,34 @@ bool noob::stage::init()
 	triplanar_shader_tag.inner = temp_triplanar_shader;	
 
 
-	// TODO: Add stage default components
-	// noob::basic_renderer::uniform_info basic_shader_info;
+	unit_sphere_shape = sphere(0.5);
+	unit_cube_shape = box(1.0, 1.0, 1.0);
+	unit_capsule_shape = capsule(0.5, 1.0);
+	unit_cylinder_shape = cylinder(0.5, 1.0);
+	unit_cone_shape = cone(0.5, 1.0);
 
-	// basic_shader_info.colour = noob::vec4(1.0, 0.0, 0.0, 1.0);
+	unit_sphere_mesh = meshes_holder.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_sphere_shape)));
+	unit_cube_mesh =  meshes_holder.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_cube_shape)));
+	unit_capsule_mesh =  meshes_holder.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_capsule_shape)));
+	unit_cylinder_mesh =  meshes_holder.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_cylinder_shape)));
+	unit_cone_mesh =  meshes_holder.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_cone_shape)));
 
-	// auto s = shaders.add(basic_shader_info);
-	// shaders.set(s, "debug");
+	unit_sphere_model = basic_model(unit_sphere_mesh);
+	unit_cube_model = basic_model(unit_cube_mesh);
+	unit_capsule_model = basic_model(unit_capsule_mesh);
+	unit_cylinder_model = basic_model(unit_cylinder_mesh);
+	unit_cone_model = basic_model(unit_cone_mesh);
+
+	// noob::animated_models animated_models_holder;
+	// noob::bodies bodies_holder;
+	// noob::skeletal_anims skeletal_anims_holder;
+	// noob::lights lights_holder;
+	// noob::reflections reflections_holder;
+
+	//  Init basic default shader
+	noob::basic_renderer::uniform_info basic_shader_info;
+	basic_shader_info.colour = noob::vec4(1.0, 1.0, 1.0, 1.0);
+	set_shader(basic_shader_info, "debug"); 
 
 	logger::log("[Stage] init complete.");
 	return true;
@@ -78,12 +99,11 @@ void noob::stage::draw() const
 }
 
 
-noob::bodies::handle noob::stage::make_body(const noob::shapes::handle& h, float mass, const noob::vec3& pos, const noob::versor& orient)
+noob::bodies::handle noob::stage::body(noob::shapes::handle h, float mass, const noob::vec3& pos, const noob::versor& orient)
 {
 	std::unique_ptr<noob::body_controller> b = std::make_unique<noob::body_controller>();
 	b->init(dynamics_world, shapes_holder.get(h), mass, pos, orient);
 	return bodies_holder.add(std::move(b));
-	//return bodies_holder.add(shapes_holder.get(h), mass, pos, orient);
 }
 
 
@@ -157,49 +177,62 @@ noob::shapes::handle noob::stage::capsule(float r, float h)
 	return capsules[std::make_tuple(r, h)];
 }
 
+/*
+   noob::shapes::handle noob::stage::plane(const noob::vec3& normal, float offset)
+   {
+   auto search = planes.find(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset));
+   if (search == planes.end())
+   {
+   std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+   temp->plane(normal, offset);
+   auto results = planes.insert(std::make_pair(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset), shapes_holder.add(std::move(temp))));
+   return (results.first)->second;
+   }
+   return planes[std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset)];
+   }
+   */
 
-noob::shapes::handle noob::stage::plane(const noob::vec3& normal, float offset)
+noob::shapes::handle noob::stage::hull(noob::meshes::handle _mesh)
 {
-	auto search = planes.find(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset));
-	if (search == planes.end())
-	{
-		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
-		temp->plane(normal, offset);
-		auto results = planes.insert(std::make_pair(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset), shapes_holder.add(std::move(temp))));
-		return (results.first)->second;
-	}
-	return planes[std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset)];
+	// TODO: Add to shape_to_mesh
+	std::unique_ptr<noob::shape> temp_shape = std::make_unique<noob::shape>();
+	temp_shape->convex(meshes_holder.get(_mesh));
+
+	noob::shapes::handle temp_shape_handle =  shapes_holder.add(std::move(temp_shape));
+	shape_to_mesh[temp_shape_handle.get_handle()] = _mesh;
+	return temp_shape_handle;
 }
 
 
-noob::shapes::handle noob::stage::make_hull(const std::vector<noob::vec3>& points)
+noob::shapes::handle noob::stage::static_trimesh(noob::meshes::handle _mesh)
 {
-	std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
-	temp->convex(points);
-	return shapes_holder.add(std::move(temp));
+	//auto m = boost::intrusive_ptr<noob::basic_mesh>();
+	// *m = mesh;
+	//auto m_tag = meshes_holder.add(m);//boost::intrusive_ptr<noob::basic_mesh>())
+	std::unique_ptr<noob::shape> temp_shape = std::make_unique<noob::shape>();
+	temp_shape->trimesh(meshes_holder.get(_mesh));
+
+	noob::shapes::handle temp_shape_handle =  shapes_holder.add(std::move(temp_shape));
+	shape_to_mesh[temp_shape_handle.get_handle()] = _mesh;
+	return temp_shape_handle;
 }
 
 
-noob::shapes::handle noob::stage::make_trimesh(const noob::basic_mesh& mesh)
+noob::meshes::handle noob::stage::add_mesh(std::unique_ptr<noob::basic_mesh> m)
 {
-	auto m = boost::intrusive_ptr<noob::basic_mesh>();
-	*m = mesh;
-	auto m_tag = meshes_holder.add(m);//boost::intrusive_ptr<noob::basic_mesh>())
-	std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
-	temp->trimesh(meshes_holder.get(m_tag));
-	return shapes_holder.add(std::move(temp));
+	return meshes_holder.add(std::move(m));	
 }
 
 
-noob::basic_models::handle noob::stage::make_basic_model(const noob::basic_mesh& input_mesh)
+noob::basic_models::handle noob::stage::basic_model(noob::meshes::handle _mesh)
 {
 	std::unique_ptr<noob::basic_model> temp = std::make_unique<noob::basic_model>();
-	temp->init(input_mesh);
+	temp->init(*meshes_holder.get(_mesh));
 	return basic_models_holder.add(std::move(temp));
 }
 
 
-noob::animated_models::handle noob::stage::make_animated_model(const std::string& filename)
+noob::animated_models::handle noob::stage::animated_model(const std::string& filename)
 {
 	std::unique_ptr<noob::animated_model> temp = std::make_unique<noob::animated_model>();
 	temp->init(filename);
@@ -207,11 +240,50 @@ noob::animated_models::handle noob::stage::make_animated_model(const std::string
 }
 
 
-noob::skeletal_anims::handle noob::stage::make_skeleton(const std::string& filename)
+noob::skeletal_anims::handle noob::stage::skeleton(const std::string& filename)
 {
 	std::unique_ptr<noob::skeletal_anim> temp = std::make_unique<noob::skeletal_anim>();
 	temp->init(filename);
 	return skeletal_anims_holder.add(std::move(temp));
+}
+
+
+// Lighting functions
+void noob::stage::set_light(const noob::light, const std::string&)
+{
+
+}
+
+
+noob::lights::handle noob::stage::get_light(const std::string&)
+{
+
+}
+
+
+// Surface reflectivity
+void noob::stage::set_reflection(const noob::reflection&, const std::string&)
+{
+
+}
+
+
+noob::reflections::handle noob::stage::get_reflection(const std::string&)
+{
+
+}
+
+
+// Shader setting
+void noob::stage::set_shader(const noob::prepared_shaders::info&, const std::string& name)
+{
+
+}
+
+
+noob::prepared_shaders::info noob::stage::get_shader(const std::string& name)
+{
+
 }
 
 
@@ -224,20 +296,123 @@ es::entity noob::stage::actor(const noob::bodies::handle _bod, noob::animated_mo
 }
 
 
-es::entity noob::stage::prop(const noob::bodies::handle _bod)
-{
-	noob::body_controller* body = bodies_holder.get(_bod);
-	
-}
-
-
 es::entity noob::stage::prop(const noob::bodies::handle _bod, noob::basic_models::handle _model)
 {
+	// noob::body_controller* body = bodies_holder.get(_bod);
+	// noob::shape::type t = body->shape->get_type();
+	// noob::basic_model* m = basic_models_holder.get(_model);
+	es::entity temp (pool.new_entity());
+	pool.set(temp, body_tag.inner, bodies_holder.get(_bod));
+	pool.set(temp, basic_model_tag.inner, basic_models_holder.get(_model));
+	return temp;
+}
+
+
+es::entity noob::stage::scenery(const noob::shapes::handle _shape, const noob::vec3& pos, const noob::versor& orient)
+{
+	std::unique_ptr<noob::body_controller> b;
+	noob::shape* s = shapes_holder.get(_shape);
+	b->init(dynamics_world, s, 0.0, pos, orient);
+	auto b_handle = bodies_holder.add(std::move(b));
+	// TODO: Finish implementing
 
 }
 
 
-es::entity noob::stage::scenery(const noob::basic_mesh& _mesh, const noob::vec3& pos, const noob::versor& orient)
+noob::basic_mesh noob::stage::make_mesh(const noob::shapes::handle h)
 {
+	noob::shape* s = shapes_holder.get(h);
+	switch(s->shape_type)
+	{
+		case(noob::shape::type::SPHERE):
+			{
+				return noob::mesh_utils::sphere(static_cast<btSphereShape*>(s->inner_shape)->getRadius());
+				logger::log("[Stage] sphere shape to model");
+				break;
+			}
+		case(noob::shape::type::BOX):
+			{
+				noob::vec3 half_extents = static_cast<btBoxShape*>(s->inner_shape)->getHalfExtentsWithoutMargin();
+				return noob::mesh_utils::box(half_extents.v[0]*2, half_extents.v[1]*2, half_extents.v[2]*2);
+				logger::log("[Stage] box shape to model");
+				break;
+			}
+		case(noob::shape::type::CAPSULE):
+			{
+				btCapsuleShape* temp = static_cast<btCapsuleShape*>(s->inner_shape);
+				return noob::mesh_utils::capsule(temp->getRadius(), temp->getHalfHeight()*2);
+				logger::log("[Stage] capsule shape to model");
+				break;
+			}
+		case(noob::shape::type::CYLINDER):
+			{
+				btCylinderShape* temp = static_cast<btCylinderShape*>(s->inner_shape);// return std::make_tuple(unit_cylinder_model, s->scales);
+				noob::vec3 half_extents = temp->getHalfExtentsWithoutMargin();
+				return noob::mesh_utils::cylinder(temp->getRadius(), half_extents.v[1]*2);
+				logger::log("[Stage] cylinder shape to model");
+				break;
+			}
+		case(noob::shape::type::CONE):
+			{
+				btConeShape* temp = static_cast<btConeShape*>(s->inner_shape);
+				return noob::mesh_utils::cone(temp->getRadius(), temp->getHeight());
+				logger::log("[Stage] cone shape to model");
+				break;
+			}
+		case(noob::shape::type::CONVEX):
+			{
+				return noob::mesh_utils::copy(*meshes_holder.get(shape_to_mesh[h.get_handle()]));
+				logger::log("[Stage] convex shape to model");
+				break;
+			}
+		case(noob::shape::type::TRIMESH):
+			{
+				return noob::mesh_utils::copy(*meshes_holder.get(shape_to_mesh[h.get_handle()]));
+				logger::log("[Stage] trimesh shape to model");
+				break;
+			}
+		default:
+			logger::log("[Stage] - WARNING - no shape to model :(");
+			break;
+	};
+}
 
+
+std::tuple<noob::basic_models::handle,noob::vec3> noob::stage::get_model(const noob::shapes::handle h)
+{
+	noob::shape* s = shapes_holder.get(h);
+	switch(s->shape_type)
+	{
+		case(noob::shape::type::SPHERE):
+			return std::make_tuple(unit_sphere_model, s->scales);
+			logger::log("[Stage] sphere shape to model");
+			break;
+		case(noob::shape::type::BOX):
+			return std::make_tuple(unit_cube_model, s->scales);
+			logger::log("[Stage] box shape to model");
+			break;
+		case(noob::shape::type::CAPSULE):
+			return std::make_tuple(unit_capsule_model, s->scales);
+			logger::log("[Stage] capsule shape to model");
+			break;
+		case(noob::shape::type::CYLINDER):
+			return std::make_tuple(unit_cylinder_model, s->scales);
+			logger::log("[Stage] cylinder shape to model");
+			break;
+		case(noob::shape::type::CONE):
+			return std::make_tuple(unit_cone_model, s->scales);
+			logger::log("[Stage] cone shape to model");
+			break;
+		case(noob::shape::type::CONVEX):
+			return std::make_tuple(shape_to_model[h.get_handle()], noob::vec3(1.0, 1.0, 1.0));
+			logger::log("[Stage] convex shape to model");
+			break;
+		case(noob::shape::type::TRIMESH):
+			return std::make_tuple(shape_to_model[h.get_handle()], noob::vec3(1.0, 1.0, 1.0));
+			logger::log("[Stage] trimesh shape to model");
+			break;
+		default:
+			logger::log("[Stage] - WARNING - no shape to model :(");
+			break;
+	};
 }

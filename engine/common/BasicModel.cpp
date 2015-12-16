@@ -39,7 +39,7 @@ void noob::basic_model::init(const noob::basic_mesh& input_mesh)
 	vertex_buffer = bgfx::createVertexBuffer(bgfx::copy(&vertices[0], vertices.size() * sizeof(noob::basic_model::vertex)), noob::basic_model::vertex::ms_decl);
 	index_buffer = bgfx::createIndexBuffer(bgfx::copy(&indices[0], indices.size() * sizeof(uint16_t)));
 
-	noob::basic_mesh::bbox_info bbox = input_mesh.get_bbox();
+	noob::basic_mesh::bbox bbox = input_mesh.get_bbox();
 	dimensions = (bbox.max - bbox.min).v;
 	ready = true;
 //	logger::log("[[Model] - load successful :)");

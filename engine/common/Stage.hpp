@@ -30,12 +30,12 @@
 //#include "Body.hpp"
 #include "Shape.hpp"
 #include "Component.hpp"
-#include "IntrusiveBase.hpp"
+// #include "IntrusiveBase.hpp"
 
 namespace noob
 {
-	typedef noob::component<boost::intrusive_ptr<noob::basic_mesh>> meshes;
-	typedef noob::component<std::unique_ptr<noob::basic_model>> basic_models;	
+	typedef noob::component<std::unique_ptr<noob::basic_mesh>> meshes;
+	typedef noob::component<std::unique_ptr<noob::basic_model>> basic_models;
 	typedef noob::component<std::unique_ptr<noob::animated_model>> animated_models;
 	typedef noob::component<std::unique_ptr<noob::shape>> shapes;
 	typedef noob::component<std::unique_ptr<noob::skeletal_anim>> skeletal_anims;
@@ -70,7 +70,7 @@ namespace noob
 			void draw() const;
 
 			// Creates physics body. Those get made lots.
-			noob::bodies::handle make_body(const noob::shapes::handle&, float mass, const noob::vec3& pos, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
+			noob::bodies::handle body(noob::shapes::handle, float mass, const noob::vec3& pos, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
 
 			// Parametric shapes. These get cached for reuse by the physics engine.
 			noob::shapes::handle sphere(float r);
@@ -78,29 +78,29 @@ namespace noob
 			noob::shapes::handle cylinder(float r, float h);
 			noob::shapes::handle cone(float r, float h);
 			noob::shapes::handle capsule(float r, float h);
-			noob::shapes::handle plane(const noob::vec3& normal, float offset);
+			// noob::shapes::handle plane(const noob::vec3& normal, float offset);
 
 			// Point-based shapes
-			noob::shapes::handle make_hull(const std::vector<noob::vec3>& points);
-			noob::shapes::handle make_trimesh(const noob::basic_mesh& mesh);
+			noob::shapes::handle hull(noob::meshes::handle);
+			noob::shapes::handle static_trimesh(noob::meshes::handle);
 
-			// Creates a mesh from a shape handle.
-			// noob::basic_mesh mesh_from_shape(noob::shapes::handle h);
+			// Adds a mesh to the scene.
+			noob::meshes::handle add_mesh(std::unique_ptr<noob::basic_mesh> h);
 
-			// Basic model creation. Those don't have bone weights built-in, so its lighter on the video card. Great for static objects
+			// Basic model creation. Those don't have bone weights built-in, so its lighter on the video card. Great for non-animated meshes and also scenery.
 			// TODO: Provide mesh creation function from noob::shapes::handle
-			noob::basic_models::handle make_basic_model(const noob::basic_mesh&);
+			noob::basic_models::handle basic_model(noob::meshes::handle);
 
 			// Loads a serialized model (from cereal binary)
 			// TODO: Expand all such functions to load from cereal binary and also sqlite
-			noob::animated_models::handle make_animated_model(const std::string& filename);
+			noob::animated_models::handle animated_model(const std::string& filename);
 
 			// Skeletal animations (encompassing basic, single-bone animation...)
-			noob::skeletal_anims::handle make_skeleton(const std::string& filename);
+			noob::skeletal_anims::handle skeleton(const std::string& filename);
 
 			// Lighting functions
 			void set_light(const noob::light, const std::string&);
-			noob::reflections::handle get_light(const std::string&);
+			noob::lights::handle get_light(const std::string&);
 
 			// Surface reflectivity
 			void set_reflection(const noob::reflection&, const std::string&);
@@ -127,6 +127,14 @@ namespace noob
 			noob::reflections reflections_holder;
 			noob::shaders shaders_holder;
 
+			// The following are basic, commonly-used objects that we class provide as a convenience.
+			// noob::shape objects are a wrapper to Bullet shapes that provide a basic API to the rest of the app
+			noob::shapes::handle unit_sphere_shape, unit_cube_shape, unit_capsule_shape, unit_cylinder_shape, unit_cone_shape;
+			// noob:basic_mesh objects are holders for an indexed trimesh
+			noob::meshes::handle unit_sphere_mesh, unit_cube_mesh, unit_capsule_mesh, unit_cylinder_mesh, unit_cone_mesh;
+			// noob:basic_nodel objects like these represent models in the graphics card's buffer
+			noob::basic_models::handle unit_sphere_model, unit_cube_model, unit_capsule_model, unit_cylinder_model, unit_cone_model;
+
 			// Functions to create commonly-used configurations:
 			// Actors have character controllers and weighted models. They can be animated and can apply movement to themselves.
 			es::entity actor(const noob::bodies::handle, const noob::animated_models::handle);
@@ -136,7 +144,14 @@ namespace noob
 			es::entity prop(const noob::bodies::handle);
 			es::entity prop(const noob::bodies::handle, const noob::basic_models::handle);
 			// Scenery is a non-movable item that is also made with a leaned-down mesh. Uses trimeshes as input. 
-			es::entity scenery(const noob::basic_mesh&, const noob::vec3& pos, const noob::versor& orient);
+			es::entity scenery(const noob::shapes::handle, const noob::vec3& pos, const noob::versor& orient);
+
+
+			// Utilities:
+			
+			noob::basic_mesh make_mesh(const noob::shapes::handle);
+			// For parametrics, this one will return a normalized model that gets 
+			std::tuple<noob::basic_models::handle,noob::vec3> get_model(const noob::shapes::handle);
 
 		protected:
 
@@ -161,8 +176,15 @@ namespace noob
 			std::map<std::tuple<float, float>, shapes::handle> cylinders;
 			std::map<std::tuple<float, float>, shapes::handle> cones;
 			std::map<std::tuple<float, float>, shapes::handle> capsules;
-			std::map<std::tuple<float,float,float,float>, shapes::handle> planes;
+			// std::map<std::tuple<float,float,float,float>, shapes::handle> planes;
 			std::unordered_map<std::string, shapes::handle> hulls;
 			std::unordered_map<std::string, shapes::handle> trimeshes;
+
+			std::unordered_map<size_t, noob::meshes::handle> shape_to_mesh;
+			std::unordered_map<size_t, noob::basic_models::handle> shape_to_model;
+
+			std::unordered_map<std::string, noob::shaders::handle> shader_names;
+			std::unordered_map<std::string, noob::lights::handle> light_names;
+			std::unordered_map<std::string, noob::reflections::handle> reflection_names;
 	};
 }

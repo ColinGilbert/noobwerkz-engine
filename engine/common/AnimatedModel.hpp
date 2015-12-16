@@ -21,7 +21,6 @@ namespace noob
 {
 	class animated_model : public drawable
 	{
-		// friend class boost::intrusive_ptr<noob::animated_model>;
 		public:
 			template <class Archive>
 				void serialize(Archive& ar)
@@ -77,7 +76,7 @@ namespace noob
 
 			};
 
-			animated_model() : references(0) {}
+			// animated_model() : references(0) {}
 			~animated_model();
 			// This loads from the cereal binary files prepared by the animated_model_loader class
 			void init(const std::string& filename);
@@ -85,7 +84,7 @@ namespace noob
 
 			void draw(uint8_t view_id, const noob::mat4& animated_model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags = BGFX_STATE_DEFAULT) const;
 
-			size_t references;
+			// size_t references;
 
 		protected:
 			bool ready;

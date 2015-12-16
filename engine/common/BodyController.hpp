@@ -16,8 +16,8 @@ namespace noob
 {
 	class body_controller 
 	{
+		friend class stage;
 		public:
-		
 			struct info
 			{
 				void init(btRigidBody* _body)

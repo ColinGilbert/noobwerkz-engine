@@ -54,8 +54,6 @@ typedef OpenMesh::PolyMesh_ArrayKernelT<> PolyMesh;
 
 #include <Eigen/Geometry>
 #include "Logger.hpp"
-#include "format.h"
-#include <bgfx.h>
 
 namespace noob
 {
@@ -63,15 +61,15 @@ namespace noob
 	{
 		public:
 
-			basic_mesh() : references(0), volume_calculated(false), volume(0.0) {}
+			basic_mesh() : volume_calculated(false), volume(0.0) {}
 
 			template <class Archive>
 				void serialize( Archive & ar )
 				{
-					ar(vertices, normals, indices, bbox, volume_calculated, volume);
+					ar(vertices, normals, indices, bbox_info, volume_calculated, volume);
 				}
 
-			struct bbox_info
+			struct bbox
 			{
 			template <class Archive>
 				void serialize( Archive & ar )
@@ -108,16 +106,16 @@ namespace noob
 			void rotate(const noob::versor&);
 			void scale(const noob::vec3&);
 			
-			noob::basic_mesh::bbox_info get_bbox() const { return bbox; }
+			noob::basic_mesh::bbox get_bbox() const { return bbox_info; }
 
 			TriMesh to_half_edges() const;
 			void from_half_edges(TriMesh);
 			void from_half_edges(PolyMesh);
 
-			size_t references;
+			// size_t references;
 
 		protected:
-			bbox_info bbox;
+			bbox bbox_info;
 			bool volume_calculated;
 			double volume;
 

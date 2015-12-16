@@ -19,12 +19,13 @@ namespace noob
 
 
 
-		basic_model() : references(0) {}
+		//basic_model() {}
 		virtual ~basic_model();
-		void init (const noob::basic_mesh&);
+		void init(const noob::basic_mesh&);
+
 		void draw(uint8_t view_id, const noob::mat4& model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags) const;
 
-		size_t references;
+		// size_t references;
 
 		protected:
 		struct vertex

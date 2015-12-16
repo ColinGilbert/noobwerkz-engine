@@ -114,6 +114,13 @@ return mesh;
 
 */
 
+noob::basic_mesh noob::mesh_utils::sphere(float radius)
+{
+	return catmull_sphere(radius);
+}
+
+
+
 noob::basic_mesh noob::mesh_utils::cone(float radius, float height, size_t segments)
 {
 	TriMesh half_edges;
@@ -274,8 +281,14 @@ noob::basic_mesh noob::mesh_utils::cylinder(float radius, float height, size_t s
 	return mesh;
 }
 
+noob::basic_mesh noob::mesh_utils::capsule(float radius, float height, size_t segments)
+{
+	return noob::mesh_utils::cylinder(radius, height, segments);
+}
 
-noob::basic_mesh noob::mesh_utils::cube(float width, float height, float depth, size_t subdivides)
+
+
+noob::basic_mesh noob::mesh_utils::box(float width, float height, float depth, size_t subdivides)
 {
 	PolyMesh half_edges;
 	PolyMesh::VertexHandle vhandle[8];
@@ -345,12 +358,12 @@ noob::basic_mesh noob::mesh_utils::cube(float width, float height, float depth, 
 
 	half_edges.triangulate();
 	half_edges.garbage_collection();
-	//OpenMesh::IO::write_mesh(half_edges, "temp/cube.off");
+	//OpenMesh::IO::write_mesh(half_edges, "temp/box.off");
 
 	noob::basic_mesh mesh;
 	mesh.from_half_edges(half_edges);
-	//mesh.load_file("temp/cube.off", "cube-temp");
-	// logger::log(fmt::format("Created cube with width = {0}, height = {1}, depth = {2} with {3} subdivides.", width, height, depth, subdivides));
+	//mesh.load_file("temp/box.off", "box-temp");
+	// logger::log(fmt::format("Created box with width = {0}, height = {1}, depth = {2} with {3} subdivides.", width, height, depth, subdivides));
 	return mesh;
 }
 
@@ -358,7 +371,7 @@ noob::basic_mesh noob::mesh_utils::cube(float width, float height, float depth, 
 noob::basic_mesh noob::mesh_utils::catmull_sphere(float radius)
 {
 	float diameter = radius * 2;
-	noob::basic_mesh mesh = noob::mesh_utils::cube(diameter, diameter, diameter, 3);
+	noob::basic_mesh mesh = noob::mesh_utils::box(diameter, diameter, diameter, 3);
 	// logger::log(fmt::format("Created sphere of radius {0}.", radius));
 	return mesh;
 }
@@ -445,6 +458,38 @@ noob::basic_mesh noob::mesh_utils::csg(const noob::basic_mesh& a, const noob::ba
 	}
 
 	return results;
+}
+
+
+noob::basic_mesh noob::mesh_utils::copy(const noob::basic_mesh& m)
+{
+	noob::basic_mesh temp;
+	temp.vertices.reserve(m.vertices.size());
+	temp.normals.reserve(m.normals.size());
+	temp.texcoords.reserve(m.texcoords.size());
+	temp.indices.reserve(m.indices.size());
+
+	for (noob::vec3 v : m.vertices)
+	{
+		temp.vertices.emplace_back(v);
+	}
+
+	for (noob::vec3 n : m.normals)
+	{
+		temp.normals.emplace_back(n);
+	}
+
+	for (noob::vec3 u : m.texcoords)
+	{
+		temp.texcoords.emplace_back(u);
+	}
+
+	for (size_t i : m.indices)
+	{
+		temp.indices.emplace_back(i);
+	}
+
+	return temp;
 }
 
 

@@ -109,7 +109,7 @@ void noob::basic_mesh::to_origin()
 	// noob::basic_mesh temp;
 	for (size_t i = 0; i < vertices.size(); ++i)
 	{
-		vertices[i] = (vertices[i] - bbox.center);
+		vertices[i] = (vertices[i] - bbox_info.center);
 	}
 	normalize();
 
@@ -202,7 +202,7 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 
 
 	// double accum_x, accum_y, accum_z = 0.0f;
-	bbox.min = bbox.max = bbox.center = noob::vec3(0.0, 0.0, 0.0);	
+	bbox_info.min = bbox_info.max = bbox_info.center = noob::vec3(0.0, 0.0, 0.0);	
 
 	for ( size_t n = 0; n < num_verts; ++n)
 	{
@@ -213,13 +213,13 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 		v.v[2] = pt[2];
 		vertices.push_back(v);
 
-		bbox.min[0] = std::min(bbox.min[0], v[0]);
-		bbox.min[1] = std::min(bbox.min[1], v[1]);
-		bbox.min[2] = std::min(bbox.min[2], v[2]);
+		bbox_info.min[0] = std::min(bbox_info.min[0], v[0]);
+		bbox_info.min[1] = std::min(bbox_info.min[1], v[1]);
+		bbox_info.min[2] = std::min(bbox_info.min[2], v[2]);
 
-		bbox.max[0] = std::max(bbox.max[0], v[0]);
-		bbox.max[1] = std::max(bbox.max[1], v[1]);
-		bbox.max[2] = std::max(bbox.max[2], v[2]);
+		bbox_info.max[0] = std::max(bbox_info.max[0], v[0]);
+		bbox_info.max[1] = std::max(bbox_info.max[1], v[1]);
+		bbox_info.max[2] = std::max(bbox_info.max[2], v[2]);
 
 		if (has_normals)
 		{
@@ -237,7 +237,7 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 		num_verts = 1;
 	}
 
-	bbox.center = noob::vec3((bbox.max[0] + bbox.min[0])/2, (bbox.max[1] + bbox.min[1])/2, (bbox.max[2] + bbox.min[2])/2);
+	bbox_info.center = noob::vec3((bbox_info.max[0] + bbox_info.min[0])/2, (bbox_info.max[1] + bbox_info.min[1])/2, (bbox_info.max[2] + bbox_info.min[2])/2);
 
 	for (size_t n = 0; n < num_faces; ++n)
 	{

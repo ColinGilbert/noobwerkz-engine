@@ -15,7 +15,19 @@ namespace noob
 				{
 					friend class component;
 					public:
+
 					handle() : valid(false), inner(0) {}
+
+					size_t get_handle() const 
+					{
+						return inner;
+					}
+
+					bool is_valid() const
+					{
+						return valid;
+					}
+
 					protected:
 					bool valid;
 					size_t inner;
@@ -77,9 +89,23 @@ namespace noob
 		class component<std::unique_ptr<T>> 
 		{
 			public:
+			
 				class handle
 				{
 					friend class component;
+					public:
+					handle() : valid(false), inner(0) {}
+
+					size_t get_handle() const 
+					{
+						return inner;
+					}
+
+					bool is_valid() const
+					{
+						return valid;
+					}
+
 					protected:
 					bool valid;
 					size_t inner;
