@@ -86,7 +86,16 @@ update_viewing_configurations()
 
   float   invdet;  
   float   a11, a12, a13, a21, a22, a23, a31, a32, a33;
-  Vec3f inv_rot[3], trans;
+  Vec3f  trans;
+
+// Workaround for internal compiler error on Visual Studio 2015 Update 1
+#if (_MSC_VER >= 1900 )
+  Vec3f inv_rot[3]{ {},{},{} };
+  Vec3f normal[4]{ {},{},{},{} };
+#else
+  Vec3f inv_rot[3];
+  Vec3f normal[4];
+#endif
 
   a11      = (float) modelview_matrix_[0]; 
   a12      = (float) modelview_matrix_[4]; 
@@ -103,7 +112,7 @@ update_viewing_configurations()
   a33      = (float) modelview_matrix_[10];
   trans[2] = (float) modelview_matrix_[14];
 
-  invdet=a11*(a33*a22-a32*a23) - a21*(a33*a12-a32*a13) + a31*(a23*a12-a22*a13);
+  invdet = a11*(a33*a22-a32*a23) - a21*(a33*a12-a32*a13) + a31*(a23*a12-a22*a13);
   invdet= (float) 1.0/invdet;
 
   (inv_rot[0])[0] =  (a33*a22-a32*a23) * invdet;
@@ -123,15 +132,14 @@ update_viewing_configurations()
   up_dir_    =   Vec3f(a21, a22, a23);
   view_dir_  = - Vec3f(a31, a32, a33);
 
-  Vec3f normal[4];  
   //float	aspect = width() / height();
-  float	half_theta = fovy() * 0.5f;
-  float	half_phi = atanf(aspect() * tanf(half_theta));
+  const float	half_theta = fovy() * 0.5f;
+  const float	half_phi = atanf(aspect() * tanf(half_theta));
   
-  float sin1 = sinf(half_theta);
-  float cos1 = cosf(half_theta);
-  float sin2 = sinf(half_phi);
-  float cos2 = cosf(half_phi);
+  const float sin1 = sinf(half_theta);
+  const float cos1 = cosf(half_theta);
+  const float sin2 = sinf(half_phi);
+  const float cos2 = cosf(half_phi);
   
   normal[0] =  cos2 * right_dir_ + sin2 * view_dir_;
   normal[1] = -cos1 * up_dir_    - sin1 * view_dir_;
