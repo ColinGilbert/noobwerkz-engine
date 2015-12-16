@@ -136,28 +136,27 @@ namespace noob
 			noob::basic_models::handle unit_sphere_model, unit_cube_model, unit_capsule_model, unit_cylinder_model, unit_cone_model;
 
 			// Functions to create commonly-used configurations:
-			// Actors have character controllers and weighted models. They can be animated and can apply movement to themselves.
+			// Actors have weighted models and their body_controller is set to apply movement to itself.
 			es::entity actor(const noob::bodies::handle, const noob::animated_models::handle);
 			// Props are simple rigid-body objects with leaned-down 3d models that cannot be animated via vertex weights. They also cannot apply movement to themselves.
-			// Bullet doesn't support movable trimeshes, so trimeshes passed into this function get implicitly turned into scenery.
+			// Note: Bullet doesn't support movable trimeshes, so trimeshes passed into this function get implicitly turned into scenery.
 			// TODO: Switch to Newton?
 			es::entity prop(const noob::bodies::handle);
 			es::entity prop(const noob::bodies::handle, const noob::basic_models::handle);
-			// Scenery is a non-movable item that is also made with a leaned-down mesh. Uses trimeshes as input. 
+			// Scenery is a non-movable item that uses indexed triangle meshes as input.
 			es::entity scenery(const noob::meshes::handle, const noob::vec3& pos, const noob::versor& orient);
-
 
 			// Utilities:
 			noob::basic_mesh make_mesh(const noob::shapes::handle);
-			// For parametrics, this one will return a normalized model that gets 
+			// For parametrics, this one will return a normalized model with scaling coordinates. For triangles, scalings are <1, 1, 1>
 			std::tuple<noob::basic_models::handle,noob::vec3> get_model(const noob::shapes::handle);
 
 		protected:
 
 			// template<typename T>
-			// unsigned char register_es_component(const std::string& friendly_name)
+			// unsigned char register_es_component(T t, const std::string& friendly_name)
 			// {
-			// auto a (pool.register_component<T>(friendly_name));
+			// auto a (pool.register_component<T>(t, friendly_name));
 			// return a;
 			// }
 
