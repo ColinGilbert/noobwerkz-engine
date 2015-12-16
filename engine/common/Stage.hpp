@@ -99,12 +99,12 @@ namespace noob
 			noob::skeletal_anims::handle skeleton(const std::string& filename);
 
 			// Lighting functions
-			void set_light(const noob::light, const std::string&);
-			noob::lights::handle get_light(const std::string&);
+			void set_light(const noob::light&, const std::string&);
+			noob::light get_light(const std::string&);
 
 			// Surface reflectivity
 			void set_reflection(const noob::reflection&, const std::string&);
-			noob::reflections::handle get_reflection(const std::string&);			
+			noob::reflection get_reflection(const std::string&);			
 
 			// Shader setting
 			void set_shader(const noob::prepared_shaders::info&, const std::string& name);
@@ -144,7 +144,7 @@ namespace noob
 			es::entity prop(const noob::bodies::handle);
 			es::entity prop(const noob::bodies::handle, const noob::basic_models::handle);
 			// Scenery is a non-movable item that is also made with a leaned-down mesh. Uses trimeshes as input. 
-			es::entity scenery(const noob::shapes::handle, const noob::vec3& pos, const noob::versor& orient);
+			es::entity scenery(const noob::basic_mesh& m, const noob::vec3& pos, const noob::versor& orient);
 
 
 			// Utilities:
@@ -180,6 +180,7 @@ namespace noob
 			std::unordered_map<std::string, shapes::handle> hulls;
 			std::unordered_map<std::string, shapes::handle> trimeshes;
 
+			// These index the inner handle # of shape components that are either hulls or trimeshes to their respective mesh.
 			std::unordered_map<size_t, noob::meshes::handle> shape_to_mesh;
 			std::unordered_map<size_t, noob::basic_models::handle> shape_to_model;
 

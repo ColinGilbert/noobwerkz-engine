@@ -248,42 +248,78 @@ noob::skeletal_anims::handle noob::stage::skeleton(const std::string& filename)
 }
 
 
-// Lighting functions
-void noob::stage::set_light(const noob::light, const std::string&)
+void noob::stage::set_light(const noob::light& l, const std::string& s)
 {
-
+	auto search = light_names.find(s);
+	if (search != light_names.end())
+	{
+		lights_holder.set(search->second, l);
+	}
+	else
+	{
+		light_names[s] = lights_holder.add(l);
+	}
 }
 
 
-noob::lights::handle noob::stage::get_light(const std::string&)
+noob::light noob::stage::get_light(const std::string& s)
 {
-
+	noob::lights::handle temp;
+	if (light_names.find(s) != light_names.end())
+	{
+		temp = light_names[s];
+	}
+	return lights_holder.get(temp);
 }
 
 
-// Surface reflectivity
-void noob::stage::set_reflection(const noob::reflection&, const std::string&)
+void noob::stage::set_reflection(const noob::reflection& r, const std::string& s)
 {
-
+	auto search = reflection_names.find(s);
+	if (search != reflection_names.end())
+	{
+		reflections_holder.set(search->second, r);
+	}
+	else
+	{
+		reflection_names[s] = reflections_holder.add(r);
+	}
 }
 
 
-noob::reflections::handle noob::stage::get_reflection(const std::string&)
+noob::reflection noob::stage::get_reflection(const std::string& s)
 {
-
+	noob::reflections::handle temp;
+	if (reflection_names.find(s) != reflection_names.end())
+	{
+		temp = reflection_names[s];
+	}
+	return reflections_holder.get(temp);
 }
 
 
-// Shader setting
-void noob::stage::set_shader(const noob::prepared_shaders::info&, const std::string& name)
+void noob::stage::set_shader(const noob::prepared_shaders::info& i, const std::string& s)
 {
-
+	auto search = shader_names.find(s);
+	if (search != shader_names.end())
+	{
+		shaders_holder.set(search->second, i);
+	}
+	else
+	{
+		shader_names[s] = shaders_holder.add(i);
+	}
 }
 
 
-noob::prepared_shaders::info noob::stage::get_shader(const std::string& name)
+noob::prepared_shaders::info noob::stage::get_shader(const std::string& s)
 {
-
+	noob::shaders::handle temp;
+	if (shader_names.find(s) != shader_names.end())
+	{
+		temp = shader_names[s];
+	}
+	return shaders_holder.get(temp);
 }
 
 
@@ -304,18 +340,29 @@ es::entity noob::stage::prop(const noob::bodies::handle _bod, noob::basic_models
 	es::entity temp (pool.new_entity());
 	pool.set(temp, body_tag.inner, bodies_holder.get(_bod));
 	pool.set(temp, basic_model_tag.inner, basic_models_holder.get(_model));
+
 	return temp;
 }
 
 
-es::entity noob::stage::scenery(const noob::shapes::handle _shape, const noob::vec3& pos, const noob::versor& orient)
+es::entity noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, const noob::versor& orient)
 {
+	//noob::shape* s = shapes_holder.get(_shape);
+	std::unique_ptr<noob::basic_mesh> m_ptr;
+	*m_ptr = m;
+	noob::meshes::handle m_handle = add_mesh(std::move(m_ptr));
 	std::unique_ptr<noob::body_controller> b;
-	noob::shape* s = shapes_holder.get(_shape);
-	b->init(dynamics_world, s, 0.0, pos, orient);
-	auto b_handle = bodies_holder.add(std::move(b));
+	noob::shapes::handle s_handle = static_trimesh(m_handle);
+	noob::bodies::handle b_handle = body(s_handle, 0.0, pos, orient);
+	//b->init(dynamics_world, shapes_holder.get(s_handle), 0.0, pos, orient);
+	//auto b_handle = bodies_holder.add(std::move(b));
 	// TODO: Finish implementing
+	noob::basic_models::handle model_handle = std::get<0>(get_model(s_handle));
+	es::entity temp (pool.new_entity());
+	pool.set(temp, body_tag.inner, bodies_holder.get(b_handle));
+	pool.set(temp, basic_model_tag.inner, basic_models_holder.get(model_handle));
 
+	return temp;
 }
 
 
@@ -375,6 +422,9 @@ noob::basic_mesh noob::stage::make_mesh(const noob::shapes::handle h)
 			logger::log("[Stage] - WARNING - no shape to model :(");
 			break;
 	};
+
+	return noob::mesh_utils::copy(*meshes_holder.get(unit_sphere_mesh));
+
 }
 
 
@@ -415,4 +465,5 @@ std::tuple<noob::basic_models::handle,noob::vec3> noob::stage::get_model(const n
 			logger::log("[Stage] - WARNING - no shape to model :(");
 			break;
 	};
+	return std::make_tuple(unit_sphere_model, noob::vec3(1.0, 1.0, 1.0));
 }

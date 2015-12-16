@@ -7,7 +7,7 @@
 
 namespace noob
 {
-	template<typename T>
+	template <typename T>
 		class component 
 		{
 			public:
@@ -52,6 +52,19 @@ namespace noob
 					return (h.inner < items.size());
 				}
 
+				bool exists(const std::string& name)
+				{
+					return (names.find(name) != names.end());
+				}
+
+				void set(component<T>::handle h, const T& t)
+				{
+					if (exists(h))
+					{
+						items[h.inner] = t;
+					}
+				}
+
 				void set(component<T>::handle h, const std::string& name)
 				{
 					if (exists(h))
@@ -72,11 +85,6 @@ namespace noob
 					return h;
 				}
 
-				bool exists(const std::string& name)
-				{
-					return (names.find(name) != names.end());
-				}
-
 
 			protected:
 
@@ -86,10 +94,10 @@ namespace noob
 
 
 	template<typename T>
-		class component<std::unique_ptr<T>> 
+		class component <std::unique_ptr<T>> 
 		{
 			public:
-			
+
 				class handle
 				{
 					friend class component;
@@ -110,6 +118,7 @@ namespace noob
 					bool valid;
 					size_t inner;
 				};
+
 
 				T* get(component<std::unique_ptr<T>>::handle h)
 				{
@@ -142,10 +151,22 @@ namespace noob
 					return h;
 				}
 
-
 				bool exists(component<std::unique_ptr<T>>::handle h)
 				{
 					return (h.inner < items.size());
+				}
+
+				bool exists(const std::string& name)
+				{
+					return (names.find(name) != names.end());
+				}
+
+				void set(component<std::unique_ptr<T>>::handle h, std::unique_ptr<T>&& t)
+				{
+					if (exists(h))
+					{
+						items[h.inner] = std::move(t);
+					}
 				}
 
 				void set(component<std::unique_ptr<T>>::handle h, const std::string& name)
@@ -168,10 +189,7 @@ namespace noob
 					return h;
 				}
 
-				bool exists(const std::string& name)
-				{
-					return (names.find(name) != names.end());
-				}
+
 
 			protected:
 
