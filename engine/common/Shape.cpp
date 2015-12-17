@@ -18,6 +18,7 @@ void noob::shape::sphere(float radius)
 	}
 	scales = noob::vec3(radius*2, radius*2, radius*2);
 	// dims[0] = radius;
+	// inner_shape->setMargin(0.3);
 	physics_valid = true;
 }
 
@@ -88,19 +89,18 @@ void noob::shape::trimesh(const noob::basic_mesh* mesh)
 {
 	if (!physics_valid)
 	{
-		inner_mesh = const_cast<noob::basic_mesh*>(mesh);
 		shape_type = noob::shape::type::TRIMESH;
 		btTriangleMesh* phyz_mesh = new btTriangleMesh();
 		
-		for (size_t i = 0; i < inner_mesh->indices.size(); i = i + 3)
+		for (size_t i = 0; i < mesh->indices.size(); i = i + 3)
 		{
-			uint16_t index_1 = inner_mesh->indices[i];
-			uint16_t index_2 = inner_mesh->indices[i+1];
-			uint16_t index_3 = inner_mesh->indices[i+2];
+			uint16_t index_1 = static_cast<uint16_t>(mesh->indices[i]);
+			uint16_t index_2 = static_cast<uint16_t>(mesh->indices[i+1]);
+			uint16_t index_3 = static_cast<uint16_t>(mesh->indices[i+2]);
 
-			std::array<float, 3> v1 = inner_mesh->vertices[index_1].v;
-			std::array<float, 3> v2 = inner_mesh->vertices[index_2].v;
-			std::array<float, 3> v3 = inner_mesh->vertices[index_3].v;
+			std::array<float, 3> v1 = mesh->vertices[index_1].v;
+			std::array<float, 3> v2 = mesh->vertices[index_2].v;
+			std::array<float, 3> v3 = mesh->vertices[index_3].v;
 
 			btVector3 bv1 = btVector3(v1[0], v1[1], v1[2]);
 			btVector3 bv2 = btVector3(v2[0], v2[1], v2[2]);
@@ -109,7 +109,7 @@ void noob::shape::trimesh(const noob::basic_mesh* mesh)
 			phyz_mesh->addTriangle(bv1, bv2, bv3);
 		}        
 		inner_shape = new btBvhTriangleMeshShape(phyz_mesh, true);
-		set_margin(0.1);
+		// set_margin(2.5);
 		scales = noob::vec3(1.0, 1.0, 1.0);
 	}
 	physics_valid = true;

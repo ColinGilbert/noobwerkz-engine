@@ -18,6 +18,8 @@ namespace noob
 			
 			void init(const std::string& prefix, size_t width, size_t height);
 			void window_dims(size_t width, size_t height);
+			// TODO: Implement
+			// noob::vec2 dims(const std::string& text); 
 			void text(const std::string& text, float x, float y, noob::gui::font_size size = noob::gui::font_size::READING, uint32_t colour = 0xFFFF00FF);
 			void frame();
 			void crosshairs(bool active = false);

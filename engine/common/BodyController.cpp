@@ -5,7 +5,7 @@
 
 #include <cmath>
 
-void noob::body_controller::init(btDynamicsWorld* _dynamics_world, const noob::shape* _shape, float mass, const noob::vec3& pos, const noob::versor& orient)
+void noob::body_controller::init(btDynamicsWorld* _dynamics_world, const noob::shape* _shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
 {
 	dynamics_world = _dynamics_world;
 	btTransform start_transform;
@@ -18,6 +18,8 @@ void noob::body_controller::init(btDynamicsWorld* _dynamics_world, const noob::s
 	shape->inner_shape->calculateLocalInertia(mass, inertia);
 	btRigidBody::btRigidBodyConstructionInfo ci(mass, motion_state, shape->inner_shape, inertia);
 	inner_body = new btRigidBody(ci);
+	set_ccd(ccd);
+
 	dynamics_world->addRigidBody(inner_body);
 }
 
@@ -34,14 +36,15 @@ void noob::body_controller::init(btDynamicsWorld* _dynamics_world, const noob::s
 	shape->inner_shape->calculateLocalInertia(_info.mass, inertia);
 	btRigidBody::btRigidBodyConstructionInfo ci(_info.mass, motion_state, shape->inner_shape, inertia);
 	inner_body = new btRigidBody(ci);
-	dynamics_world->addRigidBody(inner_body);
-
 	inner_body->setFriction(_info.friction);
 	inner_body->setRestitution(_info.restitution);
 	inner_body->setAngularFactor(btVector3(_info.angular_factor.v[0], _info.angular_factor.v[1], _info.angular_factor.v[2]));
 	inner_body->setLinearFactor(btVector3(_info.linear_factor.v[0], _info.linear_factor.v[1], _info.linear_factor.v[2]));
 	inner_body->setLinearVelocity(btVector3(_info.linear_velocity.v[0], _info.linear_velocity.v[1], _info.linear_velocity.v[2]));
 	inner_body->setAngularVelocity(btVector3(_info.angular_velocity.v[0], _info.angular_velocity.v[1], _info.angular_velocity.v[2]));
+	self_control = _info.self_control;
+	set_ccd(_info.ccd);
+	dynamics_world->addRigidBody(inner_body);
 }
 
 /*
@@ -67,7 +70,7 @@ void noob::body_controller::set_self_control(bool b)
 	}
 	else
 	{
-
+		self_control = false;
 	}
 }
 
@@ -204,4 +207,15 @@ std::string noob::body_controller::get_debug_string() const
 	fmt::MemoryWriter w;
 	w << "[Body] position " << get_position().to_string() << ", orientation " << get_orientation().to_string() << ", linear velocity " << get_linear_velocity().to_string() << ", angular velocity " << get_angular_velocity().to_string() << ", on ground? " << on_ground() << ", ray lambda  = " << ray_lambda; //<< " ray lambda # 2 = " << ray_lambda[1];
 	return w.str();
+}
+
+void noob::body_controller::set_ccd(bool b)
+{
+	if (b == true)
+	{
+		btVector3 center;
+		btScalar radius;
+		shape->inner_shape->getBoundingSphere(center, radius);
+		inner_body->setCcdMotionThreshold(radius);
+	}
 }

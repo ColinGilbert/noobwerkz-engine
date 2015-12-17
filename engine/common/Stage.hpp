@@ -73,7 +73,7 @@ namespace noob
 			void draw() const;
 
 			// Creates physics body. Those get made lots.
-			noob::bodies::handle body(noob::shapes::handle, float mass, const noob::vec3& pos, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
+			noob::bodies::handle body(noob::shapes::handle, float mass, const noob::vec3& pos, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0), bool ccd = false);
 
 			// Parametric shapes. These get cached for reuse by the physics engine.
 			noob::shapes::handle sphere(float r);
@@ -171,7 +171,8 @@ namespace noob
 			btCollisionDispatcher* collision_dispatcher;
 			btSequentialImpulseConstraintSolver* solver;
 			btDiscreteDynamicsWorld* dynamics_world;
-
+			
+			
 			// TODO: Test other data structures.
 			// Benchmark, benchmark, benchmark!!! Multiplatform, too!!!
 			std::map<float, shapes::handle> sphere_shapes;

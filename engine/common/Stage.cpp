@@ -19,7 +19,8 @@ void noob::stage::init()
 	solver = new btSequentialImpulseConstraintSolver();
 	dynamics_world = new btDiscreteDynamicsWorld(collision_dispatcher, broadphase, solver, collision_configuration);
 	dynamics_world->setGravity(btVector3(0, -10, 0));
-
+	// dynamics_world->setApplySpeculativeContactRestitution(true);
+	// dynamics_world->setSynchronizeAllMotionStates(true);
 	renderer.init();
 
 	auto temp_mesh (pool.register_component<noob::meshes::handle>("mesh"));
@@ -137,10 +138,10 @@ void noob::stage::draw() const
 }
 
 
-noob::bodies::handle noob::stage::body(noob::shapes::handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient)
+noob::bodies::handle noob::stage::body(noob::shapes::handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
 {
 	std::unique_ptr<noob::body_controller> b = std::make_unique<noob::body_controller>();
-	b->init(dynamics_world, shapes_holder.get(shape_h), mass, pos, orient);
+	b->init(dynamics_world, shapes_holder.get(shape_h), mass, pos, orient, ccd);
 	auto bod_h = bodies_holder.add(std::move(b));
 	bodies_to_shapes.insert(std::make_pair(bod_h.get_inner(), shape_h));
 	return bod_h;
@@ -515,6 +516,7 @@ es::entity noob::stage::prop(const noob::bodies::handle _bod, noob::basic_models
 es::entity noob::stage::scenery(const noob::meshes::handle h, const noob::vec3& pos, const std::string& shading, const noob::versor& orient)
 {
 	noob::shapes::handle s_handle = static_trimesh(h);
+	// shapes_holder.get(s_handle)->set_margin(1.0);
 	noob::bodies::handle b_handle = body(s_handle, 0.0, pos, orient);
 	noob::basic_models::handle model_handle = std::get<0>(get_model(s_handle));
 	

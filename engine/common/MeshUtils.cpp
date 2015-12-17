@@ -422,6 +422,7 @@ noob::basic_mesh noob::mesh_utils::csg(const noob::basic_mesh& _a, const noob::b
 	csgjs_model model_b = get_csg_model(b);
 
 	csgjs_model resulting_csg_model;
+
 	if (op == noob::csg_op::UNION)
 	{
 		resulting_csg_model = csgjs_union(model_a, model_b);
@@ -459,8 +460,10 @@ noob::basic_mesh noob::mesh_utils::csg(const noob::basic_mesh& _a, const noob::b
 
 	for (int i : resulting_csg_model.indices)
 	{
-		results.indices.push_back(static_cast<uint16_t>(i));
+		results.indices.push_back(i);
 	}
+	
+	results.normalize();
 
 	return results;
 }
@@ -513,8 +516,8 @@ csgjs_model noob::mesh_utils::get_csg_model(const noob::basic_mesh& m)
 		vert.normal.y = m.normals[j].v[1];
 		vert.normal.z = m.normals[j].v[2];
 
-		// vert.uv.x = m.texcoords[j].v[0];
-		// vert.uv.y = m.texcoords[j].v[1];
+		vert.uv.x = m.texcoords[j].v[0];
+		vert.uv.y = m.texcoords[j].v[1];
 
 		model.vertices.push_back(vert);
 	}

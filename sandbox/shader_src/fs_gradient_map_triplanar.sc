@@ -17,11 +17,12 @@ uniform vec4 colour_positions;
 // Scaling factors (for the texture)
 uniform vec4 scale;
 
-//uniform u_texture;
+// uniform u_texture;
 
 void main()
 {
-	vec3 position = normalize(v_position);
+	//vec3 position = normalize(v_position);
+	vec3 position = v_position;
 	vec3 normal_blend = normalize(max(abs(v_normal), 0.0001));
 
 	float b = normal_blend.x + normal_blend.y + normal_blend.z;

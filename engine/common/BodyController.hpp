@@ -20,7 +20,7 @@ namespace noob
 		public:
 			struct info
 			{
-				void init(btRigidBody* _body)
+				void init(btRigidBody* _body, bool _self_control, bool _ccd)
 				{
 					float inv_mass = _body->getInvMass();
 					if (inv_mass > 0.0)
@@ -36,25 +36,29 @@ namespace noob
 					orientation =  _body->getOrientation();
 					linear_velocity = _body->getLinearVelocity();
 					angular_velocity = _body->getAngularVelocity();
+					self_control = _self_control;
+					ccd = _ccd;
 				}
 
 				float mass, friction, restitution;
 				noob::vec3 linear_factor, angular_factor, position, linear_velocity, angular_velocity;
 				noob::versor orientation;
+				bool ccd, self_control;
+
 			};
 
 			template <class Archive>
 				void serialize(Archive& ar)
 				{
 					noob::body_controller::info info;
-					info.init(inner_body);
+					info.init(inner_body, self_control, ccd);
 					ar(info);
 				}
 
-			body_controller() : height(0.0), width(0.0), step_height(0.1), ray_lambda(1.0), turn_angle(1.0), dt(1.0/60.0), max_linear_velocity(10.0), walk_speed(0.5), turn_speed(0.5), jump_force(1.5), airborne(true), obstacle(true), self_control(false) {}
+			body_controller() : height(0.0), width(0.0), step_height(0.1), ray_lambda(1.0), turn_angle(1.0), dt(1.0/60.0), max_linear_velocity(10.0), walk_speed(0.5), turn_speed(0.5), jump_force(1.5), airborne(true), obstacle(false), self_control(false) {}
 
 
-			void init(btDynamicsWorld*, const noob::shape*, float mass, const noob::vec3& position, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0));
+			void init(btDynamicsWorld*, const noob::shape*, float mass, const noob::vec3& position, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0), bool ccd = false);
 			void init(btDynamicsWorld*, const noob::shape*, const noob::body_controller::info&);
 
 			void set_self_control(bool b);
@@ -84,6 +88,8 @@ namespace noob
 
 
 		protected:
+			void set_ccd(bool); // Helper to set ccd, for write-once-only purposes.
+			bool ccd;
 			void update();
 			bool airborne, obstacle, self_control;
 			noob::shape* shape;

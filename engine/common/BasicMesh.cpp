@@ -162,7 +162,7 @@ void noob::basic_mesh::save(const std::string& filename) const
 
 bool noob::basic_mesh::load_mem(const std::string& file, const std::string& name)
 {
-	const aiScene* scene = aiImportFileFromMemory(file.c_str(), file.size(), aiProcessPreset_TargetRealtime_Fast, "");
+	const aiScene* scene = aiImportFileFromMemory(file.c_str(), file.size(), post_process, "");//aiProcessPreset_TargetRealtime_Fast | aiProcess_FixInfacingNormals, "");
 	return load_assimp(scene, name);
 }
 
@@ -170,7 +170,7 @@ bool noob::basic_mesh::load_mem(const std::string& file, const std::string& name
 bool noob::basic_mesh::load_file(const std::string& filename, const std::string& name)
 {
 	// logger::log(fmt::format("[Mesh] loading file {0}", filename ));
-	const aiScene* scene = aiImportFile(filename.c_str(), aiProcessPreset_TargetRealtime_Fast);
+	const aiScene* scene = aiImportFile(filename.c_str(), post_process);//aiProcessPreset_TargetRealtime_Fast | aiProcess_FixInfacingNormals);
 	return load_assimp(scene, name);	
 }
 
@@ -200,11 +200,11 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 	bool has_normals = mesh_data->HasNormals();
 	//logger::log(fmt::format("[Mesh] load({0}) - Mesh has {1} verts, normals? {2}", name, num_verts, has_normals));
 
-
+	bool has_texcoords = mesh_data->HasTextureCoords(0);
 	// double accum_x, accum_y, accum_z = 0.0f;
 	bbox_info.min = bbox_info.max = bbox_info.center = noob::vec3(0.0, 0.0, 0.0);	
 
-	for ( size_t n = 0; n < num_verts; ++n)
+	for (size_t n = 0; n < num_verts; ++n)
 	{
 		aiVector3D pt = mesh_data->mVertices[n];
 		noob::vec3 v;
@@ -230,7 +230,21 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 			norm.v[2] = normal[2];
 			normals.push_back(norm);
 		}
+		if (has_texcoords)
+		{
+			aiVector3D tex = mesh_data->mTextureCoords[0][n];
+			noob::vec3 uvw;
+			uvw.v[0] = tex[0];
+			uvw.v[1] = tex[1];
+			uvw.v[2] = tex[2];
+			texcoords.push_back(uvw);
+		}
+		else
+		{
+			texcoords.push_back(noob::vec3(0.0, 0.0, 0.0));
+		}
 	}
+		
 
 	if (num_verts == 0)
 	{
