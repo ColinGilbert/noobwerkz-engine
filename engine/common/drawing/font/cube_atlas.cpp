@@ -3,7 +3,7 @@
 * License: http://www.opensource.org/licenses/BSD-2-Clause
 */
 
-#include <bgfx.h>
+#include <bgfx/bgfx.h>
 
 #include <limits.h> // INT_MAX
 #include <memory.h> // memset

@@ -42,7 +42,7 @@ void noob::body_controller::init(btDynamicsWorld* _dynamics_world, const noob::s
 	inner_body->setLinearFactor(btVector3(_info.linear_factor.v[0], _info.linear_factor.v[1], _info.linear_factor.v[2]));
 	inner_body->setLinearVelocity(btVector3(_info.linear_velocity.v[0], _info.linear_velocity.v[1], _info.linear_velocity.v[2]));
 	inner_body->setAngularVelocity(btVector3(_info.angular_velocity.v[0], _info.angular_velocity.v[1], _info.angular_velocity.v[2]));
-	self_control = _info.self_control;
+	self_controlled = _info.self_controlled;
 	set_ccd(_info.ccd);
 	dynamics_world->addRigidBody(inner_body);
 }
@@ -58,11 +58,11 @@ void noob::body_controller::init(btDynamicsWorld* _dynamics_world, const noob::s
    }
    */
 
-void noob::body_controller::set_self_control(bool b)
+void noob::body_controller::set_self_controlled(bool b)
 {
 	if (b == true)
 	{
-		self_control = true;
+		self_controlled = true;
 		// inner_body->setLinearSleepingThreshold(btScalar(0.8));
 		// inner_body->setAngularSleepingThreshold(btScalar(1.0));
 		// inner_body->setAngularFactor(btVector2(0.0, 0.0));
@@ -70,14 +70,14 @@ void noob::body_controller::set_self_control(bool b)
 	}
 	else
 	{
-		self_control = false;
+		self_controlled = false;
 	}
 }
 
 
 void noob::body_controller::update() 
 {
-	if (self_control)
+	if (self_controlled)
 	{
 		btTransform xform;
 
@@ -100,7 +100,7 @@ void noob::body_controller::update()
 		{
 			airborne = false;
 			// if (i == 0) airborne = false;
-			// if (i == 1) obstacle = false;
+			// if (i == 1) obstacled = false;
 			// logger::log("[Character] - ray hit!");
 			ray_lambda = ray_callback.m_closestHitFraction;
 		}
@@ -116,7 +116,7 @@ void noob::body_controller::update()
 
 void noob::body_controller::move(bool forward, bool backward, bool left, bool right, bool jump)
 {
-	if (self_control)
+	if (self_controlled)
 	{
 		if (on_ground())
 		{
@@ -126,8 +126,6 @@ void noob::body_controller::move(bool forward, bool backward, bool left, bool ri
 			btVector3 linear_velocity = inner_body->getLinearVelocity();
 			btScalar speed = inner_body->getLinearVelocity().length();
 			btVector3 walk_direction = btVector3(0.0, 0.0, 0.0);
-
-			btScalar walk_speed = 0.5;// / 3.0;
 
 			btVector3 forward_dir(walk_speed, 0.0, 0.0);
 
@@ -157,7 +155,7 @@ void noob::body_controller::move(bool forward, bool backward, bool left, bool ri
 
 bool noob::body_controller::on_ground() const
 {
-	return (!(airborne && obstacle));
+	return (!(airborne && obstacled));
 	//	return ray_lambda[0] < btScalar(1.0);
 }
 

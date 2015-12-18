@@ -9,7 +9,7 @@ uniform vec4 colour_2;
 uniform vec4 colour_3;
 uniform vec4 colour_4;
 
-uniform vec3 mapping_blend;
+uniform vec4 mapping_blend;
 
 // Positions are only required for the two mid-gradient colours, as the other two are at the ends
 uniform vec4 colour_positions;

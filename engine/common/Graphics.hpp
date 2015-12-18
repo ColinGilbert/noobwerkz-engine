@@ -5,7 +5,7 @@
 #include <string>
 #include <memory>
 #include <unordered_map>
-#include <bgfx.h>
+#include <bgfx/bgfx.h>
 
 #include <boost/variant/variant.hpp>
 

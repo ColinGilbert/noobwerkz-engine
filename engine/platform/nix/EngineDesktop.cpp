@@ -1,13 +1,13 @@
 #include <atomic>
 
-#include <bgfx.h>
+#include <bgfx/bgfx.h>
 #include "Graphics.hpp"
 #include "Application.hpp"
 #include "Logger.hpp"
 #include "NDOF.hpp"
 
 #include <GLFW/glfw3.h>
-#include <bgfxplatform.h>
+#include <bgfx/bgfxplatform.h>
 
 std::atomic<uint32_t> width(1280);
 std::atomic<uint32_t> height(720);

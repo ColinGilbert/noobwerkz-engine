@@ -36,14 +36,16 @@ void noob::application::user_init()
 	stage.set_shader(purple_shader, "purple");
 
 	// Make a basic scenery
-	noob::basic_mesh temp_1 = noob::mesh_utils::box(1000.0, 50.0, 1000.0);
-	temp_1.translate(noob::vec3(0.0, -50.0, 0.0));
+	noob::basic_mesh temp_1 = noob::mesh_utils::box(200.0, 20.0, 200.0);
+	//noob::basic_mesh temp_2 = noob::mesh_utils::cone(500.0, 1000.0);
+	temp_1.translate(noob::vec3(0.0, -20.0, 0.0));
+	
+	//noob::basic_mesh scene_mesh = noob::mesh_utils::csg(temp_1, temp_2, noob::csg_op::INTERSECTION);
 	auto scenery_h = stage.scenery(stage.add_mesh(temp_1), noob::vec3(0.0, 0.0, 0.0), "moon");
 
-	// Now, drop randomly-shaped hull objects all over it.
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_real_distribution<> dis(-10, 10);
+	std::uniform_real_distribution<> dis(-10.0, 10.0);
 
 	for (size_t i = 0 ; i < 500; ++i )
 	{
@@ -53,9 +55,10 @@ void noob::application::user_init()
 		// 	points.push_back(noob::vec3(dis(gen), dis(gen), dis(gen)));
 		// }
 		//auto h = stage.hull(points);
-		auto h = stage.unit_sphere_shape;
-		auto temp_body = stage.body(h, 1.0, noob::vec3(std::abs(dis(gen)*10.0), std::abs(dis(gen)*10.0) + 50.0, std::abs(dis(gen)*10.0)), noob::versor(0.0, 0.0, 0.0, 1.0));//, true);
-		stage.bodies_holder.get(temp_body)->set_self_control(false);
+		auto h = stage.sphere(5.0);
+
+		auto temp_body = stage.body(h, 1.0, noob::vec3(dis(gen), 100, dis(gen)), noob::versor(0.0, 0.0, 0.0, 1.0)); //, true);
+		stage.bodies_holder.get(temp_body)->set_self_controlled(true);
 		stage.prop(temp_body, "purple");
 	}
 

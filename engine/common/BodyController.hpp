@@ -1,4 +1,4 @@
-// Kinematic, until self_control == false. The it beomes dynamic body
+// Kinematic, until self_controlled == false. The it beomes dynamic body
 #pragma once
 
 #include <cereal/types/array.hpp>
@@ -20,7 +20,7 @@ namespace noob
 		public:
 			struct info
 			{
-				void init(btRigidBody* _body, bool _self_control, bool _ccd)
+				void init(btRigidBody* _body, bool _self_controlled, bool _ccd)
 				{
 					float inv_mass = _body->getInvMass();
 					if (inv_mass > 0.0)
@@ -36,14 +36,14 @@ namespace noob
 					orientation =  _body->getOrientation();
 					linear_velocity = _body->getLinearVelocity();
 					angular_velocity = _body->getAngularVelocity();
-					self_control = _self_control;
+					self_controlled = _self_controlled;
 					ccd = _ccd;
 				}
 
 				float mass, friction, restitution;
 				noob::vec3 linear_factor, angular_factor, position, linear_velocity, angular_velocity;
 				noob::versor orientation;
-				bool ccd, self_control;
+				bool ccd, self_controlled;
 
 			};
 
@@ -51,17 +51,17 @@ namespace noob
 				void serialize(Archive& ar)
 				{
 					noob::body_controller::info info;
-					info.init(inner_body, self_control, ccd);
+					info.init(inner_body, self_controlled, ccd);
 					ar(info);
 				}
 
-			body_controller() : height(0.0), width(0.0), step_height(0.1), ray_lambda(1.0), turn_angle(1.0), dt(1.0/60.0), max_linear_velocity(10.0), walk_speed(0.5), turn_speed(0.5), jump_force(1.5), airborne(true), obstacle(false), self_control(false) {}
+			body_controller() : height(0.0), width(0.0), step_height(0.1), ray_lambda(1.0), turn_angle(1.0), dt(1.0/60.0), max_linear_velocity(10.0), walk_speed(0.5), turn_speed(0.5), jump_force(1.5), airborne(true), obstacled(false), self_controlled(false) {}
 
 
 			void init(btDynamicsWorld*, const noob::shape*, float mass, const noob::vec3& position, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0), bool ccd = false);
 			void init(btDynamicsWorld*, const noob::shape*, const noob::body_controller::info&);
 
-			void set_self_control(bool b);
+			void set_self_controlled(bool b);
 			void set_walk_speed(float s);
 			void set_jump_force(float j);
 			
@@ -91,7 +91,7 @@ namespace noob
 			void set_ccd(bool); // Helper to set ccd, for write-once-only purposes.
 			bool ccd;
 			void update();
-			bool airborne, obstacle, self_control;
+			bool airborne, obstacled, self_controlled;
 			noob::shape* shape;
 			// btCollisionShape* inner_shape;			
 			btDynamicsWorld* dynamics_world;
@@ -136,7 +136,7 @@ namespace noob
    class body_controller
    {
    public:
-   body_controller() : resting(false), self_control(false), time_on_ground(0.0), slope(0.0, 0.0, 0.0), world(nullptr) {}
+   body_controller() : resting(false), self_controlled(false), time_on_ground(0.0), slope(0.0, 0.0, 0.0), world(nullptr) {}
 
    void init(btDynamicsWorld*, const std::shared_ptr<noob::prop>&);
    void update();
@@ -149,7 +149,7 @@ namespace noob
    noob::prop* get_prop() const { return prop.get(); }
 
    protected:
-   bool resting, self_control;
+   bool resting, self_controlled;
    float width, mass, height, current_speed, max_speed, time_on_ground;
    noob::vec3 slope;
    std::shared_ptr<noob::prop> prop;

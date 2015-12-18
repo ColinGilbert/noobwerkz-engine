@@ -1,7 +1,7 @@
 // Interface class for drawble items
 #pragma once
 
-#include <bgfx.h>
+#include <bgfx/bgfx.h>
 #include "MathFuncs.hpp"
 
 namespace noob

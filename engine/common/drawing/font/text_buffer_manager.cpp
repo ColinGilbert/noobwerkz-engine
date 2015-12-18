@@ -5,7 +5,7 @@
 
 //#include "../common.sh"
 
-#include <bgfx.h>
+#include <bgfx/bgfx.h>
 #include <stddef.h> // offsetof
 #include <memory.h> // memcpy
 #include <wchar.h>  // wcslen

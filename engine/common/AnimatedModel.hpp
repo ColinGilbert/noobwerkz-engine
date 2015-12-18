@@ -9,7 +9,7 @@
 #include <cereal/types/set.hpp>
 #include <cereal/archives/binary.hpp>
 
-#include <bgfx.h>
+// #include <bgfx/bgfx.h>
 
 #include "format.h"
 #include "Drawable.hpp"
