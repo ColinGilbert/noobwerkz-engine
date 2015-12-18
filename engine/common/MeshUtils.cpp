@@ -379,7 +379,7 @@ noob::basic_mesh noob::mesh_utils::catmull_sphere(float radius)
 
 noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 {
-	// TODO: Optimize this	
+/*	// TODO: Optimize this	
 	std::vector<btVector3> bt_points;
 	for (noob::vec3 p : points)
 	{
@@ -407,7 +407,7 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 	}
 
 	mesh.normalize();
-	return mesh;
+	return mesh; */
 }
 
 

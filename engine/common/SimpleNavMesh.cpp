@@ -30,7 +30,7 @@
 #include "CrowdTool.h"
 #include "MathFuncs.hpp"
 
-#include <btBulletDynamicsCommon.h>
+// #include <btBulletDynamicsCommon.h>
 
 noob::simple_navmesh::simple_navmesh() :
 	m_keepInterResults(true),

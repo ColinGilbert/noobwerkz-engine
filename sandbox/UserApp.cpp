@@ -1,6 +1,7 @@
 #include "Application.hpp"
 
 #include <random>
+
 // TODO: Insert the callback function here
 std::vector<std::tuple<noob::keyboard::keys, noob::keyboard::mod_keys, std::string>> keystrokes;
 
@@ -52,11 +53,11 @@ void noob::application::user_init()
 		// {	
 		// 	points.push_back(noob::vec3(dis(gen), dis(gen), dis(gen)));
 		// }
-		//auto h = stage.hull(points);
-		auto h = stage.unit_sphere_shape;
-		auto temp_body = stage.body(h, 1.0, noob::vec3(std::abs(dis(gen)*10.0), std::abs(dis(gen)*10.0) + 50.0, std::abs(dis(gen)*10.0)), noob::versor(0.0, 0.0, 0.0, 1.0));//, true);
-		stage.bodies_holder.get(temp_body)->set_self_control(false);
-		stage.prop(temp_body, "purple");
+		// auto h = stage.hull(points);
+		// auto h = stage.unit_sphere_shape;
+		// auto temp_body = stage.body(h, 1.0, noob::vec3(std::abs(dis(gen)*10.0), std::abs(dis(gen)*10.0) + 50.0, std::abs(dis(gen)*10.0)), noob::versor(0.0, 0.0, 0.0, 1.0));//, true);
+		// stage.bodies_holder.get(temp_body)->set_self_control(false);
+		// stage.prop(temp_body, "purple");
 	}
 
 

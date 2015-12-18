@@ -4,7 +4,7 @@
 
 
 #include <cmath>
-
+/*
 void noob::body_controller::init(btDynamicsWorld* _dynamics_world, const noob::shape* _shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
 {
 	dynamics_world = _dynamics_world;
@@ -46,7 +46,7 @@ void noob::body_controller::init(btDynamicsWorld* _dynamics_world, const noob::s
 	set_ccd(_info.ccd);
 	dynamics_world->addRigidBody(inner_body);
 }
-
+*/
 /*
    void noob::body_controller::set_position(const noob::vec3& pos)
    {
@@ -79,7 +79,7 @@ void noob::body_controller::update()
 {
 	if (self_control)
 	{
-		btTransform xform;
+/*		btTransform xform;
 
 		inner_body->getMotionState()->getWorldTransform(xform);
 
@@ -110,13 +110,14 @@ void noob::body_controller::update()
 			// logger::log("[Character] - no hit");
 			ray_lambda = 1.0;
 		}
+*/
 	}
 }
 
 
 void noob::body_controller::move(bool forward, bool backward, bool left, bool right, bool jump)
 {
-	if (self_control)
+/*	if (self_control)
 	{
 		if (on_ground())
 		{
@@ -152,6 +153,7 @@ void noob::body_controller::move(bool forward, bool backward, bool left, bool ri
 			}
 		}
 	}
+*/
 }
 
 
@@ -164,41 +166,43 @@ bool noob::body_controller::on_ground() const
 
 noob::vec3 noob::body_controller::get_position() const
 {
-	btTransform xform;
-	inner_body->getMotionState()->getWorldTransform(xform);
-	return xform.getOrigin();
+	noob::vec3 pos;
+	NewtonBodyGetMatrix(inner_body, &pos.v[0]);
+	return pos;
 }
 
 
 noob::versor noob::body_controller::get_orientation() const
 {
-	btTransform xform;
-	inner_body->getMotionState()->getWorldTransform(xform);
-	return xform.getRotation();
+
+	noob::versor orient;
+	NewtonBodyGetRotation(inner_body, &orient.q[0]);
+	return orient;
 }
 
 
 noob::vec3 noob::body_controller::get_linear_velocity() const
 {
-	return inner_body->getLinearVelocity();
+	noob::vec3 vel;
+	NewtonBodyGetVelocity(inner_body, &vel.v[0]);
+	return vel;	
 }
 
 
 noob::vec3 noob::body_controller::get_angular_velocity() const
 {
-	return inner_body->getAngularVelocity();	
+	noob::vec3 omega;
+	NewtonBodyGetOmega(inner_body, &omega.v[0]);
+	return omega;
 }
 
 
 
 noob::mat4 noob::body_controller::get_transform() const
 {
-	btTransform xform;
-	inner_body->getMotionState()->getWorldTransform(xform);
-	noob::transform_helper t;
-	t.translate(get_position());
-	t.rotate(get_orientation());
-	return t.get_matrix();
+	noob::mat4 xform;
+	NewtonBodyGetMatrix(inner_body, &xform.m[0]);
+	return xform;
 }
 
 
@@ -209,13 +213,139 @@ std::string noob::body_controller::get_debug_string() const
 	return w.str();
 }
 
+
 void noob::body_controller::set_ccd(bool b)
 {
 	if (b == true)
 	{
-		btVector3 center;
-		btScalar radius;
-		shape->inner_shape->getBoundingSphere(center, radius);
-		inner_body->setCcdMotionThreshold(radius);
+		// btVector3 center;
+		// btScalar radius;
+		// shape->inner_shape->getBoundingSphere(center, radius);
+		// inner_body->setCcdMotionThreshold(radius);
 	}
+}
+
+
+void noob::body_controller::sphere(float mass, float r, const noob::vec3& pos, const NewtonWorld* const world)
+{
+	NewtonCollision* const collision = NewtonCreateSphere(world, r, 0, NULL);
+
+	noob::mat4 matrix = noob::identity_mat4();
+
+	matrix = noob::translate(matrix, pos);
+	
+	inner_body = NewtonCreateDynamicBody(world, collision, &matrix.m[0]);
+
+	// set the force callback for applying the force and torque
+	NewtonBodySetForceAndTorqueCallback(inner_body, noob::body_controller::apply_gravity);
+
+	NewtonBodySetMassProperties(inner_body, mass, collision);
+
+	// NewtonBodySetLinearDamping (body, 0.0f);
+
+	NewtonDestroyCollision(collision);
+}
+
+
+void noob::body_controller::box(float mass, float x, float y, float z, const noob::vec3& pos, const NewtonWorld* const world)
+{
+	NewtonCollision* const collision = NewtonCreateBox(world, x, y, z, 0, NULL);
+
+	noob::mat4 matrix = noob::identity_mat4();
+
+	matrix = noob::translate(matrix, pos);
+	
+	inner_body = NewtonCreateDynamicBody(world, collision, &matrix.m[0]);
+
+	// set the force callback for applying the force and torque
+	NewtonBodySetForceAndTorqueCallback(inner_body, noob::body_controller::apply_gravity);
+
+	NewtonBodySetMassProperties(inner_body, mass, collision);
+
+	// NewtonBodySetLinearDamping (body, 0.0f);
+
+	NewtonDestroyCollision(collision);
+	
+}
+
+
+void noob::body_controller::cone(float mass, float r, float h, const noob::vec3& pos, const NewtonWorld* const world)
+{
+	NewtonCollision* const collision = NewtonCreateCone(world, r, h, 0, NULL);
+
+	noob::mat4 matrix = noob::identity_mat4();
+
+	matrix = noob::translate(matrix, pos);
+	
+	inner_body = NewtonCreateDynamicBody(world, collision, &matrix.m[0]);
+
+	// set the force callback for applying the force and torque
+	NewtonBodySetForceAndTorqueCallback(inner_body, noob::body_controller::apply_gravity);
+
+	NewtonBodySetMassProperties(inner_body, mass, collision);
+
+	// NewtonBodySetLinearDamping (body, 0.0f);
+
+	NewtonDestroyCollision(collision);
+
+}
+
+
+void noob::body_controller::cylinder(float mass, float r, float h, const noob::vec3& pos, const NewtonWorld* const world)
+{
+	NewtonCollision* const collision = NewtonCreateCylinder(world, r, h, 0, NULL);
+
+	noob::mat4 matrix = noob::identity_mat4();
+
+	matrix = noob::translate(matrix, pos);
+	
+	inner_body = NewtonCreateDynamicBody(world, collision, &matrix.m[0]);
+
+	// set the force callback for applying the force and torque
+	NewtonBodySetForceAndTorqueCallback(inner_body, noob::body_controller::apply_gravity);
+
+	NewtonBodySetMassProperties(inner_body, mass, collision);
+
+	// NewtonBodySetLinearDamping (body, 0.0f);
+
+	NewtonDestroyCollision(collision);
+
+}
+
+
+void noob::body_controller::static_mesh(const noob::basic_mesh& m, const noob::vec3& pos, const NewtonWorld* const world)
+{
+	NewtonCollision* const collision = NewtonCreateTreeCollision(world, 0);
+
+	NewtonTreeCollisionBeginBuild (collision);
+
+	for (size_t i = 0; i < m.indices.size(); i += 3)
+	{
+		std::array<noob::vec3, 3> current_face;
+		current_face[0] = m.vertices[i];
+		current_face[1] = m.vertices[i+1];
+		current_face[2] = m.vertices[i+2];
+		NewtonTreeCollisionAddFace (collision, 1, &current_face[0].v[0], 3 * sizeof (float), 0);
+	}
+	NewtonTreeCollisionEndBuild (collision, 1);
+
+	noob::mat4 matrix = noob::identity_mat4();
+	matrix = noob::translate(matrix, pos);
+	inner_body = NewtonCreateDynamicBody(world, collision, &matrix[0]);
+
+	NewtonDestroyCollision(collision);
+
+}
+
+
+void noob::body_controller::apply_gravity(const NewtonBody* const bod, float dt, int thread_index)
+{
+	float mass;
+	float Ixx;
+	float Iyy;
+	float Izz;
+
+	NewtonBodyGetMassMatrix(bod, &mass, &Ixx, &Iyy, &Izz);
+	noob::vec4 gravity_force (0.0f, -9.8f * mass, 0.0f, 0.0f);
+	NewtonBodySetForce(bod, &gravity_force.v[0]);
 }

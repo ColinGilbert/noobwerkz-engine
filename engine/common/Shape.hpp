@@ -1,5 +1,6 @@
 // This represents a conceptual geometric shape.
 // Tied into the physics engine.
+/*
 #pragma once
 
 
@@ -11,12 +12,11 @@
 #include <cereal/types/vector.hpp>
 #include <cereal/archives/portable_binary.hpp>
 
-#include <btBulletDynamicsCommon.h>
+// #include <btBulletDynamicsCommon.h>
 #include "BasicMesh.hpp"
 #include "MeshUtils.hpp"
 #include "MathFuncs.hpp"
 #include "IntrusiveBase.hpp"
-
 
 namespace noob
 {
@@ -28,11 +28,11 @@ namespace noob
 		public:
 		enum class type { SPHERE, BOX, CAPSULE, CYLINDER, CONE, CONVEX, TRIMESH };//, PLANE };
 
-		shape() : physics_valid(false) {}
-		virtual ~shape();
+//		shape() : physics_valid(false) {}
+//		virtual ~shape();
 		
-		void set_margin(float);
-		float get_margin() const;
+//		void set_margin(float);
+//		float get_margin() const;
 
 		noob::shape::type get_type() const;
 
@@ -56,10 +56,11 @@ namespace noob
 		noob::vec3 get_scales() const;
 
 		noob::shape::type shape_type;
-		bool physics_valid;
+		bool physics_valid;a
 		noob::vec3 scales;
 		std::array<float, 4> dims;
-		btCollisionShape* inner_shape;
+		// btCollisionShape* inner_shape;
 		noob::basic_mesh* inner_mesh;
 	};
 }
+*/

@@ -58,7 +58,7 @@
 //#include "MeshUtils.hpp"
 #include "FileSystem.hpp"
 
-#include <btBulletDynamicsCommon.h>
+// #include <btBulletDynamicsCommon.h>
 // #include <chaiscript/chaiscript.hpp>
 // #include <chaiscript/chaiscript_stdlib.hpp>
 #include <angelscript.h>
