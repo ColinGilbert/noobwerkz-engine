@@ -1,12 +1,12 @@
 var a00115 =
 [
-    [ "EdgeT", "a00133.html", "a00133" ],
-    [ "FaceT", "a00146.html", "a00146" ],
-    [ "State", "a00261.html", "a00261" ],
-    [ "VertexT", "a00312.html", "a00312" ],
-    [ "final_t", "a00115.html#a6130640284ae3223c2a7e3c54269d4f1", null ],
-    [ "state_t", "a00115.html#a13c642f3a0e8bfb626e99d0d27b7fdd9", null ],
-    [ "FaceAttributes", "a00115.html#a3f66494113d1cab98d16193096274e38a0df83e391d1ec7a31f379421620ce1dd", null ],
-    [ "VertexAttributes", "a00115.html#a1202bd17bc21d4b75513f523cedcf3d5a22e7462f43622ff48a71f4839ddfc1da", null ],
-    [ "HalfedgeAttributes", "a00115.html#a601f80dd60b5a259210abf8bbf09759da0fc7210a7fffcd5b03b89a647e3ddf20", null ]
+    [ "FVCoeff", "a00160.html", "a00160" ],
+    [ "Coeff", "a00115.html#a51f676308b796d2388577fb9462bc76e", null ],
+    [ "Inherited", "a00115.html#a009d16d1903d3455e7872901e2c927f7", null ],
+    [ "CompositeSqrt3T", "a00115.html#ac44f9b9e3f7f163e7de5869f54d9ab4b", null ],
+    [ "CompositeSqrt3T", "a00115.html#acde2583b232d49fb6b79d92cbed13660", null ],
+    [ "~CompositeSqrt3T", "a00115.html#ad57715ac9bb42648964d80ee58cffcbb", null ],
+    [ "apply_rules", "a00115.html#a002726eaa6860072f116de68e90b64a7", null ],
+    [ "name", "a00115.html#a740d47decf8feb627608a686936cf36f", null ],
+    [ "coeffs_", "a00115.html#a2f3b940fc080a39727acd56f1b8e50fc", null ]
 ];

@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh Tools Documentation</title>
+<title>OpenMesh: Sudivision Tools</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -99,23 +100,49 @@ $(document).ready(function(){initNavTree('a00042.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title"><a class="el" href="a00715.html" title="Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...">OpenMesh</a> Tools Documentation </div>  </div>
+<div class="title">Sudivision Tools </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><ul>
-<li><a class="el" href="a00004.html">Mesh Decimation Framework</a> </li>
-<li><a class="el" href="a00040.html">Sudivision Tools</a> </li>
-<li><a class="el" href="a00068.html">View Dependent Progressive Meshes</a> </li>
-<li><a class="el" href="a00038.html">Smoother Tools</a> </li>
-<li>Miscellaneous <a class="el" href="a00264.html" title="This class decomposes a triangle mesh into several triangle strips. ">OpenMesh::StripifierT</a> </li>
-</ul>
-</div></div><!-- contents -->
+<div class="textblock"><h1><a class="anchor" id="OM_Subdivider_Overview"></a>
+Overview</h1>
+<p>The OpenMesh library provides a few tools for uniform and adaptive subdivision:</p>
+<ol type="1">
+<li>Uniform subdivision<ol type="a">
+<li><a class="el" href="a00202.html" title="Uniform Loop subdivision algorithm. ">OpenMesh::Subdivider::Uniform::LoopT</a></li>
+<li><a class="el" href="a00267.html" title="Uniform Sqrt3 subdivision algorithm ">OpenMesh::Subdivider::Uniform::Sqrt3T</a></li>
+<li><a class="el" href="a00223.html" title="Modified Butterfly subdivision algorithm. ">OpenMesh::Subdivider::Uniform::ModifiedButterflyT</a></li>
+<li><a class="el" href="a00193.html" title="Uniform Interpolating Sqrt3 subdivision algorithm ">OpenMesh::Subdivider::Uniform::InterpolatingSqrt3LGT</a></li>
+<li><a class="el" href="a00117.html" title="This class provides the composite subdivision rules for the uniform case. ">OpenMesh::Subdivider::Uniform::CompositeT</a></li>
+<li><a class="el" href="a00104.html" title="Based on code from Leon Kos, CAD lab, Mech.Eng., University of Ljubljana, Slovenia (http://www...">OpenMesh::Subdivider::Uniform::CatmullClarkT</a></li>
+</ol>
+</li>
+<li>Adaptive subdivision<ol type="a">
+<li><a class="el" href="a00116.html" title="Adaptive Composite Subdivision framework. ">OpenMesh::Subdivider::Adaptive::CompositeT</a></li>
+</ol>
+</li>
+<li>Simple subdivision<ol type="a">
+<li><a class="el" href="a00200.html" title="Uniform LongestEdgeT subdivision algorithm ">OpenMesh::Subdivider::Uniform::LongestEdgeT</a></li>
+</ol>
+</li>
+</ol>
+<h1><a class="anchor" id="OM_Subdivider_Usage"></a>
+Usage</h1>
+<p>The subdividers directly work on an <a class="el" href="a00730.html" title="Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...">OpenMesh</a>. The following example shows how to use them:</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="a00594.html">OpenMesh/Tools/Subdivider/Uniform/CatmullClarkT.hh</a>&gt;</span></div>
+<div class="line"></div>
+<div class="line"><span class="comment">// Initialize subdivider</span></div>
+<div class="line"><a class="code" href="a00104.html">OpenMesh::Subdivider::Uniform::CatmullClarkT&lt;PolyMesh&gt;</a> catmull;</div>
+<div class="line"></div>
+<div class="line"><span class="comment">// Execute 3 subdivision steps</span></div>
+<div class="line">catmull.<a class="code" href="a00273.html#a4faaaf5cdd9273b4c28ef9f2a2e942ba">attach</a>(mesh_);</div>
+<div class="line">catmull( 3 );</div>
+<div class="line">catmull.<a class="code" href="a00273.html#a5e43f1fde3bd9588b4265fe1d1be6a8d">detach</a>();</div>
+</div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- doc-content -->
 <hr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

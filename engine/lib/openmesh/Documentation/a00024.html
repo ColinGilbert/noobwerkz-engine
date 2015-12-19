@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -104,13 +105,13 @@ $(document).ready(function(){initNavTree('a00024.html','');});
 <div class="contents">
 <div class="textblock"><p>This section explains the methods used to read a mesh from a file or write it to a file.</p>
 <p>The corresponding functions are defined in the namespace OpenMesh::MeshIO. This section is divided into three steps. Step one will give a short example on how to use the OpenMesh IOManager, step two will give some background information on how IOManager works and finally step three will show you how to add your own modules to IOManager.</p>
-<p>A tutorial with more information regarding file IO can be found here: <a class="el" href="a00060.html">Using IO::Options</a></p>
+<p>A tutorial with more information regarding file IO can be found here: <a class="el" href="a00062.html">Using IO::Options</a></p>
 <h1><a class="anchor" id="mesh_io_quick"></a>
 Step 1 - IOManager quick start</h1>
 <p>For a quick start you can copy the following code directly to your project.</p>
 <dl class="section note"><dt>Note</dt><dd><ul>
 <li>
-If you link statically against <a class="el" href="a00715.html" title="Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...">OpenMesh</a>, you have to add the define OM_STATIC_BUILD to your application. This will ensure that readers and writers get initialized correctly. </li>
+If you link statically against <a class="el" href="a00730.html" title="Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...">OpenMesh</a>, you have to add the define OM_STATIC_BUILD to your application. This will ensure that readers and writers get initialized correctly. </li>
 <li>
 IOManager uses the filename extension to determine which reader/writer to use. I.e. if passing "inputmesh.obj" as filename parameter, the OBJ-File reader/writer will be used to parse/write the file. </li>
 </ul>
@@ -119,7 +120,7 @@ IOManager uses the filename extension to determine which reader/writer to use. I
 <div class="line"></div>
 <div class="line">MyMesh mesh;</div>
 <div class="line"></div>
-<div class="line"><span class="keywordflow">if</span> (!<a class="code" href="a00721.html#ac417960ec28ffdd7e7003a2b1ebb2d1c">OpenMesh::IO::read_mesh</a>(mesh, <span class="stringliteral">&quot;some input file&quot;</span>)) </div>
+<div class="line"><span class="keywordflow">if</span> (!<a class="code" href="a00736.html#ac417960ec28ffdd7e7003a2b1ebb2d1c">OpenMesh::IO::read_mesh</a>(mesh, <span class="stringliteral">&quot;some input file&quot;</span>)) </div>
 <div class="line">{</div>
 <div class="line">  std::cerr &lt;&lt; <span class="stringliteral">&quot;read error\n&quot;</span>;</div>
 <div class="line">  exit(1);</div>
@@ -127,7 +128,7 @@ IOManager uses the filename extension to determine which reader/writer to use. I
 <div class="line"></div>
 <div class="line"><span class="comment">// do something with your mesh ...</span></div>
 <div class="line"></div>
-<div class="line"><span class="keywordflow">if</span> (!<a class="code" href="a00721.html#a18286a792ebf896872f5e26182fc5c7b">OpenMesh::IO::write_mesh</a>(mesh, <span class="stringliteral">&quot;some output file&quot;</span>)) </div>
+<div class="line"><span class="keywordflow">if</span> (!<a class="code" href="a00736.html#a18286a792ebf896872f5e26182fc5c7b">OpenMesh::IO::write_mesh</a>(mesh, <span class="stringliteral">&quot;some output file&quot;</span>)) </div>
 <div class="line">{</div>
 <div class="line">  std::cerr &lt;&lt; <span class="stringliteral">&quot;write error\n&quot;</span>;</div>
 <div class="line">  exit(1);</div>
@@ -146,7 +147,7 @@ Step 2 - The theory behind IOManager</h1>
 </p>
 <p>Persistent data of arbitrary format is first interpreted by a reader module. The data is then passed - by means of a specified interface - to an importer module for the target data structure. The process for writing data is analogous. The IOManager controls the entire process. Reader/Writer modules are invisible to the user. Importer/Exporter however have to be specified explicitely as they are specific to a data structure.</p>
 <p>The complete separation of data structure and persistent data makes it especially easy to maintain existing code and to extend funtionality at both ends as will be shown in step three.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="a00721.html" title="This namespace contains functions for reading and writing polygonal meshes and a list of supported fi...">OpenMesh::IO</a>::<em>IOManager</em></dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="a00736.html" title="This namespace contains functions for reading and writing polygonal meshes and a list of supported fi...">OpenMesh::IO</a>::<em>IOManager</em></dd></dl>
 <p><br />
 <br />
 </p>
@@ -154,7 +155,7 @@ Step 2 - The theory behind IOManager</h1>
 Step 3 - How to extend IOManager</h1>
 <h2><a class="anchor" id="mesh_io_extend_fileformat"></a>
 Adding support for a new file format</h2>
-<p>Adding support for a new file format involves adding a reader and writer module. Reader modules are classes derived from <a class="el" href="a00096.html" title="Base class for reader modules. ">OpenMesh::IO::BaseReader</a>. The part of the interface that you usually have to define is shown below.</p>
+<p>Adding support for a new file format involves adding a reader and writer module. Reader modules are classes derived from <a class="el" href="a00099.html" title="Base class for reader modules. ">OpenMesh::IO::BaseReader</a>. The part of the interface that you usually have to define is shown below.</p>
 <div class="fragment"><div class="line"><span class="keyword">class </span>BaseReader</div>
 <div class="line">{</div>
 <div class="line"><span class="keyword">public</span>:</div>
@@ -168,8 +169,8 @@ Adding support for a new file format</h2>
 <div class="line"></div>
 <div class="line">  ...</div>
 <div class="line">};</div>
-</div><!-- fragment --><p>Based on the file extension or the header information the IOManager decides which reader module to use. The reader then parses the format and the information will be passed to the target data structure be means of a class derived from <a class="el" href="a00091.html" title="Base class for importer modules. ">OpenMesh::IO::BaseImporter</a>.</p>
-<p>Writer modules are derived from <a class="el" href="a00097.html" title="Base class for all writer modules. ">OpenMesh::IO::BaseWriter</a> and work the same way as reader modules.</p>
+</div><!-- fragment --><p>Based on the file extension or the header information the IOManager decides which reader module to use. The reader then parses the format and the information will be passed to the target data structure be means of a class derived from <a class="el" href="a00094.html" title="Base class for importer modules. ">OpenMesh::IO::BaseImporter</a>.</p>
+<p>Writer modules are derived from <a class="el" href="a00100.html" title="Base class for all writer modules. ">OpenMesh::IO::BaseWriter</a> and work the same way as reader modules.</p>
 <p><br />
 </p>
 <h2><a class="anchor" id="mesh_io_extend_datastruct"></a>
@@ -182,7 +183,7 @@ Adding support for a new data structure</h2>
 <div class="line">  <span class="keyword">virtual</span> <span class="keywordtype">void</span> add_vertex  (<span class="keyword">const</span> OpenMesh::Vec3f&amp;) {};</div>
 <div class="line">  <span class="keyword">virtual</span> <span class="keywordtype">void</span> add_normal  (<span class="keyword">const</span> OpenMesh::Vec3f&amp;) {};</div>
 <div class="line">  <span class="keyword">virtual</span> <span class="keywordtype">void</span> add_texture (<span class="keyword">const</span> OpenMesh::Vec2f&amp;) {};</div>
-<div class="line">  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="a00727.html#a74526aa4da59e96b7ed4dc9bd7268fe2">add_face</a>    (<span class="keyword">const</span> FaceType&amp;)        {};</div>
+<div class="line">  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="a00742.html#a74526aa4da59e96b7ed4dc9bd7268fe2">add_face</a>    (<span class="keyword">const</span> FaceType&amp;)        {};</div>
 <div class="line">};</div>
 </div><!-- fragment --><p>The Importer is then responsible for filling the target data structure. Exporting information from a data structure is a little bit more involved than importing data to it. The writer modules must be able to iterate over all vectors/texcoords/faces. Therefore an exporter has to provide these iterators :</p>
 <div class="fragment"><div class="line"><span class="keyword">class </span>BaseExporter</div>
@@ -215,7 +216,6 @@ Adding support for a new data structure</h2>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

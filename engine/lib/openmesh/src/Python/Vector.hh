@@ -38,6 +38,71 @@ Scalar get_item(Vector& _vec, int _index) {
 	return 0.0;
 }
 
+namespace {
+template<class Scalar>
+struct Factory {
+    typedef OpenMesh::VectorT<Scalar, 2> Vector2;
+    typedef OpenMesh::VectorT<Scalar, 3> Vector3;
+    typedef OpenMesh::VectorT<Scalar, 4> Vector4;
+
+    static Vector2 *vec2_default() {
+        return new Vector2(Scalar(), Scalar());
+    }
+    static Vector2 *vec2_user_defined(const Scalar& _v0, const Scalar& _v1) {
+        return new Vector2(_v0, _v1);
+    }
+    static Vector3 *vec3_default() {
+        return new Vector3(Scalar(), Scalar(), Scalar());
+    }
+    static Vector3 *vec3_user_defined(const Scalar& _v0, const Scalar& _v1, const Scalar& _v2) {
+        return new Vector3(_v0, _v1, _v2);
+    }
+    static Vector4 *vec4_default() {
+        return new Vector4(Scalar(), Scalar(), Scalar(), Scalar());
+    }
+    static Vector4 *vec4_user_defined(const Scalar& _v0, const Scalar& _v1, const Scalar& _v2, const Scalar& _v3) {
+        return new Vector4(_v0, _v1, _v2, _v3);
+    }
+};
+}
+
+template<class Scalar, int N>
+void defInitMod(class_< OpenMesh::VectorT<Scalar, N> > &classVector);
+
+template<class Scalar>
+void defInitMod(class_< OpenMesh::VectorT<Scalar, 2> > &classVector) {
+    classVector
+        .def("__init__", make_constructor(&Factory<Scalar>::vec2_default))
+        .def("__init__", make_constructor(&Factory<Scalar>::vec2_user_defined))
+        ;
+
+    typedef OpenMesh::VectorT<Scalar, 2> Vector;
+    def("dot", &Vector::operator|);
+}
+template<class Scalar>
+void defInitMod(class_< OpenMesh::VectorT<Scalar, 3> > &classVector) {
+    classVector
+        .def("__init__", make_constructor(&Factory<Scalar>::vec3_default))
+        .def("__init__", make_constructor(&Factory<Scalar>::vec3_user_defined))
+        .def("__mod__", &Factory<Scalar>::Vector3::operator%)
+        ;
+
+    def("cross", &Factory<Scalar>::Vector3::operator%);
+
+    typedef OpenMesh::VectorT<Scalar, 3> Vector;
+    def("dot", &Vector::operator|);
+}
+template<class Scalar>
+void defInitMod(class_< OpenMesh::VectorT<Scalar, 4> > &classVector) {
+    classVector
+        .def("__init__", make_constructor(&Factory<Scalar>::vec4_default))
+        .def("__init__", make_constructor(&Factory<Scalar>::vec4_user_defined))
+        ;
+
+    typedef OpenMesh::VectorT<Scalar, 4> Vector;
+    def("dot", &Vector::operator|);
+}
+
 /**
  * Expose a vector type to %Python.
  *

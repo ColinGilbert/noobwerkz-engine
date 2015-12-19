@@ -1,21 +1,37 @@
 var a00266 =
 [
-    [ "Subdivider", "a00266.html#ad1db1a2494e54d511462747323c41b65", null ],
-    [ "SubdividerPool", "a00266.html#a96e145fe7c244e9b0741e30db148b541", null ],
-    [ "SOPType", "a00266.html#ad7e0d63fa53de5dcd3c88894d4364a66", [
-      [ "SOP_UniformCompositeLoop", "a00266.html#ad7e0d63fa53de5dcd3c88894d4364a66a5973cbaf735baa06c32b08dafde67475", null ],
-      [ "SOP_UniformCompositeSqrt3", "a00266.html#ad7e0d63fa53de5dcd3c88894d4364a66a1a718035b888334c4df731118e19406d", null ],
-      [ "SOP_UniformLoop", "a00266.html#ad7e0d63fa53de5dcd3c88894d4364a66aa5af82312fd23d99013ba13b724d7608", null ],
-      [ "SOP_UniformSqrt3", "a00266.html#ad7e0d63fa53de5dcd3c88894d4364a66a64222d2120c10786b53eac2a8b41504a", null ],
-      [ "SOP_UniformInterpolatingSqrt3", "a00266.html#ad7e0d63fa53de5dcd3c88894d4364a66a34a3cd4f4d82d472d8ee8a923a24b3c9", null ],
-      [ "SOP_ModifiedButterfly", "a00266.html#ad7e0d63fa53de5dcd3c88894d4364a66a33ac7701518570a2d53ec837e9722da0", null ],
-      [ "SOP_CatmullClark", "a00266.html#ad7e0d63fa53de5dcd3c88894d4364a66a2cd856e8f120d41bbebb7cef3399dbba", null ],
-      [ "SOP_Undefined", "a00266.html#ad7e0d63fa53de5dcd3c88894d4364a66a4aaad609e3189284217330317885ef90", null ]
+    [ "EdgeHandle", "a00266.html#a13bc5af7cbfbd9aceffe641ee7e39428", null ],
+    [ "NormalType", "a00266.html#a133102bd0c12a8130285d79e7e7ecc3e", null ],
+    [ "Point", "a00266.html#aadfb4510075ee3ffff7f19ef62cf88a8", null ],
+    [ "Scalar", "a00266.html#a821709705d2f795e4226eac61f35200b", null ],
+    [ "VertexHandle", "a00266.html#a3d89accc059b42abcafd7d888f9b6d97", null ],
+    [ "Component", "a00266.html#a867faa77ce2ddee85543459f6653af18", [
+      [ "Tangential", "a00266.html#a867faa77ce2ddee85543459f6653af18abe52e6b9d369495ca31057e39e29e465", null ],
+      [ "Normal", "a00266.html#a867faa77ce2ddee85543459f6653af18af2527cfb0045e95d97010a5621e9ca5c", null ],
+      [ "Tangential_and_Normal", "a00266.html#a867faa77ce2ddee85543459f6653af18a898a6c92513c4d4ec9fbd4652752c602", null ]
     ] ],
-    [ "SubdivideWidget", "a00266.html#a191e3e6216dc6d0a99527aa0bf5dbac7", null ],
-    [ "~SubdivideWidget", "a00266.html#aa6c1aa852431cb53a4c8c5123b1c47cf", null ],
-    [ "keyPressEvent", "a00266.html#a7551af8d1b317cdd54096a7181d6d604", null ],
-    [ "open_mesh", "a00266.html#a76b8eb6dd5f47ea05161c22da4adca54", null ],
-    [ "update", "a00266.html#aa4fe279c7abcb6885c692f7b6cf4dc96", null ],
-    [ "status_bar", "a00266.html#a537edb8daa5e873442678d01cd5ffca7", null ]
+    [ "Continuity", "a00266.html#aafd6f051464295a9900846ed431f3610", [
+      [ "C0", "a00266.html#aafd6f051464295a9900846ed431f3610a3d371b8e298b792d80b6004f84c1b8b1", null ],
+      [ "C1", "a00266.html#aafd6f051464295a9900846ed431f3610ac3ca183e3c39091e3b033527b32acdcf", null ],
+      [ "C2", "a00266.html#aafd6f051464295a9900846ed431f3610a6933a74d441609c5d5fbe6a7a35ffa3d", null ]
+    ] ],
+    [ "SmootherT", "a00266.html#af300a00749e27e052aac01f998532587", null ],
+    [ "~SmootherT", "a00266.html#aed79f05f0eadb16108a9297f1d70ad6a", null ],
+    [ "component", "a00266.html#af024fcdfba5a5b7859b2ef592bcd0da3", null ],
+    [ "compute_new_positions_C0", "a00266.html#abe7a849f0c90a8675d7bfe8ad24d4970", null ],
+    [ "compute_new_positions_C1", "a00266.html#aed9c534d5b6df5d02e8d487163ab7a1d", null ],
+    [ "continuity", "a00266.html#aee7f2f156eb583e757cde29ad781b68f", null ],
+    [ "disable_local_error_check", "a00266.html#aac72d74a6daf8c8fb24a0437f022dabb", null ],
+    [ "initialize", "a00266.html#a8f76bf70d991095b63f4161cc8406b6a", null ],
+    [ "is_active", "a00266.html#a8400e706771692f1a5ea14111160cdeb", null ],
+    [ "new_position", "a00266.html#addb46f1a7fc8665e866f5dc0f1b3ff49", null ],
+    [ "orig_normal", "a00266.html#a8c1fd69482b0d629d6055b8e45d9a54d", null ],
+    [ "orig_position", "a00266.html#ae3e0d90fadf9490e5a172328992ebbb7", null ],
+    [ "set_absolute_local_error", "a00266.html#aa4afc9ae6b9ce5f3fc1ea7372ce0b42f", null ],
+    [ "set_new_position", "a00266.html#a1173442f5f5a83084d4c3fb72d1ce2a0", null ],
+    [ "set_relative_local_error", "a00266.html#acd0b96d45f71d37584cd91e067397e7b", null ],
+    [ "skip_features", "a00266.html#affa58655ba9762e346d71f77b656c19d", null ],
+    [ "smooth", "a00266.html#a6f87efbec4758b930d02372f26c8bed8", null ],
+    [ "mesh_", "a00266.html#a0d0fe0cb163f0da862c772818a5ee326", null ],
+    [ "skip_features_", "a00266.html#a78a7d0b7b1afd9b19f1dbd0011aab99a", null ]
 ];

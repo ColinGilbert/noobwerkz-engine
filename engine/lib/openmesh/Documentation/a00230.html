@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh::NormalConeT&lt; Scalar &gt; Class Template Reference</title>
+<title>OpenMesh: OpenMesh::MPropHandleT&lt; T &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -108,63 +109,112 @@ $(document).ready(function(){initNavTree('a00230.html','');});
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="a00958.html">List of all members</a>  </div>
+<a href="a00991.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">OpenMesh::NormalConeT&lt; Scalar &gt; Class Template Reference</div>  </div>
+<div class="title">OpenMesh::MPropHandleT&lt; T &gt; Struct Template Reference<div class="ingroups"><a class="el" href="a00753.html">Mesh Property Handles</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>/class NormalCone NormalCone.hh &lt;ACG/Geometry/Types/NormalCone.hh&gt;  
+<p>Handle representing a mesh property.  
  <a href="a00230.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="a00419_source.html">OpenMesh/Core/Geometry/NormalConeT.hh</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="a00533_source.html">OpenMesh/Core/Utils/Property.hh</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for OpenMesh::MPropHandleT&lt; T &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00992.png" border="0" usemap="#OpenMesh_1_1MPropHandleT_3_01T_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="OpenMesh_1_1MPropHandleT_3_01T_01_4_inherit__map" id="OpenMesh_1_1MPropHandleT_3_01T_01_4_inherit__map">
+<area shape="rect" id="node2" href="a00098.html" title="Base property handle. " alt="" coords="16,80,207,121"/><area shape="rect" id="node3" href="a00093.html" title="Base class for all handle types. " alt="" coords="29,5,193,32"/></map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for OpenMesh::MPropHandleT&lt; T &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00993.png" border="0" usemap="#OpenMesh_1_1MPropHandleT_3_01T_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="OpenMesh_1_1MPropHandleT_3_01T_01_4_coll__map" id="OpenMesh_1_1MPropHandleT_3_01T_01_4_coll__map">
+<area shape="rect" id="node2" href="a00098.html" title="Base property handle. " alt="" coords="16,80,207,121"/><area shape="rect" id="node3" href="a00093.html" title="Base class for all handle types. " alt="" coords="29,5,193,32"/></map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a331e9c8f2939c95852d241ba0e27b288"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a331e9c8f2939c95852d241ba0e27b288"></a>
-typedef <a class="el" href="a00304.html">VectorT</a>&lt; Scalar, 3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Vec3</b></td></tr>
-<tr class="separator:a331e9c8f2939c95852d241ba0e27b288"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23de4753d1d73a08a599e70583a96747"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a23de4753d1d73a08a599e70583a96747"></a>
+typedef T&#160;</td><td class="memItemRight" valign="bottom"><b>Value</b></td></tr>
+<tr class="separator:a23de4753d1d73a08a599e70583a96747"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a368d56d0f34323eb044a346b307e7cd9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a368d56d0f34323eb044a346b307e7cd9"></a>
+typedef T&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b></td></tr>
+<tr class="separator:a368d56d0f34323eb044a346b307e7cd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_a00098"><td colspan="2" onclick="javascript:toggleInherit('pub_types_a00098')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="a00098.html">OpenMesh::BasePropHandleT&lt; T &gt;</a></td></tr>
+<tr class="memitem:a11b9e29f7a57635467ebb5f6fa3b27c8 inherit pub_types_a00098"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a11b9e29f7a57635467ebb5f6fa3b27c8"></a>
+typedef T&#160;</td><td class="memItemRight" valign="bottom"><b>Value</b></td></tr>
+<tr class="separator:a11b9e29f7a57635467ebb5f6fa3b27c8 inherit pub_types_a00098"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d6f710554c4255a2fdc3a9bec643490 inherit pub_types_a00098"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4d6f710554c4255a2fdc3a9bec643490"></a>
+typedef std::vector&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>vector_type</b></td></tr>
+<tr class="separator:a4d6f710554c4255a2fdc3a9bec643490 inherit pub_types_a00098"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebd66f77f378bb1395150dadb18f4608 inherit pub_types_a00098"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aebd66f77f378bb1395150dadb18f4608"></a>
+typedef T&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b></td></tr>
+<tr class="separator:aebd66f77f378bb1395150dadb18f4608 inherit pub_types_a00098"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adace525e87365c2322918a5477c12416 inherit pub_types_a00098"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adace525e87365c2322918a5477c12416"></a>
+typedef vector_type::reference&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b></td></tr>
+<tr class="separator:adace525e87365c2322918a5477c12416 inherit pub_types_a00098"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc32ed49c9a168b61649ef239115e9e4 inherit pub_types_a00098"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adc32ed49c9a168b61649ef239115e9e4"></a>
+typedef <br class="typebreak" />
+vector_type::const_reference&#160;</td><td class="memItemRight" valign="bottom"><b>const_reference</b></td></tr>
+<tr class="separator:adc32ed49c9a168b61649ef239115e9e4 inherit pub_types_a00098"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2b95db3a078fa3c5937e35900a2e5672"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2b95db3a078fa3c5937e35900a2e5672"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00230.html#a2b95db3a078fa3c5937e35900a2e5672">NormalConeT</a> ()</td></tr>
-<tr class="memdesc:a2b95db3a078fa3c5937e35900a2e5672"><td class="mdescLeft">&#160;</td><td class="mdescRight">default constructor (not initialized) <br /></td></tr>
-<tr class="separator:a2b95db3a078fa3c5937e35900a2e5672"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53c15696a4f1069ed3b934cd3d297853"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a53c15696a4f1069ed3b934cd3d297853"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00230.html#a53c15696a4f1069ed3b934cd3d297853">NormalConeT</a> (const <a class="el" href="a00304.html">Vec3</a> &amp;_center_normal, Scalar _angle=0.0)</td></tr>
-<tr class="memdesc:a53c15696a4f1069ed3b934cd3d297853"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize cone with center (unit vector) and angle (radius in radians) <br /></td></tr>
-<tr class="separator:a53c15696a4f1069ed3b934cd3d297853"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5026b4a5db7a2bf6a795544081c93b2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab5026b4a5db7a2bf6a795544081c93b2"></a>
-Scalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00230.html#ab5026b4a5db7a2bf6a795544081c93b2">max_angle</a> (const <a class="el" href="a00304.html">Vec3</a> &amp;) const </td></tr>
-<tr class="memdesc:ab5026b4a5db7a2bf6a795544081c93b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">return max. distance (radians) unit vector to cone (distant side) <br /></td></tr>
-<tr class="separator:ab5026b4a5db7a2bf6a795544081c93b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0634eb78ca82616573d989f2bfafde9e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0634eb78ca82616573d989f2bfafde9e"></a>
-Scalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00230.html#a0634eb78ca82616573d989f2bfafde9e">max_angle</a> (const <a class="el" href="a00230.html">NormalConeT</a> &amp;) const </td></tr>
-<tr class="memdesc:a0634eb78ca82616573d989f2bfafde9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">return max. distance (radians) cone to cone (distant sides) <br /></td></tr>
-<tr class="separator:a0634eb78ca82616573d989f2bfafde9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6fd9ba88a9b0049a91429a87c73862ec"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6fd9ba88a9b0049a91429a87c73862ec"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00230.html#a6fd9ba88a9b0049a91429a87c73862ec">merge</a> (const <a class="el" href="a00230.html">NormalConeT</a> &amp;)</td></tr>
-<tr class="memdesc:a6fd9ba88a9b0049a91429a87c73862ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">merge _cone; this instance will then enclose both former cones <br /></td></tr>
-<tr class="separator:a6fd9ba88a9b0049a91429a87c73862ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a19af98981b8a70c237f310a33b6d786e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a19af98981b8a70c237f310a33b6d786e"></a>
-const <a class="el" href="a00304.html">Vec3</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00230.html#a19af98981b8a70c237f310a33b6d786e">center_normal</a> () const </td></tr>
-<tr class="memdesc:a19af98981b8a70c237f310a33b6d786e"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns center normal <br /></td></tr>
-<tr class="separator:a19af98981b8a70c237f310a33b6d786e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad9495676461cac88ac967efac0231743"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad9495676461cac88ac967efac0231743"></a>
-Scalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00230.html#ad9495676461cac88ac967efac0231743">angle</a> () const </td></tr>
-<tr class="memdesc:ad9495676461cac88ac967efac0231743"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns size of cone (radius in radians) <br /></td></tr>
-<tr class="separator:ad9495676461cac88ac967efac0231743"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0838a2c79027be89fd46643ca9f94f99"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0838a2c79027be89fd46643ca9f94f99"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>MPropHandleT</b> (int _idx=-1)</td></tr>
+<tr class="separator:a0838a2c79027be89fd46643ca9f94f99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5aee84b67a176144313d582b63790954"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5aee84b67a176144313d582b63790954"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>MPropHandleT</b> (const <a class="el" href="a00098.html">BasePropHandleT</a>&lt; T &gt; &amp;_b)</td></tr>
+<tr class="separator:a5aee84b67a176144313d582b63790954"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_a00098"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a00098')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="a00098.html">OpenMesh::BasePropHandleT&lt; T &gt;</a></td></tr>
+<tr class="memitem:a7385ee81415599c240a8494c8d7e456c inherit pub_methods_a00098"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7385ee81415599c240a8494c8d7e456c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BasePropHandleT</b> (int _idx=-1)</td></tr>
+<tr class="separator:a7385ee81415599c240a8494c8d7e456c inherit pub_methods_a00098"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_a00093"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a00093')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="a00093.html">OpenMesh::BaseHandle</a></td></tr>
+<tr class="memitem:af4ba7b0ad5573aa45f722ba5abf870dc inherit pub_methods_a00093"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af4ba7b0ad5573aa45f722ba5abf870dc"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BaseHandle</b> (int _idx=-1)</td></tr>
+<tr class="separator:af4ba7b0ad5573aa45f722ba5abf870dc inherit pub_methods_a00093"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3dc9929544c4e00e5e6e1ca8261ffe99 inherit pub_methods_a00093"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3dc9929544c4e00e5e6e1ca8261ffe99"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00093.html#a3dc9929544c4e00e5e6e1ca8261ffe99">idx</a> () const </td></tr>
+<tr class="memdesc:a3dc9929544c4e00e5e6e1ca8261ffe99 inherit pub_methods_a00093"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the underlying index of this handle. <br /></td></tr>
+<tr class="separator:a3dc9929544c4e00e5e6e1ca8261ffe99 inherit pub_methods_a00093"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8313d1ad8a3a571d23dd0b62ec696e7e inherit pub_methods_a00093"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8313d1ad8a3a571d23dd0b62ec696e7e"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00093.html#a8313d1ad8a3a571d23dd0b62ec696e7e">is_valid</a> () const </td></tr>
+<tr class="memdesc:a8313d1ad8a3a571d23dd0b62ec696e7e inherit pub_methods_a00093"><td class="mdescLeft">&#160;</td><td class="mdescRight">The handle is valid iff the index is not equal to -1. <br /></td></tr>
+<tr class="separator:a8313d1ad8a3a571d23dd0b62ec696e7e inherit pub_methods_a00093"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0fdb6ed3edbfc180f3e419ba9b8bebd inherit pub_methods_a00093"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab0fdb6ed3edbfc180f3e419ba9b8bebd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00093.html#ab0fdb6ed3edbfc180f3e419ba9b8bebd">reset</a> ()</td></tr>
+<tr class="memdesc:ab0fdb6ed3edbfc180f3e419ba9b8bebd inherit pub_methods_a00093"><td class="mdescLeft">&#160;</td><td class="mdescRight">reset handle to be invalid <br /></td></tr>
+<tr class="separator:ab0fdb6ed3edbfc180f3e419ba9b8bebd inherit pub_methods_a00093"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab025c00d990cc69cd20e33e94abd2db9 inherit pub_methods_a00093"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab025c00d990cc69cd20e33e94abd2db9"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00093.html#ab025c00d990cc69cd20e33e94abd2db9">invalidate</a> ()</td></tr>
+<tr class="memdesc:ab025c00d990cc69cd20e33e94abd2db9 inherit pub_methods_a00093"><td class="mdescLeft">&#160;</td><td class="mdescRight">reset handle to be invalid <br /></td></tr>
+<tr class="separator:ab025c00d990cc69cd20e33e94abd2db9 inherit pub_methods_a00093"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcc9664f93e20647a5ab5c5d85f0a292 inherit pub_methods_a00093"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abcc9664f93e20647a5ab5c5d85f0a292"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="a00093.html">BaseHandle</a> &amp;_rhs) const </td></tr>
+<tr class="separator:abcc9664f93e20647a5ab5c5d85f0a292 inherit pub_methods_a00093"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ead06ba4994b58587b3ecc293d0e120 inherit pub_methods_a00093"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7ead06ba4994b58587b3ecc293d0e120"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="a00093.html">BaseHandle</a> &amp;_rhs) const </td></tr>
+<tr class="separator:a7ead06ba4994b58587b3ecc293d0e120 inherit pub_methods_a00093"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d3f93f05379be03f540aa20faffb5dd inherit pub_methods_a00093"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2d3f93f05379be03f540aa20faffb5dd"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (const <a class="el" href="a00093.html">BaseHandle</a> &amp;_rhs) const </td></tr>
+<tr class="separator:a2d3f93f05379be03f540aa20faffb5dd inherit pub_methods_a00093"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a920ae45d39fecd84691242965db44e81 inherit pub_methods_a00093"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a920ae45d39fecd84691242965db44e81"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>__increment</b> ()</td></tr>
+<tr class="separator:a920ae45d39fecd84691242965db44e81 inherit pub_methods_a00093"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a407f932da7d3a2a30b8edb9d6ed27782 inherit pub_methods_a00093"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a407f932da7d3a2a30b8edb9d6ed27782"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>__decrement</b> ()</td></tr>
+<tr class="separator:a407f932da7d3a2a30b8edb9d6ed27782 inherit pub_methods_a00093"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename Scalar&gt;<br />
-class OpenMesh::NormalConeT&lt; Scalar &gt;</h3>
+<div class="textblock"><h3>template&lt;class T&gt;<br />
+struct OpenMesh::MPropHandleT&lt; T &gt;</h3>
 
-<p>/class NormalCone NormalCone.hh &lt;ACG/Geometry/Types/NormalCone.hh&gt; </p>
-<p>NormalCone that can be merged with other normal cones. Provides the center normal and the opening angle. </p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
-<li>OpenMesh/Core/Geometry/<a class="el" href="a00419_source.html">NormalConeT.hh</a></li>
-<li>OpenMesh/Core/Geometry/NormalConeT.cc</li>
+<p>Handle representing a mesh property. </p>
+</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<li>OpenMesh/Core/Utils/<a class="el" href="a00533_source.html">Property.hh</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -172,7 +222,6 @@ class OpenMesh::NormalConeT&lt; Scalar &gt;</h3>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

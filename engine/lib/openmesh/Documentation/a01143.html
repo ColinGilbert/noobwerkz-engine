@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -87,7 +88,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('a00164.html','');});
+$(document).ready(function(){initNavTree('a00080.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -106,23 +107,30 @@ $(document).ready(function(){initNavTree('a00164.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT&lt; Mesh, CenterEntityHandle, ValueHandle, CW &gt; Member List</div>  </div>
+<div class="title">OpenMesh::IO::_STLReader_ Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="a00164.html">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT&lt; Mesh, CenterEntityHandle, ValueHandle, CW &gt;</a>, including all inherited members.</p>
+<p>This is the complete list of members for <a class="el" href="a00080.html">OpenMesh::IO::_STLReader_</a>, including all inherited members.</p>
 <table class="directory">
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>decrement</b>(const Mesh *mesh, typename Mesh::HalfedgeHandle &amp;heh, typename Mesh::HalfedgeHandle &amp;start, int &amp;lap_counter) (defined in <a class="el" href="a00164.html">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT&lt; Mesh, CenterEntityHandle, ValueHandle, CW &gt;</a>)</td><td class="entry"><a class="el" href="a00164.html">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT&lt; Mesh, CenterEntityHandle, ValueHandle, CW &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">static</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>increment</b>(const Mesh *mesh, typename Mesh::HalfedgeHandle &amp;heh, typename Mesh::HalfedgeHandle &amp;start, int &amp;lap_counter) (defined in <a class="el" href="a00164.html">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT&lt; Mesh, CenterEntityHandle, ValueHandle, CW &gt;</a>)</td><td class="entry"><a class="el" href="a00164.html">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT&lt; Mesh, CenterEntityHandle, ValueHandle, CW &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">static</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>init</b>(const Mesh *, typename Mesh::HalfedgeHandle &amp;, typename Mesh::HalfedgeHandle &amp;, int &amp;) (defined in <a class="el" href="a00164.html">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT&lt; Mesh, CenterEntityHandle, ValueHandle, CW &gt;</a>)</td><td class="entry"><a class="el" href="a00164.html">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT&lt; Mesh, CenterEntityHandle, ValueHandle, CW &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">static</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>is_valid</b>(const typename Mesh::HalfedgeHandle &amp;heh, const int lap_counter) (defined in <a class="el" href="a00164.html">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT&lt; Mesh, CenterEntityHandle, ValueHandle, CW &gt;</a>)</td><td class="entry"><a class="el" href="a00164.html">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT&lt; Mesh, CenterEntityHandle, ValueHandle, CW &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">static</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>_STLReader_</b>() (defined in <a class="el" href="a00080.html">OpenMesh::IO::_STLReader_</a>)</td><td class="entry"><a class="el" href="a00080.html">OpenMesh::IO::_STLReader_</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00099.html#a6b133dc9142fc0ed32145a16d22a9f47">can_u_read</a>(const std::string &amp;_filename) const </td><td class="entry"><a class="el" href="a00099.html">OpenMesh::IO::BaseReader</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>check_extension</b>(const std::string &amp;_fname, const std::string &amp;_ext) const  (defined in <a class="el" href="a00099.html">OpenMesh::IO::BaseReader</a>)</td><td class="entry"><a class="el" href="a00099.html">OpenMesh::IO::BaseReader</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00080.html#a453b5bc39c6256dae86d72e73d9ece7e">epsilon</a>() const </td><td class="entry"><a class="el" href="a00080.html">OpenMesh::IO::_STLReader_</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00080.html#a3f2d2f8443ad016d81ad1506cf22f5db">get_description</a>() const </td><td class="entry"><a class="el" href="a00080.html">OpenMesh::IO::_STLReader_</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00080.html#a1313e21a04264133ffca2be46c47697f">get_extensions</a>() const </td><td class="entry"><a class="el" href="a00080.html">OpenMesh::IO::_STLReader_</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00099.html#ad42405faca54db1c05f1499f4b919910">get_magic</a>() const </td><td class="entry"><a class="el" href="a00099.html">OpenMesh::IO::BaseReader</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00080.html#ab13615c05aef446846cf177b439bdeb7">read</a>(const std::string &amp;_filename, BaseImporter &amp;_bi, Options &amp;_opt)</td><td class="entry"><a class="el" href="a00080.html">OpenMesh::IO::_STLReader_</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00080.html#ab0015a00f47a24d94dde0ee81a76666a">read</a>(std::istream &amp;_in, BaseImporter &amp;_bi, Options &amp;_opt)</td><td class="entry"><a class="el" href="a00080.html">OpenMesh::IO::_STLReader_</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00080.html#a858cd5bae3eea93ecc33ca12a3e6c475">set_epsilon</a>(float _eps)</td><td class="entry"><a class="el" href="a00080.html">OpenMesh::IO::_STLReader_</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00080.html#a88db910f48bfa7c42c873888bed4cfc6">~_STLReader_</a>()</td><td class="entry"><a class="el" href="a00080.html">OpenMesh::IO::_STLReader_</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00099.html#affd6cb98cb0883d0afc5edd2067b21fe">~BaseReader</a>()</td><td class="entry"><a class="el" href="a00099.html">OpenMesh::IO::BaseReader</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 <hr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

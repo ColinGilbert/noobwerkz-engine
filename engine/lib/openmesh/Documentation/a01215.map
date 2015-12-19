@@ -1,3 +1,5 @@
-<map id="OpenMesh::Subdivider::Adaptive::EF&lt; M &gt;" name="OpenMesh::Subdivider::Adaptive::EF&lt; M &gt;">
-<area shape="rect" id="node2" href="$a00256.html" title="Base class for adaptive composite subdivision rules. " alt="" coords="5,5,216,47"/>
+<map id="OpenMesh::Kernel_OSG::FP::GeoIndicesUI32&lt; IsTriMesh &gt;" name="OpenMesh::Kernel_OSG::FP::GeoIndicesUI32&lt; IsTriMesh &gt;">
+<area shape="rect" id="node2" href="$a00242.html" title="Property adaptor for OpenSG GeoProperties. " alt="" coords="5,89,128,115"/>
+<area shape="rect" id="node3" href="$a00097.html" title="Abstract class defining the basic interface of a dynamic property. " alt="" coords="89,5,261,32"/>
+<area shape="rect" id="node4" href="$a00242.html" title="Property adaptor for OpenSG GeoProperties. " alt="" coords="153,81,343,123"/>
 </map>

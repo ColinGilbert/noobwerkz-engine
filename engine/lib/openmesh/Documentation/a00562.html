@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh/Tools/Kernel_OSG/bindT.hh File Reference</title>
+<title>OpenMesh: OpenMesh/Tools/Decimater/ModNormalFlippingT.hh File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -105,65 +106,51 @@ $(document).ready(function(){initNavTree('a00562.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#namespaces">Namespaces</a>  </div>
   <div class="headertitle">
-<div class="title">bindT.hh File Reference</div>  </div>
+<div class="title">ModNormalFlippingT.hh File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>Bind an <a class="el" href="a00715.html" title="Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...">OpenMesh</a> to a OpenSG geometry node.  
-<a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;functional&gt;</code><br />
-<code>#include &lt;algorithm&gt;</code><br />
-<code>#include &lt;OpenMesh/Core/Mesh/TriMeshT.hh&gt;</code><br />
-<code>#include &lt;OpenMesh/Core/Utils/color_cast.hh&gt;</code><br />
-<code>#include &lt;OpenMesh/Tools/Utils/GLConstAsString.hh&gt;</code><br />
-<code>#include &lt;OpenSG/OSGGeometry.h&gt;</code><br />
-<code>#include &quot;color_cast.hh&quot;</code><br />
+<div class="textblock"><code>#include &lt;<a class="el" href="a00555_source.html">OpenMesh/Tools/Decimater/ModBaseT.hh</a>&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
-Include dependency graph for bindT.hh:</div>
+Include dependency graph for ModNormalFlippingT.hh:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00793.png" border="0" usemap="#OpenMesh_2Tools_2Kernel__OSG_2bindT_8hh" alt=""/></div>
-<map name="OpenMesh_2Tools_2Kernel__OSG_2bindT_8hh" id="OpenMesh_2Tools_2Kernel__OSG_2bindT_8hh">
-<area shape="rect" id="node4" href="a00503_source.html" title="OpenMesh/Core/Mesh\l/TriMeshT.hh" alt="" coords="2061,95,2214,136"/><area shape="rect" id="node45" href="a00517_source.html" title="OpenMesh/Core/Utils\l/color_cast.hh" alt="" coords="1107,809,1255,851"/><area shape="rect" id="node47" href="a00595_source.html" title="OpenMesh/Tools/Utils\l/GLConstAsString.hh" alt="" coords="2747,95,2899,136"/><area shape="rect" id="node50" href="a00518_source.html" title="color_cast.hh" alt="" coords="2962,727,3062,754"/><area shape="rect" id="node6" href="a00494_source.html" title="OpenMesh/Core/Mesh\l/PolyMeshT.hh" alt="" coords="245,184,398,225"/><area shape="rect" id="node7" href="a00417_source.html" title="OpenMesh/Core/Geometry\l/MathDefs.hh" alt="" coords="296,273,475,315"/><area shape="rect" id="node10" href="a00491_source.html" title="OpenMesh/Core/Mesh\l/PolyConnectivity.hh" alt="" coords="2417,273,2570,315"/><area shape="rect" id="node42" href="a00483_source.html" title="OpenMesh/Core/Mesh\l/FinalMeshItemsT.hh" alt="" coords="398,899,551,940"/><area shape="rect" id="node11" href="a00473_source.html" title="OpenMesh/Core/Mesh\l/ArrayKernel.hh" alt="" coords="715,363,869,404"/><area shape="rect" id="node38" href="a00489_source.html" title="OpenMesh/Core/Mesh\l/IteratorsT.hh" alt="" coords="2691,899,2845,940"/><area shape="rect" id="node41" href="a00482_source.html" title="OpenMesh/Core/Mesh\l/CirculatorsT.hh" alt="" coords="2869,899,3022,940"/><area shape="rect" id="node13" href="a00521_source.html" title="OpenMesh/Core/Utils\l/GenProg.hh" alt="" coords="695,1077,843,1119"/><area shape="rect" id="node14" href="a00471_source.html" title="OpenMesh/Core/Mesh\l/ArrayItems.hh" alt="" coords="499,988,653,1029"/><area shape="rect" id="node17" href="a00479_source.html" title="OpenMesh/Core/Mesh\l/BaseKernel.hh" alt="" coords="2290,452,2443,493"/><area shape="rect" id="node33" href="a00495_source.html" title="OpenMesh/Core/Mesh\l/Status.hh" alt="" coords="2209,988,2362,1029"/><area shape="rect" id="node15" href="a00488_source.html" title="OpenMesh/Core/Mesh\l/Handles.hh" alt="" coords="347,1077,501,1119"/><area shape="rect" id="node20" href="a00524_source.html" title="OpenMesh/Core/Utils\l/PropertyContainer.hh" alt="" coords="2065,541,2215,583"/><area shape="rect" id="node21" href="a00523_source.html" title="OpenMesh/Core/Utils\l/Property.hh" alt="" coords="2062,631,2210,672"/><area shape="rect" id="node22" href="a00516_source.html" title="OpenMesh/Core/Utils\l/BaseProperty.hh" alt="" coords="2062,720,2210,761"/><area shape="rect" id="node23" href="a00456_source.html" title="OpenMesh/Core/IO/StoreRestore.hh" alt="" coords="1523,817,1757,843"/><area shape="rect" id="node36" href="a00508.html" title="This file provides the streams omlog, omout, and omerr. " alt="" coords="2091,1077,2258,1119"/><area shape="rect" id="node25" href="a00451_source.html" title="OpenMesh/Core/IO/SR\l_binary.hh" alt="" coords="1561,988,1719,1029"/><area shape="rect" id="node29" href="a00452_source.html" title="OpenMesh/Core/IO/SR\l_binary_spec.hh" alt="" coords="1729,899,1887,940"/><area shape="rect" id="node32" href="a00422_source.html" title="OpenMesh/Core/Geometry\l/VectorT.hh" alt="" coords="1256,988,1435,1029"/><area shape="rect" id="node34" href="a00455_source.html" title="OpenMesh/Core/IO/SR\l_types.hh" alt="" coords="1806,1077,1965,1119"/><area shape="rect" id="node35" href="a00453_source.html" title="OpenMesh/Core/IO/SR\l_rbo.hh" alt="" coords="1923,988,2082,1029"/><area shape="rect" id="node37" href="a00506_source.html" title="OpenMesh/Core/System\l/mostream.hh" alt="" coords="2091,1167,2258,1208"/><area shape="rect" id="node43" href="a00532_source.html" title="OpenMesh/Core/Utils\l/vector_traits.hh" alt="" coords="830,988,978,1029"/><area shape="rect" id="node46" href="a00531_source.html" title="OpenMesh/Core/Utils\l/vector_cast.hh" alt="" coords="931,899,1079,940"/></map>
+<div class="center"><img src="a00798.png" border="0" usemap="#OpenMesh_2Tools_2Decimater_2ModNormalFlippingT_8hh" alt=""/></div>
+<map name="OpenMesh_2Tools_2Decimater_2ModNormalFlippingT_8hh" id="OpenMesh_2Tools_2Decimater_2ModNormalFlippingT_8hh">
+<area shape="rect" id="node2" href="a00555.html" title="Base class for all decimation modules. " alt="" coords="187,95,372,136"/><area shape="rect" id="node3" href="a00532_source.html" title="OpenMesh/Core/Utils\l/Noncopyable.hh" alt="" coords="15,184,163,225"/><area shape="rect" id="node5" href="a00546.html" title="Provides data class CollapseInfoT for storing all information about a halfedge collapse. " alt="" coords="187,184,372,225"/></map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00799.png" border="0" usemap="#OpenMesh_2Tools_2Decimater_2ModNormalFlippingT_8hhdep" alt=""/></div>
+<map name="OpenMesh_2Tools_2Decimater_2ModNormalFlippingT_8hhdep" id="OpenMesh_2Tools_2Decimater_2ModNormalFlippingT_8hhdep">
+<area shape="rect" id="node2" href="a00400_source.html" title="OpenMesh/Apps/Decimating\l/DecimaterViewerWidget.hh" alt="" coords="5,95,195,136"/><area shape="rect" id="node3" href="a00633_source.html" title="Python/Decimater.hh" alt="" coords="219,102,365,129"/></map>
 </div>
 </div>
 <p><a href="a00562_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:a00715"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00715.html">OpenMesh</a></td></tr>
-<tr class="memdesc:a00715"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels and mesh traits. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00724"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00724.html">OpenMesh::Kernel_OSG</a></td></tr>
-<tr class="memdesc:a00724"><td class="mdescLeft">&#160;</td><td class="mdescRight">In this namespace resides the OpenSG integration of <a class="el" href="a00715.html" title="Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...">OpenMesh</a>. <br /></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00226.html">OpenMesh::Decimater::ModNormalFlippingT&lt; MeshT &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decimating module to avoid flipping of faces.  <a href="a00226.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:a445596a00b39cf2dba9f88672236a94b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a445596a00b39cf2dba9f88672236a94b"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>OpenMesh::Kernel_OSG::type_is_valid</b> (unsigned char _t)</td></tr>
-<tr class="separator:a445596a00b39cf2dba9f88672236a94b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16b8b29bbad427ea962a06fc04f5eb7a"><td class="memTemplParams" colspan="2">template&lt;typename Mesh &gt; </td></tr>
-<tr class="memitem:a16b8b29bbad427ea962a06fc04f5eb7a"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="a00724.html#a16b8b29bbad427ea962a06fc04f5eb7a">OpenMesh::Kernel_OSG::bind</a> (osg::GeometryPtr &amp;_geo, <a class="el" href="a00242.html">Mesh</a> &amp;_mesh)</td></tr>
-<tr class="memdesc:a16b8b29bbad427ea962a06fc04f5eb7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bind a OpenSG geometry to a mesh.  <a href="#a16b8b29bbad427ea962a06fc04f5eb7a">More...</a><br /></td></tr>
-<tr class="separator:a16b8b29bbad427ea962a06fc04f5eb7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdc3b4bdec92e3e781d54fbb21e533f6"><td class="memTemplParams" colspan="2">template&lt;typename Mesh &gt; </td></tr>
-<tr class="memitem:abdc3b4bdec92e3e781d54fbb21e533f6"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="a00724.html#abdc3b4bdec92e3e781d54fbb21e533f6">OpenMesh::Kernel_OSG::bind</a> (<a class="el" href="a00242.html">Mesh</a> &amp;_mesh, osg::GeometryPtr &amp;_geo)</td></tr>
-<tr class="memdesc:abdc3b4bdec92e3e781d54fbb21e533f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bind a mesh object to geometry.  <a href="#abdc3b4bdec92e3e781d54fbb21e533f6">More...</a><br /></td></tr>
-<tr class="separator:abdc3b4bdec92e3e781d54fbb21e533f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:a00730"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00730.html">OpenMesh</a></td></tr>
+<tr class="memdesc:a00730"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels and mesh traits. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00733"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00733.html">OpenMesh::Decimater</a></td></tr>
+<tr class="memdesc:a00733"><td class="mdescLeft">&#160;</td><td class="mdescRight">Software related to mesh decimation. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Bind an <a class="el" href="a00715.html" title="Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...">OpenMesh</a> to a OpenSG geometry node. </p>
-<p>Be aware that due to this link the geometry node maybe modified. For instance triangle strips are converted to regular triangles. </p>
-</div></div><!-- contents -->
+</div><!-- contents -->
 </div><!-- doc-content -->
 <hr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

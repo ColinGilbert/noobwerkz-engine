@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -136,7 +137,7 @@ the opposite halfedge (6), </li>
 <dl class="section attention"><dt>Attention</dt><dd>In order to efficiently classify a boundary vertex, the outgoing halfedge of these vertices <b> must be a boundary halfedge </b> (see OpenMesh::PolyMeshT::is_boundary()). </dd>
 <dd>
 Whenever you modify the topology using low-level topology changing functions, be sure to guarantee this behaviour (see OpenMesh::PolyMeshT::adjust_outgoing_halfedge())</dd></dl>
-<p>While one does not need to store the previous halfedge (7) explicitly, because it can be derived from the links to the next halfedges, one may do so for the sake of performance. In fact, the previous halfedge is stored by default (<a class="el" href="a00127.html" title="Base class for all traits. ">OpenMesh::DefaultTraits</a>). Using traits and attributes the previous halfedge can removed, to gain memory. This kind of mesh customization is explained in <a class="el" href="a00020.html">Specifying your MyMesh</a>.</p>
+<p>While one does not need to store the previous halfedge (7) explicitly, because it can be derived from the links to the next halfedges, one may do so for the sake of performance. In fact, the previous halfedge is stored by default (<a class="el" href="a00131.html" title="Base class for all traits. ">OpenMesh::DefaultTraits</a>). Using traits and attributes the previous halfedge can removed, to gain memory. This kind of mesh customization is explained in <a class="el" href="a00020.html">Specifying your MyMesh</a>.</p>
 <p>While the halfedge-based structures usually consume more memory than their face-based counter-parts they have the following important advantages:</p>
 <ul>
 <li>It is easy to mix faces of arbitrary vertex count in one mesh.</li>
@@ -156,7 +157,6 @@ Whenever you modify the topology using low-level topology changing functions, be
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

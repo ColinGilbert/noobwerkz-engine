@@ -1,12 +1,15 @@
 var a00075 =
 [
-    [ "_OMWriter_", "a00075.html#a124124ec1cf547f34f7f07c3c5345267", null ],
-    [ "~_OMWriter_", "a00075.html#ae824f4266ba7a3230c483f10c90b2c22", null ],
-    [ "binary_size", "a00075.html#afa0cc90c2f427187ec8399ddd86eec87", null ],
-    [ "get_description", "a00075.html#a9f5b8b9fafa088ef99ffd94a456b8a14", null ],
-    [ "get_extensions", "a00075.html#ad2c1f43c1f3c53ee395b7d0c19d59328", null ],
-    [ "store_binary_custom_chunk", "a00075.html#ae576fc20ff55ab6828fa35df5696a3df", null ],
-    [ "write", "a00075.html#aaa236eda6d8b4232d16f532ecbe42b4b", null ],
-    [ "write", "a00075.html#aa110cadf1ddcac647f33076fd276d9e4", null ],
-    [ "write_binary", "a00075.html#aca64ba480920d5e5954cbf0334cd585a", null ]
+    [ "_OFFWriter_", "a00075.html#a671ef9b741880ebfbc7b1d6f912e956f", null ],
+    [ "~_OFFWriter_", "a00075.html#ac095ce656c923495a9690604b48d7bf6", null ],
+    [ "binary_size", "a00075.html#af052800810b1de522fd65efd011f339c", null ],
+    [ "get_description", "a00075.html#aa9d5d470755469d88eddaba5d6945a33", null ],
+    [ "get_extensions", "a00075.html#a9d6340faf7f9859e09b817fa0cae1529", null ],
+    [ "write", "a00075.html#a25dffaeba54287b8a5871ca45ab205e8", null ],
+    [ "write", "a00075.html#a7307374d92852b0482563b8e5e805884", null ],
+    [ "write_ascii", "a00075.html#a8aa94e185fd3903d9df4563d63c808f8", null ],
+    [ "write_binary", "a00075.html#ac7fd563914cd3ac91292ab4e4b3a1e10", null ],
+    [ "writeValue", "a00075.html#a866bc75f53d74a55911bfbc4d78adb90", null ],
+    [ "writeValue", "a00075.html#a4659019f5698ec9c4429df27b035398a", null ],
+    [ "writeValue", "a00075.html#a25d6062e74323de651b10ca2b2f2434f", null ]
 ];

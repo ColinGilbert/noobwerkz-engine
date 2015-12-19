@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -110,9 +111,9 @@ $(document).ready(function(){initNavTree('a00004.html','');});
 </ol>
 <h1><a class="anchor" id="DecimaterAlg"></a>
 The decimation algorithm</h1>
-<p>The decimater (<a class="el" href="a00124.html" title="Decimater framework. ">OpenMesh::Decimater::DecimaterT</a>) provides the decimation algorithm, while the decimation modules provide the computational part. The modules compute a priority value due to some error metric, which is used by the decimater to feed a priority queue. The lower the error value, the more a potential collapse moves to the front of the queue. The one with the lowest error will always be the candidate for the next collapse.</p>
+<p>The decimater (<a class="el" href="a00128.html" title="Decimater framework. ">OpenMesh::Decimater::DecimaterT</a>) provides the decimation algorithm, while the decimation modules provide the computational part. The modules compute a priority value due to some error metric, which is used by the decimater to feed a priority queue. The lower the error value, the more a potential collapse moves to the front of the queue. The one with the lowest error will always be the candidate for the next collapse.</p>
 <p>This implementation does a halfedge collapse, hence simply collapsing one vertex into another connected by a halfedge.</p>
-<dl class="section note"><dt>Note</dt><dd>The decimater ignores all 'locked' and 'deleted' vertices (see <a class="el" href="a00716.html#af600bbf2c3f55c90a2a64848f0547617" title="Status bits used by the Status class. ">OpenMesh::Attributes::StatusBits</a>)</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>The decimater ignores all 'locked' and 'deleted' vertices (see <a class="el" href="a00731.html#af600bbf2c3f55c90a2a64848f0547617" title="Status bits used by the Status class. ">OpenMesh::Attributes::StatusBits</a>)</dd></dl>
 <dl class="section attention"><dt>Attention</dt><dd>The decimater sets temporarily the status bit 'tagged' and clears it after usage regardless of a previous state.</dd></dl>
 <h1><a class="anchor" id="DecimaterLock"></a>
 Block vertices from beeing touched by the Decimater</h1>
@@ -131,20 +132,20 @@ Block vertices from beeing touched by the Decimater</h1>
 <div class="line">  }</div>
 </div><!-- fragment --><h1><a class="anchor" id="DecimaterMod"></a>
 Decimating Modules</h1>
-<p>The vertex to be removed is determined by a decimation module, which has to be derived from <a class="el" href="a00214.html" title="Base class for all decimation modules. ">OpenMesh::Decimater::ModBaseT</a>. The framework supplies already a few decimation modules. But it's very easy to build your own (<a class="el" href="a00214.html">OpenMesh::Decimater::ModBaseT</a>). The most important function of a decimation module is <a class="el" href="a00214.html#acb81c6b9a752741fce2366ca605cd14c" title="Return collapse priority. ">OpenMesh::Decimater::ModBaseT::collapse_priority()</a>. It takes an <a class="el" href="a00107.html" title="Stores information about a halfedge collapse. ">OpenMesh::Decimater::CollapseInfoT</a> describing a potential halfedge collapse, and returns a value due to some error metric. The error value is used by the decimater to feed a priority queue. Collapses with low error will be executed first, and those with large error later. Of course a module computing the error quadric is provided (<a class="el" href="a00223.html" title="Mesh decimation module computing collapse priority based on error quadrics. ">OpenMesh::Decimater::ModQuadricT</a>).</p>
-<p>This framework allows to use more than one decimation module with some restrictions. Since the error value is always normalized and sometimes very difficult to compare to other metrics, the framework allows only one non-binary module, i.e. a module computing a float value. Every further module must be a binary module, i.e. collapse_prioerity() returns <a class="el" href="a00214.html#a49500127c96591367298aa17e8527e44a2b521064f4abfdfb6eb5464308b6f6e7" title="indicates a legal collapse ">OpenMesh::Decimater::ModBaseT::LEGAL_COLLAPSE</a> or <a class="el" href="a00214.html#a49500127c96591367298aa17e8527e44afc88837943f46ccbf0ef35d3fcf9c5b1" title="indicates an illegal collapse ">OpenMesh::Decimater::ModBaseT::ILLEGAL_COLLAPSE</a>. In the algorithm the binary modules are evaluated first. If the evaluated collapse passes the test, then the non-binary module contributes to the decision step.</p>
-<p>In some cases the module does not contribute anything to the decision engine of the decimater, but instead, e.g. simply collects information, while the decimater does it's work. For instance the module <a class="el" href="a00222.html" title="Collect progressive mesh information while decimating. ">OpenMesh::Decimater::ModProgMeshT</a> collects information from all collapses that have been done. This information can be used to generate progressive meshes as described in "Progressive meshes", Hoppe, 1996.</p>
+<p>The vertex to be removed is determined by a decimation module, which has to be derived from <a class="el" href="a00219.html" title="Base class for all decimation modules. ">OpenMesh::Decimater::ModBaseT</a>. The framework supplies already a few decimation modules. But it's very easy to build your own (<a class="el" href="a00219.html">OpenMesh::Decimater::ModBaseT</a>). The most important function of a decimation module is <a class="el" href="a00219.html#acb81c6b9a752741fce2366ca605cd14c" title="Return collapse priority. ">OpenMesh::Decimater::ModBaseT::collapse_priority()</a>. It takes an <a class="el" href="a00110.html" title="Stores information about a halfedge collapse. ">OpenMesh::Decimater::CollapseInfoT</a> describing a potential halfedge collapse, and returns a value due to some error metric. The error value is used by the decimater to feed a priority queue. Collapses with low error will be executed first, and those with large error later. Of course a module computing the error quadric is provided (<a class="el" href="a00228.html" title="Mesh decimation module computing collapse priority based on error quadrics. ">OpenMesh::Decimater::ModQuadricT</a>).</p>
+<p>This framework allows to use more than one decimation module with some restrictions. Since the error value is always normalized and sometimes very difficult to compare to other metrics, the framework allows only one non-binary module, i.e. a module computing a float value. Every further module must be a binary module, i.e. collapse_prioerity() returns <a class="el" href="a00219.html#a49500127c96591367298aa17e8527e44a2b521064f4abfdfb6eb5464308b6f6e7" title="indicates a legal collapse ">OpenMesh::Decimater::ModBaseT::LEGAL_COLLAPSE</a> or <a class="el" href="a00219.html#a49500127c96591367298aa17e8527e44afc88837943f46ccbf0ef35d3fcf9c5b1" title="indicates an illegal collapse ">OpenMesh::Decimater::ModBaseT::ILLEGAL_COLLAPSE</a>. In the algorithm the binary modules are evaluated first. If the evaluated collapse passes the test, then the non-binary module contributes to the decision step.</p>
+<p>In some cases the module does not contribute anything to the decision engine of the decimater, but instead, e.g. simply collects information, while the decimater does it's work. For instance the module <a class="el" href="a00227.html" title="Collect progressive mesh information while decimating. ">OpenMesh::Decimater::ModProgMeshT</a> collects information from all collapses that have been done. This information can be used to generate progressive meshes as described in "Progressive meshes", Hoppe, 1996.</p>
 <p>Provided decimation modules(Binary: B, Continuous: C, Special: X):</p>
 <ul>
-<li><a class="el" href="a00212.html" title="Use aspect ratio to control decimation. ">OpenMesh::Decimater::ModAspectRatioT</a> (B,C)</li>
-<li><a class="el" href="a00215.html" title="Use edge length to control decimation. ">OpenMesh::Decimater::ModEdgeLengthT</a> (B,C)</li>
-<li><a class="el" href="a00217.html" title="Use Hausdorff distance to control decimation. ">OpenMesh::Decimater::ModHausdorffT</a> (B)</li>
-<li><a class="el" href="a00219.html" title="Lock one-ring around remaining vertex after a collapse to prevent further collapses of halfedges inci...">OpenMesh::Decimater::ModIndependentSetsT</a> (B)</li>
-<li><a class="el" href="a00220.html" title="Use Normal deviation to control decimation. ">OpenMesh::Decimater::ModNormalDeviationT</a> (B,C)</li>
-<li><a class="el" href="a00221.html" title="Decimating module to avoid flipping of faces. ">OpenMesh::Decimater::ModNormalFlippingT</a> (B)</li>
-<li><a class="el" href="a00222.html" title="Collect progressive mesh information while decimating. ">OpenMesh::Decimater::ModProgMeshT</a> (X)</li>
-<li><a class="el" href="a00223.html" title="Mesh decimation module computing collapse priority based on error quadrics. ">OpenMesh::Decimater::ModQuadricT</a> (B,C)</li>
-<li><a class="el" href="a00224.html" title="Use Roundness of triangles to control decimation. ">OpenMesh::Decimater::ModRoundnessT</a> (B,C)</li>
+<li><a class="el" href="a00217.html" title="Use aspect ratio to control decimation. ">OpenMesh::Decimater::ModAspectRatioT</a> (B,C)</li>
+<li><a class="el" href="a00220.html" title="Use edge length to control decimation. ">OpenMesh::Decimater::ModEdgeLengthT</a> (B,C)</li>
+<li><a class="el" href="a00222.html" title="Use Hausdorff distance to control decimation. ">OpenMesh::Decimater::ModHausdorffT</a> (B)</li>
+<li><a class="el" href="a00224.html" title="Lock one-ring around remaining vertex after a collapse to prevent further collapses of halfedges inci...">OpenMesh::Decimater::ModIndependentSetsT</a> (B)</li>
+<li><a class="el" href="a00225.html" title="Use Normal deviation to control decimation. ">OpenMesh::Decimater::ModNormalDeviationT</a> (B,C)</li>
+<li><a class="el" href="a00226.html" title="Decimating module to avoid flipping of faces. ">OpenMesh::Decimater::ModNormalFlippingT</a> (B)</li>
+<li><a class="el" href="a00227.html" title="Collect progressive mesh information while decimating. ">OpenMesh::Decimater::ModProgMeshT</a> (X)</li>
+<li><a class="el" href="a00228.html" title="Mesh decimation module computing collapse priority based on error quadrics. ">OpenMesh::Decimater::ModQuadricT</a> (B,C)</li>
+<li><a class="el" href="a00229.html" title="Use Roundness of triangles to control decimation. ">OpenMesh::Decimater::ModRoundnessT</a> (B,C)</li>
 </ul>
 <h1><a class="anchor" id="DecimaterHnd"></a>
 Module Handles</h1>
@@ -154,12 +155,12 @@ Module Handles</h1>
 Basic Setup</h1>
 <p>The following small example show the basic steps to setup up a decimater:</p>
 <div class="fragment"><div class="line"><span class="comment">// </span></div>
-<div class="line"><span class="keyword">using namespace </span><a class="code" href="a00715.html">OpenMesh</a></div>
+<div class="line"><span class="keyword">using namespace </span><a class="code" href="a00730.html">OpenMesh</a></div>
 <div class="line"></div>
 <div class="line"><span class="comment">// ---------------------------------------- necessary types</span></div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Mesh type</span></div>
-<div class="line"><span class="keyword">typedef</span> <a class="code" href="a00273.html">TriMesh_ArrayKernelT&lt;&gt;</a>                      <a class="code" href="a00242.html">Mesh</a>;</div>
+<div class="line"><span class="keyword">typedef</span> <a class="code" href="a00281.html">TriMesh_ArrayKernelT&lt;&gt;</a>                      <a class="code" href="a00249.html">Mesh</a>;</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Decimater type</span></div>
 <div class="line"><span class="keyword">typedef</span> Decimater::DecimaterT&lt; Mesh &gt;               Decimater;</div>
@@ -196,7 +197,6 @@ Basic Setup</h1>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

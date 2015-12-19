@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 15:07:46 +0200 (Di, 28 Apr 2015) $                   *
+ *   $Revision$                                                         *
+ *   $Date$                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -57,12 +57,9 @@
 #include <fstream>
 
 // OpenMesh
-#include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/IO/BinaryHelper.hh>
 #include <OpenMesh/Core/IO/reader/STLReader.hh>
 #include <OpenMesh/Core/IO/IOManager.hh>
-#include <OpenMesh/Core/System/omstream.hh>
-#include <OpenMesh/Core/IO/importer/BaseImporter.hh>
 
 
 //=== NAMESPACES ==============================================================
@@ -249,6 +246,9 @@ read_stla(std::istream& _in, BaseImporter& _bi, Options& _opt) const
 
   std::string line;
 
+  std::string        garbage;
+  std::stringstream  strstream;
+
   bool facet_normal(false);
 
   while( _in && !_in.eof() ) {
@@ -265,9 +265,8 @@ read_stla(std::istream& _in, BaseImporter& _bi, Options& _opt) const
 
     // Normal found?
     if (line.find("facet normal") != std::string::npos) {
-      std::stringstream strstream(line);
-
-      std::string garbage;
+      strstream.str(line);
+      strstream.clear();
 
       // facet
       strstream >> garbage;
@@ -292,9 +291,9 @@ read_stla(std::istream& _in, BaseImporter& _bi, Options& _opt) const
         std::getline(_in, line);
         trimStdString(line);
 
-        std::stringstream strstream(line);
+        strstream.str(line);
+        strstream.clear();
 
-        std::string garbage;
         strstream >> garbage;
 
         strstream >> v[0];

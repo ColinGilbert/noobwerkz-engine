@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -102,7 +103,7 @@ $(document).ready(function(){initNavTree('a00018.html','');});
 <div class="title">Conceptual Class Hierarchy </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Since there is no such thing as a OpenMesh class and the library makes heavy use of C++ template, we show the inheritance graph of <a class="el" href="a00273.html" title="Triangle mesh based on the ArrayKernel. ">OpenMesh::TriMesh_ArrayKernelT</a> as proxy for all possible mesh types.</p>
+<div class="textblock"><p>Since there is no such thing as a OpenMesh class and the library makes heavy use of C++ template, we show the inheritance graph of <a class="el" href="a00281.html" title="Triangle mesh based on the ArrayKernel. ">OpenMesh::TriMesh_ArrayKernelT</a> as proxy for all possible mesh types.</p>
 <p>Please note! Most of the inheritence relationships are realized by template parameterization! Therefore some of the inheritance links are not documented in a inheritance graph in the reference. This picture shows the overall concept.</p>
 <div class="image">
 <img src="class-hierarchy2.png" alt="class-hierarchy2.png"/>
@@ -129,14 +130,13 @@ Building the mesh</h1>
 <div class="line">  <span class="keyword">typedef</span> ArrayKernelT&lt;AttribKernel, MeshItems&gt;      MeshKernel;</div>
 <div class="line">  <span class="keyword">typedef</span> TriMeshT&lt;MeshKernel&gt;                       Mesh;</div>
 <div class="line">};</div>
-</div><!-- fragment --><p>To generate the actual mesh type the helper template class <code>TriMesh_ArrayKernel_GeneratorT</code> is used. It takes the traits in a template argument and passes it to <code>FinalMeshItemsT</code> to get the final type of the mesh items (MeshItems). The <code>MeshItems</code> defines the types for Point, Normal, Color, TexCoord, Vertex, and for all mesh items. With the help of <code>MeshItems</code> create the type of the <code>AttribKernel</code>, which defines the apropriate standard properties for the items. Finally use <code>AttribKernel</code> and <code>MeshItems</code> to create the mesh kernel type <code>MeshKernel</code>. It's quite a way to get a kernel . As long as the created kernel follows the kernel concept (<a class="el" href="a00738.html">Mesh Kernels</a>), we can easily create now the mesh. Here we use now <code>TriMeshT</code> to create the final mesh type <code>Mesh</code>. </p>
+</div><!-- fragment --><p>To generate the actual mesh type the helper template class <code>TriMesh_ArrayKernel_GeneratorT</code> is used. It takes the traits in a template argument and passes it to <code>FinalMeshItemsT</code> to get the final type of the mesh items (MeshItems). The <code>MeshItems</code> defines the types for Point, Normal, Color, TexCoord, Vertex, and for all mesh items. With the help of <code>MeshItems</code> create the type of the <code>AttribKernel</code>, which defines the apropriate standard properties for the items. Finally use <code>AttribKernel</code> and <code>MeshItems</code> to create the mesh kernel type <code>MeshKernel</code>. It's quite a way to get a kernel . As long as the created kernel follows the kernel concept (<a class="el" href="a00754.html">Mesh Kernels</a>), we can easily create now the mesh. Here we use now <code>TriMeshT</code> to create the final mesh type <code>Mesh</code>. </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <hr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

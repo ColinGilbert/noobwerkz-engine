@@ -1,3 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node2" href="$a00236.html" title="Option\&lt; T \&gt;" alt="" coords="96,5,188,32"/>
+<area shape="rect" id="node2" href="$a00238.html" title="OpenMeshBase" alt="" coords="131,5,246,32"/>
+<area shape="rect" id="node3" href="$a00239.html" title="OpenMeshBasePoly" alt="" coords="118,56,259,83"/>
+<area shape="rect" id="node4" href="$a00240.html" title="OpenMeshBasePolyVec2i" alt="" coords="101,107,276,133"/>
+<area shape="rect" id="node5" href="$a00241.html" title="OpenMeshBaseTriVec2i" alt="" coords="107,157,270,184"/>
 </map>

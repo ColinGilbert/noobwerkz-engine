@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: AnalyzerTraits::VertexT&lt; Base, Refs &gt; Struct Template Reference</title>
+<title>OpenMesh: OpenMesh::vector_traits&lt; osg::Vec4d &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -106,41 +107,52 @@ $(document).ready(function(){initNavTree('a00309.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="a00840.html">List of all members</a>  </div>
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="a01053.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">AnalyzerTraits::VertexT&lt; Base, Refs &gt; Struct Template Reference</div>  </div>
+<div class="title">OpenMesh::vector_traits&lt; osg::Vec4d &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="dynheader">
-Inheritance diagram for AnalyzerTraits::VertexT&lt; Base, Refs &gt;:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00841.png" border="0" usemap="#AnalyzerTraits_1_1VertexT_3_01Base_00_01Refs_01_4_inherit__map" alt="Inheritance graph"/></div>
-<map name="AnalyzerTraits_1_1VertexT_3_01Base_00_01Refs_01_4_inherit__map" id="AnalyzerTraits_1_1VertexT_3_01Base_00_01Refs_01_4_inherit__map">
-</map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for AnalyzerTraits::VertexT&lt; Base, Refs &gt;:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00842.png" border="0" usemap="#AnalyzerTraits_1_1VertexT_3_01Base_00_01Refs_01_4_coll__map" alt="Collaboration graph"/></div>
-<map name="AnalyzerTraits_1_1VertexT_3_01Base_00_01Refs_01_4_coll__map" id="AnalyzerTraits_1_1VertexT_3_01Base_00_01Refs_01_4_coll__map">
-</map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+
+<p>Vector traits for OpenSG vector type.  
+ <a href="a00309.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="a00576_source.html">OpenMesh/Tools/Kernel_OSG/VectorAdapter.hh</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:a13ed052d1ef17368a6ecf61ad0273894"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a13ed052d1ef17368a6ecf61ad0273894"></a>
-VHierarchyNodeHandle&#160;</td><td class="memItemRight" valign="bottom"><b>vhierarchy_node_handle</b> ()</td></tr>
-<tr class="separator:a13ed052d1ef17368a6ecf61ad0273894"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1ff013c12c8458738404276ac9045b2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa1ff013c12c8458738404276ac9045b2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>set_vhierarchy_node_handle</b> (VHierarchyNodeHandle _node_handle)</td></tr>
-<tr class="separator:aa1ff013c12c8458738404276ac9045b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa2e4322f8bbed125d585126c952c8dd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afa2e4322f8bbed125d585126c952c8dd"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ancestor</b> (const VHierarchyNodeIndex &amp;_other)</td></tr>
-<tr class="separator:afa2e4322f8bbed125d585126c952c8dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ad01c90bfefda479a415ab6c11725c9fb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad01c90bfefda479a415ab6c11725c9fb"></a>
+typedef osg::Vec4d&#160;</td><td class="memItemRight" valign="bottom"><b>vector_type</b></td></tr>
+<tr class="separator:ad01c90bfefda479a415ab6c11725c9fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0978e57d3ef41e8540401a1ededce1e5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0978e57d3ef41e8540401a1ededce1e5"></a>
+typedef vector_type::ValueType&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b></td></tr>
+<tr class="separator:a0978e57d3ef41e8540401a1ededce1e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cf201954d988e04005e4a8435c6c79f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6cf201954d988e04005e4a8435c6c79f"></a>
+typedef GenProg::Int2Type<br class="typebreak" />
+&lt; vector_type::_iSize &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>typed_size</b></td></tr>
+<tr class="separator:a6cf201954d988e04005e4a8435c6c79f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a9f2634c080732b7e23094f8efdda996c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9f2634c080732b7e23094f8efdda996c"></a>
+static size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> ()</td></tr>
+<tr class="separator:a9f2634c080732b7e23094f8efdda996c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a9aeac6eab6ced3740549265e22b4b786"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9aeac6eab6ced3740549265e22b4b786"></a>
+static const size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size_</b> = vector_type::_iSize</td></tr>
+<tr class="separator:a9aeac6eab6ced3740549265e22b4b786"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>OpenMesh/Apps/VDProgMesh/Analyzer/vdpmanalyzer.cc</li>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;&gt;<br />
+struct OpenMesh::vector_traits&lt; osg::Vec4d &gt;</h3>
+
+<p>Vector traits for OpenSG vector type. </p>
+</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<li>OpenMesh/Tools/Kernel_OSG/<a class="el" href="a00576_source.html">VectorAdapter.hh</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -148,7 +160,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ancestor</b> (cons
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

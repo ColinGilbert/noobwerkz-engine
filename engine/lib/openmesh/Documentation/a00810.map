@@ -1,7 +1,12 @@
-<map id="OpenMesh/Tools/Subdivider/Adaptive/Composite/CompositeTraits.hh" name="OpenMesh/Tools/Subdivider/Adaptive/Composite/CompositeTraits.hh">
-<area shape="rect" id="node2" href="$a00576.html" title="OpenMesh/Tools/Subdivider\l/Adaptive/Composite/CompositeT.hh" alt="" coords="5,95,243,136"/>
-<area shape="rect" id="node4" href="$a00580_source.html" title="OpenMesh/Tools/Subdivider\l/Adaptive/Composite/RuleInterfaceT.hh" alt="" coords="267,95,519,136"/>
-<area shape="rect" id="node3" href="$a00574.html" title="OpenMesh/Tools/Subdivider\l/Adaptive/Composite/CompositeT.cc" alt="" coords="16,184,253,225"/>
-<area shape="rect" id="node5" href="$a00582.html" title="OpenMesh/Tools/Subdivider\l/Adaptive/Composite/RulesT.hh" alt="" coords="289,184,497,225"/>
-<area shape="rect" id="node6" href="$a00581.html" title="OpenMesh/Tools/Subdivider\l/Adaptive/Composite/RulesT.cc" alt="" coords="289,273,497,315"/>
+<map id="OpenMesh/Tools/Decimater/Observer.hh" name="OpenMesh/Tools/Decimater/Observer.hh">
+<area shape="rect" id="node2" href="$a00545.html" title="OpenMesh/Tools/Decimater\l/BaseDecimaterT.hh" alt="" coords="502,95,687,136"/>
+<area shape="rect" id="node11" href="$a00568.html" title="OpenMesh/Tools/Decimater\l/Observer.cc" alt="" coords="711,95,897,136"/>
+<area shape="rect" id="node3" href="$a00548.html" title="OpenMesh/Tools/Decimater\l/DecimaterT.hh" alt="" coords="398,184,583,225"/>
+<area shape="rect" id="node9" href="$a00550.html" title="OpenMesh/Tools/Decimater\l/McDecimaterT.hh" alt="" coords="607,184,793,225"/>
+<area shape="rect" id="node4" href="$a00400_source.html" title="OpenMesh/Apps/Decimating\l/DecimaterViewerWidget.hh" alt="" coords="5,273,195,315"/>
+<area shape="rect" id="node5" href="$a00547.html" title="OpenMesh/Tools/Decimater\l/DecimaterT.cc" alt="" coords="219,273,405,315"/>
+<area shape="rect" id="node6" href="$a00552_source.html" title="OpenMesh/Tools/Decimater\l/MixedDecimaterT.hh" alt="" coords="598,273,783,315"/>
+<area shape="rect" id="node8" href="$a00633_source.html" title="Python/Decimater.hh" alt="" coords="429,281,574,307"/>
+<area shape="rect" id="node7" href="$a00551.html" title="OpenMesh/Tools/Decimater\l/MixedDecimaterT.cc" alt="" coords="598,363,783,404"/>
+<area shape="rect" id="node10" href="$a00549.html" title="OpenMesh/Tools/Decimater\l/McDecimaterT.cc" alt="" coords="807,273,993,315"/>
 </map>

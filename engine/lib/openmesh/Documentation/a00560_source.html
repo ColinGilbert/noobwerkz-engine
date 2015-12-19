@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh/Tools/Dualizer/meshDualT.hh Source File</title>
+<title>OpenMesh: OpenMesh/Tools/Decimater/ModIndependentSetsT.hh Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -105,7 +106,7 @@ $(document).ready(function(){initNavTree('a00560_source.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">meshDualT.hh</div>  </div>
+<div class="title">ModIndependentSetsT.hh</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* ========================================================================= *</span></div>
@@ -150,112 +151,77 @@ $(document).ready(function(){initNavTree('a00560_source.html','');});
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment"> * ========================================================================= */</span></div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">/*===========================================================================*\</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment"> *                                                                           *</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment"> *   $Revision: 1258 $                                                         *</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment"> *   $Date: 2015-04-28 15:07:46 +0200 (Di, 28 Apr 2015) $                   *</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment"> *                                                                           *             </span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment"> *   $Revision$                                                         *</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment"> *   $Date$                   *</span></div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment"> *                                                                           *</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">\*===========================================================================*/</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment"> \*===========================================================================*/</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">  Compute the dual of a mesh:</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">  - each face of the original mesh is replaced by a vertex at the center of gravity of the vertices of the face</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">  - each vertex of the original mesh is replaced by a face containing the dual vertices of its primal adjacent faces</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment"></span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">  Changelog:</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment">    - 29 mar 2010: initial work</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment"></span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">  Programmer: </span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">    Clement Courbet - clement.courbet@ecp.fr</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment"></span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">  (c) Clement Courbet 2010</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">//=============================================================================</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment">//  CLASS ModQuadricT</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">//=============================================================================</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#ifndef OPENMESH_TOOLS_MODINDEPENDENTSETST_HH</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor">#define OPENMESH_TOOLS_MODINDEPENDENTSETST_HH</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">//== INCLUDES =================================================================</span></div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#ifndef OPENMESH_MESH_DUAL_H</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#define OPENMESH_MESH_DUAL_H</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">//== INCLUDES =================================================================</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment">// -------------------- STL</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#if defined(OM_CC_MIPS)</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor">#  include &lt;math.h&gt;</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor">#  include &lt;cmath&gt;</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="preprocessor">#include &lt;OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh&gt;</span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor">#include &lt;OpenMesh/Core/Utils/Property.hh&gt;</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="comment">//== FORWARDDECLARATIONS ======================================================</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="a00555.html">OpenMesh/Tools/Decimater/ModBaseT.hh</a>&gt;</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">//== NAMESPACE ================================================================</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">namespace </span><a class="code" href="a00730.html">OpenMesh</a> { <span class="comment">// BEGIN_NS_OPENMESH</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keyword">namespace </span>Decimater { <span class="comment">// BEGIN_NS_DECIMATER</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">//== CLASS DEFINITION =========================================================</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">class</span> MeshT&gt;</div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="a00224.html">   76</a></span>&#160;<span class="keyword">class </span><a class="code" href="a00224.html">ModIndependentSetsT</a>: <span class="keyword">public</span> <a class="code" href="a00219.html">ModBaseT</a>&lt;MeshT&gt; {</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="a00224.html#adf73fdba60ea2f994796dd829041be97">   78</a></span>&#160;    <a class="code" href="a00555.html#ae1f2d4c274e420c0e81d52cf17cc1c5b">DECIMATING_MODULE</a>( <a class="code" href="a00224.html">ModIndependentSetsT</a>, MeshT, IndependentSets )</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    ;</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="comment">//== NAMESPACES ===============================================================</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="keyword">namespace </span><a class="code" href="a00715.html">OpenMesh</a>   { </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keyword">namespace </span>Util { </div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="comment">//== Function DEFINITION =========================================================</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> MeshTraits&gt;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;PolyMesh_ArrayKernelT&lt;MeshTraits&gt;* MeshDual (PolyMesh_ArrayKernelT&lt;MeshTraits&gt; &amp;primal)</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;{</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;  PolyMesh_ArrayKernelT&lt;MeshTraits&gt;* dual = <span class="keyword">new</span> PolyMesh_ArrayKernelT&lt;MeshTraits&gt;();</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  <span class="comment">//we will need to reference which vertex in the dual is attached to each face in the primal</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;  <span class="comment">//and which face of the dual is attached to each vertex in the primal.</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="a00224.html#a1cb2074ae492242832abfa3922745220">   82</a></span>&#160;    <a class="code" href="a00224.html#a1cb2074ae492242832abfa3922745220">ModIndependentSetsT</a>(MeshT &amp;_mesh) :</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        Base(_mesh, true) {</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    }</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
+<div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="a00224.html#ab24afb91c890d484a3bc7674c3e20c39">   87</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="a00224.html#ab24afb91c890d484a3bc7674c3e20c39">postprocess_collapse</a>(<span class="keyword">const</span> <a class="code" href="a00110.html">CollapseInfo</a>&amp; _ci) {</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      <span class="keyword">typename</span> Mesh::VertexVertexIter vv_it;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;      Base::mesh().status(_ci.<a class="code" href="a00110.html#a7e472c32525398eeb34cad7c52aa3651">v1</a>).set_locked(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;      vv_it = Base::mesh().vv_iter(_ci.<a class="code" href="a00110.html#a7e472c32525398eeb34cad7c52aa3651">v1</a>);</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      <span class="keywordflow">for</span> (; vv_it.is_valid(); ++vv_it)</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        Base::mesh().status(*vv_it).set_locked(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    }</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordtype">void</span> set_binary(<span class="keywordtype">bool</span> _b) { }</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;};</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  FPropHandleT&lt; typename PolyMesh_ArrayKernelT&lt;MeshTraits&gt;::VertexHandle &gt; primalToDual;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;  primal.add_property(primalToDual);</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;  <span class="comment">//for each face in the primal mesh, add a vertex at the center of gravity of the face</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;  <span class="keywordflow">for</span>(<span class="keyword">typename</span> PolyMesh_ArrayKernelT&lt;MeshTraits&gt;::ConstFaceIter fit=primal.faces_begin(); fit!=primal.faces_end(); ++fit)</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;  {</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;      <span class="keyword">typename</span> PolyMesh_ArrayKernelT&lt;MeshTraits&gt;::Point centerPoint(0,0,0);</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;      <span class="keyword">typename</span> PolyMesh_ArrayKernelT&lt;MeshTraits&gt;::Scalar degree= 0.0;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;      <span class="keywordflow">for</span>(<span class="keyword">typename</span> PolyMesh_ArrayKernelT&lt;MeshTraits&gt;::ConstFaceVertexIter vit=primal.cfv_iter(*fit); vit.is_valid(); ++vit, ++degree)</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        centerPoint += primal.point(*vit);</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        assert(degree!=0);</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        centerPoint /= degree;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        primal.property(primalToDual, *fit) = dual-&gt;add_vertex(centerPoint);</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;  }</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;  <span class="comment">//for each vertex in the primal, add a face in the dual</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;  std::vector&lt; typename PolyMesh_ArrayKernelT&lt;MeshTraits&gt;::VertexHandle &gt;  face_vhandles;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;  <span class="keywordflow">for</span>(<span class="keyword">typename</span> PolyMesh_ArrayKernelT&lt;MeshTraits&gt;::ConstVertexIter vit=primal.vertices_begin(); vit!=primal.vertices_end(); ++vit)</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;  {</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keywordflow">if</span>(!primal.is_boundary(*vit))</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    {</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;      face_vhandles.clear();</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;      <span class="keywordflow">for</span>(<span class="keyword">typename</span> PolyMesh_ArrayKernelT&lt;MeshTraits&gt;::ConstVertexFaceIter fit=primal.cvf_iter(*vit); fit.is_valid(); ++fit)</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        face_vhandles.push_back(primal.property(primalToDual, *fit));</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;      dual-&gt;add_face(face_vhandles);</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    }</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;  }</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;  primal.remove_property(primalToDual);</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;  <span class="keywordflow">return</span> dual;</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;}</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;} <span class="comment">// namespace Util</span></div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;} <span class="comment">// namespace OpenMesh</span></div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="preprocessor">#endif // OPENMESH_MESH_DUAL_H defined</span></div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;</div>
-<div class="ttc" id="a00715_html"><div class="ttname"><a href="a00715.html">OpenMesh</a></div><div class="ttdoc">Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...</div><div class="ttdef"><b>Definition:</b> MeshItems.hh:64</div></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="comment">//=============================================================================</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;}<span class="comment">// END_NS_DECIMATER</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;} <span class="comment">// END_NS_OPENMESH</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="comment">//=============================================================================</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="preprocessor">#endif // OPENMESH_TOOLS_MODINDEPENDENTSETST_HH defined</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="comment">//=============================================================================</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
+<div class="ttc" id="a00224_html_ab24afb91c890d484a3bc7674c3e20c39"><div class="ttname"><a href="a00224.html#ab24afb91c890d484a3bc7674c3e20c39">OpenMesh::Decimater::ModIndependentSetsT::postprocess_collapse</a></div><div class="ttdeci">void postprocess_collapse(const CollapseInfo &amp;_ci)</div><div class="ttdoc">override </div><div class="ttdef"><b>Definition:</b> ModIndependentSetsT.hh:87</div></div>
+<div class="ttc" id="a00224_html"><div class="ttname"><a href="a00224.html">OpenMesh::Decimater::ModIndependentSetsT</a></div><div class="ttdoc">Lock one-ring around remaining vertex after a collapse to prevent further collapses of halfedges inci...</div><div class="ttdef"><b>Definition:</b> ModIndependentSetsT.hh:76</div></div>
+<div class="ttc" id="a00110_html"><div class="ttname"><a href="a00110.html">OpenMesh::Decimater::CollapseInfoT</a></div><div class="ttdoc">Stores information about a halfedge collapse. </div><div class="ttdef"><b>Definition:</b> CollapseInfoT.hh:80</div></div>
+<div class="ttc" id="a00730_html"><div class="ttname"><a href="a00730.html">OpenMesh</a></div><div class="ttdoc">Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...</div><div class="ttdef"><b>Definition:</b> MeshItems.hh:64</div></div>
+<div class="ttc" id="a00555_html_ae1f2d4c274e420c0e81d52cf17cc1c5b"><div class="ttname"><a href="a00555.html#ae1f2d4c274e420c0e81d52cf17cc1c5b">DECIMATING_MODULE</a></div><div class="ttdeci">#define DECIMATING_MODULE(Classname, MeshT, Name)</div><div class="ttdoc">Convenience macro, to be used in derived modules The macro defines the types. </div><div class="ttdef"><b>Definition:</b> ModBaseT.hh:154</div></div>
+<div class="ttc" id="a00555_html"><div class="ttname"><a href="a00555.html">ModBaseT.hh</a></div><div class="ttdoc">Base class for all decimation modules. </div></div>
+<div class="ttc" id="a00110_html_a7e472c32525398eeb34cad7c52aa3651"><div class="ttname"><a href="a00110.html#a7e472c32525398eeb34cad7c52aa3651">OpenMesh::Decimater::CollapseInfoT::v1</a></div><div class="ttdeci">Mesh::VertexHandle v1</div><div class="ttdoc">Remaining vertex. </div><div class="ttdef"><b>Definition:</b> CollapseInfoT.hh:98</div></div>
+<div class="ttc" id="a00224_html_a1cb2074ae492242832abfa3922745220"><div class="ttname"><a href="a00224.html#a1cb2074ae492242832abfa3922745220">OpenMesh::Decimater::ModIndependentSetsT::ModIndependentSetsT</a></div><div class="ttdeci">ModIndependentSetsT(MeshT &amp;_mesh)</div><div class="ttdoc">Constructor. </div><div class="ttdef"><b>Definition:</b> ModIndependentSetsT.hh:82</div></div>
+<div class="ttc" id="a00219_html"><div class="ttname"><a href="a00219.html">OpenMesh::Decimater::ModBaseT</a></div><div class="ttdoc">Base class for all decimation modules. </div><div class="ttdef"><b>Definition:</b> ModBaseT.hh:197</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <hr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

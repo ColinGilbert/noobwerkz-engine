@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh::PolyMesh_ArrayKernelT&lt; Traits &gt; Class Template Reference</title>
+<title>OpenMesh: OpenMesh::Kernel_OSG::oPropertyT&lt; GeoProperty &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -106,360 +107,256 @@ $(document).ready(function(){initNavTree('a00242.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="a00965.html">List of all members</a>  </div>
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="a01200.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">OpenMesh::PolyMesh_ArrayKernelT&lt; Traits &gt; Class Template Reference<div class="ingroups"><a class="el" href="a00739.html">Predefined Mesh Types</a></div></div>  </div>
+<div class="title">OpenMesh::Kernel_OSG::oPropertyT&lt; GeoProperty &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Polygonal mesh based on the <a class="el" href="a00082.html" title="Mesh kernel using arrays for mesh item storage. ">ArrayKernel</a>.  
+<p>Property adaptor for OpenSG GeoProperties.  
  <a href="a00242.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="a00492_source.html">OpenMesh/Mesh/Types/PolyMesh_ArrayKernelT.hh</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="a00574_source.html">OpenMesh/Tools/Kernel_OSG/PropertyT.hh</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for OpenMesh::PolyMesh_ArrayKernelT&lt; Traits &gt;:</div>
+Inheritance diagram for OpenMesh::Kernel_OSG::oPropertyT&lt; GeoProperty &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00966.png" border="0" usemap="#OpenMesh_1_1PolyMesh__ArrayKernelT_3_01Traits_01_4_inherit__map" alt="Inheritance graph"/></div>
-<map name="OpenMesh_1_1PolyMesh__ArrayKernelT_3_01Traits_01_4_inherit__map" id="OpenMesh_1_1PolyMesh__ArrayKernelT_3_01Traits_01_4_inherit__map">
-<area shape="rect" id="node2" href="a00243.html" title="Base type for a polygonal mesh. " alt="" coords="9,80,164,136"/></map>
+<div class="center"><img src="a01201.png" border="0" usemap="#OpenMesh_1_1Kernel__OSG_1_1oPropertyT_3_01GeoProperty_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="OpenMesh_1_1Kernel__OSG_1_1oPropertyT_3_01GeoProperty_01_4_inherit__map" id="OpenMesh_1_1Kernel__OSG_1_1oPropertyT_3_01GeoProperty_01_4_inherit__map">
+<area shape="rect" id="node3" href="a00177.html" title="Adaptor for osg::GeoIndicesUI32. " alt="" coords="17,169,184,225"/><area shape="rect" id="node2" href="a00097.html" title="Abstract class defining the basic interface of a dynamic property. " alt="" coords="15,5,187,32"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
-Collaboration diagram for OpenMesh::PolyMesh_ArrayKernelT&lt; Traits &gt;:</div>
+Collaboration diagram for OpenMesh::Kernel_OSG::oPropertyT&lt; GeoProperty &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00967.png" border="0" usemap="#OpenMesh_1_1PolyMesh__ArrayKernelT_3_01Traits_01_4_coll__map" alt="Collaboration graph"/></div>
-<map name="OpenMesh_1_1PolyMesh__ArrayKernelT_3_01Traits_01_4_coll__map" id="OpenMesh_1_1PolyMesh__ArrayKernelT_3_01Traits_01_4_coll__map">
-<area shape="rect" id="node2" href="a00243.html" title="Base type for a polygonal mesh. " alt="" coords="9,80,164,136"/></map>
+<div class="center"><img src="a01202.png" border="0" usemap="#OpenMesh_1_1Kernel__OSG_1_1oPropertyT_3_01GeoProperty_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="OpenMesh_1_1Kernel__OSG_1_1oPropertyT_3_01GeoProperty_01_4_coll__map" id="OpenMesh_1_1Kernel__OSG_1_1oPropertyT_3_01GeoProperty_01_4_coll__map">
+<area shape="rect" id="node2" href="a00097.html" title="Abstract class defining the basic interface of a dynamic property. " alt="" coords="15,5,187,32"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:acbc1653e06fdb802c666acc919fc79b1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acbc1653e06fdb802c666acc919fc79b1"></a>
+typedef GeoProperty&#160;</td><td class="memItemRight" valign="bottom"><b>property_t</b></td></tr>
+<tr class="separator:acbc1653e06fdb802c666acc919fc79b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51fd217fd82f1bcea7351ed6ca812ea6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a51fd217fd82f1bcea7351ed6ca812ea6"></a>
+typedef property_t::PtrType&#160;</td><td class="memItemRight" valign="bottom"><b>property_ptr_t</b></td></tr>
+<tr class="separator:a51fd217fd82f1bcea7351ed6ca812ea6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ac8ef38a920b2555a25241e5acc6d7e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ac8ef38a920b2555a25241e5acc6d7e"></a>
+typedef property_t::StoredFieldType&#160;</td><td class="memItemRight" valign="bottom"><b>field_t</b></td></tr>
+<tr class="separator:a0ac8ef38a920b2555a25241e5acc6d7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00d73e914c72898b07630e5d54868e1d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a00d73e914c72898b07630e5d54868e1d"></a>
+typedef field_t::StoredType&#160;</td><td class="memItemRight" valign="bottom"><b>element_t</b></td></tr>
+<tr class="separator:a00d73e914c72898b07630e5d54868e1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ce9172ca80aabd40d7b93a9c68d5766"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ce9172ca80aabd40d7b93a9c68d5766"></a>
+typedef field_t::StoredType&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b></td></tr>
+<tr class="separator:a1ce9172ca80aabd40d7b93a9c68d5766"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a6358ad85c37b8e374bbc5bbde9660fda"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6358ad85c37b8e374bbc5bbde9660fda"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>oPropertyT</b> (property_ptr_t _geo_prop, const std::string &amp;_name=&quot;&lt;unknown&gt;&quot;)</td></tr>
+<tr class="separator:a6358ad85c37b8e374bbc5bbde9660fda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a797dfbe8202e7f972ce077863e9c38b6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a797dfbe8202e7f972ce077863e9c38b6"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>oPropertyT</b> (const std::string &amp;_name=&quot;&lt;unknown&gt;&quot;)</td></tr>
+<tr class="separator:a797dfbe8202e7f972ce077863e9c38b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9ffd31fa982c7b7c4988400e7ee9835"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac9ffd31fa982c7b7c4988400e7ee9835"></a>
+<a class="el" href="a00242.html">oPropertyT</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="a00242.html">oPropertyT</a> &amp;_rhs)</td></tr>
+<tr class="separator:ac9ffd31fa982c7b7c4988400e7ee9835"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76d932e13622eb8a87cfc13058538b53"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a76d932e13622eb8a87cfc13058538b53"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00242.html#a76d932e13622eb8a87cfc13058538b53">reserve</a> (size_t _n)</td></tr>
+<tr class="memdesc:a76d932e13622eb8a87cfc13058538b53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reserve memory for n elements. <br /></td></tr>
+<tr class="separator:a76d932e13622eb8a87cfc13058538b53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91c309c4854fb5181326f9747478b5e0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a91c309c4854fb5181326f9747478b5e0"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00242.html#a91c309c4854fb5181326f9747478b5e0">resize</a> (size_t _n)</td></tr>
+<tr class="memdesc:a91c309c4854fb5181326f9747478b5e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resize storage to hold n elements. <br /></td></tr>
+<tr class="separator:a91c309c4854fb5181326f9747478b5e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab44f9a631e21f158844394e7a14f8341"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab44f9a631e21f158844394e7a14f8341"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00242.html#ab44f9a631e21f158844394e7a14f8341">push_back</a> ()</td></tr>
+<tr class="memdesc:ab44f9a631e21f158844394e7a14f8341"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extend the number of elements by one. <br /></td></tr>
+<tr class="separator:ab44f9a631e21f158844394e7a14f8341"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac098080990152ff86b1cd445dab4eaa8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac098080990152ff86b1cd445dab4eaa8"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00242.html#ac098080990152ff86b1cd445dab4eaa8">swap</a> (size_t _i0, size_t _i1)</td></tr>
+<tr class="memdesc:ac098080990152ff86b1cd445dab4eaa8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Let two elements swap their storage place. <br /></td></tr>
+<tr class="separator:ac098080990152ff86b1cd445dab4eaa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6126879a2c7b7dc06858702168a6f28"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac6126879a2c7b7dc06858702168a6f28"></a>
+virtual <a class="el" href="a00242.html">oPropertyT</a>&lt; property_t &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00242.html#ac6126879a2c7b7dc06858702168a6f28">clone</a> () const </td></tr>
+<tr class="memdesc:ac6126879a2c7b7dc06858702168a6f28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a deep copy of self. <br /></td></tr>
+<tr class="separator:ac6126879a2c7b7dc06858702168a6f28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0e7839eeeba0528390ccbe9315dd153"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00242.html#ac0e7839eeeba0528390ccbe9315dd153">set_persistent</a> (bool _yn)</td></tr>
+<tr class="memdesc:ac0e7839eeeba0528390ccbe9315dd153"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable or disable persistency.  <a href="#ac0e7839eeeba0528390ccbe9315dd153">More...</a><br /></td></tr>
+<tr class="separator:ac0e7839eeeba0528390ccbe9315dd153"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a343ed6ccf1c18c068708936f8413bf2c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a343ed6ccf1c18c068708936f8413bf2c"></a>
+virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00242.html#a343ed6ccf1c18c068708936f8413bf2c">n_elements</a> () const </td></tr>
+<tr class="memdesc:a343ed6ccf1c18c068708936f8413bf2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of elements in property. <br /></td></tr>
+<tr class="separator:a343ed6ccf1c18c068708936f8413bf2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af01714b3c18b264a0ffabc328f6cd258"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af01714b3c18b264a0ffabc328f6cd258"></a>
+virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00242.html#af01714b3c18b264a0ffabc328f6cd258">element_size</a> () const </td></tr>
+<tr class="memdesc:af01714b3c18b264a0ffabc328f6cd258"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of one element in bytes or UnknownSize if not known. <br /></td></tr>
+<tr class="separator:af01714b3c18b264a0ffabc328f6cd258"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d7ba03c98003ab49c441be61a78269f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3d7ba03c98003ab49c441be61a78269f"></a>
+virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00242.html#a3d7ba03c98003ab49c441be61a78269f">store</a> (std::ostream &amp;_ostr, bool _swap) const </td></tr>
+<tr class="memdesc:a3d7ba03c98003ab49c441be61a78269f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store self as one binary block. <br /></td></tr>
+<tr class="separator:a3d7ba03c98003ab49c441be61a78269f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af263bcb96eb989660cd802eaf93cd028"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00242.html#af263bcb96eb989660cd802eaf93cd028">restore</a> (std::istream &amp;_istr, bool _swap)</td></tr>
+<tr class="memdesc:af263bcb96eb989660cd802eaf93cd028"><td class="mdescLeft">&#160;</td><td class="mdescRight">Restore self from a binary block.  <a href="#af263bcb96eb989660cd802eaf93cd028">More...</a><br /></td></tr>
+<tr class="separator:af263bcb96eb989660cd802eaf93cd028"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa63de2e07f86498cc680035833773b8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaa63de2e07f86498cc680035833773b8"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00242.html#aaa63de2e07f86498cc680035833773b8">clear</a> (void)</td></tr>
+<tr class="memdesc:aaa63de2e07f86498cc680035833773b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear all elements and free memory. <br /></td></tr>
+<tr class="separator:aaa63de2e07f86498cc680035833773b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff8c7fdc5b332dd1503655f6dae165d2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aff8c7fdc5b332dd1503655f6dae165d2"></a>
+property_ptr_t &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>osg_ptr</b> ()</td></tr>
+<tr class="separator:aff8c7fdc5b332dd1503655f6dae165d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7694c7fca2f9e23f36c36a7c2d9fd952"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7694c7fca2f9e23f36c36a7c2d9fd952"></a>
+const property_ptr_t &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>osg_ptr</b> () const </td></tr>
+<tr class="separator:a7694c7fca2f9e23f36c36a7c2d9fd952"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e9a4e09905ac2816af65407791fa841"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e9a4e09905ac2816af65407791fa841"></a>
+const element_t *&#160;</td><td class="memItemRight" valign="bottom"><b>data</b> () const </td></tr>
+<tr class="separator:a4e9a4e09905ac2816af65407791fa841"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7243f520e92997bc806db84654870525"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7243f520e92997bc806db84654870525"></a>
+element_t &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (size_t idx)</td></tr>
+<tr class="separator:a7243f520e92997bc806db84654870525"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2309c22e77d88da6db96cdbb0533b83"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad2309c22e77d88da6db96cdbb0533b83"></a>
+const element_t &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (size_t idx) const </td></tr>
+<tr class="separator:ad2309c22e77d88da6db96cdbb0533b83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_a00097"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a00097')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="a00097.html">OpenMesh::BaseProperty</a></td></tr>
+<tr class="memitem:ab40b442ea053998cbde8e9a4bb27c6a3 inherit pub_methods_a00097"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#ab40b442ea053998cbde8e9a4bb27c6a3">BaseProperty</a> (const std::string &amp;_name=&quot;&lt;unknown&gt;&quot;)</td></tr>
+<tr class="memdesc:ab40b442ea053998cbde8e9a4bb27c6a3 inherit pub_methods_a00097"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#ab40b442ea053998cbde8e9a4bb27c6a3">More...</a><br /></td></tr>
+<tr class="separator:ab40b442ea053998cbde8e9a4bb27c6a3 inherit pub_methods_a00097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9301f986c88572a20649f8743bfac6ac inherit pub_methods_a00097"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9301f986c88572a20649f8743bfac6ac"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a9301f986c88572a20649f8743bfac6ac">BaseProperty</a> (const <a class="el" href="a00097.html">BaseProperty</a> &amp;_rhs)</td></tr>
+<tr class="memdesc:a9301f986c88572a20649f8743bfac6ac inherit pub_methods_a00097"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor. <br /></td></tr>
+<tr class="separator:a9301f986c88572a20649f8743bfac6ac inherit pub_methods_a00097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3c0dbc83c42199de5722a5812c5a12b inherit pub_methods_a00097"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa3c0dbc83c42199de5722a5812c5a12b"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#aa3c0dbc83c42199de5722a5812c5a12b">~BaseProperty</a> ()</td></tr>
+<tr class="memdesc:aa3c0dbc83c42199de5722a5812c5a12b inherit pub_methods_a00097"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor. <br /></td></tr>
+<tr class="separator:aa3c0dbc83c42199de5722a5812c5a12b inherit pub_methods_a00097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac5035f4fa788d640f96d80ee082cb87 inherit pub_methods_a00097"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aac5035f4fa788d640f96d80ee082cb87"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#aac5035f4fa788d640f96d80ee082cb87">copy</a> (size_t _io, size_t _i1)=0</td></tr>
+<tr class="memdesc:aac5035f4fa788d640f96d80ee082cb87 inherit pub_methods_a00097"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy one element to another. <br /></td></tr>
+<tr class="separator:aac5035f4fa788d640f96d80ee082cb87 inherit pub_methods_a00097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0824dab1057df3baa04e25e13ac9ca9e inherit pub_methods_a00097"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0824dab1057df3baa04e25e13ac9ca9e"></a>
+const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a0824dab1057df3baa04e25e13ac9ca9e">name</a> () const </td></tr>
+<tr class="memdesc:a0824dab1057df3baa04e25e13ac9ca9e inherit pub_methods_a00097"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the name of the property. <br /></td></tr>
+<tr class="separator:a0824dab1057df3baa04e25e13ac9ca9e inherit pub_methods_a00097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8624c097041e1e57cc0b3d8ab6ab43ec inherit pub_methods_a00097"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8624c097041e1e57cc0b3d8ab6ab43ec"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>stats</b> (std::ostream &amp;_ostr) const </td></tr>
+<tr class="separator:a8624c097041e1e57cc0b3d8ab6ab43ec inherit pub_methods_a00097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ccadfed0436f3c25c574f3e151e7036 inherit pub_methods_a00097"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ccadfed0436f3c25c574f3e151e7036"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a0ccadfed0436f3c25c574f3e151e7036">persistent</a> (void) const </td></tr>
+<tr class="memdesc:a0ccadfed0436f3c25c574f3e151e7036 inherit pub_methods_a00097"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the persistent flag is enabled else false. <br /></td></tr>
+<tr class="separator:a0ccadfed0436f3c25c574f3e151e7036 inherit pub_methods_a00097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad31a816e407f15361c5027517e012cb4 inherit pub_methods_a00097"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad31a816e407f15361c5027517e012cb4"></a>
+virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#ad31a816e407f15361c5027517e012cb4">size_of</a> () const </td></tr>
+<tr class="memdesc:ad31a816e407f15361c5027517e012cb4 inherit pub_methods_a00097"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return size of property in bytes. <br /></td></tr>
+<tr class="separator:ad31a816e407f15361c5027517e012cb4 inherit pub_methods_a00097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99494b064f29f3f0b529fbe11c758269 inherit pub_methods_a00097"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a99494b064f29f3f0b529fbe11c758269">size_of</a> (size_t _n_elem) const </td></tr>
+<tr class="memdesc:a99494b064f29f3f0b529fbe11c758269 inherit pub_methods_a00097"><td class="mdescLeft">&#160;</td><td class="mdescRight">Estimated size of property if it has _n_elem elements.  <a href="#a99494b064f29f3f0b529fbe11c758269">More...</a><br /></td></tr>
+<tr class="separator:a99494b064f29f3f0b529fbe11c758269 inherit pub_methods_a00097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a6ca288c2e73f0aefcfdd6b2bd2c9b621"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6ca288c2e73f0aefcfdd6b2bd2c9b621"></a>
+property_ptr_t&#160;</td><td class="memItemRight" valign="bottom"><b>data_</b></td></tr>
+<tr class="separator:a6ca288c2e73f0aefcfdd6b2bd2c9b621"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_types_a00243"><td colspan="2" onclick="javascript:toggleInherit('pub_types_a00243')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="a00243.html">OpenMesh::PolyMeshT&lt; Kernel &gt;</a></td></tr>
-<tr class="memitem:aee8e212a032787407e4a543031840063 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aee8e212a032787407e4a543031840063"></a>
-typedef <a class="el" href="a00243.html">PolyMeshT</a>&lt; Kernel &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#aee8e212a032787407e4a543031840063">This</a></td></tr>
-<tr class="memdesc:aee8e212a032787407e4a543031840063 inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Self type. Used to specify iterators/circulators. <br /></td></tr>
-<tr class="separator:aee8e212a032787407e4a543031840063 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0fc18e13d70825938274e3faf7b55e01 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0fc18e13d70825938274e3faf7b55e01"></a>
-typedef Kernel::VertexHandle&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a0fc18e13d70825938274e3faf7b55e01">VertexHandle</a></td></tr>
-<tr class="memdesc:a0fc18e13d70825938274e3faf7b55e01 inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle for referencing the corresponding item. <br /></td></tr>
-<tr class="separator:a0fc18e13d70825938274e3faf7b55e01 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac364b18ba6ed17e4e6a6551787b2e2a3 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac364b18ba6ed17e4e6a6551787b2e2a3"></a>
-typedef Kernel::HalfedgeHandle&#160;</td><td class="memItemRight" valign="bottom"><b>HalfedgeHandle</b></td></tr>
-<tr class="separator:ac364b18ba6ed17e4e6a6551787b2e2a3 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e3309b66b4cb3bf22b6229f20375ef2 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1e3309b66b4cb3bf22b6229f20375ef2"></a>
-typedef Kernel::EdgeHandle&#160;</td><td class="memItemRight" valign="bottom"><b>EdgeHandle</b></td></tr>
-<tr class="separator:a1e3309b66b4cb3bf22b6229f20375ef2 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4c0e43573d85661542b22cb4f4a1d11 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab4c0e43573d85661542b22cb4f4a1d11"></a>
-typedef Kernel::FaceHandle&#160;</td><td class="memItemRight" valign="bottom"><b>FaceHandle</b></td></tr>
-<tr class="separator:ab4c0e43573d85661542b22cb4f4a1d11 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb18d53e36e53e024c8506cd3c961096 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afb18d53e36e53e024c8506cd3c961096"></a>
-typedef Kernel::VertexIter&#160;</td><td class="memItemRight" valign="bottom"><b>VertexIter</b></td></tr>
-<tr class="separator:afb18d53e36e53e024c8506cd3c961096 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae40d2dfe0d226e49d869481bbd40a911 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae40d2dfe0d226e49d869481bbd40a911"></a>
-typedef Kernel::HalfedgeIter&#160;</td><td class="memItemRight" valign="bottom"><b>HalfedgeIter</b></td></tr>
-<tr class="separator:ae40d2dfe0d226e49d869481bbd40a911 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5250dba0f527b19bfa665a288b5d63d inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac5250dba0f527b19bfa665a288b5d63d"></a>
-typedef Kernel::EdgeIter&#160;</td><td class="memItemRight" valign="bottom"><b>EdgeIter</b></td></tr>
-<tr class="separator:ac5250dba0f527b19bfa665a288b5d63d inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34402ff0bd674fbad2685df22eecde64 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a34402ff0bd674fbad2685df22eecde64"></a>
-typedef Kernel::FaceIter&#160;</td><td class="memItemRight" valign="bottom"><b>FaceIter</b></td></tr>
-<tr class="separator:a34402ff0bd674fbad2685df22eecde64 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbad7fb3cfb4bad77153b9a8530a402f inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acbad7fb3cfb4bad77153b9a8530a402f"></a>
-typedef Kernel::ConstVertexIter&#160;</td><td class="memItemRight" valign="bottom"><b>ConstVertexIter</b></td></tr>
-<tr class="separator:acbad7fb3cfb4bad77153b9a8530a402f inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85c57baa38e7e3d07bd7f3c7f194b354 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a85c57baa38e7e3d07bd7f3c7f194b354"></a>
-typedef Kernel::ConstHalfedgeIter&#160;</td><td class="memItemRight" valign="bottom"><b>ConstHalfedgeIter</b></td></tr>
-<tr class="separator:a85c57baa38e7e3d07bd7f3c7f194b354 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca72b40b26d4c76dfaec5e4191bdaa31 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aca72b40b26d4c76dfaec5e4191bdaa31"></a>
-typedef Kernel::ConstEdgeIter&#160;</td><td class="memItemRight" valign="bottom"><b>ConstEdgeIter</b></td></tr>
-<tr class="separator:aca72b40b26d4c76dfaec5e4191bdaa31 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a371650bb71152018ea1f3f570b465b inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0a371650bb71152018ea1f3f570b465b"></a>
-typedef Kernel::ConstFaceIter&#160;</td><td class="memItemRight" valign="bottom"><b>ConstFaceIter</b></td></tr>
-<tr class="separator:a0a371650bb71152018ea1f3f570b465b inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a15372f27edf521d8e9028e2abccae342 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a15372f27edf521d8e9028e2abccae342"></a>
-typedef Kernel::Scalar&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a15372f27edf521d8e9028e2abccae342">Scalar</a></td></tr>
-<tr class="memdesc:a15372f27edf521d8e9028e2abccae342 inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scalar type. <br /></td></tr>
-<tr class="separator:a15372f27edf521d8e9028e2abccae342 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed10fb4dfb536b53a5e20c8f2442eadf inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aed10fb4dfb536b53a5e20c8f2442eadf"></a>
-typedef Kernel::Point&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">Point</a></td></tr>
-<tr class="memdesc:aed10fb4dfb536b53a5e20c8f2442eadf inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Coordinate type. <br /></td></tr>
-<tr class="separator:aed10fb4dfb536b53a5e20c8f2442eadf inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3570fd132d1ac589b380485cf59c9e0b inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3570fd132d1ac589b380485cf59c9e0b"></a>
-typedef Kernel::Normal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a3570fd132d1ac589b380485cf59c9e0b">Normal</a></td></tr>
-<tr class="memdesc:a3570fd132d1ac589b380485cf59c9e0b inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normal type. <br /></td></tr>
-<tr class="separator:a3570fd132d1ac589b380485cf59c9e0b inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0d8129bf1a819c468c6edcb13b5203b inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af0d8129bf1a819c468c6edcb13b5203b"></a>
-typedef Kernel::Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#af0d8129bf1a819c468c6edcb13b5203b">Color</a></td></tr>
-<tr class="memdesc:af0d8129bf1a819c468c6edcb13b5203b inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Color type. <br /></td></tr>
-<tr class="separator:af0d8129bf1a819c468c6edcb13b5203b inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6526fbc3e7f3a1e98a5543b9563b021 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af6526fbc3e7f3a1e98a5543b9563b021"></a>
-typedef Kernel::TexCoord1D&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#af6526fbc3e7f3a1e98a5543b9563b021">TexCoord1D</a></td></tr>
-<tr class="memdesc:af6526fbc3e7f3a1e98a5543b9563b021 inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">TexCoord1D type. <br /></td></tr>
-<tr class="separator:af6526fbc3e7f3a1e98a5543b9563b021 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ae59536e97b43444c4f1622c645ebaf inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4ae59536e97b43444c4f1622c645ebaf"></a>
-typedef Kernel::TexCoord2D&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a4ae59536e97b43444c4f1622c645ebaf">TexCoord2D</a></td></tr>
-<tr class="memdesc:a4ae59536e97b43444c4f1622c645ebaf inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">TexCoord2D type. <br /></td></tr>
-<tr class="separator:a4ae59536e97b43444c4f1622c645ebaf inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ec24476d2513efe71ddd1255a2ca444 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ec24476d2513efe71ddd1255a2ca444"></a>
-typedef Kernel::TexCoord3D&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a5ec24476d2513efe71ddd1255a2ca444">TexCoord3D</a></td></tr>
-<tr class="memdesc:a5ec24476d2513efe71ddd1255a2ca444 inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">TexCoord3D type. <br /></td></tr>
-<tr class="separator:a5ec24476d2513efe71ddd1255a2ca444 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03e6fd1a2fc91d4144374fd28dfbecee inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a03e6fd1a2fc91d4144374fd28dfbecee"></a>
-typedef Kernel::Vertex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a03e6fd1a2fc91d4144374fd28dfbecee">Vertex</a></td></tr>
-<tr class="memdesc:a03e6fd1a2fc91d4144374fd28dfbecee inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vertex type. <br /></td></tr>
-<tr class="separator:a03e6fd1a2fc91d4144374fd28dfbecee inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a249b0c195a81eeab341f7f73089d157e inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a249b0c195a81eeab341f7f73089d157e"></a>
-typedef Kernel::Halfedge&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a249b0c195a81eeab341f7f73089d157e">Halfedge</a></td></tr>
-<tr class="memdesc:a249b0c195a81eeab341f7f73089d157e inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Halfedge type. <br /></td></tr>
-<tr class="separator:a249b0c195a81eeab341f7f73089d157e inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2ccdc42b7b25cf35915d3639fc461b2 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab2ccdc42b7b25cf35915d3639fc461b2"></a>
-typedef Kernel::Edge&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#ab2ccdc42b7b25cf35915d3639fc461b2">Edge</a></td></tr>
-<tr class="memdesc:ab2ccdc42b7b25cf35915d3639fc461b2 inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Edge type. <br /></td></tr>
-<tr class="separator:ab2ccdc42b7b25cf35915d3639fc461b2 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71e1e8eaabeb24eca04237931b4bea26 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a71e1e8eaabeb24eca04237931b4bea26"></a>
-typedef Kernel::Face&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a71e1e8eaabeb24eca04237931b4bea26">Face</a></td></tr>
-<tr class="memdesc:a71e1e8eaabeb24eca04237931b4bea26 inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Face type. <br /></td></tr>
-<tr class="separator:a71e1e8eaabeb24eca04237931b4bea26 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc7d422e2ce13141e8291f7d29f7ecef inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adc7d422e2ce13141e8291f7d29f7ecef"></a>
-typedef Kernel::VertexVertexIter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#adc7d422e2ce13141e8291f7d29f7ecef">VertexVertexIter</a></td></tr>
-<tr class="memdesc:adc7d422e2ce13141e8291f7d29f7ecef inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Circulator. <br /></td></tr>
-<tr class="separator:adc7d422e2ce13141e8291f7d29f7ecef inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6549eda743520c8a7aa3dfe6a37b2468 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6549eda743520c8a7aa3dfe6a37b2468"></a>
-typedef Kernel::VertexOHalfedgeIter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a6549eda743520c8a7aa3dfe6a37b2468">VertexOHalfedgeIter</a></td></tr>
-<tr class="memdesc:a6549eda743520c8a7aa3dfe6a37b2468 inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Circulator. <br /></td></tr>
-<tr class="separator:a6549eda743520c8a7aa3dfe6a37b2468 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a437621f3901a93d0ebf8cdceac8e2939 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a437621f3901a93d0ebf8cdceac8e2939"></a>
-typedef Kernel::VertexIHalfedgeIter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a437621f3901a93d0ebf8cdceac8e2939">VertexIHalfedgeIter</a></td></tr>
-<tr class="memdesc:a437621f3901a93d0ebf8cdceac8e2939 inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Circulator. <br /></td></tr>
-<tr class="separator:a437621f3901a93d0ebf8cdceac8e2939 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68dd0d2773f837cbfb525d7208dedde0 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68dd0d2773f837cbfb525d7208dedde0"></a>
-typedef Kernel::VertexEdgeIter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a68dd0d2773f837cbfb525d7208dedde0">VertexEdgeIter</a></td></tr>
-<tr class="memdesc:a68dd0d2773f837cbfb525d7208dedde0 inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Circulator. <br /></td></tr>
-<tr class="separator:a68dd0d2773f837cbfb525d7208dedde0 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ebe8b94ca30db3af44c809ab3ee7247 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ebe8b94ca30db3af44c809ab3ee7247"></a>
-typedef Kernel::VertexFaceIter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a1ebe8b94ca30db3af44c809ab3ee7247">VertexFaceIter</a></td></tr>
-<tr class="memdesc:a1ebe8b94ca30db3af44c809ab3ee7247 inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Circulator. <br /></td></tr>
-<tr class="separator:a1ebe8b94ca30db3af44c809ab3ee7247 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c65ec045ac0126b3ea7264cee26aa1b inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c65ec045ac0126b3ea7264cee26aa1b"></a>
-typedef Kernel::FaceVertexIter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a3c65ec045ac0126b3ea7264cee26aa1b">FaceVertexIter</a></td></tr>
-<tr class="memdesc:a3c65ec045ac0126b3ea7264cee26aa1b inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Circulator. <br /></td></tr>
-<tr class="separator:a3c65ec045ac0126b3ea7264cee26aa1b inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeca99c6cd952038e80b37c848035af73 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeca99c6cd952038e80b37c848035af73"></a>
-typedef Kernel::FaceHalfedgeIter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#aeca99c6cd952038e80b37c848035af73">FaceHalfedgeIter</a></td></tr>
-<tr class="memdesc:aeca99c6cd952038e80b37c848035af73 inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Circulator. <br /></td></tr>
-<tr class="separator:aeca99c6cd952038e80b37c848035af73 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04a30000943150f98db373a3317760af inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a04a30000943150f98db373a3317760af"></a>
-typedef Kernel::FaceEdgeIter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a04a30000943150f98db373a3317760af">FaceEdgeIter</a></td></tr>
-<tr class="memdesc:a04a30000943150f98db373a3317760af inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Circulator. <br /></td></tr>
-<tr class="separator:a04a30000943150f98db373a3317760af inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98618ca3fd3eec347bb5b02410a5e1e6 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a98618ca3fd3eec347bb5b02410a5e1e6"></a>
-typedef Kernel::FaceFaceIter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a98618ca3fd3eec347bb5b02410a5e1e6">FaceFaceIter</a></td></tr>
-<tr class="memdesc:a98618ca3fd3eec347bb5b02410a5e1e6 inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Circulator. <br /></td></tr>
-<tr class="separator:a98618ca3fd3eec347bb5b02410a5e1e6 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17a73f876343905c8b37b947e9152ac8 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a17a73f876343905c8b37b947e9152ac8"></a>
-typedef <br class="typebreak" />
-Kernel::ConstVertexVertexIter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a17a73f876343905c8b37b947e9152ac8">ConstVertexVertexIter</a></td></tr>
-<tr class="memdesc:a17a73f876343905c8b37b947e9152ac8 inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Circulator. <br /></td></tr>
-<tr class="separator:a17a73f876343905c8b37b947e9152ac8 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf4b52db4b0198a91a02c06003623bfb inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acf4b52db4b0198a91a02c06003623bfb"></a>
-typedef <br class="typebreak" />
-Kernel::ConstVertexOHalfedgeIter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#acf4b52db4b0198a91a02c06003623bfb">ConstVertexOHalfedgeIter</a></td></tr>
-<tr class="memdesc:acf4b52db4b0198a91a02c06003623bfb inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Circulator. <br /></td></tr>
-<tr class="separator:acf4b52db4b0198a91a02c06003623bfb inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7221db878118b37611454a13f1754a08 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7221db878118b37611454a13f1754a08"></a>
-typedef <br class="typebreak" />
-Kernel::ConstVertexIHalfedgeIter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a7221db878118b37611454a13f1754a08">ConstVertexIHalfedgeIter</a></td></tr>
-<tr class="memdesc:a7221db878118b37611454a13f1754a08 inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Circulator. <br /></td></tr>
-<tr class="separator:a7221db878118b37611454a13f1754a08 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ccd0ce4fff127b13eb80fafefda0d0a inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9ccd0ce4fff127b13eb80fafefda0d0a"></a>
-typedef Kernel::ConstVertexEdgeIter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a9ccd0ce4fff127b13eb80fafefda0d0a">ConstVertexEdgeIter</a></td></tr>
-<tr class="memdesc:a9ccd0ce4fff127b13eb80fafefda0d0a inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Circulator. <br /></td></tr>
-<tr class="separator:a9ccd0ce4fff127b13eb80fafefda0d0a inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61167f0a130e599b909cc8629a6dca2a inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a61167f0a130e599b909cc8629a6dca2a"></a>
-typedef Kernel::ConstVertexFaceIter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a61167f0a130e599b909cc8629a6dca2a">ConstVertexFaceIter</a></td></tr>
-<tr class="memdesc:a61167f0a130e599b909cc8629a6dca2a inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Circulator. <br /></td></tr>
-<tr class="separator:a61167f0a130e599b909cc8629a6dca2a inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23b20f8208bae0aa1b344cac48c1f635 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a23b20f8208bae0aa1b344cac48c1f635"></a>
-typedef Kernel::ConstFaceVertexIter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a23b20f8208bae0aa1b344cac48c1f635">ConstFaceVertexIter</a></td></tr>
-<tr class="memdesc:a23b20f8208bae0aa1b344cac48c1f635 inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Circulator. <br /></td></tr>
-<tr class="separator:a23b20f8208bae0aa1b344cac48c1f635 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b0729c26d7cf8f123c344a3b81d353c inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1b0729c26d7cf8f123c344a3b81d353c"></a>
-typedef <br class="typebreak" />
-Kernel::ConstFaceHalfedgeIter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a1b0729c26d7cf8f123c344a3b81d353c">ConstFaceHalfedgeIter</a></td></tr>
-<tr class="memdesc:a1b0729c26d7cf8f123c344a3b81d353c inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Circulator. <br /></td></tr>
-<tr class="separator:a1b0729c26d7cf8f123c344a3b81d353c inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e15960d27e6d40646260109f5910b5b inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5e15960d27e6d40646260109f5910b5b"></a>
-typedef Kernel::ConstFaceEdgeIter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a5e15960d27e6d40646260109f5910b5b">ConstFaceEdgeIter</a></td></tr>
-<tr class="memdesc:a5e15960d27e6d40646260109f5910b5b inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Circulator. <br /></td></tr>
-<tr class="separator:a5e15960d27e6d40646260109f5910b5b inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af081cbe692a0563c1ce08735f4b3491e inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af081cbe692a0563c1ce08735f4b3491e"></a>
-typedef Kernel::ConstFaceFaceIter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#af081cbe692a0563c1ce08735f4b3491e">ConstFaceFaceIter</a></td></tr>
-<tr class="memdesc:af081cbe692a0563c1ce08735f4b3491e inherit pub_types_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Circulator. <br /></td></tr>
-<tr class="separator:af081cbe692a0563c1ce08735f4b3491e inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d0ff00a35aa4b3ebfa554441def1334 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5d0ff00a35aa4b3ebfa554441def1334"></a>enum &#160;</td><td class="memItemRight" valign="bottom">{ <b>IsPolyMesh</b> = 1
- }</td></tr>
-<tr class="memdesc:a5d0ff00a35aa4b3ebfa554441def1334"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine whether this is a <a class="el" href="a00243.html" title="Base type for a polygonal mesh. ">PolyMeshT</a> or <a class="el" href="a00276.html" title="Base type for a triangle mesh. ">TriMeshT</a> ( This function does not check the per face vertex count! It only checks if the datatype is <a class="el" href="a00243.html" title="Base type for a polygonal mesh. ">PolyMeshT</a> or <a class="el" href="a00276.html" title="Base type for a triangle mesh. ">TriMeshT</a> ) <br /></td></tr>
-<tr class="separator:a5d0ff00a35aa4b3ebfa554441def1334 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab049a82d0fafc6b5e81936c8debc9952 inherit pub_types_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab049a82d0fafc6b5e81936c8debc9952"></a>enum &#160;</td><td class="memItemRight" valign="bottom">{ <b>IsTriMesh</b> = 0
- }</td></tr>
-<tr class="memdesc:ab049a82d0fafc6b5e81936c8debc9952"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine whether this is a <a class="el" href="a00243.html" title="Base type for a polygonal mesh. ">PolyMeshT</a> or <a class="el" href="a00276.html" title="Base type for a triangle mesh. ">TriMeshT</a> ( This function does not check the per face vertex count! It only checks if the datatype is <a class="el" href="a00243.html" title="Base type for a polygonal mesh. ">PolyMeshT</a> or <a class="el" href="a00276.html" title="Base type for a triangle mesh. ">TriMeshT</a> ) <br /></td></tr>
-<tr class="separator:ab049a82d0fafc6b5e81936c8debc9952 inherit pub_types_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_a00243"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a00243')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="a00243.html">OpenMesh::PolyMeshT&lt; Kernel &gt;</a></td></tr>
-<tr class="memitem:aee07d968ddfbb6376a7f7712ae1a73c4 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00243.html#a0fc18e13d70825938274e3faf7b55e01">VertexHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#aee07d968ddfbb6376a7f7712ae1a73c4">new_vertex</a> ()</td></tr>
-<tr class="memdesc:aee07d968ddfbb6376a7f7712ae1a73c4 inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uses default copy and assignment operator.  <a href="#aee07d968ddfbb6376a7f7712ae1a73c4">More...</a><br /></td></tr>
-<tr class="separator:aee07d968ddfbb6376a7f7712ae1a73c4 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77d36a90d4c207845cf1478aec56c283 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a77d36a90d4c207845cf1478aec56c283"></a>
-<a class="el" href="a00243.html#a0fc18e13d70825938274e3faf7b55e01">VertexHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><b>new_vertex</b> (const <a class="el" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">Point</a> &amp;_p)</td></tr>
-<tr class="separator:a77d36a90d4c207845cf1478aec56c283 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0577d7120881533e6e3af635382ba82 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac0577d7120881533e6e3af635382ba82"></a>
-<a class="el" href="a00243.html#a0fc18e13d70825938274e3faf7b55e01">VertexHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><b>add_vertex</b> (const <a class="el" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">Point</a> &amp;_p)</td></tr>
-<tr class="separator:ac0577d7120881533e6e3af635382ba82 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a090d5252328e5fbd7f10e2cc3576d2eb inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a090d5252328e5fbd7f10e2cc3576d2eb"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a090d5252328e5fbd7f10e2cc3576d2eb">calc_edge_vector</a> (EdgeHandle _eh, <a class="el" href="a00243.html#a3570fd132d1ac589b380485cf59c9e0b">Normal</a> &amp;_edge_vec) const </td></tr>
-<tr class="memdesc:a090d5252328e5fbd7f10e2cc3576d2eb inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the edge vector as the vector defined by the halfedge with id #0 (see below) <br /></td></tr>
-<tr class="separator:a090d5252328e5fbd7f10e2cc3576d2eb inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b45bfb6c89627b22a1ae33be996ec9f inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2b45bfb6c89627b22a1ae33be996ec9f"></a>
-<a class="el" href="a00243.html#a3570fd132d1ac589b380485cf59c9e0b">Normal</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a2b45bfb6c89627b22a1ae33be996ec9f">calc_edge_vector</a> (EdgeHandle _eh) const </td></tr>
-<tr class="memdesc:a2b45bfb6c89627b22a1ae33be996ec9f inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the edge vector as the vector defined by the halfedge with id #0 (see below) <br /></td></tr>
-<tr class="separator:a2b45bfb6c89627b22a1ae33be996ec9f inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ce28ba8fef4acb4e97c380be47ef240 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3ce28ba8fef4acb4e97c380be47ef240"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a3ce28ba8fef4acb4e97c380be47ef240">calc_edge_vector</a> (HalfedgeHandle _heh, <a class="el" href="a00243.html#a3570fd132d1ac589b380485cf59c9e0b">Normal</a> &amp;_edge_vec) const </td></tr>
-<tr class="memdesc:a3ce28ba8fef4acb4e97c380be47ef240 inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the edge vector as the difference of the the points defined by to_vertex_handle() and from_vertex_handle() <br /></td></tr>
-<tr class="separator:a3ce28ba8fef4acb4e97c380be47ef240 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af183231a6d5eb220370c017e40f3adb1 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af183231a6d5eb220370c017e40f3adb1"></a>
-<a class="el" href="a00243.html#a3570fd132d1ac589b380485cf59c9e0b">Normal</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#af183231a6d5eb220370c017e40f3adb1">calc_edge_vector</a> (HalfedgeHandle _heh) const </td></tr>
-<tr class="memdesc:af183231a6d5eb220370c017e40f3adb1 inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the edge vector as the difference of the the points defined by to_vertex_handle() and from_vertex_handle() <br /></td></tr>
-<tr class="separator:af183231a6d5eb220370c017e40f3adb1 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a822dab13832e6151dc6c83e88d82625d inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a822dab13832e6151dc6c83e88d82625d"></a>
-<a class="el" href="a00243.html#a15372f27edf521d8e9028e2abccae342">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calc_edge_length</b> (EdgeHandle _eh) const </td></tr>
-<tr class="separator:a822dab13832e6151dc6c83e88d82625d inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aece958e03921a6cf39045b8b1013e448 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aece958e03921a6cf39045b8b1013e448"></a>
-<a class="el" href="a00243.html#a15372f27edf521d8e9028e2abccae342">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#aece958e03921a6cf39045b8b1013e448">calc_edge_length</a> (HalfedgeHandle _heh) const </td></tr>
-<tr class="memdesc:aece958e03921a6cf39045b8b1013e448 inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the length of the edge _heh. <br /></td></tr>
-<tr class="separator:aece958e03921a6cf39045b8b1013e448 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a595150124f47261e85bed7daef94af9f inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a595150124f47261e85bed7daef94af9f"></a>
-<a class="el" href="a00243.html#a15372f27edf521d8e9028e2abccae342">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calc_edge_sqr_length</b> (EdgeHandle _eh) const </td></tr>
-<tr class="separator:a595150124f47261e85bed7daef94af9f inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0da8b1b2b463dabd292311c9b834f6a9 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0da8b1b2b463dabd292311c9b834f6a9"></a>
-<a class="el" href="a00243.html#a15372f27edf521d8e9028e2abccae342">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calc_edge_sqr_length</b> (HalfedgeHandle _heh) const </td></tr>
-<tr class="separator:a0da8b1b2b463dabd292311c9b834f6a9 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fb01f73d2eec4de5ccaf47fe22b01b1 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a1fb01f73d2eec4de5ccaf47fe22b01b1">calc_sector_vectors</a> (HalfedgeHandle _in_heh, <a class="el" href="a00243.html#a3570fd132d1ac589b380485cf59c9e0b">Normal</a> &amp;_vec0, <a class="el" href="a00243.html#a3570fd132d1ac589b380485cf59c9e0b">Normal</a> &amp;_vec1) const </td></tr>
-<tr class="memdesc:a1fb01f73d2eec4de5ccaf47fe22b01b1 inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">defines a consistent representation of a sector geometry: the halfedge _in_heh defines the sector orientation the vertex pointed by _in_heh defines the sector center _vec0 and _vec1 are resp.  <a href="#a1fb01f73d2eec4de5ccaf47fe22b01b1">More...</a><br /></td></tr>
-<tr class="separator:a1fb01f73d2eec4de5ccaf47fe22b01b1 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a458cb0e3630ed058b40df038ee65a611 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00243.html#a15372f27edf521d8e9028e2abccae342">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a458cb0e3630ed058b40df038ee65a611">calc_sector_angle</a> (HalfedgeHandle _in_heh) const </td></tr>
-<tr class="memdesc:a458cb0e3630ed058b40df038ee65a611 inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculates the sector angle.  <a href="#a458cb0e3630ed058b40df038ee65a611">More...</a><br /></td></tr>
-<tr class="separator:a458cb0e3630ed058b40df038ee65a611 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2996b1f2d1a63073b837e5ad438a1832 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2996b1f2d1a63073b837e5ad438a1832"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a2996b1f2d1a63073b837e5ad438a1832">calc_sector_normal</a> (HalfedgeHandle _in_heh, <a class="el" href="a00243.html#a3570fd132d1ac589b380485cf59c9e0b">Normal</a> &amp;_sector_normal) const </td></tr>
-<tr class="memdesc:a2996b1f2d1a63073b837e5ad438a1832 inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculates the normal (non-normalized) of the face sector defined by the angle &lt;(_in_heh,next_halfedge(_in_heh)) <br /></td></tr>
-<tr class="separator:a2996b1f2d1a63073b837e5ad438a1832 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab72758b5395b2b489f12f82d242531ce inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00243.html#a15372f27edf521d8e9028e2abccae342">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#ab72758b5395b2b489f12f82d242531ce">calc_sector_area</a> (HalfedgeHandle _in_heh) const </td></tr>
-<tr class="memdesc:ab72758b5395b2b489f12f82d242531ce inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculates the area of the face sector defined by the angle &lt;(_in_heh,next_halfedge(_in_heh)) NOTE: special cases (e.g.  <a href="#ab72758b5395b2b489f12f82d242531ce">More...</a><br /></td></tr>
-<tr class="separator:ab72758b5395b2b489f12f82d242531ce inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49dd0f24137854f97530779c58f1a964 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00243.html#a15372f27edf521d8e9028e2abccae342">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a49dd0f24137854f97530779c58f1a964">calc_dihedral_angle_fast</a> (HalfedgeHandle _heh) const </td></tr>
-<tr class="memdesc:a49dd0f24137854f97530779c58f1a964 inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculates the dihedral angle on the halfedge _heh  <a href="#a49dd0f24137854f97530779c58f1a964">More...</a><br /></td></tr>
-<tr class="separator:a49dd0f24137854f97530779c58f1a964 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab02b7b6311a48b3b1dca15ca33bf55af inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00243.html#a15372f27edf521d8e9028e2abccae342">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#ab02b7b6311a48b3b1dca15ca33bf55af">calc_dihedral_angle_fast</a> (EdgeHandle _eh) const </td></tr>
-<tr class="memdesc:ab02b7b6311a48b3b1dca15ca33bf55af inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculates the dihedral angle on the edge _eh  <a href="#ab02b7b6311a48b3b1dca15ca33bf55af">More...</a><br /></td></tr>
-<tr class="separator:ab02b7b6311a48b3b1dca15ca33bf55af inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a410f38155ec12c4409579f8346b4009c inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a410f38155ec12c4409579f8346b4009c"></a>
-<a class="el" href="a00243.html#a15372f27edf521d8e9028e2abccae342">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calc_dihedral_angle</b> (HalfedgeHandle _heh) const </td></tr>
-<tr class="separator:a410f38155ec12c4409579f8346b4009c inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c8076b4547614001d7f49960f8dd1ed inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0c8076b4547614001d7f49960f8dd1ed"></a>
-<a class="el" href="a00243.html#a15372f27edf521d8e9028e2abccae342">Scalar</a>&#160;</td><td class="memItemRight" valign="bottom"><b>calc_dihedral_angle</b> (EdgeHandle _eh) const </td></tr>
-<tr class="separator:a0c8076b4547614001d7f49960f8dd1ed inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a52366a97b3c87ab3473c476f221e22 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5a52366a97b3c87ab3473c476f221e22"></a>
-unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a5a52366a97b3c87ab3473c476f221e22">find_feature_edges</a> (<a class="el" href="a00243.html#a15372f27edf521d8e9028e2abccae342">Scalar</a> _angle_tresh=OpenMesh::deg_to_rad(44.0))</td></tr>
-<tr class="memdesc:a5a52366a97b3c87ab3473c476f221e22 inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">tags an edge as a feature if its dihedral angle is larger than _angle_tresh returns the number of the found feature edges, requires edge_status property <br /></td></tr>
-<tr class="separator:a5a52366a97b3c87ab3473c476f221e22 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0bd67ac6c4c3fa8707191dcf28b7649 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af0bd67ac6c4c3fa8707191dcf28b7649"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#af0bd67ac6c4c3fa8707191dcf28b7649">split</a> (FaceHandle _fh, const <a class="el" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">Point</a> &amp;_p)</td></tr>
-<tr class="memdesc:af0bd67ac6c4c3fa8707191dcf28b7649 inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Face split (= 1-to-n split) <br /></td></tr>
-<tr class="separator:af0bd67ac6c4c3fa8707191dcf28b7649 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a48712f39ad55c72ab48bf1127b6113bf inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a48712f39ad55c72ab48bf1127b6113bf"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>split</b> (FaceHandle _fh, <a class="el" href="a00243.html#a0fc18e13d70825938274e3faf7b55e01">VertexHandle</a> _vh)</td></tr>
-<tr class="separator:a48712f39ad55c72ab48bf1127b6113bf inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac198e4c43d5baf73b85557eaa48cc722 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac198e4c43d5baf73b85557eaa48cc722"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>split</b> (EdgeHandle _eh, const <a class="el" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">Point</a> &amp;_p)</td></tr>
-<tr class="separator:ac198e4c43d5baf73b85557eaa48cc722 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf9763c2328f9c70113da70f8fdc60c4 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adf9763c2328f9c70113da70f8fdc60c4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>split</b> (EdgeHandle _eh, <a class="el" href="a00243.html#a0fc18e13d70825938274e3faf7b55e01">VertexHandle</a> _vh)</td></tr>
-<tr class="separator:adf9763c2328f9c70113da70f8fdc60c4 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a601f21014e50bd5a2243b0e4849c9c14 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a601f21014e50bd5a2243b0e4849c9c14">update_normals</a> ()</td></tr>
-<tr class="memdesc:a601f21014e50bd5a2243b0e4849c9c14 inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute normals for all primitives.  <a href="#a601f21014e50bd5a2243b0e4849c9c14">More...</a><br /></td></tr>
-<tr class="separator:a601f21014e50bd5a2243b0e4849c9c14 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7b40ea47b87d63d3f7a4a448b2a5a8d inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab7b40ea47b87d63d3f7a4a448b2a5a8d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#ab7b40ea47b87d63d3f7a4a448b2a5a8d">update_normal</a> (FaceHandle _fh)</td></tr>
-<tr class="memdesc:ab7b40ea47b87d63d3f7a4a448b2a5a8d inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update normal for face _fh. <br /></td></tr>
-<tr class="separator:ab7b40ea47b87d63d3f7a4a448b2a5a8d inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5677ec057717fece1bc3c7abbf93cbdf inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a5677ec057717fece1bc3c7abbf93cbdf">update_face_normals</a> ()</td></tr>
-<tr class="memdesc:a5677ec057717fece1bc3c7abbf93cbdf inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update normal vectors for all faces.  <a href="#a5677ec057717fece1bc3c7abbf93cbdf">More...</a><br /></td></tr>
-<tr class="separator:a5677ec057717fece1bc3c7abbf93cbdf inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad3b0a3001c7e44714e16442b78583af inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="a00243.html#a3570fd132d1ac589b380485cf59c9e0b">Normal</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#aad3b0a3001c7e44714e16442b78583af">calc_face_normal</a> (FaceHandle _fh) const </td></tr>
-<tr class="memdesc:aad3b0a3001c7e44714e16442b78583af inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate normal vector for face _fh.  <a href="#aad3b0a3001c7e44714e16442b78583af">More...</a><br /></td></tr>
-<tr class="separator:aad3b0a3001c7e44714e16442b78583af inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2785fb696363e3b4a65df8319f06dd6 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00243.html#a3570fd132d1ac589b380485cf59c9e0b">Normal</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#af2785fb696363e3b4a65df8319f06dd6">calc_face_normal</a> (const <a class="el" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">Point</a> &amp;_p0, const <a class="el" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">Point</a> &amp;_p1, const <a class="el" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">Point</a> &amp;_p2) const </td></tr>
-<tr class="memdesc:af2785fb696363e3b4a65df8319f06dd6 inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate normal vector for face (_p0, _p1, _p2).  <a href="#af2785fb696363e3b4a65df8319f06dd6">More...</a><br /></td></tr>
-<tr class="separator:af2785fb696363e3b4a65df8319f06dd6 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d493c0b39c20eef9e169bce81e243dc inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4d493c0b39c20eef9e169bce81e243dc"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a4d493c0b39c20eef9e169bce81e243dc">calc_face_centroid</a> (FaceHandle _fh, <a class="el" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">Point</a> &amp;_pt) const </td></tr>
-<tr class="memdesc:a4d493c0b39c20eef9e169bce81e243dc inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculates the average of the vertices defining _fh <br /></td></tr>
-<tr class="separator:a4d493c0b39c20eef9e169bce81e243dc inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9fc738c69147f4fa18cba94cd0d84523 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9fc738c69147f4fa18cba94cd0d84523"></a>
-<a class="el" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">Point</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a9fc738c69147f4fa18cba94cd0d84523">calc_face_centroid</a> (FaceHandle _fh) const </td></tr>
-<tr class="memdesc:a9fc738c69147f4fa18cba94cd0d84523 inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes and returns the average of the vertices defining _gh. <br /></td></tr>
-<tr class="separator:a9fc738c69147f4fa18cba94cd0d84523 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac98934e64388f212e03a66b39d0ee137 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac98934e64388f212e03a66b39d0ee137"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#ac98934e64388f212e03a66b39d0ee137">update_normal</a> (HalfedgeHandle _heh, const double _feature_angle=0.8)</td></tr>
-<tr class="memdesc:ac98934e64388f212e03a66b39d0ee137 inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update normal for halfedge _heh. <br /></td></tr>
-<tr class="separator:ac98934e64388f212e03a66b39d0ee137 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58045f9fafc6239077c747afdd8f852d inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a58045f9fafc6239077c747afdd8f852d">update_halfedge_normals</a> (const double _feature_angle=0.8)</td></tr>
-<tr class="memdesc:a58045f9fafc6239077c747afdd8f852d inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update normal vectors for all halfedges.  <a href="#a58045f9fafc6239077c747afdd8f852d">More...</a><br /></td></tr>
-<tr class="separator:a58045f9fafc6239077c747afdd8f852d inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c1231e5c26af1cdec5b0745b6727d4b inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="a00243.html#a3570fd132d1ac589b380485cf59c9e0b">Normal</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a9c1231e5c26af1cdec5b0745b6727d4b">calc_halfedge_normal</a> (HalfedgeHandle _heh, const double _feature_angle=0.8) const </td></tr>
-<tr class="memdesc:a9c1231e5c26af1cdec5b0745b6727d4b inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate halfedge normal for one specific halfedge.  <a href="#a9c1231e5c26af1cdec5b0745b6727d4b">More...</a><br /></td></tr>
-<tr class="separator:a9c1231e5c26af1cdec5b0745b6727d4b inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f6f5dd7a243ce8b34233361f17131ff inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a2f6f5dd7a243ce8b34233361f17131ff">is_estimated_feature_edge</a> (HalfedgeHandle _heh, const double _feature_angle) const </td></tr>
-<tr class="memdesc:a2f6f5dd7a243ce8b34233361f17131ff inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">identifies feature edges w.r.t.  <a href="#a2f6f5dd7a243ce8b34233361f17131ff">More...</a><br /></td></tr>
-<tr class="separator:a2f6f5dd7a243ce8b34233361f17131ff inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f33200ba959d2d68e62d0cdf0afe322 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8f33200ba959d2d68e62d0cdf0afe322"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a8f33200ba959d2d68e62d0cdf0afe322">update_normal</a> (<a class="el" href="a00243.html#a0fc18e13d70825938274e3faf7b55e01">VertexHandle</a> _vh)</td></tr>
-<tr class="memdesc:a8f33200ba959d2d68e62d0cdf0afe322 inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update normal for vertex _vh. <br /></td></tr>
-<tr class="separator:a8f33200ba959d2d68e62d0cdf0afe322 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbf60ccc42cb484ba2911bda8277551c inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#acbf60ccc42cb484ba2911bda8277551c">update_vertex_normals</a> ()</td></tr>
-<tr class="memdesc:acbf60ccc42cb484ba2911bda8277551c inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update normal vectors for all vertices.  <a href="#acbf60ccc42cb484ba2911bda8277551c">More...</a><br /></td></tr>
-<tr class="separator:acbf60ccc42cb484ba2911bda8277551c inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05f9cf93cfc2d00e9060ee04aba64cde inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00243.html#a3570fd132d1ac589b380485cf59c9e0b">Normal</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a05f9cf93cfc2d00e9060ee04aba64cde">calc_vertex_normal</a> (<a class="el" href="a00243.html#a0fc18e13d70825938274e3faf7b55e01">VertexHandle</a> _vh) const </td></tr>
-<tr class="memdesc:a05f9cf93cfc2d00e9060ee04aba64cde inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate vertex normal for one specific vertex.  <a href="#a05f9cf93cfc2d00e9060ee04aba64cde">More...</a><br /></td></tr>
-<tr class="separator:a05f9cf93cfc2d00e9060ee04aba64cde inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb4f197611a4ceba81e7262ccb3e57d8 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#adb4f197611a4ceba81e7262ccb3e57d8">calc_vertex_normal_fast</a> (<a class="el" href="a00243.html#a0fc18e13d70825938274e3faf7b55e01">VertexHandle</a> _vh, <a class="el" href="a00243.html#a3570fd132d1ac589b380485cf59c9e0b">Normal</a> &amp;_n) const </td></tr>
-<tr class="memdesc:adb4f197611a4ceba81e7262ccb3e57d8 inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Different methods for calculation of the normal at _vh:  <a href="#adb4f197611a4ceba81e7262ccb3e57d8">More...</a><br /></td></tr>
-<tr class="separator:adb4f197611a4ceba81e7262ccb3e57d8 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a268f9ebdf96e451c2cbf28fe252b8eee inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a268f9ebdf96e451c2cbf28fe252b8eee">calc_vertex_normal_correct</a> (<a class="el" href="a00243.html#a0fc18e13d70825938274e3faf7b55e01">VertexHandle</a> _vh, <a class="el" href="a00243.html#a3570fd132d1ac589b380485cf59c9e0b">Normal</a> &amp;_n) const </td></tr>
-<tr class="memdesc:a268f9ebdf96e451c2cbf28fe252b8eee inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute normals for all primitives.  <a href="#a268f9ebdf96e451c2cbf28fe252b8eee">More...</a><br /></td></tr>
-<tr class="separator:a268f9ebdf96e451c2cbf28fe252b8eee inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e35bd2564bb83b080dafea72bc99e86 inherit pub_methods_a00243"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a1e35bd2564bb83b080dafea72bc99e86">calc_vertex_normal_loop</a> (<a class="el" href="a00243.html#a0fc18e13d70825938274e3faf7b55e01">VertexHandle</a> _vh, <a class="el" href="a00243.html#a3570fd132d1ac589b380485cf59c9e0b">Normal</a> &amp;_n) const </td></tr>
-<tr class="memdesc:a1e35bd2564bb83b080dafea72bc99e86 inherit pub_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute normals for all primitives.  <a href="#a1e35bd2564bb83b080dafea72bc99e86">More...</a><br /></td></tr>
-<tr class="separator:a1e35bd2564bb83b080dafea72bc99e86 inherit pub_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_static_methods_a00243"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_a00243')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="a00243.html">OpenMesh::PolyMeshT&lt; Kernel &gt;</a></td></tr>
-<tr class="memitem:a4ebdfb213024282b74f376a264a9b92c inherit pub_static_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4ebdfb213024282b74f376a264a9b92c"></a>
-static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#a4ebdfb213024282b74f376a264a9b92c">is_polymesh</a> ()</td></tr>
-<tr class="memdesc:a4ebdfb213024282b74f376a264a9b92c inherit pub_static_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine whether this is a <a class="el" href="a00243.html" title="Base type for a polygonal mesh. ">PolyMeshT</a> or <a class="el" href="a00276.html" title="Base type for a triangle mesh. ">TriMeshT</a> ( This function does not check the per face vertex count! It only checks if the datatype is <a class="el" href="a00243.html" title="Base type for a polygonal mesh. ">PolyMeshT</a> or <a class="el" href="a00276.html" title="Base type for a triangle mesh. ">TriMeshT</a> ) <br /></td></tr>
-<tr class="separator:a4ebdfb213024282b74f376a264a9b92c inherit pub_static_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad7b1074053a5595bb546047a21b8790a inherit pub_static_methods_a00243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad7b1074053a5595bb546047a21b8790a"></a>
-static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00243.html#ad7b1074053a5595bb546047a21b8790a">is_trimesh</a> ()</td></tr>
-<tr class="memdesc:ad7b1074053a5595bb546047a21b8790a inherit pub_static_methods_a00243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine whether this is a <a class="el" href="a00243.html" title="Base type for a polygonal mesh. ">PolyMeshT</a> or <a class="el" href="a00276.html" title="Base type for a triangle mesh. ">TriMeshT</a> ( This function does not check the per face vertex count! It only checks if the datatype is <a class="el" href="a00243.html" title="Base type for a polygonal mesh. ">PolyMeshT</a> or <a class="el" href="a00276.html" title="Base type for a triangle mesh. ">TriMeshT</a> ) <br /></td></tr>
-<tr class="separator:ad7b1074053a5595bb546047a21b8790a inherit pub_static_methods_a00243"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_static_attribs_a00097"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_a00097')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="a00097.html">OpenMesh::BaseProperty</a></td></tr>
+<tr class="memitem:a3dbccc1d0ac8f9a0ba27c46f2fe58414 inherit pub_static_attribs_a00097"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3dbccc1d0ac8f9a0ba27c46f2fe58414"></a>
+static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a3dbccc1d0ac8f9a0ba27c46f2fe58414">UnknownSize</a> = size_t(-1)</td></tr>
+<tr class="memdesc:a3dbccc1d0ac8f9a0ba27c46f2fe58414 inherit pub_static_attribs_a00097"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates an error when a size is returned by a member. <br /></td></tr>
+<tr class="separator:a3dbccc1d0ac8f9a0ba27c46f2fe58414 inherit pub_static_attribs_a00097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_a00097"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a00097')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="a00097.html">OpenMesh::BaseProperty</a></td></tr>
+<tr class="memitem:ace9460aa7a6d1b044661a25dea831259 inherit pro_methods_a00097"><td class="memTemplParams" colspan="2"><a class="anchor" id="ace9460aa7a6d1b044661a25dea831259"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ace9460aa7a6d1b044661a25dea831259 inherit pro_methods_a00097"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>check_and_set_persistent</b> (bool _yn)</td></tr>
+<tr class="separator:ace9460aa7a6d1b044661a25dea831259 inherit pro_methods_a00097"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;class Traits = DefaultTraits&gt;<br />
-class OpenMesh::PolyMesh_ArrayKernelT&lt; Traits &gt;</h3>
+<div class="textblock"><h3>template&lt;typename GeoProperty&gt;<br />
+class OpenMesh::Kernel_OSG::oPropertyT&lt; GeoProperty &gt;</h3>
 
-<p>Polygonal mesh based on the <a class="el" href="a00082.html" title="Mesh kernel using arrays for mesh item storage. ">ArrayKernel</a>. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="a00243.html" title="Base type for a polygonal mesh. ">OpenMesh::PolyMeshT</a> </dd>
-<dd>
-<a class="el" href="a00082.html" title="Mesh kernel using arrays for mesh item storage. ">OpenMesh::ArrayKernel</a> </dd></dl>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
-<li>OpenMesh/Core/Mesh/<a class="el" href="a00492_source.html">PolyMesh_ArrayKernelT.hh</a></li>
+<p>Property adaptor for OpenSG GeoProperties. </p>
+<p>This class bridges the interfaces of OpenMesh properties and OpenSG GeoProperties. The PropertyKernelT uses these adaptors to add all necessary property functions to the kernel, while the <a class="el" href="a00086.html" title="This class adds the standard properties to the mesh type. ">AttribKernelT</a> extends the kernel with the standard properites. Finally the <a class="el" href="a00085.html" title="Mesh kernel using arrays for mesh item storage. ">ArrayKernelT</a> completes the kernel build with a specialized version of the garbage collections since the GeoIndices require special handling.</p>
+<dl class="section attention"><dt>Attention</dt><dd>Data will be shared with a geometry core when linking a mesh with a OpenSG geometry node using <a class="el" href="a00739.html#a16b8b29bbad427ea962a06fc04f5eb7a" title="Bind a OpenSG geometry to a mesh. ">Kernel_OSG::bind</a>. </dd></dl>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="af263bcb96eb989660cd802eaf93cd028"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename GeoProperty&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual size_t <a class="el" href="a00242.html">OpenMesh::Kernel_OSG::oPropertyT</a>&lt; GeoProperty &gt;::restore </td>
+          <td>(</td>
+          <td class="paramtype">std::istream &amp;&#160;</td>
+          <td class="paramname"><em>_istr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_swap</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Restore self from a binary block. </p>
+<p>Uses <a class="el" href="a00242.html#a76d932e13622eb8a87cfc13058538b53" title="Reserve memory for n elements. ">reserve()</a> to set the size of self before restoring. </p>
+
+<p>Implements <a class="el" href="a00097.html#a0eb66e2547283ca989179d508fbbed87">OpenMesh::BaseProperty</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac0e7839eeeba0528390ccbe9315dd153"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename GeoProperty&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="a00242.html">OpenMesh::Kernel_OSG::oPropertyT</a>&lt; GeoProperty &gt;::set_persistent </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_yn</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enable or disable persistency. </p>
+<p>Self must be a named property to enable persistency. </p>
+
+<p>Implements <a class="el" href="a00097.html#aeac2109212f8489104137a03ffee3962">OpenMesh::BaseProperty</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>OpenMesh/Tools/Kernel_OSG/<a class="el" href="a00574_source.html">PropertyT.hh</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -467,7 +364,6 @@ class OpenMesh::PolyMesh_ArrayKernelT&lt; Traits &gt;</h3>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

@@ -1,22 +1,13 @@
 var a00151 =
 [
-    [ "ITraits", "a00191.html", null ],
-    [ "Color", "a00151.html#a16a70086a44d5112ec2690d82bbead19", null ],
-    [ "EdgeData", "a00151.html#a295e370c8836ad1cae9df4e4080ddbf7", null ],
-    [ "FaceData", "a00151.html#a2ffcd509c110563df518f3362274aa50", null ],
-    [ "HalfedgeData", "a00151.html#a56743f5782252db0e26b6162530e5990", null ],
-    [ "Normal", "a00151.html#a52d9fa9844f3fe26ffb7bb7c8f67ee04", null ],
-    [ "Point", "a00151.html#ad2609e867f708b2ea05bcb4d1d14e88e", null ],
-    [ "Scalar", "a00151.html#ae6008daf75f029dfc8246dd10018284b", null ],
-    [ "TexCoord1D", "a00151.html#a8e7f8f9a80ffb877c4108fb5ad534dff", null ],
-    [ "TexCoord2D", "a00151.html#a0076cd5f52ed0a7b00180e9a5f09e5ff", null ],
-    [ "TexCoord3D", "a00151.html#a89ef75dd6ff40d948a1c4caf8257b7cc", null ],
-    [ "TextureIndex", "a00151.html#a4c5c922d3402bdc5c19f10b612505c0e", null ],
-    [ "VertexData", "a00151.html#af42bd72d675cb5f7720b753911f72995", null ],
-    [ "Attribs", "a00151.html#a0e3c143655378fbb47b40a8856e77ce7", [
-      [ "VAttribs", "a00151.html#a0e3c143655378fbb47b40a8856e77ce7aa37e83e8d6ea9ddf5445f3b61ca23b71", null ],
-      [ "HAttribs", "a00151.html#a0e3c143655378fbb47b40a8856e77ce7a23c2cc6950dbebe6371e6e86845ddb4b", null ],
-      [ "EAttribs", "a00151.html#a0e3c143655378fbb47b40a8856e77ce7a032c7bd5cb24fd7538a129dba7d96fd8", null ],
-      [ "FAttribs", "a00151.html#a0e3c143655378fbb47b40a8856e77ce7a4903d2facde6418b7ff79cf9e07c6d4a", null ]
-    ] ]
+    [ "final", "a00151.html#ab003fede3ae653c274454ca3cd92041a", null ],
+    [ "inc_state", "a00151.html#a2505811c8e2c0082400da75c7c24da82", null ],
+    [ "position", "a00151.html#a762f33cf0c91df7996f732b58c95c26c", null ],
+    [ "red_halfedge", "a00151.html#a0176b783646e3c36ff785c40375ae2e6", null ],
+    [ "set_final", "a00151.html#ac4ac9944aeddb4fa2a828e67b75e5969", null ],
+    [ "set_not_final", "a00151.html#a5c6dda8d1218a740c8a8c1eabfb6a509", null ],
+    [ "set_position", "a00151.html#a104e5e9a6a014850d4727a3625851206", null ],
+    [ "set_red_halfedge", "a00151.html#adf1fd0736c853bc83597a264c0cd9d3e", null ],
+    [ "set_state", "a00151.html#a105b84e1cab336963664a98d5d1aeae5", null ],
+    [ "state", "a00151.html#a41fcc084e5e1a54f25bd932ca8954777", null ]
 ];

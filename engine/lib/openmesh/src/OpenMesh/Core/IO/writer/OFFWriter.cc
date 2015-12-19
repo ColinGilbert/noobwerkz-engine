@@ -41,23 +41,21 @@
 
 /*===========================================================================*\
  *                                                                           *
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 15:07:46 +0200 (Di, 28 Apr 2015) $                   *
+ *   $Revision$                                                         *
+ *   $Date$                   *
  *                                                                           *
 \*===========================================================================*/
 
 
 //== INCLUDES =================================================================
 
-
+#include <fstream>
 #include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/System/omstream.hh>
 #include <OpenMesh/Core/Utils/Endian.hh>
 #include <OpenMesh/Core/IO/IOManager.hh>
 #include <OpenMesh/Core/IO/BinaryHelper.hh>
 #include <OpenMesh/Core/IO/writer/OFFWriter.hh>
-
-#include <OpenMesh/Core/IO/SR_store.hh>
 
 //=== NAMESPACES ==============================================================
 
@@ -87,47 +85,10 @@ bool
 _OFFWriter_::
 write(const std::string& _filename, BaseExporter& _be, Options _opt, std::streamsize _precision) const
 {
-  // check exporter features
-  if ( !check( _be, _opt ) )
-    return false;
+  std::ofstream out(_filename.c_str(), (_opt.check(Options::Binary) ? std::ios_base::binary | std::ios_base::out
+                                                           : std::ios_base::out) );
 
-
-  // check writer features
-  if ( _opt.check(Options::FaceNormal) ) // not supported by format
-    return false;
-
-  // open file
-  std::fstream out(_filename.c_str(), (_opt.check(Options::Binary) ? std::ios_base::binary | std::ios_base::out
-                                                         : std::ios_base::out) );
-  if (!out)
-  {
-    omerr() << "[OFFWriter] : cannot open file "
-	  << _filename
-	  << std::endl;
-    return false;
-  }
-
-  // write header line
-  if (_opt.check(Options::VertexTexCoord)) out << "ST";
-  if (_opt.check(Options::VertexColor) || _opt.check(Options::FaceColor))    out << "C";
-  if (_opt.check(Options::VertexNormal))   out << "N";
-  out << "OFF";
-  if (_opt.check(Options::Binary)) out << " BINARY";
-  out << "\n";
-
-
-  if (!_opt.check(Options::Binary))
-    out.precision(_precision);
-
-  // write to file
-  bool result = (_opt.check(Options::Binary) ?
-		 write_binary(out, _be, _opt) :
-		 write_ascii(out, _be, _opt));
-
-
-  // return result
-  out.close();
-  return result;
+  return write(out, _be, _opt, _precision);
 }
 
 //-----------------------------------------------------------------------------

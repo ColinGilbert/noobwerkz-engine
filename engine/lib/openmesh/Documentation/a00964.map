@@ -1,0 +1,12 @@
+<map id="OpenMesh::DefaultTraits" name="OpenMesh::DefaultTraits">
+<area shape="rect" id="node2" href="$a00083.html" title="AnalyzerTraits" alt="" coords="271,5,378,32"/>
+<area shape="rect" id="node3" href="$a00126.html" title="CustomTraits" alt="" coords="274,56,375,83"/>
+<area shape="rect" id="node4" href="$a00127.html" title="CustomTraitsVec2i" alt="" coords="257,107,392,133"/>
+<area shape="rect" id="node5" href="$a00232.html" title="MyTraits" alt="" coords="288,157,361,184"/>
+<area shape="rect" id="node6" href="$a00278.html" title="Base class for all mesh traits using the OSGArrayKernelT. " alt="" coords="241,209,408,250"/>
+<area shape="rect" id="node7" href="$a00213.html" title="OpenMesh::Python::MeshTraits" alt="" coords="221,275,428,301"/>
+<area shape="rect" id="node8" href="$a00118.html" title="Adaptive Composite Subdivision framework. " alt="" coords="232,326,417,367"/>
+<area shape="rect" id="node9" href="$a00277.html" title="OpenMesh::Subdivider\l::Adaptive::Traits" alt="" coords="247,391,402,433"/>
+<area shape="rect" id="node10" href="$a00119.html" title="Uniform Composite Subdivision framework. " alt="" coords="235,457,415,498"/>
+<area shape="rect" id="node11" href="$a00212.html" title="Mesh traits for View Dependent Progressive Meshes. " alt="" coords="222,523,427,549"/>
+</map>

@@ -1,16 +1,18 @@
 var a00218 =
 [
-    [ "mesh_t", "a00218.html#a4c2bd18d13af40e004814e66e2e83f21", null ],
-    [ "parent_t", "a00218.html#a32cac0953e9ccfdab3825e8fa9710b8b", null ],
-    [ "real_t", "a00218.html#ae853054b768347ead3c3a239cbd99bc5", null ],
-    [ "weight_t", "a00218.html#a42b598e7c4f594fa60eae79b75896ddd", null ],
-    [ "weights_t", "a00218.html#a58bfb9902c057b9691dc3329391b2cc2", null ],
-    [ "ModifiedButterflyT", "a00218.html#a18defcc08980d311fe53fbb57b1c63ee", null ],
-    [ "ModifiedButterflyT", "a00218.html#a76aa04dd324557bad4acf1f8610cb142", null ],
-    [ "~ModifiedButterflyT", "a00218.html#a95fbb2406cbeb58f30780a92af32760a", null ],
-    [ "cleanup", "a00218.html#ab4ad979e5bdaf16dab2f84063071857d", null ],
-    [ "init_weights", "a00218.html#a81b2612d667f5e1e4baa6678f6981b0d", null ],
-    [ "name", "a00218.html#a853805f6974853e9afe4159c56c3f094", null ],
-    [ "prepare", "a00218.html#a5cb2f2cf637a0c07a7fab9a2fcedeb5c", null ],
-    [ "subdivide", "a00218.html#a8268bf3fb5ddd8a05fc1f3d128bee933", null ]
+    [ "Base", "a00218.html#ac37ddd719bc57f990b9a3748626b1121", null ],
+    [ "BaseModQ", "a00218.html#aa5a90b672232c5bb8efe086f0c42e1c7", null ],
+    [ "CollapseInfo", "a00218.html#a874de872cffd7fd61e0eab73de49626e", null ],
+    [ "Handle", "a00218.html#a4fbcd6d8549acfe9611b53d6bae22fb4", null ],
+    [ "level_t", "a00218.html#acfbcd130077fac4aa81b7c75f0e39e61", null ],
+    [ "Mesh", "a00218.html#ab568ca80fd223c6cce21b6bc9da561ae", null ],
+    [ "Self", "a00218.html#a496b6470a53f9c2991d96e762d4e8c9b", null ],
+    [ "ModBalancerT", "a00218.html#a35c84643ccb29982bd43ef790179be91", null ],
+    [ "~ModBalancerT", "a00218.html#a21611b06088681264380f678518666f7", null ],
+    [ "bits_for_roots", "a00218.html#a4265e1100e35cff41baaeb0f647848ae", null ],
+    [ "collapse_priority", "a00218.html#a627c9486bf8c3975363e4053a3d8c323", null ],
+    [ "initialize", "a00218.html#af1e70352151863eab2898b6963c845d9", null ],
+    [ "max_level", "a00218.html#a57e22af7ec8535987f15244cd5c5417b", null ],
+    [ "name", "a00218.html#a23b339e0465946a7dd2734be84510de9", null ],
+    [ "postprocess_collapse", "a00218.html#a7ae6cc4976c9b829a926a1f2c6b862d1", null ]
 ];

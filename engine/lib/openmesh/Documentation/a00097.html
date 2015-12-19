@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh::IO::BaseWriter Class Reference</title>
+<title>OpenMesh: OpenMesh::BaseProperty Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -106,72 +107,123 @@ $(document).ready(function(){initNavTree('a00097.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="a01122.html">List of all members</a>  </div>
+<a href="a00956.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">OpenMesh::IO::BaseWriter Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+<div class="title">OpenMesh::BaseProperty Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Base class for all writer modules.  
+<p>Abstract class defining the basic interface of a dynamic property.  
  <a href="a00097.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="a00458_source.html">OpenMesh/Core/IO/writer/BaseWriter.hh</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="a00533_source.html">OpenMesh/Core/Utils/PropertyT.hh</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for OpenMesh::IO::BaseWriter:</div>
+Inheritance diagram for OpenMesh::BaseProperty:</div>
 <div class="dyncontent">
-<div class="center"><img src="a01123.png" border="0" usemap="#OpenMesh_1_1IO_1_1BaseWriter_inherit__map" alt="Inheritance graph"/></div>
-<map name="OpenMesh_1_1IO_1_1BaseWriter_inherit__map" id="OpenMesh_1_1IO_1_1BaseWriter_inherit__map">
-<area shape="rect" id="node2" href="a00071.html" title="This class defines the OBJ writer. " alt="" coords="233,5,424,32"/><area shape="rect" id="node3" href="a00073.html" title="Implementation of the OFF format writer. " alt="" coords="233,56,424,83"/><area shape="rect" id="node4" href="a00075.html" title="Implementation of the OM format writer. " alt="" coords="236,107,421,133"/><area shape="rect" id="node5" href="a00077.html" title="Implementation of the PLY format writer. " alt="" coords="234,157,423,184"/><area shape="rect" id="node6" href="a00079.html" title="Implementation of the STL format writer. " alt="" coords="235,208,423,235"/><area shape="rect" id="node7" href="a00080.html" title="OpenMesh::IO::_VTKWriter_" alt="" coords="233,259,424,285"/></map>
+<div class="center"><img src="a00957.png" border="0" usemap="#OpenMesh_1_1BaseProperty_inherit__map" alt="Inheritance graph"/></div>
+<map name="OpenMesh_1_1BaseProperty_inherit__map" id="OpenMesh_1_1BaseProperty_inherit__map">
+<area shape="rect" id="node2" href="a00242.html" title="Property adaptor for OpenSG GeoProperties. " alt="" coords="225,13,416,54"/><area shape="rect" id="node4" href="a00255.html" title="Default property class for any type T. " alt="" coords="229,79,412,105"/><area shape="rect" id="node5" href="a00256.html" title="Property specialization for bool type. " alt="" coords="245,130,396,171"/><area shape="rect" id="node6" href="a00257.html" title="Property specialization for std::string type. " alt="" coords="245,195,396,237"/><area shape="rect" id="node3" href="a00177.html" title="Adaptor for osg::GeoIndicesUI32. " alt="" coords="464,5,631,61"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a64e0d2f73712d56ed5f911c39664a641"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a64e0d2f73712d56ed5f911c39664a641"></a>
-typedef unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>Option</b></td></tr>
-<tr class="separator:a64e0d2f73712d56ed5f911c39664a641"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7f287d4cf768bf1a0ee08ad68286fa1c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7f287d4cf768bf1a0ee08ad68286fa1c"></a>
-virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a7f287d4cf768bf1a0ee08ad68286fa1c">~BaseWriter</a> ()</td></tr>
-<tr class="memdesc:a7f287d4cf768bf1a0ee08ad68286fa1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor. <br /></td></tr>
-<tr class="separator:a7f287d4cf768bf1a0ee08ad68286fa1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac3c0fcb247b70c6f6a37b8c37b4e1863"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac3c0fcb247b70c6f6a37b8c37b4e1863"></a>
-virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#ac3c0fcb247b70c6f6a37b8c37b4e1863">get_description</a> () const =0</td></tr>
-<tr class="memdesc:ac3c0fcb247b70c6f6a37b8c37b4e1863"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return short description of the supported file format. <br /></td></tr>
-<tr class="separator:ac3c0fcb247b70c6f6a37b8c37b4e1863"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58ed321267dab25305b4607985ec16d1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a58ed321267dab25305b4607985ec16d1"></a>
-virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a58ed321267dab25305b4607985ec16d1">get_extensions</a> () const =0</td></tr>
-<tr class="memdesc:a58ed321267dab25305b4607985ec16d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return file format's extension. <br /></td></tr>
-<tr class="separator:a58ed321267dab25305b4607985ec16d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7be62a261074da8eca25020904e32e3d"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a7be62a261074da8eca25020904e32e3d">can_u_write</a> (const std::string &amp;_filename) const </td></tr>
-<tr class="memdesc:a7be62a261074da8eca25020904e32e3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if writer can write _filename (checks extension).  <a href="#a7be62a261074da8eca25020904e32e3d">More...</a><br /></td></tr>
-<tr class="separator:a7be62a261074da8eca25020904e32e3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c0818a63926bdb439044a8f4c038d85"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a7c0818a63926bdb439044a8f4c038d85">write</a> (const std::string &amp;_filename, <a class="el" href="a00089.html">BaseExporter</a> &amp;_be, <a class="el" href="a00237.html">Options</a> _opt, std::streamsize _precision=6) const =0</td></tr>
-<tr class="memdesc:a7c0818a63926bdb439044a8f4c038d85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write to a file.  <a href="#a7c0818a63926bdb439044a8f4c038d85">More...</a><br /></td></tr>
-<tr class="separator:a7c0818a63926bdb439044a8f4c038d85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0aa2050e93f96d71ff70ce788a76a94"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#ae0aa2050e93f96d71ff70ce788a76a94">write</a> (std::ostream &amp;_os, <a class="el" href="a00089.html">BaseExporter</a> &amp;_be, <a class="el" href="a00237.html">Options</a> _opt, std::streamsize _precision=6) const =0</td></tr>
-<tr class="memdesc:ae0aa2050e93f96d71ff70ce788a76a94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write to a std::ostream.  <a href="#ae0aa2050e93f96d71ff70ce788a76a94">More...</a><br /></td></tr>
-<tr class="separator:ae0aa2050e93f96d71ff70ce788a76a94"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeaa3c6f90582538e7900bd42ddfd78b4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeaa3c6f90582538e7900bd42ddfd78b4"></a>
-virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#aeaa3c6f90582538e7900bd42ddfd78b4">binary_size</a> (<a class="el" href="a00089.html">BaseExporter</a> &amp;, <a class="el" href="a00237.html">Options</a>) const </td></tr>
-<tr class="memdesc:aeaa3c6f90582538e7900bd42ddfd78b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns expected size of file if binary format is supported else 0. <br /></td></tr>
-<tr class="separator:aeaa3c6f90582538e7900bd42ddfd78b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab40b442ea053998cbde8e9a4bb27c6a3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#ab40b442ea053998cbde8e9a4bb27c6a3">BaseProperty</a> (const std::string &amp;_name=&quot;&lt;unknown&gt;&quot;)</td></tr>
+<tr class="memdesc:ab40b442ea053998cbde8e9a4bb27c6a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#ab40b442ea053998cbde8e9a4bb27c6a3">More...</a><br /></td></tr>
+<tr class="separator:ab40b442ea053998cbde8e9a4bb27c6a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9301f986c88572a20649f8743bfac6ac"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9301f986c88572a20649f8743bfac6ac"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a9301f986c88572a20649f8743bfac6ac">BaseProperty</a> (const <a class="el" href="a00097.html">BaseProperty</a> &amp;_rhs)</td></tr>
+<tr class="memdesc:a9301f986c88572a20649f8743bfac6ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor. <br /></td></tr>
+<tr class="separator:a9301f986c88572a20649f8743bfac6ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3c0dbc83c42199de5722a5812c5a12b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa3c0dbc83c42199de5722a5812c5a12b"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#aa3c0dbc83c42199de5722a5812c5a12b">~BaseProperty</a> ()</td></tr>
+<tr class="memdesc:aa3c0dbc83c42199de5722a5812c5a12b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor. <br /></td></tr>
+<tr class="separator:aa3c0dbc83c42199de5722a5812c5a12b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4060f65f09046a5afc09dec01e6fb43a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4060f65f09046a5afc09dec01e6fb43a"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a4060f65f09046a5afc09dec01e6fb43a">reserve</a> (size_t _n)=0</td></tr>
+<tr class="memdesc:a4060f65f09046a5afc09dec01e6fb43a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reserve memory for n elements. <br /></td></tr>
+<tr class="separator:a4060f65f09046a5afc09dec01e6fb43a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66772821263401aa8c178f3a69aa79e7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a66772821263401aa8c178f3a69aa79e7"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a66772821263401aa8c178f3a69aa79e7">resize</a> (size_t _n)=0</td></tr>
+<tr class="memdesc:a66772821263401aa8c178f3a69aa79e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resize storage to hold n elements. <br /></td></tr>
+<tr class="separator:a66772821263401aa8c178f3a69aa79e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c1ae555fb1427debe9428422f82424a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6c1ae555fb1427debe9428422f82424a"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a6c1ae555fb1427debe9428422f82424a">clear</a> ()=0</td></tr>
+<tr class="memdesc:a6c1ae555fb1427debe9428422f82424a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear all elements and free memory. <br /></td></tr>
+<tr class="separator:a6c1ae555fb1427debe9428422f82424a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f2bd397fadcf254837de61df06069d0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1f2bd397fadcf254837de61df06069d0"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a1f2bd397fadcf254837de61df06069d0">push_back</a> ()=0</td></tr>
+<tr class="memdesc:a1f2bd397fadcf254837de61df06069d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extend the number of elements by one. <br /></td></tr>
+<tr class="separator:a1f2bd397fadcf254837de61df06069d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a675f54dbc7eabe2f9489a8e5d2d1c93a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a675f54dbc7eabe2f9489a8e5d2d1c93a"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a675f54dbc7eabe2f9489a8e5d2d1c93a">swap</a> (size_t _i0, size_t _i1)=0</td></tr>
+<tr class="memdesc:a675f54dbc7eabe2f9489a8e5d2d1c93a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Let two elements swap their storage place. <br /></td></tr>
+<tr class="separator:a675f54dbc7eabe2f9489a8e5d2d1c93a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac5035f4fa788d640f96d80ee082cb87"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aac5035f4fa788d640f96d80ee082cb87"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#aac5035f4fa788d640f96d80ee082cb87">copy</a> (size_t _io, size_t _i1)=0</td></tr>
+<tr class="memdesc:aac5035f4fa788d640f96d80ee082cb87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy one element to another. <br /></td></tr>
+<tr class="separator:aac5035f4fa788d640f96d80ee082cb87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77ca94a8f5980b756b22844e360f3e93"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a77ca94a8f5980b756b22844e360f3e93"></a>
+virtual <a class="el" href="a00097.html">BaseProperty</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a77ca94a8f5980b756b22844e360f3e93">clone</a> () const =0</td></tr>
+<tr class="memdesc:a77ca94a8f5980b756b22844e360f3e93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a deep copy of self. <br /></td></tr>
+<tr class="separator:a77ca94a8f5980b756b22844e360f3e93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0824dab1057df3baa04e25e13ac9ca9e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0824dab1057df3baa04e25e13ac9ca9e"></a>
+const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a0824dab1057df3baa04e25e13ac9ca9e">name</a> () const </td></tr>
+<tr class="memdesc:a0824dab1057df3baa04e25e13ac9ca9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the name of the property. <br /></td></tr>
+<tr class="separator:a0824dab1057df3baa04e25e13ac9ca9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8624c097041e1e57cc0b3d8ab6ab43ec"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8624c097041e1e57cc0b3d8ab6ab43ec"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>stats</b> (std::ostream &amp;_ostr) const </td></tr>
+<tr class="separator:a8624c097041e1e57cc0b3d8ab6ab43ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ccadfed0436f3c25c574f3e151e7036"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ccadfed0436f3c25c574f3e151e7036"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a0ccadfed0436f3c25c574f3e151e7036">persistent</a> (void) const </td></tr>
+<tr class="memdesc:a0ccadfed0436f3c25c574f3e151e7036"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the persistent flag is enabled else false. <br /></td></tr>
+<tr class="separator:a0ccadfed0436f3c25c574f3e151e7036"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeac2109212f8489104137a03ffee3962"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#aeac2109212f8489104137a03ffee3962">set_persistent</a> (bool _yn)=0</td></tr>
+<tr class="memdesc:aeac2109212f8489104137a03ffee3962"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable or disable persistency.  <a href="#aeac2109212f8489104137a03ffee3962">More...</a><br /></td></tr>
+<tr class="separator:aeac2109212f8489104137a03ffee3962"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99ab2519267e0ddcfa5a56aea9199071"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a99ab2519267e0ddcfa5a56aea9199071"></a>
+virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a99ab2519267e0ddcfa5a56aea9199071">n_elements</a> () const =0</td></tr>
+<tr class="memdesc:a99ab2519267e0ddcfa5a56aea9199071"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of elements in property. <br /></td></tr>
+<tr class="separator:a99ab2519267e0ddcfa5a56aea9199071"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf1ba7d86bcc64d2fae4609e47cb4a0a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adf1ba7d86bcc64d2fae4609e47cb4a0a"></a>
+virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#adf1ba7d86bcc64d2fae4609e47cb4a0a">element_size</a> () const =0</td></tr>
+<tr class="memdesc:adf1ba7d86bcc64d2fae4609e47cb4a0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of one element in bytes or UnknownSize if not known. <br /></td></tr>
+<tr class="separator:adf1ba7d86bcc64d2fae4609e47cb4a0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad31a816e407f15361c5027517e012cb4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad31a816e407f15361c5027517e012cb4"></a>
+virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#ad31a816e407f15361c5027517e012cb4">size_of</a> () const </td></tr>
+<tr class="memdesc:ad31a816e407f15361c5027517e012cb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return size of property in bytes. <br /></td></tr>
+<tr class="separator:ad31a816e407f15361c5027517e012cb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99494b064f29f3f0b529fbe11c758269"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a99494b064f29f3f0b529fbe11c758269">size_of</a> (size_t _n_elem) const </td></tr>
+<tr class="memdesc:a99494b064f29f3f0b529fbe11c758269"><td class="mdescLeft">&#160;</td><td class="mdescRight">Estimated size of property if it has _n_elem elements.  <a href="#a99494b064f29f3f0b529fbe11c758269">More...</a><br /></td></tr>
+<tr class="separator:a99494b064f29f3f0b529fbe11c758269"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9142c5642b82609dfd69b5b671d872c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab9142c5642b82609dfd69b5b671d872c"></a>
+virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#ab9142c5642b82609dfd69b5b671d872c">store</a> (std::ostream &amp;_ostr, bool _swap) const =0</td></tr>
+<tr class="memdesc:ab9142c5642b82609dfd69b5b671d872c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store self as one binary block. <br /></td></tr>
+<tr class="separator:ab9142c5642b82609dfd69b5b671d872c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0eb66e2547283ca989179d508fbbed87"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a0eb66e2547283ca989179d508fbbed87">restore</a> (std::istream &amp;_istr, bool _swap)=0</td></tr>
+<tr class="memdesc:a0eb66e2547283ca989179d508fbbed87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Restore self from a binary block.  <a href="#a0eb66e2547283ca989179d508fbbed87">More...</a><br /></td></tr>
+<tr class="separator:a0eb66e2547283ca989179d508fbbed87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a3dbccc1d0ac8f9a0ba27c46f2fe58414"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3dbccc1d0ac8f9a0ba27c46f2fe58414"></a>
+static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a3dbccc1d0ac8f9a0ba27c46f2fe58414">UnknownSize</a> = size_t(-1)</td></tr>
+<tr class="memdesc:a3dbccc1d0ac8f9a0ba27c46f2fe58414"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates an error when a size is returned by a member. <br /></td></tr>
+<tr class="separator:a3dbccc1d0ac8f9a0ba27c46f2fe58414"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a74c5725d6c46cf8d641c7fc7985e1dc5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a74c5725d6c46cf8d641c7fc7985e1dc5"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>check</b> (<a class="el" href="a00089.html">BaseExporter</a> &amp;_be, <a class="el" href="a00237.html">Options</a> _opt) const </td></tr>
-<tr class="separator:a74c5725d6c46cf8d641c7fc7985e1dc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace9460aa7a6d1b044661a25dea831259"><td class="memTemplParams" colspan="2"><a class="anchor" id="ace9460aa7a6d1b044661a25dea831259"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ace9460aa7a6d1b044661a25dea831259"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>check_and_set_persistent</b> (bool _yn)</td></tr>
+<tr class="separator:ace9460aa7a6d1b044661a25dea831259"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Base class for all writer modules. </p>
-<p>The module should register itself at the IOManager by calling the register_module function. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a7be62a261074da8eca25020904e32e3d"></a>
+<div class="textblock"><p>Abstract class defining the basic interface of a dynamic property. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="ab40b442ea053998cbde8e9a4bb27c6a3"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -179,152 +231,133 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>check</b> (<a class="
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool OpenMesh::IO::BaseWriter::can_u_write </td>
+          <td class="memname">OpenMesh::BaseProperty::BaseProperty </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>_filename</em></td><td>)</td>
+          <td class="paramname"><em>_name</em> = <code>&quot;&lt;unknown&gt;&quot;</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Default constructor. </p>
+<p>In OpenMesh all mesh data is stored in so-called properties. We distinuish between standard properties, which can be defined at compile time using the <a class="el" href="a00731.html" title="This namespace holds per item attributes like normal/color. ">Attributes</a> in the traits definition and at runtime using the request property functions defined in one of the kernels.</p>
+<p>If the property should be stored along with the default properties in the OM-format one must name the property and enable the persistant flag with <a class="el" href="a00097.html#aeac2109212f8489104137a03ffee3962" title="Enable or disable persistency. ">set_persistent()</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_name</td><td>Optional textual name for the property. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a0eb66e2547283ca989179d508fbbed87"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual size_t OpenMesh::BaseProperty::restore </td>
+          <td>(</td>
+          <td class="paramtype">std::istream &amp;&#160;</td>
+          <td class="paramname"><em>_istr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_swap</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Restore self from a binary block. </p>
+<p>Uses <a class="el" href="a00097.html#a4060f65f09046a5afc09dec01e6fb43a" title="Reserve memory for n elements. ">reserve()</a> to set the size of self before restoring. </p>
+
+<p>Implemented in <a class="el" href="a00257.html#a619e87f5a601b4c4007a91ffc58c6bb6">OpenMesh::PropertyT&lt; std::string &gt;</a>, <a class="el" href="a00256.html#a21d1880f0b89fb9daa1c0c5daed574b1">OpenMesh::PropertyT&lt; bool &gt;</a>, <a class="el" href="a00242.html#af263bcb96eb989660cd802eaf93cd028">OpenMesh::Kernel_OSG::oPropertyT&lt; GeoProperty &gt;</a>, and <a class="el" href="a00255.html#a90b89d38f7fa7410cea2786b48ce4461">OpenMesh::PropertyT&lt; T &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aeac2109212f8489104137a03ffee3962"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void OpenMesh::BaseProperty::set_persistent </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_yn</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enable or disable persistency. </p>
+<p>Self must be a named property to enable persistency. </p>
+
+<p>Implemented in <a class="el" href="a00257.html#a0d9bb02308869542552eca53d041097e">OpenMesh::PropertyT&lt; std::string &gt;</a>, <a class="el" href="a00256.html#aede7a8a5b614c7cd594c13f689ef716e">OpenMesh::PropertyT&lt; bool &gt;</a>, <a class="el" href="a00242.html#ac0e7839eeeba0528390ccbe9315dd153">OpenMesh::Kernel_OSG::oPropertyT&lt; GeoProperty &gt;</a>, and <a class="el" href="a00255.html#a591925b6eb3245fa0d510d79de27ef30">OpenMesh::PropertyT&lt; T &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a99494b064f29f3f0b529fbe11c758269"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual size_t OpenMesh::BaseProperty::size_of </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>_n_elem</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns true if writer can write _filename (checks extension). </p>
-<p>_filename can also provide an extension without a name for a file e.g. _filename == "om" checks, if the writer can write the "om" extension </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">_filename</td><td>complete name of a file or just the extension </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true, if writer can write data with the given extension </dd></dl>
+<p>Estimated size of property if it has _n_elem elements. </p>
+<p>The member returns UnknownSize if the size cannot be estimated. </p>
 
-</div>
-</div>
-<a class="anchor" id="a7c0818a63926bdb439044a8f4c038d85"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool OpenMesh::IO::BaseWriter::write </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>_filename</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="a00089.html">BaseExporter</a> &amp;&#160;</td>
-          <td class="paramname"><em>_be</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="a00237.html">Options</a>&#160;</td>
-          <td class="paramname"><em>_opt</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::streamsize&#160;</td>
-          <td class="paramname"><em>_precision</em> = <code>6</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Write to a file. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">_filename</td><td>write to file with the given filename </td></tr>
-    <tr><td class="paramname">_be</td><td><a class="el" href="a00089.html" title="Base class for exporter modules. ">BaseExporter</a>, which specifies the data source </td></tr>
-    <tr><td class="paramname">_opt</td><td>writing options </td></tr>
-    <tr><td class="paramname">_precision</td><td>can be used to specify the precision of the floating point notation. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implemented in <a class="el" href="a00075.html#aa110cadf1ddcac647f33076fd276d9e4">OpenMesh::IO::_OMWriter_</a>, <a class="el" href="a00073.html#a25dffaeba54287b8a5871ca45ab205e8">OpenMesh::IO::_OFFWriter_</a>, <a class="el" href="a00077.html#af6ac5c38afb28fcd982ca5aab8dcb3c0">OpenMesh::IO::_PLYWriter_</a>, <a class="el" href="a00079.html#aa202ae93b2cd9c7946291a56478ec570">OpenMesh::IO::_STLWriter_</a>, <a class="el" href="a00071.html#adcb31c3553c0307d1fc44115460f6901">OpenMesh::IO::_OBJWriter_</a>, and <a class="el" href="a00080.html#a2cfd212d5d8b032243bd9a3d0d1f21b1">OpenMesh::IO::_VTKWriter_</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ae0aa2050e93f96d71ff70ce788a76a94"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool OpenMesh::IO::BaseWriter::write </td>
-          <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
-          <td class="paramname"><em>_os</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="a00089.html">BaseExporter</a> &amp;&#160;</td>
-          <td class="paramname"><em>_be</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="a00237.html">Options</a>&#160;</td>
-          <td class="paramname"><em>_opt</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::streamsize&#160;</td>
-          <td class="paramname"><em>_precision</em> = <code>6</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Write to a std::ostream. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">_os</td><td>write to std::ostream </td></tr>
-    <tr><td class="paramname">_be</td><td><a class="el" href="a00089.html" title="Base class for exporter modules. ">BaseExporter</a>, which specifies the data source </td></tr>
-    <tr><td class="paramname">_opt</td><td>writing options </td></tr>
-    <tr><td class="paramname">_precision</td><td>can be used to specify the precision of the floating point notation. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implemented in <a class="el" href="a00073.html#a7307374d92852b0482563b8e5e805884">OpenMesh::IO::_OFFWriter_</a>, <a class="el" href="a00075.html#aaa236eda6d8b4232d16f532ecbe42b4b">OpenMesh::IO::_OMWriter_</a>, <a class="el" href="a00077.html#a1492f566f494e1fb53475f51bd299876">OpenMesh::IO::_PLYWriter_</a>, <a class="el" href="a00079.html#a2fe2fe180f3efdd8a7d8650f7791081a">OpenMesh::IO::_STLWriter_</a>, <a class="el" href="a00071.html#a8324e17b43ec30f805bc406e703ca090">OpenMesh::IO::_OBJWriter_</a>, and <a class="el" href="a00080.html#aa805adf619325cac01c6eb7db4720805">OpenMesh::IO::_VTKWriter_</a>.</p>
+<p>Reimplemented in <a class="el" href="a00257.html#a6cf700204b62c1d00c36eda2a00e7f9c">OpenMesh::PropertyT&lt; std::string &gt;</a>, <a class="el" href="a00256.html#a28bba15869fd28a805418da1ada2d838">OpenMesh::PropertyT&lt; bool &gt;</a>, and <a class="el" href="a00255.html#a20576d4bf703c8dd95547074546e2485">OpenMesh::PropertyT&lt; T &gt;</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>OpenMesh/Core/IO/writer/<a class="el" href="a00458_source.html">BaseWriter.hh</a></li>
-<li>OpenMesh/Core/IO/writer/BaseWriter.cc</li>
+<li>OpenMesh/Core/Utils/<a class="el" href="a00526_source.html">BaseProperty.hh</a></li>
+<li>OpenMesh/Core/Utils/BaseProperty.cc</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -332,7 +365,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>check</b> (<a class="
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

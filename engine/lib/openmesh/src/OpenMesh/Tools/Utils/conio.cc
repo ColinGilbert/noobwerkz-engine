@@ -41,12 +41,11 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 15:07:46 +0200 (Di, 28 Apr 2015) $                   *
+ *   $Revision$                                                         *
+ *   $Date$                   *
  *                                                                           *
 \*===========================================================================*/
 
-#include <OpenMesh/Core/System/config.hh>
 #include <OpenMesh/Tools/Utils/conio.hh>
 
 // ----------------------------------------------------------------- MSVC Compiler ----
@@ -92,7 +91,6 @@ int getche() { return ::getche(); }
 #endif
 #include <termios.h>   /* tcsetattr()    */
 #include <sys/ioctl.h> /* ioctl()        */
-#include <sys/time.h>  /* struct timeval */
 
 namespace OpenMesh {
 namespace Utils {

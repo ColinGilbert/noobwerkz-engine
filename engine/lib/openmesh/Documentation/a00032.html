@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -154,11 +155,11 @@ Navigating over halfedges</h1>
 <div class="line"></div>
 <div class="line">[...]</div>
 </div><!-- fragment --><p>References:<br />
- <a class="el" href="a00193.html#a907f874b93f142afc5a08bac1983280f" title="Get the next halfedge handle. ">OpenMesh::Concepts::KernelT&lt; FinalMeshItems &gt;::next_halfedge_handle()</a><br />
- <a class="el" href="a00193.html#aa9d89ad830674141c58387e78b7590ea" title="Get the previous halfedge of the given halfedge. ">OpenMesh::Concepts::KernelT&lt; FinalMeshItems &gt;::prev_halfedge_handle()</a></p>
+ <a class="el" href="a00198.html#a907f874b93f142afc5a08bac1983280f" title="Get the next halfedge handle. ">OpenMesh::Concepts::KernelT&lt; FinalMeshItems &gt;::next_halfedge_handle()</a><br />
+ <a class="el" href="a00198.html#aa9d89ad830674141c58387e78b7590ea" title="Get the previous halfedge of the given halfedge. ">OpenMesh::Concepts::KernelT&lt; FinalMeshItems &gt;::prev_halfedge_handle()</a></p>
 <h1><a class="anchor" id="nav_bound"></a>
 Mesh boundaries</h1>
-<p>As you have seen in the previous section, navigating along boundaries is very simple. In general OpenMesh also offers a boundary attribute for edges, vertices and faces. So testing i.e. whether a face is a boundary face is quite simple using <a class="el" href="a00240.html#ab80f63880838f2488ad4f53021111e1f" title="Check if the halfedge is at the boundary. ">OpenMesh::PolyConnectivity::is_boundary()</a>.<br />
+<p>As you have seen in the previous section, navigating along boundaries is very simple. In general OpenMesh also offers a boundary attribute for edges, vertices and faces. So testing i.e. whether a face is a boundary face is quite simple using <a class="el" href="a00247.html#ab80f63880838f2488ad4f53021111e1f" title="Check if the halfedge is at the boundary. ">OpenMesh::PolyConnectivity::is_boundary()</a>.<br />
 </p>
 <dl class="section note"><dt>Note</dt><dd>You can iterate along boundaries by using the next_halfedge_handle(). If you are on a boundary, the next halfedge is guaranteed to be also a boundary halfedge.</dd></dl>
 <p>So for each type we can make use of one of the following functions:</p>
@@ -177,27 +178,27 @@ Mesh boundaries</h1>
 <div class="line"><span class="keywordtype">bool</span> is_boundary (FaceHandle _fh, <span class="keywordtype">bool</span> _check_vertex=<span class="keyword">false</span>) const</div>
 </div><!-- fragment --><h1><a class="anchor" id="nav_io"></a>
 Using incoming and outgoing halfedges</h1>
-<p>OpenMesh offers quite a lot of iterators and circulators to easily iterate over the structures of a mesh. A very helpful iterator is the <a class="el" href="a00240.html#a5b228884a6385b324b256263eb8254b1" title="Enumerates incoming half edges in a clockwise fashion. ">OpenMesh::PolyConnectivity::VertexIHalfedgeIter</a> or the <a class="el" href="a00240.html#a162054e1fc345ce1df9cdfda7433ffc0" title="Enumerates outgoing half edges in a clockwise fashion. ">OpenMesh::PolyConnectivity::VertexOHalfedgeIter</a> which are used to iterate over all incoming/outgoing halfedges of a vertex. So, sticking to the illustration below, a OpenMesh::PolyConnectivity:V:ertexIHalfedgeIter for the lower most vertex would iterate over all incoming halfedges (blue), whereas the OpenMesh::PolyConnectivity::OpenMesh::PolyConnectivity::VertexOHalfedgeIter would iterate over all outgoing halfedges (red):</p>
+<p>OpenMesh offers quite a lot of iterators and circulators to easily iterate over the structures of a mesh. A very helpful iterator is the <a class="el" href="a00247.html#a5b228884a6385b324b256263eb8254b1" title="Enumerates incoming half edges in a clockwise fashion. ">OpenMesh::PolyConnectivity::VertexIHalfedgeIter</a> or the <a class="el" href="a00247.html#a162054e1fc345ce1df9cdfda7433ffc0" title="Enumerates outgoing half edges in a clockwise fashion. ">OpenMesh::PolyConnectivity::VertexOHalfedgeIter</a> which are used to iterate over all incoming/outgoing halfedges of a vertex. So, sticking to the illustration below, a OpenMesh::PolyConnectivity:V:ertexIHalfedgeIter for the lower most vertex would iterate over all incoming halfedges (blue), whereas the OpenMesh::PolyConnectivity::OpenMesh::PolyConnectivity::VertexOHalfedgeIter would iterate over all outgoing halfedges (red):</p>
 <div class="image">
 <img src="mesh.inout.png" alt="mesh.inout.png"/>
 </div>
 <p>A schematic code example of how to use the halfedge iterators as described above: </p><div class="fragment"><div class="line">[...]</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Get some vertex handle</span></div>
-<div class="line"><a class="code" href="a00243.html#a0fc18e13d70825938274e3faf7b55e01">PolyMesh::VertexHandle</a> v = ...;</div>
+<div class="line"><a class="code" href="a00250.html#a0fc18e13d70825938274e3faf7b55e01">PolyMesh::VertexHandle</a> v = ...;</div>
 <div class="line"></div>
-<div class="line"><span class="keywordflow">for</span>(<a class="code" href="a00243.html#a437621f3901a93d0ebf8cdceac8e2939">PolyMesh::VertexIHalfedgeIter</a> vih_it = mesh.vih_iter(v); vih_it; ++vih_it) {</div>
+<div class="line"><span class="keywordflow">for</span>(<a class="code" href="a00250.html#a437621f3901a93d0ebf8cdceac8e2939">PolyMesh::VertexIHalfedgeIter</a> vih_it = mesh.vih_iter(v); vih_it; ++vih_it) {</div>
 <div class="line">        <span class="comment">// Iterate over all incoming halfedges...</span></div>
 <div class="line">}</div>
 <div class="line"></div>
-<div class="line"><span class="keywordflow">for</span>(<a class="code" href="a00243.html#a6549eda743520c8a7aa3dfe6a37b2468">PolyMesh::VertexOHalfedgeIter</a> voh_it = mesh.voh_iter(v); voh_it; ++voh_it) {</div>
+<div class="line"><span class="keywordflow">for</span>(<a class="code" href="a00250.html#a6549eda743520c8a7aa3dfe6a37b2468">PolyMesh::VertexOHalfedgeIter</a> voh_it = mesh.voh_iter(v); voh_it; ++voh_it) {</div>
 <div class="line">        <span class="comment">// Iterate over all outgoing halfedges...</span></div>
 <div class="line">}</div>
 <div class="line"></div>
 <div class="line">[...]</div>
 </div><!-- fragment --><h1><a class="anchor" id="nav_opposite"></a>
 Using opposite halfedges</h1>
-<p>The halfedge structure splits every edge into two directional parts by creating two directed edges out of one undirected edge. So for every halfedge there exists its counterpart pointing in the opposite direction. OpenMesh allows to easily navigate through opposing halfedges via the function <a class="el" href="a00193.html#ab33100ddcfda860072d0662c93175f11" title="Get the opposite halfedge. ">OpenMesh::Concepts::KernelT&lt; FinalMeshItems &gt;::opposite_halfedge_handle()</a>. So in the illustration below <code>opposite_halfedge_handle()</code> for the blue halfedge would return the red halfedge:</p>
+<p>The halfedge structure splits every edge into two directional parts by creating two directed edges out of one undirected edge. So for every halfedge there exists its counterpart pointing in the opposite direction. OpenMesh allows to easily navigate through opposing halfedges via the function <a class="el" href="a00198.html#ab33100ddcfda860072d0662c93175f11" title="Get the opposite halfedge. ">OpenMesh::Concepts::KernelT&lt; FinalMeshItems &gt;::opposite_halfedge_handle()</a>. So in the illustration below <code>opposite_halfedge_handle()</code> for the blue halfedge would return the red halfedge:</p>
 <div class="image">
 <img src="mesh.opp.png" alt="mesh.opp.png"/>
 </div>
@@ -211,16 +212,16 @@ Using opposite halfedges</h1>
 <div class="line">PolyMesh::HalfedgeHandle opposite_heh = mesh.opposite_halfedge_handle(heh);</div>
 </div><!-- fragment --><p>There are also a few more functions that offer easy access to opposing structures:</p>
 <div class="fragment"><div class="line"><span class="comment">// Get the face adjacent to the opposite halfedge</span></div>
-<div class="line"><a class="code" href="a00240.html#af8101dcdc98c8c89a8a56baef445c2ac">OpenMesh::PolyConnectivity::opposite_face_handle</a>();</div>
+<div class="line"><a class="code" href="a00247.html#af8101dcdc98c8c89a8a56baef445c2ac">OpenMesh::PolyConnectivity::opposite_face_handle</a>();</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Get the handle to the opposite halfedge</span></div>
-<div class="line"><a class="code" href="a00193.html#ab33100ddcfda860072d0662c93175f11">OpenMesh::Concepts::KernelT::opposite_halfedge_handle</a>();</div>
+<div class="line"><a class="code" href="a00198.html#ab33100ddcfda860072d0662c93175f11">OpenMesh::Concepts::KernelT::opposite_halfedge_handle</a>();</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Get the opposite vertex to the opposite halfedge</span></div>
-<div class="line"><a class="code" href="a00271.html#acc997689fa40077f99bb27967e1288ef">OpenMesh::TriConnectivity::opposite_he_opposite_vh</a>();</div>
+<div class="line"><a class="code" href="a00279.html#acc997689fa40077f99bb27967e1288ef">OpenMesh::TriConnectivity::opposite_he_opposite_vh</a>();</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Get the vertex assigned to the opposite halfedge</span></div>
-<div class="line"><a class="code" href="a00271.html#a919de74b6e59ee17fe5c96c663d9dcc8">OpenMesh::TriConnectivity::opposite_vh</a>();</div>
+<div class="line"><a class="code" href="a00279.html#a919de74b6e59ee17fe5c96c663d9dcc8">OpenMesh::TriConnectivity::opposite_vh</a>();</div>
 </div><!-- fragment --><h1><a class="anchor" id="nav_to_from"></a>
 Getting the to and from vertices</h1>
 <div class="image">
@@ -228,17 +229,16 @@ Getting the to and from vertices</h1>
 </div>
 <p>If you have an halfedge, you can get the to and the from handles of the adjacent vertices. </p><dl class="section note"><dt>Note</dt><dd>The halfedges have a direction. Therefore the to vertex is the from vertex of the opposite halfedge and vice versa.</dd></dl>
 <div class="fragment"><div class="line"><span class="comment">// Get the handle of the to vertex</span></div>
-<div class="line"><a class="code" href="a00193.html#a0417e17b1004ff9a5ca7a72b6faa80e0">OpenMesh::Concepts::KernelT::to_vertex_handle</a>();</div>
+<div class="line"><a class="code" href="a00198.html#a0417e17b1004ff9a5ca7a72b6faa80e0">OpenMesh::Concepts::KernelT::to_vertex_handle</a>();</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Get the handle of the from vertex</span></div>
-<div class="line"><a class="code" href="a00193.html#aa573ba57e938839441c233281e902003">OpenMesh::Concepts::KernelT::from_vertex_handle</a>();</div>
+<div class="line"><a class="code" href="a00198.html#aa573ba57e938839441c233281e902003">OpenMesh::Concepts::KernelT::from_vertex_handle</a>();</div>
 </div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- doc-content -->
 <hr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

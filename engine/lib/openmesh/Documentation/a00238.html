@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh::VDPM::Plane3d Class Reference</title>
+<title>OpenMesh: OpenMeshBase Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -106,54 +107,45 @@ $(document).ready(function(){initNavTree('a00238.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
-<a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="a01343.html">List of all members</a>  </div>
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="a00897.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">OpenMesh::VDPM::Plane3d Class Reference</div>  </div>
+<div class="title">OpenMeshBase Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>ax + by + cz + d = 0  
- <a href="a00238.html#details">More...</a></p>
-
-<p><code>#include &lt;<a class="el" href="a00420_source.html">OpenMesh/Tools/VDPM/Plane3d.hh</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for OpenMeshBase:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00898.png" border="0" usemap="#OpenMeshBase_inherit__map" alt="Inheritance graph"/></div>
+<map name="OpenMeshBase_inherit__map" id="OpenMeshBase_inherit__map">
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for OpenMeshBase:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00899.png" border="0" usemap="#OpenMeshBase_coll__map" alt="Collaboration graph"/></div>
+<map name="OpenMeshBase_coll__map" id="OpenMeshBase_coll__map">
+<area shape="rect" id="node3" href="a00249.html" title="Polygonal mesh based on the ArrayKernel. " alt="" coords="77,187,240,228"/><area shape="rect" id="node4" href="a00250.html" title="Base type for a polygonal mesh. " alt="" coords="81,81,236,137"/></map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:af98a68626c2c4530a6a3d8db7ab0e596"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af98a68626c2c4530a6a3d8db7ab0e596"></a>
-typedef OpenMesh::Vec3f&#160;</td><td class="memItemRight" valign="bottom"><b>vector_type</b></td></tr>
-<tr class="separator:af98a68626c2c4530a6a3d8db7ab0e596"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36588a8b1c74d29e1fe3545a9667a16d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a36588a8b1c74d29e1fe3545a9667a16d"></a>
-typedef vector_type::value_type&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b></td></tr>
-<tr class="separator:a36588a8b1c74d29e1fe3545a9667a16d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a9847f6c87e867123d163028c67f390c6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9847f6c87e867123d163028c67f390c6"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>SetUp</b> ()</td></tr>
+<tr class="separator:a9847f6c87e867123d163028c67f390c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31c31c6d21ce2924f44b448744bb53d3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a31c31c6d21ce2924f44b448744bb53d3"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>TearDown</b> ()</td></tr>
+<tr class="separator:a31c31c6d21ce2924f44b448744bb53d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:a932327b391a56d9fc792fcfcf8339ee0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a932327b391a56d9fc792fcfcf8339ee0"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Plane3d</b> (const vector_type &amp;_dir, const vector_type &amp;_pnt)</td></tr>
-<tr class="separator:a932327b391a56d9fc792fcfcf8339ee0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8e6e0da9b231169005263b3c23303e9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac8e6e0da9b231169005263b3c23303e9"></a>
-value_type&#160;</td><td class="memItemRight" valign="bottom"><b>signed_distance</b> (const OpenMesh::Vec3f &amp;_p)</td></tr>
-<tr class="separator:ac8e6e0da9b231169005263b3c23303e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10c9be4fbd0692768eeca2dd5739adb9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a10c9be4fbd0692768eeca2dd5739adb9"></a>
-value_type&#160;</td><td class="memItemRight" valign="bottom"><b>singed_distance</b> (const OpenMesh::Vec3f &amp;point)</td></tr>
-<tr class="separator:a10c9be4fbd0692768eeca2dd5739adb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a48d342a7b8f1207b70831af6697c7bd8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a48d342a7b8f1207b70831af6697c7bd8"></a>
-vector_type&#160;</td><td class="memItemRight" valign="bottom"><b>n_</b></td></tr>
-<tr class="separator:a48d342a7b8f1207b70831af6697c7bd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac43866a66a76184863c47d9aef94bf0b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac43866a66a76184863c47d9aef94bf0b"></a>
-value_type&#160;</td><td class="memItemRight" valign="bottom"><b>d_</b></td></tr>
-<tr class="separator:ac43866a66a76184863c47d9aef94bf0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:adb66ef750f8de373ef4b3996728325e1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adb66ef750f8de373ef4b3996728325e1"></a>
+<a class="el" href="a00249.html">Mesh</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mesh_</b></td></tr>
+<tr class="separator:adb66ef750f8de373ef4b3996728325e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>ax + by + cz + d = 0 </p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
-<li>OpenMesh/Core/Geometry/<a class="el" href="a00420_source.html">Plane3d.hh</a></li>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Unittests/<a class="el" href="a00642_source.html">unittests_common.hh</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -161,7 +153,6 @@ value_type&#160;</td><td class="memItemRight" valign="bottom"><b>d_</b></td></tr
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

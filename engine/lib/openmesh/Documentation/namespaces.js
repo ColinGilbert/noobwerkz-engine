@@ -1,4 +1,4 @@
 var namespaces =
 [
-    [ "OpenMesh", "a00715.html", "a00715" ]
+    [ "OpenMesh", "a00730.html", "a00730" ]
 ];

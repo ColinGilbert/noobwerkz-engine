@@ -1,12 +1,17 @@
 var a00236 =
 [
-    [ "Base", "a00236.html#a6a1261acd3d8b5d10027e03bdcf00326", null ],
-    [ "Option", "a00236.html#a50f70a7b4e3ce1fbcb3aca0a5d4f4a5e", null ],
-    [ "is_empty", "a00236.html#a14231241d6c56253a109a89432349481", null ],
-    [ "is_valid", "a00236.html#a2311ecd5f5b685bc231e0b2775ba3776", null ],
-    [ "operator const T &", "a00236.html#aff81f73c334484cf7808c8f2a139285e", null ],
-    [ "operator T &", "a00236.html#ad923eec08ad42ee2c5fe612b44a335b6", null ],
-    [ "operator!=", "a00236.html#af018a6f7ba82d963e2458a317408e312", null ],
-    [ "operator=", "a00236.html#a3c4383711d470474e6c78016628248f3", null ],
-    [ "operator==", "a00236.html#a60930fb68690441c373abcf49cda438e", null ]
+    [ "is_float", "a00236.html#a618be7579ce6a3a032f45c781d3f0bac", null ],
+    [ "is_float", "a00236.html#a91f72bf52bc98a6aa3fe351950c80147", null ],
+    [ "is_float", "a00236.html#a079fc24ff33a963bee51d7d6120c37b9", null ],
+    [ "is_signed", "a00236.html#acf20a7a1be200c07cde321669273c292", null ],
+    [ "is_signed", "a00236.html#a30d9ad0165f9e338877c5c3d9674d22b", null ],
+    [ "is_signed", "a00236.html#a67c1050dfa28611bde388502dc62d99e", null ],
+    [ "is_signed", "a00236.html#ae4a6cd17fe730baab5665e5850fb39e2", null ],
+    [ "is_signed", "a00236.html#a3a80d6eade53a8b731788352a3d85e00", null ],
+    [ "max", "a00236.html#adcde35956f2ff7c4624cad66d7944eec", null ],
+    [ "max", "a00236.html#a046c5f9ff5b18276ef82efacf93acd96", null ],
+    [ "max", "a00236.html#aa00363608ac33e1b8745e0f6f02d0d4a", null ],
+    [ "min", "a00236.html#a299caf73cac6f473ca40c8df8c5c9c97", null ],
+    [ "min", "a00236.html#a35f1885b497acac6607d87450d325aeb", null ],
+    [ "min", "a00236.html#a6c46eeeca884d6b88a70b1d211f9e756", null ]
 ];

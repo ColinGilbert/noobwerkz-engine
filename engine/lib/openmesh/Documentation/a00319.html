@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh::VDPM::VHierarchyWindow Class Reference</title>
+<title>OpenMesh: OpenMesh::Concepts::MeshItems::VertexT&lt; Refs_ &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -106,65 +107,50 @@ $(document).ready(function(){initNavTree('a00319.html','');});
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="a01352.html">List of all members</a>  </div>
+<a href="a01067.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">OpenMesh::VDPM::VHierarchyWindow Class Reference</div>  </div>
+<div class="title">OpenMesh::Concepts::MeshItems::VertexT&lt; Refs_ &gt; Class Template Reference<div class="ingroups"><a class="el" href="a00756.html">Interface Concepts</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="a00617_source.html">OpenMesh/Tools/VDPM/VHierarchyWindow.hh</a>&gt;</code></p>
+<p>Interface for the internal vertex type.  
+ <a href="a00319.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="a00334_source.html">Doc/Concepts/MeshItems.hh</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a1e5f6c61e62ce8fcf6e05ecfa22d76e8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1e5f6c61e62ce8fcf6e05ecfa22d76e8"></a>
+typedef Refs_&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00319.html#a1e5f6c61e62ce8fcf6e05ecfa22d76e8">Refs</a></td></tr>
+<tr class="memdesc:a1e5f6c61e62ce8fcf6e05ecfa22d76e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Re-export the template argument Refs. This <b>must</b> be done! <br /></td></tr>
+<tr class="separator:a1e5f6c61e62ce8fcf6e05ecfa22d76e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a431e910efd64bb1f4188d6b77f5430b1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a431e910efd64bb1f4188d6b77f5430b1"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>VHierarchyWindow</b> (<a class="el" href="a00315.html">VHierarchy</a> &amp;_vhierarchy)</td></tr>
-<tr class="separator:a431e910efd64bb1f4188d6b77f5430b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82a121754f23507372a13f81c3522f98"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a82a121754f23507372a13f81c3522f98"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>set_vertex_hierarchy</b> (<a class="el" href="a00315.html">VHierarchy</a> &amp;_vhierarchy)</td></tr>
-<tr class="separator:a82a121754f23507372a13f81c3522f98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3311a05a938bc63365726063c7059623"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3311a05a938bc63365726063c7059623"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> ()</td></tr>
-<tr class="separator:a3311a05a938bc63365726063c7059623"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c202745c97a1a51e836151daf4a656b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9c202745c97a1a51e836151daf4a656b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>next</b> ()</td></tr>
-<tr class="separator:a9c202745c97a1a51e836151daf4a656b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b09537208bf14f7ee8b8c6341f5c3a5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3b09537208bf14f7ee8b8c6341f5c3a5"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> ()</td></tr>
-<tr class="separator:a3b09537208bf14f7ee8b8c6341f5c3a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5691b439a530e99d8e656d4ccd84db1e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5691b439a530e99d8e656d4ccd84db1e"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>window_size</b> () const </td></tr>
-<tr class="separator:a5691b439a530e99d8e656d4ccd84db1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9945aa92232ee4ca1f8cfc4e7d589130"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9945aa92232ee4ca1f8cfc4e7d589130"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>buffer_size</b> () const </td></tr>
-<tr class="separator:a9945aa92232ee4ca1f8cfc4e7d589130"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22aabfa2b222e1c9093c04c01d582f89"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a22aabfa2b222e1c9093c04c01d582f89"></a>
-<a class="el" href="a00317.html">VHierarchyNodeHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><b>node_handle</b> ()</td></tr>
-<tr class="separator:a22aabfa2b222e1c9093c04c01d582f89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2c377865da6f0a68438bcbf874316d1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af2c377865da6f0a68438bcbf874316d1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>activate</b> (<a class="el" href="a00317.html">VHierarchyNodeHandle</a> _node_handle)</td></tr>
-<tr class="separator:af2c377865da6f0a68438bcbf874316d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a933858f9d7786a6604c1da2eeb89893c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a933858f9d7786a6604c1da2eeb89893c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>inactivate</b> (<a class="el" href="a00317.html">VHierarchyNodeHandle</a> _node_handle)</td></tr>
-<tr class="separator:a933858f9d7786a6604c1da2eeb89893c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a584d65bc4cb82fb077e02759ed5c3b3d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a584d65bc4cb82fb077e02759ed5c3b3d"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_active</b> (<a class="el" href="a00317.html">VHierarchyNodeHandle</a> _node_handle) const </td></tr>
-<tr class="separator:a584d65bc4cb82fb077e02759ed5c3b3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a14076d2ff619b5b8c729efcc8af977cf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a14076d2ff619b5b8c729efcc8af977cf"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> (<a class="el" href="a00734.html#a503c22d36bf2bdb5daeccd78c29053fd">VHierarchyNodeHandleContainer</a> &amp;_roots)</td></tr>
-<tr class="separator:a14076d2ff619b5b8c729efcc8af977cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3da73d6d8ee3a532d794416de4a40eab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3da73d6d8ee3a532d794416de4a40eab"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>update_with_vsplit</b> (<a class="el" href="a00317.html">VHierarchyNodeHandle</a> _parent_handle)</td></tr>
-<tr class="separator:a3da73d6d8ee3a532d794416de4a40eab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3775d37faf227534664e88425a883b9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa3775d37faf227534664e88425a883b9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>update_with_ecol</b> (<a class="el" href="a00317.html">VHierarchyNodeHandle</a> _parent_handle)</td></tr>
-<tr class="separator:aa3775d37faf227534664e88425a883b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac714e165662433c27dbc482b7a524201"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac714e165662433c27dbc482b7a524201"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00319.html#ac714e165662433c27dbc482b7a524201">VertexT</a> ()</td></tr>
+<tr class="memdesc:ac714e165662433c27dbc482b7a524201"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. <br /></td></tr>
+<tr class="separator:ac714e165662433c27dbc482b7a524201"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d4c3d3ed2a845f8533dd2612c1ec663"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1d4c3d3ed2a845f8533dd2612c1ec663"></a>
+<a class="el" href="a00180.html">HalfedgeHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00319.html#a1d4c3d3ed2a845f8533dd2612c1ec663">halfedge_handle</a> () const </td></tr>
+<tr class="memdesc:a1d4c3d3ed2a845f8533dd2612c1ec663"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get an outgoing halfedge. <br /></td></tr>
+<tr class="separator:a1d4c3d3ed2a845f8533dd2612c1ec663"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e37f87e0ff740f42d6e700ccc5b71b1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2e37f87e0ff740f42d6e700ccc5b71b1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00319.html#a2e37f87e0ff740f42d6e700ccc5b71b1">set_halfedge_handle</a> (<a class="el" href="a00180.html">HalfedgeHandle</a> _eh)</td></tr>
+<tr class="memdesc:a2e37f87e0ff740f42d6e700ccc5b71b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the outgoing halfedge link. <br /></td></tr>
+<tr class="separator:a2e37f87e0ff740f42d6e700ccc5b71b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><dl class="todo"><dt><b><a class="el" href="a00741.html#_todo000008">Todo:</a></b></dt><dd><a class="el" href="a00319.html">VHierarchyWindow</a> documentation </dd></dl>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
-<li>OpenMesh/Tools/VDPM/<a class="el" href="a00617_source.html">VHierarchyWindow.hh</a></li>
-<li>OpenMesh/Tools/VDPM/VHierarchyWindow.cc</li>
+<div class="textblock"><h3>template&lt;class Refs_&gt;<br />
+class OpenMesh::Concepts::MeshItems::VertexT&lt; Refs_ &gt;</h3>
+
+<p>Interface for the internal vertex type. </p>
+<p>This minimal interface must be provided by every vertex. It's up to the mesh kernel (or the items used by the mesh kernel) to implement it.</p>
+<p>All methods marked as internal should only be used by the mesh kernel. </p>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
+<li>Doc/Concepts/<a class="el" href="a00334_source.html">MeshItems.hh</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -172,7 +158,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>update_with_ecol</b> 
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

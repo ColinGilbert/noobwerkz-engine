@@ -1,7 +1,14 @@
 var a00591 =
 [
-    [ "Sqrt3T", "a00260.html", "a00260" ],
-    [ "ASSERT_CONSISTENCY", "a00591.html#a5ff0177b2f657049627fd5df41c5c5da", null ],
-    [ "next_heh", "a00591.html#aefbe43b0d066107e63a1a54e4ddd20c7", null ],
-    [ "set_next_heh", "a00591.html#a55c0b4ebd88d45de752332e91b84bb52", null ]
+    [ "EH", "a00591.html#ae72a312c7dc40d459f10487922018d17", null ],
+    [ "FH", "a00591.html#ad435a18ef42aa68e48fa714a54740f0a", null ],
+    [ "FVH", "a00591.html#a70af77d6d76b90b002f01651e745845a", null ],
+    [ "HEH", "a00591.html#a7c2a1a811a9acba4ae3e0b6ba24017e9", null ],
+    [ "MOBJ", "a00591.html#a353139e042f3649d44ecdc3595403bb5", null ],
+    [ "NHEH", "a00591.html#afc7c739d7db106cdeaeeacc477055419", null ],
+    [ "OHEH", "a00591.html#ac06399117e085ad4cd3a0c78f3346805", null ],
+    [ "OPENMESH_SUBDIVIDER_ADAPTIVE_RULEST_CC", "a00591.html#a507adaa037668974a23595f5a51c2fb0", null ],
+    [ "PHEH", "a00591.html#a09cf7b3349e5348847bd7648bb8e5955", null ],
+    [ "TVH", "a00591.html#a16515da611681c49c5d90d4064eb01d2", null ],
+    [ "VH", "a00591.html#ac31fb559eebde8ea35b9f6b97fa4a91e", null ]
 ];

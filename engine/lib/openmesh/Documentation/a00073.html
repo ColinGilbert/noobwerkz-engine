@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh::IO::_OFFWriter_ Class Reference</title>
+<title>OpenMesh: OpenMesh::IO::_OBJWriter_ Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -107,97 +108,80 @@ $(document).ready(function(){initNavTree('a00073.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="a01092.html">List of all members</a>  </div>
+<a href="a01122.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">OpenMesh::IO::_OFFWriter_ Class Reference</div>  </div>
+<div class="title">OpenMesh::IO::_OBJWriter_ Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Implementation of the OFF format writer.  
+<p>This class defines the OBJ writer.  
  <a href="a00073.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="a00462_source.html">OpenMesh/Core/IO/writer/OFFWriter.hh</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="a00470_source.html">OpenMesh/Core/IO/writer/OBJWriter.hh</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for OpenMesh::IO::_OFFWriter_:</div>
+Inheritance diagram for OpenMesh::IO::_OBJWriter_:</div>
 <div class="dyncontent">
-<div class="center"><img src="a01093.png" border="0" usemap="#OpenMesh_1_1IO_1_1__OFFWriter___inherit__map" alt="Inheritance graph"/></div>
-<map name="OpenMesh_1_1IO_1_1__OFFWriter___inherit__map" id="OpenMesh_1_1IO_1_1__OFFWriter___inherit__map">
-<area shape="rect" id="node2" href="a00097.html" title="Base class for all writer modules. " alt="" coords="11,5,191,32"/></map>
+<div class="center"><img src="a01123.png" border="0" usemap="#OpenMesh_1_1IO_1_1__OBJWriter___inherit__map" alt="Inheritance graph"/></div>
+<map name="OpenMesh_1_1IO_1_1__OBJWriter___inherit__map" id="OpenMesh_1_1IO_1_1__OBJWriter___inherit__map">
+<area shape="rect" id="node2" href="a00100.html" title="Base class for all writer modules. " alt="" coords="11,5,191,32"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
-Collaboration diagram for OpenMesh::IO::_OFFWriter_:</div>
+Collaboration diagram for OpenMesh::IO::_OBJWriter_:</div>
 <div class="dyncontent">
-<div class="center"><img src="a01094.png" border="0" usemap="#OpenMesh_1_1IO_1_1__OFFWriter___coll__map" alt="Collaboration graph"/></div>
-<map name="OpenMesh_1_1IO_1_1__OFFWriter___coll__map" id="OpenMesh_1_1IO_1_1__OFFWriter___coll__map">
-<area shape="rect" id="node2" href="a00097.html" title="Base class for all writer modules. " alt="" coords="11,5,191,32"/></map>
+<div class="center"><img src="a01124.png" border="0" usemap="#OpenMesh_1_1IO_1_1__OBJWriter___coll__map" alt="Collaboration graph"/></div>
+<map name="OpenMesh_1_1IO_1_1__OBJWriter___coll__map" id="OpenMesh_1_1IO_1_1__OBJWriter___coll__map">
+<area shape="rect" id="node2" href="a00100.html" title="Base class for all writer modules. " alt="" coords="11,5,191,32"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa9d5d470755469d88eddaba5d6945a33"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa9d5d470755469d88eddaba5d6945a33"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00073.html#aa9d5d470755469d88eddaba5d6945a33">get_description</a> () const </td></tr>
-<tr class="memdesc:aa9d5d470755469d88eddaba5d6945a33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return short description of the supported file format. <br /></td></tr>
-<tr class="separator:aa9d5d470755469d88eddaba5d6945a33"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d6340faf7f9859e09b817fa0cae1529"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9d6340faf7f9859e09b817fa0cae1529"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00073.html#a9d6340faf7f9859e09b817fa0cae1529">get_extensions</a> () const </td></tr>
-<tr class="memdesc:a9d6340faf7f9859e09b817fa0cae1529"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return file format's extension. <br /></td></tr>
-<tr class="separator:a9d6340faf7f9859e09b817fa0cae1529"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a25dffaeba54287b8a5871ca45ab205e8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00073.html#a25dffaeba54287b8a5871ca45ab205e8">write</a> (const std::string &amp;, <a class="el" href="a00089.html">BaseExporter</a> &amp;, <a class="el" href="a00237.html">Options</a>, std::streamsize _precision=6) const </td></tr>
-<tr class="memdesc:a25dffaeba54287b8a5871ca45ab205e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write to a file.  <a href="#a25dffaeba54287b8a5871ca45ab205e8">More...</a><br /></td></tr>
-<tr class="separator:a25dffaeba54287b8a5871ca45ab205e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7307374d92852b0482563b8e5e805884"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00073.html#a7307374d92852b0482563b8e5e805884">write</a> (std::ostream &amp;, <a class="el" href="a00089.html">BaseExporter</a> &amp;, <a class="el" href="a00237.html">Options</a>, std::streamsize _precision=6) const </td></tr>
-<tr class="memdesc:a7307374d92852b0482563b8e5e805884"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write to a std::ostream.  <a href="#a7307374d92852b0482563b8e5e805884">More...</a><br /></td></tr>
-<tr class="separator:a7307374d92852b0482563b8e5e805884"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af052800810b1de522fd65efd011f339c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af052800810b1de522fd65efd011f339c"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00073.html#af052800810b1de522fd65efd011f339c">binary_size</a> (<a class="el" href="a00089.html">BaseExporter</a> &amp;_be, <a class="el" href="a00237.html">Options</a> _opt) const </td></tr>
-<tr class="memdesc:af052800810b1de522fd65efd011f339c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns expected size of file if binary format is supported else 0. <br /></td></tr>
-<tr class="separator:af052800810b1de522fd65efd011f339c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_a00097"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a00097')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="a00097.html">OpenMesh::IO::BaseWriter</a></td></tr>
-<tr class="memitem:a7f287d4cf768bf1a0ee08ad68286fa1c inherit pub_methods_a00097"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7f287d4cf768bf1a0ee08ad68286fa1c"></a>
-virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a7f287d4cf768bf1a0ee08ad68286fa1c">~BaseWriter</a> ()</td></tr>
-<tr class="memdesc:a7f287d4cf768bf1a0ee08ad68286fa1c inherit pub_methods_a00097"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor. <br /></td></tr>
-<tr class="separator:a7f287d4cf768bf1a0ee08ad68286fa1c inherit pub_methods_a00097"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7be62a261074da8eca25020904e32e3d inherit pub_methods_a00097"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00097.html#a7be62a261074da8eca25020904e32e3d">can_u_write</a> (const std::string &amp;_filename) const </td></tr>
-<tr class="memdesc:a7be62a261074da8eca25020904e32e3d inherit pub_methods_a00097"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if writer can write _filename (checks extension).  <a href="#a7be62a261074da8eca25020904e32e3d">More...</a><br /></td></tr>
-<tr class="separator:a7be62a261074da8eca25020904e32e3d inherit pub_methods_a00097"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:a866bc75f53d74a55911bfbc4d78adb90"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a866bc75f53d74a55911bfbc4d78adb90"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>writeValue</b> (std::ostream &amp;_out, int value) const </td></tr>
-<tr class="separator:a866bc75f53d74a55911bfbc4d78adb90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4659019f5698ec9c4429df27b035398a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4659019f5698ec9c4429df27b035398a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>writeValue</b> (std::ostream &amp;_out, unsigned int value) const </td></tr>
-<tr class="separator:a4659019f5698ec9c4429df27b035398a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a25d6062e74323de651b10ca2b2f2434f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a25d6062e74323de651b10ca2b2f2434f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>writeValue</b> (std::ostream &amp;_out, float value) const </td></tr>
-<tr class="separator:a25d6062e74323de651b10ca2b2f2434f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8aa94e185fd3903d9df4563d63c808f8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8aa94e185fd3903d9df4563d63c808f8"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>write_ascii</b> (std::ostream &amp;_in, <a class="el" href="a00089.html">BaseExporter</a> &amp;, <a class="el" href="a00237.html">Options</a>) const </td></tr>
-<tr class="separator:a8aa94e185fd3903d9df4563d63c808f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7fd563914cd3ac91292ab4e4b3a1e10"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac7fd563914cd3ac91292ab4e4b3a1e10"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>write_binary</b> (std::ostream &amp;_in, <a class="el" href="a00089.html">BaseExporter</a> &amp;, <a class="el" href="a00237.html">Options</a>) const </td></tr>
-<tr class="separator:ac7fd563914cd3ac91292ab4e4b3a1e10"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_a00097"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a00097')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="a00097.html">OpenMesh::IO::BaseWriter</a></td></tr>
-<tr class="memitem:a74c5725d6c46cf8d641c7fc7985e1dc5 inherit pro_methods_a00097"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a74c5725d6c46cf8d641c7fc7985e1dc5"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>check</b> (<a class="el" href="a00089.html">BaseExporter</a> &amp;_be, <a class="el" href="a00237.html">Options</a> _opt) const </td></tr>
-<tr class="separator:a74c5725d6c46cf8d641c7fc7985e1dc5 inherit pro_methods_a00097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb70a2844af33fdff77e1d1619b19592"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeb70a2844af33fdff77e1d1619b19592"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00073.html#aeb70a2844af33fdff77e1d1619b19592">~_OBJWriter_</a> ()</td></tr>
+<tr class="memdesc:aeb70a2844af33fdff77e1d1619b19592"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor. <br /></td></tr>
+<tr class="separator:aeb70a2844af33fdff77e1d1619b19592"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ad44d1aca048d2f6e7bccdd040f298c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ad44d1aca048d2f6e7bccdd040f298c"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00073.html#a1ad44d1aca048d2f6e7bccdd040f298c">get_description</a> () const </td></tr>
+<tr class="memdesc:a1ad44d1aca048d2f6e7bccdd040f298c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return short description of the supported file format. <br /></td></tr>
+<tr class="separator:a1ad44d1aca048d2f6e7bccdd040f298c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bb9ead4aa2ddaf89226cecea70f8b96"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1bb9ead4aa2ddaf89226cecea70f8b96"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00073.html#a1bb9ead4aa2ddaf89226cecea70f8b96">get_extensions</a> () const </td></tr>
+<tr class="memdesc:a1bb9ead4aa2ddaf89226cecea70f8b96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return file format's extension. <br /></td></tr>
+<tr class="separator:a1bb9ead4aa2ddaf89226cecea70f8b96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcb31c3553c0307d1fc44115460f6901"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00073.html#adcb31c3553c0307d1fc44115460f6901">write</a> (const std::string &amp;, <a class="el" href="a00092.html">BaseExporter</a> &amp;, <a class="el" href="a00244.html">Options</a>, std::streamsize _precision=6) const </td></tr>
+<tr class="memdesc:adcb31c3553c0307d1fc44115460f6901"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write to a file.  <a href="#adcb31c3553c0307d1fc44115460f6901">More...</a><br /></td></tr>
+<tr class="separator:adcb31c3553c0307d1fc44115460f6901"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8324e17b43ec30f805bc406e703ca090"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00073.html#a8324e17b43ec30f805bc406e703ca090">write</a> (std::ostream &amp;, <a class="el" href="a00092.html">BaseExporter</a> &amp;, <a class="el" href="a00244.html">Options</a>, std::streamsize _precision=6) const </td></tr>
+<tr class="memdesc:a8324e17b43ec30f805bc406e703ca090"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write to a std::ostream.  <a href="#a8324e17b43ec30f805bc406e703ca090">More...</a><br /></td></tr>
+<tr class="separator:a8324e17b43ec30f805bc406e703ca090"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5fbd1591e5adad3aefd0a3e05585bcc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae5fbd1591e5adad3aefd0a3e05585bcc"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00073.html#ae5fbd1591e5adad3aefd0a3e05585bcc">binary_size</a> (<a class="el" href="a00092.html">BaseExporter</a> &amp;, <a class="el" href="a00244.html">Options</a>) const </td></tr>
+<tr class="memdesc:ae5fbd1591e5adad3aefd0a3e05585bcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns expected size of file if binary format is supported else 0. <br /></td></tr>
+<tr class="separator:ae5fbd1591e5adad3aefd0a3e05585bcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_a00100"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a00100')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="a00100.html">OpenMesh::IO::BaseWriter</a></td></tr>
+<tr class="memitem:a7f287d4cf768bf1a0ee08ad68286fa1c inherit pub_methods_a00100"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7f287d4cf768bf1a0ee08ad68286fa1c"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00100.html#a7f287d4cf768bf1a0ee08ad68286fa1c">~BaseWriter</a> ()</td></tr>
+<tr class="memdesc:a7f287d4cf768bf1a0ee08ad68286fa1c inherit pub_methods_a00100"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor. <br /></td></tr>
+<tr class="separator:a7f287d4cf768bf1a0ee08ad68286fa1c inherit pub_methods_a00100"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7be62a261074da8eca25020904e32e3d inherit pub_methods_a00100"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00100.html#a7be62a261074da8eca25020904e32e3d">can_u_write</a> (const std::string &amp;_filename) const </td></tr>
+<tr class="memdesc:a7be62a261074da8eca25020904e32e3d inherit pub_methods_a00100"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if writer can write _filename (checks extension).  <a href="#a7be62a261074da8eca25020904e32e3d">More...</a><br /></td></tr>
+<tr class="separator:a7be62a261074da8eca25020904e32e3d inherit pub_methods_a00100"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_types_a00097"><td colspan="2" onclick="javascript:toggleInherit('pub_types_a00097')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="a00097.html">OpenMesh::IO::BaseWriter</a></td></tr>
-<tr class="memitem:a64e0d2f73712d56ed5f911c39664a641 inherit pub_types_a00097"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a64e0d2f73712d56ed5f911c39664a641"></a>
+<tr class="inherit_header pub_types_a00100"><td colspan="2" onclick="javascript:toggleInherit('pub_types_a00100')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="a00100.html">OpenMesh::IO::BaseWriter</a></td></tr>
+<tr class="memitem:a64e0d2f73712d56ed5f911c39664a641 inherit pub_types_a00100"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a64e0d2f73712d56ed5f911c39664a641"></a>
 typedef unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>Option</b></td></tr>
-<tr class="separator:a64e0d2f73712d56ed5f911c39664a641 inherit pub_types_a00097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a64e0d2f73712d56ed5f911c39664a641 inherit pub_types_a00100"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_a00100"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a00100')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="a00100.html">OpenMesh::IO::BaseWriter</a></td></tr>
+<tr class="memitem:a74c5725d6c46cf8d641c7fc7985e1dc5 inherit pro_methods_a00100"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a74c5725d6c46cf8d641c7fc7985e1dc5"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>check</b> (<a class="el" href="a00092.html">BaseExporter</a> &amp;_be, <a class="el" href="a00244.html">Options</a> _opt) const </td></tr>
+<tr class="separator:a74c5725d6c46cf8d641c7fc7985e1dc5 inherit pro_methods_a00100"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Implementation of the OFF format writer. </p>
-<p>This class is singleton'ed by <a class="el" href="a00258.html" title="A simple singleton template. ">SingletonT</a> to OFFWriter.</p>
-<p>By passing <a class="el" href="a00237.html" title="Set options for reader/writer modules. ">Options</a> to the write function you can manipulate the writing behavoir. The following options can be set:</p>
-<p>Binary VertexNormal VertexColor VertexTexCoord FaceColor ColorAlpha </p>
+<div class="textblock"><p>This class defines the OBJ writer. </p>
+<p>This class is further singleton'ed by <a class="el" href="a00265.html" title="A simple singleton template. ">SingletonT</a> to OBJWriter. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a25dffaeba54287b8a5871ca45ab205e8"></a>
+<a class="anchor" id="adcb31c3553c0307d1fc44115460f6901"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -205,7 +189,7 @@ typedef unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>Optio
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool OpenMesh::IO::_OFFWriter_::write </td>
+          <td class="memname">bool OpenMesh::IO::_OBJWriter_::write </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>_filename</em>, </td>
@@ -213,13 +197,13 @@ typedef unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>Optio
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="a00089.html">BaseExporter</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="a00092.html">BaseExporter</a> &amp;&#160;</td>
           <td class="paramname"><em>_be</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="a00237.html">Options</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="a00244.html">Options</a>&#160;</td>
           <td class="paramname"><em>_opt</em>, </td>
         </tr>
         <tr>
@@ -245,18 +229,18 @@ typedef unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>Optio
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">_filename</td><td>write to file with the given filename </td></tr>
-    <tr><td class="paramname">_be</td><td><a class="el" href="a00089.html" title="Base class for exporter modules. ">BaseExporter</a>, which specifies the data source </td></tr>
+    <tr><td class="paramname">_be</td><td><a class="el" href="a00092.html" title="Base class for exporter modules. ">BaseExporter</a>, which specifies the data source </td></tr>
     <tr><td class="paramname">_opt</td><td>writing options </td></tr>
     <tr><td class="paramname">_precision</td><td>can be used to specify the precision of the floating point notation. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Implements <a class="el" href="a00097.html#a7c0818a63926bdb439044a8f4c038d85">OpenMesh::IO::BaseWriter</a>.</p>
+<p>Implements <a class="el" href="a00100.html#a7c0818a63926bdb439044a8f4c038d85">OpenMesh::IO::BaseWriter</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a7307374d92852b0482563b8e5e805884"></a>
+<a class="anchor" id="a8324e17b43ec30f805bc406e703ca090"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -264,7 +248,7 @@ typedef unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>Optio
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool OpenMesh::IO::_OFFWriter_::write </td>
+          <td class="memname">bool OpenMesh::IO::_OBJWriter_::write </td>
           <td>(</td>
           <td class="paramtype">std::ostream &amp;&#160;</td>
           <td class="paramname"><em>_os</em>, </td>
@@ -272,13 +256,13 @@ typedef unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>Optio
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="a00089.html">BaseExporter</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="a00092.html">BaseExporter</a> &amp;&#160;</td>
           <td class="paramname"><em>_be</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="a00237.html">Options</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="a00244.html">Options</a>&#160;</td>
           <td class="paramname"><em>_opt</em>, </td>
         </tr>
         <tr>
@@ -304,20 +288,20 @@ typedef unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>Optio
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">_os</td><td>write to std::ostream </td></tr>
-    <tr><td class="paramname">_be</td><td><a class="el" href="a00089.html" title="Base class for exporter modules. ">BaseExporter</a>, which specifies the data source </td></tr>
+    <tr><td class="paramname">_be</td><td><a class="el" href="a00092.html" title="Base class for exporter modules. ">BaseExporter</a>, which specifies the data source </td></tr>
     <tr><td class="paramname">_opt</td><td>writing options </td></tr>
     <tr><td class="paramname">_precision</td><td>can be used to specify the precision of the floating point notation. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Implements <a class="el" href="a00097.html#ae0aa2050e93f96d71ff70ce788a76a94">OpenMesh::IO::BaseWriter</a>.</p>
+<p>Implements <a class="el" href="a00100.html#ae0aa2050e93f96d71ff70ce788a76a94">OpenMesh::IO::BaseWriter</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>OpenMesh/Core/IO/writer/<a class="el" href="a00462_source.html">OFFWriter.hh</a></li>
-<li>OpenMesh/Core/IO/writer/OFFWriter.cc</li>
+<li>OpenMesh/Core/IO/writer/<a class="el" href="a00470_source.html">OBJWriter.hh</a></li>
+<li>OpenMesh/Core/IO/writer/OBJWriter.cc</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -325,7 +309,6 @@ typedef unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>Optio
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

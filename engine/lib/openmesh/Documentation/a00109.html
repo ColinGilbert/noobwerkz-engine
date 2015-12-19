@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh::color_caster&lt; osg::Color3ub, osg::Color3f &gt; Struct Template Reference</title>
+<title>OpenMesh: OpenMesh::Subdivider::Uniform::CompositeT&lt; MeshType, RealType &gt;::Coeff Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -106,41 +107,38 @@ $(document).ready(function(){initNavTree('a00109.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="a00926.html">List of all members</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="a01328.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">OpenMesh::color_caster&lt; osg::Color3ub, osg::Color3f &gt; Struct Template Reference</div>  </div>
+<div class="title">OpenMesh::Subdivider::Uniform::CompositeT&lt; MeshType, RealType &gt;::Coeff Struct Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Helper struct.  
+<p>Abstract base class for coefficient functions.  
  <a href="a00109.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="a00518_source.html">OpenMesh/Tools/Kernel_OSG/color_cast.hh</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="a00587_source.html">OpenMesh/Tools/Subdivider/Uniform/Composite/CompositeT.hh</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for OpenMesh::Subdivider::Uniform::CompositeT&lt; MeshType, RealType &gt;::Coeff:</div>
+<div class="dyncontent">
+<div class="center"><img src="a01329.png" border="0" usemap="#OpenMesh_1_1Subdivider_1_1Uniform_1_1CompositeT_3_01MeshType_00_01RealType_01_4_1_1Coeff_inherit__map" alt="Inheritance graph"/></div>
+<map name="OpenMesh_1_1Subdivider_1_1Uniform_1_1CompositeT_3_01MeshType_00_01RealType_01_4_1_1Coeff_inherit__map" id="OpenMesh_1_1Subdivider_1_1Uniform_1_1CompositeT_3_01MeshType_00_01RealType_01_4_1_1Coeff_inherit__map">
+<area shape="rect" id="node2" href="a00145.html" title="Helper struct. " alt="" coords="247,5,429,76"/><area shape="rect" id="node3" href="a00160.html" title="Helper class. " alt="" coords="224,101,452,157"/></map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:ac8f50f968894036f64c47e0296de7209"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac8f50f968894036f64c47e0296de7209"></a>
-typedef osg::Color3ub&#160;</td><td class="memItemRight" valign="bottom"><b>return_type</b></td></tr>
-<tr class="separator:ac8f50f968894036f64c47e0296de7209"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa589e8835fb07450709fa2c5d562adf8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa589e8835fb07450709fa2c5d562adf8"></a>
-typedef unsigned char&#160;</td><td class="memItemRight" valign="bottom"><b>ub</b></td></tr>
-<tr class="separator:aa589e8835fb07450709fa2c5d562adf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a776c20eefd09fa7406a4f255c9712d00"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a776c20eefd09fa7406a4f255c9712d00"></a>
-static return_type&#160;</td><td class="memItemRight" valign="bottom"><b>cast</b> (const osg::Color3f &amp;_src)</td></tr>
-<tr class="separator:a776c20eefd09fa7406a4f255c9712d00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ad2f19665418f3827ef929c6d8728af09"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad2f19665418f3827ef929c6d8728af09"></a>
+virtual double&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (size_t _valence)=0</td></tr>
+<tr class="separator:ad2f19665418f3827ef929c6d8728af09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;&gt;<br />
-struct OpenMesh::color_caster&lt; osg::Color3ub, osg::Color3f &gt;</h3>
+<div class="textblock"><h3>template&lt;typename MeshType, typename RealType = float&gt;<br />
+struct OpenMesh::Subdivider::Uniform::CompositeT&lt; MeshType, RealType &gt;::Coeff</h3>
 
-<p>Helper struct. </p>
+<p>Abstract base class for coefficient functions. </p>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
-<li>OpenMesh/Tools/Kernel_OSG/<a class="el" href="a00518_source.html">color_cast.hh</a></li>
+<li>OpenMesh/Tools/Subdivider/Uniform/Composite/<a class="el" href="a00587_source.html">CompositeT.hh</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -148,7 +146,6 @@ struct OpenMesh::color_caster&lt; osg::Color3ub, osg::Color3f &gt;</h3>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

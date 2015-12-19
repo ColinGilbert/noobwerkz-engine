@@ -16,9 +16,6 @@ endif()
 set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set (CMAKE_DEBUG_POSTFIX "d")
 
-set( OPENMESH_BUILD_SHARED false CACHE BOOL "Build as shared library(DLL)?" )
-
-
 # include our cmake files
 include (ACGCommon)
 
@@ -62,7 +59,7 @@ endif()
 # Add bundle targets here
 # ========================================================================
 if ( NOT DEFINED BUILD_APPS )
-  set( BUILD_APPS false CACHE BOOL "Enable or disable building of apps" )
+  set( BUILD_APPS true CACHE BOOL "Enable or disable building of apps" )
 endif()
 
 # Only call fixbundle, when we are building OpenMesh standalone
@@ -89,7 +86,7 @@ endif() # project OpenMesh
 
 add_subdirectory (src/OpenMesh/Core)
 add_subdirectory (src/OpenMesh/Tools)
-#add_subdirectory (src/OpenMesh/Apps)
+add_subdirectory (src/OpenMesh/Apps)
 
 # Do not build unit tests when build as external library
 if(${PROJECT_NAME} MATCHES "OpenMesh")
@@ -110,7 +107,7 @@ else()
 	set (OPENMESH_LIBRARY_DIR "${_OPENMESH_LIBRARY_DIR}" CACHE PATH "The directory where the OpenMesh libraries can be found.")
 endif()
 
-#add_subdirectory (Doc)
+add_subdirectory (Doc)
 
 # ========================================================================
 # Include Python interface

@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *
- *   $Revision: 1278 $                                                         *
- *   $Date: 2015-06-09 10:58:41 +0200 (Di, 09 Jun 2015) $                   *
+ *   $Revision$                                                         *
+ *   $Date$                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -60,13 +60,10 @@
 #endif
 
 #include <fstream>
-#include <ostream>
 #include <vector>
 
 // -------------------- OpenMesh
 #include <OpenMesh/Core/IO/OMFormat.hh>
-#include <OpenMesh/Core/System/omstream.hh>
-#include <OpenMesh/Core/Utils/Endian.hh>
 #include <OpenMesh/Core/IO/exporter/BaseExporter.hh>
 #include <OpenMesh/Core/IO/writer/OMWriter.hh>
 
@@ -251,7 +248,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
   }
 
   // ---------- write vertex color
-  if (_opt.check( Options::VertexColor ) && _be.has_vertex_colors() )
+  if (_be.n_vertices() && _opt.check( Options::VertexColor ) && _be.has_vertex_colors() )
   {
     Vec3uc c = _be.color(VertexHandle(0));
 

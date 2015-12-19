@@ -1,6 +1,5 @@
 var a00295 =
 [
-    [ "typed_size", "a00295.html#a6c6c0c34c4baef1ea3b178669240b35b", null ],
-    [ "value_type", "a00295.html#aa6dfd80ebfb1256fe7f18d8179d440d4", null ],
-    [ "vector_type", "a00295.html#a84b6777160f1a724ac5949cde973693b", null ]
+    [ "value_type", "a00295.html#a127a4d7ca521ed3254cd801917ee67d4", null ],
+    [ "vector_type", "a00295.html#a18e9f5e25f8f75da8e609efc2baa15ac", null ]
 ];

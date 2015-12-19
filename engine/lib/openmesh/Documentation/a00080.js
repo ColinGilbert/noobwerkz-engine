@@ -1,9 +1,11 @@
 var a00080 =
 [
-    [ "_VTKWriter_", "a00080.html#a337b16fc0a08df9259ea7acc65ff79e1", null ],
-    [ "binary_size", "a00080.html#a783378f6ae282850c4e8ddc3f259e629", null ],
-    [ "get_description", "a00080.html#a46f745e0db2bd441cc6d00cb1a028ebe", null ],
-    [ "get_extensions", "a00080.html#a1fb9e8fb72c6ba8008159c4f774d93c2", null ],
-    [ "write", "a00080.html#a2cfd212d5d8b032243bd9a3d0d1f21b1", null ],
-    [ "write", "a00080.html#aa805adf619325cac01c6eb7db4720805", null ]
+    [ "_STLReader_", "a00080.html#aecca39e09b28cfd0e1b54e6531037a83", null ],
+    [ "~_STLReader_", "a00080.html#a88db910f48bfa7c42c873888bed4cfc6", null ],
+    [ "epsilon", "a00080.html#a453b5bc39c6256dae86d72e73d9ece7e", null ],
+    [ "get_description", "a00080.html#a3f2d2f8443ad016d81ad1506cf22f5db", null ],
+    [ "get_extensions", "a00080.html#a1313e21a04264133ffca2be46c47697f", null ],
+    [ "read", "a00080.html#ab13615c05aef446846cf177b439bdeb7", null ],
+    [ "read", "a00080.html#ab0015a00f47a24d94dde0ee81a76666a", null ],
+    [ "set_epsilon", "a00080.html#a858cd5bae3eea93ecc33ca12a3e6c475", null ]
 ];

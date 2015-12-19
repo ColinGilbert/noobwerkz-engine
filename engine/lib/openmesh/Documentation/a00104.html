@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh::Python::CirculatorWrapperT&lt; Circulator, CenterEntityHandle &gt; Class Template Reference</title>
+<title>OpenMesh: OpenMesh::Subdivider::Uniform::CatmullClarkT&lt; MeshType, RealType &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -106,66 +107,170 @@ $(document).ready(function(){initNavTree('a00104.html','');});
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="a01180.html">List of all members</a>  </div>
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="a01307.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">OpenMesh::Python::CirculatorWrapperT&lt; Circulator, CenterEntityHandle &gt; Class Template Reference</div>  </div>
+<div class="title">OpenMesh::Subdivider::Uniform::CatmullClarkT&lt; MeshType, RealType &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Wrapper for circulators.  
+<p>Based on code from Leon Kos, CAD lab, Mech.Eng., University of Ljubljana, Slovenia (<a href="http://www.lecad.fs.uni-lj.si/~leon">http://www.lecad.fs.uni-lj.si/~leon</a>)  
  <a href="a00104.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="a00622_source.html">Python/Circulator.hh</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="a00594_source.html">CatmullClarkT.hh</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for OpenMesh::Subdivider::Uniform::CatmullClarkT&lt; MeshType, RealType &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="a01308.png" border="0" usemap="#OpenMesh_1_1Subdivider_1_1Uniform_1_1CatmullClarkT_3_01MeshType_00_01RealType_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="OpenMesh_1_1Subdivider_1_1Uniform_1_1CatmullClarkT_3_01MeshType_00_01RealType_01_4_inherit__map" id="OpenMesh_1_1Subdivider_1_1Uniform_1_1CatmullClarkT_3_01MeshType_00_01RealType_01_4_inherit__map">
+<area shape="rect" id="node2" href="a00273.html" title="Abstract base class for uniform subdivision algorithms. " alt="" coords="22,80,193,136"/><area shape="rect" id="node3" href="a00234.html" title="This class demonstrates the non copyable idiom. " alt="" coords="5,5,209,32"/></map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for OpenMesh::Subdivider::Uniform::CatmullClarkT&lt; MeshType, RealType &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="a01309.png" border="0" usemap="#OpenMesh_1_1Subdivider_1_1Uniform_1_1CatmullClarkT_3_01MeshType_00_01RealType_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="OpenMesh_1_1Subdivider_1_1Uniform_1_1CatmullClarkT_3_01MeshType_00_01RealType_01_4_coll__map" id="OpenMesh_1_1Subdivider_1_1Uniform_1_1CatmullClarkT_3_01MeshType_00_01RealType_01_4_coll__map">
+<area shape="rect" id="node2" href="a00273.html" title="Abstract base class for uniform subdivision algorithms. " alt="" coords="22,80,193,136"/><area shape="rect" id="node3" href="a00234.html" title="This class demonstrates the non copyable idiom. " alt="" coords="5,5,209,32"/></map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:afb81aaa80c3dd00a71d6e9b027c3404f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afb81aaa80c3dd00a71d6e9b027c3404f"></a>
+typedef MeshType::FaceHandle&#160;</td><td class="memItemRight" valign="bottom"><b>FaceHandle</b></td></tr>
+<tr class="separator:afb81aaa80c3dd00a71d6e9b027c3404f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16856045ea6cb81478200e338f70d7a0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a16856045ea6cb81478200e338f70d7a0"></a>
+typedef MeshType::VertexHandle&#160;</td><td class="memItemRight" valign="bottom"><b>VertexHandle</b></td></tr>
+<tr class="separator:a16856045ea6cb81478200e338f70d7a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46e6197eae82c4592eb63179bb01cedf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a46e6197eae82c4592eb63179bb01cedf"></a>
+typedef MeshType::EdgeHandle&#160;</td><td class="memItemRight" valign="bottom"><b>EdgeHandle</b></td></tr>
+<tr class="separator:a46e6197eae82c4592eb63179bb01cedf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6facaeec3c51f7d48b787b268cd611a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae6facaeec3c51f7d48b787b268cd611a"></a>
+typedef MeshType::HalfedgeHandle&#160;</td><td class="memItemRight" valign="bottom"><b>HalfedgeHandle</b></td></tr>
+<tr class="separator:ae6facaeec3c51f7d48b787b268cd611a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20beb79bd423930daa500e83354acb5a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a20beb79bd423930daa500e83354acb5a"></a>
+typedef MeshType::Point&#160;</td><td class="memItemRight" valign="bottom"><b>Point</b></td></tr>
+<tr class="separator:a20beb79bd423930daa500e83354acb5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab02d527ddfeedd4cd7e99cfac3a40193"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab02d527ddfeedd4cd7e99cfac3a40193"></a>
+typedef MeshType::Normal&#160;</td><td class="memItemRight" valign="bottom"><b>Normal</b></td></tr>
+<tr class="separator:ab02d527ddfeedd4cd7e99cfac3a40193"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab92e9e5aa0eef6d58957b8bb36e6420c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab92e9e5aa0eef6d58957b8bb36e6420c"></a>
+typedef MeshType::FaceIter&#160;</td><td class="memItemRight" valign="bottom"><b>FaceIter</b></td></tr>
+<tr class="separator:ab92e9e5aa0eef6d58957b8bb36e6420c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c2d90f4bf6f7e1be995fee3bf2346f6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5c2d90f4bf6f7e1be995fee3bf2346f6"></a>
+typedef MeshType::EdgeIter&#160;</td><td class="memItemRight" valign="bottom"><b>EdgeIter</b></td></tr>
+<tr class="separator:a5c2d90f4bf6f7e1be995fee3bf2346f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b348559c9f1453e1d1aed960b6e3080"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2b348559c9f1453e1d1aed960b6e3080"></a>
+typedef MeshType::VertexIter&#160;</td><td class="memItemRight" valign="bottom"><b>VertexIter</b></td></tr>
+<tr class="separator:a2b348559c9f1453e1d1aed960b6e3080"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a490f5a58e50ed7ba81d86cd81ffd7c5e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a490f5a58e50ed7ba81d86cd81ffd7c5e"></a>
+typedef MeshType::VertexEdgeIter&#160;</td><td class="memItemRight" valign="bottom"><b>VertexEdgeIter</b></td></tr>
+<tr class="separator:a490f5a58e50ed7ba81d86cd81ffd7c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adce13f2ef29ec027648ac8a11932885c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adce13f2ef29ec027648ac8a11932885c"></a>
+typedef MeshType::VertexFaceIter&#160;</td><td class="memItemRight" valign="bottom"><b>VertexFaceIter</b></td></tr>
+<tr class="separator:adce13f2ef29ec027648ac8a11932885c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab45a947fb39ce828de4242ddf1f8f0ef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab45a947fb39ce828de4242ddf1f8f0ef"></a>
+typedef MeshType::VOHIter&#160;</td><td class="memItemRight" valign="bottom"><b>VOHIter</b></td></tr>
+<tr class="separator:ab45a947fb39ce828de4242ddf1f8f0ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedf4baed9240d00509d09c8d8faeb75c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aedf4baed9240d00509d09c8d8faeb75c"></a>
+typedef <a class="el" href="a00273.html">SubdividerT</a>&lt; MeshType, <br class="typebreak" />
+RealType &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>parent_t</b></td></tr>
+<tr class="separator:aedf4baed9240d00509d09c8d8faeb75c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_a00273"><td colspan="2" onclick="javascript:toggleInherit('pub_types_a00273')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="a00273.html">OpenMesh::Subdivider::Uniform::SubdividerT&lt; MeshType, RealType &gt;</a></td></tr>
+<tr class="memitem:acc900fcb30e4243ecb60ee270ae9fd22 inherit pub_types_a00273"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acc900fcb30e4243ecb60ee270ae9fd22"></a>
+typedef MeshType&#160;</td><td class="memItemRight" valign="bottom"><b>mesh_t</b></td></tr>
+<tr class="separator:acc900fcb30e4243ecb60ee270ae9fd22 inherit pub_types_a00273"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad89e5e754ae100ff90a1abd02095b57 inherit pub_types_a00273"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aad89e5e754ae100ff90a1abd02095b57"></a>
+typedef RealType&#160;</td><td class="memItemRight" valign="bottom"><b>real_t</b></td></tr>
+<tr class="separator:aad89e5e754ae100ff90a1abd02095b57 inherit pub_types_a00273"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:abf4ceaed2b68f3454aeb2acd4da3fc2a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00104.html#abf4ceaed2b68f3454aeb2acd4da3fc2a">CirculatorWrapperT</a> (<a class="el" href="a00242.html">PolyMesh</a> &amp;_mesh, CenterEntityHandle _center)</td></tr>
-<tr class="memdesc:abf4ceaed2b68f3454aeb2acd4da3fc2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#abf4ceaed2b68f3454aeb2acd4da3fc2a">More...</a><br /></td></tr>
-<tr class="separator:abf4ceaed2b68f3454aeb2acd4da3fc2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aecd0decc1866e24de8e69a121c0b545b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00104.html#aecd0decc1866e24de8e69a121c0b545b">CirculatorWrapperT</a> (<a class="el" href="a00273.html">TriMesh</a> &amp;_mesh, CenterEntityHandle _center)</td></tr>
-<tr class="memdesc:aecd0decc1866e24de8e69a121c0b545b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#aecd0decc1866e24de8e69a121c0b545b">More...</a><br /></td></tr>
-<tr class="separator:aecd0decc1866e24de8e69a121c0b545b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7889a82c4fecf94cf312914149d452df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00104.html">CirculatorWrapperT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00104.html#a7889a82c4fecf94cf312914149d452df">iter</a> () const </td></tr>
-<tr class="memdesc:a7889a82c4fecf94cf312914149d452df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of Python's __iter__ magic method.  <a href="#a7889a82c4fecf94cf312914149d452df">More...</a><br /></td></tr>
-<tr class="separator:a7889a82c4fecf94cf312914149d452df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac828352aaf9fd0715a4012e15c02bfda"><td class="memItemLeft" align="right" valign="top">Circulator::value_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00104.html#ac828352aaf9fd0715a4012e15c02bfda">next</a> ()</td></tr>
-<tr class="memdesc:ac828352aaf9fd0715a4012e15c02bfda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of Python's __next__ magic method.  <a href="#ac828352aaf9fd0715a4012e15c02bfda">More...</a><br /></td></tr>
-<tr class="separator:ac828352aaf9fd0715a4012e15c02bfda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6d980d140a5fa437cbd052cad08ad5b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae6d980d140a5fa437cbd052cad08ad5b"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00104.html#ae6d980d140a5fa437cbd052cad08ad5b">CatmullClarkT</a> ()</td></tr>
+<tr class="memdesc:ae6d980d140a5fa437cbd052cad08ad5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. <br /></td></tr>
+<tr class="separator:ae6d980d140a5fa437cbd052cad08ad5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4dffc85efdd793bb06fd62ae54440e46"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4dffc85efdd793bb06fd62ae54440e46"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00104.html#a4dffc85efdd793bb06fd62ae54440e46">CatmullClarkT</a> (MeshType &amp;_m)</td></tr>
+<tr class="memdesc:a4dffc85efdd793bb06fd62ae54440e46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. <br /></td></tr>
+<tr class="separator:a4dffc85efdd793bb06fd62ae54440e46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2fe46bc746493c6e75651d65a96be7e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af2fe46bc746493c6e75651d65a96be7e"></a>
+const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00104.html#af2fe46bc746493c6e75651d65a96be7e">name</a> () const </td></tr>
+<tr class="memdesc:af2fe46bc746493c6e75651d65a96be7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return name of subdivision algorithm. <br /></td></tr>
+<tr class="separator:af2fe46bc746493c6e75651d65a96be7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_a00273"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a00273')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="a00273.html">OpenMesh::Subdivider::Uniform::SubdividerT&lt; MeshType, RealType &gt;</a></td></tr>
+<tr class="memitem:a89c316211e4014b0705d34a141152f4f inherit pub_methods_a00273"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a89c316211e4014b0705d34a141152f4f"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00273.html#a89c316211e4014b0705d34a141152f4f">~SubdividerT</a> ()</td></tr>
+<tr class="memdesc:a89c316211e4014b0705d34a141152f4f inherit pub_methods_a00273"><td class="mdescLeft">&#160;</td><td class="mdescRight">Descructor (calls <a class="el" href="a00273.html#a5e43f1fde3bd9588b4265fe1d1be6a8d" title="Detach an eventually attached mesh. ">detach()</a>) <br /></td></tr>
+<tr class="separator:a89c316211e4014b0705d34a141152f4f inherit pub_methods_a00273"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89341e7a735352adbb76f6842d3fab12 inherit pub_methods_a00273"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00273.html#a89341e7a735352adbb76f6842d3fab12">SubdividerT</a> (void)</td></tr>
+<tr class="memdesc:a89341e7a735352adbb76f6842d3fab12 inherit pub_methods_a00273"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor to be used with interface 2.  <a href="#a89341e7a735352adbb76f6842d3fab12">More...</a><br /></td></tr>
+<tr class="separator:a89341e7a735352adbb76f6842d3fab12 inherit pub_methods_a00273"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a697277667735e023a5c62b7c406a2cad inherit pub_methods_a00273"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00273.html#a697277667735e023a5c62b7c406a2cad">SubdividerT</a> (MeshType &amp;_m)</td></tr>
+<tr class="memdesc:a697277667735e023a5c62b7c406a2cad inherit pub_methods_a00273"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor to be used with interface 1 (calls <a class="el" href="a00273.html#a4faaaf5cdd9273b4c28ef9f2a2e942ba" title="Attach mesh _m to self. ">attach()</a>)  <a href="#a697277667735e023a5c62b7c406a2cad">More...</a><br /></td></tr>
+<tr class="separator:a697277667735e023a5c62b7c406a2cad inherit pub_methods_a00273"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c3bb164d974ac4bcc9217a8368a7484 inherit pub_methods_a00273"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00273.html#a2c3bb164d974ac4bcc9217a8368a7484">operator()</a> (MeshType &amp;_m, size_t _n, const bool _update_points=true)</td></tr>
+<tr class="memdesc:a2c3bb164d974ac4bcc9217a8368a7484 inherit pub_methods_a00273"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subdivide the mesh <code>_m</code> <code>_n</code> times.  <a href="#a2c3bb164d974ac4bcc9217a8368a7484">More...</a><br /></td></tr>
+<tr class="separator:a2c3bb164d974ac4bcc9217a8368a7484 inherit pub_methods_a00273"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4faaaf5cdd9273b4c28ef9f2a2e942ba inherit pub_methods_a00273"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00273.html#a4faaaf5cdd9273b4c28ef9f2a2e942ba">attach</a> (MeshType &amp;_m)</td></tr>
+<tr class="memdesc:a4faaaf5cdd9273b4c28ef9f2a2e942ba inherit pub_methods_a00273"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attach mesh <code>_m</code> to self.  <a href="#a4faaaf5cdd9273b4c28ef9f2a2e942ba">More...</a><br /></td></tr>
+<tr class="separator:a4faaaf5cdd9273b4c28ef9f2a2e942ba inherit pub_methods_a00273"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d294cdf55c4373e0793002dd8d86add inherit pub_methods_a00273"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00273.html#a3d294cdf55c4373e0793002dd8d86add">operator()</a> (size_t _n, const bool _update_points=true)</td></tr>
+<tr class="memdesc:a3d294cdf55c4373e0793002dd8d86add inherit pub_methods_a00273"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subdivide the attached <code>_n</code> times.  <a href="#a3d294cdf55c4373e0793002dd8d86add">More...</a><br /></td></tr>
+<tr class="separator:a3d294cdf55c4373e0793002dd8d86add inherit pub_methods_a00273"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e43f1fde3bd9588b4265fe1d1be6a8d inherit pub_methods_a00273"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00273.html#a5e43f1fde3bd9588b4265fe1d1be6a8d">detach</a> (void)</td></tr>
+<tr class="memdesc:a5e43f1fde3bd9588b4265fe1d1be6a8d inherit pub_methods_a00273"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detach an eventually attached mesh.  <a href="#a5e43f1fde3bd9588b4265fe1d1be6a8d">More...</a><br /></td></tr>
+<tr class="separator:a5e43f1fde3bd9588b4265fe1d1be6a8d inherit pub_methods_a00273"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a9becc2879f2bd7460a7e5459851c9a6e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9becc2879f2bd7460a7e5459851c9a6e"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00104.html#a9becc2879f2bd7460a7e5459851c9a6e">prepare</a> (MeshType &amp;_m)</td></tr>
+<tr class="memdesc:a9becc2879f2bd7460a7e5459851c9a6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize properties and weights. <br /></td></tr>
+<tr class="separator:a9becc2879f2bd7460a7e5459851c9a6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a083f82920d1b20c80fd34d0ccb566998"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a083f82920d1b20c80fd34d0ccb566998"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00104.html#a083f82920d1b20c80fd34d0ccb566998">cleanup</a> (MeshType &amp;_m)</td></tr>
+<tr class="memdesc:a083f82920d1b20c80fd34d0ccb566998"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove properties and weights. <br /></td></tr>
+<tr class="separator:a083f82920d1b20c80fd34d0ccb566998"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae629c898e1d24771d1e68cd3a4f27e4f"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00104.html#ae629c898e1d24771d1e68cd3a4f27e4f">subdivide</a> (MeshType &amp;_m, size_t _n, const bool _update_points=true)</td></tr>
+<tr class="memdesc:ae629c898e1d24771d1e68cd3a4f27e4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute n subdivision steps.  <a href="#ae629c898e1d24771d1e68cd3a4f27e4f">More...</a><br /></td></tr>
+<tr class="separator:ae629c898e1d24771d1e68cd3a4f27e4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Overload theses methods</div></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;class Circulator, class CenterEntityHandle&gt;<br />
-class OpenMesh::Python::CirculatorWrapperT&lt; Circulator, CenterEntityHandle &gt;</h3>
+<div class="textblock"><h3>template&lt;typename MeshType, typename RealType = float&gt;<br />
+class OpenMesh::Subdivider::Uniform::CatmullClarkT&lt; MeshType, RealType &gt;</h3>
 
-<p>Wrapper for circulators. </p>
-<p>This class template is used to wrap circulators for Python. It implements Python's iterator protocol (the magic methods __iter__ and __next__).</p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">Circulator</td><td>A circulator type. </td></tr>
-  </table>
-  </dd>
-</dl>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="abf4ceaed2b68f3454aeb2acd4da3fc2a"></a>
+<p>Based on code from Leon Kos, CAD lab, Mech.Eng., University of Ljubljana, Slovenia (<a href="http://www.lecad.fs.uni-lj.si/~leon">http://www.lecad.fs.uni-lj.si/~leon</a>) </p>
+<dl class="section note"><dt>Note</dt><dd>Needs a PolyMesh to work on! </dd></dl>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ae629c898e1d24771d1e68cd3a4f27e4f"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Circulator, class CenterEntityHandle&gt; </div>
+template&lt;typename MeshType , typename RealType &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="a00104.html">OpenMesh::Python::CirculatorWrapperT</a>&lt; Circulator, CenterEntityHandle &gt;::<a class="el" href="a00104.html">CirculatorWrapperT</a> </td>
+          <td class="memname">bool <a class="el" href="a00104.html">OpenMesh::Subdivider::Uniform::CatmullClarkT</a>&lt; MeshType, RealType &gt;::subdivide </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="a00242.html">PolyMesh</a> &amp;&#160;</td>
-          <td class="paramname"><em>_mesh</em>, </td>
+          <td class="paramtype">MeshType &amp;&#160;</td>
+          <td class="paramname"><em>_m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">CenterEntityHandle&#160;</td>
-          <td class="paramname"><em>_center</em>&#160;</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>_n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>_update_points</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -175,126 +280,29 @@ template&lt;class Circulator, class CenterEntityHandle&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Constructor. </p>
+<p>Execute n subdivision steps. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">_mesh</td><td>The mesh that contains the items to iterate over. </td></tr>
-    <tr><td class="paramname">_center</td><td>The handle to the center item. </td></tr>
+    <tr><td class="paramname">_m</td><td>Mesh to work on </td></tr>
+    <tr><td class="paramname">_n</td><td>Number of iterations </td></tr>
+    <tr><td class="paramname">_update_points</td><td>Unused here </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>successful? </dd></dl>
+
+<p>Implements <a class="el" href="a00273.html#aacf8b2b63d1512d3c174fbe1781ee311">OpenMesh::Subdivider::Uniform::SubdividerT&lt; MeshType, RealType &gt;</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aecd0decc1866e24de8e69a121c0b545b"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class Circulator, class CenterEntityHandle&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00104.html">OpenMesh::Python::CirculatorWrapperT</a>&lt; Circulator, CenterEntityHandle &gt;::<a class="el" href="a00104.html">CirculatorWrapperT</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="a00273.html">TriMesh</a> &amp;&#160;</td>
-          <td class="paramname"><em>_mesh</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">CenterEntityHandle&#160;</td>
-          <td class="paramname"><em>_center</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Constructor. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">_mesh</td><td>The mesh that contains the items to iterate over. </td></tr>
-    <tr><td class="paramname">_center</td><td>The handle to the center item. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a7889a82c4fecf94cf312914149d452df"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class Circulator, class CenterEntityHandle&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="a00104.html">CirculatorWrapperT</a> <a class="el" href="a00104.html">OpenMesh::Python::CirculatorWrapperT</a>&lt; Circulator, CenterEntityHandle &gt;::iter </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Implementation of Python's __iter__ magic method. </p>
-<dl class="section return"><dt>Returns</dt><dd>This circulator. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="ac828352aaf9fd0715a4012e15c02bfda"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class Circulator, class CenterEntityHandle&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Circulator::value_type <a class="el" href="a00104.html">OpenMesh::Python::CirculatorWrapperT</a>&lt; Circulator, CenterEntityHandle &gt;::next </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Implementation of Python's __next__ magic method. </p>
-<dl class="section return"><dt>Returns</dt><dd>The next item. Raises a Python StopIteration exception if there are no more items. </dd></dl>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>Python/<a class="el" href="a00622_source.html">Circulator.hh</a></li>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>OpenMesh/Tools/Subdivider/Uniform/<a class="el" href="a00594_source.html">CatmullClarkT.hh</a></li>
+<li>OpenMesh/Tools/Subdivider/Uniform/CatmullClarkT.cc</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -302,7 +310,6 @@ template&lt;class Circulator, class CenterEntityHandle&gt; </div>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

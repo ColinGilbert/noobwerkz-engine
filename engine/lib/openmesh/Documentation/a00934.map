@@ -1,4 +1,5 @@
-<map id="OpenMesh::EPropHandleT&lt; T &gt;" name="OpenMesh::EPropHandleT&lt; T &gt;">
-<area shape="rect" id="node2" href="$a00095.html" title="Base property handle. " alt="" coords="15,80,206,121"/>
-<area shape="rect" id="node3" href="$a00090.html" title="Base class for all handle types. " alt="" coords="29,5,193,32"/>
+<map id="OpenMesh::ArrayKernel" name="OpenMesh::ArrayKernel">
+<area shape="rect" id="node4" href="$a00247.html" title="Connectivity Class for polygonal meshes. " alt="" coords="63,155,255,181"/>
+<area shape="rect" id="node2" href="$a00095.html" title="This class provides the basic property management like adding/removing properties and access to prope..." alt="" coords="5,5,165,32"/>
+<area shape="rect" id="node5" href="$a00279.html" title="Connectivity Class for Triangle Meshes. " alt="" coords="68,229,249,256"/>
 </map>

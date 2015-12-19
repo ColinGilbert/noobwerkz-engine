@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh::Attributes::StatusInfo Class Reference</title>
+<title>OpenMesh: OpenMesh::Subdivider::Adaptive::RuleInterfaceT&lt; M &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -108,119 +109,174 @@ $(document).ready(function(){initNavTree('a00263.html','');});
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="a01026.html">List of all members</a>  </div>
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
+<a href="a01277.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">OpenMesh::Attributes::StatusInfo Class Reference</div>  </div>
+<div class="title">OpenMesh::Subdivider::Adaptive::RuleInterfaceT&lt; M &gt; Class Template Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Add status information to a base class.  
+<p>Base class for adaptive composite subdivision rules.  
  <a href="a00263.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="a00495_source.html">OpenMesh/Attributes/Status.hh</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="a00590_source.html">OpenMesh/Tools/Subdivider/Adaptive/Composite/RuleInterfaceT.hh</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for OpenMesh::Subdivider::Adaptive::RuleInterfaceT&lt; M &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="a01278.png" border="0" usemap="#OpenMesh_1_1Subdivider_1_1Adaptive_1_1RuleInterfaceT_3_01M_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="OpenMesh_1_1Subdivider_1_1Adaptive_1_1RuleInterfaceT_3_01M_01_4_inherit__map" id="OpenMesh_1_1Subdivider_1_1Adaptive_1_1RuleInterfaceT_3_01M_01_4_inherit__map">
+<area shape="rect" id="node2" href="a00132.html" title="Composite rule EdE. " alt="" coords="265,5,419,47"/><area shape="rect" id="node3" href="a00133.html" title="Composite rule EdEc. " alt="" coords="264,71,420,112"/><area shape="rect" id="node4" href="a00139.html" title="Composite rule EF. " alt="" coords="265,136,419,177"/><area shape="rect" id="node5" href="a00143.html" title="Composite rule EV. " alt="" coords="265,201,419,243"/><area shape="rect" id="node6" href="a00144.html" title="Composite rule EVc. " alt="" coords="265,267,419,308"/><area shape="rect" id="node7" href="a00153.html" title="Composite rule FE. " alt="" coords="265,332,419,373"/><area shape="rect" id="node8" href="a00154.html" title="Composite rule FF. " alt="" coords="265,397,419,439"/><area shape="rect" id="node9" href="a00155.html" title="Composite rule FFc. " alt="" coords="265,463,419,504"/><area shape="rect" id="node10" href="a00158.html" title="Composite rule FV. " alt="" coords="265,528,419,569"/><area shape="rect" id="node11" href="a00159.html" title="Composite rule FVc. " alt="" coords="265,593,419,635"/><area shape="rect" id="node12" href="a00285.html" title="Adaptive Composite Subdivision framework. " alt="" coords="265,659,419,700"/><area shape="rect" id="node13" href="a00286.html" title="Topological composite rule Tvv,4 doing a 1&#45;4 split of a face. " alt="" coords="265,724,419,765"/><area shape="rect" id="node14" href="a00287.html" title="Composite rule VdE. " alt="" coords="265,789,419,831"/><area shape="rect" id="node15" href="a00288.html" title="Composite rule VdEc. " alt="" coords="264,855,420,896"/><area shape="rect" id="node16" href="a00290.html" title="Composite rule VE. " alt="" coords="265,920,419,961"/><area shape="rect" id="node17" href="a00321.html" title="Composite rule VF. " alt="" coords="265,985,419,1027"/><area shape="rect" id="node18" href="a00330.html" title="Composite rule VV. " alt="" coords="265,1051,419,1092"/><area shape="rect" id="node19" href="a00331.html" title="Composite rule VVc. " alt="" coords="265,1116,419,1157"/></map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a1ed03a718aac1095556b808bf0a925d6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ed03a718aac1095556b808bf0a925d6"></a>
-typedef unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b></td></tr>
-<tr class="separator:a1ed03a718aac1095556b808bf0a925d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49ab5fcd150855be482374cd006b767e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a49ab5fcd150855be482374cd006b767e"></a>
+typedef M&#160;</td><td class="memItemRight" valign="bottom"><b>Mesh</b></td></tr>
+<tr class="separator:a49ab5fcd150855be482374cd006b767e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcf0633d1fd08fb041047b4ff350b5c9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afcf0633d1fd08fb041047b4ff350b5c9"></a>
+typedef <a class="el" href="a00263.html">RuleInterfaceT</a>&lt; M &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Self</b></td></tr>
+<tr class="separator:afcf0633d1fd08fb041047b4ff350b5c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b6d8f209f39c8e0e3cb8ad6e70b9df6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5b6d8f209f39c8e0e3cb8ad6e70b9df6"></a>
+typedef <a class="el" href="a00262.html">RuleHandleT</a>&lt; <a class="el" href="a00263.html">Self</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Rule</b></td></tr>
+<tr class="separator:a5b6d8f209f39c8e0e3cb8ad6e70b9df6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a628bf242187501f8479fd0537bf67aae"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a628bf242187501f8479fd0537bf67aae"></a>
+typedef M::Scalar&#160;</td><td class="memItemRight" valign="bottom"><b>scalar_t</b></td></tr>
+<tr class="separator:a628bf242187501f8479fd0537bf67aae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a94cd6878afd22c6b0d0773a6d08e927c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a94cd6878afd22c6b0d0773a6d08e927c"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a94cd6878afd22c6b0d0773a6d08e927c">deleted</a> () const </td></tr>
-<tr class="memdesc:a94cd6878afd22c6b0d0773a6d08e927c"><td class="mdescLeft">&#160;</td><td class="mdescRight">is deleted ? <br /></td></tr>
-<tr class="separator:a94cd6878afd22c6b0d0773a6d08e927c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45837cf4f0b91397cde55d4e235d0886"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a45837cf4f0b91397cde55d4e235d0886"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a45837cf4f0b91397cde55d4e235d0886">set_deleted</a> (bool _b)</td></tr>
-<tr class="memdesc:a45837cf4f0b91397cde55d4e235d0886"><td class="mdescLeft">&#160;</td><td class="mdescRight">set deleted <br /></td></tr>
-<tr class="separator:a45837cf4f0b91397cde55d4e235d0886"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac97a62d38127b3d6b568276bccb4a7dd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac97a62d38127b3d6b568276bccb4a7dd"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#ac97a62d38127b3d6b568276bccb4a7dd">locked</a> () const </td></tr>
-<tr class="memdesc:ac97a62d38127b3d6b568276bccb4a7dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">is locked ? <br /></td></tr>
-<tr class="separator:ac97a62d38127b3d6b568276bccb4a7dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a388e1ef35046f3563e50c44643938be5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a388e1ef35046f3563e50c44643938be5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a388e1ef35046f3563e50c44643938be5">set_locked</a> (bool _b)</td></tr>
-<tr class="memdesc:a388e1ef35046f3563e50c44643938be5"><td class="mdescLeft">&#160;</td><td class="mdescRight">set locked <br /></td></tr>
-<tr class="separator:a388e1ef35046f3563e50c44643938be5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad105ac3bb7efac8042cd4011bdd37b74"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad105ac3bb7efac8042cd4011bdd37b74"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#ad105ac3bb7efac8042cd4011bdd37b74">selected</a> () const </td></tr>
-<tr class="memdesc:ad105ac3bb7efac8042cd4011bdd37b74"><td class="mdescLeft">&#160;</td><td class="mdescRight">is selected ? <br /></td></tr>
-<tr class="separator:ad105ac3bb7efac8042cd4011bdd37b74"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c2bdc3171ea2abe66f302d4e4af2ce1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0c2bdc3171ea2abe66f302d4e4af2ce1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a0c2bdc3171ea2abe66f302d4e4af2ce1">set_selected</a> (bool _b)</td></tr>
-<tr class="memdesc:a0c2bdc3171ea2abe66f302d4e4af2ce1"><td class="mdescLeft">&#160;</td><td class="mdescRight">set selected <br /></td></tr>
-<tr class="separator:a0c2bdc3171ea2abe66f302d4e4af2ce1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3c7cc9a02f61698827b4140624d9dcb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab3c7cc9a02f61698827b4140624d9dcb"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#ab3c7cc9a02f61698827b4140624d9dcb">hidden</a> () const </td></tr>
-<tr class="memdesc:ab3c7cc9a02f61698827b4140624d9dcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">is hidden ? <br /></td></tr>
-<tr class="separator:ab3c7cc9a02f61698827b4140624d9dcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03991f395c9ac193339d5b05e22a521b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a03991f395c9ac193339d5b05e22a521b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a03991f395c9ac193339d5b05e22a521b">set_hidden</a> (bool _b)</td></tr>
-<tr class="memdesc:a03991f395c9ac193339d5b05e22a521b"><td class="mdescLeft">&#160;</td><td class="mdescRight">set hidden <br /></td></tr>
-<tr class="separator:a03991f395c9ac193339d5b05e22a521b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7650ead0b4b95692baa9548134472a4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac7650ead0b4b95692baa9548134472a4"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#ac7650ead0b4b95692baa9548134472a4">feature</a> () const </td></tr>
-<tr class="memdesc:ac7650ead0b4b95692baa9548134472a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">is feature ? <br /></td></tr>
-<tr class="separator:ac7650ead0b4b95692baa9548134472a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46b0aef2e52da77efdaf243e22b9546f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a46b0aef2e52da77efdaf243e22b9546f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a46b0aef2e52da77efdaf243e22b9546f">set_feature</a> (bool _b)</td></tr>
-<tr class="memdesc:a46b0aef2e52da77efdaf243e22b9546f"><td class="mdescLeft">&#160;</td><td class="mdescRight">set feature <br /></td></tr>
-<tr class="separator:a46b0aef2e52da77efdaf243e22b9546f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a592e9bc39fe409411fa77e64a8c18e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3a592e9bc39fe409411fa77e64a8c18e"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a3a592e9bc39fe409411fa77e64a8c18e">tagged</a> () const </td></tr>
-<tr class="memdesc:a3a592e9bc39fe409411fa77e64a8c18e"><td class="mdescLeft">&#160;</td><td class="mdescRight">is tagged ? <br /></td></tr>
-<tr class="separator:a3a592e9bc39fe409411fa77e64a8c18e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f5e2fd8dceaa6e5f7630d364fbbc45f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5f5e2fd8dceaa6e5f7630d364fbbc45f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a5f5e2fd8dceaa6e5f7630d364fbbc45f">set_tagged</a> (bool _b)</td></tr>
-<tr class="memdesc:a5f5e2fd8dceaa6e5f7630d364fbbc45f"><td class="mdescLeft">&#160;</td><td class="mdescRight">set tagged <br /></td></tr>
-<tr class="separator:a5f5e2fd8dceaa6e5f7630d364fbbc45f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd34535a365e3ef4c248705f126756d0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afd34535a365e3ef4c248705f126756d0"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#afd34535a365e3ef4c248705f126756d0">tagged2</a> () const </td></tr>
-<tr class="memdesc:afd34535a365e3ef4c248705f126756d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">is tagged2 ? This is just one more tag info. <br /></td></tr>
-<tr class="separator:afd34535a365e3ef4c248705f126756d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0cb22b146d322ac145b6504e16b2bf58"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0cb22b146d322ac145b6504e16b2bf58"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a0cb22b146d322ac145b6504e16b2bf58">set_tagged2</a> (bool _b)</td></tr>
-<tr class="memdesc:a0cb22b146d322ac145b6504e16b2bf58"><td class="mdescLeft">&#160;</td><td class="mdescRight">set tagged <br /></td></tr>
-<tr class="separator:a0cb22b146d322ac145b6504e16b2bf58"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a719a47f7448165373f507597a8a4fdc9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a719a47f7448165373f507597a8a4fdc9"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a719a47f7448165373f507597a8a4fdc9">fixed_nonmanifold</a> () const </td></tr>
-<tr class="memdesc:a719a47f7448165373f507597a8a4fdc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">is fixed non-manifold ? <br /></td></tr>
-<tr class="separator:a719a47f7448165373f507597a8a4fdc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a015adc20d559f348ded4df88508ed84a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a015adc20d559f348ded4df88508ed84a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a015adc20d559f348ded4df88508ed84a">set_fixed_nonmanifold</a> (bool _b)</td></tr>
-<tr class="memdesc:a015adc20d559f348ded4df88508ed84a"><td class="mdescLeft">&#160;</td><td class="mdescRight">set fixed non-manifold <br /></td></tr>
-<tr class="separator:a015adc20d559f348ded4df88508ed84a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8cc8924ee38d273b76b37e4eb6d8c791"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8cc8924ee38d273b76b37e4eb6d8c791"></a>
-unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a8cc8924ee38d273b76b37e4eb6d8c791">bits</a> () const </td></tr>
-<tr class="memdesc:a8cc8924ee38d273b76b37e4eb6d8c791"><td class="mdescLeft">&#160;</td><td class="mdescRight">return whole status <br /></td></tr>
-<tr class="separator:a8cc8924ee38d273b76b37e4eb6d8c791"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a211836948ed21a74219bc52080c667ba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a211836948ed21a74219bc52080c667ba"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a211836948ed21a74219bc52080c667ba">set_bits</a> (unsigned int _bits)</td></tr>
-<tr class="memdesc:a211836948ed21a74219bc52080c667ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">set whole status at once <br /></td></tr>
-<tr class="separator:a211836948ed21a74219bc52080c667ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa23503889c078c39cdf3a4ea99f865b0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa23503889c078c39cdf3a4ea99f865b0"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#aa23503889c078c39cdf3a4ea99f865b0">is_bit_set</a> (unsigned int _s) const </td></tr>
-<tr class="memdesc:aa23503889c078c39cdf3a4ea99f865b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">is a certain bit set ? <br /></td></tr>
-<tr class="separator:aa23503889c078c39cdf3a4ea99f865b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5654423dfe8d145bb41cec0879f50651"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5654423dfe8d145bb41cec0879f50651"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a5654423dfe8d145bb41cec0879f50651">set_bit</a> (unsigned int _s)</td></tr>
-<tr class="memdesc:a5654423dfe8d145bb41cec0879f50651"><td class="mdescLeft">&#160;</td><td class="mdescRight">set a certain bit <br /></td></tr>
-<tr class="separator:a5654423dfe8d145bb41cec0879f50651"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab95b6d356942d383a170fdfb73c42c91"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab95b6d356942d383a170fdfb73c42c91"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#ab95b6d356942d383a170fdfb73c42c91">unset_bit</a> (unsigned int _s)</td></tr>
-<tr class="memdesc:ab95b6d356942d383a170fdfb73c42c91"><td class="mdescLeft">&#160;</td><td class="mdescRight">unset a certain bit <br /></td></tr>
-<tr class="separator:ab95b6d356942d383a170fdfb73c42c91"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a785a68db93e51adf6e2ee33eaee3a880"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a785a68db93e51adf6e2ee33eaee3a880"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a785a68db93e51adf6e2ee33eaee3a880">change_bit</a> (unsigned int _s, bool _b)</td></tr>
-<tr class="memdesc:a785a68db93e51adf6e2ee33eaee3a880"><td class="mdescLeft">&#160;</td><td class="mdescRight">set or unset a certain bit <br /></td></tr>
-<tr class="separator:a785a68db93e51adf6e2ee33eaee3a880"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ddeddc3453946250c0313b21b79295b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8ddeddc3453946250c0313b21b79295b"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a8ddeddc3453946250c0313b21b79295b">~RuleInterfaceT</a> ()</td></tr>
+<tr class="memdesc:a8ddeddc3453946250c0313b21b79295b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor. <br /></td></tr>
+<tr class="separator:a8ddeddc3453946250c0313b21b79295b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b9f68cde6a972bef5662cd032bf5992"><td class="memItemLeft" align="right" valign="top">virtual const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a0b9f68cde6a972bef5662cd032bf5992">type</a> () const =0</td></tr>
+<tr class="memdesc:a0b9f68cde6a972bef5662cd032bf5992"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the rule.  <a href="#a0b9f68cde6a972bef5662cd032bf5992">More...</a><br /></td></tr>
+<tr class="separator:a0b9f68cde6a972bef5662cd032bf5992"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adaf8b40ec8cd1e8781e8dab4d3159579"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adaf8b40ec8cd1e8781e8dab4d3159579"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> (typename M::FaceHandle &amp;_fh, <a class="el" href="a00746.html#af706613543b0da1b097580a9dc30fc6e">state_t</a> _target_state)</td></tr>
+<tr class="separator:adaf8b40ec8cd1e8781e8dab4d3159579"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a259045b807b2509999563f9fc21d250f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a259045b807b2509999563f9fc21d250f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> (typename M::EdgeHandle &amp;_eh, <a class="el" href="a00746.html#af706613543b0da1b097580a9dc30fc6e">state_t</a> _target_state)</td></tr>
+<tr class="separator:a259045b807b2509999563f9fc21d250f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a762abadca24f09a992d69ee88dfdb60f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a762abadca24f09a992d69ee88dfdb60f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> (typename M::VertexHandle &amp;_vh, <a class="el" href="a00746.html#af706613543b0da1b097580a9dc30fc6e">state_t</a> _target_state)</td></tr>
+<tr class="separator:a762abadca24f09a992d69ee88dfdb60f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac786f275084a0cb33db23e82086a1fe1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac786f275084a0cb33db23e82086a1fe1"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#ac786f275084a0cb33db23e82086a1fe1">subdiv_type</a> () const </td></tr>
+<tr class="memdesc:ac786f275084a0cb33db23e82086a1fe1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type of split operation, if it is a topological operator. <br /></td></tr>
+<tr class="separator:ac786f275084a0cb33db23e82086a1fe1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09e217ad7942e63e8173261a476e4393"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a09e217ad7942e63e8173261a476e4393"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a09e217ad7942e63e8173261a476e4393">number</a> () const </td></tr>
+<tr class="memdesc:a09e217ad7942e63e8173261a476e4393"><td class="mdescLeft">&#160;</td><td class="mdescRight">Position in rule sequence. <br /></td></tr>
+<tr class="separator:a09e217ad7942e63e8173261a476e4393"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Raise item</div></td></tr>
+<tr class="memitem:a271540a6587ff8fb67b26b3dbc3ab2d8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a271540a6587ff8fb67b26b3dbc3ab2d8"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a271540a6587ff8fb67b26b3dbc3ab2d8">raise</a> (typename M::FaceHandle &amp;_fh, <a class="el" href="a00746.html#af706613543b0da1b097580a9dc30fc6e">state_t</a> _target_state)</td></tr>
+<tr class="memdesc:a271540a6587ff8fb67b26b3dbc3ab2d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raise item to target state <code>_target_state</code>. <br /></td></tr>
+<tr class="separator:a271540a6587ff8fb67b26b3dbc3ab2d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6015b1bab47e1bbff4882f86e5616809"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6015b1bab47e1bbff4882f86e5616809"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a6015b1bab47e1bbff4882f86e5616809">raise</a> (typename M::EdgeHandle &amp;_eh, <a class="el" href="a00746.html#af706613543b0da1b097580a9dc30fc6e">state_t</a> _target_state)</td></tr>
+<tr class="memdesc:a6015b1bab47e1bbff4882f86e5616809"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raise item to target state <code>_target_state</code>. <br /></td></tr>
+<tr class="separator:a6015b1bab47e1bbff4882f86e5616809"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93f0a04a38a7ea775bceda7edeed4314"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a93f0a04a38a7ea775bceda7edeed4314"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a93f0a04a38a7ea775bceda7edeed4314">raise</a> (typename M::VertexHandle &amp;_vh, <a class="el" href="a00746.html#af706613543b0da1b097580a9dc30fc6e">state_t</a> _target_state)</td></tr>
+<tr class="memdesc:a93f0a04a38a7ea775bceda7edeed4314"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raise item to target state <code>_target_state</code>. <br /></td></tr>
+<tr class="separator:a93f0a04a38a7ea775bceda7edeed4314"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Parameterization of rule</div></td></tr>
+<tr class="memitem:af0740a6658e4ec8f186ac53088ef0d01"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af0740a6658e4ec8f186ac53088ef0d01"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#af0740a6658e4ec8f186ac53088ef0d01">set_coeff</a> (scalar_t _coeff)</td></tr>
+<tr class="memdesc:af0740a6658e4ec8f186ac53088ef0d01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set coefficient - ignored by non-parameterized rules. <br /></td></tr>
+<tr class="separator:af0740a6658e4ec8f186ac53088ef0d01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0acb50afb26b4c0b62dbea774522c66"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac0acb50afb26b4c0b62dbea774522c66"></a>
+scalar_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#ac0acb50afb26b4c0b62dbea774522c66">coeff</a> () const </td></tr>
+<tr class="memdesc:ac0acb50afb26b4c0b62dbea774522c66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get coefficient - ignored by non-parameterized rules. <br /></td></tr>
+<tr class="separator:ac0acb50afb26b4c0b62dbea774522c66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a9a46c1370495c4ea2b116e77ab8b709a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9a46c1370495c4ea2b116e77ab8b709a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00263.html#a9a46c1370495c4ea2b116e77ab8b709a">RuleInterfaceT</a> (Mesh &amp;_mesh)</td></tr>
+<tr class="memdesc:a9a46c1370495c4ea2b116e77ab8b709a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. <br /></td></tr>
+<tr class="separator:a9a46c1370495c4ea2b116e77ab8b709a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7afd1d969d22b0b0837805e21f2ca2c2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7afd1d969d22b0b0837805e21f2ca2c2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>set_prev_rule</b> (<a class="el" href="a00263.html">Self</a> *&amp;_p)</td></tr>
+<tr class="separator:a7afd1d969d22b0b0837805e21f2ca2c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac84c5f1323bc8eafc18b2978441cb96c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac84c5f1323bc8eafc18b2978441cb96c"></a>
+<a class="el" href="a00263.html">Self</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>prev_rule</b> ()</td></tr>
+<tr class="separator:ac84c5f1323bc8eafc18b2978441cb96c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8ae5a96122e99ee6ac39728921949b3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa8ae5a96122e99ee6ac39728921949b3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>set_subdiv_rule</b> (<a class="el" href="a00263.html">Self</a> *&amp;_n)</td></tr>
+<tr class="separator:aa8ae5a96122e99ee6ac39728921949b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af56278d98179d57d86546674785a45a1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af56278d98179d57d86546674785a45a1"></a>
+<a class="el" href="a00263.html">Self</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>subdiv_rule</b> ()</td></tr>
+<tr class="separator:af56278d98179d57d86546674785a45a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8ab90db8b575cfa5b8403e75f51733a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad8ab90db8b575cfa5b8403e75f51733a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>set_number</b> (int _n)</td></tr>
+<tr class="separator:ad8ab90db8b575cfa5b8403e75f51733a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0d6aed645cba222ee1769697cc65d1c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae0d6aed645cba222ee1769697cc65d1c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>set_n_rules</b> (int _n)</td></tr>
+<tr class="separator:ae0d6aed645cba222ee1769697cc65d1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae115a18ac2920bac8f23c3ca9a9c4ffc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae115a18ac2920bac8f23c3ca9a9c4ffc"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>n_rules</b> ()</td></tr>
+<tr class="separator:ae115a18ac2920bac8f23c3ca9a9c4ffc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a110806972dd8fad0b7188e9b97bdc684"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a110806972dd8fad0b7188e9b97bdc684"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>set_subdiv_type</b> (int _n)</td></tr>
+<tr class="separator:a110806972dd8fad0b7188e9b97bdc684"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a2c200c977b8c61a1ad2ec8e6099ea66c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2c200c977b8c61a1ad2ec8e6099ea66c"></a>
+Mesh &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>mesh_</b></td></tr>
+<tr class="separator:a2c200c977b8c61a1ad2ec8e6099ea66c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a7cacb6579bb9d17013cf9f2b0bd3770f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7cacb6579bb9d17013cf9f2b0bd3770f"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>CompositeT&lt; M &gt;</b></td></tr>
+<tr class="separator:a7cacb6579bb9d17013cf9f2b0bd3770f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Add status information to a base class. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="a00716.html#af600bbf2c3f55c90a2a64848f0547617" title="Status bits used by the Status class. ">StatusBits</a> </dd></dl>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
-<li>OpenMesh/Core/Mesh/<a class="el" href="a00495_source.html">Status.hh</a></li>
+<div class="textblock"><h3>template&lt;typename M&gt;<br />
+class OpenMesh::Subdivider::Adaptive::RuleInterfaceT&lt; M &gt;</h3>
+
+<p>Base class for adaptive composite subdivision rules. </p>
+<dl class="section see"><dt>See also</dt><dd>class <a class="el" href="a00116.html" title="Adaptive Composite Subdivision framework. ">CompositeT</a> </dd></dl>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a0b9f68cde6a972bef5662cd032bf5992"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename M &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual const char* <a class="el" href="a00263.html">OpenMesh::Subdivider::Adaptive::RuleInterfaceT</a>&lt; M &gt;::type </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the name of the rule. </p>
+<p>Use define COMPOSITE_RULE to overload this function in a derived class. </p>
+
+<p>Implemented in <a class="el" href="a00133.html#afe473ce17207d7ced14301c38a9dd39a">OpenMesh::Subdivider::Adaptive::EdEc&lt; M &gt;</a>, <a class="el" href="a00132.html#a55a30d6d4e408e1bd8f8daddeb211431">OpenMesh::Subdivider::Adaptive::EdE&lt; M &gt;</a>, <a class="el" href="a00153.html#a2b346413f424f12001f3e05ad7828d78">OpenMesh::Subdivider::Adaptive::FE&lt; M &gt;</a>, <a class="el" href="a00139.html#addcec82b483b00cd12e482d4f49c3547">OpenMesh::Subdivider::Adaptive::EF&lt; M &gt;</a>, <a class="el" href="a00144.html#af960ce661958ce8c0e31f4726122fbf3">OpenMesh::Subdivider::Adaptive::EVc&lt; M &gt;</a>, <a class="el" href="a00143.html#a29794ad21b8f2be8e87f275b4e9498f3">OpenMesh::Subdivider::Adaptive::EV&lt; M &gt;</a>, <a class="el" href="a00288.html#a6aa5e6b994eb286f5e738141124f2f4e">OpenMesh::Subdivider::Adaptive::VdEc&lt; M &gt;</a>, <a class="el" href="a00287.html#a9cd59c0f70d85bcd28aced985bb9e250">OpenMesh::Subdivider::Adaptive::VdE&lt; M &gt;</a>, <a class="el" href="a00290.html#ae0ff2f32c20efd842f08ef6f81073690">OpenMesh::Subdivider::Adaptive::VE&lt; M &gt;</a>, <a class="el" href="a00331.html#a8d9b7dae6fd757578434dab918175290">OpenMesh::Subdivider::Adaptive::VVc&lt; M &gt;</a>, <a class="el" href="a00330.html#a40966eca31178a2283475b93dd47d1ac">OpenMesh::Subdivider::Adaptive::VV&lt; M &gt;</a>, <a class="el" href="a00159.html#a354134f107912975e94aae283323f431">OpenMesh::Subdivider::Adaptive::FVc&lt; M &gt;</a>, <a class="el" href="a00158.html#a73ab17df8032cd3493048a509e78c9da">OpenMesh::Subdivider::Adaptive::FV&lt; M &gt;</a>, <a class="el" href="a00155.html#a0e9ad17ab9ce42cdb69cb542ae8fc3c1">OpenMesh::Subdivider::Adaptive::FFc&lt; M &gt;</a>, <a class="el" href="a00154.html#a4cda1a6999f26436d8c7b352814b9f77">OpenMesh::Subdivider::Adaptive::FF&lt; M &gt;</a>, <a class="el" href="a00321.html#a288f0ef313beb763d37cc0ce3b58dba3">OpenMesh::Subdivider::Adaptive::VF&lt; M &gt;</a>, <a class="el" href="a00286.html#a7d9c8bc629c3f9683ae381aa4a20b2a1">OpenMesh::Subdivider::Adaptive::Tvv4&lt; M &gt;</a>, and <a class="el" href="a00285.html#ad5acb6ce06e3847037ebb3e8b1be3230">OpenMesh::Subdivider::Adaptive::Tvv3&lt; M &gt;</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>OpenMesh/Tools/Subdivider/Adaptive/Composite/<a class="el" href="a00586_source.html">CompositeT.hh</a></li>
+<li>OpenMesh/Tools/Subdivider/Adaptive/Composite/<a class="el" href="a00590_source.html">RuleInterfaceT.hh</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -228,7 +284,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a002
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

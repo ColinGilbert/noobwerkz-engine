@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -87,7 +88,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('a00232.html','');});
+$(document).ready(function(){initNavTree('a00216.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -106,25 +107,65 @@ $(document).ready(function(){initNavTree('a00232.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">OpenMesh::Decimater::Observer Member List</div>  </div>
+<div class="title">OpenMesh::Decimater::MixedDecimaterT&lt; MeshT &gt; Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="a00232.html">OpenMesh::Decimater::Observer</a>, including all inherited members.</p>
+<p>This is the complete list of members for <a class="el" href="a00216.html">OpenMesh::Decimater::MixedDecimaterT&lt; MeshT &gt;</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="a00232.html#a46ee4bf949f65d3043aee6173bc29d0c">abort</a>() const </td><td class="entry"><a class="el" href="a00232.html">OpenMesh::Decimater::Observer</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="a00232.html#adfb58e57638f68765187beab8e0f7551">get_interval</a>() const </td><td class="entry"><a class="el" href="a00232.html">OpenMesh::Decimater::Observer</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="a00232.html#ae7279c819cb88693c739f109bc21eaf4">notify</a>(size_t _step)=0</td><td class="entry"><a class="el" href="a00232.html">OpenMesh::Decimater::Observer</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="a00232.html#a750859bbf0ed03ba1b6cb2601305e9f6">Observer</a>(size_t _notificationInterval)</td><td class="entry"><a class="el" href="a00232.html">OpenMesh::Decimater::Observer</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="a00232.html#a2aead36d8cb482a9d19d0f485db3e786">set_interval</a>(size_t _notificationInterval)</td><td class="entry"><a class="el" href="a00232.html">OpenMesh::Decimater::Observer</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="a00232.html#a5146f52949ea9a510db353f48335259a">~Observer</a>()</td><td class="entry"><a class="el" href="a00232.html">OpenMesh::Decimater::Observer</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00091.html#a2168dd685ec75cc239516d2570703036">add</a>(ModHandleT&lt; _Module &gt; &amp;_mh)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>BaseDecimaterT</b>(Mesh &amp;_mesh) (defined in <a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00091.html#a3046073cf42608d314df3c4dfc2d49b4">collapse_priority</a>(const CollapseInfo &amp;_ci)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>CollapseInfo</b> typedef (defined in <a class="el" href="a00216.html">OpenMesh::Decimater::MixedDecimaterT&lt; MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00216.html">OpenMesh::Decimater::MixedDecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>DeciHeap</b> typedef (defined in <a class="el" href="a00128.html">OpenMesh::Decimater::DecimaterT&lt; MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00128.html">OpenMesh::Decimater::DecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00216.html#a4dd84571cc11d67b43cbb139373d335f">decimate</a>(const size_t _n_collapses, const float _mc_factor)</td><td class="entry"><a class="el" href="a00216.html">OpenMesh::Decimater::MixedDecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00203.html#a970cfba9e739a07ff77fa1969e97ad82">OpenMesh::Decimater::McDecimaterT::decimate</a>(size_t _n_collapses)</td><td class="entry"><a class="el" href="a00203.html">OpenMesh::Decimater::McDecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00128.html#ae68360f349a3aeb6b8a01a7ea4af7ea3">OpenMesh::Decimater::DecimaterT::decimate</a>(size_t _n_collapses=0)</td><td class="entry"><a class="el" href="a00128.html">OpenMesh::Decimater::DecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00203.html#abb7c3b986b8319da869023e2c1dfc44b">decimate_constraints_only</a>(float _factor)</td><td class="entry"><a class="el" href="a00203.html">OpenMesh::Decimater::McDecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00216.html#a1fe2c6c2b3a63f00ca99b521c6fc2e42">decimate_to</a>(size_t _n_vertices, const float _mc_factor)</td><td class="entry"><a class="el" href="a00216.html">OpenMesh::Decimater::MixedDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00203.html#acdaedd58779309579511a37ff4520e54">OpenMesh::Decimater::McDecimaterT::decimate_to</a>(size_t _n_vertices)</td><td class="entry"><a class="el" href="a00203.html">OpenMesh::Decimater::McDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00128.html#a314edcd690ba54b6b77dde411e04262a">OpenMesh::Decimater::DecimaterT::decimate_to</a>(size_t _n_vertices)</td><td class="entry"><a class="el" href="a00128.html">OpenMesh::Decimater::DecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00216.html#a649cc8f6cd7d423ee44374731f671494">decimate_to_faces</a>(const size_t _n_vertices=0, const size_t _n_faces=0, const float _mc_factor=0.8)</td><td class="entry"><a class="el" href="a00216.html">OpenMesh::Decimater::MixedDecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00203.html#a24b41676c8b93a5587a2bb36dbfb0b94">OpenMesh::Decimater::McDecimaterT::decimate_to_faces</a>(size_t _n_vertices=0, size_t _n_faces=0)</td><td class="entry"><a class="el" href="a00203.html">OpenMesh::Decimater::McDecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00128.html#a3f9e5d0abce8d73b67cf2bbf17700241">OpenMesh::Decimater::DecimaterT::decimate_to_faces</a>(size_t _n_vertices=0, size_t _n_faces=0)</td><td class="entry"><a class="el" href="a00128.html">OpenMesh::Decimater::DecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00128.html#acf185e9dd3958b8634d26ff322f80685">DecimaterT</a>(Mesh &amp;_mesh)</td><td class="entry"><a class="el" href="a00128.html">OpenMesh::Decimater::DecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>HalfedgeHandle</b> typedef (defined in <a class="el" href="a00128.html">OpenMesh::Decimater::DecimaterT&lt; MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00128.html">OpenMesh::Decimater::DecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00091.html#a0a007b3d7e3620ecb3d99516945259f4">info</a>(std::ostream &amp;_os)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00091.html#a6b828064b2a7fa5b03b637bae507ac62">initialize</a>()</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00091.html#aebbb2f4afd23574937109486a4ac6d1b">is_collapse_legal</a>(const CollapseInfo &amp;_ci)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00091.html#ad8bb8df36d34e27775aebe3844fab935">is_initialized</a>() const </td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00203.html#afe1195415c6af21ccf2a887311f049ed">McDecimaterT</a>(Mesh &amp;_mesh)</td><td class="entry"><a class="el" href="a00203.html">OpenMesh::Decimater::McDecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>Mesh</b> typedef (defined in <a class="el" href="a00216.html">OpenMesh::Decimater::MixedDecimaterT&lt; MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00216.html">OpenMesh::Decimater::MixedDecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00091.html#aa5d6598dced77ec6d97823559a3e58dc">mesh</a>()</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00216.html#a3d9cb8dbee8294357f1ca9003f08d3a8">MixedDecimaterT</a>(Mesh &amp;_mesh)</td><td class="entry"><a class="el" href="a00216.html">OpenMesh::Decimater::MixedDecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>Module</b> typedef (defined in <a class="el" href="a00216.html">OpenMesh::Decimater::MixedDecimaterT&lt; MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00216.html">OpenMesh::Decimater::MixedDecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00091.html#a9854adb7ec9f2419ece2067b5f237cfa">module</a>(ModHandleT&lt; Module &gt; &amp;_mh)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>ModuleList</b> typedef (defined in <a class="el" href="a00216.html">OpenMesh::Decimater::MixedDecimaterT&lt; MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00216.html">OpenMesh::Decimater::MixedDecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>ModuleListIterator</b> typedef (defined in <a class="el" href="a00216.html">OpenMesh::Decimater::MixedDecimaterT&lt; MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00216.html">OpenMesh::Decimater::MixedDecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00091.html#a181b92fd81aea37771dbbe9d0f7b4b30">notify_observer</a>(size_t _n_collapses)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00091.html#a9018b5e7fcc152cc7d85a6a99bf02bd5">observer</a>()</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00091.html#a8a3153d5847b381262fc15d110c3f10e">postprocess_collapse</a>(CollapseInfo &amp;_ci)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00091.html#a5a2763cdc33d785a1f53aed2168a7189">preprocess_collapse</a>(CollapseInfo &amp;_ci)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00091.html#a0b81adeaacfda9773ff6c3584f1f014b">remove</a>(ModHandleT&lt; _Module &gt; &amp;_mh)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00091.html#ae97d95611924a0630a111543d2c8bf1e">reset</a>()</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">protected</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>samples</b>() (defined in <a class="el" href="a00203.html">OpenMesh::Decimater::McDecimaterT&lt; MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00203.html">OpenMesh::Decimater::McDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>Self</b> typedef (defined in <a class="el" href="a00216.html">OpenMesh::Decimater::MixedDecimaterT&lt; MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00216.html">OpenMesh::Decimater::MixedDecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00091.html#a2ee8ed71b9fdf8524d12cfae47f63ed9">set_error_tolerance_factor</a>(double _factor)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00091.html#a596e2729e5a998715b535590fcfd00c8">set_observer</a>(Observer *_o)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>set_samples</b>(const size_t _value) (defined in <a class="el" href="a00203.html">OpenMesh::Decimater::McDecimaterT&lt; MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00203.html">OpenMesh::Decimater::McDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00091.html#a7999f437ff1a15e28f1621b77f62974e">set_uninitialized</a>()</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">protected</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>update_modules</b>(CollapseInfo &amp;_ci) (defined in <a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">protected</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>VertexHandle</b> typedef (defined in <a class="el" href="a00128.html">OpenMesh::Decimater::DecimaterT&lt; MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00128.html">OpenMesh::Decimater::DecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>~BaseDecimaterT</b>() (defined in <a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00128.html#a6d1b1b6855f42b5501860ae79cf6be64">~DecimaterT</a>()</td><td class="entry"><a class="el" href="a00128.html">OpenMesh::Decimater::DecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00203.html#a61aed0a3dbbe2d939c2a99e5f3533454">~McDecimaterT</a>()</td><td class="entry"><a class="el" href="a00203.html">OpenMesh::Decimater::McDecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00216.html#a8af89fade2619e7ca14203c44b05cf12">~MixedDecimaterT</a>()</td><td class="entry"><a class="el" href="a00216.html">OpenMesh::Decimater::MixedDecimaterT&lt; MeshT &gt;</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 <hr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

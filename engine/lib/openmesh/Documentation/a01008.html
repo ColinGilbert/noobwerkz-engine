@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -87,7 +88,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('a00292.html','');});
+$(document).ready(function(){initNavTree('a00254.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -106,24 +107,43 @@ $(document).ready(function(){initNavTree('a00292.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">OpenMesh::vector_traits&lt; osg::Pnt2d &gt; Member List</div>  </div>
+<div class="title">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt; Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="a00292.html">OpenMesh::vector_traits&lt; osg::Pnt2d &gt;</a>, including all inherited members.</p>
+<p>This is the complete list of members for <a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a>, including all inherited members.</p>
 <table class="directory">
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>size</b>() (defined in <a class="el" href="a00292.html">OpenMesh::vector_traits&lt; osg::Pnt2d &gt;</a>)</td><td class="entry"><a class="el" href="a00292.html">OpenMesh::vector_traits&lt; osg::Pnt2d &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">static</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>size_</b> (defined in <a class="el" href="a00292.html">OpenMesh::vector_traits&lt; osg::Pnt2d &gt;</a>)</td><td class="entry"><a class="el" href="a00292.html">OpenMesh::vector_traits&lt; osg::Pnt2d &gt;</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>typed_size</b> typedef (defined in <a class="el" href="a00292.html">OpenMesh::vector_traits&lt; osg::Pnt2d &gt;</a>)</td><td class="entry"><a class="el" href="a00292.html">OpenMesh::vector_traits&lt; osg::Pnt2d &gt;</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>value_type</b> typedef (defined in <a class="el" href="a00292.html">OpenMesh::vector_traits&lt; osg::Pnt2d &gt;</a>)</td><td class="entry"><a class="el" href="a00292.html">OpenMesh::vector_traits&lt; osg::Pnt2d &gt;</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>vector_type</b> typedef (defined in <a class="el" href="a00292.html">OpenMesh::vector_traits&lt; osg::Pnt2d &gt;</a>)</td><td class="entry"><a class="el" href="a00292.html">OpenMesh::vector_traits&lt; osg::Pnt2d &gt;</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00254.html#aadbc2e85d8471cf8915a720aac6e5a7b">copy</a>(const char *prop_name, MeshT &amp;src_mesh, const RangeType &amp;src_range, MeshT_2 &amp;dst_mesh, const RangeType_2 &amp;dst_range)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">static</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00254.html#a140f50f3a9a09f72244f94782b663559">copy_to</a>(HandleTypeIterator begin, HandleTypeIterator end, PropertyManager&lt; PROPTYPE_2, MeshT_2 &gt; &amp;dst_propmanager, HandleTypeIterator_2 dst_begin, HandleTypeIterator_2 dst_end) const </td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>copy_to</b>(const RangeType &amp;range, PropertyManager&lt; PROPTYPE_2, MeshT_2 &gt; &amp;dst_propmanager, const RangeType_2 &amp;dst_range) const  (defined in <a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00254.html#adcef81e060c6dc8a10a7ed1a7fb01869">createIfNotExists</a>(MeshT &amp;mesh, const char *propname)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">static</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>duplicate</b>(const char *clone_name) (defined in <a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>getMesh</b>() const  (defined in <a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>getName</b>() const  (defined in <a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>getRawProperty</b>() const  (defined in <a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>isValid</b>() const  (defined in <a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>move</b>() (defined in <a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>operator bool</b>() const  (defined in <a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>operator Proxy</b>() (defined in <a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00254.html#a0175f913ec495b7b9699a4a4d0993814">operator*</a>()</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00254.html#a4be682eda73e7d95dea85743d0dcb892">operator*</a>() const </td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>operator=</b>(Proxy p) (defined in <a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00254.html#a982d39e7eeac8383b3c899b029698496">operator[]</a>(const HandleType &amp;handle)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00254.html#a2287c607f3766aa910f08730e52f1c40">operator[]</a>(const HandleType &amp;handle) const </td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>propertyExists</b>(MeshT &amp;mesh, const char *propname) (defined in <a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">static</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00254.html#ab669f9c2efb6f9ad356c7c653a8de40c">PropertyManager</a>(MeshT &amp;mesh, const char *propname, bool existing=false)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>PropertyManager</b>() (defined in <a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>PropertyManager</b>(Proxy p) (defined in <a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00254.html#aa388e739951640a7c432b49e5232cb84">retain</a>(bool doRetain=true)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00254.html#a1c7b5c7063fb137ba9552afd4a0ec77f">set_range</a>(HandleTypeIterator begin, HandleTypeIterator end, const PROP_VALUE &amp;value)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>swap</b>(PropertyManager &amp;rhs) (defined in <a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>~PropertyManager</b>() (defined in <a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a>)</td><td class="entry"><a class="el" href="a00254.html">OpenMesh::PropertyManager&lt; PROPTYPE, MeshT &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 <hr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

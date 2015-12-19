@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh::BaseProperty Class Reference</title>
+<title>OpenMesh: OpenMesh::IO::BaseImporter Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -106,257 +107,133 @@ $(document).ready(function(){initNavTree('a00094.html','');});
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="a00920.html">List of all members</a>  </div>
+<a href="a01154.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">OpenMesh::BaseProperty Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+<div class="title">OpenMesh::IO::BaseImporter Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Abstract class defining the basic interface of a dynamic property.  
+<p>Base class for importer modules.  
  <a href="a00094.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="a00523_source.html">OpenMesh/Core/Utils/PropertyT.hh</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="a00438_source.html">OpenMesh/Core/IO/importer/BaseImporter.hh</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for OpenMesh::BaseProperty:</div>
+Inheritance diagram for OpenMesh::IO::BaseImporter:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00921.png" border="0" usemap="#OpenMesh_1_1BaseProperty_inherit__map" alt="Inheritance graph"/></div>
-<map name="OpenMesh_1_1BaseProperty_inherit__map" id="OpenMesh_1_1BaseProperty_inherit__map">
-<area shape="rect" id="node2" href="a00235.html" title="Property adaptor for OpenSG GeoProperties. " alt="" coords="225,13,416,54"/><area shape="rect" id="node4" href="a00248.html" title="Default property class for any type T. " alt="" coords="229,79,412,105"/><area shape="rect" id="node5" href="a00249.html" title="Property specialization for bool type. " alt="" coords="245,130,396,171"/><area shape="rect" id="node6" href="a00250.html" title="Property specialization for std::string type. " alt="" coords="245,195,396,237"/><area shape="rect" id="node3" href="a00172.html" title="Adaptor for osg::GeoIndicesUI32. " alt="" coords="464,5,631,61"/></map>
+<div class="center"><img src="a01155.png" border="0" usemap="#OpenMesh_1_1IO_1_1BaseImporter_inherit__map" alt="Inheritance graph"/></div>
+<map name="OpenMesh_1_1IO_1_1BaseImporter_inherit__map" id="OpenMesh_1_1IO_1_1BaseImporter_inherit__map">
+<area shape="rect" id="node2" href="a00191.html" title="This class template provides an importer module for OpenMesh meshes. " alt="" coords="17,80,187,121"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a5a6026b2a92910eef5e1bba494bf402c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5a6026b2a92910eef5e1bba494bf402c"></a>
+typedef std::vector&lt; <a class="el" href="a00313.html">VertexHandle</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>VHandles</b></td></tr>
+<tr class="separator:a5a6026b2a92910eef5e1bba494bf402c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab40b442ea053998cbde8e9a4bb27c6a3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#ab40b442ea053998cbde8e9a4bb27c6a3">BaseProperty</a> (const std::string &amp;_name=&quot;&lt;unknown&gt;&quot;)</td></tr>
-<tr class="memdesc:ab40b442ea053998cbde8e9a4bb27c6a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#ab40b442ea053998cbde8e9a4bb27c6a3">More...</a><br /></td></tr>
-<tr class="separator:ab40b442ea053998cbde8e9a4bb27c6a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9301f986c88572a20649f8743bfac6ac"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9301f986c88572a20649f8743bfac6ac"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#a9301f986c88572a20649f8743bfac6ac">BaseProperty</a> (const <a class="el" href="a00094.html">BaseProperty</a> &amp;_rhs)</td></tr>
-<tr class="memdesc:a9301f986c88572a20649f8743bfac6ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor. <br /></td></tr>
-<tr class="separator:a9301f986c88572a20649f8743bfac6ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3c0dbc83c42199de5722a5812c5a12b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa3c0dbc83c42199de5722a5812c5a12b"></a>
-virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#aa3c0dbc83c42199de5722a5812c5a12b">~BaseProperty</a> ()</td></tr>
-<tr class="memdesc:aa3c0dbc83c42199de5722a5812c5a12b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor. <br /></td></tr>
-<tr class="separator:aa3c0dbc83c42199de5722a5812c5a12b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4060f65f09046a5afc09dec01e6fb43a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4060f65f09046a5afc09dec01e6fb43a"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#a4060f65f09046a5afc09dec01e6fb43a">reserve</a> (size_t _n)=0</td></tr>
-<tr class="memdesc:a4060f65f09046a5afc09dec01e6fb43a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reserve memory for n elements. <br /></td></tr>
-<tr class="separator:a4060f65f09046a5afc09dec01e6fb43a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66772821263401aa8c178f3a69aa79e7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a66772821263401aa8c178f3a69aa79e7"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#a66772821263401aa8c178f3a69aa79e7">resize</a> (size_t _n)=0</td></tr>
-<tr class="memdesc:a66772821263401aa8c178f3a69aa79e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resize storage to hold n elements. <br /></td></tr>
-<tr class="separator:a66772821263401aa8c178f3a69aa79e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c1ae555fb1427debe9428422f82424a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6c1ae555fb1427debe9428422f82424a"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#a6c1ae555fb1427debe9428422f82424a">clear</a> ()=0</td></tr>
-<tr class="memdesc:a6c1ae555fb1427debe9428422f82424a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear all elements and free memory. <br /></td></tr>
-<tr class="separator:a6c1ae555fb1427debe9428422f82424a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f2bd397fadcf254837de61df06069d0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1f2bd397fadcf254837de61df06069d0"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#a1f2bd397fadcf254837de61df06069d0">push_back</a> ()=0</td></tr>
-<tr class="memdesc:a1f2bd397fadcf254837de61df06069d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extend the number of elements by one. <br /></td></tr>
-<tr class="separator:a1f2bd397fadcf254837de61df06069d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a675f54dbc7eabe2f9489a8e5d2d1c93a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a675f54dbc7eabe2f9489a8e5d2d1c93a"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#a675f54dbc7eabe2f9489a8e5d2d1c93a">swap</a> (size_t _i0, size_t _i1)=0</td></tr>
-<tr class="memdesc:a675f54dbc7eabe2f9489a8e5d2d1c93a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Let two elements swap their storage place. <br /></td></tr>
-<tr class="separator:a675f54dbc7eabe2f9489a8e5d2d1c93a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac5035f4fa788d640f96d80ee082cb87"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aac5035f4fa788d640f96d80ee082cb87"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#aac5035f4fa788d640f96d80ee082cb87">copy</a> (size_t _io, size_t _i1)=0</td></tr>
-<tr class="memdesc:aac5035f4fa788d640f96d80ee082cb87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy one element to another. <br /></td></tr>
-<tr class="separator:aac5035f4fa788d640f96d80ee082cb87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77ca94a8f5980b756b22844e360f3e93"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a77ca94a8f5980b756b22844e360f3e93"></a>
-virtual <a class="el" href="a00094.html">BaseProperty</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#a77ca94a8f5980b756b22844e360f3e93">clone</a> () const =0</td></tr>
-<tr class="memdesc:a77ca94a8f5980b756b22844e360f3e93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a deep copy of self. <br /></td></tr>
-<tr class="separator:a77ca94a8f5980b756b22844e360f3e93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0824dab1057df3baa04e25e13ac9ca9e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0824dab1057df3baa04e25e13ac9ca9e"></a>
-const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#a0824dab1057df3baa04e25e13ac9ca9e">name</a> () const </td></tr>
-<tr class="memdesc:a0824dab1057df3baa04e25e13ac9ca9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the name of the property. <br /></td></tr>
-<tr class="separator:a0824dab1057df3baa04e25e13ac9ca9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8624c097041e1e57cc0b3d8ab6ab43ec"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8624c097041e1e57cc0b3d8ab6ab43ec"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>stats</b> (std::ostream &amp;_ostr) const </td></tr>
-<tr class="separator:a8624c097041e1e57cc0b3d8ab6ab43ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ccadfed0436f3c25c574f3e151e7036"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ccadfed0436f3c25c574f3e151e7036"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#a0ccadfed0436f3c25c574f3e151e7036">persistent</a> (void) const </td></tr>
-<tr class="memdesc:a0ccadfed0436f3c25c574f3e151e7036"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the persistent flag is enabled else false. <br /></td></tr>
-<tr class="separator:a0ccadfed0436f3c25c574f3e151e7036"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeac2109212f8489104137a03ffee3962"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#aeac2109212f8489104137a03ffee3962">set_persistent</a> (bool _yn)=0</td></tr>
-<tr class="memdesc:aeac2109212f8489104137a03ffee3962"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable or disable persistency.  <a href="#aeac2109212f8489104137a03ffee3962">More...</a><br /></td></tr>
-<tr class="separator:aeac2109212f8489104137a03ffee3962"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99ab2519267e0ddcfa5a56aea9199071"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a99ab2519267e0ddcfa5a56aea9199071"></a>
-virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#a99ab2519267e0ddcfa5a56aea9199071">n_elements</a> () const =0</td></tr>
-<tr class="memdesc:a99ab2519267e0ddcfa5a56aea9199071"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of elements in property. <br /></td></tr>
-<tr class="separator:a99ab2519267e0ddcfa5a56aea9199071"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf1ba7d86bcc64d2fae4609e47cb4a0a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adf1ba7d86bcc64d2fae4609e47cb4a0a"></a>
-virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#adf1ba7d86bcc64d2fae4609e47cb4a0a">element_size</a> () const =0</td></tr>
-<tr class="memdesc:adf1ba7d86bcc64d2fae4609e47cb4a0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of one element in bytes or UnknownSize if not known. <br /></td></tr>
-<tr class="separator:adf1ba7d86bcc64d2fae4609e47cb4a0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad31a816e407f15361c5027517e012cb4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad31a816e407f15361c5027517e012cb4"></a>
-virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#ad31a816e407f15361c5027517e012cb4">size_of</a> () const </td></tr>
-<tr class="memdesc:ad31a816e407f15361c5027517e012cb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return size of property in bytes. <br /></td></tr>
-<tr class="separator:ad31a816e407f15361c5027517e012cb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99494b064f29f3f0b529fbe11c758269"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#a99494b064f29f3f0b529fbe11c758269">size_of</a> (size_t _n_elem) const </td></tr>
-<tr class="memdesc:a99494b064f29f3f0b529fbe11c758269"><td class="mdescLeft">&#160;</td><td class="mdescRight">Estimated size of property if it has _n_elem elements.  <a href="#a99494b064f29f3f0b529fbe11c758269">More...</a><br /></td></tr>
-<tr class="separator:a99494b064f29f3f0b529fbe11c758269"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9142c5642b82609dfd69b5b671d872c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab9142c5642b82609dfd69b5b671d872c"></a>
-virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#ab9142c5642b82609dfd69b5b671d872c">store</a> (std::ostream &amp;_ostr, bool _swap) const =0</td></tr>
-<tr class="memdesc:ab9142c5642b82609dfd69b5b671d872c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store self as one binary block. <br /></td></tr>
-<tr class="separator:ab9142c5642b82609dfd69b5b671d872c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0eb66e2547283ca989179d508fbbed87"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#a0eb66e2547283ca989179d508fbbed87">restore</a> (std::istream &amp;_istr, bool _swap)=0</td></tr>
-<tr class="memdesc:a0eb66e2547283ca989179d508fbbed87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Restore self from a binary block.  <a href="#a0eb66e2547283ca989179d508fbbed87">More...</a><br /></td></tr>
-<tr class="separator:a0eb66e2547283ca989179d508fbbed87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
-Static Public Attributes</h2></td></tr>
-<tr class="memitem:a3dbccc1d0ac8f9a0ba27c46f2fe58414"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3dbccc1d0ac8f9a0ba27c46f2fe58414"></a>
-static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00094.html#a3dbccc1d0ac8f9a0ba27c46f2fe58414">UnknownSize</a> = size_t(-1)</td></tr>
-<tr class="memdesc:a3dbccc1d0ac8f9a0ba27c46f2fe58414"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates an error when a size is returned by a member. <br /></td></tr>
-<tr class="separator:a3dbccc1d0ac8f9a0ba27c46f2fe58414"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:ace9460aa7a6d1b044661a25dea831259"><td class="memTemplParams" colspan="2"><a class="anchor" id="ace9460aa7a6d1b044661a25dea831259"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ace9460aa7a6d1b044661a25dea831259"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>check_and_set_persistent</b> (bool _yn)</td></tr>
-<tr class="separator:ace9460aa7a6d1b044661a25dea831259"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29ff22fb514c241df18d48896544a574"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a29ff22fb514c241df18d48896544a574"></a>
+virtual <a class="el" href="a00313.html">VertexHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><b>add_vertex</b> (const Vec3f &amp;_point)=0</td></tr>
+<tr class="separator:a29ff22fb514c241df18d48896544a574"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6165648a0e80f8e352f07366322ab91a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6165648a0e80f8e352f07366322ab91a"></a>
+virtual <a class="el" href="a00313.html">VertexHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><b>add_vertex</b> ()=0</td></tr>
+<tr class="separator:a6165648a0e80f8e352f07366322ab91a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa465ca49d6bb6e220b46189d05ed33c0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa465ca49d6bb6e220b46189d05ed33c0"></a>
+virtual <a class="el" href="a00148.html">FaceHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><b>add_face</b> (const VHandles &amp;_indices)=0</td></tr>
+<tr class="separator:aa465ca49d6bb6e220b46189d05ed33c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa133cf8354b3e83a91da8c0ab2f567e8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa133cf8354b3e83a91da8c0ab2f567e8"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>add_face_texcoords</b> (<a class="el" href="a00148.html">FaceHandle</a> _fh, <a class="el" href="a00313.html">VertexHandle</a> _vh, const std::vector&lt; Vec2f &gt; &amp;_face_texcoords)=0</td></tr>
+<tr class="separator:aa133cf8354b3e83a91da8c0ab2f567e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c3b5d1b35a3831369be5c936215a290"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7c3b5d1b35a3831369be5c936215a290"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_face_texindex</b> (<a class="el" href="a00148.html">FaceHandle</a> _fh, int _texId)=0</td></tr>
+<tr class="separator:a7c3b5d1b35a3831369be5c936215a290"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a504c629ca2747b696c868b669ffdf812"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a504c629ca2747b696c868b669ffdf812"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_point</b> (<a class="el" href="a00313.html">VertexHandle</a> _vh, const Vec3f &amp;_point)=0</td></tr>
+<tr class="separator:a504c629ca2747b696c868b669ffdf812"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e971ffc9753f907aaea51fda4a24963"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3e971ffc9753f907aaea51fda4a24963"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_normal</b> (<a class="el" href="a00313.html">VertexHandle</a> _vh, const Vec3f &amp;_normal)=0</td></tr>
+<tr class="separator:a3e971ffc9753f907aaea51fda4a24963"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab35b98c11e74c51302b18095c4bfb84e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab35b98c11e74c51302b18095c4bfb84e"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00313.html">VertexHandle</a> _vh, const Vec3uc &amp;_color)=0</td></tr>
+<tr class="separator:ab35b98c11e74c51302b18095c4bfb84e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a599099f7dc647766bdc2ae63cf5dd609"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a599099f7dc647766bdc2ae63cf5dd609"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00313.html">VertexHandle</a> _vh, const Vec4uc &amp;_color)=0</td></tr>
+<tr class="separator:a599099f7dc647766bdc2ae63cf5dd609"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a595829a11c5baac7a58a2c32c9689ccf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a595829a11c5baac7a58a2c32c9689ccf"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00313.html">VertexHandle</a> _vh, const Vec3f &amp;_color)=0</td></tr>
+<tr class="separator:a595829a11c5baac7a58a2c32c9689ccf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4379952297a3031bdc33db02ef6e4962"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4379952297a3031bdc33db02ef6e4962"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00313.html">VertexHandle</a> _vh, const Vec4f &amp;_color)=0</td></tr>
+<tr class="separator:a4379952297a3031bdc33db02ef6e4962"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7897efb5861a11c5cc36570d7a34bfe7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7897efb5861a11c5cc36570d7a34bfe7"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_texcoord</b> (<a class="el" href="a00313.html">VertexHandle</a> _vh, const Vec2f &amp;_texcoord)=0</td></tr>
+<tr class="separator:a7897efb5861a11c5cc36570d7a34bfe7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81f556ace7b0587f7d1f437a5810bd9a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a81f556ace7b0587f7d1f437a5810bd9a"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_texcoord</b> (<a class="el" href="a00180.html">HalfedgeHandle</a> _heh, const Vec2f &amp;_texcoord)=0</td></tr>
+<tr class="separator:a81f556ace7b0587f7d1f437a5810bd9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae60fa282ec04453d09805ca2faca1ca4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae60fa282ec04453d09805ca2faca1ca4"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00134.html">EdgeHandle</a> _eh, const Vec3uc &amp;_color)=0</td></tr>
+<tr class="separator:ae60fa282ec04453d09805ca2faca1ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5c444591a012ed81ab1114bcd33a6dd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab5c444591a012ed81ab1114bcd33a6dd"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00134.html">EdgeHandle</a> _eh, const Vec4uc &amp;_color)=0</td></tr>
+<tr class="separator:ab5c444591a012ed81ab1114bcd33a6dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6831a1bead7297b269ce93b4c0a2384"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab6831a1bead7297b269ce93b4c0a2384"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00134.html">EdgeHandle</a> _eh, const Vec3f &amp;_color)=0</td></tr>
+<tr class="separator:ab6831a1bead7297b269ce93b4c0a2384"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b06f444209a03a18526d9bb0642bc76"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2b06f444209a03a18526d9bb0642bc76"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00134.html">EdgeHandle</a> _eh, const Vec4f &amp;_color)=0</td></tr>
+<tr class="separator:a2b06f444209a03a18526d9bb0642bc76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeafed8cf33fcffe3c041d87866d26190"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeafed8cf33fcffe3c041d87866d26190"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_normal</b> (<a class="el" href="a00148.html">FaceHandle</a> _fh, const Vec3f &amp;_normal)=0</td></tr>
+<tr class="separator:aeafed8cf33fcffe3c041d87866d26190"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad01a91980479eaf70f35c642002c7992"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad01a91980479eaf70f35c642002c7992"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00148.html">FaceHandle</a> _fh, const Vec3uc &amp;_color)=0</td></tr>
+<tr class="separator:ad01a91980479eaf70f35c642002c7992"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53e0b08a948318267d22a781bc44c9ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a53e0b08a948318267d22a781bc44c9ed"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00148.html">FaceHandle</a> _fh, const Vec4uc &amp;_color)=0</td></tr>
+<tr class="separator:a53e0b08a948318267d22a781bc44c9ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4153db5db4922d65a18ab01edbf8c8de"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4153db5db4922d65a18ab01edbf8c8de"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00148.html">FaceHandle</a> _fh, const Vec3f &amp;_color)=0</td></tr>
+<tr class="separator:a4153db5db4922d65a18ab01edbf8c8de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7c882c083da2059d10bc23700b2730d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa7c882c083da2059d10bc23700b2730d"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00148.html">FaceHandle</a> _fh, const Vec4f &amp;_color)=0</td></tr>
+<tr class="separator:aa7c882c083da2059d10bc23700b2730d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea45b4ba6207843fb4c5eb0ece7a4ecf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aea45b4ba6207843fb4c5eb0ece7a4ecf"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>add_texture_information</b> (int _id, std::string _name)=0</td></tr>
+<tr class="separator:aea45b4ba6207843fb4c5eb0ece7a4ecf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab95995885fb64ca310a233cb4695b99f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab95995885fb64ca310a233cb4695b99f"></a>
+virtual <a class="el" href="a00095.html">BaseKernel</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>kernel</b> ()</td></tr>
+<tr class="separator:ab95995885fb64ca310a233cb4695b99f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d2ab3d5e31716fba74f23fa85660311"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5d2ab3d5e31716fba74f23fa85660311"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_triangle_mesh</b> () const </td></tr>
+<tr class="separator:a5d2ab3d5e31716fba74f23fa85660311"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f4b4e5acbc8a8fb662448986cc26070"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4f4b4e5acbc8a8fb662448986cc26070"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>reserve</b> (unsigned int, unsigned int, unsigned int)</td></tr>
+<tr class="separator:a4f4b4e5acbc8a8fb662448986cc26070"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2df08eadf4a3d197cf3908605709b5a0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2df08eadf4a3d197cf3908605709b5a0"></a>
+virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n_vertices</b> () const =0</td></tr>
+<tr class="separator:a2df08eadf4a3d197cf3908605709b5a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68cf18f64b7c8c9349b1051949bdaec9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68cf18f64b7c8c9349b1051949bdaec9"></a>
+virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n_faces</b> () const =0</td></tr>
+<tr class="separator:a68cf18f64b7c8c9349b1051949bdaec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e6abad49510f66bb3e9fe4f2dc07d2d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0e6abad49510f66bb3e9fe4f2dc07d2d"></a>
+virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n_edges</b> () const =0</td></tr>
+<tr class="separator:a0e6abad49510f66bb3e9fe4f2dc07d2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b0ab2b8368cc9ab015874de820b0f4a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5b0ab2b8368cc9ab015874de820b0f4a"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>prepare</b> ()</td></tr>
+<tr class="separator:a5b0ab2b8368cc9ab015874de820b0f4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a786cddca70ba2705a73598891e441fe0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a786cddca70ba2705a73598891e441fe0"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>finish</b> ()</td></tr>
+<tr class="separator:a786cddca70ba2705a73598891e441fe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Abstract class defining the basic interface of a dynamic property. </p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="ab40b442ea053998cbde8e9a4bb27c6a3"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">OpenMesh::BaseProperty::BaseProperty </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>_name</em> = <code>&quot;&lt;unknown&gt;&quot;</code></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Default constructor. </p>
-<p>In OpenMesh all mesh data is stored in so-called properties. We distinuish between standard properties, which can be defined at compile time using the <a class="el" href="a00716.html" title="This namespace holds per item attributes like normal/color. ">Attributes</a> in the traits definition and at runtime using the request property functions defined in one of the kernels.</p>
-<p>If the property should be stored along with the default properties in the OM-format one must name the property and enable the persistant flag with <a class="el" href="a00094.html#aeac2109212f8489104137a03ffee3962" title="Enable or disable persistency. ">set_persistent()</a>.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">_name</td><td>Optional textual name for the property. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a0eb66e2547283ca989179d508fbbed87"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual size_t OpenMesh::BaseProperty::restore </td>
-          <td>(</td>
-          <td class="paramtype">std::istream &amp;&#160;</td>
-          <td class="paramname"><em>_istr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>_swap</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Restore self from a binary block. </p>
-<p>Uses <a class="el" href="a00094.html#a4060f65f09046a5afc09dec01e6fb43a" title="Reserve memory for n elements. ">reserve()</a> to set the size of self before restoring. </p>
-
-<p>Implemented in <a class="el" href="a00250.html#a619e87f5a601b4c4007a91ffc58c6bb6">OpenMesh::PropertyT&lt; std::string &gt;</a>, <a class="el" href="a00249.html#a21d1880f0b89fb9daa1c0c5daed574b1">OpenMesh::PropertyT&lt; bool &gt;</a>, <a class="el" href="a00235.html#af263bcb96eb989660cd802eaf93cd028">OpenMesh::Kernel_OSG::oPropertyT&lt; GeoProperty &gt;</a>, and <a class="el" href="a00248.html#a90b89d38f7fa7410cea2786b48ce4461">OpenMesh::PropertyT&lt; T &gt;</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aeac2109212f8489104137a03ffee3962"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void OpenMesh::BaseProperty::set_persistent </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>_yn</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Enable or disable persistency. </p>
-<p>Self must be a named property to enable persistency. </p>
-
-<p>Implemented in <a class="el" href="a00250.html#a0d9bb02308869542552eca53d041097e">OpenMesh::PropertyT&lt; std::string &gt;</a>, <a class="el" href="a00249.html#aede7a8a5b614c7cd594c13f689ef716e">OpenMesh::PropertyT&lt; bool &gt;</a>, <a class="el" href="a00235.html#ac0e7839eeeba0528390ccbe9315dd153">OpenMesh::Kernel_OSG::oPropertyT&lt; GeoProperty &gt;</a>, and <a class="el" href="a00248.html#a591925b6eb3245fa0d510d79de27ef30">OpenMesh::PropertyT&lt; T &gt;</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a99494b064f29f3f0b529fbe11c758269"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual size_t OpenMesh::BaseProperty::size_of </td>
-          <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>_n_elem</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Estimated size of property if it has _n_elem elements. </p>
-<p>The member returns UnknownSize if the size cannot be estimated. </p>
-
-<p>Reimplemented in <a class="el" href="a00250.html#a6cf700204b62c1d00c36eda2a00e7f9c">OpenMesh::PropertyT&lt; std::string &gt;</a>, <a class="el" href="a00249.html#a28bba15869fd28a805418da1ada2d838">OpenMesh::PropertyT&lt; bool &gt;</a>, and <a class="el" href="a00248.html#a20576d4bf703c8dd95547074546e2485">OpenMesh::PropertyT&lt; T &gt;</a>.</p>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following files:<ul>
-<li>OpenMesh/Core/Utils/<a class="el" href="a00516_source.html">BaseProperty.hh</a></li>
-<li>OpenMesh/Core/Utils/BaseProperty.cc</li>
+<div class="textblock"><p>Base class for importer modules. </p>
+<p>Importer modules provide an interface between the loader modules and the target data structure. This is basically a wrapper providing virtual versions for the required mesh functions. </p>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
+<li>OpenMesh/Core/IO/importer/<a class="el" href="a00438_source.html">BaseImporter.hh</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -364,7 +241,6 @@ template&lt;typename T &gt; </td></tr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

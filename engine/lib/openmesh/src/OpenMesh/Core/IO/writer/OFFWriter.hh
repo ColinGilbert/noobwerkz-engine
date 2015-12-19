@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 15:07:46 +0200 (Di, 28 Apr 2015) $                   *
+ *   $Revision$                                                         *
+ *   $Date$                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -60,10 +60,8 @@
 
 //=== INCLUDES ================================================================
 
-
-#include <stdio.h>
 #include <string>
-#include <fstream>
+#include <ostream>
 
 #include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/Utils/SingletonT.hh>

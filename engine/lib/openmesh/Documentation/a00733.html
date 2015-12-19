@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh::Utils Namespace Reference</title>
+<title>OpenMesh: OpenMesh::Decimater Namespace Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -105,125 +106,80 @@ $(document).ready(function(){initNavTree('a00733.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#nested-classes">Classes</a>  </div>
   <div class="headertitle">
-<div class="title">OpenMesh::Utils Namespace Reference</div>  </div>
+<div class="title">OpenMesh::Decimater Namespace Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Collection of little utility classes and helpers.  
+<p>Software related to mesh decimation.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00183.html">HeapInterfaceT</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class demonstrates the HeapInterface's interface.  <a href="a00183.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00090.html">BaseDecimaterModule</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">base class decimater framework  <a href="a00090.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00184.html">HeapT</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An efficient, highly customizable heap.  <a href="a00184.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">singleton &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00091.html">BaseDecimaterT</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00205.html">MeshCheckerT</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check integrity of mesh.  <a href="a00205.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00110.html">CollapseInfoT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores information about a halfedge collapse.  <a href="a00110.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00229.html">Noncopyable</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class demonstrates the non copyable idiom.  <a href="a00229.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00128.html">DecimaterT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="a00733.html" title="Software related to mesh decimation. ">Decimater</a> framework.  <a href="a00128.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00231.html">NumLimitsT</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class provides the maximum and minimum values a certain scalar type (<code>int</code>, <code>float</code>, or <code>double</code>) can store.  <a href="a00231.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00203.html">McDecimaterT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiple choice decimater framework.  <a href="a00203.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00267.html">TestingFramework</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper class for test programms.  <a href="a00267.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00216.html">MixedDecimaterT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mixed decimater framework.  <a href="a00216.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00268.html">Timer</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="a00268.html" title="Timer class. ">Timer</a> class.  <a href="a00268.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00217.html">ModAspectRatioT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use aspect ratio to control decimation.  <a href="a00217.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:ae1d76d62d469368d9ef7543d654f5757"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00733.html#ae1d76d62d469368d9ef7543d654f5757">kbhit</a> (void)</td></tr>
-<tr class="memdesc:ae1d76d62d469368d9ef7543d654f5757"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if characters a pending in stdin.  <a href="#ae1d76d62d469368d9ef7543d654f5757">More...</a><br /></td></tr>
-<tr class="separator:ae1d76d62d469368d9ef7543d654f5757"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57d62648ad2dee568c8ad4f0ba9af89e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00733.html#a57d62648ad2dee568c8ad4f0ba9af89e">getch</a> (void)</td></tr>
-<tr class="memdesc:a57d62648ad2dee568c8ad4f0ba9af89e"><td class="mdescLeft">&#160;</td><td class="mdescRight">A blocking single character input from stdin.  <a href="#a57d62648ad2dee568c8ad4f0ba9af89e">More...</a><br /></td></tr>
-<tr class="separator:a57d62648ad2dee568c8ad4f0ba9af89e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f550408b4793749e894b6f006914f5f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00733.html#a1f550408b4793749e894b6f006914f5f">getche</a> (void)</td></tr>
-<tr class="memdesc:a1f550408b4793749e894b6f006914f5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">A blocking single character input from stdin with echo.  <a href="#a1f550408b4793749e894b6f006914f5f">More...</a><br /></td></tr>
-<tr class="separator:a1f550408b4793749e894b6f006914f5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02ac3f36db338d720b0558a757b1cf9e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a02ac3f36db338d720b0558a757b1cf9e"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>GLenum_as_string</b> (GLenum _m)</td></tr>
-<tr class="separator:a02ac3f36db338d720b0558a757b1cf9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00219.html">ModBaseT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base class for all decimation modules.  <a href="a00219.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00220.html">ModEdgeLengthT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use edge length to control decimation.  <a href="a00220.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00221.html">ModHandleT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle for mesh decimation modules.  <a href="a00221.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00222.html">ModHausdorffT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use Hausdorff distance to control decimation.  <a href="a00222.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00224.html">ModIndependentSetsT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lock one-ring around remaining vertex after a collapse to prevent further collapses of halfedges incident to the one-ring vertices.  <a href="a00224.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00225.html">ModNormalDeviationT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use Normal deviation to control decimation.  <a href="a00225.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00226.html">ModNormalFlippingT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decimating module to avoid flipping of faces.  <a href="a00226.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00227.html">ModProgMeshT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collect progressive mesh information while decimating.  <a href="a00227.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00228.html">ModQuadricT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mesh decimation module computing collapse priority based on error quadrics.  <a href="a00228.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00229.html">ModRoundnessT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use Roundness of triangles to control decimation.  <a href="a00229.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00237.html">Observer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="a00237.html" title="Observer class. ">Observer</a> class.  <a href="a00237.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Collection of little utility classes and helpers. </p>
-</div><h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a57d62648ad2dee568c8ad4f0ba9af89e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">OPENMESHDLLEXPORT int OpenMesh::Utils::getch </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>A blocking single character input from stdin. </p>
-<dl class="section return"><dt>Returns</dt><dd>Character, or -1 if an input error occurs.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="a00733.html#a1f550408b4793749e894b6f006914f5f" title="A blocking single character input from stdin with echo. ">getche()</a>, <a class="el" href="a00733.html#ae1d76d62d469368d9ef7543d654f5757" title="Check if characters a pending in stdin. ">kbhit()</a> </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a1f550408b4793749e894b6f006914f5f"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">OPENMESHDLLEXPORT int OpenMesh::Utils::getche </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>A blocking single character input from stdin with echo. </p>
-<dl class="section return"><dt>Returns</dt><dd>Character, or -1 if an input error occurs. </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="a00733.html#a57d62648ad2dee568c8ad4f0ba9af89e" title="A blocking single character input from stdin. ">getch()</a>, <a class="el" href="a00733.html#ae1d76d62d469368d9ef7543d654f5757" title="Check if characters a pending in stdin. ">kbhit()</a> </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="ae1d76d62d469368d9ef7543d654f5757"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">OPENMESHDLLEXPORT int OpenMesh::Utils::kbhit </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Check if characters a pending in stdin. </p>
-<dl class="section return"><dt>Returns</dt><dd>Number of characters available to read.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="a00733.html#a57d62648ad2dee568c8ad4f0ba9af89e" title="A blocking single character input from stdin. ">getch()</a>, <a class="el" href="a00733.html#a1f550408b4793749e894b6f006914f5f" title="A blocking single character input from stdin with echo. ">getche()</a> </dd></dl>
-
-</div>
-</div>
-</div><!-- contents -->
+<div class="textblock"><p>Software related to mesh decimation. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="a00548.html">DecimaterT.hh</a> </dd></dl>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <hr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

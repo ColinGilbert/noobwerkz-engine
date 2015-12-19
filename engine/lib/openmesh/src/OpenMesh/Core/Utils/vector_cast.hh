@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1278 $                                                         *
- *   $Date: 2015-06-09 10:58:41 +0200 (Di, 09 Jun 2015) $                   *
+ *   $Revision$                                                         *
+ *   $Date$                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -91,7 +91,7 @@ inline void vector_cast( const src_t &_src, dst_t &_dst, GenProg::Int2Type<n> )
 }
 
 template <typename src_t, typename dst_t>
-inline void vector_cast( const src_t &_src, dst_t &_dst, GenProg::Int2Type<0> )
+inline void vector_cast( const src_t & /*_src*/, dst_t & /*_dst*/, GenProg::Int2Type<0> )
 {
 }
 
@@ -105,7 +105,7 @@ inline void vector_copy( const src_t &_src, dst_t &_dst, GenProg::Int2Type<n> )
 }
 
 template <typename src_t, typename dst_t>
-inline void vector_copy( const src_t &_src, dst_t &_dst, GenProg::Int2Type<0> )
+inline void vector_copy( const src_t & /*_src*/, dst_t & /*_dst*/ , GenProg::Int2Type<0> )
 {
 }
 

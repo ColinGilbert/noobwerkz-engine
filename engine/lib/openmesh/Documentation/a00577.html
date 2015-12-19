@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh/Tools/Subdivider/Uniform/Composite/CompositeT.hh File Reference</title>
+<title>OpenMesh: OpenMesh/Tools/Smoother/JacobiLaplaceSmootherT.cc File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -105,48 +106,25 @@ $(document).ready(function(){initNavTree('a00577.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
-<div class="title">CompositeT.hh File Reference</div>  </div>
+<div class="title">JacobiLaplaceSmootherT.cc File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;string&gt;</code><br />
-<code>#include &lt;vector&gt;</code><br />
-<code>#include &lt;<a class="el" href="a00592_source.html">OpenMesh/Tools/Subdivider/Uniform/SubdividerT.hh</a>&gt;</code><br />
+<div class="textblock"><code>#include &lt;<a class="el" href="a00578_source.html">OpenMesh/Tools/Smoother/JacobiLaplaceSmootherT.hh</a>&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
-Include dependency graph for CompositeT.hh:</div>
+Include dependency graph for JacobiLaplaceSmootherT.cc:</div>
 <div class="dyncontent">
-<div class="center"><img src="a00807.png" border="0" usemap="#OpenMesh_2Tools_2Subdivider_2Uniform_2Composite_2CompositeT_8hh" alt=""/></div>
-<map name="OpenMesh_2Tools_2Subdivider_2Uniform_2Composite_2CompositeT_8hh" id="OpenMesh_2Tools_2Subdivider_2Uniform_2Composite_2CompositeT_8hh">
-<area shape="rect" id="node4" href="a00592.html" title="OpenMesh/Tools/Subdivider\l/Uniform/SubdividerT.hh" alt="" coords="175,95,361,136"/><area shape="rect" id="node5" href="a00505_source.html" title="OpenMesh/Core/System\l/config.hh" alt="" coords="94,184,261,225"/><area shape="rect" id="node7" href="a00522_source.html" title="OpenMesh/Core/Utils\l/Noncopyable.hh" alt="" coords="285,184,433,225"/></map>
+<div class="center"><img src="a00812.png" border="0" usemap="#OpenMesh_2Tools_2Smoother_2JacobiLaplaceSmootherT_8cc" alt=""/></div>
+<map name="OpenMesh_2Tools_2Smoother_2JacobiLaplaceSmootherT_8cc" id="OpenMesh_2Tools_2Smoother_2JacobiLaplaceSmootherT_8cc">
+<area shape="rect" id="node2" href="a00578.html" title="OpenMesh/Tools/Smoother\l/JacobiLaplaceSmootherT.hh" alt="" coords="65,95,256,136"/><area shape="rect" id="node3" href="a00580.html" title="OpenMesh/Tools/Smoother\l/LaplaceSmootherT.hh" alt="" coords="70,184,251,225"/><area shape="rect" id="node4" href="a00583.html" title="OpenMesh/Tools/Smoother\l/SmootherT.hh" alt="" coords="70,273,251,315"/><area shape="rect" id="node5" href="a00515_source.html" title="OpenMesh/Core/System\l/config.hh" alt="" coords="77,452,244,493"/><area shape="rect" id="node7" href="a00533_source.html" title="OpenMesh/Core/Utils\l/Property.hh" alt="" coords="1520,363,1668,404"/><area shape="rect" id="node33" href="a00532_source.html" title="OpenMesh/Core/Utils\l/Noncopyable.hh" alt="" coords="5,541,153,583"/><area shape="rect" id="node8" href="a00498_source.html" title="OpenMesh/Core/Mesh\l/Handles.hh" alt="" coords="1348,899,1501,940"/><area shape="rect" id="node10" href="a00526_source.html" title="OpenMesh/Core/Utils\l/BaseProperty.hh" alt="" coords="1632,452,1780,493"/><area shape="rect" id="node12" href="a00466_source.html" title="OpenMesh/Core/IO/StoreRestore.hh" alt="" coords="465,549,699,575"/><area shape="rect" id="node28" href="a00518.html" title="This file provides the streams omlog, omout, and omerr. " alt="" coords="1525,809,1692,851"/><area shape="rect" id="node14" href="a00461_source.html" title="OpenMesh/Core/IO/SR\l_binary.hh" alt="" coords="503,720,661,761"/><area shape="rect" id="node18" href="a00462_source.html" title="OpenMesh/Core/IO/SR\l_binary_spec.hh" alt="" coords="812,631,971,672"/><area shape="rect" id="node22" href="a00432_source.html" title="OpenMesh/Core/Geometry\l/VectorT.hh" alt="" coords="1277,720,1455,761"/><area shape="rect" id="node23" href="a00505_source.html" title="OpenMesh/Core/Mesh\l/Status.hh" alt="" coords="737,899,891,940"/><area shape="rect" id="node24" href="a00465_source.html" title="OpenMesh/Core/IO/SR\l_types.hh" alt="" coords="879,809,1037,851"/><area shape="rect" id="node25" href="a00463_source.html" title="OpenMesh/Core/IO/SR\l_rbo.hh" alt="" coords="929,720,1088,761"/><area shape="rect" id="node32" href="a00531_source.html" title="OpenMesh/Core/Utils\l/GenProg.hh" alt="" coords="967,899,1115,940"/><area shape="rect" id="node29" href="a00516_source.html" title="OpenMesh/Core/System\l/mostream.hh" alt="" coords="1525,899,1692,940"/></map>
 </div>
-</div><div class="textblock"><div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dyncontent">
-<div class="center"><img src="a00808.png" border="0" usemap="#OpenMesh_2Tools_2Subdivider_2Uniform_2Composite_2CompositeT_8hhdep" alt=""/></div>
-<map name="OpenMesh_2Tools_2Subdivider_2Uniform_2Composite_2CompositeT_8hhdep" id="OpenMesh_2Tools_2Subdivider_2Uniform_2Composite_2CompositeT_8hhdep">
-<area shape="rect" id="node2" href="a00586.html" title="OpenMesh/Tools/Subdivider\l/Uniform/CompositeSqrt3T.hh" alt="" coords="5,95,201,136"/><area shape="rect" id="node3" href="a00585.html" title="OpenMesh/Tools/Subdivider\l/Uniform/CompositeLoopT.hh" alt="" coords="225,95,419,136"/><area shape="rect" id="node4" href="a00575.html" title="OpenMesh/Tools/Subdivider\l/Uniform/Composite/CompositeT.cc" alt="" coords="443,95,675,136"/></map>
-</div>
-</div>
-<p><a href="a00577_source.html">Go to the source code of this file.</a></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00114.html">OpenMesh::Subdivider::Uniform::CompositeT&lt; MeshType, RealType &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class provides the composite subdivision rules for the uniform case.  <a href="a00114.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00106.html">OpenMesh::Subdivider::Uniform::CompositeT&lt; MeshType, RealType &gt;::Coeff</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract base class for coefficient functions.  <a href="a00106.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
+</div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:a00715"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00715.html">OpenMesh</a></td></tr>
-<tr class="memdesc:a00715"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels and mesh traits. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00731"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00731.html">OpenMesh::Subdivider::Uniform</a></td></tr>
-<tr class="memdesc:a00731"><td class="mdescLeft">&#160;</td><td class="mdescRight">Software related to uniform subdivision of meshes. <br /></td></tr>
+<tr class="memitem:a00730"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00730.html">OpenMesh</a></td></tr>
+<tr class="memdesc:a00730"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels and mesh traits. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
@@ -155,7 +133,6 @@ Namespaces</h2></td></tr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

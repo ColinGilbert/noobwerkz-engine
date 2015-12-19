@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh::vector_traits&lt; osg::Pnt4f &gt; Struct Template Reference</title>
+<title>OpenMesh: OpenMesh::vector_traits&lt; osg::Color3ub &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -109,49 +110,48 @@ $(document).ready(function(){initNavTree('a00297.html','');});
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="a01013.html">List of all members</a>  </div>
+<a href="a01041.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">OpenMesh::vector_traits&lt; osg::Pnt4f &gt; Struct Template Reference</div>  </div>
+<div class="title">OpenMesh::vector_traits&lt; osg::Color3ub &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Vector traits for OpenSG vector type.  
+<p>Vector traits for OpenSG color type.  
  <a href="a00297.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="a00566_source.html">OpenMesh/Tools/Kernel_OSG/VectorAdapter.hh</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="a00576_source.html">OpenMesh/Tools/Kernel_OSG/VectorAdapter.hh</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a47e360efabdb62965014bb9d2e2cff59"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a47e360efabdb62965014bb9d2e2cff59"></a>
-typedef osg::Pnt4f&#160;</td><td class="memItemRight" valign="bottom"><b>vector_type</b></td></tr>
-<tr class="separator:a47e360efabdb62965014bb9d2e2cff59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83ee1e8a91b4f09617f075f698ae7b09"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a83ee1e8a91b4f09617f075f698ae7b09"></a>
+<tr class="memitem:afe66f6a144022db94569c997df3595aa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe66f6a144022db94569c997df3595aa"></a>
+typedef osg::Color3ub&#160;</td><td class="memItemRight" valign="bottom"><b>vector_type</b></td></tr>
+<tr class="separator:afe66f6a144022db94569c997df3595aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a875c22a4e057073f808cfa165ac75330"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a875c22a4e057073f808cfa165ac75330"></a>
 typedef vector_type::ValueType&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b></td></tr>
-<tr class="separator:a83ee1e8a91b4f09617f075f698ae7b09"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ea500c73e49ff314c35cd07f3cf3b0c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2ea500c73e49ff314c35cd07f3cf3b0c"></a>
-typedef GenProg::Int2Type<br class="typebreak" />
-&lt; vector_type::_iSize &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>typed_size</b></td></tr>
-<tr class="separator:a2ea500c73e49ff314c35cd07f3cf3b0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a875c22a4e057073f808cfa165ac75330"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14c94816e15344082261f53ebfacce24"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a14c94816e15344082261f53ebfacce24"></a>
+typedef GenProg::Int2Type&lt; 3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>typed_size</b></td></tr>
+<tr class="separator:a14c94816e15344082261f53ebfacce24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a8e1a7ab6d34cb720e8cb19b03f903812"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8e1a7ab6d34cb720e8cb19b03f903812"></a>
+<tr class="memitem:abac2697556dcd29c3069892e268b8387"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abac2697556dcd29c3069892e268b8387"></a>
 static size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> ()</td></tr>
-<tr class="separator:a8e1a7ab6d34cb720e8cb19b03f903812"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:abac2697556dcd29c3069892e268b8387"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a379dda522c3f0ad809a89c9c041be603"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a379dda522c3f0ad809a89c9c041be603"></a>
-static const size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size_</b> = vector_type::_iSize</td></tr>
-<tr class="separator:a379dda522c3f0ad809a89c9c041be603"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07f947cd0b0ef1e73d6d1350f55f8e4f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a07f947cd0b0ef1e73d6d1350f55f8e4f"></a>
+static const size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size_</b> = 3</td></tr>
+<tr class="separator:a07f947cd0b0ef1e73d6d1350f55f8e4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;&gt;<br />
-struct OpenMesh::vector_traits&lt; osg::Pnt4f &gt;</h3>
+struct OpenMesh::vector_traits&lt; osg::Color3ub &gt;</h3>
 
-<p>Vector traits for OpenSG vector type. </p>
+<p>Vector traits for OpenSG color type. </p>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
-<li>OpenMesh/Tools/Kernel_OSG/<a class="el" href="a00566_source.html">VectorAdapter.hh</a></li>
+<li>OpenMesh/Tools/Kernel_OSG/<a class="el" href="a00576_source.html">VectorAdapter.hh</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -159,7 +159,6 @@ struct OpenMesh::vector_traits&lt; osg::Pnt4f &gt;</h3>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

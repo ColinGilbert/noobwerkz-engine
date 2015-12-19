@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -112,7 +113,7 @@ $(document).ready(function(){initNavTree('a00026.html','');});
 <h1><a class="anchor" id="it_iters"></a>
 Iterators</h1>
 <p>The mesh provides linear iterators (that enumerate vertices, halfedges, edges, and faces). These can be used to easily navigate through a mesh. Each iterator <code>XYZIter</code> also exists in a const version <code>ConstXYZIter</code>.</p>
-<p>All iterators are defined in the namespace <a class="el" href="a00723.html" title="Contains all mesh iterators and circulators. ">OpenMesh::Iterators</a>. They are template classes that expect a mesh as template argument to be fully specified. You should use the iterator types provided by the mesh itself, i.e. <code>MyMesh::VertexIter</code> instead of <code>OpenMesh::Iterators::VertexIterT&lt;MyMesh&gt;</code>.</p>
+<p>All iterators are defined in the namespace <a class="el" href="a00738.html" title="Contains all mesh iterators and circulators. ">OpenMesh::Iterators</a>. They are template classes that expect a mesh as template argument to be fully specified. You should use the iterator types provided by the mesh itself, i.e. <code>MyMesh::VertexIter</code> instead of <code>OpenMesh::Iterators::VertexIterT&lt;MyMesh&gt;</code>.</p>
 <p>The iterators are:</p>
 <div class="fragment"><div class="line">MyMesh mesh;</div>
 <div class="line"></div>
@@ -141,12 +142,17 @@ Iterators</h1>
 </ul>
 <p>The linear iterators are conformant to STL iterators. For a description of their interface see OpenMesh::Concepts::IteratorT.</p>
 <p>When using iterators, use the pre-increment operation (++it) for efficiency reasons.</p>
-<dl class="deprecated"><dt><b><a class="el" href="a00743.html#_deprecated000001">Deprecated:</a></b></dt><dd>While it is possible to use <code>handle()</code> to get the handle of the item referred to by the iterator, this function is deprecated. Simply dereference the iterator instead.</dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="a00759.html#_deprecated000001">Deprecated:</a></b></dt><dd>While it is possible to use <code>handle()</code> to get the handle of the item referred to by the iterator, this function is deprecated. Simply dereference the iterator instead.</dd></dl>
 <h2><a class="anchor" id="deletedElements"></a>
 Deleted Elements</h2>
 <p>If no elements of a mesh are marked as deleted, the indices provided by <code>idx()</code> are consecutive numbers from 0 to <em>number of elements</em>-1 (in the case of vertices this would be from 0 to n_vertices()-1).</p>
-<p>However, note that this is <b>not</b> the case when elements are marked as deleted and <a class="el" href="a00082.html#aba7fd4df59227f974b44111ac45e835f" title="garbage collection ">OpenMesh::ArrayKernel::garbage_collection()</a> has not yet been called.</p>
+<p>However, note that this is <b>not</b> the case when elements are marked as deleted and <a class="el" href="a00084.html#aba7fd4df59227f974b44111ac45e835f" title="garbage collection ">OpenMesh::ArrayKernel::garbage_collection()</a> has not yet been called.</p>
 <p>After garbage_collection() has been called the elements are reorganized and their handles and iterators are guaranteed to be consecutive numbers again.</p>
+<p><a class="el" href="a00730.html" title="Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...">OpenMesh</a> uses a lazy deletion scheme to avoid unnecessary updates to the data structure. The halfedge data structure will always be updated directly to ensure that following algorithms will have the correct iterator setups.</p>
+<p>So if you delete a face, The face itself will still exist but the halfedges which are now located at the hole will be updated directly, which means that circulators on the adjacent vertices will not come across the face anymore.</p>
+<p>If an edge is deleted, the adjacent faces will be removed as well (flagging them deleted and updating the surrounding halfedges). The edge itself will also be flagged as deleted. Again the circulators will not see the deleted primitives anymore.</p>
+<p>For a vertex, all adjacent faces and edges are deleted with the schemes above and the vertex flagged as deleted.</p>
+<p>The iterators, going across vertices edges and faces will still enumerate all primitives (including deleted ones). Except if you use the skipping iterators, which will skip deleted primitives. The circulators always only enumerate primitives which are not deleted.</p>
 <dl class="section note"><dt>Note</dt><dd><ul>
 <li>
 If you delete elements on the mesh, they will still be enumerated by the standard iterators. To skip deleted elements, use the <a class="el" href="a00026.html#it_iters_skipping">Skipping Iterators</a> </li>
@@ -195,43 +201,43 @@ Circulators</h1>
 <li><code>HalfedgeLoopIter:</code> iterate over a sequence of Halfedges. (all Halfedges over a face or a hole)</li>
 </ul>
 <p>All circulators provide the operations listed in CirculatorT&lt;Mesh&gt;, which are basically the same as the iterator funtions.</p>
-<dl class="section note"><dt>Note</dt><dd>Circulators are similar to bidirectional iterators and therefore they have the bidirectional_iterator_tag. However, the bidirectional requires that the attribute <a class="el" href="a00716.html#ab78a93560926cd2f9958cb028f7ea96dafaaebe1808b5cce96ad4e19df471d58a" title="Add storage for previous halfedge (halfedges). The bit is set by default in the DefaultTraits. ">OpenMesh::Attributes::PrevHalfedge</a> is available. Otherwise it is just a forward iterator.</dd></dl>
-<dl class="deprecated"><dt><b><a class="el" href="a00743.html#_deprecated000002">Deprecated:</a></b></dt><dd>While it is possible to use <code>operator</code> <code>bool()</code>, which returns true, as long as the circulator hasn't reached the end of the sequence, this function is deprecated. Use the function <code>is_valid()</code> instead.</dd></dl>
-<p>OpenMesh provides the following functions (defined in <a class="el" href="a00240.html" title="Connectivity Class for polygonal meshes. ">OpenMesh::PolyConnectivity</a>) to get circulators around a specified center item:</p>
+<dl class="section note"><dt>Note</dt><dd>Circulators are similar to bidirectional iterators and therefore they have the bidirectional_iterator_tag. However, the bidirectional requires that the attribute <a class="el" href="a00731.html#ab78a93560926cd2f9958cb028f7ea96dafaaebe1808b5cce96ad4e19df471d58a" title="Add storage for previous halfedge (halfedges). The bit is set by default in the DefaultTraits. ">OpenMesh::Attributes::PrevHalfedge</a> is available. Otherwise it is just a forward iterator.</dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="a00759.html#_deprecated000002">Deprecated:</a></b></dt><dd>While it is possible to use <code>operator</code> <code>bool()</code>, which returns true, as long as the circulator hasn't reached the end of the sequence, this function is deprecated. Use the function <code>is_valid()</code> instead.</dd></dl>
+<p>OpenMesh provides the following functions (defined in <a class="el" href="a00247.html" title="Connectivity Class for polygonal meshes. ">OpenMesh::PolyConnectivity</a>) to get circulators around a specified center item:</p>
 <div class="fragment"><div class="line"><span class="comment">/**************************************************</span></div>
 <div class="line"><span class="comment"> * Vertex circulators</span></div>
 <div class="line"><span class="comment"> **************************************************/</span></div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Get the vertex-vertex circulator (1-ring) of vertex _vh</span></div>
-<div class="line">VertexVertexIter <a class="code" href="a00240.html#a68c1388ce7b5ce1cc9cf8825293ac801">OpenMesh::PolyConnectivity::vv_iter</a> (VertexHandle _vh);</div>
+<div class="line">VertexVertexIter <a class="code" href="a00247.html#a68c1388ce7b5ce1cc9cf8825293ac801">OpenMesh::PolyConnectivity::vv_iter</a> (VertexHandle _vh);</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Get the vertex-incoming halfedges circulator of vertex _vh</span></div>
-<div class="line">VertexIHalfedgeIter <a class="code" href="a00240.html#ad107901645041fc7f0662ef92c3a079b">OpenMesh::PolyConnectivity::vih_iter</a> (VertexHandle _vh);</div>
+<div class="line">VertexIHalfedgeIter <a class="code" href="a00247.html#ad107901645041fc7f0662ef92c3a079b">OpenMesh::PolyConnectivity::vih_iter</a> (VertexHandle _vh);</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Get the vertex-outgoing halfedges circulator of vertex _vh</span></div>
-<div class="line">VertexOHalfedgeIter <a class="code" href="a00240.html#ac93ceccd63aed16bcab88930c89ffbbb">OpenMesh::PolyConnectivity::voh_iter</a> (VertexHandle _vh);</div>
+<div class="line">VertexOHalfedgeIter <a class="code" href="a00247.html#ac93ceccd63aed16bcab88930c89ffbbb">OpenMesh::PolyConnectivity::voh_iter</a> (VertexHandle _vh);</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Get the vertex-edge circulator of vertex _vh</span></div>
-<div class="line">VertexEdgeIter <a class="code" href="a00240.html#af695c0e03e74577d8d97347ca84b1ff2">OpenMesh::PolyConnectivity::ve_iter</a> (VertexHandle _vh);</div>
+<div class="line">VertexEdgeIter <a class="code" href="a00247.html#af695c0e03e74577d8d97347ca84b1ff2">OpenMesh::PolyConnectivity::ve_iter</a> (VertexHandle _vh);</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Get the vertex-face circulator of vertex _vh</span></div>
-<div class="line">VertexFaceIter <a class="code" href="a00240.html#a25860bb9999a9b507b3a80e2e37a2e82">OpenMesh::PolyConnectivity::vf_iter</a> (VertexHandle _vh);</div>
+<div class="line">VertexFaceIter <a class="code" href="a00247.html#a25860bb9999a9b507b3a80e2e37a2e82">OpenMesh::PolyConnectivity::vf_iter</a> (VertexHandle _vh);</div>
 <div class="line"></div>
 <div class="line"><span class="comment">/**************************************************</span></div>
 <div class="line"><span class="comment"> * Face circulators</span></div>
 <div class="line"><span class="comment"> **************************************************/</span></div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Get the face-vertex circulator of face _fh</span></div>
-<div class="line">FaceVertexIter <a class="code" href="a00240.html#ad063456d88df23b6987a7627ffbd1cdf">OpenMesh::PolyConnectivity::fv_iter</a> (FaceHandle _fh);</div>
+<div class="line">FaceVertexIter <a class="code" href="a00247.html#ad063456d88df23b6987a7627ffbd1cdf">OpenMesh::PolyConnectivity::fv_iter</a> (FaceHandle _fh);</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Get the face-halfedge circulator of face _fh</span></div>
-<div class="line">FaceHalfedgeIter <a class="code" href="a00240.html#a2a0cf023e9159c558bd99f11758dd0d4">OpenMesh::PolyConnectivity::fh_iter</a> (FaceHandle _fh);</div>
+<div class="line">FaceHalfedgeIter <a class="code" href="a00247.html#a2a0cf023e9159c558bd99f11758dd0d4">OpenMesh::PolyConnectivity::fh_iter</a> (FaceHandle _fh);</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Get the face-edge circulator of face _fh</span></div>
-<div class="line">FaceEdgeIter <a class="code" href="a00240.html#abf21db5a31b161e47db2539f10ea200c">OpenMesh::PolyConnectivity::fe_iter</a> (FaceHandle _fh);</div>
+<div class="line">FaceEdgeIter <a class="code" href="a00247.html#abf21db5a31b161e47db2539f10ea200c">OpenMesh::PolyConnectivity::fe_iter</a> (FaceHandle _fh);</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Get the face-face circulator of face _fh</span></div>
-<div class="line">FaceFaceIter <a class="code" href="a00240.html#adb6d2e735b9fdc6750e0c7d47cd2b153">OpenMesh::PolyConnectivity::ff_iter</a> (FaceHandle _fh);</div>
+<div class="line">FaceFaceIter <a class="code" href="a00247.html#adb6d2e735b9fdc6750e0c7d47cd2b153">OpenMesh::PolyConnectivity::ff_iter</a> (FaceHandle _fh);</div>
 </div><!-- fragment --><p>Additionally to the normal circulators there exists some for each direction (clock-wise, counterclock-wise). Those circulators might be slower than the normal one, but the direction of circulation is guaranteed. You can get these types of circulators by adding the infix "ccw" or "cw" to the function used to request the circulator of an item after the underscore. Example:</p>
 <div class="fragment"><div class="line">VertexVertexIter vvit = mesh.vv_iter(some_vertex_handle);          <span class="comment">// fastest (clock or counterclockwise)</span></div>
 <div class="line">VertexVertexCWIter vvcwit = mesh.vv_cwiter(some_vertex_handle);    <span class="comment">// clockwise</span></div>
@@ -241,7 +247,7 @@ The conversion is only valid for valid circulators. The resulting circulator fro
 <div class="line">VertexVertexCCWIter vvccwit = VertexVertexCCWIter(vvcwit); <span class="comment">//conversion of an invalid circulator</span></div>
 <div class="line"> --vvcwit;  <span class="comment">//is valid now (if the range &gt;= 1)</span></div>
 <div class="line"> ++vvccwit; <span class="comment">//can still be invalid</span></div>
-</div><!-- fragment --><p>CW and CCW circulators requires that <a class="el" href="a00716.html#ab78a93560926cd2f9958cb028f7ea96dafaaebe1808b5cce96ad4e19df471d58a" title="Add storage for previous halfedge (halfedges). The bit is set by default in the DefaultTraits. ">OpenMesh::Attributes::PrevHalfedge</a> is available.</p>
+</div><!-- fragment --><p>CW and CCW circulators requires that <a class="el" href="a00731.html#ab78a93560926cd2f9958cb028f7ea96dafaaebe1808b5cce96ad4e19df471d58a" title="Add storage for previous halfedge (halfedges). The bit is set by default in the DefaultTraits. ">OpenMesh::Attributes::PrevHalfedge</a> is available.</p>
 <dl class="section note"><dt>Note</dt><dd>For every circulator there also exists a constant version. To make use of these constant circulators just add the prefix<br />
  "Const" to the type specifier and add the prefix "c" to the function used to request the circulator of an item. Example:<br />
 </dd></dl>
@@ -256,7 +262,7 @@ How to use circulators in OpenMesh</h1>
 <div class="line"><span class="keywordflow">for</span> (MyMesh::VertexIter v_it=mesh.vertices_sbegin(); v_it!=mesh.vertices_end(); ++v_it)</div>
 <div class="line">{</div>
 <div class="line">  <span class="comment">// circulate around the current vertex</span></div>
-<div class="line">  <span class="keywordflow">for</span> (<a class="code" href="a00243.html#adc7d422e2ce13141e8291f7d29f7ecef">MyMesh::VertexVertexIter</a> vv_it=mesh.vv_iter(*v_it); vv_it.is_valid(); ++vv_it)</div>
+<div class="line">  <span class="keywordflow">for</span> (<a class="code" href="a00250.html#adc7d422e2ce13141e8291f7d29f7ecef">MyMesh::VertexVertexIter</a> vv_it=mesh.vv_iter(*v_it); vv_it.is_valid(); ++vv_it)</div>
 <div class="line">  {</div>
 <div class="line">    <span class="comment">// do something with e.g. mesh.point(*vv_it)</span></div>
 <div class="line">  }</div>
@@ -279,7 +285,6 @@ How to use circulators in OpenMesh</h1>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh::Kernel_OSG::Traits Struct Reference</title>
+<title>OpenMesh: OpenMesh::Attributes::StatusInfo Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -107,97 +108,120 @@ $(document).ready(function(){initNavTree('a00270.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
-<a href="a01170.html">List of all members</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="a01062.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">OpenMesh::Kernel_OSG::Traits Struct Reference</div>  </div>
+<div class="title">OpenMesh::Attributes::StatusInfo Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Base class for all mesh traits using the OSGArrayKernelT.  
+<p>Add status information to a base class.  
  <a href="a00270.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="a00497_source.html">OpenMesh/Tools/Kernel_OSG/Traits.hh</a>&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for OpenMesh::Kernel_OSG::Traits:</div>
-<div class="dyncontent">
-<div class="center"><img src="a01171.png" border="0" usemap="#OpenMesh_1_1Kernel__OSG_1_1Traits_inherit__map" alt="Inheritance graph"/></div>
-<map name="OpenMesh_1_1Kernel__OSG_1_1Traits_inherit__map" id="OpenMesh_1_1Kernel__OSG_1_1Traits_inherit__map">
-<area shape="rect" id="node2" href="a00127.html" title="Base class for all traits. " alt="" coords="5,5,173,32"/></map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for OpenMesh::Kernel_OSG::Traits:</div>
-<div class="dyncontent">
-<div class="center"><img src="a01172.png" border="0" usemap="#OpenMesh_1_1Kernel__OSG_1_1Traits_coll__map" alt="Collaboration graph"/></div>
-<map name="OpenMesh_1_1Kernel__OSG_1_1Traits_coll__map" id="OpenMesh_1_1Kernel__OSG_1_1Traits_coll__map">
-<area shape="rect" id="node2" href="a00127.html" title="Base class for all traits. " alt="" coords="5,5,173,32"/></map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<p><code>#include &lt;<a class="el" href="a00505_source.html">OpenMesh/Attributes/Status.hh</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a01003afa1d44248483bdd563df2138f7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a01003afa1d44248483bdd563df2138f7"></a>
-typedef osg::Pnt3f&#160;</td><td class="memItemRight" valign="bottom"><b>Point</b></td></tr>
-<tr class="separator:a01003afa1d44248483bdd563df2138f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adef5b1eaa33d1e25481314372fe7a213"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adef5b1eaa33d1e25481314372fe7a213"></a>
-typedef osg::Color3ub&#160;</td><td class="memItemRight" valign="bottom"><b>Color</b></td></tr>
-<tr class="separator:adef5b1eaa33d1e25481314372fe7a213"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea2975a936d5c8f0cec3d389c8f15696"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aea2975a936d5c8f0cec3d389c8f15696"></a>
-typedef osg::Vec3f&#160;</td><td class="memItemRight" valign="bottom"><b>Normal</b></td></tr>
-<tr class="separator:aea2975a936d5c8f0cec3d389c8f15696"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9bf514a1a1bfe8d949ccb74623d7ba77"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9bf514a1a1bfe8d949ccb74623d7ba77"></a>
-typedef osg::Vec2f&#160;</td><td class="memItemRight" valign="bottom"><b>TexCoord</b></td></tr>
-<tr class="separator:a9bf514a1a1bfe8d949ccb74623d7ba77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a76bcf8df187de33f12ccd9ad2b2487"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6a76bcf8df187de33f12ccd9ad2b2487"></a>
-typedef osg::Vec3f::ValueType&#160;</td><td class="memItemRight" valign="bottom"><b>Scalar</b></td></tr>
-<tr class="separator:a6a76bcf8df187de33f12ccd9ad2b2487"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_types_a00127"><td colspan="2" onclick="javascript:toggleInherit('pub_types_a00127')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="a00127.html">OpenMesh::DefaultTraits</a></td></tr>
-<tr class="memitem:a8ef94106efb23969b4c5616ebba07015 inherit pub_types_a00127"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8ef94106efb23969b4c5616ebba07015"></a>enum &#160;</td><td class="memItemRight" valign="bottom">{ <b>VertexAttributes</b> = 0
- }</td></tr>
-<tr class="separator:a8ef94106efb23969b4c5616ebba07015 inherit pub_types_a00127"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3287b4aad5384d152a174467c5499941 inherit pub_types_a00127"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3287b4aad5384d152a174467c5499941"></a>enum &#160;</td><td class="memItemRight" valign="bottom">{ <b>HalfedgeAttributes</b> = Attributes::PrevHalfedge
- }</td></tr>
-<tr class="separator:a3287b4aad5384d152a174467c5499941 inherit pub_types_a00127"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4d39bf05ebb44af820884814b82d5cf inherit pub_types_a00127"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa4d39bf05ebb44af820884814b82d5cf"></a>enum &#160;</td><td class="memItemRight" valign="bottom">{ <b>EdgeAttributes</b> = 0
- }</td></tr>
-<tr class="separator:aa4d39bf05ebb44af820884814b82d5cf inherit pub_types_a00127"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a8c771778d2f8508af4ca913139f29e inherit pub_types_a00127"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6a8c771778d2f8508af4ca913139f29e"></a>enum &#160;</td><td class="memItemRight" valign="bottom">{ <b>FaceAttributes</b> = 0
- }</td></tr>
-<tr class="separator:a6a8c771778d2f8508af4ca913139f29e inherit pub_types_a00127"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57c3a0075b2f50719679de132aa772b1 inherit pub_types_a00127"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a57c3a0075b2f50719679de132aa772b1"></a>
-typedef Vec3f&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00127.html#a57c3a0075b2f50719679de132aa772b1">Point</a></td></tr>
-<tr class="memdesc:a57c3a0075b2f50719679de132aa772b1 inherit pub_types_a00127"><td class="mdescLeft">&#160;</td><td class="mdescRight">The default coordinate type is OpenMesh::Vec3f. <br /></td></tr>
-<tr class="separator:a57c3a0075b2f50719679de132aa772b1 inherit pub_types_a00127"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1227753ac66ff36bc8e6322a9324bab inherit pub_types_a00127"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae1227753ac66ff36bc8e6322a9324bab"></a>
-typedef Vec3f&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00127.html#ae1227753ac66ff36bc8e6322a9324bab">Normal</a></td></tr>
-<tr class="memdesc:ae1227753ac66ff36bc8e6322a9324bab inherit pub_types_a00127"><td class="mdescLeft">&#160;</td><td class="mdescRight">The default normal type is OpenMesh::Vec3f. <br /></td></tr>
-<tr class="separator:ae1227753ac66ff36bc8e6322a9324bab inherit pub_types_a00127"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21b46e8c2402cb3e3debec6b614d72f8 inherit pub_types_a00127"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a21b46e8c2402cb3e3debec6b614d72f8"></a>
-typedef float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00127.html#a21b46e8c2402cb3e3debec6b614d72f8">TexCoord1D</a></td></tr>
-<tr class="memdesc:a21b46e8c2402cb3e3debec6b614d72f8 inherit pub_types_a00127"><td class="mdescLeft">&#160;</td><td class="mdescRight">The default 1D texture coordinate type is float. <br /></td></tr>
-<tr class="separator:a21b46e8c2402cb3e3debec6b614d72f8 inherit pub_types_a00127"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3fa9bc7fb8cfee6da20b2f4e560958f4 inherit pub_types_a00127"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3fa9bc7fb8cfee6da20b2f4e560958f4"></a>
-typedef Vec2f&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00127.html#a3fa9bc7fb8cfee6da20b2f4e560958f4">TexCoord2D</a></td></tr>
-<tr class="memdesc:a3fa9bc7fb8cfee6da20b2f4e560958f4 inherit pub_types_a00127"><td class="mdescLeft">&#160;</td><td class="mdescRight">The default 2D texture coordinate type is OpenMesh::Vec2f. <br /></td></tr>
-<tr class="separator:a3fa9bc7fb8cfee6da20b2f4e560958f4 inherit pub_types_a00127"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed25dd0009f079190e5fa6ce5e068671 inherit pub_types_a00127"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aed25dd0009f079190e5fa6ce5e068671"></a>
-typedef Vec3f&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00127.html#aed25dd0009f079190e5fa6ce5e068671">TexCoord3D</a></td></tr>
-<tr class="memdesc:aed25dd0009f079190e5fa6ce5e068671 inherit pub_types_a00127"><td class="mdescLeft">&#160;</td><td class="mdescRight">The default 3D texture coordinate type is OpenMesh::Vec3f. <br /></td></tr>
-<tr class="separator:aed25dd0009f079190e5fa6ce5e068671 inherit pub_types_a00127"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07d1284c50b17be9723e661252f21bfd inherit pub_types_a00127"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a07d1284c50b17be9723e661252f21bfd"></a>
-typedef int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00127.html#a07d1284c50b17be9723e661252f21bfd">TextureIndex</a></td></tr>
-<tr class="memdesc:a07d1284c50b17be9723e661252f21bfd inherit pub_types_a00127"><td class="mdescLeft">&#160;</td><td class="mdescRight">The default texture index type. <br /></td></tr>
-<tr class="separator:a07d1284c50b17be9723e661252f21bfd inherit pub_types_a00127"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7cf05b18cbb648c04bc92e26f1a1ff5c inherit pub_types_a00127"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7cf05b18cbb648c04bc92e26f1a1ff5c"></a>
-typedef Vec3uc&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00127.html#a7cf05b18cbb648c04bc92e26f1a1ff5c">Color</a></td></tr>
-<tr class="memdesc:a7cf05b18cbb648c04bc92e26f1a1ff5c inherit pub_types_a00127"><td class="mdescLeft">&#160;</td><td class="mdescRight">The default color type is OpenMesh::Vec3uc. <br /></td></tr>
-<tr class="separator:a7cf05b18cbb648c04bc92e26f1a1ff5c inherit pub_types_a00127"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ed03a718aac1095556b808bf0a925d6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ed03a718aac1095556b808bf0a925d6"></a>
+typedef unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b></td></tr>
+<tr class="separator:a1ed03a718aac1095556b808bf0a925d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a94cd6878afd22c6b0d0773a6d08e927c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a94cd6878afd22c6b0d0773a6d08e927c"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#a94cd6878afd22c6b0d0773a6d08e927c">deleted</a> () const </td></tr>
+<tr class="memdesc:a94cd6878afd22c6b0d0773a6d08e927c"><td class="mdescLeft">&#160;</td><td class="mdescRight">is deleted ? <br /></td></tr>
+<tr class="separator:a94cd6878afd22c6b0d0773a6d08e927c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45837cf4f0b91397cde55d4e235d0886"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a45837cf4f0b91397cde55d4e235d0886"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#a45837cf4f0b91397cde55d4e235d0886">set_deleted</a> (bool _b)</td></tr>
+<tr class="memdesc:a45837cf4f0b91397cde55d4e235d0886"><td class="mdescLeft">&#160;</td><td class="mdescRight">set deleted <br /></td></tr>
+<tr class="separator:a45837cf4f0b91397cde55d4e235d0886"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac97a62d38127b3d6b568276bccb4a7dd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac97a62d38127b3d6b568276bccb4a7dd"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#ac97a62d38127b3d6b568276bccb4a7dd">locked</a> () const </td></tr>
+<tr class="memdesc:ac97a62d38127b3d6b568276bccb4a7dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">is locked ? <br /></td></tr>
+<tr class="separator:ac97a62d38127b3d6b568276bccb4a7dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a388e1ef35046f3563e50c44643938be5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a388e1ef35046f3563e50c44643938be5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#a388e1ef35046f3563e50c44643938be5">set_locked</a> (bool _b)</td></tr>
+<tr class="memdesc:a388e1ef35046f3563e50c44643938be5"><td class="mdescLeft">&#160;</td><td class="mdescRight">set locked <br /></td></tr>
+<tr class="separator:a388e1ef35046f3563e50c44643938be5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad105ac3bb7efac8042cd4011bdd37b74"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad105ac3bb7efac8042cd4011bdd37b74"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#ad105ac3bb7efac8042cd4011bdd37b74">selected</a> () const </td></tr>
+<tr class="memdesc:ad105ac3bb7efac8042cd4011bdd37b74"><td class="mdescLeft">&#160;</td><td class="mdescRight">is selected ? <br /></td></tr>
+<tr class="separator:ad105ac3bb7efac8042cd4011bdd37b74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c2bdc3171ea2abe66f302d4e4af2ce1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0c2bdc3171ea2abe66f302d4e4af2ce1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#a0c2bdc3171ea2abe66f302d4e4af2ce1">set_selected</a> (bool _b)</td></tr>
+<tr class="memdesc:a0c2bdc3171ea2abe66f302d4e4af2ce1"><td class="mdescLeft">&#160;</td><td class="mdescRight">set selected <br /></td></tr>
+<tr class="separator:a0c2bdc3171ea2abe66f302d4e4af2ce1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3c7cc9a02f61698827b4140624d9dcb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab3c7cc9a02f61698827b4140624d9dcb"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#ab3c7cc9a02f61698827b4140624d9dcb">hidden</a> () const </td></tr>
+<tr class="memdesc:ab3c7cc9a02f61698827b4140624d9dcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">is hidden ? <br /></td></tr>
+<tr class="separator:ab3c7cc9a02f61698827b4140624d9dcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03991f395c9ac193339d5b05e22a521b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a03991f395c9ac193339d5b05e22a521b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#a03991f395c9ac193339d5b05e22a521b">set_hidden</a> (bool _b)</td></tr>
+<tr class="memdesc:a03991f395c9ac193339d5b05e22a521b"><td class="mdescLeft">&#160;</td><td class="mdescRight">set hidden <br /></td></tr>
+<tr class="separator:a03991f395c9ac193339d5b05e22a521b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7650ead0b4b95692baa9548134472a4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac7650ead0b4b95692baa9548134472a4"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#ac7650ead0b4b95692baa9548134472a4">feature</a> () const </td></tr>
+<tr class="memdesc:ac7650ead0b4b95692baa9548134472a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">is feature ? <br /></td></tr>
+<tr class="separator:ac7650ead0b4b95692baa9548134472a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46b0aef2e52da77efdaf243e22b9546f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a46b0aef2e52da77efdaf243e22b9546f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#a46b0aef2e52da77efdaf243e22b9546f">set_feature</a> (bool _b)</td></tr>
+<tr class="memdesc:a46b0aef2e52da77efdaf243e22b9546f"><td class="mdescLeft">&#160;</td><td class="mdescRight">set feature <br /></td></tr>
+<tr class="separator:a46b0aef2e52da77efdaf243e22b9546f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a592e9bc39fe409411fa77e64a8c18e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3a592e9bc39fe409411fa77e64a8c18e"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#a3a592e9bc39fe409411fa77e64a8c18e">tagged</a> () const </td></tr>
+<tr class="memdesc:a3a592e9bc39fe409411fa77e64a8c18e"><td class="mdescLeft">&#160;</td><td class="mdescRight">is tagged ? <br /></td></tr>
+<tr class="separator:a3a592e9bc39fe409411fa77e64a8c18e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f5e2fd8dceaa6e5f7630d364fbbc45f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5f5e2fd8dceaa6e5f7630d364fbbc45f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#a5f5e2fd8dceaa6e5f7630d364fbbc45f">set_tagged</a> (bool _b)</td></tr>
+<tr class="memdesc:a5f5e2fd8dceaa6e5f7630d364fbbc45f"><td class="mdescLeft">&#160;</td><td class="mdescRight">set tagged <br /></td></tr>
+<tr class="separator:a5f5e2fd8dceaa6e5f7630d364fbbc45f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd34535a365e3ef4c248705f126756d0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afd34535a365e3ef4c248705f126756d0"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#afd34535a365e3ef4c248705f126756d0">tagged2</a> () const </td></tr>
+<tr class="memdesc:afd34535a365e3ef4c248705f126756d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">is tagged2 ? This is just one more tag info. <br /></td></tr>
+<tr class="separator:afd34535a365e3ef4c248705f126756d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cb22b146d322ac145b6504e16b2bf58"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0cb22b146d322ac145b6504e16b2bf58"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#a0cb22b146d322ac145b6504e16b2bf58">set_tagged2</a> (bool _b)</td></tr>
+<tr class="memdesc:a0cb22b146d322ac145b6504e16b2bf58"><td class="mdescLeft">&#160;</td><td class="mdescRight">set tagged <br /></td></tr>
+<tr class="separator:a0cb22b146d322ac145b6504e16b2bf58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a719a47f7448165373f507597a8a4fdc9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a719a47f7448165373f507597a8a4fdc9"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#a719a47f7448165373f507597a8a4fdc9">fixed_nonmanifold</a> () const </td></tr>
+<tr class="memdesc:a719a47f7448165373f507597a8a4fdc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">is fixed non-manifold ? <br /></td></tr>
+<tr class="separator:a719a47f7448165373f507597a8a4fdc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a015adc20d559f348ded4df88508ed84a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a015adc20d559f348ded4df88508ed84a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#a015adc20d559f348ded4df88508ed84a">set_fixed_nonmanifold</a> (bool _b)</td></tr>
+<tr class="memdesc:a015adc20d559f348ded4df88508ed84a"><td class="mdescLeft">&#160;</td><td class="mdescRight">set fixed non-manifold <br /></td></tr>
+<tr class="separator:a015adc20d559f348ded4df88508ed84a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cc8924ee38d273b76b37e4eb6d8c791"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8cc8924ee38d273b76b37e4eb6d8c791"></a>
+unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#a8cc8924ee38d273b76b37e4eb6d8c791">bits</a> () const </td></tr>
+<tr class="memdesc:a8cc8924ee38d273b76b37e4eb6d8c791"><td class="mdescLeft">&#160;</td><td class="mdescRight">return whole status <br /></td></tr>
+<tr class="separator:a8cc8924ee38d273b76b37e4eb6d8c791"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a211836948ed21a74219bc52080c667ba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a211836948ed21a74219bc52080c667ba"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#a211836948ed21a74219bc52080c667ba">set_bits</a> (unsigned int _bits)</td></tr>
+<tr class="memdesc:a211836948ed21a74219bc52080c667ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">set whole status at once <br /></td></tr>
+<tr class="separator:a211836948ed21a74219bc52080c667ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa23503889c078c39cdf3a4ea99f865b0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa23503889c078c39cdf3a4ea99f865b0"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#aa23503889c078c39cdf3a4ea99f865b0">is_bit_set</a> (unsigned int _s) const </td></tr>
+<tr class="memdesc:aa23503889c078c39cdf3a4ea99f865b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">is a certain bit set ? <br /></td></tr>
+<tr class="separator:aa23503889c078c39cdf3a4ea99f865b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5654423dfe8d145bb41cec0879f50651"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5654423dfe8d145bb41cec0879f50651"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#a5654423dfe8d145bb41cec0879f50651">set_bit</a> (unsigned int _s)</td></tr>
+<tr class="memdesc:a5654423dfe8d145bb41cec0879f50651"><td class="mdescLeft">&#160;</td><td class="mdescRight">set a certain bit <br /></td></tr>
+<tr class="separator:a5654423dfe8d145bb41cec0879f50651"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab95b6d356942d383a170fdfb73c42c91"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab95b6d356942d383a170fdfb73c42c91"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#ab95b6d356942d383a170fdfb73c42c91">unset_bit</a> (unsigned int _s)</td></tr>
+<tr class="memdesc:ab95b6d356942d383a170fdfb73c42c91"><td class="mdescLeft">&#160;</td><td class="mdescRight">unset a certain bit <br /></td></tr>
+<tr class="separator:ab95b6d356942d383a170fdfb73c42c91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a785a68db93e51adf6e2ee33eaee3a880"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a785a68db93e51adf6e2ee33eaee3a880"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00270.html#a785a68db93e51adf6e2ee33eaee3a880">change_bit</a> (unsigned int _s, bool _b)</td></tr>
+<tr class="memdesc:a785a68db93e51adf6e2ee33eaee3a880"><td class="mdescLeft">&#160;</td><td class="mdescRight">set or unset a certain bit <br /></td></tr>
+<tr class="separator:a785a68db93e51adf6e2ee33eaee3a880"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Base class for all mesh traits using the OSGArrayKernelT. </p>
-<dl class="section see"><dt>See also</dt><dd>The Mesh docu section on <a class="el" href="a00020.html">Specifying your MyMesh</a>. </dd>
-<dd>
-Traits.hh for a list of macros for traits classes. </dd></dl>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
-<li>OpenMesh/Tools/Kernel_OSG/<a class="el" href="a00497_source.html">Traits.hh</a></li>
+<div class="textblock"><p>Add status information to a base class. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="a00731.html#af600bbf2c3f55c90a2a64848f0547617" title="Status bits used by the Status class. ">StatusBits</a> </dd></dl>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
+<li>OpenMesh/Core/Mesh/<a class="el" href="a00505_source.html">Status.hh</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -205,7 +229,6 @@ Traits.hh for a list of macros for traits classes. </dd></dl>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

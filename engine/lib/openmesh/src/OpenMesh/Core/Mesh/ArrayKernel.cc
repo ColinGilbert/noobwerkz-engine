@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 15:07:46 +0200 (Di, 28 Apr 2015) $                   *
+ *   $Revision$                                                         *
+ *   $Date$                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -175,6 +175,16 @@ void ArrayKernel::garbage_collection(bool _v, bool _e, bool _f)
   std::vector<HalfedgeHandle*> empty_hh;
   std::vector<FaceHandle*> empty_fh;
   garbage_collection( empty_vh,empty_hh,empty_fh,_v, _e, _f);
+}
+
+void ArrayKernel::clean_keep_reservation()
+{
+    vertices_.clear();
+
+    edges_.clear();
+
+    faces_.clear();
+
 }
 
 void ArrayKernel::clean()

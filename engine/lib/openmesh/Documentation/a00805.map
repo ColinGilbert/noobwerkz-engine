@@ -1,9 +1,5 @@
-<map id="OpenMesh/Tools/Subdivider/Adaptive/Composite/CompositeT.hh" name="OpenMesh/Tools/Subdivider/Adaptive/Composite/CompositeT.hh">
-<area shape="rect" id="node2" href="$a00505_source.html" title="OpenMesh/Core/System\l/config.hh" alt="" coords="5,184,172,225"/>
-<area shape="rect" id="node4" href="$a00578.html" title="Mesh traits for adaptive composite subdivider. " alt="" coords="127,95,389,136"/>
-<area shape="rect" id="node6" href="$a00496.html" title="This file defines the default traits and some convenience macros. " alt="" coords="285,184,439,225"/>
-<area shape="rect" id="node7" href="$a00422_source.html" title="OpenMesh/Core/Geometry\l/VectorT.hh" alt="" coords="177,273,355,315"/>
-<area shape="rect" id="node8" href="$a00477.html" title="This file provides some macros containing attribute usage. " alt="" coords="380,273,533,315"/>
-<area shape="rect" id="node10" href="$a00488_source.html" title="OpenMesh/Core/Mesh\l/Handles.hh" alt="" coords="557,273,711,315"/>
-<area shape="rect" id="node9" href="$a00495_source.html" title="OpenMesh/Core/Mesh\l/Status.hh" alt="" coords="375,363,528,404"/>
+<map id="OpenMesh/Tools/Decimater/ModQuadricT.hh" name="OpenMesh/Tools/Decimater/ModQuadricT.hh">
+<area shape="rect" id="node2" href="$a00400_source.html" title="OpenMesh/Apps/Decimating\l/DecimaterViewerWidget.hh" alt="" coords="5,95,195,136"/>
+<area shape="rect" id="node3" href="$a00565.html" title="Bodies of template member function. " alt="" coords="219,95,405,136"/>
+<area shape="rect" id="node4" href="$a00633_source.html" title="Python/Decimater.hh" alt="" coords="429,102,574,129"/>
 </map>

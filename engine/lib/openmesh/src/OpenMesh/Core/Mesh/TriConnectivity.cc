@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 15:07:46 +0200 (Di, 28 Apr 2015) $                   *
+ *   $Revision$                                                         *
+ *   $Date$                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -50,7 +50,6 @@
 //  CLASS TriMeshT - IMPLEMENTATION
 
 #include <OpenMesh/Core/Mesh/TriConnectivity.hh>
-#include <OpenMesh/Core/System/omstream.hh>
 
 namespace OpenMesh
 {

@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 15:07:46 +0200 (Di, 28 Apr 2015) $                   *
+ *   $Revision$                                                         *
+ *   $Date$                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -67,10 +67,6 @@
 #include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/Utils/SingletonT.hh>
 #include <OpenMesh/Core/IO/reader/BaseReader.hh>
-
-#ifndef WIN32
-#include <string.h>
-#endif
 
 
 //== NAMESPACES ===============================================================

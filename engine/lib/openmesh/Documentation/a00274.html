@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh::Kernel_OSG::TriMesh_OSGArrayKernel_GeneratorT&lt; Traits &gt; Struct Template Reference</title>
+<title>OpenMesh: SubdivideWidget Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -107,41 +108,84 @@ $(document).ready(function(){initNavTree('a00274.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
-<a href="a01173.html">List of all members</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="a00923.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">OpenMesh::Kernel_OSG::TriMesh_OSGArrayKernel_GeneratorT&lt; Traits &gt; Struct Template Reference</div>  </div>
+<div class="title">SubdivideWidget Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>Helper class to create a TriMesh-type based on <a class="el" href="a00083.html" title="Mesh kernel using arrays for mesh item storage. ">Kernel_OSG::ArrayKernelT</a>.  
- <a href="a00274.html#details">More...</a></p>
-
-<p><code>#include &lt;<a class="el" href="a00565_source.html">OpenMesh/Tools/Kernel_OSG/TriMesh_OSGArrayKernelT.hh</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for SubdivideWidget:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00924.png" border="0" usemap="#SubdivideWidget_inherit__map" alt="Inheritance graph"/></div>
+<map name="SubdivideWidget_inherit__map" id="SubdivideWidget_inherit__map">
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for SubdivideWidget:</div>
+<div class="dyncontent">
+<div class="center"><img src="a00925.png" border="0" usemap="#SubdivideWidget_coll__map" alt="Collaboration graph"/></div>
+<map name="SubdivideWidget_coll__map" id="SubdivideWidget_coll__map">
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a6704748a07a2116596762d977c46172c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6704748a07a2116596762d977c46172c"></a>
-typedef <a class="el" href="a00151.html">FinalMeshItemsT</a><br class="typebreak" />
-&lt; ArrayItems, <a class="el" href="a00270.html">Traits</a>, true &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>MeshItems</b></td></tr>
-<tr class="separator:a6704748a07a2116596762d977c46172c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9cd8827016e0a136aa6f5e9f3b6d2a75"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9cd8827016e0a136aa6f5e9f3b6d2a75"></a>
-typedef <a class="el" href="a00084.html">AttribKernelT</a>&lt; <a class="el" href="a00151.html">MeshItems</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>AttribKernel</b></td></tr>
-<tr class="separator:a9cd8827016e0a136aa6f5e9f3b6d2a75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac127f6132018b68c502e47f9910d3b07"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac127f6132018b68c502e47f9910d3b07"></a>
-typedef <a class="el" href="a00083.html">ArrayKernelT</a><br class="typebreak" />
-&lt; <a class="el" href="a00084.html">AttribKernel</a>, <a class="el" href="a00151.html">MeshItems</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>MeshKernel</b></td></tr>
-<tr class="separator:ac127f6132018b68c502e47f9910d3b07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a451a2c00bc77a056ab322994a2e3560d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a451a2c00bc77a056ab322994a2e3560d"></a>
-typedef <a class="el" href="a00276.html">TriMeshT</a>&lt; <a class="el" href="a00083.html">MeshKernel</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Mesh</b></td></tr>
-<tr class="separator:a451a2c00bc77a056ab322994a2e3560d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7e0d63fa53de5dcd3c88894d4364a66"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad7e0d63fa53de5dcd3c88894d4364a66"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>SOPType</b> { <br />
+&#160;&#160;<b>SOP_UniformCompositeLoop</b>, 
+<b>SOP_UniformCompositeSqrt3</b>, 
+<b>SOP_UniformLoop</b>, 
+<b>SOP_UniformSqrt3</b>, 
+<br />
+&#160;&#160;<b>SOP_UniformInterpolatingSqrt3</b>, 
+<b>SOP_ModifiedButterfly</b>, 
+<b>SOP_CatmullClark</b>, 
+<b>SOP_Undefined</b>
+<br />
+ }</td></tr>
+<tr class="separator:ad7e0d63fa53de5dcd3c88894d4364a66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1db1a2494e54d511462747323c41b65"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad1db1a2494e54d511462747323c41b65"></a>
+typedef <br class="typebreak" />
+<a class="el" href="a00273.html">OpenMesh::Subdivider::Uniform::SubdividerT</a><br class="typebreak" />
+&lt; <a class="el" href="a00249.html">Mesh</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Subdivider</b></td></tr>
+<tr class="separator:ad1db1a2494e54d511462747323c41b65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96e145fe7c244e9b0741e30db148b541"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a96e145fe7c244e9b0741e30db148b541"></a>
+typedef std::map&lt; SOPType, <br class="typebreak" />
+Subdivider * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>SubdividerPool</b></td></tr>
+<tr class="separator:a96e145fe7c244e9b0741e30db148b541"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a191e3e6216dc6d0a99527aa0bf5dbac7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a191e3e6216dc6d0a99527aa0bf5dbac7"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00274.html#a191e3e6216dc6d0a99527aa0bf5dbac7">SubdivideWidget</a> (QWidget *_parent=0, const char *_name=0)</td></tr>
+<tr class="memdesc:a191e3e6216dc6d0a99527aa0bf5dbac7"><td class="mdescLeft">&#160;</td><td class="mdescRight">constructor <br /></td></tr>
+<tr class="separator:a191e3e6216dc6d0a99527aa0bf5dbac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6c1aa852431cb53a4c8c5123b1c47cf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa6c1aa852431cb53a4c8c5123b1c47cf"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00274.html#aa6c1aa852431cb53a4c8c5123b1c47cf">~SubdivideWidget</a> ()</td></tr>
+<tr class="memdesc:aa6c1aa852431cb53a4c8c5123b1c47cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">destructor <br /></td></tr>
+<tr class="separator:aa6c1aa852431cb53a4c8c5123b1c47cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76b8eb6dd5f47ea05161c22da4adca54"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a76b8eb6dd5f47ea05161c22da4adca54"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00274.html#a76b8eb6dd5f47ea05161c22da4adca54">open_mesh</a> (const char *_filename)</td></tr>
+<tr class="memdesc:a76b8eb6dd5f47ea05161c22da4adca54"><td class="mdescLeft">&#160;</td><td class="mdescRight">open mesh from _filename <br /></td></tr>
+<tr class="separator:a76b8eb6dd5f47ea05161c22da4adca54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7551af8d1b317cdd54096a7181d6d604"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7551af8d1b317cdd54096a7181d6d604"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>keyPressEvent</b> (QKeyEvent *k)</td></tr>
+<tr class="separator:a7551af8d1b317cdd54096a7181d6d604"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4fe279c7abcb6885c692f7b6cf4dc96"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa4fe279c7abcb6885c692f7b6cf4dc96"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> ()</td></tr>
+<tr class="separator:aa4fe279c7abcb6885c692f7b6cf4dc96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a537edb8daa5e873442678d01cd5ffca7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a537edb8daa5e873442678d01cd5ffca7"></a>
+QStatusBar *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00274.html#a537edb8daa5e873442678d01cd5ffca7">status_bar</a></td></tr>
+<tr class="memdesc:a537edb8daa5e873442678d01cd5ffca7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates Status Bar Information. <br /></td></tr>
+<tr class="separator:a537edb8daa5e873442678d01cd5ffca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;class Traits&gt;<br />
-struct OpenMesh::Kernel_OSG::TriMesh_OSGArrayKernel_GeneratorT&lt; Traits &gt;</h3>
-
-<p>Helper class to create a TriMesh-type based on <a class="el" href="a00083.html" title="Mesh kernel using arrays for mesh item storage. ">Kernel_OSG::ArrayKernelT</a>. </p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
-<li>OpenMesh/Tools/Kernel_OSG/<a class="el" href="a00565_source.html">TriMesh_OSGArrayKernelT.hh</a></li>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>OpenMesh/Apps/Subdivider/<a class="el" href="a00417_source.html">SubdivideWidget.hh</a></li>
+<li>OpenMesh/Apps/Subdivider/SubdivideWidget.cc</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -149,7 +193,6 @@ struct OpenMesh::Kernel_OSG::TriMesh_OSGArrayKernel_GeneratorT&lt; Traits &gt;</
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 15:07:46 +0200 (Di, 28 Apr 2015) $                   *
+ *   $Revision$                                                         *
+ *   $Date$                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -55,11 +55,9 @@
 #include <limits>
 
 // OpenMesh
-#include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/IO/BinaryHelper.hh>
 #include <OpenMesh/Core/IO/writer/OBJWriter.hh>
 #include <OpenMesh/Core/IO/IOManager.hh>
-#include <OpenMesh/Core/System/omstream.hh>
 #include <OpenMesh/Core/Utils/color_cast.hh>
 
 //=== NAMESPACES ==============================================================

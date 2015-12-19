@@ -1,7 +1,7 @@
-<map id="OpenMesh/Tools/Utils/HeapT.hh" name="OpenMesh/Tools/Utils/HeapT.hh">
-<area shape="rect" id="node2" href="$a00538.html" title="OpenMesh/Tools/Decimater\l/DecimaterT.hh" alt="" coords="219,95,405,136"/>
-<area shape="rect" id="node3" href="$a00391_source.html" title="OpenMesh/Apps/Decimating\l/DecimaterViewerWidget.hh" alt="" coords="5,184,195,225"/>
-<area shape="rect" id="node4" href="$a00537.html" title="OpenMesh/Tools/Decimater\l/DecimaterT.cc" alt="" coords="219,184,405,225"/>
-<area shape="rect" id="node5" href="$a00542_source.html" title="OpenMesh/Tools/Decimater\l/MixedDecimaterT.hh" alt="" coords="429,184,614,225"/>
-<area shape="rect" id="node6" href="$a00541.html" title="OpenMesh/Tools/Decimater\l/MixedDecimaterT.cc" alt="" coords="429,273,614,315"/>
+<map id="OpenMesh/Tools/Subdivider/Adaptive/Composite/CompositeTraits.hh" name="OpenMesh/Tools/Subdivider/Adaptive/Composite/CompositeTraits.hh">
+<area shape="rect" id="node3" href="$a00506.html" title="This file defines the default traits and some convenience macros. " alt="" coords="134,95,287,136"/>
+<area shape="rect" id="node5" href="$a00432_source.html" title="OpenMesh/Core/Geometry\l/VectorT.hh" alt="" coords="25,184,204,225"/>
+<area shape="rect" id="node6" href="$a00487.html" title="This file provides some macros containing attribute usage. " alt="" coords="228,184,382,225"/>
+<area shape="rect" id="node8" href="$a00498_source.html" title="OpenMesh/Core/Mesh\l/Handles.hh" alt="" coords="406,184,559,225"/>
+<area shape="rect" id="node7" href="$a00505_source.html" title="OpenMesh/Core/Mesh\l/Status.hh" alt="" coords="228,273,382,315"/>
 </map>

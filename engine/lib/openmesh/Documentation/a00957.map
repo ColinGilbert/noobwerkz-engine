@@ -1,4 +1,7 @@
-<map id="OpenMesh::MPropHandleT&lt; T &gt;" name="OpenMesh::MPropHandleT&lt; T &gt;">
-<area shape="rect" id="node2" href="$a00095.html" title="Base property handle. " alt="" coords="16,80,207,121"/>
-<area shape="rect" id="node3" href="$a00090.html" title="Base class for all handle types. " alt="" coords="29,5,193,32"/>
+<map id="OpenMesh::BaseProperty" name="OpenMesh::BaseProperty">
+<area shape="rect" id="node2" href="$a00242.html" title="Property adaptor for OpenSG GeoProperties. " alt="" coords="225,13,416,54"/>
+<area shape="rect" id="node4" href="$a00255.html" title="Default property class for any type T. " alt="" coords="229,79,412,105"/>
+<area shape="rect" id="node5" href="$a00256.html" title="Property specialization for bool type. " alt="" coords="245,130,396,171"/>
+<area shape="rect" id="node6" href="$a00257.html" title="Property specialization for std::string type. " alt="" coords="245,195,396,237"/>
+<area shape="rect" id="node3" href="$a00177.html" title="Adaptor for osg::GeoIndicesUI32. " alt="" coords="464,5,631,61"/>
 </map>

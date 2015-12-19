@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -110,7 +111,7 @@ $(document).ready(function(){initNavTree('a00034.html','');});
 </ul>
 <h1><a class="anchor" id="op_flip"></a>
 Flipping edges in triangle meshes</h1>
-<p>Considering two adjacent faces of a triangle mesh, there exist exactly two different configurations of the inner edge. Calling the function <a class="el" href="a00271.html#a03b3c3be3c52a194789bd541d24f4c09" title="Flip edge _eh. ">OpenMesh::TriConnectivity::flip(EdgeHandle _eh)</a> will flip the specified edge to its opposite orientation as shown in the illustration below.</p>
+<p>Considering two adjacent faces of a triangle mesh, there exist exactly two different configurations of the inner edge. Calling the function <a class="el" href="a00279.html#a03b3c3be3c52a194789bd541d24f4c09" title="Flip edge _eh. ">OpenMesh::TriConnectivity::flip(EdgeHandle _eh)</a> will flip the specified edge to its opposite orientation as shown in the illustration below.</p>
 <div class="image">
 <img src="mesh.flip.png" alt="mesh.flip.png"/>
 <div class="caption">
@@ -121,10 +122,10 @@ Flipping edges in a triangle mesh</div></div>
 <div class="line"><span class="comment">// Add some vertices</span></div>
 <div class="line">TriMesh::VertexHandle vhandle[4];</div>
 <div class="line"></div>
-<div class="line">vhandle[0] = mesh.add_vertex(<a class="code" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(0, 0, 0));</div>
-<div class="line">vhandle[1] = mesh.add_vertex(<a class="code" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(0, 1, 0));</div>
-<div class="line">vhandle[2] = mesh.add_vertex(<a class="code" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(1, 1, 0));</div>
-<div class="line">vhandle[3] = mesh.add_vertex(<a class="code" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(1, 0, 0));</div>
+<div class="line">vhandle[0] = mesh.add_vertex(<a class="code" href="a00250.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(0, 0, 0));</div>
+<div class="line">vhandle[1] = mesh.add_vertex(<a class="code" href="a00250.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(0, 1, 0));</div>
+<div class="line">vhandle[2] = mesh.add_vertex(<a class="code" href="a00250.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(1, 1, 0));</div>
+<div class="line">vhandle[3] = mesh.add_vertex(<a class="code" href="a00250.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(1, 0, 0));</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Add two faces</span></div>
 <div class="line">std::vector&lt;TriMesh::VertexHandle&gt; face_vhandles;</div>
@@ -156,7 +157,7 @@ Flipping edges in a triangle mesh</div></div>
 <div class="line"><span class="comment">// The edge now connects vertex vhandle[1] and vhandle[3].</span></div>
 </div><!-- fragment --><h1><a class="anchor" id="op_collapse"></a>
 Collapsing edges</h1>
-<p>In this section you will learn how to collapse edges such that the two adjacent vertices join. OpenMesh provides the function <a class="el" href="a00240.html#a5afce0f6be1f425f5e0d42441fee35df" title="Halfedge collapse: collapse the from-vertex of halfedge _heh into its to-vertex. ">OpenMesh::PolyConnectivity::collapse(HalfedgeHandle _heh)</a> to perform this operation. This will collapse the from-vertex (remeber that halfedges are directed) to the to-vertex of the halfedge as illustrated below. Note that collapsing edges might cause topological inconsistencies to your mesh. You should verify consistency after collapsing edges by calling <a class="el" href="a00240.html#af1463136f43f48a7e6576701375d018c" title="Returns whether collapsing halfedge _heh is ok or would lead to topological inconsistencies. ">OpenMesh::PolyConnectivity::is_collapse_ok()</a>.</p>
+<p>In this section you will learn how to collapse edges such that the two adjacent vertices join. OpenMesh provides the function <a class="el" href="a00247.html#a5afce0f6be1f425f5e0d42441fee35df" title="Halfedge collapse: collapse the from-vertex of halfedge _heh into its to-vertex. ">OpenMesh::PolyConnectivity::collapse(HalfedgeHandle _heh)</a> to perform this operation. This will collapse the from-vertex (remeber that halfedges are directed) to the to-vertex of the halfedge as illustrated below. Note that collapsing edges might cause topological inconsistencies to your mesh. You should verify consistency after collapsing edges by calling <a class="el" href="a00247.html#af1463136f43f48a7e6576701375d018c" title="Returns whether collapsing halfedge _heh is ok or would lead to topological inconsistencies. ">OpenMesh::PolyConnectivity::is_collapse_ok()</a>.</p>
 <dl class="section note"><dt>Note</dt><dd>You have to request status attributes in order to use the collapse and delete functions!</dd></dl>
 <div class="image">
 <img src="mesh.collapse.png" alt="mesh.collapse.png"/>
@@ -171,14 +172,14 @@ Collapsing will always be performed in the direction the halfedge points to.</di
 <div class="line">mesh.request_face_status();</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Add some vertices as in the illustration above</span></div>
-<div class="line"><a class="code" href="a00243.html#a0fc18e13d70825938274e3faf7b55e01">PolyMesh::VertexHandle</a> vhandle[7];</div>
-<div class="line">vhandle[0] = mesh.add_vertex(<a class="code" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(-1, 1, 0));</div>
-<div class="line">vhandle[1] = mesh.add_vertex(<a class="code" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(-1, 3, 0));</div>
-<div class="line">vhandle[2] = mesh.add_vertex(<a class="code" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(0, 0, 0));</div>
-<div class="line">vhandle[3] = mesh.add_vertex(<a class="code" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(0, 2, 0));</div>
-<div class="line">vhandle[4] = mesh.add_vertex(<a class="code" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(0, 4, 0));</div>
-<div class="line">vhandle[5] = mesh.add_vertex(<a class="code" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(1, 1, 0));</div>
-<div class="line">vhandle[6] = mesh.add_vertex(<a class="code" href="a00243.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(1, 3, 0));</div>
+<div class="line"><a class="code" href="a00250.html#a0fc18e13d70825938274e3faf7b55e01">PolyMesh::VertexHandle</a> vhandle[7];</div>
+<div class="line">vhandle[0] = mesh.add_vertex(<a class="code" href="a00250.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(-1, 1, 0));</div>
+<div class="line">vhandle[1] = mesh.add_vertex(<a class="code" href="a00250.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(-1, 3, 0));</div>
+<div class="line">vhandle[2] = mesh.add_vertex(<a class="code" href="a00250.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(0, 0, 0));</div>
+<div class="line">vhandle[3] = mesh.add_vertex(<a class="code" href="a00250.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(0, 2, 0));</div>
+<div class="line">vhandle[4] = mesh.add_vertex(<a class="code" href="a00250.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(0, 4, 0));</div>
+<div class="line">vhandle[5] = mesh.add_vertex(<a class="code" href="a00250.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(1, 1, 0));</div>
+<div class="line">vhandle[6] = mesh.add_vertex(<a class="code" href="a00250.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(1, 3, 0));</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Add three quad faces</span></div>
 <div class="line">std::vector&lt;PolyMesh::VertexHandle&gt; face_vhandles;</div>
@@ -221,7 +222,6 @@ Collapsing will always be performed in the direction the halfedge points to.</di
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

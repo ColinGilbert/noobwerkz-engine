@@ -1,19 +1,11 @@
 var a00224 =
 [
-    [ "Base", "a00224.html#af8546d52b77726437395750b2eaa0cdb", null ],
-    [ "CollapseInfo", "a00224.html#a67e401883de3a0ec5ecdc1bb7e7e8937", null ],
-    [ "Handle", "a00224.html#a29ea31458ca5f541fc4d4c342ba9cd5a", null ],
-    [ "Mesh", "a00224.html#a3864b942ad7a74c389fb283bd55d1d73", null ],
-    [ "Point", "a00224.html#afad49f3a84130ebcc0a851cea2161739", null ],
-    [ "Self", "a00224.html#ab05734e6a95d6e330c6d115a2af8dc19", null ],
-    [ "value_type", "a00224.html#ae55ef761370282e939141ad9eaccd6ba", null ],
-    [ "ModRoundnessT", "a00224.html#a6e56da8acf8ce9a37577c07764e5c98b", null ],
-    [ "~ModRoundnessT", "a00224.html#a7b6ea799f3e162748ea4612654c56eb5", null ],
-    [ "collapse_priority", "a00224.html#ade6fe704e576b3e0f73453ffd8cad0fd", null ],
-    [ "name", "a00224.html#adbb0d330e11876fccd5a98dc50ea6f7f", null ],
-    [ "roundness", "a00224.html#a589e3679e530a184543609d23c585bf6", null ],
-    [ "set_error_tolerance_factor", "a00224.html#a14fa6c8dc43d6621a3c0cb5404e1a5de", null ],
-    [ "set_min_angle", "a00224.html#ab33b28845de4cbd93fa21012522e9275", null ],
-    [ "set_min_roundness", "a00224.html#a825e256b8e67059958ad809e9ace85c3", null ],
-    [ "unset_min_roundness", "a00224.html#a1269b89dd5b20adbf0d81a7a86cc549b", null ]
+    [ "Base", "a00224.html#ad8e4d3d5ecb9e1e6df97f771f66f9fba", null ],
+    [ "CollapseInfo", "a00224.html#a6a83d3fdd1296c9e26674fda3fd6845e", null ],
+    [ "Handle", "a00224.html#a1a8c6094a3991bffaf2974dbc12c4756", null ],
+    [ "Mesh", "a00224.html#a92153d3e9ed0ef1e79f8be8fa7849e8e", null ],
+    [ "Self", "a00224.html#ace7a1603c0fa22f79e89ce492c2a5d59", null ],
+    [ "ModIndependentSetsT", "a00224.html#a1cb2074ae492242832abfa3922745220", null ],
+    [ "name", "a00224.html#adf73fdba60ea2f994796dd829041be97", null ],
+    [ "postprocess_collapse", "a00224.html#ab24afb91c890d484a3bc7674c3e20c39", null ]
 ];

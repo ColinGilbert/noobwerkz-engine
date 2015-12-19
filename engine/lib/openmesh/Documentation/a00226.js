@@ -1,16 +1,15 @@
 var a00226 =
 [
-    [ "MyData", "a00226.html#af6b8e9f33b1ca65a43c3e187089625d3", null ],
-    [ "MyData", "a00226.html#a2498835c0e5cc2dffd0624761323d092", null ],
-    [ "operator!=", "a00226.html#a46ae55a0c6232678a1874c941d334e07", null ],
-    [ "operator=", "a00226.html#a57b8a42348369ba717315dec331eeb94", null ],
-    [ "operator=", "a00226.html#ad1501cc901067bf7361add8c39b8c7c4", null ],
-    [ "operator=", "a00226.html#acbeea404456be838406c7ce4dc8dc749", null ],
-    [ "operator=", "a00226.html#af000b1f7dc0d848ecddff16d40280cb9", null ],
-    [ "operator=", "a00226.html#a407ac0251d256819a3653c32acc2a373", null ],
-    [ "operator==", "a00226.html#ac8fea49f6e48580a36c2d82dcde19734", null ],
-    [ "bval", "a00226.html#afcf33375954ae194227aeb7c733de983", null ],
-    [ "dval", "a00226.html#ad974b667c0e6a50fdf4f9f12dad940b9", null ],
-    [ "ival", "a00226.html#a06767e9b1ab7f029da96cdc22bf7ca98", null ],
-    [ "vec4fval", "a00226.html#a6253adfccb8274a8a8fe438628e98d2a", null ]
+    [ "Base", "a00226.html#a7fe7ecf4e007f86ca3d44e5c55551ccc", null ],
+    [ "CollapseInfo", "a00226.html#a3d76b605b8024a2fbda58f75cb2a82e7", null ],
+    [ "Handle", "a00226.html#ae891fe43d2768608335bbdb28b0aa5ba", null ],
+    [ "Mesh", "a00226.html#af53d35767a40198e49080028e0f14341", null ],
+    [ "Self", "a00226.html#a20c38b5704331a06cefc589004cdbb1f", null ],
+    [ "ModNormalFlippingT", "a00226.html#a07ac6abac9f29dfcfbfe5a31cc6de624", null ],
+    [ "~ModNormalFlippingT", "a00226.html#a49b490c34b603b84401c40d667c8f8ca", null ],
+    [ "collapse_priority", "a00226.html#ae8fc0ecbd533ba2a8ce00f364ce43a38", null ],
+    [ "max_normal_deviation", "a00226.html#ae0152e836e48b493a1f0dcaba0bff199", null ],
+    [ "name", "a00226.html#aac1ca6e9ef75c049a2071f46f3221e09", null ],
+    [ "set_error_tolerance_factor", "a00226.html#a7bf4a80d6dbfa5a7fff510797e3ac112", null ],
+    [ "set_max_normal_deviation", "a00226.html#acad9f12c5b63bed362733adce479bb05", null ]
 ];

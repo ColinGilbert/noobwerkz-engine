@@ -1,17 +1,16 @@
 var a00231 =
 [
-    [ "is_float", "a00231.html#a618be7579ce6a3a032f45c781d3f0bac", null ],
-    [ "is_float", "a00231.html#a91f72bf52bc98a6aa3fe351950c80147", null ],
-    [ "is_float", "a00231.html#a079fc24ff33a963bee51d7d6120c37b9", null ],
-    [ "is_signed", "a00231.html#acf20a7a1be200c07cde321669273c292", null ],
-    [ "is_signed", "a00231.html#a30d9ad0165f9e338877c5c3d9674d22b", null ],
-    [ "is_signed", "a00231.html#a67c1050dfa28611bde388502dc62d99e", null ],
-    [ "is_signed", "a00231.html#ae4a6cd17fe730baab5665e5850fb39e2", null ],
-    [ "is_signed", "a00231.html#a3a80d6eade53a8b731788352a3d85e00", null ],
-    [ "max", "a00231.html#adcde35956f2ff7c4624cad66d7944eec", null ],
-    [ "max", "a00231.html#a046c5f9ff5b18276ef82efacf93acd96", null ],
-    [ "max", "a00231.html#aa00363608ac33e1b8745e0f6f02d0d4a", null ],
-    [ "min", "a00231.html#a299caf73cac6f473ca40c8df8c5c9c97", null ],
-    [ "min", "a00231.html#a35f1885b497acac6607d87450d325aeb", null ],
-    [ "min", "a00231.html#a6c46eeeca884d6b88a70b1d211f9e756", null ]
+    [ "MyData", "a00231.html#af6b8e9f33b1ca65a43c3e187089625d3", null ],
+    [ "MyData", "a00231.html#a2498835c0e5cc2dffd0624761323d092", null ],
+    [ "operator!=", "a00231.html#a46ae55a0c6232678a1874c941d334e07", null ],
+    [ "operator=", "a00231.html#a57b8a42348369ba717315dec331eeb94", null ],
+    [ "operator=", "a00231.html#ad1501cc901067bf7361add8c39b8c7c4", null ],
+    [ "operator=", "a00231.html#acbeea404456be838406c7ce4dc8dc749", null ],
+    [ "operator=", "a00231.html#af000b1f7dc0d848ecddff16d40280cb9", null ],
+    [ "operator=", "a00231.html#a407ac0251d256819a3653c32acc2a373", null ],
+    [ "operator==", "a00231.html#ac8fea49f6e48580a36c2d82dcde19734", null ],
+    [ "bval", "a00231.html#afcf33375954ae194227aeb7c733de983", null ],
+    [ "dval", "a00231.html#ad974b667c0e6a50fdf4f9f12dad940b9", null ],
+    [ "ival", "a00231.html#a06767e9b1ab7f029da96cdc22bf7ca98", null ],
+    [ "vec4fval", "a00231.html#a6253adfccb8274a8a8fe438628e98d2a", null ]
 ];

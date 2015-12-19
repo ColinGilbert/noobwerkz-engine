@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -107,7 +108,7 @@ $(document).ready(function(){initNavTree('a00022.html','');});
 <img src="inheritance-simple.scaled.png" alt="inheritance-simple.scaled.png"/>
 </div>
 <p>The basis for all meshes is the corresponding <code>MeshKernel</code>, taking care of the internal storage of the mesh items (vertices, (half-)edges, faces). This kernel is inherited by the <code>PolyMeshT</code>, i.e. the general polygonal mesh, adding higher level functionality. For specialization purposes the class <code>TriMeshT</code> is derived from <code>PolyMeshT</code> and overrides some member functions or adds functions only suitable for pure triangle meshes.</p>
-<p>In most cases a class (e.g. <code>PolyMeshT</code>) gets the class it should derive from (e.g. the mesh kernel) as a template parameter. The documentation class OpenMesh::Concepts::MeshKernel::KernelT lists the minimal interface a mesh kernel must provide. Special kernels may provide some more functionality, in this case refer to this kernel's documentation (see <a class="el" href="a00738.html">Mesh Kernels</a>). Therefore your mesh provides the pubic member functions of</p>
+<p>In most cases a class (e.g. <code>PolyMeshT</code>) gets the class it should derive from (e.g. the mesh kernel) as a template parameter. The documentation class OpenMesh::Concepts::MeshKernel::KernelT lists the minimal interface a mesh kernel must provide. Special kernels may provide some more functionality, in this case refer to this kernel's documentation (see <a class="el" href="a00754.html">Mesh Kernels</a>). Therefore your mesh provides the pubic member functions of</p>
 <ul>
 <li>
 The mesh kernel. </li>
@@ -116,20 +117,19 @@ The general polygonal mesh. </li>
 <li>
 The specialized triangle mesh (if you use a TriMesh instead of a PolyMesh). </li>
 </ul>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="a00717.html" title="Descriptions of the concepts used in OpenMesh. ">OpenMesh::Concepts</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="a00732.html" title="Descriptions of the concepts used in OpenMesh. ">OpenMesh::Concepts</a> </dd>
 <dd>
-<a class="el" href="a00193.html" title="This class describes the minimum interface a mesh kernel has to implement (because the resulting mesh...">OpenMesh::Concepts::KernelT</a> </dd>
+<a class="el" href="a00198.html" title="This class describes the minimum interface a mesh kernel has to implement (because the resulting mesh...">OpenMesh::Concepts::KernelT</a> </dd>
 <dd>
-<a class="el" href="a00243.html" title="Base type for a polygonal mesh. ">OpenMesh::PolyMeshT</a> </dd>
+<a class="el" href="a00250.html" title="Base type for a polygonal mesh. ">OpenMesh::PolyMeshT</a> </dd>
 <dd>
-<a class="el" href="a00276.html" title="Base type for a triangle mesh. ">OpenMesh::TriMeshT</a> </dd></dl>
+<a class="el" href="a00284.html" title="Base type for a triangle mesh. ">OpenMesh::TriMeshT</a> </dd></dl>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <hr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

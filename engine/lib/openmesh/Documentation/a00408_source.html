@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh/Apps/Subdivider/SubdivideWidget.hh Source File</title>
+<title>OpenMesh: OpenMesh/Apps/Subdivider/MeshViewerWidget.hh Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -105,7 +106,7 @@ $(document).ready(function(){initNavTree('a00408_source.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">SubdivideWidget.hh</div>  </div>
+<div class="title">MeshViewerWidget.hh</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* ========================================================================= *</span></div>
@@ -151,119 +152,86 @@ $(document).ready(function(){initNavTree('a00408_source.html','');});
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">/*===========================================================================*\</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment"> *                                                                           *             </span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment"> *   $Revision: 1258 $                                                         *</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment"> *   $Date: 2015-04-28 15:07:46 +0200 (Di, 28 Apr 2015) $                   *</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment"> *   $Revision$                                                         *</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment"> *   $Date$                   *</span></div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment"> *                                                                           *</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">\*===========================================================================*/</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">//  CLASS SubdivideWidget</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">#ifndef SUBDIVIDEWIDGET_HH</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#define SUBDIVIDEWIDGET_HH</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">//== INCLUDES =================================================================</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#include &lt;QTimer&gt;</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">#include &lt;QMainWindow&gt;</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#include &lt;QStatusBar&gt;</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#include &lt;OpenMesh/Apps/Subdivider/MeshViewerWidget.hh&gt;</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="a00592.html">OpenMesh/Tools/Subdivider/Uniform/SubdividerT.hh</a>&gt;</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">#ifndef OPENMESHAPPS_MESHVIEWERWIDGET_HH</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#define OPENMESHAPPS_MESHVIEWERWIDGET_HH</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">//== INCLUDES =================================================================</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">// -------------------- OpenMesh</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#include &lt;OpenMesh/Apps/QtViewer/MeshViewerWidgetT.hh&gt;</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor">#include &lt;OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh&gt;</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor">#include &lt;OpenMesh/Core/IO/MeshIO.hh&gt;</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="a00589.html">OpenMesh/Tools/Subdivider/Uniform/Composite/CompositeTraits.hh</a>&gt;</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="keyword">typedef</span> <a class="code" href="a00119.html">OpenMesh::Subdivider::Uniform::CompositeTraits</a> Traits;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="keyword">typedef</span> <a class="code" href="a00281.html">OpenMesh::TriMesh_ArrayKernelT&lt;Traits&gt;</a>         Mesh;</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">//== CLASS DEFINITION =========================================================</span></div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="a00266.html">   72</a></span>&#160;<span class="keyword">class </span><a class="code" href="a00266.html">SubdivideWidget</a> : <span class="keyword">public</span> QWidget</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;{</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;  Q_OBJECT</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;              </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="keyword">class </span><a class="code" href="a00214.html">MeshViewerWidget</a> : <span class="keyword">public</span> <a class="code" href="a00215.html">MeshViewerWidgetT</a>&lt;Mesh&gt;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;{</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  <span class="keyword">typedef</span> <a class="code" href="a00265.html">OpenMesh::Subdivider::Uniform::SubdividerT&lt; Mesh &gt;</a> Subdivider;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;  <span class="keyword">enum</span> SOPType {</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    SOP_UniformCompositeLoop,</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    SOP_UniformCompositeSqrt3,</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    SOP_UniformLoop,</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    SOP_UniformSqrt3,</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    SOP_UniformInterpolatingSqrt3,</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    SOP_ModifiedButterfly,</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    SOP_CatmullClark,</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    SOP_Undefined</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;  };</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  <span class="keyword">typedef</span> std::map&lt; SOPType, Subdivider* &gt; SubdividerPool;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;   </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;  <a class="code" href="a00266.html#a191e3e6216dc6d0a99527aa0bf5dbac7">SubdivideWidget</a>(QWidget* _parent=0, <span class="keyword">const</span> <span class="keywordtype">char</span>* _name=0);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;   <span class="keyword">typedef</span> <a class="code" href="a00215.html">MeshViewerWidgetT&lt;Mesh&gt;</a> Base;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;   </div>
+<div class="line"><a name="l00080"></a><span class="lineno"><a class="line" href="a00214.html#abb3882da8de0f1d08d652a14313e9515">   80</a></span>&#160;  <a class="code" href="a00214.html#abb3882da8de0f1d08d652a14313e9515">MeshViewerWidget</a>(QWidget* _parent=0)</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    : Base(_parent)</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  {}</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="a00214.html#a4c7935b5fc4a77bb83e640d678c256bb">   85</a></span>&#160;  <a class="code" href="a00214.html#a4c7935b5fc4a77bb83e640d678c256bb">~MeshViewerWidget</a>() {}</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
+<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="a00214.html#a87107d907664aa6c362d4ed93f080d6c">   88</a></span>&#160;  <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="a00214.html#a87107d907664aa6c362d4ed93f080d6c">open_mesh</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* _filename, <a class="code" href="a00244.html">OpenMesh::IO::Options</a> _opt)</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;  {</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordflow">if</span> ( Base::open_mesh( _filename, _opt ) )</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    {</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      orig_mesh_ = mesh_;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    }</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;  }</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
-<div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="a00266.html#aa6c1aa852431cb53a4c8c5123b1c47cf">   99</a></span>&#160;  <a class="code" href="a00266.html#aa6c1aa852431cb53a4c8c5123b1c47cf">~SubdivideWidget</a>() {};</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="a00266.html#a76b8eb6dd5f47ea05161c22da4adca54">open_mesh</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* _filename);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;  Mesh&amp; orig_mesh() { <span class="keywordflow">return</span> orig_mesh_; }</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  <span class="keyword">const</span> Mesh&amp; orig_mesh()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> orig_mesh_; }</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;   </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;  Mesh orig_mesh_;</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;  <span class="keywordtype">void</span> keyPressEvent( QKeyEvent *k );</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;};</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
-<div class="line"><a name="l00108"></a><span class="lineno"><a class="line" href="a00266.html#a537edb8daa5e873442678d01cd5ffca7">  108</a></span>&#160;  QStatusBar *<a class="code" href="a00266.html#a537edb8daa5e873442678d01cd5ffca7">status_bar</a>;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;  <span class="keywordtype">void</span> update();</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="keyword">private</span> slots:</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;  <span class="keywordtype">void</span> animate_slot(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;  <span class="keywordtype">void</span> slot_select_sop(<span class="keywordtype">int</span> i);</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;  <span class="keywordtype">void</span> subdiv_slot();</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;  <span class="keywordtype">void</span> reset_slot();</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;  <span class="keywordtype">void</span> save_slot();</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;  <span class="keywordtype">void</span> load_slot();</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;  <span class="comment">// widgets</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;  <a class="code" href="a00209.html">MeshViewerWidget</a>* viewer_widget_;</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;  QTimer *timer_;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;   </div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;  <span class="keywordtype">int</span> animate_step_;</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;  <span class="keywordtype">int</span> max_animate_steps_;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;  <span class="keywordtype">int</span> msecs_;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;  <span class="comment">// Selected and current subdivision operator</span></div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;  SOPType sel_topo_type; <span class="comment">// selected operator</span></div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;  SOPType cur_topo_type; <span class="comment">// active operator</span></div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;  <span class="comment">// </span></div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;  SubdividerPool subdivider_;</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;};</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="preprocessor">#endif // SUBDIVIDEWIDGET_HH defined</span></div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;</div>
-<div class="ttc" id="a00266_html_a191e3e6216dc6d0a99527aa0bf5dbac7"><div class="ttname"><a href="a00266.html#a191e3e6216dc6d0a99527aa0bf5dbac7">SubdivideWidget::SubdivideWidget</a></div><div class="ttdeci">SubdivideWidget(QWidget *_parent=0, const char *_name=0)</div><div class="ttdoc">constructor </div><div class="ttdef"><b>Definition:</b> SubdivideWidget.cc:93</div></div>
-<div class="ttc" id="a00266_html_aa6c1aa852431cb53a4c8c5123b1c47cf"><div class="ttname"><a href="a00266.html#aa6c1aa852431cb53a4c8c5123b1c47cf">SubdivideWidget::~SubdivideWidget</a></div><div class="ttdeci">~SubdivideWidget()</div><div class="ttdoc">destructor </div><div class="ttdef"><b>Definition:</b> SubdivideWidget.hh:99</div></div>
-<div class="ttc" id="a00209_html"><div class="ttname"><a href="a00209.html">MeshViewerWidget</a></div><div class="ttdef"><b>Definition:</b> MeshViewerWidget.hh:80</div></div>
-<div class="ttc" id="a00266_html"><div class="ttname"><a href="a00266.html">SubdivideWidget</a></div><div class="ttdef"><b>Definition:</b> SubdivideWidget.hh:72</div></div>
-<div class="ttc" id="a00266_html_a76b8eb6dd5f47ea05161c22da4adca54"><div class="ttname"><a href="a00266.html#a76b8eb6dd5f47ea05161c22da4adca54">SubdivideWidget::open_mesh</a></div><div class="ttdeci">bool open_mesh(const char *_filename)</div><div class="ttdoc">open mesh from _filename </div><div class="ttdef"><b>Definition:</b> SubdivideWidget.cc:350</div></div>
-<div class="ttc" id="a00265_html"><div class="ttname"><a href="a00265.html">OpenMesh::Subdivider::Uniform::SubdividerT</a></div><div class="ttdoc">Abstract base class for uniform subdivision algorithms. </div><div class="ttdef"><b>Definition:</b> SubdividerT.hh:94</div></div>
-<div class="ttc" id="a00592_html"><div class="ttname"><a href="a00592.html">SubdividerT.hh</a></div></div>
-<div class="ttc" id="a00266_html_a537edb8daa5e873442678d01cd5ffca7"><div class="ttname"><a href="a00266.html#a537edb8daa5e873442678d01cd5ffca7">SubdivideWidget::status_bar</a></div><div class="ttdeci">QStatusBar * status_bar</div><div class="ttdoc">Updates Status Bar Information. </div><div class="ttdef"><b>Definition:</b> SubdivideWidget.hh:108</div></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="comment">//=============================================================================</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="preprocessor">#endif // OPENMESHAPPS_MESHVIEWERWIDGET_HH defined</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="comment">//=============================================================================</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
+<div class="ttc" id="a00244_html"><div class="ttname"><a href="a00244.html">OpenMesh::IO::Options</a></div><div class="ttdoc">Set options for reader/writer modules. </div><div class="ttdef"><b>Definition:</b> Options.hh:95</div></div>
+<div class="ttc" id="a00215_html"><div class="ttname"><a href="a00215.html">MeshViewerWidgetT</a></div><div class="ttdef"><b>Definition:</b> MeshViewerWidgetT.hh:76</div></div>
+<div class="ttc" id="a00214_html_abb3882da8de0f1d08d652a14313e9515"><div class="ttname"><a href="a00214.html#abb3882da8de0f1d08d652a14313e9515">MeshViewerWidget::MeshViewerWidget</a></div><div class="ttdeci">MeshViewerWidget(QWidget *_parent=0)</div><div class="ttdoc">default constructor </div><div class="ttdef"><b>Definition:</b> MeshViewerWidget.hh:80</div></div>
+<div class="ttc" id="a00214_html"><div class="ttname"><a href="a00214.html">MeshViewerWidget</a></div><div class="ttdef"><b>Definition:</b> MeshViewerWidget.hh:80</div></div>
+<div class="ttc" id="a00281_html"><div class="ttname"><a href="a00281.html">OpenMesh::TriMesh_ArrayKernelT</a></div><div class="ttdoc">Triangle mesh based on the ArrayKernel. </div><div class="ttdef"><b>Definition:</b> TriMesh_ArrayKernelT.hh:98</div></div>
+<div class="ttc" id="a00214_html_a4c7935b5fc4a77bb83e640d678c256bb"><div class="ttname"><a href="a00214.html#a4c7935b5fc4a77bb83e640d678c256bb">MeshViewerWidget::~MeshViewerWidget</a></div><div class="ttdeci">~MeshViewerWidget()</div><div class="ttdoc">destructor </div><div class="ttdef"><b>Definition:</b> MeshViewerWidget.hh:85</div></div>
+<div class="ttc" id="a00589_html"><div class="ttname"><a href="a00589.html">CompositeTraits.hh</a></div><div class="ttdoc">Mesh traits for uniform composite subdivision. </div></div>
+<div class="ttc" id="a00119_html"><div class="ttname"><a href="a00119.html">OpenMesh::Subdivider::Uniform::CompositeTraits</a></div><div class="ttdoc">Uniform Composite Subdivision framework. </div><div class="ttdef"><b>Definition:</b> CompositeTraits.hh:84</div></div>
+<div class="ttc" id="a00214_html_a87107d907664aa6c362d4ed93f080d6c"><div class="ttname"><a href="a00214.html#a87107d907664aa6c362d4ed93f080d6c">MeshViewerWidget::open_mesh</a></div><div class="ttdeci">bool open_mesh(const char *_filename, OpenMesh::IO::Options _opt)</div><div class="ttdoc">open mesh </div><div class="ttdef"><b>Definition:</b> MeshViewerWidget.hh:88</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <hr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

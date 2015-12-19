@@ -1,34 +1,19 @@
-<map id="OpenMesh/Tools/Subdivider/Adaptive/Composite/RulesT.cc" name="OpenMesh/Tools/Subdivider/Adaptive/Composite/RulesT.cc">
-<area shape="rect" id="node3" href="$a00433_source.html" title="OpenMesh/Core/IO/MeshIO.hh" alt="" coords="2917,95,3120,121"/>
-<area shape="rect" id="node45" href="$a00582.html" title="RulesT.hh" alt="" coords="660,177,743,203"/>
-<area shape="rect" id="node4" href="$a00454_source.html" title="OpenMesh/Core/IO/SR\l_store.hh" alt="" coords="2939,169,3098,211"/>
-<area shape="rect" id="node26" href="$a00432_source.html" title="OpenMesh/Core/IO/IOManager.hh" alt="" coords="1419,355,1640,382"/>
-<area shape="rect" id="node39" href="$a00429_source.html" title="OpenMesh/Core/IO/importer\l/ImporterT.hh" alt="" coords="3351,259,3537,300"/>
-<area shape="rect" id="node44" href="$a00427_source.html" title="OpenMesh/Core/IO/exporter\l/ExporterT.hh" alt="" coords="3561,259,3748,300"/>
-<area shape="rect" id="node5" href="$a00455_source.html" title="OpenMesh/Core/IO/SR\l_types.hh" alt="" coords="3407,527,3566,568"/>
-<area shape="rect" id="node6" href="$a00453_source.html" title="OpenMesh/Core/IO/SR\l_rbo.hh" alt="" coords="3143,437,3302,479"/>
-<area shape="rect" id="node16" href="$a00451_source.html" title="OpenMesh/Core/IO/SR\l_binary.hh" alt="" coords="2261,437,2419,479"/>
-<area shape="rect" id="node20" href="$a00452_source.html" title="OpenMesh/Core/IO/SR\l_binary_spec.hh" alt="" coords="2727,348,2886,389"/>
-<area shape="rect" id="node25" href="$a00456_source.html" title="OpenMesh/Core/IO/StoreRestore.hh" alt="" coords="2689,266,2924,293"/>
-<area shape="rect" id="node10" href="$a00508.html" title="This file provides the streams omlog, omout, and omerr. " alt="" coords="1203,527,1370,568"/>
-<area shape="rect" id="node15" href="$a00521_source.html" title="OpenMesh/Core/Utils\l/GenProg.hh" alt="" coords="3845,616,3993,657"/>
-<area shape="rect" id="node11" href="$a00506_source.html" title="OpenMesh/Core/System\l/mostream.hh" alt="" coords="1021,616,1187,657"/>
-<area shape="rect" id="node23" href="$a00422_source.html" title="OpenMesh/Core/Geometry\l/VectorT.hh" alt="" coords="2549,616,2728,657"/>
-<area shape="rect" id="node24" href="$a00495_source.html" title="OpenMesh/Core/Mesh\l/Status.hh" alt="" coords="2994,616,3147,657"/>
-<area shape="rect" id="node29" href="$a00438_source.html" title="OpenMesh/Core/IO/Options.hh" alt="" coords="1617,534,1820,561"/>
-<area shape="rect" id="node30" href="$a00440_source.html" title="OpenMesh/Core/IO/reader\l/BaseReader.hh" alt="" coords="637,437,811,479"/>
-<area shape="rect" id="node33" href="$a00428_source.html" title="OpenMesh/Core/IO/importer\l/BaseImporter.hh" alt="" coords="840,527,1027,568"/>
-<area shape="rect" id="node36" href="$a00530_source.html" title="OpenMesh/Core/Utils\l/SingletonT.hh" alt="" coords="1394,527,1542,568"/>
-<area shape="rect" id="node37" href="$a00458_source.html" title="OpenMesh/Core/IO/writer\l/BaseWriter.hh" alt="" coords="1505,437,1676,479"/>
-<area shape="rect" id="node38" href="$a00426_source.html" title="OpenMesh/Core/IO/exporter\l/BaseExporter.hh" alt="" coords="1895,527,2081,568"/>
-<area shape="rect" id="node34" href="$a00479_source.html" title="OpenMesh/Core/Mesh\l/BaseKernel.hh" alt="" coords="741,616,894,657"/>
-<area shape="rect" id="node35" href="$a00524_source.html" title="OpenMesh/Core/Utils\l/PropertyContainer.hh" alt="" coords="725,705,875,747"/>
-<area shape="rect" id="node40" href="$a00531_source.html" title="OpenMesh/Core/Utils\l/vector_cast.hh" alt="" coords="3743,437,3891,479"/>
-<area shape="rect" id="node42" href="$a00517_source.html" title="OpenMesh/Core/Utils\l/color_cast.hh" alt="" coords="3581,348,3729,389"/>
-<area shape="rect" id="node43" href="$a00477.html" title="This file provides some macros containing attribute usage. " alt="" coords="2994,527,3147,568"/>
-<area shape="rect" id="node41" href="$a00532_source.html" title="OpenMesh/Core/Utils\l/vector_traits.hh" alt="" coords="3794,527,3942,568"/>
-<area shape="rect" id="node46" href="$a00505_source.html" title="OpenMesh/Core/System\l/config.hh" alt="" coords="961,348,1127,389"/>
-<area shape="rect" id="node47" href="$a00580_source.html" title="OpenMesh/Tools/Subdivider\l/Adaptive/Composite/RuleInterfaceT.hh" alt="" coords="65,259,317,300"/>
-<area shape="rect" id="node48" href="$a00578.html" title="Mesh traits for adaptive composite subdivider. " alt="" coords="59,348,322,389"/>
-<area shape="rect" id="node49" href="$a00496.html" title="This file defines the default traits and some convenience macros. " alt="" coords="2546,437,2699,479"/>
+<map id="OpenMesh/Tools/Smoother/JacobiLaplaceSmootherT.hh" name="OpenMesh/Tools/Smoother/JacobiLaplaceSmootherT.hh">
+<area shape="rect" id="node2" href="$a00580.html" title="OpenMesh/Tools/Smoother\l/LaplaceSmootherT.hh" alt="" coords="70,95,251,136"/>
+<area shape="rect" id="node3" href="$a00583.html" title="OpenMesh/Tools/Smoother\l/SmootherT.hh" alt="" coords="70,184,251,225"/>
+<area shape="rect" id="node4" href="$a00515_source.html" title="OpenMesh/Core/System\l/config.hh" alt="" coords="77,363,244,404"/>
+<area shape="rect" id="node6" href="$a00533_source.html" title="OpenMesh/Core/Utils\l/Property.hh" alt="" coords="1520,273,1668,315"/>
+<area shape="rect" id="node32" href="$a00532_source.html" title="OpenMesh/Core/Utils\l/Noncopyable.hh" alt="" coords="5,452,153,493"/>
+<area shape="rect" id="node7" href="$a00498_source.html" title="OpenMesh/Core/Mesh\l/Handles.hh" alt="" coords="1348,809,1501,851"/>
+<area shape="rect" id="node9" href="$a00526_source.html" title="OpenMesh/Core/Utils\l/BaseProperty.hh" alt="" coords="1632,363,1780,404"/>
+<area shape="rect" id="node11" href="$a00466_source.html" title="OpenMesh/Core/IO/StoreRestore.hh" alt="" coords="465,459,699,486"/>
+<area shape="rect" id="node27" href="$a00518.html" title="This file provides the streams omlog, omout, and omerr. " alt="" coords="1525,720,1692,761"/>
+<area shape="rect" id="node13" href="$a00461_source.html" title="OpenMesh/Core/IO/SR\l_binary.hh" alt="" coords="503,631,661,672"/>
+<area shape="rect" id="node17" href="$a00462_source.html" title="OpenMesh/Core/IO/SR\l_binary_spec.hh" alt="" coords="812,541,971,583"/>
+<area shape="rect" id="node21" href="$a00432_source.html" title="OpenMesh/Core/Geometry\l/VectorT.hh" alt="" coords="1277,631,1455,672"/>
+<area shape="rect" id="node22" href="$a00505_source.html" title="OpenMesh/Core/Mesh\l/Status.hh" alt="" coords="737,809,891,851"/>
+<area shape="rect" id="node23" href="$a00465_source.html" title="OpenMesh/Core/IO/SR\l_types.hh" alt="" coords="879,720,1037,761"/>
+<area shape="rect" id="node24" href="$a00463_source.html" title="OpenMesh/Core/IO/SR\l_rbo.hh" alt="" coords="929,631,1088,672"/>
+<area shape="rect" id="node31" href="$a00531_source.html" title="OpenMesh/Core/Utils\l/GenProg.hh" alt="" coords="967,809,1115,851"/>
+<area shape="rect" id="node28" href="$a00516_source.html" title="OpenMesh/Core/System\l/mostream.hh" alt="" coords="1525,809,1692,851"/>
 </map>

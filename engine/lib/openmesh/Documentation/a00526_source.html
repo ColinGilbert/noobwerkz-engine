@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: Python/PropertyManager.hh Source File</title>
+<title>OpenMesh: OpenMesh/Core/Utils/BaseProperty.hh Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -105,115 +106,171 @@ $(document).ready(function(){initNavTree('a00526_source.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">PropertyManager.hh</div>  </div>
+<div class="title">BaseProperty.hh</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef OPENMESH_PYTHON_PROPERTYMANAGER_HH</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define OPENMESH_PYTHON_PROPERTYMANAGER_HH</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;</div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="a00621.html">Python/Bindings.hh</a>&quot;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;OpenMesh/Core/Utils/PropertyManager.hh&quot;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span><a class="code" href="a00715.html">OpenMesh</a> {</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">namespace </span>Python {</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(retain_overloads, retain, 0, 1)</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;template &lt;class PropertyManager, class IndexHandle&gt;</div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="a00727.html#a6b6d415eac8d4303bdbca5c7635be22f">   24</a></span>&#160;<span class="keywordtype">object</span> <a class="code" href="a00727.html#a6b6d415eac8d4303bdbca5c7635be22f">propman_get_item</a>(PropertyManager&amp; _self, IndexHandle _handle) {</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keywordflow">return</span> _self[_handle];</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;}</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> PropertyManager, <span class="keyword">class</span> IndexHandle&gt;</div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="a00727.html#afa870a748e93e6147316ef489942166f">   39</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="a00727.html#afa870a748e93e6147316ef489942166f">propman_set_item</a>(<a class="code" href="a00247.html">PropertyManager</a>&amp; _self, IndexHandle _handle, <span class="keywordtype">object</span> _value) {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        _self[_handle] = _value;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> PropertyManager, <span class="keyword">class</span> Iterator&gt;</div>
-<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="a00727.html#a10e33334c915e5a14fc2cd32d9f2f60e">   55</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="a00727.html#a10e33334c915e5a14fc2cd32d9f2f60e">propman_set_range</a>(<a class="code" href="a00247.html">PropertyManager</a>&amp; _self, Iterator _it, <span class="keywordtype">object</span> _value) {</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordflow">try</span> {</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                <span class="keywordflow">while</span> (<span class="keyword">true</span>) {</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                        _self[_it.next()] = _value;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                }</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        }</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordflow">catch</span> (error_already_set exception) {</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                <span class="comment">// This is expected behavior</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                PyErr_Clear();</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        }</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;}</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> PropertyManager, <span class="keyword">class</span> Mesh&gt;</div>
-<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="a00727.html#a1a34f1de4193e2bf4797d2acb5336c8d">   77</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="a00727.html#a1a34f1de4193e2bf4797d2acb5336c8d">property_exists</a>(Mesh&amp; _mesh, <span class="keyword">const</span> <span class="keywordtype">char</span> *_propname) {</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keywordflow">return</span> PropertyManager::propertyExists(_mesh, _propname);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;}</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> PropHandle, <span class="keyword">class</span> IndexHandle, <span class="keyword">class</span> Iterator&gt;</div>
-<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="a00727.html#a0c6a346a48ebe20ccadfdfd3c7c66e56">   97</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="a00727.html#a0c6a346a48ebe20ccadfdfd3c7c66e56">expose_property_manager</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *_name) {</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="comment">// Convenience typedef</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keyword">typedef</span> <a class="code" href="a00247.html">PropertyManager&lt;PropHandle, PolyConnectivity&gt;</a> <a class="code" href="a00247.html">PropertyManager</a>;</div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* ========================================================================= *</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> *                                                                           *</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *                               OpenMesh                                    *</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> *           Copyright (c) 2001-2015, RWTH-Aachen University                 *</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> *           Department of Computer Graphics and Multimedia                  *</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> *                          All rights reserved.                             *</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> *                            www.openmesh.org                               *</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> *                                                                           *</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> *---------------------------------------------------------------------------*</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> * This file is part of OpenMesh.                                            *</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> *---------------------------------------------------------------------------*</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> *                                                                           *</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> * Redistribution and use in source and binary forms, with or without        *</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> * modification, are permitted provided that the following conditions        *</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> * are met:                                                                  *</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> *                                                                           *</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> * 1. Redistributions of source code must retain the above copyright notice, *</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> *    this list of conditions and the following disclaimer.                  *</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"> *                                                                           *</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment"> * 2. Redistributions in binary form must reproduce the above copyright      *</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment"> *    notice, this list of conditions and the following disclaimer in the    *</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> *    documentation and/or other materials provided with the distribution.   *</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> *                                                                           *</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"> * 3. Neither the name of the copyright holder nor the names of its          *</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment"> *    contributors may be used to endorse or promote products derived from   *</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment"> *    this software without specific prior written permission.               *</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment"> *                                                                           *</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS       *</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment"> * &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED *</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment"> * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A           *</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment"> * PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER *</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment"> * OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,  *</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,       *</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR        *</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment"> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF    *</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment"> * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING      *</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment"> * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS        *</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment"> * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.              *</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment"> *                                                                           *</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment"> * ========================================================================= */</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">/*===========================================================================*\</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment"> *                                                                           *             </span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment"> *   $Revision$                                                         *</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment"> *   $Date$                   *</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment"> *                                                                           *</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">\*===========================================================================*/</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor">#ifndef OPENMESH_BASEPROPERTY_HH</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">#define OPENMESH_BASEPROPERTY_HH</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">#include &lt;OpenMesh/Core/IO/StoreRestore.hh&gt;</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="a00518.html">OpenMesh/Core/System/omstream.hh</a>&gt;</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keyword">namespace </span><a class="code" href="a00730.html">OpenMesh</a> {</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">//== CLASS DEFINITION =========================================================</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="a00097.html">   65</a></span>&#160;<span class="keyword">class </span>OPENMESHDLLEXPORT <a class="code" href="a00097.html">BaseProperty</a></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;{</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="a00097.html#a3dbccc1d0ac8f9a0ba27c46f2fe58414">   70</a></span>&#160;  <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">size_t</span> UnknownSize = size_t(-1);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
+<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="a00097.html#ab40b442ea053998cbde8e9a4bb27c6a3">   88</a></span>&#160;  <a class="code" href="a00097.html#ab40b442ea053998cbde8e9a4bb27c6a3">BaseProperty</a>(<span class="keyword">const</span> std::string&amp; _name = <span class="stringliteral">&quot;&lt;unknown&gt;&quot;</span>)</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;  : name_(_name), persistent_(false)</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;  {}</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
+<div class="line"><a name="l00093"></a><span class="lineno"><a class="line" href="a00097.html#a9301f986c88572a20649f8743bfac6ac">   93</a></span>&#160;  <a class="code" href="a00097.html#a9301f986c88572a20649f8743bfac6ac">BaseProperty</a>(<span class="keyword">const</span> <a class="code" href="a00097.html">BaseProperty</a> &amp; _rhs)</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;      : name_( _rhs.name_ ), persistent_( _rhs.persistent_ ) {}</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
+<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="a00097.html#aa3c0dbc83c42199de5722a5812c5a12b">   97</a></span>&#160;  <span class="keyword">virtual</span> <a class="code" href="a00097.html#aa3c0dbc83c42199de5722a5812c5a12b">~BaseProperty</a>() {}</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="keyword">public</span>: <span class="comment">// synchronized array interface</span></div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="comment">// Function pointers</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        void (PropertyManager::*retain)(bool) = &amp;<a class="code" href="a00247.html#aa388e739951640a7c432b49e5232cb84">PropertyManager::retain</a>;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> reserve(<span class="keywordtype">size_t</span> _n) = 0;</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        object (*getitem)(PropertyManager&amp;, IndexHandle        ) = &amp;<a class="code" href="a00727.html#a6b6d415eac8d4303bdbca5c7635be22f">propman_get_item</a>;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        void   (*setitem)(PropertyManager&amp;, IndexHandle, object) = &amp;<a class="code" href="a00727.html#afa870a748e93e6147316ef489942166f">propman_set_item</a>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> resize(<span class="keywordtype">size_t</span> _n) = 0;</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        void (*set_range)(PropertyManager&amp;, Iterator, object) = &amp;<a class="code" href="a00727.html#a10e33334c915e5a14fc2cd32d9f2f60e">propman_set_range</a>;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        bool (*property_exists_poly)(<a class="code" href="a00242.html">PolyMesh</a>&amp;, <span class="keyword">const</span> <span class="keywordtype">char</span> *) = &amp;property_exists&lt;PropertyManager, PolyMesh&gt;;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        bool (*property_exists_tri )(<a class="code" href="a00273.html">TriMesh</a>&amp;,  <span class="keyword">const</span> <span class="keywordtype">char</span> *) = &amp;property_exists&lt;PropertyManager, TriMesh &gt;;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="comment">// Expose property manager</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        class_&lt;PropertyManager, boost::noncopyable&gt;(_name)</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                .def(init&lt;<a class="code" href="a00242.html">PolyMesh</a>&amp;, <span class="keyword">const</span> <span class="keywordtype">char</span> *, optional&lt;bool&gt; &gt;())</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                .def(init&lt;<a class="code" href="a00273.html">TriMesh</a>&amp;,  <span class="keyword">const</span> <span class="keywordtype">char</span> *, optional&lt;bool&gt; &gt;())</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                .def(<span class="stringliteral">&quot;swap&quot;</span>, &amp;PropertyManager::swap)</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                .def(<span class="stringliteral">&quot;is_valid&quot;</span>, &amp;PropertyManager::isValid)</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                .def(<span class="stringliteral">&quot;__bool__&quot;</span>, &amp;PropertyManager::operator <span class="keywordtype">bool</span>)</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;                .def(<span class="stringliteral">&quot;__nonzero__&quot;</span>, &amp;PropertyManager::operator <span class="keywordtype">bool</span>)</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;                .def(<span class="stringliteral">&quot;get_raw_property&quot;</span>, &amp;PropertyManager::getRawProperty, return_value_policy&lt;copy_const_reference&gt;())</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;                .def(<span class="stringliteral">&quot;get_name&quot;</span>, &amp;PropertyManager::getName, return_value_policy&lt;copy_const_reference&gt;())</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;                .def(<span class="stringliteral">&quot;get_mesh&quot;</span>, &amp;PropertyManager::getMesh, return_value_policy&lt;reference_existing_object&gt;())</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> clear() = 0;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> push_back() = 0;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> swap(<span class="keywordtype">size_t</span> _i0, <span class="keywordtype">size_t</span> _i1) = 0;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> copy(<span class="keywordtype">size_t</span> _io, <span class="keywordtype">size_t</span> _i1) = 0;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;  </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="a00097.html">BaseProperty</a>* clone () <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="keyword">public</span>: <span class="comment">// named property interface</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;</div>
+<div class="line"><a name="l00125"></a><span class="lineno"><a class="line" href="a00097.html#a0824dab1057df3baa04e25e13ac9ca9e">  125</a></span>&#160;  <span class="keyword">const</span> std::string&amp; <a class="code" href="a00097.html#a0824dab1057df3baa04e25e13ac9ca9e">name</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> name_; }</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;                .def(<span class="stringliteral">&quot;retain&quot;</span>, retain, retain_overloads())</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> stats(std::ostream&amp; _ostr) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;                .def(<span class="stringliteral">&quot;__getitem__&quot;</span>, getitem)</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;                .def(<span class="stringliteral">&quot;__setitem__&quot;</span>, setitem)</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;                .def(<span class="stringliteral">&quot;set_range&quot;</span>, set_range)</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="keyword">public</span>: <span class="comment">// I/O support</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;</div>
+<div class="line"><a name="l00132"></a><span class="lineno"><a class="line" href="a00097.html#a0ccadfed0436f3c25c574f3e151e7036">  132</a></span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="a00097.html#a0ccadfed0436f3c25c574f3e151e7036">persistent</a>(<span class="keywordtype">void</span>)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> persistent_; }</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;                .def(<span class="stringliteral">&quot;property_exists&quot;</span>, property_exists_poly)</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;                .def(<span class="stringliteral">&quot;property_exists&quot;</span>, property_exists_tri)</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;                .staticmethod(<span class="stringliteral">&quot;property_exists&quot;</span>)</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;                ;</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;}</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;} <span class="comment">// namespace OpenMesh</span></div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;} <span class="comment">// namespace Python</span></div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="ttc" id="a00715_html"><div class="ttname"><a href="a00715.html">OpenMesh</a></div><div class="ttdoc">Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...</div><div class="ttdef"><b>Definition:</b> MeshItems.hh:64</div></div>
-<div class="ttc" id="a00242_html"><div class="ttname"><a href="a00242.html">OpenMesh::PolyMesh_ArrayKernelT</a></div><div class="ttdoc">Polygonal mesh based on the ArrayKernel. </div><div class="ttdef"><b>Definition:</b> PolyMesh_ArrayKernelT.hh:98</div></div>
-<div class="ttc" id="a00247_html"><div class="ttname"><a href="a00247.html">OpenMesh::PropertyManager</a></div><div class="ttdoc">This class is intended to manage the lifecycle of properties. </div><div class="ttdef"><b>Definition:</b> PropertyManager.hh:78</div></div>
-<div class="ttc" id="a00621_html"><div class="ttname"><a href="a00621.html">Bindings.hh</a></div></div>
-<div class="ttc" id="a00247_html_aa388e739951640a7c432b49e5232cb84"><div class="ttname"><a href="a00247.html#aa388e739951640a7c432b49e5232cb84">OpenMesh::PropertyManager::retain</a></div><div class="ttdeci">void retain(bool doRetain=true)</div><div class="ttdoc">Disable lifecycle management for this property. </div><div class="ttdef"><b>Definition:</b> PropertyManager.hh:261</div></div>
-<div class="ttc" id="a00727_html_a1a34f1de4193e2bf4797d2acb5336c8d"><div class="ttname"><a href="a00727.html#a1a34f1de4193e2bf4797d2acb5336c8d">OpenMesh::Python::property_exists</a></div><div class="ttdeci">bool property_exists(Mesh &amp;_mesh, const char *_propname)</div><div class="ttdoc">Thin wrapper for propertyExists. </div><div class="ttdef"><b>Definition:</b> PropertyManager.hh:77</div></div>
-<div class="ttc" id="a00727_html_a10e33334c915e5a14fc2cd32d9f2f60e"><div class="ttname"><a href="a00727.html#a10e33334c915e5a14fc2cd32d9f2f60e">OpenMesh::Python::propman_set_range</a></div><div class="ttdeci">void propman_set_range(PropertyManager &amp;_self, Iterator _it, object _value)</div><div class="ttdoc">Conveniently set the property value for an entire range of mesh items using a Python iterator...</div><div class="ttdef"><b>Definition:</b> PropertyManager.hh:55</div></div>
-<div class="ttc" id="a00727_html_a6b6d415eac8d4303bdbca5c7635be22f"><div class="ttname"><a href="a00727.html#a6b6d415eac8d4303bdbca5c7635be22f">OpenMesh::Python::propman_get_item</a></div><div class="ttdeci">object propman_get_item(PropertyManager &amp;_self, IndexHandle _handle)</div><div class="ttdoc">Implementation of Python&#39;s __getitem__ magic method. </div><div class="ttdef"><b>Definition:</b> PropertyManager.hh:24</div></div>
-<div class="ttc" id="a00727_html_a0c6a346a48ebe20ccadfdfd3c7c66e56"><div class="ttname"><a href="a00727.html#a0c6a346a48ebe20ccadfdfd3c7c66e56">OpenMesh::Python::expose_property_manager</a></div><div class="ttdeci">void expose_property_manager(const char *_name)</div><div class="ttdoc">Expose a property manager type to Python. </div><div class="ttdef"><b>Definition:</b> PropertyManager.hh:97</div></div>
-<div class="ttc" id="a00727_html_afa870a748e93e6147316ef489942166f"><div class="ttname"><a href="a00727.html#afa870a748e93e6147316ef489942166f">OpenMesh::Python::propman_set_item</a></div><div class="ttdeci">void propman_set_item(PropertyManager &amp;_self, IndexHandle _handle, object _value)</div><div class="ttdoc">Implementation of Python&#39;s __setitem__ magic method. </div><div class="ttdef"><b>Definition:</b> PropertyManager.hh:39</div></div>
-<div class="ttc" id="a00273_html"><div class="ttname"><a href="a00273.html">OpenMesh::TriMesh_ArrayKernelT</a></div><div class="ttdoc">Triangle mesh based on the ArrayKernel. </div><div class="ttdef"><b>Definition:</b> TriMesh_ArrayKernelT.hh:98</div></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> set_persistent( <span class="keywordtype">bool</span> _yn ) = 0;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">size_t</span>       n_elements() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">size_t</span>       element_size() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;</div>
+<div class="line"><a name="l00145"></a><span class="lineno"><a class="line" href="a00097.html#ad31a816e407f15361c5027517e012cb4">  145</a></span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">size_t</span>       <a class="code" href="a00097.html#ad31a816e407f15361c5027517e012cb4">size_of</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="keyword">  </span>{</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    <span class="keywordflow">return</span> size_of( n_elements() );</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;  }</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;</div>
+<div class="line"><a name="l00152"></a><span class="lineno"><a class="line" href="a00097.html#a99494b064f29f3f0b529fbe11c758269">  152</a></span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">size_t</span>       <a class="code" href="a00097.html#a99494b064f29f3f0b529fbe11c758269">size_of</a>(<span class="keywordtype">size_t</span> _n_elem)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="keyword">  </span>{</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <span class="keywordflow">return</span> (element_size()!=UnknownSize)</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;      ? (_n_elem*element_size())</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;      : UnknownSize;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;  }</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> store( std::ostream&amp; _ostr, <span class="keywordtype">bool</span> _swap ) <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> restore( std::istream&amp; _istr, <span class="keywordtype">bool</span> _swap ) = 0;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;  <span class="comment">// To be used in a derived class, when overloading set_persistent()</span></div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;  <span class="keyword">template</span> &lt; <span class="keyword">typename</span> T &gt;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;  <span class="keywordtype">void</span> check_and_set_persistent( <span class="keywordtype">bool</span> _yn )</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;  {</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <span class="keywordflow">if</span> ( _yn &amp;&amp; !IO::is_streamable&lt;T&gt;() )</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;      omerr() &lt;&lt; <span class="stringliteral">&quot;Warning! Type of property value is not binary storable!\n&quot;</span>;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    persistent_ = IO::is_streamable&lt;T&gt;() &amp;&amp; _yn;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;  }</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;  std::string name_;</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;  <span class="keywordtype">bool</span>        persistent_;</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;};</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;}<span class="comment">//namespace OpenMesh</span></div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="preprocessor">#endif //OPENMESH_BASEPROPERTY_HH</span></div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;</div>
+<div class="ttc" id="a00097_html_a0ccadfed0436f3c25c574f3e151e7036"><div class="ttname"><a href="a00097.html#a0ccadfed0436f3c25c574f3e151e7036">OpenMesh::BaseProperty::persistent</a></div><div class="ttdeci">bool persistent(void) const </div><div class="ttdoc">Returns true if the persistent flag is enabled else false. </div><div class="ttdef"><b>Definition:</b> BaseProperty.hh:132</div></div>
+<div class="ttc" id="a00730_html"><div class="ttname"><a href="a00730.html">OpenMesh</a></div><div class="ttdoc">Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...</div><div class="ttdef"><b>Definition:</b> MeshItems.hh:64</div></div>
+<div class="ttc" id="a00518_html"><div class="ttname"><a href="a00518.html">omstream.hh</a></div><div class="ttdoc">This file provides the streams omlog, omout, and omerr. </div></div>
+<div class="ttc" id="a00097_html_ad31a816e407f15361c5027517e012cb4"><div class="ttname"><a href="a00097.html#ad31a816e407f15361c5027517e012cb4">OpenMesh::BaseProperty::size_of</a></div><div class="ttdeci">virtual size_t size_of() const </div><div class="ttdoc">Return size of property in bytes. </div><div class="ttdef"><b>Definition:</b> BaseProperty.hh:145</div></div>
+<div class="ttc" id="a00097_html_a9301f986c88572a20649f8743bfac6ac"><div class="ttname"><a href="a00097.html#a9301f986c88572a20649f8743bfac6ac">OpenMesh::BaseProperty::BaseProperty</a></div><div class="ttdeci">BaseProperty(const BaseProperty &amp;_rhs)</div><div class="ttdoc">Copy constructor. </div><div class="ttdef"><b>Definition:</b> BaseProperty.hh:93</div></div>
+<div class="ttc" id="a00097_html_a0824dab1057df3baa04e25e13ac9ca9e"><div class="ttname"><a href="a00097.html#a0824dab1057df3baa04e25e13ac9ca9e">OpenMesh::BaseProperty::name</a></div><div class="ttdeci">const std::string &amp; name() const </div><div class="ttdoc">Return the name of the property. </div><div class="ttdef"><b>Definition:</b> BaseProperty.hh:125</div></div>
+<div class="ttc" id="a00097_html_a99494b064f29f3f0b529fbe11c758269"><div class="ttname"><a href="a00097.html#a99494b064f29f3f0b529fbe11c758269">OpenMesh::BaseProperty::size_of</a></div><div class="ttdeci">virtual size_t size_of(size_t _n_elem) const </div><div class="ttdoc">Estimated size of property if it has _n_elem elements. </div><div class="ttdef"><b>Definition:</b> BaseProperty.hh:152</div></div>
+<div class="ttc" id="a00097_html"><div class="ttname"><a href="a00097.html">OpenMesh::BaseProperty</a></div><div class="ttdoc">Abstract class defining the basic interface of a dynamic property. </div><div class="ttdef"><b>Definition:</b> BaseProperty.hh:65</div></div>
+<div class="ttc" id="a00097_html_aa3c0dbc83c42199de5722a5812c5a12b"><div class="ttname"><a href="a00097.html#aa3c0dbc83c42199de5722a5812c5a12b">OpenMesh::BaseProperty::~BaseProperty</a></div><div class="ttdeci">virtual ~BaseProperty()</div><div class="ttdoc">Destructor. </div><div class="ttdef"><b>Definition:</b> BaseProperty.hh:97</div></div>
+<div class="ttc" id="a00097_html_ab40b442ea053998cbde8e9a4bb27c6a3"><div class="ttname"><a href="a00097.html#ab40b442ea053998cbde8e9a4bb27c6a3">OpenMesh::BaseProperty::BaseProperty</a></div><div class="ttdeci">BaseProperty(const std::string &amp;_name=&quot;&lt;unknown&gt;&quot;)</div><div class="ttdoc">Default constructor. </div><div class="ttdef"><b>Definition:</b> BaseProperty.hh:88</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <hr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

@@ -56,23 +56,6 @@ if (DISABLE_QMAKE_BUILD)
   list (APPEND CPACK_SOURCE_IGNORE_FILES "\\\\.qmake\\\\.cache")
 endif ()
 
-# filter out all disabled plugins
-# file (
-#   GLOB _plugins_in
-#   RELATIVE "${CMAKE_SOURCE_DIR}"
-#   "${CMAKE_SOURCE_DIR}/Plugin-*"
-# )
-#foreach (_plugin ${_plugins_in})
-#  string (REPLACE "Plugin-" "" _plugin_name ${_plugin})
-#  string (TOUPPER ${_plugin_name} _PLUGIN)
-#  if (NOT EXISTS ${CMAKE_SOURCE_DIR}/${_plugin}/CMakeLists.txt AND DISABLE_QMAKE_BUILD)
-#    list (APPEND CPACK_SOURCE_IGNORE_FILES "${CMAKE_SOURCE_DIR}/${_plugin}")
-#  elseif (DISABLE_PLUGIN_${_PLUGIN})
-#    list (APPEND CPACK_SOURCE_IGNORE_FILES "${CMAKE_SOURCE_DIR}/${_plugin}")
-#  endif ()
-#endforeach ()
-
-
 if (WIN32)
   # window NSIS installer
   set (CPACK_GENERATOR "NSIS")
@@ -134,27 +117,6 @@ if (WIN32)
 
   set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "CreateShortcut \\\"$SMPROGRAMS\\\\${CPACK_NSIS_DISPLAY_NAME}\\\\Documentation.lnk\\\" \\\"$INSTDIR\\\\Doc\\\\html\\\\index.html \\\" "  )
 
-  # append dll's to installed package
-  #if (EXISTS ${CMAKE_SOURCE_DIR}/WIN)
-	  #file (GLOB _files "${CMAKE_SOURCE_DIR}/WIN/DLLs/DLLs 32 debug/*.dll")
-	  #install(FILES ${_files}
-	  #DESTINATION ${ACG_PROJECT_BINDIR}
-	  #CONFIGURATIONS Debug
-	  #)
-    #file (GLOB _files "${CMAKE_SOURCE_DIR}/WIN/DLLs/DLLs 32 release/*.dll")
-    #install (FILES ${_files}
-    #  DESTINATION ${ACG_PROJECT_BINDIR}
-    #  CONFIGURATIONS Release
-    #)
-    #install (FILES "${CMAKE_SOURCE_DIR}/WIN/DLLs/Redistributables/Visual Studio 2008/vcredist_x86.exe"
-    #  DESTINATION ${ACG_PROJECT_BINDIR}
-    #)
-    #set (CPACK_NSIS_EXTRA_INSTALL_COMMANDS "ExecWait '\\\"$INSTDIR\\\\vcredist_x86.exe\\\" /q:a'")
-    #endif ()
-    #elseif (APPLE)
-  # apple Drag'n'Drop installer package
-  #set (CPACK_GENERATOR "DragNDrop;TGZ")
-  #set (CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/OpenFlipper/Icons/OpenFlipper_Icon.icns")
 endif ()
 
 # has to be last

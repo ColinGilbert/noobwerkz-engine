@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -87,7 +88,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('a00091.html','');});
+$(document).ready(function(){initNavTree('a00071.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -106,52 +107,30 @@ $(document).ready(function(){initNavTree('a00091.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">OpenMesh::IO::BaseImporter Member List</div>  </div>
+<div class="title">OpenMesh::IO::_IOManager_ Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>, including all inherited members.</p>
+<p>This is the complete list of members for <a class="el" href="a00071.html">OpenMesh::IO::_IOManager_</a>, including all inherited members.</p>
 <table class="directory">
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>add_face</b>(const VHandles &amp;_indices)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>add_face_texcoords</b>(FaceHandle _fh, VertexHandle _vh, const std::vector&lt; Vec2f &gt; &amp;_face_texcoords)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>add_texture_information</b>(int _id, std::string _name)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>add_vertex</b>(const Vec3f &amp;_point)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>add_vertex</b>()=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>finish</b>() (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>is_triangle_mesh</b>() const  (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>kernel</b>() (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>n_edges</b>() const =0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>n_faces</b>() const =0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>n_vertices</b>() const =0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>prepare</b>() (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>reserve</b>(unsigned int, unsigned int, unsigned int) (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>set_color</b>(VertexHandle _vh, const Vec3uc &amp;_color)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>set_color</b>(VertexHandle _vh, const Vec4uc &amp;_color)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>set_color</b>(VertexHandle _vh, const Vec3f &amp;_color)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>set_color</b>(VertexHandle _vh, const Vec4f &amp;_color)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>set_color</b>(EdgeHandle _eh, const Vec3uc &amp;_color)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>set_color</b>(EdgeHandle _eh, const Vec4uc &amp;_color)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>set_color</b>(EdgeHandle _eh, const Vec3f &amp;_color)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>set_color</b>(EdgeHandle _eh, const Vec4f &amp;_color)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>set_color</b>(FaceHandle _fh, const Vec3uc &amp;_color)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>set_color</b>(FaceHandle _fh, const Vec4uc &amp;_color)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>set_color</b>(FaceHandle _fh, const Vec3f &amp;_color)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>set_color</b>(FaceHandle _fh, const Vec4f &amp;_color)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>set_face_texindex</b>(FaceHandle _fh, int _texId)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>set_normal</b>(VertexHandle _vh, const Vec3f &amp;_normal)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>set_normal</b>(FaceHandle _fh, const Vec3f &amp;_normal)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>set_point</b>(VertexHandle _vh, const Vec3f &amp;_point)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>set_texcoord</b>(VertexHandle _vh, const Vec2f &amp;_texcoord)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>set_texcoord</b>(HalfedgeHandle _heh, const Vec2f &amp;_texcoord)=0 (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>VHandles</b> typedef (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>~BaseImporter</b>() (defined in <a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a>)</td><td class="entry"><a class="el" href="a00091.html">OpenMesh::IO::BaseImporter</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>binary_size</b>(const std::string &amp;_format, BaseExporter &amp;_be, Options _opt=Options::Default) (defined in <a class="el" href="a00071.html">OpenMesh::IO::_IOManager_</a>)</td><td class="entry"><a class="el" href="a00071.html">OpenMesh::IO::_IOManager_</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00071.html#a118c87363cd9eab8d8e77c27f57c0e98">can_read</a>(const std::string &amp;_format) const </td><td class="entry"><a class="el" href="a00071.html">OpenMesh::IO::_IOManager_</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00071.html#aa5ba61c712c47e3a5732cba9bd72c14d">can_write</a>(const std::string &amp;_format) const </td><td class="entry"><a class="el" href="a00071.html">OpenMesh::IO::_IOManager_</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00071.html#a5e3d1d3b352c33564d4844f292275698">IOManager</a>()</td><td class="entry"><a class="el" href="a00071.html">OpenMesh::IO::_IOManager_</a></td><td class="entry"><span class="mlabel">friend</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00071.html#ac3d9b92b132ce16580099c8ccd5ef94a">qt_read_filters</a>() const </td><td class="entry"><a class="el" href="a00071.html">OpenMesh::IO::_IOManager_</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00071.html#a14a72706b4c13a3635cf448e9ce55b6b">qt_write_filters</a>() const </td><td class="entry"><a class="el" href="a00071.html">OpenMesh::IO::_IOManager_</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00071.html#a96b93ad4d6635a5fea110071bff19cfc">read</a>(const std::string &amp;_filename, BaseImporter &amp;_bi, Options &amp;_opt)</td><td class="entry"><a class="el" href="a00071.html">OpenMesh::IO::_IOManager_</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00071.html#ae8b7820b71be36aa7097c89bbebff9bc">read</a>(std::istream &amp;_filename, const std::string &amp;_ext, BaseImporter &amp;_bi, Options &amp;_opt)</td><td class="entry"><a class="el" href="a00071.html">OpenMesh::IO::_IOManager_</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00071.html#afc523ce80234260b8d6f7084a5cbcb13">register_module</a>(BaseReader *_bl)</td><td class="entry"><a class="el" href="a00071.html">OpenMesh::IO::_IOManager_</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00071.html#a539db8979ec6980cd3e038bdc6292cdc">register_module</a>(BaseWriter *_bw)</td><td class="entry"><a class="el" href="a00071.html">OpenMesh::IO::_IOManager_</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00071.html#a6493341522e1670c7bca82bdd5c1c89b">write</a>(const std::string &amp;_filename, BaseExporter &amp;_be, Options _opt=Options::Default, std::streamsize _precision=6)</td><td class="entry"><a class="el" href="a00071.html">OpenMesh::IO::_IOManager_</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00071.html#a3434323b42dda1dab53d05a720355eca">write</a>(std::ostream &amp;_filename, const std::string &amp;_ext, BaseExporter &amp;_be, Options _opt=Options::Default, std::streamsize _precision=6)</td><td class="entry"><a class="el" href="a00071.html">OpenMesh::IO::_IOManager_</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 <hr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

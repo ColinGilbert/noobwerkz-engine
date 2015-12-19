@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh::Decimater::ModIndependentSetsT&lt; MeshT &gt; Class Template Reference</title>
+<title>OpenMesh: OpenMesh::Decimater::ModBaseT&lt; MeshT &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -108,129 +109,247 @@ $(document).ready(function(){initNavTree('a00219.html','');});
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="a01061.html">List of all members</a>  </div>
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="a01086.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">OpenMesh::Decimater::ModIndependentSetsT&lt; MeshT &gt; Class Template Reference</div>  </div>
+<div class="title">OpenMesh::Decimater::ModBaseT&lt; MeshT &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Lock one-ring around remaining vertex after a collapse to prevent further collapses of halfedges incident to the one-ring vertices.  
+<p>Base class for all decimation modules.  
  <a href="a00219.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="a00550_source.html">OpenMesh/Tools/Decimater/ModIndependentSetsT.hh</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="a00555_source.html">OpenMesh/Tools/Decimater/ModBaseT.hh</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for OpenMesh::Decimater::ModIndependentSetsT&lt; MeshT &gt;:</div>
+Inheritance diagram for OpenMesh::Decimater::ModBaseT&lt; MeshT &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="a01062.png" border="0" usemap="#OpenMesh_1_1Decimater_1_1ModIndependentSetsT_3_01MeshT_01_4_inherit__map" alt="Inheritance graph"/></div>
-<map name="OpenMesh_1_1Decimater_1_1ModIndependentSetsT_3_01MeshT_01_4_inherit__map" id="OpenMesh_1_1Decimater_1_1ModIndependentSetsT_3_01MeshT_01_4_inherit__map">
-<area shape="rect" id="node2" href="a00214.html" title="Base class for all decimation modules. " alt="" coords="7,5,165,47"/></map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for OpenMesh::Decimater::ModIndependentSetsT&lt; MeshT &gt;:</div>
-<div class="dyncontent">
-<div class="center"><img src="a01063.png" border="0" usemap="#OpenMesh_1_1Decimater_1_1ModIndependentSetsT_3_01MeshT_01_4_coll__map" alt="Collaboration graph"/></div>
-<map name="OpenMesh_1_1Decimater_1_1ModIndependentSetsT_3_01MeshT_01_4_coll__map" id="OpenMesh_1_1Decimater_1_1ModIndependentSetsT_3_01MeshT_01_4_coll__map">
-<area shape="rect" id="node2" href="a00214.html" title="Base class for all decimation modules. " alt="" coords="7,5,165,47"/></map>
+<div class="center"><img src="a01087.png" border="0" usemap="#OpenMesh_1_1Decimater_1_1ModBaseT_3_01MeshT_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="OpenMesh_1_1Decimater_1_1ModBaseT_3_01MeshT_01_4_inherit__map" id="OpenMesh_1_1Decimater_1_1ModBaseT_3_01MeshT_01_4_inherit__map">
+<area shape="rect" id="node2" href="a00228.html" title="ModQuadricT\&lt; D \&gt;" alt="" coords="243,5,377,32"/><area shape="rect" id="node3" href="a00217.html" title="Use aspect ratio to control decimation. " alt="" coords="211,57,409,98"/><area shape="rect" id="node4" href="a00220.html" title="Use edge length to control decimation. " alt="" coords="212,122,408,163"/><area shape="rect" id="node5" href="a00222.html" title="Use Hausdorff distance to control decimation. " alt="" coords="218,187,402,229"/><area shape="rect" id="node6" href="a00224.html" title="Lock one&#45;ring around remaining vertex after a collapse to prevent further collapses of halfedges inci..." alt="" coords="229,252,391,308"/><area shape="rect" id="node7" href="a00225.html" title="Use Normal deviation to control decimation. " alt="" coords="230,332,390,388"/><area shape="rect" id="node8" href="a00226.html" title="Decimating module to avoid flipping of faces. " alt="" coords="233,412,387,468"/><area shape="rect" id="node9" href="a00227.html" title="Collect progressive mesh information while decimating. " alt="" coords="217,491,403,533"/><area shape="rect" id="node10" href="a00228.html" title="Mesh decimation module computing collapse priority based on error quadrics. " alt="" coords="224,557,396,598"/><area shape="rect" id="node12" href="a00229.html" title="Use Roundness of triangles to control decimation. " alt="" coords="213,622,407,663"/><area shape="rect" id="node11" href="a00218.html" title="ModBalancerT\&lt; D \&gt;" alt="" coords="457,564,597,591"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ace7a1603c0fa22f79e89ce492c2a5d59"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ace7a1603c0fa22f79e89ce492c2a5d59"></a>
-typedef <a class="el" href="a00219.html">ModIndependentSetsT</a><br class="typebreak" />
-&lt; MeshT &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Self</b></td></tr>
-<tr class="separator:ace7a1603c0fa22f79e89ce492c2a5d59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a8c6094a3991bffaf2974dbc12c4756"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1a8c6094a3991bffaf2974dbc12c4756"></a>
-typedef <br class="typebreak" />
-<a class="el" href="a00216.html">OpenMesh::Decimater::ModHandleT</a><br class="typebreak" />
-&lt; <a class="el" href="a00219.html">Self</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Handle</b></td></tr>
-<tr class="separator:a1a8c6094a3991bffaf2974dbc12c4756"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8e4d3d5ecb9e1e6df97f771f66f9fba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad8e4d3d5ecb9e1e6df97f771f66f9fba"></a>
-typedef <br class="typebreak" />
-<a class="el" href="a00214.html">OpenMesh::Decimater::ModBaseT</a><br class="typebreak" />
-&lt; MeshT &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Base</b></td></tr>
-<tr class="separator:ad8e4d3d5ecb9e1e6df97f771f66f9fba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92153d3e9ed0ef1e79f8be8fa7849e8e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a92153d3e9ed0ef1e79f8be8fa7849e8e"></a>
-typedef Base::Mesh&#160;</td><td class="memItemRight" valign="bottom"><b>Mesh</b></td></tr>
-<tr class="separator:a92153d3e9ed0ef1e79f8be8fa7849e8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a83d3fdd1296c9e26674fda3fd6845e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6a83d3fdd1296c9e26674fda3fd6845e"></a>
-typedef Base::CollapseInfo&#160;</td><td class="memItemRight" valign="bottom"><b>CollapseInfo</b></td></tr>
-<tr class="separator:a6a83d3fdd1296c9e26674fda3fd6845e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_types_a00214"><td colspan="2" onclick="javascript:toggleInherit('pub_types_a00214')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="a00214.html">OpenMesh::Decimater::ModBaseT&lt; MeshT &gt;</a></td></tr>
-<tr class="memitem:a49500127c96591367298aa17e8527e44 inherit pub_types_a00214"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="a00214.html#a49500127c96591367298aa17e8527e44afc88837943f46ccbf0ef35d3fcf9c5b1">ILLEGAL_COLLAPSE</a> = -1, 
-<a class="el" href="a00214.html#a49500127c96591367298aa17e8527e44a2b521064f4abfdfb6eb5464308b6f6e7">LEGAL_COLLAPSE</a> = 0
+<tr class="memitem:a49500127c96591367298aa17e8527e44"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="a00219.html#a49500127c96591367298aa17e8527e44afc88837943f46ccbf0ef35d3fcf9c5b1">ILLEGAL_COLLAPSE</a> = -1, 
+<a class="el" href="a00219.html#a49500127c96591367298aa17e8527e44a2b521064f4abfdfb6eb5464308b6f6e7">LEGAL_COLLAPSE</a> = 0
  }</td></tr>
-<tr class="separator:a49500127c96591367298aa17e8527e44 inherit pub_types_a00214"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a859ae4de39db6d7e9d1a1ad1335fb897 inherit pub_types_a00214"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a859ae4de39db6d7e9d1a1ad1335fb897"></a>
+<tr class="separator:a49500127c96591367298aa17e8527e44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a859ae4de39db6d7e9d1a1ad1335fb897"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a859ae4de39db6d7e9d1a1ad1335fb897"></a>
 typedef MeshT&#160;</td><td class="memItemRight" valign="bottom"><b>Mesh</b></td></tr>
-<tr class="separator:a859ae4de39db6d7e9d1a1ad1335fb897 inherit pub_types_a00214"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8cc9f0b0682dbead98929e929e18d2cf inherit pub_types_a00214"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8cc9f0b0682dbead98929e929e18d2cf"></a>
-typedef <a class="el" href="a00107.html">CollapseInfoT</a>&lt; MeshT &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>CollapseInfo</b></td></tr>
-<tr class="separator:a8cc9f0b0682dbead98929e929e18d2cf inherit pub_types_a00214"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a859ae4de39db6d7e9d1a1ad1335fb897"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cc9f0b0682dbead98929e929e18d2cf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8cc9f0b0682dbead98929e929e18d2cf"></a>
+typedef <a class="el" href="a00110.html">CollapseInfoT</a>&lt; MeshT &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>CollapseInfo</b></td></tr>
+<tr class="separator:a8cc9f0b0682dbead98929e929e18d2cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:adf73fdba60ea2f994796dd829041be97"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adf73fdba60ea2f994796dd829041be97"></a>
-virtual const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00219.html#adf73fdba60ea2f994796dd829041be97">name</a> () const </td></tr>
-<tr class="memdesc:adf73fdba60ea2f994796dd829041be97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set module's name (using DECIMATER_MODNAME macro) <br /></td></tr>
-<tr class="separator:adf73fdba60ea2f994796dd829041be97"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1cb2074ae492242832abfa3922745220"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1cb2074ae492242832abfa3922745220"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00219.html#a1cb2074ae492242832abfa3922745220">ModIndependentSetsT</a> (MeshT &amp;_mesh)</td></tr>
-<tr class="memdesc:a1cb2074ae492242832abfa3922745220"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. <br /></td></tr>
-<tr class="separator:a1cb2074ae492242832abfa3922745220"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab24afb91c890d484a3bc7674c3e20c39"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab24afb91c890d484a3bc7674c3e20c39"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00219.html#ab24afb91c890d484a3bc7674c3e20c39">postprocess_collapse</a> (const <a class="el" href="a00107.html">CollapseInfo</a> &amp;_ci)</td></tr>
-<tr class="memdesc:ab24afb91c890d484a3bc7674c3e20c39"><td class="mdescLeft">&#160;</td><td class="mdescRight">override <br /></td></tr>
-<tr class="separator:ab24afb91c890d484a3bc7674c3e20c39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_a00214"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a00214')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="a00214.html">OpenMesh::Decimater::ModBaseT&lt; MeshT &gt;</a></td></tr>
-<tr class="memitem:ab2e5893b8418b3bbf4c88fc5cb7b75e5 inherit pub_methods_a00214"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab2e5893b8418b3bbf4c88fc5cb7b75e5"></a>
-virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00214.html#ab2e5893b8418b3bbf4c88fc5cb7b75e5">~ModBaseT</a> ()</td></tr>
-<tr class="memdesc:ab2e5893b8418b3bbf4c88fc5cb7b75e5 inherit pub_methods_a00214"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual desctructor. <br /></td></tr>
-<tr class="separator:ab2e5893b8418b3bbf4c88fc5cb7b75e5 inherit pub_methods_a00214"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec5ede626422c446f296cd186c740797 inherit pub_methods_a00214"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec5ede626422c446f296cd186c740797"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00214.html#aec5ede626422c446f296cd186c740797">is_binary</a> (void) const </td></tr>
-<tr class="memdesc:aec5ede626422c446f296cd186c740797 inherit pub_methods_a00214"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if criteria returns a binary value. <br /></td></tr>
-<tr class="separator:aec5ede626422c446f296cd186c740797 inherit pub_methods_a00214"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36fbc3ecb0b707e2087aea565c5bd6b5 inherit pub_methods_a00214"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a36fbc3ecb0b707e2087aea565c5bd6b5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00214.html#a36fbc3ecb0b707e2087aea565c5bd6b5">set_binary</a> (bool _b)</td></tr>
-<tr class="memdesc:a36fbc3ecb0b707e2087aea565c5bd6b5 inherit pub_methods_a00214"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set whether module is binary or not. <br /></td></tr>
-<tr class="separator:a36fbc3ecb0b707e2087aea565c5bd6b5 inherit pub_methods_a00214"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c6972aeffef98839951846051690c0b inherit pub_methods_a00214"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2c6972aeffef98839951846051690c0b"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00214.html#a2c6972aeffef98839951846051690c0b">initialize</a> ()</td></tr>
-<tr class="memdesc:a2c6972aeffef98839951846051690c0b inherit pub_methods_a00214"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize module-internal stuff. <br /></td></tr>
-<tr class="separator:a2c6972aeffef98839951846051690c0b inherit pub_methods_a00214"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb81c6b9a752741fce2366ca605cd14c inherit pub_methods_a00214"><td class="memItemLeft" align="right" valign="top">virtual float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00214.html#acb81c6b9a752741fce2366ca605cd14c">collapse_priority</a> (const <a class="el" href="a00107.html">CollapseInfoT</a>&lt; MeshT &gt; &amp;)</td></tr>
-<tr class="memdesc:acb81c6b9a752741fce2366ca605cd14c inherit pub_methods_a00214"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return collapse priority.  <a href="#acb81c6b9a752741fce2366ca605cd14c">More...</a><br /></td></tr>
-<tr class="separator:acb81c6b9a752741fce2366ca605cd14c inherit pub_methods_a00214"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d6aa846add0068b1e2bd7005e60edb4 inherit pub_methods_a00214"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4d6aa846add0068b1e2bd7005e60edb4"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00214.html#a4d6aa846add0068b1e2bd7005e60edb4">preprocess_collapse</a> (const <a class="el" href="a00107.html">CollapseInfoT</a>&lt; MeshT &gt; &amp;)</td></tr>
-<tr class="memdesc:a4d6aa846add0068b1e2bd7005e60edb4 inherit pub_methods_a00214"><td class="mdescLeft">&#160;</td><td class="mdescRight">Before _from_vh has been collapsed into _to_vh, this method will be called. <br /></td></tr>
-<tr class="separator:a4d6aa846add0068b1e2bd7005e60edb4 inherit pub_methods_a00214"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f1b2156b44cff425dd758e84218f0db inherit pub_methods_a00214"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00214.html#a3f1b2156b44cff425dd758e84218f0db">set_error_tolerance_factor</a> (double _factor)</td></tr>
-<tr class="memdesc:a3f1b2156b44cff425dd758e84218f0db inherit pub_methods_a00214"><td class="mdescLeft">&#160;</td><td class="mdescRight">This provides a function that allows the setting of a percentage of the original contraint.  <a href="#a3f1b2156b44cff425dd758e84218f0db">More...</a><br /></td></tr>
-<tr class="separator:a3f1b2156b44cff425dd758e84218f0db inherit pub_methods_a00214"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2e5893b8418b3bbf4c88fc5cb7b75e5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab2e5893b8418b3bbf4c88fc5cb7b75e5"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00219.html#ab2e5893b8418b3bbf4c88fc5cb7b75e5">~ModBaseT</a> ()</td></tr>
+<tr class="memdesc:ab2e5893b8418b3bbf4c88fc5cb7b75e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual desctructor. <br /></td></tr>
+<tr class="separator:ab2e5893b8418b3bbf4c88fc5cb7b75e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2263cecf2fe777ce711d7ea27f5a3fe9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2263cecf2fe777ce711d7ea27f5a3fe9"></a>
+virtual const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00219.html#a2263cecf2fe777ce711d7ea27f5a3fe9">name</a> () const </td></tr>
+<tr class="memdesc:a2263cecf2fe777ce711d7ea27f5a3fe9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set module's name (using DECIMATER_MODNAME macro) <br /></td></tr>
+<tr class="separator:a2263cecf2fe777ce711d7ea27f5a3fe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec5ede626422c446f296cd186c740797"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec5ede626422c446f296cd186c740797"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00219.html#aec5ede626422c446f296cd186c740797">is_binary</a> (void) const </td></tr>
+<tr class="memdesc:aec5ede626422c446f296cd186c740797"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if criteria returns a binary value. <br /></td></tr>
+<tr class="separator:aec5ede626422c446f296cd186c740797"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36fbc3ecb0b707e2087aea565c5bd6b5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a36fbc3ecb0b707e2087aea565c5bd6b5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00219.html#a36fbc3ecb0b707e2087aea565c5bd6b5">set_binary</a> (bool _b)</td></tr>
+<tr class="memdesc:a36fbc3ecb0b707e2087aea565c5bd6b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set whether module is binary or not. <br /></td></tr>
+<tr class="separator:a36fbc3ecb0b707e2087aea565c5bd6b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c6972aeffef98839951846051690c0b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2c6972aeffef98839951846051690c0b"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00219.html#a2c6972aeffef98839951846051690c0b">initialize</a> ()</td></tr>
+<tr class="memdesc:a2c6972aeffef98839951846051690c0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize module-internal stuff. <br /></td></tr>
+<tr class="separator:a2c6972aeffef98839951846051690c0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb81c6b9a752741fce2366ca605cd14c"><td class="memItemLeft" align="right" valign="top">virtual float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00219.html#acb81c6b9a752741fce2366ca605cd14c">collapse_priority</a> (const <a class="el" href="a00110.html">CollapseInfoT</a>&lt; MeshT &gt; &amp;)</td></tr>
+<tr class="memdesc:acb81c6b9a752741fce2366ca605cd14c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return collapse priority.  <a href="#acb81c6b9a752741fce2366ca605cd14c">More...</a><br /></td></tr>
+<tr class="separator:acb81c6b9a752741fce2366ca605cd14c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d6aa846add0068b1e2bd7005e60edb4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4d6aa846add0068b1e2bd7005e60edb4"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00219.html#a4d6aa846add0068b1e2bd7005e60edb4">preprocess_collapse</a> (const <a class="el" href="a00110.html">CollapseInfoT</a>&lt; MeshT &gt; &amp;)</td></tr>
+<tr class="memdesc:a4d6aa846add0068b1e2bd7005e60edb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Before _from_vh has been collapsed into _to_vh, this method will be called. <br /></td></tr>
+<tr class="separator:a4d6aa846add0068b1e2bd7005e60edb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b79ddfa2e7771572dd558c928edcdeb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9b79ddfa2e7771572dd558c928edcdeb"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00219.html#a9b79ddfa2e7771572dd558c928edcdeb">postprocess_collapse</a> (const <a class="el" href="a00110.html">CollapseInfoT</a>&lt; MeshT &gt; &amp;)</td></tr>
+<tr class="memdesc:a9b79ddfa2e7771572dd558c928edcdeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">After _from_vh has been collapsed into _to_vh, this method will be called. <br /></td></tr>
+<tr class="separator:a9b79ddfa2e7771572dd558c928edcdeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f1b2156b44cff425dd758e84218f0db"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00219.html#a3f1b2156b44cff425dd758e84218f0db">set_error_tolerance_factor</a> (double _factor)</td></tr>
+<tr class="memdesc:a3f1b2156b44cff425dd758e84218f0db"><td class="mdescLeft">&#160;</td><td class="mdescRight">This provides a function that allows the setting of a percentage of the original contraint.  <a href="#a3f1b2156b44cff425dd758e84218f0db">More...</a><br /></td></tr>
+<tr class="separator:a3f1b2156b44cff425dd758e84218f0db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_methods_a00214"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a00214')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="a00214.html">OpenMesh::Decimater::ModBaseT&lt; MeshT &gt;</a></td></tr>
-<tr class="memitem:ac434e4c53a1502b51c9bf8f79214727e inherit pro_methods_a00214"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00214.html#ac434e4c53a1502b51c9bf8f79214727e">ModBaseT</a> (MeshT &amp;_mesh, bool _is_binary)</td></tr>
-<tr class="memdesc:ac434e4c53a1502b51c9bf8f79214727e inherit pro_methods_a00214"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#ac434e4c53a1502b51c9bf8f79214727e">More...</a><br /></td></tr>
-<tr class="separator:ac434e4c53a1502b51c9bf8f79214727e inherit pro_methods_a00214"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b4ef38dac53440f7a01402a6844722a inherit pro_methods_a00214"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4b4ef38dac53440f7a01402a6844722a"></a>
-MeshT &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00214.html#a4b4ef38dac53440f7a01402a6844722a">mesh</a> ()</td></tr>
-<tr class="memdesc:a4b4ef38dac53440f7a01402a6844722a inherit pro_methods_a00214"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access the mesh associated with the decimater. <br /></td></tr>
-<tr class="separator:a4b4ef38dac53440f7a01402a6844722a inherit pro_methods_a00214"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_a00214"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a00214')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="a00214.html">OpenMesh::Decimater::ModBaseT&lt; MeshT &gt;</a></td></tr>
-<tr class="memitem:a3893f0f6368f1a1fe5e37f6006d72d62 inherit pro_attribs_a00214"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3893f0f6368f1a1fe5e37f6006d72d62"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:ac434e4c53a1502b51c9bf8f79214727e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00219.html#ac434e4c53a1502b51c9bf8f79214727e">ModBaseT</a> (MeshT &amp;_mesh, bool _is_binary)</td></tr>
+<tr class="memdesc:ac434e4c53a1502b51c9bf8f79214727e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#ac434e4c53a1502b51c9bf8f79214727e">More...</a><br /></td></tr>
+<tr class="separator:ac434e4c53a1502b51c9bf8f79214727e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b4ef38dac53440f7a01402a6844722a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4b4ef38dac53440f7a01402a6844722a"></a>
+MeshT &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00219.html#a4b4ef38dac53440f7a01402a6844722a">mesh</a> ()</td></tr>
+<tr class="memdesc:a4b4ef38dac53440f7a01402a6844722a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access the mesh associated with the decimater. <br /></td></tr>
+<tr class="separator:a4b4ef38dac53440f7a01402a6844722a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a3893f0f6368f1a1fe5e37f6006d72d62"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3893f0f6368f1a1fe5e37f6006d72d62"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>error_tolerance_factor_</b></td></tr>
-<tr class="separator:a3893f0f6368f1a1fe5e37f6006d72d62 inherit pro_attribs_a00214"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a3893f0f6368f1a1fe5e37f6006d72d62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;class MeshT&gt;<br />
-class OpenMesh::Decimater::ModIndependentSetsT&lt; MeshT &gt;</h3>
+<div class="textblock"><h3>template&lt;typename MeshT&gt;<br />
+class OpenMesh::Decimater::ModBaseT&lt; MeshT &gt;</h3>
 
-<p>Lock one-ring around remaining vertex after a collapse to prevent further collapses of halfedges incident to the one-ring vertices. </p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
-<li>OpenMesh/Tools/Decimater/<a class="el" href="a00550_source.html">ModIndependentSetsT.hh</a></li>
+<p>Base class for all decimation modules. </p>
+<p>Each module has to implement this interface. To build your own module you have to</p><ol type="1">
+<li>derive from this class.</li>
+<li>create the basic settings with <a class="el" href="a00555.html#ae1f2d4c274e420c0e81d52cf17cc1c5b" title="Convenience macro, to be used in derived modules The macro defines the types. ">DECIMATING_MODULE()</a>.</li>
+<li>override <a class="el" href="a00219.html#acb81c6b9a752741fce2366ca605cd14c" title="Return collapse priority. ">collapse_priority()</a>, if necessary.</li>
+<li>override <a class="el" href="a00219.html#a2c6972aeffef98839951846051690c0b" title="Initialize module-internal stuff. ">initialize()</a>, if necessary.</li>
+<li>override <a class="el" href="a00219.html#a9b79ddfa2e7771572dd558c928edcdeb" title="After _from_vh has been collapsed into _to_vh, this method will be called. ">postprocess_collapse()</a>, if necessary.</li>
+</ol>
+<p>A module has two major working modes:</p><ol type="1">
+<li>binary mode</li>
+<li>non-binary mode</li>
+</ol>
+<p>In the binary mode <a class="el" href="a00219.html#acb81c6b9a752741fce2366ca605cd14c" title="Return collapse priority. ">collapse_priority()</a> checks a constraint and returns LEGAL_COLLAPSE or ILLEGAL_COLLAPSE.</p>
+<p>In the non-binary mode the module computes a float error value in the range [0, inf) and returns it. In the case a constraint has been set, e.g. the error must be lower than a upper bound, and the constraint is violated, <a class="el" href="a00219.html#acb81c6b9a752741fce2366ca605cd14c" title="Return collapse priority. ">collapse_priority()</a> must return ILLEGAL_COLLAPSE.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="a00219.html#acb81c6b9a752741fce2366ca605cd14c" title="Return collapse priority. ">collapse_priority()</a></dd></dl>
+<dl class="todo"><dt><b><a class="el" href="a00757.html#_todo000004">Todo:</a></b></dt><dd>"Tutorial on building a custom decimation module."</dd></dl>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a class="anchor" id="a49500127c96591367298aa17e8527e44"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename MeshT&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">anonymous enum</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a49500127c96591367298aa17e8527e44afc88837943f46ccbf0ef35d3fcf9c5b1"></a>ILLEGAL_COLLAPSE&#160;</td><td class="fielddoc">
+<p>indicates an illegal collapse </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a49500127c96591367298aa17e8527e44a2b521064f4abfdfb6eb5464308b6f6e7"></a>LEGAL_COLLAPSE&#160;</td><td class="fielddoc">
+<p>indicates a legal collapse </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="ac434e4c53a1502b51c9bf8f79214727e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename MeshT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="a00219.html">OpenMesh::Decimater::ModBaseT</a>&lt; MeshT &gt;::<a class="el" href="a00219.html">ModBaseT</a> </td>
+          <td>(</td>
+          <td class="paramtype">MeshT &amp;&#160;</td>
+          <td class="paramname"><em>_mesh</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>_is_binary</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Default constructor. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="a00004.html">Mesh Decimation Framework</a> </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="acb81c6b9a752741fce2366ca605cd14c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename MeshT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual float <a class="el" href="a00219.html">OpenMesh::Decimater::ModBaseT</a>&lt; MeshT &gt;::collapse_priority </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="a00110.html">CollapseInfoT</a>&lt; MeshT &gt; &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return collapse priority. </p>
+<p>In the binary mode <a class="el" href="a00219.html#acb81c6b9a752741fce2366ca605cd14c" title="Return collapse priority. ">collapse_priority()</a> checks a constraint and returns LEGAL_COLLAPSE or ILLEGAL_COLLAPSE.</p>
+<p>In the non-binary mode the module computes a float error value in the range [0, inf) and returns it. In the case a constraint has been set, e.g. the error must be lower than a upper bound, and the constraint is violated, <a class="el" href="a00219.html#acb81c6b9a752741fce2366ca605cd14c" title="Return collapse priority. ">collapse_priority()</a> must return ILLEGAL_COLLAPSE.</p>
+<dl class="section return"><dt>Returns</dt><dd>Collapse priority in the range [0,inf), <code>LEGAL_COLLAPSE</code> or <code>ILLEGAL_COLLAPSE</code>. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="a00225.html#a46e41a1f64c62f72207d842f4cb581af">OpenMesh::Decimater::ModNormalDeviationT&lt; MeshT &gt;</a>, <a class="el" href="a00226.html#ae8fc0ecbd533ba2a8ce00f364ce43a38">OpenMesh::Decimater::ModNormalFlippingT&lt; MeshT &gt;</a>, <a class="el" href="a00222.html#a4fe09f7156ee291e13d63033ee8cba42">OpenMesh::Decimater::ModHausdorffT&lt; MeshT &gt;</a>, <a class="el" href="a00229.html#ade6fe704e576b3e0f73453ffd8cad0fd">OpenMesh::Decimater::ModRoundnessT&lt; MeshT &gt;</a>, <a class="el" href="a00228.html#af831bbc194faf3a3c346bd215f01f413">OpenMesh::Decimater::ModQuadricT&lt; MeshT &gt;</a>, <a class="el" href="a00228.html#af831bbc194faf3a3c346bd215f01f413">OpenMesh::Decimater::ModQuadricT&lt; D &gt;</a>, and <a class="el" href="a00220.html#a8b205feac99470a63e6c3351088513a0">OpenMesh::Decimater::ModEdgeLengthT&lt; MeshT &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3f1b2156b44cff425dd758e84218f0db"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename MeshT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="a00219.html">OpenMesh::Decimater::ModBaseT</a>&lt; MeshT &gt;::set_error_tolerance_factor </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>_factor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This provides a function that allows the setting of a percentage of the original contraint. </p>
+<p>Note that the module might need to be re-initialized again after setting the percentage </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_factor</td><td>has to be in the closed interval between 0.0 and 1.0 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="a00225.html#a03b1ad704d30d9a3d8cbf0ba1d97af46">OpenMesh::Decimater::ModNormalDeviationT&lt; MeshT &gt;</a>, <a class="el" href="a00229.html#a14fa6c8dc43d6621a3c0cb5404e1a5de">OpenMesh::Decimater::ModRoundnessT&lt; MeshT &gt;</a>, <a class="el" href="a00226.html#a7bf4a80d6dbfa5a7fff510797e3ac112">OpenMesh::Decimater::ModNormalFlippingT&lt; MeshT &gt;</a>, <a class="el" href="a00228.html#a31113d67dcd8953edef8377572e0b173">OpenMesh::Decimater::ModQuadricT&lt; MeshT &gt;</a>, <a class="el" href="a00228.html#a31113d67dcd8953edef8377572e0b173">OpenMesh::Decimater::ModQuadricT&lt; D &gt;</a>, <a class="el" href="a00222.html#a71936976d0d95a85dbea2e50cc638b82">OpenMesh::Decimater::ModHausdorffT&lt; MeshT &gt;</a>, <a class="el" href="a00217.html#a0de961edd95e71ce601e2f675c11b648">OpenMesh::Decimater::ModAspectRatioT&lt; MeshT &gt;</a>, and <a class="el" href="a00220.html#a50454bc8ea7dd04451def96d6e447654">OpenMesh::Decimater::ModEdgeLengthT&lt; MeshT &gt;</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>OpenMesh/Tools/Decimater/<a class="el" href="a00555_source.html">ModBaseT.hh</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -238,7 +357,6 @@ class OpenMesh::Decimater::ModIndependentSetsT&lt; MeshT &gt;</h3>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

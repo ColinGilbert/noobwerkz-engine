@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh/Tools/VDPM/MeshTraits.hh Source File</title>
+<title>OpenMesh: OpenMesh/Tools/Utils/Gnuplot.hh Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -105,150 +106,172 @@ $(document).ready(function(){initNavTree('a00607_source.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">MeshTraits.hh</div>  </div>
+<div class="title">Gnuplot.hh</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* ========================================================================= *</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> *                                                                           *</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> *                               OpenMesh                                    *</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> *           Copyright (c) 2001-2015, RWTH-Aachen University                 *</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> *           Department of Computer Graphics and Multimedia                  *</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> *                          All rights reserved.                             *</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> *                            www.openmesh.org                               *</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> *                                                                           *</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> *---------------------------------------------------------------------------*</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> * This file is part of OpenMesh.                                            *</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> *---------------------------------------------------------------------------*</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> *                                                                           *</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> * Redistribution and use in source and binary forms, with or without        *</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> * modification, are permitted provided that the following conditions        *</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> * are met:                                                                  *</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> *                                                                           *</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> * 1. Redistributions of source code must retain the above copyright notice, *</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> *    this list of conditions and the following disclaimer.                  *</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"> *                                                                           *</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment"> * 2. Redistributions in binary form must reproduce the above copyright      *</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment"> *    notice, this list of conditions and the following disclaimer in the    *</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> *    documentation and/or other materials provided with the distribution.   *</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> *                                                                           *</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"> * 3. Neither the name of the copyright holder nor the names of its          *</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment"> *    contributors may be used to endorse or promote products derived from   *</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment"> *    this software without specific prior written permission.               *</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment"> *                                                                           *</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS       *</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment"> * &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED *</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment"> * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A           *</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment"> * PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER *</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment"> * OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,  *</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,       *</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR        *</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment"> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF    *</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment"> * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING      *</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment"> * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS        *</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment"> * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.              *</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment"> *                                                                           *</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment"> * ========================================================================= */</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">/*===========================================================================*\</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment"> *                                                                           *             </span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment"> *   $Revision: 1258 $                                                         *</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment"> *   $Date: 2015-04-28 15:07:46 +0200 (Di, 28 Apr 2015) $                   *</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment"> *                                                                           *</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">\*===========================================================================*/</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">//  CLASS VDPMTraits</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// A C++ interface to gnuplot. </span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// This is a direct translation from the C interface</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// written by N. Devillard (which is available from</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">// http://ndevilla.free.fr/gnuplot/).</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// As in the C interface this uses pipes and so wont</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// run on a system that doesn&#39;t have POSIX pipe </span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// support</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// Rajarshi Guha</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// &lt;rajarshi@presidency.com&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// 07/03/03</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment"></span><span class="comment">//</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// A little correction for Win32 compatibility</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">// and MS VC 6.0 done by V.Chyzhdzenka </span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">// Notes:</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// 1. Added private method Gnuplot::init().</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">// 2. Temporary file is created in th current</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">//    folder but not in /tmp.</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">// 3. Added #indef WIN32 e.t.c. where is needed.</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment">// 4. Added private member m_sGNUPlotFileName is</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment">//    a name of executed GNUPlot file.</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment">// Viktor Chyzhdzenka</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment">// e-mail: chyzhdzenka@mail.ru</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">// 20/05/03</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#ifndef _GNUPLOT_HH</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor">#define _GNUPLOT_HH</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor">#include &lt;OpenMesh/Core/System/config.hh&gt;</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">// #ifndef WIN32</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment">// #  include &lt;unistd.h&gt;</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">// #else</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">// #  pragma warning (disable : 4786) // Disable 4786 warning for MS VC 6.0</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment">// #endif</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#if defined(OM_CC_MIPS)</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">#  include &lt;stdio.h&gt;</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">#  include &lt;cstdio&gt;</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">#include &lt;stdexcept&gt;</span></div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#ifndef OPENMESH_VDPM_TRAITS_HH</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#define OPENMESH_VDPM_TRAITS_HH</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">//== INCLUDES =================================================================</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#include &lt;OpenMesh/Core/System/config.h&gt;</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="a00496.html">OpenMesh/Core/Mesh/Traits.hh</a>&gt;</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="preprocessor">#include &lt;OpenMesh/Tools/VDPM/VHierarchy.hh&gt;</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">// ----------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#ifdef WIN32</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor">#  define GP_MAX_TMP_FILES    27 //27 temporary files it&#39;s Microsoft restriction</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#  define GP_MAX_TMP_FILES    64</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">#  define GP_TMP_NAME_SIZE    512</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#  define GP_TITLE_SIZE       80</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="preprocessor">#define GP_CMD_SIZE         1024</span></div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">//== FORWARDDECLARATIONS ======================================================</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">// ----------------------------------------------------------------------------</span></div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">//== NAMESPACES ===============================================================</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="keyword">namespace </span><a class="code" href="a00715.html">OpenMesh</a> {</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="keyword">namespace </span>VDPM {</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment">//== CLASS DEFINITION =========================================================</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;              </div>
-<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="a00207.html">   83</a></span>&#160;<span class="keyword">struct </span>OPENMESHDLLEXPORT <a class="code" href="a00207.html">MeshTraits</a> : <span class="keyword">public</span> <a class="code" href="a00127.html">DefaultTraits</a></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;{</div>
-<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="a00310.html">   85</a></span>&#160;  <a class="code" href="a00496.html#aa5146d858418fcb93715406a6ce8e30f">VertexTraits</a></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;  {</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <a class="code" href="a00317.html">VHierarchyNodeHandle</a> vhierarchy_node_handle()</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    {</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;      <span class="keywordflow">return</span> node_handle_; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    }</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keywordtype">void</span> set_vhierarchy_node_handle(<a class="code" href="a00317.html">VHierarchyNodeHandle</a> _node_handle)</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    {</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;      node_handle_ = _node_handle; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    }</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordtype">bool</span> is_ancestor(<span class="keyword">const</span> <a class="code" href="a00318.html">VHierarchyNodeIndex</a> &amp;_other)</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    {</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">false</span>; </div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    }</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keyword">using namespace </span><a class="code" href="a00752.html">std</a>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment">// ----------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="a00179.html">   74</a></span>&#160;<span class="keyword">class </span><a class="code" href="a00179.html">GnuplotException</a> : <span class="keyword">public</span> runtime_error</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;{</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;  <a class="code" href="a00179.html">GnuplotException</a>(<span class="keyword">const</span> <span class="keywordtype">string</span> &amp;msg) : runtime_error(msg){}</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;};</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="comment">// ----------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="a00178.html">   92</a></span>&#160;<span class="keyword">class </span><a class="code" href="a00178.html">Gnuplot</a></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;{</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;  FILE            *gnucmd;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;  <span class="keywordtype">string</span>           pstyle;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;  vector&lt;string&gt;   to_delete;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  <span class="keywordtype">int</span>              nplots;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;  <span class="keywordtype">bool</span>             get_program_path(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; );</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  <span class="keywordtype">bool</span>             valid;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;  <span class="comment">// Name of executed GNUPlot file</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;  <span class="keyword">static</span> <span class="keywordtype">string</span>    gnuplot_executable_;</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <a class="code" href="a00317.html">VHierarchyNodeHandle</a>  node_handle_;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;   </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  };</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;  </div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;  <a class="code" href="a00496.html#a427ff443d5e47c76b9c45a29213e63db">VertexAttributes</a>(<a class="code" href="a00716.html#ab78a93560926cd2f9958cb028f7ea96dad3e94e10c76894ebce6048b8bbb77a74">OpenMesh::Attributes::Status</a> |</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                   <a class="code" href="a00716.html#ab78a93560926cd2f9958cb028f7ea96da213616dd2e4d9744d863587001a77988">OpenMesh::Attributes::Normal</a>);</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;  <a class="code" href="a00496.html#a72688ff15a275a41a98159ce72eaab4f">HalfedgeAttributes</a>(<a class="code" href="a00716.html#ab78a93560926cd2f9958cb028f7ea96dafaaebe1808b5cce96ad4e19df471d58a">OpenMesh::Attributes::PrevHalfedge</a>);</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;  <a class="code" href="a00496.html#a8126b6d66b0b65c5e23e8856c6092c28">EdgeAttributes</a>(<a class="code" href="a00716.html#ab78a93560926cd2f9958cb028f7ea96dad3e94e10c76894ebce6048b8bbb77a74">OpenMesh::Attributes::Status</a>);</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;  <a class="code" href="a00496.html#a75f0d731abf2489208086aac5147eefc">FaceAttributes</a>(<a class="code" href="a00716.html#ab78a93560926cd2f9958cb028f7ea96dad3e94e10c76894ebce6048b8bbb77a74">OpenMesh::Attributes::Status</a> |</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                 <a class="code" href="a00716.html#ab78a93560926cd2f9958cb028f7ea96da213616dd2e4d9744d863587001a77988">OpenMesh::Attributes::Normal</a>);</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;};</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;  <span class="keywordtype">void</span> init();</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;  <a class="code" href="a00178.html">Gnuplot</a>();</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;  </div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;  <a class="code" href="a00178.html">Gnuplot</a>(<span class="keyword">const</span> <span class="keywordtype">string</span> &amp; _style);</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;} <span class="comment">// namespace VDPM</span></div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;} <span class="comment">// namespace OpenMesh</span></div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="preprocessor">#endif // OPENMESH_VDPM_TRAITS_HH defined</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;</div>
-<div class="ttc" id="a00127_html"><div class="ttname"><a href="a00127.html">OpenMesh::DefaultTraits</a></div><div class="ttdoc">Base class for all traits. </div><div class="ttdef"><b>Definition:</b> Traits.hh:126</div></div>
-<div class="ttc" id="a00715_html"><div class="ttname"><a href="a00715.html">OpenMesh</a></div><div class="ttdoc">Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...</div><div class="ttdef"><b>Definition:</b> MeshItems.hh:64</div></div>
-<div class="ttc" id="a00496_html_a75f0d731abf2489208086aac5147eefc"><div class="ttname"><a href="a00496.html#a75f0d731abf2489208086aac5147eefc">FaceAttributes</a></div><div class="ttdeci">#define FaceAttributes(_i)</div><div class="ttdoc">Macro for defining the face attributes. See Specifying your MyMesh. </div><div class="ttdef"><b>Definition:</b> Traits.hh:93</div></div>
-<div class="ttc" id="a00496_html"><div class="ttname"><a href="a00496.html">Traits.hh</a></div><div class="ttdoc">This file defines the default traits and some convenience macros. </div></div>
-<div class="ttc" id="a00318_html"><div class="ttname"><a href="a00318.html">OpenMesh::VDPM::VHierarchyNodeIndex</a></div><div class="ttdoc">Index of vertex hierarchy node. </div><div class="ttdef"><b>Definition:</b> VHierarchyNodeIndex.hh:78</div></div>
-<div class="ttc" id="a00716_html_ab78a93560926cd2f9958cb028f7ea96da213616dd2e4d9744d863587001a77988"><div class="ttname"><a href="a00716.html#ab78a93560926cd2f9958cb028f7ea96da213616dd2e4d9744d863587001a77988">OpenMesh::Attributes::Normal</a></div><div class="ttdoc">Add normals to mesh item (vertices/faces) </div><div class="ttdef"><b>Definition:</b> Attributes.hh:87</div></div>
-<div class="ttc" id="a00317_html"><div class="ttname"><a href="a00317.html">OpenMesh::VDPM::VHierarchyNodeHandle</a></div><div class="ttdoc">Handle for vertex hierarchy nodes. </div><div class="ttdef"><b>Definition:</b> VHierarchyNode.hh:82</div></div>
-<div class="ttc" id="a00496_html_a427ff443d5e47c76b9c45a29213e63db"><div class="ttname"><a href="a00496.html#a427ff443d5e47c76b9c45a29213e63db">VertexAttributes</a></div><div class="ttdeci">#define VertexAttributes(_i)</div><div class="ttdoc">Macro for defining the vertex attributes. See Specifying your MyMesh. </div><div class="ttdef"><b>Definition:</b> Traits.hh:84</div></div>
-<div class="ttc" id="a00716_html_ab78a93560926cd2f9958cb028f7ea96dafaaebe1808b5cce96ad4e19df471d58a"><div class="ttname"><a href="a00716.html#ab78a93560926cd2f9958cb028f7ea96dafaaebe1808b5cce96ad4e19df471d58a">OpenMesh::Attributes::PrevHalfedge</a></div><div class="ttdoc">Add storage for previous halfedge (halfedges). The bit is set by default in the DefaultTraits. </div><div class="ttdef"><b>Definition:</b> Attributes.hh:89</div></div>
-<div class="ttc" id="a00496_html_a8126b6d66b0b65c5e23e8856c6092c28"><div class="ttname"><a href="a00496.html#a8126b6d66b0b65c5e23e8856c6092c28">EdgeAttributes</a></div><div class="ttdeci">#define EdgeAttributes(_i)</div><div class="ttdoc">Macro for defining the edge attributes. See Specifying your MyMesh. </div><div class="ttdef"><b>Definition:</b> Traits.hh:90</div></div>
-<div class="ttc" id="a00496_html_a72688ff15a275a41a98159ce72eaab4f"><div class="ttname"><a href="a00496.html#a72688ff15a275a41a98159ce72eaab4f">HalfedgeAttributes</a></div><div class="ttdeci">#define HalfedgeAttributes(_i)</div><div class="ttdoc">Macro for defining the halfedge attributes. See Specifying your MyMesh. </div><div class="ttdef"><b>Definition:</b> Traits.hh:87</div></div>
-<div class="ttc" id="a00496_html_aa5146d858418fcb93715406a6ce8e30f"><div class="ttname"><a href="a00496.html#aa5146d858418fcb93715406a6ce8e30f">VertexTraits</a></div><div class="ttdeci">#define VertexTraits</div><div class="ttdoc">Macro for defining the vertex traits. See Specifying your MyMesh. </div><div class="ttdef"><b>Definition:</b> Traits.hh:96</div></div>
-<div class="ttc" id="a00716_html_ab78a93560926cd2f9958cb028f7ea96dad3e94e10c76894ebce6048b8bbb77a74"><div class="ttname"><a href="a00716.html#ab78a93560926cd2f9958cb028f7ea96dad3e94e10c76894ebce6048b8bbb77a74">OpenMesh::Attributes::Status</a></div><div class="ttdoc">Add status to mesh item (all items) </div><div class="ttdef"><b>Definition:</b> Attributes.hh:90</div></div>
-<div class="ttc" id="a00207_html"><div class="ttname"><a href="a00207.html">OpenMesh::VDPM::MeshTraits</a></div><div class="ttdoc">Mesh traits for View Dependent Progressive Meshes. </div><div class="ttdef"><b>Definition:</b> MeshTraits.hh:83</div></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;  <a class="code" href="a00178.html">Gnuplot</a>(<span class="keyword">const</span> <span class="keywordtype">string</span> &amp; _title,</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;          <span class="keyword">const</span> <span class="keywordtype">string</span> &amp; _style,</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;          <span class="keyword">const</span> <span class="keywordtype">string</span> &amp; _xlabel,</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;          <span class="keyword">const</span> <span class="keywordtype">string</span> &amp; _ylabel,</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;          vector&lt;double&gt; _x, vector&lt;double&gt; _y);</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;  </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;  <a class="code" href="a00178.html">Gnuplot</a>(<span class="keyword">const</span> <span class="keywordtype">string</span> &amp;_title,</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;          <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;_style,</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;          <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;_xlabel,</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;          <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;_ylabel,</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;          vector&lt;double&gt; _x);</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;  ~<a class="code" href="a00178.html">Gnuplot</a>();</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;  </div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;  <span class="keywordtype">void</span> cmd(<span class="keyword">const</span> <span class="keywordtype">char</span> *_cmd, ...);</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;  </div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;  <span class="keywordtype">void</span> set_style(<span class="keyword">const</span> <span class="keywordtype">string</span> &amp; _style);   </div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;  <span class="keywordtype">void</span> set_ylabel(<span class="keyword">const</span> <span class="keywordtype">string</span> &amp; _ylabel); </div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;  <span class="keywordtype">void</span> set_xlabel(<span class="keyword">const</span> <span class="keywordtype">string</span> &amp; _xlabel); </div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;  <span class="keywordtype">void</span> plot_x(vector&lt;double&gt; _x, <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;_title);</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;  </div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;  <span class="keywordtype">void</span> plot_xy(vector&lt;double&gt; _x, vector&lt;double&gt; _y, <span class="keyword">const</span> <span class="keywordtype">string</span>  &amp;_title);</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;  </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;  <span class="keywordtype">void</span> plot_slope(</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;                  <span class="keywordtype">double</span> _a,</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                  <span class="keywordtype">double</span> _b,</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                  <span class="keyword">const</span> <span class="keywordtype">string</span> &amp; _title</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;                  );</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;  </div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;  <span class="keywordtype">void</span> plot_equation(</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                     <span class="keyword">const</span> <span class="keywordtype">string</span> &amp; _equation,</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                     <span class="keyword">const</span> <span class="keywordtype">string</span> &amp; _title</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;                     );</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;  </div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;  <span class="keywordtype">void</span> reset_plot(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;</div>
+<div class="line"><a name="l00174"></a><span class="lineno"><a class="line" href="a00178.html#a977e731d99c7a768f8d93eb50e2b8f79">  174</a></span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="a00178.html#a977e731d99c7a768f8d93eb50e2b8f79">is_valid</a>(<span class="keywordtype">void</span>)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> valid; }</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;</div>
+<div class="line"><a name="l00177"></a><span class="lineno"><a class="line" href="a00178.html#a8e121a09a1de635b3a6752c7dffd4fc3">  177</a></span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="a00178.html#a8e121a09a1de635b3a6752c7dffd4fc3">is_active</a>(<span class="keywordtype">void</span>)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> this-&gt;nplots &gt; 0; }</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;};</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="comment">// ----------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="preprocessor">#endif // _GNUPLOT_HH</span></div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="comment">// ============================================================================</span></div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;</div>
+<div class="ttc" id="a00179_html"><div class="ttname"><a href="a00179.html">GnuplotException</a></div><div class="ttdoc">Exception thrown by class Gnuplot. </div><div class="ttdef"><b>Definition:</b> Gnuplot.hh:74</div></div>
+<div class="ttc" id="a00178_html_a8e121a09a1de635b3a6752c7dffd4fc3"><div class="ttname"><a href="a00178.html#a8e121a09a1de635b3a6752c7dffd4fc3">Gnuplot::is_active</a></div><div class="ttdeci">bool is_active(void) const </div><div class="ttdoc">Is Self active, i.e. does it have an active plot? </div><div class="ttdef"><b>Definition:</b> Gnuplot.hh:177</div></div>
+<div class="ttc" id="a00178_html"><div class="ttname"><a href="a00178.html">Gnuplot</a></div><div class="ttdoc">Utility class interfacing with Gnuplot. </div><div class="ttdef"><b>Definition:</b> Gnuplot.hh:92</div></div>
+<div class="ttc" id="a00178_html_a977e731d99c7a768f8d93eb50e2b8f79"><div class="ttname"><a href="a00178.html#a977e731d99c7a768f8d93eb50e2b8f79">Gnuplot::is_valid</a></div><div class="ttdeci">bool is_valid(void) const </div><div class="ttdoc">Is Self valid? </div><div class="ttdef"><b>Definition:</b> Gnuplot.hh:174</div></div>
+<div class="ttc" id="a00752_html"><div class="ttname"><a href="a00752.html">std</a></div><div class="ttdoc">STL namespace. </div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <hr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

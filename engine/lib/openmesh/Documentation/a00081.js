@@ -1,9 +1,10 @@
 var a00081 =
 [
-    [ "HalfedgeT", "a00178.html", "a00178" ],
-    [ "VertexT", "a00309.html", "a00309" ],
-    [ "VertexAttributes", "a00081.html#a696510997f1c2c6cbf7975b6c40680d8a280bd81e822c54a399c456c33ae33d6a", null ],
-    [ "HalfedgeAttributes", "a00081.html#ade66067117a028dadbd6f6fcba57b7fea8c7256fe39a9e1c7c1c4f575d41bb5bf", null ],
-    [ "EdgeAttributes", "a00081.html#a5dba7fdbbf973741699dbaf23e5a3af2a3d0f87ea6484042f07e454de28fa3ee7", null ],
-    [ "FaceAttributes", "a00081.html#af645df2c785f75d7280ee8b928e8037fa6ec33ccb10890282c62046d47663a38e", null ]
+    [ "_STLWriter_", "a00081.html#af0f85fc9d552a68179f3697fe820972d", null ],
+    [ "~_STLWriter_", "a00081.html#a340821184c3f578745d5739def5af9e2", null ],
+    [ "binary_size", "a00081.html#a0e5685046e08e90577ff1e230bd2498a", null ],
+    [ "get_description", "a00081.html#a88b1ada06eb85171f9bdf14762636276", null ],
+    [ "get_extensions", "a00081.html#acdd9bea02020e107711e0b475f160cc9", null ],
+    [ "write", "a00081.html#aa202ae93b2cd9c7946291a56478ec570", null ],
+    [ "write", "a00081.html#a2fe2fe180f3efdd8a7d8650f7791081a", null ]
 ];

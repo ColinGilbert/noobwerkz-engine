@@ -1,11 +1,7 @@
 var a00230 =
 [
-    [ "Vec3", "a00230.html#a331e9c8f2939c95852d241ba0e27b288", null ],
-    [ "NormalConeT", "a00230.html#a2b95db3a078fa3c5937e35900a2e5672", null ],
-    [ "NormalConeT", "a00230.html#a53c15696a4f1069ed3b934cd3d297853", null ],
-    [ "angle", "a00230.html#ad9495676461cac88ac967efac0231743", null ],
-    [ "center_normal", "a00230.html#a19af98981b8a70c237f310a33b6d786e", null ],
-    [ "max_angle", "a00230.html#ab5026b4a5db7a2bf6a795544081c93b2", null ],
-    [ "max_angle", "a00230.html#a0634eb78ca82616573d989f2bfafde9e", null ],
-    [ "merge", "a00230.html#a6fd9ba88a9b0049a91429a87c73862ec", null ]
+    [ "Value", "a00230.html#a23de4753d1d73a08a599e70583a96747", null ],
+    [ "value_type", "a00230.html#a368d56d0f34323eb044a346b307e7cd9", null ],
+    [ "MPropHandleT", "a00230.html#a0838a2c79027be89fd46643ca9f94f99", null ],
+    [ "MPropHandleT", "a00230.html#a5aee84b67a176144313d582b63790954", null ]
 ];

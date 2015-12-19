@@ -1,9 +1,14 @@
 var a00216 =
 [
-    [ "module_type", "a00216.html#af19f628827dcef46b1a8d0c8089395a3", null ],
-    [ "Self", "a00216.html#a0e3639e5bb92e31536592b4563df9714", null ],
-    [ "ModHandleT", "a00216.html#ac92064c74c3357c7dbcca86f1ab33042", null ],
-    [ "~ModHandleT", "a00216.html#a1363f675b0b3f1d7ca7cd3060562788d", null ],
-    [ "is_valid", "a00216.html#aad798bd729c73b0f1c445df21ed803ef", null ],
-    [ "BaseDecimaterT", "a00216.html#a05fd2fd36ea29292aef2422fd49dafdb", null ]
+    [ "CollapseInfo", "a00216.html#a88c5ffbe7d747ad3e90fcd32e9951b1c", null ],
+    [ "Mesh", "a00216.html#a9617c474f3118aad86f5f6695c5d03b2", null ],
+    [ "Module", "a00216.html#a729fab1aef13345727eb2f701beea745", null ],
+    [ "ModuleList", "a00216.html#a74adb268781e75a09eddb182e587b513", null ],
+    [ "ModuleListIterator", "a00216.html#a683d3ae2afa7e435737afae97575e543", null ],
+    [ "Self", "a00216.html#a1c7bb630a92dbc6c7f344a1522b21406", null ],
+    [ "MixedDecimaterT", "a00216.html#a3d9cb8dbee8294357f1ca9003f08d3a8", null ],
+    [ "~MixedDecimaterT", "a00216.html#a8af89fade2619e7ca14203c44b05cf12", null ],
+    [ "decimate", "a00216.html#a4dd84571cc11d67b43cbb139373d335f", null ],
+    [ "decimate_to", "a00216.html#a1fe2c6c2b3a63f00ca99b521c6fc2e42", null ],
+    [ "decimate_to_faces", "a00216.html#a649cc8f6cd7d423ee44374731f671494", null ]
 ];

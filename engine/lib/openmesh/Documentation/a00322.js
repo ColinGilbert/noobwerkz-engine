@@ -1,10 +1,14 @@
 var a00322 =
 [
-    [ "Handle", "a00322.html#a14b2cdecef6dd28326e8ccf421ab4b24", null ],
-    [ "Inherited", "a00322.html#a3c605608ee751d545f5acf0794d0f061", null ],
-    [ "Self", "a00322.html#ad52ee1ea798d090ae4ca78c2796e1c22", null ],
-    [ "VV", "a00322.html#aaeb46438b668f7aadac90f2a0a5ca47f", null ],
-    [ "raise", "a00322.html#a783eaafbc5bded0c15cbad10035f3dcd", null ],
-    [ "type", "a00322.html#a40966eca31178a2283475b93dd47d1ac", null ],
-    [ "CompositeT< M >", "a00322.html#a7cacb6579bb9d17013cf9f2b0bd3770f", null ]
+    [ "VFront", "a00322.html#a75aeba0707f402936f818d1f6b39b241", null ],
+    [ "add", "a00322.html#a24c9de0499c51ca6f32828e0f98786da", null ],
+    [ "begin", "a00322.html#a1b741319e496504bdf868f10247bb88f", null ],
+    [ "clear", "a00322.html#a47d616a7ffea952553aa634eabc4cbb1", null ],
+    [ "end", "a00322.html#abcfef5c821feaf3b97150426a522bc9f", null ],
+    [ "init", "a00322.html#a448188bd4a10d2d9f1dba08198a2d5d7", null ],
+    [ "is_active", "a00322.html#ab19b5661d19748de6c9a2d674de8e5a9", null ],
+    [ "next", "a00322.html#a0b1fecfa858d66f8fedd42268685c29d", null ],
+    [ "node_handle", "a00322.html#a2774625710f2c3a4b7b75b26102a8bfa", null ],
+    [ "remove", "a00322.html#ad32dd818568fd3f54102a3d375fdae00", null ],
+    [ "size", "a00322.html#a069dceaf8270fde722cddca27c9ce31b", null ]
 ];

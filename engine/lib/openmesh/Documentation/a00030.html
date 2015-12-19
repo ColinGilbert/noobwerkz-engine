@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -99,7 +100,7 @@ $(document).ready(function(){initNavTree('a00030.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">Compiling <a class="el" href="a00715.html" title="Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...">OpenMesh</a> </div>  </div>
+<div class="title">Compiling <a class="el" href="a00730.html" title="Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...">OpenMesh</a> </div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><h1><a class="anchor" id="compilers"></a>
@@ -153,7 +154,7 @@ Chosing build system</h1>
 Unix</h1>
 <h2><a class="anchor" id="linux_using_cmake"></a>
 Compiling OpenMesh using CMake</h2>
-<p>In order to compile OpenMesh, create a directory named e.g. "build" in <a class="el" href="a00715.html" title="Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...">OpenMesh</a>'s root directory. <b>Change to the newly created directory</b> and type <br />
+<p>In order to compile OpenMesh, create a directory named e.g. "build" in <a class="el" href="a00730.html" title="Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...">OpenMesh</a>'s root directory. <b>Change to the newly created directory</b> and type <br />
 <br />
  <code> cmake&#160;..&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;## Generates the appropriate Makefiles<br />
  make&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;## Builds the project<br />
@@ -171,7 +172,7 @@ Compiling OpenMesh using CMake</h2>
  <b>doc</b>: Builds the Documentation<br />
  <b>doc-install</b>: Builds the Documentation and installs it<br />
  <br />
- </p><dl class="section note"><dt>Note</dt><dd>When you link against the static libraries of <a class="el" href="a00715.html" title="Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...">OpenMesh</a> and get the error "can not be used when making a
+ </p><dl class="section note"><dt>Note</dt><dd>When you link against the static libraries of <a class="el" href="a00730.html" title="Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...">OpenMesh</a> and get the error "can not be used when making a
 shared object; recompile with -fPIC" you need to add "-fPIC" to the CMAKE_CXX_FLAGS. (This is usually added automatically)</dd></dl>
 <h1><a class="anchor" id="sec_compiling_windows"></a>
 Windows</h1>
@@ -193,7 +194,7 @@ Get cmake for windows from <a href="http://www.cmake.org/cmake/resources/softwar
 <li>
 Start the cmake gui and open the OpenMesh toplevel directory as source directory  </li>
 <li>
-Choose a build directory (e.g. create a directory called "build" in <a class="el" href="a00715.html" title="Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...">OpenMesh</a>'s root folder)  </li>
+Choose a build directory (e.g. create a directory called "build" in <a class="el" href="a00730.html" title="Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...">OpenMesh</a>'s root folder)  </li>
 <li>
 Click on configure .... If any libraries are left unconfigured, you can adjust the path manually. Rerun configure until everything is configured correctly. Attention: Some build variables are only visible in advanced view mode. Select Visual Studio 9 (2008), Visual Studio 10(2010), Visual Studio 11 (2012), Visual Studio 12 (2013) (Depending on your version) as generator.  </li>
 <li>
@@ -241,7 +242,6 @@ Compiling OpenMesh using CMake</h2>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

@@ -2,8 +2,8 @@ var NAVTREE =
 [
   [ "OpenMesh", "index.html", [
     [ "OpenMesh Documentation", "index.html", "index" ],
-    [ "Todo List", "a00742.html", null ],
-    [ "Deprecated List", "a00744.html", null ],
+    [ "Todo List", "a00758.html", null ],
+    [ "Deprecated List", "a00760.html", null ],
     [ "Modules", "modules.html", "modules" ],
     [ "Namespaces", null, [
       [ "Namespace List", "namespaces.html", "namespaces" ],
@@ -42,23 +42,24 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"a00081.html#ade66067117a028dadbd6f6fcba57b7fea8c7256fe39a9e1c7c1c4f575d41bb5bf",
-"a00085.html#a013bceb30351e7b5c92ced7df5d47c9a",
-"a00091.html#a2ba3fc3c6592669fd10c75ef22989083",
-"a00101.html#ae84b68aef1eadc265af487ff3eaaa148",
-"a00128.html#a96ea13d376c135f2b43d88de8360c766",
-"a00168.html#acab882b4d902e022c4f33f0fa3305c76",
-"a00190.html#a12fa6a51caaee41796501a106ed3100c",
-"a00196.html#aad3108336bda6bc7a6a70b53cca3a43a",
-"a00220.html#ab5a127bbc5af7d2ec291ff09404b0030",
-"a00240.html#a057718868453662d2989c0b05ef05943",
-"a00240.html#a9ca5417be1a5bbd673711327945bbfb4",
-"a00245.html#a3df25e822cf0df63c47bb18771c78162",
-"a00256.html#a6015b1bab47e1bbff4882f86e5616809",
-"a00270.html#adef5b1eaa33d1e25481314372fe7a213",
-"a00304.html#a6ff404699ab2fbc45b3987e20218617a",
-"a00396_source.html",
-"a00589_source.html"
+"a00082.html#a46f745e0db2bd441cc6d00cb1a028ebe",
+"a00086.html#ad93559cb53cf3ca7648508764ba4b2a4",
+"a00092.html#aaca3881714c7bf5c30e8a93bdb8ef8d8",
+"a00100.html#ac3c0fcb247b70c6f6a37b8c37b4e1863",
+"a00130.html#a2e2b51cb38ba9d88ffe1e99f668a089a",
+"a00158.html#a3c9b092336a8cb70c3d3ce9d92663042",
+"a00191.html#ac1fb9239612211caa02700db410df1f4",
+"a00198.html#aebd448c2a612a801147f62656d605208",
+"a00222.html#a4e638750b7aa9c885dfa88ffba72ded4",
+"a00244.html#a4c2bbb43717623b1836fcf533e849b49",
+"a00247.html#a71aecb0f5c3cd117fdcbeb686704c95b",
+"a00250.html#a5ec24476d2513efe71ddd1255a2ca444",
+"a00259.html#ad984e8acf6e5ae854bc7979addaedbb6",
+"a00276.html#a129372ccc43d66a01dd92e635b8419fda4e9f45facaa41709d1f7a15f1ac664ff",
+"a00298.html#a8f51284c13cfadd09cb362d52f7af2ad",
+"a00327.html#a5691b439a530e99d8e656d4ccd84db1e",
+"a00569_source.html",
+"functions_type_e.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

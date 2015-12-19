@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: Tutorials (code examples)</title>
+<title>OpenMesh: How to create your own project using OpenMesh</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -99,50 +100,56 @@ $(document).ready(function(){initNavTree('a00066.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">Tutorials (code examples) </div>  </div>
+<div class="title">How to create your own project using <a class="el" href="a00730.html" title="Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...">OpenMesh</a> </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>The OpenMesh mesh library is a powerful tool for handling polygonal meshes.</p>
-<p>Due to its inherent generative structure it allows the user to create mesh types which are custom tailored to the specific needs of the application. The user can either supply his own data structures for representing vertices, edges and faces or he can conveniently use the predefined structures of OpenMesh. Additionally OpenMesh offers dynamic properties allowing the user to attach and detach data to the mesh during runtime.</p>
-<p>This document is supposed to introduce the basic concepts of OpenMesh.</p>
-<p>In this tutorial we will introduce the OpenMesh library by means of simple examples. The first one just builds a polygonal mesh representing a cube and writes the result to standard output. The following examples develop a simple mesh smoother: Recall that the immediate neighbors of a vertex are called the 1-ring of this vertex. It is well known that a polygonal mesh can be smoothed by repeatedly replacing each vertex' position by the center of gravity (cog) of its 1-ring. The basic smoother will</p>
+<div class="textblock"><p>In this tutorial we will explain, how to create a new project using OpenMesh and build it with the CMake build system.</p>
+<p>We assume, that you have already downloaded the OpenMesh source files as well as installed the CMake build tools.</p>
+<p>There are quite few steps to follow to successfully add your own application to the build tree:</p>
 <ul>
-<li>read a polygonal mesh from standard input, </li>
-<li>compute the cog of the 1-ring of each vertex, </li>
-<li>replace each vertex' position by its cog and finally, </li>
-<li>write the mesh to standard output.</li>
+<li>Go to OpenMeshRoot/src/OpenMesh/Apps and create a new directory, say "MyOwnProject" </li>
+<li>Now create a new file called "CMakeLists.txt" containing the following lines:</li>
 </ul>
-<ol>
-<li>
-<a class="el" href="a00064.html">How to create your own project using OpenMesh</a> </li>
-<li>
-<a class="el" href="a00044.html">First Steps - Building a cube</a> </li>
-<li>
-<a class="el" href="a00046.html">Using iterators and circulators</a> </li>
-<li>
-<a class="el" href="a00048.html">Using (custom) properties</a> </li>
-<li>
-<a class="el" href="a00050.html">Using STL algorithms</a> </li>
-<li>
-<a class="el" href="a00052.html">Using standard properties</a> </li>
-<li>
-<a class="el" href="a00054.html">Using mesh attributes and traits</a> </li>
-<li>
-<a class="el" href="a00056.html">Extending the mesh using traits</a> </li>
-<li>
-<a class="el" href="a00058.html">Deleting geometry elements</a> </li>
-<li>
-<a class="el" href="a00060.html">Using IO::Options</a> </li>
-<li>
-<a class="el" href="a00062.html">Storing custom properties</a> </li>
-</ol>
+<div class="fragment"><div class="line">include (ACGCommon)</div>
+<div class="line"></div>
+<div class="line">include_directories (</div>
+<div class="line">  ../../..</div>
+<div class="line">  ${CMAKE_CURRENT_SOURCE_DIR}</div>
+<div class="line">)</div>
+<div class="line"></div>
+<div class="line">set (targetName MyOwnProject)</div>
+<div class="line"></div>
+<div class="line"><span class="preprocessor"># collect all header and source files</span></div>
+<div class="line">acg_append_files (headers <span class="stringliteral">&quot;*.hh&quot;</span> .)</div>
+<div class="line">acg_append_files (sources &quot;*.cc&quot; .)</div>
+<div class="line"></div>
+<div class="line">acg_add_executable (${targetName} ${headers} ${sources})</div>
+<div class="line"></div>
+<div class="line">target_link_libraries (${targetName}</div>
+<div class="line">  OpenMeshCore</div>
+<div class="line">  OpenMeshTools</div>
+<div class="line">)</div>
+<div class="line"></div>
+</div><!-- fragment --><p>(Remember to replace "MyProjectName" with whatever you have chosen as your project's name. Note: If you don't want to use *.hh and *.cc as your C++ source file suffices, you'll have to change this, too, because CMake won't build your sources otherwise.</p>
+<ul>
+<li>Create your source files as for example explained in the previous tutorial (<a class="el" href="a00046.html">First Steps - Building a cube</a>) and save them in the same directory.</li>
+</ul>
+<ul>
+<li>Add<div class="fragment"><div class="line">add_subdirectory (MyOwnProject) </div>
+</div><!-- fragment --> to OpenMeshRoot/src/OpenMesh/Apps/CMakeLists.txt (note: You can either add this line right after the other projects or at the end of the file).</li>
+</ul>
+<ul>
+<li>Create a directory called "build" in <a class="el" href="a00730.html" title="Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...">OpenMesh</a>'s root directory. Change to the newly created directory and call <div class="fragment"><div class="line">cmake .. </div>
+</div><!-- fragment --> and<div class="fragment"><div class="line">make </div>
+</div><!-- fragment --></li>
+</ul>
+<p>That's all. Your project will now be built. </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <hr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

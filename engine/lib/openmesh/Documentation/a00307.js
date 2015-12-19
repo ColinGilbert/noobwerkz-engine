@@ -1,9 +1,6 @@
 var a00307 =
 [
-    [ "VertexT", "a00307.html#a724246add78300a73b06b096869d46e1", null ],
-    [ "VertexT", "a00307.html#a724246add78300a73b06b096869d46e1", null ],
-    [ "cog", "a00307.html#a9e8026a4aef5aea6064b0453ed80deab", null ],
-    [ "cog", "a00307.html#a9e8026a4aef5aea6064b0453ed80deab", null ],
-    [ "set_cog", "a00307.html#a188be293a85465cae0c87d084cdcf1f8", null ],
-    [ "set_cog", "a00307.html#a188be293a85465cae0c87d084cdcf1f8", null ]
+    [ "typed_size", "a00307.html#ad3a7847244ed2c2f402e8f6d91a688e1", null ],
+    [ "value_type", "a00307.html#a66951ec780374a3defbbafdd6ef9ef82", null ],
+    [ "vector_type", "a00307.html#a80a297d31a7aaa315fb99c385dcd435d", null ]
 ];

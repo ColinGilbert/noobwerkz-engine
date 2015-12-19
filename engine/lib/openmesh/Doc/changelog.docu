@@ -6,6 +6,111 @@
 
 <!-- --------------------------------------------------------------------- -->
 
+
+<tr valign=top><td><b>6.0</b> (?/?/?)</td><td>
+
+
+</tr>
+
+
+
+<tr valign=top><td><b>5.1</b> (2015/17/12)</td><td>
+
+<b>Core</b>
+<ul>
+<li>Added clean_keep_reservation() (remove all elements from the mesh but keeps the properties. In contrast to clean() the memory used for the elements will remain allocated</li>
+<li>Reduced number of include statements to speedup compilation</li>
+<li>Removed unused member variable next_cache_count_ member of PolyConnectivity and made it local</li>
+</ul>
+
+<b>General</b>
+<ul>
+<li>Fixed bug preventing from building with 2 dimensional vectors (e.g. vec2i) </li>
+<li>Heap: Minor cleanup (some consts)</li>
+<li>Added static versions of ArrayKernel::edge_handle and ...::halfedge_handle</li>
+<li>Reduced number of includes</li>
+</ul>
+
+<b>IO</b>
+<ul>
+<li>OMWriter: fix crash in OMWriter when writing an empty mesh with colors</li>
+</ul>
+
+<b>VectorT</b>
+<ul>
+<li>take VectorT argument by reference for non-member vector scalar multiplication</li>
+</ul>
+
+<b>Unittests</b>
+<ul>
+<li>Added some basic linear algebra tests for VectorT</li>
+<li>Added tests for vec2x construction</li>
+</ul>
+
+<b>Documentation</b>
+<ul>
+<li>Add some more documentation about primitive deletion. Closes #14</li>
+</ul>
+
+<b>Build System</b>
+<ul>
+<li>Fixed missing debug dll for autobuilders</li>
+</ul>
+
+<b>Python Interface</b>
+<ul>
+<li>Exposed Decimater to python</li>
+</ul>
+
+</tr>
+
+
+
+<tr valign=top><td><b>5.0</b> (2015/11/18)</td><td>
+
+<b>General</b>
+<ul>
+<li>Moved repository to git</li>
+</ul>
+
+<b>Core</b>
+<ul>
+<li>Fixed bug where range iterators contained an invalid element when the range was empty</li>
+<li>Reintroduced and polished the StatusSet API (Thanks to Martin Marinov)</li>
+<li>More efficient implementation of opposite_halfedge_handle (Less instructions required)</li>
+<li>PolyMeshes: More robust algorithm for computing surface normals (Fixes bad normals on concave polygons)</li>
+</ul>
+
+<b>VectorT</b>
+<ul>
+<li>Modernized VectorT constructors for C++11 (Less redundancy, make some of the VectorT constructors constexpr)</li>
+<li>C++11: Added _htmlColor literal operator.</li>
+<li>C++11: Added explicit static_cast along with static SFINAE checks to VectorT constructor.</li>
+</ul>
+
+<b>IO</b>
+<ul>
+<li>loaded properties are presistant per default</li>
+<li>remove unnecessary c headers</li>
+<li>PLY Writer: fix crash when saving a mesh and a custom property was removed before, extend unittest for this case</li>
+<li>PLY Writer: add custom property (with pod data type) support for binary ply files closes #2496</li>
+<li>remove redundant code refs #2525</li>
+<li>Off Writer: Removed redundant code</li>
+<li>Made STLReader, OBJReader reuse stringstreams to improve performance</li>
+</ul>
+
+<b>Unittests</b>
+<ul>
+<li>add obj writer unittest</li>
+<li>add unittest for write stla</li>
+<li>Fixed bug where Some C++11 unittests were not build and used</li>
+<li>Added more unittests c++11 ranges vvrange and vertexrange</li>
+</ul>
+
+
+</tr>
+
+
 <tr valign=top><td><b>4.1</b> (2015/07/27,Rev.1318)</td><td>
 <b>Core</b>
 <ul>
@@ -23,6 +128,8 @@
 <ul>
 <li>Removed fixbundle calls if not building apps.</li>
 </ul>
+
+</tr>
 
 
 <tr valign=top><td><b>4.0</b> (2015/07/08,Rev.1308)</td><td>

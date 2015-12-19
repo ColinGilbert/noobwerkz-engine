@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -87,7 +88,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('a00190.html','');});
+$(document).ready(function(){initNavTree('a00171.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -106,24 +107,22 @@ $(document).ready(function(){initNavTree('a00190.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">OpenMesh::Python::IteratorWrapperT&lt; Iterator, n_items &gt; Member List</div>  </div>
+<div class="title">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT_DEPRECATED&lt; Mesh, CenterEntityHandle, ValueHandle &gt; Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="a00190.html">OpenMesh::Python::IteratorWrapperT&lt; Iterator, n_items &gt;</a>, including all inherited members.</p>
+<p>This is the complete list of members for <a class="el" href="a00171.html">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT_DEPRECATED&lt; Mesh, CenterEntityHandle, ValueHandle &gt;</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="a00190.html#a6b49d9626ebee0d51322c17a84d87a3d">iter</a>() const </td><td class="entry"><a class="el" href="a00190.html">OpenMesh::Python::IteratorWrapperT&lt; Iterator, n_items &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="a00190.html#a12fa6a51caaee41796501a106ed3100c">IteratorWrapperT</a>(const PolyMesh &amp;_mesh, typename Iterator::value_type _hnd, bool _skip=false)</td><td class="entry"><a class="el" href="a00190.html">OpenMesh::Python::IteratorWrapperT&lt; Iterator, n_items &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="a00190.html#a16c36edd15526c5249ef56a028c8caed">IteratorWrapperT</a>(const TriMesh &amp;_mesh, typename Iterator::value_type _hnd, bool _skip=false)</td><td class="entry"><a class="el" href="a00190.html">OpenMesh::Python::IteratorWrapperT&lt; Iterator, n_items &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="a00190.html#aae5800629ad4ccb0c40f911c89d9a724">len</a>() const </td><td class="entry"><a class="el" href="a00190.html">OpenMesh::Python::IteratorWrapperT&lt; Iterator, n_items &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="a00190.html#a57a3bf723bdca89baf534ffd07106030">next</a>()</td><td class="entry"><a class="el" href="a00190.html">OpenMesh::Python::IteratorWrapperT&lt; Iterator, n_items &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>decrement</b>(const Mesh *mesh, typename Mesh::HalfedgeHandle &amp;heh, typename Mesh::HalfedgeHandle &amp;start, int &amp;lap_counter) (defined in <a class="el" href="a00171.html">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT_DEPRECATED&lt; Mesh, CenterEntityHandle, ValueHandle &gt;</a>)</td><td class="entry"><a class="el" href="a00171.html">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT_DEPRECATED&lt; Mesh, CenterEntityHandle, ValueHandle &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">static</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>increment</b>(const Mesh *mesh, typename Mesh::HalfedgeHandle &amp;heh, typename Mesh::HalfedgeHandle &amp;start, int &amp;lap_counter) (defined in <a class="el" href="a00171.html">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT_DEPRECATED&lt; Mesh, CenterEntityHandle, ValueHandle &gt;</a>)</td><td class="entry"><a class="el" href="a00171.html">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT_DEPRECATED&lt; Mesh, CenterEntityHandle, ValueHandle &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">static</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>init</b>(const Mesh *, typename Mesh::HalfedgeHandle &amp;, typename Mesh::HalfedgeHandle &amp;, int &amp;) (defined in <a class="el" href="a00171.html">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT_DEPRECATED&lt; Mesh, CenterEntityHandle, ValueHandle &gt;</a>)</td><td class="entry"><a class="el" href="a00171.html">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT_DEPRECATED&lt; Mesh, CenterEntityHandle, ValueHandle &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">static</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>is_valid</b>(const typename Mesh::HalfedgeHandle &amp;heh, const typename Mesh::HalfedgeHandle &amp;start, const int lap_counter) (defined in <a class="el" href="a00171.html">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT_DEPRECATED&lt; Mesh, CenterEntityHandle, ValueHandle &gt;</a>)</td><td class="entry"><a class="el" href="a00171.html">OpenMesh::Iterators::GenericCirculator_ValueHandleFnsT_DEPRECATED&lt; Mesh, CenterEntityHandle, ValueHandle &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">static</span></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 <hr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

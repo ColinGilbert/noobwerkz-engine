@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: Using IO::Options</title>
+<title>OpenMesh: Deleting geometry elements</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -99,408 +100,249 @@ $(document).ready(function(){initNavTree('a00060.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">Using IO::Options </div>  </div>
+<div class="title">Deleting geometry elements </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>This example shows:</p>
-<ul>
-<li>How to control the behaviour of <code>Mesh::IO::read_mesh()</code>,</li>
-<li>How to control the behaviour of <code>Mesh::IO::write_mesh()</code>.</li>
-</ul>
-<p>The class <code><a class="el" href="a00237.html" title="Set options for reader/writer modules. ">OpenMesh::IO::Options</a></code> can be used when reading/writing a mesh. It controls the behaviour of the reader/writer modules by means of enabled/disabled bits in a bitset. The class provides an interface for enabling, disabling and verifying the bits in the set. We distinguish between</p>
-<ol type="1">
-<li>mode bits - control binary reading/writing<ul>
-<li>Options::Binary</li>
-<li>Options::MSB</li>
-<li>Options::LSB</li>
-<li>Options::Swap (MSB|LSB)</li>
-</ul>
-</li>
-<li>property bits - controls which standard properties to read/write<ul>
-<li>Options::VertexNormal</li>
-<li>Options::VertexTexCoord</li>
-<li>Options::VertexColor</li>
-<li>Options::FaceNormal</li>
-<li>Options::FaceColor</li>
-<li>Options::FaceTexCoord</li>
-<li>Options::ColorAlpha</li>
-<li>Options::ColorFloat</li>
-<li>Options::Custom</li>
-</ul>
-</li>
-</ol>
-<p>These bits have different effects when reading or writing. The file format itself is selected by the extension of the filename.</p>
-<p>Please take into account, each mesh has to <b>request</b> the standard property <b>before loading</b> with the corresponding option. For instance, if you enable Options::VertexNormal, your mesh has to request vertex normals. Otherwise, they will not be written into the mesh.</p>
-<dl class="section note"><dt>Note</dt><dd>Face Tex Coords will not be saved as a property per face, but as a property per halfedge. Therefore, you have to request the "halfedge_texcoords2D" property</dd></dl>
-<p>The OBJ-reader can also read information about the textures in the *.mtl file, if available. These texture information (includes texturename and index) will be saved in the property of type: </p><div class="fragment"><div class="line"><a class="code" href="a00225.html">OpenMesh::MPropHandleT&lt; std::map&lt; int, std::string &gt;</a> &gt; </div>
-</div><!-- fragment --><p> with the name: </p><div class="fragment"><div class="line"><span class="stringliteral">&quot;TextureMapping&quot;</span> </div>
-</div><!-- fragment --><p> This property will be automatically created, if textures were found. There is no other option you have to define for reading texture information beside of the request of the property.<br />
-Additionally, the OBJ loader writes the texture index per face, if the property "face_texture_index" is requested. The texture index is the same index as the index written in the texture mapping. So, it is possible to get the name of the texture from a face via its texture index over the texture mapping property to the texture name. But remember, you have to request the face texture index property first before loading the mesh.</p>
-<p>Below in the table you can see what options are suported by which reader/writer (it is possible that the data format can support more). ASCII is not a real option and will be selected, if binary was not defined.</p>
-<table class="doxtable">
-<caption align="bottom"><em>Reader/Writer Feature Support List</em></caption>
-<tr>
-<th>Format/Option</th><td>ASCII</td><td>Binary</td><td>MSB</td><td>LSB</td><td>Swap</td><td>VertexNormal</td><td>VertexColor</td><td>VertexTexCoord</td><td>EdgeColor</td><td>FaceNormal</td><td>FaceColor</td><td>FaceTexCoord</td><td>ColorAlpha</td><td>ColorFloat</td><td>Custom </td></tr>
-<tr>
-<th>OBJ</th><td>x</td><td></td><td></td><td></td><td></td><td>x</td><td>x *)</td><td>x</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td></td><td></td></tr>
-<tr>
-<th>OFF</th><td>x</td><td>x</td><td></td><td>x</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td></td><td>x</td><td></td><td>x</td><td>x</td><td></td></tr>
-<tr>
-<th>PLY</th><td>x</td><td>x</td><td>x</td><td>x</td><td></td><td>x</td><td>x</td><td>x</td><td></td><td></td><td></td><td></td><td>x</td><td>x</td><td>x **) </td></tr>
-<tr>
-<th>OM</th><td></td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td><td>x</td><td></td><td>x</td><td>x</td><td></td><td></td><td></td><td>x (<a class="el" href="a00062.html">Storing custom properties</a> ) </td></tr>
-<tr>
-<th>STL</th><td>x</td><td>x</td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td><td>x</td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr>
-<th>VTK ***)</th><td>x</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-</table>
-<p>*) can <em>read</em> the non-standard extension vertex colors (floats only): </p><ul>
-<li>defined with vc (e.g. used by meshlab) </li>
-<li>colors encoded in a vertex line (v followed by 6 values)</li>
-</ul>
-<p>**) only ascii version and only vertex and face properties with fundamental types. Take into account, that you don't have to request these custom properties before loading.</p>
-<p>***) no reader exists</p>
-<p>The program does not more than providing a command line based interface to select the option bits for reading/writing and to request mesh properties. Hence illegal combinations are possible and will result in a failure of the program. (The input file won't be damaged in this case, but be careful where you put the ouput file!)</p>
-<h5>Reading meshes</h5>
-<p>When reading a file the mode bits are used to give the reader an advice or hint. Depending on the format we can help the reader to interpret the data correctly. First of all we can tell it that the file contains binary data.</p>
- <div class="fragment"><div class="line">        ropt += IO::Options::Binary; </div>
+<div class="textblock"><p>This small example shows how to remove faces and vertices from a mesh.</p>
+<p>We basically use the geometry created in <a class="el" href="a00046.html">First Steps - Building a cube</a>.</p>
+<p>If we want our mesh class to be able to remove vertices, faces or edges we have to extend the default traits for our mesh class. Vertices, faces and (half-)edges need the <a class="el" href="a00731.html#ab78a93560926cd2f9958cb028f7ea96dad3e94e10c76894ebce6048b8bbb77a74" title="Add status to mesh item (all items) ">OpenMesh::Attributes::Status</a> attribute which is used to hold the flag "deleted" if an element is deleted.</p>
+<p>Instead of defining the required attributes via traits on compile-time, it is possible to request attributes dynamically on run-time by requesting them. In this example, we want to delete faces, edges and vertices, therefore requesting the status attribute is required. </p><dl class="section note"><dt>Note</dt><dd>You have to request attributes before you use them, if you don't enable them via traits.</dd></dl>
+ <div class="fragment"><div class="line">  <span class="comment">// the request has to be called before a vertex/face/edge can be deleted. it grants access to the status attribute</span></div>
+<div class="line">  mesh.request_face_status();</div>
+<div class="line">  mesh.request_edge_status();</div>
+<div class="line">  mesh.request_vertex_status();</div>
 </div><!-- fragment --></p>
-<p>Further on we can ask the reader two swap the byte-order.</p>
-<p><div class="fragment"><div class="line">        ropt += IO::Options::Swap; </div>
+<p>After having created the geometry of the cube one can delete faces and vertices by simply calling delete_vertices() (delete_faces() or delete_edges() respectively).</p>
+<p>Note that there is actually no way to directly delete halfedges since they are automatically affected when the parent edge is marked as deleted!</p>
+<p>The status whether an element is marked as deleted can be requested by</p>
+<div class="fragment"><div class="line">mesh.status(handle).deleted();  <span class="comment">// true if element handle is marked as deleted</span></div>
+<div class="line">                                <span class="comment">// false otherwise</span></div>
+</div><!-- fragment --><p>where handle is either a vertex-, edge- or face-handle.</p>
+<p>In this example we delete all faces except one and the corresponding vertices. The code looks like this</p>
+ <div class="fragment"><div class="line">  <span class="comment">// Delete face 0</span></div>
+<div class="line">  mesh.delete_face(fhandle[0], <span class="keyword">false</span>);</div>
+<div class="line">  <span class="comment">// ... face 2</span></div>
+<div class="line">  mesh.delete_face(fhandle[2], <span class="keyword">false</span>);</div>
+<div class="line">  <span class="comment">// ... face 3</span></div>
+<div class="line">  mesh.delete_face(fhandle[3], <span class="keyword">false</span>);</div>
+<div class="line">  <span class="comment">// ... face 4</span></div>
+<div class="line">  mesh.delete_face(fhandle[4], <span class="keyword">false</span>);</div>
+<div class="line">  <span class="comment">// ... face 5</span></div>
+<div class="line">  mesh.delete_face(fhandle[5], <span class="keyword">false</span>);</div>
+<div class="line">  </div>
+<div class="line"></div>
+<div class="line">  <span class="comment">// If isolated vertices result in a face deletion</span></div>
+<div class="line">  <span class="comment">// they have to be deleted manually. If you want this</span></div>
+<div class="line">  <span class="comment">// to happen automatically, change the second parameter</span></div>
+<div class="line">  <span class="comment">// to true.</span></div>
+<div class="line"></div>
+<div class="line">  <span class="comment">// Now delete the isolated vertices 0, 1, 2 and 3</span></div>
+<div class="line">  mesh.delete_vertex(vhandle[0], <span class="keyword">false</span>);</div>
+<div class="line">  mesh.delete_vertex(vhandle[1], <span class="keyword">false</span>);</div>
+<div class="line">  mesh.delete_vertex(vhandle[2], <span class="keyword">false</span>);</div>
+<div class="line">  mesh.delete_vertex(vhandle[3], <span class="keyword">false</span>);</div>
 </div><!-- fragment --></p>
-<p>(Both can be done via the command line with the options -b and -s, respectively.)</p>
-<p>By default the geometry and the topology is restored from the file. The file might contain more, especially it could provide normals or texture coordinates. We can examine the property bits after reading to find out what else is available:</p>
- <div class="fragment"><div class="line">                ropt.check(IO::Options::VertexNormal) </div>
+<p>Now the deleted faces and vertices are marked as "deleted" internally. Call garbage_collection() to definitely remove them from memory.</p>
+ <div class="fragment"><div class="line">  <span class="comment">// Delete all elements that are marked as deleted</span></div>
+<div class="line">  <span class="comment">// from memory.</span></div>
+<div class="line">  mesh.garbage_collection();</div>
 </div><!-- fragment --></p>
-<p>If a property bit is set it does not mean, that it has been restored as well. The property must have been requested prior reading the file. (The demo program offers the command line option <code>-Xv</code>[nct] and <code>-Xf</code>[nc] to request vertex and face properties.)</p>
-<h5>Writing meshes</h5>
-<p>When writing the mesh the mode bits apparently control whether to use the binary variant and the desired byte-ordering. For example, if we choose binary mode and want to swap the byte order, we set</p>
-<p><div class="fragment"><div class="line">        wopt += IO::Options::Binary; </div>
-<div class="line">        wopt += IO::Options::Swap; </div>
-</div><!-- fragment --></p>
-<p>If the format does not specify the byte order the system byte order is used. If the format does not support binary storage, the mode bits are ignored.</p>
-<p>If the format supports storing additional information, which are conform with the standard properties, we can use the property bits to tell the writer what we would like to have stored. If we would like to store the vertex normals we simply set</p>
-<p><div class="fragment"><div class="line">              wopt += IO::Options::VertexNormal; </div>
-</div><!-- fragment --></p>
-<p>Finally we can write the data to the file</p>
- <div class="fragment"><div class="line">  <span class="keywordflow">if</span> ( !IO::write_mesh( mesh, argv[optind+1], wopt ) )</div>
-</div><!-- fragment --></p>
-<p>The method returns false on error, which might have three different reasons:</p>
-<ol type="1">
-<li>the option is not supported by the choosen format</li>
-<li>a selected standard property is not available</li>
-<li>a 'system' error like<ul>
-<li>could not open the file due to access rights</li>
-<li>disk space exhausted during write</li>
-<li>...</li>
-</ul>
-</li>
-</ol>
-<p>The complete source looks like this:</p>
-<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
-<div class="line"><span class="preprocessor">#include &lt;iterator&gt;</span></div>
+<p>The full source code of the example:</p>
+<div class="fragment"><div class="line"><span class="comment">/* ========================================================================= *</span></div>
+<div class="line"><span class="comment"> *                                                                           *</span></div>
+<div class="line"><span class="comment"> *                               OpenMesh                                    *</span></div>
+<div class="line"><span class="comment"> *           Copyright (c) 2001-2015, RWTH-Aachen University                 *</span></div>
+<div class="line"><span class="comment"> *           Department of Computer Graphics and Multimedia                  *</span></div>
+<div class="line"><span class="comment"> *                          All rights reserved.                             *</span></div>
+<div class="line"><span class="comment"> *                            www.openmesh.org                               *</span></div>
+<div class="line"><span class="comment"> *                                                                           *</span></div>
+<div class="line"><span class="comment"> *---------------------------------------------------------------------------*</span></div>
+<div class="line"><span class="comment"> * This file is part of OpenMesh.                                            *</span></div>
+<div class="line"><span class="comment"> *---------------------------------------------------------------------------*</span></div>
+<div class="line"><span class="comment"> *                                                                           *</span></div>
+<div class="line"><span class="comment"> * Redistribution and use in source and binary forms, with or without        *</span></div>
+<div class="line"><span class="comment"> * modification, are permitted provided that the following conditions        *</span></div>
+<div class="line"><span class="comment"> * are met:                                                                  *</span></div>
+<div class="line"><span class="comment"> *                                                                           *</span></div>
+<div class="line"><span class="comment"> * 1. Redistributions of source code must retain the above copyright notice, *</span></div>
+<div class="line"><span class="comment"> *    this list of conditions and the following disclaimer.                  *</span></div>
+<div class="line"><span class="comment"> *                                                                           *</span></div>
+<div class="line"><span class="comment"> * 2. Redistributions in binary form must reproduce the above copyright      *</span></div>
+<div class="line"><span class="comment"> *    notice, this list of conditions and the following disclaimer in the    *</span></div>
+<div class="line"><span class="comment"> *    documentation and/or other materials provided with the distribution.   *</span></div>
+<div class="line"><span class="comment"> *                                                                           *</span></div>
+<div class="line"><span class="comment"> * 3. Neither the name of the copyright holder nor the names of its          *</span></div>
+<div class="line"><span class="comment"> *    contributors may be used to endorse or promote products derived from   *</span></div>
+<div class="line"><span class="comment"> *    this software without specific prior written permission.               *</span></div>
+<div class="line"><span class="comment"> *                                                                           *</span></div>
+<div class="line"><span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS       *</span></div>
+<div class="line"><span class="comment"> * &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED *</span></div>
+<div class="line"><span class="comment"> * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A           *</span></div>
+<div class="line"><span class="comment"> * PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER *</span></div>
+<div class="line"><span class="comment"> * OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,  *</span></div>
+<div class="line"><span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,       *</span></div>
+<div class="line"><span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR        *</span></div>
+<div class="line"><span class="comment"> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF    *</span></div>
+<div class="line"><span class="comment"> * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING      *</span></div>
+<div class="line"><span class="comment"> * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS        *</span></div>
+<div class="line"><span class="comment"> * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.              *</span></div>
+<div class="line"><span class="comment"> *                                                                           *</span></div>
+<div class="line"><span class="comment"> * ========================================================================= */</span></div>
+<div class="line"></div>
+<div class="line"><span class="comment">/*===========================================================================*\</span></div>
+<div class="line"><span class="comment"> *                                                                           *</span></div>
+<div class="line"><span class="comment"> *   $Revision: 736 $                                                         *</span></div>
+<div class="line"><span class="comment"> *   $Date: 2012-10-08 09:30:49 +0200 (Mo, 08. Okt 2012) $                   *</span></div>
+<div class="line"><span class="comment"> *                                                                           *</span></div>
+<div class="line"><span class="comment">\*===========================================================================*/</span></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
 <div class="line"><span class="comment">// -------------------- OpenMesh</span></div>
 <div class="line"><span class="preprocessor">#include &lt;OpenMesh/Core/IO/MeshIO.hh&gt;</span></div>
-<div class="line"><span class="preprocessor">#include &lt;OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh&gt;</span></div>
-<div class="line"><span class="preprocessor">#include &lt;OpenMesh/Tools/Utils/getopt.h&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;OpenMesh/Core/System/config.h&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;OpenMesh/Core/Mesh/Status.hh&gt;</span></div>
 <div class="line"></div>
 <div class="line"><span class="comment">// ----------------------------------------------------------------------------</span></div>
 <div class="line"></div>
-<div class="line"><span class="keyword">using namespace </span><a class="code" href="a00715.html">OpenMesh</a>;</div>
-<div class="line"></div>
-<div class="line"><span class="comment">// ----------------------------------------------------------------------------</span></div>
-<div class="line"></div>
-<div class="line"><span class="keyword">typedef</span> <a class="code" href="a00273.html">TriMesh_ArrayKernelT&lt;&gt;</a>  MyMesh;</div>
-<div class="line"></div>
-<div class="line"><span class="comment">// ----------------------------------------------------------------------------</span></div>
-<div class="line"></div>
-<div class="line"><span class="preprocessor">#define CHKROPT( Option ) \</span></div>
-<div class="line"><span class="preprocessor">  std::cout &lt;&lt; &quot;  provides &quot; &lt;&lt; #Option \</span></div>
-<div class="line"><span class="preprocessor">            &lt;&lt; (ropt.check(IO::Options:: Option)?&quot;: yes\n&quot;:&quot;: no\n&quot;)</span></div>
-<div class="line"></div>
-<div class="line"><span class="preprocessor">#define CHKWOPT( Option ) \</span></div>
-<div class="line"><span class="preprocessor">  std::cout &lt;&lt; &quot;  write &quot; &lt;&lt; #Option \</span></div>
-<div class="line"><span class="preprocessor">            &lt;&lt; (wopt.check(IO::Options:: Option)?&quot;: yes\n&quot;:&quot;: no\n&quot;)</span></div>
-<div class="line"></div>
-<div class="line"><span class="preprocessor">#define MESHOPT( msg, tf ) \</span></div>
-<div class="line"><span class="preprocessor">  std::cout &lt;&lt; &quot;  &quot; &lt;&lt; msg &lt;&lt; &quot;: &quot; &lt;&lt; ((tf)?&quot;yes\n&quot;:&quot;no\n&quot;)</span></div>
-<div class="line"></div>
-<div class="line"><span class="comment">// ----------------------------------------------------------------------------</span></div>
-<div class="line"></div>
-<div class="line"><span class="keywordtype">void</span> parse_commandline( <span class="keywordtype">int</span> _argc, <span class="keywordtype">char</span> **_argv, MyMesh&amp; _mesh,</div>
-<div class="line">                        <a class="code" href="a00237.html">IO::Options</a> &amp;ropt, <a class="code" href="a00237.html">IO::Options</a> &amp;wopt );</div>
-<div class="line"></div>
-<div class="line"><span class="keywordtype">void</span> usage_and_exit(<span class="keywordtype">int</span> xcode);</div>
-<div class="line"></div>
-<div class="line"><span class="comment">// ----------------------------------------------------------------------------</span></div>
-<div class="line"></div>
-<div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> **argv)</div>
+<div class="line"><span class="keyword">struct </span><a class="code" href="a00232.html">MyTraits</a> : <span class="keyword">public</span> <a class="code" href="a00131.html">OpenMesh::DefaultTraits</a></div>
 <div class="line">{</div>
-<div class="line">  MyMesh  mesh;</div>
-<div class="line">  <a class="code" href="a00237.html">IO::Options</a> ropt, wopt;</div>
+<div class="line">};</div>
 <div class="line"></div>
-<div class="line">  <span class="comment">// -------------------- evaluate commandline</span></div>
 <div class="line"></div>
-<div class="line">  parse_commandline( argc, argv, mesh, ropt, wopt );</div>
+<div class="line"><span class="keyword">typedef</span> <a class="code" href="a00249.html">OpenMesh::PolyMesh_ArrayKernelT&lt;MyTraits&gt;</a>  MyMesh;</div>
 <div class="line"></div>
-<div class="line">  <span class="comment">// -------------------- read mesh</span></div>
 <div class="line"></div>
-<div class="line">  <span class="keywordflow">if</span> ( ! <a class="code" href="a00721.html#ac417960ec28ffdd7e7003a2b1ebb2d1c">IO::read_mesh</a>(mesh,argv[optind], ropt))</div>
+<div class="line"><span class="comment">// ----------------------------------------------------------------------------</span></div>
+<div class="line"><span class="comment">// Build a simple cube and delete it except one face</span></div>
+<div class="line">  </div>
+<div class="line"><span class="keywordtype">int</span> main()</div>
+<div class="line">{</div>
+<div class="line">  MyMesh mesh;</div>
+<div class="line"></div>
+<div class="line">  <span class="comment">// the request has to be called before a vertex/face/edge can be deleted. it grants access to the status attribute</span></div>
+<div class="line">  mesh.request_face_status();</div>
+<div class="line">  mesh.request_edge_status();</div>
+<div class="line">  mesh.request_vertex_status();</div>
+<div class="line"></div>
+<div class="line">  <span class="comment">// generate vertices</span></div>
+<div class="line"></div>
+<div class="line">  <a class="code" href="a00250.html#a0fc18e13d70825938274e3faf7b55e01">MyMesh::VertexHandle</a> vhandle[8];</div>
+<div class="line">  MyMesh::FaceHandle   fhandle[6];</div>
+<div class="line"></div>
+<div class="line">  vhandle[0] = mesh.add_vertex(<a class="code" href="a00250.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(-1, -1,  1));</div>
+<div class="line">  vhandle[1] = mesh.add_vertex(<a class="code" href="a00250.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>( 1, -1,  1));</div>
+<div class="line">  vhandle[2] = mesh.add_vertex(<a class="code" href="a00250.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>( 1,  1,  1));</div>
+<div class="line">  vhandle[3] = mesh.add_vertex(<a class="code" href="a00250.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(-1,  1,  1));</div>
+<div class="line">  vhandle[4] = mesh.add_vertex(<a class="code" href="a00250.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(-1, -1, -1));</div>
+<div class="line">  vhandle[5] = mesh.add_vertex(<a class="code" href="a00250.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>( 1, -1, -1));</div>
+<div class="line">  vhandle[6] = mesh.add_vertex(<a class="code" href="a00250.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>( 1,  1, -1));</div>
+<div class="line">  vhandle[7] = mesh.add_vertex(<a class="code" href="a00250.html#aed10fb4dfb536b53a5e20c8f2442eadf">MyMesh::Point</a>(-1,  1, -1));</div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line">  <span class="comment">// generate (quadrilateral) faces</span></div>
+<div class="line"></div>
+<div class="line">  std::vector&lt;MyMesh::VertexHandle&gt;  tmp_face_vhandles;</div>
+<div class="line"></div>
+<div class="line">  tmp_face_vhandles.clear();</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[0]);</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[1]);</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[2]);</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[3]);</div>
+<div class="line">  fhandle[0] = mesh.add_face(tmp_face_vhandles);</div>
+<div class="line"> </div>
+<div class="line">  tmp_face_vhandles.clear();</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[7]);</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[6]);</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[5]);</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[4]);</div>
+<div class="line">  fhandle[1] = mesh.add_face(tmp_face_vhandles);</div>
+<div class="line"> </div>
+<div class="line">  tmp_face_vhandles.clear();</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[1]);</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[0]);</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[4]);</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[5]);</div>
+<div class="line">  fhandle[2] = mesh.add_face(tmp_face_vhandles);</div>
+<div class="line"> </div>
+<div class="line"></div>
+<div class="line">  tmp_face_vhandles.clear();</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[2]);</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[1]);</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[5]);</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[6]);</div>
+<div class="line">  fhandle[3] = mesh.add_face(tmp_face_vhandles);</div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line">  tmp_face_vhandles.clear();</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[3]);</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[2]);</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[6]);</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[7]);</div>
+<div class="line">  fhandle[4] = mesh.add_face(tmp_face_vhandles);</div>
+<div class="line"> </div>
+<div class="line"></div>
+<div class="line">  tmp_face_vhandles.clear();</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[0]);</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[3]);</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[7]);</div>
+<div class="line">  tmp_face_vhandles.push_back(vhandle[4]);</div>
+<div class="line">  fhandle[5] = mesh.add_face(tmp_face_vhandles);</div>
+<div class="line"></div>
+<div class="line">  <span class="comment">// And now delete all faces and vertices</span></div>
+<div class="line">  <span class="comment">// except face (vh[7], vh[6], vh[5], vh[4])</span></div>
+<div class="line">  <span class="comment">// whose handle resides in fhandle[1]</span></div>
+<div class="line"></div>
+<div class="line">   </div>
+<div class="line">  <span class="comment">// Delete face 0</span></div>
+<div class="line">  mesh.delete_face(fhandle[0], <span class="keyword">false</span>);</div>
+<div class="line">  <span class="comment">// ... face 2</span></div>
+<div class="line">  mesh.delete_face(fhandle[2], <span class="keyword">false</span>);</div>
+<div class="line">  <span class="comment">// ... face 3</span></div>
+<div class="line">  mesh.delete_face(fhandle[3], <span class="keyword">false</span>);</div>
+<div class="line">  <span class="comment">// ... face 4</span></div>
+<div class="line">  mesh.delete_face(fhandle[4], <span class="keyword">false</span>);</div>
+<div class="line">  <span class="comment">// ... face 5</span></div>
+<div class="line">  mesh.delete_face(fhandle[5], <span class="keyword">false</span>);</div>
+<div class="line">  </div>
+<div class="line"></div>
+<div class="line">  <span class="comment">// If isolated vertices result in a face deletion</span></div>
+<div class="line">  <span class="comment">// they have to be deleted manually. If you want this</span></div>
+<div class="line">  <span class="comment">// to happen automatically, change the second parameter</span></div>
+<div class="line">  <span class="comment">// to true.</span></div>
+<div class="line"></div>
+<div class="line">  <span class="comment">// Now delete the isolated vertices 0, 1, 2 and 3</span></div>
+<div class="line">  mesh.delete_vertex(vhandle[0], <span class="keyword">false</span>);</div>
+<div class="line">  mesh.delete_vertex(vhandle[1], <span class="keyword">false</span>);</div>
+<div class="line">  mesh.delete_vertex(vhandle[2], <span class="keyword">false</span>);</div>
+<div class="line">  mesh.delete_vertex(vhandle[3], <span class="keyword">false</span>);</div>
+<div class="line"></div>
+<div class="line">  <span class="comment">// Delete all elements that are marked as deleted</span></div>
+<div class="line">  <span class="comment">// from memory.</span></div>
+<div class="line">  mesh.garbage_collection();</div>
+<div class="line"></div>
+<div class="line">  <span class="comment">// write mesh to output.obj</span></div>
+<div class="line">  <span class="keywordflow">try</span> {</div>
+<div class="line">        <span class="keywordflow">if</span> ( !<a class="code" href="a00736.html#a18286a792ebf896872f5e26182fc5c7b">OpenMesh::IO::write_mesh</a>(mesh, <span class="stringliteral">&quot;output.off&quot;</span>) ) {</div>
+<div class="line">          std::cerr &lt;&lt; <span class="stringliteral">&quot;Cannot write mesh to file &#39;output.off&#39;&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line">          <span class="keywordflow">return</span> 1;</div>
+<div class="line">        }</div>
+<div class="line">  }</div>
+<div class="line">  <span class="keywordflow">catch</span>( std::exception&amp; x )</div>
 <div class="line">  {</div>
-<div class="line">    std::cerr &lt;&lt; <span class="stringliteral">&quot;Error loading mesh from file &quot;</span> &lt;&lt; argv[optind] &lt;&lt; std::endl;</div>
+<div class="line">    std::cerr &lt;&lt; x.what() &lt;&lt; std::endl;</div>
 <div class="line">    <span class="keywordflow">return</span> 1;</div>
 <div class="line">  }</div>
-<div class="line"></div>
-<div class="line">  <span class="comment">// -------------------- show options</span></div>
-<div class="line"></div>
-<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;File &quot;</span> &lt;&lt; argv[optind] &lt;&lt; std::endl;</div>
-<div class="line"></div>
-<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;  is binary: &quot;</span> </div>
-<div class="line">            &lt;&lt; (ropt.check(<a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21a5cb7f45e7ba928e0a23e4a676d10fa8a">IO::Options::Binary</a>) ? <span class="stringliteral">&quot; yes\n&quot;</span> : <span class="stringliteral">&quot; no\n&quot;</span>);</div>
-<div class="line"></div>
-<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;  byte order: &quot;</span>;</div>
-<div class="line">  <span class="keywordflow">if</span> (ropt.check(<a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21a35dfdd7a0af4b3c83fbdec77a6428ba3">IO::Options::Swap</a>))</div>
-<div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;swapped\n&quot;</span>;</div>
-<div class="line">  <span class="keywordflow">else</span> <span class="keywordflow">if</span> (ropt.check(<a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21ac53f41d3b8306a764e7382372d56b7ec">IO::Options::LSB</a>))</div>
-<div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;little endian\n&quot;</span>;</div>
-<div class="line">  <span class="keywordflow">else</span> <span class="keywordflow">if</span> (ropt.check(<a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21a5976f96b11378c06f15f99bef6cc5f19">IO::Options::MSB</a>))</div>
-<div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;big endian\n&quot;</span>;</div>
-<div class="line">  <span class="keywordflow">else</span></div>
-<div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;don&#39;t care\n&quot;</span>;</div>
-<div class="line">  </div>
-<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;  provides VertexNormal&quot;</span></div>
-<div class="line">            &lt;&lt; ( <span class="comment">// strange layout for doxygen</span></div>
-<div class="line">                ropt.check(<a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21ad989c6d671050e12953b648c4c72dded">IO::Options::VertexNormal</a>) </div>
-<div class="line">                ? <span class="stringliteral">&quot;: yes\n&quot;</span>:<span class="stringliteral">&quot;: no\n&quot;</span>);</div>
-<div class="line">  CHKROPT( VertexColor    );</div>
-<div class="line">  CHKROPT( VertexTexCoord );</div>
-<div class="line">  CHKROPT( FaceNormal     );</div>
-<div class="line">  CHKROPT( FaceColor      );</div>
-<div class="line"></div>
-<div class="line"></div>
-<div class="line">  <span class="comment">// -------------------- mesh stats</span></div>
-<div class="line"></div>
-<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;# Vertices: &quot;</span> &lt;&lt; mesh.n_vertices() &lt;&lt; std::endl;</div>
-<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;# Edges   : &quot;</span> &lt;&lt; mesh.n_faces() &lt;&lt; std::endl;</div>
-<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;# Faces   : &quot;</span> &lt;&lt; mesh.n_faces() &lt;&lt; std::endl;</div>
-<div class="line"></div>
-<div class="line"></div>
-<div class="line">  <span class="comment">// -------------------- show write options</span></div>
-<div class="line"></div>
-<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;Selected write options:\n&quot;</span>;</div>
-<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;  use binary: &quot;</span> </div>
-<div class="line">            &lt;&lt; (wopt.check(<a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21a5cb7f45e7ba928e0a23e4a676d10fa8a">IO::Options::Binary</a>) ? <span class="stringliteral">&quot; yes\n&quot;</span> : <span class="stringliteral">&quot; no\n&quot;</span>);</div>
-<div class="line"></div>
-<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;  byte order: &quot;</span>;</div>
-<div class="line">  <span class="keywordflow">if</span> (wopt.check(<a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21a35dfdd7a0af4b3c83fbdec77a6428ba3">IO::Options::Swap</a>))</div>
-<div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;swapped\n&quot;</span>;</div>
-<div class="line">  <span class="keywordflow">else</span> <span class="keywordflow">if</span> (wopt.check(<a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21ac53f41d3b8306a764e7382372d56b7ec">IO::Options::LSB</a>))</div>
-<div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;little endian\n&quot;</span>;</div>
-<div class="line">  <span class="keywordflow">else</span> <span class="keywordflow">if</span> (wopt.check(<a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21a5976f96b11378c06f15f99bef6cc5f19">IO::Options::MSB</a>))</div>
-<div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;big endian\n&quot;</span>;</div>
-<div class="line">  <span class="keywordflow">else</span></div>
-<div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;don&#39;t care\n&quot;</span>;</div>
-<div class="line">  </div>
-<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;  write VertexNormal&quot;</span></div>
-<div class="line">            &lt;&lt; (wopt.check(<a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21ad989c6d671050e12953b648c4c72dded">IO::Options::VertexNormal</a>) ? <span class="stringliteral">&quot;: yes\n&quot;</span>:<span class="stringliteral">&quot;: no\n&quot;</span>);</div>
-<div class="line">  CHKWOPT( VertexColor    );</div>
-<div class="line">  CHKWOPT( VertexTexCoord );</div>
-<div class="line">  CHKWOPT( FaceNormal     );</div>
-<div class="line">  CHKWOPT( FaceColor      );</div>
-<div class="line"></div>
-<div class="line">  <span class="comment">// -------------------- show mesh capabilities</span></div>
-<div class="line"></div>
-<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;Mesh supports\n&quot;</span>;</div>
-<div class="line">  MESHOPT(<span class="stringliteral">&quot;vertex normals&quot;</span>, mesh.has_vertex_normals());</div>
-<div class="line">  MESHOPT(<span class="stringliteral">&quot;vertex colors&quot;</span>, mesh.has_vertex_colors());</div>
-<div class="line">  MESHOPT(<span class="stringliteral">&quot;texcoords&quot;</span>, mesh.has_vertex_texcoords2D());</div>
-<div class="line">  MESHOPT(<span class="stringliteral">&quot;face normals&quot;</span>, mesh.has_face_normals());</div>
-<div class="line">  MESHOPT(<span class="stringliteral">&quot;face colors&quot;</span>, mesh.has_face_colors());</div>
-<div class="line"></div>
-<div class="line">  <span class="comment">// -------------------- write mesh</span></div>
-<div class="line"></div>
-<div class="line">  std::cout &lt;&lt; <span class="stringliteral">&quot;Write mesh to &quot;</span> &lt;&lt; argv[optind+1] &lt;&lt; <span class="stringliteral">&quot;..&quot;</span>;</div>
-<div class="line">  <span class="keywordflow">if</span> ( !<a class="code" href="a00721.html#a18286a792ebf896872f5e26182fc5c7b">IO::write_mesh</a>( mesh, argv[optind+1], wopt ) )</div>
-<div class="line">  {</div>
-<div class="line">    std::cerr &lt;&lt; <span class="stringliteral">&quot;Error&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line">    std::cerr &lt;&lt; <span class="stringliteral">&quot;Possible reasons:\n&quot;</span>;</div>
-<div class="line">    std::cerr &lt;&lt; <span class="stringliteral">&quot;1. Chosen format cannot handle an option!\n&quot;</span>;</div>
-<div class="line">    std::cerr &lt;&lt; <span class="stringliteral">&quot;2. Mesh does not provide necessary information!\n&quot;</span>;</div>
-<div class="line">    std::cerr &lt;&lt; <span class="stringliteral">&quot;3. Or simply cannot open file for writing!\n&quot;</span>;</div>
-<div class="line">    <span class="keywordflow">return</span> 1;</div>
-<div class="line">  }</div>
-<div class="line">  <span class="keywordflow">else</span></div>
-<div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;Ok.\n&quot;</span>;</div>
-<div class="line"></div>
+<div class="line"> </div>
 <div class="line">  <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-<div class="line"></div>
-<div class="line"><span class="comment">// ----------------------------------------------------------------------------</span></div>
-<div class="line"></div>
-<div class="line"><span class="keywordtype">void</span> parse_commandline( <span class="keywordtype">int</span> _argc, <span class="keywordtype">char</span> **_argv, MyMesh&amp; _mesh,</div>
-<div class="line">                        <a class="code" href="a00237.html">IO::Options</a> &amp;ropt, <a class="code" href="a00237.html">IO::Options</a> &amp;wopt )</div>
-<div class="line">{</div>
-<div class="line">  <span class="keywordtype">int</span> c;</div>
-<div class="line">  <span class="keywordflow">while</span> ((c=getopt(_argc, _argv, <span class="stringliteral">&quot;bhsBF:LMSV:X:&quot;</span>))!=-1)</div>
-<div class="line">  {</div>
-<div class="line">    <span class="keywordflow">switch</span>(c) </div>
-<div class="line">    {</div>
-<div class="line">      <span class="comment">// -------------------- read options</span></div>
-<div class="line"></div>
-<div class="line">      <span class="comment">// force binary input</span></div>
-<div class="line">      <span class="keywordflow">case</span> <span class="charliteral">&#39;b&#39;</span>: </div>
-<div class="line">        ropt += <a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21a5cb7f45e7ba928e0a23e4a676d10fa8a">IO::Options::Binary</a>; </div>
-<div class="line">        <span class="keywordflow">break</span>;</div>
-<div class="line"></div>
-<div class="line">      <span class="comment">// force swapping the byte order, when reading a binary file</span></div>
-<div class="line">      <span class="keywordflow">case</span> <span class="charliteral">&#39;s&#39;</span>: </div>
-<div class="line">        ropt += <a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21a35dfdd7a0af4b3c83fbdec77a6428ba3">IO::Options::Swap</a>; </div>
-<div class="line">        <span class="keywordflow">break</span>;</div>
-<div class="line"></div>
-<div class="line">      <span class="comment">// -------------------- write options</span></div>
-<div class="line"></div>
-<div class="line">      <span class="comment">// Write binary variant of format if possible</span></div>
-<div class="line">      <span class="keywordflow">case</span> <span class="charliteral">&#39;B&#39;</span>: </div>
-<div class="line">        wopt += <a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21a5cb7f45e7ba928e0a23e4a676d10fa8a">IO::Options::Binary</a>; </div>
-<div class="line">        <span class="keywordflow">break</span>;</div>
-<div class="line"></div>
-<div class="line">      <span class="comment">// </span></div>
-<div class="line">      <span class="keywordflow">case</span> <span class="charliteral">&#39;F&#39;</span>:</div>
-<div class="line">        <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> i=0; optarg[i]; ++i)</div>
-<div class="line">          <span class="keywordflow">switch</span>(optarg[i]) {</div>
-<div class="line">            <span class="keywordflow">case</span> <span class="charliteral">&#39;n&#39;</span> : wopt += <a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21a20ffc1477fa85d5ba3623817f71d1b39">IO::Options::FaceNormal</a>; <span class="keywordflow">break</span>;</div>
-<div class="line">            <span class="keywordflow">case</span> <span class="charliteral">&#39;c&#39;</span> : wopt += <a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21a3e0b1cda32fe42bde7ac3dc96f977a46">IO::Options::FaceColor</a>; <span class="keywordflow">break</span>;</div>
-<div class="line">          }</div>
-<div class="line">        <span class="keywordflow">break</span>;</div>
-<div class="line"></div>
-<div class="line">      <span class="comment">// Use little endian when writing binary data</span></div>
-<div class="line">      <span class="keywordflow">case</span> <span class="charliteral">&#39;L&#39;</span>: </div>
-<div class="line">        wopt += <a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21ac53f41d3b8306a764e7382372d56b7ec">IO::Options::LSB</a>; </div>
-<div class="line">        <span class="keywordflow">break</span>;</div>
-<div class="line"></div>
-<div class="line">      <span class="comment">// Use big endian when writing binary data</span></div>
-<div class="line">      <span class="keywordflow">case</span> <span class="charliteral">&#39;M&#39;</span>: </div>
-<div class="line">        wopt += <a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21a5976f96b11378c06f15f99bef6cc5f19">IO::Options::MSB</a>; </div>
-<div class="line">        <span class="keywordflow">break</span>;</div>
-<div class="line"></div>
-<div class="line">      <span class="comment">// Swap byte order when writing binary data</span></div>
-<div class="line">      <span class="keywordflow">case</span> <span class="charliteral">&#39;S&#39;</span>: </div>
-<div class="line">        wopt += <a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21a35dfdd7a0af4b3c83fbdec77a6428ba3">IO::Options::Swap</a>; </div>
-<div class="line">        <span class="keywordflow">break</span>;</div>
-<div class="line"></div>
-<div class="line">      <span class="comment">//</span></div>
-<div class="line">      <span class="keywordflow">case</span> <span class="charliteral">&#39;V&#39;</span>:</div>
-<div class="line">      {</div>
-<div class="line">        <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> i=0; optarg[i]; ++i)</div>
-<div class="line">          <span class="keywordflow">switch</span>(optarg[i]) {</div>
-<div class="line">            <span class="keywordflow">case</span> <span class="charliteral">&#39;n&#39;</span> : <span class="comment">// dont&#39;t change layout!!</span></div>
-<div class="line">              wopt += <a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21ad989c6d671050e12953b648c4c72dded">IO::Options::VertexNormal</a>; </div>
-<div class="line">              <span class="keywordflow">break</span>;</div>
-<div class="line">            <span class="keywordflow">case</span> <span class="charliteral">&#39;t&#39;</span> : wopt += <a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21ae9e664738c4c48ac057770fb08a723f0">IO::Options::VertexTexCoord</a>; <span class="keywordflow">break</span>;</div>
-<div class="line">            <span class="keywordflow">case</span> <span class="charliteral">&#39;c&#39;</span> : wopt += <a class="code" href="a00237.html#a9f4f797b08c045b611eaa6f8d149da21af7b6bb87f12fdfe5c9a8f8e1ce9325c7">IO::Options::VertexColor</a>; <span class="keywordflow">break</span>;</div>
-<div class="line">          }</div>
-<div class="line">        <span class="keywordflow">break</span>;</div>
-<div class="line">      }</div>
-<div class="line"></div>
-<div class="line">      <span class="comment">// -------------------- request mesh&#39; standard properties</span></div>
-<div class="line">      <span class="keywordflow">case</span> <span class="charliteral">&#39;X&#39;</span>:</div>
-<div class="line">      {        </div>
-<div class="line">        <span class="keywordtype">char</span> entity=<span class="charliteral">&#39;\0&#39;</span>;</div>
-<div class="line">        <span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> i=0; optarg[i]; ++i)</div>
-<div class="line">          <span class="keywordflow">switch</span>(optarg[i]) {</div>
-<div class="line">            <span class="keywordflow">case</span> <span class="charliteral">&#39;v&#39;</span>: </div>
-<div class="line">            <span class="keywordflow">case</span> <span class="charliteral">&#39;f&#39;</span>: entity = optarg[i]; <span class="keywordflow">break</span>;</div>
-<div class="line">            <span class="keywordflow">case</span> <span class="charliteral">&#39;n&#39;</span>:</div>
-<div class="line">              <span class="keywordflow">switch</span>(entity) {</div>
-<div class="line">                <span class="keywordflow">case</span> <span class="charliteral">&#39;v&#39;</span>: _mesh.request_vertex_normals(); <span class="keywordflow">break</span>;</div>
-<div class="line">                <span class="keywordflow">case</span> <span class="charliteral">&#39;f&#39;</span>: _mesh.request_face_normals(); <span class="keywordflow">break</span>;</div>
-<div class="line">              }</div>
-<div class="line">              <span class="keywordflow">break</span>;</div>
-<div class="line">            <span class="keywordflow">case</span> <span class="charliteral">&#39;c&#39;</span>:</div>
-<div class="line">              <span class="keywordflow">switch</span>(entity) {</div>
-<div class="line">                <span class="keywordflow">case</span> <span class="charliteral">&#39;v&#39;</span>: _mesh.request_vertex_colors(); <span class="keywordflow">break</span>;</div>
-<div class="line">                <span class="keywordflow">case</span> <span class="charliteral">&#39;f&#39;</span>: _mesh.request_face_colors(); <span class="keywordflow">break</span>;</div>
-<div class="line">              }</div>
-<div class="line">              <span class="keywordflow">break</span>;</div>
-<div class="line">            <span class="keywordflow">case</span> <span class="charliteral">&#39;t&#39;</span>:</div>
-<div class="line">              <span class="keywordflow">switch</span>(entity) {</div>
-<div class="line">                <span class="keywordflow">case</span> <span class="charliteral">&#39;v&#39;</span>: _mesh.request_vertex_texcoords2D(); <span class="keywordflow">break</span>;</div>
-<div class="line">              }</div>
-<div class="line">              <span class="keywordflow">break</span>;</div>
-<div class="line">          }</div>
-<div class="line">        <span class="keywordflow">break</span>;</div>
-<div class="line">      }</div>
-<div class="line">      </div>
-<div class="line">      <span class="comment">// -------------------- help</span></div>
-<div class="line">      <span class="keywordflow">case</span> <span class="charliteral">&#39;h&#39;</span>:</div>
-<div class="line">        usage_and_exit(0);</div>
-<div class="line">      <span class="keywordflow">default</span>:</div>
-<div class="line">        usage_and_exit(1);</div>
-<div class="line">    }</div>
-<div class="line">  }</div>
-<div class="line"></div>
-<div class="line">  <span class="keywordflow">if</span> ( _argc-optind != 2)</div>
-<div class="line">    usage_and_exit(1);</div>
-<div class="line">}</div>
-<div class="line"></div>
-<div class="line"></div>
-<div class="line"><span class="comment">// ----------------------------------------------------------------------------</span></div>
-<div class="line"></div>
-<div class="line"><span class="keywordtype">void</span> usage_and_exit(<span class="keywordtype">int</span> xcode)</div>
-<div class="line">{</div>
-<div class="line">  std::ostream &amp;os = xcode ? std::cerr : std::cout;</div>
-<div class="line"></div>
-<div class="line">  os &lt;&lt; <span class="stringliteral">&quot;Usage: io_options [Options] &lt;input&gt; &lt;output&gt;\n&quot;</span> </div>
-<div class="line">     &lt;&lt; std::endl;</div>
-<div class="line">  os &lt;&lt; <span class="stringliteral">&quot;  Read and write a mesh, using OpenMesh::IO::Options\n&quot;</span></div>
-<div class="line">     &lt;&lt; std::endl;</div>
-<div class="line">  os &lt;&lt; <span class="stringliteral">&quot;Options:\n&quot;</span></div>
-<div class="line">     &lt;&lt; std::endl;</div>
-<div class="line">  os &lt;&lt; <span class="stringliteral">&quot;a) read options\n&quot;</span></div>
-<div class="line">     &lt;&lt; std::endl</div>
-<div class="line">     &lt;&lt; <span class="stringliteral">&quot;  -b\n&quot;</span></div>
-<div class="line">     &lt;&lt; <span class="stringliteral">&quot;\tAssume input file is a binary file\n&quot;</span></div>
-<div class="line">     &lt;&lt; std::endl</div>
-<div class="line">     &lt;&lt; <span class="stringliteral">&quot;  -s\n&quot;</span></div>
-<div class="line">     &lt;&lt; <span class="stringliteral">&quot;\tSwap byte order when reading a binary file!\n&quot;</span></div>
-<div class="line">     &lt;&lt; std::endl;</div>
-<div class="line">  os &lt;&lt; <span class="stringliteral">&quot;b) write options\n&quot;</span></div>
-<div class="line">     &lt;&lt; std::endl</div>
-<div class="line">     &lt;&lt; <span class="stringliteral">&quot;  -B\n&quot;</span></div>
-<div class="line">     &lt;&lt; <span class="stringliteral">&quot;\tWrite binary data\n&quot;</span></div>
-<div class="line">     &lt;&lt; std::endl</div>
-<div class="line">     &lt;&lt; <span class="stringliteral">&quot;  -S\n&quot;</span></div>
-<div class="line">     &lt;&lt; <span class="stringliteral">&quot;\tSwap byte order, when writing binary data\n&quot;</span></div>
-<div class="line">     &lt;&lt; std::endl</div>
-<div class="line">     &lt;&lt; <span class="stringliteral">&quot;  -M/-L\n&quot;</span></div>
-<div class="line">     &lt;&lt; <span class="stringliteral">&quot;\tUse MSB/LSB byte ordering, when writing binary data\n&quot;</span></div>
-<div class="line">     &lt;&lt; std::endl</div>
-<div class="line">     &lt;&lt; <span class="stringliteral">&quot;  -V{n|t|c}\n&quot;</span></div>
-<div class="line">     &lt;&lt; <span class="stringliteral">&quot;\tWrite vertex normals, texcoords, and/or colors\n&quot;</span></div>
-<div class="line">     &lt;&lt; std::endl</div>
-<div class="line">     &lt;&lt; <span class="stringliteral">&quot;  -F{n|c}\n&quot;</span></div>
-<div class="line">     &lt;&lt; <span class="stringliteral">&quot;\tWrite face normals, and/or colors\n&quot;</span></div>
-<div class="line">     &lt;&lt; std::endl;</div>
-<div class="line">  os &lt;&lt; <span class="stringliteral">&quot;c) Mesh properties\n&quot;</span></div>
-<div class="line">     &lt;&lt; std::endl</div>
-<div class="line">     &lt;&lt; <span class="stringliteral">&quot;  -Xv{n|c|t}\n&quot;</span></div>
-<div class="line">     &lt;&lt; <span class="stringliteral">&quot;\tRequest vertex property normals|colors|texcoords\n&quot;</span></div>
-<div class="line">     &lt;&lt; std::endl</div>
-<div class="line">     &lt;&lt; <span class="stringliteral">&quot;  -Xf{n|c}\n&quot;</span></div>
-<div class="line">     &lt;&lt; <span class="stringliteral">&quot;\tRequest face property normals|colors\n&quot;</span></div>
-<div class="line">     &lt;&lt; std::endl;</div>
-<div class="line">  exit(xcode);</div>
-<div class="line">}</div>
-<div class="line"></div>
-<div class="line"><span class="comment">// end of file</span></div>
-<div class="line"><span class="comment">// ============================================================================</span></div>
 </div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- doc-content -->
 <hr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

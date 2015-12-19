@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 15:07:46 +0200 (Di, 28 Apr 2015) $                   *
+ *   $Revision$                                                         *
+ *   $Date$                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -58,8 +58,6 @@
 #include <OpenMesh/Tools/VDPM/VHierarchyWindow.hh>
 
 #ifndef WIN32
-#include <string.h>
-#include <cstdlib>
 #else
   #if defined(__MINGW32__)
     #include <stdlib.h>

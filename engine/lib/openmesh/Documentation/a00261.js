@@ -1,5 +1,6 @@
 var a00261 =
 [
-    [ "final", "a00261.html#a19d4b296b0cb4fc8ffd02eaea52ac7d4", null ],
-    [ "state", "a00261.html#a5ff04cb36fb6056dae87c688ebb34af9", null ]
+    [ "RandomNumberGenerator", "a00261.html#a242cb86aad8221eac2d29e245c2c5ae2", null ],
+    [ "getRand", "a00261.html#a6780d2e8b0bffb3959c487a2646e8e65", null ],
+    [ "resolution", "a00261.html#a96712ed75ec124c4a4f111970517c1a6", null ]
 ];

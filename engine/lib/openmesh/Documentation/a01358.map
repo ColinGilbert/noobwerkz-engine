@@ -1,0 +1,12 @@
+<map id="OpenMesh::Subdivider::Uniform::SubdividerT&lt; MeshType, RealType &gt;" name="OpenMesh::Subdivider::Uniform::SubdividerT&lt; MeshType, RealType &gt;">
+<area shape="rect" id="node3" href="$a00104.html" title="Based on code from Leon Kos, CAD lab, Mech.Eng., University of Ljubljana, Slovenia (http://www..." alt="" coords="491,5,661,61"/>
+<area shape="rect" id="node4" href="$a00117.html" title="This class provides the composite subdivision rules for the uniform case. " alt="" coords="491,85,661,141"/>
+<area shape="rect" id="node7" href="$a00193.html" title="Uniform Interpolating Sqrt3 subdivision algorithm " alt="" coords="478,165,674,221"/>
+<area shape="rect" id="node8" href="$a00200.html" title="Uniform LongestEdgeT subdivision algorithm " alt="" coords="491,245,661,301"/>
+<area shape="rect" id="node9" href="$a00202.html" title="Uniform Loop subdivision algorithm. " alt="" coords="477,325,675,381"/>
+<area shape="rect" id="node10" href="$a00223.html" title="Modified Butterfly subdivision algorithm. " alt="" coords="485,405,667,461"/>
+<area shape="rect" id="node11" href="$a00267.html" title="Uniform Sqrt3 subdivision algorithm " alt="" coords="476,485,676,541"/>
+<area shape="rect" id="node2" href="$a00234.html" title="This class demonstrates the non copyable idiom. " alt="" coords="5,260,209,287"/>
+<area shape="rect" id="node5" href="$a00114.html" title="Uniform composite Loop subdivision algorithm. " alt="" coords="726,45,909,101"/>
+<area shape="rect" id="node6" href="$a00115.html" title="Uniform composite sqrt(3) subdivision algorithm. " alt="" coords="724,125,911,181"/>
+</map>

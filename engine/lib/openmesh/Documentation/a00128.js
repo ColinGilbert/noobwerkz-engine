@@ -1,10 +1,18 @@
 var a00128 =
 [
-    [ "Handle", "a00128.html#a96ea13d376c135f2b43d88de8360c766", null ],
-    [ "Inherited", "a00128.html#a06b3145fed5d20f0fb41303432878a5c", null ],
-    [ "Self", "a00128.html#a2246e4e1cac97ddddcbae8c1960eb5f9", null ],
-    [ "EdE", "a00128.html#aa236b9a7fd3ab24a89f95c159580ff13", null ],
-    [ "raise", "a00128.html#a9c49c7e79978a7015c91b06a59330d9e", null ],
-    [ "type", "a00128.html#a55a30d6d4e408e1bd8f8daddeb211431", null ],
-    [ "CompositeT< M >", "a00128.html#a7cacb6579bb9d17013cf9f2b0bd3770f", null ]
+    [ "HeapInterface", "a00187.html", "a00187" ],
+    [ "CollapseInfo", "a00128.html#ac4bc78e9bb2a26693eda5ad817dd8308", null ],
+    [ "DeciHeap", "a00128.html#a22d1340e2ee838d396a6aba82135e4c9", null ],
+    [ "HalfedgeHandle", "a00128.html#a6214e337d0b42e74ef2f8ec93b67319d", null ],
+    [ "Mesh", "a00128.html#a3c5207a20bd2e5adfd2bb35f82719694", null ],
+    [ "Module", "a00128.html#a2c16ba0c94ecaa849bfdfa31148ac5ff", null ],
+    [ "ModuleList", "a00128.html#a0846b1d3f4ac5dc6a1aa32a9e7efc7b6", null ],
+    [ "ModuleListIterator", "a00128.html#a7d925514a38016c7bd90b4047655f0cc", null ],
+    [ "Self", "a00128.html#a56387852bafbda2cd245b08ea2d0008e", null ],
+    [ "VertexHandle", "a00128.html#a45a4df1d970e4d3ed619029ea80fe30f", null ],
+    [ "DecimaterT", "a00128.html#acf185e9dd3958b8634d26ff322f80685", null ],
+    [ "~DecimaterT", "a00128.html#a6d1b1b6855f42b5501860ae79cf6be64", null ],
+    [ "decimate", "a00128.html#ae68360f349a3aeb6b8a01a7ea4af7ea3", null ],
+    [ "decimate_to", "a00128.html#a314edcd690ba54b6b77dde411e04262a", null ],
+    [ "decimate_to_faces", "a00128.html#a3f9e5d0abce8d73b67cf2bbf17700241", null ]
 ];

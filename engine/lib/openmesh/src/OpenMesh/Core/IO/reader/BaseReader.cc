@@ -41,22 +41,19 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1278 $                                                         *
- *   $Date: 2015-06-09 10:58:41 +0200 (Di, 09 Jun 2015) $                   *
+ *   $Revision$                                                         *
+ *   $Date$                   *
  *                                                                           *
 \*===========================================================================*/
 
 
 //=== INCLUDES ================================================================
 
-#include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/IO/reader/BaseReader.hh>
-#include <algorithm>
-#include <string>
+
 #if defined(OM_CC_MIPS)
 #  include <ctype.h>
 #else
-#  include <cctype>
 #endif
 
 

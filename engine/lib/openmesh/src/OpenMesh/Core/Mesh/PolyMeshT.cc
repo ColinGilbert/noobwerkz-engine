@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1316 $                                                         *
- *   $Date: 2015-07-25 21:28:39 +0200 (Sa, 25 Jul 2015) $                   *
+ *   $Revision$                                                         *
+ *   $Date$                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -61,6 +61,8 @@
 
 #include <OpenMesh/Core/Mesh/PolyMeshT.hh>
 #include <OpenMesh/Core/Geometry/LoopSchemeMaskT.hh>
+#include <OpenMesh/Core/Geometry/VectorDimensionsT.hh>
+#include <OpenMesh/Core/Utils/GenProg.hh>
 #include <OpenMesh/Core/Utils/vector_cast.hh>
 #include <OpenMesh/Core/System/omstream.hh>
 #include <vector>
@@ -97,36 +99,47 @@ uint PolyMeshT<Kernel>::find_feature_edges(Scalar _angle_tresh)
 
 template <class Kernel>
 typename PolyMeshT<Kernel>::Normal
-PolyMeshT<Kernel>::
-calc_face_normal(FaceHandle _fh) const
+PolyMeshT<Kernel>::calc_face_normal(FaceHandle _fh) const
+{
+  return calc_face_normal_impl(_fh, typename GenProg::IF<
+    VectorDimensionsT<PolyMeshT<Kernel>::Point>::value == 3,
+    PointIs3DTag,
+    PointIsNot3DTag
+  >::Result());
+}
+
+template <class Kernel>
+typename PolyMeshT<Kernel>::Normal
+PolyMeshT<Kernel>::calc_face_normal_impl(FaceHandle _fh, PointIs3DTag) const
 {
   assert(this->halfedge_handle(_fh).is_valid());
   ConstFaceVertexIter fv_it(this->cfv_iter(_fh));
   
-  Point p0 = this->point(*fv_it);
-  const Point p0i = p0; //save point of vertex 0
   // Safeguard for 1-gons
   if (!(++fv_it).is_valid()) return Normal(0, 0, 0);
 
-  Point p1 = this->point(*fv_it);
-  const Point p1i = p1; //save point of vertex 1
-  
   // Safeguard for 2-gons
   if (!(++fv_it).is_valid()) return Normal(0, 0, 0);
-  
-  //calculate area-weighted average normal of polygon's ears
+
+  // use Newell's Method to compute the surface normal
   Normal n(0,0,0);
-  for(; fv_it.is_valid(); ++fv_it)
+  for(fv_it = this->cfv_iter(_fh); fv_it.is_valid(); ++fv_it)
   {
-    const Point p2 = this->point(*fv_it);
-    n += vector_cast<Normal>(calc_face_normal(p0, p1, p2));
-    p0 = p1;
-    p1 = p2;
+    // next vertex
+    ConstFaceVertexIter fv_itn = fv_it;
+    ++fv_itn;
+
+    if (!fv_itn.is_valid())
+      fv_itn = this->cfv_iter(_fh);
+
+    // http://www.opengl.org/wiki/Calculating_a_Surface_Normal
+    const Point a = this->point(*fv_it) - this->point(*fv_itn);
+    const Point b = this->point(*fv_it) + this->point(*fv_itn);
+
+    n[0] += a[1] * b[2];
+    n[1] += a[2] * b[0];
+    n[2] += a[0] * b[1];
   }
-  
-  //two additional steps since we started at vertex 2, not 0
-  n += vector_cast<Normal>(calc_face_normal(p0, p1, p0i));
-  n += vector_cast<Normal>(calc_face_normal(p1, p0i, p1i));
 
   const typename vector_traits<Normal>::value_type norm = n.length();
   
@@ -138,8 +151,15 @@ calc_face_normal(FaceHandle _fh) const
           : Normal(0, 0, 0);
 }
 
-//-----------------------------------------------------------------------------
+template <class Kernel>
+typename PolyMeshT<Kernel>::Normal
+PolyMeshT<Kernel>::calc_face_normal_impl(FaceHandle, PointIsNot3DTag) const
+{
+  // Dummy fallback implementation
+  return Normal(typename Normal::value_type(0));
+}
 
+//-----------------------------------------------------------------------------
 
 template <class Kernel>
 typename PolyMeshT<Kernel>::Normal
@@ -147,6 +167,21 @@ PolyMeshT<Kernel>::
 calc_face_normal(const Point& _p0,
      const Point& _p1,
      const Point& _p2) const
+{
+  return calc_face_normal_impl(_p0, _p1, _p2, typename GenProg::IF<
+    VectorDimensionsT<PolyMeshT<Kernel>::Point>::value == 3,
+    PointIs3DTag,
+    PointIsNot3DTag
+  >::Result());
+}
+
+template <class Kernel>
+typename PolyMeshT<Kernel>::Normal
+PolyMeshT<Kernel>::
+calc_face_normal_impl(const Point& _p0,
+     const Point& _p1,
+     const Point& _p2,
+     PointIs3DTag) const
 {
 #if 1
   // The OpenSG <Vector>::operator -= () does not support the type Point
@@ -171,6 +206,13 @@ calc_face_normal(const Point& _p0,
 
   return (norm != 0.0) ? n *= (1.0/norm) : Normal(0,0,0);
 #endif
+}
+
+template <class Kernel>
+typename PolyMeshT<Kernel>::Normal
+PolyMeshT<Kernel>::calc_face_normal_impl(const Point&, const Point&, const Point&, PointIsNot3DTag) const
+{
+  return Normal(typename Normal::value_type(0));
 }
 
 //-----------------------------------------------------------------------------
@@ -199,7 +241,7 @@ PolyMeshT<Kernel>::
 update_normals()
 {
   // Face normals are required to compute the vertex and the halfedge normals
-  if (Kernel::has_face_normals() ) {     
+  if (Kernel::has_face_normals() ) {
     update_face_normals();
 
     if (Kernel::has_vertex_normals() ) update_vertex_normals();

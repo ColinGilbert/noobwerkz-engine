@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh/Core/IO/writer/OBJWriter.hh Source File</title>
+<title>OpenMesh: OpenMesh/Core/IO/reader/STLReader.hh Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -105,7 +106,7 @@ $(document).ready(function(){initNavTree('a00460_source.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">OBJWriter.hh</div>  </div>
+<div class="title">STLReader.hh</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/* ========================================================================= *</span></div>
@@ -151,110 +152,122 @@ $(document).ready(function(){initNavTree('a00460_source.html','');});
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">/*===========================================================================*\</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment"> *                                                                           *</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment"> *   $Revision: 1258 $                                                         *</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment"> *   $Date: 2015-04-28 15:07:46 +0200 (Di, 28 Apr 2015) $                   *</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment"> *   $Revision$                                                         *</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment"> *   $Date$                   *</span></div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment"> *                                                                           *</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">\*===========================================================================*/</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">//=============================================================================</span></div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">//  Implements an IOManager writer module for OBJ files</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">//  Implements an reader module for STL files</span></div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">//=============================================================================</span></div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#ifndef __OBJWRITER_HH__</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#define __OBJWRITER_HH__</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#ifndef __STLREADER_HH__</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#define __STLREADER_HH__</span></div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">//=== INCLUDES ================================================================</span></div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="preprocessor">#include &lt;fstream&gt;</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="preprocessor">#include &lt;OpenMesh/Core/System/config.h&gt;</span></div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#include &lt;OpenMesh/Core/Utils/SingletonT.hh&gt;</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">#include &lt;OpenMesh/Core/IO/exporter/BaseExporter.hh&gt;</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#include &lt;OpenMesh/Core/IO/writer/BaseWriter.hh&gt;</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">#include &lt;OpenMesh/Core/IO/reader/BaseReader.hh&gt;</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="comment">//== NAMESPACES ===============================================================</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment">//== NAMESPACES ===============================================================</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="keyword">namespace </span><a class="code" href="a00715.html">OpenMesh</a> {</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="keyword">namespace </span>IO {</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="keyword">namespace </span><a class="code" href="a00730.html">OpenMesh</a> {</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="keyword">namespace </span>IO {</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="comment">//== FORWARDS =================================================================</span></div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="comment">//=== IMPLEMENTATION ==========================================================</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="keyword">class </span>BaseImporter;</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
-<div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="a00071.html">   87</a></span>&#160;<span class="keyword">class </span>OPENMESHDLLEXPORT <a class="code" href="a00071.html">_OBJWriter_</a> : <span class="keyword">public</span> <a class="code" href="a00097.html">BaseWriter</a></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;{</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  <a class="code" href="a00071.html">_OBJWriter_</a>();</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="comment">//== IMPLEMENTATION ===========================================================</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
+<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="a00080.html">   89</a></span>&#160;<span class="keyword">class </span>OPENMESHDLLEXPORT <a class="code" href="a00080.html">_STLReader_</a> : <span class="keyword">public</span> <a class="code" href="a00099.html">BaseReader</a></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;{</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
-<div class="line"><a name="l00094"></a><span class="lineno"><a class="line" href="a00071.html#aeb70a2844af33fdff77e1d1619b19592">   94</a></span>&#160;  <span class="keyword">virtual</span> <a class="code" href="a00071.html#aeb70a2844af33fdff77e1d1619b19592">~_OBJWriter_</a>() {};</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  <span class="comment">// constructor</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;  <a class="code" href="a00080.html">_STLReader_</a>();</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
-<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="a00071.html#a1ad44d1aca048d2f6e7bccdd040f298c">   96</a></span>&#160;  std::string <a class="code" href="a00071.html#a1ad44d1aca048d2f6e7bccdd040f298c">get_description</a>()<span class="keyword"> const  </span>{ <span class="keywordflow">return</span> <span class="stringliteral">&quot;Alias/Wavefront&quot;</span>; }</div>
-<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="a00071.html#a1bb9ead4aa2ddaf89226cecea70f8b96">   97</a></span>&#160;  std::string <a class="code" href="a00071.html#a1bb9ead4aa2ddaf89226cecea70f8b96">get_extensions</a>()<span class="keyword">  const  </span>{ <span class="keywordflow">return</span> <span class="stringliteral">&quot;obj&quot;</span>; }</div>
+<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="a00080.html#a88db910f48bfa7c42c873888bed4cfc6">   97</a></span>&#160;  <span class="keyword">virtual</span> <a class="code" href="a00080.html#a88db910f48bfa7c42c873888bed4cfc6">~_STLReader_</a>() {};</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  <span class="keywordtype">bool</span> write(<span class="keyword">const</span> std::string&amp;, <a class="code" href="a00089.html">BaseExporter</a>&amp;, <a class="code" href="a00237.html">Options</a>, std::streamsize _precision = 6) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  <span class="keywordtype">bool</span> write(std::ostream&amp;, <a class="code" href="a00089.html">BaseExporter</a>&amp;, <a class="code" href="a00237.html">Options</a>, std::streamsize _precision = 6) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
-<div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="a00071.html#ae5fbd1591e5adad3aefd0a3e05585bcc">  103</a></span>&#160;  <span class="keywordtype">size_t</span> <a class="code" href="a00071.html#ae5fbd1591e5adad3aefd0a3e05585bcc">binary_size</a>(<a class="code" href="a00089.html">BaseExporter</a>&amp;, <a class="code" href="a00237.html">Options</a>)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 0; }</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;  <span class="keyword">mutable</span> std::string path_;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  <span class="keyword">mutable</span> std::string objName_;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;  <span class="keyword">mutable</span> std::vector&lt; OpenMesh::Vec3f &gt; material_;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;  <span class="keyword">mutable</span> std::vector&lt; OpenMesh::Vec4f &gt; materialA_;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;  <span class="keywordtype">size_t</span> getMaterial(OpenMesh::Vec3f _color) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;  <span class="keywordtype">size_t</span> getMaterial(OpenMesh::Vec4f _color) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;  <span class="keywordtype">bool</span> writeMaterial(std::ostream&amp; _out, <a class="code" href="a00089.html">BaseExporter</a>&amp;, <a class="code" href="a00237.html">Options</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
+<div class="line"><a name="l00100"></a><span class="lineno"><a class="line" href="a00080.html#a3f2d2f8443ad016d81ad1506cf22f5db">  100</a></span>&#160;  std::string <a class="code" href="a00080.html#a3f2d2f8443ad016d81ad1506cf22f5db">get_description</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="keyword">  </span>{ <span class="keywordflow">return</span> <span class="stringliteral">&quot;Stereolithography Interface Format&quot;</span>; }</div>
+<div class="line"><a name="l00102"></a><span class="lineno"><a class="line" href="a00080.html#a1313e21a04264133ffca2be46c47697f">  102</a></span>&#160;  std::string <a class="code" href="a00080.html#a1313e21a04264133ffca2be46c47697f">get_extensions</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="stringliteral">&quot;stl stla stlb&quot;</span>; }</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;  <span class="keywordtype">bool</span> read(<span class="keyword">const</span> std::string&amp; _filename,</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            <a class="code" href="a00094.html">BaseImporter</a>&amp; _bi,</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            <a class="code" href="a00244.html">Options</a>&amp; _opt);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  <span class="keywordtype">bool</span> read(std::istream&amp; _in,</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                    <a class="code" href="a00094.html">BaseImporter</a>&amp; _bi,</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            <a class="code" href="a00244.html">Options</a>&amp; _opt);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
+<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="a00080.html#a858cd5bae3eea93ecc33ca12a3e6c475">  114</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="a00080.html#a858cd5bae3eea93ecc33ca12a3e6c475">set_epsilon</a>(<span class="keywordtype">float</span> _eps) { eps_=_eps; }</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
+<div class="line"><a name="l00117"></a><span class="lineno"><a class="line" href="a00080.html#a453b5bc39c6256dae86d72e73d9ece7e">  117</a></span>&#160;  <span class="keywordtype">float</span> <a class="code" href="a00080.html#a453b5bc39c6256dae86d72e73d9ece7e">epsilon</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> eps_; }</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;};</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="comment">//== TYPE DEFINITION ==========================================================</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;  <span class="keyword">enum</span> STL_Type { STLA, STLB, NONE };</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;  STL_Type check_stl_type(<span class="keyword">const</span> std::string&amp; _filename) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="keyword">extern</span> _OBJWriter_  <a class="code" href="a00721.html#ad7d48d59c5744757fa97d45f9a85fceb">__OBJWriterinstance</a>;</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;OPENMESHDLLEXPORT _OBJWriter_&amp; OBJWriter();</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;  <span class="keywordtype">bool</span> read_stla(<span class="keyword">const</span> std::string&amp; _filename, BaseImporter&amp; _bi, Options&amp; _opt) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;  <span class="keywordtype">bool</span> read_stla(std::istream&amp; _in, BaseImporter&amp; _bi, Options&amp; _opt) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;  <span class="keywordtype">bool</span> read_stlb(<span class="keyword">const</span> std::string&amp; _filename, BaseImporter&amp; _bi, Options&amp; _opt) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;  <span class="keywordtype">bool</span> read_stlb(std::istream&amp; _in, BaseImporter&amp; _bi, Options&amp; _opt) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;} <span class="comment">// namespace IO</span></div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;} <span class="comment">// namespace OpenMesh</span></div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="comment">//=============================================================================</span></div>
-<div class="ttc" id="a00715_html"><div class="ttname"><a href="a00715.html">OpenMesh</a></div><div class="ttdoc">Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...</div><div class="ttdef"><b>Definition:</b> MeshItems.hh:64</div></div>
-<div class="ttc" id="a00071_html_ae5fbd1591e5adad3aefd0a3e05585bcc"><div class="ttname"><a href="a00071.html#ae5fbd1591e5adad3aefd0a3e05585bcc">OpenMesh::IO::_OBJWriter_::binary_size</a></div><div class="ttdeci">size_t binary_size(BaseExporter &amp;, Options) const </div><div class="ttdoc">Returns expected size of file if binary format is supported else 0. </div><div class="ttdef"><b>Definition:</b> OBJWriter.hh:103</div></div>
-<div class="ttc" id="a00721_html_ad7d48d59c5744757fa97d45f9a85fceb"><div class="ttname"><a href="a00721.html#ad7d48d59c5744757fa97d45f9a85fceb">OpenMesh::IO::__OBJWriterinstance</a></div><div class="ttdeci">_OBJWriter_ __OBJWriterinstance</div><div class="ttdoc">Declare the single entity of the OBJ writer. </div><div class="ttdef"><b>Definition:</b> OBJWriter.cc:76</div></div>
-<div class="ttc" id="a00071_html_aeb70a2844af33fdff77e1d1619b19592"><div class="ttname"><a href="a00071.html#aeb70a2844af33fdff77e1d1619b19592">OpenMesh::IO::_OBJWriter_::~_OBJWriter_</a></div><div class="ttdeci">virtual ~_OBJWriter_()</div><div class="ttdoc">Destructor. </div><div class="ttdef"><b>Definition:</b> OBJWriter.hh:94</div></div>
-<div class="ttc" id="a00071_html_a1bb9ead4aa2ddaf89226cecea70f8b96"><div class="ttname"><a href="a00071.html#a1bb9ead4aa2ddaf89226cecea70f8b96">OpenMesh::IO::_OBJWriter_::get_extensions</a></div><div class="ttdeci">std::string get_extensions() const </div><div class="ttdoc">Return file format&#39;s extension. </div><div class="ttdef"><b>Definition:</b> OBJWriter.hh:97</div></div>
-<div class="ttc" id="a00071_html_a1ad44d1aca048d2f6e7bccdd040f298c"><div class="ttname"><a href="a00071.html#a1ad44d1aca048d2f6e7bccdd040f298c">OpenMesh::IO::_OBJWriter_::get_description</a></div><div class="ttdeci">std::string get_description() const </div><div class="ttdoc">Return short description of the supported file format. </div><div class="ttdef"><b>Definition:</b> OBJWriter.hh:96</div></div>
-<div class="ttc" id="a00237_html"><div class="ttname"><a href="a00237.html">OpenMesh::IO::Options</a></div><div class="ttdoc">Set options for reader/writer modules. </div><div class="ttdef"><b>Definition:</b> Options.hh:95</div></div>
-<div class="ttc" id="a00089_html"><div class="ttname"><a href="a00089.html">OpenMesh::IO::BaseExporter</a></div><div class="ttdoc">Base class for exporter modules. </div><div class="ttdef"><b>Definition:</b> BaseExporter.hh:89</div></div>
-<div class="ttc" id="a00097_html"><div class="ttname"><a href="a00097.html">OpenMesh::IO::BaseWriter</a></div><div class="ttdoc">Base class for all writer modules. </div><div class="ttdef"><b>Definition:</b> BaseWriter.hh:88</div></div>
-<div class="ttc" id="a00071_html"><div class="ttname"><a href="a00071.html">OpenMesh::IO::_OBJWriter_</a></div><div class="ttdoc">This class defines the OBJ writer. </div><div class="ttdef"><b>Definition:</b> OBJWriter.hh:87</div></div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;  <span class="keywordtype">float</span> eps_;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;};</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="comment">//== TYPE DEFINITION ==========================================================</span></div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="keyword">extern</span> _STLReader_  <a class="code" href="a00736.html#a0528676c0e2aa006892a169613c3bf42">__STLReaderInstance</a>;</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;OPENMESHDLLEXPORT _STLReader_&amp;  STLReader();</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="comment">//=============================================================================</span></div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;} <span class="comment">// namespace IO</span></div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;} <span class="comment">// namespace OpenMesh</span></div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="comment">//=============================================================================</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="comment">//=============================================================================</span></div>
+<div class="ttc" id="a00736_html_a0528676c0e2aa006892a169613c3bf42"><div class="ttname"><a href="a00736.html#a0528676c0e2aa006892a169613c3bf42">OpenMesh::IO::__STLReaderInstance</a></div><div class="ttdeci">_STLReader_ __STLReaderInstance</div><div class="ttdoc">Declare the single entity of the STL reader. </div><div class="ttdef"><b>Definition:</b> STLReader.cc:76</div></div>
+<div class="ttc" id="a00244_html"><div class="ttname"><a href="a00244.html">OpenMesh::IO::Options</a></div><div class="ttdoc">Set options for reader/writer modules. </div><div class="ttdef"><b>Definition:</b> Options.hh:95</div></div>
+<div class="ttc" id="a00730_html"><div class="ttname"><a href="a00730.html">OpenMesh</a></div><div class="ttdoc">Contains all the mesh ingredients like the polygonal mesh, the triangle mesh, different mesh kernels ...</div><div class="ttdef"><b>Definition:</b> MeshItems.hh:64</div></div>
+<div class="ttc" id="a00099_html"><div class="ttname"><a href="a00099.html">OpenMesh::IO::BaseReader</a></div><div class="ttdoc">Base class for reader modules. </div><div class="ttdef"><b>Definition:</b> BaseReader.hh:94</div></div>
+<div class="ttc" id="a00080_html_a453b5bc39c6256dae86d72e73d9ece7e"><div class="ttname"><a href="a00080.html#a453b5bc39c6256dae86d72e73d9ece7e">OpenMesh::IO::_STLReader_::epsilon</a></div><div class="ttdeci">float epsilon() const </div><div class="ttdoc">Returns the threshold to be used for considering two point to be equal. </div><div class="ttdef"><b>Definition:</b> STLReader.hh:117</div></div>
+<div class="ttc" id="a00080_html_a3f2d2f8443ad016d81ad1506cf22f5db"><div class="ttname"><a href="a00080.html#a3f2d2f8443ad016d81ad1506cf22f5db">OpenMesh::IO::_STLReader_::get_description</a></div><div class="ttdeci">std::string get_description() const </div><div class="ttdoc">Returns a brief description of the file type that can be parsed. </div><div class="ttdef"><b>Definition:</b> STLReader.hh:100</div></div>
+<div class="ttc" id="a00080_html_a88db910f48bfa7c42c873888bed4cfc6"><div class="ttname"><a href="a00080.html#a88db910f48bfa7c42c873888bed4cfc6">OpenMesh::IO::_STLReader_::~_STLReader_</a></div><div class="ttdeci">virtual ~_STLReader_()</div><div class="ttdoc">Destructor. </div><div class="ttdef"><b>Definition:</b> STLReader.hh:97</div></div>
+<div class="ttc" id="a00094_html"><div class="ttname"><a href="a00094.html">OpenMesh::IO::BaseImporter</a></div><div class="ttdoc">Base class for importer modules. </div><div class="ttdef"><b>Definition:</b> BaseImporter.hh:88</div></div>
+<div class="ttc" id="a00080_html_a858cd5bae3eea93ecc33ca12a3e6c475"><div class="ttname"><a href="a00080.html#a858cd5bae3eea93ecc33ca12a3e6c475">OpenMesh::IO::_STLReader_::set_epsilon</a></div><div class="ttdeci">void set_epsilon(float _eps)</div><div class="ttdoc">Set the threshold to be used for considering two point to be equal. </div><div class="ttdef"><b>Definition:</b> STLReader.hh:114</div></div>
+<div class="ttc" id="a00080_html"><div class="ttname"><a href="a00080.html">OpenMesh::IO::_STLReader_</a></div><div class="ttdoc">Implementation of the STL format reader. </div><div class="ttdef"><b>Definition:</b> STLReader.hh:89</div></div>
+<div class="ttc" id="a00080_html_a1313e21a04264133ffca2be46c47697f"><div class="ttname"><a href="a00080.html#a1313e21a04264133ffca2be46c47697f">OpenMesh::IO::_STLReader_::get_extensions</a></div><div class="ttdeci">std::string get_extensions() const </div><div class="ttdoc">Returns a string with the accepted file extensions separated by a whitespace and in small caps...</div><div class="ttdef"><b>Definition:</b> STLReader.hh:102</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <hr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

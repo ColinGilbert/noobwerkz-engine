@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 15:07:46 +0200 (Di, 28 Apr 2015) $                   *
+ *   $Revision$                                                         *
+ *   $Date$                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -248,7 +248,7 @@ public:
 
   /// Update normal for halfedge _heh
   void update_normal(HalfedgeHandle _heh, const double _feature_angle = 0.8)
-  { this->set_normal(_heh, calc_halfedge_normal(_heh)); }
+  { this->set_normal(_heh, calc_halfedge_normal(_heh,_feature_angle)); }
 
   /** \brief Update normal vectors for all halfedges.
    *
@@ -520,6 +520,13 @@ public:
   inline void split(EdgeHandle _eh, VertexHandle _vh)
   { Kernel::split_edge(_eh, _vh); }
   
+private:
+  struct PointIs3DTag {};
+  struct PointIsNot3DTag {};
+  Normal calc_face_normal_impl(FaceHandle, PointIs3DTag) const;
+  Normal calc_face_normal_impl(FaceHandle, PointIsNot3DTag) const;
+  Normal calc_face_normal_impl(const Point&, const Point&, const Point&, PointIs3DTag) const;
+  Normal calc_face_normal_impl(const Point&, const Point&, const Point&, PointIsNot3DTag) const;
 };
 
 /**

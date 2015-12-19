@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -87,7 +88,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('a00300.html','');});
+$(document).ready(function(){initNavTree('a00257.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -106,24 +107,49 @@ $(document).ready(function(){initNavTree('a00300.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">OpenMesh::vector_traits&lt; osg::Vec3f &gt; Member List</div>  </div>
+<div class="title">OpenMesh::PropertyT&lt; std::string &gt; Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="a00300.html">OpenMesh::vector_traits&lt; osg::Vec3f &gt;</a>, including all inherited members.</p>
+<p>This is the complete list of members for <a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a>, including all inherited members.</p>
 <table class="directory">
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>size</b>() (defined in <a class="el" href="a00300.html">OpenMesh::vector_traits&lt; osg::Vec3f &gt;</a>)</td><td class="entry"><a class="el" href="a00300.html">OpenMesh::vector_traits&lt; osg::Vec3f &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">static</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>size_</b> (defined in <a class="el" href="a00300.html">OpenMesh::vector_traits&lt; osg::Vec3f &gt;</a>)</td><td class="entry"><a class="el" href="a00300.html">OpenMesh::vector_traits&lt; osg::Vec3f &gt;</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>typed_size</b> typedef (defined in <a class="el" href="a00300.html">OpenMesh::vector_traits&lt; osg::Vec3f &gt;</a>)</td><td class="entry"><a class="el" href="a00300.html">OpenMesh::vector_traits&lt; osg::Vec3f &gt;</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>value_type</b> typedef (defined in <a class="el" href="a00300.html">OpenMesh::vector_traits&lt; osg::Vec3f &gt;</a>)</td><td class="entry"><a class="el" href="a00300.html">OpenMesh::vector_traits&lt; osg::Vec3f &gt;</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>vector_type</b> typedef (defined in <a class="el" href="a00300.html">OpenMesh::vector_traits&lt; osg::Vec3f &gt;</a>)</td><td class="entry"><a class="el" href="a00300.html">OpenMesh::vector_traits&lt; osg::Vec3f &gt;</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00097.html#ab40b442ea053998cbde8e9a4bb27c6a3">BaseProperty</a>(const std::string &amp;_name=&quot;&lt;unknown&gt;&quot;)</td><td class="entry"><a class="el" href="a00097.html">OpenMesh::BaseProperty</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00097.html#a9301f986c88572a20649f8743bfac6ac">BaseProperty</a>(const BaseProperty &amp;_rhs)</td><td class="entry"><a class="el" href="a00097.html">OpenMesh::BaseProperty</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>check_and_set_persistent</b>(bool _yn) (defined in <a class="el" href="a00097.html">OpenMesh::BaseProperty</a>)</td><td class="entry"><a class="el" href="a00097.html">OpenMesh::BaseProperty</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00257.html#a67fcefbb9cb4e40b8db3e656fef8ac32">clear</a>()</td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00257.html#a92bed49f6af004d2d6308b507e742eee">clone</a>() const </td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>const_reference</b> typedef (defined in <a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a>)</td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00257.html#a773cae4c8ccbe304bc58dd0b8daba702">copy</a>(size_t _i0, size_t _i1)</td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>data</b>() const  (defined in <a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a>)</td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00257.html#a1bf7e5337a3eea8d42081aae7bb7f037">element_size</a>() const </td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00257.html#aa511c0843381414d011f7bb19c27ed36">n_elements</a>() const </td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00097.html#a0824dab1057df3baa04e25e13ac9ca9e">name</a>() const </td><td class="entry"><a class="el" href="a00097.html">OpenMesh::BaseProperty</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00257.html#a14a2db9eb8b2517eb91584fb2ebd3716">operator[]</a>(int _idx)</td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00257.html#ada50cd18788bd861c4ad62892f892b6f">operator[]</a>(int _idx) const </td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00097.html#a0ccadfed0436f3c25c574f3e151e7036">persistent</a>(void) const </td><td class="entry"><a class="el" href="a00097.html">OpenMesh::BaseProperty</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>PropertyT</b>(const std::string &amp;_name=&quot;&lt;unknown&gt;&quot;) (defined in <a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a>)</td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00257.html#aac958733e0a0f618ce0a14ed2147d3c8">push_back</a>()</td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>reference</b> typedef (defined in <a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a>)</td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00257.html#afb478035fb9ecd4e514ca910da744a1f">reserve</a>(size_t _n)</td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00257.html#aa15d8a4e903b35201a96e13c3ce63647">resize</a>(size_t _n)</td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00257.html#a619e87f5a601b4c4007a91ffc58c6bb6">restore</a>(std::istream &amp;_istr, bool _swap)</td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00257.html#a0d9bb02308869542552eca53d041097e">set_persistent</a>(bool _yn)</td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00257.html#adf1da8fbb23f0d2cb459f63eb891324c">size_of</a>() const </td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00257.html#a6cf700204b62c1d00c36eda2a00e7f9c">size_of</a>(size_t) const </td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>stats</b>(std::ostream &amp;_ostr) const  (defined in <a class="el" href="a00097.html">OpenMesh::BaseProperty</a>)</td><td class="entry"><a class="el" href="a00097.html">OpenMesh::BaseProperty</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00257.html#a0b175f5041e78b3412a9d0985de057c4">store</a>(std::ostream &amp;_ostr, bool _swap) const </td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00257.html#a033c963f94dbefe6cb9f593ca4fcf8df">swap</a>(size_t _i0, size_t _i1)</td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00097.html#a3dbccc1d0ac8f9a0ba27c46f2fe58414">UnknownSize</a></td><td class="entry"><a class="el" href="a00097.html">OpenMesh::BaseProperty</a></td><td class="entry"><span class="mlabel">static</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>Value</b> typedef (defined in <a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a>)</td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>value_type</b> typedef (defined in <a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a>)</td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>vector_type</b> typedef (defined in <a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a>)</td><td class="entry"><a class="el" href="a00257.html">OpenMesh::PropertyT&lt; std::string &gt;</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00097.html#aa3c0dbc83c42199de5722a5812c5a12b">~BaseProperty</a>()</td><td class="entry"><a class="el" href="a00097.html">OpenMesh::BaseProperty</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 <hr>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

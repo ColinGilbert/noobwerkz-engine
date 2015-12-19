@@ -1,14 +1,8 @@
 var a00278 =
 [
-    [ "Handle", "a00278.html#a1408bd4f05aaaccd2782b2449f072486", null ],
-    [ "HEH", "a00278.html#a22403c9bb47b508919cd7eac52be861e", null ],
-    [ "Inherited", "a00278.html#a1edfb3624aae247f0d5315d4a71a0fb5", null ],
-    [ "Self", "a00278.html#aa9ec574408f80c4a1220ecb153eb7ff4", null ],
-    [ "VH", "a00278.html#a451a22aca1daebcb88ba328bdaca1ec6", null ],
-    [ "Tvv4", "a00278.html#a233ffb437a26ecce74a5c42a288c3fe3", null ],
-    [ "raise", "a00278.html#ab09301dedc33cf3b842bb37b899b3914", null ],
-    [ "raise", "a00278.html#a299416a502b33bac5015481d71d97461", null ],
-    [ "raise", "a00278.html#a64ed1ebc23688483b61f8c91d0ae0625", null ],
-    [ "type", "a00278.html#a7d9c8bc629c3f9683ae381aa4a20b2a1", null ],
-    [ "CompositeT< M >", "a00278.html#a7cacb6579bb9d17013cf9f2b0bd3770f", null ]
+    [ "Color", "a00278.html#adef5b1eaa33d1e25481314372fe7a213", null ],
+    [ "Normal", "a00278.html#aea2975a936d5c8f0cec3d389c8f15696", null ],
+    [ "Point", "a00278.html#a01003afa1d44248483bdd563df2138f7", null ],
+    [ "Scalar", "a00278.html#a6a76bcf8df187de33f12ccd9ad2b2487", null ],
+    [ "TexCoord", "a00278.html#a9bf514a1a1bfe8d949ccb74623d7ba77", null ]
 ];

@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: IteratorT&lt; Mesh &gt; Class Template Reference</title>
+<title>OpenMesh: OpenMesh::Utils::HeapT&lt; HeapEntry, HeapInterface &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -106,113 +107,123 @@ $(document).ready(function(){initNavTree('a00189.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#friends">Friends</a> &#124;
-<a href="a00859.html">List of all members</a>  </div>
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="a01361.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">IteratorT&lt; Mesh &gt; Class Template Reference</div>  </div>
+<div class="title">OpenMesh::Utils::HeapT&lt; HeapEntry, HeapInterface &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Linear iterator.  
+<p>An efficient, highly customizable heap.  
  <a href="a00189.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="a00489_source.html">OpenMesh/Mesh/Iterators/IteratorsT.hh</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="a00608_source.html">OSG/Utils/HeapT.hh</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for OpenMesh::Utils::HeapT&lt; HeapEntry, HeapInterface &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="a01363.png" border="0" usemap="#OpenMesh_1_1Utils_1_1HeapT_3_01HeapEntry_00_01HeapInterface_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="OpenMesh_1_1Utils_1_1HeapT_3_01HeapEntry_00_01HeapInterface_01_4_inherit__map" id="OpenMesh_1_1Utils_1_1HeapT_3_01HeapEntry_00_01HeapInterface_01_4_inherit__map">
+<area shape="rect" id="node2" title="STL class. " alt="" coords="19,5,190,32"/></map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for OpenMesh::Utils::HeapT&lt; HeapEntry, HeapInterface &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="a01364.png" border="0" usemap="#OpenMesh_1_1Utils_1_1HeapT_3_01HeapEntry_00_01HeapInterface_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="OpenMesh_1_1Utils_1_1HeapT_3_01HeapEntry_00_01HeapInterface_01_4_coll__map" id="OpenMesh_1_1Utils_1_1HeapT_3_01HeapEntry_00_01HeapInterface_01_4_coll__map">
+<area shape="rect" id="node2" title="STL class. " alt="" coords="19,95,190,121"/></map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a2d4b36a0e8db86ce211a4083bc39db58"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2d4b36a0e8db86ce211a4083bc39db58"></a>
-typedef TargetType&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b></td></tr>
-<tr class="separator:a2d4b36a0e8db86ce211a4083bc39db58"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc0abf90b76181d1937e395a3f31970a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acc0abf90b76181d1937e395a3f31970a"></a>
-typedef TargetHandle&#160;</td><td class="memItemRight" valign="bottom"><b>value_handle</b></td></tr>
-<tr class="separator:acc0abf90b76181d1937e395a3f31970a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef7362159ebe104e7baa6b58f1be2fe9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aef7362159ebe104e7baa6b58f1be2fe9"></a>
-typedef value_type &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b></td></tr>
-<tr class="separator:aef7362159ebe104e7baa6b58f1be2fe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e6535d431ac1439a16764841c1fcdc8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6e6535d431ac1439a16764841c1fcdc8"></a>
-typedef value_type *&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b></td></tr>
-<tr class="separator:a6e6535d431ac1439a16764841c1fcdc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ec438dfb3d7d1af33af82429fbc026b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ec438dfb3d7d1af33af82429fbc026b"></a>
-typedef <a class="el" href="a00242.html">Mesh</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>mesh_ptr</b></td></tr>
-<tr class="separator:a0ec438dfb3d7d1af33af82429fbc026b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3dfcc68114410ef33515de6111c89af5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3dfcc68114410ef33515de6111c89af5"></a>
-typedef <a class="el" href="a00242.html">Mesh</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>mesh_ref</b></td></tr>
-<tr class="separator:a3dfcc68114410ef33515de6111c89af5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7bbc1a02cf6a6150ed18732308739b8b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7bbc1a02cf6a6150ed18732308739b8b"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#a7bbc1a02cf6a6150ed18732308739b8b">IteratorT</a> ()</td></tr>
-<tr class="memdesc:a7bbc1a02cf6a6150ed18732308739b8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. <br /></td></tr>
-<tr class="separator:a7bbc1a02cf6a6150ed18732308739b8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b7b584e8ced70e1631bb1e05ef98b25"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3b7b584e8ced70e1631bb1e05ef98b25"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#a3b7b584e8ced70e1631bb1e05ef98b25">IteratorT</a> (mesh_ref _mesh, value_handle _hnd, bool _skip=false)</td></tr>
-<tr class="memdesc:a3b7b584e8ced70e1631bb1e05ef98b25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct with mesh and a target handle. <br /></td></tr>
-<tr class="separator:a3b7b584e8ced70e1631bb1e05ef98b25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac75eaef4651a1ec15a1c4cd2e971e09c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac75eaef4651a1ec15a1c4cd2e971e09c"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#ac75eaef4651a1ec15a1c4cd2e971e09c">IteratorT</a> (const <a class="el" href="a00189.html">IteratorT</a> &amp;_rhs)</td></tr>
-<tr class="memdesc:ac75eaef4651a1ec15a1c4cd2e971e09c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor. <br /></td></tr>
-<tr class="separator:ac75eaef4651a1ec15a1c4cd2e971e09c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a997042d1fe2837b7bcb15751859b3e01"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a997042d1fe2837b7bcb15751859b3e01"></a>
-<a class="el" href="a00189.html">IteratorT</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#a997042d1fe2837b7bcb15751859b3e01">operator=</a> (const <a class="el" href="a00189.html">IteratorT</a>&lt; <a class="el" href="a00242.html">Mesh</a> &gt; &amp;_rhs)</td></tr>
-<tr class="memdesc:a997042d1fe2837b7bcb15751859b3e01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assignment operator. <br /></td></tr>
-<tr class="separator:a997042d1fe2837b7bcb15751859b3e01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af99d0a4f3300195f722c88371ce08e8f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af99d0a4f3300195f722c88371ce08e8f"></a>
-reference&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#af99d0a4f3300195f722c88371ce08e8f">operator*</a> () const </td></tr>
-<tr class="memdesc:af99d0a4f3300195f722c88371ce08e8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Standard dereferencing operator. <br /></td></tr>
-<tr class="separator:af99d0a4f3300195f722c88371ce08e8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ff3b6545b862364451a569713250758"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9ff3b6545b862364451a569713250758"></a>
-pointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#a9ff3b6545b862364451a569713250758">operator-&gt;</a> () const </td></tr>
-<tr class="memdesc:a9ff3b6545b862364451a569713250758"><td class="mdescLeft">&#160;</td><td class="mdescRight">Standard pointer operator. <br /></td></tr>
-<tr class="separator:a9ff3b6545b862364451a569713250758"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7235030def12b54dec9c442155e849b1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7235030def12b54dec9c442155e849b1"></a>
-value_handle&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#a7235030def12b54dec9c442155e849b1">handle</a> () const </td></tr>
-<tr class="memdesc:a7235030def12b54dec9c442155e849b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the handle of the item the iterator refers to. <br /></td></tr>
-<tr class="separator:a7235030def12b54dec9c442155e849b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75a2e758c39a3f4a7155e75ac7c6d486"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a75a2e758c39a3f4a7155e75ac7c6d486"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#a75a2e758c39a3f4a7155e75ac7c6d486">operator value_handle</a> () const </td></tr>
-<tr class="memdesc:a75a2e758c39a3f4a7155e75ac7c6d486"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cast to the handle of the item the iterator refers to. <br /></td></tr>
-<tr class="separator:a75a2e758c39a3f4a7155e75ac7c6d486"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0979750fb2d836e4d4a0c9dceef09117"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0979750fb2d836e4d4a0c9dceef09117"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#a0979750fb2d836e4d4a0c9dceef09117">operator==</a> (const <a class="el" href="a00189.html">IteratorT</a> &amp;_rhs) const </td></tr>
-<tr class="memdesc:a0979750fb2d836e4d4a0c9dceef09117"><td class="mdescLeft">&#160;</td><td class="mdescRight">Are two iterators equal? Only valid if they refer to the same mesh! <br /></td></tr>
-<tr class="separator:a0979750fb2d836e4d4a0c9dceef09117"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4dcecbb4e247881591529b8c177f231"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af4dcecbb4e247881591529b8c177f231"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#af4dcecbb4e247881591529b8c177f231">operator!=</a> (const <a class="el" href="a00189.html">IteratorT</a> &amp;_rhs) const </td></tr>
-<tr class="memdesc:af4dcecbb4e247881591529b8c177f231"><td class="mdescLeft">&#160;</td><td class="mdescRight">Not equal? <br /></td></tr>
-<tr class="separator:af4dcecbb4e247881591529b8c177f231"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc55a7845d96c40ac2ab6fff5ffe17a4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adc55a7845d96c40ac2ab6fff5ffe17a4"></a>
-<a class="el" href="a00189.html">IteratorT</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#adc55a7845d96c40ac2ab6fff5ffe17a4">operator++</a> ()</td></tr>
-<tr class="memdesc:adc55a7845d96c40ac2ab6fff5ffe17a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Standard pre-increment operator. <br /></td></tr>
-<tr class="separator:adc55a7845d96c40ac2ab6fff5ffe17a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7059c8db91867207167063beaabbc27"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab7059c8db91867207167063beaabbc27"></a>
-<a class="el" href="a00189.html">IteratorT</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#ab7059c8db91867207167063beaabbc27">operator--</a> ()</td></tr>
-<tr class="memdesc:ab7059c8db91867207167063beaabbc27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Standard pre-decrement operator. <br /></td></tr>
-<tr class="separator:ab7059c8db91867207167063beaabbc27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2eea15f9cd4a652468e42a62c750e82"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af2eea15f9cd4a652468e42a62c750e82"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#af2eea15f9cd4a652468e42a62c750e82">enable_skipping</a> ()</td></tr>
-<tr class="memdesc:af2eea15f9cd4a652468e42a62c750e82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turn on skipping: automatically skip deleted/hidden elements. <br /></td></tr>
-<tr class="separator:af2eea15f9cd4a652468e42a62c750e82"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86af850f73a987534295e735b5952f2a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a86af850f73a987534295e735b5952f2a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#a86af850f73a987534295e735b5952f2a">disable_skipping</a> ()</td></tr>
-<tr class="memdesc:a86af850f73a987534295e735b5952f2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turn on skipping: automatically skip deleted/hidden elements. <br /></td></tr>
-<tr class="separator:a86af850f73a987534295e735b5952f2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24a2c62d488a9a9e73572ad7820a8e68"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a24a2c62d488a9a9e73572ad7820a8e68"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#a24a2c62d488a9a9e73572ad7820a8e68">HeapT</a> ()</td></tr>
+<tr class="memdesc:a24a2c62d488a9a9e73572ad7820a8e68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. <br /></td></tr>
+<tr class="separator:a24a2c62d488a9a9e73572ad7820a8e68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03ec9a9ca32d9d6409e980b90d53f54b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a03ec9a9ca32d9d6409e980b90d53f54b"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#a03ec9a9ca32d9d6409e980b90d53f54b">HeapT</a> (const HeapInterface &amp;_interface)</td></tr>
+<tr class="memdesc:a03ec9a9ca32d9d6409e980b90d53f54b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct with a given <code>HeapIterface</code>. <br /></td></tr>
+<tr class="separator:a03ec9a9ca32d9d6409e980b90d53f54b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e0a462d94cdd0c68aeeaaeadfa78d2d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7e0a462d94cdd0c68aeeaaeadfa78d2d"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#a7e0a462d94cdd0c68aeeaaeadfa78d2d">~HeapT</a> ()</td></tr>
+<tr class="memdesc:a7e0a462d94cdd0c68aeeaaeadfa78d2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor. <br /></td></tr>
+<tr class="separator:a7e0a462d94cdd0c68aeeaaeadfa78d2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba777f483777c18a4ce9d7a6a87993c8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aba777f483777c18a4ce9d7a6a87993c8"></a>
+HeapInterface &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getInterface</b> ()</td></tr>
+<tr class="separator:aba777f483777c18a4ce9d7a6a87993c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7885c6d13895b638af278d0779aa691c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7885c6d13895b638af278d0779aa691c"></a>
+const HeapInterface &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getInterface</b> () const </td></tr>
+<tr class="separator:a7885c6d13895b638af278d0779aa691c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afef1992d5a553b9e8d152af61b9e4fc2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afef1992d5a553b9e8d152af61b9e4fc2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#afef1992d5a553b9e8d152af61b9e4fc2">clear</a> ()</td></tr>
+<tr class="memdesc:afef1992d5a553b9e8d152af61b9e4fc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">clear the heap <br /></td></tr>
+<tr class="separator:afef1992d5a553b9e8d152af61b9e4fc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade912131211221530243c1c465d553f2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ade912131211221530243c1c465d553f2"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#ade912131211221530243c1c465d553f2">empty</a> () const </td></tr>
+<tr class="memdesc:ade912131211221530243c1c465d553f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">is heap empty? <br /></td></tr>
+<tr class="separator:ade912131211221530243c1c465d553f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8023f6b4c686a6300ca767b71f5d6380"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8023f6b4c686a6300ca767b71f5d6380"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#a8023f6b4c686a6300ca767b71f5d6380">size</a> () const </td></tr>
+<tr class="memdesc:a8023f6b4c686a6300ca767b71f5d6380"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns the size of heap <br /></td></tr>
+<tr class="separator:a8023f6b4c686a6300ca767b71f5d6380"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab25df952eaf2a9195243759dab1c252e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab25df952eaf2a9195243759dab1c252e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#ab25df952eaf2a9195243759dab1c252e">reserve</a> (size_t _n)</td></tr>
+<tr class="memdesc:ab25df952eaf2a9195243759dab1c252e"><td class="mdescLeft">&#160;</td><td class="mdescRight">reserve space for _n entries <br /></td></tr>
+<tr class="separator:ab25df952eaf2a9195243759dab1c252e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35feb375cbcf48457e8e2d6307fe7fba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a35feb375cbcf48457e8e2d6307fe7fba"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#a35feb375cbcf48457e8e2d6307fe7fba">reset_heap_position</a> (HeapEntry _h)</td></tr>
+<tr class="memdesc:a35feb375cbcf48457e8e2d6307fe7fba"><td class="mdescLeft">&#160;</td><td class="mdescRight">reset heap position to -1 (not in heap) <br /></td></tr>
+<tr class="separator:a35feb375cbcf48457e8e2d6307fe7fba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af286643ed54c1f7252989b2a525c0c07"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af286643ed54c1f7252989b2a525c0c07"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#af286643ed54c1f7252989b2a525c0c07">is_stored</a> (HeapEntry _h)</td></tr>
+<tr class="memdesc:af286643ed54c1f7252989b2a525c0c07"><td class="mdescLeft">&#160;</td><td class="mdescRight">is an entry in the heap? <br /></td></tr>
+<tr class="separator:af286643ed54c1f7252989b2a525c0c07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a986a09f8eef49ee033663b59fa068c22"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a986a09f8eef49ee033663b59fa068c22"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#a986a09f8eef49ee033663b59fa068c22">insert</a> (HeapEntry _h)</td></tr>
+<tr class="memdesc:a986a09f8eef49ee033663b59fa068c22"><td class="mdescLeft">&#160;</td><td class="mdescRight">insert the entry _h <br /></td></tr>
+<tr class="separator:a986a09f8eef49ee033663b59fa068c22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73bb3ecb13f6553a1e279e97f224d5cf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a73bb3ecb13f6553a1e279e97f224d5cf"></a>
+HeapEntry&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#a73bb3ecb13f6553a1e279e97f224d5cf">front</a> () const </td></tr>
+<tr class="memdesc:a73bb3ecb13f6553a1e279e97f224d5cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">get the first entry <br /></td></tr>
+<tr class="separator:a73bb3ecb13f6553a1e279e97f224d5cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0f851857c3aee86ea1eb763a5980660"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa0f851857c3aee86ea1eb763a5980660"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#aa0f851857c3aee86ea1eb763a5980660">pop_front</a> ()</td></tr>
+<tr class="memdesc:aa0f851857c3aee86ea1eb763a5980660"><td class="mdescLeft">&#160;</td><td class="mdescRight">delete the first entry <br /></td></tr>
+<tr class="separator:aa0f851857c3aee86ea1eb763a5980660"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac141346bca01e86f1f7d9e4f0f2a9d8c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac141346bca01e86f1f7d9e4f0f2a9d8c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#ac141346bca01e86f1f7d9e4f0f2a9d8c">remove</a> (HeapEntry _h)</td></tr>
+<tr class="memdesc:ac141346bca01e86f1f7d9e4f0f2a9d8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">remove an entry <br /></td></tr>
+<tr class="separator:ac141346bca01e86f1f7d9e4f0f2a9d8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a4198bf734a87481ee5fedc46f2eebd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5a4198bf734a87481ee5fedc46f2eebd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#a5a4198bf734a87481ee5fedc46f2eebd">update</a> (HeapEntry _h)</td></tr>
+<tr class="memdesc:a5a4198bf734a87481ee5fedc46f2eebd"><td class="mdescLeft">&#160;</td><td class="mdescRight">update an entry: change the key and update the position to reestablish the heap property. <br /></td></tr>
+<tr class="separator:a5a4198bf734a87481ee5fedc46f2eebd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3acd94c1497f8b6afd9548ffd64e2318"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3acd94c1497f8b6afd9548ffd64e2318"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#a3acd94c1497f8b6afd9548ffd64e2318">check</a> ()</td></tr>
+<tr class="memdesc:a3acd94c1497f8b6afd9548ffd64e2318"><td class="mdescLeft">&#160;</td><td class="mdescRight">check heap condition <br /></td></tr>
+<tr class="separator:a3acd94c1497f8b6afd9548ffd64e2318"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a30e36dbff40e8addd4f2ac4d68afd738"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a30e36dbff40e8addd4f2ac4d68afd738"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>ConstIterT&lt; Mesh &gt;</b></td></tr>
-<tr class="separator:a30e36dbff40e8addd4f2ac4d68afd738"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:afb629f999cdff18c71780372ffa4a655"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afb629f999cdff18c71780372ffa4a655"></a>
+HeapInterface&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00189.html#afb629f999cdff18c71780372ffa4a655">interface_</a></td></tr>
+<tr class="memdesc:afb629f999cdff18c71780372ffa4a655"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instance of HeapInterface. <br /></td></tr>
+<tr class="separator:afb629f999cdff18c71780372ffa4a655"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;class Mesh&gt;<br />
-class IteratorT&lt; Mesh &gt;</h3>
+<div class="textblock"><h3>template&lt;class HeapEntry, class HeapInterface = HeapEntry&gt;<br />
+class OpenMesh::Utils::HeapT&lt; HeapEntry, HeapInterface &gt;</h3>
 
-<p>Linear iterator. </p>
+<p>An efficient, highly customizable heap. </p>
+<p>The main difference (and performance boost) of this heap compared to e.g. the heap of the STL is that here the positions of the heap's elements are accessible from the elements themself. Therefore if one changes the priority of an element one does not have to remove and re-insert this element, but can just call the <a class="el" href="a00189.html#a5a4198bf734a87481ee5fedc46f2eebd" title="update an entry: change the key and update the position to reestablish the heap property. ">update(HeapEntry)</a> method.</p>
+<p>This heap class is parameterized by two template arguments: </p><ul>
+<li>the class <code>HeapEntry</code>, that will be stored in the heap </li>
+<li>the HeapInterface telling the heap how to compare heap entries and how to store the heap positions in the heap entries.</li>
+</ul>
+<p>As an example how to use the class see declaration of class <a class="el" href="a00128.html" title="Decimater framework. ">Decimater::DecimaterT</a>.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="a00188.html" title="This class demonstrates the HeapInterface&#39;s interface. ">HeapInterfaceT</a> </dd></dl>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
-<li>OpenMesh/Core/Mesh/gen/<a class="el" href="a00487_source.html">iterators_template.hh</a></li>
+<li>OpenMesh/Tools/Utils/<a class="el" href="a00608_source.html">HeapT.hh</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -220,7 +231,6 @@ class IteratorT&lt; Mesh &gt;</h3>
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

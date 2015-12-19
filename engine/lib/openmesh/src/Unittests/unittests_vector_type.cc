@@ -83,6 +83,75 @@ TEST_F(OpenMeshVectorTest, VectorCasting) {
 
 }
 
+#if __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
+TEST_F(OpenMeshVectorTest, cpp11_constructors) {
+    OpenMesh::Vec3d vec1 { 1.2, 2.0, 3.0 };
 
+    EXPECT_EQ(1.2, vec1[0]);
+    EXPECT_EQ(2.0, vec1[1]);
+    EXPECT_EQ(3.0, vec1[2]);
+
+    OpenMesh::Vec4f vec2 { 1.2f, 3.5f, 1.0f, 0.0f };
+
+    EXPECT_EQ(1.2f, vec2[0]);
+    EXPECT_EQ(3.5f, vec2[1]);
+    EXPECT_EQ(1.0f, vec2[2]);
+    EXPECT_EQ(0.0f, vec2[3]);
+
+    OpenMesh::Vec4f vec2b { vec2 };
+
+    EXPECT_EQ(1.2f, vec2b[0]);
+    EXPECT_EQ(3.5f, vec2b[1]);
+    EXPECT_EQ(1.0f, vec2b[2]);
+    EXPECT_EQ(0.0f, vec2b[3]);
+
+    OpenMesh::Vec4d vec4d { 1.23 };
+    EXPECT_EQ(1.23, vec4d[0]);
+    EXPECT_EQ(1.23, vec4d[1]);
+    EXPECT_EQ(1.23, vec4d[2]);
+    EXPECT_EQ(1.23, vec4d[3]);
+}
+
+TEST_F(OpenMeshVectorTest, cpp11_htmlColorLiteral) {
+    static constexpr OpenMesh::Vec4f rose = 0xFFC7F1FF_htmlColor;
+
+    const OpenMesh::Vec4f light_blue = 0x1FCFFFFF_htmlColor;
+    EXPECT_LE((OpenMesh::Vec4f(0.1215686274f, 0.8117647058f, 1.0f, 1.0f)
+        - light_blue).sqrnorm(), 1e-10);
+
+    const auto light_blue_2 = 0x1FCFFFFF_htmlColor;
+    // Check whether auto type deduction works as expected.
+    static_assert(std::is_same<decltype(light_blue_2), decltype(light_blue)>
+        ::value, "Bad type deduced from _htmlColor literal.");
+    EXPECT_EQ(light_blue, light_blue_2);
+}
+#endif
+
+
+TEST_F(OpenMeshVectorTest, BasicLinearAlgebra) {
+    OpenMesh::Vec3d v(1, 2, 3);
+    EXPECT_EQ(v[0], 1.0);
+    EXPECT_EQ(v[1], 2.0);
+    EXPECT_EQ(v[2], 3.0);
+
+    EXPECT_EQ(OpenMesh::Vec3d(-1, -2, -3), -v);
+    EXPECT_EQ(3, OpenMesh::Vec3d(1, 3, 2).max());
+    EXPECT_EQ(3, OpenMesh::Vec3d(1, 2, 3).max());
+    EXPECT_EQ(3, OpenMesh::Vec3d(1, 3, -4).max());
+    EXPECT_EQ(3, OpenMesh::Vec3d(-4, 2, 3).max());
+    EXPECT_EQ(4, OpenMesh::Vec3d(1, 3, -4).max_abs());
+    EXPECT_EQ(4, OpenMesh::Vec3d(-4, 2, 3).max_abs());
+
+    EXPECT_EQ(1, OpenMesh::Vec3d(1, 3, 2).min());
+    EXPECT_EQ(1, OpenMesh::Vec3d(1, 2, 3).min());
+    EXPECT_EQ(-4, OpenMesh::Vec3d(1, 3, -4).min());
+    EXPECT_EQ(-4, OpenMesh::Vec3d(-4, 2, 3).min());
+    EXPECT_EQ(1, OpenMesh::Vec3d(1, 3, -4).min_abs());
+    EXPECT_EQ(2, OpenMesh::Vec3d(-4, 2, 3).min_abs());
+
+    EXPECT_NEAR(14, OpenMesh::Vec3d(1, 2, 3) | OpenMesh::Vec3d(1, 2, 3), 1e-6);
+    EXPECT_NEAR(-14, OpenMesh::Vec3d(1, 2, 3) | OpenMesh::Vec3d(-1, -2, -3), 1e-6);
+    EXPECT_NEAR(14, OpenMesh::Vec3d(-1, -2, -3) | OpenMesh::Vec3d(-1, -2, -3), 1e-6);
+}
 
 }

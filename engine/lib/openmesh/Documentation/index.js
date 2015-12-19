@@ -17,8 +17,8 @@ var index =
       ] ]
     ] ],
     [ "Using and understanding OpenMesh", "a00006.html", "a00006" ],
-    [ "OpenMesh Tools Documentation", "a00042.html", "a00042" ],
-    [ "Tutorials (code examples)", "a00066.html", "a00066" ],
+    [ "OpenMesh Tools Documentation", "a00044.html", "a00044" ],
+    [ "Tutorials (code examples)", "a00068.html", "a00068" ],
     [ "Python Tutorial", "a00036.html", [
       [ "Building the Python Bindings", "a00036.html#python_build", null ],
       [ "Getting Started", "a00036.html#python_start", null ],

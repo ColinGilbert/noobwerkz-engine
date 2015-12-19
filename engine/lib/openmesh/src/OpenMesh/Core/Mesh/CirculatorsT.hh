@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *             
- *   $Revision: 1258 $                                                         *
- *   $Date: 2015-04-28 15:07:46 +0200 (Di, 28 Apr 2015) $                   *
+ *   $Revision$                                                         *
+ *   $Date$                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -202,7 +202,7 @@ class GenericCirculatorBaseT {
         GenericCirculatorBaseT() : mesh_(0), lap_counter_(0) {}
 
         GenericCirculatorBaseT(mesh_ref mesh, HalfedgeHandle heh, bool end = false) :
-            mesh_(&mesh), start_(heh), heh_(heh), lap_counter_(static_cast<int>(end)) {}
+            mesh_(&mesh), start_(heh), heh_(heh), lap_counter_(static_cast<int>(end && heh.is_valid())) {}
 
         GenericCirculatorBaseT(const GenericCirculatorBaseT &rhs) :
             mesh_(rhs.mesh_), start_(rhs.start_), heh_(rhs.heh_), lap_counter_(rhs.lap_counter_) {}

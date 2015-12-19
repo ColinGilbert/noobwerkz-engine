@@ -10,7 +10,7 @@
 //=== INCLUDES ================================================================
 
 #include <string>
-#include <fstream>
+#include <iosfwd>
 
 #include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/Utils/SingletonT.hh>

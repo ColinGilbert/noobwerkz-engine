@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>OpenMesh: OpenMesh::IO::BaseImporter Class Reference</title>
+<title>OpenMesh: OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt; Singleton Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,6 +21,7 @@
   $(document).ready(function() { searchBox.OnSelectItem(0); });
 </script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="logo_align.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -28,7 +29,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="acg_logo_small.png"/></td>
+  <td id="projectlogo"><img alt="Logo" src="rwth_I8_bild_rgb.jpg"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">OpenMesh
    </div>
@@ -108,131 +109,277 @@ $(document).ready(function(){initNavTree('a00091.html','');});
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="a01118.html">List of all members</a>  </div>
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="a01068.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">OpenMesh::IO::BaseImporter Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+<div class="title">OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt; Singleton Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>Base class for importer modules.  
- <a href="a00091.html#details">More...</a></p>
-
-<p><code>#include &lt;<a class="el" href="a00428_source.html">OpenMesh/Core/IO/importer/BaseImporter.hh</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for OpenMesh::IO::BaseImporter:</div>
+Inheritance diagram for OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="a01119.png" border="0" usemap="#OpenMesh_1_1IO_1_1BaseImporter_inherit__map" alt="Inheritance graph"/></div>
-<map name="OpenMesh_1_1IO_1_1BaseImporter_inherit__map" id="OpenMesh_1_1IO_1_1BaseImporter_inherit__map">
-<area shape="rect" id="node2" href="a00186.html" title="This class template provides an importer module for OpenMesh meshes. " alt="" coords="17,80,187,121"/></map>
+<div class="center"><img src="a01069.png" border="0" usemap="#OpenMesh_1_1Decimater_1_1BaseDecimaterT_3_01MeshT_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="OpenMesh_1_1Decimater_1_1BaseDecimaterT_3_01MeshT_01_4_inherit__map" id="OpenMesh_1_1Decimater_1_1BaseDecimaterT_3_01MeshT_01_4_inherit__map">
+<area shape="rect" id="node3" href="a00128.html" title="Decimater framework. " alt="" coords="506,5,669,47"/><area shape="rect" id="node5" href="a00203.html" title="Multiple choice decimater framework. " alt="" coords="497,71,677,112"/><area shape="rect" id="node2" href="a00234.html" title="This class demonstrates the non copyable idiom. " alt="" coords="5,46,209,73"/><area shape="rect" id="node4" href="a00216.html" title="Mixed decimater framework. " alt="" coords="725,39,923,80"/></map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for OpenMesh::Decimater::BaseDecimaterT&lt; MeshT &gt;:</div>
+<div class="dyncontent">
+<div class="center"><img src="a01070.png" border="0" usemap="#OpenMesh_1_1Decimater_1_1BaseDecimaterT_3_01MeshT_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="OpenMesh_1_1Decimater_1_1BaseDecimaterT_3_01MeshT_01_4_coll__map" id="OpenMesh_1_1Decimater_1_1BaseDecimaterT_3_01MeshT_01_4_coll__map">
+<area shape="rect" id="node2" href="a00234.html" title="This class demonstrates the non copyable idiom. " alt="" coords="5,5,209,32"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a5a6026b2a92910eef5e1bba494bf402c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5a6026b2a92910eef5e1bba494bf402c"></a>
-typedef std::vector&lt; <a class="el" href="a00305.html">VertexHandle</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>VHandles</b></td></tr>
-<tr class="separator:a5a6026b2a92910eef5e1bba494bf402c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf71a7f9e9717f9a1be7e0d10bc84615"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acf71a7f9e9717f9a1be7e0d10bc84615"></a>
+typedef <a class="el" href="a00091.html">BaseDecimaterT</a>&lt; MeshT &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Self</b></td></tr>
+<tr class="separator:acf71a7f9e9717f9a1be7e0d10bc84615"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b1d851255dd19a1fad12f47304e105b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8b1d851255dd19a1fad12f47304e105b"></a>
+typedef MeshT&#160;</td><td class="memItemRight" valign="bottom"><b>Mesh</b></td></tr>
+<tr class="separator:a8b1d851255dd19a1fad12f47304e105b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e0e078a178ebfcaa0d567cafabf0d93"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0e0e078a178ebfcaa0d567cafabf0d93"></a>
+typedef <a class="el" href="a00110.html">CollapseInfoT</a>&lt; MeshT &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>CollapseInfo</b></td></tr>
+<tr class="separator:a0e0e078a178ebfcaa0d567cafabf0d93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d74f124a7f8ae0c471760fe34bae571"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2d74f124a7f8ae0c471760fe34bae571"></a>
+typedef <a class="el" href="a00219.html">ModBaseT</a>&lt; MeshT &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Module</b></td></tr>
+<tr class="separator:a2d74f124a7f8ae0c471760fe34bae571"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa1e4a65ab8d2507eecfe16553c9a2b8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaa1e4a65ab8d2507eecfe16553c9a2b8"></a>
+typedef std::vector&lt; <a class="el" href="a00219.html">Module</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ModuleList</b></td></tr>
+<tr class="separator:aaa1e4a65ab8d2507eecfe16553c9a2b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a630207b818e071bc7f6b10e5d7bc8801"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a630207b818e071bc7f6b10e5d7bc8801"></a>
+typedef ModuleList::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>ModuleListIterator</b></td></tr>
+<tr class="separator:a630207b818e071bc7f6b10e5d7bc8801"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a29ff22fb514c241df18d48896544a574"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a29ff22fb514c241df18d48896544a574"></a>
-virtual <a class="el" href="a00305.html">VertexHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><b>add_vertex</b> (const Vec3f &amp;_point)=0</td></tr>
-<tr class="separator:a29ff22fb514c241df18d48896544a574"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6165648a0e80f8e352f07366322ab91a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6165648a0e80f8e352f07366322ab91a"></a>
-virtual <a class="el" href="a00305.html">VertexHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><b>add_vertex</b> ()=0</td></tr>
-<tr class="separator:a6165648a0e80f8e352f07366322ab91a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa465ca49d6bb6e220b46189d05ed33c0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa465ca49d6bb6e220b46189d05ed33c0"></a>
-virtual <a class="el" href="a00143.html">FaceHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><b>add_face</b> (const VHandles &amp;_indices)=0</td></tr>
-<tr class="separator:aa465ca49d6bb6e220b46189d05ed33c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa133cf8354b3e83a91da8c0ab2f567e8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa133cf8354b3e83a91da8c0ab2f567e8"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>add_face_texcoords</b> (<a class="el" href="a00143.html">FaceHandle</a> _fh, <a class="el" href="a00305.html">VertexHandle</a> _vh, const std::vector&lt; Vec2f &gt; &amp;_face_texcoords)=0</td></tr>
-<tr class="separator:aa133cf8354b3e83a91da8c0ab2f567e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c3b5d1b35a3831369be5c936215a290"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7c3b5d1b35a3831369be5c936215a290"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_face_texindex</b> (<a class="el" href="a00143.html">FaceHandle</a> _fh, int _texId)=0</td></tr>
-<tr class="separator:a7c3b5d1b35a3831369be5c936215a290"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a504c629ca2747b696c868b669ffdf812"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a504c629ca2747b696c868b669ffdf812"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_point</b> (<a class="el" href="a00305.html">VertexHandle</a> _vh, const Vec3f &amp;_point)=0</td></tr>
-<tr class="separator:a504c629ca2747b696c868b669ffdf812"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e971ffc9753f907aaea51fda4a24963"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3e971ffc9753f907aaea51fda4a24963"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_normal</b> (<a class="el" href="a00305.html">VertexHandle</a> _vh, const Vec3f &amp;_normal)=0</td></tr>
-<tr class="separator:a3e971ffc9753f907aaea51fda4a24963"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab35b98c11e74c51302b18095c4bfb84e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab35b98c11e74c51302b18095c4bfb84e"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00305.html">VertexHandle</a> _vh, const Vec3uc &amp;_color)=0</td></tr>
-<tr class="separator:ab35b98c11e74c51302b18095c4bfb84e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a599099f7dc647766bdc2ae63cf5dd609"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a599099f7dc647766bdc2ae63cf5dd609"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00305.html">VertexHandle</a> _vh, const Vec4uc &amp;_color)=0</td></tr>
-<tr class="separator:a599099f7dc647766bdc2ae63cf5dd609"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a595829a11c5baac7a58a2c32c9689ccf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a595829a11c5baac7a58a2c32c9689ccf"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00305.html">VertexHandle</a> _vh, const Vec3f &amp;_color)=0</td></tr>
-<tr class="separator:a595829a11c5baac7a58a2c32c9689ccf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4379952297a3031bdc33db02ef6e4962"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4379952297a3031bdc33db02ef6e4962"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00305.html">VertexHandle</a> _vh, const Vec4f &amp;_color)=0</td></tr>
-<tr class="separator:a4379952297a3031bdc33db02ef6e4962"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7897efb5861a11c5cc36570d7a34bfe7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7897efb5861a11c5cc36570d7a34bfe7"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_texcoord</b> (<a class="el" href="a00305.html">VertexHandle</a> _vh, const Vec2f &amp;_texcoord)=0</td></tr>
-<tr class="separator:a7897efb5861a11c5cc36570d7a34bfe7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81f556ace7b0587f7d1f437a5810bd9a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a81f556ace7b0587f7d1f437a5810bd9a"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_texcoord</b> (<a class="el" href="a00175.html">HalfedgeHandle</a> _heh, const Vec2f &amp;_texcoord)=0</td></tr>
-<tr class="separator:a81f556ace7b0587f7d1f437a5810bd9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae60fa282ec04453d09805ca2faca1ca4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae60fa282ec04453d09805ca2faca1ca4"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00130.html">EdgeHandle</a> _eh, const Vec3uc &amp;_color)=0</td></tr>
-<tr class="separator:ae60fa282ec04453d09805ca2faca1ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5c444591a012ed81ab1114bcd33a6dd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab5c444591a012ed81ab1114bcd33a6dd"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00130.html">EdgeHandle</a> _eh, const Vec4uc &amp;_color)=0</td></tr>
-<tr class="separator:ab5c444591a012ed81ab1114bcd33a6dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6831a1bead7297b269ce93b4c0a2384"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab6831a1bead7297b269ce93b4c0a2384"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00130.html">EdgeHandle</a> _eh, const Vec3f &amp;_color)=0</td></tr>
-<tr class="separator:ab6831a1bead7297b269ce93b4c0a2384"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b06f444209a03a18526d9bb0642bc76"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2b06f444209a03a18526d9bb0642bc76"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00130.html">EdgeHandle</a> _eh, const Vec4f &amp;_color)=0</td></tr>
-<tr class="separator:a2b06f444209a03a18526d9bb0642bc76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeafed8cf33fcffe3c041d87866d26190"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeafed8cf33fcffe3c041d87866d26190"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_normal</b> (<a class="el" href="a00143.html">FaceHandle</a> _fh, const Vec3f &amp;_normal)=0</td></tr>
-<tr class="separator:aeafed8cf33fcffe3c041d87866d26190"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad01a91980479eaf70f35c642002c7992"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad01a91980479eaf70f35c642002c7992"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00143.html">FaceHandle</a> _fh, const Vec3uc &amp;_color)=0</td></tr>
-<tr class="separator:ad01a91980479eaf70f35c642002c7992"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53e0b08a948318267d22a781bc44c9ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a53e0b08a948318267d22a781bc44c9ed"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00143.html">FaceHandle</a> _fh, const Vec4uc &amp;_color)=0</td></tr>
-<tr class="separator:a53e0b08a948318267d22a781bc44c9ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4153db5db4922d65a18ab01edbf8c8de"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4153db5db4922d65a18ab01edbf8c8de"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00143.html">FaceHandle</a> _fh, const Vec3f &amp;_color)=0</td></tr>
-<tr class="separator:a4153db5db4922d65a18ab01edbf8c8de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7c882c083da2059d10bc23700b2730d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa7c882c083da2059d10bc23700b2730d"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>set_color</b> (<a class="el" href="a00143.html">FaceHandle</a> _fh, const Vec4f &amp;_color)=0</td></tr>
-<tr class="separator:aa7c882c083da2059d10bc23700b2730d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea45b4ba6207843fb4c5eb0ece7a4ecf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aea45b4ba6207843fb4c5eb0ece7a4ecf"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>add_texture_information</b> (int _id, std::string _name)=0</td></tr>
-<tr class="separator:aea45b4ba6207843fb4c5eb0ece7a4ecf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab95995885fb64ca310a233cb4695b99f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab95995885fb64ca310a233cb4695b99f"></a>
-virtual <a class="el" href="a00092.html">BaseKernel</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>kernel</b> ()</td></tr>
-<tr class="separator:ab95995885fb64ca310a233cb4695b99f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d2ab3d5e31716fba74f23fa85660311"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5d2ab3d5e31716fba74f23fa85660311"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_triangle_mesh</b> () const </td></tr>
-<tr class="separator:a5d2ab3d5e31716fba74f23fa85660311"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f4b4e5acbc8a8fb662448986cc26070"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4f4b4e5acbc8a8fb662448986cc26070"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>reserve</b> (unsigned int, unsigned int, unsigned int)</td></tr>
-<tr class="separator:a4f4b4e5acbc8a8fb662448986cc26070"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2df08eadf4a3d197cf3908605709b5a0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2df08eadf4a3d197cf3908605709b5a0"></a>
-virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n_vertices</b> () const =0</td></tr>
-<tr class="separator:a2df08eadf4a3d197cf3908605709b5a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68cf18f64b7c8c9349b1051949bdaec9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68cf18f64b7c8c9349b1051949bdaec9"></a>
-virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n_faces</b> () const =0</td></tr>
-<tr class="separator:a68cf18f64b7c8c9349b1051949bdaec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e6abad49510f66bb3e9fe4f2dc07d2d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0e6abad49510f66bb3e9fe4f2dc07d2d"></a>
-virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><b>n_edges</b> () const =0</td></tr>
-<tr class="separator:a0e6abad49510f66bb3e9fe4f2dc07d2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b0ab2b8368cc9ab015874de820b0f4a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5b0ab2b8368cc9ab015874de820b0f4a"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>prepare</b> ()</td></tr>
-<tr class="separator:a5b0ab2b8368cc9ab015874de820b0f4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a786cddca70ba2705a73598891e441fe0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a786cddca70ba2705a73598891e441fe0"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>finish</b> ()</td></tr>
-<tr class="separator:a786cddca70ba2705a73598891e441fe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcba4546553667f83876afc88f2e36cc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adcba4546553667f83876afc88f2e36cc"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BaseDecimaterT</b> (Mesh &amp;_mesh)</td></tr>
+<tr class="separator:adcba4546553667f83876afc88f2e36cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b828064b2a7fa5b03b637bae507ac62"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00091.html#a6b828064b2a7fa5b03b637bae507ac62">initialize</a> ()</td></tr>
+<tr class="memdesc:a6b828064b2a7fa5b03b637bae507ac62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize decimater and decimating modules.  <a href="#a6b828064b2a7fa5b03b637bae507ac62">More...</a><br /></td></tr>
+<tr class="separator:a6b828064b2a7fa5b03b637bae507ac62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8bb8df36d34e27775aebe3844fab935"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad8bb8df36d34e27775aebe3844fab935"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00091.html#ad8bb8df36d34e27775aebe3844fab935">is_initialized</a> () const </td></tr>
+<tr class="memdesc:ad8bb8df36d34e27775aebe3844fab935"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether decimater has been successfully initialized. <br /></td></tr>
+<tr class="separator:ad8bb8df36d34e27775aebe3844fab935"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a007b3d7e3620ecb3d99516945259f4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0a007b3d7e3620ecb3d99516945259f4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00091.html#a0a007b3d7e3620ecb3d99516945259f4">info</a> (std::ostream &amp;_os)</td></tr>
+<tr class="memdesc:a0a007b3d7e3620ecb3d99516945259f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print information about modules to _os. <br /></td></tr>
+<tr class="separator:a0a007b3d7e3620ecb3d99516945259f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a596e2729e5a998715b535590fcfd00c8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00091.html#a596e2729e5a998715b535590fcfd00c8">set_observer</a> (<a class="el" href="a00237.html">Observer</a> *_o)</td></tr>
+<tr class="memdesc:a596e2729e5a998715b535590fcfd00c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add observer.  <a href="#a596e2729e5a998715b535590fcfd00c8">More...</a><br /></td></tr>
+<tr class="separator:a596e2729e5a998715b535590fcfd00c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9018b5e7fcc152cc7d85a6a99bf02bd5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9018b5e7fcc152cc7d85a6a99bf02bd5"></a>
+<a class="el" href="a00237.html">Observer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00091.html#a9018b5e7fcc152cc7d85a6a99bf02bd5">observer</a> ()</td></tr>
+<tr class="memdesc:a9018b5e7fcc152cc7d85a6a99bf02bd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get current observer of a decimater. <br /></td></tr>
+<tr class="separator:a9018b5e7fcc152cc7d85a6a99bf02bd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5d6598dced77ec6d97823559a3e58dc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa5d6598dced77ec6d97823559a3e58dc"></a>
+Mesh &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00091.html#aa5d6598dced77ec6d97823559a3e58dc">mesh</a> ()</td></tr>
+<tr class="memdesc:aa5d6598dced77ec6d97823559a3e58dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">access mesh. used in modules. <br /></td></tr>
+<tr class="separator:aa5d6598dced77ec6d97823559a3e58dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2168dd685ec75cc239516d2570703036"><td class="memTemplParams" colspan="2"><a class="anchor" id="a2168dd685ec75cc239516d2570703036"></a>
+template&lt;typename _Module &gt; </td></tr>
+<tr class="memitem:a2168dd685ec75cc239516d2570703036"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="a00091.html#a2168dd685ec75cc239516d2570703036">add</a> (<a class="el" href="a00221.html">ModHandleT</a>&lt; _Module &gt; &amp;_mh)</td></tr>
+<tr class="memdesc:a2168dd685ec75cc239516d2570703036"><td class="mdescLeft">&#160;</td><td class="mdescRight">add module to decimater <br /></td></tr>
+<tr class="separator:a2168dd685ec75cc239516d2570703036"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b81adeaacfda9773ff6c3584f1f014b"><td class="memTemplParams" colspan="2"><a class="anchor" id="a0b81adeaacfda9773ff6c3584f1f014b"></a>
+template&lt;typename _Module &gt; </td></tr>
+<tr class="memitem:a0b81adeaacfda9773ff6c3584f1f014b"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="a00091.html#a0b81adeaacfda9773ff6c3584f1f014b">remove</a> (<a class="el" href="a00221.html">ModHandleT</a>&lt; _Module &gt; &amp;_mh)</td></tr>
+<tr class="memdesc:a0b81adeaacfda9773ff6c3584f1f014b"><td class="mdescLeft">&#160;</td><td class="mdescRight">remove module <br /></td></tr>
+<tr class="separator:a0b81adeaacfda9773ff6c3584f1f014b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9854adb7ec9f2419ece2067b5f237cfa"><td class="memTemplParams" colspan="2"><a class="anchor" id="a9854adb7ec9f2419ece2067b5f237cfa"></a>
+template&lt;typename Module &gt; </td></tr>
+<tr class="memitem:a9854adb7ec9f2419ece2067b5f237cfa"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="a00219.html">Module</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="a00091.html#a9854adb7ec9f2419ece2067b5f237cfa">module</a> (<a class="el" href="a00221.html">ModHandleT</a>&lt; <a class="el" href="a00219.html">Module</a> &gt; &amp;_mh)</td></tr>
+<tr class="memdesc:a9854adb7ec9f2419ece2067b5f237cfa"><td class="mdescLeft">&#160;</td><td class="mdescRight">get module referenced by handle _mh <br /></td></tr>
+<tr class="separator:a9854adb7ec9f2419ece2067b5f237cfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a181b92fd81aea37771dbbe9d0f7b4b30"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a181b92fd81aea37771dbbe9d0f7b4b30"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00091.html#a181b92fd81aea37771dbbe9d0f7b4b30">notify_observer</a> (size_t _n_collapses)</td></tr>
+<tr class="memdesc:a181b92fd81aea37771dbbe9d0f7b4b30"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns false, if abort requested by observer <br /></td></tr>
+<tr class="separator:a181b92fd81aea37771dbbe9d0f7b4b30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7999f437ff1a15e28f1621b77f62974e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7999f437ff1a15e28f1621b77f62974e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00091.html#a7999f437ff1a15e28f1621b77f62974e">set_uninitialized</a> ()</td></tr>
+<tr class="memdesc:a7999f437ff1a15e28f1621b77f62974e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset the initialized flag, and clear the bmodules_ and cmodule_. <br /></td></tr>
+<tr class="separator:a7999f437ff1a15e28f1621b77f62974e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11f4e99daaa70662eb5556115b7ba68b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a11f4e99daaa70662eb5556115b7ba68b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>update_modules</b> (<a class="el" href="a00110.html">CollapseInfo</a> &amp;_ci)</td></tr>
+<tr class="separator:a11f4e99daaa70662eb5556115b7ba68b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebbb2f4afd23574937109486a4ac6d1b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00091.html#aebbb2f4afd23574937109486a4ac6d1b">is_collapse_legal</a> (const <a class="el" href="a00110.html">CollapseInfo</a> &amp;_ci)</td></tr>
+<tr class="memdesc:aebbb2f4afd23574937109486a4ac6d1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is an edge collapse legal? Performs topological test only.  <a href="#aebbb2f4afd23574937109486a4ac6d1b">More...</a><br /></td></tr>
+<tr class="separator:aebbb2f4afd23574937109486a4ac6d1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3046073cf42608d314df3c4dfc2d49b4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3046073cf42608d314df3c4dfc2d49b4"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00091.html#a3046073cf42608d314df3c4dfc2d49b4">collapse_priority</a> (const <a class="el" href="a00110.html">CollapseInfo</a> &amp;_ci)</td></tr>
+<tr class="memdesc:a3046073cf42608d314df3c4dfc2d49b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate priority of an halfedge collapse (using the modules) <br /></td></tr>
+<tr class="separator:a3046073cf42608d314df3c4dfc2d49b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a2763cdc33d785a1f53aed2168a7189"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5a2763cdc33d785a1f53aed2168a7189"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00091.html#a5a2763cdc33d785a1f53aed2168a7189">preprocess_collapse</a> (<a class="el" href="a00110.html">CollapseInfo</a> &amp;_ci)</td></tr>
+<tr class="memdesc:a5a2763cdc33d785a1f53aed2168a7189"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pre-process a collapse. <br /></td></tr>
+<tr class="separator:a5a2763cdc33d785a1f53aed2168a7189"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a3153d5847b381262fc15d110c3f10e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8a3153d5847b381262fc15d110c3f10e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00091.html#a8a3153d5847b381262fc15d110c3f10e">postprocess_collapse</a> (<a class="el" href="a00110.html">CollapseInfo</a> &amp;_ci)</td></tr>
+<tr class="memdesc:a8a3153d5847b381262fc15d110c3f10e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Post-process a collapse. <br /></td></tr>
+<tr class="separator:a8a3153d5847b381262fc15d110c3f10e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ee8ed71b9fdf8524d12cfae47f63ed9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00091.html#a2ee8ed71b9fdf8524d12cfae47f63ed9">set_error_tolerance_factor</a> (double _factor)</td></tr>
+<tr class="memdesc:a2ee8ed71b9fdf8524d12cfae47f63ed9"><td class="mdescLeft">&#160;</td><td class="mdescRight">This provides a function that allows the setting of a percentage of the original constraint of the modules.  <a href="#a2ee8ed71b9fdf8524d12cfae47f63ed9">More...</a><br /></td></tr>
+<tr class="separator:a2ee8ed71b9fdf8524d12cfae47f63ed9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae97d95611924a0630a111543d2c8bf1e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00091.html#ae97d95611924a0630a111543d2c8bf1e">reset</a> ()</td></tr>
+<tr class="memdesc:ae97d95611924a0630a111543d2c8bf1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset the status of this class.  <a href="#ae97d95611924a0630a111543d2c8bf1e">More...</a><br /></td></tr>
+<tr class="separator:ae97d95611924a0630a111543d2c8bf1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Base class for importer modules. </p>
-<p>Importer modules provide an interface between the loader modules and the target data structure. This is basically a wrapper providing virtual versions for the required mesh functions. </p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
-<li>OpenMesh/Core/IO/importer/<a class="el" href="a00428_source.html">BaseImporter.hh</a></li>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a6b828064b2a7fa5b03b637bae507ac62"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Mesh &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT</a>&lt; Mesh &gt;::initialize </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialize decimater and decimating modules. </p>
+<p>Return values: true ok false No ore more than one non-binary module exist. In that case the decimater is uninitialized! </p>
+
+</div>
+</div>
+<a class="anchor" id="aebbb2f4afd23574937109486a4ac6d1b"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Mesh &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT</a>&lt; Mesh &gt;::is_collapse_legal </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="a00110.html">CollapseInfo</a> &amp;&#160;</td>
+          <td class="paramname"><em>_ci</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Is an edge collapse legal? Performs topological test only. </p>
+<p>The method evaluates the status bit Locked, Deleted, and Feature. </p><dl class="section attention"><dt>Attention</dt><dd>The method temporarily sets the bit Tagged. After usage the bit will be disabled! </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae97d95611924a0630a111543d2c8bf1e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename MeshT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT</a>&lt; MeshT &gt;::reset </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reset the status of this class. </p>
+<p>You have to call initialize again!! </p>
+
+</div>
+</div>
+<a class="anchor" id="a2ee8ed71b9fdf8524d12cfae47f63ed9"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Mesh &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT</a>&lt; Mesh &gt;::set_error_tolerance_factor </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>_factor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This provides a function that allows the setting of a percentage of the original constraint of the modules. </p>
+<p>Note that some modules might re-initialize in their set_error_tolerance_factor function as necessary </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_factor</td><td>has to be in the closed interval between 0.0 and 1.0 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a596e2729e5a998715b535590fcfd00c8"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename MeshT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="a00091.html">OpenMesh::Decimater::BaseDecimaterT</a>&lt; MeshT &gt;::set_observer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="a00237.html">Observer</a> *&#160;</td>
+          <td class="paramname"><em>_o</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Add observer. </p>
+<p>You can set an observer which is used as a callback to check the decimators progress and to abort it if necessary.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_o</td><td><a class="el" href="a00237.html" title="Observer class. ">Observer</a> to be used </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>The documentation for this singleton was generated from the following files:<ul>
+<li>OpenMesh/Tools/Decimater/<a class="el" href="a00545_source.html">BaseDecimaterT.hh</a></li>
+<li>OpenMesh/Tools/Decimater/BaseDecimaterT.cc</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -240,7 +387,6 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>finish</b> ()
 <address>
 <small>
 <a href="http://www.rwth-graphics.de" style="text-decoration:none;">
-<img src="acg_logo.png" alt="acg pic" align="middle" border=0>
 </a>
 Project <b>OpenMesh</b>, 
 &copy;&nbsp; Computer Graphics Group, RWTH Aachen.

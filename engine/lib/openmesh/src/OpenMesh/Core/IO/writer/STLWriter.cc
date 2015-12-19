@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *
- *   $Revision: 1302 $                                                         *
- *   $Date: 2015-07-02 16:52:32 +0200 (Do, 02 Jul 2015) $                   *
+ *   $Revision$                                                         *
+ *   $Date$                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -54,7 +54,6 @@
 #include <fstream>
 
 // OpenMesh
-#include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/System/omstream.hh>
 #include <OpenMesh/Core/Geometry/VectorT.hh>
 #include <OpenMesh/Core/IO/BinaryHelper.hh>

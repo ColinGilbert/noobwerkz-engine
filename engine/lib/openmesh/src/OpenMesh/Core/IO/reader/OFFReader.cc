@@ -41,8 +41,8 @@
 
 /*===========================================================================*\
  *                                                                           *
- *   $Revision: 1278 $                                                         *
- *   $Date: 2015-06-09 10:58:41 +0200 (Di, 09 Jun 2015) $                   *
+ *   $Revision$                                                         *
+ *   $Date$                   *
  *                                                                           *
 \*===========================================================================*/
 
@@ -56,12 +56,9 @@
 #include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/System/omstream.hh>
 #include <OpenMesh/Core/IO/reader/OFFReader.hh>
-#include <OpenMesh/Core/IO/importer/BaseImporter.hh>
 #include <OpenMesh/Core/IO/IOManager.hh>
 #include <OpenMesh/Core/Utils/color_cast.hh>
 // #include <OpenMesh/Core/IO/BinaryHelper.hh>
-
-#include <OpenMesh/Core/IO/SR_store.hh>
 
 //STL
 #include <iostream>
@@ -74,12 +71,10 @@
 #elif defined(_STLPORT_VERSION) && (_STLPORT_VERSION==0x460)
 #  include <cctype>
 #else
-#  include <cctype>
 using std::isspace;
 #endif
 
 #ifndef WIN32
-#include <string.h>
 #endif
 
 //=== NAMESPACES ==============================================================
@@ -182,16 +177,18 @@ _OFFReader_::read_ascii(std::istream& _in, BaseImporter& _bi, Options& _opt) con
 {
 
 
-  unsigned int            i, j, k, l, idx;
-  unsigned int            nV, nF, dummy;
-  OpenMesh::Vec3f         v, n;
-  OpenMesh::Vec2f         t;
-  OpenMesh::Vec3i         c3;
-  OpenMesh::Vec3f         c3f;
-  OpenMesh::Vec4i         c4;
-  OpenMesh::Vec4f         c4f;
-  BaseImporter::VHandles  vhandles;
-  VertexHandle            vh;
+  unsigned int              i, j, k, l, idx;
+  unsigned int              nV, nF, dummy;
+  OpenMesh::Vec3f           v, n;
+  OpenMesh::Vec2f           t;
+  OpenMesh::Vec3i           c3;
+  OpenMesh::Vec3f           c3f;
+  OpenMesh::Vec4i           c4;
+  OpenMesh::Vec4f           c4f;
+  BaseImporter::VHandles    vhandles;
+  VertexHandle              vh;
+  std::stringstream         stream;
+  std::string               trash;
 
   // read header line
   std::string header;
@@ -227,12 +224,11 @@ _OFFReader_::read_ascii(std::istream& _in, BaseImporter& _bi, Options& _opt) con
 
     int colorType = getColorType(line, options_.vertex_has_texcoord() );
 
-    std::stringstream stream( line );
+    stream.str(line);
+    stream.clear();
 
     //perhaps read COLOR
     if ( options_.vertex_has_color() ){
-
-      std::string trash;
 
       switch (colorType){
         case 0 : break; //no color
@@ -315,9 +311,8 @@ _OFFReader_::read_ascii(std::istream& _in, BaseImporter& _bi, Options& _opt) con
 
       int colorType = getColorType(line, false );
 
-      std::stringstream stream( line );
-
-      std::string trash;
+      stream.str(line);
+      stream.clear();
 
       switch (colorType){
         case 0 : break; //no color
