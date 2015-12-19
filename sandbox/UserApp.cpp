@@ -56,9 +56,9 @@ void noob::application::user_init()
 		// }
 		//auto h = stage.hull(points);
 		auto h = stage.sphere(5.0);
-
 		auto temp_body = stage.body(h, 1.0, noob::vec3(dis(gen), 100, dis(gen)), noob::versor(0.0, 0.0, 0.0, 1.0)); //, true);
-		stage.bodies_holder.get(temp_body)->set_self_controlled(true);
+
+		stage.bodies_holder.get(temp_body)->set_self_controlled(false);
 		stage.prop(temp_body, "purple");
 	}
 

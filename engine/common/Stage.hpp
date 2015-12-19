@@ -116,7 +116,7 @@ namespace noob
 			es::storage pool;
 
 			// Tags that are used for faster access to our tag-tracker
-			noob::component_tag mesh_tag, path_tag, shape_tag, shape_type_tag, body_tag, basic_model_tag, animated_model_tag, skeletal_anim_tag, shader_tag;
+			noob::component_tag scales_tag, mesh_tag, path_tag, shape_tag, shape_type_tag, body_tag, basic_model_tag, animated_model_tag, skeletal_anim_tag, shader_tag;
 
 			// Indexable object tracking
 			noob::meshes meshes_holder;

@@ -23,6 +23,9 @@ void noob::stage::init()
 	// dynamics_world->setSynchronizeAllMotionStates(true);
 	renderer.init();
 
+	auto temp_scaling (pool.register_component<noob::vec3>("scales"));
+	scales_tag.inner = temp_scaling;
+
 	auto temp_mesh (pool.register_component<noob::meshes::handle>("mesh"));
 	mesh_tag.inner = temp_mesh;
 
@@ -133,7 +136,9 @@ void noob::stage::draw() const
 	{
 		//logger::log("drawloop");
 		// logger::log(bodies_holder.get(b)->get_debug_string());
-		renderer.draw(basic_models_holder.get(m), shaders_holder.get(s), bodies_holder.get(b)->get_transform());
+		noob::mat4 world_mat = noob::scale(noob::identity_mat4(), shapes_holder.get(bodies_to_shapes[b.get_inner()])->get_scales());
+		world_mat = bodies_holder.get(b)->get_transform() * world_mat;
+		renderer.draw(basic_models_holder.get(m), shaders_holder.get(s), world_mat);
 	});
 }
 
@@ -496,7 +501,9 @@ es::entity noob::stage::prop(const noob::bodies::handle _bod, const std::string&
 {
 	es::entity temp (pool.new_entity());
 	pool.set(temp, body_tag.inner, _bod);
-	pool.set(temp, basic_model_tag.inner, std::get<0>(get_model(bodies_to_shapes[_bod.get_inner()])));
+	auto bs = bodies_to_shapes[_bod.get_inner()];
+	pool.set(temp, basic_model_tag.inner, std::get<0>(get_model(bs)));
+	pool.set(temp, scales_tag.inner, shapes_holder.get(bodies_to_shapes[_bod.get_inner()])->get_scales());
 	pool.set(temp, shader_tag.inner, get_shader(shading));
 	return temp;
 }
@@ -508,6 +515,7 @@ es::entity noob::stage::prop(const noob::bodies::handle _bod, noob::basic_models
 	es::entity temp (pool.new_entity());
 	pool.set(temp, body_tag.inner, bodies_holder.get(_bod));
 	pool.set(temp, basic_model_tag.inner, _model);
+	pool.set(temp, scales_tag.inner, noob::vec3(1.0, 1.0, 1.0));
 	pool.set(temp, shader_tag.inner, get_shader(shading));
 	return temp;
 }
@@ -523,6 +531,7 @@ es::entity noob::stage::scenery(const noob::meshes::handle h, const noob::vec3& 
 	es::entity temp (pool.new_entity());
 	pool.set(temp, body_tag.inner, b_handle);
 	pool.set(temp, basic_model_tag.inner, model_handle);
+	pool.set(temp, scales_tag.inner, std::get<1>(get_model(s_handle)));//bodies_holder.get(b_handle)->inner_shape->get_scales());
 	pool.set(temp, shader_tag.inner, get_shader(shading));
 	return temp;
 }
