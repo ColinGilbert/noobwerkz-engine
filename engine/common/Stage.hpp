@@ -32,6 +32,8 @@
 #include "Component.hpp"
 // #include "IntrusiveBase.hpp"
 
+#include <standalone/brigand.hpp>
+
 namespace noob
 {
 	typedef noob::component<std::unique_ptr<noob::basic_mesh>> meshes;
@@ -145,6 +147,7 @@ namespace noob
 			// Props are simple rigid-body objects with leaned-down 3d models that cannot be animated via vertex weights. They also cannot apply movement to themselves.
 			// Note: Bullet doesn't support movable trimeshes, so trimeshes passed into this function get implicitly turned into scenery.
 			// TODO: Switch to Newton?
+			//
 			es::entity prop(const noob::bodies::handle, const std::string& shading);
 			// es::entity prop(const noob::bodies::handle, const std::string& shading);
 			es::entity prop(const noob::bodies::handle, const noob::basic_models::handle, const std::string& shading);

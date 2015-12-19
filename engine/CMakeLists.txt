@@ -12,6 +12,8 @@ include_directories(${Boost_INCLUDE_DIR})
 
 #include_directories(lib/tinympl)
 
+include_directories(lib/brigand)
+
 include_directories(lib/es)
 list (APPEND es_src
 	lib/es/es/storage.cpp

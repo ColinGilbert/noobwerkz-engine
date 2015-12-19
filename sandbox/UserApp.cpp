@@ -6,7 +6,7 @@ std::vector<std::tuple<noob::keyboard::keys, noob::keyboard::mod_keys, std::stri
 
 void noob::application::user_init()
 {
-	view_mat = noob::look_at(noob::vec3(0.0, 20.0, -50.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0)); //look_at(const vec3& cam_pos, vec3 targ_pos, const vec3& up)
+	view_mat = noob::look_at(noob::vec3(0.0, 300.0, -300.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0)); //look_at(const vec3& cam_pos, vec3 targ_pos, const vec3& up)
 	noob::triplanar_gradient_map_renderer::uniform_info moon_shader;
 	moon_shader.colours[0] = noob::vec4(1.0, 0.0, 0.0, 1.0);
 	moon_shader.colours[1] = noob::vec4(0.0, 1.0, 0.0, 1.0);
@@ -14,7 +14,7 @@ void noob::application::user_init()
 	moon_shader.colours[3] = noob::vec4(0.0, 0.0, 0.0, 1.0);
 	moon_shader.mapping_blends = noob::vec3(0.7, 0.5, 1.0);
 	// moon_shader.scales = noob::vec3(1.0,1.0,1.0);
-	moon_shader.scales = noob::vec3(1.0/10.0, 1.0/10.0, 1.0/10.0);
+	moon_shader.scales = noob::vec3(1.0, 1.0, 1.0);
 	// moon_shader.scales = noob::vec3(1.0, 1.0, 1.0);
 	// moon_shader.scales = noob::vec3(1/10,1/10,1/10);
 	moon_shader.colour_positions = noob::vec2(0.4, 0.6);
@@ -36,12 +36,13 @@ void noob::application::user_init()
 	stage.set_shader(purple_shader, "purple");
 
 	// Make a basic scenery
-	noob::basic_mesh temp_1 = noob::mesh_utils::box(200.0, 20.0, 200.0);
-	//noob::basic_mesh temp_2 = noob::mesh_utils::cone(500.0, 1000.0);
-	temp_1.translate(noob::vec3(0.0, -20.0, 0.0));
+	noob::basic_mesh temp_1 = noob::mesh_utils::box(100.0, 20.0, 100.0);
+	// temp_1.translate(noob::vec3(0.0, 10.0, 0.0));
+	noob::basic_mesh temp_2 = noob::mesh_utils::cone(50.0, 100.0);
+	temp_1.translate(noob::vec3(0.0, 10.0, 0.0));
+	noob::basic_mesh scene_mesh = noob::mesh_utils::csg(temp_1, temp_2, noob::csg_op::UNION);
 	
-	//noob::basic_mesh scene_mesh = noob::mesh_utils::csg(temp_1, temp_2, noob::csg_op::INTERSECTION);
-	auto scenery_h = stage.scenery(stage.add_mesh(temp_1), noob::vec3(0.0, 0.0, 0.0), "moon");
+	auto scenery_h = stage.scenery(stage.add_mesh(scene_mesh), noob::vec3(0.0, 0.0, 0.0), "moon");
 
 	std::random_device rd;
 	std::mt19937 gen(rd());
@@ -55,8 +56,9 @@ void noob::application::user_init()
 		// 	points.push_back(noob::vec3(dis(gen), dis(gen), dis(gen)));
 		// }
 		//auto h = stage.hull(points);
-		auto h = stage.sphere(5.0);
-		auto temp_body = stage.body(h, 1.0, noob::vec3(dis(gen), 100, dis(gen)), noob::versor(0.0, 0.0, 0.0, 1.0)); //, true);
+
+		auto h = stage.box(10.0, 10.0, 10.0);//sphere(5.0);
+		auto temp_body = stage.body(h, 1.0, noob::vec3(dis(gen), 250.0, dis(gen)), noob::versor(0.0, 0.0, 0.0, 1.0)); //, true);
 
 		stage.bodies_holder.get(temp_body)->set_self_controlled(false);
 		stage.prop(temp_body, "purple");

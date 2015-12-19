@@ -413,29 +413,28 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 
 noob::basic_mesh noob::mesh_utils::csg(const noob::basic_mesh& _a, const noob::basic_mesh& _b, const noob::csg_op op)
 {
-	noob::basic_mesh a = _a;
-	noob::basic_mesh b = _b;
-	a.normalize();
-	b.normalize();
+	// noob::basic_mesh a = _a;
+	// noob::basic_mesh b = _b;
+	// a.normalize();
+	// b.normalize();
 
-	csgjs_model model_a = get_csg_model(a);
-	csgjs_model model_b = get_csg_model(b);
+	csgjs_model model_a = get_csg_model(_a);
+	csgjs_model model_b = get_csg_model(_b);
 
 	csgjs_model resulting_csg_model;
+	switch (op)
+	{
+		case (noob::csg_op::UNION):
+			resulting_csg_model = csgjs_union(model_a, model_b);
+			break;
 
-	if (op == noob::csg_op::UNION)
-	{
-		resulting_csg_model = csgjs_union(model_a, model_b);
-	}
-	else if (op == noob::csg_op::DIFFERENCE)
-	{
-		resulting_csg_model = csgjs_difference(model_a, model_b);
-	}
-	else
-	{
-		resulting_csg_model = csgjs_intersection(model_a, model_b);
-	}
-
+		case(noob::csg_op::DIFFERENCE):
+			resulting_csg_model = csgjs_difference(model_a, model_b);
+			break;
+		case(noob::csg_op::INTERSECTION):
+			resulting_csg_model = csgjs_intersection(model_a, model_b);
+			break;
+	};
 	noob::basic_mesh results;
 
 	for (size_t i = 0; i < resulting_csg_model.vertices.size(); i++)
@@ -462,7 +461,7 @@ noob::basic_mesh noob::mesh_utils::csg(const noob::basic_mesh& _a, const noob::b
 	{
 		results.indices.push_back(i);
 	}
-	
+
 	results.normalize();
 
 	return results;
