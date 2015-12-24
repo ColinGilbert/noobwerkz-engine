@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.0)
 project(NoobWerkz)
 
-set(CMAKE_BUILD_TYPE "DEBUG")
-#set(CMAKE_BUILD_TYPE "RELEASE")
+#set(CMAKE_BUILD_TYPE "DEBUG")
+set(CMAKE_BUILD_TYPE "RELEASE")
 
 set(CMAKE_CXX_FLAGS "-std=c++1y -O2 -fno-strict-aliasing -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DOM_GARBAGE_NO_STATUS_WARNING -DEIGEN_MPL2_ONLY -Wall ${CMAKE_CXX_FLAGS}") # -DCHAISCRIPT_NO_THREADS
 set(CMAKE_C_FLAGS "-std=c99 -fno-strict-aliasing -DSQLITE_ENABLE_COLUMN_METADATA -DSTB_IMAGE_STATIC -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -Wall ${CMAKE_C_FLAGS}")
@@ -34,121 +34,119 @@ add_subdirectory(lib/freetype)
 #add_subdirectory(lib/polyvox)
 include_directories(lib/polyvox/include)
 
+include_directories(lib/dcollide)
+list (APPEND dcollide_src
+	lib/dcollide/debug.cpp
 
+	lib/dcollide/broadphase/broadphase.cpp
+	lib/dcollide/broadphase/broadphasefactory.cpp
+	lib/dcollide/broadphase/broadphaseproxydata.cpp
+	lib/dcollide/broadphase/broadphasejob.cpp
+	lib/dcollide/broadphase/broadphasecollisions.cpp
 
-include_directories(lib/d-collide/d-collide)
-list (APPEND d_collide_src
-    lib/d-collide/d-collide/debug.cpp
+	# Broadphase Octree Files
+	lib/dcollide/broadphase/broadphasehierarchicalgrid.cpp
+	lib/dcollide/broadphase/broadphasehierarchicalgridproxydata.cpp
+	lib/dcollide/broadphase/broadphasehierarchicalgridjob.cpp
+	lib/dcollide/broadphase/broadphasehierarchicalgridjob2.cpp
+	lib/dcollide/broadphase/broadphasehierarchicalgridjobcollection.cpp
+	lib/dcollide/broadphase/hierarchicalgrid.cpp
 
-    lib/d-collide/d-collide/broadphase/broadphase.cpp
-    lib/d-collide/d-collide/broadphase/broadphasefactory.cpp
-    lib/d-collide/d-collide/broadphase/broadphaseproxydata.cpp
-    lib/d-collide/d-collide/broadphase/broadphasejob.cpp
-    lib/d-collide/d-collide/broadphase/broadphasecollisions.cpp
+	# BroadPhase Brute Force Files
+	lib/dcollide/broadphase/broadphasebruteforce.cpp
+	lib/dcollide/broadphase/broadphasebruteforcejob.cpp
 
-    # Broadphase Octree Files
-    lib/d-collide/d-collide/roadphase/broadphasehierarchicalgrid.cpp
-    lib/d-collide/d-collide/roadphase/broadphasehierarchicalgridproxydata.cpp
-    lib/d-collide/d-collide/roadphase/broadphasehierarchicalgridjob.cpp
-    lib/d-collide/d-collide/broadphase/broadphasehierarchicalgridjob2.cpp
-    lib/d-collide/d-collide/roadphase/broadphasehierarchicalgridjobcollection.cpp
-    lib/d-collide/d-collide/roadphase/hierarchicalgrid.cpp
+	lib/dcollide/math/matrix.cpp
+	lib/dcollide/math/quaternion.cpp
+	lib/dcollide/math/vector.cpp
+	lib/dcollide/math/plane.cpp
+	lib/dcollide/world.cpp
+	lib/dcollide/pipeline.cpp
+	lib/dcollide/worldparameters.cpp
+	lib/dcollide/worldcollisions.cpp
+	lib/dcollide/proxy.cpp
+	lib/dcollide/proxyfactory.cpp
+	lib/dcollide/thread/thread.cpp
+	lib/dcollide/thread/jobpool.cpp
+	lib/dcollide/thread/jobpoolcollection.cpp
+	lib/dcollide/thread/threadpool.cpp
+	lib/dcollide/thread/threadjobcollection.cpp
+	lib/dcollide/debuglog.cpp
+	lib/dcollide/debugstream.cpp
+	lib/dcollide/debugstreamconfiguration_initialize.cpp
 
-    # BroadPhase Brute Force Files
-    lib/d-collide/d-collide/roadphase/broadphasebruteforce.cpp
-    lib/d-collide/d-collide/roadphase/broadphasebruteforcejob.cpp
+	lib/dcollide/detectordeform/detectordeformmanager.cpp
+	lib/dcollide/detectordeform/detectordeformalgorithm.cpp
+	lib/dcollide/detectordeform/detectordeformjob.cpp
+	lib/dcollide/detectordeform/detectordeformproxydata.cpp
+	lib/dcollide/detectordeform/spatialhash/intvector3.cpp
+	lib/dcollide/detectordeform/spatialhash/simplehash.cpp
+	lib/dcollide/detectordeform/spatialhash/spatialhash.cpp
+	lib/dcollide/detectordeform/spatialhash/spatialgrid.cpp
+	lib/dcollide/detectordeform/spatialhash/spatialhashalgorithm.cpp
+	lib/dcollide/detectordeform/spatialhash/spatialhashjobcollection.cpp
+	lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchy.cpp
+	lib/dcollide/detectordeform/surfacehierarchy/normalcone.cpp
+	lib/dcollide/detectordeform/surfacehierarchy/deformablebvhnode.cpp
+	lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyalgorithm.cpp
+	lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyjob.cpp
+	lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyselfjob.cpp
+	lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyproxydata.cpp
+	lib/dcollide/detectordeform/bvhierarchy/bvhierarchyalgorithm.cpp
+	lib/dcollide/detectordeform/bvhierarchy/bvhierarchybvhnode.cpp
+	lib/dcollide/detectordeform/bvhierarchy/bvhierarchyjob.cpp
+	lib/dcollide/detectordeform/bvhierarchy/bvhierarchyproxydata.cpp
 
-    lib/d-collide/d-collide/math/matrix.cpp
-    lib/d-collide/d-collide/math/quaternion.cpp
-    lib/d-collide/d-collide/math/vector.cpp
-    lib/d-collide/d-collide/math/plane.cpp
-    lib/d-collide/d-collide/orld.cpp
-    lib/d-collide/d-collide/ipeline.cpp
-    lib/d-collide/d-collide/orldparameters.cpp
-    lib/d-collide/d-collide/orldcollisions.cpp
-    lib/d-collide/d-collide/roxy.cpp
-    lib/d-collide/d-collide/roxyfactory.cpp
-    lib/d-collide/d-collide/hread/thread.cpp
-    lib/d-collide/d-collide/hread/jobpool.cpp
-    lib/d-collide/d-collide/hread/jobpoolcollection.cpp
-    lib/d-collide/d-collide/hread/threadpool.cpp
-    lib/d-collide/d-collide/hread/threadjobcollection.cpp
-    lib/d-collide/d-collide/ebuglog.cpp
-    lib/d-collide/d-collide/ebugstream.cpp
-    lib/d-collide/d-collide/ebugstreamconfiguration_initialize.cpp
+	lib/dcollide/bvhnode.cpp
+	lib/dcollide/bvhnodedefault.cpp
+	lib/dcollide/meshsplitter.cpp
 
-    lib/d-collide/d-collide/etectordeform/detectordeformmanager.cpp
-    lib/d-collide/d-collide/etectordeform/detectordeformalgorithm.cpp
-    lib/d-collide/d-collide/detectordeform/detectordeformjob.cpp
-    lib/d-collide/d-collide/detectordeform/detectordeformproxydata.cpp
-    lib/d-collide/d-collide/detectordeform/spatialhash/intvector3.cpp
-    lib/d-collide/d-collide/detectordeform/spatialhash/simplehash.cpp
-    lib/d-collide/d-collide/detectordeform/spatialhash/spatialhash.cpp
-    lib/d-collide/d-collide/detectordeform/spatialhash/spatialgrid.cpp
-    lib/d-collide/d-collide/detectordeform/spatialhash/spatialhashalgorithm.cpp
-    lib/d-collide/d-collide/detectordeform/spatialhash/spatialhashjobcollection.cpp
-    lib/d-collide/d-collide/detectordeform/surfacehierarchy/surfacehierarchy.cpp
-    lib/d-collide/d-collide/detectordeform/surfacehierarchy/normalcone.cpp
-    lib/d-collide/d-collide/detectordeform/surfacehierarchy/deformablebvhnode.cpp
-    lib/d-collide/d-collide/detectordeform/surfacehierarchy/surfacehierarchyalgorithm.cpp
-    lib/d-collide/d-collide/detectordeform/surfacehierarchy/surfacehierarchyjob.cpp
-    lib/d-collide/d-collide/detectordeform/surfacehierarchy/surfacehierarchyselfjob.cpp
-    lib/d-collide/d-collide/detectordeform/surfacehierarchy/surfacehierarchyproxydata.cpp
-    lib/d-collide/d-collide/detectordeform/bvhierarchy/bvhierarchyalgorithm.cpp
-    lib/d-collide/d-collide/detectordeform/bvhierarchy/bvhierarchybvhnode.cpp
-    lib/d-collide/d-collide/detectordeform/bvhierarchy/bvhierarchyjob.cpp
-    lib/d-collide/d-collide/detectordeform/bvhierarchy/bvhierarchyproxydata.cpp
+	lib/dcollide/boundingvolumes/aabb.cpp
+	lib/dcollide/boundingvolumes/obb.cpp
+	lib/dcollide/boundingvolumes/boundingvolume.cpp
+	lib/dcollide/boundingvolumes/boundingsphere.cpp
+	lib/dcollide/boundingvolumes/kdop.cpp
 
-    lib/d-collide/d-collide/bvhnode.cpp
-    lib/d-collide/d-collide/bvhnodedefault.cpp
-    lib/d-collide/d-collide/meshsplitter.cpp
+	lib/dcollide/shapes/box.cpp
+	lib/dcollide/shapes/cone.cpp
+	lib/dcollide/shapes/cylinder.cpp
+	lib/dcollide/shapes/mesh.cpp
+	lib/dcollide/shapes/shape.cpp
+	lib/dcollide/shapes/sphere.cpp
+	lib/dcollide/shapes/wedge.cpp
+	lib/dcollide/shapes/mesh/triangle.cpp
+	lib/dcollide/shapes/mesh/vertex.cpp
+	lib/dcollide/shapes/mesh/line.cpp
+	lib/dcollide/shapes/mesh/meshfactory.cpp
 
-    lib/d-collide/d-collide/boundingvolumes/aabb.cpp
-    lib/d-collide/d-collide/boundingvolumes/obb.cpp
-    lib/d-collide/d-collide/boundingvolumes/boundingvolume.cpp
-    lib/d-collide/d-collide/boundingvolumes/boundingsphere.cpp
-    lib/d-collide/d-collide/boundingvolumes/kdop.cpp
+	lib/dcollide/exceptions/exception.cpp
 
-    lib/d-collide/d-collide/shapes/box.cpp
-    lib/d-collide/d-collide/shapes/cone.cpp
-    lib/d-collide/d-collide/shapes/cylinder.cpp
-    lib/d-collide/d-collide/shapes/mesh.cpp
-    lib/d-collide/d-collide/shapes/shape.cpp
-    lib/d-collide/d-collide/shapes/sphere.cpp
-    lib/d-collide/d-collide/shapes/wedge.cpp
-    lib/d-collide/d-collide/shapes/mesh/triangle.cpp
-    lib/d-collide/d-collide/shapes/mesh/vertex.cpp
-    lib/d-collide/d-collide/shapes/mesh/line.cpp
-    lib/d-collide/d-collide/shapes/mesh/meshfactory.cpp
+	lib/dcollide/detectorrigid/bvhtraverse.cpp
+	lib/dcollide/detectorrigid/middlephaserigidjob.cpp
+	lib/dcollide/detectorrigid/middlephaserigidjobcreator.cpp
 
-    lib/d-collide/d-collide/exceptions/exception.cpp
+	lib/dcollide/narrowphase/narrowphase.cpp
+	lib/dcollide/narrowphase/triangleintersector.cpp
+	lib/dcollide/narrowphase/boxsphereintersector.cpp
+	lib/dcollide/narrowphase/boxboxintersector.cpp
+	lib/dcollide/narrowphase/wedgeintersector.cpp
+	lib/dcollide/narrowphase/intersectionhelpers.cpp
+	lib/dcollide/narrowphase/cylinderintersector.cpp
+	lib/dcollide/narrowphase/coneintersector.cpp
+	lib/dcollide/narrowphase/spheresphereintersector.cpp
+	lib/dcollide/narrowphase/meshmeshintersector.cpp
+	lib/dcollide/narrowphase/narrowphasejob.cpp
+	lib/dcollide/narrowphase/spheretriangleintersector.cpp
 
-
-    lib/d-collide/d-collide/detectorrigid/bvhtraverse.cpp
-    lib/d-collide/d-collide/detectorrigid/middlephaserigidjob.cpp
-    lib/d-collide/d-collide/detectorrigid/middlephaserigidjobcreator.cpp
-
-    lib/d-collide/d-collide/narrowphase/narrowphase.cpp
-    lib/d-collide/d-collide/narrowphase/triangleintersector.cpp
-    lib/d-collide/d-collide/narrowphase/boxsphereintersector.cpp
-    lib/d-collide/d-collide/narrowphase/boxboxintersector.cpp
-    lib/d-collide/d-collide/narrowphase/wedgeintersector.cpp
-    lib/d-collide/d-collide/narrowphase/intersectionhelpers.cpp
-    lib/d-collide/d-collide/narrowphase/cylinderintersector.cpp
-    lib/d-collide/d-collide/narrowphase/coneintersector.cpp
-    lib/d-collide/d-collide/narrowphase/spheresphereintersector.cpp
-    lib/d-collide/d-collide/narrowphase/meshmeshintersector.cpp
-    lib/d-collide/d-collide/narrowphase/narrowphasejob.cpp
-    lib/d-collide/d-collide/narrowphase/spheretriangleintersector.cpp
-    
-    lib/d-collide/d-collide/collisioncache.cpp
-    lib/d-collide/d-collide/collisionpair.cpp
+	lib/dcollide/collisioncache.cpp
+	lib/dcollide/collisionpair.cpp
 
 	)
 
 
-#include_directories(lib/eigen)
-#add_subdirectory(lib/rbdl)
+include_directories(lib/eigen)
+add_subdirectory(lib/rbdl)
+
 
 include_directories(lib/csgjs-cpp)
 list (APPEND csgjs_src
@@ -333,7 +331,7 @@ list(APPEND common_src
 	common/GUI.cpp
 	common/Camera.cpp
 	common/Stage.cpp
-	common/BodyController.cpp
+	common/Body.cpp
 	common/Shape.cpp
 	common/MeshUtils.cpp
 	common/BasicModel.cpp
@@ -358,7 +356,8 @@ list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 
 add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${csgjs_src}
 	${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src}
-	${es_src} ${user_src} ${recast_src} ${angelscript_src} ${es_src} ) 
+	${es_src} ${user_src} ${recast_src} ${angelscript_src} ${es_src}
+	${dcollide_src}) 
 
 target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES}
 	${OPENGL_LIBRARIES} freetype rt dl pthread assimp m emon OpenMeshCore

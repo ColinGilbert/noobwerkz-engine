@@ -23,10 +23,10 @@ namespace noob
 	class shape 
 	{
 		friend class stage;
-		friend class body_controller;
+		friend class body;
 
 		public:
-		enum class type { SPHERE, BOX, CAPSULE, CYLINDER, CONE, CONVEX, TRIMESH };//, PLANE };
+		enum class type { SPHERE, BOX, CYLINDER, CONE, HULL, TRIMESH };
 
 		shape() : physics_valid(false) {}
 		virtual ~shape();
@@ -50,7 +50,7 @@ namespace noob
 		void trimesh(const noob::basic_mesh*);
 		
 		// In this engine, we don't really use planes. This is due to the fact that their representation doesn't jive with the other parametrics.
-	//	void plane(const noob::vec3& normal, float offset);
+		// void plane(const noob::vec3& normal, float offset);
 		
 		// Used to calculate scale of world transform for drawing purposes (so that only one copy of the mesh gets kept in-buffer, which is a supremely useful optimization for parametric shapes)
 		noob::vec3 get_scales() const;

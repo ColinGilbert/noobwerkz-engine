@@ -1,5 +1,7 @@
 #include "Shape.hpp"
 
+
+
 noob::shape::~shape()
 {
 	if (physics_valid)
@@ -46,7 +48,7 @@ void noob::shape::cylinder(float radius, float height)
 	physics_valid = true;
 }
 
-
+/*
 void noob::shape::capsule(float radius, float height)
 {
 	if (!physics_valid)
@@ -57,7 +59,7 @@ void noob::shape::capsule(float radius, float height)
 	scales = noob::vec3(radius*2, height, radius*2);
 	physics_valid = true;
 }
-
+*/
 
 void noob::shape::cone(float radius, float height)
 {
@@ -75,7 +77,7 @@ void noob::shape::hull(const std::vector<noob::vec3>& points)
 {
 	if (!physics_valid)
 	{
-		shape_type = noob::shape::type::CONVEX;
+		shape_type = noob::shape::type::HULL;
 		scales = noob::vec3(1.0, 1.0, 1.0);
 		inner_shape = new btConvexHullShape(&points[0].v[0], points.size());
 		// size_t num_p = static_cast<btConvexHullShape*>(inner_shape)->getNumPoints();

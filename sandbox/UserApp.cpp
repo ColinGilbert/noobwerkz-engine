@@ -6,19 +6,19 @@ std::vector<std::tuple<noob::keyboard::keys, noob::keyboard::mod_keys, std::stri
 
 void noob::application::user_init()
 {
-	view_mat = noob::look_at(noob::vec3(0.0, 300.0, -300.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0)); //look_at(const vec3& cam_pos, vec3 targ_pos, const vec3& up)
+	view_mat = noob::look_at(noob::vec3(0.0, -10.0, 0.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(1.0, 0.0, 0.0)); //look_at(const vec3& cam_pos, vec3 targ_pos, const vec3& up)
 	noob::triplanar_gradient_map_renderer::uniform_info moon_shader;
-	moon_shader.colours[0] = noob::vec4(1.0, 0.0, 0.0, 1.0);
-	moon_shader.colours[1] = noob::vec4(0.0, 1.0, 0.0, 1.0);
-	moon_shader.colours[2] = noob::vec4(0.0, 0.0, 1.0, 1.0);
+	moon_shader.colours[0] = noob::vec4(1.0, 1.0, 1.0, 1.0);
+	moon_shader.colours[1] = noob::vec4(0.0, 0.0, 0.0, 1.0);
+	moon_shader.colours[2] = noob::vec4(0.0, 0.0, 0.0, 1.0);
 	moon_shader.colours[3] = noob::vec4(0.0, 0.0, 0.0, 1.0);
-	moon_shader.mapping_blends = noob::vec3(0.7, 0.5, 1.0);
-	// moon_shader.scales = noob::vec3(1.0,1.0,1.0);
-	moon_shader.scales = noob::vec3(1.0, 1.0, 1.0);
-	// moon_shader.scales = noob::vec3(1.0, 1.0, 1.0);
-	// moon_shader.scales = noob::vec3(1/10,1/10,1/10);
+	moon_shader.mapping_blends = noob::vec3(0.0, 0.0, 1.0);
+	moon_shader.scales = noob::vec3(1.0/10.0, 1.0/10.0, 1.0/10.0);
 	moon_shader.colour_positions = noob::vec2(0.4, 0.6);
+	// moon_shader.scales = noob::vec3(1.0/100.0, 1.0/100.0, 1.0/100.0);
+
 	stage.set_shader(moon_shader, "moon");
+	
 	// auto actor_id = stage.actor(stage.basic_models.get_handle("unit-sphere"), stage.skeletons.get_handle("null"), noob::vec3(0.0, 80.0, 0.0));
 
 	// This shader isn't really blue, but bear with me :P
@@ -29,9 +29,9 @@ void noob::application::user_init()
 	purple_shader.colours[3] = noob::vec4(0.0, 0.0, 1.0, 1.0);
 	purple_shader.mapping_blends = noob::vec3(0.2, 0.0, 0.5);
 	// purple_shader.scales = noob::vec3(1.0,1.0,1.0);
-	purple_shader.scales = noob::vec3(1.0, 1.0, 1.0);
 	// purple_shader.scales = noob::vec3(1.0, 1.0, 1.0);
-	// purple_shader.scales = noob::vec3(1/10,1/10,1/10);
+	// purple_shader.scales = noob::vec3(1.0, 1.0, 1.0);
+	purple_shader.scales = noob::vec3(1.0/100.0, 1.0/100.0, 1.0/100.0);
 	purple_shader.colour_positions = noob::vec2(0.2, 0.7);
 	stage.set_shader(purple_shader, "purple");
 
@@ -55,15 +55,14 @@ void noob::application::user_init()
 		// {	
 		// 	points.push_back(noob::vec3(dis(gen), dis(gen), dis(gen)));
 		// }
-		//auto h = stage.hull(points);
+		// auto h = stage.hull(points);
 
-		auto h = stage.box(10.0, 10.0, 10.0);//sphere(5.0);
-		auto temp_body = stage.body(h, 1.0, noob::vec3(dis(gen), 250.0, dis(gen)), noob::versor(0.0, 0.0, 0.0, 1.0)); //, true);
+		auto h = stage.box(2.0, 2.0, 2.0); 
+		auto temp_body = stage.body(noob::body_type::DYNAMIC, h, 1.0, noob::vec3(dis(gen), 250.0, dis(gen)), noob::versor(0.0, 0.0, 0.0, 1.0)); //, true);
 
-		stage.bodies_holder.get(temp_body)->set_self_controlled(false);
+		stage.bodies.get(temp_body); //->set_self_controlled(false);
 		stage.prop(temp_body, "purple");
 	}
-
 
 	keystrokes.push_back(std::make_tuple(noob::keyboard::keys::NUM_5, noob::keyboard::mod_keys::NONE, "switch view"));
 }
@@ -86,10 +85,4 @@ void noob::application::user_update(double dt)
 	}
 
 	gui.text(ww.str(), static_cast<float>(window_width - 500), static_cast<float>(window_height - 50), noob::gui::font_size::HEADER);
-	
-
-	//gui.text();
-	//gui.text();
-
-
 }
