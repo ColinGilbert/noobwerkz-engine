@@ -6,7 +6,7 @@ std::vector<std::tuple<noob::keyboard::keys, noob::keyboard::mod_keys, std::stri
 
 void noob::application::user_init()
 {
-	view_mat = noob::look_at(noob::vec3(0.0, -10.0, 0.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(1.0, 0.0, 0.0)); //look_at(const vec3& cam_pos, vec3 targ_pos, const vec3& up)
+	view_mat = noob::look_at(noob::vec3(0.0, 100.0, -100.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0)); //look_at(const vec3& cam_pos, vec3 targ_pos, const vec3& up)
 	noob::triplanar_gradient_map_renderer::uniform_info moon_shader;
 	moon_shader.colours[0] = noob::vec4(1.0, 1.0, 1.0, 1.0);
 	moon_shader.colours[1] = noob::vec4(0.0, 0.0, 0.0, 1.0);
