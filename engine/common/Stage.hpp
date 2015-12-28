@@ -62,6 +62,7 @@ namespace noob
 	class stage
 	{
 		public:
+			stage() : show_origin(true) {}
 			~stage();
 
 			// This one must be called by the application. It really sucks but that's because the graphics API is (currently) static. This may well change soon enough.
@@ -158,6 +159,8 @@ namespace noob
 			noob::basic_mesh make_mesh(const noob::shapes_holder::handle);
 			// For parametrics, this one will return a normalized model with scaling coordinates. For triangles, scalings are <1, 1, 1>
 			std::tuple<noob::basic_models_holder::handle,noob::vec3> get_model(const noob::shapes_holder::handle);
+
+			bool show_origin;
 
 		protected:
 			// template<typename T>

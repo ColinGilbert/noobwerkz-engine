@@ -292,6 +292,11 @@ void noob::basic_mesh::translate(const noob::vec3& translation)
 	noob::transform_helper t;
 	t.translate(translation);
 	transform(t.get_matrix());
+	// for (auto v : vertices)
+	// {
+	//	v += translation;
+	// }
+	// normalize();
 }
 
 

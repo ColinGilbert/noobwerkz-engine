@@ -2,9 +2,9 @@
 
 #include "Logger.hpp"
 
-#define GUI_FILL_LAYER_1 1
-#define GUI_FILL_LAYER_2 2
-#define GUI_FILL_LAYER_3 3
+// #define GUI_FILL_LAYER_1 1
+// #define GUI_FILL_LAYER_2 2
+// #define GUI_FILL_LAYER_3 3
 #define GUI_TEXT_LAYER 4
 
 

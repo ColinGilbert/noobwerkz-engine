@@ -15,9 +15,14 @@ uniform vec4 mapping_blend;
 uniform vec4 colour_positions;
 
 // Scaling factors (for the texture)
-uniform vec4 scale;
+// uniform vec4 scales;
 
 // uniform u_texture;
+uniform vec4 light_0_direction;
+uniform vec4 light_1_direction;
+uniform vec4 light_2_direction;
+uniform vec4 light_3_direction;
+
 
 void main()
 {
@@ -51,5 +56,17 @@ void main()
 	
 	vec4 tex_final = ((colour_1 + colour_2) * ratio_1_to_2) + ((colour_2 + colour_3) * ratio_2_to_3) + ((colour_3 + colour_4) * ratio_3_to_4);
 
-	gl_FragColor = tex_final; 
+	// vec3 lightDir = vec3(0.0, 0.0, 1.0);
+	// float diffuse = clamp(dot(lightDir, normalFromVS), 0.0, 1.0);
+	// diffuse *= 0.7; // Dim the diffuse a bit
+	// float ambient = 0.3; // Add some ambient
+	// float lightIntensity = diffuse + ambient; // Compute the final light intensity
+	// outputColor = surfaceColor * lightIntensity; //Compute final rendered color
+
+	float diffuse = clamp(dot(light_0_direction.xyz, v_normal), 0.0, 1.0);
+	diffuse *= 0.7;
+	float ambient = 0.3;
+	float light_intensity = diffuse + ambient;
+
+	gl_FragColor = tex_final * light_intensity;
 }

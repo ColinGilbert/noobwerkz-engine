@@ -58,19 +58,16 @@ void noob::stage::init()
 
 	unit_sphere_shape = sphere(0.5);
 	unit_cube_shape = box(1.0, 1.0, 1.0);
-	// unit_capsule_shape = capsule(0.5, 1.0);
 	unit_cylinder_shape = cylinder(0.5, 1.0);
 	unit_cone_shape = cone(0.5, 1.0);
 
 	unit_sphere_mesh = meshes.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_sphere_shape)));
 	unit_cube_mesh =  meshes.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_cube_shape)));
-	// unit_capsule_mesh =  meshes.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_capsule_shape)));
 	unit_cylinder_mesh =  meshes.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_cylinder_shape)));
 	unit_cone_mesh =  meshes.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_cone_shape)));
 
 	shapes_to_meshes[unit_sphere_shape.get_inner()] = unit_sphere_mesh;
 	shapes_to_meshes[unit_cube_shape.get_inner()] = unit_cube_mesh;
-	shapes_to_meshes[unit_capsule_shape.get_inner()] = unit_capsule_mesh;
 	shapes_to_meshes[unit_cylinder_shape.get_inner()] = unit_cylinder_mesh;
 	shapes_to_meshes[unit_cone_shape.get_inner()] = unit_cone_mesh;
 
@@ -79,7 +76,6 @@ void noob::stage::init()
 	logger::log("[Stage] making unit cube model");
 	unit_cube_model = basic_model(unit_cube_mesh);
 	// logger::log("[Stage] making unit capsule model");
-	// unit_capsule_model = basic_model(unit_capsule_mesh);
 	logger::log("[Stage] making unit cylinder model");
 	unit_cylinder_model = basic_model(unit_cylinder_mesh);
 	logger::log("[Stage] making unit cone model");
@@ -87,13 +83,12 @@ void noob::stage::init()
 
 	meshes_to_models[unit_sphere_mesh.get_inner()] = unit_sphere_model;
 	meshes_to_models[unit_cube_mesh.get_inner()] = unit_cube_model;
-	// meshes_to_models[unit_capsule_mesh.get_inner()] = unit_capsule_model;
 	meshes_to_models[unit_cylinder_mesh.get_inner()] = unit_cylinder_model;
 	meshes_to_models[unit_cone_mesh.get_inner()] = unit_cone_model;
 
 	//  Init basic default shader
 	noob::basic_renderer::uniform_info basic_shader_info;
-	basic_shader_info.colour = noob::vec4(1.0, 1.0, 1.0, 1.0);
+	basic_shader_info.colour = noob::vec4(1.0, 0.0, 0.0, 1.0);
 	set_shader(basic_shader_info, "debug"); 
 	debug_shader = get_shader("debug");
 
@@ -112,6 +107,7 @@ void noob::stage::init()
 	default_triplanar_shader = get_shader("default-triplanar");
 
 	logger::log("[Stage] init complete.");
+
 }
 
 
@@ -138,6 +134,16 @@ void noob::stage::draw() const
 		world_mat = bodies.get(b)->get_transform() * world_mat;
 		renderer.draw(basic_models.get(m), shaders.get(s), world_mat);
 	});
+
+	if (show_origin)
+	{
+		// noob::mat4 world_mat = noob::scale(noob::identity_mat4(), shapes.get(bodies_to_shapes[b.get_inner()])->get_scales());
+		// world_mat = bodies.get(b)->get_transform() * world_mat;
+		// renderer.draw(basic_models.get(m), shaders.get(s), world_mat);
+		//bgfx::setViewTransform(view_id, view_matrix, ortho);
+		// bgfx::setViewRect(view_id, 0, 0, window_width, window_height);
+		renderer.draw(basic_models.get(unit_cube_model), shaders.get(debug_shader), noob::scale(noob::identity_mat4(), noob::vec3(10.0, 10.0, 10.0)));
+	}
 }
 
 

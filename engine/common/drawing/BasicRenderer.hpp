@@ -16,7 +16,7 @@ namespace noob
 			};
 			
 			void init();
-			void draw(const noob::drawable* animated_model, const noob::mat4& world_matrix, const noob::basic_renderer::uniform_info& info, uint8_t view_id = 0) const;
+			void draw(const noob::drawable* animated_model, const noob::mat4& world_matrix, const noob::basic_renderer::uniform_info& info, uint8_t view_id) const;
 
 		protected:
 			noob::graphics::shader shader;
