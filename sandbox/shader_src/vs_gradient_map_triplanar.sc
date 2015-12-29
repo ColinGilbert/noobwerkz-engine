@@ -10,6 +10,7 @@ void main()
 	// v_position = mul(u_modelViewProj, vec4(a_position, 1.0)).xyz; // v_position = mul(world_mat, vec4(a_position, 1.0)).xyz;
 	// v_position = mul(normal_mat, vec4(a_position, 1.0)).xyz;
 
-	v_normal = mul(normal_mat, vec4(a_normal, 0.0)).xyz;
+	// v_normal = mul(world_mat, vec4(a_normal, 1.0)).xyz;
+	v_normal = mul(normal_mat, vec4(a_normal, 1.0)).xyz;
 	gl_Position = mul(u_modelViewProj, vec4(a_position, 1.0));
 }

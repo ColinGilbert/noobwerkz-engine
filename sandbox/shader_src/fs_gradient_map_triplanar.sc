@@ -65,9 +65,10 @@ void main()
 	// float lightIntensity = diffuse + ambient; // Compute the final light intensity
 	// outputColor = surfaceColor * lightIntensity; //Compute final rendered color
 
+	float diffuse = clamp(dot(v_normal, light_0_direction.xyz), 0.0, 1.0);
 	// float diffuse = clamp(dot(light_0_direction.xyz, v_normal), 0.0, 1.0);
-	float diffuse = max(dot(light_0_direction.xyz, v_normal), 0.0);
-	diffuse *= 0.7;
+	// float diffuse = max(dot(light_0_direction.xyz, v_normal), 0.0);
+	diffuse *= 0.8;
 	float ambient = 0.3;
 	float light_intensity = diffuse + ambient;
 
