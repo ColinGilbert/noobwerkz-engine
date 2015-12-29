@@ -123,8 +123,12 @@ void noob::stage::update(double dt)
 }
 
 
-void noob::stage::draw() const
+void noob::stage::draw(float window_width, float window_height) const
 {
+
+	bgfx::setViewTransform(0, &view_mat.m[0], &projection_mat.m[0]);
+	bgfx::setViewRect(0, 0, 0, window_width, window_height);
+	bgfx::setViewRect(1, 0, 0, window_width, window_height);
 	// TODO: Use culling to determine which items are invisible.
 	pool.for_each<noob::basic_models_holder::handle, noob::bodies_holder::handle, noob::shaders_holder::handle>(basic_model_tag.get(), body_tag.get(), shader_tag.get(), [this](es::storage::iterator, noob::basic_models_holder::handle& m, noob::bodies_holder::handle& b, noob::shaders_holder::handle& s) -> long unsigned int
 	{
@@ -132,7 +136,8 @@ void noob::stage::draw() const
 		// logger::log(bodies.get(b)->get_debug_string());
 		noob::mat4 world_mat = noob::scale(noob::identity_mat4(), shapes.get(bodies_to_shapes[b.get_inner()])->get_scales());
 		world_mat = bodies.get(b)->get_transform() * world_mat;
-		renderer.draw(basic_models.get(m), shaders.get(s), world_mat);
+		noob::mat4 normal_mat = noob::transpose(noob::inverse((view_mat * world_mat)));
+		renderer.draw(basic_models.get(m), shaders.get(s), world_mat, normal_mat);
 	});
 
 	if (show_origin)
@@ -142,7 +147,8 @@ void noob::stage::draw() const
 		// renderer.draw(basic_models.get(m), shaders.get(s), world_mat);
 		//bgfx::setViewTransform(view_id, view_matrix, ortho);
 		// bgfx::setViewRect(view_id, 0, 0, window_width, window_height);
-		renderer.draw(basic_models.get(unit_cube_model), shaders.get(debug_shader), noob::scale(noob::identity_mat4(), noob::vec3(10.0, 10.0, 10.0)));
+		noob::mat4 normal_mat = noob::identity_mat4();
+		renderer.draw(basic_models.get(unit_cube_model), shaders.get(debug_shader), noob::scale(noob::identity_mat4(), noob::vec3(10.0, 10.0, 10.0)), normal_mat);
 	}
 }
 

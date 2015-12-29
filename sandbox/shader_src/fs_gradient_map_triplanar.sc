@@ -27,6 +27,7 @@ uniform vec4 light_3_direction;
 void main()
 {
 	vec3 position = normalize(v_position);
+	// vec3 position = v_position;
 	vec3 normal_blend = normalize(max(abs(v_normal), 0.0001));
 
 	float b = normal_blend.x + normal_blend.y + normal_blend.z;
@@ -40,6 +41,7 @@ void main()
 	vec4 xaxis = vec4(texture2D(u_texture, position.yz).rgb, 1.0);
 	vec4 yaxis = vec4(texture2D(u_texture, position.xz).rgb, 1.0);
 	vec4 zaxis = vec4(texture2D(u_texture, position.xy).rgb, 1.0);
+
 
 	vec4 tex = xaxis * normal_blend.x + yaxis * normal_blend.y + zaxis * normal_blend.z;
 
@@ -63,7 +65,8 @@ void main()
 	// float lightIntensity = diffuse + ambient; // Compute the final light intensity
 	// outputColor = surfaceColor * lightIntensity; //Compute final rendered color
 
-	float diffuse = clamp(dot(light_0_direction.xyz, v_normal), 0.0, 1.0);
+	// float diffuse = clamp(dot(light_0_direction.xyz, v_normal), 0.0, 1.0);
+	float diffuse = max(dot(light_0_direction.xyz, v_normal), 0.0);
 	diffuse *= 0.7;
 	float ambient = 0.3;
 	float light_intensity = diffuse + ambient;

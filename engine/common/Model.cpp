@@ -1,3 +1,4 @@
+/*
 #include "Model.hpp"
 #include "Logger.hpp"
 
@@ -97,3 +98,4 @@ void noob::model::draw(uint8_t view_id, const noob::mat4& model_mat, const bgfx:
 		logger::log("Attempting to draw item with improper state.");
 	}
 }
+*/

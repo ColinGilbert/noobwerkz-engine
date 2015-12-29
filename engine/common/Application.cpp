@@ -282,15 +282,9 @@ void noob::application::update(double delta)
 
 void noob::application::draw()
 {
+	stage.projection_mat = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 0.1f, 2000.0f);
 
-	noob::mat4 proj = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 0.1f, 2000.0f);
-
-	bgfx::setViewTransform(0, &view_mat.m[0], &proj.m[0]);
-	bgfx::setViewRect(0, 0, 0, window_width, window_height);
-
-	stage.draw();
-
-	// gui.text("The goat stumbled upon the cheese", 150.0, 50.0);
+	stage.draw(window_width, window_height);
 }
 
 
@@ -302,10 +296,10 @@ void noob::application::accept_ndof_data(const noob::ndof::data& info)
 		float damping = 360.0;
 		noob::vec3 rotation(info.rotation);
 		noob::vec3 translation(info.translation);
-		view_mat = noob::rotate_x_deg(view_mat, -rotation[0]/damping);
-		view_mat = noob::rotate_y_deg(view_mat, -rotation[1]/damping);
-		view_mat = noob::rotate_z_deg(view_mat, -rotation[2]/damping);
-		view_mat = noob::translate(view_mat, noob::vec3(-translation[0]/damping, -translation[1]/damping, -translation[2]/damping));
+		stage.view_mat = noob::rotate_x_deg(stage.view_mat, -rotation[0]/damping);
+		stage.view_mat = noob::rotate_y_deg(stage.view_mat, -rotation[1]/damping);
+		stage.view_mat = noob::rotate_z_deg(stage.view_mat, -rotation[2]/damping);
+		stage.view_mat = noob::translate(stage.view_mat, noob::vec3(-translation[0]/damping, -translation[1]/damping, -translation[2]/damping));
 	}
 }
 

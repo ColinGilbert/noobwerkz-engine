@@ -22,10 +22,10 @@ namespace noob
 
 			typedef boost::variant<noob::triplanar_gradient_map_renderer::uniform_info, noob::basic_renderer::uniform_info> info;
 			
-			void draw(const noob::drawable* drawable, const prepared_shaders::info& uni, const noob::mat4& world_mat = noob::identity_mat4(), uint8_t view_id = 0) const
+			void draw(const noob::drawable* drawable, const prepared_shaders::info& uni, const noob::mat4& world_mat, const noob::mat4& normal_mat, uint8_t view_id = 0) const
 			{
 				match(uni,
-				[this, drawable, world_mat, view_id] (const noob::triplanar_gradient_map_renderer::uniform_info& info) -> void { this->triplanar.draw(drawable, world_mat, info, view_id); },
+				[this, drawable, world_mat, normal_mat, view_id] (const noob::triplanar_gradient_map_renderer::uniform_info& info) -> void { this->triplanar.draw(drawable, world_mat, normal_mat, info, view_id); },
 				[this, drawable, world_mat, view_id] (const noob::basic_renderer::uniform_info& info) -> void { this->basic.draw(drawable, world_mat, info, view_id); }
 				);
 			}

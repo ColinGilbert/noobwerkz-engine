@@ -115,7 +115,7 @@ namespace noob
 			// size_t references;
 
 		protected:
-			static constexpr aiPostProcessSteps post_process = aiProcessPreset_TargetRealtime_Fast | aiProcess_CalcTangentSpace | aiProcess_ImproveCacheLocality | aiProcess_FindInstances | aiProcess_FixInfacingNormals; 
+			static constexpr aiPostProcessSteps post_process = static_cast<aiPostProcessSteps>(aiProcessPreset_TargetRealtime_Fast | aiProcess_CalcTangentSpace | aiProcess_ImproveCacheLocality | aiProcess_FindInstances | aiProcess_FixInfacingNormals); 
 			bbox bbox_info;
 			bool volume_calculated;
 			double volume;

@@ -62,7 +62,7 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() : show_origin(true) {}
+			stage() : show_origin(true), view_mat(noob::identity_mat4()), projection_mat(noob::identity_mat4()) {}
 			~stage();
 
 			// This one must be called by the application. It really sucks but that's because the graphics API is (currently) static. This may well change soon enough.
@@ -74,7 +74,7 @@ namespace noob
 			// Call those every frame or so.
 			void update(double dt);
 			// TODO: Implement
-			void draw() const;
+			void draw(float window_width, float window_height) const;
 
 			// Creates physics body. Those get made lots.
 			noob::bodies_holder::handle body(noob::body_type, noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0), bool ccd = false);
@@ -161,6 +161,9 @@ namespace noob
 			std::tuple<noob::basic_models_holder::handle,noob::vec3> get_model(const noob::shapes_holder::handle);
 
 			bool show_origin;
+			
+			noob::mat4 view_mat, projection_mat;
+
 
 		protected:
 			// template<typename T>

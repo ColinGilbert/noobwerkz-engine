@@ -51,6 +51,19 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 
 	noob::graphics::add_uniform(std::string("light_direction"), bgfx::UniformType::Enum::Vec4, 4);
 	noob::graphics::add_uniform(std::string("light_intensity"), bgfx::UniformType::Enum::Vec4, 4);
+
+	noob::graphics::add_uniform(std::string("colour_1"), bgfx::UniformType::Enum::Vec4);
+	noob::graphics::add_uniform(std::string("colour_2"), bgfx::UniformType::Enum::Vec4);
+	noob::graphics::add_uniform(std::string("colour_3"), bgfx::UniformType::Enum::Vec4);
+	noob::graphics::add_uniform(std::string("colour_4"), bgfx::UniformType::Enum::Vec4);
+	noob::graphics::add_uniform(std::string("mapping_blend"), bgfx::UniformType::Enum::Vec4);
+	noob::graphics::add_uniform(std::string("colour_positions"), bgfx::UniformType::Enum::Vec4);
+	noob::graphics::add_uniform(std::string("scales"), bgfx::UniformType::Enum::Vec4);
+	noob::graphics::add_uniform(std::string("light_0_direction"), bgfx::UniformType::Enum::Vec4);
+	noob::graphics::add_uniform(std::string("light_1_direction"), bgfx::UniformType::Enum::Vec4);
+	noob::graphics::add_uniform(std::string("light_2_direction"), bgfx::UniformType::Enum::Vec4);
+	noob::graphics::add_uniform(std::string("light_3_direction"), bgfx::UniformType::Enum::Vec4);
+	noob::graphics::add_uniform(std::string("normal_mat"), bgfx::UniformType::Enum::Mat4);
 }
 
 void noob::graphics::frame(uint32_t width, uint32_t height)
