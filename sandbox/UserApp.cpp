@@ -8,7 +8,7 @@ void noob::application::user_init()
 {
 	stage.view_mat = noob::look_at(noob::vec3(0.0, 0.0, -200.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0)); //look_at(const vec3& cam_pos, vec3 targ_pos, const vec3& up)
 	
-	stage.show_origin = false;
+	// stage.show_origin = false;
 	
 	noob::triplanar_gradient_map_renderer::uniform_info moon_shader;
 	moon_shader.colours[0] = noob::vec4(1.0, 1.0, 1.0, 0.0);
@@ -16,7 +16,7 @@ void noob::application::user_init()
 	moon_shader.colours[2] = noob::vec4(0.0, 0.0, 0.0, 0.0);
 	moon_shader.colours[3] = noob::vec4(0.0, 0.0, 0.0, 0.0);
 	moon_shader.mapping_blends = noob::vec3(0.0, 0.0, 1.0);
-	moon_shader.scales = noob::vec3(1.0, 1.0, 1.0);
+	moon_shader.scales = noob::vec3(1.0/100.0, 1.0/100.0, 1.0/100.0);
 	moon_shader.colour_positions = noob::vec2(0.4, 0.6);
 	moon_shader.light_dir[0] = noob::vec3(0.0, 1.0, 0.0);
 	stage.set_shader(moon_shader, "moon");
@@ -27,7 +27,7 @@ void noob::application::user_init()
 	purple_shader.colours[2] = noob::vec4(1.0, 0.0, 1.0, 0.0);
 	purple_shader.colours[3] = noob::vec4(0.0, 0.0, 1.0, 0.0);
 	purple_shader.mapping_blends = noob::vec3(0.2, 0.0, 0.5);
-	purple_shader.scales = noob::vec3(1.0, 1.0, 1.0);
+	purple_shader.scales = noob::vec3(1.0/4.0, 1.0/4.0, 1.0/4.0);
 	purple_shader.colour_positions = noob::vec2(0.2, 0.7);
 	purple_shader.light_dir[0] = noob::vec3(0.0, 1.0, 0.0);
 	stage.set_shader(purple_shader, "purple");
@@ -47,7 +47,7 @@ void noob::application::user_init()
 
 	for (size_t i = 0 ; i < 500; ++i )
 	{
-		auto h = stage.box(3.0, 3.0, 3.0); 
+		auto h = stage.box(4.0, 4.0, 4.0); 
 		auto temp_body = stage.body(noob::body_type::DYNAMIC, h, 1.0, noob::vec3(dis(gen), 250.0, dis(gen)), noob::versor(0.0, 0.0, 0.0, 1.0)); //, true);
 
 		stage.bodies.get(temp_body); 

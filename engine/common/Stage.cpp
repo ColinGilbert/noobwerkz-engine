@@ -128,6 +128,7 @@ void noob::stage::draw(float window_width, float window_height) const
 
 	bgfx::setViewTransform(0, &view_mat.m[0], &projection_mat.m[0]);
 	bgfx::setViewRect(0, 0, 0, window_width, window_height);
+	bgfx::setViewTransform(1, &view_mat.m[0], &projection_mat.m[0]);
 	bgfx::setViewRect(1, 0, 0, window_width, window_height);
 	// TODO: Use culling to determine which items are invisible.
 	pool.for_each<noob::basic_models_holder::handle, noob::bodies_holder::handle, noob::shaders_holder::handle>(basic_model_tag.get(), body_tag.get(), shader_tag.get(), [this](es::storage::iterator, noob::basic_models_holder::handle& m, noob::bodies_holder::handle& b, noob::shaders_holder::handle& s) -> long unsigned int

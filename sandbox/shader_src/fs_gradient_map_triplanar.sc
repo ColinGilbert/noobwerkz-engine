@@ -15,7 +15,7 @@ uniform vec4 mapping_blend;
 uniform vec4 colour_positions;
 
 // Scaling factors (for the texture)
-// uniform vec4 scales;
+uniform vec4 scales;
 
 // uniform u_texture;
 uniform vec4 light_0_direction;
@@ -26,8 +26,8 @@ uniform vec4 light_3_direction;
 
 void main()
 {
-	vec3 position = normalize(v_position);
-	// vec3 position = v_position;
+	// vec3 position = normalize(v_position);
+	vec3 position = v_position;
 	vec3 normal_blend = normalize(max(abs(v_normal), 0.0001));
 
 	float b = normal_blend.x + normal_blend.y + normal_blend.z;
@@ -38,9 +38,9 @@ void main()
 	// vec4 yaxis = vec4(0.0, 1.0, 0.0, 1.0);
 	// vec4 zaxis = vec4(0.0, 0.0, 1.0, 1.0);
 
-	vec4 xaxis = vec4(texture2D(u_texture, position.yz).rgb, 1.0);
-	vec4 yaxis = vec4(texture2D(u_texture, position.xz).rgb, 1.0);
-	vec4 zaxis = vec4(texture2D(u_texture, position.xy).rgb, 1.0);
+	vec4 xaxis = vec4(texture2D(u_texture, position.yz * scales.x).rgb, 1.0);
+	vec4 yaxis = vec4(texture2D(u_texture, position.xz * scales.y).rgb, 1.0);
+	vec4 zaxis = vec4(texture2D(u_texture, position.xy * scales.z).rgb, 1.0);
 
 
 	vec4 tex = xaxis * normal_blend.x + yaxis * normal_blend.y + zaxis * normal_blend.z;
@@ -69,7 +69,7 @@ void main()
 	// float diffuse = clamp(dot(light_0_direction.xyz, v_normal), 0.0, 1.0);
 	// float diffuse = max(dot(light_0_direction.xyz, v_normal), 0.0);
 	diffuse *= 0.8;
-	float ambient = 0.3;
+	float ambient = 0.5;
 	float light_intensity = diffuse + ambient;
 
 	gl_FragColor = tex_final * light_intensity;

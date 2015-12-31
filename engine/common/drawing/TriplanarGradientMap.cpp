@@ -36,8 +36,8 @@ void noob::triplanar_gradient_map_renderer::draw(const noob::drawable* model, co
 
 	bgfx::setUniform(noob::graphics::get_uniform("colour_positions").handle, &colour_pos.v[0]);
 
-	//noob::vec4 scalings(info.scales, 1.0);
-	//bgfx::setUniform(noob::graphics::get_uniform("scales").handle, &scalings.v[0]);
+	noob::vec4 scalings(info.scales, 1.0);
+	bgfx::setUniform(noob::graphics::get_uniform("scales").handle, &scalings.v[0]);
 
 	noob::graphics::sampler samp = noob::graphics::get_sampler("u_texture");
 	bgfx::setTexture(0, samp.handle, noob::graphics::get_texture("grad_map"));
