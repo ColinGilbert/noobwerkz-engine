@@ -1,5 +1,5 @@
 #include "Application.hpp"
-
+#include <cmath>
 #include <random>
 // TODO: Insert the callback function here
 std::vector<std::tuple<noob::keyboard::keys, noob::keyboard::mod_keys, std::string>> keystrokes;
@@ -48,7 +48,12 @@ void noob::application::user_init()
 	for (size_t i = 0 ; i < 500; ++i )
 	{
 		auto h = stage.box(4.0, 4.0, 4.0); 
-		auto temp_body = stage.body(noob::body_type::DYNAMIC, h, 1.0, noob::vec3(dis(gen), 250.0, dis(gen)), noob::versor(0.0, 0.0, 0.0, 1.0)); //, true);
+		float x_pos = dis(gen);
+		x_pos += std::copysign(1.0, x_pos)*7.0;
+		float z_pos = dis(gen);
+		z_pos += std::copysign(1.0, z_pos)*7.0;
+
+		auto temp_body = stage.body(noob::body_type::DYNAMIC, h, 1.0, noob::vec3(x_pos, 250.0, z_pos), noob::versor(0.0, 0.0, 0.0, 1.0)); //, true);
 
 		stage.bodies.get(temp_body); 
 		stage.prop(temp_body, "purple");

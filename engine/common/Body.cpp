@@ -25,6 +25,29 @@ void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg
 	start_transform.setIdentity();
 	start_transform.setOrigin(btVector3(pos.v[0], pos.v[1], pos.v[2]));
 	start_transform.setRotation(btQuaternion(orient.q[0], orient.q[1], orient.q[2], orient.q[3]));
+
+	switch(type)
+	{
+		case(noob::body_type::DYNAMIC):
+		{
+			break;
+		}
+		case(noob::body_type::KINEMATIC):
+		{
+			break;
+		}
+		case(noob::body_type::STATIC):
+		{
+			break;
+		}
+		case(noob::body_type::GHOST):
+		{
+			break;
+		}
+
+	};
+
+
 	btVector3 inertia(0.0, 0.0, 0.0);
 	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
 	shape = const_cast<noob::shape*>(_shape);

@@ -61,12 +61,10 @@ namespace noob
 
 			static bgfx::TextureHandle load_texture(const std::string& friendly_name, const std::string& filename, uint32_t flags);
 
-
 			// ---------------- Asset creators (make assets available from getters) ----------------
 			static bool add_sampler(const std::string&);
 			static bool add_uniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t count = 1);
 			static bool add_shader(const std::string&, const noob::graphics::shader&);
-
 
 			// ---------------- Getters -----------------
 			static noob::graphics::shader get_shader(const std::string&);
@@ -91,6 +89,9 @@ namespace noob
 				return bgfx::copy(&payload[0], payload.size());
 			}
 
+			static noob::graphics::uniform light_direction, light_intensity, colour_0, colour_1, colour_2, colour_3, mapping_blends, colour_positions, scales, light_0_direction, light_1_direction, light_2_direction, light_3_direction, normal_mat;
+
+		protected:
 			// ---------------- Data --------------------
 			static std::unordered_map<std::string, bgfx::TextureHandle> global_textures;
 			static std::unordered_map<std::string, noob::graphics::shader> shaders;

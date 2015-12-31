@@ -21,10 +21,10 @@ void noob::triplanar_gradient_map_renderer::draw(const noob::drawable* model, co
 
 	// const uint64_t state = 0 | BGFX_STATE_CULL_CW | BGFX_STATE_DEPTH_TEST_LESS;// | BGFX_STATE_MSAA;
 	// bgfx::setState(state);
-	bgfx::setUniform(noob::graphics::get_uniform("colour_1").handle, &info.colours[0].v[0]);
-	bgfx::setUniform(noob::graphics::get_uniform("colour_2").handle, &info.colours[1].v[0]);
-	bgfx::setUniform(noob::graphics::get_uniform("colour_3").handle, &info.colours[2].v[0]);
-	bgfx::setUniform(noob::graphics::get_uniform("colour_4").handle, &info.colours[3].v[0]);
+	bgfx::setUniform(noob::graphics::get_uniform("colour_0").handle, &info.colours[0].v[0]);
+	bgfx::setUniform(noob::graphics::get_uniform("colour_1").handle, &info.colours[1].v[0]);
+	bgfx::setUniform(noob::graphics::get_uniform("colour_2").handle, &info.colours[2].v[0]);
+	bgfx::setUniform(noob::graphics::get_uniform("colour_3").handle, &info.colours[3].v[0]);
 
 	bgfx::setUniform(noob::graphics::get_uniform("normal_mat").handle, &normal_mat.m[0]);
 
