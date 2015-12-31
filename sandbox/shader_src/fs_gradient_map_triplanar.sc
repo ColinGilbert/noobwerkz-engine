@@ -69,7 +69,7 @@ void main()
 	// float diffuse = max(dot(light_0_direction.xyz, v_normal), 0.0);
 	diffuse *= 0.8;
 	float ambient = 0.5;
-	float light_intensity = diffuse + ambient;
+	float light_intensity = clamp(diffuse + ambient, 0.0, 1.0);
 
 	gl_FragColor = tex_final * light_intensity;
 }

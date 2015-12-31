@@ -186,10 +186,10 @@ namespace noob
 	}
 
 	// squared length
-	float length_squared(const vec3& v) 
-	{
-		return v.v[0] * v.v[0] + v.v[1] * v.v[1] + v.v[2] * v.v[2];
-	}
+	//float length_squared(const vec3& v) 
+	//{
+	//	return v.v[0] * v.v[0] + v.v[1] * v.v[1] + v.v[2] * v.v[2];
+	//}
 
 	vec3 normalize(const vec3& v) 
 	{
@@ -303,7 +303,7 @@ namespace noob
 		return vec3 (x, y, z);
 	}
 
-	float get_squared_dist(vec3 from, vec3 to)
+	float get_squared_dist(const vec3& from, const vec3& to)
 	{
 		float x = (to.v[0] - from.v[0]) * (to.v[0] - from.v[0]);
 		float y = (to.v[1] - from.v[1]) * (to.v[1] - from.v[1]);
@@ -314,7 +314,7 @@ namespace noob
 	/* converts an un-normalized direction into a heading in degrees
 	   NB i suspect that the z is backwards here but i've used in in
 	   several places like this. d'oh! */
-	float direction_to_heading(vec3 d) 
+	float direction_to_heading(const vec3& d) 
 	{
 		return atan2 (-d.v[0], -d.v[2]) * ONE_RAD_IN_DEG;
 	}

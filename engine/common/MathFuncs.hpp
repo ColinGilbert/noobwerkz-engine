@@ -291,12 +291,17 @@ namespace noob
 
 	// vector functions
 	float length(const vec3& v);
-	float length2(const vec3& v);
+	inline float length_squared(const vec3& v)
+	{
+		return v.v[0] * v.v[0] + v.v[1] * v.v[1] + v.v[2] * v.v[2];
+	}
+
+
 	vec3 normalize(const vec3& v);
 	float dot(const vec3& a, const vec3& b);
 	vec3 cross(const vec3& a, const vec3& b);
-	float get_squared_dist(vec3 from, vec3 to);
-	float direction_to_heading(vec3 d);
+	float get_squared_dist(const vec3& from, const vec3& to);
+	float direction_to_heading(const vec3& d);
 	vec3 heading_to_direction(float degrees);
 
 	inline bool linearly_dependent(const noob::vec3& a, const noob::vec3& b, const noob::vec3& c)

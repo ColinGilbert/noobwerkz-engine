@@ -32,13 +32,9 @@ void noob::application::user_init()
 	purple_shader.light_dir[0] = noob::vec3(0.0, 1.0, 0.0);
 	stage.set_shader(purple_shader, "purple");
 
-	// Make a basic scenery
-	// noob::basic_mesh temp_1 = noob::mesh_utils::box(100.0, 20.0, 100.0);
-	// temp_1.translate(noob::vec3(0.0, 10.0, 0.0));
-	noob::basic_mesh temp_2 = noob::mesh_utils::cone(50.0, 100.0);
-	temp_2.translate(noob::vec3(0.0, 10.0, 0.0));
-	// noob::basic_mesh scene_mesh = noob::mesh_utils::csg(temp_1, temp_2, noob::csg_op::UNION);
-	noob::basic_mesh scene_mesh = temp_2;
+	noob::basic_mesh temp = noob::mesh_utils::cone(50.0, 100.0);
+	temp.translate(noob::vec3(0.0, 10.0, 0.0));
+	noob::basic_mesh scene_mesh = temp;
 	auto scenery_h = stage.scenery(stage.add_mesh(scene_mesh), noob::vec3(0.0, 0.0, 0.0), "moon");
 
 	std::random_device rd;

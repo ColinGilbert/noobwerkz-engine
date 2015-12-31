@@ -13,7 +13,7 @@ noob::application::application()
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
 	script_engine = asCreateScriptEngine();
-	// assert(script_engine == 0); // TODO: Look into a little.
+	// assert(script_engine == 0); // TODO: Look into
 	set_init_script("init.as");
 	view_mat = noob::look_at(noob::vec3(0, 50.0, -100.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
 }	
@@ -90,6 +90,60 @@ void noob::application::init()
 
 	r = script_engine->RegisterObjectType("vec3", sizeof(vec3), asOBJ_VALUE | asOBJ_POD); assert( r >= 0 );
 	// TODO: Constructors, operators, for vec3
+		// vec3();
+		// create from 3 scalars
+		// vec3(float x, float y, float z);
+		// create from vec2 and a scalar
+		// vec3(const vec2& vv, float z);
+		// create from truncated vec4
+		// vec3(const vec4& vv);
+		// vec3(const vec3& vv);
+		// vec3(const btVector3&);
+
+		// template <class Archive>
+		// void serialize( Archive & ar )
+		// {
+		// 	ar(v);
+		// }
+
+		// add vector to vector
+		// vec3 operator+(const vec3& rhs) const;
+		// add scalar to vector
+		// vec3 operator+(float rhs) const;
+		// because user's expect this too
+		// vec3& operator+=(const vec3& rhs);
+		// subtract vector from vector
+		// vec3 operator-(const vec3& rhs) const;
+		// add vector to vector
+		// vec3 operator-(float rhs) const;
+		// because users expect this too
+		// vec3& operator-=(const vec3& rhs);
+		// multiply with scalar
+		// vec3 operator*(float rhs) const;
+		// because users expect this too
+		// vec3& operator*=(float rhs);
+		// divide vector by scalar
+		// vec3 operator/(float rhs) const;
+		// because users expect this too
+		// vec3& operator=(const vec3& rhs);
+	
+		// internal data
+		// std::array<float,3> v;
+
+		// float& operator[](int x)
+		// {
+			// return v[x];
+		// }
+
+		//std::string to_string() const
+		// {
+			// fmt::MemoryWriter w;
+			// w << "(" << v[0] << ", " << v[1] << ", " << v[2] << ")";
+			// return w.str();
+		// }
+
+
+
 
 	r = script_engine->RegisterObjectType("vec4", sizeof(vec4), asOBJ_VALUE | asOBJ_POD); assert( r >= 0 );
 	// TODO: Constructors, operators, for vec4
@@ -104,16 +158,15 @@ void noob::application::init()
 	// TODO: Constructors, operators, for mat4
 
 	// TODO: The host of mathematical functions defined in MathFuncs.hpp
-
-	// float length(const vec3& v);
-	// float length2(const vec3& v);
-	// vec3 normalize(const vec3& v);
-	// float dot(const vec3& a, const vec3& b);
-	// vec3 cross(const vec3& a, const vec3& b);
-	// float get_squared_dist(vec3 from, vec3 to);
-	// float direction_to_heading(vec3 d);
-	// vec3 heading_to_direction(float degrees);
-
+	r = script_engine->RegisterGlobalFunction("float length(const vec3& in)", asFUNCTION(length_squared), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("float length_squared(const vec3& in)", asFUNCTION(length), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("vec3 normalize(const vec3& in)", asFUNCTIONPR(normalize, (const vec3&), vec3), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("float dot(const vec3& in, const vec3& in)", asFUNCTIONPR(dot, (const vec3&, const vec3&), float), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("vec3 cross(const vec3& in, const vec3& in)", asFUNCTION(cross), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("float get_squared_dist(const vec3& in, const vec3& in)", asFUNCTION(get_squared_dist), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("float direction_to_heading(const vec3& in)", asFUNCTION(direction_to_heading), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("vec3 heading_to_direction(float)", asFUNCTION(heading_to_direction), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("bool linearly_dependent(const vec3& in, const vec3& in, const vec3& in)", asFUNCTION(linearly_dependent), asCALL_CDECL); assert( r >= 0);
 	// bool linearly_dependent(const noob::vec3& a, const noob::vec3& b, const noob::vec3& c);
 
 	// matrix functions
@@ -282,7 +335,7 @@ void noob::application::update(double delta)
 
 void noob::application::draw()
 {
-	stage.projection_mat = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 0.1f, 2000.0f);
+	stage.projection_mat = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 0.1f, 500.0f);
 
 	stage.draw(window_width, window_height);
 }
