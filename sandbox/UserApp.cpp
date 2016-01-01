@@ -8,7 +8,7 @@ void noob::application::user_init()
 {
 	stage.view_mat = noob::look_at(noob::vec3(0.0, 0.0, -200.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0)); //look_at(const vec3& cam_pos, vec3 targ_pos, const vec3& up)
 	
-	// stage.show_origin = false;
+	stage.show_origin = false;
 	
 	noob::triplanar_gradient_map_renderer::uniform_info moon_shader;
 	moon_shader.colours[0] = noob::vec4(1.0, 1.0, 1.0, 0.0);

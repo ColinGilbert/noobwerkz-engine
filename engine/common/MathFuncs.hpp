@@ -56,14 +56,14 @@ namespace noob
 		vec2(float x, float y);
 
 		template <class Archive>
-		void serialize( Archive & ar )
-		{
-			ar(v);
-		}
+			void serialize( Archive & ar )
+			{
+				ar(v);
+			}
 
 
 		std::array<float,2> v;
-		
+
 		float& operator[](int x) 
 		{
 			return v[x];
@@ -78,13 +78,13 @@ namespace noob
 		}
 
 
-/*
-		inline bool operator<(const noob::vec2& lhs, const noob::vec2& rhs)
-		
-		{
-			return (std::sqrt(std::pow(lhs.v[0], 2) + std::pow(lhs.v[1], 2))) < (std::sqrt(std::pow(rhs.v[0], 2) + std::pow(rhs.v[1], 2)));
-		}
-*/
+		/*
+		   inline bool operator<(const noob::vec2& lhs, const noob::vec2& rhs)
+
+		   {
+		   return (std::sqrt(std::pow(lhs.v[0], 2) + std::pow(lhs.v[1], 2))) < (std::sqrt(std::pow(rhs.v[0], 2) + std::pow(rhs.v[1], 2)));
+		   }
+		   */
 	};
 
 	struct vec3
@@ -100,10 +100,10 @@ namespace noob
 		vec3(const btVector3&);
 
 		template <class Archive>
-		void serialize( Archive & ar )
-		{
-			ar(v);
-		}
+			void serialize( Archive & ar )
+			{
+				ar(v);
+			}
 
 		// add vector to vector
 		vec3 operator+(const vec3& rhs) const;
@@ -125,7 +125,7 @@ namespace noob
 		vec3 operator/(float rhs) const;
 		// because users expect this too
 		vec3& operator=(const vec3& rhs);
-	
+
 		// internal data
 		std::array<float,3> v;
 
@@ -150,14 +150,14 @@ namespace noob
 		vec4(const vec3& vv, float w);
 
 		template <class Archive>
-		void serialize( Archive & ar )
-		{
-			ar(v);
-		}
+			void serialize( Archive & ar )
+			{
+				ar(v);
+			}
 
 
 		std::array<float,4> v;
-	
+
 		float& operator[](int x)
 		{
 			return v[x];
@@ -183,10 +183,10 @@ namespace noob
 		mat3(float a, float b, float c,	float d, float e, float f, float g, float h, float i);
 
 		template <class Archive>
-		void serialize( Archive & ar )
-		{
-			ar(m);
-		}
+			void serialize( Archive & ar )
+			{
+				ar(m);
+			}
 
 
 
@@ -196,7 +196,7 @@ namespace noob
 		{
 			return m[x];
 		}
-		
+
 		std::string to_string() const
 		{
 			fmt::MemoryWriter w;
@@ -223,10 +223,10 @@ namespace noob
 		mat4(const glm::mat4&);
 
 		template <class Archive>
-		void serialize( Archive & ar )
-		{
-			ar(m);
-		}
+			void serialize( Archive & ar )
+			{
+				ar(m);
+			}
 
 		vec4 operator*(const vec4& rhs) const;
 		mat4 operator*(const mat4& rhs) const;
@@ -253,12 +253,12 @@ namespace noob
 		versor(float,float,float,float);
 		versor(const vec4& v);
 		versor(const btQuaternion&);
-		
+
 		template <class Archive>
-		void serialize( Archive & ar )
-		{
-			ar(q);
-		}
+			void serialize( Archive & ar )
+			{
+				ar(q);
+			}
 
 
 
@@ -280,10 +280,10 @@ namespace noob
 	struct cubic_region
 	{
 		template <class Archive>
-		void serialize( Archive & ar )
-		{
-			ar(lower_corner, upper_corner);
-		}
+			void serialize( Archive & ar )
+			{
+				ar(lower_corner, upper_corner);
+			}
 
 		vec3 lower_corner, upper_corner;
 	};
@@ -331,7 +331,7 @@ namespace noob
 
 
 	// extraction of useful info from mat4
-	
+
 	// TODO: Implement. PITA (?)
 	// vec4 rotation_from_mat4(const mat4& m);
 	vec3 translation_from_mat4(const mat4& m);
@@ -345,20 +345,17 @@ namespace noob
 	// quaternion functions
 	versor quat_from_axis_rad(float radians, float x, float y, float z);
 	versor quat_from_axis_deg(float degrees, float x, float y, float z);
-
 	versor quat_from_mat4(const mat4&);
-
 	mat4 quat_to_mat4(const versor& q);
 	float dot(const versor& q, const versor& r);
-	// TODO: Find out if this was ever in the library, and either replace it or implement it.
-	versor slerp(const versor& q, const versor& r);
-	void create_versor(float* q, float a, float x, float y, float z);
-	void mult_quat_quat(float* result, float* r, float* s);
-	//void mult_quat_quat(versor results, const versor& r, const versor& s);
-	void normalize_quat(float* q);
-	void quat_to_mat4(float* m, float* q); 
-	// stupid overloading wouldn't let me use const
+	// versor slerp(const versor& q, const versor& r);
 	versor normalize(const versor& q);
-	void print(const versor& q);
-	versor slerp(versor& q, versor& r, float t);
+	versor slerp(const versor& q, const versor& r, float t);
 };
+
+// void create_versor(float* q, float a, float x, float y, float z);
+// void mult_quat_quat(float* result, float* r, float* s);
+// void mult_quat_quat(versor results, const versor& r, const versor& s);
+// void normalize_quat(float* q);
+// void quat_to_mat4(float* m, float* q); 
+// stupid overloading wouldn't let me use const

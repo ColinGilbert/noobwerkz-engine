@@ -116,9 +116,6 @@ namespace noob
 			void set_shader(const noob::prepared_shaders::info&, const std::string& name);
 			noob::shaders_holder::handle get_shader(const std::string& name);
 
-			// Our component-entity system: The super-efficient handle-swapping fast-iterating dynamic magic enabler
-			es::storage pool;
-
 			// Tags that are used for faster access to our tag-tracker
 			noob::component_tag scales_tag, mesh_tag, path_tag, shape_tag, shape_type_tag, body_tag, basic_model_tag, animated_model_tag, skeletal_anim_tag, shader_tag;
 
@@ -150,10 +147,12 @@ namespace noob
 			// Props are simple rigid-body objects with leaned-down 3d models that cannot be animated via vertex weights. They also cannot apply movement to themselves.
 			// Note: Bullet doesn't support movable trimeshes, so trimeshes passed into this function get implicitly turned into scenery.
 			es::entity prop(const noob::bodies_holder::handle, const std::string& shading);
-			// es::entity prop(const noob::bodies_holder::handle, const std::string& shading);
+			//es::entity prop(const noob::bodies_holder::handle, const std::string& shading);
 			es::entity prop(const noob::bodies_holder::handle, const noob::basic_models_holder::handle, const std::string& shading);
 			// Scenery is a non-movable item that uses indexed triangle meshes as input.
 			es::entity scenery(const noob::meshes_holder::handle, const noob::vec3& pos, const std::string& shading, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0) );
+
+			es::storage pool;
 
 			// Utilities:
 			noob::basic_mesh make_mesh(const noob::shapes_holder::handle);
@@ -172,6 +171,9 @@ namespace noob
 			// auto a (pool.register_component<T>(t, friendly_name));
 			// return a;
 			// }
+
+	// Our component-entity system: The super-efficient handle-swapping fast-iterating dynamic magic enabler
+
 
 			noob::prepared_shaders renderer;
 
