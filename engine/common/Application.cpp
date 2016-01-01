@@ -85,92 +85,101 @@ void noob::application::init()
 	//r = script_engine->RegisterGlobalFunction("", asFUNCTION(func_name), asCALL_CDECL);
 	script_engine->SetMessageCallback(asFUNCTION(angel_message_callback), 0, asCALL_CDECL);
 
-	r = script_engine->RegisterObjectType("vec2", sizeof(vec2), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
-	// TODO: Constructors, operators, for vec2
+	RegisterStdString(script_engine);
 
-	r = script_engine->RegisterObjectType("vec3", sizeof(vec3), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
-	// TODO: Constructors, operators, for vec3
-	// vec3();
-	// create from 3 scalars
-	// vec3(float x, float y, float z);
-	// create from vec2 and a scalar
-	// vec3(const vec2& vv, float z);
-	// create from truncated vec4
-	// vec3(const vec4& vv);
-	// vec3(const vec3& vv);
-	// vec3(const btVector3&);
-
-	// template <class Archive>
-	// void serialize( Archive & ar )
-	// {
-	// 	ar(v);
-	// }
-
-	// add vector to vector
-	// vec3 operator+(const vec3& rhs) const;
-	// add scalar to vector
-	// vec3 operator+(float rhs) const;
-	// because user's expect this too
-	// vec3& operator+=(const vec3& rhs);
-	// subtract vector from vector
-	// vec3 operator-(const vec3& rhs) const;
-	// add vector to vector
-	// vec3 operator-(float rhs) const;
-	// because users expect this too
-	// vec3& operator-=(const vec3& rhs);
-	// multiply with scalar
-	// vec3 operator*(float rhs) const;
-	// because users expect this too
-	// vec3& operator*=(float rhs);
-	// divide vector by scalar
-	// vec3 operator/(float rhs) const;
-	// because users expect this too
-	// vec3& operator=(const vec3& rhs);
-
-	// internal data
-	// std::array<float,3> v;
-
-	// float& operator[](int x)
-	// {
-	// return v[x];
-	// }
-
-	//std::string to_string() const
-	// {
-	// fmt::MemoryWriter w;
-	// w << "(" << v[0] << ", " << v[1] << ", " << v[2] << ")";
-	// return w.str();
-	// }
-
-
-
-
-	r = script_engine->RegisterObjectType("vec4", sizeof(vec4), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
-	// TODO: Constructors, operators, for vec4
-
-	r = script_engine->RegisterObjectType("versor", sizeof(versor), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
-	// TODO: Constructors, operators, for versor
-
-	r = script_engine->RegisterObjectType("mat3", sizeof(mat3), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
-	// TODO: Constructors, operators, for mat3
-
-	r = script_engine->RegisterObjectType("mat4", sizeof(mat4), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
-	// TODO: Constructors, operators, for mat4
-	r = script_engine->RegisterObjectType("basic_mesh", sizeof(basic_mesh), asOBJ_VALUE); assert(r >= 0 );
-
-	RegisterStdString(script_engine);	
 	RegisterVector<float>("float", script_engine);
 	RegisterVector<double>("double", script_engine);
 	RegisterVector<int>("int", script_engine);
 	RegisterVector<unsigned int>("uint", script_engine);
+
+
+
+	r = script_engine->RegisterObjectType("vec2", sizeof(vec2), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
 	RegisterVector<noob::vec2>("vec2", script_engine);
+	// TODO: Constructors, operators, for vec2
+	// float& operator[](int x);
+
+	r = script_engine->RegisterObjectType("vec3", sizeof(vec3), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
 	RegisterVector<noob::vec3>("vec3", script_engine);
+
+	// TODO: Constructors, operators, for vec3
+	// vec3 operator+(const vec3& rhs) const;
+	// vec3 operator+(float rhs) const;
+	// vec3& operator+=(const vec3& rhs);
+	// vec3 operator-(const vec3& rhs) const;
+	// vec3 operator-(float rhs) const;
+	// vec3& operator-=(const vec3& rhs);
+	// vec3 operator*(float rhs) const;
+	// vec3& operator*=(float rhs);
+	// vec3 operator/(float rhs) const;
+	// vec3& operator=(const vec3& rhs);
+	// float& operator[](int x);
+
+	r = script_engine->RegisterObjectType("vec4", sizeof(vec4), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
 	RegisterVector<noob::vec4>("vec4", script_engine);
-	RegisterVector<noob::versor>("versor", script_engine);
+
+	// TODO: Constructors, operators, for vec4
+	// float& operator[](int x)
+	
+	r = script_engine->RegisterObjectType("mat3", sizeof(mat3), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
 	RegisterVector<noob::mat3>("mat3", script_engine);
+
+	// TODO: Constructors, operators, for mat3
+	// float& operator[](int x);
+
+	r = script_engine->RegisterObjectType("mat4", sizeof(mat4), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
 	RegisterVector<noob::mat4>("mat4", script_engine);
+	// TODO: Constructors, operators, for mat4
+	// float& operator[](int x);
+	// vec4 operator*(const vec4& rhs) const;
+	// mat4 operator*(const mat4& rhs) const;
+	// mat4& operator=(const mat4& rhs);
+	// float& operator[](int x);
+
+	r = script_engine->RegisterObjectType("versor", sizeof(versor), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
+	RegisterVector<noob::versor>("versor", script_engine);
+	// TODO: Constructors, operators, for versor
+	// versor operator/(float rhs);
+	// versor operator*(float rhs);
+	// versor operator*(const versor& rhs);
+	// versor operator+(const versor& rhs);
+	// versor& operator=(const versor& rhs);
+	// float& operator[](int x); 
+
+
+	r = script_engine->RegisterObjectType("basic_mesh", sizeof(basic_mesh), asOBJ_VALUE); assert(r >= 0 );
 	RegisterVector<noob::basic_mesh>("basic_mesh", script_engine);
 
+	r = script_engine->RegisterObjectMethod("basic_mesh", "vec3 get_vertex(uint)", asMETHOD(noob::basic_mesh, get_vertex), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "vec3 get_normal(uint)", asMETHOD(noob::basic_mesh, get_normal), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "vec3 get_texcoord(uint)", asMETHOD(noob::basic_mesh, get_texcoord), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "uint get_index(uint)", asMETHOD(noob::basic_mesh, get_index), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "void set_vertex(uint, const vec3& in)", asMETHOD(noob::basic_mesh, set_vertex), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "void set_normal(uint, const vec3& in)", asMETHOD(noob::basic_mesh, set_normal), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "void set_texcoord(uint, const vec3& in)", asMETHOD(noob::basic_mesh, set_texcoord), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "void set_index(uint, uint)", asMETHOD(noob::basic_mesh, set_index), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "double get_volume()", asMETHOD(noob::basic_mesh, get_volume), asCALL_THISCALL); assert( r >= 0 );
+
+	// void decimate(const std::string& filename, size_t num_verts) const;
+	// noob::basic_mesh decimate(size_t num_verts) const;
+	r = script_engine->RegisterObjectMethod("basic_mesh", "string save()", asMETHODPR(noob::basic_mesh, save, (void) const, std::string), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "void save(const string& in)", asMETHODPR(noob::basic_mesh, save, (const std::string&) const, void), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "bool load_mem(const string& in, const string& in)", asMETHODPR(noob::basic_mesh, load_mem, (const std::string&, const std::string&), bool), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "bool load_file(const string& in, const string& in)", asMETHODPR(noob::basic_mesh, load_file, (const std::string&, const std::string&), bool), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "void transform(const vec3& in)", asMETHOD(noob::basic_mesh, transform), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "void normalize()", asMETHOD(noob::basic_mesh, normalize), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "void to_origin()", asMETHOD(noob::basic_mesh, to_origin), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "void translate(const mat4& in)", asMETHOD(noob::basic_mesh, transform), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "void rotate(const versor& in)", asMETHOD(noob::basic_mesh, rotate), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "void scale(const vec3& in)", asMETHOD(noob::basic_mesh, scale), asCALL_THISCALL); assert( r >= 0 );
+
+	// noob::basic_mesh::bbox get_bbox() const { return bbox_info; }
+
+	script_engine->RegisterGlobalFunction("basic_mesh sphere(float)", asFUNCTION(mesh_utils::sphere), asCALL_CDECL); assert(r >= 0);
+	script_engine->RegisterGlobalFunction("basic_mesh cone(float, float)", asFUNCTION(mesh_utils::cone), asCALL_CDECL); assert(r >= 0);
+	script_engine->RegisterGlobalFunction("basic_mesh box(float, float)", asFUNCTION(mesh_utils::cylinder), asCALL_CDECL); assert(r >= 0);
+	script_engine->RegisterGlobalFunction("basic_mesh hull(const vector_vec3& in)", asFUNCTION(mesh_utils::hull), asCALL_CDECL); assert(r >= 0);
+	
 	r = script_engine->RegisterGlobalFunction("float length(const vec3& in)", asFUNCTION(length_squared), asCALL_CDECL); assert(r >= 0 );
 	r = script_engine->RegisterGlobalFunction("float length_squared(const vec3& in)", asFUNCTION(length), asCALL_CDECL); assert(r >= 0 );
 	r = script_engine->RegisterGlobalFunction("vec3 normalize(const vec3& in)", asFUNCTIONPR(normalize, (const vec3&), vec3), asCALL_CDECL); assert(r >= 0 );
@@ -210,37 +219,6 @@ void noob::application::init()
 	r = script_engine->RegisterGlobalFunction("versor normalize(const versor& in)", asFUNCTIONPR(normalize, (const versor&), versor), asCALL_CDECL); assert(r >= 0);
 	r = script_engine->RegisterGlobalFunction("versor slerp(const versor& in, const versor& in, float)", asFUNCTION(slerp), asCALL_CDECL); assert(r >= 0);
 
-	
-	r = script_engine->RegisterObjectMethod("basic_mesh", "vec3 get_vertex(uint)", asMETHOD(noob::basic_mesh, get_vertex), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("basic_mesh", "vec3 get_normal(uint)", asMETHOD(noob::basic_mesh, get_normal), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("basic_mesh", "vec3 get_texcoord(uint)", asMETHOD(noob::basic_mesh, get_texcoord), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("basic_mesh", "uint get_index(uint)", asMETHOD(noob::basic_mesh, get_index), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("basic_mesh", "void set_vertex(uint, const vec3& in)", asMETHOD(noob::basic_mesh, set_vertex), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("basic_mesh", "void set_normal(uint, const vec3& in)", asMETHOD(noob::basic_mesh, set_normal), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("basic_mesh", "void set_texcoord(uint, const vec3& in)", asMETHOD(noob::basic_mesh, set_texcoord), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("basic_mesh", "void set_index(uint, uint)", asMETHOD(noob::basic_mesh, set_index), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("basic_mesh", "double get_volume()", asMETHOD(noob::basic_mesh, get_volume), asCALL_THISCALL); assert( r >= 0 );
-
-	// void decimate(const std::string& filename, size_t num_verts) const;
-	// noob::basic_mesh decimate(size_t num_verts) const;
-	r = script_engine->RegisterObjectMethod("basic_mesh", "string save()", asMETHODPR(noob::basic_mesh, save, (void) const, std::string), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("basic_mesh", "void save(const string& in)", asMETHODPR(noob::basic_mesh, save, (const std::string&) const, void), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("basic_mesh", "bool load_mem(const string& in, const string& in)", asMETHODPR(noob::basic_mesh, load_mem, (const std::string&, const std::string&), bool), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("basic_mesh", "bool load_file(const string& in, const string& in)", asMETHODPR(noob::basic_mesh, load_file, (const std::string&, const std::string&), bool), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("basic_mesh", "void transform(const vec3& in)", asMETHOD(noob::basic_mesh, transform), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("basic_mesh", "void normalize()", asMETHOD(noob::basic_mesh, normalize), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("basic_mesh", "void to_origin()", asMETHOD(noob::basic_mesh, to_origin), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("basic_mesh", "void translate(const mat4& in)", asMETHOD(noob::basic_mesh, transform), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("basic_mesh", "void rotate(const versor& in)", asMETHOD(noob::basic_mesh, rotate), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("basic_mesh", "void scale(const vec3& in)", asMETHOD(noob::basic_mesh, scale), asCALL_THISCALL); assert( r >= 0 );
-
-	// noob::basic_mesh::bbox get_bbox() const { return bbox_info; }
-
-	script_engine->RegisterGlobalFunction("basic_mesh sphere(float)", asFUNCTION(mesh_utils::sphere), asCALL_CDECL); assert(r >= 0);
-	script_engine->RegisterGlobalFunction("basic_mesh cone(float, float)", asFUNCTION(mesh_utils::cone), asCALL_CDECL); assert(r >= 0);
-	script_engine->RegisterGlobalFunction("basic_mesh box(float, float)", asFUNCTION(mesh_utils::cylinder), asCALL_CDECL); assert(r >= 0);
-	script_engine->RegisterGlobalFunction("basic_mesh hull(const vector_vec3& in)", asFUNCTION(mesh_utils::hull), asCALL_CDECL); assert(r >= 0);
-	
 	r = script_engine->RegisterObjectType("body_handle", sizeof(noob::bodies_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
 	r = script_engine->RegisterEnum("body_type"); assert(r >= 0);
 	r = script_engine->RegisterEnumValue("body_type", "DYNAMIC", 0); assert(r >= 0);
@@ -248,10 +226,6 @@ void noob::application::init()
 	r = script_engine->RegisterEnumValue("body_type", "KINEMATIC", 2); assert(r >= 0);
 	r = script_engine->RegisterEnumValue("body_type", "GHOST", 3); assert(r >= 0);
 
-//	r = script_engine->RegisterObjectType("mesh_handle", sizeof(noob::meshes_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
-//	r = script_engine->RegisterObjectType("basic_model_handle", sizeof(noob::basic_models_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
-//	r = script_engine->RegisterObjectType("animated_model_handle", sizeof(noob::animated_models_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
-//	r = script_engine->RegisterObjectType("skeletal_anim_handle", sizeof(noob::skeletal_anims_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
 	r = script_engine->RegisterObjectType("stage", sizeof(noob::stage), asOBJ_VALUE); assert(r >= 0 );
 
 	r = script_engine->RegisterObjectMethod("stage", "void init()", asMETHOD(noob::stage, init), asCALL_THISCALL); assert( r >= 0 );
@@ -267,7 +241,7 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("stage", "uint static_trimesh(uint)", asMETHOD(noob::stage, _static_trimesh), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint add_mesh(const basic_mesh& in)", asMETHOD(noob::stage, _add_mesh), asCALL_THISCALL); assert( r >= 0 );
 
-	// r = script_engine->RegisterObjectMethod("stage", "uint basic_model(uint)", asMETHOD(noob::stage, _basic_mdoel), asCALL_THISCALL); assert(r >= 0);
+	// r = script_engine->RegisterObjectMethod("stage", "uint basic_model(uint)", asMETHOD(noob::stage, _basic_model), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("stage", "uint animated_model(const string& in)", asMETHOD(noob::stage, _animated_model), asCALL_THISCALL); assert( r >= 0 );
 
 	r = script_engine->RegisterObjectMethod("stage", "uint skeleton(const string& in)", asMETHOD(noob::stage, _skeleton), asCALL_THISCALL); assert( r >= 0 );
@@ -293,50 +267,18 @@ void noob::application::init()
 
 	// void stage.set_shader(const noob::prepared_shaders::info&, const std::string& name);
 	// noob::shaders_holder::handle stage.get_shader(const std::string& name);
+	// r = script_engine->RegisterObjectMethod("stage", "uint actor(uint, uint, const string& in)", asMETHOD(noob::stage, _actor), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "uint prop(uint, const string& in)", asMETHODPR(noob::stage, _prop, (unsigned int, const std::string&), unsigned int), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "uint prop(uint, uint, const string& in)", asMETHODPR(noob::stage, _prop, (unsigned int, unsigned int, const std::string&), unsigned int), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "uint scenery(uint, const vec3& in, const string& in, const versor& in)", asMETHOD(noob::stage, _scenery), asCALL_THISCALL); assert(r >= 0);
 	
-	// noob::component_tag stage.scales_tag;
-	// noob::component_tag stage.mesh_tag;
-	// noob::component_tag stage.path_tag;
-	// noob::component_tag stage.shape_tag;
-	// noob::component_tag stage.shape_type_tag;
-	// noob::component_tag tage.body_tag;
-	// noob::component_tag stage.basic_model_tag;
-	// noob::component_tag stage.animated_model_tag;
-	// noob::component_tag stage.skeletal_anim_tag;
-	// noob::component_tag stage.shader_tag;
-	// noob::meshes_holder stage.meshes;
-	// noob::basic_models_holder stage.basic_models;
-	// noob::animated_models_holder stage.animated_models;
-	// noob::shapes_holder stage.shapes;
-	// noob::bodies_holder stage.bodies;
-	// noob::skeletal_anims_holder stage.skeletal_anims;
-	// noob::lights_holder stage.lights;
-	// noob::reflections_holder stage.reflections;
-	// noob::shaders_holder stage.shaders;
-	// const noob::shapes_holder::handle stage.unit_sphere_shape;
-	// const noob::shapes_holder::handleunit_cube_shape;
-	// const noob::shapes_holder::handleunit_capsule_shape;
-	// const noob::shapes_holder::handleunit_cylinder_shape;
-	// const noob::shapes_holder::handleunit_cone_shape;
-	// const noob::meshes_holder::handle unit_sphere_mesh;
-	// const noob::meshes_holder::handle unit_cube_mesh;
-	// const noob::meshes_holder::handle unit_capsule_mesh;
-	// const noob::meshes_holder::handle unit_cylinder_mesh;
-	// const noob::meshes_holder::handle unit_cone_mesh;
-	// const noob::basic_models_holder::handle unit_sphere_model;
-	// const noob::basic_models_holder::handle unit_cube_model;
-	// const noob::basic_models_holder::handle unit_capsule_model;
-	// const noob::basic_models_holder::handle unit_cylinder_model;
-	// const noob::basic_models_holder::handle unit_cone_model;
-	// const noob::shaders_holder::handle debug_shader;
-	// const noob::shaders_holder::handle default_triplanar_shader;
-	// const noob::shaders_holder::handle uv_shader;
-	// es::entity stage.actor(float radius, float height, const noob::animated_models_holder::handle, const std::string& shading);
-	// es::entity stage.prop(const noob::bodies_holder::handle, const std::string& shading);
-	// es::entity stage.prop(const noob::bodies_holder::handle, const noob::basic_models_holder::handle, const std::string& shading);
-	// es::entity stage.scenery(const noob::meshes_holder::handle, const noob::vec3& pos, const std::string& shading, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0) );
-	// es::storage stage.pool;
-	// noob::basic_mesh stage.make_mesh(const noob::shapes_holder::handle);
+	// uint stage.actor(const noob::bodies_holder::handle, const noob::animated_models_holder::handle, const std::string& shading);
+	// uint stage.prop(const noob::bodies_holder::handle, const std::string& shading);
+	// uint stage.prop(const noob::bodies_holder::handle, const noob::basic_models_holder::handle, const std::string& shading);
+	// uint stage.scenery(const noob::meshes_holder::handle, const noob::vec3& pos, const std::string& shading, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0) );
+
+	// noob::basic_mesh stage.make_mesh(uint), _make_mesh(;
+	
 	// std::tuple<noob::basic_models_holder::handle,noob::vec3> stage.get_model(const noob::shapes_holder::handle);
 	// bool stage.show_origin;
 	// noob::mat4 stage.stage.view_mat;

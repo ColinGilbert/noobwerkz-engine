@@ -590,6 +590,12 @@ es::entity noob::stage::actor(float radius, float height, noob::animated_models_
 }
 
 
+unsigned int noob::stage::_actor(float radius, float height, unsigned int _model, const std::string& _shading)
+{
+
+}
+
+
 es::entity noob::stage::prop(const noob::bodies_holder::handle _bod, const std::string& shading)
 {
 	es::entity temp (pool.new_entity());
@@ -602,6 +608,11 @@ es::entity noob::stage::prop(const noob::bodies_holder::handle _bod, const std::
 }
 
 
+unsigned int noob::stage::_prop(unsigned int _bod, const std::string& shading)
+{
+
+}
+
 
 es::entity noob::stage::prop(const noob::bodies_holder::handle _bod, noob::basic_models_holder::handle _model, const std::string& shading)
 {
@@ -612,6 +623,13 @@ es::entity noob::stage::prop(const noob::bodies_holder::handle _bod, noob::basic
 	pool.set(temp, shader_tag.inner, get_shader(shading));
 	return temp;
 }
+
+
+unsigned int noob::stage::_prop(unsigned int _bod, unsigned int _model, const std::string& shading)
+{
+
+}
+
 
 
 es::entity noob::stage::scenery(const noob::meshes_holder::handle h, const noob::vec3& pos, const std::string& shading, const noob::versor& orient)
@@ -627,4 +645,10 @@ es::entity noob::stage::scenery(const noob::meshes_holder::handle h, const noob:
 	pool.set(temp, scales_tag.inner, std::get<1>(get_model(s_handle)));//bodies.get(b_handle)->inner_shape->get_scales());
 	pool.set(temp, shader_tag.inner, get_shader(shading));
 	return temp;
+}
+
+
+unsigned int noob::stage::_scenery(unsigned int _mesh, const noob::vec3& pos, const std::string& shading, const noob::versor& orient)
+{
+
 }

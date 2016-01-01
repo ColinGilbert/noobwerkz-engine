@@ -828,6 +828,21 @@ namespace noob
 		return normalize (result);
 	}
 
+	//vec3& vec3::operator=(const vec3& rhs)
+	//{
+	//	v[0] = rhs.v[0];
+	//	v[1] = rhs.v[1];
+	//	v[2] = rhs.v[2];
+	//	return *this;
+	// }
+	versor& versor::operator=(const versor& rhs)
+	{
+		q[0] = rhs.q[0];
+		q[1] = rhs.q[1];
+		q[2] = rhs.q[2];
+		q[3] = rhs.q[3];
+	}
+
 	versor quat_from_axis_rad(float radians, float x, float y, float z)
 	{
 		versor result;

@@ -159,20 +159,21 @@ namespace noob
 			// Functions to create commonly-used configurations:
 			// Actors are a ghost body with a skeletal model. They are controlled by custom logic in order to cut down on physics engine time
 			es::entity actor(float radius, float height, const noob::animated_models_holder::handle, const std::string& shading);
-			unsigned int _actor(float, float, unsigned int, const std::string&);
+			unsigned int _actor(float radius, float height, unsigned int _model, const std::string& shading);
 
 			// Props are simple rigid-body objects with leaned-down 3d models that cannot be animated via vertex weights. They also cannot apply movement to themselves.
 			// Note: Bullet doesn't support movable trimeshes, so trimeshes passed into this function get implicitly turned into scenery.
 			es::entity prop(const noob::bodies_holder::handle, const std::string& shading);
-			unsigned int _prop(unsigned int, float, unsigned int, const std::string&);
+			unsigned int _prop(unsigned int _bod, const std::string& shading);
 
 			//es::entity prop(const noob::bodies_holder::handle, const std::string& shading);
 			es::entity prop(const noob::bodies_holder::handle, const noob::basic_models_holder::handle, const std::string& shading);
-			unsigned int _prop(unsigned int, unsigned int, const std::string&);
+			unsigned int _prop(unsigned int _bod, unsigned int _model, const std::string& shading);
+
 
 			// Scenery is a non-movable item that uses indexed triangle meshes as input.
 			es::entity scenery(const noob::meshes_holder::handle, const noob::vec3& pos, const std::string& shading, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
-			unsigned int _scenery(unsigned int, const noob::vec3&, const std::string&, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
+			unsigned int _scenery(unsigned int _mesh, const noob::vec3& pos, const std::string& _shading, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
 
 			es::storage pool;
 

@@ -78,6 +78,7 @@ namespace noob
 		}
 
 
+
 		/*
 		   inline bool operator<(const noob::vec2& lhs, const noob::vec2& rhs)
 
@@ -266,6 +267,7 @@ namespace noob
 		versor operator*(float rhs);
 		versor operator*(const versor& rhs);
 		versor operator+(const versor& rhs);
+		versor& operator=(const versor& rhs);
 		std::array<float,4> q;
 
 		float& operator[](int x) 
