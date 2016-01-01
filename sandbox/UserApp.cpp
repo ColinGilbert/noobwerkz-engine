@@ -34,7 +34,7 @@ void noob::application::user_init()
 
 	noob::basic_mesh temp = noob::mesh_utils::cone(50.0, 100.0);
 	temp.translate(noob::vec3(0.0, 10.0, 0.0));
-	// temp.rotate(noob::versor(0.0, 0.0, 0.0, 1.0));
+	temp.rotate(noob::versor(0.0, 0.0, 0.0, 1.0));
 	noob::basic_mesh scene_mesh = temp;
 	auto scenery_h = stage.scenery(stage.add_mesh(scene_mesh), noob::vec3(0.0, 0.0, 0.0), "moon");
 
