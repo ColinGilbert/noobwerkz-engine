@@ -521,9 +521,9 @@ noob::basic_mesh noob::stage::make_mesh(const noob::shapes_holder::handle h)
 }
 
 
-noob::basic_mesh noob::stage::_make_mesh(unsigned int h)
+noob::basic_mesh noob::stage::_make_mesh(unsigned int _shape)
 {
-	return make_mesh(shapes.make_handle(h));
+	return make_mesh(shapes.make_handle(_shape));
 }
 
 
@@ -572,25 +572,24 @@ std::tuple<noob::basic_models_holder::handle, noob::vec3> noob::stage::get_model
 }
 
 
-std::tuple<unsigned int, noob::vec3> noob::stage::_get_model(unsigned int h)
+std::tuple<unsigned int, noob::vec3> noob::stage::_get_model(unsigned int shape_h)
 {
-	auto a = get_model(shapes.make_handle(h));
-	return std::make_tuple(std::get<0>(a).get_inner(), std::get<1>(a));//_model(shapes.make_handle(h));
+	auto a = get_model(shapes.make_handle(shape_h));
+	return std::make_tuple(std::get<0>(a).get_inner(), std::get<1>(a));
 }
 
 
-es::entity noob::stage::actor(float radius, float height, noob::animated_models_holder::handle _model, const std::string& shading)
+es::entity noob::stage::actor(const noob::bodies_holder::handle _bod, noob::animated_models_holder::handle _model, const std::string& shading)
 {
 	es::entity temp (pool.new_entity());
-	// pool.set(temp, body_tag.inner, _bod);
+	pool.set(temp, body_tag.inner, _bod);
 	pool.set(temp, animated_model_tag.inner, _model);
 	pool.set(temp, shader_tag.inner, get_shader(shading));
-	
 	return temp;
 }
 
 
-unsigned int noob::stage::_actor(float radius, float height, unsigned int _model, const std::string& _shading)
+unsigned int noob::stage::_actor(unsigned int _bod, unsigned int _model, const std::string& _shading)
 {
 
 }
@@ -629,7 +628,6 @@ unsigned int noob::stage::_prop(unsigned int _bod, unsigned int _model, const st
 {
 
 }
-
 
 
 es::entity noob::stage::scenery(const noob::meshes_holder::handle h, const noob::vec3& pos, const std::string& shading, const noob::versor& orient)

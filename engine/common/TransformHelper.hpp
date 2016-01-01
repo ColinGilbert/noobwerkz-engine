@@ -19,15 +19,15 @@ namespace noob
 				{
 					m = noob::quat_to_mat4(rotation) * m;
 				}
-				if (scaled)
-				{
+				// if (scaled)
+				// {
 					m = noob::scale(m, scaling);
 				
-				}
-				if (translated)
-				{
+				// }
+				// if (translated)
+				// {
 					m = noob::translate(m, translation);
-				}
+				// }
 
 				return m;
 			}

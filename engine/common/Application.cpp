@@ -267,7 +267,8 @@ void noob::application::init()
 
 	// void stage.set_shader(const noob::prepared_shaders::info&, const std::string& name);
 	// noob::shaders_holder::handle stage.get_shader(const std::string& name);
-	// r = script_engine->RegisterObjectMethod("stage", "uint actor(uint, uint, const string& in)", asMETHOD(noob::stage, _actor), asCALL_THISCALL); assert( r >= 0 );
+	
+	r = script_engine->RegisterObjectMethod("stage", "uint actor(uint, uint, const string& in)", asMETHOD(noob::stage, _actor), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint prop(uint, const string& in)", asMETHODPR(noob::stage, _prop, (unsigned int, const std::string&), unsigned int), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint prop(uint, uint, const string& in)", asMETHODPR(noob::stage, _prop, (unsigned int, unsigned int, const std::string&), unsigned int), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint scenery(uint, const vec3& in, const string& in, const versor& in)", asMETHOD(noob::stage, _scenery), asCALL_THISCALL); assert(r >= 0);
