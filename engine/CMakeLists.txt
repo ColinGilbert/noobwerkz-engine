@@ -145,7 +145,7 @@ list (APPEND dcollide_src
 
 
 include_directories(lib/eigen)
-add_subdirectory(lib/rbdl)
+# add_subdirectory(lib/rbdl)
 
 
 include_directories(lib/csgjs-cpp)
