@@ -178,7 +178,7 @@ namespace noob
 
 			// Utilities:
 			noob::basic_mesh make_mesh(const noob::shapes_holder::handle);
-			noob::basic_mesh _make_mesh(unsigned int _shape);
+			noob::basic_mesh _make_mesh(unsigned int _shape_h);
 
 
 			// For parametrics, this one will return a normalized model with scaling coordinates. For triangles, scalings are <1, 1, 1>

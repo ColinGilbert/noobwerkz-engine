@@ -69,6 +69,21 @@ namespace noob
 			return v[x];
 		}
 
+		
+		float get_opIndex(int i) const
+
+		{
+			if (i > 1 ) return v[1];
+			if (i < 0) return v[0];
+			return v[i];
+		}
+
+		void set_opIndex(int i, float value)
+		{
+			if (i > 2 && i < 0) return;
+			v[i] = value;
+		}
+
 
 		std::string to_string() const
 		{
@@ -135,6 +150,20 @@ namespace noob
 			return v[x];
 		}
 
+		float get_opIndex(int i) const
+
+		{
+			if (i > 2 ) return v[2];
+			if (i < 0) return v[0];
+			return v[i];
+		}
+
+		void set_opIndex(int i, float value)
+		{
+			if (i > 2 && i < 0) return;
+			v[i] = value;
+		}
+
 		std::string to_string() const
 		{
 			fmt::MemoryWriter w;
@@ -164,6 +193,20 @@ namespace noob
 			return v[x];
 		}
 
+		float get_opIndex(int i) const
+
+		{
+			if (i > 3 ) return v[3];
+			if (i < 0) return v[0];
+			return v[i];
+		}
+
+		void set_opIndex(int i, float value)
+		{
+			if (i > 3 && i < 0) return;
+			v[i] = value;
+		}
+
 		std::string to_string() const
 		{
 			fmt::MemoryWriter w;
@@ -189,13 +232,25 @@ namespace noob
 				ar(m);
 			}
 
-
-
 		std::array<float,9> m;
 
 		float& operator[](int x) 
 		{
 			return m[x];
+		}
+
+		float get_opIndex(int i) const
+
+		{
+			if (i > 8 ) return m[8];
+			if (i < 0) return m[0];
+			return m[i];
+		}
+
+		void set_opIndex(int i, float value)
+		{
+			if (i > 8 && i < 0) return;
+			m[i] = value;
 		}
 
 		std::string to_string() const
@@ -239,6 +294,20 @@ namespace noob
 			return m[x];
 		}
 
+		float get_opIndex(int i) const
+
+		{
+			if (i > 15) return m[15];
+			if (i < 0) return m[0];
+			return m[i];
+		}
+
+		void set_opIndex(int i, float value)
+		{
+			if (i > 15 && i < 0) return;
+			m[i] = value;
+		}
+
 		std::string to_string() const
 		{
 			fmt::MemoryWriter w;
@@ -262,17 +331,30 @@ namespace noob
 			}
 
 
-
-		versor operator/(float rhs);
-		versor operator*(float rhs);
-		versor operator*(const versor& rhs);
-		versor operator+(const versor& rhs);
+		versor operator/(float rhs) const;
+		versor operator*(float rhs) const;
+		versor operator*(const versor& rhs) const;
+		versor operator+(const versor& rhs) const;
 		versor& operator=(const versor& rhs);
 		std::array<float,4> q;
 
 		float& operator[](int x) 
 		{
 			return q[x];
+		}
+
+		float get_opIndex(int i) const
+
+		{
+			if (i > 3 ) return q[3];
+			if (i < 0) return q[0];
+			return 	q[i];
+		}
+
+		void set_opIndex(int i, float value)
+		{
+			if (i > 3 && i < 0) return;
+			q[i] = value;
 		}
 
 		std::string to_string() const;

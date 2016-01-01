@@ -103,7 +103,7 @@ namespace noob
 		protected:
 			void update(double delta);
 			void draw();
-			
+		
 			// Overload these if you're writing a game that is setup and/or updated in C++.
 			void user_init();
 			void user_update(double);

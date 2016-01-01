@@ -761,15 +761,7 @@ namespace noob
 		q[3] = quat.w();
 	}
 
-	//versor::versor(const rp3d::Quaternion& qq)
-	//{
-	//	q[0] = qq.x;
-	//	q[1] = qq.y;
-	//	q[2] = qq.z;
-	//	q[3] = qq.w;
-	//}
-
-	versor versor::operator/(float rhs)
+	versor versor::operator/(float rhs) const
 	{
 		versor result;
 		result.q[0] = q[0] / rhs;
@@ -779,7 +771,7 @@ namespace noob
 		return result;
 	}
 
-	versor versor::operator*(float rhs)
+	versor versor::operator*(float rhs) const
 	{
 		versor result;
 		result.q[0] = q[0] * rhs;
@@ -802,7 +794,7 @@ namespace noob
 		printf ("[%.2f ,%.2f, %.2f, %.2f]\n", q.q[0], q.q[1], q.q[2], q.q[3]);
 	}
 */
-	versor versor::operator*(const versor& rhs)
+	versor versor::operator*(const versor& rhs) const
 	{
 		versor result;
 		result.q[0] = rhs.q[0] * q[0] - rhs.q[1] * q[1] -
@@ -817,7 +809,7 @@ namespace noob
 		return normalize (result);
 	}
 
-	versor versor::operator+(const versor& rhs)
+	versor versor::operator+(const versor& rhs) const
 	{
 		versor result;
 		result.q[0] = rhs.q[0] + q[0];
