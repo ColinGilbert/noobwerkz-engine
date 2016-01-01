@@ -78,31 +78,44 @@ namespace noob
 
 			// Creates physics body. Those get made lots.
 			noob::bodies_holder::handle body(noob::body_type, noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0), bool ccd = false);
+			unsigned int _body(noob::body_type, unsigned int, float, const noob::vec3&, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0), bool ccd = false);
 
 			// Parametric shapes. These get cached for reuse by the physics engine.
 			noob::shapes_holder::handle sphere(float r);
+			unsigned int _sphere(float r);
+			
 			noob::shapes_holder::handle box(float x, float y, float z);
+			unsigned int _box(float x, float y, float z);
+
 			noob::shapes_holder::handle cylinder(float r, float h);
+			unsigned int _cylinder(float r, float h);
+			
 			noob::shapes_holder::handle cone(float r, float h);
-			// noob::shapes_holder::handle capsule(float r, float h);
-			// noob::shapes_holder::handle plane(const noob::vec3& normal, float offset);
+			unsigned int _cone(float r, float h);
 
 			// Point-based shapes
 			noob::shapes_holder::handle hull(const std::vector<noob::vec3>&);
-			noob::shapes_holder::handle static_trimesh(const noob::meshes_holder::handle);
+			unsigned int _hull(const std::vector<noob::vec3>&);
 
+			noob::shapes_holder::handle static_trimesh(const noob::meshes_holder::handle);
+			unsigned int _static_trimesh(unsigned int);
+			
 			// Adds a mesh to the scene.
-			noob::meshes_holder::handle add_mesh(const noob::basic_mesh& h);
+			noob::meshes_holder::handle add_mesh(const noob::basic_mesh&);
+			unsigned int _add_mesh(const noob::basic_mesh&);
 
 			// Basic model creation. Those don't have bone weights built-in, so its lighter on the video card. Great for non-animated meshes and also scenery.
 			noob::basic_models_holder::handle basic_model(const noob::meshes_holder::handle);
+			unsigned int _basic_model(unsigned int);
 
 			// Loads a serialized model (from cereal binary)
 			// TODO: Expand all such functions to load from cereal binary and also sqlite
 			noob::animated_models_holder::handle animated_model(const std::string& filename);
+			unsigned int _animated_model(const std::string&);
 
 			// Skeletal animations (encompassing basic, single-bone animation...)
 			noob::skeletal_anims_holder::handle skeleton(const std::string& filename);
+			unsigned int _skeleton(const std::string&);
 
 			// Lighting functions
 			void set_light(const noob::light&, const std::string&);
@@ -114,7 +127,9 @@ namespace noob
 
 			// Shader setting
 			void set_shader(const noob::prepared_shaders::info&, const std::string& name);
+
 			noob::shaders_holder::handle get_shader(const std::string& name);
+			unsigned int _get_shader(const std::string&);
 
 			// Tags that are used for faster access to our tag-tracker
 			noob::component_tag scales_tag, mesh_tag, path_tag, shape_tag, shape_type_tag, body_tag, basic_model_tag, animated_model_tag, skeletal_anim_tag, shader_tag;
@@ -144,20 +159,29 @@ namespace noob
 			// Functions to create commonly-used configurations:
 			// Actors are a ghost body with a skeletal model. They are controlled by custom logic in order to cut down on physics engine time
 			es::entity actor(float radius, float height, const noob::animated_models_holder::handle, const std::string& shading);
+			unsigned int _actor(float, float, unsigned int, const std::string&);
+
 			// Props are simple rigid-body objects with leaned-down 3d models that cannot be animated via vertex weights. They also cannot apply movement to themselves.
 			// Note: Bullet doesn't support movable trimeshes, so trimeshes passed into this function get implicitly turned into scenery.
 			es::entity prop(const noob::bodies_holder::handle, const std::string& shading);
+			unsigned int _prop(unsigned int, float, unsigned int, const std::string&);
+
 			//es::entity prop(const noob::bodies_holder::handle, const std::string& shading);
 			es::entity prop(const noob::bodies_holder::handle, const noob::basic_models_holder::handle, const std::string& shading);
+			unsigned int _prop(unsigned int, unsigned int, const std::string&);
+
 			// Scenery is a non-movable item that uses indexed triangle meshes as input.
-			es::entity scenery(const noob::meshes_holder::handle, const noob::vec3& pos, const std::string& shading, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0) );
+			es::entity scenery(const noob::meshes_holder::handle, const noob::vec3& pos, const std::string& shading, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
+			unsigned int _scenery(unsigned int, const noob::vec3&, const std::string&, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
 
 			es::storage pool;
 
 			// Utilities:
 			noob::basic_mesh make_mesh(const noob::shapes_holder::handle);
+			noob::basic_mesh _make_mesh(unsigned int);
 			// For parametrics, this one will return a normalized model with scaling coordinates. For triangles, scalings are <1, 1, 1>
 			std::tuple<noob::basic_models_holder::handle,noob::vec3> get_model(const noob::shapes_holder::handle);
+			std::tuple<unsigned int, noob::vec3> _get_model(unsigned int);
 
 			bool show_origin;
 			

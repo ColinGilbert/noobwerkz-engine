@@ -97,6 +97,13 @@ namespace noob
 					return h;
 				}
 
+				component<T>::handle make_handle(unsigned int i)
+				{
+					handle h;
+					h.inner = i;
+					h.valid = exists(h);
+					return h;
+				}
 
 			protected:
 
@@ -211,7 +218,13 @@ namespace noob
 					return h;
 				}
 
-
+				component<std::unique_ptr<T>>::handle make_handle(unsigned int i)
+				{
+					handle h;
+					h.inner = i;
+					h.valid = exists(h);
+					return h;
+				}
 
 			protected:
 

@@ -49,9 +49,6 @@ void noob::stage::init()
 	auto temp_skeletal_anim (pool.register_component<noob::skeletal_anims_holder::handle>("skeletal-anim"));
 	skeletal_anim_tag.inner = temp_skeletal_anim;
 
-	//auto temp_basic_shader (pool.register_component<noob::basic_renderer::uniform_info>("basic-renderer-uniform"));
-	//basic_shader_tag.inner = temp_basic_shader;
-
 	auto temp_shader (pool.register_component<noob::shaders_holder::handle>("shading"));
 	shader_tag.inner = temp_shader;	
 
@@ -154,13 +151,19 @@ void noob::stage::draw(float window_width, float window_height) const
 }
 
 
-noob::bodies_holder::handle noob::stage::body(noob::body_type _type, noob::shapes_holder::handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
+noob::bodies_holder::handle noob::stage::body(noob::body_type b_type, noob::shapes_holder::handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
 {
 	std::unique_ptr<noob::body> b = std::make_unique<noob::body>();
-	b->init(dynamics_world, _type, shapes.get(shape_h), mass, pos, orient, ccd);
+	b->init(dynamics_world, b_type, shapes.get(shape_h), mass, pos, orient, ccd);
 	auto bod_h = bodies.add(std::move(b));
 	bodies_to_shapes.insert(std::make_pair(bod_h.get_inner(), shape_h));
 	return bod_h;
+}
+
+
+unsigned int noob::stage::_body(noob::body_type b_type, unsigned int shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
+{
+	return body(b_type, shapes.make_handle(shape_h), mass, pos, orient, ccd).get_inner();
 }
 
 
@@ -179,6 +182,12 @@ noob::shapes_holder::handle noob::stage::sphere(float r)
 }
 
 
+unsigned int noob::stage::_sphere(float r)
+{
+	return sphere(r).get_inner();
+}
+
+
 noob::shapes_holder::handle noob::stage::box(float x, float y, float z)
 {
 	auto search = box_shapes.find(std::make_tuple(x,y,z));
@@ -190,6 +199,12 @@ noob::shapes_holder::handle noob::stage::box(float x, float y, float z)
 		return (results.first)->second;
 	}
 	return box_shapes[std::make_tuple(x,y,z)];
+}
+
+
+unsigned int noob::stage::_box(float x, float y, float z)
+{
+	return box(x, y, z).get_inner();
 }
 
 
@@ -207,6 +222,12 @@ noob::shapes_holder::handle noob::stage::cylinder(float r, float h)
 }
 
 
+unsigned int noob::stage::_cylinder(float r, float h)
+{
+	return cylinder(r, h).get_inner();
+}
+
+
 noob::shapes_holder::handle noob::stage::cone(float r, float h)
 {
 	auto search = cone_shapes.find(std::make_tuple(r, h));
@@ -219,6 +240,13 @@ noob::shapes_holder::handle noob::stage::cone(float r, float h)
 	}
 	return cone_shapes[std::make_tuple(r, h)];
 }
+
+
+unsigned int noob::stage::_cone(float r, float h)
+{
+	return cone(r, h).get_inner();
+}
+
 
 /*
 noob::shapes_holder::handle noob::stage::capsule(float r, float h)
@@ -263,9 +291,13 @@ noob::shapes_holder::handle noob::stage::hull(const std::vector<vec3> & _points)
 	noob::meshes_holder::handle temp_mesh_handle = meshes.add(std::move(temp_mesh));
 	shapes_to_meshes[temp_shape_handle.get_inner()] = temp_mesh_handle;
 
-	//meshes_to_models[temp_mesh_handle.get_inner()] = 
-
 	return temp_shape_handle;
+}
+
+
+unsigned int noob::stage::_hull(const std::vector<vec3>& _points)
+{
+	return hull(_points).get_inner();
 }
 
 
@@ -285,11 +317,23 @@ noob::shapes_holder::handle noob::stage::static_trimesh(const noob::meshes_holde
 }
 
 
+unsigned int noob::stage::_static_trimesh(unsigned int _m)
+{
+	return static_trimesh(meshes.make_handle(_m)).get_inner();
+}
+
+
 noob::meshes_holder::handle noob::stage::add_mesh(const noob::basic_mesh& m)
 {
 	std::unique_ptr<noob::basic_mesh> mesh_ptr = std::make_unique<noob::basic_mesh>();
 	*mesh_ptr = noob::mesh_utils::copy(m);
 	return meshes.add(std::move(mesh_ptr));	
+}
+
+
+unsigned int noob::stage::_add_mesh(const noob::basic_mesh& m)
+{
+ 	return add_mesh(m).get_inner();
 }
 
 
@@ -309,6 +353,12 @@ noob::basic_models_holder::handle noob::stage::basic_model(const noob::meshes_ho
 }
 
 
+unsigned int noob::stage::_basic_model(unsigned int _m)
+{
+	return basic_model(meshes.make_handle(_m)).get_inner();
+}
+
+
 noob::animated_models_holder::handle noob::stage::animated_model(const std::string& filename)
 {
 	std::unique_ptr<noob::animated_model> temp = std::make_unique<noob::animated_model>();
@@ -317,11 +367,23 @@ noob::animated_models_holder::handle noob::stage::animated_model(const std::stri
 }
 
 
+unsigned int noob::stage::_animated_model(const std::string& filename)
+{
+	return animated_model(filename).get_inner();
+}
+
+
 noob::skeletal_anims_holder::handle noob::stage::skeleton(const std::string& filename)
 {
 	std::unique_ptr<noob::skeletal_anim> temp = std::make_unique<noob::skeletal_anim>();
 	temp->init(filename);
 	return skeletal_anims.add(std::move(temp));
+}
+
+
+unsigned int noob::stage::_skeleton(const std::string& filename)
+{
+	return skeleton(filename).get_inner();
 }
 
 
@@ -400,6 +462,12 @@ noob::shaders_holder::handle noob::stage::get_shader(const std::string& s)
 }
 
 
+unsigned int noob::stage::_get_shader(const std::string& s)
+{
+	return get_shader(s).get_inner();
+}
+
+
 noob::basic_mesh noob::stage::make_mesh(const noob::shapes_holder::handle h)
 {
 	noob::shape* s = shapes.get(h);
@@ -453,6 +521,13 @@ noob::basic_mesh noob::stage::make_mesh(const noob::shapes_holder::handle h)
 }
 
 
+noob::basic_mesh noob::stage::_make_mesh(unsigned int h)
+{
+	return make_mesh(shapes.make_handle(h));
+}
+
+
+
 std::tuple<noob::basic_models_holder::handle, noob::vec3> noob::stage::get_model(const noob::shapes_holder::handle h)
 {
 	noob::shape* s = shapes.get(h);
@@ -494,6 +569,13 @@ std::tuple<noob::basic_models_holder::handle, noob::vec3> noob::stage::get_model
 			break;
 	};
 	return std::make_tuple(unit_sphere_model, noob::vec3(1.0, 1.0, 1.0));
+}
+
+
+std::tuple<unsigned int, noob::vec3> noob::stage::_get_model(unsigned int h)
+{
+	auto a = get_model(shapes.make_handle(h));
+	return std::make_tuple(std::get<0>(a).get_inner(), std::get<1>(a));//_model(shapes.make_handle(h));
 }
 
 

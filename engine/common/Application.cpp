@@ -158,11 +158,11 @@ void noob::application::init()
 	// TODO: Constructors, operators, for mat4
 	r = script_engine->RegisterObjectType("basic_mesh", sizeof(basic_mesh), asOBJ_VALUE); assert(r >= 0 );
 
-	
+	RegisterStdString(script_engine);	
 	RegisterVector<float>("float", script_engine);
 	RegisterVector<double>("double", script_engine);
 	RegisterVector<int>("int", script_engine);
-	RegisterVector<uint32_t>("uint", script_engine);
+	RegisterVector<unsigned int>("uint", script_engine);
 	RegisterVector<noob::vec2>("vec2", script_engine);
 	RegisterVector<noob::vec3>("vec3", script_engine);
 	RegisterVector<noob::vec4>("vec4", script_engine);
@@ -223,14 +223,10 @@ void noob::application::init()
 
 	// void decimate(const std::string& filename, size_t num_verts) const;
 	// noob::basic_mesh decimate(size_t num_verts) const;
-
-	// std::string save() const;
-	// void save(const std::string& filename) const;
-			
-	// Takes any file Assimp can. First mesh of file only. No bones.
-	// bool load_mem(const std::string& file, const std::string& name = "");
-	// bool load_file(const std::string& filename, const std::string& name = "");
-
+	r = script_engine->RegisterObjectMethod("basic_mesh", "string save()", asMETHODPR(noob::basic_mesh, save, (void) const, std::string), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "void save(const string& in)", asMETHODPR(noob::basic_mesh, save, (const std::string&) const, void), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "bool load_mem(const string& in, const string& in)", asMETHODPR(noob::basic_mesh, load_mem, (const std::string&, const std::string&), bool), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "bool load_file(const string& in, const string& in)", asMETHODPR(noob::basic_mesh, load_file, (const std::string&, const std::string&), bool), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("basic_mesh", "void transform(const vec3& in)", asMETHOD(noob::basic_mesh, transform), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("basic_mesh", "void normalize()", asMETHOD(noob::basic_mesh, normalize), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("basic_mesh", "void to_origin()", asMETHOD(noob::basic_mesh, to_origin), asCALL_THISCALL); assert( r >= 0 );
@@ -252,46 +248,52 @@ void noob::application::init()
 	r = script_engine->RegisterEnumValue("body_type", "KINEMATIC", 2); assert(r >= 0);
 	r = script_engine->RegisterEnumValue("body_type", "GHOST", 3); assert(r >= 0);
 
-	r = script_engine->RegisterObjectType("shape_handle", sizeof(noob::shapes_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
-	r = script_engine->RegisterObjectType("mesh_handle", sizeof(noob::meshes_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
-	r = script_engine->RegisterObjectType("basic_model_handle", sizeof(noob::basic_models_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
-	r = script_engine->RegisterObjectType("animated_model_handle", sizeof(noob::animated_models_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
-	r = script_engine->RegisterObjectType("skeletal_anim_handle", sizeof(noob::skeletal_anims_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
-
+//	r = script_engine->RegisterObjectType("mesh_handle", sizeof(noob::meshes_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
+//	r = script_engine->RegisterObjectType("basic_model_handle", sizeof(noob::basic_models_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
+//	r = script_engine->RegisterObjectType("animated_model_handle", sizeof(noob::animated_models_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
+//	r = script_engine->RegisterObjectType("skeletal_anim_handle", sizeof(noob::skeletal_anims_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
 	r = script_engine->RegisterObjectType("stage", sizeof(noob::stage), asOBJ_VALUE); assert(r >= 0 );
 
 	r = script_engine->RegisterObjectMethod("stage", "void init()", asMETHOD(noob::stage, init), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "void tear_down()", asMETHOD(noob::stage, tear_down), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "void update(double)", asMETHOD(noob::stage, update), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "void draw(float, float)", asMETHOD(noob::stage, draw), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "uint body(body_type, uint, float, const vec3& in, const versor& in, bool)", asMETHOD(noob::stage, _body), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "uint sphere(float)", asMETHOD(noob::stage, _sphere), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "uint box(float, float, float)", asMETHOD(noob::stage, _box), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "uint cylinder(float, float)", asMETHOD(noob::stage, _cylinder), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "uint cone(float, float)", asMETHOD(noob::stage, _cone), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "uint hull(const vector_vec3& in)", asMETHOD(noob::stage, _hull), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "uint static_trimesh(uint)", asMETHOD(noob::stage, _static_trimesh), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "uint add_mesh(const basic_mesh& in)", asMETHOD(noob::stage, _add_mesh), asCALL_THISCALL); assert( r >= 0 );
 
-	// r = script_engine->RegisterObjectMethod("stage", "body_handle body(body_type, shape_handle, float, const vec3& in, const versor& in, bool)", asMETHOD(stage, body), asCALL_THISCALL); assert( r >= 0 );
-	// r = script_engine->RegisterObjectMethod("stage", "shape_handle sphere(float)", asMETHOD(stage, sphere), asCALL_THISCALL); assert( r >= 0 );
-	// r = script_engine->RegisterObjectMethod("stage", "shape_handle box(float, float, float)", asMETHOD(stage, box), asCALL_THISCALL); assert( r >= 0 );
-	// r = script_engine->RegisterObjectMethod("stage", "shape_handle cylinder(float float)", asMETHOD(stage, cylinder), asCALL_THISCALL); assert( r >= 0 );
-	// r = script_engine->RegisterObjectMethod("stage", "shape_handle cone(float, float)", asMETHOD(stage, cone), asCALL_THISCALL); assert( r >= 0 );
-	// r = script_engine->RegisterObjectMethod("stage", "shape_handle hull(const std::vector<vec3>& in)", asMETHOD(stage, hull), asCALL_THISCALL); assert( r >= 0 );
-	// r = script_engine->RegisterObjectMethod("stage", "shape_handle static_trimesh(mesh_handle)", asMETHOD(stage, static_trimesh), asCALL_THISCALL); assert( r >= 0 );
-	// r = script_engine->RegisterObjectMethod("stage", "shape_handle add_mesh(const basic_mesh& in)", asMETHOD(stage, add_mesh), asCALL_THISCALL); assert( r >= 0 );
-	// r = script_engine->RegisterObjectMethod("stage", "shape_handle sphere(float)", asMETHOD(stage, sphere), asCALL_THISCALL); assert( r >= 0 );
+	// r = script_engine->RegisterObjectMethod("stage", "uint basic_model(uint)", asMETHOD(noob::stage, _basic_mdoel), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("stage", "uint animated_model(const string& in)", asMETHOD(noob::stage, _animated_model), asCALL_THISCALL); assert( r >= 0 );
 
+	r = script_engine->RegisterObjectMethod("stage", "uint skeleton(const string& in)", asMETHOD(noob::stage, _skeleton), asCALL_THISCALL); assert( r >= 0 );
 
-	// noob::shapes_holder::handle stage.sphere(float r);
-	// noob::shapes_holder::handle stage.box(float x, float y, float z);
-	// noob::shapes_holder::handle stage.cylinder(float r, float h);
-	// noob::shapes_holder::handle stage.cone(float r, float h);
-	// noob::shapes_holder::handle stage.hull(const std::vector<noob::vec3>&);
-	// noob::shapes_holder::handle stage.static_trimesh(const noob::meshes_holder::handle);
-	// noob::meshes_holder::handle stage.add_mesh(const noob::basic_mesh& h);
-	// noob::basic_models_holder::handle stage.basic_model(const noob::meshes_holder::handle);
-	// noob::animated_models_holder::handle stage.animated_model(const std::string& filename);
-	// noob::skeletal_anims_holder::handle stage.skeleton(const std::string& filename);
+	
+	// TODO
+	// r = script_engine->RegisterObjectMethod("stage", "void set_light(const light& in, const string& in)", asMETHOD(noob::stage, set_light), asCALL_THISCALL); assert( r >= 0 );
+	// r = script_engine->RegisterObjectMethod("stage", "light get_light(const string& in)", asMETHOD(noob::stage, get_light), asCALL_THISCALL); assert( r >= 0 );
+
 	// void stage.set_light(const noob::light&, const std::string&);
 	// noob::light stage.get_light(const std::string&);
+
+	// TODO
+	// r = script_engine->RegisterObjectMethod("stage", "void set_reflection(const reflection& in, const string& in)", asMETHOD(noob::stage, set_reflection), asCALL_THISCALL); assert( r >= 0 );
+	// r = script_engine->RegisterObjectMethod("stage", "reflection get_reflection(const string& in)", asMETHOD(noob::stage, get_reflection), asCALL_THISCALL); assert( r >= 0 );
+
 	// void stage.set_reflection(const noob::reflection&, const std::string&);
 	// noob::reflection stage.get_reflection(const std::string&);			
+
+	// TODO
+	// r = script_engine->RegisterObjectMethod("stage", "void set_shader(const shader_info& in, const string& in)", asMETHOD(noob::stage, set_shader), asCALL_THISCALL); assert( r >= 0 );
+	// r = script_engine->RegisterObjectMethod("stage", "unsigned int get_shader(const string& in)", asMETHOD(noob::stage, _get_shader), asCALL_THISCALL); assert( r >= 0 );
+
 	// void stage.set_shader(const noob::prepared_shaders::info&, const std::string& name);
 	// noob::shaders_holder::handle stage.get_shader(const std::string& name);
+	
 	// noob::component_tag stage.scales_tag;
 	// noob::component_tag stage.mesh_tag;
 	// noob::component_tag stage.path_tag;
