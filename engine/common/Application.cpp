@@ -217,9 +217,17 @@ void noob::application::init()
 	// basic_mesh catmull_sphere(float radius);
 	// basic_mesh hull(const std::vector<noob::vec3>& points);
 	// basic_mesh csg(const noob::basic_mesh& a, const noob::basic_mesh& b, const noob::csg_op op);
+	
+	r = script_engine->RegisterObjectType("body_handle", sizeof(noob::bodies_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
+	r = script_engine->RegisterObjectType("shape_handle", sizeof(noob::shapes_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
+	r = script_engine->RegisterObjectType("mesh_handle", sizeof(noob::meshes_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
+	r = script_engine->RegisterObjectType("basic_model_handle", sizeof(noob::basic_models_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
+	r = script_engine->RegisterObjectType("animated_model_handle", sizeof(noob::animated_models_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
+	r = script_engine->RegisterObjectType("skeletal_anim_handle", sizeof(noob::skeletal_anims_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
 
 
-	// r = script_engine->RegisterObjectType("animated_model_handle", sizeof(noob::stage.animated_models::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
+
+	r = script_engine->RegisterObjectMethod("stage", "void init()", asMETHOD(noob::stage, init), asCALL_THISCALL); assert( r >= 0 );
 
 	// void stage.init();
 	// void stage.tear_down();
