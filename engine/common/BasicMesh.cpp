@@ -34,6 +34,94 @@
 
 #include <Eigen/Geometry>
 
+noob::vec3 noob::basic_mesh::get_vertex(unsigned int i)
+{
+	if (i > vertices.size())
+	{
+		logger::log("[BasicMesh] - Attempting to get invalid vertex");
+		return vertices[0];
+	}
+	else return vertices[i];
+}
+
+
+noob::vec3 noob::basic_mesh::get_normal(unsigned int i)
+{
+	if (i > normals.size())
+	{
+		logger::log("[BasicMesh] - Attempting to get invalid normal");
+		return normals[0];
+	}
+	else return normals[i];
+}
+
+
+noob::vec3 noob::basic_mesh::get_texcoord(unsigned int i)
+{
+	if (i > texcoords.size())
+	{
+		logger::log("[BasicMesh] - Attempting to get invalid texcoord");
+		return texcoords[0];
+	}
+	else return texcoords[i];
+}
+
+
+unsigned int noob::basic_mesh::get_index(unsigned int i)
+{
+	if (i > indices.size())
+	{
+		logger::log("[BasicMesh] - Attempting to get invalid index");
+		return indices[0];
+	}
+	else return indices[i];
+
+}
+
+
+void noob::basic_mesh::set_vertex(unsigned int i, const noob::vec3& v)
+{
+	if (i > vertices.size())
+	{
+		logger::log("[BasicMesh] - Attempting to set invalid vertex");
+	}
+	else vertices[i] = v;
+}
+
+
+void noob::basic_mesh::set_normal(unsigned int i, const noob::vec3& v)
+{
+	if (i > normals.size())
+	{
+		logger::log("[BasicMesh] - Attempting to set invalid normal");
+	}
+	else normals[i] = v;
+}
+
+
+void noob::basic_mesh::set_texcoord(unsigned int i, const noob::vec3& v)
+{
+	if (i > texcoords.size())
+	{
+		logger::log("[BasicMesh] - Attempting to set invalid texcoord");
+	}
+	else texcoords[i] = v;
+}
+
+
+void noob::basic_mesh::set_index(unsigned int i, unsigned int v)
+{
+	if (i > indices.size())
+	{
+		logger::log("[BasicMesh] - Attempting to set invalid index");
+	}
+	else indices[i] = static_cast<uint32_t>(v);
+
+}
+
+
+
+
 double noob::basic_mesh::get_volume()
 {
 	if (!volume_calculated)
@@ -244,7 +332,7 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 			texcoords.push_back(noob::vec3(0.0, 0.0, 0.0));
 		}
 	}
-		
+
 
 	if (num_verts == 0)
 	{
@@ -359,7 +447,7 @@ void noob::basic_mesh::from_half_edges(PolyMesh half_edges)
 	PolyMesh _half_edges = half_edges;
 	_half_edges.triangulate();
 	_half_edges.garbage_collection();
-	
+
 	if (!OpenMesh::IO::write_mesh(half_edges, oss, "temp.off")) 
 	{
 		logger::log("[BasicMesh] Could not import from OpenMesh!");

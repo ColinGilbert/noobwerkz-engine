@@ -15,18 +15,18 @@ namespace noob
 			{
 				noob::mat4 m = noob::identity_mat4();
 				
-				if (rotated)
-				{
+				// if (rotated)
+				// {
 					m = noob::quat_to_mat4(rotation) * m;
-				}
-				if (scaled)
-				{
+				// }
+				// if (scaled)
+				// {
 					m = noob::scale(m, scaling);
-				}
-				if (translated)
-				{
+				// }
+				// if (translated)
+				// {
 					m = noob::translate(m, translation);
-				}
+				// }
 
 				return m;
 			}
@@ -48,7 +48,7 @@ namespace noob
 			void rotate(const noob::versor& quat)
 			{
 				rotated = true;
-				rotation = rotation * quat;
+				rotation = quat * rotation;
 				rotation = noob::normalize(rotation);
 			}
 

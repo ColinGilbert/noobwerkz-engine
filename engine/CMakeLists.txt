@@ -4,7 +4,7 @@ project(NoobWerkz)
 set(CMAKE_BUILD_TYPE "DEBUG")
 #set(CMAKE_BUILD_TYPE "RELEASE")
 
-set(CMAKE_CXX_FLAGS "-std=c++1y -O2 -fno-strict-aliasing -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DOM_GARBAGE_NO_STATUS_WARNING -DEIGEN_MPL2_ONLY -Wall ${CMAKE_CXX_FLAGS}") # -DCHAISCRIPT_NO_THREADS
+set(CMAKE_CXX_FLAGS "-std=c++1y -O2 -fno-strict-aliasing -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DOM_GARBAGE_NO_STATUS_WARNING -DAS_CAN_USE_CPP11 -DEIGEN_MPL2_ONLY -Wall ${CMAKE_CXX_FLAGS}") # -DCHAISCRIPT_NO_THREADS
 set(CMAKE_C_FLAGS "-std=c99 -fno-strict-aliasing -DSQLITE_ENABLE_COLUMN_METADATA -DSTB_IMAGE_STATIC -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -Wall ${CMAKE_C_FLAGS}")
 
 find_package(Boost COMPONENTS system filesystem REQUIRED)
@@ -170,6 +170,7 @@ include_directories(lib/stb)
 include_directories(lib/inline_variant_visitor)
 
 include_directories(common)
+include_directories(common/scripting)
 include_directories(common/drawing)
 include_directories(common/drawing/font)
 include_directories(common/drawing/shaderc)

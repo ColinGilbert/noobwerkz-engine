@@ -19,7 +19,7 @@ namespace noob
 		static noob::basic_mesh box(float width, float height, float depth, size_t subdivides = 0);
 		static noob::basic_mesh cylinder(float radius, float height, size_t segments = 0);
 		// Currently returns a cylinder.
-		static noob::basic_mesh capsule(float radius, float height, size_t segments = 0);
+		// static noob::basic_mesh capsule(float radius, float height, size_t segments = 0);
 		// Currently not working
 		static noob::basic_mesh swept_sphere(float radius, size_t x_segment = 0, size_t y_segment = 0);
 		static noob::basic_mesh catmull_sphere(float radius);

@@ -61,6 +61,7 @@
 #include <btBulletDynamicsCommon.h>
 // #include <chaiscript/chaiscript.hpp>
 // #include <chaiscript/chaiscript_stdlib.hpp>
+#include "AngelVector.hpp"
 #include <angelscript.h>
 
 namespace noob

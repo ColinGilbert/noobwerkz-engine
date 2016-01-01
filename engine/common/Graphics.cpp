@@ -63,6 +63,7 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	noob::graphics::add_uniform(std::string("light_2_direction"), bgfx::UniformType::Enum::Vec4);
 	noob::graphics::add_uniform(std::string("light_3_direction"), bgfx::UniformType::Enum::Vec4);
 	noob::graphics::add_uniform(std::string("normal_mat"), bgfx::UniformType::Enum::Mat4);
+
 }
 
 void noob::graphics::frame(uint32_t width, uint32_t height)

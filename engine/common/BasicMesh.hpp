@@ -4,13 +4,6 @@
 #pragma once
 
 #define OM_STATIC_BUILD 1
-/*
-#include <boost/interprocess/containers/vector.hpp>
-#include <boost/interprocess/containers/string.hpp>
-#include <boost/interprocess/allocators/allocator.hpp>
-#include <boost/interprocess/managed_shared_memory.hpp>
-#include <boost/interprocess/streams/vectorstream.hpp>
-*/
 
 #include <cereal/access.hpp>
 #include <cereal/types/array.hpp>
@@ -55,10 +48,18 @@ typedef OpenMesh::PolyMesh_ArrayKernelT<> PolyMesh;
 #include <Eigen/Geometry>
 #include "Logger.hpp"
 
+#define AS_CAN_USE_CPP11 1
+
 namespace noob
 {
 	class basic_mesh 
 	{
+		friend class stage;
+		friend class basic_model;
+		friend class shape;
+		friend class mesh_utils;
+		friend class voxel_world;
+
 		public:
 
 			basic_mesh() : volume_calculated(false), volume(0.0) {}
@@ -79,11 +80,18 @@ namespace noob
 
 				noob::vec3 min, max, center;
 			};
+		
+
+			// Proxies for AngelScript
+			noob::vec3 get_vertex(unsigned int);
+			noob::vec3 get_normal(unsigned int);
+			noob::vec3 get_texcoord(unsigned int);
+			unsigned int get_index(unsigned int);
 			
-			std::vector<noob::vec3> vertices;
-			std::vector<noob::vec3> normals;
-			std::vector<noob::vec3> texcoords;
-			std::vector<uint32_t> indices;
+			void set_vertex(unsigned int, const noob::vec3&);
+			void set_normal(unsigned int, const noob::vec3&);
+			void set_texcoord(unsigned int, const noob::vec3&);
+			void set_index(unsigned int, unsigned int);
 
 			double get_volume();
 
@@ -94,10 +102,8 @@ namespace noob
 			void save(const std::string& filename) const;
 			
 			// Takes any file Assimp can. First mesh of file only. No bones.
-			bool load_mem(const std::string& file, const std::string& name = "");
+			bool load_mem(const std::string&, const std::string& name = "");
 			bool load_file(const std::string& filename, const std::string& name = "");
-			bool load_assimp(const aiScene* scene, const std::string& name);
-
 
 			void normalize();
 			void transform(const noob::mat4& transform);
@@ -108,13 +114,18 @@ namespace noob
 			
 			noob::basic_mesh::bbox get_bbox() const { return bbox_info; }
 
+
+		protected:
+			bool load_assimp(const aiScene* scene, const std::string& name);
 			TriMesh to_half_edges() const;
 			void from_half_edges(TriMesh);
 			void from_half_edges(PolyMesh);
 
-			// size_t references;
+			std::vector<noob::vec3> vertices;
+			std::vector<noob::vec3> normals;
+			std::vector<noob::vec3> texcoords;
+			std::vector<uint32_t> indices;
 
-		protected:
 			static constexpr aiPostProcessSteps post_process = static_cast<aiPostProcessSteps>(aiProcessPreset_TargetRealtime_Fast | aiProcess_CalcTangentSpace | aiProcess_ImproveCacheLocality | aiProcess_FindInstances | aiProcess_FixInfacingNormals); 
 			bbox bbox_info;
 			bool volume_calculated;

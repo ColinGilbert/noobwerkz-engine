@@ -34,19 +34,20 @@ void noob::application::user_init()
 
 	noob::basic_mesh temp = noob::mesh_utils::cone(50.0, 100.0);
 	temp.translate(noob::vec3(0.0, 10.0, 0.0));
+	// temp.rotate(noob::versor(0.0, 0.0, 0.0, 1.0));
 	noob::basic_mesh scene_mesh = temp;
 	auto scenery_h = stage.scenery(stage.add_mesh(scene_mesh), noob::vec3(0.0, 0.0, 0.0), "moon");
 
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_real_distribution<> dis(-100.0, 100.0);
+	std::uniform_real_distribution<> dis(-10.0, 10.0);
 
-	for (size_t i = 0 ; i < 500; ++i )
+	for (size_t i = 0 ; i < 500; ++i)
 	{
 		auto h = stage.box(4.0, 4.0, 4.0); 
-		float x_pos = dis(gen);
+		float x_pos = dis(gen) * 10.0;
 		x_pos += std::copysign(1.0, x_pos)*7.0;
-		float z_pos = dis(gen);
+		float z_pos = dis(gen) * 10.0;
 		z_pos += std::copysign(1.0, z_pos)*7.0;
 
 		auto temp_body = stage.body(noob::body_type::DYNAMIC, h, 1.0, noob::vec3(x_pos, 250.0, z_pos), noob::versor(0.0, 0.0, 0.0, 1.0)); //, true);
@@ -63,6 +64,8 @@ void noob::application::user_update(double dt)
 {
 	gui.text("Noobwerkz Editor", 50.0, 50.0, noob::gui::font_size::HEADER);
 	fmt::MemoryWriter ww;
+
+	// Quick loop to help print key bindings to screen
 	for (auto k : keystrokes)
 	{
 		ww << std::get<2>(k) << ": " << noob::keyboard::to_string(std::get<1>(k));

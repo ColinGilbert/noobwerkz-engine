@@ -280,12 +280,12 @@ noob::basic_mesh noob::mesh_utils::cylinder(float radius, float height, size_t s
 	// logger::log(fmt::format("Created cylinder with height = {0}, radius = {1} with {2} segments.", height, radius, _segments));
 	return mesh;
 }
-
+/*
 noob::basic_mesh noob::mesh_utils::capsule(float radius, float height, size_t segments)
 {
 	return noob::mesh_utils::cylinder(radius, height, segments);
 }
-
+*/
 
 
 noob::basic_mesh noob::mesh_utils::box(float width, float height, float depth, size_t subdivides)

@@ -13,7 +13,7 @@
 
 namespace noob
 {
-	enum class body_type {DYNAMIC, KINEMATIC, STATIC, GHOST};
+	enum class body_type {DYNAMIC = 0, KINEMATIC = 1, STATIC = 2, GHOST = 3};
 
 	class body 
 	{
