@@ -148,7 +148,7 @@ double noob::basic_mesh::get_volume()
 }
 
 
-void noob::basic_mesh::decimate(const std::string& filename, size_t num_verts) const
+noob::basic_mesh noob::basic_mesh::decimate(size_t num_verts) const
 {
 	//logger::log("[Mesh] decimating");
 	TriMesh half_edges = to_half_edges();
@@ -170,19 +170,11 @@ void noob::basic_mesh::decimate(const std::string& filename, size_t num_verts) c
 	logger::log(fmt::format("[Mesh] decimate() - Vertices removed = {0}", verts_removed));
 	decimator.mesh().garbage_collection();
 	half_edges.garbage_collection();
-	OpenMesh::IO::write_mesh(half_edges, filename);
-	// logger::log("[Mesh] decimate() - done");
+	noob::basic_mesh temp;
+	temp.from_half_edges(half_edges);
+	return temp;
 }
 
-/*
-   noob::basic_mesh noob::basic_mesh::decimate(size_t num_verts) const
-   {
-//decimate("./temp/temp-decimated.off", num_verts);
-noob::basic_mesh temp;
-//temp.load("./temp/temp-decimated.off", "temp-decimated");
-return temp;
-}
-*/
 
 void noob::basic_mesh::normalize() 
 {
@@ -202,26 +194,7 @@ void noob::basic_mesh::to_origin()
 	normalize();
 
 }
-/*
-   std::tuple<size_t, const char*> noob::basic_mesh::save() const
-   {
-   fmt::MemoryWriter w;
-   w << "OFF" << "\n" << vertices.size() << " " << indices.size() / 3 << " " << 0 <<  "\n";
-   for (auto v : vertices)
-   {
-   w << v.v[0] << " " << v.v[1] << " " << v.v[2] <<  "\n";
-   }
-   for (size_t i = 0; i < indices.size(); i = i + 3)
-   {
-   w << 3 << " " << indices[i] << " " << indices[i+1] << " " << indices[i+2] << "\n";
-   }
 
-   const char* mem = w.data();
-   size_t size = w.size();
-
-   return std::make_tuple(size, mem);
-   }
-   */
 
 std::string noob::basic_mesh::save() const
 {
@@ -238,6 +211,7 @@ std::string noob::basic_mesh::save() const
 
 	return w.str();
 }
+
 
 void noob::basic_mesh::save(const std::string& filename) const
 {
@@ -355,6 +329,7 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 	return true;
 }
 
+
 void noob::basic_mesh::transform(const noob::mat4& transform)
 {
 
@@ -375,16 +350,12 @@ void noob::basic_mesh::transform(const noob::mat4& transform)
 	normalize();
 }
 
+
 void noob::basic_mesh::translate(const noob::vec3& translation)
 {
 	noob::transform_helper t;
 	t.translate(translation);
 	transform(t.get_matrix());
-	// for (auto v : vertices)
-	// {
-	//	v += translation;
-	// }
-	// normalize();
 }
 
 
@@ -427,6 +398,7 @@ TriMesh noob::basic_mesh::to_half_edges() const
 	return half_edges;
 }
 
+
 void noob::basic_mesh::from_half_edges(TriMesh half_edges)
 {
 	std::ostringstream oss;
@@ -439,6 +411,7 @@ void noob::basic_mesh::from_half_edges(TriMesh half_edges)
 		load_mem(oss.str());
 	}
 }
+
 
 
 void noob::basic_mesh::from_half_edges(PolyMesh half_edges)
@@ -457,82 +430,3 @@ void noob::basic_mesh::from_half_edges(PolyMesh half_edges)
 		load_mem(oss.str());
 	}
 }
-
-
-/*
-   noob::basic_mesh noob::basic_mesh::bone()
-   {
-   TriMesh half_edges;
-   TriMesh::VertexHandle vhandles[6];
-
-   vhandles[0] = half_edges.add_vertex(TriMesh::Point(1.0, 0.0, 0.0));
-   vhandles[1] = half_edges.add_vertex(TriMesh::Point(0.8, 0.2, 0.2));
-   vhandles[2] = half_edges.add_vertex(TriMesh::Point(0.8, 0.2, -0.2));
-   vhandles[3] = half_edges.add_vertex(TriMesh::Point(0.8, -0.2, -0.2));
-   vhandles[4] = half_edges.add_vertex(TriMesh::Point(0.8, -0.2, 0.2));
-   vhandles[5] = half_edges.add_vertex(TriMesh::Point(-1.0, 0.0, 0.0));
-
-   std::vector<TriMesh::VertexHandle> face_vhandles;
-
-   face_vhandles.clear();
-   face_vhandles.push_back(vhandles[0]);
-   face_vhandles.push_back(vhandles[2]);
-   face_vhandles.push_back(vhandles[1]);
-   half_edges.add_face(face_vhandles);
-
-   face_vhandles.clear();
-   face_vhandles.push_back(vhandles[5]);
-   face_vhandles.push_back(vhandles[1]);
-   face_vhandles.push_back(vhandles[2]);
-   half_edges.add_face(face_vhandles);
-
-   face_vhandles.clear();
-   face_vhandles.push_back(vhandles[0]);
-   face_vhandles.push_back(vhandles[3]);
-   face_vhandles.push_back(vhandles[2]);
-   half_edges.add_face(face_vhandles);
-
-   face_vhandles.clear();
-   face_vhandles.push_back(vhandles[5]);
-   face_vhandles.push_back(vhandles[2]);
-   face_vhandles.push_back(vhandles[3]);
-   half_edges.add_face(face_vhandles);
-
-   face_vhandles.clear();
-   face_vhandles.push_back(vhandles[0]);
-   face_vhandles.push_back(vhandles[4]);
-   face_vhandles.push_back(vhandles[3]);
-   half_edges.add_face(face_vhandles);
-
-   face_vhandles.clear();
-   face_vhandles.push_back(vhandles[5]);
-   face_vhandles.push_back(vhandles[3]);
-   face_vhandles.push_back(vhandles[4]);
-   half_edges.add_face(face_vhandles);
-
-   face_vhandles.clear();
-   face_vhandles.push_back(vhandles[0]);
-   face_vhandles.push_back(vhandles[1]);
-   face_vhandles.push_back(vhandles[4]);
-   half_edges.add_face(face_vhandles);
-
-   face_vhandles.clear();
-   face_vhandles.push_back(vhandles[5]);
-   face_vhandles.push_back(vhandles[4]);
-   face_vhandles.push_back(vhandles[1]);
-   half_edges.add_face(face_vhandles);
-
-   face_vhandles.clear();
-   face_vhandles.push_back(vhandles[0]);
-   face_vhandles.push_back(vhandles[1]);
-   face_vhandles.push_back(vhandles[2]);
-   half_edges.add_face(face_vhandles);
-
-   OpenMesh::IO::write_mesh(half_edges, "temp/bone.off");
-   noob::basic_mesh mesh;
-mesh.load("temp/bone.off", "bone-temp");
-
-return mesh;
-}
-*/
-

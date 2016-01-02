@@ -95,8 +95,7 @@ namespace noob
 
 			double get_volume();
 
-			void decimate(const std::string& filename, size_t num_verts) const;
-			//noob::basic_mesh decimate(size_t num_verts) const;
+			noob::basic_mesh decimate(size_t num_verts) const;
 
 			std::string save() const;
 			void save(const std::string& filename) const;

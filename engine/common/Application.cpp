@@ -217,6 +217,11 @@ void noob::application::init()
 	r = script_engine->RegisterEnumValue("body_type", "KINEMATIC", 2); assert(r >= 0);
 	r = script_engine->RegisterEnumValue("body_type", "GHOST", 3); assert(r >= 0);
 
+	RegisterVector<noob::bodies_holder::handle>("body_handle", script_engine);
+	
+	r = script_engine->RegisterObjectType("light", sizeof(noob::light), asOBJ_VALUE | asOBJ_POD); assert(r >= 0);
+	r = script_engine->RegisterObjectType("reflection", sizeof(noob::reflection), asOBJ_VALUE | asOBJ_POD); assert (r >= 0);
+	r = script_engine->RegisterObjectType("shader", sizeof(noob::prepared_shaders::info), asOBJ_VALUE | asOBJ_POD); assert ( r >= 0);
 	r = script_engine->RegisterObjectType("stage", sizeof(noob::stage), asOBJ_VALUE); assert(r >= 0 );
 
 	r = script_engine->RegisterObjectMethod("stage", "void init()", asMETHOD(noob::stage, init), asCALL_THISCALL); assert( r >= 0 );
@@ -232,45 +237,19 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("stage", "uint static_trimesh(uint)", asMETHOD(noob::stage, _static_trimesh), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint add_mesh(const basic_mesh& in)", asMETHOD(noob::stage, _add_mesh), asCALL_THISCALL); assert( r >= 0 );
 
-	// r = script_engine->RegisterObjectMethod("stage", "uint basic_model(uint)", asMETHOD(noob::stage, _basic_model), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("stage", "uint basic_model(uint)", asMETHOD(noob::stage, _basic_model), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("stage", "uint animated_model(const string& in)", asMETHOD(noob::stage, _animated_model), asCALL_THISCALL); assert( r >= 0 );
-
 	r = script_engine->RegisterObjectMethod("stage", "uint skeleton(const string& in)", asMETHOD(noob::stage, _skeleton), asCALL_THISCALL); assert( r >= 0 );
-
-	
-	// TODO
-	// r = script_engine->RegisterObjectMethod("stage", "void set_light(const light& in, const string& in)", asMETHOD(noob::stage, set_light), asCALL_THISCALL); assert( r >= 0 );
-	// r = script_engine->RegisterObjectMethod("stage", "light get_light(const string& in)", asMETHOD(noob::stage, get_light), asCALL_THISCALL); assert( r >= 0 );
-
-	// void stage.set_light(const noob::light&, const std::string&);
-	// noob::light stage.get_light(const std::string&);
-
-	// TODO
-	// r = script_engine->RegisterObjectMethod("stage", "void set_reflection(const reflection& in, const string& in)", asMETHOD(noob::stage, set_reflection), asCALL_THISCALL); assert( r >= 0 );
-	// r = script_engine->RegisterObjectMethod("stage", "reflection get_reflection(const string& in)", asMETHOD(noob::stage, get_reflection), asCALL_THISCALL); assert( r >= 0 );
-
-	// void stage.set_reflection(const noob::reflection&, const std::string&);
-	// noob::reflection stage.get_reflection(const std::string&);			
-
-	// TODO
-	// r = script_engine->RegisterObjectMethod("stage", "void set_shader(const shader_info& in, const string& in)", asMETHOD(noob::stage, set_shader), asCALL_THISCALL); assert( r >= 0 );
-	// r = script_engine->RegisterObjectMethod("stage", "unsigned int get_shader(const string& in)", asMETHOD(noob::stage, _get_shader), asCALL_THISCALL); assert( r >= 0 );
-
-	// void stage.set_shader(const noob::prepared_shaders::info&, const std::string& name);
-	// noob::shaders_holder::handle stage.get_shader(const std::string& name);
-	
+	r = script_engine->RegisterObjectMethod("stage", "void set_light(const light& in, const string& in)", asMETHOD(noob::stage, set_light), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "light get_light(const string& in)", asMETHOD(noob::stage, get_light), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "void set_reflection(const reflection& in, const string& in)", asMETHOD(noob::stage, set_reflection), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "reflection get_reflection(const string& in)", asMETHOD(noob::stage, get_reflection), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "void set_shader(const shader& in, const string& in)", asMETHOD(noob::stage, set_shader), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "uint get_shader(const string& in)", asMETHOD(noob::stage, _get_shader), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint actor(uint, uint, const string& in)", asMETHOD(noob::stage, _actor), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint prop(uint, const string& in)", asMETHODPR(noob::stage, _prop, (unsigned int, const std::string&), unsigned int), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint prop(uint, uint, const string& in)", asMETHODPR(noob::stage, _prop, (unsigned int, unsigned int, const std::string&), unsigned int), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint scenery(uint, const vec3& in, const string& in, const versor& in)", asMETHOD(noob::stage, _scenery), asCALL_THISCALL); assert(r >= 0);
-	
-	// uint stage.actor(const noob::bodies_holder::handle, const noob::animated_models_holder::handle, const std::string& shading);
-	// uint stage.prop(const noob::bodies_holder::handle, const std::string& shading);
-	// uint stage.prop(const noob::bodies_holder::handle, const noob::basic_models_holder::handle, const std::string& shading);
-	// uint stage.scenery(const noob::meshes_holder::handle, const noob::vec3& pos, const std::string& shading, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0) );
-
-	// noob::basic_mesh stage.make_mesh(uint), _make_mesh(;
-	
 	// std::tuple<noob::basic_models_holder::handle,noob::vec3> stage.get_model(const noob::shapes_holder::handle);
 	// bool stage.show_origin;
 	// noob::mat4 stage.stage.view_mat;

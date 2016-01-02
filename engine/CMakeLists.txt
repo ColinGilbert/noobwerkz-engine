@@ -31,6 +31,9 @@ include_directories(lib/glfw/include)
 include_directories(lib/freetype/include)
 add_subdirectory(lib/freetype)
 
+
+include_directories(lib/bullet3/src)
+
 #add_subdirectory(lib/polyvox)
 include_directories(lib/polyvox/include)
 
