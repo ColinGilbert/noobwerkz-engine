@@ -290,13 +290,13 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
   std::string line;
   std::string keyWrd;
 
-  float                     x, y, z, u, v;
+  float                     x, y, z, u, v, w;
   float                     r, g, b;
   BaseImporter::VHandles    vhandles;
   std::vector<Vec3f>        normals;
   std::vector<Vec3f>        colors;
-  std::vector<Vec2f>        texcoords;
-  std::vector<Vec2f>        face_texcoords;
+  std::vector<Vec3f>        texcoords3d, face_texcoords3d;
+  std::vector<Vec2f>        texcoords, face_texcoords;
   std::vector<VertexHandle> vertexHandles;
 
   std::string               matname;
@@ -406,7 +406,6 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
       stream >> u; stream >> v;
 
       if ( !stream.fail()  ){
-
         if ( userOptions.vertex_has_texcoord() || userOptions.face_has_texcoord() ) {
           texcoords.push_back(OpenMesh::Vec2f(u, v));
 
@@ -415,9 +414,20 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
           fileOptions += Options::FaceTexCoord;
         }
 
-      }else{
+        //try to read the w component as it is optional
+        stream >> w;
+        if ( !stream.fail()  ){
+          if ( userOptions.vertex_has_texcoord() || userOptions.face_has_texcoord() ) {
+            texcoords3d.push_back(OpenMesh::Vec3f(u, v, w));
 
-        omerr() << "Only single 2D texture coordinate per vertex"
+            // Can be used for both!
+            fileOptions += Options::VertexTexCoord;
+            fileOptions += Options::FaceTexCoord;
+          }
+        }
+
+      }else{
+        omerr() << "Only single 2D or 3D texture coordinate per vertex"
               << "allowed!" << std::endl;
         return false;
       }
@@ -553,6 +563,8 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
                 if (!texcoords.empty() && (unsigned int) (value - 1) < texcoords.size()) {
                   // Obj counts from 1 and not zero .. array counts from zero therefore -1
                   _bi.set_texcoord(vhandles.back(), texcoords[value - 1]);
+                  if(!texcoords3d.empty() && (unsigned int) (value -1) < texcoords3d.size())
+                    _bi.set_texcoord(vhandles.back(), texcoords3d[value - 1]);
                 } else {
                   omerr() << "Error setting Texture coordinates" << std::endl;
                 }
@@ -563,6 +575,8 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
 
                   if (!texcoords.empty() && (unsigned int) (value - 1) < texcoords.size()) {
                     face_texcoords.push_back( texcoords[value-1] );
+                    if(!texcoords3d.empty() && (unsigned int) (value -1) < texcoords3d.size())
+                      face_texcoords3d.push_back( texcoords3d[value-1] );
                   } else {
                     omerr() << "Error setting Texture coordinates" << std::endl;
                   }
@@ -609,7 +623,10 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
         fh = _bi.add_face(faceVertices);
 
       if (!vhandles.empty() && fh.is_valid() )
+      {
         _bi.add_face_texcoords(fh, vhandles[0], face_texcoords);
+        _bi.add_face_texcoords(fh, vhandles[0], face_texcoords3d);
+      }
 
       if ( !matname.empty()  )
       {
