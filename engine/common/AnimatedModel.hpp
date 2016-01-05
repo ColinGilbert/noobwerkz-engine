@@ -74,7 +74,6 @@ namespace noob
 				std::vector<uint16_t> indices;
 				std::array<float, 3> dimensions;
 				std::string name;
-
 			};
 
 			// animated_model() : references(0) {}

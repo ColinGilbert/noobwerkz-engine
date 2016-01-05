@@ -14,6 +14,27 @@ std::unordered_map<std::string, noob::graphics::uniform> noob::graphics::uniform
 std::unordered_map<std::string, noob::graphics::sampler> noob::graphics::samplers;
 std::unordered_map<std::string, noob::graphics::shader> noob::graphics::shaders;
 
+const noob::graphics::uniform noob::graphics::invalid_uniform;
+const noob::graphics::uniform noob::graphics::colour_0;
+const noob::graphics::uniform noob::graphics::colour_1;
+const noob::graphics::uniform noob::graphics::colour_2;
+const noob::graphics::uniform noob::graphics::colour_3;
+const noob::graphics::uniform noob::graphics::texture_blend;
+const noob::graphics::uniform noob::graphics::colour_positions;
+const noob::graphics::uniform noob::graphics::scales;
+const noob::graphics::uniform noob::graphics::light_direction_0;
+const noob::graphics::uniform noob::graphics::light_direction_1;
+const noob::graphics::uniform noob::graphics::light_direction_2;
+const noob::graphics::uniform noob::graphics::light_direction_3;
+const noob::graphics::uniform noob::graphics::light_colour_0;
+const noob::graphics::uniform noob::graphics::light_colour_1;
+const noob::graphics::uniform noob::graphics::light_colour_2;
+const noob::graphics::uniform noob::graphics::light_colour_3;
+const noob::graphics::uniform noob::graphics::normal_mat;
+
+const noob::graphics::sampler noob::graphics::invalid_sampler;
+
+
 void noob::graphics::init(uint32_t width, uint32_t height)
 {
 	uint32_t reset = BGFX_RESET_VSYNC;
@@ -48,22 +69,32 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	noob::graphics::add_shader(std::string("invalid"), shad);
 	noob::graphics::add_uniform(std::string("invalid"), bgfx::UniformType::Enum::Int1, 0);
 	noob::graphics::add_sampler(std::string("invalid"));
-
-	noob::graphics::add_uniform(std::string("light_direction"), bgfx::UniformType::Enum::Vec4, 4);
-	noob::graphics::add_uniform(std::string("light_intensity"), bgfx::UniformType::Enum::Vec4, 4);
-	noob::graphics::add_uniform(std::string("colour_0"), bgfx::UniformType::Enum::Vec4);
-	noob::graphics::add_uniform(std::string("colour_1"), bgfx::UniformType::Enum::Vec4);
-	noob::graphics::add_uniform(std::string("colour_2"), bgfx::UniformType::Enum::Vec4);
-	noob::graphics::add_uniform(std::string("colour_3"), bgfx::UniformType::Enum::Vec4);
-	noob::graphics::add_uniform(std::string("mapping_blend"), bgfx::UniformType::Enum::Vec4);
-	noob::graphics::add_uniform(std::string("colour_positions"), bgfx::UniformType::Enum::Vec4);
-	noob::graphics::add_uniform(std::string("scales"), bgfx::UniformType::Enum::Vec4);
-	noob::graphics::add_uniform(std::string("light_0_direction"), bgfx::UniformType::Enum::Vec4);
-	noob::graphics::add_uniform(std::string("light_1_direction"), bgfx::UniformType::Enum::Vec4);
-	noob::graphics::add_uniform(std::string("light_2_direction"), bgfx::UniformType::Enum::Vec4);
-	noob::graphics::add_uniform(std::string("light_3_direction"), bgfx::UniformType::Enum::Vec4);
-	noob::graphics::add_uniform(std::string("normal_mat"), bgfx::UniformType::Enum::Mat4);
-
+	invalid_uniform = get_uniform("invalid");
+	invalid_sampler = get_sampler("invalid");
+	noob::graphics::add_uniform(std::string("colour_0"), bgfx::UniformType::Enum::Vec4, 1);
+	colour_0 = get_uniform("colour_0");
+	noob::graphics::add_uniform(std::string("colour_1"), bgfx::UniformType::Enum::Vec4, 1);
+	colour_1 = get_uniform("colour_1");
+	noob::graphics::add_uniform(std::string("colour_2"), bgfx::UniformType::Enum::Vec4, 1);
+	colour_2 = get_uniform("colour_2");
+	noob::graphics::add_uniform(std::string("colour_3"), bgfx::UniformType::Enum::Vec4, 1);
+	colour_3 = get_uniform("colour_3");
+	noob::graphics::add_uniform(std::string("texture_blend"), bgfx::UniformType::Enum::Vec4, 1);
+	texture_blend = get_uniform("texture_blend");
+	noob::graphics::add_uniform(std::string("colour_positions"), bgfx::UniformType::Enum::Vec4, 1);
+	colour_positions = get_uniform("colour_positions");
+	noob::graphics::add_uniform(std::string("scales"), bgfx::UniformType::Enum::Vec4, 1);
+	scales = get_uniform("scales");
+	noob::graphics::add_uniform(std::string("light_direction_0"), bgfx::UniformType::Enum::Vec4, 1);
+	light_direction_0 = get_uniform("light_direction_0");
+	noob::graphics::add_uniform(std::string("light_direction_1"), bgfx::UniformType::Enum::Vec4, 1);
+	light_direction_1 = get_uniform("light_direction_1");
+	noob::graphics::add_uniform(std::string("light_direction_2"), bgfx::UniformType::Enum::Vec4, 1);
+	light_direction_2 = get_uniform("light_direction_2");
+	noob::graphics::add_uniform(std::string("light_direction_3"), bgfx::UniformType::Enum::Vec4, 1);
+	light_direction_3 = get_uniform("light_direction_3");
+	noob::graphics::add_uniform(std::string("normal_mat"), bgfx::UniformType::Enum::Mat4, 1);
+	normal_mat = get_uniform("normal_mat");
 }
 
 void noob::graphics::frame(uint32_t width, uint32_t height)

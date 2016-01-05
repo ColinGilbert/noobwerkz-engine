@@ -9,7 +9,7 @@ uniform vec4 colour_1;
 uniform vec4 colour_2;
 uniform vec4 colour_3;
 
-uniform vec4 mapping_blend;
+uniform vec4 texture_blend;
 
 // Positions are only required for the two mid-gradient colours, as the other two are at the ends
 uniform vec4 colour_positions;
@@ -18,10 +18,10 @@ uniform vec4 colour_positions;
 uniform vec4 scales;
 
 // uniform u_texture;
-uniform vec4 light_0_direction;
-uniform vec4 light_1_direction;
-uniform vec4 light_2_direction;
-uniform vec4 light_3_direction;
+uniform vec4 light_direction_0;
+uniform vec4 light_direction_1;
+uniform vec4 light_direction_2;
+uniform vec4 light_direction_3;
 
 
 void main()
@@ -44,9 +44,9 @@ void main()
 
 	vec4 tex = xaxis * normal_blend.x + yaxis * normal_blend.y + zaxis * normal_blend.z;
 
-	float tex_r = mapping_blend.x * tex.r;
-	float tex_b = mapping_blend.y * tex.g;
-	float tex_g = mapping_blend.z * tex.b;
+	float tex_r = texture_blend.x * tex.r;
+	float tex_b = texture_blend.y * tex.g;
+	float tex_g = texture_blend.z * tex.b;
 
 	vec4 tex_weighted = vec4(tex_r, tex_g, tex_b, 1.0);
 	float tex_intensity = (tex_r + tex_g + tex_b) * 0.3333;
@@ -64,9 +64,9 @@ void main()
 	// float lightIntensity = diffuse + ambient; // Compute the final light intensity
 	// outputColor = surfaceColor * lightIntensity; //Compute final rendered color
 
-	float diffuse = clamp(dot(mult_normal, light_0_direction.xyz), 0.0, 1.0);
-	// float diffuse = clamp(dot(light_0_direction.xyz, v_normal), 0.0, 1.0);
-	// float diffuse = max(dot(light_0_direction.xyz, v_normal), 0.0);
+	float diffuse = clamp(dot(mult_normal, light_direction_0.xyz), 0.0, 1.0);
+	// float diffuse = clamp(dot(light_direction_0.xyz, v_normal), 0.0, 1.0);
+	// float diffuse = max(dot(light_direction_0.xyz, v_normal), 0.0);
 	diffuse *= 0.8;
 	float ambient = 0.5;
 	float light_intensity = clamp(diffuse + ambient, 0.0, 1.0);

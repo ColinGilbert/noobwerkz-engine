@@ -21,6 +21,8 @@ namespace noob
 			// TODO: Implement
 			// noob::vec2 dims(const std::string& text); 
 			void text(const std::string& text, float x, float y, noob::gui::font_size size = noob::gui::font_size::READING, uint32_t colour = 0xFFFF00FF);
+
+			// Called every frame. Could be replaced with a callback but call-forward also makes really good sense.
 			void frame();
 			void crosshairs(bool active = false);
 		protected:

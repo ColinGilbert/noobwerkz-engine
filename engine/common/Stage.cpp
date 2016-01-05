@@ -97,9 +97,9 @@ void noob::stage::init()
 	triplanar_info.colours[2] = noob::vec4(1.0, 1.0, 1.0, 1.0);
 	triplanar_info.colours[3] = noob::vec4(1.0, 1.0, 1.0, 1.0);
 
-	triplanar_info.mapping_blends = noob::vec3(1.0, 1.0, 1.0);
-	triplanar_info.scales = noob::vec3(1.0, 1.0, 1.0);
-	triplanar_info.colour_positions = noob::vec2(0.3, 0.6);
+	triplanar_info.blend = noob::vec4(1.0, 1.0, 1.0, 0.0);
+	triplanar_info.scales = noob::vec4(1.0, 1.0, 1.0, 0.0);
+	triplanar_info.colour_positions = noob::vec4(0.3, 0.6, 0.0, 0.0);
 	set_shader(triplanar_info, "default-triplanar");
 	default_triplanar_shader = get_shader("default-triplanar");
 

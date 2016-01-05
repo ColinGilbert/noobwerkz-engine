@@ -14,10 +14,10 @@ namespace noob
 			struct uniform_info
 			{
 				std::array<noob::vec4, 4> colours;
-				noob::vec3 mapping_blends;
-				noob::vec3 scales;
-				noob::vec2 colour_positions;
-				std::array<noob::vec3, 4> light_dir;
+				noob::vec4 blend;
+				noob::vec4 scales;
+				noob::vec4 colour_positions;
+				std::array<noob::vec4, 4> light_dir;
 			};
 
 			void init();

@@ -27,35 +27,17 @@ void noob::triplanar_gradient_map_renderer::draw(const noob::drawable* model, co
 	bgfx::setUniform(noob::graphics::get_uniform("colour_3").handle, &info.colours[3].v[0]);
 
 	bgfx::setUniform(noob::graphics::get_uniform("normal_mat").handle, &normal_mat.m[0]);
-
-	noob::vec4 map_blends(info.mapping_blends, 0.0);
-
-	bgfx::setUniform(noob::graphics::get_uniform("mapping_blend").handle, &map_blends.v[0]);
-
-	noob::vec4 colour_pos(info.colour_positions, 0.0, 0.0);
-
-	bgfx::setUniform(noob::graphics::get_uniform("colour_positions").handle, &colour_pos.v[0]);
-
-	noob::vec4 scalings(info.scales, 1.0);
-	bgfx::setUniform(noob::graphics::get_uniform("scales").handle, &scalings.v[0]);
+	bgfx::setUniform(noob::graphics::get_uniform("texture_blend").handle, &info.blend.v[0]);
+	bgfx::setUniform(noob::graphics::get_uniform("colour_positions").handle, &info.colour_positions.v[0]);
+	bgfx::setUniform(noob::graphics::get_uniform("scales").handle, &info.scales.v[0]);
 
 	noob::graphics::sampler samp = noob::graphics::get_sampler("u_texture");
 	bgfx::setTexture(0, samp.handle, noob::graphics::get_texture("grad_map"));
 
-
-	noob::graphics::add_uniform(std::string("light_0_direction"), bgfx::UniformType::Enum::Vec4);
-	noob::graphics::add_uniform(std::string("light_1_direction"), bgfx::UniformType::Enum::Vec4);
-	noob::graphics::add_uniform(std::string("light_2_direction"), bgfx::UniformType::Enum::Vec4);
-	noob::graphics::add_uniform(std::string("light_3_direction"), bgfx::UniformType::Enum::Vec4);
-
-	noob::vec4 light_dir_0(info.light_dir[0], 0.0);
-	bgfx::setUniform(noob::graphics::get_uniform("light_0_direction").handle, &light_dir_0.v[0]);
-	noob::vec4 light_dir_1(info.light_dir[1], 0.0);
-	bgfx::setUniform(noob::graphics::get_uniform("light_1_direction").handle, &light_dir_1.v[0]);
-	noob::vec4 light_dir_2(info.light_dir[2], 0.0);
-	bgfx::setUniform(noob::graphics::get_uniform("light_2_direction").handle, &light_dir_2.v[0]);
-	noob::vec4 light_dir_3(info.light_dir[3], 0.0);
-	bgfx::setUniform(noob::graphics::get_uniform("light_3_direction").handle, &light_dir_3.v[0]);
+	bgfx::setUniform(noob::graphics::get_uniform("light_direction_0").handle, &info.light_dir[0].v[0]);
+	bgfx::setUniform(noob::graphics::get_uniform("light_direction_1").handle, &info.light_dir[1].v[0]);
+	bgfx::setUniform(noob::graphics::get_uniform("light_direction_2").handle, &info.light_dir[2].v[0]);
+	bgfx::setUniform(noob::graphics::get_uniform("light_direction_3").handle, &info.light_dir[3].v[0]);
 
 	noob::graphics::shader s = noob::graphics::get_shader("gradient_map_triplanar");
 	model->draw(view_id, world_mat, normal_mat, s.program,  0 | BGFX_STATE_RGB_WRITE | BGFX_STATE_ALPHA_WRITE | BGFX_STATE_DEPTH_WRITE | BGFX_STATE_DEPTH_TEST_LESS | BGFX_STATE_MSAA);

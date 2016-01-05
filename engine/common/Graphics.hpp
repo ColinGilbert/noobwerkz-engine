@@ -63,7 +63,7 @@ namespace noob
 
 			// ---------------- Asset creators (make assets available from getters) ----------------
 			static bool add_sampler(const std::string&);
-			static bool add_uniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t count = 1);
+			static bool add_uniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t count);
 			static bool add_shader(const std::string&, const noob::graphics::shader&);
 
 			// ---------------- Getters -----------------
@@ -89,8 +89,9 @@ namespace noob
 				return bgfx::copy(&payload[0], payload.size());
 			}
 
-			static noob::graphics::uniform light_direction, light_intensity, colour_0, colour_1, colour_2, colour_3, mapping_blends, colour_positions, scales, light_0_direction, light_1_direction, light_2_direction, light_3_direction, normal_mat;
+			static const noob::graphics::uniform invalid_uniform, colour_0, colour_1, colour_2, colour_3, texture_blend, colour_positions, scales, light_direction_0, light_direction_1, light_direction_2, light_direction_3, light_colour_0, light_colour_1, light_colour_2, light_colour_3, normal_mat;
 
+			static const noob::graphics::sampler invalid_sampler;
 		protected:
 			// ---------------- Data --------------------
 			static std::unordered_map<std::string, bgfx::TextureHandle> global_textures;
