@@ -2,22 +2,23 @@ $input v_position, v_normal, mult_normal
 
 #include "common.sh"
 
-SAMPLER2D(u_texture, 0);
+SAMPLER2D(texture_0, 0);
 
 uniform vec4 colour_0;
 uniform vec4 colour_1;
 uniform vec4 colour_2;
 uniform vec4 colour_3;
 
-uniform vec4 texture_blend;
+// Texture blending factor
+uniform vec4 blend_0;
 
 // Positions are only required for the two mid-gradient colours, as the other two are at the ends
-uniform vec4 colour_positions;
+uniform vec4 blend_1;
 
 // Scaling factors (for the texture)
 uniform vec4 scales;
 
-// uniform u_texture;
+// uniform texture_0;
 uniform vec4 light_direction_0;
 uniform vec4 light_direction_1;
 uniform vec4 light_direction_2;
@@ -38,22 +39,22 @@ void main()
 	// vec4 yaxis = vec4(0.0, 1.0, 0.0, 1.0);
 	// vec4 zaxis = vec4(0.0, 0.0, 1.0, 1.0);
 
-	vec4 xaxis = vec4(texture2D(u_texture, position.yz * scales.x).rgb, 1.0);
-	vec4 yaxis = vec4(texture2D(u_texture, position.xz * scales.y).rgb, 1.0);
-	vec4 zaxis = vec4(texture2D(u_texture, position.xy * scales.z).rgb, 1.0);
+	vec4 xaxis = vec4(texture2D(texture_0, position.yz * scales.x).rgb, 1.0);
+	vec4 yaxis = vec4(texture2D(texture_0, position.xz * scales.y).rgb, 1.0);
+	vec4 zaxis = vec4(texture2D(texture_0, position.xy * scales.z).rgb, 1.0);
 
 	vec4 tex = xaxis * normal_blend.x + yaxis * normal_blend.y + zaxis * normal_blend.z;
 
-	float tex_r = texture_blend.x * tex.r;
-	float tex_b = texture_blend.y * tex.g;
-	float tex_g = texture_blend.z * tex.b;
+	float tex_r = blend_0.x * tex.r;
+	float tex_b = blend_0.y * tex.g;
+	float tex_g = blend_0.z * tex.b;
 
 	vec4 tex_weighted = vec4(tex_r, tex_g, tex_b, 1.0);
 	float tex_intensity = (tex_r + tex_g + tex_b) * 0.3333;
 
-	float ratio_0_to_1 = when_le(tex_intensity, colour_positions.x) * ((tex_intensity + colour_positions.x) * 0.5);
-	float ratio_1_to_2 = when_le(tex_intensity, colour_positions.y) * when_gt(tex_intensity, colour_positions.x) * ((tex_intensity + colour_positions.y) * 0.5);
-	float ratio_2_to_3 = when_ge(tex_intensity, colour_positions.y) * ((tex_intensity + 1.0) * 0.5);
+	float ratio_0_to_1 = when_le(tex_intensity, blend_1.x) * ((tex_intensity + blend_1.x) * 0.5);
+	float ratio_1_to_2 = when_le(tex_intensity, blend_1.y) * when_gt(tex_intensity, blend_1.x) * ((tex_intensity + blend_1.y) * 0.5);
+	float ratio_2_to_3 = when_ge(tex_intensity, blend_1.y) * ((tex_intensity + 1.0) * 0.5);
 	
 	vec4 tex_final = ((colour_0 + colour_1) * ratio_0_to_1) + ((colour_1 + colour_2) * ratio_1_to_2) + ((colour_2 + colour_3) * ratio_2_to_3);
 

@@ -9,7 +9,7 @@
 
 // bgfx::VertexDecl noob::graphics::mesh_vertex::ms_decl;
 
-std::unordered_map<std::string, bgfx::TextureHandle> noob::graphics::global_textures;
+std::unordered_map<std::string, noob::graphics::texture> noob::graphics::global_textures;
 std::unordered_map<std::string, noob::graphics::uniform> noob::graphics::uniforms;
 std::unordered_map<std::string, noob::graphics::sampler> noob::graphics::samplers;
 std::unordered_map<std::string, noob::graphics::shader> noob::graphics::shaders;
@@ -19,8 +19,8 @@ const noob::graphics::uniform noob::graphics::colour_0;
 const noob::graphics::uniform noob::graphics::colour_1;
 const noob::graphics::uniform noob::graphics::colour_2;
 const noob::graphics::uniform noob::graphics::colour_3;
-const noob::graphics::uniform noob::graphics::texture_blend;
-const noob::graphics::uniform noob::graphics::colour_positions;
+const noob::graphics::uniform noob::graphics::blend_0;
+const noob::graphics::uniform noob::graphics::blend_1;
 const noob::graphics::uniform noob::graphics::scales;
 const noob::graphics::uniform noob::graphics::light_direction_0;
 const noob::graphics::uniform noob::graphics::light_direction_1;
@@ -32,8 +32,8 @@ const noob::graphics::uniform noob::graphics::light_colour_2;
 const noob::graphics::uniform noob::graphics::light_colour_3;
 const noob::graphics::uniform noob::graphics::normal_mat;
 
-const noob::graphics::sampler noob::graphics::invalid_sampler;
-
+const noob::graphics::sampler noob::graphics::invalid_texture;
+const noob::graphics::sampler noob::graphics::texture_0;
 
 void noob::graphics::init(uint32_t width, uint32_t height)
 {
@@ -67,10 +67,9 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	shad.program = h;
 
 	noob::graphics::add_shader(std::string("invalid"), shad);
+
 	noob::graphics::add_uniform(std::string("invalid"), bgfx::UniformType::Enum::Int1, 0);
-	noob::graphics::add_sampler(std::string("invalid"));
 	invalid_uniform = get_uniform("invalid");
-	invalid_sampler = get_sampler("invalid");
 	noob::graphics::add_uniform(std::string("colour_0"), bgfx::UniformType::Enum::Vec4, 1);
 	colour_0 = get_uniform("colour_0");
 	noob::graphics::add_uniform(std::string("colour_1"), bgfx::UniformType::Enum::Vec4, 1);
@@ -79,10 +78,10 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	colour_2 = get_uniform("colour_2");
 	noob::graphics::add_uniform(std::string("colour_3"), bgfx::UniformType::Enum::Vec4, 1);
 	colour_3 = get_uniform("colour_3");
-	noob::graphics::add_uniform(std::string("texture_blend"), bgfx::UniformType::Enum::Vec4, 1);
-	texture_blend = get_uniform("texture_blend");
-	noob::graphics::add_uniform(std::string("colour_positions"), bgfx::UniformType::Enum::Vec4, 1);
-	colour_positions = get_uniform("colour_positions");
+	noob::graphics::add_uniform(std::string("blend_0"), bgfx::UniformType::Enum::Vec4, 1);
+	blend_0 = get_uniform("blend_0");
+	noob::graphics::add_uniform(std::string("blend_1"), bgfx::UniformType::Enum::Vec4, 1);
+	blend_1 = get_uniform("blend_1");
 	noob::graphics::add_uniform(std::string("scales"), bgfx::UniformType::Enum::Vec4, 1);
 	scales = get_uniform("scales");
 	noob::graphics::add_uniform(std::string("light_direction_0"), bgfx::UniformType::Enum::Vec4, 1);
@@ -95,6 +94,12 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	light_direction_3 = get_uniform("light_direction_3");
 	noob::graphics::add_uniform(std::string("normal_mat"), bgfx::UniformType::Enum::Mat4, 1);
 	normal_mat = get_uniform("normal_mat");
+
+	noob::graphics::add_sampler(std::string("invalid"));
+	invalid_texture = get_sampler("invalid");
+	noob::graphics::add_sampler("texture_0");
+	texture_0 = get_sampler("texture_0");
+
 }
 
 void noob::graphics::frame(uint32_t width, uint32_t height)
@@ -103,13 +108,15 @@ void noob::graphics::frame(uint32_t width, uint32_t height)
 }
 
 
-bgfx::TextureHandle noob::graphics::get_texture(const std::string& name)
+noob::graphics::texture noob::graphics::get_texture(const std::string& name)
 {
 	if (global_textures.find(name) == global_textures.end())
 	{
 		bgfx::TextureHandle dummy;
 		dummy.idx = bgfx::invalidHandle;
-		return dummy;
+		noob::graphics::texture t;
+		t.handle = dummy;
+		return t;
 	}
 	else return global_textures.find(name)->second;
 }
@@ -160,7 +167,7 @@ bgfx::ProgramHandle noob::graphics::load_program(const std::string& vs_filename,
 }
 
 
-bgfx::TextureHandle noob::graphics::load_texture(const std::string& friendly_name, const std::string& filename, uint32_t flags)
+noob::graphics::texture noob::graphics::load_texture(const std::string& friendly_name, const std::string& filename, uint32_t flags)
 {
 	int width = 0;
 	int height = 0;
@@ -193,9 +200,11 @@ bgfx::TextureHandle noob::graphics::load_texture(const std::string& friendly_nam
 		logger::log(ww.str());
 	}
 
-	noob::graphics::global_textures.insert(std::make_pair(friendly_name, tex));
+	noob::graphics::texture t;
+	t.handle = tex;
+	noob::graphics::global_textures.insert(std::make_pair(friendly_name, t));
 
-	return tex;
+	return t;
 }
 
 

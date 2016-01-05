@@ -18,6 +18,7 @@ namespace noob
 				noob::vec4 scales;
 				noob::vec4 colour_positions;
 				std::array<noob::vec4, 4> light_dir;
+				noob::graphics::texture texture_map;
 			};
 
 			void init();

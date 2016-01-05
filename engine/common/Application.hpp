@@ -53,15 +53,9 @@
 #include "TransformHelper.hpp"
 #include "Keys.hpp"
 #include "format.h"
-//#include "AnimatedModel.hpp"
-//#include "ShaderVariant.hpp"
-//#include "MeshUtils.hpp"
 #include "FileSystem.hpp"
 
 #include <btBulletDynamicsCommon.h>
-// #include <chaiscript/chaiscript.hpp>
-// #include <chaiscript/chaiscript_stdlib.hpp>
-
 #include <angelscript.h>
 
 #include "AngelVector.hpp"
@@ -82,10 +76,13 @@ namespace noob
 			uint32_t get_height() const { return static_cast<uint32_t>(window_height); }
 			uint32_t get_width() const { return static_cast<uint32_t>(window_width); }
 
+			// Init must always be called.
 			void init();
+			// Those three allow an app to be controlled better by an external environment (ie: Android/iOS)
 			void pause();
 			void resume();
-			
+			void gc();
+
 			typedef std::tuple<const std::array<int, 2>&, const std::array<float,2>&> touch_instance;
 			
 			// Callbacks

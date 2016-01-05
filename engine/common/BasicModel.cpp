@@ -6,6 +6,7 @@ bgfx::VertexDecl noob::basic_model::vertex::ms_decl;
 
 noob::basic_model::~basic_model()
 {
+	ready = false;
 	if (vertex_buffer.idx != bgfx::invalidHandle)
 	{
 		bgfx::destroyVertexBuffer(vertex_buffer);
@@ -15,13 +16,11 @@ noob::basic_model::~basic_model()
 	{
 		bgfx::destroyIndexBuffer(index_buffer);
 	}
-	ready = false;
 }
 
 
 void noob::basic_model::init(const noob::basic_mesh& input_mesh)
 {
-	ready = false;
 	noob::basic_model::vertex::init();
 	for (size_t n = 0; n < input_mesh.vertices.size(); ++n)
 	{
@@ -41,10 +40,12 @@ void noob::basic_model::init(const noob::basic_mesh& input_mesh)
 
 	noob::basic_mesh::bbox bbox = input_mesh.get_bbox();
 	dimensions = (bbox.max + bbox.min);
-	ready = true;
+
 	fmt::MemoryWriter ww;
 	ww << "[Model] load successful - vertices " << vertices.size() << ", indices " << indices.size() << ", max " << bbox.max.to_string() << ", min " << bbox.min.to_string() << ", dims " << dimensions.to_string();
 	logger::log(ww.str());
+
+	ready = true;
 }
 
 
@@ -53,7 +54,7 @@ void noob::basic_model::draw(uint8_t view_id, const noob::mat4& model_mat, const
 	if (ready)
 	{
 		bgfx::setTransform(&model_mat.m[0]);
-		bgfx::setUniform(noob::graphics::get_uniform("normal_mat").handle, &normal_mat.m[0]);
+		// bgfx::setUniform(noob::graphics::get_uniform("normal_mat").handle, &normal_mat.m[0]);
 		bgfx::setVertexBuffer(vertex_buffer);
 		bgfx::setIndexBuffer(index_buffer);
 		bgfx::setState(bgfx_state_flags);

@@ -20,7 +20,7 @@ namespace noob
 
 
 
-		//basic_model() {}
+		basic_model() : ready(false) {}
 		virtual ~basic_model();
 		void init(const noob::basic_mesh&);
 

@@ -40,6 +40,11 @@ namespace noob
 
 				bgfx::UniformHandle handle;
 			};
+			
+			struct texture
+			{
+				bgfx::TextureHandle handle;
+			};
 
 			struct shader
 			{
@@ -59,7 +64,7 @@ namespace noob
 			// TODO: Implement this 
 			// static bgfx::ProgramHandle compile_and_load_program(const std::string& vs_source_filename, const std::string& fs_source_filename, const std::string& varyings_filename);
 
-			static bgfx::TextureHandle load_texture(const std::string& friendly_name, const std::string& filename, uint32_t flags);
+			static noob::graphics::texture load_texture(const std::string& friendly_name, const std::string& filename, uint32_t flags);
 
 			// ---------------- Asset creators (make assets available from getters) ----------------
 			static bool add_sampler(const std::string&);
@@ -68,7 +73,7 @@ namespace noob
 
 			// ---------------- Getters -----------------
 			static noob::graphics::shader get_shader(const std::string&);
-			static bgfx::TextureHandle get_texture(const std::string&);
+			static noob::graphics::texture get_texture(const std::string&);
 			static noob::graphics::uniform get_uniform(const std::string&);
 			static noob::graphics::sampler get_sampler(const std::string&);
 
@@ -89,12 +94,12 @@ namespace noob
 				return bgfx::copy(&payload[0], payload.size());
 			}
 
-			static const noob::graphics::uniform invalid_uniform, colour_0, colour_1, colour_2, colour_3, texture_blend, colour_positions, scales, light_direction_0, light_direction_1, light_direction_2, light_direction_3, light_colour_0, light_colour_1, light_colour_2, light_colour_3, normal_mat;
+			static const noob::graphics::uniform invalid_uniform, colour_0, colour_1, colour_2, colour_3, blend_0, blend_1, scales, light_direction_0, light_direction_1, light_direction_2, light_direction_3, light_colour_0, light_colour_1, light_colour_2, light_colour_3, normal_mat;
 
-			static const noob::graphics::sampler invalid_sampler;
+			static const noob::graphics::sampler invalid_texture, texture_0;
 		protected:
 			// ---------------- Data --------------------
-			static std::unordered_map<std::string, bgfx::TextureHandle> global_textures;
+			static std::unordered_map<std::string, noob::graphics::texture> global_textures;
 			static std::unordered_map<std::string, noob::graphics::shader> shaders;
 			static std::unordered_map<std::string, noob::graphics::uniform> uniforms;
 			static std::unordered_map<std::string, noob::graphics::sampler> samplers;

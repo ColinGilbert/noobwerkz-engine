@@ -55,7 +55,7 @@ void noob::animated_model::draw(uint8_t view_id, const noob::mat4& model_mat, co
 		for (noob::animated_model::mesh m : meshes)
 		{
 			bgfx::setTransform(&model_mat.m[0]);
-			bgfx::setUniform(noob::graphics::get_uniform("normal_mat").handle, &normal_mat.m[0]);
+			// bgfx::setUniform(noob::graphics::get_uniform("normal_mat").handle, &normal_mat.m[0]);
 			bgfx::setVertexBuffer(m.vertex_buffer);
 			bgfx::setIndexBuffer(m.index_buffer);
 			bgfx::setState(bgfx_state_flags);
