@@ -236,7 +236,6 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("stage", "uint hull(const vector_vec3& in)", asMETHOD(noob::stage, _hull), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint static_trimesh(uint)", asMETHOD(noob::stage, _static_trimesh), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint add_mesh(const basic_mesh& in)", asMETHOD(noob::stage, _add_mesh), asCALL_THISCALL); assert( r >= 0 );
-
 	r = script_engine->RegisterObjectMethod("stage", "uint basic_model(uint)", asMETHOD(noob::stage, _basic_model), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("stage", "uint animated_model(const string& in)", asMETHOD(noob::stage, _animated_model), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint skeleton(const string& in)", asMETHOD(noob::stage, _skeleton), asCALL_THISCALL); assert( r >= 0 );
