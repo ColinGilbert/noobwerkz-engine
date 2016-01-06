@@ -406,24 +406,19 @@ read(std::istream& _in, BaseImporter& _bi, Options& _opt)
       stream >> u; stream >> v;
 
       if ( !stream.fail()  ){
+
         if ( userOptions.vertex_has_texcoord() || userOptions.face_has_texcoord() ) {
           texcoords.push_back(OpenMesh::Vec2f(u, v));
 
           // Can be used for both!
           fileOptions += Options::VertexTexCoord;
           fileOptions += Options::FaceTexCoord;
-        }
 
-        //try to read the w component as it is optional
-        stream >> w;
-        if ( !stream.fail()  ){
-          if ( userOptions.vertex_has_texcoord() || userOptions.face_has_texcoord() ) {
-            texcoords3d.push_back(OpenMesh::Vec3f(u, v, w));
+          // try to read the w component as it is optional
+          stream >> w;
+          if ( !stream.fail()  )
+              texcoords3d.push_back(OpenMesh::Vec3f(u, v, w));
 
-            // Can be used for both!
-            fileOptions += Options::VertexTexCoord;
-            fileOptions += Options::FaceTexCoord;
-          }
         }
 
       }else{
