@@ -54,6 +54,7 @@
 #include "Keys.hpp"
 #include "format.h"
 #include "FileSystem.hpp"
+#include "Body.hpp"
 
 #include <btBulletDynamicsCommon.h>
 #include <angelscript.h>

@@ -78,14 +78,15 @@ void angel_message_callback(const asSMessageInfo *msg, void *param)
 
 void noob::application::init()
 {
+	logger::log("[Application] Begin init.");
 	ui_enabled = true;
 	gui.init(*prefix, window_width, window_height);
 	stage.init();
 	voxels.init();
 
-	// Used by ANgelScript to capture the result of the last registering.
+	// Used by AngelScript to capture the result of the last registration.
 	int r;
-	//r = script_engine->RegisterGlobalFunction("", asFUNCTION(func_name), asCALL_CDECL);
+	// Example: r = script_engine->RegisterGlobalFunction("", asFUNCTION(func_name), asCALL_CDECL);
 	script_engine->SetMessageCallback(asFUNCTION(angel_message_callback), 0, asCALL_CDECL);
 
 	RegisterStdString(script_engine);
@@ -94,7 +95,7 @@ void noob::application::init()
 	RegisterVector<double>("double", script_engine);
 	RegisterVector<int>("int", script_engine);
 	RegisterVector<unsigned int>("uint", script_engine);
-	// Does not work! TODO: Report on forums
+	// Does not work! TODO: Report on forums.
 	// RegisterVector<bool>("boolean", script_engine);
 
 	r = script_engine->RegisterObjectType("vec2", sizeof(vec2), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
@@ -102,8 +103,7 @@ void noob::application::init()
 	// TODO: Constructors, operators, for vec2
 	r = script_engine->RegisterObjectMethod("vec2", "void set_opIndex(int, float)", asMETHOD(noob::vec2, set_opIndex), asCALL_THISCALL); assert(r >= 0 );
 	r = script_engine->RegisterObjectMethod("vec2", "float get_opIndex(int) const", asMETHOD(noob::vec2, get_opIndex), asCALL_THISCALL); assert(r >= 0 );
-	
-	
+
 	r = script_engine->RegisterObjectType("vec3", sizeof(vec3), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
 	RegisterVector<noob::vec3>("vec3", script_engine);
 	r = script_engine->RegisterObjectMethod("vec3", "vec3 opAdd(float) const", asMETHODPR(noob::vec3, operator+, (float) const, noob::vec3), asCALL_THISCALL); assert(r >= 0 );
@@ -168,12 +168,12 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("basic_mesh", "void rotate(const versor& in)", asMETHOD(noob::basic_mesh, rotate), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("basic_mesh", "void scale(const vec3& in)", asMETHOD(noob::basic_mesh, scale), asCALL_THISCALL); assert( r >= 0 );
 	// noob::basic_mesh::bbox get_bbox() const { return bbox_info; }
-	
+
 	script_engine->RegisterGlobalFunction("basic_mesh sphere_mesh(float)", asFUNCTION(mesh_utils::sphere), asCALL_CDECL); assert(r >= 0);
 	script_engine->RegisterGlobalFunction("basic_mesh cone_mesh(float, float)", asFUNCTION(mesh_utils::cone), asCALL_CDECL); assert(r >= 0);
 	script_engine->RegisterGlobalFunction("basic_mesh box_mesh(float, float)", asFUNCTION(mesh_utils::cylinder), asCALL_CDECL); assert(r >= 0);
 	script_engine->RegisterGlobalFunction("basic_mesh hull_mesh(const vector_vec3& in)", asFUNCTION(mesh_utils::hull), asCALL_CDECL); assert(r >= 0);
-	
+
 	r = script_engine->RegisterGlobalFunction("float length(const vec3& in)", asFUNCTION(length_squared), asCALL_CDECL); assert(r >= 0 );
 	r = script_engine->RegisterGlobalFunction("float length_squared(const vec3& in)", asFUNCTION(length), asCALL_CDECL); assert(r >= 0 );
 	r = script_engine->RegisterGlobalFunction("vec3 normalize(const vec3& in)", asFUNCTIONPR(normalize, (const vec3&), vec3), asCALL_CDECL); assert(r >= 0 );
@@ -197,10 +197,10 @@ void noob::application::init()
 	r = script_engine->RegisterGlobalFunction("mat4 rotate_y_deg(const mat4& in, float)", asFUNCTION(rotate_y_deg), asCALL_CDECL); assert(r >= 0);
 	r = script_engine->RegisterGlobalFunction("mat4 rotate_z_deg(const mat4& in, float)", asFUNCTION(rotate_z_deg), asCALL_CDECL); assert(r >= 0);
 	r = script_engine->RegisterGlobalFunction("mat4 scale(const mat4& in, const vec3& in)", asFUNCTION(scale), asCALL_CDECL); assert(r >= 0);
-	
+
 	// vec3 translation_from_mat4(const mat4& m);
 	// vec3 scale_from_mat4(const mat4& m);
-	
+
 	r = script_engine->RegisterGlobalFunction("mat4 look_at(const vec3& in, const vec3& in, const vec3& in)", asFUNCTION(look_at), asCALL_CDECL); assert(r >= 0);
 	r = script_engine->RegisterGlobalFunction("mat4 perspective(float, float, float, float)", asFUNCTION(perspective), asCALL_CDECL); assert(r >= 0);
 	r = script_engine->RegisterGlobalFunction("mat4 scale(float, float, float, float, float, float)", asFUNCTION(ortho), asCALL_CDECL); assert(r >= 0);
@@ -213,17 +213,37 @@ void noob::application::init()
 	r = script_engine->RegisterGlobalFunction("versor normalize(const versor& in)", asFUNCTIONPR(normalize, (const versor&), versor), asCALL_CDECL); assert(r >= 0);
 	r = script_engine->RegisterGlobalFunction("versor slerp(const versor& in, const versor& in, float)", asFUNCTION(slerp), asCALL_CDECL); assert(r >= 0);
 
-	r = script_engine->RegisterObjectType("body_handle", sizeof(noob::bodies_holder::handle), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
+	r = script_engine->RegisterObjectType("body", sizeof(noob::body), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
 	r = script_engine->RegisterEnum("body_type"); assert(r >= 0);
 	r = script_engine->RegisterEnumValue("body_type", "DYNAMIC", 0); assert(r >= 0);
 	r = script_engine->RegisterEnumValue("body_type", "STATIC", 1); assert(r >= 0);
 	r = script_engine->RegisterEnumValue("body_type", "KINEMATIC", 2); assert(r >= 0);
 	r = script_engine->RegisterEnumValue("body_type", "GHOST", 3); assert(r >= 0);
+	r = script_engine->RegisterObjectType("body_info", sizeof(noob::body::info), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
+	r = script_engine->RegisterObjectProperty("body_info", "float mass", asOFFSET(noob::body::info, mass)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("body_info", "float friction", asOFFSET(noob::body::info, friction)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("body_info", "float restitution", asOFFSET(noob::body::info, restitution)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("body_info", "vec3 linear_factor", asOFFSET(noob::body::info, linear_factor)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("body_info", "vec3 angular_factor", asOFFSET(noob::body::info, angular_factor)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("body_info", "vec3 position", asOFFSET(noob::body::info, position)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("body_info", "vec3 linear_velocity", asOFFSET(noob::body::info, linear_velocity)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("body_info", "vec3 angular_velocity", asOFFSET(noob::body::info, angular_velocity)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("body_info", "versor orientation", asOFFSET(noob::body::info, orientation)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("body_info", "bool ccd", asOFFSET(noob::body::info, ccd)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("body_info", "body_type type", asOFFSET(noob::body::info, type)); assert( r >= 0 );
 
-	RegisterVector<noob::bodies_holder::handle>("body_handle", script_engine);
-	
 	r = script_engine->RegisterObjectType("light", sizeof(noob::light), asOBJ_VALUE | asOBJ_POD); assert(r >= 0);
-	r = script_engine->RegisterObjectType("reflection", sizeof(noob::reflection), asOBJ_VALUE | asOBJ_POD); assert (r >= 0);
+	r = script_engine->RegisterObjectProperty("light", "vec4 position", asOFFSET(noob::light, position)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("light", "vec4 specular", asOFFSET(noob::light, specular)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("light", "vec4 diffuse", asOFFSET(noob::light, diffuse)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("light", "vec4 ambient", asOFFSET(noob::light, ambient)); assert( r >= 0 );
+
+	r = script_engine->RegisterObjectType("reflection", sizeof(noob::reflection), asOBJ_VALUE | asOBJ_POD); assert(r >= 0);
+	r = script_engine->RegisterObjectProperty("reflection", "vec4 specular", asOFFSET(noob::reflection, specular)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("reflection", "vec4 diffuse", asOFFSET(noob::reflection, diffuse)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("reflection", "vec4 ambient", asOFFSET(noob::reflection, ambient)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("reflection", "float exponent", asOFFSET(noob::reflection, exponent)); assert( r >= 0 );
+
 	r = script_engine->RegisterObjectType("shader", sizeof(noob::prepared_shaders::uniform), asOBJ_VALUE | asOBJ_POD); assert ( r >= 0);
 	r = script_engine->RegisterObjectType("stage", sizeof(noob::stage), asOBJ_VALUE); assert(r >= 0 );
 
@@ -252,7 +272,7 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("stage", "uint prop(uint, const string& in)", asMETHODPR(noob::stage, _prop, (unsigned int, const std::string&), unsigned int), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint prop(uint, uint, const string& in)", asMETHODPR(noob::stage, _prop, (unsigned int, unsigned int, const std::string&), unsigned int), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint scenery(uint, const vec3& in, const string& in, const versor& in)", asMETHOD(noob::stage, _scenery), asCALL_THISCALL); assert(r >= 0);
-	// std::tuple<noob::basic_models_holder::handle,noob::vec3> stage.get_model(const noob::shapes_holder::handle);
+
 	// bool stage.show_origin;
 	// noob::mat4 stage.stage.view_mat;
 	// noob::mat4 stage.projection_mat;

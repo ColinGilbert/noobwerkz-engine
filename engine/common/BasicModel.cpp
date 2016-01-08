@@ -42,7 +42,7 @@ void noob::basic_model::init(const noob::basic_mesh& input_mesh)
 	dimensions = (bbox.max + bbox.min);
 
 	fmt::MemoryWriter ww;
-	ww << "[Model] Load successful - vertices " << vertices.size() << ", indices " << indices.size() << ", max " << bbox.max.to_string() << ", min " << bbox.min.to_string() << ", dims " << dimensions.to_string();
+	ww << "[Model] Load successful - " << vertices.size() << " vertices, " << indices.size() << " indices, max" << bbox.max.to_string() << ", min" << bbox.min.to_string() << ", dims" << dimensions.to_string();
 	logger::log(ww.str());
 
 	ready = true;

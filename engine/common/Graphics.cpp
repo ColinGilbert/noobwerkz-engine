@@ -162,24 +162,22 @@ bgfx::ProgramHandle noob::graphics::load_program(const std::string& vs_filename,
 
 noob::graphics::texture noob::graphics::load_texture(const std::string& friendly_name, const std::string& filename, uint32_t flags)
 {
-	int width = 0;
-	int height = 0;
-	int channels = 0;
-	uint8_t* tex_data = stbi_load(filename.c_str(), &width, &height, &channels, 0);
+	int width, height, channels;
+	width = height = channels = 0;
+	
 	fmt::MemoryWriter ww;
-	ww << "[Graphics] Loading Texture: " << filename << ", width: " << width << ", height: " << height << ", channels: " << channels;
-
-	// TODO: Find out why mips break the rendering
+	ww << "[Graphics] Loading Texture: " << filename << ". ";
+	
 	std::string texture_file = noob::utils::load_file_as_string(filename);
 	
-	ww << ", loaded size = " << texture_file.size() << " bytes. ";
+	ww << "Loaded size = " << texture_file.size() << " bytes. ";
 	
 	bgfx::TextureInfo tex_info;
 	bgfx::TextureHandle tex = bgfx::createTexture(bgfx::copy(&texture_file[0], sizeof(char) * texture_file.size()), flags, 0, &tex_info);
 
 	// bgfx::TextureHandle tex = bgfx::createTexture2D(static_cast<uint16_t>(width), static_cast<uint16_t>(height), static_cast<uint8_t>(0), bgfx::TextureFormat::RGBA32, static_cast<uint32_t>(flags), bgfx::copy(&texture_file[0], sizeof(char) * texture_file.size()));
 
-	ww << "BGFX texture info: storage size = " << tex_info.storageSize << ", width = " << tex_info.width << ", height = " << tex_info.height << ", depth = " << tex_info.depth << ", mips = " << (int)tex_info.numMips << ", bpp = " << (int)tex_info.bitsPerPixel << ", cube map? " << tex_info.cubeMap;
+	ww << "BGFX texture info: Storage size is " << tex_info.storageSize << " bytes, width of " << tex_info.width << ", height of " << tex_info.height << ", depth of " << tex_info.depth << ". Num mips is " << tex_info.numMips << ". Bpp " << tex_info.bitsPerPixel << ". Cube map? " << tex_info.cubeMap << ".";
 	
 	logger::log(ww.str());
 

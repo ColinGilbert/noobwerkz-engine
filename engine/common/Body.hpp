@@ -62,20 +62,11 @@ namespace noob
 
 			body() : physics_valid(true) {}
 			~body();
+
 			void init(btDynamicsWorld*, noob::body_type, const noob::shape*, float mass, const noob::vec3& position, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0), bool ccd = false);
 			void init(btDynamicsWorld*, noob::body_type, const noob::shape*, const noob::body::info&);
 
 			void set_type(noob::body_type);
-
-			// void set_self_controlled(bool b);
-			// void set_walk_speed(float s);
-			// void set_jump_force(float j);
-			
-			// void move(bool forward, bool backward, bool left, bool right, bool jump);
-			// void jump();
-
-			// bool can_jump() const;
-			// bool on_ground() const;
 			
 			void set_position(const noob::vec3&);
 			void set_orientation(const noob::versor&);
