@@ -45,7 +45,7 @@ namespace noob
 	typedef noob::component<std::unique_ptr<noob::body>> bodies_holder;
 	typedef noob::component<noob::light> lights_holder;
 	typedef noob::component<noob::reflection> reflections_holder;
-	typedef noob::component<noob::prepared_shaders::info> shaders_holder;
+	typedef noob::component<noob::prepared_shaders::uniform> shaders_holder;
 
 	class stage;
 
@@ -62,7 +62,7 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() : show_origin(true), view_mat(noob::identity_mat4()), projection_mat(noob::identity_mat4()) {}
+			stage() : show_origin(true), basic_lights( { noob::vec4(0.0, 1.0, 0.0, 0.3), noob::vec4(1.0, 0.0, 0.0, 0.3) } ), view_mat(noob::identity_mat4()), projection_mat(noob::identity_mat4()) {}
 			~stage();
 
 			// This one must be called by the application. It really sucks but that's because the graphics API is (currently) static. This may well change soon enough.
@@ -126,7 +126,7 @@ namespace noob
 			noob::reflection get_reflection(const std::string&);			
 
 			// Shader setting
-			void set_shader(const noob::prepared_shaders::info&, const std::string& name);
+			void set_shader(const noob::prepared_shaders::uniform&, const std::string& name);
 
 			noob::shaders_holder::handle get_shader(const std::string& name);
 			unsigned int _get_shader(const std::string&);
@@ -187,6 +187,7 @@ namespace noob
 
 			bool show_origin;
 			
+			std::array<noob::vec4, 2> basic_lights;
 			noob::mat4 view_mat, projection_mat;
 
 

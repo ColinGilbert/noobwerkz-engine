@@ -60,6 +60,7 @@
 
 #include "AngelVector.hpp"
 #include "scriptstdstring.h"
+#include "scripthelper.h"
 
 namespace noob
 {

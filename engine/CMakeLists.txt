@@ -34,7 +34,6 @@ add_subdirectory(lib/freetype)
 
 include_directories(lib/bullet3/src)
 
-#add_subdirectory(lib/polyvox)
 include_directories(lib/polyvox/include)
 
 include_directories(lib/dcollide)
@@ -148,16 +147,15 @@ list (APPEND dcollide_src
 
 
 include_directories(lib/eigen)
-# add_subdirectory(lib/rbdl)
+add_subdirectory(lib/rbdl)
 
-
+# TODO: Remove
 include_directories(lib/csgjs-cpp)
 list (APPEND csgjs_src
 	lib/csgjs-cpp/csgjs.cpp
 	)
 
 include_directories(lib/openmesh/src)
-#add_subdirectory(lib/openmesh)
 
 include_directories(lib/bx/include)
 include_directories(lib/bgfx/include)
@@ -262,6 +260,7 @@ list (APPEND recast_src
 include_directories(lib/angelscript-sdk/angelscript/include)
 include_directories(lib/angelscript-sdk/add_on/scriptbuilder)
 include_directories(lib/angelscript-sdk/add_on/scriptstdstring)
+include_directories(lib/angelscript-sdk/add_on/scripthelper)
 
 list(APPEND angelscript_src
 	lib/angelscript-sdk/angelscript/source/as_atomic.cpp

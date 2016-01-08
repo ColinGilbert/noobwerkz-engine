@@ -84,19 +84,18 @@ void noob::stage::init()
 	meshes_to_models[unit_cone_mesh.get_inner()] = unit_cone_model;
 
 	//  Init basic default shader
-	noob::basic_renderer::uniform_info basic_shader_info;
+	noob::basic_renderer::uniform basic_shader_info;
 	basic_shader_info.colour = noob::vec4(1.0, 0.0, 0.0, 1.0);
 	set_shader(basic_shader_info, "debug"); 
 	debug_shader = get_shader("debug");
 
 	// Init triplanar shader. For fun.
-	noob::triplanar_gradient_map_renderer::uniform_info triplanar_info;
+	noob::triplanar_gradient_map_renderer::uniform triplanar_info;
 	std::array<noob::vec4,4> colours;
 	triplanar_info.colours[0] = noob::vec4(1.0, 1.0, 1.0, 1.0);
 	triplanar_info.colours[1] = noob::vec4(1.0, 1.0, 1.0, 1.0);
 	triplanar_info.colours[2] = noob::vec4(1.0, 1.0, 1.0, 1.0);
 	triplanar_info.colours[3] = noob::vec4(1.0, 1.0, 1.0, 1.0);
-
 	triplanar_info.blend = noob::vec4(1.0, 1.0, 1.0, 0.0);
 	triplanar_info.scales = noob::vec4(1.0, 1.0, 1.0, 0.0);
 	triplanar_info.colour_positions = noob::vec4(0.3, 0.6, 0.0, 0.0);
@@ -127,15 +126,17 @@ void noob::stage::draw(float window_width, float window_height) const
 	bgfx::setViewRect(0, 0, 0, window_width, window_height);
 	bgfx::setViewTransform(1, &view_mat.m[0], &projection_mat.m[0]);
 	bgfx::setViewRect(1, 0, 0, window_width, window_height);
+
+
 	// TODO: Use culling to determine which items are invisible.
 	pool.for_each<noob::basic_models_holder::handle, noob::bodies_holder::handle, noob::shaders_holder::handle>(basic_model_tag.get(), body_tag.get(), shader_tag.get(), [this](es::storage::iterator, noob::basic_models_holder::handle& m, noob::bodies_holder::handle& b, noob::shaders_holder::handle& s) -> long unsigned int
 	{
-		//logger::log("drawloop");
+		// logger::log("drawloop");
 		// logger::log(bodies.get(b)->get_debug_string());
 		noob::mat4 world_mat = noob::scale(noob::identity_mat4(), shapes.get(bodies_to_shapes[b.get_inner()])->get_scales());
 		world_mat = bodies.get(b)->get_transform() * world_mat;
 		noob::mat4 normal_mat = noob::transpose(noob::inverse((view_mat * world_mat)));
-		renderer.draw(basic_models.get(m), shaders.get(s), world_mat, normal_mat);
+		renderer.draw(basic_models.get(m), shaders.get(s), world_mat, normal_mat, basic_lights);
 	});
 
 	if (show_origin)
@@ -146,7 +147,8 @@ void noob::stage::draw(float window_width, float window_height) const
 		//bgfx::setViewTransform(view_id, view_matrix, ortho);
 		// bgfx::setViewRect(view_id, 0, 0, window_width, window_height);
 		noob::mat4 normal_mat = noob::identity_mat4();
-		renderer.draw(basic_models.get(unit_cube_model), shaders.get(debug_shader), noob::scale(noob::identity_mat4(), noob::vec3(10.0, 10.0, 10.0)), normal_mat);
+		
+		// renderer.draw(basic_models.get(unit_cube_model), shaders.get(debug_shader), noob::scale(noob::identity_mat4(), noob::vec3(10.0, 10.0, 10.0)), normal_mat, basic_lights);
 	}
 }
 
@@ -437,7 +439,7 @@ noob::reflection noob::stage::get_reflection(const std::string& s)
 }
 
 
-void noob::stage::set_shader(const noob::prepared_shaders::info& i, const std::string& s)
+void noob::stage::set_shader(const noob::prepared_shaders::uniform& i, const std::string& s)
 {
 	auto search = names_to_shaders.find(s);
 	if (search != names_to_shaders.end())

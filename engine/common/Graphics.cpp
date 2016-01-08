@@ -22,14 +22,8 @@ const noob::graphics::uniform noob::graphics::colour_3;
 const noob::graphics::uniform noob::graphics::blend_0;
 const noob::graphics::uniform noob::graphics::blend_1;
 const noob::graphics::uniform noob::graphics::scales;
-const noob::graphics::uniform noob::graphics::light_direction_0;
-const noob::graphics::uniform noob::graphics::light_direction_1;
-const noob::graphics::uniform noob::graphics::light_direction_2;
-const noob::graphics::uniform noob::graphics::light_direction_3;
-const noob::graphics::uniform noob::graphics::light_colour_0;
-const noob::graphics::uniform noob::graphics::light_colour_1;
-const noob::graphics::uniform noob::graphics::light_colour_2;
-const noob::graphics::uniform noob::graphics::light_colour_3;
+const noob::graphics::uniform noob::graphics::basic_light_0;
+const noob::graphics::uniform noob::graphics::basic_light_1;
 const noob::graphics::uniform noob::graphics::normal_mat;
 
 const noob::graphics::sampler noob::graphics::invalid_texture;
@@ -84,14 +78,10 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	blend_1 = get_uniform("blend_1");
 	noob::graphics::add_uniform(std::string("scales"), bgfx::UniformType::Enum::Vec4, 1);
 	scales = get_uniform("scales");
-	noob::graphics::add_uniform(std::string("light_direction_0"), bgfx::UniformType::Enum::Vec4, 1);
-	light_direction_0 = get_uniform("light_direction_0");
-	noob::graphics::add_uniform(std::string("light_direction_1"), bgfx::UniformType::Enum::Vec4, 1);
-	light_direction_1 = get_uniform("light_direction_1");
-	noob::graphics::add_uniform(std::string("light_direction_2"), bgfx::UniformType::Enum::Vec4, 1);
-	light_direction_2 = get_uniform("light_direction_2");
-	noob::graphics::add_uniform(std::string("light_direction_3"), bgfx::UniformType::Enum::Vec4, 1);
-	light_direction_3 = get_uniform("light_direction_3");
+	noob::graphics::add_uniform(std::string("basic_light_0"), bgfx::UniformType::Enum::Vec4, 1);
+	basic_light_0 = get_uniform("basic_light_0");
+	noob::graphics::add_uniform(std::string("basic_light_1"), bgfx::UniformType::Enum::Vec4, 1);
+	basic_light_1 = get_uniform("basic_light_1");
 	noob::graphics::add_uniform(std::string("normal_mat"), bgfx::UniformType::Enum::Mat4, 1);
 	normal_mat = get_uniform("normal_mat");
 
@@ -124,7 +114,9 @@ noob::graphics::texture noob::graphics::get_texture(const std::string& name)
 
 bgfx::ShaderHandle noob::graphics::load_shader(const std::string& filename)
 {
-	logger::log("Loading shader");
+	fmt::MemoryWriter ww;
+	ww <<"[Graphics] Loading shader at ";
+
 	std::string shader_path = "shaders/dx9/";
 
 	switch (bgfx::getRendererType() )
@@ -149,18 +141,19 @@ bgfx::ShaderHandle noob::graphics::load_shader(const std::string& filename)
 	shader_path.append(filename);
 	shader_path.append(".bin");
 
-	logger::log(shader_path);
+	ww << shader_path;
+	logger::log(ww.str());
+	
 	// noob::utils::data.insert(std::make_pair(shader_path, noob::utils::load_file_as_string(shader_path)));
 	const bgfx::Memory* mem = get_bgfx_mem(noob::utils::load_file_as_string(shader_path));
 	bgfx::ShaderHandle s = bgfx::createShader(mem);
-
+	
 	return s;
 }
 
 
 bgfx::ProgramHandle noob::graphics::load_program(const std::string& vs_filename, const std::string& fs_filename)
 {
-
 	bgfx::ShaderHandle vsh = load_shader(vs_filename);
 	bgfx::ShaderHandle fsh = load_shader(fs_filename);
 	return bgfx::createProgram(vsh, fsh, true);
@@ -173,32 +166,22 @@ noob::graphics::texture noob::graphics::load_texture(const std::string& friendly
 	int height = 0;
 	int channels = 0;
 	uint8_t* tex_data = stbi_load(filename.c_str(), &width, &height, &channels, 0);
-
-	{
-		fmt::MemoryWriter ww;
-		ww << "Loading Texture: " << filename << ", width: " << width << ", height: " << height << ", channels: " << channels;
-		logger::log(ww.str());
-	}
+	fmt::MemoryWriter ww;
+	ww << "[Graphics] Loading Texture: " << filename << ", width: " << width << ", height: " << height << ", channels: " << channels;
 
 	// TODO: Find out why mips break the rendering
 	std::string texture_file = noob::utils::load_file_as_string(filename);
 	
-	{
-		fmt::MemoryWriter ww;
-		ww << "Loaded texture size = " << texture_file.size();
-		logger::log(ww.str());
-	}
+	ww << ", loaded size = " << texture_file.size() << " bytes. ";
 	
 	bgfx::TextureInfo tex_info;
 	bgfx::TextureHandle tex = bgfx::createTexture(bgfx::copy(&texture_file[0], sizeof(char) * texture_file.size()), flags, 0, &tex_info);
 
 	// bgfx::TextureHandle tex = bgfx::createTexture2D(static_cast<uint16_t>(width), static_cast<uint16_t>(height), static_cast<uint8_t>(0), bgfx::TextureFormat::RGBA32, static_cast<uint32_t>(flags), bgfx::copy(&texture_file[0], sizeof(char) * texture_file.size()));
 
-	{
-		fmt::MemoryWriter ww;
-		ww << "BGFX texture info: storage size = " << tex_info.storageSize << ", width = " << tex_info.width << ", height = " << tex_info.height << ", depth = " << tex_info.depth << ", mips = " << (int)tex_info.numMips << ", bpp = " << (int)tex_info.bitsPerPixel << ", cube map? " << tex_info.cubeMap;
-		logger::log(ww.str());
-	}
+	ww << "BGFX texture info: storage size = " << tex_info.storageSize << ", width = " << tex_info.width << ", height = " << tex_info.height << ", depth = " << tex_info.depth << ", mips = " << (int)tex_info.numMips << ", bpp = " << (int)tex_info.bitsPerPixel << ", cube map? " << tex_info.cubeMap;
+	
+	logger::log(ww.str());
 
 	noob::graphics::texture t;
 	t.handle = tex;

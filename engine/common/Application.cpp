@@ -13,7 +13,8 @@ noob::application::application()
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
 	script_engine = asCreateScriptEngine();
-	// assert(script_engine == 0); // TODO: Look into
+	assert(script_engine > 0);
+	// noob::filesystem::init(*prefix);
 	set_init_script("init.as");
 	view_mat = noob::look_at(noob::vec3(0, 50.0, -100.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
 }	
@@ -40,7 +41,7 @@ void noob::application::set_init_script(const std::string& name)
 }
 
 
-void noob::application::eval(const std::string& string_to_eval)
+void noob::application::eval(const std::string& s)
 {
 
 }
@@ -91,8 +92,8 @@ void noob::application::init()
 	RegisterVector<double>("double", script_engine);
 	RegisterVector<int>("int", script_engine);
 	RegisterVector<unsigned int>("uint", script_engine);
-	// DOes not work!
-	// RegisterVector<bool>("bool", script_engine);
+	// Does not work! TODO: Report on forums
+	// RegisterVector<bool>("boolean", script_engine);
 
 	r = script_engine->RegisterObjectType("vec2", sizeof(vec2), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
 	RegisterVector<noob::vec2>("vec2", script_engine);
@@ -221,7 +222,7 @@ void noob::application::init()
 	
 	r = script_engine->RegisterObjectType("light", sizeof(noob::light), asOBJ_VALUE | asOBJ_POD); assert(r >= 0);
 	r = script_engine->RegisterObjectType("reflection", sizeof(noob::reflection), asOBJ_VALUE | asOBJ_POD); assert (r >= 0);
-	r = script_engine->RegisterObjectType("shader", sizeof(noob::prepared_shaders::info), asOBJ_VALUE | asOBJ_POD); assert ( r >= 0);
+	r = script_engine->RegisterObjectType("shader", sizeof(noob::prepared_shaders::uniform), asOBJ_VALUE | asOBJ_POD); assert ( r >= 0);
 	r = script_engine->RegisterObjectType("stage", sizeof(noob::stage), asOBJ_VALUE); assert(r >= 0 );
 
 	r = script_engine->RegisterObjectMethod("stage", "void init()", asMETHOD(noob::stage, init), asCALL_THISCALL); assert( r >= 0 );
@@ -306,8 +307,7 @@ void noob::application::update(double delta)
 
 void noob::application::draw()
 {
-	stage.projection_mat = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 1.0f, 400.0f);
-
+	stage.projection_mat = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 1.0, 1000.0);
 	stage.draw(window_width, window_height);
 }
 

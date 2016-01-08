@@ -94,7 +94,7 @@ namespace noob
 				return bgfx::copy(&payload[0], payload.size());
 			}
 
-			static const noob::graphics::uniform invalid_uniform, colour_0, colour_1, colour_2, colour_3, blend_0, blend_1, scales, light_direction_0, light_direction_1, light_direction_2, light_direction_3, light_colour_0, light_colour_1, light_colour_2, light_colour_3, normal_mat;
+			static const noob::graphics::uniform invalid_uniform, colour_0, colour_1, colour_2, colour_3, blend_0, blend_1, scales, basic_light_0, basic_light_1, normal_mat;
 
 			static const noob::graphics::sampler invalid_texture, texture_0;
 		protected:

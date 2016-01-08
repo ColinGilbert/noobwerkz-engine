@@ -10,8 +10,9 @@ void noob::application::user_init()
 	
 	stage.show_origin = false;
 	noob::graphics::load_texture("grad_map", "gradient_map.dds", BGFX_TEXTURE_NONE);
-		
-	noob::triplanar_gradient_map_renderer::uniform_info moon_shader;
+	
+	noob::triplanar_gradient_map_renderer::uniform moon_shader;
+	
 	moon_shader.colours[0] = noob::vec4(1.0, 1.0, 1.0, 0.0);
 	moon_shader.colours[1] = noob::vec4(0.0, 0.0, 0.0, 0.0);
 	moon_shader.colours[2] = noob::vec4(0.0, 0.0, 0.0, 0.0);
@@ -19,12 +20,11 @@ void noob::application::user_init()
 	moon_shader.blend = noob::vec4(0.0, 0.0, 1.0, 0.0);
 	moon_shader.scales = noob::vec4(1.0/100.0, 1.0/100.0, 1.0/100.0, 0.0);
 	moon_shader.colour_positions = noob::vec4(0.4, 0.6, 0.0, 0.0);
-	moon_shader.light_dir[0] = noob::vec4(0.0, 1.0, 0.0, 0.0);
 	moon_shader.texture_map = noob::graphics::get_texture("grad_map");
 
 	stage.set_shader(moon_shader, "moon");
 	
-	noob::triplanar_gradient_map_renderer::uniform_info purple_shader;
+	noob::triplanar_gradient_map_renderer::uniform purple_shader;
 	purple_shader.colours[0] = noob::vec4(1.0, 1.0, 1.0, 0.0);
 	purple_shader.colours[1] = noob::vec4(1.0, 0.0, 1.0, 0.0);
 	purple_shader.colours[2] = noob::vec4(1.0, 0.0, 1.0, 0.0);
@@ -32,7 +32,6 @@ void noob::application::user_init()
 	purple_shader.blend = noob::vec4(0.2, 0.0, 0.5, 0.0);
 	purple_shader.scales = noob::vec4(1.0/4.0, 1.0/4.0, 1.0/4.0, 0.0);
 	purple_shader.colour_positions = noob::vec4(0.2, 0.7, 0.0, 0.0);
-	purple_shader.light_dir[0] = noob::vec4(0.0, 1.0, 0.0, 0.0);
 	purple_shader.texture_map = moon_shader.texture_map;
 
 	stage.set_shader(purple_shader, "purple");
