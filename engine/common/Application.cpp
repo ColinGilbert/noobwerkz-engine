@@ -14,6 +14,7 @@ noob::application::application()
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
 	script_engine = asCreateScriptEngine();
 	assert(script_engine > 0);
+	// TODO: Uncomment once noob::filesystem is fixed
 	// noob::filesystem::init(*prefix);
 	set_init_script("init.as");
 	view_mat = noob::look_at(noob::vec3(0, 50.0, -100.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
@@ -57,6 +58,7 @@ void angel_message_callback(const asSMessageInfo *msg, void *param)
 				message_type = "WARN";
 				break;
 			}
+
 		case (asMSGTYPE_INFORMATION):
 			{
 				message_type = "INFO";
@@ -255,7 +257,7 @@ void noob::application::init()
 	// noob::mat4 stage.stage.view_mat;
 	// noob::mat4 stage.projection_mat;
 
-	logger::log("[Application] done init.");
+	logger::log("[Application] Done basic init.");
 	user_init();
 }
 

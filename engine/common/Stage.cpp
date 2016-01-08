@@ -68,14 +68,14 @@ void noob::stage::init()
 	shapes_to_meshes[unit_cylinder_shape.get_inner()] = unit_cylinder_mesh;
 	shapes_to_meshes[unit_cone_shape.get_inner()] = unit_cone_mesh;
 
-	logger::log("[Stage] making unit sphere model");
+	logger::log("[Stage] Making unit sphere model");
 	unit_sphere_model = basic_model(unit_sphere_mesh);
-	logger::log("[Stage] making unit cube model");
+	logger::log("[Stage] Making unit cube model");
 	unit_cube_model = basic_model(unit_cube_mesh);
 	// logger::log("[Stage] making unit capsule model");
-	logger::log("[Stage] making unit cylinder model");
+	logger::log("[Stage] Making unit cylinder model");
 	unit_cylinder_model = basic_model(unit_cylinder_mesh);
-	logger::log("[Stage] making unit cone model");
+	logger::log("[Stage] Making unit cone model");
 	unit_cone_model = basic_model(unit_cone_mesh);
 
 	meshes_to_models[unit_sphere_mesh.get_inner()] = unit_sphere_model;
@@ -102,7 +102,7 @@ void noob::stage::init()
 	set_shader(triplanar_info, "default-triplanar");
 	default_triplanar_shader = get_shader("default-triplanar");
 
-	logger::log("[Stage] init complete.");
+	logger::log("[Stage] Done init.");
 
 }
 
@@ -344,7 +344,7 @@ noob::basic_models_holder::handle noob::stage::basic_model(const noob::meshes_ho
 	auto search = meshes_to_models.find(_mesh.get_inner());
 	if (search == meshes_to_models.end())
 	{		
-		logger::log("[Stage] basic_model() - Mesh not found. Making model");
+		// logger::log("[Stage] Adding a model. Mesh not found; creating.");
 		std::unique_ptr<noob::basic_model> temp = std::make_unique<noob::basic_model>();
 		temp->init(noob::mesh_utils::copy(*meshes.get(_mesh)));
 		noob::basic_models_holder::handle h = basic_models.add(std::move(temp));

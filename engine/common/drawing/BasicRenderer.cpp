@@ -13,7 +13,7 @@ void noob::basic_renderer::init()
 	shader.program = program_handle;
 	noob::graphics::add_shader("basic", shader);
 	fmt::MemoryWriter ww;
-	ww <<"[BasicRenderer] - program valid? " << program_valid;
+	ww <<"[BasicRenderer] Program valid? " << program_valid;
 	logger::log(ww.str());
 }
 

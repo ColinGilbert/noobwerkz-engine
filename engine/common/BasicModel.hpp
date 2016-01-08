@@ -50,7 +50,6 @@ namespace noob
 			static bgfx::VertexDecl ms_decl;
 		};
 
-
 		std::vector<noob::basic_model::vertex> vertices;
 		std::vector<uint16_t> indices;
 		noob::vec3 dimensions;

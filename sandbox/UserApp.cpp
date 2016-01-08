@@ -61,6 +61,7 @@ void noob::application::user_init()
 	}
 
 	keystrokes.push_back(std::make_tuple(noob::keyboard::keys::NUM_5, noob::keyboard::mod_keys::NONE, "switch view"));
+	logger::log("[Application] Done user init.");
 }
 
 

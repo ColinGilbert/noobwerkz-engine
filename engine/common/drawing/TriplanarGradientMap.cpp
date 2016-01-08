@@ -1,8 +1,5 @@
 #include "TriplanarGradientMap.hpp"
 
-
-
-
 void noob::triplanar_gradient_map_renderer::init()
 {
 	bgfx::ProgramHandle program_handle = noob::graphics::load_program("vs_gradient_map_triplanar", "fs_gradient_map_triplanar");
@@ -11,7 +8,7 @@ void noob::triplanar_gradient_map_renderer::init()
 	shader.samplers.push_back(noob::graphics::texture_0);
 	noob::graphics::add_shader("gradient_map_triplanar", shader);
 	fmt::MemoryWriter ww;
-	ww << "[TriplanarGradientMap] - program valid? " << program_valid;
+	ww << "[TriplanarGradientMap] Program valid? " << program_valid;
 	logger::log(ww.str());
 }
 
