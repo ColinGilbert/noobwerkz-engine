@@ -71,7 +71,7 @@ void angel_message_callback(const asSMessageInfo *msg, void *param)
 			}
 	}
 	fmt::MemoryWriter ww;
-	ww << "[AngelScript callback] " /* << msg->section << " row = " << msg->row << " col: " << msg->col << ", type: " */ << message_type << ": " << msg->message;
+	ww << "[AngelScript callback] " << message_type << ": " << msg->message << ", script section: " << msg->section << " row = " << msg->row << " col: " << msg->col;
 	logger::log(ww.str());
 }
 
@@ -97,15 +97,121 @@ void noob::application::init()
 	RegisterVector<unsigned int>("uint", script_engine);
 	// Does not work! TODO: Report on forums.
 	// RegisterVector<bool>("bool", script_engine);
-	// 
+
+	// Neither those two seem to work. They register just fine but there's literally no output to the commandline.
+	r = script_engine->RegisterGlobalFunction("void logger(const string& in)", asFUNCTION(logger::log), asCALL_CDECL); assert (r >= 0);
+	// r = script_engine->RegisterGlobalFunction("void log(const string& in)", asFUNCTIONPR(logger::log, (const std::string&), void), asCALL_CDECL); assert (r >= 0);
+
+	// struct uniform
+	// {
+	// 	void init(const std::string& name, bgfx::UniformType::Enum _type, uint16_t _count = 1)
+	// 	{
+	// 		handle = bgfx::createUniform(name.c_str(), type, _count);
+	// 		type = _type;
+	// 		count = _count;
+	// 	}
+
+	// 	bgfx::UniformHandle handle;
+	// 	bgfx::UniformType::Enum type;
+	// 	uint16_t count;
+	// };
+
+	// struct sampler
+	// {
+	// 	void init(const std::string& name)
+	// 	{
+	// 		handle = bgfx::createUniform(name.c_str(), bgfx::UniformType::Int1);
+	// 	}
+	// 	bgfx::UniformHandle handle;
+	// };
+
+	r = script_engine->RegisterObjectType("texture", sizeof(noob::graphics::texture), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::graphics::texture>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
+	r = script_engine->RegisterObjectProperty("texture", "uint handle", asOFFSET(noob::graphics::texture, handle)); assert(r >= 0);
+
+	// struct texture
+	// {
+	// 	bgfx::TextureHandle handle;
+	// };
+
+	// struct shader
+	// {
+	// 	bgfx::ProgramHandle program;
+	// 	std::vector<noob::graphics::uniform> uniforms;
+	// 	std::vector<noob::graphics::sampler> samplers;	
+	// };
+
+	// static void init(uint32_t width, uint32_t height);
+	// static void destroy();
+	// static void frame(uint32_t width, uint32_t height);
+
+	// ---------------- Asset loaders (builds from files and returns handles) -----------------
+	// static bgfx::ShaderHandle load_shader(const std::string& filename);
+	// static bgfx::ProgramHandle load_program(const std::string& vs_filename, const std::string& fs_filename);
+
+	// static noob::graphics::texture load_texture(const std::string& friendly_name, const std::string& filename, uint32_t flags);
+	r = script_engine->RegisterGlobalFunction("texture load_texture(const string& in, const string& in, uint)", asFUNCTION(noob::graphics::load_texture), asCALL_CDECL); assert (r >= 0);
+
+	// ---------------- Asset creators (make assets available from getters) ----------------
+	// static bool add_sampler(const std::string&);
+	// static bool add_uniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t count);
+	// static bool add_shader(const std::string&, const noob::graphics::shader&);
+
+	// ---------------- Getters -----------------
+	// static noob::graphics::shader get_shader(const std::string&);
+	// static noob::graphics::texture get_texture(const std::string&);
+	// static noob::graphics::uniform get_uniform(const std::string&);
+	// static noob::graphics::sampler get_sampler(const std::string&);
+
+	// ---------------- Checkers ----------------
+	// static bool is_valid(const noob::graphics::uniform&);
+	// static bool is_valid(const noob::graphics::sampler&);
+
+
+
+
+
+
+
+	// static void as_vec4_destructor_wrapper(uint8_t* memory)
+	// static void as_mat3_constructor_wrapper_basic(uint8_t* memory)
+	// static void as_mat3_constructor_wrapper_float_9(uint8_t* memory, float a, float b, float c, float d, float e, float f, float g, float h, float i)
+	// static void as_mat3_destructor_wrapper(uint8_t* memory)
+	// static void as_mat4_constructor_wrapper_basic(uint8_t* memory)
+	// static void as_mat4_constructor_wrapper_float_16(uint8_t* memory, float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float mm, float n, float o, float p)
+	// static void as_mat4_destructor_wrapper(uint8_t* memory)
+	// static void as_versor_constructor_wrapper_basic(uint8_t* memory)
+	// static void as_versor_constructor_wrapper_float_4(uint8_t* memory, float x, float y, float z, float w)
+	// static void as_versor_destructor_wrapper(uint8_t* memory)
+
+
+
 	r = script_engine->RegisterObjectType("vec2", sizeof(vec2), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::vec2>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
 	RegisterVector<noob::vec2>("vec2", script_engine);
-	// TODO: Constructors, operators, for vec2
+	
+	// static void as_vec2_constructor_wrapper_basic(uint8_t* memory)
+	// static void as_vec2_constructor_wrapper_float_2(uint8_t* memory, float x, float y)
+	// static void as_vec2_destructor_wrapper(uint8_t* memory)
+
+	r = script_engine->RegisterObjectBehaviour("vec2", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(as_vec2_constructor_wrapper_basic), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	r = script_engine->RegisterObjectBehaviour("vec2", asBEHAVE_CONSTRUCT, "void f(float, float)", asFUNCTION(as_vec2_constructor_wrapper_float_2), asCALL_CDECL_OBJLAST); assert( r >= 0);
+	r = script_engine->RegisterObjectBehaviour("vec2", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_vec2_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("vec2", "void set_opIndex(int, float)", asMETHOD(noob::vec2, set_opIndex), asCALL_THISCALL); assert(r >= 0 );
 	r = script_engine->RegisterObjectMethod("vec2", "float get_opIndex(int) const", asMETHOD(noob::vec2, get_opIndex), asCALL_THISCALL); assert(r >= 0 );
 
 	r = script_engine->RegisterObjectType("vec3", sizeof(vec3), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::vec3>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
 	RegisterVector<noob::vec3>("vec3", script_engine);
+	r = script_engine->RegisterObjectBehaviour("vec3", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(as_vec3_constructor_wrapper_basic), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	r = script_engine->RegisterObjectBehaviour("vec3", asBEHAVE_CONSTRUCT, "void f(float, float, float)", asFUNCTION(as_vec3_constructor_wrapper_float_3), asCALL_CDECL_OBJLAST); assert( r >= 0);
+	r = script_engine->RegisterObjectBehaviour("vec3", asBEHAVE_CONSTRUCT, "void f(vec2, float)", asFUNCTION(as_vec3_constructor_wrapper_vec2_float), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	// r = script_engine->RegisterObjectBehaviour("vec3", asBEHAVE_CONSTRUCT, "void f(vec4)", asFUNCTION(as_vec2_constructor_wrapper_float_2), asCALL_CDECL_OBJLAST); assert( r >= 0);
+	r = script_engine->RegisterObjectBehaviour("vec3", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_vec3_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+
+	// static void as_vec3_constructor_wrapper_basic(uint8_t* memory)
+	// static void as_vec3_constructor_wrapper_float_3(uint8_t* memory, float x, float y, float z)
+	// static void as_vec3_constructor_wrapper_vec2_float(uint8_t* memory, const noob::vec2& vv,  float z)
+	// static void as_vec3_constructor_wrapper_vec4(uint8_t* memory, const noob::vec4& vv)
+	// static void as_vec3_constructor_wrapper_vec3(uint8_t* memory, const noob::vec3& vv)
+	// static void as_vec3_destructor_wrapper(uint8_t* memory)
 	r = script_engine->RegisterObjectMethod("vec3", "vec3 opAdd(float) const", asMETHODPR(noob::vec3, operator+, (float) const, noob::vec3), asCALL_THISCALL); assert(r >= 0 );
 	r = script_engine->RegisterObjectMethod("vec3", "vec3 opAdd(const vec3& in) const", asMETHODPR(noob::vec3, operator+, (const noob::vec3&) const, noob::vec3), asCALL_THISCALL); assert(r >= 0 );
 	r = script_engine->RegisterObjectMethod("vec3", "vec3& opAddAssign(const vec3& in)", asMETHOD(noob::vec3, operator+=), asCALL_THISCALL); assert(r >= 0);
@@ -121,7 +227,16 @@ void noob::application::init()
 
 	r = script_engine->RegisterObjectType("vec4", sizeof(vec4), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::vec4>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
 	RegisterVector<noob::vec4>("vec4", script_engine);
-
+	r = script_engine->RegisterObjectBehaviour("vec4", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(as_vec4_constructor_wrapper_basic), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	r = script_engine->RegisterObjectBehaviour("vec4", asBEHAVE_CONSTRUCT, "void f(float, float, float, float)", asFUNCTION(as_vec4_constructor_wrapper_float_4), asCALL_CDECL_OBJLAST); assert( r >= 0);
+	r = script_engine->RegisterObjectBehaviour("vec4", asBEHAVE_CONSTRUCT, "void f(vec2, float, float)", asFUNCTION(as_vec4_constructor_wrapper_vec2_float_2), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	r = script_engine->RegisterObjectBehaviour("vec4", asBEHAVE_CONSTRUCT, "void f(vec3, float)", asFUNCTION(as_vec4_constructor_wrapper_vec3_float), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	// r = script_engine->RegisterObjectBehaviour("vec3", asBEHAVE_CONSTRUCT, "void f(vec4)", asFUNCTION(as_vec2_constructor_wrapper_float_2), asCALL_CDECL_OBJLAST); assert( r >= 0);
+	r = script_engine->RegisterObjectBehaviour("vec4", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_vec4_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	// static void as_vec4_constructor_wrapper_basic(uint8_t* memory)
+	// static void as_vec4_constructor_wrapper_float_4(uint8_t* memory, float x, float y, float z, float w)
+	// static void as_vec4_constructor_wrapper_vec2_float_2(uint8_t* memory, const noob::vec2& vv,  float z, float w)
+	// static void as_vec4_constructor_wrapper_vec3_float(uint8_t* memory, const noob::vec3& vv, float w)
 	r = script_engine->RegisterObjectMethod("vec4", "void set_opIndex(int, float)", asMETHOD(noob::vec4, set_opIndex), asCALL_THISCALL); assert(r >= 0 );
 	r = script_engine->RegisterObjectMethod("vec4", "float get_opIndex(int) const", asMETHOD(noob::vec4, get_opIndex), asCALL_THISCALL); assert(r >= 0 );
 
@@ -143,6 +258,13 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("versor", "versor& opAssign(const versor& in)", asMETHOD(noob::versor, operator=), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("versor", "void set_opIndex(int, float)", asMETHOD(noob::versor, set_opIndex), asCALL_THISCALL); assert(r >= 0 );
 	r = script_engine->RegisterObjectMethod("versor", "float get_opIndex(int) const", asMETHOD(noob::versor, get_opIndex), asCALL_THISCALL); assert(r >= 0 );
+
+	// 	struct cubic_region
+	//	{
+	//	`	vec3 lower_corner, upper_corner;
+	//	};
+
+
 
 	r = script_engine->RegisterObjectType("basic_mesh", sizeof(basic_mesh), asOBJ_VALUE | asGetTypeTraits<noob::basic_mesh>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
 	RegisterVector<noob::basic_mesh>("basic_mesh", script_engine);
@@ -298,8 +420,7 @@ void noob::application::init()
 
 	logger::log("[Application] Done basic init.");
 	bool b = user_init();
-	b = load_init_script();
-	// script_init(user_init());
+	// b = load_init_script();
 }
 
 
@@ -349,22 +470,85 @@ void noob::application::update(double delta)
 
 bool noob::application::load_init_script()
 {
+	std::string user_message = "[Application] reloading script. Success? {0}";
+
 	script_module = script_engine->GetModule(0, asGM_ALWAYS_CREATE);
+
 	int r = script_module->AddScriptSection(script_name.c_str(), noob::utils::load_file_as_string(script_name).c_str());
 	if (r < 0)
 	{
-		logger::log("Application] ERROR: Init script add section failed!");
+		logger::log(fmt::format(user_message, "false - init script add section failed!"));
 		return false;
 	}
 
 	r = script_module->Build();
 	if (r < 0 )
 	{
-		logger::log("[Application] ERROR: Init script compile failed!");
+		logger::log(fmt::format(user_message, "false - init script compile failed!"));
 		return false;
 		// The build failed. The message stream will have received  
 		// compiler errors that shows what needs to be fixed
 	}
+	asIScriptContext* ctx = script_engine->CreateContext();
+	if (ctx == 0)
+	{
+		logger::log(fmt::format("false - failed to create context"));
+	}
+
+	asIScriptFunction* func = script_engine->GetModule(0)->GetFunctionByDecl("void main()");
+
+	if (func == 0)
+	{
+		logger::log(fmt::format(user_message, "false - main() not found!"));
+		return false;
+	}
+
+	r = ctx->Prepare(func);
+
+	if( r < 0 ) 
+	{
+		logger::log(fmt::format(user_message, "false - failed to prepare the context!"));
+		return false;
+	}
+
+	r = ctx->Execute();
+
+	if( r != asEXECUTION_FINISHED )
+	{
+		// The execution didn't finish as we had planned. Determine why.
+		if( r == asEXECUTION_ABORTED )
+		{
+			logger::log(fmt::format(user_message, "false - script aborted"));
+		}
+
+		else if( r == asEXECUTION_EXCEPTION )
+		{
+			fmt::MemoryWriter ww;
+			ww << "false - script ended with an exception: ";
+
+			asIScriptFunction* exception_func = ctx->GetExceptionFunction();
+
+			ww << "function: " << exception_func->GetDeclaration() << ", ";
+			ww << "module: " << exception_func->GetModuleName() << ", ";
+			ww << "section: " << exception_func->GetScriptSectionName() << ", ";
+			ww << "line: " << ctx->GetExceptionLineNumber() << ", ";
+			ww << "description: " << ctx->GetExceptionString();
+
+			logger::log(fmt::format(user_message, ww.str()));
+		}
+
+		else
+		{
+			fmt ::MemoryWriter ww;
+			ww << "false - the script ended with reason code " << r;
+			logger::log(fmt::format(user_message, ww.str()));
+		}
+
+		return false;
+	}
+
+
+	logger::log(fmt::format(user_message, "true"));
 	return true;
 }
 

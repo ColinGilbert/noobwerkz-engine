@@ -252,7 +252,7 @@ namespace noob
 			noob::vec4 get_basic_light(unsigned int) const;
 
 			noob::mat4 view_mat, projection_mat;
-			
+		
 		protected:
 			// template<typename T>
 			// unsigned char register_es_component(T t, const std::string& friendly_name)
