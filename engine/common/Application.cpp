@@ -159,6 +159,8 @@ void noob::application::init()
 	// ---------------- Getters -----------------
 	// static noob::graphics::shader get_shader(const std::string&);
 	// static noob::graphics::texture get_texture(const std::string&);
+	r = script_engine->RegisterGlobalFunction("texture get_texture(const string& in)", asFUNCTION(noob::graphics::get_texture), asCALL_CDECL); assert (r >= 0);
+	
 	// static noob::graphics::uniform get_uniform(const std::string&);
 	// static noob::graphics::sampler get_sampler(const std::string&);
 
@@ -226,12 +228,16 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("versor", "void set_opIndex(int, float)", asMETHOD(noob::versor, set_opIndex), asCALL_THISCALL); assert(r >= 0 );
 	r = script_engine->RegisterObjectMethod("versor", "float get_opIndex(int) const", asMETHOD(noob::versor, get_opIndex), asCALL_THISCALL); assert(r >= 0 );
 
-	// 	struct cubic_region
-	//	{
-	//	`	vec3 lower_corner, upper_corner;
-	//	};
+	r = script_engine->RegisterObjectType("bbox", sizeof(cubic_region), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::cubic_region>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
+	RegisterVector<noob::cubic_region>("bbox", script_engine);
+	r = script_engine->RegisterObjectProperty("bbox", "vec3 min", asOFFSET(noob::bbox, min)); assert (r >= 0);
+	r = script_engine->RegisterObjectProperty("bbox", "vec3 max", asOFFSET(noob::bbox, max)); assert (r >= 0);
+	r = script_engine->RegisterObjectProperty("bbox", "vec3 center", asOFFSET(noob::bbox, center)); assert (r >= 0);
 
-
+	r = script_engine->RegisterObjectType("cubic_region", sizeof(cubic_region), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::cubic_region>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
+	RegisterVector<noob::cubic_region>("cubic_region", script_engine);
+	r = script_engine->RegisterObjectProperty("cubic_region", "vec3 lower_corner", asOFFSET(noob::cubic_region, lower_corner)); assert (r >= 0);
+	r = script_engine->RegisterObjectProperty("cubic_region", "vec3 upper_corner", asOFFSET(noob::cubic_region, upper_corner)); assert (r >= 0);
 
 	r = script_engine->RegisterObjectType("basic_mesh", sizeof(basic_mesh), asOBJ_VALUE | asGetTypeTraits<noob::basic_mesh>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
 	RegisterVector<noob::basic_mesh>("basic_mesh", script_engine);
@@ -258,6 +264,8 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("basic_mesh", "void translate(const mat4& in)", asMETHOD(noob::basic_mesh, transform), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("basic_mesh", "void rotate(const versor& in)", asMETHOD(noob::basic_mesh, rotate), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("basic_mesh", "void scale(const vec3& in)", asMETHOD(noob::basic_mesh, scale), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("basic_mesh", "bbox get_bbox() const", asMETHOD(noob::basic_mesh, get_bbox), asCALL_THISCALL); assert( r >= 0 );
+	
 	// noob::basic_mesh::bbox get_bbox() const { return bbox_info; }
 
 	r = script_engine->RegisterGlobalFunction("basic_mesh sphere_mesh(float)", asFUNCTION(mesh_utils::sphere), asCALL_CDECL); assert(r >= 0);
@@ -310,7 +318,6 @@ void noob::application::init()
 	r = script_engine->RegisterEnumValue("body_type", "GHOST", 3); assert(r >= 0);
 
 	r = script_engine->RegisterObjectType("body_info", sizeof(noob::body::info), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::body::info>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
-
 	r = script_engine->RegisterObjectProperty("body_info", "float mass", asOFFSET(noob::body::info, mass)); assert( r >= 0 );
 	r = script_engine->RegisterObjectProperty("body_info", "float friction", asOFFSET(noob::body::info, friction)); assert( r >= 0 );
 	r = script_engine->RegisterObjectProperty("body_info", "float restitution", asOFFSET(noob::body::info, restitution)); assert( r >= 0 );
@@ -342,15 +349,13 @@ void noob::application::init()
 	r = script_engine->RegisterObjectProperty("triplanar_gradmap_uniform", "vec4 blend", asOFFSET(noob::triplanar_gradient_map_renderer::uniform, blend)); assert(r >= 0);
 	r = script_engine->RegisterObjectProperty("triplanar_gradmap_uniform", "vec4 scales", asOFFSET(noob::triplanar_gradient_map_renderer::uniform, scales)); assert(r >= 0);
 	r = script_engine->RegisterObjectProperty("triplanar_gradmap_uniform", "vec4 colour_positions", asOFFSET(noob::triplanar_gradient_map_renderer::uniform, colour_positions)); assert(r >= 0);
+	r = script_engine->RegisterObjectProperty("triplanar_gradmap_uniform", "texture texture_map", asOFFSET(noob::triplanar_gradient_map_renderer::uniform, texture_map)); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("triplanar_gradmap_uniform", "void set_colour(uint, const vec4& in)", asMETHOD(noob::triplanar_gradient_map_renderer::uniform, set_colour), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("triplanar_gradmap_uniform", "vec4 get_colour(uint) const", asMETHOD(noob::triplanar_gradient_map_renderer::uniform, get_colour), asCALL_THISCALL); assert( r >= 0 );	
 
 	r = script_engine->RegisterObjectType("stage", sizeof(noob::stage), asOBJ_VALUE); assert(r >= 0 );
 	r = script_engine->RegisterObjectBehaviour("stage", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(as_stage_constructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	r = script_engine->RegisterObjectBehaviour("stage", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_stage_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
-
-	//r = script_engine->RegisterObjectBehaviour("Vec3", asBEHAVE_CONSTRUCT,  "void f(const Vec3 &in)",	asFUNCTION(Vector3CopyConstructor), asCALL_CDECL_OBJLAST); assert( r >= 0 );
-	//r = script_engine->RegisterObjectBehaviour("Vec3", asBEHAVE_CONSTRUCT,  "void f(float, float, float)",  asFUNCTION(Vector3InitConstructor), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "void init()", asMETHOD(noob::stage, init), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "void tear_down()", asMETHOD(noob::stage, tear_down), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "void update(double)", asMETHOD(noob::stage, update), asCALL_THISCALL); assert( r >= 0 );

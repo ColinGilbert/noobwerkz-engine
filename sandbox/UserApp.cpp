@@ -8,7 +8,8 @@ std::vector<std::tuple<noob::keyboard::keys, noob::keyboard::mod_keys, std::stri
 
 bool noob::application::user_init()
 {
-/*	stage.view_mat = noob::look_at(noob::vec3(0.0, 0.0, -200.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0)); //look_at(const vec3& cam_pos, vec3 targ_pos, const vec3& up)
+/*
+	stage.view_mat = noob::look_at(noob::vec3(0.0, 0.0, -200.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0)); //look_at(const vec3& cam_pos, vec3 targ_pos, const vec3& up)
 	
 	stage.show_origin = false;
 	noob::graphics::load_texture("grad_map", "gradient_map.dds", BGFX_TEXTURE_NONE);
@@ -62,6 +63,7 @@ bool noob::application::user_init()
 		stage.prop(temp_body, "purple");
 	}
 */
+
 	keystrokes.push_back(std::make_tuple(noob::keyboard::keys::NUM_5, noob::keyboard::mod_keys::NONE, "switch view"));
 	logger::log("[Application] Successfully done user init.");
 	return true;

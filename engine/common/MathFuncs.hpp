@@ -69,7 +69,7 @@ namespace noob
 			return v[x];
 		}
 
-		
+
 		float get_opIndex(int i) const
 
 		{
@@ -336,28 +336,28 @@ namespace noob
 		versor operator*(const versor& rhs) const;
 		versor operator+(const versor& rhs) const;
 		versor& operator=(const versor& rhs);
-		
+
 
 		float& operator[](int x) 
 		{
 			return q[x];
 		}
 
-/*
-		float get_opIndex(int i) const
+		/*
+		   float get_opIndex(int i) const
 
-		{
-			if (i > 8 ) return m[8];
-			if (i < 0) return m[0];
-			return m[i];
-		}
+		   {
+		   if (i > 8 ) return m[8];
+		   if (i < 0) return m[0];
+		   return m[i];
+		   }
 
-		void set_opIndex(int i, float value)
-		{
-			if (i > 8 && i < 0) return;
-			m[i] = value;
-		}
-*/
+		   void set_opIndex(int i, float value)
+		   {
+		   if (i > 8 && i < 0) return;
+		   m[i] = value;
+		   }
+		   */
 
 		float get_opIndex(int i) const
 		{
@@ -373,8 +373,19 @@ namespace noob
 		}
 
 		std::string to_string() const;
-	
+
 		std::array<float,4> q;
+	};
+
+	struct bbox
+	{
+		template <class Archive>
+			void serialize( Archive & ar )
+			{
+				ar(min, max, center);
+			}
+
+		noob::vec3 min, max, center;
 	};
 
 	struct cubic_region

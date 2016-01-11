@@ -70,17 +70,6 @@ namespace noob
 					ar(vertices, normals, indices, bbox_info, volume_calculated, volume);
 				}
 
-			struct bbox
-			{
-			template <class Archive>
-				void serialize( Archive & ar )
-				{
-					ar(min, max, center);
-				}
-
-				noob::vec3 min, max, center;
-			};
-		
 
 			// Proxies for AngelScript
 			noob::vec3 get_vertex(unsigned int);
@@ -111,7 +100,7 @@ namespace noob
 			void rotate(const noob::versor&);
 			void scale(const noob::vec3&);
 			
-			noob::basic_mesh::bbox get_bbox() const { return bbox_info; }
+			noob::bbox get_bbox() const { return bbox_info; }
 
 
 		protected:
@@ -126,7 +115,7 @@ namespace noob
 			std::vector<uint32_t> indices;
 
 			static constexpr aiPostProcessSteps post_process = static_cast<aiPostProcessSteps>(aiProcessPreset_TargetRealtime_Fast | aiProcess_CalcTangentSpace | aiProcess_ImproveCacheLocality | aiProcess_FindInstances | aiProcess_FixInfacingNormals); 
-			bbox bbox_info;
+			noob::bbox bbox_info;
 			bool volume_calculated;
 			double volume;
 
