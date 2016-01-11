@@ -27,7 +27,7 @@ void main()
 	moon_shader.set_colour(1, vec4(0.0, 0.0, 0.0, 0.0));
 	moon_shader.set_colour(2, vec4(0.0, 0.0, 0.0, 0.0));
 	moon_shader.set_colour(3, vec4(0.0, 0.0, 0.0, 0.0));
-	moon_shader.blend = vec4(0.0, 0.0, 0.0, 0.0);
+	moon_shader.blend = vec4(0.0, 0.0, 1.0, 0.0);
 	moon_shader.scales = vec4(1.0/ 100.0, 1.0/100.0, 1.0/100.0, 0.0);
 	moon_shader.colour_positions = vec4(0.5, 0.8, 0.0, 0.0);
 	moon_shader.texture_map = get_texture("grad_map");
@@ -50,8 +50,23 @@ void main()
 	temp.translate(vec3(0.0, 10.0, 0.0));
 	temp.rotate(versor(0.3333, 0.3333, 0.3333, 0.0));
 	basic_mesh scene_mesh = temp;
-	// auto scenery_h = default_stage.scenery(default_stage.add_mesh(scene_mesh), noob::vec3(0.0, 0.0, 0.0), "moon");
+	auto scenery_h = default_stage.scenery(default_stage.add_mesh(scene_mesh), vec3(0.0, 0.0, 0.0), "moon", versor(0.0, 0.0, 0.0, 1.0));
+	
+	// std::random_device rd;
+	// std::mt19937 gen(rd());
+	// std::uniform_real_distribution<> dis(-10.0, 10.0);
 
+	for (uint i = 0 ; i < 500; ++i)
+	{
+		uint h = default_stage.box(4.0, 4.0, 4.0); 
+		float x_pos = i;
+		float z_pos = i; //dis(gen) * 10.0;
+		uint temp_body = default_stage.body(DYNAMIC, h, 1.0, vec3(x_pos, 250.0, z_pos), versor(0.0, 0.0, 0.0, 1.0), false);
+		// default_stage.bodies.get(temp_body); 
+		default_stage.prop(temp_body, "purple");
+	}
+
+	
 }
 
 /*
@@ -61,7 +76,7 @@ void main()
 	noob::graphics::load_texture("grad_map", "gradient_map.dds", BGFX_TEXTURE_NONE);
 	
 	noob::triplanar_gradient_map_renderer::uniform moon_shader;
-	
+
 	moon_shader.colours[0] = noob::vec4(1.0, 1.0, 1.0, 0.0);
 	moon_shader.colours[1] = noob::vec4(0.0, 0.0, 0.0, 0.0);
 	moon_shader.colours[2] = noob::vec4(0.0, 0.0, 0.0, 0.0);

@@ -441,15 +441,15 @@ noob::reflection noob::stage::get_reflection(const std::string& s)
 
 void noob::stage::set_shader(const noob::basic_renderer::uniform& u, const std::string& name)
 {
-	noob::prepared_shaders::uniform uu(u);
-	set_shader(uu, name);
+	// noob::prepared_shaders::uniform uu(u);
+	set_shader(noob::prepared_shaders::uniform(u), name);
 }
 
 
 void noob::stage::set_shader(const noob::triplanar_gradient_map_renderer::uniform& u, const std::string& name)
 {
-	noob::prepared_shaders::uniform uu(u);
-	set_shader(uu, name);
+	// noob::prepared_shaders::uniform uu(u);
+	set_shader(noob::prepared_shaders::uniform(u), name);
 }
 
 

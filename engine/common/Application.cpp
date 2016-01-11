@@ -126,7 +126,7 @@ void noob::application::init()
 	// };
 
 	r = script_engine->RegisterObjectType("texture", sizeof(noob::graphics::texture), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::graphics::texture>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
-	r = script_engine->RegisterObjectProperty("texture", "uint handle", asOFFSET(noob::graphics::texture, handle)); assert(r >= 0);
+	r = script_engine->RegisterObjectProperty("texture", "uint16 handle", asOFFSET(noob::graphics::texture, handle)); assert(r >= 0);
 
 	// struct texture
 	// {
