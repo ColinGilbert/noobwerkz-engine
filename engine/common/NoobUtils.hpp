@@ -14,6 +14,5 @@ namespace noob
 	struct utils
 	{
 		static std::string load_file_as_string(const std::string& filename);
-		static long int fsize(FILE* _file);
 	};
 }

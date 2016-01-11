@@ -6,7 +6,7 @@
 // TODO: Insert the callback function here
 std::vector<std::tuple<noob::keyboard::keys, noob::keyboard::mod_keys, std::string>> keystrokes;
 
-void noob::application::user_init()
+bool noob::application::user_init()
 {
 	stage.view_mat = noob::look_at(noob::vec3(0.0, 0.0, -200.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0)); //look_at(const vec3& cam_pos, vec3 targ_pos, const vec3& up)
 	
@@ -63,7 +63,8 @@ void noob::application::user_init()
 	}
 
 	keystrokes.push_back(std::make_tuple(noob::keyboard::keys::NUM_5, noob::keyboard::mod_keys::NONE, "switch view"));
-	logger::log("[Application] Done user init.");
+	logger::log("[Application] Successfully done user init.");
+	return true;
 }
 
 

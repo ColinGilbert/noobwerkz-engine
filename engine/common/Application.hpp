@@ -103,10 +103,10 @@ namespace noob
 			void update(double delta);
 			void draw();
 		
-			// Overload these if you're writing a game that is setup and/or updated in C++.
-			void user_init();
+			// Overload these if you're writing a game that is setup and/or developing the engine in C++.
+			bool user_init();
 			void user_update(double);
-			
+		
 			asIScriptEngine* script_engine;
 			static application* app_pointer;
 			std::unique_ptr<std::string> prefix;

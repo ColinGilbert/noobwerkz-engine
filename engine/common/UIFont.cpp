@@ -9,21 +9,11 @@
 
 
 
-TrueTypeHandle loadTtf(FontManager* _fm, const char* _filePath)
+TrueTypeHandle load_ttf(FontManager* _fm, const std::string& file_path)
 {
-	FILE* file = fopen(_filePath, "rb");
-	if (NULL != file)
-	{
-		uint32_t size = (uint32_t)noob::utils::fsize(file);
-		uint8_t* mem = (uint8_t*)malloc(size+1);
-		size_t ignore = fread(mem, 1, size, file);
-		// BX_UNUSED(ignore);
-		fclose(file);
-		mem[size-1] = '\0';
-		TrueTypeHandle handle = _fm->createTtf(mem, size);
-		free(mem);
-		return handle;
-	}
+	std::string mem = noob::utils::load_file_as_string(file_path);
+	TrueTypeHandle handle = _fm->createTtf(reinterpret_cast<const unsigned char*>(mem.c_str()), mem.size());
+	return handle;
 	TrueTypeHandle invalid = BGFX_INVALID_HANDLE;
 	return invalid;
 }
@@ -36,7 +26,7 @@ void noob::ui_font::init(const std::string& filename, size_t font_size, float wi
 	fontManager = new FontManager(1024);
 	textBufferManager = new TextBufferManager(fontManager);
 
-	ttf_handle = loadTtf(fontManager, filename.c_str());
+	ttf_handle = load_ttf(fontManager, filename);
 	font_handle = fontManager->createFontByPixelSize(ttf_handle, 0, font_size, FONT_TYPE_DISTANCE);
 
 	fontManager->preloadGlyph(font_handle, L"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!1234567890-=_+[]{}!@#$%^&*()`~,<>/?\\'\";:. \n");
