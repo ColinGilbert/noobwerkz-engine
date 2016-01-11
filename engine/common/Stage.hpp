@@ -125,9 +125,9 @@ namespace noob
 			void set_reflection(const noob::reflection&, const std::string&);
 			noob::reflection get_reflection(const std::string&);			
 
-			// Shader setting
-			void set_shader(const noob::prepared_shaders::uniform&, const std::string& name);
-
+			void set_shader(const noob::basic_renderer::uniform&, const std::string& name);
+			void set_shader(const noob::triplanar_gradient_map_renderer::uniform&, const std::string& name);
+			
 			noob::shaders_holder::handle get_shader(const std::string& name);
 			unsigned int _get_shader(const std::string&);
 
@@ -262,6 +262,9 @@ namespace noob
 			// }
 
 	// Our component-entity system: The super-efficient handle-swapping fast-iterating dynamic magic enabler
+			// Shader setting	
+			void set_shader(const noob::prepared_shaders::uniform&, const std::string& name);
+
 			std::array<noob::vec4, 2> basic_lights;
 
 			noob::prepared_shaders renderer;

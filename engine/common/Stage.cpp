@@ -439,16 +439,30 @@ noob::reflection noob::stage::get_reflection(const std::string& s)
 }
 
 
-void noob::stage::set_shader(const noob::prepared_shaders::uniform& i, const std::string& s)
+void noob::stage::set_shader(const noob::basic_renderer::uniform& u, const std::string& name)
+{
+	noob::prepared_shaders::uniform uu(u);
+	set_shader(uu, name);
+}
+
+
+void noob::stage::set_shader(const noob::triplanar_gradient_map_renderer::uniform& u, const std::string& name)
+{
+	noob::prepared_shaders::uniform uu(u);
+	set_shader(uu, name);
+}
+
+
+void noob::stage::set_shader(const noob::prepared_shaders::uniform& u, const std::string& s)
 {
 	auto search = names_to_shaders.find(s);
 	if (search != names_to_shaders.end())
 	{
-		shaders.set(search->second, i);
+		shaders.set(search->second, u);
 	}
 	else
 	{
-		names_to_shaders[s] = shaders.add(i);
+		names_to_shaders[s] = shaders.add(u);
 	}
 }
 

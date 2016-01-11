@@ -32,6 +32,26 @@ void main()
 	moon_shader.colour_positions = vec4(0.5, 0.8, 0.0, 0.0);
 	moon_shader.texture_map = get_texture("grad_map");
 
+	default_stage.set_shader(moon_shader, "moon");
+
+	triplanar_gradmap_uniform purple_shader;
+	purple_shader.set_colour(0, vec4(1.0, 1.0, 1.0, 0.0));
+	purple_shader.set_colour(1, vec4(1.0, 0.0, 1.0, 0.0));
+	purple_shader.set_colour(2, vec4(1.0, 0.0, 1.0, 0.0));
+	purple_shader.set_colour(3, vec4(0.0, 0.0, 1.0, 0.0));
+	purple_shader.blend = vec4(0.2, 0.0, 0.5, 0.0);
+	purple_shader.scales = vec4(1.0/4.0, 1.0/4.0, 1.0/4.0, 0.0);
+	purple_shader.colour_positions = vec4(0.2, 0.7, 0.0, 0.0);
+	purple_shader.texture_map = get_texture("grad_map");
+	
+	default_stage.set_shader(purple_shader, "purple");
+
+	basic_mesh temp = cone_mesh(50.0, 100.0);
+	temp.translate(vec3(0.0, 10.0, 0.0));
+	temp.rotate(versor(0.3333, 0.3333, 0.3333, 0.0));
+	basic_mesh scene_mesh = temp;
+	// auto scenery_h = default_stage.scenery(default_stage.add_mesh(scene_mesh), noob::vec3(0.0, 0.0, 0.0), "moon");
+
 }
 
 /*
