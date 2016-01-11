@@ -336,19 +336,34 @@ namespace noob
 		versor operator*(const versor& rhs) const;
 		versor operator+(const versor& rhs) const;
 		versor& operator=(const versor& rhs);
-		std::array<float,4> q;
+		
 
 		float& operator[](int x) 
 		{
 			return q[x];
 		}
 
+/*
 		float get_opIndex(int i) const
 
 		{
+			if (i > 8 ) return m[8];
+			if (i < 0) return m[0];
+			return m[i];
+		}
+
+		void set_opIndex(int i, float value)
+		{
+			if (i > 8 && i < 0) return;
+			m[i] = value;
+		}
+*/
+
+		float get_opIndex(int i) const
+		{
 			if (i > 3 ) return q[3];
 			if (i < 0) return q[0];
-			return 	q[i];
+			return q[i];
 		}
 
 		void set_opIndex(int i, float value)
@@ -358,7 +373,8 @@ namespace noob
 		}
 
 		std::string to_string() const;
-
+	
+		std::array<float,4> q;
 	};
 
 	struct cubic_region

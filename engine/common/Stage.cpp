@@ -7,6 +7,7 @@ noob::stage::~stage()
 	delete collision_configuration;
 	delete collision_dispatcher;
 	delete broadphase;
+
 }
 
 
@@ -102,13 +103,12 @@ void noob::stage::init()
 	default_triplanar_shader = get_shader("default-triplanar");
 
 	logger::log("[Stage] Done init.");
-
 }
 
-
+// TODO: Implement
 void noob::stage::tear_down()
 {
-
+	
 }
 
 

@@ -97,14 +97,14 @@ void noob::application::init()
 	RegisterVector<unsigned int>("uint", script_engine);
 	// Does not work! TODO: Report on forums.
 	// RegisterVector<bool>("bool", script_engine);
-
-	r = script_engine->RegisterObjectType("vec2", sizeof(vec2), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
+	// 
+	r = script_engine->RegisterObjectType("vec2", sizeof(vec2), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::vec2>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
 	RegisterVector<noob::vec2>("vec2", script_engine);
 	// TODO: Constructors, operators, for vec2
 	r = script_engine->RegisterObjectMethod("vec2", "void set_opIndex(int, float)", asMETHOD(noob::vec2, set_opIndex), asCALL_THISCALL); assert(r >= 0 );
 	r = script_engine->RegisterObjectMethod("vec2", "float get_opIndex(int) const", asMETHOD(noob::vec2, get_opIndex), asCALL_THISCALL); assert(r >= 0 );
 
-	r = script_engine->RegisterObjectType("vec3", sizeof(vec3), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
+	r = script_engine->RegisterObjectType("vec3", sizeof(vec3), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::vec3>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
 	RegisterVector<noob::vec3>("vec3", script_engine);
 	r = script_engine->RegisterObjectMethod("vec3", "vec3 opAdd(float) const", asMETHODPR(noob::vec3, operator+, (float) const, noob::vec3), asCALL_THISCALL); assert(r >= 0 );
 	r = script_engine->RegisterObjectMethod("vec3", "vec3 opAdd(const vec3& in) const", asMETHODPR(noob::vec3, operator+, (const noob::vec3&) const, noob::vec3), asCALL_THISCALL); assert(r >= 0 );
@@ -119,23 +119,23 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("vec3", "void set_opIndex(int, float)", asMETHOD(noob::vec3, set_opIndex), asCALL_THISCALL); assert(r >= 0 );
 	r = script_engine->RegisterObjectMethod("vec3", "float get_opIndex(int) const", asMETHOD(noob::vec3, get_opIndex), asCALL_THISCALL); assert(r >= 0 );
 
-	r = script_engine->RegisterObjectType("vec4", sizeof(vec4), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
+	r = script_engine->RegisterObjectType("vec4", sizeof(vec4), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::vec4>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
 	RegisterVector<noob::vec4>("vec4", script_engine);
 
 	r = script_engine->RegisterObjectMethod("vec4", "void set_opIndex(int, float)", asMETHOD(noob::vec4, set_opIndex), asCALL_THISCALL); assert(r >= 0 );
 	r = script_engine->RegisterObjectMethod("vec4", "float get_opIndex(int) const", asMETHOD(noob::vec4, get_opIndex), asCALL_THISCALL); assert(r >= 0 );
 
-	r = script_engine->RegisterObjectType("mat3", sizeof(mat3), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
+	r = script_engine->RegisterObjectType("mat3", sizeof(mat3), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::mat3>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
 	RegisterVector<noob::mat3>("mat3", script_engine);
 
-	r = script_engine->RegisterObjectType("mat4", sizeof(mat4), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
+	r = script_engine->RegisterObjectType("mat4", sizeof(mat4), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::mat4>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
 	RegisterVector<noob::mat4>("mat4", script_engine);
 	r = script_engine->RegisterObjectMethod("mat4", "mat4 opMult(const vec4& in) const", asMETHODPR(noob::mat4, operator*, (const noob::vec4&) const, noob::vec4), asCALL_THISCALL); assert (r >= 0);
 	r = script_engine->RegisterObjectMethod("mat4", "mat4 opMult(const mat4& in) const", asMETHODPR(noob::mat4, operator*, (const noob::mat4&) const, noob::mat4), asCALL_THISCALL); assert (r >= 0);
 	r = script_engine->RegisterObjectMethod("mat4", "void set_opIndex(int, float)", asMETHOD(noob::mat4, set_opIndex), asCALL_THISCALL); assert(r >= 0 );
 	r = script_engine->RegisterObjectMethod("mat4", "float get_opIndex(int) const", asMETHOD(noob::mat4, get_opIndex), asCALL_THISCALL); assert(r >= 0 );
 
-	r = script_engine->RegisterObjectType("versor", sizeof(versor), asOBJ_VALUE | asOBJ_POD); assert(r >= 0 );
+	r = script_engine->RegisterObjectType("versor", sizeof(versor), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::versor>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);//| asOBJ_POD | asGetTypeTraits<noob::versor>()); assert(r >= 0 );
 	RegisterVector<noob::versor>("versor", script_engine);
 	r = script_engine->RegisterObjectMethod("versor", "vec3 opDiv(float) const", asMETHOD(noob::versor, operator/), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("versor", "versor opMult(float) const", asMETHODPR(noob::versor, operator*, (float) const, noob::versor), asCALL_THISCALL); assert(r >= 0);
@@ -144,7 +144,7 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("versor", "void set_opIndex(int, float)", asMETHOD(noob::versor, set_opIndex), asCALL_THISCALL); assert(r >= 0 );
 	r = script_engine->RegisterObjectMethod("versor", "float get_opIndex(int) const", asMETHOD(noob::versor, get_opIndex), asCALL_THISCALL); assert(r >= 0 );
 
-	r = script_engine->RegisterObjectType("basic_mesh", sizeof(basic_mesh), asOBJ_VALUE); assert(r >= 0 );
+	r = script_engine->RegisterObjectType("basic_mesh", sizeof(basic_mesh), asOBJ_VALUE | asGetTypeTraits<noob::basic_mesh>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
 	RegisterVector<noob::basic_mesh>("basic_mesh", script_engine);
 	r = script_engine->RegisterObjectMethod("basic_mesh", "vec3 get_vertex(uint)", asMETHOD(noob::basic_mesh, get_vertex), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("basic_mesh", "vec3 get_normal(uint)", asMETHOD(noob::basic_mesh, get_normal), asCALL_THISCALL); assert( r >= 0 );
@@ -287,7 +287,8 @@ void noob::application::init()
 	r = script_engine->RegisterObjectProperty("stage", "mat4 projection_mat", asOFFSET(noob::stage, projection_mat)); assert(r >= 0);
 
 	logger::log("[Application] Done basic init.");
-	user_init();
+	bool b = user_init();
+	b = load_init_script();
 	// script_init(user_init());
 }
 
@@ -319,21 +320,42 @@ void noob::application::update(double delta)
 		}	
 		else if (last_write != t)
 		{
-			// init();
+			//	try
+			//	{
+			// script_module; = script_engine->GetModule("user_module", asGM_ALWAYS_CREATE);
 
-			try
-			{
-				// TODO: Replace with AngelScript
-				// chai->eval_file(p.generic_string());
-			}
-			catch(std::exception e)
-			{
-				logger::log(fmt::format("[Application]. Caught AngelScript exception: ", e.what()));
-			}
+			//	}
+			//	catch(std::exception e)
+			//	{
+			//		logger::log(fmt::format("[Application]. Caught AngelScript exception: ", e.what()));
+			//	}
+			stage.tear_down();
+			load_init_script();
 			last_write = t;
 		}
 		time_elapsed = 0.0;
 	}
+}
+
+bool noob::application::load_init_script()
+{
+	script_module = script_engine->GetModule(0, asGM_ALWAYS_CREATE);
+	int r = script_module->AddScriptSection(script_name.c_str(), noob::utils::load_file_as_string(script_name).c_str());
+	if (r < 0)
+	{
+		logger::log("Application] ERROR: Init script add section failed!");
+		return false;
+	}
+
+	r = script_module->Build();
+	if (r < 0 )
+	{
+		logger::log("[Application] ERROR: Init script compile failed!");
+		return false;
+		// The build failed. The message stream will have received  
+		// compiler errors that shows what needs to be fixed
+	}
+	return true;
 }
 
 

@@ -106,8 +106,10 @@ namespace noob
 			// Overload these if you're writing a game that is setup and/or developing the engine in C++.
 			bool user_init();
 			void user_update(double);
-		
+			bool load_init_script();
+
 			asIScriptEngine* script_engine;
+			asIScriptModule* script_module; //  = engine->GetModule("module", asGM_ALWAYS_CREATE);
 			static application* app_pointer;
 			std::unique_ptr<std::string> prefix;
 			bool paused, input_has_started, ui_enabled;
