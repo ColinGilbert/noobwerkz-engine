@@ -1,6 +1,8 @@
 #include "Application.hpp"
 #include <cmath>
 #include <random>
+
+
 // TODO: Insert the callback function here
 std::vector<std::tuple<noob::keyboard::keys, noob::keyboard::mod_keys, std::string>> keystrokes;
 
@@ -19,7 +21,7 @@ void noob::application::user_init()
 	moon_shader.colours[3] = noob::vec4(0.0, 0.0, 0.0, 0.0);
 	moon_shader.blend = noob::vec4(0.0, 0.0, 1.0, 0.0);
 	moon_shader.scales = noob::vec4(1.0/100.0, 1.0/100.0, 1.0/100.0, 0.0);
-	moon_shader.colour_positions = noob::vec4(0.4, 0.6, 0.0, 0.0);
+	moon_shader.colour_positions = noob::vec4(0.5, 0.8, 0.0, 0.0);
 	moon_shader.texture_map = noob::graphics::get_texture("grad_map");
 
 	stage.set_shader(moon_shader, "moon");

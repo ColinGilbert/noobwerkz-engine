@@ -44,8 +44,8 @@ void main()
 	vec4 tex = xaxis * normal_blend.x + yaxis * normal_blend.y + zaxis * normal_blend.z;
 
 	float tex_r = blend_0.x * tex.r;
-	float tex_b = blend_0.y * tex.g;
-	float tex_g = blend_0.z * tex.b;
+	float tex_g = blend_0.y * tex.g;
+	float tex_b = blend_0.z * tex.b;
 
 	vec4 tex_weighted = vec4(tex_r, tex_g, tex_b, 1.0);
 	float tex_intensity = (tex_r + tex_g + tex_b) * 0.3333;
@@ -67,15 +67,15 @@ void main()
 
 	float diffuse_0 = clamp(dot(mult_normal, basic_light_0.xyz), 0.0, 1.0);
 	diffuse_0 *= 0.8;
-	light_intensity += diffuse_0 + basic_light_0.w;
+	light_intensity += clamp(diffuse_0 + basic_light_0.w, 0.0, 1.0);
 
 	float diffuse_1 = clamp(dot(mult_normal, basic_light_1.xyz), 0.0, 1.0);
 	diffuse_1 *= 0.8;
-	light_intensity += diffuse_1 + basic_light_1.w;
+	light_intensity += clamp (light_intensity + diffuse_1 + basic_light_1.w, 0.0, 1.0);
 
-	light_intensity = clamp(light_intensity, 0.0, 1.0);
+	// light_intensity = clamp(light_intensity, 0.0, 1.0);
 
-	gl_FragColor = tex_final * light_intensity;
+	gl_FragColor = clamp(tex_final * light_intensity, 0.0, 1.0);
 }
 
 // float diffuse = clamp(dot(basic_light_0.xyz, v_normal), 0.0, 1.0);

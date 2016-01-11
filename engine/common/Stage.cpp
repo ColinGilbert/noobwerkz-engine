@@ -52,8 +52,7 @@ void noob::stage::init()
 	auto temp_shader (pool.register_component<noob::shaders_holder::handle>("shading"));
 	shader_tag.inner = temp_shader;	
 
-
-	unit_sphere_shape = sphere(0.5);
+	unit_sphere_shape = static_cast<const noob::shapes_holder::handle>(this->sphere(0.5));
 	unit_cube_shape = box(1.0, 1.0, 1.0);
 	unit_cylinder_shape = cylinder(0.5, 1.0);
 	unit_cone_shape = cone(0.5, 1.0);
@@ -137,6 +136,7 @@ void noob::stage::draw(float window_width, float window_height) const
 		world_mat = bodies.get(b)->get_transform() * world_mat;
 		noob::mat4 normal_mat = noob::transpose(noob::inverse((view_mat * world_mat)));
 		renderer.draw(basic_models.get(m), shaders.get(s), world_mat, normal_mat, basic_lights);
+		return 1;
 	});
 
 	if (show_origin)
@@ -593,7 +593,7 @@ es::entity noob::stage::actor(const noob::bodies_holder::handle _bod, noob::anim
 
 unsigned int noob::stage::_actor(unsigned int _bod, unsigned int _model, const std::string& _shading)
 {
-
+	return static_cast<unsigned int>(actor(bodies.make_handle(_bod), animated_models.make_handle(_model), _shading));
 }
 
 
@@ -611,6 +611,7 @@ es::entity noob::stage::prop(const noob::bodies_holder::handle _bod, const std::
 
 unsigned int noob::stage::_prop(unsigned int _bod, const std::string& shading)
 {
+	return static_cast<unsigned int>(prop(bodies.make_handle(_bod), shading));
 
 }
 
@@ -628,7 +629,7 @@ es::entity noob::stage::prop(const noob::bodies_holder::handle _bod, noob::basic
 
 unsigned int noob::stage::_prop(unsigned int _bod, unsigned int _model, const std::string& shading)
 {
-
+	return static_cast<unsigned int>(prop(bodies.make_handle(_bod), basic_models.make_handle(_model), shading));
 }
 
 
@@ -650,5 +651,19 @@ es::entity noob::stage::scenery(const noob::meshes_holder::handle h, const noob:
 
 unsigned int noob::stage::_scenery(unsigned int _mesh, const noob::vec3& pos, const std::string& shading, const noob::versor& orient)
 {
+	return static_cast<unsigned int>(scenery(meshes.make_handle(_mesh), pos, shading, orient));
+}
 
+
+void noob::stage::set_basic_light(unsigned int i, const noob::vec4& light)
+{
+	if (i > basic_lights.size()) basic_lights[basic_lights.size()-1] = light;
+	else basic_lights[i] = light;
+}
+
+
+noob::vec4 noob::stage::get_basic_light(unsigned int i) const
+{
+	if (i > 1) return basic_lights[1];
+	else return basic_lights[i];
 }

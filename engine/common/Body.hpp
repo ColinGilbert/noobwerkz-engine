@@ -31,21 +31,20 @@ namespace noob
 					type = _type;
 					friction = _body->getFriction();
 					restitution = _body->getRestitution();
-					linear_factor = _body->getLinearFactor();
-					angular_factor = _body->getAngularFactor();
 					position = _body->getCenterOfMassPosition();
 					orientation =  _body->getOrientation();
 					linear_velocity = _body->getLinearVelocity();
 					angular_velocity = _body->getAngularVelocity();
-					// self_controlled = _self_controlled;
+					linear_factor = _body->getLinearFactor();
+					angular_factor = _body->getAngularFactor();
 					type = _type;
 					ccd = _ccd;
 				}
 
 				float mass, friction, restitution;
-				noob::vec3 linear_factor, angular_factor, position, linear_velocity, angular_velocity;
+				noob::vec3 position, linear_velocity, angular_velocity, linear_factor, angular_factor;
 				noob::versor orientation;
-				bool ccd;//, self_controlled;
+				bool ccd;
 				noob::body_type type;
 			};
 

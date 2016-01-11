@@ -14,11 +14,23 @@ namespace noob
 			
 			struct uniform
 			{
+				// Functions used by scripting engine to access colours. TODO: Wrap around/remove
+				void set_colour(unsigned int i, const noob::vec4& c)
+				{
+					if (i > 3) colours[3] = c;
+					else colours[i] = c;
+				}
+
+				noob::vec4 get_colour(unsigned int i) const
+				{
+					if (i > 3) return colours[3];
+					else return colours[i];
+				}
+				
 				std::array<noob::vec4, 4> colours;
 				noob::vec4 blend;
 				noob::vec4 scales;
 				noob::vec4 colour_positions;
-				// std::array<noob::vec4, 4> light_dir;
 				noob::graphics::texture texture_map;
 			};
 

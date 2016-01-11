@@ -20,17 +20,17 @@ namespace noob
 
 					handle() : valid(false), inner(0) {}
 
-					bool operator==(const noob::component<T>::handle other)
+					bool operator==(const noob::component<T>::handle other) const
 					{
 						return (inner == other.inner);
 					}
 
-					bool operator<(const noob::component<T>::handle other)
+					bool operator<(const noob::component<T>::handle other) const
 					{
 						return (inner < other.inner); 
 					}
 
-					size_t get_inner() const 
+					size_t get_inner() const
 					{
 						return inner;
 					}
@@ -124,17 +124,17 @@ namespace noob
 					handle() : valid(false), inner(0) {}
 
 
-					bool operator==(const noob::component<std::unique_ptr<T>>::handle other)
+					bool operator==(const noob::component<std::unique_ptr<T>>::handle other) const
 					{
 						return (inner == other.inner);
 					}
 
-					bool operator<(const noob::component<std::unique_ptr<T>>::handle other)
+					bool operator<(const noob::component<std::unique_ptr<T>>::handle other) const
 					{
 						return (inner < other.inner); 
 					}
 
-					size_t get_inner() const 
+					size_t get_inner() const
 					{
 						return inner;
 					}

@@ -22,6 +22,10 @@ namespace noob
 
 			typedef boost::variant<noob::triplanar_gradient_map_renderer::uniform, noob::basic_renderer::uniform> uniform;
 			
+
+			// enum class uniform_type {COLOUR_0 = 0, COLOUR_1 = 1, COLOUR_2 = 2, COLOUR_3 = 3, TEXTURE_SCALES = 4, BLEND_0 = 4, BLEND_1 = 5};
+			// position, specular, diffuse, ambient
+
 			void draw(const noob::drawable* drawable, const prepared_shaders::uniform& uni, const noob::mat4& world_mat, const noob::mat4& normal_mat, const std::array<noob::vec4, 2>& ambient_lights, uint8_t view_id = 0) const
 			{
 				match(uni,

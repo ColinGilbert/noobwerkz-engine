@@ -62,7 +62,7 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() : show_origin(true), basic_lights( { noob::vec4(0.0, 1.0, 0.0, 0.3), noob::vec4(1.0, 0.0, 0.0, 0.3) } ), view_mat(noob::identity_mat4()), projection_mat(noob::identity_mat4()) {}
+			stage() : show_origin(true), view_mat(noob::identity_mat4()), projection_mat(noob::identity_mat4()), basic_lights( { noob::vec4(0.0, 1.0, 0.0, 0.1), noob::vec4(1.0, 0.0, 0.0, 0.1) } ) {}
 			~stage();
 
 			// This one must be called by the application. It really sucks but that's because the graphics API is (currently) static. This may well change soon enough.
@@ -148,13 +148,75 @@ namespace noob
 
 			// The following are basic, commonly-used objects that we class provide as a convenience.
 			// noob::shape objects are a wrapper to Bullet shapes that provide a basic API to the rest of the app
-			const noob::shapes_holder::handle unit_sphere_shape, unit_cube_shape, unit_capsule_shape, unit_cylinder_shape, unit_cone_shape;
-			// noob:basic_mesh objects are holders for an indexed trimesh
-			const noob::meshes_holder::handle unit_sphere_mesh, unit_cube_mesh, unit_capsule_mesh, unit_cylinder_mesh, unit_cone_mesh;
-			// noob:basic_nodel objects like these represent models in the graphics card's buffer
-			const noob::basic_models_holder::handle unit_sphere_model, unit_cube_model, unit_capsule_model, unit_cylinder_model, unit_cone_model;
+			noob::shapes_holder::handle unit_sphere_shape, unit_cube_shape, unit_capsule_shape, unit_cylinder_shape, unit_cone_shape;
+			
+			unsigned int _unit_sphere_shape() const
+			{
+				return unit_sphere_shape.get_inner();
+			}
+			
+			unsigned int _unit_cube_shape() const
+			{
+				return unit_cube_shape.get_inner();
+			}
 
-			const noob::shaders_holder::handle debug_shader, default_triplanar_shader, uv_shader;
+			unsigned int _unit_cylinder_shape() const
+			{
+				return unit_cylinder_shape.get_inner();
+			}
+
+			unsigned int _unit_cone_shape() const
+			{
+				return unit_cone_shape.get_inner();
+			}
+
+			// noob:basic_mesh objects are holders for an indexed trimesh
+			noob::meshes_holder::handle unit_sphere_mesh, unit_cube_mesh, unit_capsule_mesh, unit_cylinder_mesh, unit_cone_mesh;
+			
+			unsigned int _unit_sphere_mesh() const
+			{
+				return unit_sphere_mesh.get_inner();
+			}
+
+			unsigned int _unit_cube_mesh() const
+			{
+				return unit_cube_mesh.get_inner();
+			}
+
+			unsigned int _unit_cylinder_mesh() const
+			{
+				return unit_cylinder_mesh.get_inner();
+			}
+
+			unsigned int _unit_cone_mesh() const
+			{
+				return unit_cone_mesh.get_inner();
+			}
+
+			// noob:basic_nodel objects like these represent models in the graphics card's buffer
+			noob::basic_models_holder::handle unit_sphere_model, unit_cube_model, unit_capsule_model, unit_cylinder_model, unit_cone_model;
+			
+			unsigned int _unit_sphere_model() const
+			{
+				return unit_sphere_model.get_inner();
+			}
+
+			unsigned int _unit_cube_model() const
+			{
+				return unit_cube_model.get_inner();
+			}
+
+			unsigned int _unit_cylinder_model() const
+			{
+				return unit_cylinder_model.get_inner();
+			}
+
+			unsigned int _unit_cone_model() const
+			{
+				return unit_cone_model.get_inner();
+			}
+
+			noob::shaders_holder::handle debug_shader, default_triplanar_shader, uv_shader;
 
 			// Functions to create commonly-used configurations:
 			// Actors are a ghost body with a skeletal model. They are controlled by custom logic in order to cut down on physics engine time
@@ -180,17 +242,17 @@ namespace noob
 			noob::basic_mesh make_mesh(const noob::shapes_holder::handle);
 			noob::basic_mesh _make_mesh(unsigned int _shape_h);
 
-
 			// For parametrics, this one will return a normalized model with scaling coordinates. For triangles, scalings are <1, 1, 1>
-			std::tuple<noob::basic_models_holder::handle,noob::vec3> get_model(const noob::shapes_holder::handle);
+			std::tuple<noob::basic_models_holder::handle, noob::vec3> get_model(const noob::shapes_holder::handle);
 			std::tuple<unsigned int, noob::vec3> _get_model(unsigned int);
 
 			bool show_origin;
 			
-			std::array<noob::vec4, 2> basic_lights;
+			void set_basic_light(unsigned int, const noob::vec4&);
+			noob::vec4 get_basic_light(unsigned int) const;
+
 			noob::mat4 view_mat, projection_mat;
-
-
+			
 		protected:
 			// template<typename T>
 			// unsigned char register_es_component(T t, const std::string& friendly_name)
@@ -200,7 +262,7 @@ namespace noob
 			// }
 
 	// Our component-entity system: The super-efficient handle-swapping fast-iterating dynamic magic enabler
-
+			std::array<noob::vec4, 2> basic_lights;
 
 			noob::prepared_shaders renderer;
 

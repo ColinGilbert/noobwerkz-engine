@@ -244,7 +244,19 @@ void noob::application::init()
 	r = script_engine->RegisterObjectProperty("reflection", "vec4 ambient", asOFFSET(noob::reflection, ambient)); assert( r >= 0 );
 	r = script_engine->RegisterObjectProperty("reflection", "float exponent", asOFFSET(noob::reflection, exponent)); assert( r >= 0 );
 
-	r = script_engine->RegisterObjectType("shader", sizeof(noob::prepared_shaders::uniform), asOBJ_VALUE | asOBJ_POD); assert ( r >= 0);
+	r = script_engine->RegisterObjectType("basic_uniform", sizeof(noob::basic_renderer::uniform), asOBJ_VALUE | asOBJ_POD); assert ( r >= 0);
+	r = script_engine->RegisterObjectProperty("basic_uniform", "vec4 colour", asOFFSET(noob::basic_renderer::uniform, colour)); assert(r >= 0);
+
+
+	r = script_engine->RegisterObjectType("triplanar_gradmap_uniform", sizeof(noob::triplanar_gradient_map_renderer::uniform), asOBJ_VALUE | asOBJ_POD); assert ( r >= 0);
+	r = script_engine->RegisterObjectProperty("triplanar_gradmap_uniform", "vec4 blend", asOFFSET(noob::triplanar_gradient_map_renderer::uniform, blend)); assert(r >= 0);
+	r = script_engine->RegisterObjectProperty("triplanar_gradmap_uniform", "vec4 scales", asOFFSET(noob::triplanar_gradient_map_renderer::uniform, scales)); assert(r >= 0);
+	r = script_engine->RegisterObjectProperty("triplanar_gradmap_uniform", "vec4 colour_positions", asOFFSET(noob::triplanar_gradient_map_renderer::uniform, colour_positions)); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("triplanar_gradmap_uniform", "void set_colour(uint, const vec4& in)", asMETHOD(noob::triplanar_gradient_map_renderer::uniform, set_colour), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("triplanar_gradmap_uniform", "vec4 get_colour(uint) const", asMETHOD(noob::triplanar_gradient_map_renderer::uniform, get_colour), asCALL_THISCALL); assert( r >= 0 );	
+
+
+
 	r = script_engine->RegisterObjectType("stage", sizeof(noob::stage), asOBJ_VALUE); assert(r >= 0 );
 
 	r = script_engine->RegisterObjectMethod("stage", "void init()", asMETHOD(noob::stage, init), asCALL_THISCALL); assert( r >= 0 );
@@ -266,12 +278,17 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("stage", "light get_light(const string& in)", asMETHOD(noob::stage, get_light), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "void set_reflection(const reflection& in, const string& in)", asMETHOD(noob::stage, set_reflection), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "reflection get_reflection(const string& in)", asMETHOD(noob::stage, get_reflection), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "void set_shader(const shader& in, const string& in)", asMETHOD(noob::stage, set_shader), asCALL_THISCALL); assert( r >= 0 );
+	// r = script_engine->RegisterObjectMethod("stage", "void set_shader(const basic_uniform& in, const string& in)", asMETHOD(noob::stage, set_shader, (const noob::basic_renderer::uniform&, const std::string&), void), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "void set_shader(const basic_uniform& in, const string& in)", asMETHOD(noob::stage, set_shader), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "void set_shader(const triplanar_gradmap_uniform& in, const string& in)", asMETHOD(noob::stage, set_shader), asCALL_THISCALL); assert( r >= 0 );
+
 	r = script_engine->RegisterObjectMethod("stage", "uint get_shader(const string& in)", asMETHOD(noob::stage, _get_shader), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint actor(uint, uint, const string& in)", asMETHOD(noob::stage, _actor), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint prop(uint, const string& in)", asMETHODPR(noob::stage, _prop, (unsigned int, const std::string&), unsigned int), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint prop(uint, uint, const string& in)", asMETHODPR(noob::stage, _prop, (unsigned int, unsigned int, const std::string&), unsigned int), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint scenery(uint, const vec3& in, const string& in, const versor& in)", asMETHOD(noob::stage, _scenery), asCALL_THISCALL); assert(r >= 0);
+
+	
 
 	// bool stage.show_origin;
 	// noob::mat4 stage.stage.view_mat;
@@ -349,7 +366,7 @@ void noob::application::accept_ndof_data(const noob::ndof::data& info)
 	}
 }
 
-
+// TODO: Refactor
 void noob::application::step()
 {
 	timespec timeNow;
