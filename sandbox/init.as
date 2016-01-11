@@ -1,5 +1,5 @@
 void main()
 {
-	stage@ s;
+	stage s;
 }
 

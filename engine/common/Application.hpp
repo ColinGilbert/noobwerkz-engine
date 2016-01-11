@@ -86,7 +86,7 @@ namespace noob
 			void gc();
 
 			typedef std::tuple<const std::array<int, 2>&, const std::array<float,2>&> touch_instance;
-			
+
 			// Callbacks
 			void touch(int pointerID, float x, float y, int action);
 			void touch(const touch_instance& t);
@@ -98,11 +98,34 @@ namespace noob
 			// step() is called by the target platform, which calculates the delta-time and drives the update() function. It is an ugly hack that had to be made public in order to be callable from the main app.
 			void step();
 
+			static void as_stage_constructor_wrapper(uint8_t* memory)
+			{
+				new(memory) noob::stage();
+			}
+
+			static void as_stage_destructor_wrapper(uint8_t* memory)
+			{
+				((noob::stage*)memory)->~stage();
+			}
+
+			static void as_basic_mesh_constructor_wrapper(uint8_t* memory)
+			{
+				new(memory) noob::basic_mesh();
+			}
+
+			static void as_basic_mesh_destructor_wrapper(uint8_t* memory)
+			{
+				((noob::basic_mesh*)memory)->~basic_mesh();
+			}
+
 
 		protected:
+
+
+
 			void update(double delta);
 			void draw();
-		
+
 			// Overload these if you're writing a game that is setup and/or developing the engine in C++.
 			bool user_init();
 			void user_update(double);
