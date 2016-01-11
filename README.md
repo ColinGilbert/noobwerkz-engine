@@ -13,19 +13,19 @@ These can provide a sense of direction as to the direction of the project; I enc
 
 High-quality tutorials and real unit tests will come when the implementation is more or less set in stone.
 
-Current version: 0.0.2, AKA: "Starting to pull together"
+Current version: 0.1, AKA: "HAHA we got scripting!"
 
 Specific features:
 ```
 A highly tunable gradient mapping shader by default. Comes with three XY-tileable textures blended into one.
 Triplanar shader for non-UV mapped objects. Texture reads are kept to a minimum (3) by using the gradient mapping technique.
-Provides clean interfaces over to those libraries and tools on top, with varying degrees of safety. These choices are left to the programmer.
+Provides clean interfaces over to those libraries and tools on top via both a scripting API for quick scene setups or a C++ level API for extension.
 ```
 
 Currently brings in (among others):
 ```
 BGFX
-GLFW'
+GLFW
 Bullet Physics
 FreeType
 PolyVox
@@ -34,7 +34,7 @@ Assimp (and a working mesh loader, too! =P)
 cppformat - the others are self-evident, but thank heavens for this little guy...
 Cereal
 AngelScript
-Boost (Asio, Filesystem, SPSC Queue)
+Boost (Variant, Filesystem, and soon Asio + SPSC Queue)
 Voro++
 ```
 
@@ -60,21 +60,21 @@ Current setup uses linux as main controller
 Ports coming soon
 ```
 
-Little *nix scripts (currently runs on bash but I don't believe it uses any bashisms):
+Little *nix scripts (currently runs on bash but I don't believe it uses any bashisms. WILL NEED A MINOR AMOUNT OF SETTING UP PRIOR TO BEING DEEMED PORTABLE):
 ```
 sandbox/b for build. Attempts to build source
 sandbox/bb for big build. Wipes the binaries and builds from scratch
 sandbox/s for shaders. Builds the full set of shaders from sandbox/shader_src and places them into the sandbox/shaders directory
-sandbox/g for git. Adds changes to git and commits them
+sandbox/g for git. Adds changes to git and commits them (for my use, mostly)
 ```
 
 Things to do in the immediate future:
 ```
-Continue refining the simulation world
+Refine physics
 AI
 Sound
 Serialization
-Scripting
+Scripting (done!)
 ```
 
 Medium future:
@@ -87,16 +87,16 @@ Basic AI
 
 Long-term:
 ```
-I intend on splitting out the platform-specific code from this project into it's own middleware platform, and running the game engine on top of it.
+I intend on splitting out all the platform-specific code from this project into it's own middleware platform, and running the game engine on top of it.
 ```
 
-Future cool use-cases:
+Future cool use-cases that it can support:
 ```
-Automated testing/simulation
+Automated testing/simulations
 Network management
 Decision support
 Data Analysis/DataViz
-Accounting of all sorts
+Accounting of all sorts (since it's designed to plug into databases)
 Secure smart homes
 Other business (general and not-so-general logic-transaction) needs
 ```

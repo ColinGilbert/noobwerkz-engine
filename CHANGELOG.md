@@ -1,3 +1,10 @@
+Version 0.1 AKA "HAHA we got scripting!"
+```
+Added proper working scripting and ported example to it. Was major PITA. :)
+Minor/medium refactorings/cleanups
+Fixes to the triplanar shader
+```
+
 Version 0.0.2 AKA "Starting to pull through"
 ```
 Lots of cleanups
