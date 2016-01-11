@@ -166,32 +166,8 @@ void noob::application::init()
 	// static bool is_valid(const noob::graphics::uniform&);
 	// static bool is_valid(const noob::graphics::sampler&);
 
-
-
-
-
-
-
-	// static void as_vec4_destructor_wrapper(uint8_t* memory)
-	// static void as_mat3_constructor_wrapper_basic(uint8_t* memory)
-	// static void as_mat3_constructor_wrapper_float_9(uint8_t* memory, float a, float b, float c, float d, float e, float f, float g, float h, float i)
-	// static void as_mat3_destructor_wrapper(uint8_t* memory)
-	// static void as_mat4_constructor_wrapper_basic(uint8_t* memory)
-	// static void as_mat4_constructor_wrapper_float_16(uint8_t* memory, float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float mm, float n, float o, float p)
-	// static void as_mat4_destructor_wrapper(uint8_t* memory)
-	// static void as_versor_constructor_wrapper_basic(uint8_t* memory)
-	// static void as_versor_constructor_wrapper_float_4(uint8_t* memory, float x, float y, float z, float w)
-	// static void as_versor_destructor_wrapper(uint8_t* memory)
-
-
-
 	r = script_engine->RegisterObjectType("vec2", sizeof(vec2), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::vec2>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
 	RegisterVector<noob::vec2>("vec2", script_engine);
-	
-	// static void as_vec2_constructor_wrapper_basic(uint8_t* memory)
-	// static void as_vec2_constructor_wrapper_float_2(uint8_t* memory, float x, float y)
-	// static void as_vec2_destructor_wrapper(uint8_t* memory)
-
 	r = script_engine->RegisterObjectBehaviour("vec2", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(as_vec2_constructor_wrapper_basic), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	r = script_engine->RegisterObjectBehaviour("vec2", asBEHAVE_CONSTRUCT, "void f(float, float)", asFUNCTION(as_vec2_constructor_wrapper_float_2), asCALL_CDECL_OBJLAST); assert( r >= 0);
 	r = script_engine->RegisterObjectBehaviour("vec2", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_vec2_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
@@ -205,13 +181,6 @@ void noob::application::init()
 	r = script_engine->RegisterObjectBehaviour("vec3", asBEHAVE_CONSTRUCT, "void f(vec2, float)", asFUNCTION(as_vec3_constructor_wrapper_vec2_float), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	// r = script_engine->RegisterObjectBehaviour("vec3", asBEHAVE_CONSTRUCT, "void f(vec4)", asFUNCTION(as_vec2_constructor_wrapper_float_2), asCALL_CDECL_OBJLAST); assert( r >= 0);
 	r = script_engine->RegisterObjectBehaviour("vec3", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_vec3_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
-
-	// static void as_vec3_constructor_wrapper_basic(uint8_t* memory)
-	// static void as_vec3_constructor_wrapper_float_3(uint8_t* memory, float x, float y, float z)
-	// static void as_vec3_constructor_wrapper_vec2_float(uint8_t* memory, const noob::vec2& vv,  float z)
-	// static void as_vec3_constructor_wrapper_vec4(uint8_t* memory, const noob::vec4& vv)
-	// static void as_vec3_constructor_wrapper_vec3(uint8_t* memory, const noob::vec3& vv)
-	// static void as_vec3_destructor_wrapper(uint8_t* memory)
 	r = script_engine->RegisterObjectMethod("vec3", "vec3 opAdd(float) const", asMETHODPR(noob::vec3, operator+, (float) const, noob::vec3), asCALL_THISCALL); assert(r >= 0 );
 	r = script_engine->RegisterObjectMethod("vec3", "vec3 opAdd(const vec3& in) const", asMETHODPR(noob::vec3, operator+, (const noob::vec3&) const, noob::vec3), asCALL_THISCALL); assert(r >= 0 );
 	r = script_engine->RegisterObjectMethod("vec3", "vec3& opAddAssign(const vec3& in)", asMETHOD(noob::vec3, operator+=), asCALL_THISCALL); assert(r >= 0);
@@ -231,12 +200,7 @@ void noob::application::init()
 	r = script_engine->RegisterObjectBehaviour("vec4", asBEHAVE_CONSTRUCT, "void f(float, float, float, float)", asFUNCTION(as_vec4_constructor_wrapper_float_4), asCALL_CDECL_OBJLAST); assert( r >= 0);
 	r = script_engine->RegisterObjectBehaviour("vec4", asBEHAVE_CONSTRUCT, "void f(vec2, float, float)", asFUNCTION(as_vec4_constructor_wrapper_vec2_float_2), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	r = script_engine->RegisterObjectBehaviour("vec4", asBEHAVE_CONSTRUCT, "void f(vec3, float)", asFUNCTION(as_vec4_constructor_wrapper_vec3_float), asCALL_CDECL_OBJLAST); assert( r >= 0 );
-	// r = script_engine->RegisterObjectBehaviour("vec3", asBEHAVE_CONSTRUCT, "void f(vec4)", asFUNCTION(as_vec2_constructor_wrapper_float_2), asCALL_CDECL_OBJLAST); assert( r >= 0);
 	r = script_engine->RegisterObjectBehaviour("vec4", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_vec4_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
-	// static void as_vec4_constructor_wrapper_basic(uint8_t* memory)
-	// static void as_vec4_constructor_wrapper_float_4(uint8_t* memory, float x, float y, float z, float w)
-	// static void as_vec4_constructor_wrapper_vec2_float_2(uint8_t* memory, const noob::vec2& vv,  float z, float w)
-	// static void as_vec4_constructor_wrapper_vec3_float(uint8_t* memory, const noob::vec3& vv, float w)
 	r = script_engine->RegisterObjectMethod("vec4", "void set_opIndex(int, float)", asMETHOD(noob::vec4, set_opIndex), asCALL_THISCALL); assert(r >= 0 );
 	r = script_engine->RegisterObjectMethod("vec4", "float get_opIndex(int) const", asMETHOD(noob::vec4, get_opIndex), asCALL_THISCALL); assert(r >= 0 );
 
@@ -252,6 +216,9 @@ void noob::application::init()
 
 	r = script_engine->RegisterObjectType("versor", sizeof(versor), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::versor>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);//| asOBJ_POD | asGetTypeTraits<noob::versor>()); assert(r >= 0 );
 	RegisterVector<noob::versor>("versor", script_engine);
+	r = script_engine->RegisterObjectBehaviour("versor", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(as_versor_constructor_wrapper_basic), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	r = script_engine->RegisterObjectBehaviour("versor", asBEHAVE_CONSTRUCT, "void f(float, float, float, float)", asFUNCTION(as_versor_constructor_wrapper_float_4), asCALL_CDECL_OBJLAST); assert( r >= 0);
+	r = script_engine->RegisterObjectBehaviour("versor", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_versor_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("versor", "vec3 opDiv(float) const", asMETHOD(noob::versor, operator/), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("versor", "versor opMult(float) const", asMETHODPR(noob::versor, operator*, (float) const, noob::versor), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("versor", "versor opMult(const versor& in) const", asMETHODPR(noob::versor, operator*, (const noob::versor&) const, noob::versor), asCALL_THISCALL); assert(r >= 0);
