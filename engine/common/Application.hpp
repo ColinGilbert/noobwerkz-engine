@@ -40,6 +40,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/system/error_code.hpp>
 
+#include "GlobalComponents.hpp"
 #include "Logger.hpp"
 #include "NoobUtils.hpp"
 #include "MathFuncs.hpp"

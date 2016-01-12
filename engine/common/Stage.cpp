@@ -7,7 +7,6 @@ noob::stage::~stage()
 	delete collision_configuration;
 	delete collision_dispatcher;
 	delete broadphase;
-
 }
 
 

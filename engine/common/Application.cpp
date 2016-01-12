@@ -12,6 +12,7 @@ noob::application::application()
 	time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
+	globals::init();
 	script_engine = asCreateScriptEngine();
 	assert(script_engine > 0);
 	// TODO: Uncomment once noob::filesystem is fixed

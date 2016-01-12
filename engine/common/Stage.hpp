@@ -31,21 +31,15 @@
 #include "Body.hpp"
 #include "Shape.hpp"
 #include "Component.hpp"
+#include "GlobalComponents.hpp"
 // #include "IntrusiveBase.hpp"
 
 #include <standalone/brigand.hpp>
 
 namespace noob
 {
-	typedef noob::component<std::unique_ptr<noob::basic_mesh>> meshes_holder;
-	typedef noob::component<std::unique_ptr<noob::basic_model>> basic_models_holder;
-	typedef noob::component<std::unique_ptr<noob::animated_model>> animated_models_holder;
-	typedef noob::component<std::unique_ptr<noob::shape>> shapes_holder;
-	typedef noob::component<std::unique_ptr<noob::skeletal_anim>> skeletal_anims_holder;
 	typedef noob::component<std::unique_ptr<noob::body>> bodies_holder;
-	typedef noob::component<noob::light> lights_holder;
-	typedef noob::component<noob::reflection> reflections_holder;
-	typedef noob::component<noob::prepared_shaders::uniform> shaders_holder;
+
 
 	class stage;
 
