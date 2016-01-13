@@ -7,8 +7,6 @@
 
 namespace noob
 {
-	class stage;
-
 	template <typename T>
 		class component 
 		{

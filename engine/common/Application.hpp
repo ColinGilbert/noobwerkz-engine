@@ -234,9 +234,23 @@ namespace noob
 				((noob::versor*)memory)->~versor();
 			}
 
+			static void as_voxel_world_constructor_wrapper_basic(uint8_t* memory)
+			{
+				new (memory) noob::voxel_world();
+			}
+			
+			static void as_voxel_world_constructor_wrapper_uint_3(uint8_t* memory, size_t x, size_t y, size_t z)
+			{
+				new(memory) noob::voxel_world(x, y, z);
+			}
+
+			static void as_voxel_world_destructor_wrapper(uint8_t* memory)
+			{
+				((noob::voxel_world*)memory)->~voxel_world();
+			}
+
+
 		protected:
-
-
 
 			void update(double delta);
 			void draw();

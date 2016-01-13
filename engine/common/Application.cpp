@@ -83,7 +83,7 @@ void noob::application::init()
 	gui.init(*prefix, window_width, window_height);
 	globals::init();
 	stage.init();
-	voxels.init();
+	voxels.init(512, 512, 512);
 
 	// Used by AngelScript to capture the result of the last registration.
 	int r;
@@ -379,7 +379,6 @@ void noob::application::init()
 	r = script_engine->RegisterGlobalFunction("void set_shader(const triplanar_gradmap_uniform& in, const string& in)", asFUNCTIONPR(globals::set_shader, (const noob::triplanar_gradient_map_renderer::uniform&, const std::string&), void), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("uint get_shader(const string& in)", asFUNCTION(globals::_get_shader), asCALL_CDECL); assert( r >= 0 );
 
-
 	r = script_engine->RegisterObjectMethod("stage", "uint actor(uint, uint, const string& in)", asMETHOD(noob::stage, _actor), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint prop(uint, const string& in)", asMETHODPR(noob::stage, _prop, (unsigned int, const std::string&), unsigned int), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint prop(uint, uint, const string& in)", asMETHODPR(noob::stage, _prop, (unsigned int, unsigned int, const std::string&), unsigned int), asCALL_THISCALL); assert( r >= 0 );
@@ -390,6 +389,33 @@ void noob::application::init()
 	r = script_engine->RegisterObjectProperty("stage", "mat4 projection_mat", asOFFSET(noob::stage, projection_mat)); assert(r >= 0);
 
 	r = script_engine->RegisterGlobalProperty("stage default_stage", &stage); assert (r >= 0);
+
+	r = script_engine->RegisterObjectType("voxel_world", sizeof(noob::voxel_world), asOBJ_VALUE); assert( r >= 0 );
+	r = script_engine->RegisterObjectBehaviour("voxel_world", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(as_voxel_world_constructor_wrapper_basic), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	r = script_engine->RegisterObjectBehaviour("voxel_world", asBEHAVE_CONSTRUCT,  "void f(uint, uint, uint)", asFUNCTION(as_voxel_world_constructor_wrapper_uint_3), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	r = script_engine->RegisterObjectBehaviour("voxel_world", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_voxel_world_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	
+	// void init(size_t x, size_t y, size_t z);
+	// void set(size_t x, size_t y, size_t z, uint8_t value);
+	// void apply_to_region(size_t lower_x, size_t lower_y, size_t lower_z, size_t upper_x, size_t upper_y, size_t upper_z, std::function<uint8_t(size_t, size_t, size_t)> functor);
+	// void sphere(size_t radius, size_t origin_x, size_t origin_y, size_t origin_z, bool fill);
+	// void box(size_t lower_x, size_t lower_y, size_t lower_z, size_t upper_x, size_t upper_y, size_t upper_z, bool fill);
+	// uint8_t get(size_t x, size_t y, size_t z) const;
+	// uint8_t safe_get(size_t x, size_t y, size_t z) const;
+
+	r = script_engine->RegisterObjectMethod("voxel_world", "void init(uint, uint, uint)", asMETHOD(noob::voxel_world, init), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("voxel_world", "void set(uint, uint, uint, uint8)", asMETHOD(noob::voxel_world, set), asCALL_THISCALL); assert( r >= 0 );
+	// r = script_engine->RegisterObjectMethod("voxel_world", "apply_to_region(uint, uint, uint, uint, uint, uint, std::function<uint8(uint, uint, uint)>)", asMETHOD(noob::voxel_world, apply_to_region), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("voxel_world", "void sphere(uint, uint, uint, uint, bool)", asMETHOD(noob::voxel_world, sphere), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("voxel_world", "void box(uint, uint, uint, uint, uint, uint, uint8)", asMETHOD(noob::voxel_world, box), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("voxel_world", "void get(uint, uint, uint)", asMETHOD(noob::voxel_world, safe_get), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("voxel_world", "void get_unsafe(uint, uint, uint)", asMETHOD(noob::voxel_world, get), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("voxel_world", "basic_mesh extract_smooth()", asMETHOD(noob::voxel_world, extract_smooth), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("voxel_world", "basic_mesh extract_cubic()", asMETHODPR(noob::voxel_world, extract_cubic, (void) const, noob::basic_mesh), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("voxel_world", "basic_mesh extract_cubic(uint8)", asMETHODPR(noob::voxel_world, extract_cubic, (uint8_t) const, noob::basic_mesh), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("voxel_world", "basic_mesh extract_region_smooth(uint, uint, uint, uint, uint, uint)", asMETHOD(noob::voxel_world, extract_region_smooth), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("voxel_world", "basic_mesh extract_region_cubic(uint, uint, uint, uint, uint, uint)", asMETHODPR(noob::voxel_world, extract_region_cubic, (size_t, size_t, size_t, size_t, size_t, size_t) const, noob::basic_mesh), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("voxel_world", "basic_mesh extract_region_cubic(uint, uint, uint, uint, uint, uint, uint8)", asMETHODPR(noob::voxel_world, extract_region_cubic, (size_t, size_t, size_t, size_t, size_t, size_t, uint8_t) const, noob::basic_mesh), asCALL_THISCALL); assert( r >= 0 );
 
 	logger::log("[Application] Done basic init.");
 	bool b = user_init();
