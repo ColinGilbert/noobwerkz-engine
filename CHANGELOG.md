@@ -1,3 +1,8 @@
+Version 0.1.1 AKA "Live reloads"
+```
+Moved out all non-stage components from stage, enabling live reloads! Yay!
+```
+
 Version 0.1 AKA "HAHA we got scripting!"
 ```
 Added proper working scripting and ported example to it. Was major PITA. :)
