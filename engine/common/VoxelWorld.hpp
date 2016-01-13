@@ -20,7 +20,7 @@ namespace noob
 			//typedef PolyVox::RawVolume<uint8_t> 8_bit_world;
 			//typedef PolyVox::RawVolume<bool> boolean_world;
 
-			voxel_world(size_t x = 256, size_t y = 256, size_t z =256) : world_width(x), world_height(y), world_depth(z), world(std::make_unique<PolyVox::RawVolume<uint8_t>>(PolyVox::Region(0, 0, 0, world_width, world_height, world_depth))) {}
+			// voxel_world(size_t x = 256, size_t y = 256, size_t z =256) : world_width(x), world_height(y), world_depth(z), world(std::make_unique<PolyVox::RawVolume<uint8_t>>(PolyVox::Region(0, 0, 0, world_width, world_height, world_depth))) {}
 			
 			void init(size_t x, size_t y, size_t z);
 

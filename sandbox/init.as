@@ -35,11 +35,19 @@ void main()
 	
 	set_shader(purple_shader, "purple");
 
-	basic_mesh temp = cone_mesh(50.0, 100.0);
-	temp.translate(vec3(0.0, 10.0, 0.0));
-	temp.rotate(versor(0.3333, 0.3333, 0.3333, 0.0));
-	basic_mesh scene_mesh = temp;
-	auto scenery_h = default_stage.scenery(add_mesh(scene_mesh), vec3(0.0, 0.0, 0.0), "moon", versor(0.0, 0.0, 0.0, 1.0));
+	// basic_mesh temp = cone_mesh(50.0, 100.0);
+	// temp.translate(vec3(0.0, 10.0, 0.0));
+	// temp.rotate(versor(0.3333, 0.3333, 0.3333, 0.0));
+	
+	voxels.init(1024, 1024, 1024);
+
+	voxels.sphere(50, 128, 128, 128, true);
+
+	basic_mesh temp = voxels.extract_smooth();
+	temp.to_origin();	
+	// basic_mesh temp = voxels.extract_cubic();
+
+	auto scenery_h = default_stage.scenery(add_mesh(temp), vec3(0.0, 0.0, 0.0), "moon", versor(0.0, 0.0, 0.0, 1.0));
 	
 	// std::random_device rd;
 	// std::mt19937 gen(rd());

@@ -392,17 +392,8 @@ void noob::application::init()
 
 	r = script_engine->RegisterObjectType("voxel_world", sizeof(noob::voxel_world), asOBJ_VALUE); assert( r >= 0 );
 	r = script_engine->RegisterObjectBehaviour("voxel_world", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(as_voxel_world_constructor_wrapper_basic), asCALL_CDECL_OBJLAST); assert( r >= 0 );
-	r = script_engine->RegisterObjectBehaviour("voxel_world", asBEHAVE_CONSTRUCT,  "void f(uint, uint, uint)", asFUNCTION(as_voxel_world_constructor_wrapper_uint_3), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	// r = script_engine->RegisterObjectBehaviour("voxel_world", asBEHAVE_CONSTRUCT,  "void f(uint, uint, uint)", asFUNCTION(as_voxel_world_constructor_wrapper_uint_3), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	r = script_engine->RegisterObjectBehaviour("voxel_world", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_voxel_world_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
-	
-	// void init(size_t x, size_t y, size_t z);
-	// void set(size_t x, size_t y, size_t z, uint8_t value);
-	// void apply_to_region(size_t lower_x, size_t lower_y, size_t lower_z, size_t upper_x, size_t upper_y, size_t upper_z, std::function<uint8_t(size_t, size_t, size_t)> functor);
-	// void sphere(size_t radius, size_t origin_x, size_t origin_y, size_t origin_z, bool fill);
-	// void box(size_t lower_x, size_t lower_y, size_t lower_z, size_t upper_x, size_t upper_y, size_t upper_z, bool fill);
-	// uint8_t get(size_t x, size_t y, size_t z) const;
-	// uint8_t safe_get(size_t x, size_t y, size_t z) const;
-
 	r = script_engine->RegisterObjectMethod("voxel_world", "void init(uint, uint, uint)", asMETHOD(noob::voxel_world, init), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("voxel_world", "void set(uint, uint, uint, uint8)", asMETHOD(noob::voxel_world, set), asCALL_THISCALL); assert( r >= 0 );
 	// r = script_engine->RegisterObjectMethod("voxel_world", "apply_to_region(uint, uint, uint, uint, uint, uint, std::function<uint8(uint, uint, uint)>)", asMETHOD(noob::voxel_world, apply_to_region), asCALL_THISCALL); assert( r >= 0 );
@@ -452,18 +443,16 @@ void noob::application::update(double delta)
 		}	
 		else if (last_write != t)
 		{
-			//	try
-			//	{
+		try
+		{
 			// script_module; = script_engine->GetModule("user_module", asGM_ALWAYS_CREATE);
-
-			//	}
-			//	catch(std::exception e)
-			//	{
-			//		logger::log(fmt::format("[Application]. Caught AngelScript exception: ", e.what()));
-			//	}
-			logger::log("[Application] reinit.");
 			stage.tear_down();
 			load_init_script();
+		}
+		catch(std::exception e)
+		{
+			logger::log(fmt::format("[Application]. Caught AngelScript exception: ", e.what()));
+		}
 			last_write = t;
 		}
 		time_elapsed = 0.0;
