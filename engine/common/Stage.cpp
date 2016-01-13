@@ -59,7 +59,8 @@ void noob::stage::init()
 // TODO: Implement
 void noob::stage::tear_down()
 {
-	
+	bodies.empty();
+	bodies_to_shapes.empty();
 }
 
 

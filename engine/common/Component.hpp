@@ -105,6 +105,12 @@ namespace noob
 					return h;
 				}
 
+				void empty()
+				{
+					items.resize(0);
+					names.empty();
+				}
+
 			protected:
 
 				std::vector<T> items;
@@ -224,6 +230,12 @@ namespace noob
 					h.inner = i;
 					h.valid = exists(h);
 					return h;
+				}
+
+				void empty()
+				{
+					items.resize(0);
+					names.empty();
 				}
 
 			protected:

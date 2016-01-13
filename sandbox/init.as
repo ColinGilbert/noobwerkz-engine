@@ -1,20 +1,9 @@
 void main()
 {
 	// default_stage s;
-	vec3 eye_pos;
-	eye_pos[0] = 0.0;
-	eye_pos[1] = 0.0;
-	eye_pos[2] = -200.0;
-
-	vec3 look_to;
-	look_to[0] = 0.0;
-	look_to[1] = 0.0;
-	look_to[2] = 0.0;
-
-	vec3 up;
-	up[0] = 0.0;
-	up[1] = 1.0;
-	up[2] = 0.0;
+	vec3 eye_pos(0.0, 0.0, -200.0);
+	vec3 look_to(0.0, 0.0, 0.0);
+	vec3 up(0.0, 1.0, 0.);
 
 	default_stage.view_mat = look_at(eye_pos, look_to, up);
 	
@@ -65,6 +54,4 @@ void main()
 		// default_stage.bodies.get(temp_body); 
 		default_stage.prop(temp_body, "purple");
 	}
-
-	
 }

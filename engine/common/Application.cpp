@@ -433,6 +433,7 @@ void noob::application::update(double delta)
 			//	{
 			//		logger::log(fmt::format("[Application]. Caught AngelScript exception: ", e.what()));
 			//	}
+			logger::log("[Application] reinit.");
 			stage.tear_down();
 			load_init_script();
 			last_write = t;
