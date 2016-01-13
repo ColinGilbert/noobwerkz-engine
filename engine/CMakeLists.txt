@@ -324,6 +324,7 @@ list(APPEND angelscript_src
 #include_directories(engine/common)
 
 list(APPEND common_src
+	common/GlobalComponents.cpp
 	common/BasicMesh.cpp
 	common/Graphics.cpp
 	common/Logger.cpp

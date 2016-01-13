@@ -12,7 +12,6 @@ noob::application::application()
 	time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
-	globals::init();
 	script_engine = asCreateScriptEngine();
 	assert(script_engine > 0);
 	// TODO: Uncomment once noob::filesystem is fixed
@@ -82,6 +81,7 @@ void noob::application::init()
 	logger::log("[Application] Begin init.");
 	ui_enabled = true;
 	gui.init(*prefix, window_width, window_height);
+	globals::init();
 	stage.init();
 	voxels.init();
 
@@ -360,23 +360,26 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("stage", "void update(double)", asMETHOD(noob::stage, update), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "void draw(float, float)", asMETHOD(noob::stage, draw), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint body(body_type, uint, float, const vec3& in, const versor& in, bool)", asMETHOD(noob::stage, _body), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "uint sphere(float)", asMETHOD(noob::stage, _sphere), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "uint box(float, float, float)", asMETHOD(noob::stage, _box), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "uint cylinder(float, float)", asMETHOD(noob::stage, _cylinder), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "uint cone(float, float)", asMETHOD(noob::stage, _cone), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "uint hull(const vector_vec3& in)", asMETHOD(noob::stage, _hull), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "uint static_trimesh(uint)", asMETHOD(noob::stage, _static_trimesh), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "uint add_mesh(const basic_mesh& in)", asMETHOD(noob::stage, _add_mesh), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "uint basic_model(uint)", asMETHOD(noob::stage, _basic_model), asCALL_THISCALL); assert(r >= 0);
-	r = script_engine->RegisterObjectMethod("stage", "uint animated_model(const string& in)", asMETHOD(noob::stage, _animated_model), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "uint skeleton(const string& in)", asMETHOD(noob::stage, _skeleton), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "void set_light(const light& in, const string& in)", asMETHOD(noob::stage, set_light), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "light get_light(const string& in)", asMETHOD(noob::stage, get_light), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "void set_reflection(const reflection& in, const string& in)", asMETHOD(noob::stage, set_reflection), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "reflection get_reflection(const string& in)", asMETHOD(noob::stage, get_reflection), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "void set_shader(const basic_uniform& in, const string& in)", asMETHODPR(noob::stage, set_shader, (const noob::basic_renderer::uniform&, const std::string&), void), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "void set_shader(const triplanar_gradmap_uniform& in, const string& in)", asMETHODPR(noob::stage, set_shader, (const noob::triplanar_gradient_map_renderer::uniform&, const std::string&), void), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "uint get_shader(const string& in)", asMETHOD(noob::stage, _get_shader), asCALL_THISCALL); assert( r >= 0 );
+
+	r = script_engine->RegisterGlobalFunction("uint sphere(float)", asFUNCTION(globals::_sphere), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("uint box(float, float, float)", asFUNCTION(globals::_box), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("uint cylinder(float, float)", asFUNCTION(globals::_cylinder), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("uint cone(float, float)", asFUNCTION(globals::_cone), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("uint hull(const vector_vec3& in)", asFUNCTION(globals::_hull), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("uint static_trimesh(uint)", asFUNCTION(globals::_static_trimesh), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("uint add_mesh(const basic_mesh& in)", asFUNCTION(globals::_add_mesh), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("uint basic_model(uint)", asFUNCTION(globals::_basic_model), asCALL_CDECL); assert(r >= 0);
+	r = script_engine->RegisterGlobalFunction("uint animated_model(const string& in)", asFUNCTION(globals::_animated_model), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("uint skeleton(const string& in)", asFUNCTION(globals::_skeleton), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("void set_light(const light& in, const string& in)", asFUNCTION(globals::set_light), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("light get_light(const string& in)", asFUNCTION(globals::get_light), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("void set_reflection(const reflection& in, const string& in)", asFUNCTION(globals::set_reflection), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("reflection get_reflection(const string& in)", asFUNCTION(globals::get_reflection), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("void set_shader(const basic_uniform& in, const string& in)", asFUNCTIONPR(globals::set_shader, (const noob::basic_renderer::uniform&, const std::string&), void), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("void set_shader(const triplanar_gradmap_uniform& in, const string& in)", asFUNCTIONPR(globals::set_shader, (const noob::triplanar_gradient_map_renderer::uniform&, const std::string&), void), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("uint get_shader(const string& in)", asFUNCTION(globals::_get_shader), asCALL_CDECL); assert( r >= 0 );
+
+
 	r = script_engine->RegisterObjectMethod("stage", "uint actor(uint, uint, const string& in)", asMETHOD(noob::stage, _actor), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint prop(uint, const string& in)", asMETHODPR(noob::stage, _prop, (unsigned int, const std::string&), unsigned int), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint prop(uint, uint, const string& in)", asMETHODPR(noob::stage, _prop, (unsigned int, unsigned int, const std::string&), unsigned int), asCALL_THISCALL); assert( r >= 0 );

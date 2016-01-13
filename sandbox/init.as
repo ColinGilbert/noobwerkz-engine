@@ -32,7 +32,7 @@ void main()
 	moon_shader.colour_positions = vec4(0.5, 0.8, 0.0, 0.0);
 	moon_shader.texture_map = get_texture("grad_map");
 
-	default_stage.set_shader(moon_shader, "moon");
+	set_shader(moon_shader, "moon");
 
 	triplanar_gradmap_uniform purple_shader;
 	purple_shader.set_colour(0, vec4(1.0, 1.0, 1.0, 0.0));
@@ -44,13 +44,13 @@ void main()
 	purple_shader.colour_positions = vec4(0.2, 0.7, 0.0, 0.0);
 	purple_shader.texture_map = get_texture("grad_map");
 	
-	default_stage.set_shader(purple_shader, "purple");
+	set_shader(purple_shader, "purple");
 
 	basic_mesh temp = cone_mesh(50.0, 100.0);
 	temp.translate(vec3(0.0, 10.0, 0.0));
 	temp.rotate(versor(0.3333, 0.3333, 0.3333, 0.0));
 	basic_mesh scene_mesh = temp;
-	auto scenery_h = default_stage.scenery(default_stage.add_mesh(scene_mesh), vec3(0.0, 0.0, 0.0), "moon", versor(0.0, 0.0, 0.0, 1.0));
+	auto scenery_h = default_stage.scenery(add_mesh(scene_mesh), vec3(0.0, 0.0, 0.0), "moon", versor(0.0, 0.0, 0.0, 1.0));
 	
 	// std::random_device rd;
 	// std::mt19937 gen(rd());
@@ -58,7 +58,7 @@ void main()
 
 	for (uint i = 0 ; i < 500; ++i)
 	{
-		uint h = default_stage.box(4.0, 4.0, 4.0); 
+		uint h = box(4.0, 4.0, 4.0); 
 		float x_pos = i;
 		float z_pos = i; //dis(gen) * 10.0;
 		uint temp_body = default_stage.body(DYNAMIC, h, 1.0, vec3(x_pos, 250.0, z_pos), versor(0.0, 0.0, 0.0, 1.0), false);
