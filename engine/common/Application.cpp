@@ -417,6 +417,8 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("voxel_world", "basic_mesh extract_region_cubic(uint, uint, uint, uint, uint, uint)", asMETHODPR(noob::voxel_world, extract_region_cubic, (size_t, size_t, size_t, size_t, size_t, size_t) const, noob::basic_mesh), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("voxel_world", "basic_mesh extract_region_cubic(uint, uint, uint, uint, uint, uint, uint8)", asMETHODPR(noob::voxel_world, extract_region_cubic, (size_t, size_t, size_t, size_t, size_t, size_t, uint8_t) const, noob::basic_mesh), asCALL_THISCALL); assert( r >= 0 );
 
+	r = script_engine->RegisterGlobalProperty("voxel_world voxels", &voxels); assert (r >= 0);
+
 	logger::log("[Application] Done basic init.");
 	bool b = user_init();
 	// b = load_init_script();
