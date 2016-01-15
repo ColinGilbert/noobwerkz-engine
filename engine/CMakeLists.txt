@@ -363,10 +363,10 @@ list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${csgjs_src}
 	${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src}
 	${es_src} ${user_src} ${recast_src} ${angelscript_src} ${es_src}
-	${dcollide_src}) 
+	${dcollide_src} ) #${newton-src}) 
 
 target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES}
 	${OPENGL_LIBRARIES} freetype rt dl pthread assimp m emon OpenMeshCore
 	spnav ozz_animation_offline_r ozz_animation_r
-	ozz_geometry_r ozz_base_r BulletDynamics BulletCollision
+	ozz_geometry_r ozz_base_r BulletDynamics BulletCollision Newton
 	BulletSoftBody LinearMath ${Boost_LIBRARIES})
