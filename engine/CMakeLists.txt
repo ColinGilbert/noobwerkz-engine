@@ -32,7 +32,7 @@ include_directories(lib/freetype/include)
 add_subdirectory(lib/freetype)
 
 
-include_directories(lib/bullet3/src)
+#include_directories(lib/bullet3/src)
 
 include_directories(lib/polyvox/include)
 
