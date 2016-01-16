@@ -9,22 +9,22 @@ noob::body::~body()
 {
 	if (physics_valid)
 	{
-		dynamics_world->removeRigidBody(inner_body);
-		delete inner_body;
+		// dynamics_world->removeRigidBody(inner_body);
+		// delete inner_body;
 	}
 }
 
 
 
 
-void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg, const noob::shape* _shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
+void noob::body::init(NewtonWorld* _dynamics_world, noob::body_type type_arg, const noob::shape* _shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
 {
 	dynamics_world = _dynamics_world;
 	type = type_arg;
-	btTransform start_transform;
-	start_transform.setIdentity();
-	start_transform.setOrigin(btVector3(pos.v[0], pos.v[1], pos.v[2]));
-	start_transform.setRotation(btQuaternion(orient.q[0], orient.q[1], orient.q[2], orient.q[3]));
+	// btTransform start_transform;
+	// start_transform.setIdentity();
+	// start_transform.setOrigin(btVector3(pos.v[0], pos.v[1], pos.v[2]));
+	// start_transform.setRotation(btQuaternion(orient.q[0], orient.q[1], orient.q[2], orient.q[3]));
 
 	switch(type)
 	{
@@ -48,39 +48,39 @@ void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg
 	};
 
 
-	btVector3 inertia(0.0, 0.0, 0.0);
-	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
+	// btVector3 inertia(0.0, 0.0, 0.0);
+	// btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
 	shape = const_cast<noob::shape*>(_shape);
-	shape->inner_shape->calculateLocalInertia(mass, inertia);
+	// shape->inner_shape->calculateLocalInertia(mass, inertia);
 	
-	btRigidBody::btRigidBodyConstructionInfo ci(mass, motion_state, shape->inner_shape, inertia);
-	inner_body = new btRigidBody(ci);
+	// btRigidBody::btRigidBodyConstructionInfo ci(mass, motion_state, shape->inner_shape, inertia);
+	// inner_body = new btRigidBody(ci);
 	set_ccd(ccd);
-	dynamics_world->addRigidBody(inner_body);
-	physics_valid = true;
+	// dynamics_world->addRigidBody(inner_body);
+	// physics_valid = true;
 }
 
-void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg, const noob::shape* _shape, const noob::body::info& _info)
+void noob::body::init(NewtonWorld* _dynamics_world, noob::body_type type_arg, const noob::shape* _shape, const noob::body::info& _info)
 {
 	dynamics_world = _dynamics_world;
-	btTransform start_transform;
-	start_transform.setIdentity();
-	start_transform.setOrigin(btVector3(_info.position.v[0], _info.position.v[1], _info.position.v[2]));
-	start_transform.setRotation(btQuaternion(_info.orientation.q[0], _info.orientation.q[1], _info.orientation.q[2], _info.orientation.q[3]));
-	btVector3 inertia(0, 0, 0);
-	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
-	shape = const_cast<noob::shape*>(_shape);
-	shape->inner_shape->calculateLocalInertia(_info.mass, inertia);
-	btRigidBody::btRigidBodyConstructionInfo ci(_info.mass, motion_state, shape->inner_shape, inertia);
-	inner_body = new btRigidBody(ci);
-	inner_body->setFriction(_info.friction);
-	inner_body->setRestitution(_info.restitution);
-	inner_body->setAngularFactor(btVector3(_info.angular_factor.v[0], _info.angular_factor.v[1], _info.angular_factor.v[2]));
-	inner_body->setLinearFactor(btVector3(_info.linear_factor.v[0], _info.linear_factor.v[1], _info.linear_factor.v[2]));
-	inner_body->setLinearVelocity(btVector3(_info.linear_velocity.v[0], _info.linear_velocity.v[1], _info.linear_velocity.v[2]));
-	inner_body->setAngularVelocity(btVector3(_info.angular_velocity.v[0], _info.angular_velocity.v[1], _info.angular_velocity.v[2]));
+	// btTransform start_transform;
+	// start_transform.setIdentity();
+	// start_transform.setOrigin(btVector3(_info.position.v[0], _info.position.v[1], _info.position.v[2]));
+	// start_transform.setRotation(btQuaternion(_info.orientation.q[0], _info.orientation.q[1], _info.orientation.q[2], _info.orientation.q[3]));
+	// btVector3 inertia(0, 0, 0);
+	// btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
+	// shape = const_cast<noob::shape*>(_shape);
+	// shape->inner_shape->calculateLocalInertia(_info.mass, inertia);
+	// btRigidBody::btRigidBodyConstructionInfo ci(_info.mass, motion_state, shape->inner_shape, inertia);
+	// inner_body = new btRigidBody(ci);
+	// inner_body->setFriction(_info.friction);
+	// inner_body->setRestitution(_info.restitution);
+	// inner_body->setAngularFactor(btVector3(_info.angular_factor.v[0], _info.angular_factor.v[1], _info.angular_factor.v[2]));
+	// inner_body->setLinearFactor(btVector3(_info.linear_factor.v[0], _info.linear_factor.v[1], _info.linear_factor.v[2]));
+	// inner_body->setLinearVelocity(btVector3(_info.linear_velocity.v[0], _info.linear_velocity.v[1], _info.linear_velocity.v[2]));
+	// inner_body->setAngularVelocity(btVector3(_info.angular_velocity.v[0], _info.angular_velocity.v[1], _info.angular_velocity.v[2]));
 	set_ccd(_info.ccd);
-	dynamics_world->addRigidBody(inner_body);
+	// dynamics_world->addRigidBody(inner_body);
 
 	physics_valid = true;
 }
@@ -228,41 +228,41 @@ bool noob::body::on_ground() const
 
 noob::vec3 noob::body::get_position() const
 {
-	btTransform xform;
-	inner_body->getMotionState()->getWorldTransform(xform);
-	return xform.getOrigin();
+	// btTransform xform;
+	// inner_body->getMotionState()->getWorldTransform(xform);
+	// return xform.getOrigin();
 }
 
 
 noob::versor noob::body::get_orientation() const
 {
-	btTransform xform;
-	inner_body->getMotionState()->getWorldTransform(xform);
-	return xform.getRotation();
+	// btTransform xform;
+	// inner_body->getMotionState()->getWorldTransform(xform);
+	// return xform.getRotation();
 }
 
 
 noob::vec3 noob::body::get_linear_velocity() const
 {
-	return inner_body->getLinearVelocity();
+	// return inner_body->getLinearVelocity();
 }
 
 
 noob::vec3 noob::body::get_angular_velocity() const
 {
-	return inner_body->getAngularVelocity();	
+	// return inner_body->getAngularVelocity();	
 }
 
 
 
 noob::mat4 noob::body::get_transform() const
 {
-	btTransform xform;
-	inner_body->getMotionState()->getWorldTransform(xform);
-	noob::transform_helper t;
-	t.translate(get_position());
-	t.rotate(get_orientation());
-	return t.get_matrix();
+	// btTransform xform;
+	// inner_body->getMotionState()->getWorldTransform(xform);
+	// noob::transform_helper t;
+	// t.translate(get_position());
+	// t.rotate(get_orientation());
+	// return t.get_matrix();
 }
 
 
@@ -277,9 +277,9 @@ void noob::body::set_ccd(bool b)
 {
 	if (b == true)
 	{
-		btVector3 center;
-		btScalar radius;
-		shape->inner_shape->getBoundingSphere(center, radius);
-		inner_body->setCcdMotionThreshold(radius);
+		// btVector3 center;
+		// btScalar radius;
+		// shape->inner_shape->getBoundingSphere(center, radius);
+		// inner_body->setCcdMotionThreshold(radius);
 	}
 }

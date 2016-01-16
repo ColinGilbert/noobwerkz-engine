@@ -11,7 +11,7 @@
 #include <cereal/types/vector.hpp>
 #include <cereal/archives/portable_binary.hpp>
 
-#include <btBulletDynamicsCommon.h>
+// #include <btBulletDynamicsCommon.h>
 #include "BasicMesh.hpp"
 #include "MeshUtils.hpp"
 #include "MathFuncs.hpp"
@@ -60,7 +60,7 @@ namespace noob
 		bool physics_valid;
 		noob::vec3 scales;
 		std::array<float, 4> dims;
-		btCollisionShape* inner_shape;
+		// btCollisionShape* inner_shape;
 		noob::basic_mesh* inner_mesh;
 	};
 }

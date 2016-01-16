@@ -1,6 +1,6 @@
 #include "MeshUtils.hpp"
 
-#include <LinearMath/btConvexHull.h>
+// #include <LinearMath/btConvexHull.h>
 
 // #include <tinympl/functional.hpp>
 
@@ -380,7 +380,7 @@ noob::basic_mesh noob::mesh_utils::catmull_sphere(float radius)
 noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 {
 	// TODO: Optimize this	
-	std::vector<btVector3> bt_points;
+/*	std::vector<btVector3> bt_points;
 	for (noob::vec3 p : points)
 	{
 		bt_points.push_back(btVector3(p.v[0], p.v[1], p.v[2]));
@@ -408,6 +408,7 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 
 	mesh.normalize();
 	return mesh;
+*/
 }
 
 

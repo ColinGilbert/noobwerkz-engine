@@ -5,7 +5,7 @@
 #include <cereal/types/vector.hpp>
 #include <cereal/archives/binary.hpp>
 
-#include <btBulletDynamicsCommon.h>
+//#include <btBulletDynamicsCommon.h>
 #include <memory>
 
 #include "MathFuncs.hpp"
@@ -22,24 +22,23 @@ namespace noob
 		public:
 			struct info
 			{
-				void init(btRigidBody* _body, noob::body_type _type, bool _ccd)
+				void init(NewtonBody* _body, noob::body_type _type, bool _ccd)
 				{
-					float inv_mass = _body->getInvMass();
-					if (inv_mass > 0.0)
-					{
-						mass = 1.0 / inv_mass;
-					}
-					else mass = 0.0;
+					// float inv_mass = _body->getInvMass();
+					// if (inv_mass > 0.0)
+					// {
+					//	mass = 1.0 / inv_mass;
+					// }
+					// else mass = 0.0;
 					type = _type;
-					friction = _body->getFriction();
-					restitution = _body->getRestitution();
-					position = _body->getCenterOfMassPosition();
-					orientation =  _body->getOrientation();
-					linear_velocity = _body->getLinearVelocity();
-					angular_velocity = _body->getAngularVelocity();
-					linear_factor = _body->getLinearFactor();
-					angular_factor = _body->getAngularFactor();
-					type = _type;
+					// friction = _body->getFriction();
+					// restitution = _body->getRestitution();
+					// position = _body->getCenterOfMassPosition();
+					// orientation =  _body->getOrientation();
+					// linear_velocity = _body->getLinearVelocity();
+					// angular_velocity = _body->getAngularVelocity();
+					// linear_factor = _body->getLinearFactor();
+					// angular_factor = _body->getAngularFactor();
 					ccd = _ccd;
 				}
 
@@ -64,11 +63,11 @@ namespace noob
 			body() : physics_valid(true) {}
 			~body();
 
-			void init(btDynamicsWorld*, noob::body_type, const noob::shape*, float mass, const noob::vec3& position, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0), bool ccd = false);
-			void init(btDynamicsWorld*, noob::body_type, const noob::shape*, const noob::body::info&);
+			void init(NewtonWorld*, noob::body_type, const noob::shape*, float mass, const noob::vec3& position, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0), bool ccd = false);
+			void init(NewtonWorld*, noob::body_type, const noob::shape*, const noob::body::info&);
 
 			void set_type(noob::body_type);
-			
+
 			void set_position(const noob::vec3&);
 			void set_orientation(const noob::versor&);
 
@@ -85,12 +84,13 @@ namespace noob
 
 		protected:
 			noob::body_type type;
-
+			NewtonWorld* dynamics_world;
+			NewtonBody* inner_body;
 			void set_ccd(bool); 
 			bool ccd, physics_valid;
 			noob::shape* shape;
 			// btCollisionShape* inner_shape;			
-			btDynamicsWorld* dynamics_world;
-			btRigidBody* inner_body;
+			//			btDynamicsWorld* dynamics_world;
+			//			btRigidBody* inner_body;
 	};
 }

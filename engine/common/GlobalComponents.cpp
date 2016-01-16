@@ -62,10 +62,10 @@ void noob::globals::init()
 	unit_cylinder_shape = cylinder(0.5, 1.0);
 	unit_cone_shape = cone(0.5, 1.0);
 
-	unit_sphere_mesh = meshes.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_sphere_shape)));
-	unit_cube_mesh =  meshes.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_cube_shape)));
-	unit_cylinder_mesh =  meshes.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_cylinder_shape)));
-	unit_cone_mesh =  meshes.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_cone_shape)));
+	//unit_sphere_mesh = meshes.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_sphere_shape)));
+	//unit_cube_mesh =  meshes.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_cube_shape)));
+	//unit_cylinder_mesh =  meshes.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_cylinder_shape)));
+	// unit_cone_mesh =  meshes.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_cone_shape)));
 
 	shapes_to_meshes[unit_sphere_shape.get_inner()] = unit_sphere_mesh;
 	shapes_to_meshes[unit_cube_shape.get_inner()] = unit_cube_mesh;
@@ -109,7 +109,6 @@ void noob::globals::init()
 
 }
 
-
 noob::basic_mesh noob::globals::make_mesh(const noob::shapes_holder::handle h)
 {
 	noob::shape* s = shapes.get(h);
@@ -118,13 +117,13 @@ noob::basic_mesh noob::globals::make_mesh(const noob::shapes_holder::handle h)
 		case(noob::shape::type::SPHERE):
 			{
 				// logger::log("[Globals] making sphere mesh");
-				return noob::mesh_utils::sphere(static_cast<btSphereShape*>(s->inner_shape)->getRadius());
+				// return noob::mesh_utils::sphere(static_cast<btSphereShape*>(s->inner_shape)->getRadius());
 			}
 		case(noob::shape::type::BOX):
 			{
 				// logger::log("[Globals] making box mesh");
-				noob::vec3 half_extents = static_cast<btBoxShape*>(s->inner_shape)->getHalfExtentsWithoutMargin();
-				return noob::mesh_utils::box(half_extents.v[0]*2, half_extents.v[1]*2, half_extents.v[2]*2);
+				// noob::vec3 half_extents = static_cast<btBoxShape*>(s->inner_shape)->getHalfExtentsWithoutMargin();
+				// return noob::mesh_utils::box(half_extents.v[0]*2, half_extents.v[1]*2, half_extents.v[2]*2);
 			}
 			// case(noob::shape::type::CAPSULE):
 			//	{
@@ -135,30 +134,31 @@ noob::basic_mesh noob::globals::make_mesh(const noob::shapes_holder::handle h)
 		case(noob::shape::type::CYLINDER):
 			{
 				// logger::log("[Globals] making cylinder mesh");
-				btCylinderShape* temp = static_cast<btCylinderShape*>(s->inner_shape);// return std::make_tuple(unit_cylinder_model, s->scales);
-				noob::vec3 half_extents = temp->getHalfExtentsWithoutMargin();
-				return noob::mesh_utils::cylinder(temp->getRadius(), half_extents.v[1]*2);
+				// btCylinderShape* temp = static_cast<btCylinderShape*>(s->inner_shape);// return std::make_tuple(unit_cylinder_model, s->scales);
+				// noob::vec3 half_extents = temp->getHalfExtentsWithoutMargin();
+				// return noob::mesh_utils::cylinder(temp->getRadius(), half_extents.v[1]*2);
 			}
 		case(noob::shape::type::CONE):
 			{
 				// logger::log("[Globals] making cone mesh");
-				btConeShape* temp = static_cast<btConeShape*>(s->inner_shape);
-				return noob::mesh_utils::cone(temp->getRadius(), temp->getHeight());
+				// btConeShape* temp = static_cast<btConeShape*>(s->inner_shape);
+				// return noob::mesh_utils::cone(temp->getRadius(), temp->getHeight());
 			}
 		case(noob::shape::type::HULL):
 			{
 				// logger::log("[Globals] making convex mesh");
-				return noob::mesh_utils::copy(*meshes.get(shapes_to_meshes[h.get_inner()]));
+				// return noob::mesh_utils::copy(*meshes.get(shapes_to_meshes[h.get_inner()]));
 			}
 		case(noob::shape::type::TRIMESH):
 			{
 				// logger::log("[Globals] making trimesh");
-				return noob::mesh_utils::copy(*meshes.get(shapes_to_meshes[h.get_inner()]));
+				// return noob::mesh_utils::copy(*meshes.get(shapes_to_meshes[h.get_inner()]));
 			}
 		default:
 			logger::log("[Globals] - USER DATA WARNING - INVALID SHAPE TO MESH :(");
 			break;
 	};
+
 	return noob::mesh_utils::copy(*meshes.get(unit_sphere_mesh));
 }
 
@@ -167,7 +167,6 @@ noob::basic_mesh noob::globals::_make_mesh(unsigned int _shape)
 {
 	return make_mesh(shapes.make_handle(_shape));
 }
-
 
 
 std::tuple<noob::basic_models_holder::handle, noob::vec3> noob::globals::get_model(const noob::shapes_holder::handle h)

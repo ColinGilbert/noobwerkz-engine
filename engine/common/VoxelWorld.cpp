@@ -173,6 +173,8 @@ noob::basic_mesh noob::voxel_world::extract_region_smooth(size_t lower_x, size_t
 	bounding_box.cropTo(world_region);
 
 	auto mesh = extractMarchingCubesMesh(&*world, bounding_box);
+	// Does nothing. :P
+	// mesh.removeUnusedVertices();
 	auto decoded_mesh = PolyVox::decodeMesh(mesh);
 	size_t num_indices = decoded_mesh.getNoOfIndices();
 	size_t num_vertices = decoded_mesh.getNoOfVertices();
@@ -250,6 +252,7 @@ noob::basic_mesh noob::voxel_world::extract_region_cubic(size_t lower_x, size_t 
 	bounding_box.cropTo(world_region);
 
 	auto mesh = extractCubicMesh(&*world, bounding_box);
+	mesh.removeUnusedVertices();
 	auto decoded_mesh = PolyVox::decodeMesh(mesh);
 	size_t num_indices = decoded_mesh.getNoOfIndices();
 	size_t num_vertices = decoded_mesh.getNoOfVertices();

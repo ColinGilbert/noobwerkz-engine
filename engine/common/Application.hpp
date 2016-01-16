@@ -57,7 +57,7 @@
 #include "FileSystem.hpp"
 #include "Body.hpp"
 
-#include <btBulletDynamicsCommon.h>
+// #include <btBulletDynamicsCommon.h>
 #include <angelscript.h>
 
 #include "AngelVector.hpp"

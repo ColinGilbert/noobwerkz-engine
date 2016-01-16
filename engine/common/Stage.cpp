@@ -3,22 +3,22 @@
 
 noob::stage::~stage()
 {
-	delete dynamics_world;
-	delete solver;
-	delete collision_configuration;
-	delete collision_dispatcher;
-	delete broadphase;
+	// delete dynamics_world;
+	// delete solver;
+	// delete collision_configuration;
+	// delete collision_dispatcher;
+	// delete broadphase;
 }
 
 
 void noob::stage::init()
 {
-	broadphase = new btDbvtBroadphase();
-	collision_configuration = new btDefaultCollisionConfiguration();
-	collision_dispatcher = new btCollisionDispatcher(collision_configuration);
-	solver = new btSequentialImpulseConstraintSolver();
-	dynamics_world = new btDiscreteDynamicsWorld(collision_dispatcher, broadphase, solver, collision_configuration);
-	dynamics_world->setGravity(btVector3(0, -10, 0));
+	// broadphase = new btDbvtBroadphase();
+	// collision_configuration = new btDefaultCollisionConfiguration();
+	// collision_dispatcher = new btCollisionDispatcher(collision_configuration);
+	// solver = new btSequentialImpulseConstraintSolver();
+	// dynamics_world = new btDiscreteDynamicsWorld(collision_dispatcher, broadphase, solver, collision_configuration);
+	// dynamics_world->setGravity(btVector3(0, -10, 0));
 	// dynamics_world->setApplySpeculativeContactRestitution(true);
 	// dynamics_world->setSynchronizeAllMotionStates(true);
 
@@ -66,7 +66,7 @@ void noob::stage::tear_down()
 
 void noob::stage::update(double dt)
 {
-	dynamics_world->stepSimulation(1.0/60.0, 10);
+	// dynamics_world->stepSimulation(1.0/60.0, 10);
 }
 
 
@@ -110,7 +110,7 @@ noob::bodies_holder::handle noob::stage::body(noob::body_type b_type, noob::shap
 	std::unique_ptr<noob::body> b = std::make_unique<noob::body>();
 	b->init(dynamics_world, b_type, globals::shapes.get(shape_h), mass, pos, orient, ccd);
 	auto bod_h = bodies.add(std::move(b));
-	bodies_to_shapes.insert(std::make_pair(bod_h.get_inner(), shape_h));
+	//bodies_to_shapes.insert(std::make_pair(bod_h.get_inner(), shape_h));
 	return bod_h;
 }
 

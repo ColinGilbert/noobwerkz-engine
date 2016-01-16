@@ -10,8 +10,8 @@
 
 #include <boost/variant.hpp>
 
-#include <btBulletDynamicsCommon.h>
-#include <dcollide.h>
+// #include <btBulletDynamicsCommon.h>
+// #include <dcollide.h>
 
 #include "es/storage.hpp"
 #include "Graphics.hpp"
@@ -108,6 +108,9 @@ namespace noob
 
 			noob::prepared_shaders renderer;
 		protected:
+
+			NewtonWorld* dynamics_world;
+
 			// template<typename T>
 			// unsigned char register_es_component(T t, const std::string& friendly_name)
 			// {
@@ -122,13 +125,13 @@ namespace noob
 
 			// noob::prepared_shaders renderer;
 
-			dcollide::World ghost_world;
+			// dcollide::World ghost_world;
 
-			btBroadphaseInterface* broadphase;
-			btDefaultCollisionConfiguration* collision_configuration;
-			btCollisionDispatcher* collision_dispatcher;
-			btSequentialImpulseConstraintSolver* solver;
-			btDiscreteDynamicsWorld* dynamics_world;
+			// btBroadphaseInterface* broadphase;
+			// btDefaultCollisionConfiguration* collision_configuration;
+			// btCollisionDispatcher* collision_dispatcher;
+			// btSequentialImpulseConstraintSolver* solver;
+			// btDiscreteDynamicsWorld* dynamics_world;
 			
 			
 

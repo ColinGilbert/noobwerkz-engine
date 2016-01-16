@@ -50,12 +50,12 @@ namespace noob
 		v[2] = vv.v[2];
 	}
 
-	vec3::vec3(const btVector3& btVec)
-	{
-		v[0] = btVec[0];
-		v[1] = btVec[1];
-		v[2] = btVec[2];
-	}
+	// vec3::vec3(const btVector3& btVec)
+	// {
+	// 	v[0] = btVec[0];
+	//	v[1] = btVec[1];
+	//	v[2] = btVec[2];
+	// }
 
 	// vec3::vec3(const rp3d::Vector3& vv)
 	//{
@@ -753,13 +753,13 @@ namespace noob
 		//q[3] = v[3];
 	}
 
-	versor::versor(const btQuaternion& quat)
-	{
-		q[0] = quat.x();
-		q[1] = quat.y();
-		q[2] = quat.z();
-		q[3] = quat.w();
-	}
+	// versor::versor(const btQuaternion& quat)
+	// {
+	// 	q[0] = quat.x();
+	//	q[1] = quat.y();
+	//	q[2] = quat.z();
+	//	q[3] = quat.w();
+	// }
 
 	versor versor::operator/(float rhs) const
 	{
