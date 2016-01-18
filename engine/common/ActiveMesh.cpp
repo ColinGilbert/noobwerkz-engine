@@ -1,8 +1,23 @@
 #include "ActiveMesh.hpp"
 
-#include <OpenMesh/Core/IO/MeshIO.hh>
-#include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
+// #include <OpenMesh/Core/IO/MeshIO.hh>
+// #include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
+
+#include <OpenMesh/Core/Utils/vector_cast.hh>
+#include <OpenMesh/Tools/Utils/getopt.h>
+#include <OpenMesh/Tools/Utils/Timer.hh>
 #include <OpenMesh/Tools/Dualizer/meshDualT.hh>
+#include <OpenMesh/Tools/Decimater/DecimaterT.hh>
+#include <OpenMesh/Tools/Decimater/ModAspectRatioT.hh>
+#include <OpenMesh/Tools/Decimater/ModEdgeLengthT.hh>
+#include <OpenMesh/Tools/Decimater/ModHausdorffT.hh>
+#include <OpenMesh/Tools/Decimater/ModNormalDeviationT.hh>
+#include <OpenMesh/Tools/Decimater/ModNormalFlippingT.hh>
+#include <OpenMesh/Tools/Decimater/ModQuadricT.hh>
+#include <OpenMesh/Tools/Decimater/ModProgMeshT.hh>
+#include <OpenMesh/Tools/Decimater/ModIndependentSetsT.hh>
+#include <OpenMesh/Tools/Decimater/ModRoundnessT.hh>
+
 
 void noob::active_mesh::init(const noob::basic_mesh&)
 {
@@ -17,13 +32,14 @@ void noob::active_mesh::init(const noob::indexed_polymesh&)
 
 
 // Basic functionality
+/*
 noob::active_mesh::face_handle noob::active_mesh::add_face(const noob::active_mesh::face&) 
 {
 
 }
+*/
 
-
-noob::active_mesh::face_handle noob::active_mesh::add_face(const std::vector<std::array<float, 3>>&) 
+noob::active_mesh::face_handle noob::active_mesh::add_face(const std::vector<size_t>&) 
 {
 
 }
@@ -47,13 +63,13 @@ bool noob::active_mesh::exists(face_handle) const
 }
 
 		
-noob::vec3 noob::active_mesh::get_vertex(uint32_t index) const 
+noob::vec3 noob::active_mesh::get_vertex(size_t index) const 
 {
 
 }
 
 
-std::vector<uint32_t> noob::active_mesh::get_face_indices(face_handle) const 
+std::vector<size_t> noob::active_mesh::get_face_indices(face_handle) const 
 {
 
 }
@@ -146,13 +162,19 @@ void noob::active_mesh::connect_faces(noob::active_mesh::face_handle first_handl
 }
 
 
-void noob::active_mesh::move_vertex(uint32_t index, const noob::vec3& direction) 
+void noob::active_mesh::move_vertex(size_t index, const noob::vec3& direction) 
 {
 
 }
 
 
-void noob::active_mesh::move_vertices(const std::vector<uint32_t>& indices, const noob::vec3& direction) 
+void noob::active_mesh::move_vertices(const std::vector<size_t>& indices, const noob::vec3& direction) 
+{
+
+}
+
+
+void noob::active_mesh::merge_adjacent_coplanars()
 {
 
 }

@@ -8,6 +8,15 @@
 
 #pragma once
 
+#include <cereal/access.hpp>
+#include <cereal/types/array.hpp>
+#include <cereal/types/memory.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/types/unordered_map.hpp>
+#include <cereal/types/map.hpp>
+#include <cereal/archives/portable_binary.hpp>
+#include <cereal/archives/binary.hpp>
+
 #include "Component.hpp"
 #include "MathFuncs.hpp"
 #include "BasicMesh.hpp"
@@ -32,9 +41,12 @@ namespace noob
 		public:
 			struct face
 			{
+				face() : hole(false) {}
+				std::vector<noob::vec2> get_2d() const;
+
 				std::vector<noob::vec3> verts;
 				noob::vec3 normal;
-				std::vector<noob::vec2> get_2d() const;
+				bool hole;
 			};
 
 			typedef noob::component<noob::active_mesh::face>::handle face_handle;
@@ -42,16 +54,18 @@ namespace noob
 			void init(const noob::basic_mesh&);
 			void init(const noob::indexed_polymesh&);
 
+			uint32_t add_vertex(const noob::vec3&);
+
 			// Basic functionality
-			face_handle add_face(const noob::active_mesh::face&);
-			face_handle add_face(const std::vector<std::array<float, 3>>&);
+			// face_handle add_face(const noob::active_mesh::face&);
+			face_handle add_face(const std::vector<size_t>&);
 			
 			bool exists(const noob::vec3&) const;
 			bool exists(const face&) const;
 			bool exists(face_handle) const;
 			
-			noob::vec3 get_vertex(uint32_t index) const;
-			std::vector<uint32_t> get_face_indices(face_handle) const;
+			noob::vec3 get_vertex(size_t index) const;
+			std::vector<size_t> get_face_indices(face_handle) const;
 			noob::active_mesh::face get_face_values(face_handle) const;
 					
 			noob::basic_mesh to_basic_mesh() const;
@@ -75,10 +89,9 @@ namespace noob
 			void extrude(noob::active_mesh::face_handle, const noob::vec3& normal, float magnitude);
 			void connect_faces(noob::active_mesh::face_handle first_handle, noob::active_mesh::face_handle second_handle);
 			//void move_vertex(const noob::vec3& vertex, const noob::vec3& normal, float magnitude);
-			void move_vertex(uint32_t index, const noob::vec3& direction);
-			void move_vertices(const std::vector<uint32_t>& indices, const noob::vec3& direction);
-
-
+			void move_vertex(size_t index, const noob::vec3& direction);
+			void move_vertices(const std::vector<size_t>& indices, const noob::vec3& direction);
+			void merge_adjacent_coplanars();
 			// This function is static because it acts on two objects. The static modifier makes it explicit.
 			// TODO: Possibly move into mesh_utils
 			static void join_meshes(const noob::active_mesh& first, noob::active_mesh::face_handle first_handle, const noob::active_mesh& second, noob::active_mesh::face_handle second_handle);
@@ -96,8 +109,6 @@ namespace noob
 			faces_holder faces;
 			std::unordered_map<size_t, PolyMesh::Face*> faces_handles_to_face_ptr;
 			std::vector<PolyMesh::Vertex*> vertices_list;
-
-			// For serialization; Doesn't need to get updated often and mostly lies fallow
 			void refresh_index();
 			noob::indexed_polymesh index;
 	};
