@@ -11,7 +11,7 @@
 #include <boost/variant.hpp>
 
 #include <btBulletDynamicsCommon.h>
-#include <dcollide.h>
+// #include <dcollide.h>
 
 #include "es/storage.hpp"
 #include "Graphics.hpp"
@@ -122,7 +122,7 @@ namespace noob
 
 			// noob::prepared_shaders renderer;
 
-			dcollide::World ghost_world;
+			// dcollide::World ghost_world;
 
 			btBroadphaseInterface* broadphase;
 			btDefaultCollisionConfiguration* collision_configuration;
