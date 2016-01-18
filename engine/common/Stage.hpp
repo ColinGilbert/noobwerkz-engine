@@ -107,6 +107,8 @@ namespace noob
 			noob::vec4 get_basic_light(unsigned int i) const;
 
 			noob::prepared_shaders renderer;
+
+
 		protected:
 			// template<typename T>
 			// unsigned char register_es_component(T t, const std::string& friendly_name)
