@@ -88,7 +88,7 @@ namespace noob
 
 			PolyMesh half_edges;
 			// This function does life-saving checks. The first tuple element is the valid flag.
-			std::tuple<bool, PolyMesh::Vertex*> get_vertex_ptr(size_t);
+			std::tuple<bool, PolyMesh::Vertex*> get_vertex_ptr(size_t) const;
 
 			// Data members.
 			size_t current_generation;
@@ -97,7 +97,8 @@ namespace noob
 			std::unordered_map<size_t, PolyMesh::Face*> faces_handles_to_face_ptr;
 			std::vector<PolyMesh::Vertex*> vertices_list;
 
-			// For serialization; DOesn't need to get updated often and mostly lies fallow
+			// For serialization; Doesn't need to get updated often and mostly lies fallow
+			void refresh_index();
 			noob::indexed_polymesh index;
 	};
 }
