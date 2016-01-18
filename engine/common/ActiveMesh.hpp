@@ -20,11 +20,11 @@ namespace noob
 	struct indexed_polymesh
 	{	
 		// Convenience
-		std::vector<std::vector<std::array<float, 3>>> get_face_list() const;
+		std::vector<std::vector<noob::vec3>> get_face_list() const;
 		
 		// Struct data memebers
-		std::vector<std::array<float, 3>> vertices;
-		std::vector<std::vector<uint32_t>> faces;
+		std::vector<noob::vec3> vertices;
+		std::vector<std::vector<size_t>> faces;
 	};
 
 	class active_mesh
@@ -33,12 +33,15 @@ namespace noob
 			struct face
 			{
 				std::vector<noob::vec3> verts;
+				noob::vec3 normal;
 				std::vector<noob::vec2> get_2d() const;
-				noob::vec3 get_normal() const;
 			};
 
 			typedef noob::component<noob::active_mesh::face>::handle face_handle;
-			
+		
+			void init(const noob::basic_mesh&);
+			void init(const noob::indexed_polymesh&);
+
 			// Basic functionality
 			face_handle add_face(const noob::active_mesh::face&);
 			face_handle add_face(const std::vector<std::array<float, 3>>&);
@@ -46,13 +49,11 @@ namespace noob
 			bool exists(const noob::vec3&) const;
 			bool exists(const face&) const;
 			bool exists(face_handle) const;
-
-			noob::active_mesh::face get_face_vals(face_handle) const;
-			noob::active_mesh::face get_face_vals(const noob::vec3&) const;
-			noob::active_mesh::face get_face_vals(uint32_t) const;
 			
-			// std::vector<uint32_t> get_indices(const noob::vec3&) const;
-			
+			noob::vec3 get_vertex(uint32_t index) const;
+			std::vector<uint32_t> get_face_indices(face_handle) const;
+			noob::active_mesh::face get_face_values(face_handle) const;
+					
 			noob::basic_mesh to_basic_mesh() const;
 			noob::indexed_polymesh to_indexed_polymesh() const;
 
@@ -60,8 +61,8 @@ namespace noob
 
 			// Generation-related utilities (meshes change and we sometimes/often need to retrieve older copies)
 			size_t get_current_generation() const;
-			noob::active_mesh retrieve_by_generation(uint32_t) const;
-			bool is_generation_current(uint32_t) const;
+			noob::active_mesh retrieve_by_generation(size_t) const;
+			bool is_generation_current(size_t) const;
 		
 			// TODO: Find out if "topological split" makes proper sense in this context
 			std::vector<noob::active_mesh> topological_split(const std::vector<noob::active_mesh::face_handle>&) const;
@@ -73,8 +74,9 @@ namespace noob
 			void cut_faces(std::vector<noob::active_mesh::face_handle>&, const noob::vec3& point_on_plane, const noob::vec3& plane_normal);
 			void extrude(noob::active_mesh::face_handle, const noob::vec3& normal, float magnitude);
 			void connect_faces(noob::active_mesh::face_handle first_handle, noob::active_mesh::face_handle second_handle);
-			void move_vertex(const noob::vec3& vertex, const noob::vec3& normal, float magnitude);
-			void move_vertex(uint32_t index, const noob::vec3& normal, float magnitude);
+			//void move_vertex(const noob::vec3& vertex, const noob::vec3& normal, float magnitude);
+			void move_vertex(uint32_t index, const noob::vec3& direction);
+			void move_vertices(const std::vector<uint32_t>& indices, const noob::vec3& direction);
 
 
 			// This function is static because it acts on two objects. The static modifier makes it explicit.
@@ -85,19 +87,17 @@ namespace noob
 		protected:
 
 			PolyMesh half_edges;
+			// This function does life-saving checks. The first tuple element is the valid flag.
+			std::tuple<bool, PolyMesh::Vertex*> get_vertex_ptr(size_t);
 
-			struct inner_index_mesh
-			{
-				std::vector<std::tuple<std::array<float, 3>, PolyMesh::Vertex*>> vertices;
-				std::vector<uint32_t> faces;
-			};
-
-			void update_index();
-			noob::active_mesh::inner_index_mesh index;
-			// TODO: Optimize.
-			// std::map<std::array<float, 3>, std::vector<uint32_t>>  verts_to_indices;
-			uint32_t current_generation;
+			// Data members.
+			size_t current_generation;
 			typedef noob::component<noob::active_mesh::face> faces_holder;
 			faces_holder faces;
+			std::unordered_map<size_t, PolyMesh::Face*> faces_handles_to_face_ptr;
+			std::vector<PolyMesh::Vertex*> vertices_list;
+
+			// For serialization; DOesn't need to get updated often and mostly lies fallow
+			noob::indexed_polymesh index;
 	};
 }
