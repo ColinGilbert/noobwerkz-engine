@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 **/build/*
 engine/build/*
 **.*.sw*
@@ -32,3 +33,10 @@ sandbox/temp/volumetric/*
 **/texturec
 #sandbox/*.tga
 sandbox/models/test.off
+=======
+.project
+.cproject
+CMakeLists.txt.user
+build*
+*.*sw*
+>>>>>>> ce3274393839af16c136433091eef1036bc625d9

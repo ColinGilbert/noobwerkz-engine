@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Version 0.1.1 AKA "Live reloads"
 ```
 Moved out all non-stage components from stage, enabling live reloads! Yay!
@@ -30,3 +31,9 @@ Version: 0.0.1, AKA: Fresh "beginnings":
 ```
 Beginning of acceptable, almost modular interface.
 ```
+=======
+Please look into the doxygen configuration (Generated from Doc/history.docu) 
+
+The latest changelog for the master can be found here:
+http://openmesh.org/Daily-Builds/Doc/a00002.html
+>>>>>>> ce3274393839af16c136433091eef1036bc625d9
