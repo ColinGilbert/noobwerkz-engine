@@ -45,12 +45,12 @@ namespace noob
 
 			// void init(const noob::indexed_polymesh&);
 
-			size_t add_vertex(const noob::vec3&);
+			PolyMesh::VertexHandle add_vertex(const noob::vec3&);
 
 			// Basic functionality
-			// size_t add_face(const noob::active_mesh::face&);
+			PolyMesh::FaceHandle add_face(const noob::active_mesh::face&);
 			
-			size_t add_face(const std::vector<size_t>&);
+			PolyMesh::FaceHandle add_face(const std::vector<PolyMesh::VertexHandle>&);
 			
 			// Constants
 			bool vertex_exists(const noob::vec3&) const;
@@ -59,8 +59,8 @@ namespace noob
 
 			noob::vec3 get_vertex(size_t index) const;
 
-			
 			bool face_exists(const face&) const;
+			
 			bool face_exists(size_t index) const;
 			
 			size_t num_vertices() const;
@@ -128,7 +128,7 @@ namespace noob
 			// Data members.
 			PolyMesh half_edges;
 			
-			std::map<std::array<float, 3>, PolyMesh::VertexHandle> xyz_to_vhandle;
+			std::map<std::array<float, 3>, PolyMesh::VertexHandle> xyz_to_vhandles;
 
 	};
 }

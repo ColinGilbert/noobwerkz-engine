@@ -30,17 +30,34 @@
 
 void noob::active_mesh::init(const noob::basic_mesh& m)
 {
-	// TriMesh::VertexIter v_it, v_end(m.half_edges.vertices_end());
-	// std::vector<TriMesh::VertexHandle> vhandles;
-	// for (v_it = m.half_edges.vertices_begin(); v_it != v_end; v_it += 3)
-	// {
-	// vhandles.clear();
-	// vhandles.push_back(m.half_edges.vertex(v_it));
-	// vhandles.push_back(m.half_edges.vertex(v_it+1));
-	// vhandles.push_back(m.half_edges.vertex(v_it+2));
-	// half_edges.add_face();
-	// }
-	// auto results = vertex_value_to_vertex_ptr.find();
+	half_edges.clear();
+	xyz_to_vhandles.empty();
+	
+	for (size_t i = 0; i < m.indices.size(); ++i)
+	{
+		
+	}
+
+// TriMesh tri_edges = m.to_half_edges():
+// TriMesh::VertexIter v_it, v_end(tri_edges.vertices_end());
+	
+// std::vector<TriMesh::VertexHandle> vhandles;
+	
+// for (v_it = tri_edges.vertices_begin(); v_it != v_end; v_it += 3)
+// {
+//      vhandles.clear();
+//      vhandles.push_back(m.tri_edges.vertex(v_it));
+//      vhandles.push_back(m.tri_edges.vertex(v_it+1));
+//      vhandles.push_back(m.tri_edges.vertex(v_it+2));
+//      half_edges.add_face();
+//      xyz_to_vhandle;
+//      xyz_to_vhandle();
+//      xyz_to_vhandle();
+// }
+
+// auto results = vertex_value_to_vertex_ptr.find();
+
+
 
 }
 
@@ -52,14 +69,26 @@ void noob::active_mesh::init(const noob::basic_mesh& m)
 
 
 // Basic functionality
-/*
-   size_t noob::active_mesh::add_face(const noob::active_mesh::face&) 
-   {
+//
 
-   }
-   */
+PolyMesh::VertexHandle noob::active_mesh::add_vertex(const noob::vec3& v)
+{
+	auto search = xyz_to_vhandles.find(v.v);
+	if (search == xyz_to_vhandles.end())
+	{
+		xyz_to_vhandles.insert(std::make_pair(v.v, half_edges.add_vertex(PolyMesh::Point(v.v[0], v.v[1], v.v[2]))));
+	}
+	PolyMesh::VertexHandle temp = xyz_to_vhandles[v.v];
+	return temp;
+}
 
-size_t noob::active_mesh::add_face(const std::vector<size_t>&) 
+PolyMesh::FaceHandle noob::active_mesh::add_face(const noob::active_mesh::face&) 
+{
+
+}
+
+
+PolyMesh::FaceHandle noob::active_mesh::add_face(const std::vector<PolyMesh::VertexHandle>&) 
 {
 
 }

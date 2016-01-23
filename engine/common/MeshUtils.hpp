@@ -5,7 +5,7 @@
 #include "MathFuncs.hpp"
 
 
-#include <Newton.h>
+// #include <Newton.h>
 //#define CSGJS_HEADER_ONLY
 #include <csgjs.hpp>
 
@@ -31,7 +31,7 @@ namespace noob
 
 		protected:
 		// static csgjs_model get_csg_model(const noob::basic_mesh& m);
-		static NewtonMesh* noob_to_newton(const noob::basic_mesh&, const NewtonWorld* const);
-		static noob::basic_mesh newton_to_noob(const NewtonMesh* const);
+		// static NewtonMesh* noob_to_newton(const noob::basic_mesh&, const NewtonWorld* const);
+		// static noob::basic_mesh newton_to_noob(const NewtonMesh* const);
 	};
 }

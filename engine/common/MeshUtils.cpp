@@ -567,7 +567,7 @@ csgjs_model noob::mesh_utils::get_csg_model(const noob::basic_mesh& m)
 }
 
 */
-
+/*
 NewtonMesh* noob::mesh_utils::noob_to_newton(const noob::basic_mesh& m_arg, const NewtonWorld* const w_arg)
 {
 	NewtonMesh* newton_mesh = NewtonMeshCreate(w_arg);
@@ -610,3 +610,5 @@ noob::basic_mesh noob::mesh_utils::newton_to_noob(const NewtonMesh* const newton
 	//
 	//
 }
+
+*/
