@@ -93,6 +93,7 @@ public:
     return (this->idx_ < _rhs.idx_); 
   }
 
+  int get_inner() const { return idx_; }
 
   // this is to be used only by the iterators
   void __increment() { ++idx_; }
