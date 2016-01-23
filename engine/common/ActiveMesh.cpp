@@ -112,25 +112,25 @@ bool noob::active_mesh::face_exists(const face&) const
 }
 
 
-bool noob::active_mesh::face_exists(size_t) const 
+bool noob::active_mesh::face_exists(PolyMesh::FaceHandle h) const 
 {
 
 }
 
 
-noob::vec3 noob::active_mesh::get_vertex(size_t index) const 
+noob::vec3 noob::active_mesh::get_vertex(PolyMesh::VertexHandle h) const 
 {
 
 }
 
 
-std::vector<size_t> noob::active_mesh::get_verts_for_face(size_t) const 
+std::vector<PolyMesh::VertexHandle> noob::active_mesh::get_verts_for_face(PolyMesh::FaceHandle) const 
 {
 
 }
 
 
-noob::active_mesh::face noob::active_mesh::get_face(size_t) const 
+noob::active_mesh::face noob::active_mesh::get_face(PolyMesh::FaceHandle) const 
 {
 
 }
@@ -148,7 +148,7 @@ noob::basic_mesh noob::active_mesh::to_basic_mesh() const
 }
 
 
-std::vector<size_t> noob::active_mesh::get_adjacent_faces(size_t) const 
+std::vector<PolyMesh::FaceHandle> noob::active_mesh::get_adjacent_faces(PolyMesh::FaceHandle) const 
 {
 
 }
@@ -175,14 +175,14 @@ std::vector<size_t> noob::active_mesh::get_adjacent_faces(size_t) const
    */
 
 // TODO: Find out if "topological split" makes proper sense in this context
-std::vector<noob::active_mesh> noob::active_mesh::topological_split(const std::vector<size_t>& sampling_points, size_t max_vertices) const 
+std::vector<noob::active_mesh> noob::active_mesh::topological_split(const std::vector<PolyMesh::FaceHandle>& sampling_points, size_t max_vertices) const 
 {
 
 }
 
 
 // Destructive utiiities. Those take full advantage of the speed benefits of half-edged meshes
-void noob::active_mesh::make_hole(size_t) 
+void noob::active_mesh::make_hole(PolyMesh::FaceHandle) 
 {
 
 }
@@ -200,31 +200,31 @@ void noob::active_mesh::cut_mesh(const noob::vec3& point_on_plane, const noob::v
 }
 
 
-void noob::active_mesh::cut_faces(std::vector<size_t>&, const noob::vec3& point_on_plane, const noob::vec3& plane_normal) 
+void noob::active_mesh::cut_faces(std::vector<PolyMesh::FaceHandle>&, const noob::vec3& point_on_plane, const noob::vec3& plane_normal) 
 {
 
 }
 
 
-void noob::active_mesh::extrude(size_t, const noob::vec3& normal, float magnitude) 
+void noob::active_mesh::extrude(PolyMesh::FaceHandle, const noob::vec3& normal, float magnitude) 
 {
 
 }
 
 
-void noob::active_mesh::connect_faces(size_t first_handle, size_t second_handle) 
+void noob::active_mesh::connect_faces(PolyMesh::FaceHandle first_handle, PolyMesh::FaceHandle second_handle) 
 {
 
 }
 
 
-void noob::active_mesh::move_vertex(size_t index, const noob::vec3& direction) 
+void noob::active_mesh::move_vertex(PolyMesh::VertexHandle index, const noob::vec3& direction) 
 {
 
 }
 
 
-void noob::active_mesh::move_vertices(const std::vector<size_t>& indices, const noob::vec3& direction) 
+void noob::active_mesh::move_vertices(const std::vector<PolyMesh::VertexHandle>& indices, const noob::vec3& direction) 
 {
 
 }

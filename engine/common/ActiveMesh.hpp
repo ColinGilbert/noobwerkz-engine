@@ -57,11 +57,11 @@ namespace noob
 			
 			bool vertex_exists(const size_t) const;
 
-			noob::vec3 get_vertex(size_t index) const;
+			noob::vec3 get_vertex(PolyMesh::VertexHandle) const;
 
 			bool face_exists(const face&) const;
 			
-			bool face_exists(size_t index) const;
+			bool face_exists(PolyMesh::FaceHandle) const;
 			
 			size_t num_vertices() const;
 
@@ -71,9 +71,9 @@ namespace noob
 
 			size_t num_faces() const;
 
-			std::vector<size_t> get_verts_for_face(size_t) const;
+			std::vector<PolyMesh::VertexHandle> get_verts_for_face(PolyMesh::FaceHandle) const;
 			
-			noob::active_mesh::face get_face(size_t) const;
+			noob::active_mesh::face get_face(PolyMesh::FaceHandle) const;
 			
 			// Caution: This function has the potential to pass around lots of data. Use cautiously.
 			std::vector<noob::active_mesh::face> get_face_list() const;
@@ -82,7 +82,7 @@ namespace noob
 			
 			// noob::indexed_polymesh to_indexed_polymesh() const;
 			
-			std::vector<size_t> get_adjacent_faces(size_t) const;
+			std::vector<PolyMesh::FaceHandle> get_adjacent_faces(PolyMesh::FaceHandle) const;
 
 			// Generation-related utilities (meshes change and we sometimes/often need to retrieve older copies)
 			
@@ -92,26 +92,26 @@ namespace noob
 			
 			// bool is_generation_current(size_t) const;
 		
-			std::vector<noob::active_mesh> topological_split(const std::vector<size_t>& sampling_points, size_t max_vertices) const;
+			std::vector<noob::active_mesh> topological_split(const std::vector<PolyMesh::FaceHandle>& samples, size_t max_vertices) const;
 
 			// Destructive utiiities. Those take full advantage of the speed benefits of half-edged meshes
-			void make_hole(size_t);
+			void make_hole(PolyMesh::FaceHandle);
 			
 			void fill_holes();
 			
 			void cut_mesh(const noob::vec3& point_on_plane, const noob::vec3 plane_normal);
 			
-			void cut_faces(std::vector<size_t>&, const noob::vec3& point_on_plane, const noob::vec3& plane_normal);
+			void cut_faces(std::vector<PolyMesh::FaceHandle>&, const noob::vec3& point_on_plane, const noob::vec3& plane_normal);
 			
-			void extrude(size_t, const noob::vec3& normal, float magnitude);
+			void extrude(PolyMesh::FaceHandle, const noob::vec3& normal, float magnitude);
 			
-			void connect_faces(size_t first, size_t second);
+			void connect_faces(PolyMesh::FaceHandle first, PolyMesh::FaceHandle second);
 			
 			//void move_vertex(const noob::vec3& vertex, const noob::vec3& normal, float magnitude);
 			
-			void move_vertex(size_t index, const noob::vec3& direction);
+			void move_vertex(PolyMesh::VertexHandle, const noob::vec3& direction);
 			
-			void move_vertices(const std::vector<size_t>& indices, const noob::vec3& direction);
+			void move_vertices(const std::vector<PolyMesh::VertexHandle>&, const noob::vec3& direction);
 			
 			void merge_adjacent_coplanars();
 			
