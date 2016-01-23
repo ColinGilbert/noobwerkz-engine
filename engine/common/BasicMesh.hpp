@@ -54,9 +54,11 @@ namespace noob
 	{
 		friend class stage;
 		friend class basic_model;
+		friend class active_mesh;
 		friend class shape;
 		friend class mesh_utils;
 		friend class voxel_world;
+		friend class voxel_world_stable;
 
 		public:
 

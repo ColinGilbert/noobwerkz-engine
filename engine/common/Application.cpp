@@ -169,6 +169,11 @@ void noob::application::init()
 	// static bool is_valid(const noob::graphics::uniform&);
 	// static bool is_valid(const noob::graphics::sampler&);
 
+	r = script_engine->RegisterEnum("csg_op"); assert(r >= 0 );
+	r = script_engine->RegisterEnumValue("csg_op", "UNION", 0); assert(r >= 0 );
+	r = script_engine->RegisterEnumValue("csg_op", "DIFFERENCE", 1); assert(r >= 0 );
+	r = script_engine->RegisterEnumValue("csg_op", "INTERSECTION", 2); assert(r >= 0 );
+
 	r = script_engine->RegisterObjectType("vec2", sizeof(vec2), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::vec2>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
 	RegisterVector<noob::vec2>("vec2", script_engine);
 	r = script_engine->RegisterObjectBehaviour("vec2", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(as_vec2_constructor_wrapper_basic), asCALL_CDECL_OBJLAST); assert( r >= 0 );
@@ -269,9 +274,12 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("basic_mesh", "bbox get_bbox() const", asMETHOD(noob::basic_mesh, get_bbox), asCALL_THISCALL); assert( r >= 0 );
 	
 	r = script_engine->RegisterGlobalFunction("basic_mesh sphere_mesh(float)", asFUNCTION(mesh_utils::sphere), asCALL_CDECL); assert(r >= 0);
+	r = script_engine->RegisterGlobalFunction("basic_mesh box_mesh(float, float, float)", asFUNCTION(mesh_utils::box), asCALL_CDECL); assert(r >= 0);
 	r = script_engine->RegisterGlobalFunction("basic_mesh cone_mesh(float, float)", asFUNCTION(mesh_utils::cone), asCALL_CDECL); assert(r >= 0);
-	r = script_engine->RegisterGlobalFunction("basic_mesh box_mesh(float, float)", asFUNCTION(mesh_utils::cylinder), asCALL_CDECL); assert(r >= 0);
+	r = script_engine->RegisterGlobalFunction("basic_mesh cylinder_mesh(float, float)", asFUNCTION(mesh_utils::cylinder), asCALL_CDECL); assert(r >= 0);
 	r = script_engine->RegisterGlobalFunction("basic_mesh hull_mesh(const vector_vec3& in)", asFUNCTION(mesh_utils::hull), asCALL_CDECL); assert(r >= 0);
+
+	r = script_engine->RegisterGlobalFunction("basic_mesh csg(const basic_mesh& in, const basic_mesh& in, csg_op)", asFUNCTION(mesh_utils::csg), asCALL_CDECL); assert(r >= 0);
 
 	r = script_engine->RegisterGlobalFunction("float length(const vec3& in)", asFUNCTION(length_squared), asCALL_CDECL); assert(r >= 0 );
 	r = script_engine->RegisterGlobalFunction("float length_squared(const vec3& in)", asFUNCTION(length), asCALL_CDECL); assert(r >= 0 );
@@ -546,7 +554,7 @@ bool noob::application::load_init_script()
 
 void noob::application::draw()
 {
-	stage.projection_mat = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 1.0, 1000.0);
+	stage.projection_mat = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 10.0, 3000.0);
 	stage.draw(window_width, window_height);
 }
 

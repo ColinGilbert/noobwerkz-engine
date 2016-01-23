@@ -18,24 +18,16 @@
 #include <cereal/archives/binary.hpp>
 
 #include "Component.hpp"
+
 #include "MathFuncs.hpp"
 #include "BasicMesh.hpp"
+
 #include "MeshUtils.hpp"
 
 typedef OpenMesh::PolyMesh_ArrayKernelT<> PolyMesh;
 
 namespace noob
 {
-	struct indexed_polymesh
-	{	
-		// Convenience
-		std::vector<std::vector<noob::vec3>> get_face_list() const;
-		
-		// Struct data memebers
-		std::vector<noob::vec3> vertices;
-		std::vector<std::vector<size_t>> faces;
-	};
-
 	class active_mesh
 	{
 		public:
@@ -49,67 +41,94 @@ namespace noob
 				bool hole;
 			};
 
-			typedef noob::component<noob::active_mesh::face>::handle face_handle;
-		
 			void init(const noob::basic_mesh&);
-			void init(const noob::indexed_polymesh&);
 
-			uint32_t add_vertex(const noob::vec3&);
+			// void init(const noob::indexed_polymesh&);
+
+			size_t add_vertex(const noob::vec3&);
 
 			// Basic functionality
-			// face_handle add_face(const noob::active_mesh::face&);
-			face_handle add_face(const std::vector<size_t>&);
+			// size_t add_face(const noob::active_mesh::face&);
 			
-			bool exists(const noob::vec3&) const;
-			bool exists(const face&) const;
-			bool exists(face_handle) const;
+			size_t add_face(const std::vector<size_t>&);
 			
-			noob::vec3 get_vertex(size_t index) const;
-			std::vector<size_t> get_face_indices(face_handle) const;
-			noob::active_mesh::face get_face_values(face_handle) const;
-					
-			noob::basic_mesh to_basic_mesh() const;
-			noob::indexed_polymesh to_indexed_polymesh() const;
+			// Constants
+			bool vertex_exists(const noob::vec3&) const;
+			
+			bool vertex_exists(const size_t) const;
 
-			std::vector<noob::active_mesh::face_handle> get_adjacent_faces(noob::active_mesh::face_handle) const;
+			noob::vec3 get_vertex(size_t index) const;
+
+			
+			bool face_exists(const face&) const;
+			bool face_exists(size_t index) const;
+			
+			size_t num_vertices() const;
+
+			// size_t num_half_edges() const;
+
+			size_t num_edges() const;
+
+			size_t num_faces() const;
+
+			std::vector<size_t> get_verts_for_face(size_t) const;
+			
+			noob::active_mesh::face get_face(size_t) const;
+			
+			// Caution: This function has the potential to pass around lots of data. Use cautiously.
+			std::vector<noob::active_mesh::face> get_face_list() const;
+			
+			noob::basic_mesh to_basic_mesh() const;
+			
+			// noob::indexed_polymesh to_indexed_polymesh() const;
+			
+			std::vector<size_t> get_adjacent_faces(size_t) const;
 
 			// Generation-related utilities (meshes change and we sometimes/often need to retrieve older copies)
-			size_t get_current_generation() const;
-			noob::active_mesh retrieve_by_generation(size_t) const;
-			bool is_generation_current(size_t) const;
+			
+			// size_t get_current_generation() const;
+			
+			// noob::active_mesh retrieve_by_generation(size_t) const;
+			
+			// bool is_generation_current(size_t) const;
 		
-			// TODO: Find out if "topological split" makes proper sense in this context
-			std::vector<noob::active_mesh> topological_split(const std::vector<noob::active_mesh::face_handle>&) const;
+			std::vector<noob::active_mesh> topological_split(const std::vector<size_t>& sampling_points, size_t max_vertices) const;
 
 			// Destructive utiiities. Those take full advantage of the speed benefits of half-edged meshes
-			void make_hole(noob::active_mesh::face_handle);
+			void make_hole(size_t);
+			
 			void fill_holes();
+			
 			void cut_mesh(const noob::vec3& point_on_plane, const noob::vec3 plane_normal);
-			void cut_faces(std::vector<noob::active_mesh::face_handle>&, const noob::vec3& point_on_plane, const noob::vec3& plane_normal);
-			void extrude(noob::active_mesh::face_handle, const noob::vec3& normal, float magnitude);
-			void connect_faces(noob::active_mesh::face_handle first_handle, noob::active_mesh::face_handle second_handle);
+			
+			void cut_faces(std::vector<size_t>&, const noob::vec3& point_on_plane, const noob::vec3& plane_normal);
+			
+			void extrude(size_t, const noob::vec3& normal, float magnitude);
+			
+			void connect_faces(size_t first, size_t second);
+			
 			//void move_vertex(const noob::vec3& vertex, const noob::vec3& normal, float magnitude);
+			
 			void move_vertex(size_t index, const noob::vec3& direction);
+			
 			void move_vertices(const std::vector<size_t>& indices, const noob::vec3& direction);
+			
 			void merge_adjacent_coplanars();
+			
 			// This function is static because it acts on two objects. The static modifier makes it explicit.
 			// TODO: Possibly move into mesh_utils
-			static void join_meshes(const noob::active_mesh& first, noob::active_mesh::face_handle first_handle, const noob::active_mesh& second, noob::active_mesh::face_handle second_handle);
+			static void join_meshes(const noob::active_mesh& first_mesh, size_t first_handle, const noob::active_mesh& second, size_t second_handle);
 			
 			
 		protected:
 
-			PolyMesh half_edges;
 			// This function does life-saving checks. The first tuple element is the valid flag.
-			std::tuple<bool, PolyMesh::Vertex*> get_vertex_ptr(size_t) const;
-
+			// std::tuple<bool, PolyMesh::Vertex*> get_vertex_ptr(size_t) const;
+			
 			// Data members.
-			size_t current_generation;
-			typedef noob::component<noob::active_mesh::face> faces_holder;
-			faces_holder faces;
-			std::unordered_map<size_t, PolyMesh::Face*> faces_handles_to_face_ptr;
-			std::vector<PolyMesh::Vertex*> vertices_list;
-			void refresh_index();
-			noob::indexed_polymesh index;
+			PolyMesh half_edges;
+			
+			std::map<std::array<float, 3>, PolyMesh::VertexHandle> xyz_to_vhandle;
+
 	};
 }

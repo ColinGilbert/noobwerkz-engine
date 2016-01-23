@@ -148,18 +148,18 @@ noob::basic_mesh noob::globals::make_mesh(const noob::shapes_holder::handle h)
 		case(noob::shape::type::HULL):
 			{
 				// logger::log("[Globals] making convex mesh");
-				return noob::mesh_utils::copy(*meshes.get(shapes_to_meshes[h.get_inner()]));
+				return *meshes.get(shapes_to_meshes[h.get_inner()]);
 			}
 		case(noob::shape::type::TRIMESH):
 			{
 				// logger::log("[Globals] making trimesh");
-				return noob::mesh_utils::copy(*meshes.get(shapes_to_meshes[h.get_inner()]));
+				return *meshes.get(shapes_to_meshes[h.get_inner()]);
 			}
 		default:
 			logger::log("[Globals] - USER DATA WARNING - INVALID SHAPE TO MESH :(");
 			break;
 	};
-	return noob::mesh_utils::copy(*meshes.get(unit_sphere_mesh));
+	return *meshes.get(unit_sphere_mesh);
 }
 
 
@@ -380,7 +380,7 @@ unsigned int noob::globals::_static_trimesh(unsigned int _m)
 noob::meshes_holder::handle noob::globals::add_mesh(const noob::basic_mesh& m)
 {
 	std::unique_ptr<noob::basic_mesh> mesh_ptr = std::make_unique<noob::basic_mesh>();
-	*mesh_ptr = noob::mesh_utils::copy(m);
+	*mesh_ptr = m; //noob::mesh_utils::copy(m);
 	return meshes.add(std::move(mesh_ptr));	
 }
 
@@ -398,7 +398,7 @@ noob::basic_models_holder::handle noob::globals::basic_model(const noob::meshes_
 	{		
 		// logger::log("[Globals] Adding a model. Mesh not found; creating.");
 		std::unique_ptr<noob::basic_model> temp = std::make_unique<noob::basic_model>();
-		temp->init(noob::mesh_utils::copy(*meshes.get(_mesh)));
+		temp->init(*meshes.get(_mesh));
 		noob::basic_models_holder::handle h = basic_models.add(std::move(temp));
 		meshes_to_models.insert(std::make_pair(_mesh.get_inner(), h));
 		return h;

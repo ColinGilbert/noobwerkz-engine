@@ -4,6 +4,8 @@
 #include "BasicMesh.hpp"
 #include "MathFuncs.hpp"
 
+
+#include <Newton.h>
 //#define CSGJS_HEADER_ONLY
 #include <csgjs.hpp>
 
@@ -25,9 +27,11 @@ namespace noob
 		static noob::basic_mesh catmull_sphere(float radius);
 		static noob::basic_mesh hull(const std::vector<noob::vec3>& points);
 		static noob::basic_mesh csg(const noob::basic_mesh& a, const noob::basic_mesh& b, const noob::csg_op op);
-		static noob::basic_mesh copy(const noob::basic_mesh&);
+		// static noob::basic_mesh copy(const noob::basic_mesh&);
 
 		protected:
-		static csgjs_model get_csg_model(const noob::basic_mesh& m);
+		// static csgjs_model get_csg_model(const noob::basic_mesh& m);
+		static NewtonMesh* noob_to_newton(const noob::basic_mesh&, const NewtonWorld* const);
+		static noob::basic_mesh newton_to_noob(const NewtonMesh* const);
 	};
 }

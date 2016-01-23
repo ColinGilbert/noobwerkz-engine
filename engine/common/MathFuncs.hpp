@@ -30,7 +30,7 @@ namespace noob
 
 	enum class csg_op
 	{
-		UNION, DIFFERENCE, INTERSECTION
+		UNION = 0, DIFFERENCE = 1, INTERSECTION = 2
 	};
 
 	enum class cardinal_axis

@@ -2,6 +2,8 @@
 
 #include <LinearMath/btConvexHull.h>
 
+
+
 // #include <tinympl/functional.hpp>
 
 /*
@@ -379,6 +381,7 @@ noob::basic_mesh noob::mesh_utils::catmull_sphere(float radius)
 
 noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 {
+/*
 	// TODO: Optimize this	
 	std::vector<btVector3> bt_points;
 	for (noob::vec3 p : points)
@@ -408,9 +411,43 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 
 	mesh.normalize();
 	return mesh;
+*/
 }
 
 
+noob::basic_mesh noob::mesh_utils::csg(const noob::basic_mesh& _a, const noob::basic_mesh& _b, const noob::csg_op op)
+{
+/*
+	NewtonWorld* const csg_world = NewtonCreate ();
+	
+	NewtonMesh* a = noob_to_newton(_a, csg_world);
+	NewtonMesh* b = noob_to_newton(_b, csg_world);
+
+	NewtonMesh* raw_results;
+	noob::mat4 id = noob::identity_mat4();
+
+	switch(op)
+	{
+		case(noob::csg_op::UNION):
+		{	
+			raw_results = NewtonMeshUnion(a, b, &id.m[0]);	
+		}
+		case(noob::csg_op::DIFFERENCE):
+		{
+			raw_results = NewtonMeshDifference(a, b, &id.m[0]);
+		}
+		case(noob::csg_op::INTERSECTION):
+		{
+			raw_results = NewtonMeshIntersection(a, b, &id.m[0]);
+		}
+	}
+	
+	return newton_to_noob(raw_results);
+*/
+}
+
+
+/*
 noob::basic_mesh noob::mesh_utils::csg(const noob::basic_mesh& _a, const noob::basic_mesh& _b, const noob::csg_op op)
 {
 	// noob::basic_mesh a = _a;
@@ -527,4 +564,49 @@ csgjs_model noob::mesh_utils::get_csg_model(const noob::basic_mesh& m)
 	}
 
 	return model;
+}
+
+*/
+
+NewtonMesh* noob::mesh_utils::noob_to_newton(const noob::basic_mesh& m_arg, const NewtonWorld* const w_arg)
+{
+	NewtonMesh* newton_mesh = NewtonMeshCreate(w_arg);
+	for(size_t i = 0; i < m_arg.indices.size(); i += 3)
+	{
+		NewtonMeshBeginFace(newton_mesh);
+		
+		std::array<noob::vec3, 3> verts;
+		verts[0] = m_arg.vertices[i];
+		verts[1] = m_arg.vertices[i+1];
+		verts[2] = m_arg.vertices[i+2];
+
+		NewtonMeshAddFace(newton_mesh, 3, &verts[0].v[0], sizeof(noob::vec3)*3, 0);
+
+		NewtonMeshEndFace(newton_mesh);
+	}
+
+	return newton_mesh;
+}
+
+
+noob::basic_mesh noob::mesh_utils::newton_to_noob(const NewtonMesh* const newton_mesh)
+{
+
+
+	NewtonMeshSaveOFF(newton_mesh, "temp/temp_newton_to_noob.off");
+	noob::basic_mesh results;
+	results.load_file("temp/temp_newton_to_noob.off", "temp-newton-to-noob");
+	return results;
+	// void NewtonMeshGetIndirectVertexStreams(const NewtonMesh* const mesh, int vertexStrideInByte, dFloat* const vertex, int* const vertexIndices, int* const vertexCount, int normalStrideInByte, dFloat* const normal, int* const normalIndices, int* const normalCount, int uvStrideInByte0, dFloat* const uv0, int* const uvIndices0, int* const uvCount0, int uvStrideInByte1, dFloat* const uv1, int* const uvIndices1, int* const uvCount1);
+	//
+	// NewtonMeshGetIndirectVertexStreams(newton_mesh, NewtonMeshGetVertexStrideInByte(newton_mesh), dFloat* const vertex, int* const vertexIndices, int* const vertexCount, int normalStrideInByte, dFloat* const normal, int* const normalIndices, int* const normalCount, int uvStrideInByte0, dFloat* const uv0, int* const uvIndices0, int* const uvCount0, int uvStrideInByte1, dFloat* const uv1, int* const uvIndices1, int* const uvCount1);
+
+	// NewtonMeshGetVertexStrideInByte (const NewtonMesh* const mesh)
+	//
+	// NewtonMeshGetPointStrideInByte (const NewtonMesh* const mesh);
+	// NewtonMeshGetPointCount (const NewtonMesh* const mesh);
+	// NewtonMeshGetTotalIndexCount (const NewtonMesh* const mesh);
+	// NewtonMeshMaterialGetIndexStreamShort (const NewtonMesh* const mesh, void* const handle, int materialId, short int* const index); 
+	//
+	//
 }

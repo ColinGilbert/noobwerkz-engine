@@ -1,7 +1,7 @@
 void main()
 {
 	// default_stage s;
-	vec3 eye_pos(0.0, 0.0, -200.0);
+	vec3 eye_pos(0.0, 1200.0, -200.0);
 	vec3 look_to(0.0, 0.0, 0.0);
 	vec3 up(0.0, 1.0, 0.);
 
@@ -35,30 +35,32 @@ void main()
 	
 	set_shader(purple_shader, "purple");
 
-	// basic_mesh temp = cone_mesh(50.0, 100.0);
-	// temp.translate(vec3(0.0, 10.0, 0.0));
-	// temp.rotate(versor(0.3333, 0.3333, 0.3333, 0.0));
-	
-	voxels.init(254, 254, 254);
+	basic_mesh a = cone_mesh(50.0, 100.0);
+	basic_mesh b = box_mesh(500.0, 10.0, 500.0);
+	b.translate(vec3(0.0, -10.0, 0.0));
 
-	voxels.sphere(50, 128, 128, 128, true);
-
-	// basic_mesh temp = voxels.extract_smooth();
-	
-	basic_mesh temp = voxels.extract_cubic();
-
-	temp.to_origin();	
-	auto scenery_h = default_stage.scenery(add_mesh(temp), vec3(0.0, 0.0, 0.0), "moon", versor(0.0, 0.0, 0.0, 1.0));
+	auto scenery_one = default_stage.scenery(add_mesh(a), vec3(0.0, 0.0, 0.0), "moon", versor(0.0, 0.0, 0.0, 1.0));
+	auto scenery_two = default_stage.scenery(add_mesh(b), vec3(0.0, 0.0, 0.0), "moon", versor(0.0, 0.0, 0.0, 1.0));
 	
 	// std::random_device rd;
 	// std::mt19937 gen(rd());
 	// std::uniform_real_distribution<> dis(-10.0, 10.0);
 
-	for (uint i = 0 ; i < 500; ++i)
+	for (int i = -500 ; i < 500; ++i)
 	{
 		uint h = box(4.0, 4.0, 4.0); 
 		float x_pos = i;
 		float z_pos = i; //dis(gen) * 10.0;
+		uint temp_body = default_stage.body(DYNAMIC, h, 1.0, vec3(x_pos, 250.0, z_pos), versor(0.0, 0.0, 0.0, 1.0), false);
+		// default_stage.bodies.get(temp_body); 
+		default_stage.prop(temp_body, "purple");
+	}
+
+	for (int i = -500 ; i < 500; ++i)
+	{
+		uint h = box(4.0, 4.0, 4.0); 
+		float x_pos = i;
+		float z_pos = -i; //dis(gen) * 10.0;
 		uint temp_body = default_stage.body(DYNAMIC, h, 1.0, vec3(x_pos, 250.0, z_pos), versor(0.0, 0.0, 0.0, 1.0), false);
 		// default_stage.bodies.get(temp_body); 
 		default_stage.prop(temp_body, "purple");

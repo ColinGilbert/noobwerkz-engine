@@ -56,8 +56,6 @@ void noob::voxel_world::apply_to_region(size_t lower_x, size_t lower_y, size_t l
 }
 
 
-
-
 void noob::voxel_world::sphere(size_t radius, size_t origin_x, size_t origin_y, size_t origin_z, bool fill)
 {
 	logger::log(fmt::format("[VoxelWorld] sphere({0}, {1}, {2}, {3}, {4})", radius, origin_x, origin_y, origin_z, fill));
