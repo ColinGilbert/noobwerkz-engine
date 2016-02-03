@@ -122,7 +122,9 @@ namespace noob
 			std::vector<noob::vec3> get_verts_for_face(PolyMesh::FaceHandle) const;
 
 			std::tuple<bool, std::vector<noob::vec3>> get_face(PolyMesh::FaceHandle) const;
-			
+		
+			std::vector<PolyMesh::EdgeHandle> get_adjacent_edges(PolyMesh::FaceHandle, PolyMesh::FaceHandle) const;
+
 			// Caution: This function has the potential to pass around lots of data. Use cautiously.
 			// std::vector<std::vector<noob::vec3>> get_all_faces() const;
 			

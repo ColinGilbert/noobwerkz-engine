@@ -307,6 +307,20 @@ namespace noob
 		return *this;
 	}
 
+	bool vec3::operator==(const vec3& rhs) const
+	{
+		for (size_t i = 0; i < 3; ++i)
+		{
+			if (!compare_floats(v[i], rhs.v[i])) return false;
+		}
+		return true;
+	}
+
+	bool vec3::operator!=(const vec3& rhs) const
+	{
+		return !(operator==(rhs));
+	}
+
 	float dot(const vec3& a, const vec3& b)
 	{
 		return a.v[0] * b.v[0] + a.v[1] * b.v[1] + a.v[2] * b.v[2];

@@ -116,24 +116,24 @@ noob::vec3 noob::active_mesh::get_face_normal(PolyMesh::FaceHandle& fh) const
 	{
 		tri[count] = noob::vec3(half_edges.point(*it));
 	}
-	
+
 	return noob::get_normal(tri);
 }
 
 
 /*
 
-bool noob::active_mesh::face_exists(const std::array<noob::vec3, 3>& verts) const
-{
+   bool noob::active_mesh::face_exists(const std::array<noob::vec3, 3>& verts) const
+   {
 
-}
+   }
 
 
-bool noob::active_mesh::face_exists(const std::array<noob::vec3, 4>& verts) const
-{
+   bool noob::active_mesh::face_exists(const std::array<noob::vec3, 4>& verts) const
+   {
 
-}
-*/
+   }
+   */
 
 
 bool noob::active_mesh::face_exists(const std::vector<noob::vec3>& verts) const 
@@ -151,7 +151,7 @@ bool noob::active_mesh::face_exists(const std::vector<noob::vec3>& verts) const
 		}
 
 		std::vector<PolyMesh::VertexHandle> vhandles_to_test;
-		
+
 		for (noob::vec3 v : verts)
 		{
 			vhandles_to_test.push_back(xyz_to_vhandles[v.v]);
@@ -232,12 +232,30 @@ std::tuple<bool, std::vector<noob::vec3>> noob::active_mesh::get_face(PolyMesh::
 }
 
 
-/*
-std::vector<std::vector<noob::vec3>> noob::active_mesh::get_all_faces() const
+std::vector<PolyMesh::EdgeHandle> noob::active_mesh::get_adjacent_edges(PolyMesh::FaceHandle first_face, PolyMesh::FaceHandle second_face) const
 {
-	
+	std::vector<PolyMesh::EdgeHandle> results;
+	for (auto first_iter = half_edges.fe_iter(first_face); first_iter.is_valid(); ++first_iter)
+	{
+		for (auto second_iter = half_edges.fe_iter(second_face); second_iter.is_valid(); ++second_iter)
+		{
+			if (first_iter == second_iter)
+			{
+				results.push_back(*first_iter);
+			}
+		}
+	}
+	return results;
 }
-*/
+
+
+
+/*
+   std::vector<std::vector<noob::vec3>> noob::active_mesh::get_all_faces() const
+   {
+
+   }
+   */
 
 
 noob::basic_mesh noob::active_mesh::to_basic_mesh() const 
@@ -264,8 +282,8 @@ std::vector<noob::active_mesh> noob::active_mesh::topological_split(size_t max_v
 {
 	std::vector<PolyMesh::FaceHandle> taken_list;
 	std::vector<noob::active_mesh> results;
-	
-	
+
+
 	return results;
 }
 
@@ -290,7 +308,7 @@ void noob::active_mesh::fill_holes()
 
 			// TODO: See if reversing is necessary
 			std::reverse(verts.begin(), verts.end());
-			
+
 			for (auto loop_it = half_edges.hl_begin(*h_it); loop_it != half_edges.hl_end(*h_it); ++loop_it)
 			{
 				verts.push_back(half_edges.to_vertex_handle(*loop_it));
@@ -303,17 +321,17 @@ void noob::active_mesh::fill_holes()
 
 
 /*
-void noob::active_mesh::cut_mesh(const noob::vec3& point_on_plane, const noob::vec3 plane_normal) 
-{
-	
-}
+   void noob::active_mesh::cut_mesh(const noob::vec3& point_on_plane, const noob::vec3 plane_normal) 
+   {
+
+   }
 
 
-void noob::active_mesh::cut_faces(std::vector<PolyMesh::FaceHandle>& face_handles, const noob::vec3& point_on_plane, const noob::vec3& plane_normal) 
-{
-	
-}
-*/
+   void noob::active_mesh::cut_faces(std::vector<PolyMesh::FaceHandle>& face_handles, const noob::vec3& point_on_plane, const noob::vec3& plane_normal) 
+   {
+
+   }
+   */
 
 
 void noob::active_mesh::extrude(PolyMesh::FaceHandle fh, float magnitude) 
@@ -328,7 +346,7 @@ void noob::active_mesh::extrude(PolyMesh::FaceHandle fh, float magnitude)
 	noob::vec3 weighted_normal = get_face_normal(fh) * magnitude;
 
 	std::vector<PolyMesh::VertexHandle> extruded_points;
-	
+
 	// Calculate the extruded points and add them to the mesh
 	for (PolyMesh::VertexHandle h : original_points)
 	{
@@ -356,12 +374,12 @@ void noob::active_mesh::extrude(PolyMesh::FaceHandle fh, float magnitude)
 	half_edges.garbage_collection();
 }
 
-/*
-void noob::active_mesh::connect_faces(PolyMesh::FaceHandle first_handle, PolyMesh::FaceHandle second_handle) 
-{
-	
-}
-*/
+
+//   void noob::active_mesh::connect_faces(PolyMesh::FaceHandle first_handle, PolyMesh::FaceHandle second_handle) 
+//   {
+
+//   }
+
 
 void noob::active_mesh::move_vertex(PolyMesh::VertexHandle vh, const noob::vec3& direction) 
 {
@@ -380,34 +398,52 @@ void noob::active_mesh::move_vertices(const std::vector<PolyMesh::VertexHandle>&
 
 void noob::active_mesh::merge_adjacent_coplanars()
 {
-      for (PolyMesh::FaceIter fit = half_edges.faces_begin(); fit != half_edges.faces_end(); ++fit)
-      {
-		
-      }
+	for (auto f_it = half_edges.faces_sbegin(); f_it != half_edges.faces_end(); ++f_it)
+	{
+		PolyMesh::FaceHandle first_face = *f_it;
+		noob::vec3 first_normal = get_face_normal(first_face); // TODO: Find out why the following doesn't compile: half_edges.face_handle(*f_it));
+		for (auto ff_it = half_edges.ff_iter(*f_it); ff_it.is_valid(); ++ff_it)
+		{
+			PolyMesh::FaceHandle second_face = *ff_it;
+			noob::vec3 second_normal = get_face_normal(second_face);
+
+			if (first_normal == second_normal)
+			{
+				// Find adjacent edge(s). TODO: Move out of this and keep it around as function
+				std::vector<PolyMesh::EdgeHandle> edges = get_adjacent_edges(*f_it, *ff_it);
+				for (PolyMesh::EdgeHandle e : edges)
+				{
+					half_edges.remove_edge(e);
+				}
+			}
+		}
+	}
+
+	half_edges.garbage_collection();
 }
 
 
 std::vector<PolyMesh::FaceHandle> noob::active_mesh::topo_split_helper(const PolyMesh::FaceHandle sample, std::set<PolyMesh::FaceHandle>& taken, size_t max_vertices) const
 {
-	std::set<PolyMesh::FaceHandle> results;
-
+	std::set<PolyMesh::FaceHandle> working_results;
+	std::vector<PolyMesh::FaceHandle> results;
 	std::vector<PolyMesh::FaceHandle> adjacents = get_adjacent_faces(sample);
-	
+
 	for (PolyMesh::FaceHandle adj : adjacents)
 	{
 		if (std::find(taken.begin(), taken.end(), adj) == taken.end())
 		{
-			if (results.size() < max_vertices)
+			if (working_results.size() < max_vertices)
 			{
-				results.insert(adj);
+				working_results.insert(adj);
 				taken.insert(adj);
 			}
 			else
 			{
-				std::vector<PolyMesh::FaceHandle> v(results.begin(), results.end());
-				return v;
+				std::vector<PolyMesh::FaceHandle> v(working_results.begin(), working_results.end());
+				results = v;
 			}
 		}
 	}
-
+	return results;
 }

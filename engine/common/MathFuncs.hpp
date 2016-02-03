@@ -26,11 +26,10 @@ typedef OpenMesh::TriMesh_ArrayKernelT<> TriMesh;
 
 #define TWO_PI (2.0 * M_PI)
 
-#define NOOB_EPSILON 0.000001
+#define NOOB_EPSILON 0.0001
 
 namespace noob
 {
-
 	enum class binary_op
 	{
 		ADD, SUBTRACT
@@ -99,16 +98,6 @@ namespace noob
 			w << "(" << v[0] << ", " << v[1] << ")";
 			return w.str();
 		}
-
-
-
-		/*
-		   inline bool operator<(const noob::vec2& lhs, const noob::vec2& rhs)
-
-		   {
-		   return (std::sqrt(std::pow(lhs.v[0], 2) + std::pow(lhs.v[1], 2))) < (std::sqrt(std::pow(rhs.v[0], 2) + std::pow(rhs.v[1], 2)));
-		   }
-		   */
 	};
 
 	struct vec3
@@ -151,6 +140,9 @@ namespace noob
 		vec3 operator/(float rhs) const;
 		// because users expect this too
 		vec3& operator=(const vec3& rhs);
+
+		bool operator==(const vec3& rhs) const;
+		bool operator!=(const vec3& rhs) const;
 
 		// internal data
 		std::array<float,3> v;
@@ -409,6 +401,12 @@ namespace noob
 		vec3 lower_corner, upper_corner;
 	};
 
+	inline bool compare_floats(float a, float b)
+	{
+		// http://c-faq.com/fp/fpequal.html
+		if (std::fabs(a - b) <= NOOB_EPSILON * std::fabs(a)) return false;
+		else return true;
+	}
 
 	// vector functions
 	float length(const vec3& v);
