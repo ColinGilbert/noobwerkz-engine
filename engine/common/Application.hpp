@@ -48,6 +48,7 @@
 #include "VoxelWorld.hpp"
 #include "GUI.hpp"
 #include "BasicMesh.hpp"
+#include "ActiveMesh.hpp"
 #include "Camera.hpp"
 #include "NDOF.hpp"
 #include "Stage.hpp"
@@ -98,26 +99,6 @@ namespace noob
 
 			// step() is called by the target platform, which calculates the delta-time and drives the update() function. It is an ugly hack that had to be made public in order to be callable from the main app.
 			void step();
-
-			static void as_stage_constructor_wrapper(uint8_t* memory)
-			{
-				new(memory) noob::stage();
-			}
-
-			static void as_stage_destructor_wrapper(uint8_t* memory)
-			{
-				((noob::stage*)memory)->~stage();
-			}
-
-			static void as_basic_mesh_constructor_wrapper(uint8_t* memory)
-			{
-				new(memory) noob::basic_mesh();
-			}
-
-			static void as_basic_mesh_destructor_wrapper(uint8_t* memory)
-			{
-				((noob::basic_mesh*)memory)->~basic_mesh();
-			}
 
 			static void as_vec2_constructor_wrapper_basic(uint8_t* memory)
 			{
@@ -248,6 +229,41 @@ namespace noob
 			{
 				((noob::voxel_world*)memory)->~voxel_world();
 			}
+
+			static void as_basic_mesh_constructor_wrapper(uint8_t* memory)
+			{
+				new(memory) noob::basic_mesh();
+			}
+
+			static void as_basic_mesh_destructor_wrapper(uint8_t* memory)
+			{
+				((noob::basic_mesh*)memory)->~basic_mesh();
+			}
+
+
+			static void as_active_mesh_constructor_wrapper(uint8_t* memory)
+			{
+				new(memory) noob::active_mesh();
+			}
+
+			static void as_active_mesh_destructor_wrapper(uint8_t* memory)
+			{
+				((noob::active_mesh*)memory)->~active_mesh();
+			}
+
+
+
+			static void as_stage_constructor_wrapper(uint8_t* memory)
+			{
+				new(memory) noob::stage();
+			}
+
+			static void as_stage_destructor_wrapper(uint8_t* memory)
+			{
+				((noob::stage*)memory)->~stage();
+			}
+
+
 
 
 		protected:

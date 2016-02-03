@@ -121,21 +121,6 @@ noob::vec3 noob::active_mesh::get_face_normal(PolyMesh::FaceHandle& fh) const
 }
 
 
-/*
-
-   bool noob::active_mesh::face_exists(const std::array<noob::vec3, 3>& verts) const
-   {
-
-   }
-
-
-   bool noob::active_mesh::face_exists(const std::array<noob::vec3, 4>& verts) const
-   {
-
-   }
-   */
-
-
 bool noob::active_mesh::face_exists(const std::vector<noob::vec3>& verts) const 
 {
 	// First the base case
@@ -247,15 +232,6 @@ std::vector<PolyMesh::EdgeHandle> noob::active_mesh::get_adjacent_edges(PolyMesh
 	}
 	return results;
 }
-
-
-
-/*
-   std::vector<std::vector<noob::vec3>> noob::active_mesh::get_all_faces() const
-   {
-
-   }
-   */
 
 
 noob::basic_mesh noob::active_mesh::to_basic_mesh() const 

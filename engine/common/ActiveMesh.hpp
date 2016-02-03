@@ -134,7 +134,8 @@ namespace noob
 			
 			std::vector<PolyMesh::FaceHandle> get_adjacent_faces(PolyMesh::FaceHandle) const;
 
-			// Basically a floodfill where all the edjacent faces get collected one-by-one and all final meshes end up =< max_vertices. Great for splitting meshes prior to uploading them to video card (if you only have 65k indices.) Returns copies of the original.
+			// Basically a floodfill where all the edjacent faces get collected one-by-one and all final meshes end up =< max_vertices. Great for splitting meshes prior to uploading them to video card (if you only have 65k indices...) Returns copies of the original.
+			// TODO: Implement
 			std::vector<noob::active_mesh> topological_split(size_t max_vertices) const;
 
 			// Destructive utiiities.
