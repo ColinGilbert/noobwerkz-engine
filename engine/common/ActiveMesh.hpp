@@ -8,12 +8,15 @@
 
 #pragma once
 
+#include <set>
+
 #include <cereal/access.hpp>
 #include <cereal/types/array.hpp>
 #include <cereal/types/memory.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/unordered_map.hpp>
 #include <cereal/types/map.hpp>
+#include <cereal/types/set.hpp>
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/binary.hpp>
 
@@ -26,20 +29,51 @@
 
 typedef OpenMesh::PolyMesh_ArrayKernelT<> PolyMesh;
 
+
 namespace noob
 {
 	class active_mesh
 	{
 		public:
-			struct face
-			{
-				face() : hole(false) {}
-				std::vector<noob::vec2> get_2d() const;
+			//	class face
+			// {
+			//	friend class active_mesh;
+			//	public:
+			//	face() : hole(false) {}
+				
+			//	void add_vertex(const noob::vec3& v)
+			//	{
+			//		vertices.push_back(v.v);
+			//	}
+				
+			//	void set_vertex(size_t i, const noob::vec3& v)
+			//	{
+			//		if (i < vertices.size())
+			//		{
+			//			vertices[i] = v;
+			//		}
+			//	}
 
-				std::vector<noob::vec3> verts;
-				noob::vec3 normal;
-				bool hole;
-			};
+			//	noob::vec3 get_vertex(size_t i) const
+			//	{
+			//		if (i > vertices.size())
+			//		{
+			//			return vertices[vertices.size()-1];
+			//		}
+			//		return vertices[i];
+			//	}
+				
+			//	noob::vec3 get_normal() const
+			//	{
+			//		return normal;
+			//	}
+
+
+			//	protected:
+			//	std::vector<noob::vec3> vertices;
+			//	noob::vec3 normal;
+			//	bool hole;
+			// };
 
 			void init(const noob::basic_mesh&);
 
@@ -48,35 +82,49 @@ namespace noob
 			PolyMesh::VertexHandle add_vertex(const noob::vec3&);
 
 			// Basic functionality
-			PolyMesh::FaceHandle add_face(const noob::active_mesh::face&);
-			
+			PolyMesh::FaceHandle add_face(const std::array<noob::vec3, 3>&);
+			PolyMesh::FaceHandle add_face(const std::array<noob::vec3, 4>&);
+			PolyMesh::FaceHandle add_face(const std::vector<noob::vec3>&);
+
 			PolyMesh::FaceHandle add_face(const std::vector<PolyMesh::VertexHandle>&);
 			
-			// Constants
 			bool vertex_exists(const noob::vec3&) const;
-			
-			bool vertex_exists(const size_t) const;
+			bool vertex_exists(const PolyMesh::VertexHandle) const;
 
-			noob::vec3 get_vertex(PolyMesh::VertexHandle) const;
+			std::tuple<bool, noob::vec3> get_vertex(PolyMesh::VertexHandle) const;
 
-			bool face_exists(const face&) const;
+			noob::vec3 get_face_normal(PolyMesh::FaceHandle&) const;
+
+			PolyMesh::VertexHandle get_vertex_handle(const noob::vec3&) const;
+
+			// bool face_exists(const std::array<noob::vec3, 3>&) const;
+			// bool face_exists(const std::array<noob::vec3, 4>&) const;
 			
+			// Caution: This function has the potential to do lots of iterations, as it tests against all faces sharing the first vertex/
+			bool face_exists(const std::vector<noob::vec3>&) const;
+
 			bool face_exists(PolyMesh::FaceHandle) const;
 			
+			PolyMesh::FaceHandle get_face_handle(const noob::vec3&) const;
+
+			const std::tuple<bool, std::vector<noob::vec3>> get_face(PolyMesh::VertexHandle) const; 
+
 			size_t num_vertices() const;
 
-			// size_t num_half_edges() const;
+			size_t num_half_edges() const;
 
 			size_t num_edges() const;
 
 			size_t num_faces() const;
 
-			std::vector<PolyMesh::VertexHandle> get_verts_for_face(PolyMesh::FaceHandle) const;
+			std::vector<PolyMesh::VertexHandle> get_vertex_handles_for_face(PolyMesh::FaceHandle) const;
 			
-			noob::active_mesh::face get_face(PolyMesh::FaceHandle) const;
+			std::vector<noob::vec3> get_verts_for_face(PolyMesh::FaceHandle) const;
+
+			std::tuple<bool, std::vector<noob::vec3>> get_face(PolyMesh::FaceHandle) const;
 			
 			// Caution: This function has the potential to pass around lots of data. Use cautiously.
-			std::vector<noob::active_mesh::face> get_face_list() const;
+			// std::vector<std::vector<noob::vec3>> get_all_faces() const;
 			
 			noob::basic_mesh to_basic_mesh() const;
 			
@@ -84,30 +132,23 @@ namespace noob
 			
 			std::vector<PolyMesh::FaceHandle> get_adjacent_faces(PolyMesh::FaceHandle) const;
 
-			// Generation-related utilities (meshes change and we sometimes/often need to retrieve older copies)
-			
-			// size_t get_current_generation() const;
-			
-			// noob::active_mesh retrieve_by_generation(size_t) const;
-			
-			// bool is_generation_current(size_t) const;
-		
-			std::vector<noob::active_mesh> topological_split(const std::vector<PolyMesh::FaceHandle>& samples, size_t max_vertices) const;
+			// Basically a floodfill where all the edjacent faces get collected one-by-one and all final meshes end up =< max_vertices. Great for splitting meshes prior to uploading them to video card (if you only have 65k indices.) Returns copies of the original.
+			std::vector<noob::active_mesh> topological_split(size_t max_vertices) const;
 
-			// Destructive utiiities. Those take full advantage of the speed benefits of half-edged meshes
+			// Destructive utiiities.
 			void make_hole(PolyMesh::FaceHandle);
 			
 			void fill_holes();
 			
-			void cut_mesh(const noob::vec3& point_on_plane, const noob::vec3 plane_normal);
+			// TODO: Before implementing the next two methods, come up with a proper plane representation (probably using Eigen or Geometric Tools.)
+			// void cut_mesh(const noob::vec3& point_on_plane, const noob::vec3 plane_normal);
+			// void cut_faces(std::vector<PolyMesh::FaceHandle>&, const noob::vec3& point_on_plane, const noob::vec3& plane_normal);
 			
-			void cut_faces(std::vector<PolyMesh::FaceHandle>&, const noob::vec3& point_on_plane, const noob::vec3& plane_normal);
+			void extrude(PolyMesh::FaceHandle, float magnitude);
 			
-			void extrude(PolyMesh::FaceHandle, const noob::vec3& normal, float magnitude);
+			// void connect_faces(PolyMesh::FaceHandle first, PolyMesh::FaceHandle second);
 			
-			void connect_faces(PolyMesh::FaceHandle first, PolyMesh::FaceHandle second);
-			
-			//void move_vertex(const noob::vec3& vertex, const noob::vec3& normal, float magnitude);
+			// void move_vertex(const noob::vec3& vertex, const noob::vec3& normal, float magnitude);
 			
 			void move_vertex(PolyMesh::VertexHandle, const noob::vec3& direction);
 			
@@ -117,10 +158,14 @@ namespace noob
 			
 			// This function is static because it acts on two objects. The static modifier makes it explicit.
 			// TODO: Possibly move into mesh_utils
-			static void join_meshes(const noob::active_mesh& first_mesh, size_t first_handle, const noob::active_mesh& second, size_t second_handle);
+			static void join_meshes_at_face(const noob::active_mesh& first_mesh, PolyMesh::FaceHandle first_handle, const noob::active_mesh& second, PolyMesh::FaceHandle second_handle);
 			
 			
 		protected:
+
+			// Returns the adjacent faces that aren't in the taken list.
+			// Side effects: Updates and sorts the taken list argument.
+			std::vector<PolyMesh::FaceHandle> topo_split_helper(PolyMesh::FaceHandle sample, std::set<PolyMesh::FaceHandle>& taken, size_t max_vertices) const;
 
 			// This function does life-saving checks. The first tuple element is the valid flag.
 			// std::tuple<bool, PolyMesh::Vertex*> get_vertex_ptr(size_t) const;

@@ -96,7 +96,7 @@ void noob::stage::draw(float window_width, float window_height) const
 		// noob::mat4 world_mat = noob::scale(noob::identity_mat4(), shapes.get(bodies_to_shapes[b.get_inner()])->get_scales());
 		// world_mat = bodies.get(b)->get_transform() * world_mat;
 		// renderer.draw(basic_models.get(m), shaders.get(s), world_mat);
-		//bgfx::setViewTransform(view_id, view_matrix, ortho);
+		// bgfx::setViewTransform(view_id, view_matrix, ortho);
 		// bgfx::setViewRect(view_id, 0, 0, window_width, window_height);
 		noob::mat4 normal_mat = noob::identity_mat4();
 		
@@ -187,9 +187,15 @@ es::entity noob::stage::scenery(const noob::meshes_holder::handle h, const noob:
 }
 
 
-unsigned int noob::stage::_scenery(unsigned int _mesh, const noob::vec3& pos, const std::string& shading, const noob::versor& orient)
+unsigned int noob::stage::_scenery_from_mesh(unsigned int _mesh, const noob::vec3& pos, const std::string& shading, const noob::versor& orient)
 {
 	return static_cast<unsigned int>(scenery(globals::meshes.make_handle(_mesh), pos, shading, orient));
+}
+
+
+unsigned int noob::stage::_scenery_from_shape(unsigned int _shape, const noob::vec3& pos, const std::string& shading, const noob::versor& orient)
+{
+	return static_cast<unsigned int>(scenery(globals::meshes.make_handle(_shape), pos, shading, orient));
 }
 
 

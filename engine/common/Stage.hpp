@@ -95,7 +95,12 @@ namespace noob
 
 			// Scenery is a non-movable item that uses indexed triangle meshes as input.
 			es::entity scenery(const noob::meshes_holder::handle, const noob::vec3& pos, const std::string& shading, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
-			unsigned int _scenery(unsigned int _mesh, const noob::vec3& pos, const std::string& _shading, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
+			unsigned int _scenery_from_mesh(unsigned int _mesh, const noob::vec3& pos, const std::string& _shading, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
+
+			es::entity scenery(const noob::shapes_holder::handle, const noob::vec3& pos, const std::string& shading, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
+			unsigned int _scenery_from_shape(unsigned int _shape, const noob::vec3& pos, const std::string& _shading, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
+
+
 
 			es::storage pool;
 

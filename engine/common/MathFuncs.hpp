@@ -12,6 +12,13 @@
 #include <glm/glm.hpp>
 #include "format.h"
 
+#include <OpenMesh/Core/IO/MeshIO.hh>
+#include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
+#include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
+
+typedef OpenMesh::PolyMesh_ArrayKernelT<> PolyMesh;
+typedef OpenMesh::TriMesh_ArrayKernelT<> TriMesh;
+
 // const used to convert degrees into radians
 #define TAU 2.0 * M_PI
 #define ONE_DEG_IN_RAD (2.0 * M_PI) / 360.0 // 0.017444444
@@ -19,6 +26,7 @@
 
 #define TWO_PI (2.0 * M_PI)
 
+#define NOOB_EPSILON 0.000001
 
 namespace noob
 {
@@ -114,6 +122,8 @@ namespace noob
 		vec3(const vec4& vv);
 		vec3(const vec3& vv);
 		vec3(const btVector3&);
+		vec3(const PolyMesh::Point&);
+		vec3(const std::array<float, 3>&);
 
 		template <class Archive>
 			void serialize( Archive & ar )
@@ -440,6 +450,7 @@ namespace noob
 	mat4 rotate_z_deg(const mat4& m, float deg);
 	mat4 scale(const mat4& m, const vec3& v);
 
+	noob::vec3 get_normal(const std::array<noob::vec3, 3>& tri);
 
 	// extraction of useful info from mat4
 

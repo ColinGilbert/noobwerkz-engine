@@ -57,6 +57,23 @@ namespace noob
 		v[2] = btVec[2];
 	}
 
+	vec3::vec3(const PolyMesh::Point& p)
+	{
+		v[0] = p[0];
+		v[1] = p[1];
+		v[2] = p[2];
+	}
+
+	vec3::vec3(const std::array<float, 3>& a)
+	{
+		// v[0] = a[0];
+		// v[1] = a[1];
+		// v[2] = a[2];
+		v = a;
+	}
+
+
+
 	// vec3::vec3(const rp3d::Vector3& vv)
 	//{
 	//	v[0] = vv.x;
@@ -616,6 +633,16 @@ namespace noob
 		return a * m;
 	}
 
+	
+	vec3 get_normal(const std::array<noob::vec3, 3>& vertices)
+	{
+		// Note: We onlt need the first three points on the face to calculate its normal.
+		noob::vec3 u = vertices[1] - vertices[0];
+		noob::vec3 v = vertices[2] - vertices[0];
+		noob::vec3 results = noob::cross(u, v);
+		return normalize(results);
+	}
+	
 
 	// --------------------------- EXTRACTION OF COMPONENTS FROM MAT4 ------------------------------*/ 
 	/*	vec4 rotation_from_mat4(const mat4& m)

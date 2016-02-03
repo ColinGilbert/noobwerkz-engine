@@ -373,7 +373,7 @@ noob::basic_mesh noob::mesh_utils::box(float width, float height, float depth, s
 noob::basic_mesh noob::mesh_utils::catmull_sphere(float radius)
 {
 	float diameter = radius * 2;
-	noob::basic_mesh mesh = noob::mesh_utils::box(diameter, diameter, diameter, 3);
+	noob::basic_mesh mesh = noob::mesh_utils::box(diameter, diameter, diameter, 2);
 	// logger::log(fmt::format("Created sphere of radius {0}.", radius));
 	return mesh;
 }
@@ -381,7 +381,20 @@ noob::basic_mesh noob::mesh_utils::catmull_sphere(float radius)
 
 noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 {
-/*
+//	btConvexHullShape* hull = new btConvexHullShape(&points[0].v[0], points.size(), sizeof(noob::vec3));
+
+	
+
+
+	//for (noob::vec3 p : points)
+	// {
+
+	// }
+	//
+	// getNumVertices () const 
+	// getEdge (int i, btVector3 &pa, btVector3 &pb) const;
+	// getVertex (int i, btVector3 &vtx) const;
+
 	// TODO: Optimize this	
 	std::vector<btVector3> bt_points;
 	for (noob::vec3 p : points)
@@ -411,7 +424,6 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 
 	mesh.normalize();
 	return mesh;
-*/
 }
 
 

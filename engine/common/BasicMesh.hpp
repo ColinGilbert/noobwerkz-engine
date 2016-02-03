@@ -14,9 +14,9 @@
 #include <cereal/archives/portable_binary.hpp>
 #include <cereal/archives/binary.hpp>
 
-#include <OpenMesh/Core/IO/MeshIO.hh>
-#include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
-#include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
+// #include <OpenMesh/Core/IO/MeshIO.hh>
+// #include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
+// #include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
 #include <OpenMesh/Tools/Decimater/CollapseInfoT.hh>
 #include <OpenMesh/Tools/Decimater/DecimaterT.hh>
 #include <OpenMesh/Tools/Decimater/ModAspectRatioT.hh>
@@ -37,8 +37,8 @@
 #include <assimp/postprocess.h>
 #include <assimp/types.h>
 
-typedef OpenMesh::TriMesh_ArrayKernelT<> TriMesh;
-typedef OpenMesh::PolyMesh_ArrayKernelT<> PolyMesh;
+// typedef OpenMesh::TriMesh_ArrayKernelT<> TriMesh;
+// typedef OpenMesh::PolyMesh_ArrayKernelT<> PolyMesh;
 
 #include "MathFuncs.hpp"
 #include "TransformHelper.hpp"

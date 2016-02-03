@@ -369,7 +369,7 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("stage", "void draw(float, float)", asMETHOD(noob::stage, draw), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint body(body_type, uint, float, const vec3& in, const versor& in, bool)", asMETHOD(noob::stage, _body), asCALL_THISCALL); assert( r >= 0 );
 
-	r = script_engine->RegisterGlobalFunction("uint sphere(float)", asFUNCTION(globals::_sphere), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("uint spheres(float)", asFUNCTION(globals::_sphere), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("uint box(float, float, float)", asFUNCTION(globals::_box), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("uint cylinder(float, float)", asFUNCTION(globals::_cylinder), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("uint cone(float, float)", asFUNCTION(globals::_cone), asCALL_CDECL); assert( r >= 0 );
@@ -390,7 +390,8 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("stage", "uint actor(uint, uint, const string& in)", asMETHOD(noob::stage, _actor), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint prop(uint, const string& in)", asMETHODPR(noob::stage, _prop, (unsigned int, const std::string&), unsigned int), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint prop(uint, uint, const string& in)", asMETHODPR(noob::stage, _prop, (unsigned int, unsigned int, const std::string&), unsigned int), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "uint scenery(uint, const vec3& in, const string& in, const versor& in)", asMETHOD(noob::stage, _scenery), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("stage", "uint scenery_from_mesh(uint, const vec3& in, const string& in, const versor& in)", asMETHOD(noob::stage, _scenery_from_mesh), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("stage", "uint scenery_from_shape(uint, const vec3& in, const string& in, const versor& in)", asMETHOD(noob::stage, _scenery_from_shape), asCALL_THISCALL); assert(r >= 0);
 
 	r = script_engine->RegisterObjectProperty("stage", "bool show_origin", asOFFSET(noob::stage, show_origin)); assert(r >= 0);	
 	r = script_engine->RegisterObjectProperty("stage", "mat4 view_mat", asOFFSET(noob::stage, view_mat)); assert(r >= 0);

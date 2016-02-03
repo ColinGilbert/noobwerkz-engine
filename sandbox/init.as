@@ -1,7 +1,7 @@
 void main()
 {
 	// default_stage s;
-	vec3 eye_pos(0.0, 1200.0, -200.0);
+	vec3 eye_pos(0.0, 1000.0, -500.0);
 	vec3 look_to(0.0, 0.0, 0.0);
 	vec3 up(0.0, 1.0, 0.);
 
@@ -39,12 +39,22 @@ void main()
 	basic_mesh b = box_mesh(500.0, 10.0, 500.0);
 	b.translate(vec3(0.0, -10.0, 0.0));
 
-	auto scenery_one = default_stage.scenery(add_mesh(a), vec3(0.0, 0.0, 0.0), "moon", versor(0.0, 0.0, 0.0, 1.0));
-	auto scenery_two = default_stage.scenery(add_mesh(b), vec3(0.0, 0.0, 0.0), "moon", versor(0.0, 0.0, 0.0, 1.0));
+	auto scenery_one = default_stage.scenery_from_mesh(add_mesh(a), vec3(0.0, 0.0, 0.0), "moon", versor(0.0, 0.0, 0.0, 1.0));
+	auto scenery_two = default_stage.scenery_from_mesh(add_mesh(b), vec3(0.0, 0.0, 0.0), "moon", versor(0.0, 0.0, 0.0, 1.0));
 	
 	// std::random_device rd;
 	// std::mt19937 gen(rd());
 	// std::uniform_real_distribution<> dis(-10.0, 10.0);
+
+	vector_vec3 p;
+	p.push_back(vec3(-50.0, 0.0, -50.0));
+	p.push_back(vec3(0.0, 35.0, 0.0));
+	p.push_back(vec3(25.0, 0.0, 20.0));
+	p.push_back(vec3(0.0, 10.0, 80.0));
+
+	uint hull_h = hull(p);
+
+	auto scenery_three = default_stage.scenery_from_shape(hull_h, vec3(0.0, 0.0, 0.0), "moon", versor(0.0, 0.0, 0.0, 1.0));
 
 	for (int i = -500 ; i < 500; ++i)
 	{
