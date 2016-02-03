@@ -313,6 +313,7 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("active_mesh", "active_mesh& opAssign(const active_mesh& in)", asMETHODPR(noob::active_mesh, operator=, (const noob::active_mesh&),noob::active_mesh&), asCALL_THISCALL); assert(r >= 0);
 
 	// void init(const noob::basic_mesh&);
+	r = script_engine->RegisterObjectMethod("active_mesh", "void init(const basic_mesh& in)", asMETHOD(noob::active_mesh, init), asCALL_THISCALL); assert(r >= 0);
 	// PolyMesh::VertexHandle add_vertex(const noob::vec3&);
 	// PolyMesh::FaceHandle add_face(const std::vector<noob::vec3>&);
 	// PolyMesh::FaceHandle add_face(const std::vector<PolyMesh::VertexHandle>&);
