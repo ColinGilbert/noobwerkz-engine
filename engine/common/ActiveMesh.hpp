@@ -75,6 +75,11 @@ namespace noob
 			//	bool hole;
 			// };
 
+			typedef PolyMesh::VertexHandle vertex_handle;
+			typedef PolyMesh::FaceHandle face_handle;
+			typedef PolyMesh::EdgeHandle edge_handle;
+			typedef PolyMesh::HalfedgeHandle halfedge_handle;
+
 			void init(const noob::basic_mesh&);
 
 			// void init(const noob::indexed_polymesh&);
@@ -105,7 +110,7 @@ namespace noob
 
 			bool face_exists(PolyMesh::FaceHandle) const;
 			
-			PolyMesh::FaceHandle get_face_handle(const noob::vec3&) const;
+			// PolyMesh::FaceHandle get_face_handle(const noob::vec3&) const;
 
 			const std::tuple<bool, std::vector<noob::vec3>> get_face(PolyMesh::VertexHandle) const; 
 

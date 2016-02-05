@@ -217,6 +217,32 @@ std::tuple<bool, std::vector<noob::vec3>> noob::active_mesh::get_face(PolyMesh::
 }
 
 
+size_t noob::active_mesh::num_vertices() const
+{
+	return half_edges.n_vertices();
+}
+
+
+size_t noob::active_mesh::num_half_edges() const
+{
+	return half_edges.n_halfedges();
+}
+
+
+size_t noob::active_mesh::num_edges() const
+{
+	return half_edges.n_edges();
+
+}
+
+
+size_t noob::active_mesh::num_faces() const
+{
+	return half_edges.n_faces();
+
+}
+
+
 std::vector<PolyMesh::EdgeHandle> noob::active_mesh::get_adjacent_edges(PolyMesh::FaceHandle first_face, PolyMesh::FaceHandle second_face) const
 {
 	std::vector<PolyMesh::EdgeHandle> results;
