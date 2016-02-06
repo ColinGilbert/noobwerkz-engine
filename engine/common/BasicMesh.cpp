@@ -9,21 +9,6 @@
 #include <assert.h>
 #include <string>
 #include <iostream>
-/*
-#include <OpenMesh/Core/IO/MeshIO.hh>
-#include <OpenMesh/Tools/Decimater/CollapseInfoT.hh>
-#include <OpenMesh/Tools/Decimater/DecimaterT.hh>
-#include <OpenMesh/Tools/Decimater/ModAspectRatioT.hh>
-#include <OpenMesh/Tools/Decimater/ModEdgeLengthT.hh>
-#include <OpenMesh/Tools/Decimater/ModHausdorffT.hh>
-#include <OpenMesh/Tools/Decimater/ModNormalDeviationT.hh>
-#include <OpenMesh/Tools/Decimater/ModNormalFlippingT.hh>
-#include <OpenMesh/Tools/Decimater/ModQuadricT.hh>
-#include <OpenMesh/Tools/Decimater/ModProgMeshT.hh>
-#include <OpenMesh/Tools/Decimater/ModIndependentSetsT.hh>
-#include <OpenMesh/Tools/Decimater/ModRoundnessT.hh>
-#include <OpenMesh/Tools/Subdivider/Uniform/CatmullClarkT.hh>
-*/
 
 #include "Logger.hpp"
 #include "BasicMesh.hpp"

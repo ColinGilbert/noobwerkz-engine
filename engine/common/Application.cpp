@@ -245,6 +245,7 @@ void noob::application::init()
 	r = script_engine->RegisterObjectProperty("cubic_region", "vec3 lower_corner", asOFFSET(noob::cubic_region, lower_corner)); assert (r >= 0);
 	r = script_engine->RegisterObjectProperty("cubic_region", "vec3 upper_corner", asOFFSET(noob::cubic_region, upper_corner)); assert (r >= 0);
 
+	r = script_engine->RegisterGlobalFunction("bool compare_floats(float, float)", asFUNCTION(compare_floats), asCALL_CDECL); assert(r >= 0 );
 	r = script_engine->RegisterGlobalFunction("float length(const vec3& in)", asFUNCTION(length_squared), asCALL_CDECL); assert(r >= 0 );
 	r = script_engine->RegisterGlobalFunction("float length_squared(const vec3& in)", asFUNCTION(length), asCALL_CDECL); assert(r >= 0 );
 	r = script_engine->RegisterGlobalFunction("vec3 normalize(const vec3& in)", asFUNCTIONPR(normalize, (const vec3&), vec3), asCALL_CDECL); assert(r >= 0 );
@@ -324,7 +325,8 @@ void noob::application::init()
 	r = script_engine->RegisterObjectBehaviour("active_mesh", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(as_active_mesh_constructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	r = script_engine->RegisterObjectBehaviour("active_mesh", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_active_mesh_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("active_mesh", "active_mesh& opAssign(const active_mesh& in)", asMETHODPR(noob::active_mesh, operator=, (const noob::active_mesh&),noob::active_mesh&), asCALL_THISCALL); assert(r >= 0);
-	r = script_engine->RegisterObjectMethod("active_mesh", "void init(const basic_mesh& in)", asMETHOD(noob::active_mesh, init), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("active_mesh", "void reset()", asMETHOD(noob::active_mesh, reset), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("active_mesh", "void from_basic_mesh(const basic_mesh& in)", asMETHOD(noob::active_mesh, from_basic_mesh), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("active_mesh", "vertex_handle add_vertex(const vec3& in)", asMETHOD(noob::active_mesh, add_vertex), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("active_mesh", "void add_face(const vector_vec3& in)", asMETHODPR(noob::active_mesh, add_face, (const std::vector<noob::vec3>&), noob::active_mesh::face_handle), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("active_mesh", "void add_face(const vector_vertex_handle& in)", asMETHODPR(noob::active_mesh, add_face, (const std::vector<noob::active_mesh::vertex_handle>&), noob::active_mesh::face_handle), asCALL_THISCALL); assert( r >= 0 );

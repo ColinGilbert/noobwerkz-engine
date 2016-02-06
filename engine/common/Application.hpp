@@ -63,7 +63,6 @@
 
 #include "AngelVector.hpp"
 #include "scriptstdstring.h"
-//#include "scripthelper.h"
 
 namespace noob
 {
@@ -240,7 +239,6 @@ namespace noob
 				((noob::basic_mesh*)memory)->~basic_mesh();
 			}
 
-
 			static void as_active_mesh_constructor_wrapper(uint8_t* memory)
 			{
 				new(memory) noob::active_mesh();
@@ -250,8 +248,6 @@ namespace noob
 			{
 				((noob::active_mesh*)memory)->~active_mesh();
 			}
-
-
 
 			static void as_stage_constructor_wrapper(uint8_t* memory)
 			{

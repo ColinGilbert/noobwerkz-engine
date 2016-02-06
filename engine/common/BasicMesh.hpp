@@ -1,4 +1,3 @@
-// TODO: Add code to generate normals via assimp
 // TODO: Replace hard-coded cylinder, cone, sphere functions with more generic swept shape algorithm. Low priority.
 
 #pragma once
