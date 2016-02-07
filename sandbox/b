@@ -1,6 +1,7 @@
 # "b" for "build"
 cd ../engine/build &&
 cmake .. &&
-make -j8 &&
+#make -j8 &&
+make &&
 cp NoobEdit ../../sandbox/e &&
 cd ../../sandbox

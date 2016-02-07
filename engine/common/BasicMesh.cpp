@@ -148,7 +148,7 @@ noob::basic_mesh noob::basic_mesh::decimate(size_t num_verts) const
 	if (!did_init) 
 	{
 		// logger::log("[Mesh] decimate() - init failed!");
-		return;
+		return noob::basic_mesh(*this);
 	}
 
 	size_t verts_removed = decimator.decimate_to(num_verts);

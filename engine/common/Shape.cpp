@@ -1,6 +1,11 @@
 #include "Shape.hpp"
 
-
+//#include "conf.h"
+// #include <brlcad/machine.h>
+// #include <brlcad/math.h>
+// #include <brlcad/raytrace.h>
+#include <brlcad/rtgeom.h>
+#include <brlcad/wdb.h>
 
 noob::shape::~shape()
 {

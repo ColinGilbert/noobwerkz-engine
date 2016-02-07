@@ -8,7 +8,10 @@ set(CMAKE_CXX_FLAGS "-std=c++1y -fno-strict-aliasing -pipe -O2 -fpermissive -DAS
 set(CMAKE_C_FLAGS "-std=c99 -pipe -fno-strict-aliasing -DSQLITE_ENABLE_COLUMN_METADATA -DSTB_IMAGE_STATIC -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -Wall ${CMAKE_C_FLAGS}")
 
 find_package(Boost COMPONENTS system filesystem REQUIRED)
+find_package(BRLCAD)
+
 include_directories(${Boost_INCLUDE_DIR})
+#include_directories(${BRLCAD_INCLUDE_DIR})
 
 #include_directories(lib/tinympl)
 
@@ -360,6 +363,10 @@ list(APPEND user_src
 
 include_directories(platform/nix)
 
+include_directories(/usr/brlcad/include)
+include_directories(/usr/brlcad/include/openNURBS)
+link_directories(/usr/brlcad/lib64)
+
 list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 
 add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${csgjs_src}
@@ -369,5 +376,6 @@ add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${csgjs_src}
 target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES}
 	${OPENGL_LIBRARIES} freetype rt dl pthread assimp m emon OpenMeshCore
 	spnav ozz_animation_offline_r ozz_animation_r
-	ozz_geometry_r ozz_base_r BulletDynamics BulletCollision
-	BulletSoftBody LinearMath ${Boost_LIBRARIES})
+	ozz_geometry_r ozz_base_r BulletDynamics BulletCollision brlcad
+	BulletSoftBody LinearMath brlcad ged wdb bn bu z m c openNURBS analyze
+	${Boost_LIBRARIES})
