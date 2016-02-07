@@ -412,6 +412,15 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("triplanar_gradmap_uniform", "void set_colour(uint, const vec4& in)", asMETHOD(noob::triplanar_gradient_map_renderer::uniform, set_colour), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("triplanar_gradmap_uniform", "vec4 get_colour(uint) const", asMETHOD(noob::triplanar_gradient_map_renderer::uniform, get_colour), asCALL_THISCALL); assert( r >= 0 );	
 
+	r = script_engine->RegisterObjectType("body_handle", sizeof(noob::bodies_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::bodies_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectType("mesh_handle", sizeof(noob::meshes_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::meshes_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectType("model_handle", sizeof(noob::basic_models_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::basic_models_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectType("animated_model_handle", sizeof(noob::animated_models_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::animated_models_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectType("skeletal_anim_handle", sizeof(noob::skeletal_anims_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::skeletal_anims_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectType("light_handle", sizeof(noob::lights_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::lights_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectType("reflection_handle", sizeof(noob::reflections_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::reflections_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectType("shader_handle", sizeof(noob::shaders_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::shaders_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+
 	r = script_engine->RegisterObjectType("stage", sizeof(noob::stage), asOBJ_VALUE); assert(r >= 0 );
 	r = script_engine->RegisterObjectBehaviour("stage", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(as_stage_constructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	r = script_engine->RegisterObjectBehaviour("stage", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_stage_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
@@ -421,7 +430,7 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("stage", "void draw(float, float)", asMETHOD(noob::stage, draw), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "uint body(body_type, uint, float, const vec3& in, const versor& in, bool)", asMETHOD(noob::stage, _body), asCALL_THISCALL); assert( r >= 0 );
 
-	r = script_engine->RegisterGlobalFunction("uint spheres(float)", asFUNCTION(globals::_sphere), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("uint sphere(float)", asFUNCTION(globals::_sphere), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("uint box(float, float, float)", asFUNCTION(globals::_box), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("uint cylinder(float, float)", asFUNCTION(globals::_cylinder), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("uint cone(float, float)", asFUNCTION(globals::_cone), asCALL_CDECL); assert( r >= 0 );
