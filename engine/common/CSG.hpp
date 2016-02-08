@@ -3,6 +3,8 @@
 #include "BasicMesh.hpp"
 #include "MathFuncs.hpp"
 
+#include <dcollide.h>
+
 namespace noob
 {
 	class csg
