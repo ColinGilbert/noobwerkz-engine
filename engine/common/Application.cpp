@@ -367,7 +367,7 @@ void noob::application::init()
 
 
 	// TODO: Implement
-	r = script_engine->RegisterGlobalFunction("basic_mesh csg(const basic_mesh& in, const basic_mesh& in, csg_op)", asFUNCTION(mesh_utils::csg), asCALL_CDECL); assert(r >= 0);
+	// r = script_engine->RegisterGlobalFunction("basic_mesh csg(const basic_mesh& in, const basic_mesh& in, csg_op)", asFUNCTION(mesh_utils::csg), asCALL_CDECL); assert(r >= 0);
 
 	r = script_engine->RegisterObjectType("body", sizeof(noob::body), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::body>() | asOBJ_APP_CLASS_ALLINTS ); assert(r >= 0 );
 	r = script_engine->RegisterEnum("body_type"); assert(r >= 0);

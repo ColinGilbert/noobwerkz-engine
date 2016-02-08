@@ -303,8 +303,8 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 }
 
 
-noob::basic_mesh noob::mesh_utils::csg(const noob::basic_mesh& _a, const noob::basic_mesh& _b, const noob::csg_op op)
-{
+// noob::basic_mesh noob::mesh_utils::csg(const noob::basic_mesh& _a, const noob::basic_mesh& _b, const noob::csg_op op)
+// {
 
 
 
@@ -335,7 +335,7 @@ noob::basic_mesh noob::mesh_utils::csg(const noob::basic_mesh& _a, const noob::b
 	
 	return newton_to_noob(raw_results);
 */
-}
+// }
 
 
 /*
