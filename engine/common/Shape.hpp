@@ -15,7 +15,7 @@
 #include "BasicMesh.hpp"
 #include "MeshUtils.hpp"
 #include "MathFuncs.hpp"
-#include "IntrusiveBase.hpp"
+// #include "IntrusiveBase.hpp"
 
 
 namespace noob

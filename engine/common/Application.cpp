@@ -352,7 +352,7 @@ void noob::application::init()
 	// Destructive utiiities.
 	r = script_engine->RegisterObjectMethod("active_mesh", "void make_hole(face_handle)", asMETHOD(noob::active_mesh, make_hole), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("active_mesh", "void fill_holes()", asMETHOD(noob::active_mesh, fill_holes), asCALL_THISCALL); assert(r >= 0);
-	r = script_engine->RegisterObjectMethod("active_mesh", "void extrude(face_handle, float)", asMETHOD(noob::active_mesh, extrude), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("active_mesh", "void extrude_face(face_handle, float, const vec3& in)", asMETHOD(noob::active_mesh, extrude_face), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("active_mesh", "void move_vertex(vertex_handle, const vec3& in)", asMETHOD(noob::active_mesh, move_vertex), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("active_mesh", "void move_vertices(const vector_vertex_handle& in, const vec3& in)", asMETHOD(noob::active_mesh, move_vertices), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("active_mesh", "void merge_adjacent_coplanars()", asMETHOD(noob::active_mesh, merge_adjacent_coplanars), asCALL_THISCALL); assert(r >= 0);

@@ -42,10 +42,6 @@ void main()
 	auto scenery_one = default_stage.scenery_from_mesh(add_mesh(a), vec3(0.0, 0.0, 0.0), "moon", versor(0.0, 0.0, 0.0, 1.0));
 	auto scenery_two = default_stage.scenery_from_mesh(add_mesh(b), vec3(0.0, 0.0, 0.0), "moon", versor(0.0, 0.0, 0.0, 1.0));
 	
-	// std::random_device rd;
-	// std::mt19937 gen(rd());
-	// std::uniform_real_distribution<> dis(-10.0, 10.0);
-
 	vector_vec3 p;
 	p.push_back(vec3(-50.0, 0.0, -50.0));
 	p.push_back(vec3(0.0, 35.0, 0.0));
@@ -60,7 +56,7 @@ void main()
 	{
 		uint h = box(4.0, 4.0, 4.0); 
 		float x_pos = i;
-		float z_pos = i; //dis(gen) * 10.0;
+		float z_pos = i;
 		uint temp_body = default_stage.body(DYNAMIC, h, 1.0, vec3(x_pos, 250.0, z_pos), versor(0.0, 0.0, 0.0, 1.0), false);
 		// default_stage.bodies.get(temp_body); 
 		default_stage.prop(temp_body, "purple");
@@ -70,7 +66,7 @@ void main()
 	{
 		uint h = box(4.0, 4.0, 4.0); 
 		float x_pos = i;
-		float z_pos = -i; //dis(gen) * 10.0;
+		float z_pos = -i;
 		uint temp_body = default_stage.body(DYNAMIC, h, 1.0, vec3(x_pos, 250.0, z_pos), versor(0.0, 0.0, 0.0, 1.0), false);
 		// default_stage.bodies.get(temp_body); 
 		default_stage.prop(temp_body, "purple");

@@ -30,119 +30,290 @@ include_directories(lib/glfw/include)
 include_directories(lib/freetype/include)
 add_subdirectory(lib/freetype)
 
+# Used to link to the system lib, but then had problems. As per Couman's
+# advice in http://bulletphysics.org/Bullet/phpBB3/viewtopic.php?t=7168
+include_directories(lib/bullet/src)
+list (APPEND bullet_src
+	lib/bullet/src/BulletDynamics/MLCPSolvers/btDantzigLCP.cpp
+	lib/bullet/src/BulletDynamics/MLCPSolvers/btMLCPSolver.cpp
+	lib/bullet/src/BulletDynamics/Dynamics/Bullet-C-API.cpp
+	lib/bullet/src/BulletDynamics/Dynamics/btRigidBody.cpp
+	lib/bullet/src/BulletDynamics/Dynamics/btSimpleDynamicsWorld.cpp
+	lib/bullet/src/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.cpp
+	lib/bullet/src/BulletDynamics/ConstraintSolver/btHingeConstraint.cpp
+	lib/bullet/src/BulletDynamics/ConstraintSolver/btConeTwistConstraint.cpp
+	lib/bullet/src/BulletDynamics/ConstraintSolver/btSliderConstraint.cpp
+	lib/bullet/src/BulletDynamics/ConstraintSolver/btSolve2LinearConstraint.cpp
+	lib/bullet/src/BulletDynamics/ConstraintSolver/btGeneric6DofConstraint.cpp
+	lib/bullet/src/BulletDynamics/ConstraintSolver/btContactConstraint.cpp
+	lib/bullet/src/BulletDynamics/ConstraintSolver/btUniversalConstraint.cpp
+	lib/bullet/src/BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.cpp
+	lib/bullet/src/BulletDynamics/ConstraintSolver/btTypedConstraint.cpp
+	lib/bullet/src/BulletDynamics/ConstraintSolver/btGearConstraint.cpp
+	lib/bullet/src/BulletDynamics/ConstraintSolver/btFixedConstraint.cpp
+	lib/bullet/src/BulletDynamics/ConstraintSolver/btGeneric6DofSpringConstraint.cpp
+	lib/bullet/src/BulletDynamics/ConstraintSolver/btHinge2Constraint.cpp
+	lib/bullet/src/BulletDynamics/ConstraintSolver/btPoint2PointConstraint.cpp
+	lib/bullet/src/BulletDynamics/Featherstone/btMultiBodyConstraint.cpp
+	lib/bullet/src/BulletDynamics/Featherstone/btMultiBodyJointMotor.cpp
+	lib/bullet/src/BulletDynamics/Featherstone/btMultiBodyConstraintSolver.cpp
+	lib/bullet/src/BulletDynamics/Featherstone/btMultiBody.cpp
+	lib/bullet/src/BulletDynamics/Featherstone/btMultiBodyJointLimitConstraint.cpp
+	lib/bullet/src/BulletDynamics/Featherstone/btMultiBodyPoint2Point.cpp
+	lib/bullet/src/BulletDynamics/Featherstone/btMultiBodyDynamicsWorld.cpp
+	lib/bullet/src/BulletDynamics/Character/btKinematicCharacterController.cpp
+	lib/bullet/src/BulletDynamics/Vehicle/btRaycastVehicle.cpp
+	lib/bullet/src/BulletDynamics/Vehicle/btWheelInfo.cpp
+	lib/bullet/src/BulletCollision/NarrowPhaseCollision/btPersistentManifold.cpp
+	lib/bullet/src/BulletCollision/NarrowPhaseCollision/btPolyhedralContactClipping.cpp
+	lib/bullet/src/BulletCollision/NarrowPhaseCollision/btGjkPairDetector.cpp
+	lib/bullet/src/BulletCollision/NarrowPhaseCollision/btGjkEpa2.cpp
+	lib/bullet/src/BulletCollision/NarrowPhaseCollision/btContinuousConvexCollision.cpp
+	lib/bullet/src/BulletCollision/NarrowPhaseCollision/btConvexCast.cpp
+	lib/bullet/src/BulletCollision/NarrowPhaseCollision/btVoronoiSimplexSolver.cpp
+	lib/bullet/src/BulletCollision/NarrowPhaseCollision/btGjkConvexCast.cpp
+	lib/bullet/src/BulletCollision/NarrowPhaseCollision/btRaycastCallback.cpp
+	lib/bullet/src/BulletCollision/NarrowPhaseCollision/btSubSimplexConvexCast.cpp
+	lib/bullet/src/BulletCollision/NarrowPhaseCollision/btGjkEpaPenetrationDepthSolver.cpp
+	lib/bullet/src/BulletCollision/NarrowPhaseCollision/btMinkowskiPenetrationDepthSolver.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btSimulationIslandManager.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btGhostObject.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btConvexConcaveCollisionAlgorithm.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btBoxBoxDetector.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btBoxBoxCollisionAlgorithm.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btConvexConvexAlgorithm.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btManifoldResult.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btSphereSphereCollisionAlgorithm.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btActivatingCollisionAlgorithm.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btCompoundCollisionAlgorithm.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btSphereBoxCollisionAlgorithm.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btSphereTriangleCollisionAlgorithm.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btEmptyCollisionAlgorithm.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btCollisionObject.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btCollisionDispatcher.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/SphereTriangleDetector.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btHashedSimplePairCache.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btBox2dBox2dCollisionAlgorithm.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btUnionFind.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btCollisionWorld.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btInternalEdgeUtility.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btConvex2dConvex2dAlgorithm.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btConvexPlaneCollisionAlgorithm.cpp
+	lib/bullet/src/BulletCollision/CollisionDispatch/btCompoundCompoundCollisionAlgorithm.cpp
+	lib/bullet/src/BulletCollision/Gimpact/gim_box_set.cpp
+	lib/bullet/src/BulletCollision/Gimpact/gim_contact.cpp
+	lib/bullet/src/BulletCollision/Gimpact/btGImpactShape.cpp
+	lib/bullet/src/BulletCollision/Gimpact/gim_tri_collision.cpp
+	lib/bullet/src/BulletCollision/Gimpact/btTriangleShapeEx.cpp
+	lib/bullet/src/BulletCollision/Gimpact/btGImpactQuantizedBvh.cpp
+	lib/bullet/src/BulletCollision/Gimpact/btGImpactCollisionAlgorithm.cpp
+	lib/bullet/src/BulletCollision/Gimpact/btGenericPoolAllocator.cpp
+	lib/bullet/src/BulletCollision/Gimpact/btContactProcessing.cpp
+	lib/bullet/src/BulletCollision/Gimpact/gim_memory.cpp
+	lib/bullet/src/BulletCollision/Gimpact/btGImpactBvh.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btTriangleIndexVertexArray.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btTriangleMeshShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btMultiSphereShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btTriangleMesh.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btTriangleBuffer.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btPolyhedralConvexShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btStridingMeshInterface.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btTetrahedronShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btCompoundShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btConvexPolyhedron.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btMinkowskiSumShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btOptimizedBvh.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btTriangleIndexVertexMaterialArray.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btBoxShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btShapeHull.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btConvex2dShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btCollisionShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btConvexPointCloudShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btBox2dShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btConeShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btStaticPlaneShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btHeightfieldTerrainShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btEmptyShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btConvexHullShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btUniformScalingShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btTriangleCallback.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btConvexInternalShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btConvexShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btCapsuleShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btScaledBvhTriangleMeshShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btConvexTriangleMeshShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btMultimaterialTriangleMeshShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btCylinderShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btSphereShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btBvhTriangleMeshShape.cpp
+	lib/bullet/src/BulletCollision/CollisionShapes/btConcaveShape.cpp
+	lib/bullet/src/BulletCollision/BroadphaseCollision/btBroadphaseProxy.cpp
+	lib/bullet/src/BulletCollision/BroadphaseCollision/btQuantizedBvh.cpp
+	lib/bullet/src/BulletCollision/BroadphaseCollision/btDbvtBroadphase.cpp
+	lib/bullet/src/BulletCollision/BroadphaseCollision/btAxisSweep3.cpp
+	lib/bullet/src/BulletCollision/BroadphaseCollision/btDbvt.cpp
+	lib/bullet/src/BulletCollision/BroadphaseCollision/btMultiSapBroadphase.cpp
+	lib/bullet/src/BulletCollision/BroadphaseCollision/btDispatcher.cpp
+	lib/bullet/src/BulletCollision/BroadphaseCollision/btSimpleBroadphase.cpp
+	lib/bullet/src/BulletCollision/BroadphaseCollision/btOverlappingPairCache.cpp
+	lib/bullet/src/BulletCollision/BroadphaseCollision/btCollisionAlgorithm.cpp
+	lib/bullet/src/LinearMath/btQuickprof.cpp
+	lib/bullet/src/LinearMath/btAlignedAllocator.cpp
+	lib/bullet/src/LinearMath/btSerializer.cpp
+	lib/bullet/src/LinearMath/btPolarDecomposition.cpp
+	lib/bullet/src/LinearMath/btConvexHull.cpp
+	lib/bullet/src/LinearMath/btGeometryUtil.cpp
+	lib/bullet/src/LinearMath/btConvexHullComputer.cpp
+	lib/bullet/src/LinearMath/btVector3.cpp
+	lib/bullet/src/BulletSoftBody/btDefaultSoftBodySolver.cpp
+	lib/bullet/src/BulletSoftBody/btSoftBody.cpp
+	lib/bullet/src/BulletSoftBody/btSoftRigidCollisionAlgorithm.cpp
+	lib/bullet/src/BulletSoftBody/btSoftBodyConcaveCollisionAlgorithm.cpp
+	lib/bullet/src/BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.cpp
+	lib/bullet/src/BulletSoftBody/btSoftRigidDynamicsWorld.cpp
+	lib/bullet/src/BulletSoftBody/btSoftSoftCollisionAlgorithm.cpp
+	lib/bullet/src/BulletSoftBody/btSoftBodyHelpers.cpp
+	#lib/bullet/src/MiniCL/MiniCL.cpp
+	#lib/bullet/src/MiniCL/MiniCLTask/MiniCLTask.cpp
+	#lib/bullet/src/MiniCL/MiniCLTaskScheduler.cpp
+	#lib/bullet/src/BulletMultiThreaded/GpuSoftBodySolvers/DX11/btSoftBodySolver_DX11SIMDAware.cpp
+	#lib/bullet/src/BulletMultiThreaded/GpuSoftBodySolvers/DX11/btSoftBodySolver_DX11.cpp
+	#lib/bullet/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/btSoftBodySolver_OpenCL.cpp
+	#lib/bullet/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/btSoftBodySolverOutputCLtoGL.cpp
+	#lib/bullet/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/btSoftBodySolver_OpenCLSIMDAware.cpp
+	#lib/bullet/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/MiniCL/MiniCLTaskWrap.cpp
+	lib/bullet/src/BulletMultiThreaded/btParallelConstraintSolver.cpp
+	lib/bullet/src/BulletMultiThreaded/SpuSampleTaskProcess.cpp
+	lib/bullet/src/BulletMultiThreaded/SpuLibspe2Support.cpp
+	lib/bullet/src/BulletMultiThreaded/SpuNarrowPhaseCollisionTask/SpuGatheringCollisionTask.cpp
+	lib/bullet/src/BulletMultiThreaded/SpuNarrowPhaseCollisionTask/boxBoxDistance.cpp
+	lib/bullet/src/BulletMultiThreaded/SpuNarrowPhaseCollisionTask/SpuContactResult.cpp
+	lib/bullet/src/BulletMultiThreaded/SpuNarrowPhaseCollisionTask/SpuMinkowskiPenetrationDepthSolver.cpp
+	lib/bullet/src/BulletMultiThreaded/SpuNarrowPhaseCollisionTask/SpuCollisionShapes.cpp
+	lib/bullet/src/BulletMultiThreaded/Win32ThreadSupport.cpp
+	lib/bullet/src/BulletMultiThreaded/SpuFakeDma.cpp
+	lib/bullet/src/BulletMultiThreaded/SpuCollisionTaskProcess.cpp
+	lib/bullet/src/BulletMultiThreaded/PosixThreadSupport.cpp
+	lib/bullet/src/BulletMultiThreaded/btThreadSupportInterface.cpp
+	lib/bullet/src/BulletMultiThreaded/SpuContactManifoldCollisionAlgorithm.cpp
+	lib/bullet/src/BulletMultiThreaded/SequentialThreadSupport.cpp
+	lib/bullet/src/BulletMultiThreaded/SpuCollisionObjectWrapper.cpp
+	lib/bullet/src/BulletMultiThreaded/SpuGatheringCollisionDispatcher.cpp
+	lib/bullet/src/BulletMultiThreaded/btGpu3DGridBroadphase.cpp
+	lib/bullet/src/BulletMultiThreaded/SpuSampleTask/SpuSampleTask.cpp
 
-#include_directories(lib/bullet3/src)
+	)
 
 include_directories(lib/polyvox/include)
 
-include_directories(lib/dcollide)
-list (APPEND dcollide_src
-	lib/dcollide/debug.cpp
+# include_directories(# lib/dcollide)
+# list (APPEND dcollide_src
+	# lib/dcollide/debug.cpp
 
-	lib/dcollide/broadphase/broadphase.cpp
-	lib/dcollide/broadphase/broadphasefactory.cpp
-	lib/dcollide/broadphase/broadphaseproxydata.cpp
-	lib/dcollide/broadphase/broadphasejob.cpp
-	lib/dcollide/broadphase/broadphasecollisions.cpp
+	# lib/dcollide/broadphase/broadphase.cpp
+	# lib/dcollide/broadphase/broadphasefactory.cpp
+	# lib/dcollide/broadphase/broadphaseproxydata.cpp
+	# lib/dcollide/broadphase/broadphasejob.cpp
+	# lib/dcollide/broadphase/broadphasecollisions.cpp
 
-# 	Broadphase Octree Files
-	lib/dcollide/broadphase/broadphasehierarchicalgrid.cpp
-	lib/dcollide/broadphase/broadphasehierarchicalgridproxydata.cpp
-	lib/dcollide/broadphase/broadphasehierarchicalgridjob.cpp
-	lib/dcollide/broadphase/broadphasehierarchicalgridjob2.cpp
-	lib/dcollide/broadphase/broadphasehierarchicalgridjobcollection.cpp
-	lib/dcollide/broadphase/hierarchicalgrid.cpp
+	# 	Broadphase Octree Files
+	# lib/dcollide/broadphase/broadphasehierarchicalgrid.cpp
+	# lib/dcollide/broadphase/broadphasehierarchicalgridproxydata.cpp
+	# lib/dcollide/broadphase/broadphasehierarchicalgridjob.cpp
+	# lib/dcollide/broadphase/broadphasehierarchicalgridjob2.cpp
+	# lib/dcollide/broadphase/broadphasehierarchicalgridjobcollection.cpp
+	# lib/dcollide/broadphase/hierarchicalgrid.cpp
 
-# 	BroadPhase Brute Force Files
-	lib/dcollide/broadphase/broadphasebruteforce.cpp
-	lib/dcollide/broadphase/broadphasebruteforcejob.cpp
+	# 	BroadPhase Brute Force Files
+	# lib/dcollide/broadphase/broadphasebruteforce.cpp
+	# lib/dcollide/broadphase/broadphasebruteforcejob.cpp
 
-	lib/dcollide/math/matrix.cpp
-	lib/dcollide/math/quaternion.cpp
-	lib/dcollide/math/vector.cpp
-	lib/dcollide/math/plane.cpp
-	lib/dcollide/world.cpp
-	lib/dcollide/pipeline.cpp
-	lib/dcollide/worldparameters.cpp
-	lib/dcollide/worldcollisions.cpp
-	lib/dcollide/proxy.cpp
-	lib/dcollide/proxyfactory.cpp
-	lib/dcollide/thread/thread.cpp
-	lib/dcollide/thread/jobpool.cpp
-	lib/dcollide/thread/jobpoolcollection.cpp
-	lib/dcollide/thread/threadpool.cpp
-	lib/dcollide/thread/threadjobcollection.cpp
-	lib/dcollide/debuglog.cpp
-	lib/dcollide/debugstream.cpp
-	lib/dcollide/debugstreamconfiguration_initialize.cpp
+	# lib/dcollide/math/matrix.cpp
+	# lib/dcollide/math/quaternion.cpp
+	# lib/dcollide/math/vector.cpp
+	# lib/dcollide/math/plane.cpp
+	# lib/dcollide/world.cpp
+	# lib/dcollide/pipeline.cpp
+	# lib/dcollide/worldparameters.cpp
+	# lib/dcollide/worldcollisions.cpp
+	# lib/dcollide/proxy.cpp
+	# lib/dcollide/proxyfactory.cpp
+	# lib/dcollide/thread/thread.cpp
+	# lib/dcollide/thread/jobpool.cpp
+	# lib/dcollide/thread/jobpoolcollection.cpp
+	# lib/dcollide/thread/threadpool.cpp
+	# lib/dcollide/thread/threadjobcollection.cpp
+	# lib/dcollide/debuglog.cpp
+	# lib/dcollide/debugstream.cpp
+	# lib/dcollide/debugstreamconfiguration_initialize.cpp
 
-	lib/dcollide/detectordeform/detectordeformmanager.cpp
-	lib/dcollide/detectordeform/detectordeformalgorithm.cpp
-	lib/dcollide/detectordeform/detectordeformjob.cpp
-	lib/dcollide/detectordeform/detectordeformproxydata.cpp
-	lib/dcollide/detectordeform/spatialhash/intvector3.cpp
-	lib/dcollide/detectordeform/spatialhash/simplehash.cpp
-	lib/dcollide/detectordeform/spatialhash/spatialhash.cpp
-	lib/dcollide/detectordeform/spatialhash/spatialgrid.cpp
-	lib/dcollide/detectordeform/spatialhash/spatialhashalgorithm.cpp
-	lib/dcollide/detectordeform/spatialhash/spatialhashjobcollection.cpp
-	lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchy.cpp
-	lib/dcollide/detectordeform/surfacehierarchy/normalcone.cpp
-	lib/dcollide/detectordeform/surfacehierarchy/deformablebvhnode.cpp
-	lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyalgorithm.cpp
-	lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyjob.cpp
-	lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyselfjob.cpp
-	lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyproxydata.cpp
-	lib/dcollide/detectordeform/bvhierarchy/bvhierarchyalgorithm.cpp
-	lib/dcollide/detectordeform/bvhierarchy/bvhierarchybvhnode.cpp
-	lib/dcollide/detectordeform/bvhierarchy/bvhierarchyjob.cpp
-	lib/dcollide/detectordeform/bvhierarchy/bvhierarchyproxydata.cpp
+	# lib/dcollide/detectordeform/detectordeformmanager.cpp
+	# lib/dcollide/detectordeform/detectordeformalgorithm.cpp
+	# lib/dcollide/detectordeform/detectordeformjob.cpp
+	# lib/dcollide/detectordeform/detectordeformproxydata.cpp
+	# lib/dcollide/detectordeform/spatialhash/intvector3.cpp
+	# lib/dcollide/detectordeform/spatialhash/simplehash.cpp
+	# lib/dcollide/detectordeform/spatialhash/spatialhash.cpp
+	# lib/dcollide/detectordeform/spatialhash/spatialgrid.cpp
+	# lib/dcollide/detectordeform/spatialhash/spatialhashalgorithm.cpp
+	# lib/dcollide/detectordeform/spatialhash/spatialhashjobcollection.cpp
+	# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchy.cpp
+	# lib/dcollide/detectordeform/surfacehierarchy/normalcone.cpp
+	# lib/dcollide/detectordeform/surfacehierarchy/deformablebvhnode.cpp
+	# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyalgorithm.cpp
+	# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyjob.cpp
+	# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyselfjob.cpp
+	# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyproxydata.cpp
+	# lib/dcollide/detectordeform/bvhierarchy/bvhierarchyalgorithm.cpp
+	# lib/dcollide/detectordeform/bvhierarchy/bvhierarchybvhnode.cpp
+	# lib/dcollide/detectordeform/bvhierarchy/bvhierarchyjob.cpp
+	# lib/dcollide/detectordeform/bvhierarchy/bvhierarchyproxydata.cpp
 
-	lib/dcollide/bvhnode.cpp
-	lib/dcollide/bvhnodedefault.cpp
-	lib/dcollide/meshsplitter.cpp
+	# lib/dcollide/bvhnode.cpp
+	# lib/dcollide/bvhnodedefault.cpp
+	# lib/dcollide/meshsplitter.cpp
 
-	lib/dcollide/boundingvolumes/aabb.cpp
-	lib/dcollide/boundingvolumes/obb.cpp
-	lib/dcollide/boundingvolumes/boundingvolume.cpp
-	lib/dcollide/boundingvolumes/boundingsphere.cpp
-	lib/dcollide/boundingvolumes/kdop.cpp
+	# lib/dcollide/boundingvolumes/aabb.cpp
+	# lib/dcollide/boundingvolumes/obb.cpp
+	# lib/dcollide/boundingvolumes/boundingvolume.cpp
+	# lib/dcollide/boundingvolumes/boundingsphere.cpp
+	# lib/dcollide/boundingvolumes/kdop.cpp
 
-	lib/dcollide/shapes/box.cpp
-	lib/dcollide/shapes/cone.cpp
-	lib/dcollide/shapes/cylinder.cpp
-	lib/dcollide/shapes/mesh.cpp
-	lib/dcollide/shapes/shape.cpp
-	lib/dcollide/shapes/sphere.cpp
-	lib/dcollide/shapes/wedge.cpp
-	lib/dcollide/shapes/mesh/triangle.cpp
-	lib/dcollide/shapes/mesh/vertex.cpp
-	lib/dcollide/shapes/mesh/line.cpp
-	lib/dcollide/shapes/mesh/meshfactory.cpp
+	# lib/dcollide/shapes/box.cpp
+	# lib/dcollide/shapes/cone.cpp
+	# lib/dcollide/shapes/cylinder.cpp
+	# lib/dcollide/shapes/mesh.cpp
+	# lib/dcollide/shapes/shape.cpp
+	# lib/dcollide/shapes/sphere.cpp
+	# lib/dcollide/shapes/wedge.cpp
+	# lib/dcollide/shapes/mesh/triangle.cpp
+	# lib/dcollide/shapes/mesh/vertex.cpp
+	# lib/dcollide/shapes/mesh/line.cpp
+	# lib/dcollide/shapes/mesh/meshfactory.cpp
 
-	lib/dcollide/exceptions/exception.cpp
+	# lib/dcollide/exceptions/exception.cpp
 
-	lib/dcollide/detectorrigid/bvhtraverse.cpp
-	lib/dcollide/detectorrigid/middlephaserigidjob.cpp
-	lib/dcollide/detectorrigid/middlephaserigidjobcreator.cpp
+	# lib/dcollide/detectorrigid/bvhtraverse.cpp
+	# lib/dcollide/detectorrigid/middlephaserigidjob.cpp
+	# lib/dcollide/detectorrigid/middlephaserigidjobcreator.cpp
 
-	lib/dcollide/narrowphase/narrowphase.cpp
-	lib/dcollide/narrowphase/triangleintersector.cpp
-	lib/dcollide/narrowphase/boxsphereintersector.cpp
-	lib/dcollide/narrowphase/boxboxintersector.cpp
-	lib/dcollide/narrowphase/wedgeintersector.cpp
-	lib/dcollide/narrowphase/intersectionhelpers.cpp
-	lib/dcollide/narrowphase/cylinderintersector.cpp
-	lib/dcollide/narrowphase/coneintersector.cpp
-	lib/dcollide/narrowphase/spheresphereintersector.cpp
-	lib/dcollide/narrowphase/meshmeshintersector.cpp
-	lib/dcollide/narrowphase/narrowphasejob.cpp
-	lib/dcollide/narrowphase/spheretriangleintersector.cpp
+	# lib/dcollide/narrowphase/narrowphase.cpp
+	# lib/dcollide/narrowphase/triangleintersector.cpp
+	# lib/dcollide/narrowphase/boxsphereintersector.cpp
+	# lib/dcollide/narrowphase/boxboxintersector.cpp
+	# lib/dcollide/narrowphase/wedgeintersector.cpp
+	# lib/dcollide/narrowphase/intersectionhelpers.cpp
+	# lib/dcollide/narrowphase/cylinderintersector.cpp
+	# lib/dcollide/narrowphase/coneintersector.cpp
+	# lib/dcollide/narrowphase/spheresphereintersector.cpp
+	# lib/dcollide/narrowphase/meshmeshintersector.cpp
+	# lib/dcollide/narrowphase/narrowphasejob.cpp
+	# lib/dcollide/narrowphase/spheretriangleintersector.cpp
 
-	lib/dcollide/collisioncache.cpp
-	lib/dcollide/collisionpair.cpp
-
-	)
+	# lib/dcollide/collisioncache.cpp
+	# lib/dcollide/collisionpair.cpp
+#	)
 
 
 include_directories(lib/eigen)
@@ -352,6 +523,7 @@ list(APPEND common_src
 	common/SimpleNavMesh.cpp
 	common/FileSystem.cpp
 	common/CSG.cpp
+	common/GeometricWorld.cpp
 	)
 
 list(APPEND user_src
@@ -365,10 +537,9 @@ list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${csgjs_src}
 	${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src}
 	${es_src} ${user_src} ${recast_src} ${angelscript_src} ${es_src}
-	${dcollide_src}) 
+	${bullet_src}) # ${dcollide_src}
 
 target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES}
-	${OPENGL_LIBRARIES} freetype rt dl pthread assimp m emon OpenMeshCore
+	${OPENGL_LIBRARIES} freetype rt dl pthread assimp m OpenMeshCore
 	spnav ozz_animation_offline_r ozz_animation_r
-	ozz_geometry_r ozz_base_r BulletDynamics BulletCollision
-	BulletSoftBody LinearMath dcollide ${Boost_LIBRARIES})
+	ozz_geometry_r ozz_base_r ${Boost_LIBRARIES})

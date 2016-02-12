@@ -1,4 +1,6 @@
 #include "ActiveMesh.hpp"
+
+
 #include <algorithm>
 #include <set>
 // #include <OpenMesh/Core/IO/MeshIO.hh>
@@ -371,7 +373,7 @@ void noob::active_mesh::fill_holes()
 // }
 
 
-void noob::active_mesh::extrude(const PolyMesh::FaceHandle fh, float magnitude) 
+void noob::active_mesh::extrude_face(const PolyMesh::FaceHandle fh, float magnitude, const noob::vec3& normal) 
 {
 	std::vector<PolyMesh::VertexHandle> original_points;
 	for (auto it = half_edges.cfv_iter(fh); it.is_valid(); ++it)

@@ -9,7 +9,7 @@ std::vector<std::tuple<noob::keyboard::keys, noob::keyboard::mod_keys, std::stri
 bool noob::application::user_init()
 {
 	keystrokes.push_back(std::make_tuple(noob::keyboard::keys::NUM_5, noob::keyboard::mod_keys::NONE, "switch view"));
-	logger::log("[Application] Successfully done user init.");
+	logger::log("[Application] Successfully done (C++) user init.");
 	return true;
 }
 

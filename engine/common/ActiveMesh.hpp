@@ -8,6 +8,7 @@
 
 #pragma once
 
+
 #include <set>
 
 #include <cereal/access.hpp>
@@ -112,7 +113,7 @@ namespace noob
 			
 			// void cut_faces(std::vector<PolyMesh::FaceHandle>&, const noob::vec3& point_on_plane, const noob::vec3& plane_normal);
 			
-			void extrude(const PolyMesh::FaceHandle, float magnitude);
+			void extrude_face(const PolyMesh::FaceHandle, float magnitude, const noob::vec3& normal);
 			
 			// void connect_faces(PolyMesh::FaceHandle first, PolyMesh::FaceHandle second);
 			

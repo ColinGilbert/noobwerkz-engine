@@ -2,12 +2,13 @@
 // NOTE: Will need to be std::move'd into things
 #pragma once
 
+
 #include <functional>
 #include <memory>
 #include <map>
 
-#include <PolyVox/RawVolume.h>
 
+#include <PolyVox/RawVolume.h>
 #include "MathFuncs.hpp"
 #include "BasicMesh.hpp"
 #include "Logger.hpp"
@@ -21,7 +22,6 @@ namespace noob
 			//typedef PolyVox::RawVolume<bool> boolean_world;
 
 			// voxel_world(size_t x = 256, size_t y = 256, size_t z =256) : world_width(x), world_height(y), world_depth(z), world(std::make_unique<PolyVox::RawVolume<uint8_t>>(PolyVox::Region(0, 0, 0, world_width, world_height, world_depth))) {}
-			
 			void init(size_t x, size_t y, size_t z);
 
 			void set(size_t x, size_t y, size_t z, uint8_t value);
