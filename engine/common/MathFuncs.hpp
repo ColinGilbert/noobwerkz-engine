@@ -172,7 +172,13 @@ namespace noob
 			w << "(" << v[0] << ", " << v[1] << ", " << v[2] << ")";
 			return w.str();
 		}
+
 	};
+
+	static noob::vec3 negate(const noob::vec3& arg)
+	{
+		return arg * -1.0;
+	}
 
 	struct vec4
 	{
@@ -408,6 +414,14 @@ namespace noob
 		else return true;
 	}
 
+	inline bool approximately_zero(float a)
+	{
+		// http://c-faq.com/fp/fpequal.html
+		if (std::fabs(a) <= NOOB_EPSILON) return false;
+		else return true;
+	}
+
+
 	// vector functions
 	float length(const vec3& v);
 	inline float length_squared(const vec3& v)
@@ -468,7 +482,8 @@ namespace noob
 	versor quat_from_mat4(const mat4&);
 	mat4 quat_to_mat4(const versor& q);
 	float dot(const versor& q, const versor& r);
-	// versor slerp(const versor& q, const versor& r);
+	vec3 lerp(const vec3& a, const vec3& b, float t);
+	// versor slerp(const versor& q, const versor& r); 
 	versor normalize(const versor& q);
 	versor slerp(const versor& q, const versor& r, float t);
 };

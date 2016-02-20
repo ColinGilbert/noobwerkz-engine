@@ -30,8 +30,12 @@ include_directories(lib/glfw/include)
 include_directories(lib/freetype/include)
 add_subdirectory(lib/freetype)
 
-# Used to link to the system lib, but then had problems. As per Couman's
-# advice in http://bulletphysics.org/Bullet/phpBB3/viewtopic.php?t=7168
+include_directories(lib/voropp/src)
+list (APPEND voropp_src
+	lib/voropp/src/voro++.cc
+	)
+
+# Used to link to the system lib, but then had problems. Now following Couman's advice in http://bulletphysics.org/Bullet/phpBB3/viewtopic.php?t=7168
 include_directories(lib/bullet/src)
 list (APPEND bullet_src
 	lib/bullet/src/BulletDynamics/MLCPSolvers/btDantzigLCP.cpp
@@ -209,110 +213,110 @@ include_directories(lib/polyvox/include)
 
 # include_directories(# lib/dcollide)
 # list (APPEND dcollide_src
-	# lib/dcollide/debug.cpp
+# lib/dcollide/debug.cpp
 
-	# lib/dcollide/broadphase/broadphase.cpp
-	# lib/dcollide/broadphase/broadphasefactory.cpp
-	# lib/dcollide/broadphase/broadphaseproxydata.cpp
-	# lib/dcollide/broadphase/broadphasejob.cpp
-	# lib/dcollide/broadphase/broadphasecollisions.cpp
+# lib/dcollide/broadphase/broadphase.cpp
+# lib/dcollide/broadphase/broadphasefactory.cpp
+# lib/dcollide/broadphase/broadphaseproxydata.cpp
+# lib/dcollide/broadphase/broadphasejob.cpp
+# lib/dcollide/broadphase/broadphasecollisions.cpp
 
-	# 	Broadphase Octree Files
-	# lib/dcollide/broadphase/broadphasehierarchicalgrid.cpp
-	# lib/dcollide/broadphase/broadphasehierarchicalgridproxydata.cpp
-	# lib/dcollide/broadphase/broadphasehierarchicalgridjob.cpp
-	# lib/dcollide/broadphase/broadphasehierarchicalgridjob2.cpp
-	# lib/dcollide/broadphase/broadphasehierarchicalgridjobcollection.cpp
-	# lib/dcollide/broadphase/hierarchicalgrid.cpp
+# 	Broadphase Octree Files
+# lib/dcollide/broadphase/broadphasehierarchicalgrid.cpp
+# lib/dcollide/broadphase/broadphasehierarchicalgridproxydata.cpp
+# lib/dcollide/broadphase/broadphasehierarchicalgridjob.cpp
+# lib/dcollide/broadphase/broadphasehierarchicalgridjob2.cpp
+# lib/dcollide/broadphase/broadphasehierarchicalgridjobcollection.cpp
+# lib/dcollide/broadphase/hierarchicalgrid.cpp
 
-	# 	BroadPhase Brute Force Files
-	# lib/dcollide/broadphase/broadphasebruteforce.cpp
-	# lib/dcollide/broadphase/broadphasebruteforcejob.cpp
+# 	BroadPhase Brute Force Files
+# lib/dcollide/broadphase/broadphasebruteforce.cpp
+# lib/dcollide/broadphase/broadphasebruteforcejob.cpp
 
-	# lib/dcollide/math/matrix.cpp
-	# lib/dcollide/math/quaternion.cpp
-	# lib/dcollide/math/vector.cpp
-	# lib/dcollide/math/plane.cpp
-	# lib/dcollide/world.cpp
-	# lib/dcollide/pipeline.cpp
-	# lib/dcollide/worldparameters.cpp
-	# lib/dcollide/worldcollisions.cpp
-	# lib/dcollide/proxy.cpp
-	# lib/dcollide/proxyfactory.cpp
-	# lib/dcollide/thread/thread.cpp
-	# lib/dcollide/thread/jobpool.cpp
-	# lib/dcollide/thread/jobpoolcollection.cpp
-	# lib/dcollide/thread/threadpool.cpp
-	# lib/dcollide/thread/threadjobcollection.cpp
-	# lib/dcollide/debuglog.cpp
-	# lib/dcollide/debugstream.cpp
-	# lib/dcollide/debugstreamconfiguration_initialize.cpp
+# lib/dcollide/math/matrix.cpp
+# lib/dcollide/math/quaternion.cpp
+# lib/dcollide/math/vector.cpp
+# lib/dcollide/math/plane.cpp
+# lib/dcollide/world.cpp
+# lib/dcollide/pipeline.cpp
+# lib/dcollide/worldparameters.cpp
+# lib/dcollide/worldcollisions.cpp
+# lib/dcollide/proxy.cpp
+# lib/dcollide/proxyfactory.cpp
+# lib/dcollide/thread/thread.cpp
+# lib/dcollide/thread/jobpool.cpp
+# lib/dcollide/thread/jobpoolcollection.cpp
+# lib/dcollide/thread/threadpool.cpp
+# lib/dcollide/thread/threadjobcollection.cpp
+# lib/dcollide/debuglog.cpp
+# lib/dcollide/debugstream.cpp
+# lib/dcollide/debugstreamconfiguration_initialize.cpp
 
-	# lib/dcollide/detectordeform/detectordeformmanager.cpp
-	# lib/dcollide/detectordeform/detectordeformalgorithm.cpp
-	# lib/dcollide/detectordeform/detectordeformjob.cpp
-	# lib/dcollide/detectordeform/detectordeformproxydata.cpp
-	# lib/dcollide/detectordeform/spatialhash/intvector3.cpp
-	# lib/dcollide/detectordeform/spatialhash/simplehash.cpp
-	# lib/dcollide/detectordeform/spatialhash/spatialhash.cpp
-	# lib/dcollide/detectordeform/spatialhash/spatialgrid.cpp
-	# lib/dcollide/detectordeform/spatialhash/spatialhashalgorithm.cpp
-	# lib/dcollide/detectordeform/spatialhash/spatialhashjobcollection.cpp
-	# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchy.cpp
-	# lib/dcollide/detectordeform/surfacehierarchy/normalcone.cpp
-	# lib/dcollide/detectordeform/surfacehierarchy/deformablebvhnode.cpp
-	# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyalgorithm.cpp
-	# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyjob.cpp
-	# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyselfjob.cpp
-	# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyproxydata.cpp
-	# lib/dcollide/detectordeform/bvhierarchy/bvhierarchyalgorithm.cpp
-	# lib/dcollide/detectordeform/bvhierarchy/bvhierarchybvhnode.cpp
-	# lib/dcollide/detectordeform/bvhierarchy/bvhierarchyjob.cpp
-	# lib/dcollide/detectordeform/bvhierarchy/bvhierarchyproxydata.cpp
+# lib/dcollide/detectordeform/detectordeformmanager.cpp
+# lib/dcollide/detectordeform/detectordeformalgorithm.cpp
+# lib/dcollide/detectordeform/detectordeformjob.cpp
+# lib/dcollide/detectordeform/detectordeformproxydata.cpp
+# lib/dcollide/detectordeform/spatialhash/intvector3.cpp
+# lib/dcollide/detectordeform/spatialhash/simplehash.cpp
+# lib/dcollide/detectordeform/spatialhash/spatialhash.cpp
+# lib/dcollide/detectordeform/spatialhash/spatialgrid.cpp
+# lib/dcollide/detectordeform/spatialhash/spatialhashalgorithm.cpp
+# lib/dcollide/detectordeform/spatialhash/spatialhashjobcollection.cpp
+# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchy.cpp
+# lib/dcollide/detectordeform/surfacehierarchy/normalcone.cpp
+# lib/dcollide/detectordeform/surfacehierarchy/deformablebvhnode.cpp
+# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyalgorithm.cpp
+# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyjob.cpp
+# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyselfjob.cpp
+# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyproxydata.cpp
+# lib/dcollide/detectordeform/bvhierarchy/bvhierarchyalgorithm.cpp
+# lib/dcollide/detectordeform/bvhierarchy/bvhierarchybvhnode.cpp
+# lib/dcollide/detectordeform/bvhierarchy/bvhierarchyjob.cpp
+# lib/dcollide/detectordeform/bvhierarchy/bvhierarchyproxydata.cpp
 
-	# lib/dcollide/bvhnode.cpp
-	# lib/dcollide/bvhnodedefault.cpp
-	# lib/dcollide/meshsplitter.cpp
+# lib/dcollide/bvhnode.cpp
+# lib/dcollide/bvhnodedefault.cpp
+# lib/dcollide/meshsplitter.cpp
 
-	# lib/dcollide/boundingvolumes/aabb.cpp
-	# lib/dcollide/boundingvolumes/obb.cpp
-	# lib/dcollide/boundingvolumes/boundingvolume.cpp
-	# lib/dcollide/boundingvolumes/boundingsphere.cpp
-	# lib/dcollide/boundingvolumes/kdop.cpp
+# lib/dcollide/boundingvolumes/aabb.cpp
+# lib/dcollide/boundingvolumes/obb.cpp
+# lib/dcollide/boundingvolumes/boundingvolume.cpp
+# lib/dcollide/boundingvolumes/boundingsphere.cpp
+# lib/dcollide/boundingvolumes/kdop.cpp
 
-	# lib/dcollide/shapes/box.cpp
-	# lib/dcollide/shapes/cone.cpp
-	# lib/dcollide/shapes/cylinder.cpp
-	# lib/dcollide/shapes/mesh.cpp
-	# lib/dcollide/shapes/shape.cpp
-	# lib/dcollide/shapes/sphere.cpp
-	# lib/dcollide/shapes/wedge.cpp
-	# lib/dcollide/shapes/mesh/triangle.cpp
-	# lib/dcollide/shapes/mesh/vertex.cpp
-	# lib/dcollide/shapes/mesh/line.cpp
-	# lib/dcollide/shapes/mesh/meshfactory.cpp
+# lib/dcollide/shapes/box.cpp
+# lib/dcollide/shapes/cone.cpp
+# lib/dcollide/shapes/cylinder.cpp
+# lib/dcollide/shapes/mesh.cpp
+# lib/dcollide/shapes/shape.cpp
+# lib/dcollide/shapes/sphere.cpp
+# lib/dcollide/shapes/wedge.cpp
+# lib/dcollide/shapes/mesh/triangle.cpp
+# lib/dcollide/shapes/mesh/vertex.cpp
+# lib/dcollide/shapes/mesh/line.cpp
+# lib/dcollide/shapes/mesh/meshfactory.cpp
 
-	# lib/dcollide/exceptions/exception.cpp
+# lib/dcollide/exceptions/exception.cpp
 
-	# lib/dcollide/detectorrigid/bvhtraverse.cpp
-	# lib/dcollide/detectorrigid/middlephaserigidjob.cpp
-	# lib/dcollide/detectorrigid/middlephaserigidjobcreator.cpp
+# lib/dcollide/detectorrigid/bvhtraverse.cpp
+# lib/dcollide/detectorrigid/middlephaserigidjob.cpp
+# lib/dcollide/detectorrigid/middlephaserigidjobcreator.cpp
 
-	# lib/dcollide/narrowphase/narrowphase.cpp
-	# lib/dcollide/narrowphase/triangleintersector.cpp
-	# lib/dcollide/narrowphase/boxsphereintersector.cpp
-	# lib/dcollide/narrowphase/boxboxintersector.cpp
-	# lib/dcollide/narrowphase/wedgeintersector.cpp
-	# lib/dcollide/narrowphase/intersectionhelpers.cpp
-	# lib/dcollide/narrowphase/cylinderintersector.cpp
-	# lib/dcollide/narrowphase/coneintersector.cpp
-	# lib/dcollide/narrowphase/spheresphereintersector.cpp
-	# lib/dcollide/narrowphase/meshmeshintersector.cpp
-	# lib/dcollide/narrowphase/narrowphasejob.cpp
-	# lib/dcollide/narrowphase/spheretriangleintersector.cpp
+# lib/dcollide/narrowphase/narrowphase.cpp
+# lib/dcollide/narrowphase/triangleintersector.cpp
+# lib/dcollide/narrowphase/boxsphereintersector.cpp
+# lib/dcollide/narrowphase/boxboxintersector.cpp
+# lib/dcollide/narrowphase/wedgeintersector.cpp
+# lib/dcollide/narrowphase/intersectionhelpers.cpp
+# lib/dcollide/narrowphase/cylinderintersector.cpp
+# lib/dcollide/narrowphase/coneintersector.cpp
+# lib/dcollide/narrowphase/spheresphereintersector.cpp
+# lib/dcollide/narrowphase/meshmeshintersector.cpp
+# lib/dcollide/narrowphase/narrowphasejob.cpp
+# lib/dcollide/narrowphase/spheretriangleintersector.cpp
 
-	# lib/dcollide/collisioncache.cpp
-	# lib/dcollide/collisionpair.cpp
+# lib/dcollide/collisioncache.cpp
+# lib/dcollide/collisionpair.cpp
 #	)
 
 
@@ -326,6 +330,43 @@ list (APPEND csgjs_src
 	)
 
 include_directories(lib/openmesh/src)
+list (APPEND openmesh_src
+	lib/openmesh/src/OpenMesh/Core/System/omstream.cc
+	#lib/openmesh/src/OpenMesh/Core/Templates/newClass.cc
+	#lib/openmesh/src/OpenMesh/Core/Templates/newClassT.cc
+	lib/openmesh/src/OpenMesh/Core/Utils/SingletonT.cc
+	lib/openmesh/src/OpenMesh/Core/Utils/BaseProperty.cc
+	lib/openmesh/src/OpenMesh/Core/Utils/RandomNumberGenerator.cc
+	lib/openmesh/src/OpenMesh/Core/Utils/Endian.cc
+	lib/openmesh/src/OpenMesh/Core/Geometry/NormalConeT.cc
+	lib/openmesh/src/OpenMesh/Core/IO/OMFormatT.cc
+	lib/openmesh/src/OpenMesh/Core/IO/BinaryHelper.cc
+	lib/openmesh/src/OpenMesh/Core/IO/reader/BaseReader.cc
+	lib/openmesh/src/OpenMesh/Core/IO/reader/PLYReader.cc
+	lib/openmesh/src/OpenMesh/Core/IO/reader/OBJReader.cc
+	lib/openmesh/src/OpenMesh/Core/IO/reader/STLReader.cc
+	lib/openmesh/src/OpenMesh/Core/IO/reader/OMReader.cc
+	lib/openmesh/src/OpenMesh/Core/IO/reader/OFFReader.cc
+	lib/openmesh/src/OpenMesh/Core/IO/IOManager.cc
+	lib/openmesh/src/OpenMesh/Core/IO/OMFormat.cc
+	lib/openmesh/src/OpenMesh/Core/IO/writer/STLWriter.cc
+	lib/openmesh/src/OpenMesh/Core/IO/writer/BaseWriter.cc
+	lib/openmesh/src/OpenMesh/Core/IO/writer/OBJWriter.cc
+	lib/openmesh/src/OpenMesh/Core/IO/writer/VTKWriter.cc
+	lib/openmesh/src/OpenMesh/Core/IO/writer/PLYWriter.cc
+	lib/openmesh/src/OpenMesh/Core/IO/writer/OFFWriter.cc
+	lib/openmesh/src/OpenMesh/Core/IO/writer/OMWriter.cc
+	lib/openmesh/src/OpenMesh/Core/Mesh/TriMeshT.cc
+	lib/openmesh/src/OpenMesh/Core/Mesh/PolyConnectivity.cc
+	lib/openmesh/src/OpenMesh/Core/Mesh/TriConnectivity.cc
+	lib/openmesh/src/OpenMesh/Core/Mesh/PolyMeshT.cc
+	lib/openmesh/src/OpenMesh/Core/Mesh/BaseKernel.cc
+	lib/openmesh/src/OpenMesh/Core/Mesh/ArrayKernelT.cc
+	lib/openmesh/src/OpenMesh/Core/Mesh/ArrayKernel.cc
+	lib/openmesh/src/OpenMesh/Tools/Decimater/ModQuadricT.cc
+	lib/openmesh/src/OpenMesh/Tools/Decimater/DecimaterT.cc
+	lib/openmesh/src/OpenMesh/Tools/Decimater/Observer.cc
+	)
 
 include_directories(lib/bx/include)
 include_directories(lib/bgfx/include)
@@ -356,13 +397,6 @@ list(APPEND bgfx_utils_src
 	common/drawing/font/text_metrics.cpp
 	common/drawing/font/text_buffer_manager.cpp
 	common/drawing/font/cube_atlas.cpp
-	)
-
-list(APPEND openmesh_src
-	lib/openmesh/src/OpenMesh/Tools/Decimater/ModQuadricT.cc
-	lib/openmesh/src/OpenMesh/Tools/Decimater/DecimaterT.cc
-	lib/openmesh/src/OpenMesh/Tools/Decimater/Observer.cc
-	lib/openmesh/src/OpenMesh/Core/Mesh/ArrayKernelT.cc
 	)
 
 include_directories(lib/variant)
@@ -537,9 +571,6 @@ list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${csgjs_src}
 	${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src}
 	${es_src} ${user_src} ${recast_src} ${angelscript_src} ${es_src}
-	${bullet_src}) # ${dcollide_src}
+	${bullet_src} ${voropp_src}) # ${dcollide_src}
 
-target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES}
-	${OPENGL_LIBRARIES} freetype rt dl pthread assimp m OpenMeshCore
-	spnav ozz_animation_offline_r ozz_animation_r
-	ozz_geometry_r ozz_base_r ${Boost_LIBRARIES})
+target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m spnav ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r ${Boost_LIBRARIES})
