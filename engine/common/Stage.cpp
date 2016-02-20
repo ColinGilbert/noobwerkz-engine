@@ -21,6 +21,7 @@ void noob::stage::init()
 	dynamics_world->setGravity(btVector3(0, -10, 0));
 
 
+
 	logger::log("[Stage] Done init.");
 }
 
@@ -52,16 +53,6 @@ void noob::stage::draw(float window_width, float window_height) const
 
 
 
-	// TODO: Find out why the latter breaks for gcc 5.3.0 but works for gcc 4.9.2
-	// pool.for_each<noob::basic_models_holder::handle, noob::bodies_holder::handle, noob::shaders_holder::handle>(basic_model_tag.get(), body_tag.get(), shader_tag.get(), [this](es::storage::iterator, noob::basic_models_holder::handle& m, noob::bodies_holder::handle& b, noob::shaders_holder::handle& s)  -> long unsigned int
-	// {
-	// noob::mat4 world_mat = noob::scale(noob::identity_mat4(), globals::shapes.get(bodies_to_shapes[b.get_inner()])->get_scales());
-	// world_mat = bodies.get(b)->get_transform() * world_mat;
-	// noob::mat4 normal_mat = noob::transpose(noob::inverse((view_mat * world_mat)));
-	// globals::renderer.draw(globals::basic_models.get(m), globals::shaders.get(s), world_mat, normal_mat, basic_lights);
-	// return 1;
-	// });
-	
 	if (show_origin)
 	{
 		// noob::mat4 world_mat = noob::scale(noob::identity_mat4(), shapes.get(bodies_to_shapes[b.get_inner()])->get_scales());
@@ -86,52 +77,26 @@ noob::bodies_holder::handle noob::stage::body(noob::body_type b_type, noob::shap
 }
 
 
-es::entity noob::stage::actor(const noob::bodies_holder::handle _bod, noob::animated_models_holder::handle _model, const std::string& shading)
+void noob::stage::actor(const noob::bodies_holder::handle _bod, noob::animated_models_holder::handle _model, const std::string& shading)
 {
-	// es::entity temp (pool.new_entity());
-	// pool.set(temp, body_tag.inner, _bod);
-	// pool.set(temp, animated_model_tag.inner, _model);
-	// pool.set(temp, shader_tag.inner, globals::get_shader(shading));
-	// return temp;
+
 }
 
 
-// es::entity noob::stage::prop(const noob::bodies_holder::handle _bod, const std::string& shading)
-// {
-	// es::entity temp (pool.new_entity());
-	// pool.set(temp, body_tag.inner, _bod);
-	// auto bs = bodies_to_shapes[_bod.get_inner()];
-	// pool.set(temp, basic_model_tag.inner, std::get<0>(globals::get_model(bs)));
-	// pool.set(temp, scales_tag.inner, globals::shapes.get(bodies_to_shapes[_bod.get_inner()])->get_scales());
-	// pool.set(temp, shader_tag.inner, globals::get_shader(shading));
-	// return temp;
-// }
 
-
-es::entity noob::stage::prop(const noob::bodies_holder::handle _bod, noob::basic_models_holder::handle _model, const std::string& shading)
+void noob::stage::prop(const noob::bodies_holder::handle _bod, noob::basic_models_holder::handle _model, const std::string& shading)
 {
-	// es::entity temp (pool.new_entity());
-	// pool.set(temp, body_tag.inner, bodies.get(_bod));
-	// pool.set(temp, basic_model_tag.inner, _model);
-	// pool.set(temp, scales_tag.inner, noob::vec3(1.0, 1.0, 1.0));
-	// pool.set(temp, shader_tag.inner, globals::get_shader(shading));
-	// return temp;
+
 }
 
 
-es::entity noob::stage::scenery(const noob::meshes_holder::handle h, const noob::vec3& pos, const std::string& shading, const noob::versor& orient)
+void noob::stage::scenery(const noob::meshes_holder::handle h, const noob::vec3& pos, const std::string& shading, const noob::versor& orient)
 {
 	noob::shapes_holder::handle s_handle = globals::static_trimesh(h);
 	// shapes.get(s_handle)->set_margin(1.0);
 	noob::bodies_holder::handle b_handle = body(noob::body_type::STATIC, s_handle, 0.0, pos, orient);
 	noob::basic_models_holder::handle model_handle = std::get<0>(globals::get_model(s_handle));
 
-	// es::entity temp (pool.new_entity());
-	// pool.set(temp, body_tag.inner, b_handle);
-	// pool.set(temp, basic_model_tag.inner, model_handle);
-	// pool.set(temp, scales_tag.inner, std::get<1>(globals::get_model(s_handle)));//bodies.get(b_handle)->inner_shape->get_scales());
-	// pool.set(temp, shader_tag.inner, globals::get_shader(shading));
-	// return temp;
 }
 
 

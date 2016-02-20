@@ -66,12 +66,12 @@ namespace noob
 			noob::bodies_holder bodies;
 
 			// Functions to create commonly-used configurations:
-			es::entity actor(const noob::bodies_holder::handle, const noob::animated_models_holder::handle, const std::string& shading);
+			void actor(const noob::bodies_holder::handle, const noob::animated_models_holder::handle, const std::string& shading);
 
-			es::entity prop(const noob::bodies_holder::handle, const noob::basic_models_holder::handle, const std::string& shading);
+			void prop(const noob::bodies_holder::handle, const noob::basic_models_holder::handle, const std::string& shading);
 
 			// Scenery is a non-movable item that uses indexed triangle meshes as input.
-			es::entity scenery(const noob::meshes_holder::handle, const noob::vec3& pos, const std::string& shading, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
+			void scenery(const noob::meshes_holder::handle, const noob::vec3& pos, const std::string& shading, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
 
 			bool show_origin;
 

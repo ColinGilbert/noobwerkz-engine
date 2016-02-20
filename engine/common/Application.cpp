@@ -448,11 +448,10 @@ void noob::application::init()
 	r = script_engine->RegisterGlobalFunction("void set_shader(const triplanar_gradmap_uniform& in, const string& in)", asFUNCTIONPR(globals::set_shader, (const noob::triplanar_gradient_map_renderer::uniform&, const std::string&), void), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("uint get_shader(const string& in)", asFUNCTION(globals::_get_shader), asCALL_CDECL); assert( r >= 0 );
 
-	//r = script_engine->RegisterObjectMethod("stage", "uint actor(uint, uint, const string& in)", asMETHOD(noob::stage, _actor), asCALL_THISCALL); assert( r >= 0 );
-	//r = script_engine->RegisterObjectMethod("stage", "uint prop(uint, const string& in)", asMETHODPR(noob::stage, _prop, (unsigned int, const std::string&), unsigned int), asCALL_THISCALL); assert( r >= 0 );
-	// r = script_engine->RegisterObjectMethod("stage", "uint prop(uint, uint, const string& in)", asMETHODPR(noob::stage, _prop, (unsigned int, unsigned int, const std::string&), unsigned int), asCALL_THISCALL); assert( r >= 0 );
-	// r = script_engine->RegisterObjectMethod("stage", "uint scenery_from_mesh(uint, const vec3& in, const string& in, const versor& in)", asMETHOD(noob::stage, _scenery_from_mesh), asCALL_THISCALL); assert(r >= 0);
-	// r = script_engine->RegisterObjectMethod("stage", "uint scenery_from_shape(uint, const vec3& in, const string& in, const versor& in)", asMETHOD(noob::stage, _scenery_from_shape), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("stage", "void actor(body_handle, animated_model_handle, const string& in)", asMETHOD(noob::stage, actor), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "void prop(body_handle, basic_model_handle, const string& in)", asMETHOD(noob::stage, prop), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "void scenery(mesh_handle, const vec3& in, const string& in, const versor& in)", asMETHOD(noob::stage, scenery), asCALL_THISCALL); assert(r >= 0);
+
 
 	r = script_engine->RegisterObjectProperty("stage", "bool show_origin", asOFFSET(noob::stage, show_origin)); assert(r >= 0);	
 	r = script_engine->RegisterObjectProperty("stage", "mat4 view_mat", asOFFSET(noob::stage, view_mat)); assert(r >= 0);
