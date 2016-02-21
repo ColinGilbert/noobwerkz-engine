@@ -430,23 +430,23 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("stage", "void draw(float, float)", asMETHOD(noob::stage, draw), asCALL_THISCALL); assert( r >= 0 );
 // 	r = script_engine->RegisterObjectMethod("stage", "uint body(body_type, uint, float, const vec3& in, const versor& in, bool)", asMETHOD(noob::stage, _body), asCALL_THISCALL); assert( r >= 0 );
 
-	r = script_engine->RegisterGlobalFunction("shape_handle sphere(float)", asFUNCTION(globals::_sphere), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("shape_handle box(float, float, float)", asFUNCTION(globals::_box), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("shape_handle cylinder(float, float)", asFUNCTION(globals::_cylinder), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("shape_handle cone(float, float)", asFUNCTION(globals::_cone), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("shape_handle hull(const vector_vec3& in)", asFUNCTION(globals::_hull), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("shape_handle static_trimesh(uint)", asFUNCTION(globals::_static_trimesh), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("basic_mesh_handle add_mesh(const basic_mesh& in)", asFUNCTION(globals::_add_mesh), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("basic_model_handle basic_model(basic_model_handle& in)", asFUNCTION(globals::_basic_model), asCALL_CDECL); assert(r >= 0);
-	r = script_engine->RegisterGlobalFunction("animated_model_handle animated_model(const string& in)", asFUNCTION(globals::_animated_model), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("skeleton_handle skeleton(const string& in)", asFUNCTION(globals::_skeleton), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("shape_handle sphere(float)", asFUNCTION(globals::sphere), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("shape_handle box(float, float, float)", asFUNCTION(globals::box), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("shape_handle cylinder(float, float)", asFUNCTION(globals::cylinder), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("shape_handle cone(float, float)", asFUNCTION(globals::cone), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("shape_handle hull(const vector_vec3& in)", asFUNCTION(globals::hull), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("shape_handle static_trimesh(uint)", asFUNCTION(globals::static_trimesh), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("basic_mesh_handle add_mesh(const basic_mesh& in)", asFUNCTION(globals::add_mesh), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("basic_model_handle basic_model(basic_model_handle& in)", asFUNCTION(globals::basic_model), asCALL_CDECL); assert(r >= 0);
+	r = script_engine->RegisterGlobalFunction("animated_model_handle animated_model(const string& in)", asFUNCTION(globals::animated_model), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("skeleton_handle skeleton(const string& in)", asFUNCTION(globals::skeleton), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("void set_light(const light& in, const string& in)", asFUNCTION(globals::set_light), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("light get_light(const string& in)", asFUNCTION(globals::get_light), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("void set_reflection(const reflection& in, const string& in)", asFUNCTION(globals::set_reflection), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("reflection get_reflection(const string& in)", asFUNCTION(globals::get_reflection), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("void set_shader(const basic_uniform& in, const string& in)", asFUNCTIONPR(globals::set_shader, (const noob::basic_renderer::uniform&, const std::string&), void), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("void set_shader(const triplanar_gradmap_uniform& in, const string& in)", asFUNCTIONPR(globals::set_shader, (const noob::triplanar_gradient_map_renderer::uniform&, const std::string&), void), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("uint get_shader(const string& in)", asFUNCTION(globals::_get_shader), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("uint get_shader(const string& in)", asFUNCTION(globals::get_shader), asCALL_CDECL); assert( r >= 0 );
 
 	r = script_engine->RegisterObjectMethod("stage", "void actor(body_handle, animated_model_handle, const string& in)", asMETHOD(noob::stage, actor), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "void prop(body_handle, basic_model_handle, const string& in)", asMETHOD(noob::stage, prop), asCALL_THISCALL); assert( r >= 0 );

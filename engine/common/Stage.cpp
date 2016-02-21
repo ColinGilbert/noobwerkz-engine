@@ -83,11 +83,21 @@ void noob::stage::actor(const noob::bodies_holder::handle _bod, noob::animated_m
 }
 
 
-
 void noob::stage::prop(const noob::bodies_holder::handle _bod, noob::basic_models_holder::handle _model, const std::string& shading)
 {
 
 }
+
+/*
+void noob::stage::scenery(const noob::meshes_holder::handle h, const noob::vec3& pos, const std::string& shading, const noob::versor& orient)
+{
+	noob::shapes_holder::handle s_handle = globals::static_trimesh(h);
+	// shapes.get(s_handle)->set_margin(1.0);
+	noob::bodies_holder::handle b_handle = body(noob::body_type::STATIC, s_handle, 0.0, pos, orient);
+	noob::basic_models_holder::handle model_handle = std::get<0>(globals::get_model(s_handle));
+
+}
+*/
 
 
 void noob::stage::scenery(const noob::meshes_holder::handle h, const noob::vec3& pos, const std::string& shading, const noob::versor& orient)
@@ -97,6 +107,7 @@ void noob::stage::scenery(const noob::meshes_holder::handle h, const noob::vec3&
 	noob::bodies_holder::handle b_handle = body(noob::body_type::STATIC, s_handle, 0.0, pos, orient);
 	noob::basic_models_holder::handle model_handle = std::get<0>(globals::get_model(s_handle));
 
+	
 }
 
 

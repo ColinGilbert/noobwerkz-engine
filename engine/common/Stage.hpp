@@ -45,7 +45,7 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() : show_origin(true), view_mat(noob::identity_mat4()), projection_mat(noob::identity_mat4()), basic_lights( { noob::vec4(0.0, 1.0, 0.0, 0.1), noob::vec4(1.0, 0.0, 0.0, 0.1) } ), models_mapping(scene_graph), shaders_mapping(scene_graph), bodies_mapping(scene_graph) {}
+			stage() : show_origin(true), view_mat(noob::identity_mat4()), projection_mat(noob::identity_mat4()), basic_lights( { noob::vec4(0.0, 1.0, 0.0, 0.1), noob::vec4(1.0, 0.0, 0.0, 0.1) } ), bodies_mapping(draw_graph), models_mapping(draw_graph), shaders_mapping(draw_graph) {}
 
 			~stage();
 
@@ -93,11 +93,11 @@ namespace noob
 			btSequentialImpulseConstraintSolver* solver;
 			btDiscreteDynamicsWorld* dynamics_world;
 			
-			lemon::SmartDigraph scene_graph;
+			lemon::SmartDigraph draw_graph;
 			lemon::SmartDigraph::NodeMap<noob::bodies_holder::handle> bodies_mapping;
 			lemon::SmartDigraph::NodeMap<noob::basic_models_holder::handle> models_mapping;
 			lemon::SmartDigraph::NodeMap<noob::shaders_holder::handle> shaders_mapping;
-
+			lemon::SmartDigraph::Node root_node;
 
 			std::unordered_map<size_t, noob::shapes_holder::handle> bodies_to_shapes;
 	};
