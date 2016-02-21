@@ -83,18 +83,8 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::an
 }
 
 
-void noob::stage::prop(const noob::bodies_holder::handle body_h, const noob::basic_models_holder::handle model_h,  const noob::shaders_holder::handle shader_h)
+void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::basic_models_holder::handle model_h,  const noob::shaders_holder::handle shader_h)
 {
-
-}
-
-
-void noob::stage::scenery(const noob::meshes_holder::handle mesh_h, const noob::shaders_holder::handle shader_h, const noob::vec3& pos, const noob::versor& orient)
-{
-	noob::shapes_holder::handle shape_h = globals::static_trimesh(mesh_h);
-	noob::bodies_holder::handle body_h = body(noob::body_type::STATIC, shape_h, 0.0, pos, orient);
-	noob::basic_models_holder::handle model_h = std::get<0>(globals::get_model(shape_h));
-	
 	bool model_found, shader_found;
 	model_found = shader_found = false;
 
@@ -134,6 +124,16 @@ void noob::stage::scenery(const noob::meshes_holder::handle mesh_h, const noob::
 	bodies_mapping[body_node] = body_h;
 	draw_graph.addArc(shader_node, body_node);
 	bodies_to_nodes.insert(std::make_pair(body_h.get_inner(), body_node));
+}
+
+
+void noob::stage::scenery(const noob::meshes_holder::handle mesh_h, const noob::shaders_holder::handle shader_h, const noob::vec3& pos, const noob::versor& orient)
+{
+	noob::shapes_holder::handle shape_h = globals::static_trimesh(mesh_h);
+	noob::bodies_holder::handle body_h = body(noob::body_type::STATIC, shape_h, 0.0, pos, orient);
+	noob::basic_models_holder::handle model_h = std::get<0>(globals::get_model(shape_h));
+	
+	actor(body_h, model_h, shader_h);
 }
 
 // noob::shaders_holder::handle shader_h = globals::get_shader(shading_name);

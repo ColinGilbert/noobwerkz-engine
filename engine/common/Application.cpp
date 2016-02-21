@@ -444,8 +444,8 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("stage", "void update(double)", asMETHOD(noob::stage, update), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "void draw(float, float)", asMETHOD(noob::stage, draw), asCALL_THISCALL); assert( r >= 0 );
 // 	r = script_engine->RegisterObjectMethod("stage", "uint body(body_type, uint, float, const vec3& in, const versor& in, bool)", asMETHOD(noob::stage, _body), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "void actor(body_handle, animated_model_handle, const string& in)", asMETHOD(noob::stage, actor), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "void prop(body_handle, basic_model_handle, const string& in)", asMETHOD(noob::stage, prop), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "void actor(const body_handle, const animated_model_handle, const shader_handle)", asMETHODPR(noob::stage, actor, (const noob::bodies_holder::handle, const noob::animated_models_holder::handle, const noob::shaders_holder::handle), void), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "void actor(const body_handle, const basic_model_handle, const shader_handle)", asMETHODPR(noob::stage, actor, (const noob::bodies_holder::handle, const noob::basic_models_holder::handle, const noob::shaders_holder::handle), void), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "void scenery(mesh_handle, const string& in, const vec3& in, const versor& in)", asMETHOD(noob::stage, scenery), asCALL_THISCALL); assert(r >= 0);
 
 	r = script_engine->RegisterObjectProperty("stage", "bool show_origin", asOFFSET(noob::stage, show_origin)); assert(r >= 0);	

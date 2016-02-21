@@ -68,7 +68,7 @@ namespace noob
 			// Functions to create commonly-used configurations:
 			void actor(const noob::bodies_holder::handle, const noob::animated_models_holder::handle, const noob::shaders_holder::handle);
 
-			void prop(const noob::bodies_holder::handle, const noob::basic_models_holder::handle, const noob::shaders_holder::handle);
+			void actor(const noob::bodies_holder::handle, const noob::basic_models_holder::handle, const noob::shaders_holder::handle);
 
 			// Scenery is a non-movable item that uses indexed triangle meshes as input.
 			void scenery(const noob::meshes_holder::handle, const noob::shaders_holder::handle, const noob::vec3& pos, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
