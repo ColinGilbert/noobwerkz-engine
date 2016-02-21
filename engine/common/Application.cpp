@@ -100,7 +100,7 @@ void noob::application::init()
 	// RegisterVector<bool>("bool", script_engine);
 
 	// Neither those two seem to work. They register just fine but there's literally no output to the commandline.
-	r = script_engine->RegisterGlobalFunction("void logger(const string& in)", asFUNCTION(logger::log), asCALL_CDECL); assert (r >= 0);
+	r = script_engine->RegisterGlobalFunction("void log(const string& in)", asFUNCTION(logger::log), asCALL_CDECL); assert (r >= 0);
 	// r = script_engine->RegisterGlobalFunction("void log(const string& in)", asFUNCTIONPR(logger::log, (const std::string&), void), asCALL_CDECL); assert (r >= 0);
 
 	// struct uniform
@@ -319,7 +319,6 @@ void noob::application::init()
 	r = script_engine->RegisterObjectType("halfedge_handle", sizeof(noob::active_mesh::halfedge_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::active_mesh::halfedge_handle>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
 	RegisterVector<noob::active_mesh::halfedge_handle>("halfedge_handle", script_engine);
 
-
 	r = script_engine->RegisterObjectType("active_mesh", sizeof(active_mesh), asOBJ_VALUE | asGetTypeTraits<noob::active_mesh>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
 	RegisterVector<noob::active_mesh>("active_mesh", script_engine);
 	r = script_engine->RegisterObjectBehaviour("active_mesh", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(as_active_mesh_constructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
@@ -363,8 +362,6 @@ void noob::application::init()
 	r = script_engine->RegisterGlobalFunction("basic_mesh cone_mesh(float, float)", asFUNCTION(mesh_utils::cone), asCALL_CDECL); assert(r >= 0);
 	r = script_engine->RegisterGlobalFunction("basic_mesh cylinder_mesh(float, float)", asFUNCTION(mesh_utils::cylinder), asCALL_CDECL); assert(r >= 0);
 	r = script_engine->RegisterGlobalFunction("basic_mesh hull_mesh(const vector_vec3& in)", asFUNCTION(mesh_utils::hull), asCALL_CDECL); assert(r >= 0);
-
-
 
 	// TODO: Implement
 	// r = script_engine->RegisterGlobalFunction("basic_mesh csg(const basic_mesh& in, const basic_mesh& in, csg_op)", asFUNCTION(mesh_utils::csg), asCALL_CDECL); assert(r >= 0);
@@ -421,15 +418,6 @@ void noob::application::init()
 	r = script_engine->RegisterObjectType("reflection_handle", sizeof(noob::reflections_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::reflections_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	r = script_engine->RegisterObjectType("shader_handle", sizeof(noob::shaders_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::shaders_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 
-	r = script_engine->RegisterObjectType("stage", sizeof(noob::stage), asOBJ_VALUE); assert(r >= 0 );
-	r = script_engine->RegisterObjectBehaviour("stage", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(as_stage_constructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
-	r = script_engine->RegisterObjectBehaviour("stage", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_stage_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "void init()", asMETHOD(noob::stage, init), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "void tear_down()", asMETHOD(noob::stage, tear_down), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "void update(double)", asMETHOD(noob::stage, update), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "void draw(float, float)", asMETHOD(noob::stage, draw), asCALL_THISCALL); assert( r >= 0 );
-// 	r = script_engine->RegisterObjectMethod("stage", "uint body(body_type, uint, float, const vec3& in, const versor& in, bool)", asMETHOD(noob::stage, _body), asCALL_THISCALL); assert( r >= 0 );
-
 	r = script_engine->RegisterGlobalFunction("shape_handle sphere(float)", asFUNCTION(globals::sphere), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("shape_handle box(float, float, float)", asFUNCTION(globals::box), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("shape_handle cylinder(float, float)", asFUNCTION(globals::cylinder), asCALL_CDECL); assert( r >= 0 );
@@ -446,12 +434,19 @@ void noob::application::init()
 	r = script_engine->RegisterGlobalFunction("reflection get_reflection(const string& in)", asFUNCTION(globals::get_reflection), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("void set_shader(const basic_uniform& in, const string& in)", asFUNCTIONPR(globals::set_shader, (const noob::basic_renderer::uniform&, const std::string&), void), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("void set_shader(const triplanar_gradmap_uniform& in, const string& in)", asFUNCTIONPR(globals::set_shader, (const noob::triplanar_gradient_map_renderer::uniform&, const std::string&), void), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("uint get_shader(const string& in)", asFUNCTION(globals::get_shader), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("shader_handle get_shader(const string& in)", asFUNCTION(globals::get_shader), asCALL_CDECL); assert( r >= 0 );
 
+	r = script_engine->RegisterObjectType("stage", sizeof(noob::stage), asOBJ_VALUE); assert(r >= 0 );
+	r = script_engine->RegisterObjectBehaviour("stage", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(as_stage_constructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	r = script_engine->RegisterObjectBehaviour("stage", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_stage_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "void init()", asMETHOD(noob::stage, init), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "void tear_down()", asMETHOD(noob::stage, tear_down), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "void update(double)", asMETHOD(noob::stage, update), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "void draw(float, float)", asMETHOD(noob::stage, draw), asCALL_THISCALL); assert( r >= 0 );
+// 	r = script_engine->RegisterObjectMethod("stage", "uint body(body_type, uint, float, const vec3& in, const versor& in, bool)", asMETHOD(noob::stage, _body), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "void actor(body_handle, animated_model_handle, const string& in)", asMETHOD(noob::stage, actor), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "void prop(body_handle, basic_model_handle, const string& in)", asMETHOD(noob::stage, prop), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "void scenery(mesh_handle, const vec3& in, const string& in, const versor& in)", asMETHOD(noob::stage, scenery), asCALL_THISCALL); assert(r >= 0);
-
+	r = script_engine->RegisterObjectMethod("stage", "void scenery(mesh_handle, const string& in, const vec3& in, const versor& in)", asMETHOD(noob::stage, scenery), asCALL_THISCALL); assert(r >= 0);
 
 	r = script_engine->RegisterObjectProperty("stage", "bool show_origin", asOFFSET(noob::stage, show_origin)); assert(r >= 0);	
 	r = script_engine->RegisterObjectProperty("stage", "mat4 view_mat", asOFFSET(noob::stage, view_mat)); assert(r >= 0);

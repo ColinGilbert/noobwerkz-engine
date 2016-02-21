@@ -22,6 +22,11 @@ namespace noob
 					{
 						return (inner == other.inner);
 					}
+					bool operator!=(const noob::component<T>::handle other) const
+					{
+						return (inner != other.inner);
+					}
+
 
 					bool operator<(const noob::component<T>::handle other) const
 					{

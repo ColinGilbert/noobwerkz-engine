@@ -1,6 +1,5 @@
 #include "GlobalComponents.hpp"
 
-
 noob::shaders_holder::handle noob::globals::debug_shader;
 noob::shaders_holder::handle noob::globals::default_triplanar_shader;
 noob::shaders_holder::handle noob::globals::uv_shader;
@@ -76,7 +75,6 @@ void noob::globals::init()
 	unit_sphere_model = basic_model(unit_sphere_mesh);
 	logger::log("[Globals] Making unit cube model");
 	unit_cube_model = basic_model(unit_cube_mesh);
-	// logger::log("[Globals] making unit capsule model");
 	logger::log("[Globals] Making unit cylinder model");
 	unit_cylinder_model = basic_model(unit_cylinder_mesh);
 	logger::log("[Globals] Making unit cone model");
@@ -105,8 +103,6 @@ void noob::globals::init()
 	triplanar_info.colour_positions = noob::vec4(0.3, 0.6, 0.0, 0.0);
 	set_shader(triplanar_info, "default-triplanar");
 	default_triplanar_shader = get_shader("default-triplanar");
-
-
 }
 
 
@@ -162,13 +158,6 @@ noob::basic_mesh noob::globals::make_mesh(const noob::shapes_holder::handle h)
 	return *meshes.get(unit_sphere_mesh);
 }
 
-/*
-noob::basic_mesh noob::globals::_make_mesh(unsigned int _shape)
-{
-	return make_mesh(shapes.make_handle(_shape));
-}
-*/
-
 
 std::tuple<noob::basic_models_holder::handle, noob::vec3> noob::globals::get_model(const noob::shapes_holder::handle h)
 {
@@ -213,13 +202,6 @@ std::tuple<noob::basic_models_holder::handle, noob::vec3> noob::globals::get_mod
 	return std::make_tuple(unit_sphere_model, noob::vec3(1.0, 1.0, 1.0));
 }
 
-/*
-std::tuple<unsigned int, noob::vec3> noob::globals::_get_model(unsigned int shape_h)
-{
-	auto a = get_model(shapes.make_handle(shape_h));
-	return std::make_tuple(std::get<0>(a).get_inner(), std::get<1>(a));
-}
-*/
 
 noob::shapes_holder::handle noob::globals::sphere(float r)
 {
@@ -235,12 +217,6 @@ noob::shapes_holder::handle noob::globals::sphere(float r)
 	return sphere_shapes[r];
 }
 
-/*
-unsigned int noob::globals::_sphere(float r)
-{
-	return sphere(r).get_inner();
-}
-*/
 
 noob::shapes_holder::handle noob::globals::box(float x, float y, float z)
 {
@@ -255,12 +231,6 @@ noob::shapes_holder::handle noob::globals::box(float x, float y, float z)
 	return box_shapes[std::make_tuple(x,y,z)];
 }
 
-/*
-unsigned int noob::globals::_box(float x, float y, float z)
-{
-	return box(x, y, z).get_inner();
-}
-*/
 
 noob::shapes_holder::handle noob::globals::cylinder(float r, float h)
 {
@@ -275,12 +245,6 @@ noob::shapes_holder::handle noob::globals::cylinder(float r, float h)
 	return cylinder_shapes[std::make_tuple(r, h)];
 }
 
-/*
-unsigned int noob::globals::_cylinder(float r, float h)
-{
-	return cylinder(r, h).get_inner();
-}
-*/
 
 noob::shapes_holder::handle noob::globals::cone(float r, float h)
 {
@@ -295,12 +259,6 @@ noob::shapes_holder::handle noob::globals::cone(float r, float h)
 	return cone_shapes[std::make_tuple(r, h)];
 }
 
-/*
-unsigned int noob::globals::_cone(float r, float h)
-{
-	return cone(r, h).get_inner();
-}
-*/
 
 /*
    noob::shapes_holder::handle noob::globals::capsule(float r, float h)
@@ -348,12 +306,6 @@ noob::shapes_holder::handle noob::globals::hull(const std::vector<vec3> & _point
 	return temp_shape_handle;
 }
 
-/*
-unsigned int noob::globals::_hull(const std::vector<vec3>& _points)
-{
-	return hull(_points).get_inner();
-}
-*/
 
 noob::shapes_holder::handle noob::globals::static_trimesh(const noob::meshes_holder::handle _mesh)
 {
@@ -370,33 +322,20 @@ noob::shapes_holder::handle noob::globals::static_trimesh(const noob::meshes_hol
 	return search->second;
 }
 
-/*
-unsigned int noob::globals::_static_trimesh(unsigned int _m)
-{
-	return static_trimesh(meshes.make_handle(_m)).get_inner();
-}
-*/
 
 noob::meshes_holder::handle noob::globals::add_mesh(const noob::basic_mesh& m)
 {
 	std::unique_ptr<noob::basic_mesh> mesh_ptr = std::make_unique<noob::basic_mesh>();
-	*mesh_ptr = m; //noob::mesh_utils::copy(m);
+	*mesh_ptr = m;
 	return meshes.add(std::move(mesh_ptr));	
 }
 
-/*
-unsigned int noob::globals::_add_mesh(const noob::basic_mesh& m)
-{
-	return add_mesh(m).get_inner();
-}
-*/
 
 noob::basic_models_holder::handle noob::globals::basic_model(const noob::meshes_holder::handle _mesh)
 {
 	auto search = meshes_to_models.find(_mesh.get_inner());
 	if (search == meshes_to_models.end())
 	{		
-		// logger::log("[Globals] Adding a model. Mesh not found; creating.");
 		std::unique_ptr<noob::basic_model> temp = std::make_unique<noob::basic_model>();
 		temp->init(*meshes.get(_mesh));
 		noob::basic_models_holder::handle h = basic_models.add(std::move(temp));
@@ -406,12 +345,6 @@ noob::basic_models_holder::handle noob::globals::basic_model(const noob::meshes_
 	return search->second;
 }
 
-/*
-unsigned int noob::globals::_basic_model(unsigned int _m)
-{
-	return basic_model(meshes.make_handle(_m)).get_inner();
-}
-*/
 
 noob::animated_models_holder::handle noob::globals::animated_model(const std::string& filename)
 {
@@ -420,12 +353,6 @@ noob::animated_models_holder::handle noob::globals::animated_model(const std::st
 	return animated_models.add(std::move(temp));
 }
 
-/*
-unsigned int noob::globals::_animated_model(const std::string& filename)
-{
-	return animated_model(filename).get_inner();
-}
-*/
 
 noob::skeletal_anims_holder::handle noob::globals::skeleton(const std::string& filename)
 {
@@ -434,12 +361,6 @@ noob::skeletal_anims_holder::handle noob::globals::skeleton(const std::string& f
 	return skeletal_anims.add(std::move(temp));
 }
 
-/*
-unsigned int noob::globals::_skeleton(const std::string& filename)
-{
-	return skeleton(filename).get_inner();
-}
-*/
 
 void noob::globals::set_light(const noob::light& l, const std::string& s)
 {
@@ -493,14 +414,12 @@ noob::reflection noob::globals::get_reflection(const std::string& s)
 
 void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std::string& name)
 {
-	// noob::prepared_shaders::uniform uu(u);
 	set_shader(noob::prepared_shaders::uniform(u), name);
 }
 
 
 void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::uniform& u, const std::string& name)
 {
-	// noob::prepared_shaders::uniform uu(u);
 	set_shader(noob::prepared_shaders::uniform(u), name);
 }
 
@@ -528,10 +447,3 @@ noob::shaders_holder::handle noob::globals::get_shader(const std::string& s)
 	}
 	return default_triplanar_shader;
 }
-
-/*
-unsigned int noob::globals::_get_shader(const std::string& s)
-{
-	return get_shader(s).get_inner();
-}
-*/
