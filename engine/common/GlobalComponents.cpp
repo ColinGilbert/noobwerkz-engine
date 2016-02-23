@@ -44,13 +44,15 @@ void noob::globals::init()
 	unit_cone_shape = cone(0.5, 1.0);
 
 	// logger::log("[Globals] Making unit sphere model");
-	// unit_sphere_model = basic_model(unit_sphere_mesh);
+	unit_sphere_model = basic_model(noob::mesh_utils::sphere(0.5));//basic_models.add(std::move(temp));
 	// logger::log("[Globals] Making unit cube model");
-	// unit_cube_model = basic_model(unit_cube_mesh);
+	unit_cube_model = basic_model(noob::mesh_utils::box(1.0, 1.0, 1.0));
+	// unit_cube_model = basic_model(noob::mesh_utils::box(1.0, 1.0, 1.0));
 	// logger::log("[Globals] Making unit cylinder model");
-	// unit_cylinder_model = basic_model(unit_cylinder_mesh);
+	// unit_cylinder_model = basic_model(noob::mesh_utils::cylinder(1.0, 0.5));
+	unit_cylinder_model = basic_model(noob::mesh_utils::cylinder(0.5, 1.0));
 	// logger::log("[Globals] Making unit cone model");
-	// unit_cone_model = basic_model(unit_cone_mesh);
+	unit_cone_model = basic_model(noob::mesh_utils::cone(0.5, 1.0));
 
 	//  Init basic default shader
 	noob::basic_renderer::uniform basic_shader_info;
@@ -126,35 +128,33 @@ noob::basic_mesh noob::globals::mesh_from_shape(const noob::shapes_holder::handl
 }
 */
 
-noob::globals::model_and_scale noob::globals::model_by_shape(const noob::shapes_holder::handle h)
+noob::basic_models_holder::handle noob::globals::basic_model(const noob::basic_mesh& m)
 {
-	noob::globals::model_and_scale results;
+	std::unique_ptr<noob::basic_model> temp = std::make_unique<noob::basic_model>();
+	temp->init(m);
+	return basic_models.add(std::move(temp));
+}
+
+
+noob::globals::scaled_model noob::globals::model_by_shape(const noob::shapes_holder::handle h)
+{
+	noob::globals::scaled_model results;
 	noob::shape* s = shapes.get(h);
 	switch(s->shape_type)
 	{
 		case(noob::shape::type::SPHERE):
-			// logger::log("[Globals] sphere shape to model");
 			results.model_h = unit_sphere_model;
 			results.scales = s->scales;
-			return results;//return std::make_tuple(unit_sphere_model, s->scales);
+			return results;
 		case(noob::shape::type::BOX):
-			// logger::log("[Globals] box shape to model");
 			results.model_h = unit_cube_model;
 			results.scales = s->scales;
 		 	return results;
-			// return std::make_tuple(unit_cube_model, s->scales);
-			// case(noob::shape::type::CAPSULE):
-			// logger::log("[Globals] capsule shape to model");
-			// return std::make_tuple(unit_capsule_model, s->scales);
 		case(noob::shape::type::CYLINDER):
-			// logger::log("[Globals] cylinder shape to model");
-			// return std::make_tuple(unit_cylinder_model, s->scales);
 			results.model_h = unit_cylinder_model;
 			results.scales = s->scales;
 			return results;
 		case(noob::shape::type::CONE):
-			// logger::log("[Globals] cone shape to model");
-			// return std::make_tuple(unit_cone_model, s->scales);
 			results.model_h = unit_cone_model;
 			results.scales = s->scales;
 			return results;
@@ -324,7 +324,7 @@ noob::shapes_holder::handle noob::globals::static_trimesh(const noob::basic_mesh
 }
 
 /*
-model_and_scale noob::globals::get_model_by_name(const std::string& name)
+scaled_model noob::globals::get_model_by_name(const std::string& name)
 {
 	auto search = names_to_models.find(name);
 	if (search == names_to_models.end())

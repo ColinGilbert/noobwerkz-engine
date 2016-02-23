@@ -419,6 +419,12 @@ void noob::application::init()
 	r = script_engine->RegisterObjectType("reflection_handle", sizeof(noob::reflections_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::reflections_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	r = script_engine->RegisterObjectType("shader_handle", sizeof(noob::shaders_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::shaders_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 
+	r = script_engine->RegisterObjectType("scaled_model", sizeof(noob::globals::scaled_model), asOBJ_VALUE); assert(r >= 0 );
+	r = script_engine->RegisterObjectBehaviour("scaled_model", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(as_scaled_model_constructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	r = script_engine->RegisterObjectBehaviour("scaled_model", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_scaled_model_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("scaled_model", "model_handle model_h", asOFFSET(noob::globals::scaled_model, model_h)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("scaled_model", "vec3 scales", asOFFSET(noob::globals::scaled_model, scales)); assert( r >= 0 );
+
 	r = script_engine->RegisterGlobalFunction("shape_handle sphere(float)", asFUNCTION(globals::sphere), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("shape_handle box(float, float, float)", asFUNCTION(globals::box), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("shape_handle cylinder(float, float)", asFUNCTION(globals::cylinder), asCALL_CDECL); assert( r >= 0 );
@@ -446,7 +452,7 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("stage", "void draw(float, float)", asMETHOD(noob::stage, draw), asCALL_THISCALL); assert( r >= 0 );
 // 	r = script_engine->RegisterObjectMethod("stage", "uint body(body_type, uint, float, const vec3& in, const versor& in, bool)", asMETHOD(noob::stage, _body), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "void actor(const body_handle& in, const animated_model_handle& in, const shader_handle& in)", asMETHODPR(noob::stage, actor, (const noob::bodies_holder::handle, const noob::animated_models_holder::handle, const noob::shaders_holder::handle), void), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "void actor(const body_handle& in, const model_and_scale& in, const shader_handle& in)", asMETHODPR(noob::stage, actor, (const noob::bodies_holder::handle, const noob::globals::model_and_scale&, const noob::shaders_holder::handle), void), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "void actor(const body_handle& in, const scaled_model& in, const shader_handle& in)", asMETHODPR(noob::stage, actor, (const noob::bodies_holder::handle, const noob::globals::scaled_model&, const noob::shaders_holder::handle), void), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "void scenery(const basic_mesh& in, const vec3& in, const versor& in, const shader_handle& in)", asMETHOD(noob::stage, scenery), asCALL_THISCALL); assert(r >= 0);
 
 	r = script_engine->RegisterObjectProperty("stage", "bool show_origin", asOFFSET(noob::stage, show_origin)); assert(r >= 0);	

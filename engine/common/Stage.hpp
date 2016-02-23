@@ -68,7 +68,7 @@ namespace noob
 			// Functions to create commonly-used configurations:
 			void actor(const noob::bodies_holder::handle, const noob::animated_models_holder::handle, const noob::shaders_holder::handle);
 
-			void actor(const noob::bodies_holder::handle, const noob::globals::model_and_scale&, const noob::shaders_holder::handle);
+			void actor(const noob::bodies_holder::handle, const noob::globals::scaled_model&, const noob::shaders_holder::handle);
 
 			// void actor(const noob::shapes_holder::handle, const noob::vec3& pos, const noob::vec3& orient, const noob::vec3& scale, const noob::shaders_holder::handle);
 
@@ -87,6 +87,9 @@ namespace noob
 
 
 		protected:
+			const int NUM_RESERVED_NODES = 12000;			
+			const int NUM_RESERVED_ARCS = 12000;
+
 			std::array<noob::vec4, 2> basic_lights;
 
 			btBroadphaseInterface* broadphase;
@@ -95,16 +98,16 @@ namespace noob
 			btSequentialImpulseConstraintSolver* solver;
 			btDiscreteDynamicsWorld* dynamics_world;
 			
-			lemon::SmartDigraph draw_graph;
-			lemon::SmartDigraph::NodeMap<noob::bodies_holder::handle> bodies_mapping;
-			lemon::SmartDigraph::NodeMap<noob::basic_models_holder::handle> basic_models_mapping;
-			lemon::SmartDigraph::NodeMap<noob::shaders_holder::handle> shaders_mapping;
-			lemon::SmartDigraph::Node root_node;
+			lemon::ListDigraph draw_graph;
+			lemon::ListDigraph::NodeMap<noob::bodies_holder::handle> bodies_mapping;
+			lemon::ListDigraph::NodeMap<noob::basic_models_holder::handle> basic_models_mapping;
+			lemon::ListDigraph::NodeMap<noob::shaders_holder::handle> shaders_mapping;
+			lemon::ListDigraph::Node root_node;
 
 			std::unordered_map<size_t, noob::shapes_holder::handle> bodies_to_shapes;
-			std::map<size_t, lemon::SmartDigraph::Node> bodies_to_nodes;
-			std::map<size_t, lemon::SmartDigraph::Node> basic_models_to_nodes;
-			std::map<size_t, lemon::SmartDigraph::Node> shaders_to_nodes;
+			std::map<size_t, lemon::ListDigraph::Node> bodies_to_nodes;
+			std::map<size_t, lemon::ListDigraph::Node> basic_models_to_nodes;
+			std::map<size_t, lemon::ListDigraph::Node> shaders_to_nodes;
 
 
 	};

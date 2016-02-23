@@ -77,14 +77,15 @@ namespace noob
 			// Utilities:
 			// static noob::basic_mesh mesh_from_shape(const noob::shapes_holder::handle);
 			
-			struct model_and_scale
+			struct scaled_model
 			{
-				model_and_scale() : scales(noob::vec3(1.0, 1.0, 1.0)) {}
+				scaled_model() : scales(noob::vec3(1.0, 1.0, 1.0)) {}
 				noob::basic_models_holder::handle model_h;
 				noob::vec3 scales;
 			};
 
-			static model_and_scale model_by_shape(const noob::shapes_holder::handle);
+			static noob::basic_models_holder::handle basic_model(const noob::basic_mesh&);
+			static scaled_model model_by_shape(const noob::shapes_holder::handle);
 
 			static noob::shaders_holder::handle get_shader(const std::string& name);
 

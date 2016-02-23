@@ -234,6 +234,16 @@ namespace noob
 				new(memory) noob::basic_mesh();
 			}
 
+			static void as_scaled_model_constructor_wrapper(uint8_t* memory)
+			{
+				new(memory) noob::globals::scaled_model();
+			}
+
+			static void as_scaled_model_destructor_wrapper(uint8_t* memory)
+			{
+				((noob::globals::scaled_model*)memory)->~scaled_model();
+			}
+
 			static void as_basic_mesh_destructor_wrapper(uint8_t* memory)
 			{
 				((noob::basic_mesh*)memory)->~basic_mesh();

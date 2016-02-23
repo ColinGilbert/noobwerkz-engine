@@ -17,7 +17,7 @@ void main()
 	moon_shader.set_colour(2, vec4(0.0, 0.0, 0.0, 0.0));
 	moon_shader.set_colour(3, vec4(0.0, 0.0, 0.0, 0.0));
 	moon_shader.blend = vec4(0.0, 0.0, 1.0, 0.0);
-	moon_shader.scales = vec4(1.0/ 100.0, 1.0/100.0, 1.0/100.0, 0.0);
+	moon_shader.scales = vec4(1.0/100.0, 1.0/100.0, 1.0/100.0, 0.0);
 	moon_shader.colour_positions = vec4(0.5, 0.8, 0.0, 0.0);
 	moon_shader.texture_map = get_texture("grad_map");
 
@@ -39,9 +39,10 @@ void main()
 	basic_mesh b = box_mesh(500.0, 10.0, 500.0);
 	b.translate(vec3(0.0, -10.0, 0.0));
 
-	default_stage.scenery(add_mesh(a), vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h);
-	default_stage.scenery(add_mesh(b), vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h);
-	
+	default_stage.scenery(a, vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h);
+	default_stage.scenery(b, vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h);
+
+/*
 	vector_vec3 p;
 	p.push_back(vec3(-50.0, 0.0, -50.0));
 	p.push_back(vec3(0.0, 35.0, 0.0));
@@ -70,4 +71,5 @@ void main()
 		body_handle temp_body = default_stage.body(DYNAMIC, box_h, 1.0, vec3(x_pos, 250.0, z_pos), versor(0.0, 0.0, 0.0, 1.0), false);
 		default_stage.actor(temp_body, box_model_h, purple_shader_h);
 	}
+*/
 }
