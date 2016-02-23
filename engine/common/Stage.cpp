@@ -48,8 +48,23 @@ void noob::stage::draw(float window_width, float window_height) const
 	bgfx::setViewTransform(1, &view_mat.m[0], &projection_mat.m[0]);
 	bgfx::setViewRect(1, 0, 0, window_width, window_height);
 
-
-
+	for (lemon::SmartDigraph::OutArcIt model_it(draw_graph, root_node); model_it != lemon::INVALID; ++model_it)
+	{
+		lemon::SmartDigraph::Node model_node = draw_graph.target(model_it);
+		noob::basic_models_holder::handle model_h = basic_models_mapping[model_node];
+		for (lemon::SmartDigraph::OutArcIt shading_it(draw_graph, model_it); shading_it != lemon::INVALID; ++shading_it)
+		{
+			lemon::SmartDigraph::Node shading_node = draw_graph.target(shading_it);
+			noob::shaders_holder::handle shader_h = shaders_mapping[shading_node];
+			for (lemon::SmartDigraph::OutArcIt body_it(draw_graph, body_it); body_it != lemon::INVALID; ++body_it)
+			{
+				lemon::SmartDigraph::Node body_node = draw_graph.target(body_it);
+				noob::bodies_holder::handle body_h = bodies_mapping[body_node];
+				noob::mat4 model_mat = bodies.get(body_h)->get_transform();
+				renderer.draw(noob::globals::basic_models.get(model_h), noob::globals::shaders.get(shader_h), model_mat, basic_lights);
+			}
+		}
+	}
 
 
 
@@ -83,14 +98,14 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::an
 }
 
 
-void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::basic_models_holder::handle model_h,  const noob::shaders_holder::handle shader_h)
+void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::globals::model_and_scale& model_info, const noob::shaders_holder::handle shader_h)
 {
 	bool model_found, shader_found;
 	model_found = shader_found = false;
 
 	lemon::SmartDigraph::Node model_node, shader_node;
 
-	auto model_results = basic_models_to_nodes.find(model_h.get_inner());
+	auto model_results = basic_models_to_nodes.find(model_info.model_h.get_inner());
 	if (model_results != basic_models_to_nodes.end())
 	{
 		model_found = true;
@@ -107,9 +122,9 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::ba
 	if (!model_found)
 	{
 		model_node = draw_graph.addNode();
-		basic_models_mapping[model_node] = model_h;
+		basic_models_mapping[model_node] = model_info.model_h;
 		draw_graph.addArc(root_node, model_node);
-		basic_models_to_nodes.insert(std::make_pair(model_h.get_inner(), model_node));
+		basic_models_to_nodes.insert(std::make_pair(model_info.model_h.get_inner(), model_node));
 	}
 
 	if (!shader_found)
@@ -127,50 +142,14 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::ba
 }
 
 
-void noob::stage::scenery(const noob::meshes_holder::handle mesh_h, const noob::shaders_holder::handle shader_h, const noob::vec3& pos, const noob::versor& orient)
+void noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle shader_h, const std::string& name)
 {
-	noob::shapes_holder::handle shape_h = globals::static_trimesh(mesh_h);
+	noob::shapes_holder::handle shape_h = globals::static_trimesh(m, name);
 	noob::bodies_holder::handle body_h = body(noob::body_type::STATIC, shape_h, 0.0, pos, orient);
-	noob::basic_models_holder::handle model_h = std::get<0>(globals::get_model(shape_h));
 	
-	actor(body_h, model_h, shader_h);
+	noob::globals::model_and_scale model_info = globals::model_by_shape(shape_h);
+	actor(body_h, model_info, shader_h);
 }
-
-// noob::shaders_holder::handle shader_h = globals::get_shader(shading_name);
-/*
-	bool model_found = false;
-	for (lemon::SmartDigraph::OutArcIt model_it(draw_graph, root_node); model_it != lemon::INVALID; ++model_it)
-	{
-		if (basic_models_mapping[draw_graph.target(model_it)] == model_h)
-		{
-			model_found = true;
-		}
-		if (model_found)
-		{
-			bool shading_found = false;
-			for (lemon::SmartDigraph::OutArcIt shading_it(draw_graph, model_it); shading_it != lemon::INVALID; ++shading_it)
-			{
-				lemon::SmartDigraph::Node n = draw_graph.target(shading_it)
-				if (shaders_mapping[n] == shader_h)
-				{
-					shading_found = true;
-				}
-				// If the model + shading was found, add the new node containing the body underneath. 
-				if (shading_found)
-				{
-					lemon::SmartDigraph::Node body_node = draw_graph.addNode();
-					bodies_mapping[body_node] = body_h;
-					draw_graph.addArc(n, body_node);
-					return;
-				}
-			}
-		// If shader hasn't been found for the model, add it, then add the body, and return immediately.
-		return;
-		}
-	}
-*/
-// At this point in execution, we can safely assume that even the model itself hasn't been found, so we add everything.
-// }
 
 
 void noob::stage::set_basic_light(unsigned int i, const noob::vec4& light)

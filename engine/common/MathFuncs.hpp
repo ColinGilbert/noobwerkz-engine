@@ -56,7 +56,6 @@ namespace noob
 	struct vec4;
 	struct versor;
 
-
 	struct vec2
 	{
 		vec2();

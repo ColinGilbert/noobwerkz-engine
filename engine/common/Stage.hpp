@@ -68,10 +68,12 @@ namespace noob
 			// Functions to create commonly-used configurations:
 			void actor(const noob::bodies_holder::handle, const noob::animated_models_holder::handle, const noob::shaders_holder::handle);
 
-			void actor(const noob::bodies_holder::handle, const noob::basic_models_holder::handle, const noob::shaders_holder::handle);
+			void actor(const noob::bodies_holder::handle, const noob::globals::model_and_scale&, const noob::shaders_holder::handle);
+
+			// void actor(const noob::shapes_holder::handle, const noob::vec3& pos, const noob::vec3& orient, const noob::vec3& scale, const noob::shaders_holder::handle);
 
 			// Scenery is a non-movable item that uses indexed triangle meshes as input.
-			void scenery(const noob::meshes_holder::handle, const noob::shaders_holder::handle, const noob::vec3& pos, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0));
+			void scenery(const noob::basic_mesh&, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle, const std::string& name);
 
 			bool show_origin;
 
@@ -103,6 +105,7 @@ namespace noob
 			std::map<size_t, lemon::SmartDigraph::Node> bodies_to_nodes;
 			std::map<size_t, lemon::SmartDigraph::Node> basic_models_to_nodes;
 			std::map<size_t, lemon::SmartDigraph::Node> shaders_to_nodes;
+
 
 	};
 }

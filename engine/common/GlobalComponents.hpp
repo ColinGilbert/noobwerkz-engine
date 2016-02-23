@@ -32,7 +32,6 @@ namespace noob
 	typedef noob::component<noob::reflection> reflections_holder;
 	typedef noob::component<noob::prepared_shaders::uniform> shaders_holder;
 
-
 	class globals
 	{
 		public:
@@ -48,19 +47,16 @@ namespace noob
 
 			static noob::shapes_holder::handle cone(float r, float h);
 
-			// Point-based shapes
-			static noob::shapes_holder::handle hull(const std::vector<noob::vec3>&);
+			static noob::shapes_holder::handle hull(const std::vector<noob::vec3>&, const std::string& name);
 
-			static noob::shapes_holder::handle static_trimesh(const noob::meshes_holder::handle);
-
-			// Adds a mesh to the scene.
-			static noob::meshes_holder::handle add_mesh(const noob::basic_mesh&);
+			static noob::shapes_holder::handle static_trimesh(const noob::basic_mesh&, const std::string& name);
 
 			// Basic model creation. Those don't have bone weights built-in, so its lighter on the video card. Great for non-animated meshes and also scenery.
-			static noob::basic_models_holder::handle basic_model(const noob::meshes_holder::handle);
+			// If the name is the same as an existing model the new one replaces it, and everything should still work because the end-user only sees handles. :)
+			static noob::basic_models_holder::handle basic_model(const noob::basic_mesh&, const std::string& name);
 
 			// Loads a serialized model (from cereal binary)
-			// TODO: Expand all such functions to load from cereal binary and also sqlite
+			// TODO: Expand all such functions to load from cereal binary (and soon also sqlite)
 			static noob::animated_models_holder::handle animated_model(const std::string& filename);
 
 			// Skeletal animations (encompassing basic, single-bone animation...)
@@ -74,16 +70,21 @@ namespace noob
 			static void set_reflection(const noob::reflection&, const std::string&);
 			static noob::reflection get_reflection(const std::string&);			
 			
-			// These were needed in order to make graphics work with AngelScript. Seriously, why use variants for this anymore?
-			static void set_shader(const noob::basic_renderer::uniform&, const std::string& name);
-			static void set_shader(const noob::triplanar_gradient_map_renderer::uniform&, const std::string& name);
+			// These were needed in order to make graphics work with AngelScript. Seriously, why use variants for this anymore? Oh yeah... Variants let us use a single container type.
+			static noob::shaders_holder::handle set_shader(const noob::basic_renderer::uniform&, const std::string& name);
+			static noob::shaders_holder::handle set_shader(const noob::triplanar_gradient_map_renderer::uniform&, const std::string& name);
 
 			// Utilities:
-			static noob::basic_mesh make_mesh(const noob::shapes_holder::handle);
+			// static noob::basic_mesh mesh_from_shape(const noob::shapes_holder::handle);
+			
+			struct model_and_scale
+			{
+				model_and_scale() : scales(noob::vec3(1.0, 1.0, 1.0)) {}
+				noob::basic_models_holder::handle model_h;
+				noob::vec3 scales;
+			};
 
-			// For parametrics, this one will return a normalized model with scaling coordinates. For triangles, scalings are <1, 1, 1>
-			static std::tuple<noob::basic_models_holder::handle, noob::vec3> get_model(const noob::shapes_holder::handle);
-			static std::tuple<unsigned int, noob::vec3> _get_model(unsigned int);
+			static model_and_scale model_by_shape(const noob::shapes_holder::handle);
 
 			static noob::shaders_holder::handle get_shader(const std::string& name);
 
@@ -91,10 +92,7 @@ namespace noob
 			// noob::shape objects are a wrapper to Bullet shapes that provide a basic API to the rest of the app
 			static noob::shapes_holder::handle unit_sphere_shape, unit_cube_shape, unit_capsule_shape, unit_cylinder_shape, unit_cone_shape;
 			
-			// noob:basic_mesh objects are holders for an indexed trimesh
-			static noob::meshes_holder::handle unit_sphere_mesh, unit_cube_mesh, unit_capsule_mesh, unit_cylinder_mesh, unit_cone_mesh;
-
-			// noob:basic_nodel objects like these represent models in the graphics card's buffer
+			// These represent models in the graphics card buffer
 			static noob::basic_models_holder::handle unit_sphere_model, unit_cube_model, unit_capsule_model, unit_cylinder_model, unit_cone_model;
 			
 			static noob::shaders_holder::handle debug_shader, default_triplanar_shader, uv_shader;
@@ -111,27 +109,15 @@ namespace noob
 			static shaders_holder shaders;
 
 		protected:
+			static noob::shaders_holder::handle set_shader(const noob::prepared_shaders::uniform&, const std::string& name);
 
-			static void set_shader(const noob::prepared_shaders::uniform&, const std::string& name);
-
-			// TODO: Test other data structures.
-			// Benchmark, benchmark, benchmark!!! Multiplatform, too!!!
-			static std::map<float, shapes_holder::handle> sphere_shapes;
-			static std::map<std::tuple<float, float, float>, shapes_holder::handle> box_shapes;
-			static std::map<std::tuple<float, float>, shapes_holder::handle> cylinder_shapes;
-			static std::map<std::tuple<float, float>, shapes_holder::handle> cone_shapes;
-			static std::map<std::tuple<float, float>, shapes_holder::handle> capsule_shapes;
-			// std::map<std::tuple<float,float,float,float>, shapes_holder::handle> planes;
-			static std::map<std::vector<std::array<float, 3>>, shapes_holder::handle> hull_shapes;
-			static std::map<std::vector<std::array<float, 3>>, shapes_holder::handle> trimesh_shapes;
-
-			static std::unordered_map<size_t, noob::meshes_holder::handle> shapes_to_meshes;
-			static std::unordered_map<size_t, noob::basic_models_holder::handle> meshes_to_models;
-			static std::unordered_map<size_t, noob::shapes_holder::handle> meshes_to_shapes;
-
+			static std::map<size_t, noob::basic_models_holder::handle> shapes_to_models;
+			static std::unordered_map<std::string, noob::shapes_holder::handle> names_to_shapes;
+			static std::unordered_map<std::string, noob::basic_models_holder::handle> names_to_basic_models;
 			static std::unordered_map<std::string, noob::shaders_holder::handle> names_to_shaders;
 			static std::unordered_map<std::string, noob::lights_holder::handle> names_to_lights;
 			static std::unordered_map<std::string, noob::reflections_holder::handle> names_to_reflections;
+			
 
 	};
 }

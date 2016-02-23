@@ -551,8 +551,6 @@ list(APPEND common_src
 	common/SkeletalAnim.cpp
 	common/ModelLoader.cpp
 	common/drawing/TriplanarGradientMap.cpp
-	common/drawing/HACDRenderer.cpp
-	common/drawing/OverlayRenderer.cpp
 	common/drawing/BasicRenderer.cpp
 	common/SimpleNavMesh.cpp
 	common/FileSystem.cpp

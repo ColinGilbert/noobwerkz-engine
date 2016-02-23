@@ -10,12 +10,6 @@ noob::shapes_holder::handle noob::globals::unit_capsule_shape;
 noob::shapes_holder::handle noob::globals::unit_cylinder_shape;
 noob::shapes_holder::handle noob::globals::unit_cone_shape;
 
-noob::meshes_holder::handle noob::globals::unit_sphere_mesh;
-noob::meshes_holder::handle noob::globals::unit_cube_mesh;
-noob::meshes_holder::handle noob::globals::unit_capsule_mesh;
-noob::meshes_holder::handle noob::globals::unit_cylinder_mesh;
-noob::meshes_holder::handle noob::globals::unit_cone_mesh;
-
 noob::basic_models_holder::handle noob::globals::unit_sphere_model;
 noob::basic_models_holder::handle noob::globals::unit_cube_model;
 noob::basic_models_holder::handle noob::globals::unit_capsule_model;
@@ -33,25 +27,13 @@ noob::lights_holder noob::globals::lights;
 noob::reflections_holder noob::globals::reflections;
 noob::shaders_holder noob::globals::shaders;
 
-// TODO: Test other data structures.
-// Benchmark, benchmark, benchmark!!! Multiplatform, too!!!
-std::map<float, noob::shapes_holder::handle>  noob::globals::sphere_shapes;
-std::map<std::tuple<float, float, float>, noob::shapes_holder::handle>  noob::globals::box_shapes;
-std::map<std::tuple<float, float>, noob::shapes_holder::handle>  noob::globals::cylinder_shapes;
-std::map<std::tuple<float, float>, noob::shapes_holder::handle>  noob::globals::cone_shapes;
-std::map<std::tuple<float, float>, noob::shapes_holder::handle>  noob::globals::capsule_shapes;
-// std::map<std::tuple<float,float,float,float>, shapes_holder::handle> planes;
-std::map<std::vector<std::array<float, 3>>, noob::shapes_holder::handle>  noob::globals::hull_shapes;
-std::map<std::vector<std::array<float, 3>>, noob::shapes_holder::handle>  noob::globals::trimesh_shapes;
-
-std::unordered_map<size_t, noob::meshes_holder::handle> noob::globals::shapes_to_meshes;
-std::unordered_map<size_t, noob::basic_models_holder::handle> noob::globals::meshes_to_models;
-std::unordered_map<size_t, noob::shapes_holder::handle> noob::globals::meshes_to_shapes;
-
+std::unordered_map<std::string, noob::shapes_holder::handle> noob::globals::names_to_shapes;
+std::unordered_map<std::string, noob::basic_models_holder::handle> noob::globals::names_to_basic_models;
 std::unordered_map<std::string, noob::shaders_holder::handle> noob::globals::names_to_shaders;
 std::unordered_map<std::string, noob::lights_holder::handle> noob::globals::names_to_lights;
 std::unordered_map<std::string, noob::reflections_holder::handle> noob::globals::names_to_reflections;
 
+std::map<size_t, noob::basic_models_holder::handle> noob::globals::shapes_to_models;
 
 void noob::globals::init()
 {
@@ -61,29 +43,14 @@ void noob::globals::init()
 	unit_cylinder_shape = cylinder(0.5, 1.0);
 	unit_cone_shape = cone(0.5, 1.0);
 
-	unit_sphere_mesh = meshes.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_sphere_shape)));
-	unit_cube_mesh =  meshes.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_cube_shape)));
-	unit_cylinder_mesh =  meshes.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_cylinder_shape)));
-	unit_cone_mesh =  meshes.add(std::make_unique<noob::basic_mesh>(make_mesh(unit_cone_shape)));
-
-	shapes_to_meshes[unit_sphere_shape.get_inner()] = unit_sphere_mesh;
-	shapes_to_meshes[unit_cube_shape.get_inner()] = unit_cube_mesh;
-	shapes_to_meshes[unit_cylinder_shape.get_inner()] = unit_cylinder_mesh;
-	shapes_to_meshes[unit_cone_shape.get_inner()] = unit_cone_mesh;
-
-	logger::log("[Globals] Making unit sphere model");
-	unit_sphere_model = basic_model(unit_sphere_mesh);
-	logger::log("[Globals] Making unit cube model");
-	unit_cube_model = basic_model(unit_cube_mesh);
-	logger::log("[Globals] Making unit cylinder model");
-	unit_cylinder_model = basic_model(unit_cylinder_mesh);
-	logger::log("[Globals] Making unit cone model");
-	unit_cone_model = basic_model(unit_cone_mesh);
-
-	meshes_to_models[unit_sphere_mesh.get_inner()] = unit_sphere_model;
-	meshes_to_models[unit_cube_mesh.get_inner()] = unit_cube_model;
-	meshes_to_models[unit_cylinder_mesh.get_inner()] = unit_cylinder_model;
-	meshes_to_models[unit_cone_mesh.get_inner()] = unit_cone_model;
+	// logger::log("[Globals] Making unit sphere model");
+	// unit_sphere_model = basic_model(unit_sphere_mesh);
+	// logger::log("[Globals] Making unit cube model");
+	// unit_cube_model = basic_model(unit_cube_mesh);
+	// logger::log("[Globals] Making unit cylinder model");
+	// unit_cylinder_model = basic_model(unit_cylinder_mesh);
+	// logger::log("[Globals] Making unit cone model");
+	// unit_cone_model = basic_model(unit_cone_mesh);
 
 	//  Init basic default shader
 	noob::basic_renderer::uniform basic_shader_info;
@@ -105,8 +72,8 @@ void noob::globals::init()
 	default_triplanar_shader = get_shader("default-triplanar");
 }
 
-
-noob::basic_mesh noob::globals::make_mesh(const noob::shapes_holder::handle h)
+/*
+noob::basic_mesh noob::globals::mesh_from_shape(const noob::shapes_holder::handle h)
 {
 	noob::shape* s = shapes.get(h);
 	switch(s->shape_type)
@@ -114,13 +81,13 @@ noob::basic_mesh noob::globals::make_mesh(const noob::shapes_holder::handle h)
 		case(noob::shape::type::SPHERE):
 			{
 				// logger::log("[Globals] making sphere mesh");
-				return noob::mesh_utils::sphere(static_cast<btSphereShape*>(s->inner_shape)->getRadius());
+				// return noob::mesh_utils::sphere(static_cast<btSphereShape*>(s->inner_shape)->getRadius());
 			}
 		case(noob::shape::type::BOX):
 			{
 				// logger::log("[Globals] making box mesh");
 				noob::vec3 half_extents = static_cast<btBoxShape*>(s->inner_shape)->getHalfExtentsWithoutMargin();
-				return noob::mesh_utils::box(half_extents.v[0]*2, half_extents.v[1]*2, half_extents.v[2]*2);
+				// return noob::mesh_utils::box(half_extents.v[0]*2, half_extents.v[1]*2, half_extents.v[2]*2);
 			}
 			// case(noob::shape::type::CAPSULE):
 			//	{
@@ -133,218 +100,248 @@ noob::basic_mesh noob::globals::make_mesh(const noob::shapes_holder::handle h)
 				// logger::log("[Globals] making cylinder mesh");
 				btCylinderShape* temp = static_cast<btCylinderShape*>(s->inner_shape);// return std::make_tuple(unit_cylinder_model, s->scales);
 				noob::vec3 half_extents = temp->getHalfExtentsWithoutMargin();
-				return noob::mesh_utils::cylinder(temp->getRadius(), half_extents.v[1]*2);
+				// return noob::mesh_utils::cylinder(temp->getRadius(), half_extents.v[1]*2);
 			}
 		case(noob::shape::type::CONE):
 			{
 				// logger::log("[Globals] making cone mesh");
 				btConeShape* temp = static_cast<btConeShape*>(s->inner_shape);
-				return noob::mesh_utils::cone(temp->getRadius(), temp->getHeight());
+				// return noob::mesh_utils::cone(temp->getRadius(), temp->getHeight());
 			}
 		case(noob::shape::type::HULL):
 			{
 				// logger::log("[Globals] making convex mesh");
-				return *meshes.get(shapes_to_meshes[h.get_inner()]);
+				// return *meshes.get(shapes_to_meshes[h.get_inner()]);
 			}
 		case(noob::shape::type::TRIMESH):
 			{
 				// logger::log("[Globals] making trimesh");
-				return *meshes.get(shapes_to_meshes[h.get_inner()]);
+				// return *meshes.get(shapes_to_meshes[h.get_inner()]);
 			}
 		default:
 			logger::log("[Globals] - USER DATA WARNING - INVALID SHAPE TO MESH :(");
 			break;
 	};
-	return *meshes.get(unit_sphere_mesh);
+	// return  *meshes.get(unit_sphere_mesh);
 }
+*/
 
-
-std::tuple<noob::basic_models_holder::handle, noob::vec3> noob::globals::get_model(const noob::shapes_holder::handle h)
+noob::globals::model_and_scale noob::globals::model_by_shape(const noob::shapes_holder::handle h)
 {
+	noob::globals::model_and_scale results;
 	noob::shape* s = shapes.get(h);
 	switch(s->shape_type)
 	{
 		case(noob::shape::type::SPHERE):
 			// logger::log("[Globals] sphere shape to model");
-			return std::make_tuple(unit_sphere_model, s->scales);
+			results.model_h = unit_sphere_model;
+			results.scales = s->scales;
+			return results;//return std::make_tuple(unit_sphere_model, s->scales);
 		case(noob::shape::type::BOX):
 			// logger::log("[Globals] box shape to model");
-			return std::make_tuple(unit_cube_model, s->scales);
-			//case(noob::shape::type::CAPSULE):
+			results.model_h = unit_cube_model;
+			results.scales = s->scales;
+		 	return results;
+			// return std::make_tuple(unit_cube_model, s->scales);
+			// case(noob::shape::type::CAPSULE):
 			// logger::log("[Globals] capsule shape to model");
-			//	return std::make_tuple(unit_capsule_model, s->scales);
+			// return std::make_tuple(unit_capsule_model, s->scales);
 		case(noob::shape::type::CYLINDER):
 			// logger::log("[Globals] cylinder shape to model");
-			return std::make_tuple(unit_cylinder_model, s->scales);
+			// return std::make_tuple(unit_cylinder_model, s->scales);
+			results.model_h = unit_cylinder_model;
+			results.scales = s->scales;
+			return results;
 		case(noob::shape::type::CONE):
 			// logger::log("[Globals] cone shape to model");
-			return std::make_tuple(unit_cone_model, s->scales);
+			// return std::make_tuple(unit_cone_model, s->scales);
+			results.model_h = unit_cone_model;
+			results.scales = s->scales;
+			return results;
 		case(noob::shape::type::HULL):
 			{
-				auto mesh = make_mesh(h);
-				auto mesh_h = add_mesh(mesh);
-				auto model_h = basic_model(mesh_h);
-				// logger::log("[Globals] convex hull to model");
-				return std::make_tuple(model_h, noob::vec3(1.0, 1.0, 1.0));
+				auto search = shapes_to_models.find(h.get_inner());
+				if (search == shapes_to_models.end())
+				{
+					results.model_h = basic_models.make_handle(search->first);
+					return results;
+				}
 			}
 		case(noob::shape::type::TRIMESH):
 			{
-				auto mesh = make_mesh(h);
-				auto mesh_h = add_mesh(mesh);
-				auto model_h = basic_model(mesh_h);
-				// logger::log("[Globals] convex hull to model");
-				return std::make_tuple(model_h, noob::vec3(1.0, 1.0, 1.0));
+				auto search = shapes_to_models.find(h.get_inner());
+				if (search == shapes_to_models.end())
+				{
+					results.model_h = basic_models.make_handle(search->first);
+					return results;
+				}
 			}
 		default:
 			logger::log("[Globals] - USER DATA WARNING - INVALID SHAPE TO MODEL :(");
 			break;
 	};
-	return std::make_tuple(unit_sphere_model, noob::vec3(1.0, 1.0, 1.0));
+	return results; 
 }
 
 
 noob::shapes_holder::handle noob::globals::sphere(float r)
 {
-	auto search = sphere_shapes.find(r);
-	if (search == sphere_shapes.end())
+	fmt::MemoryWriter w;
+	w << "sphere-" << static_cast<uint32_t>(r);
+
+	auto search = names_to_shapes.find(w.str());
+	// auto search = sphere_shapes.find(r);
+	if (search == names_to_shapes.end())
 	{
 		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
 		temp->sphere(r);
-		auto results = sphere_shapes.insert(std::make_pair(r, shapes.add(std::move(temp))));
+		
+		fmt::MemoryWriter ww;
+		ww << "sphere-" << static_cast<uint32_t>(r);
+
+		auto results = names_to_shapes.insert(std::make_pair(ww.str(), shapes.add(std::move(temp))));
 		return (results.first)->second;
 
 	}
-	return sphere_shapes[r];
+	return search->second;
 }
 
 
 noob::shapes_holder::handle noob::globals::box(float x, float y, float z)
 {
-	auto search = box_shapes.find(std::make_tuple(x,y,z));
-	if (search == box_shapes.end())
+	fmt::MemoryWriter w;
+	w << "box-" << static_cast<uint32_t>(x) << "-" << static_cast<uint32_t>(y)  << "-" << static_cast<uint32_t>(z);
+	auto search = names_to_shapes.find(w.str());
+	//auto search = box_shapes.find(std::make_tuple(x,y,z));
+	if (search == names_to_shapes.end())
 	{
 		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
 		temp->box(x, y, z);
-		auto results = box_shapes.insert(std::make_pair(std::make_tuple(x,y,z), shapes.add(std::move(temp))));
+
+		fmt::MemoryWriter ww;
+		ww << "box-" << static_cast<uint32_t>(x) << "-" << static_cast<uint32_t>(y) << "-" << static_cast<uint32_t>(z);
+
+		auto results = names_to_shapes.insert(std::make_pair(ww.str(), shapes.add(std::move(temp))));
 		return (results.first)->second;
 	}
-	return box_shapes[std::make_tuple(x,y,z)];
+	return search->second;
 }
 
 
 noob::shapes_holder::handle noob::globals::cylinder(float r, float h)
 {
-	auto search = cylinder_shapes.find(std::make_tuple(r, h));
-	if (search == cylinder_shapes.end())
+	// auto search = cylinder_shapes.find(std::make_tuple(r, h));
+	fmt::MemoryWriter w;
+	w << "cylinder-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
+	auto search = names_to_shapes.find(w.str());
+	if (search == names_to_shapes.end())
 	{
 		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
 		temp->cylinder(r, h);
-		auto results = cylinder_shapes.insert(std::make_pair(std::make_tuple(r, h), shapes.add(std::move(temp))));
+
+		fmt::MemoryWriter ww;
+		ww << "cylinder-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
+
+		auto results = names_to_shapes.insert(std::make_pair(ww.str(), shapes.add(std::move(temp))));
 		return (results.first)->second;
 	}
-	return cylinder_shapes[std::make_tuple(r, h)];
+	return search->second;
 }
 
 
 noob::shapes_holder::handle noob::globals::cone(float r, float h)
 {
-	auto search = cone_shapes.find(std::make_tuple(r, h));
-	if (search == cone_shapes.end())
+	fmt::MemoryWriter w;
+	w << "cone-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
+	auto search = names_to_shapes.find(w.str());
+	if (search == names_to_shapes.end())
 	{
 		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
 		temp->cone(r, h);
-		auto results = cone_shapes.insert(std::make_pair(std::make_tuple(r, h), shapes.add(std::move(temp))));
+
+		fmt::MemoryWriter ww;
+		ww << "cone-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
+
+		auto results = names_to_shapes.insert(std::make_pair(ww.str(), shapes.add(std::move(temp))));
 		return (results.first)->second;
 	}
-	return cone_shapes[std::make_tuple(r, h)];
+	return search->second;
 }
 
 
-/*
-   noob::shapes_holder::handle noob::globals::capsule(float r, float h)
-   {
-   auto search = capsule_shapes.find(std::make_tuple(r, h));
-   if (search == capsule_shapes.end())
-   {
-   std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
-   temp->capsule(r, h);
-   auto results = capsule_shapes.insert(std::make_pair(std::make_tuple(r, h), shapes.add(std::move(temp))));
-   return (results.first)->second;
-   }
-   return capsule_shapes[std::make_tuple(r, h)];
-   }
-   */
-/*
-   noob::shapes_holder::handle noob::globals::plane(const noob::vec3& normal, float offset)
-   {
-   auto search = planes.find(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset));
-   if (search == planes.end())
-   {
-   std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
-   temp->plane(normal, offset);
-   auto results = planes.insert(std::make_pair(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset), shapes.add(std::move(temp))));
-   return (results.first)->second;
-   }
-   return planes[std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset)];
-   }
-   */
+//   noob::shapes_holder::handle noob::globals::capsule(float r, float h)
+//   {
+//   auto search = capsule_shapes.find(std::make_tuple(r, h));
+//   if (search == capsule_shapes.end())
+//   {
+//   std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+//   temp->capsule(r, h);
+//   auto results = capsule_shapes.insert(std::make_pair(std::make_tuple(r, h), shapes.add(std::move(temp))));
+//   return (results.first)->second;
+//   }
+//   return capsule_shapes[std::make_tuple(r, h)];
+//   }
 
-noob::shapes_holder::handle noob::globals::hull(const std::vector<vec3> & _points)
+
+//  noob::shapes_holder::handle noob::globals::plane(const noob::vec3& normal, float offset)
+// {
+// auto search = planes.find(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset));
+// if (search == planes.end())
+// {
+// std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
+// temp->plane(normal, offset);
+// auto results = planes.insert(std::make_pair(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset), shapes.add(std::move(temp))));
+// return (results.first)->second;
+// }
+// return planes[std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset)];
+// }
+
+
+noob::shapes_holder::handle noob::globals::hull(const std::vector<vec3>& points, const std::string& name)
 {
-	// TODO: Add to shapes_to_meshes
-	std::unique_ptr<noob::shape> temp_shape = std::make_unique<noob::shape>();
-	temp_shape->hull(_points);
-	noob::shapes_holder::handle temp_shape_handle = shapes.add(std::move(temp_shape));
-
-	std::unique_ptr<noob::basic_mesh> temp_mesh = std::make_unique<noob::basic_mesh>();
-
-	*temp_mesh = noob::mesh_utils::hull(_points);
-	// TODO: Hash temp_mesh to save memory
-	noob::meshes_holder::handle temp_mesh_handle = meshes.add(std::move(temp_mesh));
-	shapes_to_meshes[temp_shape_handle.get_inner()] = temp_mesh_handle;
-
-	return temp_shape_handle;
+	auto search = names_to_shapes.find(name);
+	if (search == names_to_shapes.end())
+	{
+		// TODO: Add to shapes_to_meshes
+		std::unique_ptr<noob::shape> temp_shape = std::make_unique<noob::shape>();
+		temp_shape->hull(points);
+		return shapes.add(std::move(temp_shape));
+	}
+	return search->second;
 }
 
 
-noob::shapes_holder::handle noob::globals::static_trimesh(const noob::meshes_holder::handle _mesh)
+noob::shapes_holder::handle noob::globals::static_trimesh(const noob::basic_mesh& m, const std::string& name)
 {
-	auto search = meshes_to_shapes.find(_mesh.get_inner());
-	if (search == meshes_to_shapes.end())
+	auto search = names_to_shapes.find(name);
+	if (search == names_to_shapes.end())
 	{
 		std::unique_ptr<noob::shape> temp_shape_ptr = std::make_unique<noob::shape>();
-		temp_shape_ptr->trimesh(meshes.get(_mesh));
-		noob::shapes_holder::handle temp_shape = shapes.add(std::move(temp_shape_ptr));
-		meshes_to_shapes.insert(std::make_pair(_mesh.get_inner(), temp_shape));
-		shapes_to_meshes.insert(std::make_pair(temp_shape.get_inner(), _mesh));
-		return temp_shape;
+		temp_shape_ptr->trimesh(&m);
+		return shapes.add(std::move(temp_shape_ptr));
 	}
 	return search->second;
 }
 
-
-noob::meshes_holder::handle noob::globals::add_mesh(const noob::basic_mesh& m)
+/*
+model_and_scale noob::globals::get_model_by_name(const std::string& name)
 {
-	std::unique_ptr<noob::basic_mesh> mesh_ptr = std::make_unique<noob::basic_mesh>();
-	*mesh_ptr = m;
-	return meshes.add(std::move(mesh_ptr));	
-}
-
-
-noob::basic_models_holder::handle noob::globals::basic_model(const noob::meshes_holder::handle _mesh)
-{
-	auto search = meshes_to_models.find(_mesh.get_inner());
-	if (search == meshes_to_models.end())
+	auto search = names_to_models.find(name);
+	if (search == names_to_models.end())
 	{		
-		std::unique_ptr<noob::basic_model> temp = std::make_unique<noob::basic_model>();
-		temp->init(*meshes.get(_mesh));
-		noob::basic_models_holder::handle h = basic_models.add(std::move(temp));
-		meshes_to_models.insert(std::make_pair(_mesh.get_inner(), h));
+		// std::unique_ptr<noob::basic_model> temp = std::make_unique<noob::basic_model>();
+		// temp->init(*meshes.get(_mesh));
+		// return basic_models.add(std::move(temp));
+		fmt::MemoryWriter ww;
+		ww << "[Globals] Failed to get model " << name << ", returning defaults.";
+		logger::log(ww.str());
+		noob::basic_models_holder::handle h;
 		return h;
 	}
+	// logger::log("[Globals] Getting model by name failed.");
 	return search->second;
 }
-
+*/
 
 noob::animated_models_holder::handle noob::globals::animated_model(const std::string& filename)
 {
@@ -412,19 +409,19 @@ noob::reflection noob::globals::get_reflection(const std::string& s)
 }
 
 
-void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std::string& name)
+noob::shaders_holder::handle noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std::string& name)
 {
-	set_shader(noob::prepared_shaders::uniform(u), name);
+	return set_shader(noob::prepared_shaders::uniform(u), name);
 }
 
 
-void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::uniform& u, const std::string& name)
+noob::shaders_holder::handle noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::uniform& u, const std::string& name)
 {
-	set_shader(noob::prepared_shaders::uniform(u), name);
+	return set_shader(noob::prepared_shaders::uniform(u), name);
 }
 
 
-void noob::globals::set_shader(const noob::prepared_shaders::uniform& u, const std::string& s)
+noob::shaders_holder::handle noob::globals::set_shader(const noob::prepared_shaders::uniform& u, const std::string& s)
 {
 	auto search = names_to_shaders.find(s);
 	if (search != names_to_shaders.end())
@@ -435,6 +432,7 @@ void noob::globals::set_shader(const noob::prepared_shaders::uniform& u, const s
 	{
 		names_to_shaders[s] = shaders.add(u);
 	}
+	return names_to_shaders[s];
 }
 
 

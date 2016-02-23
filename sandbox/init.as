@@ -21,7 +21,7 @@ void main()
 	moon_shader.colour_positions = vec4(0.5, 0.8, 0.0, 0.0);
 	moon_shader.texture_map = get_texture("grad_map");
 
-	set_shader(moon_shader, "moon");
+	shader_handle moon_shader_h = set_shader(moon_shader, "moon");
 
 	triplanar_gradmap_uniform purple_shader;
 	purple_shader.set_colour(0, vec4(1.0, 1.0, 1.0, 0.0));
@@ -33,14 +33,14 @@ void main()
 	purple_shader.colour_positions = vec4(0.2, 0.7, 0.0, 0.0);
 	purple_shader.texture_map = get_texture("grad_map");
 	
-	set_shader(purple_shader, "purple");
+	shader_handle purple_shader_h = set_shader(purple_shader, "purple");
 
 	basic_mesh a = cone_mesh(50.0, 100.0);
 	basic_mesh b = box_mesh(500.0, 10.0, 500.0);
 	b.translate(vec3(0.0, -10.0, 0.0));
 
-	auto scenery_one = default_stage.scenery_from_mesh(add_mesh(a), vec3(0.0, 0.0, 0.0), "moon", versor(0.0, 0.0, 0.0, 1.0));
-	auto scenery_two = default_stage.scenery_from_mesh(add_mesh(b), vec3(0.0, 0.0, 0.0), "moon", versor(0.0, 0.0, 0.0, 1.0));
+	default_stage.scenery(add_mesh(a), vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h);
+	default_stage.scenery(add_mesh(b), vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h);
 	
 	vector_vec3 p;
 	p.push_back(vec3(-50.0, 0.0, -50.0));
@@ -48,27 +48,26 @@ void main()
 	p.push_back(vec3(25.0, 0.0, 20.0));
 	p.push_back(vec3(0.0, 10.0, 80.0));
 
-	uint hull_h = hull(p);
+	shape_handle hull_h = hull(p);
 
-	auto scenery_three = default_stage.scenery_from_shape(hull_h, vec3(0.0, 0.0, 0.0), "moon", versor(0.0, 0.0, 0.0, 1.0));
+	auto scenery_three = default_stage.scenery(hull_h, vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h);
 
+	shape_handle box_h = box(4.0, 4.0, 4.0); 
+	// model_handle box_model_h = get_model(box_h);
+	
 	for (int i = -500 ; i < 500; ++i)
 	{
-		uint h = box(4.0, 4.0, 4.0); 
 		float x_pos = i;
 		float z_pos = i;
-		uint temp_body = default_stage.body(DYNAMIC, h, 1.0, vec3(x_pos, 250.0, z_pos), versor(0.0, 0.0, 0.0, 1.0), false);
-		// default_stage.bodies.get(temp_body); 
-		default_stage.prop(temp_body, "purple");
+		body_handle temp_body = default_stage.body(DYNAMIC, box_h, 1.0, vec3(x_pos, 250.0, z_pos), versor(0.0, 0.0, 0.0, 1.0), false);
+		default_stage.actor(temp_body, box_model_h, purple_shader_h);
 	}
 
 	for (int i = -500 ; i < 500; ++i)
 	{
-		uint h = box(4.0, 4.0, 4.0); 
 		float x_pos = i;
 		float z_pos = -i;
-		uint temp_body = default_stage.body(DYNAMIC, h, 1.0, vec3(x_pos, 250.0, z_pos), versor(0.0, 0.0, 0.0, 1.0), false);
-		// default_stage.bodies.get(temp_body); 
-		default_stage.prop(temp_body, "purple");
+		body_handle temp_body = default_stage.body(DYNAMIC, box_h, 1.0, vec3(x_pos, 250.0, z_pos), versor(0.0, 0.0, 0.0, 1.0), false);
+		default_stage.actor(temp_body, box_model_h, purple_shader_h);
 	}
 }

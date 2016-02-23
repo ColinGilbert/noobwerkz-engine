@@ -13,7 +13,7 @@ void noob::triplanar_gradient_map_renderer::init()
 }
 
 
-void noob::triplanar_gradient_map_renderer::draw(const noob::drawable* model, const noob::mat4& world_mat, const noob::mat4& normal_mat, const noob::triplanar_gradient_map_renderer::uniform& uni, const std::array<vec4, 2>& ambient_lights, uint8_t view_id) const
+void noob::triplanar_gradient_map_renderer::draw(const noob::drawable* model, const noob::mat4& world_mat, const noob::triplanar_gradient_map_renderer::uniform& uni, const std::array<vec4, 2>& ambient_lights, uint8_t view_id) const
 {
 	bgfx::setTexture(0, noob::graphics::blend_0.handle, uni.texture_map.handle);
 
@@ -26,8 +26,6 @@ void noob::triplanar_gradient_map_renderer::draw(const noob::drawable* model, co
 	bgfx::setUniform(noob::graphics::scales.handle, &uni.scales.v[0]);
 	bgfx::setUniform(noob::graphics::basic_light_0.handle, &ambient_lights[0].v[0]);
 	bgfx::setUniform(noob::graphics::basic_light_1.handle, &ambient_lights[1].v[0]);
-	bgfx::setUniform(noob::graphics::normal_mat.handle, &normal_mat.m[0]);
 
-	// noob::graphics::shader s = noob::graphics::get_shader("gradient_map_triplanar");
-	model->draw(view_id, world_mat, normal_mat, shader.program, 0 | BGFX_STATE_RGB_WRITE | BGFX_STATE_ALPHA_WRITE | BGFX_STATE_DEPTH_WRITE | BGFX_STATE_DEPTH_TEST_LESS | BGFX_STATE_MSAA);
+	model->draw(view_id, world_mat, shader.program, 0 | BGFX_STATE_RGB_WRITE | BGFX_STATE_ALPHA_WRITE | BGFX_STATE_DEPTH_WRITE | BGFX_STATE_DEPTH_TEST_LESS | BGFX_STATE_MSAA);
 }
