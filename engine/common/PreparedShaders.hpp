@@ -22,11 +22,11 @@ namespace noob
 
 			typedef boost::variant<noob::triplanar_gradient_map_renderer::uniform, noob::basic_renderer::uniform> uniform;
 			
-			void draw(const noob::drawable* drawable, const prepared_shaders::uniform& uni, const noob::mat4& world_mat, const std::array<noob::vec4, 2>& ambient_lights, uint8_t view_id = 0) const
+			void draw(const noob::drawable* drawable, const prepared_shaders::uniform& uni, const noob::mat4& world_mat, const noob::mat4& normal_mat, const std::array<noob::vec4, 2>& ambient_lights, uint8_t view_id = 0) const
 			{
 				match(uni,
-				[this, drawable, world_mat, ambient_lights, view_id] (const noob::triplanar_gradient_map_renderer::uniform& uni) -> void { this->triplanar.draw(drawable, world_mat, uni, ambient_lights, view_id); },
-				[this, drawable, world_mat, ambient_lights, view_id] (const noob::basic_renderer::uniform& uni) -> void { this->basic.draw(drawable, world_mat, uni, ambient_lights, view_id); }
+				[this, drawable, world_mat, normal_mat, ambient_lights, view_id] (const noob::triplanar_gradient_map_renderer::uniform& uni) -> void { this->triplanar.draw(drawable, world_mat, normal_mat, uni, ambient_lights, view_id); },
+				[this, drawable, world_mat, normal_mat, ambient_lights, view_id] (const noob::basic_renderer::uniform& uni) -> void { this->basic.draw(drawable, world_mat, normal_mat, uni, ambient_lights, view_id); }
 				);
 			}
 

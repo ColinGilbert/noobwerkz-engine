@@ -21,7 +21,7 @@ void noob::stage::init()
 	dynamics_world->setGravity(btVector3(0, -10, 0));
 
 	renderer.init();
-	
+
 	draw_graph.reserveNode(NUM_RESERVED_NODES);
 	draw_graph.reserveArc(NUM_RESERVED_ARCS);
 
@@ -59,21 +59,24 @@ void noob::stage::draw(float window_width, float window_height) const
 		noob::basic_models_holder::handle model_h = basic_models_mapping[model_node];
 		if (lemon::countOutArcs(draw_graph, model_node) > 0)
 		{	
-		for (lemon::ListDigraph::OutArcIt shading_it(draw_graph, model_it); shading_it != lemon::INVALID; ++shading_it)
-		{
-			lemon::ListDigraph::Node shading_node = draw_graph.target(shading_it);
-			noob::shaders_holder::handle shader_h = shaders_mapping[shading_node];
-			if (lemon::countOutArcs(draw_graph, shading_node) > 0)
+			for (lemon::ListDigraph::OutArcIt shading_it(draw_graph, model_it); shading_it != lemon::INVALID; ++shading_it)
 			{
-				for (lemon::ListDigraph::OutArcIt body_it(draw_graph, shading_it); body_it != lemon::INVALID; ++body_it)
+				lemon::ListDigraph::Node shading_node = draw_graph.target(shading_it);
+				noob::shaders_holder::handle shader_h = shaders_mapping[shading_node];
+				if (lemon::countOutArcs(draw_graph, shading_node) > 0)
 				{
-					lemon::ListDigraph::Node body_node = draw_graph.target(body_it);
-					noob::bodies_holder::handle body_h = bodies_mapping[body_node];
-					noob::mat4 model_mat = bodies.get(body_h)->get_transform();
-					renderer.draw(noob::globals::basic_models.get(model_h), noob::globals::shaders.get(shader_h), model_mat, basic_lights);
+					for (lemon::ListDigraph::OutArcIt body_it(draw_graph, shading_it); body_it != lemon::INVALID; ++body_it)
+					{
+						// logger::log("Draw");
+						lemon::ListDigraph::Node body_node = draw_graph.target(body_it);
+						noob::bodies_holder::handle body_h = bodies_mapping[body_node];
+						noob::mat4 world_mat = noob::identity_mat4();
+						world_mat = bodies.get(body_h)->get_transform() * world_mat;
+						noob::mat4 normal_mat = noob::transpose(noob::inverse((view_mat * world_mat)));
+						renderer.draw(noob::globals::basic_models.get(model_h), noob::globals::shaders.get(shader_h), world_mat, normal_mat, basic_lights);
+					}
 				}
 			}
-		}
 		}
 	}
 
@@ -150,7 +153,8 @@ void noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, cons
 {
 	noob::shapes_holder::handle shape_h = globals::static_trimesh(m, name);
 	noob::bodies_holder::handle body_h = body(noob::body_type::STATIC, shape_h, 0.0, pos, orient);
-	noob::globals::scaled_model model_info = globals::model_by_shape(shape_h);
+	noob::globals::scaled_model model_info;
+	model_info.model_h = noob::globals::basic_model(m);
 	actor(body_h, model_info, shader_h);
 }
 

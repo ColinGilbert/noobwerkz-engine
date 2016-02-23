@@ -17,7 +17,7 @@ namespace noob
 			};
 			
 			void init();
-			void draw(const noob::drawable* model, const noob::mat4& world_matrix, const noob::basic_renderer::uniform&, const std::array<noob::vec4, 2>& ambient_lights, uint8_t view_id) const;
+			void draw(const noob::drawable* model, const noob::mat4& world_matrix, const noob::mat4& normal_mat, const noob::basic_renderer::uniform&, const std::array<noob::vec4, 2>& ambient_lights, uint8_t view_id) const;
 
 		protected:
 		

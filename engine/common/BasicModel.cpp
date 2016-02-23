@@ -49,12 +49,12 @@ void noob::basic_model::init(const noob::basic_mesh& input_mesh)
 }
 
 
-void noob::basic_model::draw(uint8_t view_id, const noob::mat4& model_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags) const
+void noob::basic_model::draw(uint8_t view_id, const noob::mat4& model_mat, const noob::mat4& normal_mat, const bgfx::ProgramHandle& prog, uint64_t bgfx_state_flags) const
 {
 	if (ready)
 	{
 		bgfx::setTransform(&model_mat.m[0]);
-		// bgfx::setUniform(noob::graphics::get_uniform("normal_mat").handle, &normal_mat.m[0]);
+		// bgfx::setUniform(noob::graphics::normal_mat.handle, &normal_mat.m[0]);
 		bgfx::setVertexBuffer(vertex_buffer);
 		bgfx::setIndexBuffer(index_buffer);
 		bgfx::setState(bgfx_state_flags);
