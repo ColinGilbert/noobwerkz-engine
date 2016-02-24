@@ -33,42 +33,4 @@ void noob::application::user_update(double dt)
 
 	gui.text(ww.str(), static_cast<float>(window_width - 500), static_cast<float>(window_height - 50), noob::gui::font_size::HEADER);
 
-
-	static double time_elapsed = 0.0;
-	time_elapsed += dt;
-
-
-	if (time_elapsed > 0.25)
-	{
-		boost::filesystem::path p;
-
-		p += *prefix;
-		p += script_name;
-
-		boost::system::error_code ec;
-
-		static std::time_t last_write = 0;
-		std::time_t t = boost::filesystem::last_write_time(p, ec);
-		if (ec != 0)
-		{
-			logger::log(fmt::format("[Application] - update() - error reading {0}: {1}", p.generic_string(), ec.message()));
-		}	
-		else if (last_write != t)
-		{
-			try
-			{
-				// script_module; = script_engine->GetModule("user_module", asGM_ALWAYS_CREATE);
-				stage.tear_down();
-				load_init_script();
-			}
-			catch(std::exception e)
-			{
-				logger::log(fmt::format("[Application]. Caught AngelScript exception: ", e.what()));
-			}
-			last_write = t;
-		}
-		time_elapsed = 0.0;
-	}
-
-
 }

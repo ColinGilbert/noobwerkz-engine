@@ -26,7 +26,12 @@ void noob::stage::init()
 	draw_graph.reserveArc(NUM_RESERVED_ARCS);
 
 	root_node = draw_graph.addNode();
-	// auto temp = body(noob::body_type::STATIC, globals.unit_sphere_shape(), 0.0, const noob::vec3& pos, const noob::versor& orient, bool ccd);
+
+	noob::bodies_holder::handle temp = body(noob::body_type::STATIC, globals::unit_sphere_shape, 0.0, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0), false);
+	fmt::MemoryWriter ww;
+	ww << "[Stage] init first body. Handle = " << temp.get_inner();
+	logger::log(ww.str());
+	
 	logger::log("[Stage] Done init.");
 }
 
@@ -57,30 +62,29 @@ void noob::stage::draw(float window_width, float window_height) const
 	{
 		lemon::ListDigraph::Node model_node = draw_graph.target(model_it);
 		noob::basic_models_holder::handle model_h = basic_models_mapping[model_node];
-		if (lemon::countOutArcs(draw_graph, model_node) > 0)
-		{	
-			for (lemon::ListDigraph::OutArcIt shading_it(draw_graph, model_it); shading_it != lemon::INVALID; ++shading_it)
+
+		for (lemon::ListDigraph::OutArcIt shading_it(draw_graph, model_it); shading_it != lemon::INVALID; ++shading_it)
+		{
+			lemon::ListDigraph::Node shading_node = draw_graph.target(shading_it);
+			noob::shaders_holder::handle shader_h = shaders_mapping[shading_node];
+			for (lemon::ListDigraph::OutArcIt body_it(draw_graph, shading_it); body_it != lemon::INVALID; ++body_it)
 			{
-				lemon::ListDigraph::Node shading_node = draw_graph.target(shading_it);
-				noob::shaders_holder::handle shader_h = shaders_mapping[shading_node];
-				if (lemon::countOutArcs(draw_graph, shading_node) > 0)
-				{
-					for (lemon::ListDigraph::OutArcIt body_it(draw_graph, shading_it); body_it != lemon::INVALID; ++body_it)
-					{
-						// logger::log("Draw");
-						lemon::ListDigraph::Node body_node = draw_graph.target(body_it);
-						noob::bodies_holder::handle body_h = bodies_mapping[body_node];
-						noob::mat4 world_mat = noob::identity_mat4();
-						world_mat = bodies.get(body_h)->get_transform() * world_mat;
-						noob::mat4 normal_mat = noob::transpose(noob::inverse((view_mat * world_mat)));
-						renderer.draw(noob::globals::basic_models.get(model_h), noob::globals::shaders.get(shader_h), world_mat, normal_mat, basic_lights);
-					}
-				}
+				lemon::ListDigraph::Node body_node = draw_graph.target(body_it);
+				noob::bodies_holder::handle body_h = bodies_mapping[body_node];
+
+				fmt::MemoryWriter ww;
+				ww << "[Stage] Drawing model " << model_h.get_inner() << " shading " << shader_h.get_inner() << " body " << body_h.get_inner();
+				logger::log(ww.str());
+
+				noob::body* body_ptr = bodies.get(body_h);
+				mat4 world_mat = bodies.get(body_h)->get_transform();// * view_mat;
+				noob::mat4 normal_mat = noob::transpose(noob::inverse((view_mat * world_mat)));
+				// noob::mat4 world_mat = noob::identity_mat4();
+				// noob::mat4 normal_mat = noob::identity_mat4();
+				renderer.draw(noob::globals::basic_models.get(model_h), noob::globals::shaders.get(shader_h), world_mat, normal_mat, basic_lights, 0);
 			}
 		}
 	}
-
-
 
 	if (show_origin)
 	{
@@ -100,9 +104,9 @@ noob::bodies_holder::handle noob::stage::body(const noob::body_type b_type, cons
 {
 	std::unique_ptr<noob::body> b = std::make_unique<noob::body>();
 	b->init(dynamics_world, b_type, globals::shapes.get(shape_h), mass, pos, orient, ccd);
-	auto bod_h = bodies.add(std::move(b));
-	bodies_to_shapes.insert(std::make_pair(bod_h.get_inner(), shape_h));
-	return bod_h;
+	return bodies.add(std::move(b));
+	// bodies_to_shapes.insert(std::make_pair(bod_h.get_inner(), shape_h));
+	// return bod_h;
 }
 
 
@@ -126,6 +130,11 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::gl
 		model_node = draw_graph.addNode();
 		basic_models_mapping[model_node] = model_info.model_h;
 		draw_graph.addArc(root_node, model_node);
+
+		fmt::MemoryWriter ww;
+		ww << "[Stage] Creating actor - model " << model_info.model_h.get_inner() << " not found in drawgraph. Creating node and connecting to root node.";
+		logger::log(ww.str());
+
 		basic_models_to_nodes.insert(std::make_pair(model_info.model_h.get_inner(), model_node));
 	}
 
@@ -139,13 +148,37 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::gl
 		shader_node = draw_graph.addNode();
 		shaders_mapping[shader_node] = shader_h;
 		draw_graph.addArc(model_node, shader_node);
+
+		fmt::MemoryWriter ww;
+		ww << "[Stage] Creating actor - shader " << shader_h.get_inner() << " not found in drawgraph. Creating node and connecting to model node " << model_info.model_h.get_inner();
+		logger::log(ww.str());
+
 		shaders_to_nodes.insert(std::make_pair(shader_h.get_inner(), shader_node));
 	}
 
-	body_node = draw_graph.addNode();
-	bodies_mapping[body_node] = body_h;
-	draw_graph.addArc(shader_node, body_node);
-	bodies_to_nodes.insert(std::make_pair(body_h.get_inner(), body_node));
+	auto body_results = bodies_to_nodes.find(body_h.get_inner());
+	if (body_results != bodies_to_nodes.end())
+	{
+		logger::log("[Stage] Warning: Attempting to use duplicate body. Aborted.");
+		return;
+	}
+	else
+	{
+		fmt::MemoryWriter ww;
+		ww << "[Stage] Creating actor - body " << body_h.get_inner() << " not found in drawgraph. Creating node and connecting to shader node " << shader_h.get_inner();
+		logger::log(ww.str());
+
+		body_node = draw_graph.addNode();
+		bodies_mapping[body_node] = body_h;
+		draw_graph.addArc(shader_node, body_node);
+
+		bodies_to_nodes.insert(std::make_pair(body_h.get_inner(), body_node));
+	}
+
+	fmt::MemoryWriter ww;
+	ww << "[Stage] Created actor - shader " << shader_h.get_inner() << ", model " << model_info.model_h.get_inner() << " , body " << body_h.get_inner(); 
+	logger::log(ww.str());
+
 }
 
 

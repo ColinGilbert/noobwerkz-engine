@@ -45,7 +45,7 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() : show_origin(true), view_mat(noob::identity_mat4()), projection_mat(noob::identity_mat4()), basic_lights( { noob::vec4(0.0, 1.0, 0.0, 0.1), noob::vec4(1.0, 0.0, 0.0, 0.1) } ), bodies_mapping(draw_graph), basic_models_mapping(draw_graph), shaders_mapping(draw_graph) {}
+			stage() : show_origin(true), view_mat(noob::identity_mat4()), projection_mat(noob::identity_mat4()), basic_lights( { noob::vec4(0.0, 1.0, 0.0, 0.3), noob::vec4(1.0, 0.0, 0.0, 0.3) } ), bodies_mapping(draw_graph), basic_models_mapping(draw_graph), shaders_mapping(draw_graph) {}
 
 			~stage();
 

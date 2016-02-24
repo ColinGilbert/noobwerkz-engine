@@ -417,7 +417,10 @@ void noob::application::init()
 	r = script_engine->RegisterObjectType("skeletal_anim_handle", sizeof(noob::skeletal_anims_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::skeletal_anims_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	r = script_engine->RegisterObjectType("light_handle", sizeof(noob::lights_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::lights_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	r = script_engine->RegisterObjectType("reflection_handle", sizeof(noob::reflections_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::reflections_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	
 	r = script_engine->RegisterObjectType("shader_handle", sizeof(noob::shaders_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::shaders_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectProperty("shader_handle", "uint64 inner", asOFFSET(noob::shaders_holder::handle, inner)); assert(r >= 0);
+	
 
 	r = script_engine->RegisterObjectType("scaled_model", sizeof(noob::globals::scaled_model), asOBJ_VALUE); assert(r >= 0 );
 	r = script_engine->RegisterObjectBehaviour("scaled_model", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(as_scaled_model_constructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
@@ -439,8 +442,8 @@ void noob::application::init()
 	r = script_engine->RegisterGlobalFunction("light get_light(const string& in)", asFUNCTION(globals::get_light), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("void set_reflection(const reflection& in, const string& in)", asFUNCTION(globals::set_reflection), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("reflection get_reflection(const string& in)", asFUNCTION(globals::get_reflection), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("shader_handle set_shader(const basic_uniform& in, const string& in)", asFUNCTIONPR(globals::set_shader, (const noob::basic_renderer::uniform&, const std::string&), noob::shaders_holder::handle), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("shader_handle set_shader(const triplanar_gradmap_uniform& in, const string& in)", asFUNCTIONPR(globals::set_shader, (const noob::triplanar_gradient_map_renderer::uniform&, const std::string&), noob::shaders_holder::handle), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("void set_shader(const basic_uniform& in, const string& in)", asFUNCTIONPR(globals::set_shader, (const noob::basic_renderer::uniform&, const std::string&), void), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("void set_shader(const triplanar_gradmap_uniform& in, const string& in)", asFUNCTIONPR(globals::set_shader, (const noob::triplanar_gradient_map_renderer::uniform&, const std::string&), void), asCALL_CDECL); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("shader_handle get_shader(const string& in)", asFUNCTION(globals::get_shader), asCALL_CDECL); assert( r >= 0 );
 
 	r = script_engine->RegisterObjectType("stage", sizeof(noob::stage), asOBJ_VALUE); assert(r >= 0 );
@@ -451,9 +454,9 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("stage", "void update(double)", asMETHOD(noob::stage, update), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "void draw(float, float)", asMETHOD(noob::stage, draw), asCALL_THISCALL); assert( r >= 0 );
 // 	r = script_engine->RegisterObjectMethod("stage", "uint body(body_type, uint, float, const vec3& in, const versor& in, bool)", asMETHOD(noob::stage, _body), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "void actor(const body_handle& in, const animated_model_handle& in, const shader_handle& in)", asMETHODPR(noob::stage, actor, (const noob::bodies_holder::handle, const noob::animated_models_holder::handle, const noob::shaders_holder::handle), void), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "void actor(const body_handle& in, const scaled_model& in, const shader_handle& in)", asMETHODPR(noob::stage, actor, (const noob::bodies_holder::handle, const noob::globals::scaled_model&, const noob::shaders_holder::handle), void), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "void scenery(const basic_mesh& in, const vec3& in, const versor& in, const shader_handle& in)", asMETHOD(noob::stage, scenery), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("stage", "void actor(const body_handle, const animated_model_handle, const shader_handle)", asMETHODPR(noob::stage, actor, (const noob::bodies_holder::handle, const noob::animated_models_holder::handle, const noob::shaders_holder::handle), void), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "void actor(const body_handle, const scaled_model& in, const shader_handle)", asMETHODPR(noob::stage, actor, (const noob::bodies_holder::handle, const noob::globals::scaled_model&, const noob::shaders_holder::handle), void), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "void scenery(const basic_mesh& in, const vec3& in, const versor& in, const shader_handle, const string& in)", asMETHOD(noob::stage, scenery), asCALL_THISCALL); assert(r >= 0);
 
 	r = script_engine->RegisterObjectProperty("stage", "bool show_origin", asOFFSET(noob::stage, show_origin)); assert(r >= 0);	
 	r = script_engine->RegisterObjectProperty("stage", "mat4 view_mat", asOFFSET(noob::stage, view_mat)); assert(r >= 0);
@@ -494,6 +497,44 @@ void noob::application::update(double delta)
 	gui.window_dims(window_width, window_height);
 	stage.update(delta);
 	user_update(delta);
+
+	static double time_elapsed = 0.0;
+	time_elapsed += delta;
+
+
+	if (time_elapsed > 0.25)
+	{
+		boost::filesystem::path p;
+
+		p += *prefix;
+		p += script_name;
+
+		boost::system::error_code ec;
+
+		static std::time_t last_write = 0;
+		std::time_t t = boost::filesystem::last_write_time(p, ec);
+		if (ec != 0)
+		{
+			logger::log(fmt::format("[Application] - update() - error reading {0}: {1}", p.generic_string(), ec.message()));
+		}	
+		else if (last_write != t)
+		{
+			try
+			{
+				// script_module; = script_engine->GetModule("user_module", asGM_ALWAYS_CREATE);
+				stage.tear_down();
+				load_init_script();
+			}
+			catch(std::exception e)
+			{
+				logger::log(fmt::format("[Application]. Caught AngelScript exception: ", e.what()));
+			}
+			last_write = t;
+		}
+		time_elapsed = 0.0;
+	}
+
+
 }
 
 bool noob::application::load_init_script()

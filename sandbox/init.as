@@ -2,6 +2,7 @@ void main()
 {
 	// default_stage s;
 	vec3 eye_pos(0.0, 1000.0, -500.0);
+	// vec3 eye_pos(0.0, 10.0, -10.0);
 	vec3 look_to(0.0, 0.0, 0.0);
 	vec3 up(0.0, 1.0, 0.);
 
@@ -12,17 +13,17 @@ void main()
 	load_texture("grad_map", "gradient_map.dds", 0);
 
 	triplanar_gradmap_uniform moon_shader;
-	moon_shader.set_colour(0, vec4(1.0, 1.0, 1.0, 0.0));
-	moon_shader.set_colour(1, vec4(0.0, 0.0, 0.0, 0.0));
-	moon_shader.set_colour(2, vec4(0.0, 0.0, 0.0, 0.0));
-	moon_shader.set_colour(3, vec4(0.0, 0.0, 0.0, 0.0));
+	moon_shader.set_colour(0, vec4(1.0, 1.0, 1.0, 1.0));
+	moon_shader.set_colour(1, vec4(1.0, 1.0, 1.0, 1.0));
+	moon_shader.set_colour(2, vec4(1.0, 1.0, 1.0, 1.0));
+	moon_shader.set_colour(3, vec4(0.0, 0.0, 0.0, 1.0));
 	moon_shader.blend = vec4(0.0, 0.0, 1.0, 0.0);
 	moon_shader.scales = vec4(1.0/100.0, 1.0/100.0, 1.0/100.0, 0.0);
 	moon_shader.colour_positions = vec4(0.5, 0.8, 0.0, 0.0);
 	moon_shader.texture_map = get_texture("grad_map");
-
-	shader_handle moon_shader_h = set_shader(moon_shader, "moon");
-
+	set_shader(moon_shader, "moon");
+	auto moon_shader_h = get_shader("moon");
+	
 	triplanar_gradmap_uniform purple_shader;
 	purple_shader.set_colour(0, vec4(1.0, 1.0, 1.0, 0.0));
 	purple_shader.set_colour(1, vec4(1.0, 0.0, 1.0, 0.0));
@@ -32,15 +33,21 @@ void main()
 	purple_shader.scales = vec4(1.0/4.0, 1.0/4.0, 1.0/4.0, 0.0);
 	purple_shader.colour_positions = vec4(0.2, 0.7, 0.0, 0.0);
 	purple_shader.texture_map = get_texture("grad_map");
-	
-	shader_handle purple_shader_h = set_shader(purple_shader, "purple");
+	set_shader(purple_shader, "purple");
+	auto purple_shader_h = get_shader("purple");
+
+
+	// basic_uniform basic_uni;
+	// basic_uni.colour = vec4(1.0, 1.0, 1.0, 1.0);
+	// set_shader(basic_uni, "basic");
+	// auto basic_h = get_shader("basic");
 
 	basic_mesh a = cone_mesh(50.0, 100.0);
 	basic_mesh b = box_mesh(500.0, 10.0, 500.0);
 	b.translate(vec3(0.0, -10.0, 0.0));
 
-	default_stage.scenery(a, vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h);
-	default_stage.scenery(b, vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h);
+	default_stage.scenery(a, vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h, "one");
+	default_stage.scenery(b, vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h, "two");
 
 /*
 	vector_vec3 p;

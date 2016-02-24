@@ -5,29 +5,33 @@
 #include <memory>
 #include <vector>
 
+#include "Logger.hpp"
+
 namespace noob
 {
+	class application;
 	template <typename T>
 		class component 
 		{
+			friend class application;
 			public:
 				class handle
 				{
 					friend class component;
+					friend class application;
 					public:
 
-					handle() : valid(false), inner(0) {}
+					handle() : inner(0) {}
 
 					bool operator==(const noob::component<T>::handle other) const
 					{
 						return (inner == other.inner);
 					}
 					
-					bool operator!=(const noob::component<T>::handle other) const
-					{
-						return (inner != other.inner);
-					}
-
+					// bool operator!=(const noob::component<T>::handle other) const
+					// {
+					//	return (inner != other.inner);
+					// }
 
 					bool operator<(const noob::component<T>::handle other) const
 					{
@@ -39,24 +43,28 @@ namespace noob
 						return inner;
 					}
 
-					bool is_valid() const
-					{
-						return valid;
-					}
-
 					protected:
-					bool valid;
 					size_t inner;
 				};
 
 				T get(component<T>::handle h)
 				{
 					if (exists(h)) return items[h.inner];
-					else return items[0];
+					else 
+					{
+						logger::log("Invalid access to component");
+					
+						return items[0];
+					}	
 				}
 
 				component<T>::handle add(const T& t)
 				{
+
+					// items.emplace_back(t);
+					// handle h;
+					// h.inner = items.size() - 1;
+					// return h;
 					items.push_back(t);
 					handle h;
 					h.inner = items.size() - 1;
@@ -67,20 +75,20 @@ namespace noob
 				{
 					return (h.inner < items.size());
 				}
-
+/*
 				bool exists(const std::string& name)
 				{
 					return (names.find(name) != names.end());
 				}
 
-				void set(component<T>::handle h, const T& t)
+*/				void set(component<T>::handle h, const T& t)
 				{
 					if (exists(h))
 					{
 						items[h.inner] = t;
 					}
 				}
-
+/*
 				void set(component<T>::handle h, const std::string& name)
 				{
 					if (exists(h))
@@ -100,7 +108,7 @@ namespace noob
 					}
 					return h;
 				}
-
+*/
 				component<T>::handle make_handle(unsigned int i)
 				{
 					handle h;
@@ -131,7 +139,7 @@ namespace noob
 				{
 					friend class component;
 					public:
-					handle() : valid(false), inner(0) {}
+					handle() : inner(0) {}
 
 
 					bool operator==(const noob::component<std::unique_ptr<T>>::handle other) const
@@ -149,30 +157,29 @@ namespace noob
 						return inner;
 					}
 
-					bool is_valid() const
-					{
-						return valid;
-					}
-
 					protected:
-					bool valid;
 					size_t inner;
 				};
 
 				T* get(component<std::unique_ptr<T>>::handle h)
 				{
 					if (exists(h)) return items[h.inner].get();
-					else return items[0].get();
+					else 
+					{
+						logger::log("Invalid access to component");
+						return items[0].get();
+					}
 				}
 
 				component<std::unique_ptr<T>>::handle add(std::unique_ptr<T>&& t)
 				{
-					items.emplace_back(std::move(t));
+					// items.emplace_back(std::move(t));
+					items.push_back(std::move(t));
 					handle h;
 					h.inner = items.size() - 1;
 					return h;
 				}
-
+/*
 				component<std::unique_ptr<T>>::handle add(std::unique_ptr<T>&& t, const std::string& name)
 				{
 					handle h;
@@ -189,7 +196,7 @@ namespace noob
 					h.inner = items.size() - 1;
 					return h;
 				}
-
+*/
 				bool exists(component<std::unique_ptr<T>>::handle h)
 				{
 					return (h.inner < items.size());
@@ -222,7 +229,6 @@ namespace noob
 					auto search = names.find(name);
 					if (search != names.end())
 					{
-						h.valid = true;
 						h.inner = search->second;
 					}
 					return h;
@@ -232,7 +238,6 @@ namespace noob
 				{
 					handle h;
 					h.inner = i;
-					h.valid = exists(h);
 					return h;
 				}
 

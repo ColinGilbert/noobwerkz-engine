@@ -2,9 +2,9 @@ $input v_position
 
 #include "common.sh"
 
-uniform vec4 colour_1;
+uniform vec4 colour_0;
 
 void main()
 {
-	gl_FragColor = colour_1; 
+	gl_FragColor = colour_0; 
 }

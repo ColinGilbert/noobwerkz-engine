@@ -55,9 +55,9 @@ void noob::globals::init()
 	unit_cone_model = basic_model(noob::mesh_utils::cone(0.5, 1.0));
 
 	//  Init basic default shader
-	noob::basic_renderer::uniform basic_shader_info;
-	basic_shader_info.colour = noob::vec4(1.0, 0.0, 0.0, 1.0);
-	set_shader(basic_shader_info, "debug"); 
+	noob::basic_renderer::uniform dbg;
+	dbg.colour = noob::vec4(1.0, 1.0, 1.0, 0.0);
+	set_shader(dbg, "debug"); 
 	debug_shader = get_shader("debug");
 
 	// Init triplanar shader. For fun.
@@ -409,19 +409,19 @@ noob::reflection noob::globals::get_reflection(const std::string& s)
 }
 
 
-noob::shaders_holder::handle noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std::string& name)
+void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std::string& name)
 {
-	return set_shader(noob::prepared_shaders::uniform(u), name);
+	set_shader(noob::prepared_shaders::uniform(u), name);
 }
 
 
-noob::shaders_holder::handle noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::uniform& u, const std::string& name)
+void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::uniform& u, const std::string& name)
 {
-	return set_shader(noob::prepared_shaders::uniform(u), name);
+	set_shader(noob::prepared_shaders::uniform(u), name);
 }
 
 
-noob::shaders_holder::handle noob::globals::set_shader(const noob::prepared_shaders::uniform& u, const std::string& s)
+void noob::globals::set_shader(const noob::prepared_shaders::uniform& u, const std::string& s)
 {
 	auto search = names_to_shaders.find(s);
 	if (search != names_to_shaders.end())
@@ -430,9 +430,14 @@ noob::shaders_holder::handle noob::globals::set_shader(const noob::prepared_shad
 	}
 	else
 	{
-		names_to_shaders[s] = shaders.add(u);
+		noob::shaders_holder::handle h = shaders.add(u);
+		
+		fmt::MemoryWriter ww;
+		ww << "[Globals] set_shader - Could not find " << s << " in list. Setting to handle " << h.get_inner();
+		logger::log(ww.str());
+
+		names_to_shaders.insert(std::make_pair(s, h));
 	}
-	return names_to_shaders[s];
 }
 
 
@@ -443,5 +448,11 @@ noob::shaders_holder::handle noob::globals::get_shader(const std::string& s)
 	{
 		return names_to_shaders.at(s);
 	}
-	return default_triplanar_shader;
+	else
+	{
+		fmt::MemoryWriter ww;
+		ww << "[Globals] Could not find shader " << s << ". Returning default.";
+		logger::log(ww.str());
+		return debug_shader;
+	}
 }

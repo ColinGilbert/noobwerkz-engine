@@ -71,8 +71,9 @@ namespace noob
 			static noob::reflection get_reflection(const std::string&);			
 			
 			// These were needed in order to make graphics work with AngelScript. Seriously, why use variants for this anymore? Oh yeah... Variants let us use a single container type.
-			static noob::shaders_holder::handle set_shader(const noob::basic_renderer::uniform&, const std::string& name);
-			static noob::shaders_holder::handle set_shader(const noob::triplanar_gradient_map_renderer::uniform&, const std::string& name);
+			static void set_shader(const noob::basic_renderer::uniform&, const std::string& name);
+			static void set_shader(const noob::triplanar_gradient_map_renderer::uniform&, const std::string& name);
+			static noob::shaders_holder::handle get_shader(const std::string& name);
 
 			// Utilities:
 			// static noob::basic_mesh mesh_from_shape(const noob::shapes_holder::handle);
@@ -87,7 +88,6 @@ namespace noob
 			static noob::basic_models_holder::handle basic_model(const noob::basic_mesh&);
 			static scaled_model model_by_shape(const noob::shapes_holder::handle);
 
-			static noob::shaders_holder::handle get_shader(const std::string& name);
 
 			// The following are basic, commonly-used objects that we provide as a convenience.
 			// noob::shape objects are a wrapper to Bullet shapes that provide a basic API to the rest of the app
@@ -110,7 +110,7 @@ namespace noob
 			static shaders_holder shaders;
 
 		protected:
-			static noob::shaders_holder::handle set_shader(const noob::prepared_shaders::uniform&, const std::string& name);
+			static void set_shader(const noob::prepared_shaders::uniform&, const std::string& name);
 
 			static std::map<size_t, noob::basic_models_holder::handle> shapes_to_models;
 			static std::unordered_map<std::string, noob::shapes_holder::handle> names_to_shapes;

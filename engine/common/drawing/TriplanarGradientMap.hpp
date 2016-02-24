@@ -35,7 +35,7 @@ namespace noob
 			};
 
 			void init();
-			void draw(const noob::drawable*, const noob::mat4& world_mat, const noob::mat4& normal_mat, const noob::triplanar_gradient_map_renderer::uniform&, const std::array<vec4, 2>& ambient_lights, uint8_t view_id = 0) const;
+			void draw(const noob::drawable*, const noob::mat4& wvp_mat, const noob::mat4& normal_mat, const noob::triplanar_gradient_map_renderer::uniform&, const std::array<vec4, 2>& ambient_lights, uint8_t view_id) const;
 
 		protected:
 	};
