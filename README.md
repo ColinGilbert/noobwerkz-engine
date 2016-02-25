@@ -47,7 +47,7 @@ Structure:
 ```
 The current setup uses a platform-specific starter program to launch the main application.
 
-There are many libraries - mostly utility libraries - in the engine/lib directory. Not all of them are being used. This needs a cleanup, but at the moment this is still my personal dev repo. Will modularize out someday.
+There are many libraries - mostly utility libraries - in the engine/lib directory. Not all of them are being used. This needs a cleanup, but at the moment this is still my personal dev repo. Will modularize out soon.
 
 Most engine code is written in engine/common directory, with user-defined functionality linked-in from the sandbox directory. I know it's not correct, but in the current context it's fine.
 
@@ -61,7 +61,7 @@ Designed so as to be stupidly easy to port (set up your hardware and define an e
 Ports coming soon
 ```
 
-Little *nix scripts (currently runs on bash but I don't believe it uses any bashisms. WILL NEED A MINOR AMOUNT OF SETTING UP PRIOR TO BEING DEEMED PORTABLE):
+Little *nix scripts (currently runs on bash but I don't believe it uses any bashisms.
 ```
 sandbox/b for build. Attempts to build source
 sandbox/bb for big build. Wipes the binaries and builds from scratch
@@ -88,41 +88,3 @@ Test framework
 Long-term:
 ```
 I intend on splitting out all the platform-specific code from this project into it's own middleware platform, and running the game engine on top of it.
-```
-
-Future cool use-cases that it can support:
-```
-Automated testing/simulations
-Network management
-Decision support
-Data Analysis/DataViz
-Accounting of all sorts (since it's designed to plug into databases)
-Secure smart homes
-Other business (general and not-so-general logic-transaction) needs
-```
-=======
-# OpenMesh, 6.0
-
-
-## Getting OpenMesh
-All Documentation, binaries and original source code are available at www.openmesh.org  
-
-The main git repository is available at:  
-https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh.git  
-
-The gitlab site can be found here:  
-https://www.graphics.rwth-aachen.de:9000/OpenMesh/OpenMesh  
-
-## Installing
-Unpack the tar-ball to a suitable place.  
-
-
-A detailed build manual for Mac/Windows/Linux is in the Documentation   
-located at Doc/html/index.html   
-
-## Documentation
-
-The latest Documentation can be found at:  
-http://www.openmesh.org/media/Documentations/OpenMesh-Doc-Latest  
-
-Documentation for previous versions is available on our website as well.  
