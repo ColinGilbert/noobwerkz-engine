@@ -69,11 +69,6 @@ sandbox/s for shaders. Builds the full set of shaders from sandbox/shader_src an
 sandbox/g for git. Adds changes to git and commits them (for my use, mostly)
 ```
 
-Things to do in the immediate future:
-```
-
-```
-
 Future:
 ```
 Scripting (done!)
