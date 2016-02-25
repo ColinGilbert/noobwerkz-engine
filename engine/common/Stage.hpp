@@ -36,7 +36,8 @@
 
 #include <standalone/brigand.hpp>
 #include <lemon/smart_graph.h>
-
+#include <lemon/list_graph.h>
+#include <lemon/lgf_writer.h>
 
 namespace noob
 {
@@ -75,13 +76,15 @@ namespace noob
 			// Scenery is a non-movable item that uses indexed triangle meshes as input.
 			void scenery(const noob::basic_mesh&, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle, const std::string& name);
 
-			bool show_origin;
-
-			noob::mat4 view_mat, projection_mat;
-
 			void set_basic_light(unsigned int i, const noob::vec4& light);
 
 			noob::vec4 get_basic_light(unsigned int i) const;
+
+			void write_graph(const std::string& filename) const;
+
+			bool show_origin;
+
+			noob::mat4 view_mat, projection_mat;
 
 			noob::prepared_shaders renderer;
 
@@ -99,9 +102,9 @@ namespace noob
 			btDiscreteDynamicsWorld* dynamics_world;
 			
 			lemon::ListDigraph draw_graph;
-			lemon::ListDigraph::NodeMap<noob::bodies_holder::handle> bodies_mapping;
-			lemon::ListDigraph::NodeMap<noob::basic_models_holder::handle> basic_models_mapping;
-			lemon::ListDigraph::NodeMap<noob::shaders_holder::handle> shaders_mapping;
+			lemon::ListDigraph::NodeMap<size_t> bodies_mapping;
+			lemon::ListDigraph::NodeMap<size_t> basic_models_mapping;
+			lemon::ListDigraph::NodeMap<size_t> shaders_mapping;
 			lemon::ListDigraph::Node root_node;
 
 			std::unordered_map<size_t, noob::shapes_holder::handle> bodies_to_shapes;

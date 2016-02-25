@@ -36,7 +36,6 @@ void main()
 	set_shader(purple_shader, "purple");
 	auto purple_shader_h = get_shader("purple");
 
-
 	// basic_uniform basic_uni;
 	// basic_uni.colour = vec4(1.0, 1.0, 1.0, 1.0);
 	// set_shader(basic_uni, "basic");
@@ -49,6 +48,8 @@ void main()
 	default_stage.scenery(a, vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h, "one");
 	default_stage.scenery(b, vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h, "two");
 
+
+	default_stage.write_graph("debug.lgf");
 /*
 	vector_vec3 p;
 	p.push_back(vec3(-50.0, 0.0, -50.0));

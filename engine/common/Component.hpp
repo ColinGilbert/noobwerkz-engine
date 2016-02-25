@@ -23,6 +23,8 @@ namespace noob
 
 					handle() : inner(0) {}
 
+			//		handle(const handle& other) {inner = other.inner; }
+
 					bool operator==(const noob::component<T>::handle other) const
 					{
 						return (inner == other.inner);
@@ -53,7 +55,6 @@ namespace noob
 					else 
 					{
 						logger::log("Invalid access to component");
-					
 						return items[0];
 					}	
 				}
@@ -113,7 +114,6 @@ namespace noob
 				{
 					handle h;
 					h.inner = i;
-					h.valid = exists(h);
 					return h;
 				}
 
@@ -139,8 +139,10 @@ namespace noob
 				{
 					friend class component;
 					public:
+
 					handle() : inner(0) {}
 
+				//	handle(const handle& other) {inner = other.inner; }
 
 					bool operator==(const noob::component<std::unique_ptr<T>>::handle other) const
 					{
@@ -214,7 +216,7 @@ namespace noob
 						items[h.inner] = std::move(t);
 					}
 				}
-
+/*
 				void set(component<std::unique_ptr<T>>::handle h, const std::string& name)
 				{
 					if (exists(h))
@@ -233,7 +235,7 @@ namespace noob
 					}
 					return h;
 				}
-
+*/
 				component<std::unique_ptr<T>>::handle make_handle(unsigned int i)
 				{
 					handle h;

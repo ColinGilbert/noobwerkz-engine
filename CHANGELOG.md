@@ -1,4 +1,10 @@
-<<<<<<< HEAD
+Version 0.2.0 AKA: "Graphix Magix, Act One"
+```
+Overhaul of the graphics system. Now allows for easy batching of instanced objects using a very compact scene graph (it only holds tags stored in std::vector containers.)
+Used to store extra meshes for no good reason. This stupidity was stopped and we now save lots of memory. :P
+
+```
+
 Version 0.1.1 AKA "Live reloads"
 ```
 Moved out all non-stage components from stage, enabling live reloads! Yay!
@@ -31,9 +37,3 @@ Version: 0.0.1, AKA: Fresh "beginnings":
 ```
 Beginning of acceptable, almost modular interface.
 ```
-=======
-Please look into the doxygen configuration (Generated from Doc/history.docu) 
-
-The latest changelog for the master can be found here:
-http://openmesh.org/Daily-Builds/Doc/a00002.html
->>>>>>> ce3274393839af16c136433091eef1036bc625d9

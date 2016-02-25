@@ -426,6 +426,9 @@ void noob::globals::set_shader(const noob::prepared_shaders::uniform& u, const s
 	auto search = names_to_shaders.find(s);
 	if (search != names_to_shaders.end())
 	{
+		fmt::MemoryWriter ww;
+		ww << "[Globals] set_shader - Found shader with name: " << s << ". Updating.";//Creating and setting to handle " << h.get_inner();
+		logger::log(ww.str());
 		shaders.set(search->second, u);
 	}
 	else
@@ -433,9 +436,8 @@ void noob::globals::set_shader(const noob::prepared_shaders::uniform& u, const s
 		noob::shaders_holder::handle h = shaders.add(u);
 		
 		fmt::MemoryWriter ww;
-		ww << "[Globals] set_shader - Could not find " << s << " in list. Setting to handle " << h.get_inner();
+		ww << "[Globals] set_shader - Could not find shader with name: " << s << ". Creating and setting to handle " << h.get_inner();
 		logger::log(ww.str());
-
 		names_to_shaders.insert(std::make_pair(s, h));
 	}
 }

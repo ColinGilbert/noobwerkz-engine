@@ -1,4 +1,6 @@
 #include "Stage.hpp"
+#include <fstream>
+#include <boost/filesystem.hpp>
 
 
 noob::stage::~stage()
@@ -22,16 +24,17 @@ void noob::stage::init()
 
 	renderer.init();
 
-	draw_graph.reserveNode(NUM_RESERVED_NODES);
-	draw_graph.reserveArc(NUM_RESERVED_ARCS);
+	// draw_graph.reserveNode(NUM_RESERVED_NODES);
+	// draw_graph.reserveArc(NUM_RESERVED_ARCS);
 
 	root_node = draw_graph.addNode();
 
 	noob::bodies_holder::handle temp = body(noob::body_type::STATIC, globals::unit_sphere_shape, 0.0, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0), false);
+
 	fmt::MemoryWriter ww;
 	ww << "[Stage] init first body. Handle = " << temp.get_inner();
 	logger::log(ww.str());
-	
+
 	logger::log("[Stage] Done init.");
 }
 
@@ -40,7 +43,7 @@ void noob::stage::init()
 void noob::stage::tear_down()
 {
 	bodies.empty();
-	bodies_to_shapes.empty();
+	// bodies_to_shapes.empty();
 }
 
 
@@ -61,29 +64,42 @@ void noob::stage::draw(float window_width, float window_height) const
 	for (lemon::ListDigraph::OutArcIt model_it(draw_graph, root_node); model_it != lemon::INVALID; ++model_it)
 	{
 		lemon::ListDigraph::Node model_node = draw_graph.target(model_it);
-		noob::basic_models_holder::handle model_h = basic_models_mapping[model_node];
+		size_t model_h = basic_models_mapping[model_node];
 
-		for (lemon::ListDigraph::OutArcIt shading_it(draw_graph, model_it); shading_it != lemon::INVALID; ++shading_it)
+		// fmt::MemoryWriter w;
+		// w << "[Stage] draw() - Iterating over model " << model_h;
+		// logger::log(w.str());
+
+		// if (lemon::countOutArcs(draw_graph, model_node) > 0)
+		// {
+		for (lemon::ListDigraph::OutArcIt shading_it(draw_graph, model_node); shading_it != lemon::INVALID; ++shading_it)
 		{
 			lemon::ListDigraph::Node shading_node = draw_graph.target(shading_it);
-			noob::shaders_holder::handle shader_h = shaders_mapping[shading_node];
-			for (lemon::ListDigraph::OutArcIt body_it(draw_graph, shading_it); body_it != lemon::INVALID; ++body_it)
+			size_t shader_h = shaders_mapping[shading_node];
+
+			// fmt::MemoryWriter ww;
+			// ww << "[Stage] draw() - Iterating over shader " << shader_h;
+			// logger::log(ww.str());
+
+			// if (lemon::countOutArcs(draw_graph, shading_node) > 0)
+			// {
+			for (lemon::ListDigraph::OutArcIt body_it(draw_graph, shading_node); body_it != lemon::INVALID; ++body_it)
 			{
 				lemon::ListDigraph::Node body_node = draw_graph.target(body_it);
-				noob::bodies_holder::handle body_h = bodies_mapping[body_node];
+				size_t body_h = bodies_mapping[body_node];
 
-				fmt::MemoryWriter ww;
-				ww << "[Stage] Drawing model " << model_h.get_inner() << " shading " << shader_h.get_inner() << " body " << body_h.get_inner();
-				logger::log(ww.str());
+				// fmt::MemoryWriter www;
+				// www << "[Stage] draw() - model " << model_h << " shading " << shader_h << " body " << body_h;
+				// logger::log(www.str());
 
-				noob::body* body_ptr = bodies.get(body_h);
-				mat4 world_mat = bodies.get(body_h)->get_transform();// * view_mat;
+				noob::body* body_ptr = bodies.get(bodies.make_handle(body_h));
+				mat4 world_mat = bodies.get(bodies.make_handle(body_h))->get_transform();
 				noob::mat4 normal_mat = noob::transpose(noob::inverse((view_mat * world_mat)));
-				// noob::mat4 world_mat = noob::identity_mat4();
-				// noob::mat4 normal_mat = noob::identity_mat4();
-				renderer.draw(noob::globals::basic_models.get(model_h), noob::globals::shaders.get(shader_h), world_mat, normal_mat, basic_lights, 0);
+				renderer.draw(noob::globals::basic_models.get(noob::globals::basic_models.make_handle(model_h)), noob::globals::shaders.get(noob::globals::shaders.make_handle(shader_h)), world_mat, normal_mat, basic_lights, 0);
 			}
+			// }
 		}
+		// }
 	}
 
 	if (show_origin)
@@ -118,67 +134,64 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::an
 
 void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::globals::scaled_model& model_info, const noob::shaders_holder::handle shader_h)
 {
-	lemon::ListDigraph::Node model_node, shader_node, body_node;
-
-	auto model_results = basic_models_to_nodes.find(model_info.model_h.get_inner());
-	if (model_results != basic_models_to_nodes.end())
-	{
-		model_node = model_results->second;
-	}
-	else
-	{
-		model_node = draw_graph.addNode();
-		basic_models_mapping[model_node] = model_info.model_h;
-		draw_graph.addArc(root_node, model_node);
-
-		fmt::MemoryWriter ww;
-		ww << "[Stage] Creating actor - model " << model_info.model_h.get_inner() << " not found in drawgraph. Creating node and connecting to root node.";
-		logger::log(ww.str());
-
-		basic_models_to_nodes.insert(std::make_pair(model_info.model_h.get_inner(), model_node));
-	}
-
-	auto shader_results = shaders_to_nodes.find(shader_h.get_inner());
-	if (shader_results != shaders_to_nodes.end())
-	{
-		shader_node = shader_results->second;
-	}
-	else
-	{
-		shader_node = draw_graph.addNode();
-		shaders_mapping[shader_node] = shader_h;
-		draw_graph.addArc(model_node, shader_node);
-
-		fmt::MemoryWriter ww;
-		ww << "[Stage] Creating actor - shader " << shader_h.get_inner() << " not found in drawgraph. Creating node and connecting to model node " << model_info.model_h.get_inner();
-		logger::log(ww.str());
-
-		shaders_to_nodes.insert(std::make_pair(shader_h.get_inner(), shader_node));
-	}
-
 	auto body_results = bodies_to_nodes.find(body_h.get_inner());
 	if (body_results != bodies_to_nodes.end())
 	{
 		logger::log("[Stage] Warning: Attempting to use duplicate body. Aborted.");
 		return;
 	}
-	else
-	{
-		fmt::MemoryWriter ww;
-		ww << "[Stage] Creating actor - body " << body_h.get_inner() << " not found in drawgraph. Creating node and connecting to shader node " << shader_h.get_inner();
-		logger::log(ww.str());
 
-		body_node = draw_graph.addNode();
-		bodies_mapping[body_node] = body_h;
-		draw_graph.addArc(shader_node, body_node);
+	lemon::ListDigraph::Node model_node, shader_node, body_node;
 
-		bodies_to_nodes.insert(std::make_pair(body_h.get_inner(), body_node));
-	}
+	// auto model_results = basic_models_to_nodes.find(model_info.model_h.get_inner());
+	// if (model_results != basic_models_to_nodes.end())
+	// {
+	// 	model_node = model_results->second;
+	// }
+	// else
+	// {
+	model_node = draw_graph.addNode();
+	basic_models_mapping[model_node] = model_info.model_h.get_inner();
 
-	fmt::MemoryWriter ww;
-	ww << "[Stage] Created actor - shader " << shader_h.get_inner() << ", model " << model_info.model_h.get_inner() << " , body " << body_h.get_inner(); 
-	logger::log(ww.str());
+	fmt::MemoryWriter ww_0;
+	ww_0 << "[Stage] Creating actor - model " << model_info.model_h.get_inner() << " not found in drawgraph. Creating node and connecting to root node.";
+	logger::log(ww_0.str());
 
+	basic_models_to_nodes.insert(std::make_pair(model_info.model_h.get_inner(), model_node));
+	// }
+	draw_graph.addArc(root_node, model_node);
+
+	// auto shader_results = shaders_to_nodes.find(shader_h.get_inner());
+	// if (shader_results != shaders_to_nodes.end())
+	// {
+	// 	shader_node = shader_results->second;
+	// }
+	// else
+	// {
+	shader_node = draw_graph.addNode();
+	shaders_mapping[shader_node] = shader_h.get_inner();
+
+	fmt::MemoryWriter ww_1;
+	ww_1 << "[Stage] Creating actor - shader " << shader_h.get_inner() << " not found in drawgraph. Creating node and connecting to model node " << model_info.model_h.get_inner();
+	logger::log(ww_1.str());
+
+	shaders_to_nodes.insert(std::make_pair(shader_h.get_inner(), shader_node));
+	// }
+	draw_graph.addArc(model_node, shader_node);
+
+	fmt::MemoryWriter ww_2;
+	ww_2 << "[Stage] Creating actor - body " << body_h.get_inner() << " Creating node and connecting to shader node " << shader_h.get_inner();
+	logger::log(ww_2.str());
+
+	body_node = draw_graph.addNode();
+	bodies_mapping[body_node] = body_h.get_inner();
+	draw_graph.addArc(shader_node, body_node);
+
+	bodies_to_nodes.insert(std::make_pair(body_h.get_inner(), body_node));
+
+	fmt::MemoryWriter ww_3;
+	ww_3 << "[Stage] Created actor - shader " << shader_h.get_inner() << ", model " << model_info.model_h.get_inner() << " , body " << body_h.get_inner(); 
+	logger::log(ww_3.str());
 }
 
 
@@ -203,4 +216,38 @@ noob::vec4 noob::stage::get_basic_light(unsigned int i) const
 {
 	if (i > 1) return basic_lights[1];
 	else return basic_lights[i];
+}
+///ListDigraph digraph;
+///ListDigraph::ArcMap<int> cap(digraph);
+///ListDigraph::Node src, trg;
+///  // Setting the capacity map and source and target nodes
+///digraphWriter(digraph, std::cout).
+///  arcMap("capacity", cap).
+///  node("source", src).
+///  node("target", trg).
+///  run();
+void noob::stage::write_graph(const std::string& filename) const
+{
+	logger::log("About to write graph");
+	boost::filesystem::path p("temp/");
+	if (boost::filesystem::exists(p))
+	{
+		// p /= boost::filesystem::path(filename.c_str());
+		
+		// std::ofstream of;
+		//of.open(p.generic_string(), std::ofstream::out | std::ofstream::trunc);
+		//if (of)
+		//{
+		std::string full_path_str = p.generic_string() + filename;
+		lemon::digraphWriter(draw_graph, full_path_str).nodeMap("model", basic_models_mapping).nodeMap("body", bodies_mapping).nodeMap("shader", shaders_mapping).node("root", root_node).run();
+
+		//}
+		//else
+		//{
+		//	fmt::MemoryWriter ww;
+		//	ww << "[Stage] Could not write graph snapshot. Failed to open " << p.generic_string();
+		//	logger::log(ww.str());
+		//}
+	}
+	else logger::log("[Stage] Could not write graph snapshot - temp directory not found.");
 }

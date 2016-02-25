@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 Hi,
 
 
@@ -14,7 +13,7 @@ These can provide a sense of direction as to the direction of the project; I enc
 
 High-quality tutorials and real unit tests will come when the implementation is more or less set in stone.
 
-Current version: 0.1.1, AKA: "Live reloads!"
+Current version: 0.2.0, AKA: "Graphix Magix, Act One"
 
 Specific features:
 ```
@@ -57,7 +56,8 @@ Short scripts with tiny names are used to do routine work (compiles, archivals, 
 
 Platforms:
 ```
-Current setup uses linux as main controller
+Current setup uses linux as main controller.
+Designed so as to be stupidly easy to port (set up your hardware and define an entry point and we're good to go!)
 Ports coming soon
 ```
 
@@ -71,19 +71,18 @@ sandbox/g for git. Adds changes to git and commits them (for my use, mostly)
 
 Things to do in the immediate future:
 ```
-Refine physics
-AI
-Sound
-Serialization
-Scripting (done!)
+
 ```
 
-Medium future:
+Future:
 ```
+Scripting (done!)
+Sound
+Serialization
 Ports to Android, iOS, Windows, OSX, Emscripten, Steam
-Test framework
-Destructible worlds
 Basic AI
+Destructible worlds
+Test framework
 ```
 
 Long-term:
@@ -127,4 +126,3 @@ The latest Documentation can be found at:
 http://www.openmesh.org/media/Documentations/OpenMesh-Doc-Latest  
 
 Documentation for previous versions is available on our website as well.  
->>>>>>> ce3274393839af16c136433091eef1036bc625d9
