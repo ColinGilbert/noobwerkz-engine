@@ -236,12 +236,12 @@ namespace noob
 
 			static void as_scaled_model_constructor_wrapper(uint8_t* memory)
 			{
-				new(memory) noob::globals::scaled_model();
+				new(memory) noob::scaled_model();
 			}
 
 			static void as_scaled_model_destructor_wrapper(uint8_t* memory)
 			{
-				((noob::globals::scaled_model*)memory)->~scaled_model();
+				((noob::scaled_model*)memory)->~scaled_model();
 			}
 
 			static void as_basic_mesh_destructor_wrapper(uint8_t* memory)
@@ -271,7 +271,6 @@ namespace noob
 
 
 
-
 		protected:
 
 			void update(double delta);
@@ -298,5 +297,6 @@ namespace noob
 			noob::stage stage;
 			noob::mat4 view_mat;
 			std::string script_name;
+			noob::globals global_storage;
 	};
 }

@@ -66,10 +66,10 @@ namespace noob
 
 	vec3::vec3(const std::array<float, 3>& a)
 	{
-		// v[0] = a[0];
-		// v[1] = a[1];
-		// v[2] = a[2];
-		v = a;
+		v[0] = a[0];
+		v[1] = a[1];
+		v[2] = a[2];
+		// v = a;
 	}
 
 
@@ -638,13 +638,13 @@ namespace noob
 	}
 
 	// scale a matrix by [x, y, z]
-	mat4 scale(const mat4& m, const vec3& v)
+	mat4 scale(const mat4& mat_arg, const vec3& v)
 	{
-		mat4 a = identity_mat4();
-		a.m[0] = v.v[0];
-		a.m[5] = v.v[1];
-		a.m[10] = v.v[2];
-		return a * m;
+		mat4 a(mat_arg);//identity_mat4();
+		a.m[0] *= v.v[0];
+		a.m[5] *= v.v[1];
+		a.m[10] *= v.v[2];
+		return a;// * m;
 	}
 
 

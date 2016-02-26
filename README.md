@@ -19,7 +19,7 @@ Specific features:
 ```
 A highly tunable gradient mapping shader by default. Comes with three XY-tileable textures blended into one.
 Triplanar shader for non-UV mapped objects. Texture reads are kept to a minimum (3) by using the gradient mapping technique.
-Provides clean interfaces over to those libraries and tools on top via both a scripting API for quick scene setups or a C++ level API for extension.
+Provides clean interfaces over to those libraries and tools on top via both a scripting API for quick scene setups or a C++ level API for fast runtimes (or) extension.
 ```
 
 Currently brings in (among others):
@@ -61,7 +61,7 @@ Designed so as to be stupidly easy to port (set up your hardware and define an e
 Ports coming soon
 ```
 
-Little *nix scripts (currently runs on bash but I don't believe it uses any bashisms.
+Little *nix scripts (currently runs on bash but I don't believe it uses any bashisms:
 ```
 sandbox/b for build. Attempts to build source
 sandbox/bb for big build. Wipes the binaries and builds from scratch
@@ -79,7 +79,3 @@ Basic AI
 Destructible worlds
 Test framework
 ```
-
-Long-term:
-```
-I intend on splitting out all the platform-specific code from this project into it's own middleware platform, and running the game engine on top of it.

@@ -13,7 +13,6 @@
 #include <btBulletDynamicsCommon.h>
 // #include <dcollide.h>
 
-#include "es/storage.hpp"
 #include "Graphics.hpp"
 #include "MathFuncs.hpp"
 #include "VoxelWorld.hpp"
@@ -46,12 +45,12 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() : show_origin(true), view_mat(noob::identity_mat4()), projection_mat(noob::identity_mat4()), basic_lights( { noob::vec4(0.0, 1.0, 0.0, 0.1), noob::vec4(1.0, 0.0, 0.0, 0.1) } ), bodies_mapping(draw_graph), basic_models_mapping(draw_graph), shaders_mapping(draw_graph) {}
+			stage() : show_origin(true), view_mat(noob::identity_mat4()), projection_mat(noob::identity_mat4()), basic_lights( { noob::vec4(0.0, 1.0, 0.0, 0.1), noob::vec4(1.0, 0.0, 0.0, 0.1) } ), bodies_mapping(draw_graph), basic_models_mapping(draw_graph), shaders_mapping(draw_graph), scales_mapping(draw_graph) {}
 
 			~stage();
 
 			// This one must be called by the application. It really sucks but that's because the graphics API is (currently) static. This may well change soon enough.
-			void init();
+			void init(const noob::globals*);
 
 			// This one provides a way to bring everything back to scratch 
 			void tear_down();
@@ -69,7 +68,11 @@ namespace noob
 			// Functions to create commonly-used configurations:
 			void actor(const noob::bodies_holder::handle, const noob::animated_models_holder::handle, const noob::shaders_holder::handle);
 
-			void actor(const noob::bodies_holder::handle, const noob::globals::scaled_model&, const noob::shaders_holder::handle);
+			void actor(const noob::bodies_holder::handle, const noob::scaled_model, const noob::shaders_holder::handle);
+
+			void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::scaled_model, const noob::shaders_holder::handle);
+			
+			void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle);
 
 			// void actor(const noob::shapes_holder::handle, const noob::vec3& pos, const noob::vec3& orient, const noob::vec3& scale, const noob::shaders_holder::handle);
 
@@ -105,6 +108,7 @@ namespace noob
 			lemon::ListDigraph::NodeMap<size_t> bodies_mapping;
 			lemon::ListDigraph::NodeMap<size_t> basic_models_mapping;
 			lemon::ListDigraph::NodeMap<size_t> shaders_mapping;
+			lemon::ListDigraph::NodeMap<std::array<float,3>> scales_mapping;
 			lemon::ListDigraph::Node root_node;
 
 			std::unordered_map<size_t, noob::shapes_holder::handle> bodies_to_shapes;
@@ -112,6 +116,6 @@ namespace noob
 			std::map<size_t, lemon::ListDigraph::Node> basic_models_to_nodes;
 			std::map<size_t, lemon::ListDigraph::Node> shaders_to_nodes;
 
-
+			noob::globals* globals;
 	};
 }

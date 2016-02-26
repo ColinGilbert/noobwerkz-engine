@@ -1,7 +1,7 @@
 #include "Application.hpp"
 
 noob::application* noob::application::app_pointer = nullptr;
-
+// noob::globals noob::application::global_storage;
 
 noob::application::application() 
 {
@@ -72,7 +72,7 @@ void angel_message_callback(const asSMessageInfo *msg, void *param)
 	}
 	fmt::MemoryWriter ww;
 	ww << "[AngelScript callback] " << message_type << ": " << msg->message << ", script section: " << msg->section << " row = " << msg->row << " col: " << msg->col;
-	logger::log(ww.str());
+	noob::logger::log(ww.str());
 }
 
 
@@ -81,8 +81,14 @@ void noob::application::init()
 	logger::log("[Application] Begin init.");
 	ui_enabled = true;
 	gui.init(*prefix, window_width, window_height);
-	globals::init();
-	stage.init();
+	if (global_storage.init())
+	{
+		stage.init(&global_storage);
+	}
+	else 
+	{
+		logger::log("[Application] Global storage init failed :(");
+	}
 	voxels.init(512, 512, 512);
 
 	// Used by AngelScript to capture the result of the last registration.
@@ -103,72 +109,16 @@ void noob::application::init()
 	r = script_engine->RegisterGlobalFunction("void log(const string& in)", asFUNCTION(logger::log), asCALL_CDECL); assert (r >= 0);
 	// r = script_engine->RegisterGlobalFunction("void log(const string& in)", asFUNCTIONPR(logger::log, (const std::string&), void), asCALL_CDECL); assert (r >= 0);
 
-	// struct uniform
-	// {
-	// 	void init(const std::string& name, bgfx::UniformType::Enum _type, uint16_t _count = 1)
-	// 	{
-	// 		handle = bgfx::createUniform(name.c_str(), type, _count);
-	// 		type = _type;
-	// 		count = _count;
-	// 	}
-
-	// 	bgfx::UniformHandle handle;
-	// 	bgfx::UniformType::Enum type;
-	// 	uint16_t count;
-	// };
-
-	// struct sampler
-	// {
-	// 	void init(const std::string& name)
-	// 	{
-	// 		handle = bgfx::createUniform(name.c_str(), bgfx::UniformType::Int1);
-	// 	}
-	// 	bgfx::UniformHandle handle;
-	// };
 
 	r = script_engine->RegisterObjectType("texture", sizeof(noob::graphics::texture), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::graphics::texture>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
 	r = script_engine->RegisterObjectProperty("texture", "uint16 handle", asOFFSET(noob::graphics::texture, handle)); assert(r >= 0);
-
-	// struct texture
-	// {
-	// 	bgfx::TextureHandle handle;
-	// };
-
-	// struct shader
-	// {
-	// 	bgfx::ProgramHandle program;
-	// 	std::vector<noob::graphics::uniform> uniforms;
-	// 	std::vector<noob::graphics::sampler> samplers;	
-	// };
-
-	// static void init(uint32_t width, uint32_t height);
-	// static void destroy();
-	// static void frame(uint32_t width, uint32_t height);
-
-	// ---------------- Asset loaders (builds from files and returns handles) -----------------
-	// static bgfx::ShaderHandle load_shader(const std::string& filename);
-	// static bgfx::ProgramHandle load_program(const std::string& vs_filename, const std::string& fs_filename);
-
 	// static noob::graphics::texture load_texture(const std::string& friendly_name, const std::string& filename, uint32_t flags);
 	r = script_engine->RegisterGlobalFunction("texture load_texture(const string& in, const string& in, uint)", asFUNCTION(noob::graphics::load_texture), asCALL_CDECL); assert (r >= 0);
 
-	// ---------------- Asset creators (make assets available from getters) ----------------
-	// static bool add_sampler(const std::string&);
-	// static bool add_uniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t count);
-	// static bool add_shader(const std::string&, const noob::graphics::shader&);
-
-	// ---------------- Getters -----------------
 	// static noob::graphics::shader get_shader(const std::string&);
 	// static noob::graphics::texture get_texture(const std::string&);
 	r = script_engine->RegisterGlobalFunction("texture get_texture(const string& in)", asFUNCTION(noob::graphics::get_texture), asCALL_CDECL); assert (r >= 0);
 	
-	// static noob::graphics::uniform get_uniform(const std::string&);
-	// static noob::graphics::sampler get_sampler(const std::string&);
-
-	// ---------------- Checkers ----------------
-	// static bool is_valid(const noob::graphics::uniform&);
-	// static bool is_valid(const noob::graphics::sampler&);
-
 	r = script_engine->RegisterEnum("csg_op"); assert(r >= 0 );
 	r = script_engine->RegisterEnumValue("csg_op", "UNION", 0); assert(r >= 0 );
 	r = script_engine->RegisterEnumValue("csg_op", "DIFFERENCE", 1); assert(r >= 0 );
@@ -410,41 +360,63 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("triplanar_gradmap_uniform", "vec4 get_colour(uint) const", asMETHOD(noob::triplanar_gradient_map_renderer::uniform, get_colour), asCALL_THISCALL); assert( r >= 0 );	
 
 	r = script_engine->RegisterObjectType("shape_handle", sizeof(noob::shapes_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::shapes_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectProperty("shape_handle", "uint64 inner", asOFFSET(noob::shapes_holder::handle, inner)); assert(r >= 0);
+	
 	r = script_engine->RegisterObjectType("body_handle", sizeof(noob::bodies_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::bodies_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
-	r = script_engine->RegisterObjectType("mesh_handle", sizeof(noob::meshes_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::meshes_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectProperty("body_handle", "uint64 inner", asOFFSET(noob::bodies_holder::handle, inner)); assert(r >= 0);
+	
 	r = script_engine->RegisterObjectType("model_handle", sizeof(noob::basic_models_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::basic_models_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectProperty("model_handle", "uint64 inner", asOFFSET(noob::basic_models_holder::handle, inner)); assert(r >= 0);
+
+
 	r = script_engine->RegisterObjectType("animated_model_handle", sizeof(noob::animated_models_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::animated_models_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectProperty("animated_model_handle", "uint64 inner", asOFFSET(noob::animated_models_holder::handle, inner)); assert(r >= 0);
+	
 	r = script_engine->RegisterObjectType("skeletal_anim_handle", sizeof(noob::skeletal_anims_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::skeletal_anims_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectProperty("skeletal_anim_handle", "uint64 inner", asOFFSET(noob::skeletal_anims_holder::handle, inner)); assert(r >= 0);
+	
 	r = script_engine->RegisterObjectType("light_handle", sizeof(noob::lights_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::lights_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectProperty("light_handle", "uint64 inner", asOFFSET(noob::lights_holder::handle, inner)); assert(r >= 0);
+	
 	r = script_engine->RegisterObjectType("reflection_handle", sizeof(noob::reflections_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::reflections_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectProperty("reflection_handle", "uint64 inner", asOFFSET(noob::reflections_holder::handle, inner)); assert(r >= 0);
 	
 	r = script_engine->RegisterObjectType("shader_handle", sizeof(noob::shaders_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::shaders_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	r = script_engine->RegisterObjectProperty("shader_handle", "uint64 inner", asOFFSET(noob::shaders_holder::handle, inner)); assert(r >= 0);
 	
-
-	r = script_engine->RegisterObjectType("scaled_model", sizeof(noob::globals::scaled_model), asOBJ_VALUE); assert(r >= 0 );
+	r = script_engine->RegisterObjectType("scaled_model", sizeof(noob::scaled_model), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::bodies_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
 	r = script_engine->RegisterObjectBehaviour("scaled_model", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(as_scaled_model_constructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	r = script_engine->RegisterObjectBehaviour("scaled_model", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_scaled_model_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
-	r = script_engine->RegisterObjectProperty("scaled_model", "model_handle model_h", asOFFSET(noob::globals::scaled_model, model_h)); assert( r >= 0 );
-	r = script_engine->RegisterObjectProperty("scaled_model", "vec3 scales", asOFFSET(noob::globals::scaled_model, scales)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("scaled_model", "model_handle model_h", asOFFSET(noob::scaled_model, model_h)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("scaled_model", "vec3 scales", asOFFSET(noob::scaled_model, scales)); assert( r >= 0 );
 
-	r = script_engine->RegisterGlobalFunction("shape_handle sphere(float)", asFUNCTION(globals::sphere), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("shape_handle box(float, float, float)", asFUNCTION(globals::box), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("shape_handle cylinder(float, float)", asFUNCTION(globals::cylinder), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("shape_handle cone(float, float)", asFUNCTION(globals::cone), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("shape_handle hull(const vector_vec3& in)", asFUNCTION(globals::hull), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("shape_handle static_trimesh(const mesh_handle& in)", asFUNCTION(globals::static_trimesh), asCALL_CDECL); assert( r >= 0 );
-	// r = script_engine->RegisterGlobalFunction("mesh_handle add_mesh(const basic_mesh& in)", asFUNCTION(globals::add_mesh), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("model_handle model_by_shape(const mesh_handle& in)", asFUNCTION(globals::model_by_shape), asCALL_CDECL); assert(r >= 0);
-	r = script_engine->RegisterGlobalFunction("animated_model_handle animated_model(const string& in)", asFUNCTION(globals::animated_model), asCALL_CDECL); assert( r >= 0 );
-	// r = script_engine->RegisterGlobalFunction("skeleton_handle skeleton(const string& in)", asFUNCTION(globals::skeleton), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("void set_light(const light& in, const string& in)", asFUNCTION(globals::set_light), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("light get_light(const string& in)", asFUNCTION(globals::get_light), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("void set_reflection(const reflection& in, const string& in)", asFUNCTION(globals::set_reflection), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("reflection get_reflection(const string& in)", asFUNCTION(globals::get_reflection), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("void set_shader(const basic_uniform& in, const string& in)", asFUNCTIONPR(globals::set_shader, (const noob::basic_renderer::uniform&, const std::string&), void), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("void set_shader(const triplanar_gradmap_uniform& in, const string& in)", asFUNCTIONPR(globals::set_shader, (const noob::triplanar_gradient_map_renderer::uniform&, const std::string&), void), asCALL_CDECL); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("shader_handle get_shader(const string& in)", asFUNCTION(globals::get_shader), asCALL_CDECL); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("shape_handle sphere_shape(float)", asMETHOD(noob::globals, sphere_shape), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("shape_handle box_shape(float, float, float)", asMETHOD(noob::globals, box_shape), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("shape_handle cylinder_shape(float, float)", asMETHOD(noob::globals, cylinder_shape), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("shape_handle cone_shape(float, float)", asMETHOD(noob::globals, cone_shape), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("shape_handle hull_shape(const vector_vec3& in)", asMETHOD(noob::globals, hull_shape), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("shape_handle static_trimesh_shape(const basic_mesh& in)", asMETHOD(noob::globals, static_trimesh_shape), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	// r = script_engine->RegisterGlobalFunction("mesh_handle add_mesh(const basic_mesh& in)", asMETHOD(noob::globals, add_mesh), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	// r = script_engine->RegisterGlobalFunction("model_handle model_by_shape(const shape_handle)", asMETHOD(noob::globals, model_by_shape), asCALL_THISCALL_ASGLOBAL, &global_storage); assert(r >= 0);
+	
+	r = script_engine->RegisterGlobalFunction("scaled_model sphere_model(float)", asMETHOD(noob::globals, sphere_model), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("scaled_model box_model(float, float, float)", asMETHOD(noob::globals, box_model), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("scaled_model cylinder_model(float, float)", asMETHOD(noob::globals, cylinder_model), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("scaled_model cone_model(float, float)", asMETHOD(noob::globals, cone_model), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("scaled_model model_from_mesh(const basic_mesh& in)", asMETHOD(noob::globals, model_from_mesh), asCALL_THISCALL_ASGLOBAL, &global_storage); assert(r >= 0);
+	
+	r = script_engine->RegisterGlobalFunction("animated_model_handle animated_model(const string& in)", asMETHOD(noob::globals, animated_model), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	// r = script_engine->RegisterGlobalFunction("skeleton_handle skeleton(const string& in)", asMETHOD(noob::globals, skeleton), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("void set_light(const light& in, const string& in)", asMETHOD(noob::globals, set_light), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("light get_light(const string& in)", asMETHOD(noob::globals, get_light), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("void set_reflection(const reflection& in, const string& in)", asMETHOD(noob::globals, set_reflection), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("reflection get_reflection(const string& in)", asMETHOD(noob::globals, get_reflection), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	// r = script_engine->RegisterGlobalFunction("shader_handle set_shader(const basic_uniform& in)", asMETHOD(noob::globals, as_set_basic_shader_wrapper), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );	
+	r = script_engine->RegisterGlobalFunction("void set_shader(const basic_uniform& in, const string& in)", asMETHODPR(noob::globals, set_shader, (const noob::basic_renderer::uniform&, const std::string&), void), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	//r = script_engine->RegisterGlobalFunction("shader_handle set_shader(const triplanar_gradmap_uniform& in, string& in)", asMETHOD(noob::globals, as_set_triplanar_gradmap_shader_wrapper), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("void set_shader(const triplanar_gradmap_uniform& in, const string& in)", asMETHODPR(noob::globals, set_shader, (const noob::triplanar_gradient_map_renderer::uniform&, const std::string&), void), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("shader_handle get_shader(const string& in)", asMETHOD(noob::globals, get_shader), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+
 
 	r = script_engine->RegisterObjectType("stage", sizeof(noob::stage), asOBJ_VALUE); assert(r >= 0 );
 	r = script_engine->RegisterObjectBehaviour("stage", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(as_stage_constructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
@@ -453,15 +425,16 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("stage", "void tear_down()", asMETHOD(noob::stage, tear_down), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "void update(double)", asMETHOD(noob::stage, update), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("stage", "void draw(float, float)", asMETHOD(noob::stage, draw), asCALL_THISCALL); assert( r >= 0 );
-// 	r = script_engine->RegisterObjectMethod("stage", "uint body(body_type, uint, float, const vec3& in, const versor& in, bool)", asMETHOD(noob::stage, _body), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "body_handle body(body_type, const shape_handle, float, const vec3& in, const versor& in, bool)", asMETHOD(noob::stage, body), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("stage", "void actor(const body_handle, const animated_model_handle, const shader_handle)", asMETHODPR(noob::stage, actor, (const noob::bodies_holder::handle, const noob::animated_models_holder::handle, const noob::shaders_holder::handle), void), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("stage", "void actor(const body_handle, const scaled_model& in, const shader_handle)", asMETHODPR(noob::stage, actor, (const noob::bodies_holder::handle, const noob::globals::scaled_model&, const noob::shaders_holder::handle), void), asCALL_THISCALL); assert( r >= 0 );
+	// r = script_engine->RegisterObjectMethod("stage", "void actor(const body_handle, const scaled_model, const shader_handle)", asMETHODPR(noob::stage, actor, (const noob::bodies_holder::handle, const noob::scaled_model, const noob::shaders_holder::handle), void), asCALL_THISCALL); assert( r >= 0 );
+	// r = script_engine->RegisterObjectMethod("stage", "void actor(const shape_handle, float, const vec3& in, const versor& in, const scaled_model, const shader_handle)", asMETHODPR(noob::stage, actor, (const noob::bodies_holder::handle, float, const noob::vec3&, const noob::versor&, const noob::scaled_model, const noob::shaders_holder::handle), void), asCALL_THISCALL); assert( r >= 0 );
+	// void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle)
+	r = script_engine->RegisterObjectMethod("stage", "void actor(const shape_handle, float, const vec3& in, const versor& in, const shader_handle)", asMETHODPR(noob::stage, actor, (const noob::shapes_holder::handle, float mass, const noob::vec3&, const noob::versor&, const noob::shaders_holder::handle), void), asCALL_THISCALL); assert( r >= 0 );
+
 	r = script_engine->RegisterObjectMethod("stage", "void scenery(const basic_mesh& in, const vec3& in, const versor& in, const shader_handle, const string& in)", asMETHOD(noob::stage, scenery), asCALL_THISCALL); assert(r >= 0);
-
 	r = script_engine->RegisterObjectMethod("stage", "void write_graph(const string& in)", asMETHOD(noob::stage, write_graph), asCALL_THISCALL); assert(r >= 0);
-
-
-
+	
 	r = script_engine->RegisterObjectProperty("stage", "bool show_origin", asOFFSET(noob::stage, show_origin)); assert(r >= 0);	
 	r = script_engine->RegisterObjectProperty("stage", "mat4 view_mat", asOFFSET(noob::stage, view_mat)); assert(r >= 0);
 	r = script_engine->RegisterObjectProperty("stage", "mat4 projection_mat", asOFFSET(noob::stage, projection_mat)); assert(r >= 0);
@@ -543,7 +516,7 @@ void noob::application::update(double delta)
 
 bool noob::application::load_init_script()
 {
-	std::string user_message = "[Application] reloading script. Success? {0}";
+	std::string user_message = "\n[Application] reloading script. Success? {0}";
 
 	script_module = script_engine->GetModule(0, asGM_ALWAYS_CREATE);
 

@@ -24,8 +24,9 @@ namespace noob
 	{
 		friend class stage;
 		friend class body;
+		// friend class globals_class;
 		friend class globals;
-
+		
 		public:
 		enum class type { SPHERE, BOX, CYLINDER, CONE, HULL, TRIMESH };
 

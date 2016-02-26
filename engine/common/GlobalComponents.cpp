@@ -1,77 +1,56 @@
 #include "GlobalComponents.hpp"
 
-noob::shaders_holder::handle noob::globals::debug_shader;
-noob::shaders_holder::handle noob::globals::default_triplanar_shader;
-noob::shaders_holder::handle noob::globals::uv_shader;
 
-noob::shapes_holder::handle noob::globals::unit_sphere_shape;
-noob::shapes_holder::handle noob::globals::unit_cube_shape;
-noob::shapes_holder::handle noob::globals::unit_capsule_shape;
-noob::shapes_holder::handle noob::globals::unit_cylinder_shape;
-noob::shapes_holder::handle noob::globals::unit_cone_shape;
-
-noob::basic_models_holder::handle noob::globals::unit_sphere_model;
-noob::basic_models_holder::handle noob::globals::unit_cube_model;
-noob::basic_models_holder::handle noob::globals::unit_capsule_model;
-noob::basic_models_holder::handle noob::globals::unit_cylinder_model;
-noob::basic_models_holder::handle noob::globals::unit_cone_model;
-
-noob::prepared_shaders noob::globals::renderer;
-
-noob::meshes_holder noob::globals::meshes;
-noob::basic_models_holder noob::globals::basic_models;
-noob::animated_models_holder noob::globals::animated_models;
-noob::shapes_holder noob::globals::shapes;
-noob::skeletal_anims_holder noob::globals::skeletal_anims;
-noob::lights_holder noob::globals::lights;
-noob::reflections_holder noob::globals::reflections;
-noob::shaders_holder noob::globals::shaders;
-
-std::unordered_map<std::string, noob::shapes_holder::handle> noob::globals::names_to_shapes;
-std::unordered_map<std::string, noob::basic_models_holder::handle> noob::globals::names_to_basic_models;
-std::unordered_map<std::string, noob::shaders_holder::handle> noob::globals::names_to_shaders;
-std::unordered_map<std::string, noob::lights_holder::handle> noob::globals::names_to_lights;
-std::unordered_map<std::string, noob::reflections_holder::handle> noob::globals::names_to_reflections;
-
-std::map<size_t, noob::basic_models_holder::handle> noob::globals::shapes_to_models;
-
-void noob::globals::init()
+bool noob::globals::init()
 {
 	renderer.init();
-	unit_sphere_shape = sphere(0.5);
-	unit_cube_shape = box(1.0, 1.0, 1.0);
-	unit_cylinder_shape = cylinder(0.5, 1.0);
-	unit_cone_shape = cone(0.5, 1.0);
+	unit_sphere_shape = sphere_shape(0.5);
+	unit_cube_shape = box_shape(1.0, 1.0, 1.0);
+	unit_cylinder_shape = cylinder_shape(0.5, 1.0);
+	unit_cone_shape = cone_shape(0.5, 1.0);
+
+	fmt::MemoryWriter ww;
+	ww << "[Globals] unit sphere shape handle " << unit_sphere_shape.get_inner() << ", unit cube shape handle " << unit_cube_shape.get_inner() << ", unit cylinder shape handle " << unit_cylinder_shape.get_inner() << ", unit cone shape handle " << unit_cone_shape.get_inner();
+	logger::log(ww.str());
 
 	// logger::log("[Globals] Making unit sphere model");
-	unit_sphere_model = basic_model(noob::mesh_utils::sphere(0.5));//basic_models.add(std::move(temp));
+	unit_sphere_model = model_from_mesh(noob::mesh_utils::sphere(0.5), "unit-sphere");//basic_models.add(std::move(temp));
 	// logger::log("[Globals] Making unit cube model");
-	unit_cube_model = basic_model(noob::mesh_utils::box(1.0, 1.0, 1.0));
-	// unit_cube_model = basic_model(noob::mesh_utils::box(1.0, 1.0, 1.0));
+	unit_cube_model = model_from_mesh(noob::mesh_utils::box(1.0, 1.0, 1.0), "unit-cube");
+	// unit_cube_model = model_from_mesh(noob::mesh_utils::box(1.0, 1.0, 1.0));
 	// logger::log("[Globals] Making unit cylinder model");
-	// unit_cylinder_model = basic_model(noob::mesh_utils::cylinder(1.0, 0.5));
-	unit_cylinder_model = basic_model(noob::mesh_utils::cylinder(0.5, 1.0));
+	// unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(1.0, 0.5));
+	unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(0.5, 1.0), "unit-cylinder");
 	// logger::log("[Globals] Making unit cone model");
-	unit_cone_model = basic_model(noob::mesh_utils::cone(0.5, 1.0));
+	unit_cone_model = model_from_mesh(noob::mesh_utils::cone(0.5, 1.0), "unit-cone");
+	
+	fmt::MemoryWriter ww_2;
+	ww_2 << "[Globals] unit sphere model handle " << unit_sphere_model.model_h.get_inner() << ", unit cube model handle " << unit_cube_model.model_h.get_inner() << ", unit cylinder model handle " << unit_cylinder_model.model_h.get_inner() << ", unit cone model handle " << unit_cone_model.model_h.get_inner();
+	logger::log(ww_2.str());
 
 	//  Init basic default shader
 	noob::basic_renderer::uniform dbg;
 	dbg.colour = noob::vec4(1.0, 1.0, 1.0, 0.0);
-	set_shader(dbg, "debug"); 
+	set_shader(dbg, "debug");
+	// logger::log("[Globals] Set debug shader");
 	debug_shader = get_shader("debug");
-
+	// logger::log("[Globals] Got debug shader handle");
 	// Init triplanar shader. For fun.
 	noob::triplanar_gradient_map_renderer::uniform triplanar_info;
 	std::array<noob::vec4,4> colours;
 	triplanar_info.colours[0] = noob::vec4(1.0, 1.0, 1.0, 1.0);
-	triplanar_info.colours[1] = noob::vec4(1.0, 1.0, 1.0, 1.0);
-	triplanar_info.colours[2] = noob::vec4(1.0, 1.0, 1.0, 1.0);
-	triplanar_info.colours[3] = noob::vec4(1.0, 1.0, 1.0, 1.0);
-	triplanar_info.blend = noob::vec4(1.0, 1.0, 1.0, 0.0);
+	triplanar_info.colours[1] = noob::vec4(0.0, 0.0, 0.0, 1.0);
+	triplanar_info.colours[2] = noob::vec4(0.0, 0.0, 0.0, 1.0);
+	triplanar_info.colours[3] = noob::vec4(0.0, 0.0, 0.0, 1.0);
+	triplanar_info.blend = noob::vec4(1.0, 0.0, 0.0, 0.0);
 	triplanar_info.scales = noob::vec4(1.0, 1.0, 1.0, 0.0);
 	triplanar_info.colour_positions = noob::vec4(0.3, 0.6, 0.0, 0.0);
 	set_shader(triplanar_info, "default-triplanar");
+	// logger::log("[Globals] Set default triplanar shader.");
 	default_triplanar_shader = get_shader("default-triplanar");
+	// logger::log("[Globals] Got default triplanar shader handle.");
+	logger::log("[Globals] Init complete.");
+	return true;
 }
 
 /*
@@ -128,34 +107,97 @@ noob::basic_mesh noob::globals::mesh_from_shape(const noob::shapes_holder::handl
 }
 */
 
-noob::basic_models_holder::handle noob::globals::basic_model(const noob::basic_mesh& m)
+noob::scaled_model noob::globals::sphere_model(float r)
 {
-	std::unique_ptr<noob::basic_model> temp = std::make_unique<noob::basic_model>();
-	temp->init(m);
-	return basic_models.add(std::move(temp));
+	noob::scaled_model temp = unit_sphere_model;
+	temp.scales = noob::vec3(r*2.0, r*2.0, r*2.0);
+	return temp;
 }
 
 
-noob::globals::scaled_model noob::globals::model_by_shape(const noob::shapes_holder::handle h)
+noob::scaled_model noob::globals::box_model(float x, float y, float z)
 {
-	noob::globals::scaled_model results;
+	noob::scaled_model temp;
+	temp.model_h= unit_cube_model.model_h;
+	temp.scales = noob::vec3(x, y, z);
+	return temp;
+}
+
+
+noob::scaled_model noob::globals::cylinder_model(float r, float h)
+{
+	noob::scaled_model temp = unit_cylinder_model;
+	temp.scales = noob::vec3(r*2.0, h, r*2.0);
+	return temp;
+
+}
+
+
+noob::scaled_model noob::globals::cone_model(float r, float h)
+{
+	noob::scaled_model temp = unit_cone_model;
+	temp.scales = noob::vec3(r*2.0, h, r*2.0);
+	return temp;
+
+}
+
+
+noob::scaled_model noob::globals::model_from_mesh(const noob::basic_mesh& m, const std::string& name)
+{
+
+	std::unique_ptr<noob::basic_model> temp = std::make_unique<noob::basic_model>();
+	temp->init(m);
+	noob::basic_models_holder::handle h;
+	auto results = names_to_basic_models.find(name);
+	if (results != names_to_basic_models.end())
+	{
+		basic_models.set(results->second, std::move(temp));
+		h = results->second;//std::move(temp);
+	}
+	else
+	{
+		h = basic_models.add(std::move(temp));
+		//h = temp.model_h;
+		names_to_basic_models.insert(std::make_pair(name, h));
+	}
+
+	noob::scaled_model retval;
+	retval.model_h = h;
+	retval.scales = noob::vec3(1.0, 1.0, 1.0);
+	return retval;
+}
+
+
+noob::scaled_model noob::globals::model_by_shape(const noob::shapes_holder::handle h)
+{
+	fmt::MemoryWriter ww;
+	ww << "[Globals] about to get model from shape " << h.get_inner();
+	logger::log(ww.str());
+	
+	scaled_model results;
+	//results.scales = noob::vec3(1.0, 1.0, 1.0);
 	noob::shape* s = shapes.get(h);
+	
+	logger::log("[Globals] got shape pointer");
+	
 	switch(s->shape_type)
 	{
+		logger::log("[Globals] choosing shape type");
+		
 		case(noob::shape::type::SPHERE):
-			results.model_h = unit_sphere_model;
+			results.model_h = unit_sphere_model.model_h;
 			results.scales = s->scales;
 			return results;
 		case(noob::shape::type::BOX):
-			results.model_h = unit_cube_model;
+			results.model_h = unit_cube_model.model_h;
 			results.scales = s->scales;
 		 	return results;
 		case(noob::shape::type::CYLINDER):
-			results.model_h = unit_cylinder_model;
+			results.model_h = unit_cylinder_model.model_h;
 			results.scales = s->scales;
 			return results;
 		case(noob::shape::type::CONE):
-			results.model_h = unit_cone_model;
+			results.model_h = unit_cone_model.model_h;
 			results.scales = s->scales;
 			return results;
 		case(noob::shape::type::HULL):
@@ -163,7 +205,8 @@ noob::globals::scaled_model noob::globals::model_by_shape(const noob::shapes_hol
 				auto search = shapes_to_models.find(h.get_inner());
 				if (search == shapes_to_models.end())
 				{
-					results.model_h = basic_models.make_handle(search->first);
+					results.model_h = search->second;
+					results.scales = noob::vec3(1.0, 1.0, 1.0);
 					return results;
 				}
 			}
@@ -172,7 +215,8 @@ noob::globals::scaled_model noob::globals::model_by_shape(const noob::shapes_hol
 				auto search = shapes_to_models.find(h.get_inner());
 				if (search == shapes_to_models.end())
 				{
-					results.model_h = basic_models.make_handle(search->first);
+					results.model_h = search->second;
+					results.scales = noob::vec3(1.0, 1.0, 1.0);					
 					return results;
 				}
 			}
@@ -184,7 +228,7 @@ noob::globals::scaled_model noob::globals::model_by_shape(const noob::shapes_hol
 }
 
 
-noob::shapes_holder::handle noob::globals::sphere(float r)
+noob::shapes_holder::handle noob::globals::sphere_shape(float r)
 {
 	fmt::MemoryWriter w;
 	w << "sphere-" << static_cast<uint32_t>(r);
@@ -207,7 +251,7 @@ noob::shapes_holder::handle noob::globals::sphere(float r)
 }
 
 
-noob::shapes_holder::handle noob::globals::box(float x, float y, float z)
+noob::shapes_holder::handle noob::globals::box_shape(float x, float y, float z)
 {
 	fmt::MemoryWriter w;
 	w << "box-" << static_cast<uint32_t>(x) << "-" << static_cast<uint32_t>(y)  << "-" << static_cast<uint32_t>(z);
@@ -228,7 +272,7 @@ noob::shapes_holder::handle noob::globals::box(float x, float y, float z)
 }
 
 
-noob::shapes_holder::handle noob::globals::cylinder(float r, float h)
+noob::shapes_holder::handle noob::globals::cylinder_shape(float r, float h)
 {
 	// auto search = cylinder_shapes.find(std::make_tuple(r, h));
 	fmt::MemoryWriter w;
@@ -249,7 +293,7 @@ noob::shapes_holder::handle noob::globals::cylinder(float r, float h)
 }
 
 
-noob::shapes_holder::handle noob::globals::cone(float r, float h)
+noob::shapes_holder::handle noob::globals::cone_shape(float r, float h)
 {
 	fmt::MemoryWriter w;
 	w << "cone-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
@@ -297,7 +341,7 @@ noob::shapes_holder::handle noob::globals::cone(float r, float h)
 // }
 
 
-noob::shapes_holder::handle noob::globals::hull(const std::vector<vec3>& points, const std::string& name)
+noob::shapes_holder::handle noob::globals::hull_shape(const std::vector<vec3>& points, const std::string& name)
 {
 	auto search = names_to_shapes.find(name);
 	if (search == names_to_shapes.end())
@@ -311,7 +355,7 @@ noob::shapes_holder::handle noob::globals::hull(const std::vector<vec3>& points,
 }
 
 
-noob::shapes_holder::handle noob::globals::static_trimesh(const noob::basic_mesh& m, const std::string& name)
+noob::shapes_holder::handle noob::globals::static_trimesh_shape(const noob::basic_mesh& m, const std::string& name)
 {
 	auto search = names_to_shapes.find(name);
 	if (search == names_to_shapes.end())
@@ -445,10 +489,14 @@ void noob::globals::set_shader(const noob::prepared_shaders::uniform& u, const s
 
 noob::shaders_holder::handle noob::globals::get_shader(const std::string& s)
 {
-	noob::shaders_holder::handle temp;
+	// noob::shaders_holder::handle temp;
 	if (names_to_shaders.find(s) != names_to_shaders.end())
 	{
-		return names_to_shaders.at(s);
+		// return names_to_shaders.at(s);
+		fmt::MemoryWriter ww;		
+		ww << "[Globals] Found shader " << s << " with handle " << names_to_shaders[s].get_inner() << ".";// << ". Returning default.";
+		logger::log(ww.str());		
+		return names_to_shaders[s];
 	}
 	else
 	{

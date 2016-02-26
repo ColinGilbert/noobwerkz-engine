@@ -4,19 +4,14 @@ project(NoobWerkz)
 set(CMAKE_BUILD_TYPE "DEBUG")
 #set(CMAKE_BUILD_TYPE "RELEASE")
 
-set(CMAKE_CXX_FLAGS "-std=c++1y -fno-strict-aliasing -pipe -O2 -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DOM_GARBAGE_NO_STATUS_WARNING -DAS_CAN_USE_CPP11 -DEIGEN_MPL2_ONLY -Wall ${CMAKE_CXX_FLAGS}") # -DCHAISCRIPT_NO_THREADS
-set(CMAKE_C_FLAGS "-std=c99 -pipe -fno-strict-aliasing -DSQLITE_ENABLE_COLUMN_METADATA -DSTB_IMAGE_STATIC -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -Wall ${CMAKE_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++1y -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DOM_GARBAGE_NO_STATUS_WARNING -DAS_CAN_USE_CPP11 -DEIGEN_MPL2_ONLY ${CMAKE_CXX_FLAGS}") 
+set(CMAKE_C_FLAGS "-std=c99 -pipe -O2 -fno-strict-aliasing -DSQLITE_ENABLE_COLUMN_METADATA -DSTB_IMAGE_STATIC -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -Wall ${CMAKE_C_FLAGS}")
 
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 
 include_directories(${Boost_INCLUDE_DIR})
 
 include_directories(lib/brigand)
-
-include_directories(lib/es)
-list (APPEND es_src
-	lib/es/es/storage.cpp
-	)
 
 include_directories(lib/cppformat)
 list (APPEND cppformat_src
@@ -566,9 +561,6 @@ include_directories(platform/nix)
 
 list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
 
-add_executable(NoobEdit ${main_src} ${common_src} ${bgfx_src} ${csgjs_src}
-	${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src}
-	${es_src} ${user_src} ${recast_src} ${angelscript_src} ${es_src}
-	${bullet_src} ${voropp_src}) # ${dcollide_src}
+add_executable(NoobEdit ${user_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src}  ${recast_src} ${angelscript_src} ${bullet_src} ${voropp_src}) # ${dcollide_src}
 
 target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m spnav ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r ${Boost_LIBRARIES})
