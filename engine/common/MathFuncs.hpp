@@ -454,7 +454,7 @@ namespace noob
 	// affine functions
 	mat4 translate(const mat4& m, const vec3& v);
 	// TODO: Find out if rotating a matrix by a quaternion can be done by converting the quat to a matrix and then multiplying the two.
-	// mat4 rotate(const mat4& m, const vec4& quat);
+	mat4 rotate(const mat4& m, const versor&);
 	mat4 rotate_x_deg(const mat4& m, float deg);
 	mat4 rotate_y_deg(const mat4& m, float deg);
 	mat4 rotate_z_deg(const mat4& m, float deg);

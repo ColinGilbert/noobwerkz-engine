@@ -31,11 +31,11 @@ void noob::stage::init(const noob::globals* g)
 
 	globals = g;
 
-	noob::bodies_holder::handle temp = body(noob::body_type::STATIC, globals->unit_sphere_shape, 0.0, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0), false);
+	// noob::bodies_holder::handle temp = body(noob::body_type::ghost, globals->unit_sphere_shape, 0.0, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0), false);
 
-	fmt::MemoryWriter ww;
-	ww << "[Stage] init first body. Handle = " << temp.get_inner();
-	logger::log(ww.str());
+	// fmt::MemoryWriter ww;
+	// ww << "[Stage] init first body. Handle = " << temp.get_inner();
+	// logger::log(ww.str());
 
 	logger::log("[Stage] Done init.");
 }
@@ -117,9 +117,12 @@ void noob::stage::draw(float window_width, float window_height) const
 				noob::vec3 scales = noob::vec3(scales_mapping[body_node]);
 
 				noob::body* body_ptr = bodies.get(bodies.make_handle(body_h));
+				// noob::mat4 world_mat = noob::identity_mat4();
+				// world_mat = noob::scale(world_mat, scales); //noob::scale(world_mat, bodies.get(bodies.make_handle(body_h))->get_transform();
 				noob::mat4 world_mat = noob::identity_mat4();
-				world_mat = noob::scale(world_mat, scales); //noob::scale(world_mat, bodies.get(bodies.make_handle(body_h))->get_transform();
-				world_mat = world_mat * bodies.get(body_h)->get_transform();
+				world_mat = noob::scale(world_mat, noob::vec3(scales_mapping[body_node]));												
+				world_mat = noob::rotate(world_mat, bodies.get(body_h)->get_orientation());
+				world_mat = noob::translate(world_mat, bodies.get(body_h)->get_position());												
 				noob::mat4 normal_mat = noob::transpose(noob::inverse((view_mat * world_mat)));
 				renderer.draw(globals->basic_models.get(globals->basic_models.make_handle(model_h)), globals->shaders.get(globals->shaders.make_handle(shader_h)), world_mat, normal_mat, basic_lights, 0);
 			}

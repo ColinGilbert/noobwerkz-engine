@@ -598,6 +598,11 @@ namespace noob
 		return m_t * m;
 	}
 
+	mat4 rotate(const mat4& m, const versor& v)
+	{
+		return quat_to_mat4(v) * m;
+	}
+
 	// rotate around x axis by an angle in degrees
 	mat4 rotate_x_deg(const mat4& m, float deg)
 	{
@@ -638,13 +643,13 @@ namespace noob
 	}
 
 	// scale a matrix by [x, y, z]
-	mat4 scale(const mat4& mat_arg, const vec3& v)
+	mat4 scale(const mat4& m, const vec3& v)
 	{
-		mat4 a(mat_arg);//identity_mat4();
-		a.m[0] *= v.v[0];
-		a.m[5] *= v.v[1];
-		a.m[10] *= v.v[2];
-		return a;// * m;
+		mat4 a = identity_mat4();
+		a.m[0] = v.v[0];
+		a.m[5] = v.v[1];
+		a.m[10] = v.v[2];
+		return a * m;
 	}
 
 

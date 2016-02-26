@@ -46,32 +46,16 @@ void set_stage()
 	default_stage.view_mat = look_at(eye_pos, look_to, up);
 	default_stage.show_origin = false;
 
-	basic_mesh a = cone_mesh(50.0, 100.0);
-	basic_mesh b = box_mesh(500.0, 10.0, 500.0);
-	b.translate(vec3(0.0, -10.0, 0.0));
+	// basic_mesh a = cone_mesh(50.0, 100.0);
+	basic_mesh b = box_mesh(400.0, 10.0, 400.0);
+	// b.translate(vec3(0.0, -10.0, 0.0));
 
-	default_stage.scenery(a, vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h, "one");
+	// default_stage.scenery(a, vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h, "one");
 	default_stage.scenery(b, vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h, "two");
 	
-	vector_vec3 p;
-	p.push_back(vec3(-50.0, 0.0, -50.0));
-	p.push_back(vec3(0.0, 35.0, 0.0));
-	p.push_back(vec3(25.0, 0.0, 20.0));
-	p.push_back(vec3(0.0, 10.0, 80.0));
-
-	// basic_mesh hull_m = hull_mesh(p);
-	// auto scenery_three = default_stage.scenery(hull_m, vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h);
-
-	shape_handle box_h = box_shape(10.0, 10.0, 10.0); 
-
 	scaled_model model_info = box_model(4.0, 4.0, 4.0);
+	shape_handle box_h = box_shape(4.0, 4.0, 4.0); 
 
-	vec3 pos(0.0, 50.0, 0.0);
-	versor orient(0.0, 0.0, 0.0, 1.0);
-	// body_handle temp_body = default_stage.body(DYNAMIC, box_h, 1.0, vec3(0.0, 250.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), false);
-	default_stage.actor(box_h, 1.0, pos, orient, purple_shader_h);
-
-/*	
 	for (int i = -500 ; i < 500; ++i)
 	{
 		float x_pos = i;
@@ -87,7 +71,6 @@ void set_stage()
 		body_handle temp_body = default_stage.body(DYNAMIC, box_h, 1.0, vec3(x_pos, 250.0, z_pos), versor(0.0, 0.0, 0.0, 1.0), false);
 		default_stage.actor(temp_body, model_info, purple_shader_h);
 	}
-*/
 }
 
 void main()
