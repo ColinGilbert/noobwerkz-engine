@@ -53,23 +53,25 @@ void set_stage()
 	// default_stage.scenery(a, vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h, "one");
 	default_stage.scenery(b, vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h, "two");
 	
-	scaled_model model_info = box_model(4.0, 4.0, 4.0);
-	shape_handle box_h = box_shape(4.0, 4.0, 4.0); 
+	// scaled_model model_info = box_model(4.0, 4.0, 4.0);
 
 	for (int i = -500 ; i < 500; ++i)
 	{
 		float x_pos = i;
 		float z_pos = i;
-		body_handle temp_body = default_stage.body(DYNAMIC, box_h, 1.0, vec3(x_pos, 250.0, z_pos), versor(0.0, 0.0, 0.0, 1.0), false);
-		default_stage.actor(temp_body, model_info, purple_shader_h);
+		float s = random() * 10.0;
+		shape_handle box_h = box_shape(s, s, s); 
+		default_stage.actor(box_h, 1.0, vec3(x_pos, 250.0, z_pos), versor(0.0, 0.0, 0.0, 1.0), purple_shader_h);
 	}
 
 	for (int i = -500 ; i < 500; ++i)
 	{
 		float x_pos = i;
 		float z_pos = -i;
-		body_handle temp_body = default_stage.body(DYNAMIC, box_h, 1.0, vec3(x_pos, 250.0, z_pos), versor(0.0, 0.0, 0.0, 1.0), false);
-		default_stage.actor(temp_body, model_info, purple_shader_h);
+		
+		float s = random() * 10.0;
+		shape_handle box_h = box_shape(s, s, s); 
+		default_stage.actor(box_h, 1.0, vec3(x_pos, 250.0, z_pos), versor(0.0, 0.0, 0.0, 1.0), purple_shader_h);
 	}
 }
 

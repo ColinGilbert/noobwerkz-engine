@@ -57,6 +57,8 @@
 #include "format.h"
 #include "FileSystem.hpp"
 #include "Body.hpp"
+#include "RandomGenerator.hpp"
+
 
 #include <btBulletDynamicsCommon.h>
 #include <angelscript.h>
@@ -296,6 +298,7 @@ namespace noob
 			noob::voxel_world voxels;
 			noob::stage stage;
 			noob::mat4 view_mat;
+			noob::random_generator randomz;
 			std::string script_name;
 			noob::globals global_storage;
 	};
