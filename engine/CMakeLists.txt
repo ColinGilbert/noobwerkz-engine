@@ -545,6 +545,7 @@ list(APPEND common_src
 	common/AnimatedModel.cpp
 	common/SkeletalAnim.cpp
 	common/ModelLoader.cpp
+	common/drawing/TriplanarGradientMapLit.cpp
 	common/drawing/TriplanarGradientMap.cpp
 	common/drawing/BasicRenderer.cpp
 	common/SimpleNavMesh.cpp

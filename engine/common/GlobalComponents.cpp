@@ -37,7 +37,7 @@ bool noob::globals::init()
 	// logger::log("[Globals] Got debug shader handle");
 	// Init triplanar shader. For fun.
 	noob::triplanar_gradient_map_renderer::uniform triplanar_info;
-	std::array<noob::vec4,4> colours;
+	
 	triplanar_info.colours[0] = noob::vec4(1.0, 1.0, 1.0, 1.0);
 	triplanar_info.colours[1] = noob::vec4(0.0, 0.0, 0.0, 1.0);
 	triplanar_info.colours[2] = noob::vec4(0.0, 0.0, 0.0, 1.0);
@@ -49,40 +49,8 @@ bool noob::globals::init()
 	// logger::log("[Globals] Set default triplanar shader.");
 	default_triplanar_shader = get_shader("default-triplanar");
 
-	noob::directional_light dir_light;
-	dir_light.direction = noob::vec3(0.0, -1.0, 0.0);
-	dir_light.colour = noob::vec3(1.0, 1.0, 1.0);
-	dir_light.emission = noob::vec3(0.3, 0.3, 0.3);
-	dir_light.ambient = noob::vec3(0.3, 0.3, 0.3);
-	dir_light.diffuse = noob::vec3(0.3, 0.3, 0.3);
-	dir_light.specular = noob::vec3(0.3, 0.3, 0.3);
-	dir_light.specular_power = 0.3333;
-	
-	noob::point_light p_light;
-	p_light.position = noob::vec3(0.0, 20.0, 0.0);
-	p_light.colour = noob::vec3(1.0, 1.0, 1.0);
-	p_light.emission = noob::vec3(0.3, 0.3, 0.3);
-	p_light.ambient = noob::vec3(0.3, 0.3, 0.3);
-	p_light.diffuse = noob::vec3(0.3, 0.3, 0.3);
-	p_light.specular = noob::vec3(0.3, 0.3, 0.3);
-	p_light.specular_power = 0.3333;
-
-	noob::spotlight s_light;
-	s_light.direction = noob::vec3(0.0, -1.0, 0.0);	
-	s_light.position = noob::vec3(0.0, 20.0, 0.0);
-	s_light.colour = noob::vec3(1.0, 1.0, 1.0);
-	s_light.emission = noob::vec3(0.3, 0.3, 0.3);
-	s_light.ambient = noob::vec3(0.3, 0.3, 0.3);
-	s_light.diffuse = noob::vec3(0.3, 0.3, 0.3);
-	s_light.specular = noob::vec3(0.3, 0.3, 0.3);
-	s_light.specular_power = 0.3333;
-
-
-	struct spotlight 
-	{
-		noob::vec3 direction, position, colour, emission, ambient, diffuse, specular;
-		float specular_power, spot_power;
-	};
+	noob::light l;
+	default_light = set_light(l, "default");
 
 	// logger::log("[Globals] Got default triplanar shader handle.");
 	logger::log("[Globals] Init complete.");
@@ -438,56 +406,41 @@ noob::skeletal_anims_holder::handle noob::globals::skeleton(const std::string& f
 	return skeletal_anims.add(std::move(temp));
 }
 
-/*
-void noob::globals::set_light(const noob::light& l, const std::string& s)
+
+noob::lights_holder::handle noob::globals::set_light(const noob::light& l, const std::string& s)
 {
 	auto search = names_to_lights.find(s);
 	if (search != names_to_lights.end())
 	{
 		lights.set(search->second, l);
+		return search->second;
 	}
 	else
 	{
-		names_to_lights[s] = lights.add(l);
+		noob::lights_holder::handle h = lights.add(l);
+		names_to_lights.insert(std::make_pair(s, h));
+		return h;
 	}
+
 }
 
 
-noob::light noob::globals::get_light(const std::string& s)
+noob::lights_holder::handle noob::globals::get_light_handle(const std::string& s) const
 {
 	noob::lights_holder::handle temp;
-	if (names_to_lights.find(s) != names_to_lights.end())
-	{
-		temp = names_to_lights[s];
+	auto search = names_to_lights.find(s);
+	if (search != names_to_lights.end())
+	{		
+		temp = search->second;
 	}
-	return lights.get(temp);
+	return temp;
 }
 
 
-void noob::globals::set_reflection(const noob::reflection& r, const std::string& s)
+noob::light noob::globals::get_light(const noob::lights_holder::handle h) const
 {
-	auto search = names_to_reflections.find(s);
-	if (search != names_to_reflections.end())
-	{
-		reflections.set(search->second, r);
-	}
-	else
-	{
-		names_to_reflections[s] = reflections.add(r);
-	}
+	return lights.get(h);
 }
-
-
-noob::reflection noob::globals::get_reflection(const std::string& s)
-{
-	noob::reflections_holder::handle temp;
-	if (names_to_reflections.find(s) != names_to_reflections.end())
-	{
-		temp = names_to_reflections[s];
-	}
-	return reflections.get(temp);
-}
-*/
 
 
 void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std::string& name)
@@ -497,6 +450,12 @@ void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std
 
 
 void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::uniform& u, const std::string& name)
+{
+	set_shader(noob::prepared_shaders::uniform(u), name);
+}
+
+
+void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer_lit::uniform& u, const std::string& name)
 {
 	set_shader(noob::prepared_shaders::uniform(u), name);
 }
@@ -524,7 +483,7 @@ void noob::globals::set_shader(const noob::prepared_shaders::uniform& u, const s
 }
 
 
-noob::shaders_holder::handle noob::globals::get_shader(const std::string& s)
+noob::shaders_holder::handle noob::globals::get_shader(const std::string& s) const
 {
 	// noob::shaders_holder::handle temp;
 	if (names_to_shaders.find(s) != names_to_shaders.end())

@@ -4,50 +4,14 @@
 
 namespace noob
 {
-// uniform vec4 emissive_coeff;
-// uniform vec4 diffuse_coeff;
-// uniform vec4 ambient_coeff;
-// uniform vec4 specular_coeff;
-// uniform vec4 light_direction;
-// uniform vec4 light_pos;
-// uniform vec4 light_colour;
-// uniform vec4 global_ambient;
-
-// uniform float specular_power;
-// uniform float spot_power;
-
-
-	struct directional_light 
-	{
-		noob::vec3 direction, colour, emission, ambient, diffuse, specular;
-		float specular_power;
-	};
-
-	struct point_light 
-	{
-		noob::vec3 position, colour, emission, ambient, diffuse, specular;
-		float specular_power;
-	};
-
-	struct spotlight 
-	{
-		noob::vec3 direction, position, colour, emission, ambient, diffuse, specular;
-		float specular_power, spot_power;
-	};
-
-/*
 	struct light 
-	{
-		light() : position(0.0, 100.0, 0.0, 0.0), specular(1.0, 1.0, 1.0, 0.0), diffuse(0.7, 0.7, 0.7, 0.0), ambient(0.2, 0.2, 0.2, 0.0) {}
-		// noob::vec4 position, specular, diffuse, ambient;
-		// emission, ambient, diffuse, specular.
-	};
+	{ 	
+		enum light_type {DIRECTIONAL = 0, POINT = 1, SPOT = 2};
+		
+		light() : position(noob::vec3(0.0, 100.0, 0.0)), direction(noob::vec3(-0.1, -1.0, -1.0)), colour(noob::vec3(1.0, 1.0, 1.0)), emissive(noob::vec3(0.0, 0.0, 0.0)), ambient(noob::vec3(0.4, 0.4, 0.4)), diffuse(noob::vec3(1.0, 1.0, 1.0)), specular(noob::vec3(0.6, 0.6, 0.6)), specular_power(50.0), spot_power(10.0), type(noob::light::light_type::POINT) {}
 
-	struct reflection
-	{
-		reflection() : specular(1.0, 1.0, 1.0, 0.0), diffuse(1.0, 1.0, 1.0, 0.0), ambient(1.0, 1.0, 1.0, 0.0), exponent(100.0) {}
-		noob::vec4 specular, diffuse, ambient;
-		float exponent;
+		noob::vec3 position, direction, colour, emissive, ambient, diffuse, specular;
+		float specular_power, spot_power;
+		light_type type;
 	};
-*/
 }

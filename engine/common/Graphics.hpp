@@ -68,7 +68,7 @@ namespace noob
 
 			// ---------------- Asset creators (make assets available from getters) ----------------
 			static bool add_sampler(const std::string&);
-			static bool add_uniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t count);
+			static noob::graphics::uniform add_uniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t count);
 			static bool add_shader(const std::string&, const noob::graphics::shader&);
 
 			// ---------------- Getters -----------------
@@ -94,7 +94,7 @@ namespace noob
 				return bgfx::copy(&payload[0], payload.size());
 			}
 
-			static const noob::graphics::uniform invalid_uniform, colour_0, colour_1, colour_2, colour_3, blend_0, blend_1, scales, basic_light_0, basic_light_1, normal_mat;
+			static const noob::graphics::uniform invalid_uniform, colour_0, colour_1, colour_2, colour_3, blend_0, blend_1, tex_scales, normal_mat, eye_pos, global_ambient, emissive_coeff_0, diffuse_coeff_0, ambient_coeff_0, specular_coeff_0, light_direction_0, light_pos_0, light_colour_0, emissive_coeff_1, diffuse_coeff_1, ambient_coeff_1, specular_coeff_1, light_direction_1, light_pos_1, light_colour_1, emissive_coeff_2, diffuse_coeff_2, ambient_coeff_2, specular_coeff_2, light_direction_2, light_pos_2, light_colour_2, emissive_coeff_3, diffuse_coeff_3, ambient_coeff_3, specular_coeff_3, light_direction_3, light_pos_3, light_colour_3, specular_powers, spot_powers;
 
 			static const noob::graphics::sampler invalid_texture, texture_0;
 		protected:

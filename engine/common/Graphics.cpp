@@ -21,10 +21,41 @@ const noob::graphics::uniform noob::graphics::colour_2;
 const noob::graphics::uniform noob::graphics::colour_3;
 const noob::graphics::uniform noob::graphics::blend_0;
 const noob::graphics::uniform noob::graphics::blend_1;
-const noob::graphics::uniform noob::graphics::scales;
-const noob::graphics::uniform noob::graphics::basic_light_0;
-const noob::graphics::uniform noob::graphics::basic_light_1;
+const noob::graphics::uniform noob::graphics::tex_scales;
 const noob::graphics::uniform noob::graphics::normal_mat;
+const noob::graphics::uniform noob::graphics::eye_pos;
+const noob::graphics::uniform noob::graphics::global_ambient;
+const noob::graphics::uniform noob::graphics::emissive_coeff_0;
+const noob::graphics::uniform noob::graphics::diffuse_coeff_0;
+const noob::graphics::uniform noob::graphics::ambient_coeff_0;
+const noob::graphics::uniform noob::graphics::specular_coeff_0;
+const noob::graphics::uniform noob::graphics::light_direction_0;
+const noob::graphics::uniform noob::graphics::light_pos_0;
+const noob::graphics::uniform noob::graphics::light_colour_0;
+const noob::graphics::uniform noob::graphics::emissive_coeff_1;
+const noob::graphics::uniform noob::graphics::diffuse_coeff_1;
+const noob::graphics::uniform noob::graphics::ambient_coeff_1;
+const noob::graphics::uniform noob::graphics::specular_coeff_1;
+const noob::graphics::uniform noob::graphics::light_direction_1;
+const noob::graphics::uniform noob::graphics::light_pos_1;
+const noob::graphics::uniform noob::graphics::light_colour_1;
+const noob::graphics::uniform noob::graphics::emissive_coeff_2;
+const noob::graphics::uniform noob::graphics::diffuse_coeff_2;
+const noob::graphics::uniform noob::graphics::ambient_coeff_2;
+const noob::graphics::uniform noob::graphics::specular_coeff_2;
+const noob::graphics::uniform noob::graphics::light_direction_2;
+const noob::graphics::uniform noob::graphics::light_pos_2;
+const noob::graphics::uniform noob::graphics::light_colour_2;
+const noob::graphics::uniform noob::graphics::emissive_coeff_3;
+const noob::graphics::uniform noob::graphics::diffuse_coeff_3;
+const noob::graphics::uniform noob::graphics::ambient_coeff_3;
+const noob::graphics::uniform noob::graphics::specular_coeff_3;
+const noob::graphics::uniform noob::graphics::light_direction_3;
+const noob::graphics::uniform noob::graphics::light_pos_3;
+const noob::graphics::uniform noob::graphics::light_colour_3;
+const noob::graphics::uniform noob::graphics::specular_powers;
+const noob::graphics::uniform noob::graphics::spot_powers;
+
 
 const noob::graphics::sampler noob::graphics::invalid_texture;
 const noob::graphics::sampler noob::graphics::texture_0;
@@ -33,7 +64,7 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 {
 	uint32_t reset = BGFX_RESET_VSYNC;
 	bgfx::reset(width, height, reset);
-	
+
 	bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x00000000, 1.0f, 0);
 	bgfx::setViewClear(1, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x00000000, 1.0f, 0);
 	bgfx::setState(BGFX_STATE_DEFAULT);
@@ -54,7 +85,7 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	///   - `u_modelViewProj mat4` - concatenated model view projection matrix.
 	///   - `u_alphaRef float` - alpha reference value for alpha test.	
 	// Add initial defaults (invalid stuff) to map
-	
+
 	bgfx::ProgramHandle h;
 	h.idx = bgfx::invalidHandle;
 	noob::graphics::shader shad;
@@ -76,14 +107,48 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	blend_0 = get_uniform("blend_0");
 	noob::graphics::add_uniform(std::string("blend_1"), bgfx::UniformType::Enum::Vec4, 1);
 	blend_1 = get_uniform("blend_1");
-	noob::graphics::add_uniform(std::string("scales"), bgfx::UniformType::Enum::Vec4, 1);
-	scales = get_uniform("scales");
-	noob::graphics::add_uniform(std::string("basic_light_0"), bgfx::UniformType::Enum::Vec4, 1);
-	basic_light_0 = get_uniform("basic_light_0");
-	noob::graphics::add_uniform(std::string("basic_light_1"), bgfx::UniformType::Enum::Vec4, 1);
-	basic_light_1 = get_uniform("basic_light_1");
-	noob::graphics::add_uniform(std::string("normal_mat"), bgfx::UniformType::Enum::Mat4, 1);
-	normal_mat = get_uniform("normal_mat");
+	tex_scales = noob::graphics::add_uniform(std::string("tex_scales"), bgfx::UniformType::Enum::Vec4, 1);
+	
+	normal_mat = add_uniform(std::string("normal_mat"), bgfx::UniformType::Enum::Mat4, 1);
+	
+	eye_pos = noob::graphics::add_uniform(std::string("eye_pos"), bgfx::UniformType::Enum::Vec4, 1);
+
+	global_ambient = noob::graphics::add_uniform(std::string("global_ambient"), bgfx::UniformType::Enum::Vec4, 1);
+
+	emissive_coeff_0 = noob::graphics::add_uniform(std::string("emissive_coeff_0"), bgfx::UniformType::Enum::Vec4, 1);
+	diffuse_coeff_0 = noob::graphics::add_uniform(std::string("diffuse_coeff_0"), bgfx::UniformType::Enum::Vec4, 1);
+	ambient_coeff_0 = noob::graphics::add_uniform(std::string("ambient_coeff_0"), bgfx::UniformType::Enum::Vec4, 1);
+	specular_coeff_0 = noob::graphics::add_uniform(std::string("specular_coeff_0"), bgfx::UniformType::Enum::Vec4, 1);
+	light_direction_0 = noob::graphics::add_uniform(std::string("light_direction_0"), bgfx::UniformType::Enum::Vec4, 1);
+	light_pos_0 = noob::graphics::add_uniform(std::string("light_pos_0"), bgfx::UniformType::Enum::Vec4, 1);
+	light_colour_0 = noob::graphics::add_uniform(std::string("light_colour_0"), bgfx::UniformType::Enum::Vec4, 1);
+	
+	emissive_coeff_1 = noob::graphics::add_uniform(std::string("emissive_coeff_1"), bgfx::UniformType::Enum::Vec4, 1);
+	diffuse_coeff_1 = noob::graphics::add_uniform(std::string("diffuse_coeff_1"), bgfx::UniformType::Enum::Vec4, 1);
+	ambient_coeff_1 = noob::graphics::add_uniform(std::string("ambient_coeff_1"), bgfx::UniformType::Enum::Vec4, 1);
+	specular_coeff_1 = noob::graphics::add_uniform(std::string("specular_coeff_1"), bgfx::UniformType::Enum::Vec4, 1);
+	light_direction_1 = noob::graphics::add_uniform(std::string("light_direction_1"), bgfx::UniformType::Enum::Vec4, 1);
+	light_pos_1 = noob::graphics::add_uniform(std::string("light_pos_1"), bgfx::UniformType::Enum::Vec4, 1);
+	light_colour_1 = noob::graphics::add_uniform(std::string("light_colour_1"), bgfx::UniformType::Enum::Vec4, 1);
+
+	emissive_coeff_2 = noob::graphics::add_uniform(std::string("emissive_coeff_2"), bgfx::UniformType::Enum::Vec4, 1);
+	diffuse_coeff_2 = noob::graphics::add_uniform(std::string("diffuse_coeff_2"), bgfx::UniformType::Enum::Vec4, 1);
+	ambient_coeff_2 = noob::graphics::add_uniform(std::string("ambient_coeff_2"), bgfx::UniformType::Enum::Vec4, 1);
+	specular_coeff_2 = noob::graphics::add_uniform(std::string("specular_coeff_2"), bgfx::UniformType::Enum::Vec4, 1);
+	light_direction_2 = noob::graphics::add_uniform(std::string("light_direction_2"), bgfx::UniformType::Enum::Vec4, 1);
+	light_pos_2 = noob::graphics::add_uniform(std::string("light_pos_2"), bgfx::UniformType::Enum::Vec4, 1);
+	light_colour_2 = noob::graphics::add_uniform(std::string("light_colour_2"), bgfx::UniformType::Enum::Vec4, 1);
+
+	emissive_coeff_3 = noob::graphics::add_uniform(std::string("emissive_coeff_3"), bgfx::UniformType::Enum::Vec4, 1);
+	diffuse_coeff_3 = noob::graphics::add_uniform(std::string("diffuse_coeff_3"), bgfx::UniformType::Enum::Vec4, 1);
+	ambient_coeff_3 = noob::graphics::add_uniform(std::string("ambient_coeff_3"), bgfx::UniformType::Enum::Vec4, 1);
+	specular_coeff_3 = noob::graphics::add_uniform(std::string("specular_coeff_3"), bgfx::UniformType::Enum::Vec4, 1);
+	light_direction_3 = noob::graphics::add_uniform(std::string("light_direction_3"), bgfx::UniformType::Enum::Vec4, 1);
+	light_pos_3 = noob::graphics::add_uniform(std::string("light_pos_3"), bgfx::UniformType::Enum::Vec4, 1);
+	light_colour_3 = noob::graphics::add_uniform(std::string("light_colour_3"), bgfx::UniformType::Enum::Vec4, 1);
+
+	specular_powers = noob::graphics::add_uniform(std::string("specular_powers"), bgfx::UniformType::Enum::Vec4, 1);
+	spot_powers = noob::graphics::add_uniform(std::string("spot_powers"), bgfx::UniformType::Enum::Vec4, 1);
 
 	noob::graphics::add_sampler(std::string("invalid"));
 	invalid_texture = get_sampler("invalid");
@@ -143,11 +208,11 @@ bgfx::ShaderHandle noob::graphics::load_shader(const std::string& filename)
 
 	ww << shader_path;
 	logger::log(ww.str());
-	
+
 	// noob::utils::data.insert(std::make_pair(shader_path, noob::utils::load_file_as_string(shader_path)));
 	const bgfx::Memory* mem = get_bgfx_mem(noob::utils::load_file_as_string(shader_path));
 	bgfx::ShaderHandle s = bgfx::createShader(mem);
-	
+
 	return s;
 }
 
@@ -164,21 +229,21 @@ noob::graphics::texture noob::graphics::load_texture(const std::string& friendly
 {
 	int width, height, channels;
 	width = height = channels = 0;
-	
+
 	fmt::MemoryWriter ww;
 	ww << "[Graphics] Loading Texture: " << filename << ". ";
-	
+
 	std::string texture_file = noob::utils::load_file_as_string(filename);
-	
+
 	ww << "Loaded size = " << texture_file.size() << " bytes. ";
-	
+
 	bgfx::TextureInfo tex_info;
 	bgfx::TextureHandle tex = bgfx::createTexture(bgfx::copy(&texture_file[0], sizeof(char) * texture_file.size()), flags, 0, &tex_info);
 
 	// bgfx::TextureHandle tex = bgfx::createTexture2D(static_cast<uint16_t>(width), static_cast<uint16_t>(height), static_cast<uint8_t>(0), bgfx::TextureFormat::RGBA32, static_cast<uint32_t>(flags), bgfx::copy(&texture_file[0], sizeof(char) * texture_file.size()));
 
 	ww << "BGFX texture info: Storage size is " << tex_info.storageSize << " bytes, width of " << tex_info.width << ", height of " << tex_info.height << ", depth of " << tex_info.depth << ". Num mips is " << tex_info.numMips << ". Bpp " << tex_info.bitsPerPixel << ". Cube map? " << tex_info.cubeMap << ".";
-	
+
 	logger::log(ww.str());
 
 	noob::graphics::texture t;
@@ -204,7 +269,7 @@ bool noob::graphics::add_sampler(const std::string& _name)
 }
 
 
-bool noob::graphics::add_uniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t count)
+noob::graphics::uniform noob::graphics::add_uniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t count)
 {
 	// If item doesn't exists
 	if (noob::graphics::uniforms.find(name) == noob::graphics::uniforms.end())
@@ -212,55 +277,61 @@ bool noob::graphics::add_uniform(const std::string& name, bgfx::UniformType::Enu
 		noob::graphics::uniform uni;
 		uni.init(name, type, count);
 		noob::graphics::uniforms.insert(std::make_pair(name, uni));
-		return true;
+		//return noob::graphics::uniforms[name];
 	}
-	else return false;
+	return noob::graphics::uniforms[name];
+	
+	//else 
+	//{
+	//	noob::graphics::uniform u;
+	//	return u;
+	// }
 }
 
 /*
-bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program)
-{
-	std::vector<noob::graphics::uniform> empty_uniforms;
-	std::vector<noob::graphics::sampler> empty_samplers;
- 	return noob::graphics::add_shader(_name, _program, empty_uniforms, empty_samplers);
-}
+   bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program)
+   {
+   std::vector<noob::graphics::uniform> empty_uniforms;
+   std::vector<noob::graphics::sampler> empty_samplers;
+   return noob::graphics::add_shader(_name, _program, empty_uniforms, empty_samplers);
+   }
 
-bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program, const std::vector<noob::graphics::uniform>& _uniforms)
-{
-	std::vector<noob::graphics::sampler> empty_samplers;
-	return noob::graphics::add_shader(_name, _program, _uniforms, empty_samplers);
+   bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program, const std::vector<noob::graphics::uniform>& _uniforms)
+   {
+   std::vector<noob::graphics::sampler> empty_samplers;
+   return noob::graphics::add_shader(_name, _program, _uniforms, empty_samplers);
 
-}
+   }
 
-bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program, const std::vector<noob::graphics::sampler>& _samplers)
-{
-	std::vector<noob::graphics::uniform> empty_uniforms;
-	return noob::graphics::add_shader(_name, _program, empty_uniforms, _samplers);
+   bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program, const std::vector<noob::graphics::sampler>& _samplers)
+   {
+   std::vector<noob::graphics::uniform> empty_uniforms;
+   return noob::graphics::add_shader(_name, _program, empty_uniforms, _samplers);
 
-}
+   }
 
 // TODO: Verify validity prior to insertion (and auto-insert into noob::graphics::uniforms, noob::graphics::samplers, and noob::graphics::programs?)
 bool noob::graphics::add_shader(const std::string& _name, const bgfx::ProgramHandle _program, const std::vector<noob::graphics::uniform>& _uniforms, const std::vector<noob::graphics::sampler>& _samplers)
 {
-	if (noob::graphics::shaders.find(_name) == noob::graphics::shaders.end())
-	{
-		noob::graphics::shader bundle;
-		bundle.program = _program;
-		
-		for (auto it = _uniforms.begin(); it != _uniforms.end(); ++it)
-		{
-			bundle.uniforms.push_back(*it); 
-		}
-		
-		for (auto it = _samplers.begin(); it != _samplers.end(); ++it)
-		{
-			bundle.samplers.push_back(*it); 
-		}
+if (noob::graphics::shaders.find(_name) == noob::graphics::shaders.end())
+{
+noob::graphics::shader bundle;
+bundle.program = _program;
 
-		noob::graphics::shaders.insert(std::make_pair(_name, bundle));
-		return true;
-	}
-	else return false;
+for (auto it = _uniforms.begin(); it != _uniforms.end(); ++it)
+{
+bundle.uniforms.push_back(*it); 
+}
+
+for (auto it = _samplers.begin(); it != _samplers.end(); ++it)
+{
+bundle.samplers.push_back(*it); 
+}
+
+noob::graphics::shaders.insert(std::make_pair(_name, bundle));
+return true;
+}
+else return false;
 }
 */
 

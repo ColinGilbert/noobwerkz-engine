@@ -16,16 +16,10 @@ uniform vec4 blend_0;
 uniform vec4 blend_1;
 
 // Scaling factors (for the texture)
-uniform vec4 scales;
-
-// uniform texture_0;
-uniform vec4 basic_light_0;
-uniform vec4 basic_light_1;
-
-uniform vec4 eye_pos;
+uniform vec4 tex_scales;
 
 // Lighting
-// All the vec4's can be treated as vec3 :)
+uniform vec4 eye_pos;
 
 uniform vec4 global_ambient;
 
@@ -36,8 +30,6 @@ uniform vec4 specular_coeff_0;
 uniform vec4 light_direction_0;
 uniform vec4 light_pos_0;
 uniform vec4 light_colour_0;
-uniform float specular_power_0;
-uniform float spot_power_0;
 
 uniform vec4 emissive_coeff_1;
 uniform vec4 diffuse_coeff_1;
@@ -46,8 +38,6 @@ uniform vec4 specular_coeff_1;
 uniform vec4 light_direction_1;
 uniform vec4 light_pos_1;
 uniform vec4 light_colour_1;
-uniform float specular_power_1;
-uniform float spot_power_1;
 
 uniform vec4 emissive_coeff_2;
 uniform vec4 diffuse_coeff_2;
@@ -56,8 +46,6 @@ uniform vec4 specular_coeff_2;
 uniform vec4 light_direction_2;
 uniform vec4 light_pos_2;
 uniform vec4 light_colour_2;
-uniform float specular_power_2;
-uniform float spot_power_2;
 
 uniform vec4 emissive_coeff_3;
 uniform vec4 diffuse_coeff_3;
@@ -66,110 +54,111 @@ uniform vec4 specular_coeff_3;
 uniform vec4 light_direction_3;
 uniform vec4 light_pos_3;
 uniform vec4 light_colour_3;
-uniform float specular_power_3;
-uniform float spot_power_3;
 
-// Note. I was able to normalize the -light_direction
+uniform vec4 specular_powers;
+uniform vec4 spot_powers;
+
 vec4 directional_light(const vec4 item_colour_arg, const vec3 light_colour_arg, const vec3 light_direction_arg, const vec3 emissive_arg, const vec3 ambient_arg, const vec3 diffuse_arg, const vec3 specular_arg, float specular_power_arg)
 {
-    vec4 colour_results = item_colour_arg;
+	vec4 colour_results = item_colour_arg;
 
-    // Ambient
-    vec3 ambient = ambient_arg * global_ambient.xyz;
+	vec3 emissive = emissive_arg;
+	// Ambient
+	vec3 ambient = ambient_arg * global_ambient.xyz;
 
-    // Diffuse
-    vec3 L = normalize(-light_direction_arg);
-    float diffuse_light = max(dot(mult_normal.xyz, L), 0.0);
-    vec3 diffuse = diffuse_arg * light_colour_arg * diffuse_light;
+	// Diffuse
+	vec3 L = normalize(-light_direction_arg);
+	float diffuse_light = max(dot(mult_normal.xyz, L), 0.0);
+	vec3 diffuse = diffuse_arg * light_colour_arg * diffuse_light;
 
-    // Specular
-    vec3 V = normalize(eye_pos.xyz - v_position.xyz);
-    vec3 H = normalize(L + V);
-    
-    float specular_light = pow(dot(mult_normal.xyz, H), specular_power_arg);
-    if (diffuse_light <= 0.0) specular_light = 0.0;
-    vec3 specular = specular_arg * light_colour_arg * specular_light;
+	// Specular
+	vec3 V = normalize(eye_pos.xyz - v_position.xyz);
+	vec3 H = normalize(L + V);
 
-    // Sum all light components
-    vec3 light = emissive_arg + ambient + diffuse + specular;
+	float specular_light = pow(dot(mult_normal.xyz, H), specular_power_arg);
+	if (diffuse_light <= 0.0) specular_light = 0.0;
+	vec3 specular = specular_arg * light_colour_arg * specular_light;
 
-    // Multiply by light
-    colour_results.xyz *= light;
+	// Sum all light components
+	vec3 light = emissive + ambient + diffuse + specular;
 
-    return colour_results;
+	// Multiply by light
+	colour_results.xyz *= light;
+
+	return colour_results;
 }
 
 
 vec4 point_light(const vec4 item_colour_arg, const vec3 light_colour_arg, const vec3 light_position_arg, const vec3 emissive_arg, const vec3 ambient_arg, const vec3 diffuse_arg, const vec3 specular_arg, float specular_power_arg)
 {
-    vec4 colour_results = item_colour_arg;
-    
-    // Emissive
-    // vec3 emissive = emissive_arg;
+	vec4 colour_results = item_colour_arg;
 
-    // Ambient
-    vec3 ambient = ambient_arg * global_ambient.xyz;
+	// Emissive
+	vec3 emissive = emissive_arg;
 
-    // Diffuse
-    vec3 L = normalize(light_position_arg - v_position.xyz);
-    float diffuse_light = max(dot(mult_normal, L), 0.0);
-    vec3 diffuse = diffuse_arg * light_colour_arg * diffuse_light;
+	// Ambient
+	vec3 ambient = ambient_arg * global_ambient.xyz;
 
-    // Specular
-    vec3 V = normalize(eye_pos.xyz - v_position.xyz);
-    vec3 H = normalize(L + V);
-    float specular_light = pow(dot(mult_normal.xyz, H), specular_power_arg);
-    if (diffuse_light <= 0.0) specular_light = 0.0;
-    vec3 specular = specular_arg * light_colour_arg * specular_light;
+	// Diffuse
+	vec3 L = normalize(light_position_arg - v_position.xyz);
+	float diffuse_light = max(dot(mult_normal, L), 0.0);
+	vec3 diffuse = diffuse_arg * light_colour_arg * diffuse_light;
 
-    // Sum all light components
-    vec3 light = emissive_arg + ambient + diffuse + specular;
+	// Specular
+	vec3 V = normalize(eye_pos.xyz - v_position.xyz);
+	vec3 H = normalize(L + V);
+	float specular_light = pow(dot(mult_normal.xyz, H), specular_power_arg);
+	if (diffuse_light <= 0.0) specular_light = 0.0;
+	vec3 specular = specular_arg * light_colour_arg * specular_light;
 
-    // Multiply by light
-    colour_results.xyz *= light;
+	// Sum all light components
+	vec3 light = emissive + ambient + diffuse + specular;
 
-    return colour_results;
+	// Multiply by light
+	colour_results.xyz *= light;
+
+	return colour_results;
 }
 
 
 vec4 spot_light(const vec4 item_colour_arg, const vec3 light_colour_arg, const vec3 light_position_arg, const vec3 light_direction_arg, const vec3 emissive_arg, const vec3 ambient_arg, const vec3 diffuse_arg, const vec3 specular_arg, float specular_power_arg, float spot_power_arg)
 {
-    vec4 colour_results = item_colour_arg;
+	vec4 colour_results = item_colour_arg;
 
-    // Emissive
-    // vec3 emissive = emissive_arg;
+	// Emissive
+	// vec3 emissive = emissive_arg;
 
-    // Ambient
-    vec3 ambient = ambient_arg * global_ambient.xyz;
+	// Ambient
+	vec3 ambient = ambient_arg * global_ambient.xyz;
 
-    // Diffuse
-    vec3 L = normalize(light_position_arg - v_position.xyz);
-    float diffuse_light = max(dot(mult_normal, L), 0.0);
-    vec3 diffuse = diffuse_arg * light_colour_arg * diffuse_light;
+	// Diffuse
+	vec3 L = normalize(light_position_arg - v_position.xyz);
+	float diffuse_light = max(dot(mult_normal, L), 0.0);
+	vec3 diffuse = diffuse_arg * light_colour_arg * diffuse_light;
 
-    // Specular
-    vec3 V = normalize(eye_pos.xyz - v_position.xyz);
-    vec3 H = normalize(L + V);
-    float specular_light = pow(dot(mult_normal.xyz, H), specular_power_arg);
-    if(diffuse_light <= 0.0) specular_light = 0.0;
-    vec3 specular = specular_arg * light_colour_arg * specular_light;
+	// Specular
+	vec3 V = normalize(eye_pos.xyz - v_position.xyz);
+	vec3 H = normalize(L + V);
+	float specular_light = pow(dot(mult_normal.xyz, H), specular_power_arg);
+	if(diffuse_light <= 0.0) specular_light = 0.0;
+	vec3 specular = specular_arg * light_colour_arg * specular_light;
 
-    // Spot scale
-    float spot_scale = pow(max(dot(L, -light_direction_arg), 0.0), spot_power_arg);
+	// Spot scale
+	float spot_scale = pow(max(dot(L, -light_direction_arg), 0.0), spot_power_arg);
 
-    // Sum all light components
-    vec3 light = emissive_arg + ambient + (diffuse + specular) * spot_scale;
+	// Sum all light components
+	vec3 light = emissive_arg + ambient + (diffuse + specular) * spot_scale;
 
-    // Multiply by light
-    colour_results.xyz *= light;
+	// Multiply by light
+	colour_results.xyz *= light;
 
-    return colour_results;
+	return colour_results;
 }
-
 
 
 void main()
 {
+
 	// vec3 position = normalize(v_position);
 	vec3 position = v_position;
 	vec3 normal_blend = normalize(max(abs(v_normal), 0.0001));
@@ -182,9 +171,9 @@ void main()
 	// vec4 yaxis = vec4(0.0, 1.0, 0.0, 1.0);
 	// vec4 zaxis = vec4(0.0, 0.0, 1.0, 1.0);
 
-	vec4 xaxis = vec4(texture2D(texture_0, position.yz * scales.x).rgb, 1.0);
-	vec4 yaxis = vec4(texture2D(texture_0, position.xz * scales.y).rgb, 1.0);
-	vec4 zaxis = vec4(texture2D(texture_0, position.xy * scales.z).rgb, 1.0);
+	vec4 xaxis = vec4(texture2D(texture_0, position.yz * tex_scales.x).rgb, 1.0);
+	vec4 yaxis = vec4(texture2D(texture_0, position.xz * tex_scales.y).rgb, 1.0);
+	vec4 zaxis = vec4(texture2D(texture_0, position.xy * tex_scales.z).rgb, 1.0);
 
 	vec4 tex = xaxis * normal_blend.x + yaxis * normal_blend.y + zaxis * normal_blend.z;
 
@@ -198,29 +187,25 @@ void main()
 	float ratio_0_to_1 = when_le(tex_intensity, blend_1.x) * ((tex_intensity + blend_1.x) * 0.5);
 	float ratio_1_to_2 = when_le(tex_intensity, blend_1.y) * when_gt(tex_intensity, blend_1.x) * ((tex_intensity + blend_1.y) * 0.5);
 	float ratio_2_to_3 = when_ge(tex_intensity, blend_1.y) * ((tex_intensity + 1.0) * 0.5);
-	
+
 	vec4 tex_final = ((colour_0 + colour_1) * ratio_0_to_1) + ((colour_1 + colour_2) * ratio_1_to_2) + ((colour_2 + colour_3) * ratio_2_to_3);
 
-	// vec3 lightDir = vec3(0.0, 0.0, 1.0);
-	// float diffuse = clamp(dot(lightDir, normalFromVS), 0.0, 1.0);
-	// diffuse *= 0.7; // Dim the diffuse a bit
-	// float ambient = 0.3; // Add some ambient
-	// float lightIntensity = diffuse + ambient; // Compute the final light intensity
-	// outputColor = surfaceColor * lightIntensity; //Compute final rendered color
+	float specular_power_0 = specular_powers[0];
+	float specular_power_1 = specular_powers[1];
+	float specular_power_2 = specular_powers[2];
+	float specular_power_3 = specular_powers[3];
 
-	float light_intensity = 0.0;
+	float spot_power_0 = spot_powers[0];
+	float spot_power_1 = spot_powers[1];
+	float spot_power_2 = spot_powers[2];	
+	float spot_power_3 = spot_powers[3];
 
-	float diffuse_0 = clamp(dot(mult_normal, basic_light_0.xyz), 0.0, 1.0);
-	diffuse_0 *= 0.8;
-	light_intensity += clamp(diffuse_0 + basic_light_0.w, 0.0, 1.0);
-
-	float diffuse_1 = clamp(dot(mult_normal, basic_light_1.xyz), 0.0, 1.0);
-	diffuse_1 *= 0.8;
-	light_intensity += clamp (light_intensity + diffuse_1 + basic_light_1.w, 0.0, 1.0);
-
-	// light_intensity = clamp(light_intensity, 0.0, 1.0);
-
-	gl_FragColor = clamp(tex_final * light_intensity, 0.0, 1.0);
+	vec4 first_pass = directional_light(tex_final, light_colour_0.xyz, light_direction_0.xyz, emissive_coeff_0.xyz, ambient_coeff_0.xyz, diffuse_coeff_0.xyz, specular_coeff_0.xyz, specular_power_0);
+	vec4 second_pass = point_light(tex_final, light_colour_1.xyz, light_pos_1.xyz, emissive_coeff_1.xyz, ambient_coeff_1.xyz, diffuse_coeff_1.xyz, specular_coeff_1.xyz, specular_power_1);
+	vec4 third_pass = point_light(tex_final,light_colour_2.xyz, light_pos_2.xyz, emissive_coeff_2.xyz, ambient_coeff_2.xyz, diffuse_coeff_2.xyz, specular_coeff_2.xyz, specular_power_2);
+	vec4 fourth_pass = spot_light(tex_final, light_colour_3.xyz, light_pos_3.xyz, light_direction_3.xyz, emissive_coeff_3.xyz, ambient_coeff_3.xyz, diffuse_coeff_3.xyz, specular_coeff_3.xyz, specular_power_3, spot_power_3);
+	vec4 output_final = (first_pass + second_pass + third_pass)/3.0;
+	gl_FragColor = clamp(output_final, 0.0, 1.0);
 }
 
 // OLD
@@ -229,104 +214,104 @@ void main()
 
 // NEWLY-FOUND
 /*
-vec4 directional_light(VertexShaderOutput input) : COLOR0
-{
-    //sample texture
-    vec4 color = tex2D(texSampler,input.Texture);
+   vec4 directional_light(VertexShaderOutput input) : COLOR0
+   {
+//sample texture
+vec4 color = tex2D(texSampler,input.Texture);
 
-    //Emisie
-    vec3 emissive = emissive_coeff;
+//Emisie
+vec3 emissive = emissive_coeff;
 
-    //Ambient
-    vec3 ambient = ambient_coeff * global_ambient;
+//Ambient
+vec3 ambient = ambient_coeff * global_ambient;
 
-    //Difuze
-    vec3 L = normalize(-light_direction);
-    float diffuse_light = max(dot(input.Normal,L), 0);
-    vec3 diffuse = diffuse_coeff*light_colour*diffuse_light;
+//Difuze
+vec3 L = normalize(-light_direction);
+float diffuse_light = max(dot(input.Normal,L), 0);
+vec3 diffuse = diffuse_coeff*light_colour*diffuse_light;
 
-    //Specular
-    vec3 V = normalize(eyePosition - input.PositionO);
-    vec3 H = normalize(L + V);
-    float specular_light = pow(dot(input.Normal,H),specular_power);
-    if(diffuse_light<=0) specular_light=0;
-    vec3 specular = specular_coeff * light_colour * specular_light;
+//Specular
+vec3 V = normalize(eyePosition - input.PositionO);
+vec3 H = normalize(L + V);
+float specular_light = pow(dot(input.Normal,H),specular_power);
+if(diffuse_light<=0) specular_light=0;
+vec3 specular = specular_coeff * light_colour * specular_light;
 
-    //sum all light components
-    vec3 light = emissive + ambient + diffuse + specular;
+//sum all light components
+vec3 light = emissive + ambient + diffuse + specular;
 
-    //multiply by light
-    color.rgb *= light;
+//multiply by light
+color.rgb *= light;
 
-    return color;
+return color;
 }
 
 vec4 PSPointLight(VertexShaderOutput input) : COLOR0
 {
-    //sample texture
-    vec4 color = tex2D(texSampler,input.Texture);
+//sample texture
+vec4 color = tex2D(texSampler,input.Texture);
 
-    //Emisie
-    vec3 emissive = emissive_coeff;
+//Emisie
+vec3 emissive = emissive_coeff;
 
-    //Ambient
-    vec3 ambient = ambient_coeff*global_ambient;
+//Ambient
+vec3 ambient = ambient_coeff*global_ambient;
 
-    //Difuze
-    vec3 L = normalize(lightPosition - input.PositionO);
-    float diffuse_light = max(dot(input.Normal,L), 0);
-    vec3 diffuse = diffuse_coeff*light_colour*diffuse_light;
+//Difuze
+vec3 L = normalize(lightPosition - input.PositionO);
+float diffuse_light = max(dot(input.Normal,L), 0);
+vec3 diffuse = diffuse_coeff*light_colour*diffuse_light;
 
-    //Specular
-    vec3 V = normalize(eyePosition - input.PositionO);
-    vec3 H = normalize(L + V);
-    float specular_light = pow(dot(input.Normal,H),specular_power);
-    if(diffuse_light<=0) specular_light=0;
-    vec3 specular = specular_coeff * light_colour * specular_light;
+//Specular
+vec3 V = normalize(eyePosition - input.PositionO);
+vec3 H = normalize(L + V);
+float specular_light = pow(dot(input.Normal,H),specular_power);
+if(diffuse_light<=0) specular_light=0;
+vec3 specular = specular_coeff * light_colour * specular_light;
 
-    //sum all light components
-    vec3 light = emissive + ambient + diffuse + specular;
+//sum all light components
+vec3 light = emissive + ambient + diffuse + specular;
 
-    //multiply by light
-    color.rgb *= light;
+//multiply by light
+color.rgb *= light;
 
-    return color;
+return color;
 }
 
 vec4 PSSpotLight(VertexShaderOutput input) : COLOR0
 {
-    //sample texture
-    vec4 color = tex2D(texSampler,input.Texture);
+//sample texture
+vec4 color = tex2D(texSampler,input.Texture);
 
-    //Emisie
-    vec3 emissive = emissive_coeff;
+//Emisie
+vec3 emissive = emissive_coeff;
 
-    //Ambient
-    vec3 ambient = ambient_coeff*global_ambient;
+//Ambient
+vec3 ambient = ambient_coeff*global_ambient;
 
-    //Difuze
-    vec3 L = normalize(lightPosition - input.PositionO);
-    float diffuse_light = max(dot(input.Normal,L), 0);
-    vec3 diffuse = diffuse_coeff*light_colour*diffuse_light;
+//Difuze
+vec3 L = normalize(lightPosition - input.PositionO);
+float diffuse_light = max(dot(input.Normal,L), 0);
+vec3 diffuse = diffuse_coeff*light_colour*diffuse_light;
 
-    //Specular
-    vec3 V = normalize(eyePosition - input.PositionO);
-    vec3 H = normalize(L + V);
-    float specular_light = pow(dot(input.Normal,H),specular_power);
-    if(diffuse_light<=0) specular_light=0;
-    vec3 specular = specular_coeff * light_colour * specular_light;
+//Specular
+vec3 V = normalize(eyePosition - input.PositionO);
+vec3 H = normalize(L + V);
+float specular_light = pow(dot(input.Normal,H),specular_power);
+if(diffuse_light<=0) specular_light=0;
+vec3 specular = specular_coeff * light_colour * specular_light;
 
-    //spot scale
-    float spotScale = pow(max(dot(L,-light_direction),0),spot_power);
+//spot scale
+float spotScale = pow(max(dot(L,-light_direction),0),spot_power);
 
-    //sum all light components
-    vec3 light = emissive + ambient + (diffuse + specular)*spotScale;
+//sum all light components
+vec3 light = emissive + ambient + (diffuse + specular)*spotScale;
 
-    
 
-    //multiply by light
-    color.rgb *= light;
 
-    return color ;
+//multiply by light
+color.rgb *= light;
+
+return color ;
 }
 */

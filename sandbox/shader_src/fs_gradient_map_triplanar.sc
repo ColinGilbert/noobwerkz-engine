@@ -16,11 +16,11 @@ uniform vec4 blend_0;
 uniform vec4 blend_1;
 
 // Scaling factors (for the texture)
-uniform vec4 scales;
+uniform vec4 tex_scales;
 
 // uniform texture_0;
-uniform vec4 basic_light_0;
-uniform vec4 basic_light_1;
+// uniform vec4 basic_light_0;
+// uniform vec4 basic_light_1;
 
 
 void main()
@@ -37,9 +37,9 @@ void main()
 	// vec4 yaxis = vec4(0.0, 1.0, 0.0, 1.0);
 	// vec4 zaxis = vec4(0.0, 0.0, 1.0, 1.0);
 
-	vec4 xaxis = vec4(texture2D(texture_0, position.yz * scales.x).rgb, 1.0);
-	vec4 yaxis = vec4(texture2D(texture_0, position.xz * scales.y).rgb, 1.0);
-	vec4 zaxis = vec4(texture2D(texture_0, position.xy * scales.z).rgb, 1.0);
+	vec4 xaxis = vec4(texture2D(texture_0, position.yz * tex_scales.x).rgb, 1.0);
+	vec4 yaxis = vec4(texture2D(texture_0, position.xz * tex_scales.y).rgb, 1.0);
+	vec4 zaxis = vec4(texture2D(texture_0, position.xy * tex_scales.z).rgb, 1.0);
 
 	vec4 tex = xaxis * normal_blend.x + yaxis * normal_blend.y + zaxis * normal_blend.z;
 
@@ -56,26 +56,18 @@ void main()
 	
 	vec4 tex_final = ((colour_0 + colour_1) * ratio_0_to_1) + ((colour_1 + colour_2) * ratio_1_to_2) + ((colour_2 + colour_3) * ratio_2_to_3);
 
-	// vec3 lightDir = vec3(0.0, 0.0, 1.0);
-	// float diffuse = clamp(dot(lightDir, normalFromVS), 0.0, 1.0);
-	// diffuse *= 0.7; // Dim the diffuse a bit
-	// float ambient = 0.3; // Add some ambient
-	// float lightIntensity = diffuse + ambient; // Compute the final light intensity
-	// outputColor = surfaceColor * lightIntensity; //Compute final rendered color
+	gl_FragColor = clamp(tex_final, 0.0, 1.0);
 
-	float light_intensity = 0.0;
 
-	float diffuse_0 = clamp(dot(mult_normal, basic_light_0.xyz), 0.0, 1.0);
-	diffuse_0 *= 0.8;
-	light_intensity += clamp(diffuse_0 + basic_light_0.w, 0.0, 1.0);
-
-	float diffuse_1 = clamp(dot(mult_normal, basic_light_1.xyz), 0.0, 1.0);
-	diffuse_1 *= 0.8;
-	light_intensity += clamp (light_intensity + diffuse_1 + basic_light_1.w, 0.0, 1.0);
-
+	// float light_intensity = 0.0;
+	// float diffuse_0 = clamp(dot(mult_normal, basic_light_0.xyz), 0.0, 1.0);
+	// diffuse_0 *= 0.8;
+	// light_intensity += clamp(diffuse_0 + basic_light_0.w, 0.0, 1.0);
+	// float diffuse_1 = clamp(dot(mult_normal, basic_light_1.xyz), 0.0, 1.0);
+	// diffuse_1 *= 0.8;
+	// light_intensity += clamp (light_intensity + diffuse_1 + basic_light_1.w, 0.0, 1.0);
 	// light_intensity = clamp(light_intensity, 0.0, 1.0);
-
-	gl_FragColor = clamp(tex_final * light_intensity, 0.0, 1.0);
+	// gl_FragColor = clamp(tex_final * light_intensity, 0.0, 1.0);
 }
 
 // float diffuse = clamp(dot(basic_light_0.xyz, v_normal), 0.0, 1.0);

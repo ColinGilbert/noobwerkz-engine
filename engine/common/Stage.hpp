@@ -45,7 +45,7 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() : show_origin(true), view_mat(noob::identity_mat4()), projection_mat(noob::identity_mat4()), basic_lights( { noob::vec4(0.0, 1.0, 0.0, 0.1), noob::vec4(1.0, 0.0, 0.0, 0.1) } ), bodies_mapping(draw_graph), basic_models_mapping(draw_graph), shaders_mapping(draw_graph), scales_mapping(draw_graph) {}
+			stage() : show_origin(true), view_mat(noob::identity_mat4()), projection_mat(noob::identity_mat4()), bodies_mapping(draw_graph), basic_models_mapping(draw_graph), shaders_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph) {}
 
 			~stage();
 
@@ -88,6 +88,8 @@ namespace noob
 			bool show_origin;
 
 			noob::mat4 view_mat, projection_mat;
+			\
+			noob::vec3 eye_pos;
 
 			noob::prepared_shaders renderer;
 
@@ -95,8 +97,6 @@ namespace noob
 		protected:
 			const int NUM_RESERVED_NODES = 12000;			
 			const int NUM_RESERVED_ARCS = 12000;
-
-			std::array<noob::vec4, 2> basic_lights;
 
 			btBroadphaseInterface* broadphase;
 			btDefaultCollisionConfiguration* collision_configuration;
@@ -108,13 +108,14 @@ namespace noob
 			lemon::ListDigraph::NodeMap<size_t> bodies_mapping;
 			lemon::ListDigraph::NodeMap<size_t> basic_models_mapping;
 			lemon::ListDigraph::NodeMap<size_t> shaders_mapping;
-			lemon::ListDigraph::NodeMap<std::array<float,3>> scales_mapping;
+			lemon::ListDigraph::NodeMap<std::array<size_t, 4>> lights_mapping;
+			lemon::ListDigraph::NodeMap<std::array<float, 3>> scales_mapping;
 			lemon::ListDigraph::Node root_node;
 
 			std::unordered_map<size_t, noob::shapes_holder::handle> bodies_to_shapes;
 			std::map<size_t, lemon::ListDigraph::Node> bodies_to_nodes;
 			std::map<size_t, lemon::ListDigraph::Node> basic_models_to_nodes;
-			std::map<size_t, lemon::ListDigraph::Node> shaders_to_nodes;
+			// std::map<size_t, lemon::ListDigraph::Node> shaders_to_nodes;
 
 			noob::globals* globals;
 	};

@@ -124,7 +124,15 @@ void noob::stage::draw(float window_width, float window_height) const
 				world_mat = noob::rotate(world_mat, bodies.get(body_h)->get_orientation());
 				world_mat = noob::translate(world_mat, bodies.get(body_h)->get_position());												
 				noob::mat4 normal_mat = noob::transpose(noob::inverse((view_mat * world_mat)));
-				renderer.draw(globals->basic_models.get(globals->basic_models.make_handle(model_h)), globals->shaders.get(globals->shaders.make_handle(shader_h)), world_mat, normal_mat, basic_lights, 0);
+
+				std::array<noob::light, 4> temp_lights;
+				std::array<size_t, 4> lights_h = lights_mapping[body_node];
+				for(size_t i = 0; i < 3; ++i)
+				{
+					temp_lights[i] = globals->lights.get(lights_h[i]);
+				}
+				
+				renderer.draw(globals->basic_models.get(globals->basic_models.make_handle(model_h)), globals->shaders.get(globals->shaders.make_handle(shader_h)), world_mat, normal_mat, eye_pos, temp_lights , 0);
 			}
 		}
 	}
@@ -210,7 +218,11 @@ void noob::stage::draw(float window_width, float window_height) const
 		bodies_mapping[body_node] = body_h.get_inner();
 		scales_mapping[body_node] = model_info.scales.v;
 		draw_graph.addArc(shader_node, body_node);
+		// TODO: Replace with decent code
 
+		noob::lights_holder::handle light_h = globals->get_light_handle("default");
+		lights_mapping[body_node] = {light_h.get_inner(), light_h.get_inner(), light_h.get_inner(), light_h.get_inner()};
+		
 		fmt::MemoryWriter ww;
 		ww << "[Stage] Created actor with model " << model_info.model_h.get_inner() << ", shader " << shader_h.get_inner() << ", and body " << body_h.get_inner() << ".";
 		logger::log(ww.str());
@@ -249,19 +261,6 @@ void noob::stage::draw(float window_width, float window_height) const
 		actor(body_h, model_info, shader_h);
 	}
 
-
-	void noob::stage::set_basic_light(unsigned int i, const noob::vec4& light)
-	{
-		if (i > basic_lights.size()) basic_lights[basic_lights.size()-1] = light;
-		else basic_lights[i] = light;
-	}
-
-
-	noob::vec4 noob::stage::get_basic_light(unsigned int i) const
-	{
-		if (i > 1) return basic_lights[1];
-		else return basic_lights[i];
-	}
 
 	void noob::stage::write_graph(const std::string& filename) const
 	{
