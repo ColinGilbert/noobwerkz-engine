@@ -7,4 +7,7 @@
 ./shaderc -f shader_src/vs_triplanar.sc -o shaders/glsl/vs_triplanar.bin --type v --platform linux -i ../engine/lib/bgfx/src --varyingdef shader_src/varying.def.sc &&
 
 ./shaderc -f shader_src/fs_gradient_map_triplanar.sc -o shaders/glsl/fs_gradient_map_triplanar.bin --type f --platform linux -i ../engine/lib/bgfx/src --varyingdef shader_src/varying.def.sc &&
-./shaderc -f shader_src/vs_gradient_map_triplanar.sc -o shaders/glsl/vs_gradient_map_triplanar.bin --type v --platform linux -i ../engine/lib/bgfx/src --varyingdef shader_src/varying.def.sc #&&
+./shaderc -f shader_src/vs_gradient_map_triplanar.sc -o shaders/glsl/vs_gradient_map_triplanar.bin --type v --platform linux -i ../engine/lib/bgfx/src --varyingdef shader_src/varying.def.sc &&
+
+./shaderc -f shader_src/fs_current.sc -o shaders/glsl/fs_current.bin --type f --platform linux -i ../engine/lib/bgfx/src --varyingdef shader_src/varying.def.sc &&
+./shaderc -f shader_src/vs_current.sc -o shaders/glsl/vs_current.bin --type v --platform linux -i ../engine/lib/bgfx/src --varyingdef shader_src/varying.def.sc #&&

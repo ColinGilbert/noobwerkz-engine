@@ -48,6 +48,42 @@ bool noob::globals::init()
 	set_shader(triplanar_info, "default-triplanar");
 	// logger::log("[Globals] Set default triplanar shader.");
 	default_triplanar_shader = get_shader("default-triplanar");
+
+	noob::directional_light dir_light;
+	dir_light.direction = noob::vec3(0.0, -1.0, 0.0);
+	dir_light.colour = noob::vec3(1.0, 1.0, 1.0);
+	dir_light.emission = noob::vec3(0.3, 0.3, 0.3);
+	dir_light.ambient = noob::vec3(0.3, 0.3, 0.3);
+	dir_light.diffuse = noob::vec3(0.3, 0.3, 0.3);
+	dir_light.specular = noob::vec3(0.3, 0.3, 0.3);
+	dir_light.specular_power = 0.3333;
+	
+	noob::point_light p_light;
+	p_light.position = noob::vec3(0.0, 20.0, 0.0);
+	p_light.colour = noob::vec3(1.0, 1.0, 1.0);
+	p_light.emission = noob::vec3(0.3, 0.3, 0.3);
+	p_light.ambient = noob::vec3(0.3, 0.3, 0.3);
+	p_light.diffuse = noob::vec3(0.3, 0.3, 0.3);
+	p_light.specular = noob::vec3(0.3, 0.3, 0.3);
+	p_light.specular_power = 0.3333;
+
+	noob::spotlight s_light;
+	s_light.direction = noob::vec3(0.0, -1.0, 0.0);	
+	s_light.position = noob::vec3(0.0, 20.0, 0.0);
+	s_light.colour = noob::vec3(1.0, 1.0, 1.0);
+	s_light.emission = noob::vec3(0.3, 0.3, 0.3);
+	s_light.ambient = noob::vec3(0.3, 0.3, 0.3);
+	s_light.diffuse = noob::vec3(0.3, 0.3, 0.3);
+	s_light.specular = noob::vec3(0.3, 0.3, 0.3);
+	s_light.specular_power = 0.3333;
+
+
+	struct spotlight 
+	{
+		noob::vec3 direction, position, colour, emission, ambient, diffuse, specular;
+		float specular_power, spot_power;
+	};
+
 	// logger::log("[Globals] Got default triplanar shader handle.");
 	logger::log("[Globals] Init complete.");
 	return true;
@@ -402,7 +438,7 @@ noob::skeletal_anims_holder::handle noob::globals::skeleton(const std::string& f
 	return skeletal_anims.add(std::move(temp));
 }
 
-
+/*
 void noob::globals::set_light(const noob::light& l, const std::string& s)
 {
 	auto search = names_to_lights.find(s);
@@ -451,6 +487,7 @@ noob::reflection noob::globals::get_reflection(const std::string& s)
 	}
 	return reflections.get(temp);
 }
+*/
 
 
 void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std::string& name)

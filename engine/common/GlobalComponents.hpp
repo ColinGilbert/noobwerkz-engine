@@ -28,8 +28,12 @@ namespace noob
 	typedef noob::component<std::unique_ptr<noob::animated_model>> animated_models_holder;
 	typedef noob::component<std::unique_ptr<noob::shape>> shapes_holder;
 	typedef noob::component<std::unique_ptr<noob::skeletal_anim>> skeletal_anims_holder;
-	typedef noob::component<noob::light> lights_holder;
-	typedef noob::component<noob::reflection> reflections_holder;
+	// typedef noob::component<noob::light> lights_holder;
+	// typedef noob::component<noob::reflection> reflections_holder;
+	typedef noob::component<noob::directional_light> directional_lights_holder;
+	typedef noob::component<noob::point_light> point_lights_holder;
+	typedef noob::component<noob::spotlight> spotlights_holder;
+	
 	typedef noob::component<noob::prepared_shaders::uniform> shaders_holder;
 
 
@@ -72,12 +76,12 @@ namespace noob
 			noob::skeletal_anims_holder::handle skeleton(const std::string& filename);
 
 			// Lighting functions
-			void set_light(const noob::light&, const std::string&);
-			noob::light get_light(const std::string&);
+			// void set_light(const noob::light&, const std::string&);
+			// noob::light get_light(const std::string&);
 
 			// Surface reflectivity
-			void set_reflection(const noob::reflection&, const std::string&);
-			noob::reflection get_reflection(const std::string&);			
+			// void set_reflection(const noob::reflection&, const std::string&);
+			// noob::reflection get_reflection(const std::string&);			
 
 			// These were needed in order to make graphics work with AngelScript. Seriously, why use variants for this anymore? Oh yeah... Variants let us use a single container type.
 			void set_shader(const noob::basic_renderer::uniform&, const std::string& name);
@@ -85,8 +89,14 @@ namespace noob
 			noob::shaders_holder::handle get_shader(const std::string& name);
 
 			// Utilities:
-			// static noob::basic_mesh mesh_from_shape(const noob::shapes_holder::handle);
+			void set_directional_light(const noob::directional_light&, const std::string& name);
+			noob::directional_lights_holder::handle get_directional_light(const std::string& name);
 
+			void set_point_light(const noob::point_light&, const std::string& name);
+			noob::point_lights_holder::handle get_point_light(const std::string& name);
+
+			void set_spotlight(const noob::spotlight&, const std::string& name);
+			noob::spotlights_holder::handle get_spotlight(const std::string& name);
 
 			// Those are easy to represent as a scaled item, and save a lot on the video card if repeated.
 			scaled_model sphere_model(float r);
@@ -114,9 +124,12 @@ namespace noob
 			animated_models_holder animated_models;
 			shapes_holder shapes;
 			skeletal_anims_holder skeletal_anims;
-			lights_holder lights;
-			reflections_holder reflections;
+			// lights_holder lights;
+			// reflections_holder reflections;
 			shaders_holder shaders;
+			directional_lights_holder directional_lights;
+			point_lights_holder point_lights;
+			spotlights_holder spotlights;
 
 		protected:
 			void set_shader(const noob::prepared_shaders::uniform&, const std::string& name);
@@ -125,8 +138,12 @@ namespace noob
 			std::unordered_map<std::string, noob::shapes_holder::handle> names_to_shapes;
 			std::unordered_map<std::string, noob::basic_models_holder::handle> names_to_basic_models;
 			std::unordered_map<std::string, noob::shaders_holder::handle> names_to_shaders;
-			std::unordered_map<std::string, noob::lights_holder::handle> names_to_lights;
-			std::unordered_map<std::string, noob::reflections_holder::handle> names_to_reflections;
+			std::unordered_map<std::string, noob::directional_lights_holder::handle> names_to_directional_lights;
+			std::unordered_map<std::string, noob::point_lights_holder::handle> names_to_point_lights;
+			std::unordered_map<std::string, noob::spotlights_holder::handle> names_to_spotlights;
+
+			// std::unordered_map<std::string, noob::lights_holder::handle> names_to_lights;
+			// std::unordered_map<std::string, noob::reflections_holder::handle> names_to_reflections;
 
 
 	};

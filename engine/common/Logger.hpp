@@ -1,5 +1,7 @@
 #pragma once
+
 #include "format.h"
+
 namespace noob
 {
 	class logger

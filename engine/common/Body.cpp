@@ -26,18 +26,22 @@ void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg
 	start_transform.setOrigin(btVector3(pos.v[0], pos.v[1], pos.v[2]));
 	start_transform.setRotation(btQuaternion(orient.q[0], orient.q[1], orient.q[2], orient.q[3]));
 
+	float _mass = mass;
 	switch(type)
 	{
 		case(noob::body_type::DYNAMIC):
 		{
+
 			break;
 		}
 		case(noob::body_type::KINEMATIC):
 		{
+			_mass = 0.0;
 			break;
 		}
 		case(noob::body_type::STATIC):
 		{
+			_mass = 0.0;
 			break;
 		}
 		case(noob::body_type::GHOST):
@@ -51,11 +55,17 @@ void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg
 	btVector3 inertia(0.0, 0.0, 0.0);
 	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
 	shape = const_cast<noob::shape*>(_shape);
-	shape->inner_shape->calculateLocalInertia(mass, inertia);
 	
-	btRigidBody::btRigidBodyConstructionInfo ci(mass, motion_state, shape->inner_shape, inertia);
+	if (type == noob::body_type::DYNAMIC)
+	{
+		shape->inner_shape->calculateLocalInertia(_mass, inertia);
+	}
+
+	btRigidBody::btRigidBodyConstructionInfo ci(_mass, motion_state, shape->inner_shape, inertia);
 	inner_body = new btRigidBody(ci);
+	
 	set_ccd(ccd);
+	
 	dynamics_world->addRigidBody(inner_body);
 	physics_valid = true;
 }

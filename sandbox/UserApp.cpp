@@ -32,5 +32,4 @@ void noob::application::user_update(double dt)
 	}
 
 	gui.text(ww.str(), static_cast<float>(window_width - 500), static_cast<float>(window_height - 50), noob::gui::font_size::HEADER);
-
 }

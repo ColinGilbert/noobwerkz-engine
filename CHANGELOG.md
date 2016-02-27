@@ -1,3 +1,12 @@
+Version 0.2.1 AKA: "Graphics Magix, Act Two" (in progress)
+```
+Added random number function
+Fix lots of nasty bugs
+Add convenient actor-adding functions
+
+```
+
+
 Version 0.2.0 AKA: "Graphix Magix, Act One"
 ```
 Overhaul of the graphics system. Now allows for easy batching of instanced objects using a very compact scene graph (it only holds tags stored in std::vector containers.)

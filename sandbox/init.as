@@ -39,7 +39,7 @@ void set_shaders()
 void set_stage()
 {
 	// default_stage s;
-	vec3 eye_pos(0.0, 1000.0, -500.0);
+	vec3 eye_pos(0.0, 500.0, -200.0);
 	vec3 look_to(0.0, 0.0, 0.0);
 	vec3 up(0.0, 1.0, 0.);
 
@@ -68,7 +68,6 @@ void set_stage()
 	{
 		float x_pos = i;
 		float z_pos = -i;
-		
 		float s = random() * 10.0;
 		shape_handle box_h = box_shape(s, s, s); 
 		default_stage.actor(box_h, 1.0, vec3(x_pos, 250.0, z_pos), versor(0.0, 0.0, 0.0, 1.0), purple_shader_h);
