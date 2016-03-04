@@ -22,6 +22,8 @@ namespace noob
 
 				public:
 
+				handle() : inner(0) {}
+
 				bool operator==(const noob::component<T>::handle other) const
 				{
 					return (inner == other.inner);
@@ -125,6 +127,8 @@ namespace noob
 					friend class component;
 
 					public:
+
+					handle() : inner(0) {}
 
 					bool operator==(const noob::component<std::unique_ptr<T>>::handle other) const
 					{

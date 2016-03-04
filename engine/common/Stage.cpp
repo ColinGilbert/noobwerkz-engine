@@ -125,14 +125,19 @@ void noob::stage::draw(float window_width, float window_height) const
 				world_mat = noob::translate(world_mat, bodies.get(body_h)->get_position());												
 				noob::mat4 normal_mat = noob::transpose(noob::inverse((view_mat * world_mat)));
 
+				noob::reflectance temp_reflect;
+				temp_reflect = globals->reflectances.get(reflectances_mapping[body_node]);
+
+
 				std::array<noob::light, 4> temp_lights;
 				std::array<size_t, 4> lights_h = lights_mapping[body_node];
+
 				for(size_t i = 0; i < 3; ++i)
 				{
 					temp_lights[i] = globals->lights.get(lights_h[i]);
 				}
 				
-				renderer.draw(globals->basic_models.get(globals->basic_models.make_handle(model_h)), globals->shaders.get(globals->shaders.make_handle(shader_h)), world_mat, normal_mat, eye_pos, temp_lights , 0);
+				renderer.draw(globals->basic_models.get(model_h), globals->shaders.get(shader_h), world_mat, normal_mat, eye_pos, temp_reflect, temp_lights , 0);
 			}
 		}
 	}
@@ -220,11 +225,12 @@ void noob::stage::draw(float window_width, float window_height) const
 		draw_graph.addArc(shader_node, body_node);
 		// TODO: Replace with decent code
 
-		noob::lights_holder::handle light_h = globals->get_light_handle("default");
+		noob::lights_holder::handle light_h = globals->default_light;
 		lights_mapping[body_node] = {light_h.get_inner(), light_h.get_inner(), light_h.get_inner(), light_h.get_inner()};
-		
+		reflectances_mapping[body_node] = model_info.reflect_h.get_inner();
+
 		fmt::MemoryWriter ww;
-		ww << "[Stage] Created actor with model " << model_info.model_h.get_inner() << ", shader " << shader_h.get_inner() << ", and body " << body_h.get_inner() << ".";
+		ww << "[Stage] Created actor with model " << model_info.model_h.get_inner() << ", shader " << shader_h.get_inner() << ", reflectance " << model_info.reflect_h.get_inner() << " and body " << body_h.get_inner() << ".";
 		logger::log(ww.str());
 	}
 

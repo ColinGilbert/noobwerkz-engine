@@ -1,0 +1,186 @@
+$input v_position, v_normal, v_view, mult_normal
+
+#include "common.sh"
+
+SAMPLER2D(texture_0, 0);
+
+// Individual colours associated with the gradient 0.0-1.0.
+uniform vec4 colour_0;
+uniform vec4 colour_1;
+uniform vec4 colour_2;
+uniform vec4 colour_3;
+
+// Texture blending factor
+uniform vec4 blend_0;
+
+// Positions are only required for the two mid-gradient colours, as the other two are at the ends
+uniform vec4 blend_1;
+
+// Scaling factors (for the texture)
+uniform vec4 tex_scales;
+
+uniform mat4 normal_mat;
+
+// Lighting
+uniform vec4 eye_pos;
+uniform vec4 eye_pos_normalized;
+
+uniform vec4 u_ambient;
+uniform vec4 u_diffuse;
+uniform vec4 u_specular_shine;
+uniform vec4 u_fog;
+
+#define MAX_LIGHTS 4
+
+uniform vec4 u_light_rgb_inner_r;// [MAX_LIGHTS];
+uniform vec4 u_light_pos_r;// [MAX_LIGHTS];
+
+
+#define u_specular      u_specular_shine.xyz
+#define u_shine     u_specular_shine.w
+
+
+
+vec4 powRgba(vec4 _rgba, float _pow)
+{
+	vec4 result;
+	result.xyz = pow(_rgba.xyz, vec3_splat(_pow) );
+	result.w = _rgba.w;
+	return result;
+}
+
+
+vec2 blinn(vec3 _lightDir, vec3 _normal, vec3 _view_dir)
+{
+	float ndotl = dot(_normal, _lightDir);
+	vec3 reflected = 2.0*ndotl*_normal - _lightDir; // reflect(_lightDir, _normal);
+	float rdotv = dot(reflected, _view_dir);
+	return vec2(ndotl, rdotv);
+}
+
+
+float fresnel(float _ndotl, float _bias, float _pow)
+{
+	float facing = (1.0 - _ndotl);
+	return max(_bias + (1.0 - _bias) * pow(facing, _pow), 0.0);
+}
+
+
+vec4 lit(float _ndotl, float _rdotv, float _m)
+{
+	float diff = max(0.0, _ndotl);
+	float spec = step(0.0, _ndotl) * pow(max(0.0, _rdotv), _m);
+	return vec4(1.0, diff, spec, 1.0);
+}
+
+
+vec3 calc_light(vec3 _view, vec3 _normal, vec3 _view_dir)
+{
+	vec3 lightPos = mul(u_view, vec4(u_light_pos_r.xyz, 1.0)).xyz;
+	vec3 toLight = lightPos - _view;
+	vec3 lightDir = normalize(toLight);
+
+	vec2 bln = blinn(lightDir, _normal, _view_dir);
+	vec4 lc = lit(bln.x, bln.y, u_shine);
+
+	float dist = max(length(toLight), u_light_pos_r.w);
+	float attn = 250.0 * pow(dist, -2.0);
+	vec3 rgb = (lc.y * u_diffuse.xyz + lc.z * u_specular) * u_light_rgb_inner_r.rgb * attn;
+
+	return rgb;
+}
+
+
+void main()
+{
+	// vec3 position = normalize(v_position);
+	vec3 position = v_position;
+	vec3 normal_blend = normalize(max(abs(v_normal), 0.0001));
+
+	float b = normal_blend.x + normal_blend.y + normal_blend.z;
+	normal_blend /= b;
+
+	// Test RGB-only. Uncomment for great wisdom!
+	// vec4 xaxis = vec4(1.0, 0.0, 0.0, 1.0); 
+	// vec4 yaxis = vec4(0.0, 1.0, 0.0, 1.0);
+	// vec4 zaxis = vec4(0.0, 0.0, 1.0, 1.0);
+
+	vec4 xaxis = vec4(texture2D(texture_0, position.yz * tex_scales.x).rgb, 1.0);
+	vec4 yaxis = vec4(texture2D(texture_0, position.xz * tex_scales.y).rgb, 1.0);
+	vec4 zaxis = vec4(texture2D(texture_0, position.xy * tex_scales.z).rgb, 1.0);
+
+	vec4 tex = xaxis * normal_blend.x + yaxis * normal_blend.y + zaxis * normal_blend.z;
+
+	float tex_r = blend_0.x * tex.r;
+	float tex_g = blend_0.y * tex.g;
+	float tex_b = blend_0.z * tex.b;
+
+	vec4 tex_weighted = vec4(tex_r, tex_g, tex_b, 1.0);
+	float tex_intensity = (tex_r + tex_g + tex_b) * 0.3333;
+
+	float ratio_0_to_1 = when_le(tex_intensity, blend_1.x) * ((tex_intensity + blend_1.x) * 0.5);
+	float ratio_1_to_2 = when_le(tex_intensity, blend_1.y) * when_gt(tex_intensity, blend_1.x) * ((tex_intensity + blend_1.y) * 0.5);
+	float ratio_2_to_3 = when_ge(tex_intensity, blend_1.y) * ((tex_intensity + 1.0) * 0.5);
+
+	vec4 tex_final = ((colour_0 + colour_1) * ratio_0_to_1) + ((colour_1 + colour_2) * ratio_1_to_2) + ((colour_2 + colour_3) * ratio_2_to_3);
+
+
+	vec3 ambient_colour = tex_final.xyz * u_ambient.xyz;//vec3(u_ambient.x * tex_final.x, u_ambient.y * tex_final.y, u_ambient.z * tex_final.z);// * tex_final.xyz;
+//	gl_FragColor = clamp(vec4(ambient_colour, 1.0), 0.0, 1.0);
+
+	vec3 normal = normalize(mult_normal);
+	vec3 view_dir = -normalize(v_view);
+	// vec3 view_dir = normalize(eye_pos.xyz - v_position);
+	vec3 light_colour = calc_light(v_view, normal, view_dir);
+
+	// light_colour *= u_lightingPass;
+
+	vec3 colour = tex_final.xyz;
+	vec3 ambient = toGamma(ambient_colour * colour);
+	vec3 diffuse = toGamma(light_colour * colour);
+
+	// gl_FragColor.xyz = clamp(light_colour, 0.0, 1.0);
+	gl_FragColor.xyz = clamp(ambient + diffuse, 0.0, 1.0);
+	gl_FragColor.w = tex_final.w;
+	// gl_FragColor = clamp(tex_final, 0.0, 1.0);
+}
+
+
+	// vec2 ndc = gl_FragCoord.xy * u_viewTexel.xy + u_viewTexel.xy * u_texelHalf;
+	// vec4 texcolor = texture2D(s_texStencil, ndc);
+	// float s = (texcolor.x - texcolor.y) + 2.0 * (texcolor.z - texcolor.w);
+	// s *= u_useStencilTex;
+	// const float LOG2 = 1.442695;
+	// float z = length(v_view);
+	// float fogFactor = 1.0/exp2(u_fogDensity*u_fogDensity*z*z*LOG2);
+	// fogFactor = clamp(fogFactor, 0.0, 1.0);
+	// vec3 color = toLinear(tex_final).xyz; //toLinear(texture2D(s_texColor, v_texcoord0)).xyz;
+	// vec3 ambient = toGamma(ambient_colour * color);
+	// vec3 diffuse = toGamma(light_colour * color);
+	// vec3 final   = mix(ambient, ambient + diffuse, float((abs(s) < 0.0001)));
+	// gl_FragColor.xyz = mix(u_fogColor, final, fogFactor);
+	// gl_FragColor.w   = 1.0;
+
+	// vec3 normal = normalize(transpose(inverse(mat3(u_model[0]))) * v_normal);
+	// vec3 normal = normalize(normal_mat * vec4(v_normal, 1.0)).xyz;
+	// vec3 surface_pos = (u_model[0] * vec4(v_position, 1.0)).xyz;
+	// vec4 surface_colour = tex_final;
+	// vec3 surface_to_light = normalize(position_radius.xyz - surface_pos);
+	// vec3 surface_to_camera = normalize(eye_pos.xyz - surface_pos);
+	// vec3 ambient = (surface_colour.xyz * colour_attenuation.xyz) * ambient_falloff.x;
+	// float diffuse_coefficient = max(0.0, dot(normal, surface_to_light));
+	// vec3 diffuse = diffuse_coefficient * surface_colour.rgb * colour_attenuation.rgb;
+	// float specular_coefficient = 0.0;
+	// if(diffuse_coefficient > 0.0)
+	// {
+	// specular_coefficient = pow(max(0.0, dot(surface_to_camera, reflect(-surface_to_light, normal))), specular_exponent.w);
+	// }
+	// vec3 specular = specular_coefficient * specular_exponent.rgb * colour_attenuation.rgb;
+	// float distance_to_light = length(position_radius.xyz - surface_pos);
+	// float attenuation = 1.0 / (1.0 + colour_attenuation.w * pow(distance_to_light, 2));
+	// vec3 linear_colour = ambient + attenuation * (diffuse + specular);
+	// vec3 gamma = vec3(1.0/2.2);
+	// gl_FragColor = vec4(pow(linear_colour, gamma), surface_colour.a);
+	// vec4 world_pos = u_model[0] * vec4(v_position, 1.0);
+	// vec4 lit_pixel = tex_final.xyz;
+	// gl_FragColor = vec4(ambient + diffuse + specular, tex_final.a); //vec4(lit_pixel, tex_final.a);

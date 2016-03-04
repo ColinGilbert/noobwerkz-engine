@@ -343,26 +343,26 @@ void noob::application::init()
 	r = script_engine->RegisterEnumValue("light_type", "SPOT", 2); assert(r >= 0);
 
 	r = script_engine->RegisterObjectType("light", sizeof(noob::light), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::light>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0);
-	r = script_engine->RegisterObjectProperty("light", "light_type type", asOFFSET(noob::light, type)); assert( r >= 0 );	
-	r = script_engine->RegisterObjectProperty("light", "vec4 position", asOFFSET(noob::light, position)); assert( r >= 0 );
-	r = script_engine->RegisterObjectProperty("light", "vec4 direction", asOFFSET(noob::light, direction)); assert( r >= 0 );
-	r = script_engine->RegisterObjectProperty("light", "vec4 colour", asOFFSET(noob::light, colour)); assert( r >= 0 );
-	r = script_engine->RegisterObjectProperty("light", "vec4 emissive", asOFFSET(noob::light, emissive)); assert( r >= 0 );
-	r = script_engine->RegisterObjectProperty("light", "vec4 ambient", asOFFSET(noob::light, ambient)); assert( r >= 0 );	
-	r = script_engine->RegisterObjectProperty("light", "vec4 diffuse", asOFFSET(noob::light, diffuse)); assert( r >= 0 );
-	r = script_engine->RegisterObjectProperty("light", "vec4 specular", asOFFSET(noob::light, specular)); assert( r >= 0 );
-	r = script_engine->RegisterObjectProperty("light", "float specular_power", asOFFSET(noob::light, specular_power)); assert( r >= 0 );
-	r = script_engine->RegisterObjectProperty("light", "float spot_power", asOFFSET(noob::light, spot_power)); assert( r >= 0 );
-		
-		// noob::vec3 position, direction, colour, emission, ambient, diffuse, specular;
-		// float specular_power, spot_power;
-		// light_type type;
+	r = script_engine->RegisterObjectMethod("light", "void set_position(vec3& in)", asMETHOD(noob::light, set_position), asCALL_THISCALL); assert( r >= 0 );	
+	r = script_engine->RegisterObjectMethod("light", "void set_colour(const vec3& in)", asMETHOD(noob::light, set_colour), asCALL_THISCALL); assert( r >= 0 );	
+	r = script_engine->RegisterObjectMethod("light", "void set_radius(float)", asMETHOD(noob::light, set_radius), asCALL_THISCALL); assert( r >= 0 );	
+	r = script_engine->RegisterObjectMethod("light", "void set_spot_radius(float r)", asMETHOD(noob::light, set_spot_radius), asCALL_THISCALL); assert( r >= 0 );	
+	r = script_engine->RegisterObjectMethod("light", "vec3 get_position()", asMETHOD(noob::light, get_position), asCALL_THISCALL); assert( r >= 0 );	
+	r = script_engine->RegisterObjectMethod("light", "vec3 get_colour()", asMETHOD(noob::light, get_colour), asCALL_THISCALL); assert( r >= 0 );	
+	r = script_engine->RegisterObjectMethod("light", "float get_radius()", asMETHOD(noob::light, get_radius), asCALL_THISCALL); assert( r >= 0 );	
+	r = script_engine->RegisterObjectMethod("light", "float get_spot_radius()", asMETHOD(noob::light, get_spot_radius), asCALL_THISCALL); assert( r >= 0 );	
 
-	// r = script_engine->RegisterObjectType("reflection", sizeof(noob::reflection), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::reflection>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0);
-	// r = script_engine->RegisterObjectProperty("reflection", "vec4 specular", asOFFSET(noob::reflection, specular)); assert( r >= 0 );
-	// r = script_engine->RegisterObjectProperty("reflection", "vec4 diffuse", asOFFSET(noob::reflection, diffuse)); assert( r >= 0 );
-	// r = script_engine->RegisterObjectProperty("reflection", "vec4 ambient", asOFFSET(noob::reflection, ambient)); assert( r >= 0 );
-	// r = script_engine->RegisterObjectProperty("reflection", "float exponent", asOFFSET(noob::reflection, exponent)); assert( r >= 0 );
+	r = script_engine->RegisterObjectType("reflectance", sizeof(noob::reflectance), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::reflectance>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("reflectance", "void set_specular(const vec3& in)", asMETHOD(noob::reflectance, set_specular), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("reflectance", "void set_specular_shiny(float)", asMETHOD(noob::reflectance, set_specular_shiny), asCALL_THISCALL); assert( r >= 0 );	
+	r = script_engine->RegisterObjectMethod("reflectance", "void set_diffuse(const vec3& in)", asMETHOD(noob::reflectance, set_diffuse), asCALL_THISCALL); assert( r >= 0 );	
+	r = script_engine->RegisterObjectMethod("reflectance", "void set_ambient(const vec3& in)", asMETHOD(noob::reflectance, set_ambient), asCALL_THISCALL); assert( r >= 0 );	
+	r = script_engine->RegisterObjectMethod("reflectance", "void set_emissive(const vec3& in)", asMETHOD(noob::reflectance, set_emissive), asCALL_THISCALL); assert( r >= 0 );	
+
+	// r = script_engine->RegisterObjectProperty("reflectance", "vec4 specular_exponent", asOFFSET(noob::reflectance, specular)); assert( r >= 0 );
+	// r = script_engine->RegisterObjectProperty("reflectance", "vec4 diffuse", asOFFSET(noob::reflectance, diffuse)); assert( r >= 0 );
+	// r = script_engine->RegisterObjectProperty("reflectance", "vec4 ambient", asOFFSET(noob::reflectance, ambient)); assert( r >= 0 );
+	// r = script_engine->RegisterObjectProperty("reflectance", "vec4 emissive", asOFFSET(noob::reflectance ,emissive)); assert( r >= 0 );
 
 	r = script_engine->RegisterObjectType("basic_uniform", sizeof(noob::basic_renderer::uniform), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::basic_renderer::uniform>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	r = script_engine->RegisterObjectProperty("basic_uniform", "vec4 colour", asOFFSET(noob::basic_renderer::uniform, colour)); assert(r >= 0);
@@ -392,7 +392,6 @@ void noob::application::init()
 	r = script_engine->RegisterObjectType("model_handle", sizeof(noob::basic_models_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::basic_models_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	r = script_engine->RegisterObjectProperty("model_handle", "uint64 inner", asOFFSET(noob::basic_models_holder::handle, inner)); assert(r >= 0);
 
-
 	r = script_engine->RegisterObjectType("animated_model_handle", sizeof(noob::animated_models_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::animated_models_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	r = script_engine->RegisterObjectProperty("animated_model_handle", "uint64 inner", asOFFSET(noob::animated_models_holder::handle, inner)); assert(r >= 0);
 	
@@ -402,8 +401,8 @@ void noob::application::init()
 	r = script_engine->RegisterObjectType("light_handle", sizeof(noob::lights_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::lights_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	r = script_engine->RegisterObjectProperty("light_handle", "uint64 inner", asOFFSET(noob::lights_holder::handle, inner)); assert(r >= 0);
 	
-	// r = script_engine->RegisterObjectType("reflection_handle", sizeof(noob::reflections_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::reflections_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
-	// r = script_engine->RegisterObjectProperty("reflection_handle", "uint64 inner", asOFFSET(noob::reflections_holder::handle, inner)); assert(r >= 0);
+	r = script_engine->RegisterObjectType("reflectance_handle", sizeof(noob::reflectances_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::reflectances_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectProperty("reflectance_handle", "uint64 inner", asOFFSET(noob::reflectances_holder::handle, inner)); assert(r >= 0);
 	
 	r = script_engine->RegisterObjectType("shader_handle", sizeof(noob::shaders_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::shaders_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	r = script_engine->RegisterObjectProperty("shader_handle", "uint64 inner", asOFFSET(noob::shaders_holder::handle, inner)); assert(r >= 0);
@@ -432,14 +431,12 @@ void noob::application::init()
 	r = script_engine->RegisterGlobalFunction("animated_model_handle animated_model(const string& in)", asMETHOD(noob::globals, animated_model), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
 	// r = script_engine->RegisterGlobalFunction("skeleton_handle skeleton(const string& in)", asMETHOD(noob::globals, skeleton), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("light_handle set_light(const light& in, const string& in)", asMETHOD(noob::globals, set_light), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("light_handle get_light_handle(const string& in)", asMETHOD(noob::globals, get_light_handle), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("light_handle get_light(const light_handle)", asMETHOD(noob::globals, set_light), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("light_handle get_light(const string& in)", asMETHOD(noob::globals, set_light), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
 
-	// r = script_engine->RegisterGlobalFunction("void set_reflection(const reflection& in, const string& in)", asMETHOD(noob::globals, set_reflection), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
-	// r = script_engine->RegisterGlobalFunction("reflection get_reflection(const string& in)", asMETHOD(noob::globals, get_reflection), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
-	// r = script_engine->RegisterGlobalFunction("shader_handle set_shader(const basic_uniform& in)", asMETHOD(noob::globals, as_set_basic_shader_wrapper), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );	
+	r = script_engine->RegisterGlobalFunction("void set_reflectance(const reflectance& in, const string& in)", asMETHOD(noob::globals, set_reflectance), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("reflectance_handle get_reflectance(const string& in)", asMETHOD(noob::globals, get_reflectance), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+
 	r = script_engine->RegisterGlobalFunction("void set_shader(const basic_uniform& in, const string& in)", asMETHODPR(noob::globals, set_shader, (const noob::basic_renderer::uniform&, const std::string&), void), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
-	//r = script_engine->RegisterGlobalFunction("shader_handle set_shader(const triplanar_gradmap_uniform& in, string& in)", asMETHOD(noob::globals, as_set_triplanar_gradmap_shader_wrapper), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("void set_shader(const triplanar_gradmap_uniform& in, const string& in)", asMETHODPR(noob::globals, set_shader, (const noob::triplanar_gradient_map_renderer::uniform&, const std::string&), void), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("void set_shader(const lit_triplanar_gradmap_uniform& in, const string& in)", asMETHODPR(noob::globals, set_shader, (const noob::triplanar_gradient_map_renderer_lit::uniform&, const std::string&), void), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
 

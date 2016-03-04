@@ -45,7 +45,7 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() : show_origin(true), view_mat(noob::identity_mat4()), projection_mat(noob::identity_mat4()), bodies_mapping(draw_graph), basic_models_mapping(draw_graph), shaders_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph) {}
+			stage() : show_origin(true), view_mat(noob::identity_mat4()), projection_mat(noob::identity_mat4()), bodies_mapping(draw_graph), basic_models_mapping(draw_graph), shaders_mapping(draw_graph), reflectances_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph) {}
 
 			~stage();
 
@@ -108,6 +108,7 @@ namespace noob
 			lemon::ListDigraph::NodeMap<size_t> bodies_mapping;
 			lemon::ListDigraph::NodeMap<size_t> basic_models_mapping;
 			lemon::ListDigraph::NodeMap<size_t> shaders_mapping;
+			lemon::ListDigraph::NodeMap<size_t> reflectances_mapping;
 			lemon::ListDigraph::NodeMap<std::array<size_t, 4>> lights_mapping;
 			lemon::ListDigraph::NodeMap<std::array<float, 3>> scales_mapping;
 			lemon::ListDigraph::Node root_node;

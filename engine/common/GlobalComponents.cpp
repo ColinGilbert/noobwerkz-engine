@@ -52,6 +52,8 @@ bool noob::globals::init()
 	noob::light l;
 	default_light = set_light(l, "default");
 
+	noob::reflectance r;
+	default_reflectance = set_reflectance(r, "default");
 	// logger::log("[Globals] Got default triplanar shader handle.");
 	logger::log("[Globals] Init complete.");
 	return true;
@@ -425,7 +427,7 @@ noob::lights_holder::handle noob::globals::set_light(const noob::light& l, const
 }
 
 
-noob::lights_holder::handle noob::globals::get_light_handle(const std::string& s) const
+noob::lights_holder::handle noob::globals::get_light(const std::string& s) const
 {
 	noob::lights_holder::handle temp;
 	auto search = names_to_lights.find(s);
@@ -437,11 +439,44 @@ noob::lights_holder::handle noob::globals::get_light_handle(const std::string& s
 }
 
 
+
+noob::reflectances_holder::handle noob::globals::set_reflectance(const noob::reflectance& r, const std::string& s)
+{
+	auto search = names_to_reflectances.find(s);
+	if (search != names_to_reflectances.end())
+	{
+		reflectances.set(search->second, r);
+		return search->second;
+	}
+	else
+	{
+		noob::reflectances_holder::handle h = reflectances.add(r);
+		names_to_reflectances.insert(std::make_pair(s, h));
+		return h;
+	}
+}
+
+
+noob::reflectances_holder::handle noob::globals::get_reflectance(const std::string& s) const
+{
+	noob::reflectances_holder::handle temp;
+	auto search = names_to_reflectances.find(s);
+	if (search != names_to_reflectances.end())
+	{		
+		temp = search->second;
+	}
+	return temp;
+}
+
+
+
+
+/*
 noob::light noob::globals::get_light(const noob::lights_holder::handle h) const
 {
 	return lights.get(h);
 }
-
+*/
 
 void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std::string& name)
 {
