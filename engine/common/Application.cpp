@@ -358,6 +358,9 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("reflectance", "void set_diffuse(const vec3& in)", asMETHOD(noob::reflectance, set_diffuse), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("reflectance", "void set_ambient(const vec3& in)", asMETHOD(noob::reflectance, set_ambient), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("reflectance", "void set_emissive(const vec3& in)", asMETHOD(noob::reflectance, set_emissive), asCALL_THISCALL); assert( r >= 0 );	
+	r = script_engine->RegisterObjectMethod("reflectance", "void set_roughness(float)", asMETHOD(noob::reflectance, set_roughness), asCALL_THISCALL); assert( r >= 0 );	
+	r = script_engine->RegisterObjectMethod("reflectance", "void set_albedo(float)", asMETHOD(noob::reflectance, set_albedo), asCALL_THISCALL); assert( r >= 0 );	
+	r = script_engine->RegisterObjectMethod("reflectance", "void set_fresnel(float)", asMETHOD(noob::reflectance, set_fresnel), asCALL_THISCALL); assert( r >= 0 );	
 
 	// r = script_engine->RegisterObjectProperty("reflectance", "vec4 specular_exponent", asOFFSET(noob::reflectance, specular)); assert( r >= 0 );
 	// r = script_engine->RegisterObjectProperty("reflectance", "vec4 diffuse", asOFFSET(noob::reflectance, diffuse)); assert( r >= 0 );
@@ -411,6 +414,7 @@ void noob::application::init()
 	r = script_engine->RegisterObjectBehaviour("scaled_model", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(as_scaled_model_constructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	r = script_engine->RegisterObjectBehaviour("scaled_model", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_scaled_model_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	r = script_engine->RegisterObjectProperty("scaled_model", "model_handle model_h", asOFFSET(noob::scaled_model, model_h)); assert( r >= 0 );
+	r = script_engine->RegisterObjectProperty("scaled_model", "reflectance_handle reflect_h", asOFFSET(noob::scaled_model, reflect_h)); assert( r >= 0 );		
 	r = script_engine->RegisterObjectProperty("scaled_model", "vec3 scales", asOFFSET(noob::scaled_model, scales)); assert( r >= 0 );
 
 	r = script_engine->RegisterGlobalFunction("shape_handle sphere_shape(float)", asMETHOD(noob::globals, sphere_shape), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
@@ -433,7 +437,7 @@ void noob::application::init()
 	r = script_engine->RegisterGlobalFunction("light_handle set_light(const light& in, const string& in)", asMETHOD(noob::globals, set_light), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("light_handle get_light(const string& in)", asMETHOD(noob::globals, set_light), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
 
-	r = script_engine->RegisterGlobalFunction("void set_reflectance(const reflectance& in, const string& in)", asMETHOD(noob::globals, set_reflectance), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("reflectance_handle set_reflectance(const reflectance& in, const string& in)", asMETHOD(noob::globals, set_reflectance), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("reflectance_handle get_reflectance(const string& in)", asMETHOD(noob::globals, get_reflectance), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
 
 	r = script_engine->RegisterGlobalFunction("void set_shader(const basic_uniform& in, const string& in)", asMETHODPR(noob::globals, set_shader, (const noob::basic_renderer::uniform&, const std::string&), void), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
@@ -628,7 +632,7 @@ bool noob::application::load_init_script()
 
 void noob::application::draw()
 {
-	stage.projection_mat = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 10.0, 3000.0);
+	stage.projection_mat = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 10.0, 5000.0);
 	stage.draw(window_width, window_height);
 }
 

@@ -35,7 +35,7 @@ void set_shaders()
 void set_stage()
 {
 	// default_stage s;
-	vec3 eye_pos(0.0, 600.0, 10.0);
+	vec3 eye_pos(0.0, 1500.0, 1500.0);
 	vec3 look_to(0.0, 0.0, 0.0);
 	vec3 up(0.0, 1.0, 0.0);
 
@@ -44,18 +44,20 @@ void set_stage()
 	default_stage.show_origin = false;
 
 	light l;
-	l.set_position(vec3(200.0, 500.0, 0.0));
+	l.set_position(vec3(1000.0, 1000.0, 0.0));
 	l.set_colour(vec3(1.0, 1.0, 1.0));
-	l.set_radius(500.0);
+	l.set_radius(100.0);
 	set_light(l, "default");
 	
 	reflectance r;
-	// r.set_fresnel(
+	r.set_fresnel(0.1);
+	r.set_albedo(0.1);
+	r.set_roughness(0.1);
 	set_reflectance(r, "lol");
 	basic_mesh a = sphere_mesh(30.0);//, 100.0);
 	a.translate(vec3(0.0, -60.0, 0.0));
 	// a.rotate(versor(0.3, 0.3 , 0.3, 0.1));
-	basic_mesh b = box_mesh(1000.0, 10.0, 1000.0);
+	basic_mesh b = box_mesh(4000.0, 10.0, 4000.0);
 	// TODO: Keep track of transformations in scriptable mesh class.
 	// b.translate(vec3(0.0, -10.0, 0.0));
 
