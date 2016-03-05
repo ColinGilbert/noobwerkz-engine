@@ -159,12 +159,12 @@ void main()
 	vec3 view_direction = normalize(world_eye - world_pos);
 	float light_distance = length(u_light_pos_r.xyz - world_pos);
 	float falloff = attenuation_madams(u_light_pos_r.w, 0.5, light_distance);
-	float diffuse_coeff = orenNayarDiffuse(light_direction, view_direction, normal, 0.3, 0.7);	
+	float roughness = 0.3;
+	float albedo = 0.5;
+	float fresnel = 0.5;
+	float diffuse_coeff = orenNayarDiffuse(light_direction, view_direction, normal, roughness, albedo);
 	vec3 diffuse = u_light_rgb_inner_r.xyz * diffuse_coeff * falloff;
-	// vec3 colour = (u_light_rgb_inner_r.xyz * tex_final.xyz * attenuation * diffuse * u_ambient.xyz);
-	// cookTorranceSpecular(vec3 lightDirection, vec3 viewDirection, vec3 surfaceNormal, float roughness, float fresnel)
-
-	float specular = cookTorranceSpecular(light_direction, view_direction, normal, 0.7, 0.7);
+	float specular = cookTorranceSpecular(light_direction, view_direction, normal, roughness, fresnel);
 	
 	vec3 colour = tex_final.xyz * (diffuse + u_ambient.xyz) + specular;	
 	
