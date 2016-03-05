@@ -29,6 +29,7 @@ uniform vec4 u_ambient;
 uniform vec4 u_diffuse;
 uniform vec4 u_specular_shine;
 uniform vec4 u_fog;
+uniform vec4 u_rough_albedo_fresnel;
 
 #define MAX_LIGHTS 4
 
@@ -159,9 +160,11 @@ void main()
 	vec3 view_direction = normalize(world_eye - world_pos);
 	float light_distance = length(u_light_pos_r.xyz - world_pos);
 	float falloff = attenuation_madams(u_light_pos_r.w, 0.5, light_distance);
-	float roughness = 0.3;
-	float albedo = 0.5;
-	float fresnel = 0.5;
+	
+	float roughness = u_rough_albedo_fresnel.x;
+	float albedo = u_rough_albedo_fresnel.y;
+	float fresnel = u_rough_albedo_fresnel.z;
+
 	float diffuse_coeff = orenNayarDiffuse(light_direction, view_direction, normal, roughness, albedo);
 	vec3 diffuse = u_light_rgb_inner_r.xyz * diffuse_coeff * falloff;
 	float specular = cookTorranceSpecular(light_direction, view_direction, normal, roughness, fresnel);

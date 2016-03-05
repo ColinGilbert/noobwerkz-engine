@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Light.hpp"
+#include "Reflectance.hpp"
+
 namespace noob
 {
 	class renderer

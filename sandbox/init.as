@@ -49,8 +49,9 @@ void set_stage()
 	l.set_radius(500.0);
 	set_light(l, "default");
 	
-	// reflectance r;
-	// set_reflectance(r, "lol");
+	reflectance r;
+	// r.set_fresnel(
+	set_reflectance(r, "lol");
 	basic_mesh a = sphere_mesh(30.0);//, 100.0);
 	a.translate(vec3(0.0, -60.0, 0.0));
 	// a.rotate(versor(0.3, 0.3 , 0.3, 0.1));
@@ -79,6 +80,11 @@ void set_stage()
 		default_stage.actor(box_h, 1.0, vec3(x_pos, 250.0, z_pos), versor(0.0, 0.0, 0.0, 1.0), purple_shader_h);
 	}
 */
+}
+
+void loop()
+{
+
 }
 
 void main()

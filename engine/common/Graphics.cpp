@@ -40,6 +40,7 @@ const noob::graphics::uniform noob::graphics::diffuse;
 const noob::graphics::uniform noob::graphics::ambient;
 const noob::graphics::uniform noob::graphics::emissive;
 const noob::graphics::uniform noob::graphics::fog;
+const noob::graphics::uniform noob::graphics::rough_albedo_fresnel;
 
 const noob::graphics::sampler noob::graphics::invalid_texture;
 const noob::graphics::sampler noob::graphics::texture_0;
@@ -107,6 +108,7 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	ambient = noob::graphics::add_uniform(std::string("u_ambient"), bgfx::UniformType::Enum::Vec4, 1);
 	emissive = noob::graphics::add_uniform(std::string("u_emissive"), bgfx::UniformType::Enum::Vec4, 1);
 	fog = noob::graphics::add_uniform(std::string("u_fog"), bgfx::UniformType::Enum::Vec4, 1);
+	rough_albedo_fresnel = noob::graphics::add_uniform(std::string("u_rough_albedo_fresnel"), bgfx::UniformType::Enum::Vec4, 1);
 
 	noob::graphics::add_sampler(std::string("invalid"));
 	invalid_texture = get_sampler("invalid");

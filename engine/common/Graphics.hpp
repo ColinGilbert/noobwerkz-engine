@@ -93,7 +93,7 @@ namespace noob
 				return bgfx::copy(&payload[0], payload.size());
 			}
 
-			static const noob::graphics::uniform invalid_uniform, colour_0, colour_1, colour_2, colour_3, blend_0, blend_1, tex_scales, normal_mat, normal_mat_modelspace, eye_pos, eye_pos_normalized, global_ambient, light_pos_radius, light_rgb_inner_r, specular_shine, diffuse, ambient, emissive, fog;
+			static const noob::graphics::uniform invalid_uniform, colour_0, colour_1, colour_2, colour_3, blend_0, blend_1, tex_scales, normal_mat, normal_mat_modelspace, eye_pos, eye_pos_normalized, global_ambient, light_pos_radius, light_rgb_inner_r, specular_shine, diffuse, ambient, emissive, fog, rough_albedo_fresnel;
 
 			static const noob::graphics::sampler invalid_texture, texture_0;
 		protected:

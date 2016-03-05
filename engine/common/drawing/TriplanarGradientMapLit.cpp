@@ -36,6 +36,8 @@ void noob::triplanar_gradient_map_renderer_lit::draw(const noob::drawable* model
 	bgfx::setUniform(noob::graphics::diffuse.handle, &reflect.diffuse.v[0]);
 	bgfx::setUniform(noob::graphics::ambient.handle, &reflect.ambient.v[0]);
 	bgfx::setUniform(noob::graphics::emissive.handle, &reflect.emissive.v[0]);
+	bgfx::setUniform(noob::graphics::rough_albedo_fresnel.handle, &reflect.rough_albedo_fresnel.v[0]);
+	
 	bgfx::setUniform(noob::graphics::fog.handle, &noob::vec4(0.01, 0.01, 0.01, 0.0).v[0]);
 	bgfx::setUniform(noob::graphics::light_rgb_inner_r.handle, &lights[0].rgb_inner_r.v[0]);
 	bgfx::setUniform(noob::graphics::light_pos_radius.handle, &lights[0].pos_radius.v[0]);
