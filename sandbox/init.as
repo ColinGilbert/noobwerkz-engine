@@ -45,12 +45,13 @@ void set_stage()
 
 	light l;
 	l.set_position(vec3(1000.0, 200.0, 0.0));
-	l.set_colour(vec3(1.0, 0.0, 1.0));
+	l.set_colour(vec3(1.0, 1.0, 1.0));
 	l.set_radius(1000.0);
 	set_light(l, "default");
 	
 	reflectance r;
-	r.set_diffuse(vec3(1.0, 1.0, 1.0));
+	// r.set_diffuse(vec3(1.0, 1.0, 1.0));
+	r.set_specular_shiny(50.0);
 	r.set_fresnel(0.9);
 	r.set_albedo(0.9);
 	r.set_roughness(0.3);

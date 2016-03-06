@@ -196,11 +196,15 @@ void main()
 	vec3 light_direction = normalize(u_light_pos_r.xyz - world_pos);
 	vec3 view_direction = normalize(world_eye - world_pos);
 	float light_distance = length(u_light_pos_r.xyz - world_pos);
-	float falloff = attenuation_madams(u_light_pos_r.w, 0.5, light_distance);
 	
 	float roughness = u_rough_albedo_fresnel.x;
 	float albedo = u_rough_albedo_fresnel.y;
 	float fresnel = u_rough_albedo_fresnel.z;
+
+	// float falloff = 0.001;
+	// float falloff = 1.0;
+	float falloff = attenuation_reid(u_light_pos_r.w, 0.5, light_distance);
+	// float falloff = attenuation_madams(u_light_pos_r.w, 0.5, light_distance);
 
 	float diffuse_coeff = lambertDiffuse(light_direction, normal);
 	//float diffuse_coeff = orenNayarDiffuse(light_direction, view_direction, normal, roughness, albedo);
