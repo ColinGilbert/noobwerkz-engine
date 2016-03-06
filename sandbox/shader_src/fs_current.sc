@@ -202,9 +202,12 @@ void main()
 	float albedo = u_rough_albedo_fresnel.y;
 	float fresnel = u_rough_albedo_fresnel.z;
 
-	float diffuse_coeff = orenNayarDiffuse(light_direction, view_direction, normal, roughness, albedo);
+	float diffuse_coeff = lambertDiffuse(light_direction, normal);
+	//float diffuse_coeff = orenNayarDiffuse(light_direction, view_direction, normal, roughness, albedo);
 	vec3 diffuse = u_light_rgb_intensity.rgb * diffuse_coeff * falloff;
-	float specular = cookTorranceSpecular(light_direction, view_direction, normal, roughness, fresnel);
+	
+	float specular = blinnPhongSpecular(light_direction, view_direction, normal, u_shine);
+	// float specular = cookTorranceSpecular(light_direction, view_direction, normal, roughness, fresnel);
 	
 	vec3 colour = (tex_final.xyz * (diffuse + u_ambient.xyz) + specular) * u_light_rgb_intensity.rgb;
 	
