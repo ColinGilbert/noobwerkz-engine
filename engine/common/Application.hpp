@@ -271,6 +271,26 @@ namespace noob
 				((noob::stage*)memory)->~stage();
 			}
 
+			static void as_light_constructor_wrapper(uint8_t* memory)
+			{
+				new(memory) noob::light();
+			}
+
+			static void as_light_destructor_wrapper(uint8_t* memory)
+			{
+				((noob::light*)memory)->~light();
+			}
+
+			static void as_reflectance_constructor_wrapper(uint8_t* memory)
+			{
+				new(memory) noob::reflectance();
+			}
+
+			static void as_reflectance_destructor_wrapper(uint8_t* memory)
+			{
+				((noob::reflectance*)memory)->~reflectance();
+			}
+
 
 
 		protected:

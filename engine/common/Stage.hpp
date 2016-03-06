@@ -72,12 +72,12 @@ namespace noob
 
 			void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::scaled_model, const noob::shaders_holder::handle);
 			
-			void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle);
+			void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle, const noob::reflectances_holder::handle);
 
 			// void actor(const noob::shapes_holder::handle, const noob::vec3& pos, const noob::vec3& orient, const noob::vec3& scale, const noob::shaders_holder::handle);
 
 			// Scenery is a non-movable item that uses indexed triangle meshes as input.
-			void scenery(const noob::basic_mesh&, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle, const std::string& name);
+			void scenery(const noob::basic_mesh&, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle, const noob::reflectances_holder::handle, const std::string& name);
 
 			void set_basic_light(unsigned int i, const noob::vec4& light);
 

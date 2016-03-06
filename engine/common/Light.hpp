@@ -10,7 +10,7 @@ namespace noob
 	{
 		public:
 
-		light() : pos_radius(noob::vec4(0.0, 200.0, 0.0, 100.0)), rgb_inner_r(noob::vec4(1.0, 1.0, 1.0, 20.0)) {}
+		light() : rgb_intensity(noob::vec4(1.0, 1.0, 1.0, 1.0)), pos_radius(noob::vec4(0.0, 200.0, 0.0, 100.0)) {}
 
 		void set_position(const noob::vec3& arg)
 		{
@@ -18,14 +18,15 @@ namespace noob
 			pos_radius = noob::vec4(arg, r);
 		}
 
-		void set_spot_radius(float r)
+		void set_intensity(float r)
 		{
-			rgb_inner_r.v[3] = r;
+			rgb_intensity.v[3] = r;
 		}
 
 		void set_colour(const noob::vec3& arg)
 		{
-			rgb_inner_r = noob::vec4(arg, rgb_inner_r.v[3]);
+			float temp = rgb_intensity.v[3];
+			rgb_intensity = noob::vec4(arg, temp);
 		}
 
 		void set_radius(float r)
@@ -42,17 +43,17 @@ namespace noob
 			return pos;
 		}
 
-		float get_spot_radius() const
+		float get_intensity() const
 		{
-			return rgb_inner_r.v[3];
+			return rgb_intensity.v[3];
 		}
 
 		noob::vec3 get_colour() const
 		{
 			noob::vec3 retval;
-			retval.v[0] = rgb_inner_r.v[0];
-			retval.v[1] = rgb_inner_r.v[1];
-			retval.v[2] = rgb_inner_r.v[2];
+			retval.v[0] = rgb_intensity.v[0];
+			retval.v[1] = rgb_intensity.v[1];
+			retval.v[2] = rgb_intensity.v[2];
 			return retval;
 		}
 		float get_radius(float r)
@@ -60,7 +61,6 @@ namespace noob
 			return pos_radius.v[3];
 		}
 
-
-		noob::vec4 rgb_inner_r, pos_radius;
+		noob::vec4 rgb_intensity, pos_radius;
 	};
 }

@@ -39,7 +39,7 @@ void noob::triplanar_gradient_map_renderer_lit::draw(const noob::drawable* model
 	bgfx::setUniform(noob::graphics::rough_albedo_fresnel.handle, &reflect.rough_albedo_fresnel.v[0]);
 	
 	bgfx::setUniform(noob::graphics::fog.handle, &noob::vec4(0.01, 0.01, 0.01, 0.0).v[0]);
-	bgfx::setUniform(noob::graphics::light_rgb_inner_r.handle, &lights[0].rgb_inner_r.v[0]);
+	bgfx::setUniform(noob::graphics::light_rgb_intensity.handle, &lights[0].rgb_intensity.v[0]);
 	bgfx::setUniform(noob::graphics::light_pos_radius.handle, &lights[0].pos_radius.v[0]);
 
 	model->draw(view_id, w_mat, shader.program, 0 | BGFX_STATE_RGB_WRITE | BGFX_STATE_ALPHA_WRITE | BGFX_STATE_DEPTH_WRITE | BGFX_STATE_DEPTH_TEST_LESS | BGFX_STATE_MSAA);

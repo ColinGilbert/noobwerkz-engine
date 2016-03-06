@@ -33,13 +33,16 @@ uniform vec4 u_rough_albedo_fresnel;
 
 #define MAX_LIGHTS 4
 
-uniform vec4 u_light_rgb_inner_r;// [MAX_LIGHTS];
+uniform vec4 u_light_rgb_intensity;// [MAX_LIGHTS];
 uniform vec4 u_light_pos_r;// [MAX_LIGHTS];
 
 #define PI 3.14159265
 
 #define u_specular      u_specular_shine.xyz
 #define u_shine     u_specular_shine.w
+
+
+
 float beckmannDistribution(float x, float roughness)
 {
   float NdotH = max(x, 0.0001);
@@ -67,6 +70,12 @@ float attenuation_madams(float r, float f, float d)
 }
 
 
+float lambertDiffuse(vec3 lightDirection, vec3 surfaceNormal)
+{
+  return max(0.0, dot(lightDirection, surfaceNormal));
+}
+
+
 float orenNayarDiffuse(vec3 lightDirection, vec3 viewDirection, vec3 surfaceNormal, float roughness, float albedo)
 {
   
@@ -87,11 +96,41 @@ float orenNayarDiffuse(vec3 lightDirection, vec3 viewDirection, vec3 surfaceNorm
 
 float blinnPhongSpecular(vec3 lightDirection, vec3 viewDirection, vec3 surfaceNormal, float shininess)
 {
-
   //Calculate Blinn-Phong power
   vec3 H = normalize(viewDirection + lightDirection);
   return pow(max(0.0, dot(surfaceNormal, H)), shininess);
 }
+
+
+float beckmannSpecular(vec3 lightDirection, vec3 viewDirection, vec3 surfaceNormal, float roughness)
+{
+  return beckmannDistribution(dot(surfaceNormal, normalize(lightDirection + viewDirection)), roughness);
+}
+
+
+float wardSpecular(vec3 lightDirection, vec3 viewDirection, vec3 surfaceNormal, vec3 fiberParallel, vec3 fiberPerpendicular, float shinyParallel, float shinyPerpendicular)
+{
+
+  float NdotL = dot(surfaceNormal, lightDirection);
+  float NdotR = dot(surfaceNormal, viewDirection);
+
+  if(NdotL < 0.0 || NdotR < 0.0) 
+  {
+    return 0.0;
+  }
+
+  vec3 H = normalize(lightDirection + viewDirection);
+
+  float NdotH = dot(surfaceNormal, H);
+  float XdotH = dot(fiberParallel, H);
+  float YdotH = dot(fiberPerpendicular, H);
+
+  float coeff = sqrt(NdotL/NdotR) / (4.0 * PI * shinyParallel * shinyPerpendicular); 
+  float theta = (pow(XdotH/shinyParallel, 2.0) + pow(YdotH/shinyPerpendicular, 2.0)) / (1.0 + NdotH);
+
+  return coeff * exp(-2.0 * theta);
+}
+
 
 float cookTorranceSpecular(vec3 lightDirection, vec3 viewDirection, vec3 surfaceNormal, float roughness, float fresnel)
 {
@@ -153,8 +192,6 @@ void main()
 
 	vec4 tex_final = ((colour_0 + colour_1) * ratio_0_to_1) + ((colour_1 + colour_2) * ratio_1_to_2) + ((colour_2 + colour_3) * ratio_2_to_3);
 
-	vec3 ambient_colour = tex_final.xyz * u_ambient.xyz;
-
 	vec3 normal = normalize(world_normal);
 	vec3 light_direction = normalize(u_light_pos_r.xyz - world_pos);
 	vec3 view_direction = normalize(world_eye - world_pos);
@@ -166,10 +203,10 @@ void main()
 	float fresnel = u_rough_albedo_fresnel.z;
 
 	float diffuse_coeff = orenNayarDiffuse(light_direction, view_direction, normal, roughness, albedo);
-	vec3 diffuse = u_light_rgb_inner_r.xyz * diffuse_coeff * falloff;
+	vec3 diffuse = u_light_rgb_intensity.rgb * diffuse_coeff * falloff;
 	float specular = cookTorranceSpecular(light_direction, view_direction, normal, roughness, fresnel);
 	
-	vec3 colour = tex_final.xyz * (diffuse + u_ambient.xyz) + specular;	
+	vec3 colour = (tex_final.xyz * (diffuse + u_ambient.xyz) + specular) * u_light_rgb_intensity.rgb;
 	
 	gl_FragColor.xyz = clamp(colour, 0.0, 1.0);
 	gl_FragColor.w = tex_final.w;

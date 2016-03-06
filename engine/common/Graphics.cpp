@@ -29,7 +29,7 @@ const noob::graphics::uniform noob::graphics::eye_pos;
 const noob::graphics::uniform noob::graphics::eye_pos_normalized;
 const noob::graphics::uniform noob::graphics::global_ambient;
 
-const noob::graphics::uniform noob::graphics::light_rgb_inner_r;
+const noob::graphics::uniform noob::graphics::light_rgb_intensity;
 const noob::graphics::uniform noob::graphics::light_pos_radius;
 
 // const noob::graphics::uniform noob::graphics::colour_attenuation;
@@ -98,7 +98,7 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	
 	global_ambient = noob::graphics::add_uniform(std::string("global_ambient"), bgfx::UniformType::Enum::Vec4, 1);
 	
-	light_rgb_inner_r = noob::graphics::add_uniform(std::string("u_light_rgb_inner_r"), bgfx::UniformType::Enum::Vec4, 1);
+	light_rgb_intensity = noob::graphics::add_uniform(std::string("u_light_rgb_intensity"), bgfx::UniformType::Enum::Vec4, 1);
 	light_pos_radius = noob::graphics::add_uniform(std::string("u_light_pos_r"), bgfx::UniformType::Enum::Vec4, 1);
 	// colour_attenuation = noob::graphics::add_uniform(std::string("colour_attenuation"), bgfx::UniformType::Enum::Vec4, 1);
 	// ambient_falloff = noob::graphics::add_uniform(std::string("ambient_falloff"), bgfx::UniformType::Enum::Vec4, 1);

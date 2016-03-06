@@ -222,12 +222,13 @@ void noob::stage::draw(float window_width, float window_height) const
 		lemon::ListDigraph::Node body_node = draw_graph.addNode();
 		bodies_mapping[body_node] = body_h.get_inner();
 		scales_mapping[body_node] = model_info.scales.v;
+		reflectances_mapping[body_node] = model_info.reflect_h.get_inner();
 		draw_graph.addArc(shader_node, body_node);
 		// TODO: Replace with decent code
 
 		noob::lights_holder::handle light_h = globals->default_light;
 		lights_mapping[body_node] = {light_h.get_inner(), light_h.get_inner(), light_h.get_inner(), light_h.get_inner()};
-		reflectances_mapping[body_node] = model_info.reflect_h.get_inner();
+		//reflectances_mapping[body_node] = model_info.reflect_h.get_inner();
 
 		fmt::MemoryWriter ww;
 		ww << "[Stage] Created actor with model " << model_info.model_h.get_inner() << ", shader " << shader_h.get_inner() << ", reflectance " << model_info.reflect_h.get_inner() << " and body " << body_h.get_inner() << ".";
@@ -244,13 +245,14 @@ void noob::stage::draw(float window_width, float window_height) const
 
 
 
-	void noob::stage::actor(const noob::shapes_holder::handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle shader_h)
+	void noob::stage::actor(const noob::shapes_holder::handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle shader_h, const noob::reflectances_holder::handle reflect_arg)
 	{
 		noob::shape* s = globals->shapes.get(shape_h);
 		if (s->get_type() != noob::shape::type::TRIMESH)
 		{
 			noob::bodies_holder::handle body_h = body(noob::body_type::DYNAMIC, shape_h, mass, pos, orient);
 			noob::scaled_model model_info = globals->model_by_shape(shape_h);
+			model_info.reflect_h = reflect_arg;
 			actor(body_h, model_info, shader_h);
 		}
 		else logger::log("[Stage] Attempting to create actor with static mesh.");
@@ -258,12 +260,13 @@ void noob::stage::draw(float window_width, float window_height) const
 
 
 
-	void noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle shader_h, const std::string& name)
+	void noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle shader_h, const noob::reflectances_holder::handle reflect_arg, const std::string& name)
 	{
 		noob::shapes_holder::handle shape_h = globals->static_trimesh_shape(m, name);
 		noob::bodies_holder::handle body_h = body(noob::body_type::STATIC, shape_h, 0.0, pos, orient);
 		noob::scaled_model model_info;
 		model_info = globals->model_from_mesh(m, name);
+		model_info.reflect_h = reflect_arg;
 		actor(body_h, model_info, shader_h);
 	}
 

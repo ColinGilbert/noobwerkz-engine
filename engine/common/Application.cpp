@@ -343,16 +343,20 @@ void noob::application::init()
 	r = script_engine->RegisterEnumValue("light_type", "SPOT", 2); assert(r >= 0);
 
 	r = script_engine->RegisterObjectType("light", sizeof(noob::light), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::light>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0);
+	r = script_engine->RegisterObjectBehaviour("light", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(as_light_constructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	r = script_engine->RegisterObjectBehaviour("light", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_light_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("light", "void set_position(vec3& in)", asMETHOD(noob::light, set_position), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("light", "void set_colour(const vec3& in)", asMETHOD(noob::light, set_colour), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("light", "void set_radius(float)", asMETHOD(noob::light, set_radius), asCALL_THISCALL); assert( r >= 0 );	
-	r = script_engine->RegisterObjectMethod("light", "void set_spot_radius(float r)", asMETHOD(noob::light, set_spot_radius), asCALL_THISCALL); assert( r >= 0 );	
+	r = script_engine->RegisterObjectMethod("light", "void set_intensity(float r)", asMETHOD(noob::light, set_intensity), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("light", "vec3 get_position()", asMETHOD(noob::light, get_position), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("light", "vec3 get_colour()", asMETHOD(noob::light, get_colour), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("light", "float get_radius()", asMETHOD(noob::light, get_radius), asCALL_THISCALL); assert( r >= 0 );	
-	r = script_engine->RegisterObjectMethod("light", "float get_spot_radius()", asMETHOD(noob::light, get_spot_radius), asCALL_THISCALL); assert( r >= 0 );	
+	r = script_engine->RegisterObjectMethod("light", "float get_intensity()", asMETHOD(noob::light, get_intensity), asCALL_THISCALL); assert( r >= 0 );	
 
 	r = script_engine->RegisterObjectType("reflectance", sizeof(noob::reflectance), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::reflectance>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0);
+	r = script_engine->RegisterObjectBehaviour("reflectance", asBEHAVE_CONSTRUCT,  "void f()", asFUNCTION(as_reflectance_constructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	r = script_engine->RegisterObjectBehaviour("reflectance", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_reflectance_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("reflectance", "void set_specular(const vec3& in)", asMETHOD(noob::reflectance, set_specular), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("reflectance", "void set_specular_shiny(float)", asMETHOD(noob::reflectance, set_specular_shiny), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("reflectance", "void set_diffuse(const vec3& in)", asMETHOD(noob::reflectance, set_diffuse), asCALL_THISCALL); assert( r >= 0 );	
@@ -460,9 +464,9 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("stage", "void actor(const body_handle, const scaled_model, const shader_handle)", asMETHODPR(noob::stage, actor, (const noob::bodies_holder::handle, const noob::scaled_model, const noob::shaders_holder::handle), void), asCALL_THISCALL); assert( r >= 0 );
 	// r = script_engine->RegisterObjectMethod("stage", "void actor(const shape_handle, float, const vec3& in, const versor& in, const scaled_model, const shader_handle)", asMETHODPR(noob::stage, actor, (const noob::bodies_holder::handle, float, const noob::vec3&, const noob::versor&, const noob::scaled_model, const noob::shaders_holder::handle), void), asCALL_THISCALL); assert( r >= 0 );
 	// void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle)
-	r = script_engine->RegisterObjectMethod("stage", "void actor(const shape_handle, float, const vec3& in, const versor& in, const shader_handle)", asMETHODPR(noob::stage, actor, (const noob::shapes_holder::handle, float mass, const noob::vec3&, const noob::versor&, const noob::shaders_holder::handle), void), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("stage", "void actor(const shape_handle, float, const vec3& in, const versor& in, const shader_handle, const reflectance_handle)", asMETHODPR(noob::stage, actor, (const noob::shapes_holder::handle, float mass, const noob::vec3&, const noob::versor&, const noob::shaders_holder::handle, const reflectances_holder::handle), void), asCALL_THISCALL); assert( r >= 0 );
 
-	r = script_engine->RegisterObjectMethod("stage", "void scenery(const basic_mesh& in, const vec3& in, const versor& in, const shader_handle, const string& in)", asMETHOD(noob::stage, scenery), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("stage", "void scenery(const basic_mesh& in, const vec3& in, const versor& in, const shader_handle, const reflectance_handle, const string& in)", asMETHOD(noob::stage, scenery), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("stage", "void write_graph(const string& in)", asMETHOD(noob::stage, write_graph), asCALL_THISCALL); assert(r >= 0);
 	
 	r = script_engine->RegisterObjectProperty("stage", "bool show_origin", asOFFSET(noob::stage, show_origin)); assert(r >= 0);	
