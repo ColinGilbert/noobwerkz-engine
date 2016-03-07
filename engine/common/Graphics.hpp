@@ -9,7 +9,7 @@
 
 #include <boost/variant/variant.hpp>
 
-
+#include "NoobDefines.hpp"
 #include "NoobUtils.hpp"
 
 namespace noob

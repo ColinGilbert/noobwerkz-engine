@@ -1,5 +1,6 @@
 #pragma once
 
+// #include "NoobDefines.hpp"
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
 #include "AnimatedModel.hpp"
@@ -35,7 +36,7 @@ namespace noob
 			};
 
 			void init();
-			void draw(const noob::drawable*, const noob::mat4& w_mat, const noob::mat4& normal_mat, const noob::vec3& eye_pos, const noob::triplanar_gradient_map_renderer_lit::uniform&, const noob::reflectance&, const std::array<noob::light, 4>&, uint8_t view_id) const;
+			void draw(const noob::drawable*, const noob::mat4& w_mat, const noob::mat4& normal_mat, const noob::vec3& eye_pos, const noob::triplanar_gradient_map_renderer_lit::uniform&, const noob::reflectance&, const std::array<noob::light, MAX_LIGHTS>&, uint8_t view_id) const;
 
 		protected:
 	};

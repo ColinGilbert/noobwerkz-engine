@@ -18,7 +18,7 @@ void noob::basic_renderer::init()
 }
 
 
-void noob::basic_renderer::draw(const noob::drawable* model, const noob::mat4& world_mat, const noob::mat4& normal_mat, const noob::vec3& eye_pos,  const noob::basic_renderer::uniform& uni, const noob::reflectance& reflect, const std::array<noob::light, 4 >& lights, uint8_t view_id) const
+void noob::basic_renderer::draw(const noob::drawable* model, const noob::mat4& world_mat, const noob::mat4& normal_mat, const noob::vec3& eye_pos,  const noob::basic_renderer::uniform& uni, const noob::reflectance& reflect, const std::array<noob::light, MAX_LIGHTS>& lights, uint8_t view_id) const
 {
 	bgfx::setUniform(noob::graphics::get_uniform("colour_0").handle, &uni.colour.v[0]);
 	//noob::graphics::shader s = noob::graphics::get_shader("basic");

@@ -29,6 +29,12 @@ void noob::stage::init(const noob::globals* g)
 
 	root_node = draw_graph.addNode();
 
+	//for (size_t i = 0; i < 6; ++i)
+	//{
+		//noob::lights_holder::handle;
+		//lights[i] =
+	//}
+
 	globals = g;
 
 	// noob::bodies_holder::handle temp = body(noob::body_type::ghost, globals->unit_sphere_shape, 0.0, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0), false);
@@ -100,6 +106,12 @@ void noob::stage::draw(float window_width, float window_height) const
 	bgfx::setViewTransform(1, &view_mat.m[0], &projection_mat.m[0]);
 	bgfx::setViewRect(1, 0, 0, window_width, window_height);
 
+	std::array<noob::light, MAX_LIGHTS> temp_lights;
+	for (size_t i = 0; i < MAX_LIGHTS; ++i)
+	{
+		temp_lights[i] = globals->lights.get(lights[i]);
+	}
+
 	for (lemon::ListDigraph::OutArcIt model_it(draw_graph, root_node); model_it != lemon::INVALID; ++model_it)
 	{
 		lemon::ListDigraph::Node model_node = draw_graph.target(model_it);
@@ -129,15 +141,15 @@ void noob::stage::draw(float window_width, float window_height) const
 				temp_reflect = globals->reflectances.get(reflectances_mapping[body_node]);
 
 
-				std::array<noob::light, 4> temp_lights;
-				std::array<size_t, 4> lights_h = lights_mapping[body_node];
+				// std::array<noob::light, 4> temp_lights;
+				// std::array<size_t, 4> lights_h = lights_mapping[body_node];
 
-				for(size_t i = 0; i < 3; ++i)
-				{
-					temp_lights[i] = globals->lights.get(lights_h[i]);
-				}
+				// for(size_t i = 0; i < 3; ++i)
+				// {
+				// 	temp_lights[i] = globals->lights.get(lights_h[i]);
+				// }
 				
-				renderer.draw(globals->basic_models.get(model_h), globals->shaders.get(shader_h), world_mat, normal_mat, eye_pos, temp_reflect, temp_lights , 0);
+				renderer.draw(globals->basic_models.get(model_h), globals->shaders.get(shader_h), world_mat, normal_mat, eye_pos, temp_reflect, temp_lights, 0);
 			}
 		}
 	}
@@ -268,6 +280,28 @@ void noob::stage::draw(float window_width, float window_height) const
 		model_info = globals->model_from_mesh(m, name);
 		model_info.reflect_h = reflect_arg;
 		actor(body_h, model_info, shader_h);
+	}
+
+	
+	void noob::stage::set_light(unsigned int i, const noob::lights_holder::handle h)
+	{
+		if (i < MAX_LIGHTS)
+		{
+			lights[i] = h;
+		}	
+	}
+
+	
+	noob::lights_holder::handle noob::stage::get_light(unsigned int i) const
+	{
+		noob::lights_holder::handle l;
+	
+		if (i < MAX_LIGHTS)
+		{
+			l = lights[i];
+		}
+		
+		return l;
 	}
 
 

@@ -1,7 +1,6 @@
 // TODO: Implement all creation functions (*) and ensure that they take constructor args
 #pragma once
 
-
 #include <stack>
 #include <string>
 #include <tuple>
@@ -13,6 +12,7 @@
 #include <btBulletDynamicsCommon.h>
 // #include <dcollide.h>
 
+#include "NoobDefines.hpp"
 #include "Graphics.hpp"
 #include "MathFuncs.hpp"
 #include "VoxelWorld.hpp"
@@ -79,9 +79,9 @@ namespace noob
 			// Scenery is a non-movable item that uses indexed triangle meshes as input.
 			void scenery(const noob::basic_mesh&, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle, const noob::reflectances_holder::handle, const std::string& name);
 
-			void set_basic_light(unsigned int i, const noob::vec4& light);
+			void set_light(unsigned int, const noob::lights_holder::handle);
 
-			noob::vec4 get_basic_light(unsigned int i) const;
+			noob::lights_holder::handle get_light(unsigned int i) const;
 
 			void write_graph(const std::string& filename) const;
 
@@ -117,6 +117,8 @@ namespace noob
 			std::map<size_t, lemon::ListDigraph::Node> bodies_to_nodes;
 			std::map<size_t, lemon::ListDigraph::Node> basic_models_to_nodes;
 			// std::map<size_t, lemon::ListDigraph::Node> shaders_to_nodes;
+
+			std::array<noob::lights_holder::handle, MAX_LIGHTS> lights;
 
 			noob::globals* globals;
 	};

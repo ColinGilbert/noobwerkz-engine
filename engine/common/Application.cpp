@@ -467,6 +467,9 @@ void noob::application::init()
 	r = script_engine->RegisterObjectMethod("stage", "void actor(const shape_handle, float, const vec3& in, const versor& in, const shader_handle, const reflectance_handle)", asMETHODPR(noob::stage, actor, (const noob::shapes_holder::handle, float mass, const noob::vec3&, const noob::versor&, const noob::shaders_holder::handle, const reflectances_holder::handle), void), asCALL_THISCALL); assert( r >= 0 );
 
 	r = script_engine->RegisterObjectMethod("stage", "void scenery(const basic_mesh& in, const vec3& in, const versor& in, const shader_handle, const reflectance_handle, const string& in)", asMETHOD(noob::stage, scenery), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("stage", "void set_light(uint, const light_handle)", asMETHOD(noob::stage, set_light), asCALL_THISCALL); assert(r >= 0);
+	// r = script_engine->RegisterObjectMethod("stage", "light_handle get_light()", asMETHOD(noob::stage, get_light), asCALL_THISCALL); assert(r >= 0);
+	
 	r = script_engine->RegisterObjectMethod("stage", "void write_graph(const string& in)", asMETHOD(noob::stage, write_graph), asCALL_THISCALL); assert(r >= 0);
 	
 	r = script_engine->RegisterObjectProperty("stage", "bool show_origin", asOFFSET(noob::stage, show_origin)); assert(r >= 0);	

@@ -43,15 +43,24 @@ void set_stage()
 	default_stage.view_mat = look_at(eye_pos, look_to, up);
 	default_stage.show_origin = false;
 
-	light l;
-	l.set_position(vec3(1000.0, 200.0, 0.0));
-	l.set_colour(vec3(1.0, 1.0, 1.0));
-	l.set_radius(1000.0);
-	set_light(l, "default");
-	
+
+	for (uint i = 0; i < 6; ++i)
+	{
+		light l;
+		float x = -i * 300.0;
+		float y = 500.0;
+		float z = -i * 300.0;
+		l.set_position(vec3(x, y, z));
+		l.set_colour(vec3(1.0, 1.0, 1.0));
+		string s = "stage-light-" + i;
+		// log("[USER] Setting light " + i);
+		light_handle lh = set_light(l, s);
+		default_stage.set_light(i, lh);
+	}
+
 	reflectance r;
 	// r.set_diffuse(vec3(1.0, 1.0, 1.0));
-	r.set_specular_shiny(50.0);
+	r.set_specular_shiny(10.0);
 	r.set_fresnel(0.9);
 	r.set_albedo(0.9);
 	r.set_roughness(0.3);

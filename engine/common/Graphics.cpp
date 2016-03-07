@@ -98,8 +98,8 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	
 	global_ambient = noob::graphics::add_uniform(std::string("global_ambient"), bgfx::UniformType::Enum::Vec4, 1);
 	
-	light_rgb_intensity = noob::graphics::add_uniform(std::string("u_light_rgb_intensity"), bgfx::UniformType::Enum::Vec4, 1);
-	light_pos_radius = noob::graphics::add_uniform(std::string("u_light_pos_r"), bgfx::UniformType::Enum::Vec4, 1);
+	light_rgb_intensity = noob::graphics::add_uniform(std::string("u_light_rgb_intensity"), bgfx::UniformType::Enum::Vec4, MAX_LIGHTS);
+	light_pos_radius = noob::graphics::add_uniform(std::string("u_light_pos_r"), bgfx::UniformType::Enum::Vec4, MAX_LIGHTS);
 	// colour_attenuation = noob::graphics::add_uniform(std::string("colour_attenuation"), bgfx::UniformType::Enum::Vec4, 1);
 	// ambient_falloff = noob::graphics::add_uniform(std::string("ambient_falloff"), bgfx::UniformType::Enum::Vec4, 1);
 

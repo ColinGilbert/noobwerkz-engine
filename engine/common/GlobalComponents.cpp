@@ -50,6 +50,7 @@ bool noob::globals::init()
 	default_triplanar_shader = get_shader("default-triplanar");
 
 	noob::light l;
+	l.set_colour(noob::vec3(0.0, 1.0, 1.0));
 	default_light = set_light(l, "default");
 
 	noob::reflectance r;

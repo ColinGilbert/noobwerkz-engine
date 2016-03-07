@@ -1,5 +1,6 @@
 #pragma once
 
+#include "NoobDefines.hpp"
 #include "Light.hpp"
 #include "Reflectance.hpp"
 

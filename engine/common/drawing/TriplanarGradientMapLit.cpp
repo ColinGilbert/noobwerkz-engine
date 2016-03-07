@@ -13,7 +13,7 @@ void noob::triplanar_gradient_map_renderer_lit::init()
 }
 
 
-void noob::triplanar_gradient_map_renderer_lit::draw(const noob::drawable* model, const noob::mat4& w_mat, const noob::mat4& normal_mat, const noob::vec3& eye_pos, const noob::triplanar_gradient_map_renderer_lit::uniform& uni, const noob::reflectance& reflect, const std::array<noob::light, 4>& lights, uint8_t view_id) const
+void noob::triplanar_gradient_map_renderer_lit::draw(const noob::drawable* model, const noob::mat4& w_mat, const noob::mat4& normal_mat, const noob::vec3& eye_pos, const noob::triplanar_gradient_map_renderer_lit::uniform& uni, const noob::reflectance& reflect, const std::array<noob::light, MAX_LIGHTS>& lights, uint8_t view_id) const
 {
 	bgfx::setUniform(noob::graphics::normal_mat.handle, &normal_mat.m[0]);
 	bgfx::setUniform(noob::graphics::eye_pos.handle, &eye_pos.v[0]);	
@@ -39,8 +39,23 @@ void noob::triplanar_gradient_map_renderer_lit::draw(const noob::drawable* model
 	bgfx::setUniform(noob::graphics::rough_albedo_fresnel.handle, &reflect.rough_albedo_fresnel.v[0]);
 	
 	bgfx::setUniform(noob::graphics::fog.handle, &noob::vec4(0.01, 0.01, 0.01, 0.0).v[0]);
-	bgfx::setUniform(noob::graphics::light_rgb_intensity.handle, &lights[0].rgb_intensity.v[0]);
-	bgfx::setUniform(noob::graphics::light_pos_radius.handle, &lights[0].pos_radius.v[0]);
+	
+
+	std::array<noob::vec4, MAX_LIGHTS> lights_rgbi;
+	for (size_t i = 0 ; i < MAX_LIGHTS; ++i)
+	{
+		lights_rgbi[i] = lights[i].rgb_intensity;
+	}
+
+	std::array<noob::vec4, MAX_LIGHTS> lights_pos_radii;
+	for (size_t i = 0 ; i < MAX_LIGHTS; ++i)
+	{
+		lights_pos_radii[i] = lights[i].pos_radius;
+	}
+
+	bgfx::setUniform(noob::graphics::light_rgb_intensity.handle, &lights_rgbi[0].v[0], MAX_LIGHTS);
+	bgfx::setUniform(noob::graphics::light_pos_radius.handle, &lights_pos_radii[0].v[0], MAX_LIGHTS);
+	
 
 	model->draw(view_id, w_mat, shader.program, 0 | BGFX_STATE_RGB_WRITE | BGFX_STATE_ALPHA_WRITE | BGFX_STATE_DEPTH_WRITE | BGFX_STATE_DEPTH_TEST_LESS | BGFX_STATE_MSAA);
 }

@@ -150,7 +150,5 @@ namespace noob
 			std::unordered_map<std::string, noob::shaders_holder::handle> names_to_shaders;
 			std::unordered_map<std::string, noob::lights_holder::handle> names_to_lights;
 			std::unordered_map<std::string, noob::reflectances_holder::handle> names_to_reflectances;
-
-
 	};
 }
