@@ -49,7 +49,7 @@ void set_stage()
 		light l;
 		float x = -i * 300.0;
 		float y = 500.0;
-		float z = -i * 300.0;
+		float z = i * 300.0;
 		l.set_position(vec3(x, y, z));
 		l.set_colour(vec3(1.0, 1.0, 1.0));
 		string s = "stage-light-" + i;

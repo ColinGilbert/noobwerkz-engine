@@ -13,6 +13,7 @@
 #include "BasicMesh.hpp"
 #include "MeshUtils.hpp"
 #include "BasicModel.hpp"
+#include "ScaledModel.hpp"
 #include "AnimatedModel.hpp"
 #include "Shape.hpp"
 #include "Body.hpp"
@@ -20,32 +21,11 @@
 #include "Light.hpp"
 #include "PreparedShaders.hpp"
 #include "Component.hpp"
+#include "ComponentDefines.hpp"
+
 
 namespace noob
 {
-	typedef noob::component<std::unique_ptr<noob::basic_mesh>> meshes_holder;
-	typedef noob::component<std::unique_ptr<noob::basic_model>> basic_models_holder;
-	typedef noob::component<std::unique_ptr<noob::animated_model>> animated_models_holder;
-	typedef noob::component<std::unique_ptr<noob::shape>> shapes_holder;
-	typedef noob::component<std::unique_ptr<noob::skeletal_anim>> skeletal_anims_holder;
-	typedef noob::component<noob::light> lights_holder;
-	typedef noob::component<noob::reflectance> reflectances_holder;
-	// typedef noob::component<noob::directional_light> directional_lights_holder;
-	// typedef noob::component<noob::point_light> point_lights_holder;
-	// typedef noob::component<noob::spotlight> spotlights_holder;
-	
-	typedef noob::component<noob::prepared_shaders::uniform> shaders_holder;
-
-
-	struct scaled_model
-	{
-		scaled_model() : scales(noob::vec3(1.0, 1.0, 1.0)) {}
-		noob::basic_models_holder::handle model_h;
-		noob::reflectances_holder::handle reflect_h;
-		noob::vec3 scales;
-	};
-
-	
 	class globals
 	{
 		public:

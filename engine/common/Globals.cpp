@@ -1,4 +1,4 @@
-#include "GlobalComponents.hpp"
+#include "Globals.hpp"
 
 
 bool noob::globals::init()

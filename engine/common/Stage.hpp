@@ -23,6 +23,7 @@
 #include "Actor.hpp"
 #include "SkeletalAnim.hpp"
 #include "BasicModel.hpp"
+#include "ScaledModel.hpp"
 #include "AnimatedModel.hpp"
 #include "TransformHelper.hpp"
 #include "Prop.hpp"
@@ -30,18 +31,18 @@
 #include "Body.hpp"
 #include "Shape.hpp"
 #include "Component.hpp"
-#include "GlobalComponents.hpp"
+#include "Globals.hpp"
 // #include "IntrusiveBase.hpp"
+#include "ComponentDefines.hpp"
 
 #include <standalone/brigand.hpp>
+
 #include <lemon/smart_graph.h>
 #include <lemon/list_graph.h>
 #include <lemon/lgf_writer.h>
 
 namespace noob
 {
-	typedef noob::component<std::unique_ptr<noob::body>> bodies_holder;
-
 	class stage
 	{
 		public:

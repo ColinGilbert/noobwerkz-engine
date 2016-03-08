@@ -523,7 +523,7 @@ list(APPEND angelscript_src
 #include_directories(engine/common)
 
 list(APPEND common_src
-	common/GlobalComponents.cpp
+	common/Globals.cpp
 	common/BasicMesh.cpp
 	common/Graphics.cpp
 	common/Logger.cpp
@@ -552,6 +552,17 @@ list(APPEND common_src
 	common/FileSystem.cpp
 	common/CSG.cpp
 	common/GeometricWorld.cpp
+	common/scripting/RegisterMath.cpp
+	common/scripting/RegisterBasicMesh.cpp
+	common/scripting/RegisterActiveMesh.cpp
+	common/scripting/RegisterGlobals.cpp
+	common/scripting/RegisterStage.cpp
+	common/scripting/RegisterLight.cpp
+	common/scripting/RegisterReflectance.cpp
+	common/scripting/RegisterShaders.cpp
+	common/scripting/RegisterVoxels.cpp
+	common/scripting/RegisterScaledModel.cpp
+	common/scripting/RegisterHandles.cpp
 	)
 
 list(APPEND user_src
