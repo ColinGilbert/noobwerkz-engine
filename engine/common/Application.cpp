@@ -129,53 +129,14 @@ void noob::application::init()
 	// TODO: Implement
 	// r = script_engine->RegisterGlobalFunction("basic_mesh csg(const basic_mesh& in, const basic_mesh& in, csg_op)", asFUNCTION(mesh_utils::csg), asCALL_CDECL); assert(r >= 0);
 	r = script_engine->RegisterGlobalFunction("double random()", asMETHOD(noob::random_generator, get), asCALL_THISCALL_ASGLOBAL, &randomz); assert( r >= 0 );
-
-	r = script_engine->RegisterObjectType("body", sizeof(noob::body), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::body>() | asOBJ_APP_CLASS_ALLINTS ); assert(r >= 0 );
-	r = script_engine->RegisterEnum("body_type"); assert(r >= 0);
-	r = script_engine->RegisterEnumValue("body_type", "DYNAMIC", 0); assert(r >= 0);
-	r = script_engine->RegisterEnumValue("body_type", "STATIC", 1); assert(r >= 0);
-	r = script_engine->RegisterEnumValue("body_type", "KINEMATIC", 2); assert(r >= 0);
-	r = script_engine->RegisterEnumValue("body_type", "GHOST", 3); assert(r >= 0);
-
-	r = script_engine->RegisterObjectType("body_info", sizeof(noob::body::info), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::body::info>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
-	r = script_engine->RegisterObjectProperty("body_info", "float mass", asOFFSET(noob::body::info, mass)); assert( r >= 0 );
-	r = script_engine->RegisterObjectProperty("body_info", "float friction", asOFFSET(noob::body::info, friction)); assert( r >= 0 );
-	r = script_engine->RegisterObjectProperty("body_info", "float restitution", asOFFSET(noob::body::info, restitution)); assert( r >= 0 );
-	r = script_engine->RegisterObjectProperty("body_info", "vec3 linear_factor", asOFFSET(noob::body::info, linear_factor)); assert( r >= 0 );
-	r = script_engine->RegisterObjectProperty("body_info", "vec3 angular_factor", asOFFSET(noob::body::info, angular_factor)); assert( r >= 0 );
-	r = script_engine->RegisterObjectProperty("body_info", "vec3 position", asOFFSET(noob::body::info, position)); assert( r >= 0 );
-	r = script_engine->RegisterObjectProperty("body_info", "vec3 linear_velocity", asOFFSET(noob::body::info, linear_velocity)); assert( r >= 0 );
-	r = script_engine->RegisterObjectProperty("body_info", "vec3 angular_velocity", asOFFSET(noob::body::info, angular_velocity)); assert( r >= 0 );
-	r = script_engine->RegisterObjectProperty("body_info", "versor orientation", asOFFSET(noob::body::info, orientation)); assert( r >= 0 );
-	r = script_engine->RegisterObjectProperty("body_info", "bool ccd", asOFFSET(noob::body::info, ccd)); assert( r >= 0 );
-	r = script_engine->RegisterObjectProperty("body_info", "body_type type", asOFFSET(noob::body::info, type)); assert( r >= 0 );
-
+	register_body(script_engine);
 	register_light(script_engine);
 	register_reflectance(script_engine);
 	// r = script_engine->RegisterObjectProperty("reflectance", "vec4 specular_exponent", asOFFSET(noob::reflectance, specular)); assert( r >= 0 );
 	// r = script_engine->RegisterObjectProperty("reflectance", "vec4 diffuse", asOFFSET(noob::reflectance, diffuse)); assert( r >= 0 );
 	// r = script_engine->RegisterObjectProperty("reflectance", "vec4 ambient", asOFFSET(noob::reflectance, ambient)); assert( r >= 0 );
 	// r = script_engine->RegisterObjectProperty("reflectance", "vec4 emissive", asOFFSET(noob::reflectance ,emissive)); assert( r >= 0 );
-
-	r = script_engine->RegisterObjectType("basic_uniform", sizeof(noob::basic_renderer::uniform), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::basic_renderer::uniform>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
-	r = script_engine->RegisterObjectProperty("basic_uniform", "vec4 colour", asOFFSET(noob::basic_renderer::uniform, colour)); assert(r >= 0);
-
-	r = script_engine->RegisterObjectType("triplanar_gradmap_uniform", sizeof(noob::triplanar_gradient_map_renderer::uniform), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::triplanar_gradient_map_renderer::uniform>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
-	r = script_engine->RegisterObjectProperty("triplanar_gradmap_uniform", "vec4 blend", asOFFSET(noob::triplanar_gradient_map_renderer::uniform, blend)); assert(r >= 0);
-	r = script_engine->RegisterObjectProperty("triplanar_gradmap_uniform", "vec4 scales", asOFFSET(noob::triplanar_gradient_map_renderer::uniform, scales)); assert(r >= 0);
-	r = script_engine->RegisterObjectProperty("triplanar_gradmap_uniform", "vec4 colour_positions", asOFFSET(noob::triplanar_gradient_map_renderer::uniform, colour_positions)); assert(r >= 0);
-	r = script_engine->RegisterObjectProperty("triplanar_gradmap_uniform", "texture texture_map", asOFFSET(noob::triplanar_gradient_map_renderer::uniform, texture_map)); assert(r >= 0);
-	r = script_engine->RegisterObjectMethod("triplanar_gradmap_uniform", "void set_colour(uint, const vec4& in)", asMETHOD(noob::triplanar_gradient_map_renderer::uniform, set_colour), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("triplanar_gradmap_uniform", "vec4 get_colour(uint) const", asMETHOD(noob::triplanar_gradient_map_renderer::uniform, get_colour), asCALL_THISCALL); assert( r >= 0 );	
-
-	r = script_engine->RegisterObjectType("lit_triplanar_gradmap_uniform", sizeof(noob::triplanar_gradient_map_renderer_lit::uniform), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::triplanar_gradient_map_renderer_lit::uniform>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
-	r = script_engine->RegisterObjectProperty("lit_triplanar_gradmap_uniform", "vec4 blend", asOFFSET(noob::triplanar_gradient_map_renderer_lit::uniform, blend)); assert(r >= 0);
-	r = script_engine->RegisterObjectProperty("lit_triplanar_gradmap_uniform", "vec4 scales", asOFFSET(noob::triplanar_gradient_map_renderer_lit::uniform, scales)); assert(r >= 0);
-	r = script_engine->RegisterObjectProperty("lit_triplanar_gradmap_uniform", "vec4 colour_positions", asOFFSET(noob::triplanar_gradient_map_renderer_lit::uniform, colour_positions)); assert(r >= 0);
-	r = script_engine->RegisterObjectProperty("lit_triplanar_gradmap_uniform", "texture texture_map", asOFFSET(noob::triplanar_gradient_map_renderer_lit::uniform, texture_map)); assert(r >= 0);
-	r = script_engine->RegisterObjectMethod("lit_triplanar_gradmap_uniform", "void set_colour(uint, const vec4& in)", asMETHOD(noob::triplanar_gradient_map_renderer_lit::uniform, set_colour), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("lit_triplanar_gradmap_uniform", "vec4 get_colour(uint) const", asMETHOD(noob::triplanar_gradient_map_renderer_lit::uniform, get_colour), asCALL_THISCALL); assert( r >= 0 );	
-
+	register_uniforms(script_engine);
 	register_handles(script_engine);
 	register_scaled_model(script_engine);
 	register_globals(script_engine, global_storage);

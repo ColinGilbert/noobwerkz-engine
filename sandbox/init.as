@@ -44,12 +44,26 @@ void set_stage()
 	default_stage.show_origin = false;
 
 
-	for (uint i = 0; i < 6; ++i)
+	for (int i = 0; i < 6; ++i)
 	{
 		light l;
-		float x = -i * 300.0;
-		float y = 500.0;
-		float z = i * 300.0;
+		float x = i * 500.0;
+		float y = 200.0;
+		float z = i * 500.0;
+		l.set_position(vec3(x, y, z));
+		l.set_colour(vec3(1.0, 1.0, 1.0));
+		string s = "stage-light-" + i;
+		// log("[USER] Setting light " + i);
+		light_handle lh = set_light(l, s);
+		default_stage.set_light(i, lh);
+	}
+/*
+	for (int i = 0; i < 3; ++i)
+	{
+		light l;
+		float x = (float)i * -300.0;
+		float y = 200.0;
+		float z = (float)i * -300.0;
 		l.set_position(vec3(x, y, z));
 		l.set_colour(vec3(1.0, 1.0, 1.0));
 		string s = "stage-light-" + i;
@@ -58,9 +72,11 @@ void set_stage()
 		default_stage.set_light(i, lh);
 	}
 
+*/
+
 	reflectance r;
 	// r.set_diffuse(vec3(1.0, 1.0, 1.0));
-	r.set_specular_shiny(10.0);
+	r.set_specular_shiny(26.0);
 	r.set_fresnel(0.9);
 	r.set_albedo(0.9);
 	r.set_roughness(0.3);

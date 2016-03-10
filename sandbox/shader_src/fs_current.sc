@@ -221,7 +221,7 @@ void main()
 		total_light += light_colour;
 	}
 
-	total_light *= (1.0 / MAX_LIGHTS_F);
+	// total_light *= (1.0 / MAX_LIGHTS_F);
 	vec3 total_colour = (tex_final.xyz * u_ambient.xyz) + total_light;
 	
 	gl_FragColor.xyz = clamp(total_colour, 0.0, 1.0);

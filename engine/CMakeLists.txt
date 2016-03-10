@@ -563,6 +563,8 @@ list(APPEND common_src
 	common/scripting/RegisterVoxels.cpp
 	common/scripting/RegisterScaledModel.cpp
 	common/scripting/RegisterHandles.cpp
+	common/scripting/RegisterBody.cpp
+	common/scripting/RegisterUniforms.cpp
 	)
 
 list(APPEND user_src

@@ -11,3 +11,5 @@
 #include "RegisterVoxels.hpp"
 #include "RegisterScaledModel.hpp"
 #include "RegisterHandles.hpp"
+#include "RegisterBody.hpp"
+#include "RegisterUniforms.hpp"
