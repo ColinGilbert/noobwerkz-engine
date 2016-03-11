@@ -10,7 +10,7 @@ namespace noob
 	{
 		public:
 
-		light() : rgb_intensity(noob::vec4(1.0, 1.0, 1.0, 1.0)), pos_radius(noob::vec4(0.0, 200.0, 0.0, 100.0)) {}
+		light() : rgb_intensity(noob::vec4(1.0, 1.0, 1.0, 1.0)), pos_radius(noob::vec4(0.0, 200.0, 0.0, 300.0)) {}
 
 		void set_position(const noob::vec3& arg)
 		{

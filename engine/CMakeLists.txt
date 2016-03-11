@@ -539,6 +539,7 @@ list(APPEND common_src
 	common/Camera.cpp
 	common/Stage.cpp
 	common/Body.cpp
+	common/Ghost.cpp
 	common/Shape.cpp
 	common/MeshUtils.cpp
 	common/BasicModel.cpp

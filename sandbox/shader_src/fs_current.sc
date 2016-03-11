@@ -214,7 +214,8 @@ void main()
 		//float diffuse_coeff = orenNayarDiffuse(light_direction, view_direction, normal, roughness, albedo);
 		float diffuse = (diffuse_coeff * falloff);// * u_light_rgb_intensity[ii].rgb;
 
-		float specular = blinnPhongSpecular(light_direction, view_direction, normal, u_shine);
+		float specular = 0.0;
+		// float specular = blinnPhongSpecular(light_direction, view_direction, normal, u_shine);
 		// float specular = cookTorranceSpecular(light_direction, view_direction, normal, roughness, fresnel);
 
 		vec3 light_colour = (diffuse + specular) * u_light_rgb_intensity[ii].rgb; // * u_light_rgb_intensity[ii].a;

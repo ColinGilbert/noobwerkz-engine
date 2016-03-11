@@ -287,7 +287,7 @@ bool noob::application::load_init_script()
 
 void noob::application::draw()
 {
-	stage.projection_mat = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 10.0, 5000.0);
+	stage.projection_mat = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 1.0, 2000.0);
 	stage.draw(window_width, window_height);
 }
 
