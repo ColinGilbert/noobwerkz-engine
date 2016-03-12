@@ -554,6 +554,7 @@ list(APPEND common_src
 	common/CSG.cpp
 	common/GeometricWorld.cpp
 	common/scripting/RegisterMath.cpp
+	common/scripting/RegisterGraphics.cpp
 	common/scripting/RegisterBasicMesh.cpp
 	common/scripting/RegisterActiveMesh.cpp
 	common/scripting/RegisterGlobals.cpp

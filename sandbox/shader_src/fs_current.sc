@@ -34,7 +34,7 @@ uniform vec4 u_rough_albedo_fresnel;
 #define MAX_LIGHTS 6
 const float MAX_LIGHTS_F = 6.0;
 
-uniform vec4 u_light_rgb_intensity[MAX_LIGHTS];
+uniform vec4 u_light_rgb_falloff[MAX_LIGHTS];
 uniform vec4 u_light_pos_r[MAX_LIGHTS];
 
 #define PI 3.14159265
@@ -184,11 +184,11 @@ void main()
 	float tex_b = blend_0.z * tex.b;
 
 	vec4 tex_weighted = vec4(tex_r, tex_g, tex_b, 1.0);
-	float tex_intensity = (tex_r + tex_g + tex_b) * 0.3333;
+	float tex_falloff = (tex_r + tex_g + tex_b) * 0.3333;
 
-	float ratio_0_to_1 = when_le(tex_intensity, blend_1.x) * ((tex_intensity + blend_1.x) * 0.5);
-	float ratio_1_to_2 = when_le(tex_intensity, blend_1.y) * when_gt(tex_intensity, blend_1.x) * ((tex_intensity + blend_1.y) * 0.5);
-	float ratio_2_to_3 = when_ge(tex_intensity, blend_1.y) * ((tex_intensity + 1.0) * 0.5);
+	float ratio_0_to_1 = when_le(tex_falloff, blend_1.x) * ((tex_falloff + blend_1.x) * 0.5);
+	float ratio_1_to_2 = when_le(tex_falloff, blend_1.y) * when_gt(tex_falloff, blend_1.x) * ((tex_falloff + blend_1.y) * 0.5);
+	float ratio_2_to_3 = when_ge(tex_falloff, blend_1.y) * ((tex_falloff + 1.0) * 0.5);
 
 	vec4 tex_final = ((colour_0 + colour_1) * ratio_0_to_1) + ((colour_1 + colour_2) * ratio_1_to_2) + ((colour_2 + colour_3) * ratio_2_to_3);
 
@@ -202,7 +202,7 @@ void main()
 		vec3 light_direction = normalize(u_light_pos_r[ii].xyz - world_pos);
 		float light_distance = length(u_light_pos_r[ii].xyz - world_pos);
 
-		float falloff = attenuation_reid(u_light_pos_r[ii].w, 0.5, light_distance);
+		float falloff = attenuation_reid(u_light_pos_r[ii].w, u_light_rgb_falloff[ii].w, light_distance);
 		// float falloff = attenuation_madams(u_light_pos_r[ii].w, 0.5, light_distance);
 
 		// Uncomment to use orenNayar, cookTorrance, etc...
@@ -212,13 +212,13 @@ void main()
 
 		float diffuse_coeff = lambertDiffuse(light_direction, normal);
 		//float diffuse_coeff = orenNayarDiffuse(light_direction, view_direction, normal, roughness, albedo);
-		float diffuse = (diffuse_coeff * falloff);// * u_light_rgb_intensity[ii].rgb;
+		float diffuse = (diffuse_coeff * falloff);// * u_light_rgb_falloff[ii].rgb;
 
 		float specular = 0.0;
 		// float specular = blinnPhongSpecular(light_direction, view_direction, normal, u_shine);
 		// float specular = cookTorranceSpecular(light_direction, view_direction, normal, roughness, fresnel);
 
-		vec3 light_colour = (diffuse + specular) * u_light_rgb_intensity[ii].rgb; // * u_light_rgb_intensity[ii].a;
+		vec3 light_colour = (diffuse + specular) * u_light_rgb_falloff[ii].rgb; // * u_light_rgb_falloff[ii].a;
 		total_light += light_colour;
 	}
 

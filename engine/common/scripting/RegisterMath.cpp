@@ -4,6 +4,12 @@
 void noob::register_math(asIScriptEngine* script_engine)
 {
 	int r;
+
+	RegisterVector<float>("float", script_engine);
+	RegisterVector<double>("double", script_engine);
+	RegisterVector<int>("int", script_engine);
+	RegisterVector<unsigned int>("uint", script_engine);
+
 	r = script_engine->RegisterEnum("csg_op"); assert(r >= 0 );
 	r = script_engine->RegisterEnumValue("csg_op", "UNION", 0); assert(r >= 0 );
 	r = script_engine->RegisterEnumValue("csg_op", "DIFFERENCE", 1); assert(r >= 0 );

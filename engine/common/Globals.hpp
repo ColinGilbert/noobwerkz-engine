@@ -21,6 +21,7 @@
 #include "Light.hpp"
 #include "PreparedShaders.hpp"
 #include "Component.hpp"
+#include "Ghost.hpp"
 #include "ComponentDefines.hpp"
 
 
@@ -121,14 +122,24 @@ namespace noob
 			// point_lights_holder point_lights;
 			// spotlights_holder spotlights;
 
+			enum collision_type
+			{
+				NOTHING = 0,
+				TERRAIN = 1 << 1,
+				CHARACTER = 1 << 2,
+				TEAM_A = 1 << 3,
+				TEAM_B = 1 << 4,
+				POWERUP = 1 << 5,
+			};
+
 		protected:
 			void set_shader(const noob::prepared_shaders::uniform&, const std::string& name);
 
-			std::map<size_t, noob::basic_models_holder::handle> shapes_to_models;
-			std::unordered_map<std::string, noob::shapes_holder::handle> names_to_shapes;
-			std::unordered_map<std::string, noob::basic_models_holder::handle> names_to_basic_models;
-			std::unordered_map<std::string, noob::shaders_holder::handle> names_to_shaders;
-			std::unordered_map<std::string, noob::lights_holder::handle> names_to_lights;
-			std::unordered_map<std::string, noob::reflectances_holder::handle> names_to_reflectances;
+			std::map<size_t, noob::model_handle> shapes_to_models;
+			std::unordered_map<std::string, noob::shape_handle> names_to_shapes;
+			std::unordered_map<std::string, noob::model_handle> names_to_basic_models;
+			std::unordered_map<std::string, noob::shader_handle> names_to_shaders;
+			std::unordered_map<std::string, noob::light_handle> names_to_lights;
+			std::unordered_map<std::string, noob::reflectance_handle> names_to_reflectances;
 	};
 }

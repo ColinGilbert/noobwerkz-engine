@@ -171,10 +171,13 @@ void noob::stage::draw(float window_width, float window_height) const
 	noob::bodies_holder::handle noob::stage::body(const noob::body_type b_type, const noob::shapes_holder::handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
 	{
 		std::unique_ptr<noob::body> b = std::make_unique<noob::body>();
-		b->init(dynamics_world, b_type, globals->shapes.get(shape_h), mass, pos, orient, ccd);
-		return bodies.add(std::move(b));
+		b->init(dynamics_world, b_type, globals->shapes.get(shape_h), mass, pos, orient, ccd);	
+		body_handle bod_h = bodies.add(std::move(b));
+		noob::body* temp = bodies.get(bod_h);
+		temp->inner_body->setUserIndex(bod_h.get_inner());
+		
 		// bodies_to_shapes.insert(std::make_pair(bod_h.get_inner(), shape_h));
-		// return bod_h;
+		return bod_h;
 	}
 
 

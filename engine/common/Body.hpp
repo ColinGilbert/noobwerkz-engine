@@ -14,7 +14,8 @@
 namespace noob
 {
 	class stage;
-	enum class body_type {DYNAMIC = 0, KINEMATIC = 1, STATIC = 2, GHOST = 3};
+
+	enum class body_type {DYNAMIC = 0, KINEMATIC = 1, STATIC = 2}; //, GHOST = 3};
 
 	class body 
 	{
@@ -61,13 +62,13 @@ namespace noob
 
 			// body() : height(0.0), width(0.0), step_height(0.1), ray_lambda(1.0), turn_angle(1.0), dt(1.0/60.0), max_linear_velocity(10.0), walk_speed(0.5), turn_speed(0.5), jump_force(1.5), airborne(true), obstacled(false), self_controlled(false) {}
 
-			body() : physics_valid(true) {}
+			body() : physics_valid(false), is_physical(true) {}
 			~body();
 
 			void init(btDynamicsWorld*, noob::body_type, const noob::shape*, float mass, const noob::vec3& position, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0), bool ccd = false);
 			void init(btDynamicsWorld*, noob::body_type, const noob::shape*, const noob::body::info&);
 
-			void set_type(noob::body_type);
+			// void set_type(noob::body_type);
 			
 			void set_position(const noob::vec3&);
 			void set_orientation(const noob::versor&);
@@ -83,6 +84,8 @@ namespace noob
 
 			std::string get_debug_string() const;
 
+			const bool is_physical;
+		
 		protected:
 			noob::body_type type;
 
@@ -92,5 +95,6 @@ namespace noob
 			// btCollisionShape* inner_shape;			
 			btDynamicsWorld* dynamics_world;
 			btRigidBody* inner_body;
+			// This is a hack to allow Bullet to introspect whether this is a physical or ghost object. Useful when filtering collisions between bodies and ghosts.
 	};
 }

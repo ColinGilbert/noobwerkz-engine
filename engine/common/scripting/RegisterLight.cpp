@@ -14,9 +14,9 @@ void noob::register_light(asIScriptEngine* script_engine)
 	r = script_engine->RegisterObjectMethod("light", "void set_position(vec3& in)", asMETHOD(noob::light, set_position), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("light", "void set_colour(const vec3& in)", asMETHOD(noob::light, set_colour), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("light", "void set_radius(float)", asMETHOD(noob::light, set_radius), asCALL_THISCALL); assert( r >= 0 );	
-	r = script_engine->RegisterObjectMethod("light", "void set_intensity(float r)", asMETHOD(noob::light, set_intensity), asCALL_THISCALL); assert( r >= 0 );	
+	r = script_engine->RegisterObjectMethod("light", "void set_falloff(float r)", asMETHOD(noob::light, set_falloff), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("light", "vec3 get_position()", asMETHOD(noob::light, get_position), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("light", "vec3 get_colour()", asMETHOD(noob::light, get_colour), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("light", "float get_radius()", asMETHOD(noob::light, get_radius), asCALL_THISCALL); assert( r >= 0 );	
-	r = script_engine->RegisterObjectMethod("light", "float get_intensity()", asMETHOD(noob::light, get_intensity), asCALL_THISCALL); assert( r >= 0 );	
+	r = script_engine->RegisterObjectMethod("light", "float get_falloff()", asMETHOD(noob::light, get_falloff), asCALL_THISCALL); assert( r >= 0 );	
 }

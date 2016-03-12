@@ -4,11 +4,12 @@ void noob::register_body(asIScriptEngine* script_engine)
 {
 	int r;
 	r = script_engine->RegisterObjectType("body", sizeof(noob::body), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::body>() | asOBJ_APP_CLASS_ALLINTS ); assert(r >= 0 );
+
 	r = script_engine->RegisterEnum("body_type"); assert(r >= 0);
 	r = script_engine->RegisterEnumValue("body_type", "DYNAMIC", 0); assert(r >= 0);
 	r = script_engine->RegisterEnumValue("body_type", "STATIC", 1); assert(r >= 0);
 	r = script_engine->RegisterEnumValue("body_type", "KINEMATIC", 2); assert(r >= 0);
-	r = script_engine->RegisterEnumValue("body_type", "GHOST", 3); assert(r >= 0);
+	// r = script_engine->RegisterEnumValue("body_type", "GHOST", 3); assert(r >= 0);
 
 	r = script_engine->RegisterObjectType("body_info", sizeof(noob::body::info), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::body::info>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
 	r = script_engine->RegisterObjectProperty("body_info", "float mass", asOFFSET(noob::body::info, mass)); assert( r >= 0 );

@@ -39,20 +39,27 @@ void set_stage()
 	vec3 look_to(0.0, 0.0, 0.0);
 	vec3 up(0.0, 1.0, 0.0);
 
-	default_stage.eye_pos = eye_pos; //vec3(0.0, 1000.0, -500.0);
+	default_stage.eye_pos = eye_pos;
 	default_stage.view_mat = look_at(eye_pos, look_to, up);
 	default_stage.show_origin = false;
 
-
+	float light_x_coeff = 200.0;
+	float light_y = 100.0;
+	float light_z_coeff = 200.0;
+	float light_radius = 500.0;
+	float light_falloff = 1.0;
+	vec3 light_colour(1.0, 1.0, 1.0);
+	
 	for (int i = 0; i < 6; ++i)
 	{
 		light l;
-		float x = i * 200.0;
-		float y = 100.0;
-		float z = i * 200.0;
+		float x = i * light_x_coeff;
+		float y = light_y;
+		float z = i * light_z_coeff;
 		l.set_position(vec3(x, y, z));
-		l.set_colour(vec3(1.0, 1.0, 1.0));
-		// l.set_radius(500.0);
+		l.set_falloff(light_falloff);
+		l.set_colour(light_colour);
+		// l.set_radius(light_radius);
 		string s = "stage-light-" + i;
 		// log("[USER] Setting light " + i);
 		light_handle lh = set_light(l, s);
@@ -62,12 +69,12 @@ void set_stage()
 	for (int i = 0; i < 3; ++i)
 	{
 		light l;
-		float x = (float)i * -300.0;
-		float y = 100.0;
-		float z = (float)i * -300.0;
+		float x = i * -light_x_coeff;
+		float y = light_y;
+		float z = i * -light_z_coeff;;
 		l.set_position(vec3(x, y, z));
-		l.set_colour(vec3(1.0, 1.0, 1.0));
-		// l.set_radius(500.0);
+		l.set_colour(light_colour);
+		// l.set_radius(light_radius);
 		string s = "stage-light-" + i;
 		// log("[USER] Setting light " + i);
 		light_handle lh = set_light(l, s);

@@ -27,11 +27,11 @@ void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg
 	start_transform.setRotation(btQuaternion(orient.q[0], orient.q[1], orient.q[2], orient.q[3]));
 
 	float _mass = mass;
+	
 	switch(type)
 	{
 		case(noob::body_type::DYNAMIC):
 		{
-
 			break;
 		}
 		case(noob::body_type::KINEMATIC):
@@ -44,10 +44,14 @@ void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg
 			_mass = 0.0;
 			break;
 		}
-		case(noob::body_type::GHOST):
+		default:
 		{
 			break;
 		}
+		// case(noob::body_type::GHOST):
+		// {
+		//	break;
+		// }
 
 	};
 
@@ -67,7 +71,9 @@ void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg
 	set_ccd(ccd);
 	
 	dynamics_world->addRigidBody(inner_body);
-	physics_valid = true;
+	inner_body->setUserPointer(this);
+	inner_body->setUserIndex(-1);
+	physics_valid = true;	
 }
 
 void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg, const noob::shape* _shape, const noob::body::info& _info)
@@ -89,13 +95,14 @@ void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg
 	inner_body->setLinearFactor(btVector3(_info.linear_factor.v[0], _info.linear_factor.v[1], _info.linear_factor.v[2]));
 	inner_body->setLinearVelocity(btVector3(_info.linear_velocity.v[0], _info.linear_velocity.v[1], _info.linear_velocity.v[2]));
 	inner_body->setAngularVelocity(btVector3(_info.angular_velocity.v[0], _info.angular_velocity.v[1], _info.angular_velocity.v[2]));
+	inner_body->setUserPointer(this);
+	inner_body->setUserIndex(-1);
 	set_ccd(_info.ccd);
-	dynamics_world->addRigidBody(inner_body);
-
+	dynamics_world->addRigidBody(inner_body);	
 	physics_valid = true;
 }
 
-
+/*
 void noob::body::set_type(noob::body_type type_arg)
 {
 	if (type != type_arg)
@@ -111,16 +118,16 @@ void noob::body::set_type(noob::body_type type_arg)
 			case(noob::body_type::STATIC):
 				
 				break;
-			case(noob::body_type::GHOST):
+			//case(noob::body_type::GHOST):
 				
-				break;
+			//	break;
 		};
 	}
 	
 	type = type_arg;
 
 }
-
+*/
 
 /*
    void noob::body::set_position(const noob::vec3& pos)

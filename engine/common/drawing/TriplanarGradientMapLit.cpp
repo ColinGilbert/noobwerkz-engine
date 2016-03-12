@@ -44,7 +44,7 @@ void noob::triplanar_gradient_map_renderer_lit::draw(const noob::drawable* model
 	std::array<noob::vec4, MAX_LIGHTS> lights_rgbi;
 	for (size_t i = 0 ; i < MAX_LIGHTS; ++i)
 	{
-		lights_rgbi[i] = lights[i].rgb_intensity;
+		lights_rgbi[i] = lights[i].rgb_falloff;
 	}
 
 	std::array<noob::vec4, MAX_LIGHTS> lights_pos_radii;
@@ -53,7 +53,7 @@ void noob::triplanar_gradient_map_renderer_lit::draw(const noob::drawable* model
 		lights_pos_radii[i] = lights[i].pos_radius;
 	}
 
-	bgfx::setUniform(noob::graphics::light_rgb_intensity.handle, &lights_rgbi[0].v[0], MAX_LIGHTS);
+	bgfx::setUniform(noob::graphics::light_rgb_falloff.handle, &lights_rgbi[0].v[0], MAX_LIGHTS);
 	bgfx::setUniform(noob::graphics::light_pos_radius.handle, &lights_pos_radii[0].v[0], MAX_LIGHTS);
 	
 
