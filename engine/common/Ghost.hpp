@@ -24,17 +24,17 @@ namespace noob
 				std::vector<size_t> ghosts;
 			};
 
-			noob::ghost::intersection_results intersecting() const;
+			noob::ghost::intersection_results get_intersecting() const;
 
 			noob::vec3 get_position() const;
 			noob::versor get_orientation() const;
 			noob::mat4 get_transform() const;
 
+			// This is a hack to allow Bullet to introspect whether this is a physical or ghost object. Useful when filtering collisions between bodies and ghosts.
 			const bool is_physical;
 
 		protected:
 			btPairCachingGhostObject* inner;
 			btCollisionWorld* world;
-			// This is a hack to allow Bullet to introspect whether this is a physical or ghost object. Useful when filtering collisions between bodies and ghosts.
 	};
 }
