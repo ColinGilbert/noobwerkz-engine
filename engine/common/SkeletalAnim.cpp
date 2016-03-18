@@ -90,7 +90,7 @@ void noob::skeletal_anim::optimize(float translation_tolerance, float rotation_t
 			if (optimize)
 			{
 				ozz::animation::offline::RawAnimation optimized_anim;
-				optimizer(current_raw_anim, &optimized_anim);
+				optimizer(current_raw_anim, skeleton, &optimized_anim);
 				ozz::animation::Animation* runtime_anim = builder(optimized_anim);
 				runtime_anims.insert(std::make_pair(it.first, runtime_anim));
 			}
@@ -120,7 +120,7 @@ void noob::skeletal_anim::optimize(float translation_tolerance, float rotation_t
 			if (optimize)
 			{
 				ozz::animation::offline::RawAnimation optimized_anim;
-				optimizer(raw_anim, &optimized_anim);
+				optimizer(raw_anim, skeleton, &optimized_anim);
 				ozz::animation::Animation* runtime_anim = builder(optimized_anim);
 				runtime_anims.insert(std::make_pair(name, runtime_anim));
 			}

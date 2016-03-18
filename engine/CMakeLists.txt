@@ -19,8 +19,10 @@ list (APPEND cppformat_src
 	lib/cppformat/posix.cc
 	)
 
-add_subdirectory(lib/glfw)
-include_directories(lib/glfw/include)
+if (DEFINED NOOB_PLATFORM_LINUX)
+	add_subdirectory(lib/glfw)
+	include_directories(lib/glfw/include)	
+endif()
 
 include_directories(lib/freetype/include)
 add_subdirectory(lib/freetype)
@@ -205,114 +207,6 @@ list (APPEND bullet_src
 	)
 
 include_directories(lib/polyvox/include)
-
-# include_directories(# lib/dcollide)
-# list (APPEND dcollide_src
-# lib/dcollide/debug.cpp
-
-# lib/dcollide/broadphase/broadphase.cpp
-# lib/dcollide/broadphase/broadphasefactory.cpp
-# lib/dcollide/broadphase/broadphaseproxydata.cpp
-# lib/dcollide/broadphase/broadphasejob.cpp
-# lib/dcollide/broadphase/broadphasecollisions.cpp
-
-# 	Broadphase Octree Files
-# lib/dcollide/broadphase/broadphasehierarchicalgrid.cpp
-# lib/dcollide/broadphase/broadphasehierarchicalgridproxydata.cpp
-# lib/dcollide/broadphase/broadphasehierarchicalgridjob.cpp
-# lib/dcollide/broadphase/broadphasehierarchicalgridjob2.cpp
-# lib/dcollide/broadphase/broadphasehierarchicalgridjobcollection.cpp
-# lib/dcollide/broadphase/hierarchicalgrid.cpp
-
-# 	BroadPhase Brute Force Files
-# lib/dcollide/broadphase/broadphasebruteforce.cpp
-# lib/dcollide/broadphase/broadphasebruteforcejob.cpp
-
-# lib/dcollide/math/matrix.cpp
-# lib/dcollide/math/quaternion.cpp
-# lib/dcollide/math/vector.cpp
-# lib/dcollide/math/plane.cpp
-# lib/dcollide/world.cpp
-# lib/dcollide/pipeline.cpp
-# lib/dcollide/worldparameters.cpp
-# lib/dcollide/worldcollisions.cpp
-# lib/dcollide/proxy.cpp
-# lib/dcollide/proxyfactory.cpp
-# lib/dcollide/thread/thread.cpp
-# lib/dcollide/thread/jobpool.cpp
-# lib/dcollide/thread/jobpoolcollection.cpp
-# lib/dcollide/thread/threadpool.cpp
-# lib/dcollide/thread/threadjobcollection.cpp
-# lib/dcollide/debuglog.cpp
-# lib/dcollide/debugstream.cpp
-# lib/dcollide/debugstreamconfiguration_initialize.cpp
-
-# lib/dcollide/detectordeform/detectordeformmanager.cpp
-# lib/dcollide/detectordeform/detectordeformalgorithm.cpp
-# lib/dcollide/detectordeform/detectordeformjob.cpp
-# lib/dcollide/detectordeform/detectordeformproxydata.cpp
-# lib/dcollide/detectordeform/spatialhash/intvector3.cpp
-# lib/dcollide/detectordeform/spatialhash/simplehash.cpp
-# lib/dcollide/detectordeform/spatialhash/spatialhash.cpp
-# lib/dcollide/detectordeform/spatialhash/spatialgrid.cpp
-# lib/dcollide/detectordeform/spatialhash/spatialhashalgorithm.cpp
-# lib/dcollide/detectordeform/spatialhash/spatialhashjobcollection.cpp
-# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchy.cpp
-# lib/dcollide/detectordeform/surfacehierarchy/normalcone.cpp
-# lib/dcollide/detectordeform/surfacehierarchy/deformablebvhnode.cpp
-# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyalgorithm.cpp
-# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyjob.cpp
-# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyselfjob.cpp
-# lib/dcollide/detectordeform/surfacehierarchy/surfacehierarchyproxydata.cpp
-# lib/dcollide/detectordeform/bvhierarchy/bvhierarchyalgorithm.cpp
-# lib/dcollide/detectordeform/bvhierarchy/bvhierarchybvhnode.cpp
-# lib/dcollide/detectordeform/bvhierarchy/bvhierarchyjob.cpp
-# lib/dcollide/detectordeform/bvhierarchy/bvhierarchyproxydata.cpp
-
-# lib/dcollide/bvhnode.cpp
-# lib/dcollide/bvhnodedefault.cpp
-# lib/dcollide/meshsplitter.cpp
-
-# lib/dcollide/boundingvolumes/aabb.cpp
-# lib/dcollide/boundingvolumes/obb.cpp
-# lib/dcollide/boundingvolumes/boundingvolume.cpp
-# lib/dcollide/boundingvolumes/boundingsphere.cpp
-# lib/dcollide/boundingvolumes/kdop.cpp
-
-# lib/dcollide/shapes/box.cpp
-# lib/dcollide/shapes/cone.cpp
-# lib/dcollide/shapes/cylinder.cpp
-# lib/dcollide/shapes/mesh.cpp
-# lib/dcollide/shapes/shape.cpp
-# lib/dcollide/shapes/sphere.cpp
-# lib/dcollide/shapes/wedge.cpp
-# lib/dcollide/shapes/mesh/triangle.cpp
-# lib/dcollide/shapes/mesh/vertex.cpp
-# lib/dcollide/shapes/mesh/line.cpp
-# lib/dcollide/shapes/mesh/meshfactory.cpp
-
-# lib/dcollide/exceptions/exception.cpp
-
-# lib/dcollide/detectorrigid/bvhtraverse.cpp
-# lib/dcollide/detectorrigid/middlephaserigidjob.cpp
-# lib/dcollide/detectorrigid/middlephaserigidjobcreator.cpp
-
-# lib/dcollide/narrowphase/narrowphase.cpp
-# lib/dcollide/narrowphase/triangleintersector.cpp
-# lib/dcollide/narrowphase/boxsphereintersector.cpp
-# lib/dcollide/narrowphase/boxboxintersector.cpp
-# lib/dcollide/narrowphase/wedgeintersector.cpp
-# lib/dcollide/narrowphase/intersectionhelpers.cpp
-# lib/dcollide/narrowphase/cylinderintersector.cpp
-# lib/dcollide/narrowphase/coneintersector.cpp
-# lib/dcollide/narrowphase/spheresphereintersector.cpp
-# lib/dcollide/narrowphase/meshmeshintersector.cpp
-# lib/dcollide/narrowphase/narrowphasejob.cpp
-# lib/dcollide/narrowphase/spheretriangleintersector.cpp
-
-# lib/dcollide/collisioncache.cpp
-# lib/dcollide/collisionpair.cpp
-#	)
 
 
 include_directories(lib/eigen)
@@ -573,10 +467,23 @@ list(APPEND user_src
 	../sandbox/UserApp.cpp
 	)
 
-include_directories(platform/nix)
+if (DEFINED NOOB_PLATFORM_LINUX)
+	include_directories(platform/nix)
+	list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)	
+endif()
 
-list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)
+if (DEFINED NOOB_PLATFORM_IOS)
+	list(APPEND main_src platform/ios/EngineIOS.cpp)
+endif()
 
-add_executable(NoobEdit ${user_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${vhacd_src} ${openmesh_src} ${cppformat_src}  ${recast_src} ${angelscript_src} ${bullet_src} ${voropp_src}) # ${dcollide_src}
 
-target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m spnav ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r ${Boost_LIBRARIES})
+add_executable(NoobEdit ${user_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${openmesh_src} ${cppformat_src} ${recast_src} ${angelscript_src} ${bullet_src} ${voropp_src})
+
+
+
+target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r ${Boost_LIBRARIES})
+
+if (DEFINED NOOB_PLATFORM_LINUX)
+	target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES})	
+	target_link_libraries(NoobEdit LINK_PUBLIC spnav)
+endif()
