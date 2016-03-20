@@ -29,12 +29,14 @@
 #include <OpenMesh/Tools/Decimater/ModRoundnessT.hh>
 #include <OpenMesh/Tools/Subdivider/Uniform/CatmullClarkT.hh>
 
+/*
 #include <assimp/quaternion.h>
 #include <assimp/anim.h>
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <assimp/types.h>
+*/
 
 // typedef OpenMesh::TriMesh_ArrayKernelT<> TriMesh;
 // typedef OpenMesh::PolyMesh_ArrayKernelT<> PolyMesh;
@@ -42,6 +44,7 @@
 #include "MathFuncs.hpp"
 #include "TransformHelper.hpp"
 
+#include <Eigen/Dense>
 #include <Eigen/Geometry>
 #include "Logger.hpp"
 
@@ -61,62 +64,67 @@ namespace noob
 
 		public:
 
-			basic_mesh() : volume_calculated(false), volume(0.0) {}
+		basic_mesh() : volume_calculated(false), volume(0.0) {}
+		/*
+		   template <class Archive>
+		   void serialize( Archive & ar )
+		   {
+		   ar(vertices, normals, indices, bbox_info, volume_calculated, volume);
+		   }
+		   */
 
-			template <class Archive>
-				void serialize( Archive & ar )
-				{
-					ar(vertices, normals, indices, bbox_info, volume_calculated, volume);
-				}
+		// Proxies for AngelScript
+		noob::vec3 get_vertex(unsigned int);
+		noob::vec3 get_normal(unsigned int);
+		// noob::vec3 get_texcoord(unsigned int);
+		//unsigned int get_index(unsigned int);
 
+		// void set_vertex(unsigned int, const noob::vec3&);
+		// void set_normal(unsigned int, const noob::vec3&);
+		// void set_texcoord(unsigned int, const noob::vec3&);
+		// void set_index(unsigned int, unsigned int);
 
-			// Proxies for AngelScript
-			noob::vec3 get_vertex(unsigned int);
-			noob::vec3 get_normal(unsigned int);
-			noob::vec3 get_texcoord(unsigned int);
-			unsigned int get_index(unsigned int);
-			
-			void set_vertex(unsigned int, const noob::vec3&);
-			void set_normal(unsigned int, const noob::vec3&);
-			void set_texcoord(unsigned int, const noob::vec3&);
-			void set_index(unsigned int, unsigned int);
+		double get_volume();
 
-			double get_volume();
+		noob::basic_mesh decimate(size_t num_verts) const;
 
-			noob::basic_mesh decimate(size_t num_verts) const;
+		// std::string save() const;
+		bool save(const std::string& filename) const;
 
-			std::string save() const;
-			void save(const std::string& filename) const;
-			
-			// Takes any file Assimp can. First mesh of file only. No bones.
-			bool load_mem(const std::string&, const std::string& name = "");
-			bool load_file(const std::string& filename, const std::string& name = "");
+		// Takes any file Assimp can. First mesh of file only. No bones.
+		// bool load_mem(const std::string&, const std::string& name = "");
+		bool load_file(const std::string& filename, const std::string& name = "");
 
-			void normalize();
-			void transform(const noob::mat4& transform);
-			void to_origin();
-			void translate(const noob::vec3&);
-			void rotate(const noob::versor&);
-			void scale(const noob::vec3&);
-			
-			noob::bbox get_bbox() const { return bbox_info; }
+		void normalize();
+		// void transform(const noob::mat4& transform);
+		// void to_origin();
+		// void translate(const noob::vec3&);
+		// void rotate(const noob::versor&);
+		// void scale(const noob::vec3&);
+
+		noob::bbox get_bbox() const { return bbox_info; }
 
 
 		protected:
-			bool load_assimp(const aiScene* scene, const std::string& name);
-			TriMesh to_half_edges() const;
-			void from_half_edges(TriMesh);
-			void from_half_edges(PolyMesh);
+		// bool load_assimp(const aiScene* scene, const std::string& name);
+		TriMesh to_half_edges() const;
+		void from_half_edges(TriMesh);
+		void from_half_edges(PolyMesh);
 
-			std::vector<noob::vec3> vertices;
-			std::vector<noob::vec3> normals;
-			std::vector<noob::vec3> texcoords;
-			std::vector<uint32_t> indices;
+		// std::vector<noob::vec3> vertices;
+		// std::vector<noob::vec3> normals;
+		// std::vector<noob::vec3> texcoords;
+		// std::vector<uint32_t> indices;
 
-			static constexpr aiPostProcessSteps post_process = static_cast<aiPostProcessSteps>(aiProcessPreset_TargetRealtime_Fast | aiProcess_CalcTangentSpace | aiProcess_ImproveCacheLocality | aiProcess_FindInstances | aiProcess_FixInfacingNormals); 
-			noob::bbox bbox_info;
-			bool volume_calculated;
-			double volume;
+		// static constexpr aiPostProcessSteps post_process = static_cast<aiPostProcessSteps>(aiProcessPreset_TargetRealtime_Fast | aiProcess_CalcTangentSpace | aiProcess_ImproveCacheLocality | aiProcess_FindInstances | aiProcess_FixInfacingNormals); 
+
+		Eigen::Matrix3Xd V;
+		Eigen::Matrix3Xd N;
+		Eigen::Matrix3Xi F;
+
+		noob::bbox bbox_info;
+		bool volume_calculated;
+		double volume;
 
 	};
 }

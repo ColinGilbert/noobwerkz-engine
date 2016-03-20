@@ -24,6 +24,8 @@ if (DEFINED NOOB_PLATFORM_LINUX)
 	include_directories(lib/glfw/include)	
 endif()
 
+include_directories(lib/libigl/include/igl)
+
 include_directories(lib/freetype/include)
 add_subdirectory(lib/freetype)
 
@@ -209,8 +211,9 @@ list (APPEND bullet_src
 include_directories(lib/polyvox/include)
 
 
-include_directories(lib/eigen)
-add_subdirectory(lib/rbdl)
+#include_directories(lib/eigen)
+include_directories(lib/eigen/src)
+# add_subdirectory(lib/rbdl)
 
 # TODO: Remove
 include_directories(lib/csgjs-cpp)
@@ -289,6 +292,7 @@ list(APPEND bgfx_utils_src
 	)
 
 include_directories(lib/variant)
+
 include_directories(lib/recastnavigation/Detour/Include)
 include_directories(lib/recastnavigation/Recast/Include)
 include_directories(lib/recastnavigation/RecastDemo/Include)
@@ -426,7 +430,7 @@ list(APPEND common_src
 	common/NoobUtils.cpp
 	common/EditorUtils.cpp
 	common/VoxelWorld.cpp
-	common/VoxelWorldStable.cpp
+	# common/VoxelWorldStable.cpp
 	common/ActiveMesh.cpp
 	common/UIFont.cpp
 	common/GUI.cpp
@@ -439,7 +443,7 @@ list(APPEND common_src
 	common/BasicModel.cpp
 	common/AnimatedModel.cpp
 	common/SkeletalAnim.cpp
-	common/ModelLoader.cpp
+	# common/ModelLoader.cpp
 	common/drawing/TriplanarGradientMapLit.cpp
 	common/drawing/TriplanarGradientMap.cpp
 	common/drawing/BasicRenderer.cpp
@@ -481,7 +485,7 @@ add_executable(NoobEdit ${user_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx
 
 
 
-target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r ${Boost_LIBRARIES})
+target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype rt dl pthread m ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r ${Boost_LIBRARIES})
 
 if (DEFINED NOOB_PLATFORM_LINUX)
 	target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES})	

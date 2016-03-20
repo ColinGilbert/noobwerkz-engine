@@ -14,33 +14,40 @@
 #include "BasicMesh.hpp"
 #include "format.h"
 
-//#include "VHACD.h"
 
+#include <igl/read_triangle_mesh.h>
+#include <igl/write_triangle_mesh.h>
 
-#include <Eigen/Geometry>
 
 noob::vec3 noob::basic_mesh::get_vertex(unsigned int i)
 {
-	if (i > vertices.size())
+	if (i > V.size())
 	{
 		logger::log("[BasicMesh] - Attempting to get invalid vertex");
-		return vertices[0];
+		return noob::vec3(V.col(0));
 	}
-	else return vertices[i];
+	else
+	{
+		return noob::vec3(V.col(i));
+	}
 }
 
 
 noob::vec3 noob::basic_mesh::get_normal(unsigned int i)
 {
-	if (i > normals.size())
+	if (i > N.size())
 	{
 		logger::log("[BasicMesh] - Attempting to get invalid normal");
-		return normals[0];
+		//Eigen::Vector3d pp = N[0];
+		return noob::vec3(N.col(i));
 	}
-	else return normals[i];
+	else
+	{
+		return noob::vec3(N.col(i));
+	}
 }
 
-
+/*
 noob::vec3 noob::basic_mesh::get_texcoord(unsigned int i)
 {
 	if (i > texcoords.size())
@@ -103,9 +110,7 @@ void noob::basic_mesh::set_index(unsigned int i, unsigned int v)
 	else indices[i] = static_cast<uint32_t>(v);
 
 }
-
-
-
+*/
 
 double noob::basic_mesh::get_volume()
 {
@@ -116,17 +121,18 @@ double noob::basic_mesh::get_volume()
 		// Woot alma mater! (... Soon :P)
 		// The volume of the tetrahedron with vertices (0 ,0 ,0), (a1 ,a2 ,a3), (b1, b2, b3) and (c1, c2, c3) is [a1b2c3 + a2b3c1 + a3b1c2 - a1b3c2 - a2b1c3 - a3b2c1] / 6.
 		double accum = 0.0;
-		for (uint32_t i = 0; i < indices.size(); i += 3)
+		for (size_t i = 0; i < F.size(); ++i)
 		{
-			noob::vec3 first = vertices[i];
-			noob::vec3 second = vertices[i+1];
-			noob::vec3 third = vertices[i+2];
+			Eigen::Vector3i ff = F.col(i);
+			noob::vec3 first(V.col(ff[0]));
+			noob::vec3 second(V.col(ff[1])); // = vertices[i+1];
+			noob::vec3 third(V.col(ff[2])); // = vertices[i+2];
 
 			accum += ((static_cast<double>(first.v[0]) * static_cast<double>(second.v[1]) * static_cast<double>(third.v[2])) + (static_cast<double>(first.v[1]) * static_cast<double>(second.v[2]) * static_cast<double>(third.v[0])) + (static_cast<double>(first.v[2]) * static_cast<double>(second.v[0]) * static_cast<double>(third.v[1])) - (static_cast<double>(first.v[0]) * static_cast<double>(second.v[2]) * static_cast<double>(third.v[1])) - (static_cast<double>(first.v[1]) * static_cast<double>(second.v[0]) * static_cast<double>(third.v[2])) - (static_cast<double>(first.v[2]) * static_cast<double>(second.v[1]) * static_cast<double>(third.v[0]))) / 6.0;
 
 		}
 		volume_calculated = true;
-		return accum;
+		volume = accum;
 	}
 
 	return volume;
@@ -163,11 +169,11 @@ noob::basic_mesh noob::basic_mesh::decimate(size_t num_verts) const
 
 void noob::basic_mesh::normalize() 
 {
-	std::string temp = save();
-	load_mem(temp);
+	// std::string temp = save();
+	// load_mem(temp);
 }
 
-
+/*
 // TODO
 void noob::basic_mesh::to_origin()
 {
@@ -179,8 +185,8 @@ void noob::basic_mesh::to_origin()
 	normalize();
 
 }
-
-
+*/
+/*
 std::string noob::basic_mesh::save() const
 {
 	fmt::MemoryWriter w;
@@ -196,125 +202,29 @@ std::string noob::basic_mesh::save() const
 
 	return w.str();
 }
+*/
 
-
-void noob::basic_mesh::save(const std::string& filename) const
+bool noob::basic_mesh::save(const std::string& filename) const
 {
-	// logger::log("[Mesh] - save() - begin");
-	TriMesh half_edges = to_half_edges();
-	// logger::log("[Mesh] - save() - half-edges created");
-	OpenMesh::IO::write_mesh(half_edges, filename);
+	return igl::write_triangle_mesh(filename, V, F);
 }
 
-
+/*
 bool noob::basic_mesh::load_mem(const std::string& file, const std::string& name)
 {
 	const aiScene* scene = aiImportFileFromMemory(file.c_str(), file.size(), post_process, "");//aiProcessPreset_TargetRealtime_Fast | aiProcess_FixInfacingNormals, "");
 	return load_assimp(scene, name);
 }
-
+*/
 
 bool noob::basic_mesh::load_file(const std::string& filename, const std::string& name)
 {
-	// logger::log(fmt::format("[Mesh] loading file {0}", filename ));
-	const aiScene* scene = aiImportFile(filename.c_str(), post_process);//aiProcessPreset_TargetRealtime_Fast | aiProcess_FixInfacingNormals);
-	return load_assimp(scene, name);	
+
+	return igl::read_triangle_mesh(filename, V, F);
 }
 
 
-bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name)
-{
-	// logger::log("[Mesh] load() - begin");
-	if (!scene)
-	{
-		logger::log(fmt::format("[Mesh] load({0}) - cannot open", name));
-		return false;
-	}
-
-	vertices.clear();
-	indices.clear();
-	normals.clear();
-
-	const aiMesh* mesh_data = scene->mMeshes[0];
-
-	// logger::log(fmt::format("[Mesh] load({0}) - Attempting to obtain mesh data", name));
-
-	size_t num_verts = mesh_data->mNumVertices;
-	size_t num_faces = mesh_data->mNumFaces;
-	// TODO: Fix?
-	// auto num_indices = mesh_data->mNumFaces / 3;
-
-	bool has_normals = mesh_data->HasNormals();
-	//logger::log(fmt::format("[Mesh] load({0}) - Mesh has {1} verts, normals? {2}", name, num_verts, has_normals));
-
-	bool has_texcoords = mesh_data->HasTextureCoords(0);
-	// double accum_x, accum_y, accum_z = 0.0f;
-	bbox_info.min = bbox_info.max = bbox_info.center = noob::vec3(0.0, 0.0, 0.0);	
-
-	for (size_t n = 0; n < num_verts; ++n)
-	{
-		aiVector3D pt = mesh_data->mVertices[n];
-		noob::vec3 v;
-		v.v[0] = pt[0];
-		v.v[1] = pt[1];
-		v.v[2] = pt[2];
-		vertices.push_back(v);
-
-		bbox_info.min[0] = std::min(bbox_info.min[0], v[0]);
-		bbox_info.min[1] = std::min(bbox_info.min[1], v[1]);
-		bbox_info.min[2] = std::min(bbox_info.min[2], v[2]);
-
-		bbox_info.max[0] = std::max(bbox_info.max[0], v[0]);
-		bbox_info.max[1] = std::max(bbox_info.max[1], v[1]);
-		bbox_info.max[2] = std::max(bbox_info.max[2], v[2]);
-
-		if (has_normals)
-		{
-			aiVector3D normal = mesh_data->mNormals[n];
-			noob::vec3 norm;
-			norm.v[0] = normal[0];
-			norm.v[1] = normal[1];
-			norm.v[2] = normal[2];
-			normals.push_back(norm);
-		}
-		if (has_texcoords)
-		{
-			aiVector3D tex = mesh_data->mTextureCoords[0][n];
-			noob::vec3 uvw;
-			uvw.v[0] = tex[0];
-			uvw.v[1] = tex[1];
-			uvw.v[2] = tex[2];
-			texcoords.push_back(uvw);
-		}
-		else
-		{
-			texcoords.push_back(noob::vec3(0.0, 0.0, 0.0));
-		}
-	}
-
-
-	if (num_verts == 0)
-	{
-		num_verts = 1;
-	}
-
-	bbox_info.center = noob::vec3((bbox_info.max[0] + bbox_info.min[0])/2, (bbox_info.max[1] + bbox_info.min[1])/2, (bbox_info.max[2] + bbox_info.min[2])/2);
-
-	for (size_t n = 0; n < num_faces; ++n)
-	{
-		// Allows for degenerate triangles. Worth keeping?
-		const struct aiFace* face = &mesh_data->mFaces[n];
-		indices.push_back(face->mIndices[0]);
-		indices.push_back(face->mIndices[1]);
-		indices.push_back(face->mIndices[2]);
-	}
-
-	aiReleaseImport(scene);
-
-	return true;
-}
-
-
+/*
 void noob::basic_mesh::transform(const noob::mat4& transform)
 {
 
@@ -359,24 +269,28 @@ void noob::basic_mesh::scale(const noob::vec3& scale)
 	transform(t.get_matrix());
 
 }
-
+*/
 
 TriMesh noob::basic_mesh::to_half_edges() const
 {
 	TriMesh half_edges;
 	std::vector<TriMesh::VertexHandle> vert_handles;
 
-	for (auto v : vertices)
+	for (size_t i = 0; i < V.size(); ++i)
 	{
-		vert_handles.push_back(half_edges.add_vertex(TriMesh::Point(v.v[0], v.v[1], v.v[2])));
+		Eigen::Vector3d pp = V.col(i);
+		vert_handles.push_back(half_edges.add_vertex(TriMesh::Point(static_cast<float>(pp[0]), static_cast<float>(pp[1]), static_cast<float>(pp[2]))));
 	}
 
-	for (size_t i = 0; i < indices.size(); i = i + 3)
+	for (size_t i = 0; i < F.size(); ++i)
 	{
 		std::vector<TriMesh::VertexHandle> face_verts;
-		face_verts.push_back(vert_handles[indices[i]]);
-		face_verts.push_back(vert_handles[indices[i+1]]);
-		face_verts.push_back(vert_handles[indices[i+2]]);
+		Eigen::Vector3i ff = F.col(i);
+
+		face_verts.push_back(vert_handles[ff[0]]);
+		face_verts.push_back(vert_handles[ff[1]]);
+		face_verts.push_back(vert_handles[ff[2]]);
+		
 		half_edges.add_face(face_verts);
 	}
 
@@ -386,32 +300,55 @@ TriMesh noob::basic_mesh::to_half_edges() const
 
 void noob::basic_mesh::from_half_edges(TriMesh half_edges)
 {
-	std::ostringstream oss;
-	if (!OpenMesh::IO::write_mesh(half_edges, oss, "temp.off")) 
+	V.resize(Eigen::NoChange, half_edges.n_vertices());
+	for (TriMesh::ConstVertexIter v_it = half_edges.vertices_begin(); v_it != half_edges.vertices_end(); ++v_it)
 	{
-		logger::log("[BasicMesh] Could not import from OpenMesh!");
+		TriMesh::Point p = half_edges.point(*v_it);
+		size_t col_index = v_it->idx();
+		V.setConstant(col_index, 0, p[0]);
+		V.setConstant(col_index, 1, p[1]);
+		V.setConstant(col_index, 2, p[2]);
 	}
-	else
+
+	F.resize(Eigen::NoChange, half_edges.n_faces());
+	for (TriMesh::ConstFaceIter f_it = half_edges.faces_begin(); f_it != half_edges.faces_end(); ++f_it)
 	{
-		load_mem(oss.str());
+		size_t tri_vert_index = 0;
+		for (TriMesh::FaceVertexCCWIter fv_it = half_edges.fv_ccwiter(*f_it); fv_it.is_valid(); ++fv_it)
+		{
+			F.setConstant(f_it->idx(), tri_vert_index, fv_it->idx());
+			++tri_vert_index;
+		}
 	}
 }
 
 
-
-void noob::basic_mesh::from_half_edges(PolyMesh half_edges)
+void noob::basic_mesh::from_half_edges(PolyMesh _half_edges)
 {
-	std::ostringstream oss;
-	PolyMesh _half_edges = half_edges;
-	_half_edges.triangulate();
-	_half_edges.garbage_collection();
+	// std::ostringstream oss;
+	PolyMesh half_edges = _half_edges;
+	half_edges.triangulate();
+	half_edges.garbage_collection();
+	
+	V.resize(Eigen::NoChange, half_edges.n_vertices());
+	for (PolyMesh::ConstVertexIter v_it = half_edges.vertices_begin(); v_it != half_edges.vertices_end(); ++v_it)
+	{
+		PolyMesh::Point p = half_edges.point(*v_it);
+		size_t col_index = v_it->idx();
+		V.setConstant(col_index, 0, p[0]);
+		V.setConstant(col_index, 1, p[1]);
+		V.setConstant(col_index, 2, p[2]);
+	}
 
-	if (!OpenMesh::IO::write_mesh(half_edges, oss, "temp.off")) 
+	F.resize(Eigen::NoChange, half_edges.n_faces());
+	for (PolyMesh::ConstFaceIter f_it = half_edges.faces_begin(); f_it != half_edges.faces_end(); ++f_it)
 	{
-		logger::log("[BasicMesh] Could not import from OpenMesh!");
+		size_t tri_vert_index = 0;
+		for (PolyMesh::FaceVertexCCWIter fv_it = half_edges.fv_ccwiter(*f_it); fv_it.is_valid(); ++fv_it)
+		{
+			F.setConstant(f_it->idx(), tri_vert_index, fv_it->idx());
+			++tri_vert_index;
+		}
 	}
-	else
-	{
-		load_mem(oss.str());
-	}
+	//from_half_edges(reinterpret_cast<TriMesh>(_half_edges));
 }

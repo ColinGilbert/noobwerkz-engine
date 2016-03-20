@@ -12,7 +12,6 @@ noob::basic_mesh noob::mesh_utils::sphere(float radius)
 }
 
 
-
 noob::basic_mesh noob::mesh_utils::cone(float radius, float height, size_t segments)
 {
 	TriMesh half_edges;
@@ -80,6 +79,7 @@ noob::basic_mesh noob::mesh_utils::cone(float radius, float height, size_t segme
 	// logger::log(fmt::format("Created cone with height = {0}, radius = {1}, and {2} segments.", height, radius, _segments));
 	return mesh;
 }
+
 
 noob::basic_mesh noob::mesh_utils::cylinder(float radius, float height, size_t segments)
 {

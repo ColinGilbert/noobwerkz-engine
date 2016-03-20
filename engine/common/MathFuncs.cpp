@@ -50,6 +50,13 @@ namespace noob
 		v[2] = vv.v[2];
 	}
 
+	vec3::vec3(const Eigen::Vector3d& vv)
+	{
+		v[0] = vv[0];
+		v[1] = vv[1];
+		v[2] = vv[2];
+	}
+
 	vec3::vec3(const btVector3& btVec)
 	{
 		v[0] = btVec[0];
@@ -163,11 +170,12 @@ namespace noob
 	   m[12] = 0.0f ; m[13] = 0.0f ; m[14] = 0.0f ; m[15] = 1.0f;
 	   }
 	   */
+/*	
 	mat4::mat4(const aiMatrix4x4& AssimpMatrix)
 	{
 		mat4(*AssimpMatrix[0], *AssimpMatrix[1], *AssimpMatrix[2], *AssimpMatrix[3], *AssimpMatrix[4], *AssimpMatrix[5], *AssimpMatrix[6], *AssimpMatrix[7], *AssimpMatrix[8], *AssimpMatrix[9], *AssimpMatrix[10], *AssimpMatrix[11], *AssimpMatrix[12], *AssimpMatrix[13], *AssimpMatrix[14], *AssimpMatrix[15]);
 	}
-
+*/
 	// TODO: Test this shit
 	/*
 	   mat4::mat4(const dMatrix& NewtonMatrix)
