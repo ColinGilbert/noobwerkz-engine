@@ -17,9 +17,10 @@
 
 #include <igl/read_triangle_mesh.h>
 #include <igl/write_triangle_mesh.h>
+#include <igl/per_vertex_normals.h>
 
 
-noob::vec3 noob::basic_mesh::get_vertex(unsigned int i)
+noob::vec3 noob::basic_mesh::get_vertex(size_t i)
 {
 	if (i > V.size())
 	{
@@ -33,7 +34,7 @@ noob::vec3 noob::basic_mesh::get_vertex(unsigned int i)
 }
 
 
-noob::vec3 noob::basic_mesh::get_normal(unsigned int i)
+noob::vec3 noob::basic_mesh::get_normal(size_t i)
 {
 	if (i > N.size())
 	{
@@ -48,69 +49,69 @@ noob::vec3 noob::basic_mesh::get_normal(unsigned int i)
 }
 
 /*
-noob::vec3 noob::basic_mesh::get_texcoord(unsigned int i)
-{
-	if (i > texcoords.size())
-	{
-		logger::log("[BasicMesh] - Attempting to get invalid texcoord");
-		return texcoords[0];
-	}
-	else return texcoords[i];
-}
+   noob::vec3 noob::basic_mesh::get_texcoord(unsigned int i)
+   {
+   if (i > texcoords.size())
+   {
+   logger::log("[BasicMesh] - Attempting to get invalid texcoord");
+   return texcoords[0];
+   }
+   else return texcoords[i];
+   }
 
 
-unsigned int noob::basic_mesh::get_index(unsigned int i)
-{
-	if (i > indices.size())
-	{
-		logger::log("[BasicMesh] - Attempting to get invalid index");
-		return indices[0];
-	}
-	else return indices[i];
+   unsigned int noob::basic_mesh::get_index(unsigned int i)
+   {
+   if (i > indices.size())
+   {
+   logger::log("[BasicMesh] - Attempting to get invalid index");
+   return indices[0];
+   }
+   else return indices[i];
 
-}
-
-
-void noob::basic_mesh::set_vertex(unsigned int i, const noob::vec3& v)
-{
-	if (i > vertices.size())
-	{
-		logger::log("[BasicMesh] - Attempting to set invalid vertex");
-	}
-	else vertices[i] = v;
-}
+   }
 
 
-void noob::basic_mesh::set_normal(unsigned int i, const noob::vec3& v)
-{
-	if (i > normals.size())
-	{
-		logger::log("[BasicMesh] - Attempting to set invalid normal");
-	}
-	else normals[i] = v;
-}
+   void noob::basic_mesh::set_vertex(unsigned int i, const noob::vec3& v)
+   {
+   if (i > vertices.size())
+   {
+   logger::log("[BasicMesh] - Attempting to set invalid vertex");
+   }
+   else vertices[i] = v;
+   }
 
 
-void noob::basic_mesh::set_texcoord(unsigned int i, const noob::vec3& v)
-{
-	if (i > texcoords.size())
-	{
-		logger::log("[BasicMesh] - Attempting to set invalid texcoord");
-	}
-	else texcoords[i] = v;
-}
+   void noob::basic_mesh::set_normal(unsigned int i, const noob::vec3& v)
+   {
+   if (i > normals.size())
+   {
+   logger::log("[BasicMesh] - Attempting to set invalid normal");
+   }
+   else normals[i] = v;
+   }
 
 
-void noob::basic_mesh::set_index(unsigned int i, unsigned int v)
-{
-	if (i > indices.size())
-	{
-		logger::log("[BasicMesh] - Attempting to set invalid index");
-	}
-	else indices[i] = static_cast<uint32_t>(v);
+   void noob::basic_mesh::set_texcoord(unsigned int i, const noob::vec3& v)
+   {
+   if (i > texcoords.size())
+   {
+   logger::log("[BasicMesh] - Attempting to set invalid texcoord");
+   }
+   else texcoords[i] = v;
+   }
 
-}
-*/
+
+   void noob::basic_mesh::set_index(unsigned int i, unsigned int v)
+   {
+   if (i > indices.size())
+   {
+   logger::log("[BasicMesh] - Attempting to set invalid index");
+   }
+   else indices[i] = static_cast<uint32_t>(v);
+
+   }
+   */
 
 double noob::basic_mesh::get_volume()
 {
@@ -139,10 +140,44 @@ double noob::basic_mesh::get_volume()
 }
 
 
+size_t noob::basic_mesh::num_verts() const
+{
+	return V.size();
+}
+
+
+size_t noob::basic_mesh::num_faces() const
+{
+	return F.size();
+}
+
+
+std::array<noob::vec3, 3> noob::basic_mesh::get_face_verts(size_t f) const
+{
+	std::array<noob::vec3, 3> verts;
+	Eigen::Vector3i tri = F.col(f);
+	verts[0] = noob::vec3(V.col(tri[0]));
+	verts[1] = noob::vec3(V.col(tri[1]));
+	verts[2] = noob::vec3(V.col(tri[2]));
+	return verts;
+}
+
+std::array<size_t, 3> noob::basic_mesh::get_face_indices(size_t f) const
+{
+	std::array<size_t, 3> indices;
+	Eigen::Vector3i tri = F.col(f);
+	indices[0] = tri[0];
+	indices[1] = tri[1];
+	indices[2] = tri[2];
+	return indices;
+}
+
+
+
 noob::basic_mesh noob::basic_mesh::decimate(size_t num_verts) const
 {
 	//logger::log("[Mesh] decimating");
-	TriMesh half_edges = to_half_edges();
+	TriMesh half_edges = to_half_edges_tri();
 	// logger::log(fmt::format("[Mesh] decimating - Half edges generated. num verts = {0}", half_edges.n_vertices()));
 
 	OpenMesh::Decimater::DecimaterT<TriMesh> decimator(half_edges);
@@ -169,7 +204,22 @@ noob::basic_mesh noob::basic_mesh::decimate(size_t num_verts) const
 
 void noob::basic_mesh::normalize() 
 {
-	// std::string temp = save();
+	N.resize(3, V.cols());
+	igl::per_vertex_normals(V, F, igl::PerVertexNormalsWeightingType::PER_VERTEX_NORMALS_WEIGHTING_TYPE_DEFAULT, N);
+
+	// enum PerVertexNormalsWeightingType
+	// {
+	// Incident face normals have uniform influence on vertex normal
+	// PER_VERTEX_NORMALS_WEIGHTING_TYPE_UNIFORM = 0,
+	// Incident face normals are averaged weighted by area
+	// PER_VERTEX_NORMALS_WEIGHTING_TYPE_AREA = 1,
+	// Incident face normals are averaged weighted by incident angle of vertex
+	// PER_VERTEX_NORMALS_WEIGHTING_TYPE_ANGLE = 2,
+	// Area weights
+	// PER_VERTEX_NORMALS_WEIGHTING_TYPE_DEFAULT = 3,
+	// NUM_PER_VERTEX_NORMALS_WEIGHTING_TYPE = 4
+	// };
+// std::string temp = save();
 	// load_mem(temp);
 }
 
@@ -177,32 +227,32 @@ void noob::basic_mesh::normalize()
 // TODO
 void noob::basic_mesh::to_origin()
 {
-	// noob::basic_mesh temp;
-	for (size_t i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i] = (vertices[i] - bbox_info.center);
-	}
-	normalize();
+// noob::basic_mesh temp;
+for (size_t i = 0; i < vertices.size(); ++i)
+{
+vertices[i] = (vertices[i] - bbox_info.center);
+}
+normalize();
 
 }
 */
 /*
-std::string noob::basic_mesh::save() const
-{
-	fmt::MemoryWriter w;
-	w << "OFF" << "\n" << vertices.size() << " " << indices.size() / 3 << " " << 0 <<  "\n";
-	for (auto v : vertices)
-	{
-		w << v.v[0] << " " << v.v[1] << " " << v.v[2] <<  "\n";
-	}
-	for (size_t i = 0; i < indices.size(); i = i + 3)
-	{
-		w << 3 << " " << indices[i] << " " << indices[i+1] << " " << indices[i+2] << "\n";
-	}
+   std::string noob::basic_mesh::save() const
+   {
+   fmt::MemoryWriter w;
+   w << "OFF" << "\n" << vertices.size() << " " << indices.size() / 3 << " " << 0 <<  "\n";
+   for (auto v : vertices)
+   {
+   w << v.v[0] << " " << v.v[1] << " " << v.v[2] <<  "\n";
+   }
+   for (size_t i = 0; i < indices.size(); i = i + 3)
+   {
+   w << 3 << " " << indices[i] << " " << indices[i+1] << " " << indices[i+2] << "\n";
+   }
 
-	return w.str();
-}
-*/
+   return w.str();
+   }
+   */
 
 bool noob::basic_mesh::save(const std::string& filename) const
 {
@@ -210,68 +260,67 @@ bool noob::basic_mesh::save(const std::string& filename) const
 }
 
 /*
-bool noob::basic_mesh::load_mem(const std::string& file, const std::string& name)
-{
-	const aiScene* scene = aiImportFileFromMemory(file.c_str(), file.size(), post_process, "");//aiProcessPreset_TargetRealtime_Fast | aiProcess_FixInfacingNormals, "");
-	return load_assimp(scene, name);
-}
-*/
+   bool noob::basic_mesh::load_mem(const std::string& file, const std::string& name)
+   {
+   const aiScene* scene = aiImportFileFromMemory(file.c_str(), file.size(), post_process, "");//aiProcessPreset_TargetRealtime_Fast | aiProcess_FixInfacingNormals, "");
+   return load_assimp(scene, name);
+   }
+   */
 
 bool noob::basic_mesh::load_file(const std::string& filename, const std::string& name)
 {
-
 	return igl::read_triangle_mesh(filename, V, F);
 }
 
 
 /*
-void noob::basic_mesh::transform(const noob::mat4& transform)
-{
+   void noob::basic_mesh::transform(const noob::mat4& transform)
+   {
 
-	for (size_t i = 0; i < vertices.size(); i++)
-	{
-		noob::vec3 v = vertices[i];
-		noob::vec4 temp_vert(v, 1.0);
-		noob::vec4 temp_transform = transform * temp_vert;
-		noob::vec3 transformed_vert;
+   for (size_t i = 0; i < vertices.size(); i++)
+   {
+   noob::vec3 v = vertices[i];
+   noob::vec4 temp_vert(v, 1.0);
+   noob::vec4 temp_transform = transform * temp_vert;
+   noob::vec3 transformed_vert;
 
-		transformed_vert[0] = temp_transform[0];
-		transformed_vert[1] = temp_transform[1];
-		transformed_vert[2] = temp_transform[2];
+   transformed_vert[0] = temp_transform[0];
+   transformed_vert[1] = temp_transform[1];
+   transformed_vert[2] = temp_transform[2];
 
-		vertices[i] = temp_transform;
-	}
+   vertices[i] = temp_transform;
+   }
 
-	normalize();
-}
-
-
-void noob::basic_mesh::translate(const noob::vec3& translation)
-{
-	noob::transform_helper t;
-	t.translate(translation);
-	transform(t.get_matrix());
-}
+   normalize();
+   }
 
 
-void noob::basic_mesh::rotate(const noob::versor& orientation)
-{
-	noob::transform_helper t;
-	t.rotate(orientation);
-	transform(t.get_matrix());
-}
+   void noob::basic_mesh::translate(const noob::vec3& translation)
+   {
+   noob::transform_helper t;
+   t.translate(translation);
+   transform(t.get_matrix());
+   }
 
 
-void noob::basic_mesh::scale(const noob::vec3& scale)
-{
-	noob::transform_helper t;
-	t.scale(scale);
-	transform(t.get_matrix());
+   void noob::basic_mesh::rotate(const noob::versor& orientation)
+   {
+   noob::transform_helper t;
+   t.rotate(orientation);
+   transform(t.get_matrix());
+   }
 
-}
-*/
 
-TriMesh noob::basic_mesh::to_half_edges() const
+   void noob::basic_mesh::scale(const noob::vec3& scale)
+   {
+   noob::transform_helper t;
+   t.scale(scale);
+   transform(t.get_matrix());
+
+   }
+   */
+
+TriMesh noob::basic_mesh::to_half_edges_tri() const
 {
 	TriMesh half_edges;
 	std::vector<TriMesh::VertexHandle> vert_handles;
@@ -290,7 +339,34 @@ TriMesh noob::basic_mesh::to_half_edges() const
 		face_verts.push_back(vert_handles[ff[0]]);
 		face_verts.push_back(vert_handles[ff[1]]);
 		face_verts.push_back(vert_handles[ff[2]]);
-		
+
+		half_edges.add_face(face_verts);
+	}
+
+	return half_edges;
+}
+
+
+PolyMesh noob::basic_mesh::to_half_edges_poly() const
+{
+	PolyMesh half_edges;
+	std::vector<PolyMesh::VertexHandle> vert_handles;
+
+	for (size_t i = 0; i < V.size(); ++i)
+	{
+		Eigen::Vector3d pp = V.col(i);
+		vert_handles.push_back(half_edges.add_vertex(PolyMesh::Point(static_cast<float>(pp[0]), static_cast<float>(pp[1]), static_cast<float>(pp[2]))));
+	}
+
+	for (size_t i = 0; i < F.size(); ++i)
+	{
+		std::vector<PolyMesh::VertexHandle> face_verts;
+		Eigen::Vector3i ff = F.col(i);
+
+		face_verts.push_back(vert_handles[ff[0]]);
+		face_verts.push_back(vert_handles[ff[1]]);
+		face_verts.push_back(vert_handles[ff[2]]);
+
 		half_edges.add_face(face_verts);
 	}
 
@@ -300,7 +376,7 @@ TriMesh noob::basic_mesh::to_half_edges() const
 
 void noob::basic_mesh::from_half_edges(TriMesh half_edges)
 {
-	V.resize(Eigen::NoChange, half_edges.n_vertices());
+	V.resize(3, half_edges.n_vertices());
 	for (TriMesh::ConstVertexIter v_it = half_edges.vertices_begin(); v_it != half_edges.vertices_end(); ++v_it)
 	{
 		TriMesh::Point p = half_edges.point(*v_it);
@@ -309,8 +385,7 @@ void noob::basic_mesh::from_half_edges(TriMesh half_edges)
 		V.setConstant(col_index, 1, p[1]);
 		V.setConstant(col_index, 2, p[2]);
 	}
-
-	F.resize(Eigen::NoChange, half_edges.n_faces());
+	F.resize(3, half_edges.n_faces());
 	for (TriMesh::ConstFaceIter f_it = half_edges.faces_begin(); f_it != half_edges.faces_end(); ++f_it)
 	{
 		size_t tri_vert_index = 0;
@@ -320,6 +395,9 @@ void noob::basic_mesh::from_half_edges(TriMesh half_edges)
 			++tri_vert_index;
 		}
 	}
+	// N.resize(3, half_edges.n_vertices());
+	igl::per_vertex_normals(V, F, igl::PerVertexNormalsWeightingType::PER_VERTEX_NORMALS_WEIGHTING_TYPE_DEFAULT, N);
+
 }
 
 
@@ -329,8 +407,8 @@ void noob::basic_mesh::from_half_edges(PolyMesh _half_edges)
 	PolyMesh half_edges = _half_edges;
 	half_edges.triangulate();
 	half_edges.garbage_collection();
-	
-	V.resize(Eigen::NoChange, half_edges.n_vertices());
+
+	//V.resize(3, half_edges.n_vertices());
 	for (PolyMesh::ConstVertexIter v_it = half_edges.vertices_begin(); v_it != half_edges.vertices_end(); ++v_it)
 	{
 		PolyMesh::Point p = half_edges.point(*v_it);
@@ -340,7 +418,7 @@ void noob::basic_mesh::from_half_edges(PolyMesh _half_edges)
 		V.setConstant(col_index, 2, p[2]);
 	}
 
-	F.resize(Eigen::NoChange, half_edges.n_faces());
+	// F.resize(3, half_edges.n_faces());
 	for (PolyMesh::ConstFaceIter f_it = half_edges.faces_begin(); f_it != half_edges.faces_end(); ++f_it)
 	{
 		size_t tri_vert_index = 0;
@@ -350,5 +428,8 @@ void noob::basic_mesh::from_half_edges(PolyMesh _half_edges)
 			++tri_vert_index;
 		}
 	}
+	// N.resize(3, half_edges.n_vertices());
+	igl::per_vertex_normals(V, F, igl::PerVertexNormalsWeightingType::PER_VERTEX_NORMALS_WEIGHTING_TYPE_DEFAULT, N);
+
 	//from_half_edges(reinterpret_cast<TriMesh>(_half_edges));
 }

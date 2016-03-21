@@ -73,9 +73,13 @@ namespace noob
 		   }
 		   */
 
+
+
 		// Proxies for AngelScript
-		noob::vec3 get_vertex(unsigned int);
-		noob::vec3 get_normal(unsigned int);
+		noob::vec3 get_vertex(size_t);
+		
+		noob::vec3 get_normal(size_t);
+		
 		// noob::vec3 get_texcoord(unsigned int);
 		//unsigned int get_index(unsigned int);
 
@@ -86,6 +90,14 @@ namespace noob
 
 		double get_volume();
 
+		size_t num_verts() const;
+
+		size_t num_faces() const;		
+
+		std::array<noob::vec3, 3> get_face_verts(size_t) const;
+		
+		std::array<size_t, 3> get_face_indices(size_t) const;
+		
 		noob::basic_mesh decimate(size_t num_verts) const;
 
 		// std::string save() const;
@@ -104,12 +116,15 @@ namespace noob
 
 		noob::bbox get_bbox() const { return bbox_info; }
 
+		TriMesh to_half_edges_tri() const;
+		PolyMesh to_half_edges_poly() const;
+		
+		void from_half_edges(TriMesh);
+		void from_half_edges(PolyMesh);
 
 		protected:
 		// bool load_assimp(const aiScene* scene, const std::string& name);
-		TriMesh to_half_edges() const;
-		void from_half_edges(TriMesh);
-		void from_half_edges(PolyMesh);
+
 
 		// std::vector<noob::vec3> vertices;
 		// std::vector<noob::vec3> normals;
@@ -118,9 +133,9 @@ namespace noob
 
 		// static constexpr aiPostProcessSteps post_process = static_cast<aiPostProcessSteps>(aiProcessPreset_TargetRealtime_Fast | aiProcess_CalcTangentSpace | aiProcess_ImproveCacheLocality | aiProcess_FindInstances | aiProcess_FixInfacingNormals); 
 
-		Eigen::Matrix3Xd V;
-		Eigen::Matrix3Xd N;
-		Eigen::Matrix3Xi F;
+		Eigen::MatrixXd V;
+		Eigen::MatrixXd N;
+		Eigen::MatrixXi F;
 
 		noob::bbox bbox_info;
 		bool volume_calculated;

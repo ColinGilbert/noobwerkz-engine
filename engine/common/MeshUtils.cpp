@@ -288,14 +288,25 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 
 	noob::basic_mesh mesh;
 
+	mesh.V.resize(Eigen::NoChange, hull_result.mNumOutputVertices);
+
+	assert(hull_result.mNumIndices % 3 == 0);
+
+	mesh.F.resize(Eigen::NoChange, hull_result.mNumIndices / 3);
 	for (unsigned int i = 0; i < hull_result.mNumOutputVertices; ++i)
 	{
-		mesh.vertices.push_back(hull_result.m_OutputVertices[i]);
+		auto v = hull_result.m_OutputVertices[i];
+		mesh.V(i, 0) = v.x();
+		mesh.V(i, 1) = v.y();
+		mesh.V(i, 2) = v.z();
 	}
 
-	for (unsigned int i = 0; i < hull_result.mNumIndices; ++i)
+	unsigned int num_faces = hull_result.mNumIndices / 3;
+	for (unsigned int i = 0; i < num_faces; ++i)
 	{
-		mesh.indices.push_back(static_cast<uint16_t>(hull_result.m_Indices[i]));
+		mesh.F(i, 0) = hull_result.m_Indices[i];
+		mesh.F(i, 1) = hull_result.m_Indices[i+1];
+		mesh.F(i, 2) = hull_result.m_Indices[i+2];
 	}
 
 	mesh.normalize();

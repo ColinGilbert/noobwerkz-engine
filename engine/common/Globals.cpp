@@ -13,15 +13,15 @@ bool noob::globals::init()
 	ww << "[Globals] unit sphere shape handle " << unit_sphere_shape.get_inner() << ", unit cube shape handle " << unit_cube_shape.get_inner() << ", unit cylinder shape handle " << unit_cylinder_shape.get_inner() << ", unit cone shape handle " << unit_cone_shape.get_inner();
 	logger::log(ww.str());
 
-	// logger::log("[Globals] Making unit sphere model");
+	logger::log("[Globals] Making unit sphere model");
 	unit_sphere_model = model_from_mesh(noob::mesh_utils::sphere(0.5), "unit-sphere");//basic_models.add(std::move(temp));
-	// logger::log("[Globals] Making unit cube model");
+	logger::log("[Globals] Making unit cube model");
 	unit_cube_model = model_from_mesh(noob::mesh_utils::box(1.0, 1.0, 1.0), "unit-cube");
 	// unit_cube_model = model_from_mesh(noob::mesh_utils::box(1.0, 1.0, 1.0));
-	// logger::log("[Globals] Making unit cylinder model");
+	logger::log("[Globals] Making unit cylinder model");
 	// unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(1.0, 0.5));
 	unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(0.5, 1.0), "unit-cylinder");
-	// logger::log("[Globals] Making unit cone model");
+	logger::log("[Globals] Making unit cone model");
 	unit_cone_model = model_from_mesh(noob::mesh_utils::cone(0.5, 1.0), "unit-cone");
 	
 	fmt::MemoryWriter ww_2;
@@ -368,7 +368,7 @@ noob::shapes_holder::handle noob::globals::static_trimesh_shape(const noob::basi
 	if (search == names_to_shapes.end())
 	{
 		std::unique_ptr<noob::shape> temp_shape_ptr = std::make_unique<noob::shape>();
-		temp_shape_ptr->trimesh(&m);
+		temp_shape_ptr->trimesh(m);
 		return shapes.add(std::move(temp_shape_ptr));
 	}
 	return search->second;

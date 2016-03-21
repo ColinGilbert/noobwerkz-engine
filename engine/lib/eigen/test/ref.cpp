@@ -34,6 +34,18 @@ inline void on_temporary_creation(int) {
 
 // test Ref.h
 
+// Deal with i387 extended precision
+#if EIGEN_ARCH_i386 && !(EIGEN_ARCH_x86_64)
+
+#if EIGEN_COMP_GNUC_STRICT && EIGEN_GNUC_AT_LEAST(4,4)
+#pragma GCC optimize ("-ffloat-store")
+#else
+#undef VERIFY_IS_EQUAL
+#define VERIFY_IS_EQUAL(X,Y) VERIFY_IS_APPROX(X,Y)
+#endif
+
+#endif
+
 template<typename MatrixType> void ref_matrix(const MatrixType& m)
 {
   typedef typename MatrixType::Index Index;
@@ -70,7 +82,6 @@ template<typename MatrixType> void ref_matrix(const MatrixType& m)
   m2.block(i,j,brows,bcols).setRandom();
   rm2 = m2.block(i,j,brows,bcols);
   VERIFY_IS_EQUAL(m1, m2);
-  
   
   ConstRefDynMat rm3 = m1.block(i,j,brows,bcols);
   m1.block(i,j,brows,bcols) *= 2;
@@ -229,6 +240,28 @@ void call_ref()
   VERIFY_EVALUATION_COUNT( call_ref_7(c,c), 0);
 }
 
+typedef Matrix<double,Dynamic,Dynamic,RowMajor> RowMatrixXd;
+int test_ref_overload_fun1(Ref<MatrixXd> )       { return 1; }
+int test_ref_overload_fun1(Ref<RowMatrixXd> )    { return 2; }
+int test_ref_overload_fun1(Ref<MatrixXf> )       { return 3; }
+
+int test_ref_overload_fun2(Ref<const MatrixXd> ) { return 4; }
+int test_ref_overload_fun2(Ref<const MatrixXf> ) { return 5; }
+
+// See also bug 969
+void test_ref_overloads()
+{
+  MatrixXd Ad, Bd;
+  RowMatrixXd rAd, rBd;
+  VERIFY( test_ref_overload_fun1(Ad)==1 );
+  VERIFY( test_ref_overload_fun1(rAd)==2 );
+  
+  MatrixXf Af, Bf;
+  VERIFY( test_ref_overload_fun2(Ad)==4 );
+  VERIFY( test_ref_overload_fun2(Ad+Bd)==4 );
+  VERIFY( test_ref_overload_fun2(Af+Bf)==5 );
+}
+
 void test_ref()
 {
   for(int i = 0; i < g_repeat; i++) {
@@ -249,4 +282,6 @@ void test_ref()
     CALL_SUBTEST_5( ref_matrix(MatrixXi(internal::random<int>(1,10),internal::random<int>(1,10))) );
     CALL_SUBTEST_6( call_ref() );
   }
+  
+  CALL_SUBTEST_7( test_ref_overloads() );
 }

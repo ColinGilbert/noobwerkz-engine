@@ -267,13 +267,9 @@ void noob::active_mesh::from_basic_mesh(const noob::basic_mesh& m)
 {
 	reset();
 
-	std::array<noob::vec3, 3> faces;
-	for (size_t i = 0; i < m.indices.size(); i += 3)
+	for (size_t i = 0; i < m.num_faces(); ++i)
 	{
-		faces[0] = m.vertices[i];
-		faces[1] = m.vertices[i+1];
-		faces[2] = m.vertices[i+2];
-		add_face(faces);
+		add_face(m.get_face_verts(i));
 	}
 }
 

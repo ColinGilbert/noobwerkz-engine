@@ -85,22 +85,23 @@ void noob::shape::hull(const std::vector<noob::vec3>& points)
 }
 
 
-void noob::shape::trimesh(const noob::basic_mesh* mesh)
+void noob::shape::trimesh(const noob::basic_mesh& m)
 {
 	if (!physics_valid)
 	{
 		shape_type = noob::shape::type::TRIMESH;
 		btTriangleMesh* phyz_mesh = new btTriangleMesh();
 		
-		for (size_t i = 0; i < mesh->indices.size(); i = i + 3)
+		for (size_t i = 0; i < m.num_faces(); ++i)
 		{
-			uint16_t index_1 = static_cast<uint16_t>(mesh->indices[i]);
-			uint16_t index_2 = static_cast<uint16_t>(mesh->indices[i+1]);
-			uint16_t index_3 = static_cast<uint16_t>(mesh->indices[i+2]);
+			Eigen::Vector3i face_indices = m.F.col(i);
+			uint16_t index_1 = static_cast<uint16_t>(face_indices[0]);
+			uint16_t index_2 = static_cast<uint16_t>(face_indices[1]);
+			uint16_t index_3 = static_cast<uint16_t>(face_indices[2]);
 
-			std::array<float, 3> v1 = mesh->vertices[index_1].v;
-			std::array<float, 3> v2 = mesh->vertices[index_2].v;
-			std::array<float, 3> v3 = mesh->vertices[index_3].v;
+			std::array<float, 3> v1 = m.get_vertex(face_indices[0]).v;
+			std::array<float, 3> v2 = m.get_vertex(face_indices[1]).v;
+			std::array<float, 3> v3 = m.get_vertex(face_indices[2]).v;
 
 			btVector3 bv1 = btVector3(v1[0], v1[1], v1[2]);
 			btVector3 bv2 = btVector3(v2[0], v2[1], v2[2]);

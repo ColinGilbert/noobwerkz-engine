@@ -158,17 +158,17 @@ noob::basic_mesh noob::voxel_world::extract_cubic() const
 	return extract_region_cubic(0, 0, 0, world_width, world_height, world_depth);
 }
 		
-
+/*
 noob::basic_mesh noob::voxel_world::extract_cubic(uint8_t bitmask) const
 {
 	return extract_region_cubic(0, 0, 0, world_width, world_height, world_depth, bitmask);
 }
-
+*/
 
 noob::basic_mesh noob::voxel_world::extract_region_smooth(size_t lower_x, size_t lower_y, size_t lower_z, size_t upper_x, size_t upper_y, size_t upper_z) const
 {
 	logger::log("[VoxelWorld] extracting smooth region");
-	noob::basic_mesh world_mesh;
+	noob::basic_mesh m;
 	PolyVox::Region bounding_box(lower_x, lower_y, lower_z, upper_x, upper_y, upper_z);
 	PolyVox::Region world_region = world->getEnclosingRegion();
 	bounding_box.cropTo(world_region);
@@ -177,29 +177,39 @@ noob::basic_mesh noob::voxel_world::extract_region_smooth(size_t lower_x, size_t
 	auto decoded_mesh = PolyVox::decodeMesh(mesh);
 	size_t num_indices = decoded_mesh.getNoOfIndices();
 	size_t num_vertices = decoded_mesh.getNoOfVertices();
+	assert(num_indices % 3 == 0);	
+	size_t num_faces = num_indices / 3;
+
+	m.V.resize(Eigen::NoChange, num_vertices);
+	// m.N.resize(num_vertices);
+
+	m.F.resize(Eigen::NoChange, num_faces);
 
 	for (size_t i = 0; i < num_vertices; i++)
 	{
 		auto vertex = decoded_mesh.getVertex(i);
-		world_mesh.vertices.push_back(noob::vec3(vertex.position.getX(), vertex.position.getY(), vertex.position.getZ()));
-		//auto vert = half_edges.add_vertex(TriMesh::Point(vertex.position.getX(), vertex.position.getY(), vertex.position.getZ()));
-		//verts.push_back(vert);
+		m.V(i, 0) = vertex.position.getX();
+		m.V(i, 1) = vertex.position.getY();
+		m.V(i, 2) = vertex.position.getZ();
 	}
 
-	for (size_t i = 0; i < num_indices; i++)
+	for (size_t i = 0; i < num_indices; i = i + 3)
 	{
-		world_mesh.indices.push_back(decoded_mesh.getIndex(i));
+		size_t f = i / 3;
+		m.F(f, 0) = decoded_mesh.getIndex(i);
+		m.F(f, 1) = decoded_mesh.getIndex(i+1);
+		m.F(f, 2) = decoded_mesh.getIndex(i+2);
 	}
 
-	world_mesh.normalize();
-	return world_mesh;
+	m.normalize();
+	return m;
 }
 
 
 noob::basic_mesh noob::voxel_world::extract_region_cubic(size_t lower_x, size_t lower_y, size_t lower_z, size_t upper_x, size_t upper_y, size_t upper_z) const
 {
 	logger::log("[VoxelWorld] extracting cubic region");
-	noob::basic_mesh world_mesh;
+	noob::basic_mesh m;
 	PolyVox::Region bounding_box(lower_x, lower_y, lower_z, upper_x, upper_y, upper_z);
 	PolyVox::Region world_region = world->getEnclosingRegion();
 	bounding_box.cropTo(world_region);
@@ -209,25 +219,38 @@ noob::basic_mesh noob::voxel_world::extract_region_cubic(size_t lower_x, size_t 
 	auto decoded_mesh = PolyVox::decodeMesh(mesh);
 	size_t num_indices = decoded_mesh.getNoOfIndices();
 	size_t num_vertices = decoded_mesh.getNoOfVertices();
+	
+	assert(num_indices % 3 == 0);	
+	
+	size_t num_faces = num_indices / 3;
+
+	m.V.resize(Eigen::NoChange, num_vertices);
+	// m.N.resize(num_vertices);
+
+	m.F.resize(Eigen::NoChange, num_faces);
 
 	for (size_t i = 0; i < num_vertices; i++)
 	{
 		auto vertex = decoded_mesh.getVertex(i);
-		world_mesh.vertices.push_back(noob::vec3(vertex.position.getX(), vertex.position.getY(), vertex.position.getZ()));
-		//auto vert = half_edges.add_vertex(TriMesh::Point(vertex.position.getX(), vertex.position.getY(), vertex.position.getZ()));
-		//verts.push_back(vert);
+		m.V(i, 0) = vertex.position.getX();
+		m.V(i, 1) = vertex.position.getY();
+		m.V(i, 2) = vertex.position.getZ();
 	}
 
-	for (size_t i = 0; i < num_indices; i++)
+	for (size_t i = 0; i < num_indices; i = i + 3)
 	{
-		world_mesh.indices.push_back(decoded_mesh.getIndex(i));
+		size_t f = i / 3;
+		m.F(f, 0) = decoded_mesh.getIndex(i);
+		m.F(f, 1) = decoded_mesh.getIndex(i+1);
+		m.F(f, 2) = decoded_mesh.getIndex(i+2);
 	}
 
-	world_mesh.normalize();
-	return world_mesh;
+	m.normalize();
+	return m;
 }
 
 
+/*
 noob::basic_mesh noob::voxel_world::extract_region_cubic(size_t lower_x, size_t lower_y, size_t lower_z, size_t upper_x, size_t upper_y, size_t upper_z, uint8_t bitmask) const
 {
 	logger::log(fmt::format("[VoxelWorld] extracting cubic region with bitmask {0}", bitmask));
@@ -245,7 +268,7 @@ noob::basic_mesh noob::voxel_world::extract_region_cubic(size_t lower_x, size_t 
 		}
 	}
 
-	noob::basic_mesh world_mesh;
+	noob::basic_mesh m;
 	PolyVox::Region bounding_box(lower_x, lower_y, lower_z, upper_x, upper_y, upper_z);
 	PolyVox::Region world_region = temp_world.getEnclosingRegion();
 	bounding_box.cropTo(world_region);
@@ -268,7 +291,9 @@ noob::basic_mesh noob::voxel_world::extract_region_cubic(size_t lower_x, size_t 
 		world_mesh.indices.push_back(decoded_mesh.getIndex(i));
 	}
 
-	world_mesh.normalize();
-	return world_mesh;
+
+	m.normalize();
+	return m;
 
 }
+*/

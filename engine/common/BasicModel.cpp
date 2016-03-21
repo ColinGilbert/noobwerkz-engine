@@ -22,17 +22,20 @@ noob::basic_model::~basic_model()
 void noob::basic_model::init(const noob::basic_mesh& input_mesh)
 {
 	noob::basic_model::vertex::init();
-	for (size_t n = 0; n < input_mesh.vertices.size(); ++n)
+	for (size_t n = 0; n < input_mesh.V.size(); ++n)
 	{
 		noob::basic_model::vertex vertex;
-		vertex.position = input_mesh.vertices[n].v;
-		vertex.normal = input_mesh.normals[n].v;
+		vertex.position = input_mesh.get_vertex(n).v;
+		vertex.normal = input_mesh.get_normal(n).v;
 		vertices.push_back(vertex);
 	}
-
-	for (uint16_t i : input_mesh.indices)
+	
+	for (size_t i = 0; i < input_mesh.num_faces(); ++i)
 	{
-		indices.push_back(i);
+		std::array<size_t, 3> temp = input_mesh.get_face_indices(i);
+		indices.push_back(static_cast<uint16_t>(temp[0]));
+		indices.push_back(static_cast<uint16_t>(temp[1]));
+		indices.push_back(static_cast<uint16_t>(temp[2]));
 	}
 
 	vertex_buffer = bgfx::createVertexBuffer(bgfx::copy(&vertices[0], vertices.size() * sizeof(noob::basic_model::vertex)), noob::basic_model::vertex::ms_decl);

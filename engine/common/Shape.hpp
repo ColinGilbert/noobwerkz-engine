@@ -49,7 +49,7 @@ namespace noob
 		void cone(float radius, float height);
 		void hull(const std::vector<noob::vec3>&);
 		// TODO: Test without inner_mesh
-		void trimesh(const noob::basic_mesh*);
+		void trimesh(const noob::basic_mesh&);
 		
 		// In this engine, we don't really use planes. This is due to the fact that their representation doesn't jive with the other parametrics.
 		// void plane(const noob::vec3& normal, float offset);

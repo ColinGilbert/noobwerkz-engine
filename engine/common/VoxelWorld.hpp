@@ -39,11 +39,11 @@ namespace noob
 
 			noob::basic_mesh extract_smooth() const;
 			noob::basic_mesh extract_cubic() const;
-			noob::basic_mesh extract_cubic(uint8_t bitmask) const;
+			// noob::basic_mesh extract_cubic(uint8_t bitmask) const;
 
 			noob::basic_mesh extract_region_smooth(size_t lower_x, size_t lower_y, size_t lower_z, size_t upper_x, size_t upper_y, size_t upper_z) const;
 			noob::basic_mesh extract_region_cubic(size_t lower_x, size_t lower_y, size_t lower_z, size_t upper_x, size_t upper_y, size_t upper_z) const;
-			noob::basic_mesh extract_region_cubic(size_t lower_x, size_t lower_y, size_t lower_z, size_t upper_x, size_t upper_y, size_t upper_z, uint8_t bitmask) const;
+			// noob::basic_mesh extract_region_cubic(size_t lower_x, size_t lower_y, size_t lower_z, size_t upper_x, size_t upper_y, size_t upper_z, uint8_t bitmask) const;
 
 
 		protected:

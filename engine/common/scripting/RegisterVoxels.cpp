@@ -16,9 +16,9 @@ void noob::register_voxels(asIScriptEngine* script_engine)
 	r = script_engine->RegisterObjectMethod("voxel_world", "void get_unsafe(uint, uint, uint)", asMETHOD(noob::voxel_world, get), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("voxel_world", "basic_mesh extract_smooth()", asMETHOD(noob::voxel_world, extract_smooth), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("voxel_world", "basic_mesh extract_cubic()", asMETHODPR(noob::voxel_world, extract_cubic, (void) const, noob::basic_mesh), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("voxel_world", "basic_mesh extract_cubic(uint8)", asMETHODPR(noob::voxel_world, extract_cubic, (uint8_t) const, noob::basic_mesh), asCALL_THISCALL); assert( r >= 0 );
+	// r = script_engine->RegisterObjectMethod("voxel_world", "basic_mesh extract_cubic(uint8)", asMETHODPR(noob::voxel_world, extract_cubic, (uint8_t) const, noob::basic_mesh), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("voxel_world", "basic_mesh extract_region_smooth(uint, uint, uint, uint, uint, uint)", asMETHOD(noob::voxel_world, extract_region_smooth), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("voxel_world", "basic_mesh extract_region_cubic(uint, uint, uint, uint, uint, uint)", asMETHODPR(noob::voxel_world, extract_region_cubic, (size_t, size_t, size_t, size_t, size_t, size_t) const, noob::basic_mesh), asCALL_THISCALL); assert( r >= 0 );
-	r = script_engine->RegisterObjectMethod("voxel_world", "basic_mesh extract_region_cubic(uint, uint, uint, uint, uint, uint, uint8)", asMETHODPR(noob::voxel_world, extract_region_cubic, (size_t, size_t, size_t, size_t, size_t, size_t, uint8_t) const, noob::basic_mesh), asCALL_THISCALL); assert( r >= 0 );
+	// r = script_engine->RegisterObjectMethod("voxel_world", "basic_mesh extract_region_cubic(uint, uint, uint, uint, uint, uint, uint8)", asMETHODPR(noob::voxel_world, extract_region_cubic, (size_t, size_t, size_t, size_t, size_t, size_t, uint8_t) const, noob::basic_mesh), asCALL_THISCALL); assert( r >= 0 );
 
 }
