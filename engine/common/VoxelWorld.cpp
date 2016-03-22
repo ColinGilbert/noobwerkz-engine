@@ -131,6 +131,7 @@ void noob::voxel_world::box(size_t lower_x, size_t lower_y, size_t lower_z, size
 	}
 }
 
+
 uint8_t noob::voxel_world::get(size_t x, size_t y, size_t z) const
 {
 	return world->getVoxel(x, y, z);
@@ -270,5 +271,4 @@ noob::basic_mesh noob::voxel_world::extract_region_cubic(size_t lower_x, size_t 
 
 	world_mesh.update_normals();
 	return world_mesh;
-
 }
