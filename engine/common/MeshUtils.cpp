@@ -298,7 +298,7 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 		mesh.indices.push_back(static_cast<uint16_t>(hull_result.m_Indices[i]));
 	}
 
-	mesh.normalize();
+	mesh.update_normals();
 	return mesh;
 }
 
@@ -343,8 +343,8 @@ noob::basic_mesh noob::mesh_utils::csg(const noob::basic_mesh& _a, const noob::b
 {
 	// noob::basic_mesh a = _a;
 	// noob::basic_mesh b = _b;
-	// a.normalize();
-	// b.normalize();
+	// a.update_normals();
+	// b.update_normals();
 
 	csgjs_model model_a = get_csg_model(_a);
 	csgjs_model model_b = get_csg_model(_b);
@@ -390,7 +390,7 @@ noob::basic_mesh noob::mesh_utils::csg(const noob::basic_mesh& _a, const noob::b
 		results.indices.push_back(i);
 	}
 
-	results.normalize();
+	results.update_normals();
 
 	return results;
 }

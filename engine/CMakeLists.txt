@@ -426,7 +426,6 @@ list(APPEND common_src
 	common/NoobUtils.cpp
 	common/EditorUtils.cpp
 	common/VoxelWorld.cpp
-	common/VoxelWorldStable.cpp
 	common/ActiveMesh.cpp
 	common/UIFont.cpp
 	common/GUI.cpp

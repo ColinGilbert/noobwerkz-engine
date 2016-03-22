@@ -42,10 +42,8 @@
 #include "MathFuncs.hpp"
 #include "TransformHelper.hpp"
 
-#include <Eigen/Geometry>
+// #include <Eigen/Geometry>
 #include "Logger.hpp"
-
-#define AS_CAN_USE_CPP11 1
 
 namespace noob
 {
@@ -63,11 +61,11 @@ namespace noob
 
 			basic_mesh() : volume_calculated(false), volume(0.0) {}
 
-			template <class Archive>
-				void serialize( Archive & ar )
-				{
-					ar(vertices, normals, indices, bbox_info, volume_calculated, volume);
-				}
+			// template <class Archive>
+				// void serialize( Archive & ar )
+				// {
+				// 	ar(vertices, normals, indices, bbox_info, volume_calculated, volume);
+				// }
 
 
 			// Proxies for AngelScript
@@ -89,31 +87,32 @@ namespace noob
 			void save(const std::string& filename) const;
 			
 			// Takes any file Assimp can. First mesh of file only. No bones.
-			bool load_mem(const std::string&, const std::string& name = "");
-			bool load_file(const std::string& filename, const std::string& name = "");
+			//bool load_mem(const std::string&, const std::string& name = "");
+			//bool load_file(const std::string& filename, const std::string& name = "");
 
-			void normalize();
-			void transform(const noob::mat4& transform);
-			void to_origin();
-			void translate(const noob::vec3&);
-			void rotate(const noob::versor&);
-			void scale(const noob::vec3&);
+			void update_normals();
+			// void transform(const noob::mat4& transform);
+			// void to_origin();
+			// void translate(const noob::vec3&);
+			// void rotate(const noob::versor&);
+			// void scale(const noob::vec3&);
 			
 			noob::bbox get_bbox() const { return bbox_info; }
 
 
 		protected:
-			bool load_assimp(const aiScene* scene, const std::string& name);
+			// bool load_assimp(const aiScene* scene, const std::string& name);
 			TriMesh to_half_edges() const;
 			void from_half_edges(TriMesh);
 			void from_half_edges(PolyMesh);
+			
+			void vert_normals_from_trimesh(TriMesh);
 
 			std::vector<noob::vec3> vertices;
 			std::vector<noob::vec3> normals;
 			std::vector<noob::vec3> texcoords;
 			std::vector<uint32_t> indices;
 
-			static constexpr aiPostProcessSteps post_process = static_cast<aiPostProcessSteps>(aiProcessPreset_TargetRealtime_Fast | aiProcess_CalcTangentSpace | aiProcess_ImproveCacheLocality | aiProcess_FindInstances | aiProcess_FixInfacingNormals); 
 			noob::bbox bbox_info;
 			bool volume_calculated;
 			double volume;

@@ -105,8 +105,6 @@ void noob::basic_mesh::set_index(unsigned int i, unsigned int v)
 }
 
 
-
-
 double noob::basic_mesh::get_volume()
 {
 	if (!volume_calculated)
@@ -161,25 +159,25 @@ noob::basic_mesh noob::basic_mesh::decimate(size_t num_verts) const
 }
 
 
-void noob::basic_mesh::normalize() 
+void noob::basic_mesh::update_normals() 
 {
-	std::string temp = save();
-	load_mem(temp);
+	TriMesh half_edges = to_half_edges();
+	vert_normals_from_trimesh(half_edges);
 }
 
-
+/*
 // TODO
 void noob::basic_mesh::to_origin()
 {
-	// noob::basic_mesh temp;
-	for (size_t i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i] = (vertices[i] - bbox_info.center);
-	}
-	normalize();
+// noob::basic_mesh temp;
+for (size_t i = 0; i < vertices.size(); ++i)
+{
+vertices[i] = (vertices[i] - bbox_info.center);
+}
+update_normals();
 
 }
-
+*/
 
 std::string noob::basic_mesh::save() const
 {
@@ -205,160 +203,65 @@ void noob::basic_mesh::save(const std::string& filename) const
 	// logger::log("[Mesh] - save() - half-edges created");
 	OpenMesh::IO::write_mesh(half_edges, filename);
 }
+/*
+
+   bool noob::basic_mesh::load_mem(const std::string& file, const std::string& name)
+   {
+   std::sstream
+   }
 
 
-bool noob::basic_mesh::load_mem(const std::string& file, const std::string& name)
-{
-	const aiScene* scene = aiImportFileFromMemory(file.c_str(), file.size(), post_process, "");//aiProcessPreset_TargetRealtime_Fast | aiProcess_FixInfacingNormals, "");
-	return load_assimp(scene, name);
-}
+   bool noob::basic_mesh::load_file(const std::string& filename, const std::string& name)
+   {
+   }
+   */
+
+/*
+   void noob::basic_mesh::transform(const noob::mat4& transform)
+   {
+
+   for (size_t i = 0; i < vertices.size(); i++)
+   {
+   noob::vec3 v = vertices[i];
+   noob::vec4 temp_vert(v, 1.0);
+   noob::vec4 temp_transform = transform * temp_vert;
+   noob::vec3 transformed_vert;
+
+   transformed_vert[0] = temp_transform[0];
+   transformed_vert[1] = temp_transform[1];
+   transformed_vert[2] = temp_transform[2];
+
+   vertices[i] = temp_transform;
+   }
+
+   update_normals();
+   }
 
 
-bool noob::basic_mesh::load_file(const std::string& filename, const std::string& name)
-{
-	// logger::log(fmt::format("[Mesh] loading file {0}", filename ));
-	const aiScene* scene = aiImportFile(filename.c_str(), post_process);//aiProcessPreset_TargetRealtime_Fast | aiProcess_FixInfacingNormals);
-	return load_assimp(scene, name);	
-}
+   void noob::basic_mesh::translate(const noob::vec3& translation)
+   {
+   noob::transform_helper t;
+   t.translate(translation);
+   transform(t.get_matrix());
+   }
 
 
-bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name)
-{
-	// logger::log("[Mesh] load() - begin");
-	if (!scene)
-	{
-		logger::log(fmt::format("[Mesh] load({0}) - cannot open", name));
-		return false;
-	}
-
-	vertices.clear();
-	indices.clear();
-	normals.clear();
-
-	const aiMesh* mesh_data = scene->mMeshes[0];
-
-	// logger::log(fmt::format("[Mesh] load({0}) - Attempting to obtain mesh data", name));
-
-	size_t num_verts = mesh_data->mNumVertices;
-	size_t num_faces = mesh_data->mNumFaces;
-	// TODO: Fix?
-	// auto num_indices = mesh_data->mNumFaces / 3;
-
-	bool has_normals = mesh_data->HasNormals();
-	//logger::log(fmt::format("[Mesh] load({0}) - Mesh has {1} verts, normals? {2}", name, num_verts, has_normals));
-
-	bool has_texcoords = mesh_data->HasTextureCoords(0);
-	// double accum_x, accum_y, accum_z = 0.0f;
-	bbox_info.min = bbox_info.max = bbox_info.center = noob::vec3(0.0, 0.0, 0.0);	
-
-	for (size_t n = 0; n < num_verts; ++n)
-	{
-		aiVector3D pt = mesh_data->mVertices[n];
-		noob::vec3 v;
-		v.v[0] = pt[0];
-		v.v[1] = pt[1];
-		v.v[2] = pt[2];
-		vertices.push_back(v);
-
-		bbox_info.min[0] = std::min(bbox_info.min[0], v[0]);
-		bbox_info.min[1] = std::min(bbox_info.min[1], v[1]);
-		bbox_info.min[2] = std::min(bbox_info.min[2], v[2]);
-
-		bbox_info.max[0] = std::max(bbox_info.max[0], v[0]);
-		bbox_info.max[1] = std::max(bbox_info.max[1], v[1]);
-		bbox_info.max[2] = std::max(bbox_info.max[2], v[2]);
-
-		if (has_normals)
-		{
-			aiVector3D normal = mesh_data->mNormals[n];
-			noob::vec3 norm;
-			norm.v[0] = normal[0];
-			norm.v[1] = normal[1];
-			norm.v[2] = normal[2];
-			normals.push_back(norm);
-		}
-		if (has_texcoords)
-		{
-			aiVector3D tex = mesh_data->mTextureCoords[0][n];
-			noob::vec3 uvw;
-			uvw.v[0] = tex[0];
-			uvw.v[1] = tex[1];
-			uvw.v[2] = tex[2];
-			texcoords.push_back(uvw);
-		}
-		else
-		{
-			texcoords.push_back(noob::vec3(0.0, 0.0, 0.0));
-		}
-	}
+   void noob::basic_mesh::rotate(const noob::versor& orientation)
+   {
+   noob::transform_helper t;
+   t.rotate(orientation);
+   transform(t.get_matrix());
+   }
 
 
-	if (num_verts == 0)
-	{
-		num_verts = 1;
-	}
+   void noob::basic_mesh::scale(const noob::vec3& scale)
+   {
+   noob::transform_helper t;
+   t.scale(scale);
+   transform(t.get_matrix());
 
-	bbox_info.center = noob::vec3((bbox_info.max[0] + bbox_info.min[0])/2, (bbox_info.max[1] + bbox_info.min[1])/2, (bbox_info.max[2] + bbox_info.min[2])/2);
-
-	for (size_t n = 0; n < num_faces; ++n)
-	{
-		// Allows for degenerate triangles. Worth keeping?
-		const struct aiFace* face = &mesh_data->mFaces[n];
-		indices.push_back(face->mIndices[0]);
-		indices.push_back(face->mIndices[1]);
-		indices.push_back(face->mIndices[2]);
-	}
-
-	aiReleaseImport(scene);
-
-	return true;
-}
-
-
-void noob::basic_mesh::transform(const noob::mat4& transform)
-{
-
-	for (size_t i = 0; i < vertices.size(); i++)
-	{
-		noob::vec3 v = vertices[i];
-		noob::vec4 temp_vert(v, 1.0);
-		noob::vec4 temp_transform = transform * temp_vert;
-		noob::vec3 transformed_vert;
-
-		transformed_vert[0] = temp_transform[0];
-		transformed_vert[1] = temp_transform[1];
-		transformed_vert[2] = temp_transform[2];
-
-		vertices[i] = temp_transform;
-	}
-
-	normalize();
-}
-
-
-void noob::basic_mesh::translate(const noob::vec3& translation)
-{
-	noob::transform_helper t;
-	t.translate(translation);
-	transform(t.get_matrix());
-}
-
-
-void noob::basic_mesh::rotate(const noob::versor& orientation)
-{
-	noob::transform_helper t;
-	t.rotate(orientation);
-	transform(t.get_matrix());
-}
-
-
-void noob::basic_mesh::scale(const noob::vec3& scale)
-{
-	noob::transform_helper t;
-	t.scale(scale);
-	transform(t.get_matrix());
-
-}
+   }
+   */
 
 
 TriMesh noob::basic_mesh::to_half_edges() const
@@ -386,32 +289,88 @@ TriMesh noob::basic_mesh::to_half_edges() const
 
 void noob::basic_mesh::from_half_edges(TriMesh half_edges)
 {
-	std::ostringstream oss;
-	if (!OpenMesh::IO::write_mesh(half_edges, oss, "temp.off")) 
-	{
-		logger::log("[BasicMesh] Could not import from OpenMesh!");
-	}
-	else
-	{
-		load_mem(oss.str());
-	}
-}
+	vertices.resize(half_edges.n_vertices());
+	indices.clear();
 
+	for (TriMesh::ConstVertexIter v_it = half_edges.vertices_begin(); v_it != half_edges.vertices_end(); ++v_it)
+	{
+		vertices[v_it->idx()] = noob::vec3(half_edges.point(*v_it));
+	}
+
+	for (TriMesh::ConstFaceIter f_it = half_edges.faces_begin(); f_it != half_edges.faces_end(); ++f_it)
+	{
+		for (TriMesh::FaceVertexCCWIter fv_it = half_edges.fv_ccwiter(*f_it); fv_it.is_valid(); ++fv_it)
+		{
+			indices.push_back(static_cast<uint16_t>(fv_it->idx()));
+		}
+	}
+
+	vert_normals_from_trimesh(half_edges);
+	fmt::MemoryWriter ww;
+	ww << "[BasicMesh] Created basic_mesh with verts = " << vertices.size() << ", indices = " << indices.size() << " from TriMesh with verts = " << half_edges.n_vertices();
+	logger::log(ww.str());
+}
 
 
 void noob::basic_mesh::from_half_edges(PolyMesh half_edges)
 {
-	std::ostringstream oss;
-	PolyMesh _half_edges = half_edges;
-	_half_edges.triangulate();
-	_half_edges.garbage_collection();
+	PolyMesh temp_polymesh(half_edges);
 
-	if (!OpenMesh::IO::write_mesh(half_edges, oss, "temp.off")) 
+	temp_polymesh.triangulate();
+	temp_polymesh.garbage_collection();
+
+	TriMesh temp_trimesh;
+
+	for (PolyMesh::ConstVertexIter v_it = temp_polymesh.vertices_begin(); v_it != temp_polymesh.vertices_end(); ++v_it)
 	{
-		logger::log("[BasicMesh] Could not import from OpenMesh!");
+		PolyMesh::Point temp(temp_polymesh.point(*v_it));
+		TriMesh::Point p;
+
+		p[0] = temp[0];
+		p[1] = temp[1];
+		p[2] = temp[2];
+
+		temp_trimesh.add_vertex(p);
+	}
+
+	std::vector<PolyMesh::VertexHandle> temp_face;
+	temp_face.resize(3);
+	for (PolyMesh::ConstFaceIter f_it = temp_polymesh.faces_begin(); f_it != temp_polymesh.faces_end(); ++f_it)
+	{
+		size_t index = 0;
+		for (PolyMesh::FaceVertexCCWIter fv_it = temp_polymesh.fv_ccwiter(*f_it); fv_it.is_valid(); ++fv_it)
+		{
+			temp_face[index] = *fv_it;
+			++index;
+		}
+		temp_trimesh.add_face(temp_face);
+	}
+
+	from_half_edges(temp_trimesh);
+}
+
+
+void noob::basic_mesh::vert_normals_from_trimesh(TriMesh half_edges)
+{
+	half_edges.request_vertex_normals();
+	// Assure we have vertex normals
+	assert(half_edges.has_vertex_normals());
+	if (!half_edges.has_vertex_normals())
+	{
+		logger::log("[BasicMesh] RUNTIME BAD NONO: Vertex normals not available. Mesh goes *pop* and disappears!"); //Standard vertex property 'Normals' not available!");
 	}
 	else
 	{
-		load_mem(oss.str());
+		logger::log("[BasicMesh] Got our vertex normals!");
+		// Ee need face normals to update the vertex normals
+		half_edges.request_face_normals();
+		// Let the half_edges update the normals
+		half_edges.update_normals();
+		normals.resize(half_edges.n_vertices());
+		for (TriMesh::VertexIter v_it = half_edges.vertices_begin(); v_it != half_edges.vertices_end(); ++v_it)
+		{	
+			// auto p = half_edges.normal(*v_it);
+			normals[v_it->idx()] = half_edges.normal(*v_it);
+		}
 	}
 }
