@@ -6,11 +6,6 @@
 #include <vector>
 #include <memory>
 
-#include <cereal/types/array.hpp>
-#include <cereal/types/memory.hpp>
-#include <cereal/types/vector.hpp>
-#include <cereal/archives/portable_binary.hpp>
-
 #include <btBulletDynamicsCommon.h>
 #include "BasicMesh.hpp"
 #include "MeshUtils.hpp"
@@ -31,8 +26,9 @@ namespace noob
 		enum class type { SPHERE, BOX, CYLINDER, CONE, HULL, TRIMESH };
 
 		shape() : physics_valid(false) {}
-		virtual ~shape();
-		
+		//virtual ~shape();
+		~shape();
+
 		void set_margin(float);
 		float get_margin() const;
 
@@ -62,6 +58,6 @@ namespace noob
 		noob::vec3 scales;
 		std::array<float, 4> dims;
 		btCollisionShape* inner_shape;
-		noob::basic_mesh* inner_mesh;
+		// noob::basic_mesh* inner_mesh;
 	};
 }

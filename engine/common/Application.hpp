@@ -25,15 +25,6 @@
 #include <fstream>
 #include <atomic>
 
-#include <cereal/access.hpp>
-#include <cereal/types/array.hpp>
-#include <cereal/types/memory.hpp>
-#include <cereal/types/vector.hpp>
-#include <cereal/types/unordered_map.hpp>
-#include <cereal/types/map.hpp>
-#include <cereal/archives/portable_binary.hpp>
-#include <cereal/archives/binary.hpp>
-
 #include <lemon/list_graph.h>
 #include <lemon/static_graph.h>
 

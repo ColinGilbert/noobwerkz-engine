@@ -3,12 +3,6 @@
 
 #include <fstream>
 
-#include <cereal/types/string.hpp>
-#include <cereal/types/array.hpp>
-#include <cereal/types/vector.hpp>
-#include <cereal/types/set.hpp>
-#include <cereal/archives/binary.hpp>
-
 // #include <bgfx/bgfx.h>
 
 #include "format.h"
@@ -22,27 +16,10 @@ namespace noob
 	class animated_model : public drawable
 	{
 		public:
-			template <class Archive>
-				void serialize(Archive& ar)
-				{
-					ar(meshes);
-				}
-
 			struct mesh
 			{
-				template <class Archive>
-					void serialize(Archive & ar)
-					{
-						ar(vertices, indices, dimensions, name);
-					}
-
 				struct vertex
 				{
-					template <class Archive>
-						void serialize( Archive & ar )
-						{
-							ar(position, normal, uv, tangent, bitangent, bone_indices, bone_weights);
-						}
 					vertex() : position({0.0f, 0.0f, 0.0f}), normal({0.0f, 0.0f, 0.0f}), uv({0.0f, 0.0f} ), tangent({ 0.0f, 0.0f, 0.0f }), bitangent({0.0f, 0.0f, 0.0f}), bone_indices({ 0, 0, 0, 0 }), bone_weights({ 0.0f, 0.0f, 0.0f, 0.0f}) {}
 					std::array<float, 3> position, normal;
 					std::array<float, 3> uv;

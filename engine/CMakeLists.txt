@@ -264,8 +264,6 @@ include_directories(lib/bgfx/3rdparty/khronos)
 
 include_directories(lib/lemon)
 
-include_directories(lib/cereal/include)
-
 include_directories(lib/stb)
 
 include_directories(lib/inline_variant_visitor)

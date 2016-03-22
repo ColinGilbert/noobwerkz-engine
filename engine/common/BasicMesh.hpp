@@ -4,15 +4,6 @@
 
 #define OM_STATIC_BUILD 1
 
-#include <cereal/access.hpp>
-#include <cereal/types/array.hpp>
-#include <cereal/types/memory.hpp>
-#include <cereal/types/vector.hpp>
-#include <cereal/types/unordered_map.hpp>
-#include <cereal/types/map.hpp>
-#include <cereal/archives/portable_binary.hpp>
-#include <cereal/archives/binary.hpp>
-
 // #include <OpenMesh/Core/IO/MeshIO.hh>
 // #include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
 // #include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>

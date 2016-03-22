@@ -1,10 +1,6 @@
 // Kinematic, until self_controlled == false. The it beomes dynamic body
 #pragma once
 
-#include <cereal/types/array.hpp>
-#include <cereal/types/vector.hpp>
-#include <cereal/archives/binary.hpp>
-
 #include <btBulletDynamicsCommon.h>
 #include <memory>
 
@@ -51,16 +47,6 @@ namespace noob
 				noob::body_type type;
 			};
 
-			template <class Archive>
-				void serialize(Archive& ar)
-				{
-					noob::body::info info;
-					info.init(inner_body, type, ccd);//self_controlled, ccd);
-					ar(info);
-				}
-
-
-			// body() : height(0.0), width(0.0), step_height(0.1), ray_lambda(1.0), turn_angle(1.0), dt(1.0/60.0), max_linear_velocity(10.0), walk_speed(0.5), turn_speed(0.5), jump_force(1.5), airborne(true), obstacled(false), self_controlled(false) {}
 
 			body() : physics_valid(false), is_physical(true) {}
 			~body();
@@ -83,7 +69,8 @@ namespace noob
 			noob::body::info get_info() const;
 
 			std::string get_debug_string() const;
-
+			
+			// This is a hack to allow Bullet (or anyone else) to introspect whether this is a physical or ghost object. Useful when filtering collisions between bodies and ghosts.
 			const bool is_physical;
 		
 		protected:
@@ -95,6 +82,5 @@ namespace noob
 			// btCollisionShape* inner_shape;			
 			btDynamicsWorld* dynamics_world;
 			btRigidBody* inner_body;
-			// This is a hack to allow Bullet to introspect whether this is a physical or ghost object. Useful when filtering collisions between bodies and ghosts.
 	};
 }
