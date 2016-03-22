@@ -29,20 +29,12 @@
 #include <OpenMesh/Tools/Decimater/ModRoundnessT.hh>
 #include <OpenMesh/Tools/Subdivider/Uniform/CatmullClarkT.hh>
 
-#include <assimp/quaternion.h>
-#include <assimp/anim.h>
-#include <assimp/cimport.h>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-#include <assimp/types.h>
-
 // typedef OpenMesh::TriMesh_ArrayKernelT<> TriMesh;
 // typedef OpenMesh::PolyMesh_ArrayKernelT<> PolyMesh;
 
 #include "MathFuncs.hpp"
 #include "TransformHelper.hpp"
 
-// #include <Eigen/Geometry>
 #include "Logger.hpp"
 
 namespace noob
@@ -61,14 +53,6 @@ namespace noob
 
 			basic_mesh() : volume_calculated(false), volume(0.0) {}
 
-			// template <class Archive>
-				// void serialize( Archive & ar )
-				// {
-				// 	ar(vertices, normals, indices, bbox_info, volume_calculated, volume);
-				// }
-
-
-			// Proxies for AngelScript
 			noob::vec3 get_vertex(unsigned int);
 			noob::vec3 get_normal(unsigned int);
 			noob::vec3 get_texcoord(unsigned int);
@@ -86,7 +70,6 @@ namespace noob
 			std::string save() const;
 			void save(const std::string& filename) const;
 			
-			// Takes any file Assimp can. First mesh of file only. No bones.
 			//bool load_mem(const std::string&, const std::string& name = "");
 			//bool load_file(const std::string& filename, const std::string& name = "");
 
@@ -101,7 +84,6 @@ namespace noob
 
 
 		protected:
-			// bool load_assimp(const aiScene* scene, const std::string& name);
 			TriMesh to_half_edges() const;
 			void from_half_edges(TriMesh);
 			void from_half_edges(PolyMesh);
@@ -116,6 +98,5 @@ namespace noob
 			noob::bbox bbox_info;
 			bool volume_calculated;
 			double volume;
-
 	};
 }

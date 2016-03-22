@@ -438,7 +438,6 @@ list(APPEND common_src
 	common/BasicModel.cpp
 	common/AnimatedModel.cpp
 	common/SkeletalAnim.cpp
-	common/ModelLoader.cpp
 	common/drawing/TriplanarGradientMapLit.cpp
 	common/drawing/TriplanarGradientMap.cpp
 	common/drawing/BasicRenderer.cpp
@@ -480,7 +479,7 @@ add_executable(NoobEdit ${user_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx
 
 
 
-target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype rt dl pthread assimp m ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r ${Boost_LIBRARIES})
+target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype rt dl pthread m ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r ${Boost_LIBRARIES})
 
 if (DEFINED NOOB_PLATFORM_LINUX)
 	target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES})	
