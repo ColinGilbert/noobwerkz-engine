@@ -203,7 +203,6 @@ list (APPEND bullet_src
 	lib/bullet/src/BulletMultiThreaded/SpuGatheringCollisionDispatcher.cpp
 	lib/bullet/src/BulletMultiThreaded/btGpu3DGridBroadphase.cpp
 	lib/bullet/src/BulletMultiThreaded/SpuSampleTask/SpuSampleTask.cpp
-
 	)
 
 include_directories(lib/polyvox/include)
@@ -286,7 +285,6 @@ list(APPEND bgfx_utils_src
 	common/drawing/font/cube_atlas.cpp
 	)
 
-include_directories(lib/variant)
 include_directories(lib/recastnavigation/Detour/Include)
 include_directories(lib/recastnavigation/Recast/Include)
 include_directories(lib/recastnavigation/RecastDemo/Include)
@@ -412,8 +410,6 @@ list(APPEND angelscript_src
 	lib/angelscript-sdk/add_on/scriptstdstring/scriptstdstring_utils.cpp
 	)
 
-#include_directories(engine/common)
-
 list(APPEND common_src
 	common/Globals.cpp
 	common/BasicMesh.cpp
@@ -468,14 +464,12 @@ if (DEFINED NOOB_PLATFORM_LINUX)
 	list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)	
 endif()
 
-if (DEFINED NOOB_PLATFORM_IOS)
-	list(APPEND main_src platform/ios/EngineIOS.cpp)
-endif()
+# if (DEFINED NOOB_PLATFORM_IOS)
+# list(APPEND main_src platform/ios/EngineIOS.mm)
+# endif()
 
 
 add_executable(NoobEdit ${user_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${openmesh_src} ${cppformat_src} ${recast_src} ${angelscript_src} ${bullet_src} ${voropp_src})
-
-
 
 target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype rt dl pthread m ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r ${Boost_LIBRARIES})
 

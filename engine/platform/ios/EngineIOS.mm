@@ -1,5 +1,3 @@
-#ifdef NOOB_PLATFORM_IOS
-
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <QuartzCore/CAEAGLLayer.h>
@@ -226,5 +224,3 @@ int main(int _argc, char* _argv[])
 	[pool release];
 	return exitCode;
 }
-
-#endif // NOOB_PLATFORM_IOS
