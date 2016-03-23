@@ -32,9 +32,8 @@ PolyVox
 Lemon Graph Library 
 Assimp (and a working mesh loader, too! =P)
 cppformat - the others are self-evident, but thank heavens for this little guy...
-Cereal
 AngelScript
-Boost (Variant, Filesystem, and soon Asio + SPSC Queue)
+Boost (Variant, Filesystem)
 Voro++
 ```
 
