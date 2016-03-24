@@ -1,0 +1,27 @@
+[submodule "engine/lib/SQLiteCpp"]
+	path = engine/lib/SQLiteCpp
+	url = https://github.com/srombauts/SQLiteCpp/
+[submodule "engine/lib/bgfx"]
+	path = engine/lib/bgfx
+	url = https://www.github.com/bkaradzic/bgfx
+[submodule "engine/lib/bx"]
+	path = engine/lib/bx
+	url = https://www.github.com/bkaradzic/bx
+[submodule "engine/lib/brigand"]
+	path = engine/lib/brigand
+	url = https://www.github.com/edouarda/brigand
+[submodule "engine/lib/inline_variant_visitor"]
+	path = engine/lib/inline_variant_visitor
+	url = https://www.github.com/exclipy/inline_variant_visitor
+[submodule "engine/lib/jl_signal"]
+	path = engine/lib/jl_signal
+	url = https://www.github.com/jeffomatic/jl_signal
+[submodule "engine/lib/libpd"]
+	path = engine/lib/libpd
+	url = https://www.github.com/libpd/libpd
+[submodule "engine/lib/polyvox"]
+	path = engine/lib/polyvox
+	url = https://bitbucket.org/volumesoffun/polyvox.git
+[submodule "engine/lib/recastnavigation"]
+	path = engine/lib/recastnavigation
+	url = https://www.github.com/recastnavigation/recastnavigation

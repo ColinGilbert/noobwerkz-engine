@@ -44,7 +44,7 @@ list(APPEND bgfx_utils_src
 
 
 include_directories(lib/freetype/include)
-add_subdirectory(lib/freetype)
+#add_subdirectory(lib/freetype)
 
 include_directories(lib/voropp/src)
 list (APPEND voropp_src
