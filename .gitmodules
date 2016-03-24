@@ -21,7 +21,10 @@
 	url = https://www.github.com/libpd/libpd
 [submodule "engine/lib/polyvox"]
 	path = engine/lib/polyvox
-	url = https://bitbucket.org/volumesoffun/polyvox.git
+	url = https://www.github.com/ColinGilbert/polyvox
 [submodule "engine/lib/recastnavigation"]
 	path = engine/lib/recastnavigation
 	url = https://www.github.com/recastnavigation/recastnavigation
+[submodule "engine/lib/stb"]
+	path = engine/lib/stb
+	url = https://www.github.com/ColinGilbert/stb
