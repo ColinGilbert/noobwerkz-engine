@@ -28,3 +28,6 @@
 [submodule "engine/lib/stb"]
 	path = engine/lib/stb
 	url = https://www.github.com/ColinGilbert/stb
+[submodule "engine/lib/ozz-animation"]
+	path = engine/lib/ozz-animation
+	url = https://github.com/guillaumeblanc/ozz-animation
