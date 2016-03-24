@@ -24,6 +24,25 @@ if (DEFINED NOOB_PLATFORM_LINUX)
 	include_directories(lib/glfw/include)	
 endif()
 
+
+include_directories(lib/bx/include)
+include_directories(lib/bgfx/include)
+include_directories(lib/bgfx/3rdparty/sdf)
+include_directories(lib/bgfx/3rdparty/khronos)
+
+list(APPEND bgfx_src
+	lib/bgfx/src/amalgamated.cpp
+	)
+
+list(APPEND bgfx_utils_src
+	common/drawing/font/font_manager.cpp
+	common/drawing/font/utf8.cpp
+	common/drawing/font/text_metrics.cpp
+	common/drawing/font/text_buffer_manager.cpp
+	common/drawing/font/cube_atlas.cpp
+	)
+
+
 include_directories(lib/freetype/include)
 add_subdirectory(lib/freetype)
 
@@ -207,7 +226,6 @@ list (APPEND bullet_src
 
 include_directories(lib/polyvox/include)
 
-
 include_directories(lib/eigen)
 add_subdirectory(lib/rbdl)
 
@@ -256,10 +274,6 @@ list (APPEND openmesh_src
 	lib/openmesh/src/OpenMesh/Tools/Decimater/Observer.cc
 	)
 
-include_directories(lib/bx/include)
-include_directories(lib/bgfx/include)
-include_directories(lib/bgfx/3rdparty)
-include_directories(lib/bgfx/3rdparty/khronos)
 
 include_directories(lib/lemon)
 
@@ -267,23 +281,13 @@ include_directories(lib/stb)
 
 include_directories(lib/inline_variant_visitor)
 
+include_directories(lib/angelscript-sdk/angelscript/include)
+
 include_directories(common)
 include_directories(common/scripting)
 include_directories(common/drawing)
 include_directories(common/drawing/font)
-include_directories(common/drawing/shaderc)
-
-list(APPEND bgfx_src
-	lib/bgfx/src/amalgamated.cpp
-	)
-
-list(APPEND bgfx_utils_src
-	common/drawing/font/font_manager.cpp
-	common/drawing/font/utf8.cpp
-	common/drawing/font/text_metrics.cpp
-	common/drawing/font/text_buffer_manager.cpp
-	common/drawing/font/cube_atlas.cpp
-	)
+# include_directories(common/drawing/shaderc)
 
 include_directories(lib/recastnavigation/Detour/Include)
 include_directories(lib/recastnavigation/Recast/Include)
@@ -438,7 +442,6 @@ list(APPEND common_src
 	common/SimpleNavMesh.cpp
 	common/FileSystem.cpp
 	common/CSG.cpp
-	common/GeometricWorld.cpp
 	common/scripting/RegisterMath.cpp
 	common/scripting/RegisterGraphics.cpp
 	common/scripting/RegisterBasicMesh.cpp
