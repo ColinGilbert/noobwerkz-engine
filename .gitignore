@@ -2,7 +2,7 @@
 engine/build/*
 **.*.sw*
 *.*.sw*
-#**/.git
+**/.git
 **.gitignore
 !.gitignore
 **/obj/*

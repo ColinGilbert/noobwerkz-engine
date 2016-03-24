@@ -769,7 +769,7 @@ void TextBufferManager::submitTextBuffer(TextBufferHandle _handle, uint8_t _id, 
 			}
 
 			bgfx::setVertexBuffer(vbh, 0, bc.textBuffer->getVertexCount() );
-			bgfx::setIndexBuffer(ibh, bc.textBuffer->getIndexCount() );
+			bgfx::setIndexBuffer(ibh, 0, bc.textBuffer->getIndexCount() );
 		}
 		break;
 
@@ -797,8 +797,8 @@ void TextBufferManager::submitTextBuffer(TextBufferHandle _handle, uint8_t _id, 
 				bgfx::updateDynamicVertexBuffer(vbh, 0, bgfx::copy(bc.textBuffer->getVertexBuffer(), vertexSize));
 			}
 
-			bgfx::setVertexBuffer(vbh, bc.textBuffer->getVertexCount() );
-			bgfx::setIndexBuffer(ibh, bc.textBuffer->getIndexCount() );
+			bgfx::setVertexBuffer(vbh,0, bc.textBuffer->getVertexCount() );
+			bgfx::setIndexBuffer(ibh, 0, bc.textBuffer->getIndexCount() );
 		}
 		break;
 

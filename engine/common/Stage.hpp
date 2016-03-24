@@ -27,8 +27,6 @@
 #include "ScaledModel.hpp"
 #include "AnimatedModel.hpp"
 #include "TransformHelper.hpp"
-#include "Prop.hpp"
-#include "Scenery.hpp"
 #include "Body.hpp"
 #include "Shape.hpp"
 #include "Component.hpp"
