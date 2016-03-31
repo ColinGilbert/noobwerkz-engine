@@ -44,7 +44,7 @@ list(APPEND bgfx_utils_src
 
 
 include_directories(lib/freetype/include)
-#add_subdirectory(lib/freetype)
+add_subdirectory(lib/freetype)
 
 include_directories(lib/voropp/src)
 list (APPEND voropp_src
@@ -225,15 +225,8 @@ list (APPEND bullet_src
 	)
 
 include_directories(lib/polyvox/include)
-
 include_directories(lib/eigen)
 add_subdirectory(lib/rbdl)
-
-# TODO: Remove
-include_directories(lib/csgjs-cpp)
-list (APPEND csgjs_src
-	lib/csgjs-cpp/csgjs.cpp
-	)
 
 include_directories(lib/openmesh/src)
 list (APPEND openmesh_src
@@ -430,6 +423,7 @@ list(APPEND common_src
 	common/Camera.cpp
 	common/Stage.cpp
 	common/Body.cpp
+	common/Joint.cpp
 	common/Ghost.cpp
 	common/Shape.cpp
 	common/MeshUtils.cpp
@@ -467,7 +461,7 @@ if (DEFINED NOOB_PLATFORM_LINUX)
 	list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)	
 endif()
 
-# if (DEFINED NOOB_PLATFORM_IOS)
+# if (DEFINED IOS)
 # list(APPEND main_src platform/ios/EngineIOS.mm)
 # endif()
 
