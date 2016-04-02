@@ -424,6 +424,7 @@ list(APPEND common_src
 	common/Stage.cpp
 	common/Body.cpp
 	common/Joint.cpp
+	common/Armature.cpp
 	common/Ghost.cpp
 	common/Shape.cpp
 	common/MeshUtils.cpp
