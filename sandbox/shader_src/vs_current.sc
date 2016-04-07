@@ -1,9 +1,9 @@
 $input a_position, a_normal
 $output v_position, v_normal, world_pos, world_normal, world_eye
 
-uniform mat4 u_normal_mat;
-uniform mat4 u_normal_mat_modelspace;
-uniform vec4 eye_pos;
+// uniform mat4 u_normal_mat;
+// uniform mat4 u_normal_mat_modelspace;
+// uniform vec4 eye_pos;
 
 #include "common.sh"
 

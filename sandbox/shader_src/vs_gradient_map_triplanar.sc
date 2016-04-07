@@ -2,8 +2,10 @@ $input a_position, a_normal
 $output v_position, v_normal, mult_normal
 
 #include "common.sh"
-uniform mat4 world_mat;
-uniform mat4 normal_mat;
+
+// uniform mat4 world_mat;
+// uniform mat4 normal_mat;
+
 void main()
 {
 	v_position = a_position.xyz;

@@ -4,19 +4,19 @@ $input v_position, v_normal, mult_normal
 
 SAMPLER2D(texture_0, 0);
 
-uniform vec4 colour_0;
-uniform vec4 colour_1;
-uniform vec4 colour_2;
-uniform vec4 colour_3;
+// uniform vec4 colour_0;
+// uniform vec4 colour_1;
+// uniform vec4 colour_2;
+// uniform vec4 colour_3;
 
 // Texture blending factor
-uniform vec4 blend_0;
+// uniform vec4 blend_0;
 
 // Positions are only required for the two mid-gradient colours, as the other two are at the ends
-uniform vec4 blend_1;
+// uniform vec4 blend_1;
 
 // Scaling factors (for the texture)
-uniform vec4 tex_scales;
+// uniform vec4 tex_scales;
 
 // uniform texture_0;
 // uniform vec4 basic_light_0;
