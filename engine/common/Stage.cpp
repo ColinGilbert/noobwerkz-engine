@@ -181,6 +181,15 @@ void noob::stage::draw(float window_width, float window_height) const
 	}
 
 
+	noob::joint_handle noob::stage::joint(const noob::body_handle a, const noob::vec3& local_point_on_a, const noob::body_handle b, const noob::vec3& point_on_b)
+	{
+		noob::joint_handle h;
+		
+
+		return h;
+	}
+
+
 	void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::animated_models_holder::handle model_h, const noob::shaders_holder::handle shader_h)
 	{
 
@@ -203,6 +212,7 @@ void noob::stage::draw(float window_width, float window_height) const
 		{
 			model_node = model_results->second;
 		}
+
 		else
 		{
 			model_node = draw_graph.addNode();

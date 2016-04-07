@@ -31,3 +31,6 @@
 [submodule "engine/lib/ozz-animation"]
 	path = engine/lib/ozz-animation
 	url = https://github.com/guillaumeblanc/ozz-animation
+[submodule "engine/lib/sparsehash"]
+	path = engine/lib/sparsehash
+	url = https://github.com/sparsehash/sparsehash

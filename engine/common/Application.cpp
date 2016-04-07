@@ -169,33 +169,31 @@ void noob::application::update(double delta)
 			}
 			catch(std::exception e)
 			{
-				logger::log(fmt::format("[Application]. Caught AngelScript exception: ", e.what()));
+				logger::log(fmt::format("[Application]. Init script failed! Caught AngelScript exception: ", e.what()));
 			}
 			last_write = t;
 		}
 		time_elapsed = 0.0;
 	}
-
-
 }
 
 bool noob::application::load_init_script()
 {
-	std::string user_message = "\n[Application] reloading script. Success? {0}";
+	std::string user_message = "\n[Application] Loading script. Success? {0}";
 
 	script_module = script_engine->GetModule(0, asGM_ALWAYS_CREATE);
 
 	int r = script_module->AddScriptSection(script_name.c_str(), noob::utils::load_file_as_string(script_name).c_str());
 	if (r < 0)
 	{
-		logger::log(fmt::format(user_message, "false - init script add section failed!"));
+		logger::log(fmt::format(user_message, "False - Add section failed."));
 		return false;
 	}
 
 	r = script_module->Build();
 	if (r < 0 )
 	{
-		logger::log(fmt::format(user_message, "false - init script compile failed!"));
+		logger::log(fmt::format(user_message, "False - Compile failed."));
 		return false;
 		// The build failed. The message stream will have received  
 		// compiler errors that shows what needs to be fixed
@@ -203,14 +201,14 @@ bool noob::application::load_init_script()
 	asIScriptContext* ctx = script_engine->CreateContext();
 	if (ctx == 0)
 	{
-		logger::log(fmt::format("false - failed to create context"));
+		logger::log(fmt::format(user_message, "False - Failed to create context."));
 	}
 
 	asIScriptFunction* func = script_engine->GetModule(0)->GetFunctionByDecl("void main()");
 
 	if (func == 0)
 	{
-		logger::log(fmt::format(user_message, "false - main() not found!"));
+		logger::log(fmt::format(user_message, "False - Function main() not found."));
 		return false;
 	}
 
@@ -218,7 +216,7 @@ bool noob::application::load_init_script()
 
 	if( r < 0 ) 
 	{
-		logger::log(fmt::format(user_message, "false - failed to prepare the context!"));
+		logger::log(fmt::format(user_message, "False - Failed to prepare the context."));
 		return false;
 	}
 
@@ -229,13 +227,13 @@ bool noob::application::load_init_script()
 		// The execution didn't finish as we had planned. Determine why.
 		if( r == asEXECUTION_ABORTED )
 		{
-			logger::log(fmt::format(user_message, "false - script aborted"));
+			logger::log(fmt::format(user_message, "False - Script aborted."));
 		}
 
 		else if( r == asEXECUTION_EXCEPTION )
 		{
 			fmt::MemoryWriter ww;
-			ww << "false - script ended with an exception: ";
+			ww << "False - Script ended with an exception: ";
 
 			asIScriptFunction* exception_func = ctx->GetExceptionFunction();
 
@@ -251,7 +249,7 @@ bool noob::application::load_init_script()
 		else
 		{
 			fmt ::MemoryWriter ww;
-			ww << "false - the script ended with reason code " << r;
+			ww << "False - Ended with reason code: " << r;
 			logger::log(fmt::format(user_message, ww.str()));
 		}
 
@@ -259,7 +257,7 @@ bool noob::application::load_init_script()
 	}
 
 
-	logger::log(fmt::format(user_message, "true"));
+	logger::log(fmt::format(user_message, "True. :)"));
 	return true;
 }
 

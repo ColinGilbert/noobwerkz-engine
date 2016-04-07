@@ -17,6 +17,7 @@ namespace noob
 	{
 		friend class stage;
 		friend class joint;
+
 		public:
 			struct info
 			{

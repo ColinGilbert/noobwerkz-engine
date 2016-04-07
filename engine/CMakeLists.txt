@@ -267,6 +267,8 @@ list (APPEND openmesh_src
 	lib/openmesh/src/OpenMesh/Tools/Decimater/Observer.cc
 	)
 
+# include_directories(lib/sparsehash/src/google)
+
 
 include_directories(lib/lemon)
 
