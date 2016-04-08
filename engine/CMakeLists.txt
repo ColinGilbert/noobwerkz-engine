@@ -447,7 +447,6 @@ list(APPEND common_src
 	common/scripting/RegisterStage.cpp
 	common/scripting/RegisterLight.cpp
 	common/scripting/RegisterReflectance.cpp
-	common/scripting/RegisterShaders.cpp
 	common/scripting/RegisterVoxels.cpp
 	common/scripting/RegisterScaledModel.cpp
 	common/scripting/RegisterHandles.cpp

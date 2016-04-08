@@ -1,4 +1,4 @@
-$input v_position, v_normal, world_pos, world_normal, world_eye
+$input v_position, v_normal, world_pos, world_normal// , world_eye
 
 #include "common.sh"
 
@@ -36,9 +36,10 @@ void main()
 	float ratio_2_to_3 = when_ge(tex_falloff, blend_1.y) * ((tex_falloff + 1.0) * 0.5);
 
 	vec4 tex_final = ((colour_0 + colour_1) * ratio_0_to_1) + ((colour_1 + colour_2) * ratio_1_to_2) + ((colour_2 + colour_3) * ratio_2_to_3);
-
-	vec3 total_colour = tex_final.xyz + get_light(world_eye, world_pos, world_normal);
 	
-	gl_FragColor.xyz = clamp(total_colour, 0.0, 1.0);
+	vec3 light = get_light(world_pos, world_normal);
+	vec3 total_colour = tex_final.xyz + light;
+	
+	gl_FragColor.xyz = clamp(total_colour * u_ambient.xyz, 0.0, 1.0);
 	gl_FragColor.w = tex_final.w;
 }

@@ -27,10 +27,11 @@ uniform vec4 blend_1;
 uniform vec4 tex_scales;
 
 uniform mat4 normal_mat;
+// uniform mat4 u_normal_mat_modelspace;
 
 // Lighting
 uniform vec4 eye_pos;
-uniform vec4 eye_pos_normalized;
+//uniform vec4 eye_pos_normalized;
 
 uniform vec4 u_ambient;
 uniform vec4 u_diffuse;
@@ -160,11 +161,10 @@ float cookTorranceSpecular(vec3 lightDirection, vec3 viewDirection, vec3 surface
 }
 
 
-vec3 get_light(vec3 world_eye, vec3 world_pos, vec3 world_normal)
+vec3 get_light(vec3 world_pos, vec3 world_normal)
 {
-
 	vec3 normal = normalize(world_normal);
-	vec3 view_direction = normalize(world_eye - world_pos);
+	vec3 view_direction = normalize(eye_pos.xyz - world_pos);
 
 	vec3 total_light = vec3(0.0, 0.0, 0.0);
 
@@ -185,8 +185,8 @@ vec3 get_light(vec3 world_eye, vec3 world_pos, vec3 world_normal)
 		//float diffuse_coeff = orenNayarDiffuse(light_direction, view_direction, normal, roughness, albedo);
 		float diffuse = (diffuse_coeff * falloff);// * u_light_rgb_falloff[ii].rgb;
 
-		float specular = 0.0;
-		// float specular = blinnPhongSpecular(light_direction, view_direction, normal, u_shine);
+		// float specular = 0.0;
+		float specular = blinnPhongSpecular(light_direction, view_direction, normal, u_shine);
 		// float specular = cookTorranceSpecular(light_direction, view_direction, normal, roughness, fresnel);
 
 		vec3 light_colour = (diffuse + specular) * u_light_rgb_falloff[ii].rgb; // * u_light_rgb_falloff[ii].a;
@@ -194,5 +194,6 @@ vec3 get_light(vec3 world_eye, vec3 world_pos, vec3 world_normal)
 	}
 
 	// total_light *= (1.0 / MAX_LIGHTS_F);
-	return total_light * u_ambient.xyz;
+	// total_light *= u_ambient.xyz;
+	return total_light;
 }

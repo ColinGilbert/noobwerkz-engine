@@ -86,9 +86,6 @@ void noob::stage::tear_down()
 	// bodies_mapping(draw_graph);
 	// basic_models_mapping(draw_graph);
 	// shaders_mapping(draw_graph);
-
-
-
 }
 
 
@@ -106,7 +103,12 @@ void noob::stage::draw(float window_width, float window_height) const
 	bgfx::setViewTransform(1, &view_mat.m[0], &projection_mat.m[0]);
 	bgfx::setViewRect(1, 0, 0, window_width, window_height);
 
+	bgfx::setUniform(noob::graphics::ambient.handle, &ambient_light.v[0]);
+	bgfx::setUniform(noob::graphics::eye_pos.handle, &eye_pos.v[0]);	
+	bgfx::setUniform(noob::graphics::eye_pos_normalized.handle, &(noob::normalize(eye_pos)).v[0]);
+
 	std::array<noob::light, MAX_LIGHTS> temp_lights;
+
 	for (size_t i = 0; i < MAX_LIGHTS; ++i)
 	{
 		temp_lights[i] = globals->lights.get(lights[i]);
@@ -135,7 +137,7 @@ void noob::stage::draw(float window_width, float window_height) const
 				world_mat = noob::scale(world_mat, noob::vec3(scales_mapping[body_node]));												
 				world_mat = noob::rotate(world_mat, bodies.get(body_h)->get_orientation());
 				world_mat = noob::translate(world_mat, bodies.get(body_h)->get_position());												
-				noob::mat4 normal_mat = noob::transpose(noob::inverse((view_mat * world_mat)));
+				noob::mat4 normal_mat = noob::transpose(noob::inverse((world_mat * view_mat)));
 
 				noob::reflectance temp_reflect;
 				temp_reflect = globals->reflectances.get(reflectances_mapping[body_node]);
@@ -282,7 +284,6 @@ void noob::stage::draw(float window_width, float window_height) const
 		}
 		else logger::log("[Stage] Attempting to create actor with static mesh.");
 	}
-
 
 
 	void noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle shader_h, const noob::reflectances_holder::handle reflect_arg, const std::string& name)

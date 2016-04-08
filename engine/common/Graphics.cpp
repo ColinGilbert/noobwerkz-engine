@@ -27,7 +27,7 @@ const noob::graphics::uniform noob::graphics::normal_mat;
 const noob::graphics::uniform noob::graphics::normal_mat_modelspace;
 const noob::graphics::uniform noob::graphics::eye_pos;
 const noob::graphics::uniform noob::graphics::eye_pos_normalized;
-const noob::graphics::uniform noob::graphics::global_ambient;
+const noob::graphics::uniform noob::graphics::ambient;
 
 const noob::graphics::uniform noob::graphics::light_rgb_falloff;
 const noob::graphics::uniform noob::graphics::light_pos_radius;
@@ -37,8 +37,8 @@ const noob::graphics::uniform noob::graphics::light_pos_radius;
 
 const noob::graphics::uniform noob::graphics::specular_shine;
 const noob::graphics::uniform noob::graphics::diffuse;
-const noob::graphics::uniform noob::graphics::ambient;
 const noob::graphics::uniform noob::graphics::emissive;
+
 const noob::graphics::uniform noob::graphics::fog;
 const noob::graphics::uniform noob::graphics::rough_albedo_fresnel;
 
@@ -96,7 +96,7 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	eye_pos_normalized = noob::graphics::add_uniform(std::string("eye_pos_normalized"), bgfx::UniformType::Enum::Vec4, 1);
 
 	
-	global_ambient = noob::graphics::add_uniform(std::string("global_ambient"), bgfx::UniformType::Enum::Vec4, 1);
+	ambient = noob::graphics::add_uniform(std::string("ambient"), bgfx::UniformType::Enum::Vec4, 1);
 	
 	light_rgb_falloff = noob::graphics::add_uniform(std::string("u_light_rgb_falloff"), bgfx::UniformType::Enum::Vec4, MAX_LIGHTS);
 	light_pos_radius = noob::graphics::add_uniform(std::string("u_light_pos_r"), bgfx::UniformType::Enum::Vec4, MAX_LIGHTS);

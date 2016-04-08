@@ -26,6 +26,15 @@ namespace noob
 			
 			void draw(const noob::drawable* drawable, const prepared_shaders::uniform& uni, const noob::mat4& world_mat, const noob::mat4& normal_mat, const noob::vec3& eye_pos, const noob::reflectance& reflect, const std::array<noob::light, MAX_LIGHTS>& lights, uint8_t view_id = 0) const
 			{
+
+
+
+
+
+
+
+
+
 				match(uni,
 				[this, drawable, world_mat, normal_mat, eye_pos, reflect, lights, view_id] (const noob::triplanar_gradient_map_renderer_lit::uniform& uni) -> void { this->triplanar_lit.draw(drawable, world_mat, normal_mat, eye_pos, uni, reflect, lights, view_id); },				
 				[this, drawable, world_mat, normal_mat, eye_pos, reflect, lights, view_id] (const noob::triplanar_gradient_map_renderer::uniform& uni) -> void { this->triplanar.draw(drawable, world_mat, normal_mat, eye_pos, uni, reflect, lights, view_id); },
