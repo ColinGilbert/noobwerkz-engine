@@ -35,5 +35,5 @@ sandbox/models/test.off
 .project
 .cproject
 CMakeLists.txt.user
-build*
+#build*
 *.*sw*
