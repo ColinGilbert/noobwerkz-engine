@@ -1,5 +1,5 @@
-**/build/*
-engine/build/*
+#**/build/*
+#engine/build/*
 **.*.sw*
 *.*.sw*
 **/.git
