@@ -2,7 +2,7 @@
 #include <cmath>
 
 #include <array>
-#include <assimp/types.h>
+//#include <assimp/types.h>
 #include <btBulletDynamicsCommon.h>
 #include <glm/glm.hpp>
 #include "format.h"
@@ -250,7 +250,7 @@ namespace noob
 		mat4(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float mm, float n, float o, float p);
 		mat4(std::array<float,16> mm);
 		// mat4(const aiMatrix3x3& AssimpMatrix);
-		mat4(const aiMatrix4x4&);
+		// mat4(const aiMatrix4x4&);
 		mat4(const glm::mat4&);
 
 		vec4 operator*(const vec4& rhs) const;

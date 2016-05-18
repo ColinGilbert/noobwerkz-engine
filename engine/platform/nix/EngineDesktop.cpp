@@ -109,7 +109,8 @@ int main(int /*_argc*/, char** /*_argv*/)
 	glfwSetWindowSizeCallback(window, window_size_callback);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetKeyCallback(window, key_callback);
-	glfwMakeContextCurrent(window);
+	// Note: The ext time seems to have been there for a while and everything was fine. Now (nVidia 361.28
+	//glfwMakeContextCurrent(window);
 
 	ndof.run();
 

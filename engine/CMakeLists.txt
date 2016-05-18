@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.0)
 project(NoobWerkz)
 
-# set(CMAKE_BUILD_TYPE "DEBUG")
+#set(CMAKE_BUILD_TYPE "DEBUG")
 set(CMAKE_BUILD_TYPE "RELEASE")
 
-set(CMAKE_CXX_FLAGS "-std=c++1y -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DOM_GARBAGE_NO_STATUS_WARNING -DAS_CAN_USE_CPP11 -DEIGEN_MPL2_ONLY ${CMAKE_CXX_FLAGS}") 
-set(CMAKE_C_FLAGS "-std=c99 -pipe -O2 -fno-strict-aliasing -DSQLITE_ENABLE_COLUMN_METADATA -DSTB_IMAGE_STATIC -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -Wall ${CMAKE_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++1y -O2 -pipe -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DOM_GARBAGE_NO_STATUS_WARNING -DAS_CAN_USE_CPP11 -DEIGEN_MPL2_ONLY ${CMAKE_CXX_FLAGS}") 
+set(CMAKE_C_FLAGS "-std=c99 -O2 -pipe -DSQLITE_ENABLE_COLUMN_METADATA -DSTB_IMAGE_STATIC -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -Wall ${CMAKE_C_FLAGS}")
 
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 
@@ -42,7 +42,6 @@ list(APPEND bgfx_utils_src
 	common/drawing/font/cube_atlas.cpp
 	)
 
-
 include_directories(lib/freetype/include)
 add_subdirectory(lib/freetype)
 
@@ -50,6 +49,53 @@ include_directories(lib/voropp/src)
 list (APPEND voropp_src
 	lib/voropp/src/voro++.cc
 	)
+
+include_directories(lib/ozz-animation/include)
+include_directories(lib/ozz-animation/include/ozz)
+include_directories(lib/ozz-animation/src)
+list(APPEND ozz_src
+	lib/ozz-animation/src/animation/runtime/local_to_model_job.cc
+	lib/ozz-animation/src/animation/runtime/skeleton_utils.cc
+	lib/ozz-animation/src/animation/runtime/sampling_job.cc
+	lib/ozz-animation/src/animation/runtime/animation.cc
+	lib/ozz-animation/src/animation/runtime/blending_job.cc
+	lib/ozz-animation/src/animation/runtime/skeleton.cc
+	#lib/ozz-animation/src/animation/offline/collada/dae2skel.cc
+	#lib/ozz-animation/src/animation/offline/collada/collada_transform.cc
+	#lib/ozz-animation/src/animation/offline/collada/collada_base.cc
+	#lib/ozz-animation/src/animation/offline/collada/collada_skeleton.cc
+	#lib/ozz-animation/src/animation/offline/collada/dae2anim.cc
+	#lib/ozz-animation/src/animation/offline/collada/collada_animation.cc
+	#lib/ozz-animation/src/animation/offline/collada/collada.cc
+	lib/ozz-animation/src/animation/offline/animation_optimizer.cc
+	lib/ozz-animation/src/animation/offline/skeleton_builder.cc
+	lib/ozz-animation/src/animation/offline/additive_animation_builder.cc
+	lib/ozz-animation/src/animation/offline/raw_skeleton.cc
+	lib/ozz-animation/src/animation/offline/animation_builder.cc
+	lib/ozz-animation/src/animation/offline/raw_animation.cc
+	#lib/ozz-animation/src/animation/offline/fbx/fbx_base.cc
+	#lib/ozz-animation/src/animation/offline/fbx/fbx2anim.cc
+	#lib/ozz-animation/src/animation/offline/fbx/fbx.cc
+	#lib/ozz-animation/src/animation/offline/fbx/fbx_skeleton.cc
+	#lib/ozz-animation/src/animation/offline/fbx/fbx_animation.cc
+	#lib/ozz-animation/src/animation/offline/fbx/fbx2skel.cc
+	lib/ozz-animation/src/animation/offline/raw_animation_archive.cc
+	lib/ozz-animation/src/animation/offline/raw_animation_utils.cc
+	lib/ozz-animation/src/animation/offline/raw_skeleton_archive.cc
+	#lib/ozz-animation/src/animation/offline/tools/convert2anim.cc
+	#lib/ozz-animation/src/animation/offline/tools/convert2skel.cc
+	lib/ozz-animation/src/base/io/archive.cc
+	lib/ozz-animation/src/base/io/stream.cc
+	lib/ozz-animation/src/base/memory/allocator.cc
+	lib/ozz-animation/src/base/log.cc
+	lib/ozz-animation/src/base/containers/string_archive.cc
+	lib/ozz-animation/src/base/maths/box.cc
+	lib/ozz-animation/src/base/maths/soa_math_archive.cc
+	lib/ozz-animation/src/base/maths/simd_math_archive.cc
+	lib/ozz-animation/src/base/maths/math_archive.cc
+	lib/ozz-animation/src/base/maths/simd_math.cc
+	lib/ozz-animation/src/geometry/runtime/skinning_job.cc
+	)	
 
 # Used to link to the system lib, but then had problems. Now following Couman's advice in http://bulletphysics.org/Bullet/phpBB3/viewtopic.php?t=7168
 include_directories(lib/bullet/src)
@@ -267,9 +313,6 @@ list (APPEND openmesh_src
 	lib/openmesh/src/OpenMesh/Tools/Decimater/Observer.cc
 	)
 
-# include_directories(lib/sparsehash/src/google)
-
-
 include_directories(lib/lemon)
 
 include_directories(lib/stb)
@@ -282,7 +325,6 @@ include_directories(common)
 include_directories(common/scripting)
 include_directories(common/drawing)
 include_directories(common/drawing/font)
-# include_directories(common/drawing/shaderc)
 
 include_directories(lib/recastnavigation/Detour/Include)
 include_directories(lib/recastnavigation/Recast/Include)
@@ -468,9 +510,11 @@ endif()
 # endif()
 
 
-add_executable(NoobEdit ${user_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${openmesh_src} ${cppformat_src} ${recast_src} ${angelscript_src} ${bullet_src} ${voropp_src})
+add_executable(NoobEdit ${user_src} ${main_src} ${common_src} ${bgfx_src}
+	${bgfx_utils_src} ${openmesh_src} ${cppformat_src} ${recast_src}
+	${angelscript_src} ${bullet_src} ${voropp_src} ${ozz_src})
 
-target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype rt dl pthread m ozz_animation_offline_r ozz_animation_r ozz_geometry_r ozz_base_r ${Boost_LIBRARIES})
+target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype rt dl pthread m ${Boost_LIBRARIES})
 
 if (DEFINED NOOB_PLATFORM_LINUX)
 	target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES})	

@@ -1,5 +1,4 @@
-#**/build/*
-#engine/build/*
+**/build/*
 **.*.sw*
 *.*.sw*
 **/.git
@@ -27,7 +26,6 @@ sandbox/shaders/dx11/*
 sandbox/temp/volumetric/*
 **/e
 **/shaderc
-
 **/geometryc
 **/texturec
 #sandbox/*.tga
