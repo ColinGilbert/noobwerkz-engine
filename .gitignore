@@ -1,4 +1,6 @@
 **/build/*
+**/_builds
+**/_builds/*
 **.*.sw*
 *.*.sw*
 **/.git
