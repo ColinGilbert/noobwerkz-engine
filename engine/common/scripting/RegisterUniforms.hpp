@@ -3,7 +3,8 @@
 #include <angelscript.h>
 #include "AngelVector.hpp"
 
-#include "PreparedShaders.hpp"
+#include "BasicRenderer.hpp"
+#include "TriplanarGradientMap.hpp"
 
 
 namespace noob

@@ -23,7 +23,8 @@
 #include "Component.hpp"
 #include "Ghost.hpp"
 #include "ComponentDefines.hpp"
-
+#include "BasicRenderer.hpp"
+#include "TriplanarGradientMap.hpp"
 
 namespace noob
 {
@@ -66,8 +67,8 @@ namespace noob
 			// void set_reflection(const noob::reflection&, const std::string&);
 			// noob::reflection get_reflection(const std::string&);			
 
-			void set_shader(const noob::basic_shader_uniform&, const std::string& name);
-			void set_shader(const noob::triplanar_shader_uniform&, const std::string& name);
+			void set_shader(const noob::basic_renderer::uniform&, const std::string& name);
+			void set_shader(const noob::triplanar_gradient_map_renderer::uniform&, const std::string& name);
 			
 			struct shader_results
 			{
@@ -75,7 +76,7 @@ namespace noob
 				size_t handle_num;
 			};
 
-			shader_results get_shader(const std::string& name) const;
+			noob::globals::shader_results get_shader(const std::string& name) const;
 
 			// Utilities:
 			noob::light_handle set_light(const noob::light&, const std::string& name);

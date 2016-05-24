@@ -1,4 +1,3 @@
-/*
 #include "BasicRenderer.hpp"
 
 void noob::basic_renderer::init()
@@ -60,4 +59,3 @@ void noob::basic_renderer::draw(const noob::drawable* model, const noob::mat4& w
 	model->draw(view_id, w_mat, shader.program,  0 | BGFX_STATE_RGB_WRITE | BGFX_STATE_ALPHA_WRITE | BGFX_STATE_DEPTH_WRITE | BGFX_STATE_DEPTH_TEST_LESS | BGFX_STATE_MSAA);
 
 }
-*/

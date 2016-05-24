@@ -1,4 +1,3 @@
-/*
 #include "TriplanarGradientMap.hpp"
 
 void noob::triplanar_gradient_map_renderer::init()
@@ -28,4 +27,3 @@ void noob::triplanar_gradient_map_renderer::draw(const noob::drawable* model, co
 	bgfx::setUniform(noob::graphics::normal_mat.handle, &normal_mat.m[0]);
 	model->draw(view_id, w_mat, shader.program, 0 | BGFX_STATE_RGB_WRITE | BGFX_STATE_ALPHA_WRITE | BGFX_STATE_DEPTH_WRITE | BGFX_STATE_DEPTH_TEST_LESS | BGFX_STATE_MSAA);
 }
-*/
