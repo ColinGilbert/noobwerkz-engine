@@ -8,8 +8,6 @@
 // #include <forward_list>
 #include <functional>
 
-#include <boost/variant.hpp>
-
 #include <btBulletDynamicsCommon.h>
 // #include <dcollide.h>
 

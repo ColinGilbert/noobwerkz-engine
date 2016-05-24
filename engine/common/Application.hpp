@@ -28,9 +28,6 @@
 #include <lemon/list_graph.h>
 #include <lemon/static_graph.h>
 
-#include <boost/filesystem.hpp>
-#include <boost/system/error_code.hpp>
-
 #include "Globals.hpp"
 #include "Logger.hpp"
 #include "NoobUtils.hpp"

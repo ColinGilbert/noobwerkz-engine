@@ -2,7 +2,6 @@
 
 #include "RegisterScripts.hpp"
 
-
 noob::application* noob::application::app_pointer = nullptr;
 // noob::globals noob::application::global_storage;
 
@@ -21,7 +20,8 @@ noob::application::application()
 	// noob::filesystem::init(*prefix);
 	set_init_script("init.as");
 	view_mat = noob::look_at(noob::vec3(0, 50.0, -100.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
-}	
+
+}
 
 
 noob::application::~application()
@@ -130,7 +130,7 @@ void noob::application::init()
 
 	logger::log("[Application] Done basic init.");
 	bool b = user_init();
-	// b = load_init_script();
+	b = load_init_script();
 }
 
 
@@ -139,19 +139,18 @@ void noob::application::update(double delta)
 	gui.window_dims(window_width, window_height);
 	stage.update(delta);
 	user_update(delta);
-
+/*
 	static double time_elapsed = 0.0;
 	time_elapsed += delta;
 
 
 	if (time_elapsed > 0.25)
 	{
-		boost::filesystem::path p;
+		filesystem::path p1(*prefix);
 
-		p += *prefix;
-		p += script_name;
+		
+		filesystem::path p2(script_name);
 
-		boost::system::error_code ec;
 
 		static std::time_t last_write = 0;
 		std::time_t t = boost::filesystem::last_write_time(p, ec);
@@ -175,6 +174,7 @@ void noob::application::update(double delta)
 		}
 		time_elapsed = 0.0;
 	}
+*/
 }
 
 bool noob::application::load_init_script()

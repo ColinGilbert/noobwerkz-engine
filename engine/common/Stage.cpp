@@ -1,7 +1,6 @@
 #include "Stage.hpp"
-#include <fstream>
-#include <boost/filesystem.hpp>
 
+#include <fstream>
 
 noob::stage::~stage()
 {
@@ -318,7 +317,7 @@ void noob::stage::draw(float window_width, float window_height) const
 		return l;
 	}
 
-
+/*
 	void noob::stage::write_graph(const std::string& filename) const
 	{
 		logger::log("About to write graph");
@@ -330,3 +329,4 @@ void noob::stage::draw(float window_width, float window_height) const
 		}
 		else logger::log("[Stage] Could not write graph snapshot - temp directory not found.");
 	}
+*/

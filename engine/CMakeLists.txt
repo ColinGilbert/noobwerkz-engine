@@ -7,11 +7,16 @@ set(CMAKE_BUILD_TYPE "RELEASE")
 set(CMAKE_CXX_FLAGS "-std=c++1y -O2 -pipe -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DOM_GARBAGE_NO_STATUS_WARNING -DAS_CAN_USE_CPP11 -DEIGEN_MPL2_ONLY ${CMAKE_CXX_FLAGS}") 
 set(CMAKE_C_FLAGS "-std=c99 -O2 -pipe -DSQLITE_ENABLE_COLUMN_METADATA -DSTB_IMAGE_STATIC -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -Wall ${CMAKE_C_FLAGS}")
 
-find_package(Boost COMPONENTS system filesystem REQUIRED)
-
-include_directories(${Boost_INCLUDE_DIR})
-
 include_directories(lib/brigand)
+
+include_directories(lib/rdestl)
+list (APPEND rdestl_src
+	lib/rdestl/allocator.cpp
+	lib/rdestl/intrusive_list.cpp
+	lib/rdestl/intrusive_slist.cpp
+	lib/rdestl/list.cpp
+	)
+
 
 include_directories(lib/cppformat)
 list (APPEND cppformat_src
@@ -29,6 +34,7 @@ include_directories(lib/bx/include)
 include_directories(lib/bgfx/include)
 include_directories(lib/bgfx/3rdparty/sdf)
 include_directories(lib/bgfx/3rdparty/khronos)
+include_directories(lib/bgfx/3rdparty)
 
 list(APPEND bgfx_src
 	lib/bgfx/src/amalgamated.cpp
@@ -511,10 +517,10 @@ endif()
 
 
 add_executable(NoobEdit ${user_src} ${main_src} ${common_src} ${bgfx_src}
-	${bgfx_utils_src} ${openmesh_src} ${cppformat_src} ${recast_src}
+	${bgfx_utils_src} ${openmesh_src} ${rdestl_src} ${cppformat_src} ${recast_src}
 	${angelscript_src} ${bullet_src} ${voropp_src} ${ozz_src})
 
-target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype rt dl pthread m ${Boost_LIBRARIES})
+target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype rt dl pthread m)
 
 if (DEFINED NOOB_PLATFORM_LINUX)
 	target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES})	

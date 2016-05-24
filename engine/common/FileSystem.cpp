@@ -1,6 +1,5 @@
+/*
 #include <fstream>
-#include <boost/filesystem.hpp>
-#include <boost/system/error_code.hpp>
 
 #include "FileSystem.hpp"
 #include "Logger.hpp"
@@ -128,3 +127,4 @@ bool noob::filesystem::exists(file_id id)
 
 	return false;
 }
+*/
