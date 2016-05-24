@@ -1,22 +1,16 @@
 // TODO: Implement all creation functions (*) and ensure that they take constructor args
 #pragma once
 
-// #include <stack>
-// #include <string>
-// #include <tuple>
-// #include <list>
-// #include <forward_list>
 #include <functional>
 
 #include <btBulletDynamicsCommon.h>
-// #include <dcollide.h>
 
 #include "NoobDefines.hpp"
 #include "Graphics.hpp"
 #include "MathFuncs.hpp"
 #include "VoxelWorld.hpp"
-#include "TriplanarGradientMap.hpp"
 #include "BasicRenderer.hpp"
+#include "TriplanarGradientMap.hpp"
 #include "TransformHelper.hpp"
 #include "Actor.hpp"
 #include "SkeletalAnim.hpp"
@@ -29,7 +23,6 @@
 #include "Shape.hpp"
 #include "Component.hpp"
 #include "Globals.hpp"
-// #include "IntrusiveBase.hpp"
 #include "ComponentDefines.hpp"
 
 #include <standalone/brigand.hpp>
@@ -68,17 +61,17 @@ namespace noob
 			noob::ghosts_holder ghosts;
 
 			// Functions to create commonly-used configurations:
-			void actor(const noob::bodies_holder::handle, const noob::animated_models_holder::handle, const noob::shaders_holder::handle);
+			void actor(const noob::bodies_holder::handle, const noob::animated_models_holder::handle, const noob::globals::shader_results);
 
-			void actor(const noob::bodies_holder::handle, const noob::scaled_model, const noob::shaders_holder::handle);
+			void actor(const noob::bodies_holder::handle, const noob::scaled_model, const noob::globals::shader_results);
 
-			// void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::scaled_model, const noob::shaders_holder::handle);
-			void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle, const noob::reflectances_holder::handle);
+			// void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::scaled_model, const noob::globals::shader_results);
+			void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results, const noob::reflectances_holder::handle);
 
-			// void actor(const noob::shapes_holder::handle, const noob::vec3& pos, const noob::vec3& orient, const noob::vec3& scale, const noob::shaders_holder::handle);
+			// void actor(const noob::shapes_holder::handle, const noob::vec3& pos, const noob::vec3& orient, const noob::vec3& scale, const noob::globals::shader_results);
 
 			// Scenery is a non-movable item that uses indexed triangle meshes as input.
-			void scenery(const noob::basic_mesh&, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle, const noob::reflectances_holder::handle, const std::string& name);
+			void scenery(const noob::basic_mesh&, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results, const noob::reflectances_holder::handle, const std::string& name);
 
 			void set_light(unsigned int, const noob::lights_holder::handle);
 

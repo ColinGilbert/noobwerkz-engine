@@ -25,15 +25,9 @@ Provides clean interfaces over to those libraries and tools on top via both a sc
 Currently brings in (among others):
 ```
 BGFX
-GLFW
 Bullet Physics
-FreeType
 PolyVox
-Lemon Graph Library 
-Assimp (and a working mesh loader, too! =P)
-cppformat - the others are self-evident, but thank heavens for this little guy...
 AngelScript
-Boost (Variant, Filesystem)
 Voro++
 ```
 

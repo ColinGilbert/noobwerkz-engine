@@ -21,8 +21,6 @@ void noob::stage::init(const noob::globals* g)
 	dynamics_world = new btDiscreteDynamicsWorld(collision_dispatcher, broadphase, solver, collision_configuration);
 	dynamics_world->setGravity(btVector3(0, -10, 0));
 
-	renderer.init();
-
 	draw_graph.reserveNode(NUM_RESERVED_NODES);
 	draw_graph.reserveArc(NUM_RESERVED_ARCS);
 
@@ -197,13 +195,13 @@ void noob::stage::draw(float window_width, float window_height) const
 	}
 
 
-	void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::animated_models_holder::handle model_h, const noob::shaders_holder::handle shader_h)
+	void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::animated_models_holder::handle model_h, const noob::globals::shader_results shader_h)
 	{
 
 	}
 
 
-	void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::scaled_model model_info, const noob::shaders_holder::handle shader_h)
+	void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::scaled_model model_info, const noob::globals::shader_results shader_h)
 	{
 		auto body_results = bodies_to_nodes.find(body_h.get_inner());
 		if (body_results != bodies_to_nodes.end())
@@ -267,7 +265,7 @@ void noob::stage::draw(float window_width, float window_height) const
 
 
 /*
-	void noob::stage::actor(const noob::shapes_holder::handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::scaled_model model_info, const noob::shaders_holder::handle shader_h)
+	void noob::stage::actor(const noob::shapes_holder::handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::scaled_model model_info, const noob::globals::shader_results shader_h)
 	{
 		noob::bodies_holder::handle body_h = body(noob::body_type::DYNAMIC, shape_h, mass, pos, orient);
 		actor(body_h, model_info, shader_h);
@@ -275,7 +273,7 @@ void noob::stage::draw(float window_width, float window_height) const
 */
 
 
-	void noob::stage::actor(const noob::shapes_holder::handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle shader_h, const noob::reflectances_holder::handle reflect_arg)
+	void noob::stage::actor(const noob::shapes_holder::handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results shader_h, const noob::reflectances_holder::handle reflect_arg)
 	{
 		noob::shape* s = globals->shapes.get(shape_h);
 		if (s->get_type() != noob::shape::type::TRIMESH)
@@ -289,7 +287,7 @@ void noob::stage::draw(float window_width, float window_height) const
 	}
 
 
-	void noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle shader_h, const noob::reflectances_holder::handle reflect_arg, const std::string& name)
+	void noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results shader_h, const noob::reflectances_holder::handle reflect_arg, const std::string& name)
 	{
 		noob::shapes_holder::handle shape_h = globals->static_trimesh_shape(m, name);
 		noob::bodies_holder::handle body_h = body(noob::body_type::STATIC, shape_h, 0.0, pos, orient);
