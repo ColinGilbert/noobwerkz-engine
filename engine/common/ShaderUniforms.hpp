@@ -3,8 +3,20 @@
 
 namespace noob
 {
-`	class uniforms
+	
+	enum shader_type
+	{
+		BASIC = 0,
+		TRIPLANAR = 1 << 1,
+	};
+
+	class basic_shader_uniform
 	{
 		
+	};
+
+	class triplanar_shader_uniform
+	{
+
 	};
 }

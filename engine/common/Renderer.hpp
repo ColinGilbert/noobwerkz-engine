@@ -1,3 +1,4 @@
+/*
 #pragma once
 
 #include "NoobDefines.hpp"
@@ -13,3 +14,4 @@ namespace noob
 			bool program_valid;
 	};
 }
+*/

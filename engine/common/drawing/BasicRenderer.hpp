@@ -1,3 +1,4 @@
+/*
 #pragma once
 
 #include "MathFuncs.hpp"
@@ -24,3 +25,4 @@ namespace noob
 		
 	};
 }
+*/

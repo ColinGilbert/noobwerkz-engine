@@ -73,8 +73,7 @@ namespace noob
 
 			void actor(const noob::bodies_holder::handle, const noob::scaled_model, const noob::shaders_holder::handle);
 
-			void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::scaled_model, const noob::shaders_holder::handle);
-			
+			// void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::scaled_model, const noob::shaders_holder::handle);
 			void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle, const noob::reflectances_holder::handle);
 
 			// void actor(const noob::shapes_holder::handle, const noob::vec3& pos, const noob::vec3& orient, const noob::vec3& scale, const noob::shaders_holder::handle);
@@ -95,7 +94,7 @@ namespace noob
 			noob::vec4 ambient_light;
 			noob::vec3 eye_pos;
 
-			noob::prepared_shaders renderer;
+			// noob::prepared_shaders renderer;
 
 
 		protected:

@@ -1,6 +1,6 @@
+/*
 #pragma once
 
-// #include "NoobDefines.hpp"
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
 #include "AnimatedModel.hpp"
@@ -42,3 +42,4 @@ namespace noob
 	};
 
 }
+*/

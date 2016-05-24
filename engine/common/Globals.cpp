@@ -3,7 +3,7 @@
 
 bool noob::globals::init()
 {
-	renderer.init();
+	// renderer.init();
 	unit_sphere_shape = sphere_shape(0.5);
 	unit_cube_shape = box_shape(1.0, 1.0, 1.0);
 	unit_cylinder_shape = cylinder_shape(0.5, 1.0);
@@ -29,14 +29,15 @@ bool noob::globals::init()
 	logger::log(ww_2.str());
 
 	//  Init basic default shader
-	noob::basic_renderer::uniform dbg;
+	noob::basic_shader_uniform dbg;
 	dbg.colour = noob::vec4(1.0, 1.0, 1.0, 0.0);
 	set_shader(dbg, "debug");
 	// logger::log("[Globals] Set debug shader");
-	debug_shader = get_shader("debug");
+	shader_results t1 = get_shader("debug");
+	debug_shader = basic_shaders_holders.get_handle(t1.handle_num);
 	// logger::log("[Globals] Got debug shader handle");
 	// Init triplanar shader. For fun.
-	noob::triplanar_gradient_map_renderer::uniform triplanar_info;
+	noob::triplanar_shader_uniform triplanar_info;
 	
 	triplanar_info.colours[0] = noob::vec4(1.0, 1.0, 1.0, 1.0);
 	triplanar_info.colours[1] = noob::vec4(0.0, 0.0, 0.0, 1.0);
@@ -47,7 +48,9 @@ bool noob::globals::init()
 	triplanar_info.colour_positions = noob::vec4(0.3, 0.6, 0.0, 0.0);
 	set_shader(triplanar_info, "default-triplanar");
 	// logger::log("[Globals] Set default triplanar shader.");
-	default_triplanar_shader = get_shader("default-triplanar");
+	
+	shader_results t2 = get_shader("default-triplanar");
+	default_triplanar_shader = triplanar_shader_holder.get_handle(t2.handle_num);
 
 	noob::light l;
 	l.set_colour(noob::vec3(0.0, 1.0, 1.0));
@@ -479,48 +482,21 @@ noob::light noob::globals::get_light(const noob::lights_holder::handle h) const
 }
 */
 
-void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std::string& name)
+void noob::globals::set_shader(const noob::basic_shader_uniform& u, const std::string& name)
 {
-	set_shader(noob::prepared_shaders::uniform(u), name);
+	// set_shader(noob::prepared_shaders::uniform(u), name);
 }
 
 
 void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::uniform& u, const std::string& name)
 {
-	set_shader(noob::prepared_shaders::uniform(u), name);
+	// set_shader(noob::prepared_shaders::uniform(u), name);
 }
 
 
-void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer_lit::uniform& u, const std::string& name)
+noob::shader_results noob::globals::get_shader(const std::string& s) const
 {
-	set_shader(noob::prepared_shaders::uniform(u), name);
-}
-
-
-void noob::globals::set_shader(const noob::prepared_shaders::uniform& u, const std::string& s)
-{
-	auto search = names_to_shaders.find(s);
-	if (search != names_to_shaders.end())
-	{
-		fmt::MemoryWriter ww;
-		ww << "[Globals] set_shader - Found shader with name: " << s << ". Updating.";//Creating and setting to handle " << h.get_inner();
-		logger::log(ww.str());
-		shaders.set(search->second, u);
-	}
-	else
-	{
-		noob::shaders_holder::handle h = shaders.add(u);
-		
-		fmt::MemoryWriter ww;
-		ww << "[Globals] set_shader - Could not find shader with name: " << s << ". Creating and setting to handle " << h.get_inner();
-		logger::log(ww.str());
-		names_to_shaders.insert(std::make_pair(s, h));
-	}
-}
-
-
-noob::shaders_holder::handle noob::globals::get_shader(const std::string& s) const
-{
+	noob::shader_results results;
 	// noob::shaders_holder::handle temp;
 	if (names_to_shaders.find(s) != names_to_shaders.end())
 	{

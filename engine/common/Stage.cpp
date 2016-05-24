@@ -94,6 +94,8 @@ void noob::stage::update(double dt)
 }
 
 
+
+
 void noob::stage::draw(float window_width, float window_height) const
 {
 
@@ -106,6 +108,10 @@ void noob::stage::draw(float window_width, float window_height) const
 	bgfx::setUniform(noob::graphics::eye_pos.handle, &eye_pos.v[0]);	
 	bgfx::setUniform(noob::graphics::eye_pos_normalized.handle, &(noob::normalize(eye_pos)).v[0]);
 
+
+
+
+	// static const noob::graphics::uniform invalid_uniform, colour_0, colour_1, colour_2, colour_3, blend_0, blend_1, tex_scales, normal_mat, normal_mat_modelspace, eye_pos, eye_pos_normalized, ambient, light_pos_radius, light_rgb_falloff, specular_shine, diffuse, emissive, fog, rough_albedo_fresnel;
 	std::array<noob::light, MAX_LIGHTS> temp_lights;
 
 	for (size_t i = 0; i < MAX_LIGHTS; ++i)
@@ -250,11 +256,9 @@ void noob::stage::draw(float window_width, float window_height) const
 		scales_mapping[body_node] = model_info.scales.v;
 		reflectances_mapping[body_node] = model_info.reflect_h.get_inner();
 		draw_graph.addArc(shader_node, body_node);
-		// TODO: Replace with decent code
 
 		noob::lights_holder::handle light_h = globals->default_light;
 		lights_mapping[body_node] = {light_h.get_inner(), light_h.get_inner(), light_h.get_inner(), light_h.get_inner()};
-		//reflectances_mapping[body_node] = model_info.reflect_h.get_inner();
 
 		fmt::MemoryWriter ww;
 		ww << "[Stage] Created actor with model " << model_info.model_h.get_inner() << ", shader " << shader_h.get_inner() << ", reflectance " << model_info.reflect_h.get_inner() << " and body " << body_h.get_inner() << ".";
@@ -262,13 +266,13 @@ void noob::stage::draw(float window_width, float window_height) const
 	}
 
 
-
+/*
 	void noob::stage::actor(const noob::shapes_holder::handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::scaled_model model_info, const noob::shaders_holder::handle shader_h)
 	{
 		noob::bodies_holder::handle body_h = body(noob::body_type::DYNAMIC, shape_h, mass, pos, orient);
 		actor(body_h, model_info, shader_h);
 	}
-
+*/
 
 
 	void noob::stage::actor(const noob::shapes_holder::handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::shaders_holder::handle shader_h, const noob::reflectances_holder::handle reflect_arg)

@@ -10,9 +10,10 @@
 #include "BasicMesh.hpp"
 #include "ActiveMesh.hpp"
 #include "SkeletalAnim.hpp"
-#include "PreparedShaders.hpp"
+// #include "PreparedShaders.hpp"
 #include "BasicModel.hpp"
 #include "AnimatedModel.hpp"
+#include "ShaderUniforms.hpp"
 
 namespace noob
 {
@@ -26,7 +27,9 @@ namespace noob
 	typedef noob::component<noob::reflectance> reflectances_holder;
 	typedef noob::component<std::unique_ptr<noob::basic_model>> basic_models_holder;
 	typedef noob::component<std::unique_ptr<noob::animated_model>> animated_models_holder;
-	typedef noob::component<noob::prepared_shaders::uniform> shaders_holder;
+	// typedef noob::component<noob::prepared_shaders::uniform> shaders_holder;
+	typedef noob::component<noob::basic_shader_uniform> basic_shaders_holder;
+	typedef noob::component<noob::triplanar_shader_uniform> triplanar_shaders_holder;
 
 	typedef meshes_holder::handle mesh_handle;
 	typedef bodies_holder::handle body_handle;
@@ -38,6 +41,8 @@ namespace noob
 	typedef reflectances_holder::handle reflectance_handle;
 	typedef basic_models_holder::handle model_handle;
 	typedef animated_models_holder::handle animated_model_handle;
-	typedef shaders_holder::handle shader_handle;
+	// typedef shaders_holder::handle shader_handle;
 
+	typedef basic_shaders_holder basic_shader_handle;
+	typedef triplanar_shaders_holder::handle triplanar_shader_handle;
 }
