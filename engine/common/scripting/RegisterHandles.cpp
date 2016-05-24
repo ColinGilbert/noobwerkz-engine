@@ -1,6 +1,5 @@
 #include "RegisterHandles.hpp"
 
-
 void noob::register_handles(asIScriptEngine* script_engine)
 {
 	int r;
@@ -25,6 +24,6 @@ void noob::register_handles(asIScriptEngine* script_engine)
 	r = script_engine->RegisterObjectType("reflectance_handle", sizeof(noob::reflectances_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::reflectances_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	// r = script_engine->RegisterObjectProperty("reflectance_handle", "uint64 inner", asOFFSET(noob::reflectances_holder::handle, inner)); assert(r >= 0);
 	
-	r = script_engine->RegisterObjectType("shader_handle", sizeof(noob::shaders_holder::handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::shaders_holder::handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectType("shader_handle", sizeof(noob::globals::shader_results), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::globals::shader_results>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	// r = script_engine->RegisterObjectProperty("shader_handle", "uint64 inner", asOFFSET(noob::shaders_holder::handle, inner)); assert(r >= 0);
 }

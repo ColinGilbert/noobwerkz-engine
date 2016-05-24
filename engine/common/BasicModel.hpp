@@ -1,10 +1,8 @@
 #pragma once
 
-
 #include "Drawable.hpp"
 #include "BasicMesh.hpp"
 // #include "IntrusiveBase.hpp"
-#include <boost/intrusive_ptr.hpp>
 #include "Graphics.hpp"
 
 namespace noob

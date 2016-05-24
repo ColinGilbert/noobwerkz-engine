@@ -19,7 +19,6 @@
 #include "Body.hpp"
 #include "SkeletalAnim.hpp"
 #include "Light.hpp"
-#include "ShaderUniforms.hpp"
 #include "Component.hpp"
 #include "Ghost.hpp"
 #include "ComponentDefines.hpp"
@@ -28,6 +27,12 @@
 
 namespace noob
 {
+	enum shader_type
+	{       
+		BASIC = 0,
+		TRIPLANAR = 1 << 1,
+	};
+
 	class globals
 	{
 		public:
@@ -58,31 +63,22 @@ namespace noob
 			// Skeletal animations (encompassing basic, single-bone animation...)
 			noob::skeletal_anims_holder::handle skeleton(const std::string& filename);
 
-			// Lighting functions
-			// noob::lights_holder::handle set_light(const noob::light&, const std::string&);
-			// noob::lights_holder::handle get_light_handle(const std::string&) const;
-			// noob::light get_light(const noob::lights_holder::handle) const;
-
-			// Surface reflectivity
-			// void set_reflection(const noob::reflection&, const std::string&);
-			// noob::reflection get_reflection(const std::string&);			
-
 			void set_shader(const noob::basic_renderer::uniform&, const std::string& name);
 			void set_shader(const noob::triplanar_gradient_map_renderer::uniform&, const std::string& name);
-			
+
 			struct shader_results
 			{
+				shader_results() : type(shader_type::BASIC), handle(0) {}
 				shader_type type;
-				size_t handle_num;
+				size_t handle;
 			};
 
 			noob::globals::shader_results get_shader(const std::string& name) const;
 
-			// Utilities:
 			noob::light_handle set_light(const noob::light&, const std::string& name);
 			noob::light_handle get_light(const std::string& name) const;
 
-			
+
 			noob::reflectance_handle set_reflectance(const noob::reflectance&, const std::string& name);
 			noob::reflectance_handle get_reflectance(const std::string& name) const;
 			// void set_point_light(const noob::point_light&, const std::string& name);
@@ -102,21 +98,16 @@ namespace noob
 			scaled_model model_by_shape(const noob::shapes_holder::handle);
 
 			// The following are basic, commonly-used objects that we provide as a convenience.
-			// noob::shape objects are a wrapper to Bullet shapes that provide a basic API to the rest of the app
 			noob::shapes_holder::handle unit_sphere_shape, unit_cube_shape, unit_capsule_shape, unit_cylinder_shape, unit_cone_shape;
 
 			// These represent models in the graphics card buffer
 			noob::scaled_model unit_sphere_model, unit_cube_model, unit_capsule_model, unit_cylinder_model, unit_cone_model;
 
-			// noob::shaders_holder::handle debug_shader, default_triplanar_shader, uv_shader;
-			
 			noob::basic_shader_handle debug_shader;
 			noob::triplanar_shader_handle default_triplanar_shader;
 
 			noob::light_handle default_light;
 			noob::reflectance_handle default_reflectance;
-
-			// noob::prepared_shaders renderer;
 
 			meshes_holder meshes;
 			basic_models_holder basic_models;
@@ -127,6 +118,9 @@ namespace noob
 			reflectances_holder reflectances;
 			basic_shaders_holder basic_shaders;
 			triplanar_shaders_holder triplanar_shaders;
+
+			noob::basic_renderer basic_drawer;
+			noob::triplanar_gradient_map_renderer triplanar_drawer;
 
 			// directional_lights_holder directional_lights;
 			// point_lights_holder point_lights;
@@ -142,13 +136,12 @@ namespace noob
 				POWERUP = 1 << 5,
 			};
 
-		protected:
-			// void set_shader(const noob::prepared_shaders::uniform&, const std::string& name);
 
+		protected:
 			std::map<size_t, noob::model_handle> shapes_to_models;
 			std::unordered_map<std::string, noob::shape_handle> names_to_shapes;
 			std::unordered_map<std::string, noob::model_handle> names_to_basic_models;
-			std::unordered_map<std::string, std::tuple<uint8_t, size_t>> names_to_shaders;
+			std::unordered_map<std::string, noob::globals::shader_results> names_to_shaders;
 			std::unordered_map<std::string, noob::light_handle> names_to_lights;
 			std::unordered_map<std::string, noob::reflectance_handle> names_to_reflectances;
 	};

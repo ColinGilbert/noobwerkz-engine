@@ -6,6 +6,7 @@
 
 #include <angelscript.h>
 #include "AngelVector.hpp"
+#include "RegisterGlobals.hpp"
 
 namespace noob
 {

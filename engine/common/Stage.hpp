@@ -15,7 +15,6 @@
 #include "Graphics.hpp"
 #include "MathFuncs.hpp"
 #include "VoxelWorld.hpp"
-#include "PreparedShaders.hpp"
 #include "TriplanarGradientMap.hpp"
 #include "BasicRenderer.hpp"
 #include "TransformHelper.hpp"

@@ -7,8 +7,6 @@
 #include <unordered_map>
 #include <bgfx/bgfx.h>
 
-#include <boost/variant/variant.hpp>
-
 #include "NoobDefines.hpp"
 #include "NoobUtils.hpp"
 

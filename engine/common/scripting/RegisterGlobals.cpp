@@ -24,6 +24,5 @@ void noob::register_globals(asIScriptEngine* script_engine, const noob::globals&
 	r = script_engine->RegisterGlobalFunction("reflectance_handle get_reflectance(const string& in)", asMETHOD(noob::globals, get_reflectance), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("void set_shader(const basic_uniform& in, const string& in)", asMETHODPR(noob::globals, set_shader, (const noob::basic_renderer::uniform&, const std::string&), void), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("void set_shader(const triplanar_gradmap_uniform& in, const string& in)", asMETHODPR(noob::globals, set_shader, (const noob::triplanar_gradient_map_renderer::uniform&, const std::string&), void), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
-	// r = script_engine->RegisterGlobalFunction("void set_shader(const lit_triplanar_gradmap_uniform& in, const string& in)", asMETHODPR(noob::globals, set_shader, (const noob::triplanar_gradient_map_renderer_lit::uniform&, const std::string&), void), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("shader_handle get_shader(const string& in)", asMETHOD(noob::globals, get_shader), asCALL_THISCALL_ASGLOBAL, &global_storage); assert( r >= 0 );
 }
