@@ -4,7 +4,9 @@ project(NoobWerkz)
 #set(CMAKE_BUILD_TYPE "DEBUG")
 set(CMAKE_BUILD_TYPE "RELEASE")
 
-set(CMAKE_CXX_FLAGS "-std=c++1y -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DOM_GARBAGE_NO_STATUS_WARNING -DAS_CAN_USE_CPP11 -DEIGEN_MPL2_ONLY ${CMAKE_CXX_FLAGS}") 
+set(ASSIMP_FLAGS "-DASSIMP_BUILD_NO_XGL_IMPORTER -DASSIMP_BUILD_NO_FBX_IMPORTER -DASSIMP_BUILD_NO_ASSBIN_IMPORTER -DASSIMP_BUILD_NO_C4D_IMPORTER -DASSIMP_BUILD_NO_X_IMPORTER -DASSIMP_BUILD_NO_OBJ_IMPORTER -DASSIMP_BUILD_NO_MD3_IMPORTER -DASSIMP_BUILD_NO_MD2_IMPORTER -DASSIMP_BUILD_NO_PLY_IMPORTER -DASSIMP_BUILD_NO_MDL_IMPORTER -DASSIMP_BUILD_NO_ASE_IMPORTER -DASSIMP_BUILD_NO_HMP_IMPORTER -DASSIMP_BUILD_NO_SMD_IMPORTER -DASSIMP_BUILD_NO_MDC_IMPORTER -DASSIMP_BUILD_NO_MD5_IMPORTER -DASSIMP_BUILD_NO_STL_IMPORTER -DASSIMP_BUILD_NO_LWO_IMPORTER -DASSIMP_BUILD_NO_DXF_IMPORTER -DASSIMP_BUILD_NO_NFF_IMPORTER -DASSIMP_BUILD_NO_RAW_IMPORTER -DASSIMP_BUILD_NO_OFF_IMPORTER -DASSIMP_BUILD_NO_AC_IMPORTER -DASSIMP_BUILD_NO_BVH_IMPORTER -DASSIMP_BUILD_NO_IRRMESH_IMPORTER -DASSIMP_BUILD_NO_IRR_IMPORTER -DASSIMP_BUILD_NO_Q3D_IMPORTER -DASSIMP_BUILD_NO_B3D_IMPORTER -DASSIMP_BUILD_NO_COLLADA_IMPORTER -DASSIMP_BUILD_NO_TERRAGEN_IMPORTER -DASSIMP_BUILD_NO_CSM_IMPORTER -DASSIMP_BUILD_NO_3D_IMPORTER -DASSIMP_BUILD_NO_LWS_IMPORTER -DASSIMP_BUILD_NO_OGRE_IMPORTER -DASSIMP_BUILD_NO_OPENGEX_IMPORTER -DASSIMP_BUILD_NO_COB_IMPORTER -DASSIMP_BUILD_NO_BLEND_IMPORTER -DASSIMP_BUILD_NO_Q3BSP_IMPORTER -DASSIMP_BUILD_NO_NDO_IMPORTER -DASSIMP_BUILD_NO_IFC_IMPORTER -DASSIMP_BUILD_NO_XGL_IMPORTER -DASSIMP_BUILD_NO_FBX_IMPORTER")
+
+set(CMAKE_CXX_FLAGS "-std=c++1y -fpermissive -DASIO_STANDALONE -DOM_STATIC_BUILD -DOM_GARBAGE_NO_STATUS_WARNING -DAS_CAN_USE_CPP11 -DEIGEN_MPL2_ONLY ${CMAKE_CXX_FLAGS} ${ASSIMP_FLAGS}") 
 set(CMAKE_C_FLAGS "-DSQLITE_ENABLE_COLUMN_METADATA -DSTB_IMAGE_STATIC -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -Wall ${CMAKE_C_FLAGS}")
 
 include_directories(lib/brigand)
@@ -145,21 +147,21 @@ list (APPEND assimp_src
 	#lib/assimp/port/AndroidJNI/AndroidJNIIOSystem.cpp
 	#lib/assimp/samples/SimpleOpenGL/Sample_SimpleOpenGL.c
 	#lib/assimp/samples/SimpleTexturedOpenGL/SimpleTexturedOpenGL/src/model_loading.cpp
-	#lib/assimp/code/UnrealLoader.cpp
+	lib/assimp/code/UnrealLoader.cpp
 	lib/assimp/code/SkeletonMeshBuilder.cpp
-	#lib/assimp/code/NFFLoader.cpp
+	lib/assimp/code/NFFLoader.cpp
 	lib/assimp/code/StandardShapes.cpp
 	lib/assimp/code/TriangulateProcess.cpp
 	lib/assimp/code/FBXTokenizer.cpp
-	#lib/assimp/code/HMPLoader.cpp
+	lib/assimp/code/HMPLoader.cpp
 	lib/assimp/code/3DSConverter.cpp
 	lib/assimp/code/FBXProperties.cpp
 	lib/assimp/code/MD2Loader.cpp
 	lib/assimp/code/FBXConverter.cpp
-	#lib/assimp/code/BlenderBMesh.cpp
+	lib/assimp/code/BlenderBMesh.cpp
 	lib/assimp/code/ProcessHelper.cpp
 	lib/assimp/code/DefaultIOStream.cpp
-	#lib/assimp/code/ACLoader.cpp
+	lib/assimp/code/ACLoader.cpp
 	lib/assimp/code/SpatialSort.cpp
 	lib/assimp/code/AssimpPCH.cpp
 	lib/assimp/code/FBXMaterial.cpp
@@ -174,47 +176,47 @@ list (APPEND assimp_src
 	lib/assimp/code/RawLoader.cpp
 	lib/assimp/code/AssimpCExport.cpp
 	lib/assimp/code/AssbinLoader.cpp
-	#lib/assimp/code/LWOBLoader.cpp
+	lib/assimp/code/LWOBLoader.cpp
 	lib/assimp/code/XFileImporter.cpp
 	lib/assimp/code/ColladaParser.cpp
-	#lib/assimp/code/LWOMaterial.cpp
+	lib/assimp/code/LWOMaterial.cpp
 	lib/assimp/code/IFCGeometry.cpp
-	#lib/assimp/code/BlenderModifier.cpp
+	lib/assimp/code/BlenderModifier.cpp
 	lib/assimp/code/IFCMaterial.cpp
-	#lib/assimp/code/OgreXmlSerializer.cpp
+	lib/assimp/code/OgreXmlSerializer.cpp
 	lib/assimp/code/FBXDocument.cpp
 	lib/assimp/code/FBXModel.cpp
-	#lib/assimp/code/TerragenLoader.cpp
+	lib/assimp/code/TerragenLoader.cpp
 	lib/assimp/code/PlyExporter.cpp
 	lib/assimp/code/ObjExporter.cpp
 	lib/assimp/code/IFCCurve.cpp
 	lib/assimp/code/PlyParser.cpp
-	#lib/assimp/code/Q3BSPFileParser.cpp
-	#lib/assimp/code/OgreBinarySerializer.cpp
+	lib/assimp/code/Q3BSPFileParser.cpp
+	lib/assimp/code/OgreBinarySerializer.cpp
 	lib/assimp/code/PostStepRegistry.cpp
-	#lib/assimp/code/LWSLoader.cpp
-	#lib/assimp/code/IRRLoader.cpp
-	#lib/assimp/code/IRRShared.cpp
+	lib/assimp/code/LWSLoader.cpp
+	lib/assimp/code/IRRLoader.cpp
+	lib/assimp/code/IRRShared.cpp
 	lib/assimp/code/STLExporter.cpp
 	lib/assimp/code/MakeVerboseFormat.cpp
-	#lib/assimp/code/Q3BSPFileImporter.cpp
+	lib/assimp/code/Q3BSPFileImporter.cpp
 	lib/assimp/code/ComputeUVMappingProcess.cpp
 	lib/assimp/code/RemoveVCProcess.cpp
-	#lib/assimp/code/OgreImporter.cpp
+	lib/assimp/code/OgreImporter.cpp
 	lib/assimp/code/XFileExporter.cpp
 	lib/assimp/code/FBXImporter.cpp
 	lib/assimp/code/SceneCombiner.cpp
-	#lib/assimp/code/MS3DLoader.cpp
+	lib/assimp/code/MS3DLoader.cpp
 	lib/assimp/code/IFCUtil.cpp
 	lib/assimp/code/MDLLoader.cpp
-	#lib/assimp/code/XGLLoader.cpp
-	#lib/assimp/code/BlenderLoader.cpp
+	lib/assimp/code/XGLLoader.cpp
+	lib/assimp/code/BlenderLoader.cpp
 	lib/assimp/code/IFCBoolean.cpp
 	lib/assimp/code/RemoveRedundantMaterials.cpp
 	lib/assimp/code/GenVertexNormalsProcess.cpp
-	#lib/assimp/code/OgreStructs.cpp
+	lib/assimp/code/OgreStructs.cpp
 	lib/assimp/code/FBXDocumentUtil.cpp
-	#lib/assimp/code/OgreMaterial.cpp
+	lib/assimp/code/OgreMaterial.cpp
 	lib/assimp/code/ColladaExporter.cpp
 	lib/assimp/code/IFCOpenings.cpp
 	lib/assimp/code/Assimp.cpp
@@ -224,57 +226,57 @@ list (APPEND assimp_src
 	lib/assimp/code/ConvertToLHProcess.cpp
 	lib/assimp/code/MDLMaterialLoader.cpp
 	lib/assimp/code/ObjFileParser.cpp
-	#lib/assimp/code/LWOAnimation.cpp
+	lib/assimp/code/LWOAnimation.cpp
 	lib/assimp/code/STEPFileReader.cpp
 	lib/assimp/code/ValidateDataStructure.cpp
-	#lib/assimp/code/Q3BSPZipArchive.cpp
-	#lib/assimp/code/CSMLoader.cpp
+	lib/assimp/code/Q3BSPZipArchive.cpp
+	lib/assimp/code/CSMLoader.cpp
 	lib/assimp/code/FBXBinaryTokenizer.cpp
 	lib/assimp/code/OptimizeMeshes.cpp
 	lib/assimp/code/JoinVerticesProcess.cpp
-	#lib/assimp/code/SMDLoader.cpp
+	lib/assimp/code/SMDLoader.cpp
 	lib/assimp/code/Subdivision.cpp
-	#lib/assimp/code/NDOLoader.cpp
+	lib/assimp/code/NDOLoader.cpp
 	lib/assimp/code/IFCReaderGen.cpp
 	lib/assimp/code/FBXMeshGeometry.cpp
-	#lib/assimp/code/IRRMeshLoader.cpp
+	lib/assimp/code/IRRMeshLoader.cpp
 	lib/assimp/code/FBXDeformer.cpp
 	lib/assimp/code/ObjFileImporter.cpp
-	#lib/assimp/code/ASEParser.cpp
+	lib/assimp/code/ASEParser.cpp
 	lib/assimp/code/RemoveComments.cpp
-	#lib/assimp/code/MDCLoader.cpp
+	lib/assimp/code/MDCLoader.cpp
 	lib/assimp/code/IFCLoader.cpp
 	lib/assimp/code/STEPFileEncoding.cpp
 	lib/assimp/code/FindInstancesProcess.cpp
-	#lib/assimp/code/3DSLoader.cpp
+	lib/assimp/code/3DSLoader.cpp
 	lib/assimp/code/Bitmap.cpp
-	#lib/assimp/code/BlenderScene.cpp
+	lib/assimp/code/BlenderScene.cpp
 	lib/assimp/code/FindDegenerates.cpp
 	lib/assimp/code/FBXParser.cpp
 	lib/assimp/code/LimitBoneWeightsProcess.cpp
 	lib/assimp/code/Importer.cpp
 	lib/assimp/code/VertexTriangleAdjacency.cpp
 	lib/assimp/code/AssxmlExporter.cpp
-	#lib/assimp/code/COBLoader.cpp
+	lib/assimp/code/COBLoader.cpp
 	lib/assimp/code/PlyLoader.cpp
 	lib/assimp/code/ColladaLoader.cpp
-	#lib/assimp/code/LWOLoader.cpp
+	lib/assimp/code/LWOLoader.cpp
 	lib/assimp/code/TextureTransform.cpp
 	lib/assimp/code/SplitLargeMeshes.cpp
 	lib/assimp/code/FixNormalsStep.cpp
-	#lib/assimp/code/ASELoader.cpp
-	#lib/assimp/code/Q3DLoader.cpp
-	#lib/assimp/code/BlenderDNA.cpp
-	#lib/assimp/code/BlenderTessellator.cpp
+	lib/assimp/code/ASELoader.cpp
+	lib/assimp/code/Q3DLoader.cpp
+	lib/assimp/code/BlenderDNA.cpp
+	lib/assimp/code/BlenderTessellator.cpp
 	lib/assimp/code/OpenGEXImporter.cpp
 	lib/assimp/code/STLLoader.cpp
 	lib/assimp/code/DefaultIOSystem.cpp
-	#lib/assimp/code/BVHLoader.cpp
+	lib/assimp/code/BVHLoader.cpp
 	#lib/assimp/code/C4DImporter.cpp
 	lib/assimp/code/GenFaceNormalsProcess.cpp
 	lib/assimp/code/AssbinExporter.cpp
 	lib/assimp/code/ScenePreprocessor.cpp
-	#lib/assimp/code/DXFLoader.cpp
+	lib/assimp/code/DXFLoader.cpp
 	lib/assimp/code/SplitByBoneCountProcess.cpp
 	lib/assimp/code/MD5Loader.cpp
 	lib/assimp/code/ObjFileMtlImporter.cpp
@@ -287,7 +289,7 @@ list (APPEND assimp_src
 	lib/assimp/code/XFileParser.cpp
 	lib/assimp/code/FindInvalidDataProcess.cpp
 	lib/assimp/code/MD3Loader.cpp
-	#lib/assimp/code/B3DImporter.cpp
+	lib/assimp/code/B3DImporter.cpp
 	lib/assimp/code/CalcTangentsProcess.cpp
 	lib/assimp/code/IFCProfile.cpp
 	lib/assimp/code/SortByPTypeProcess.cpp
