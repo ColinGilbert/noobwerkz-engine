@@ -12,7 +12,11 @@
 namespace noob
 {
 	/*--------------------------------CONSTRUCTORS--------------------------------*/
-	vec2::vec2() {}
+	vec2::vec2()
+	{
+		v[0] = 0.0;
+		v[1] = 0.0;
+	}
 
 	vec2::vec2(float x, float y)
 	{
@@ -20,7 +24,12 @@ namespace noob
 		v[1] = y;
 	}
 
-	vec3::vec3() {}
+	vec3::vec3() 
+	{
+		v[0] = 0.0;
+		v[1] = 0.0;
+		v[2] = 0.0;
+	}
 
 	vec3::vec3(float x, float y, float z)
 	{
@@ -81,7 +90,13 @@ namespace noob
 	//	v[2] = vv.z;
 	//}
 
-	vec4::vec4() {}
+	vec4::vec4() 
+	{
+		v[0] = 0.0;
+		v[1] = 0.0;
+		v[2] = 0.0;
+		v[3] = 0.0;
+	}
 
 	vec4::vec4(float x, float y, float z, float w)
 	{
@@ -107,7 +122,19 @@ namespace noob
 		v[3] = w;
 	}
 
-	mat3::mat3() {}
+	mat3::mat3()
+	{
+		m[0] = 0.0;
+		m[1] = 0.0;
+		m[2] = 0.0;
+		m[3] = 0.0;
+		m[4] = 0.0;
+		m[5] = 0.0;
+		m[6] = 0.0;
+		m[7] = 0.0;
+		m[8] = 0.0;
+
+	}
 
 	/* note: entered in COLUMNS */
 	mat3::mat3(float a, float b, float c, float d, float e, float f, float g, float h, float i) 
@@ -123,7 +150,25 @@ namespace noob
 		m[8] = i;
 	}
 
-	mat4::mat4() {}
+	mat4::mat4() 
+	{
+		m[0] = 0.0;
+		m[1] = 0.0;
+		m[2] = 0.0;
+		m[3] = 0.0;
+		m[4] = 0.0;
+		m[5] = 0.0;
+		m[6] = 0.0;
+		m[7] = 0.0;
+		m[8] = 0.0;
+		m[9] = 0.0;
+		m[10] = 0.0;
+		m[11] = 0.0;
+		m[12] = 0.0;
+		m[13] = 0.0;
+		m[14] = 0.0;
+		m[15] = 0.0;
+	}
 
 	/* note: entered in COLUMNS */
 	mat4::mat4(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float mm, float n, float o, float p)

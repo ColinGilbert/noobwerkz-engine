@@ -52,7 +52,7 @@ namespace noob
 
 	struct vec2
 	{
-		vec2();
+		vec2(); 
 		vec2(float x, float y);
 
 		std::array<float,2> v;
