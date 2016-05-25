@@ -6,7 +6,7 @@ void set_shaders()
 {
 	load_texture("grad_map", "gradient_map.dds", 0);
 
-	lit_triplanar_gradmap_uniform moon_shader;
+	triplanar_gradmap_uniform moon_shader;
 	moon_shader.set_colour(0, vec4(1.0, 1.0, 1.0, 1.0));
 	moon_shader.set_colour(1, vec4(1.0, 1.0, 1.0, 1.0));
 	moon_shader.set_colour(2, vec4(1.0, 1.0, 1.0, 1.0));
@@ -18,7 +18,7 @@ void set_shaders()
 	set_shader(moon_shader, "moon");
 	moon_shader_h = get_shader("moon");
 	
-	lit_triplanar_gradmap_uniform purple_shader;
+	triplanar_gradmap_uniform purple_shader;
 	purple_shader.set_colour(0, vec4(1.0, 1.0, 1.0, 0.0));
 	purple_shader.set_colour(1, vec4(1.0, 0.0, 1.0, 0.0));
 	purple_shader.set_colour(2, vec4(1.0, 0.0, 1.0, 0.0));

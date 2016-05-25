@@ -103,7 +103,7 @@ namespace noob
 			lemon::ListDigraph::NodeMap<size_t> bodies_mapping;
 			lemon::ListDigraph::NodeMap<std::function<noob::mat4(void)>> model_mats_mapping;
 			lemon::ListDigraph::NodeMap<size_t> basic_models_mapping;
-			lemon::ListDigraph::NodeMap<size_t> shaders_mapping;
+			lemon::ListDigraph::NodeMap<noob::globals::shader_results> shaders_mapping;
 			lemon::ListDigraph::NodeMap<size_t> reflectances_mapping;
 			lemon::ListDigraph::NodeMap<std::array<size_t, 4>> lights_mapping;
 			lemon::ListDigraph::NodeMap<std::array<float, 3>> scales_mapping;

@@ -125,7 +125,7 @@ void noob::stage::draw(float window_width, float window_height) const
 		for (lemon::ListDigraph::OutArcIt shading_it(draw_graph, model_node); shading_it != lemon::INVALID; ++shading_it)
 		{
 			lemon::ListDigraph::Node shading_node = draw_graph.target(shading_it);
-			size_t shader_h = shaders_mapping[shading_node];
+			noob::globals::shader_results shader_h = shaders_mapping[shading_node];
 
 			for (lemon::ListDigraph::OutArcIt body_it(draw_graph, shading_node); body_it != lemon::INVALID; ++body_it)
 			{
@@ -154,7 +154,26 @@ void noob::stage::draw(float window_width, float window_height) const
 				// 	temp_lights[i] = globals->lights.get(lights_h[i]);
 				// }
 				
-				renderer.draw(globals->basic_models.get(model_h), globals->shaders.get(shader_h), world_mat, normal_mat, eye_pos, temp_reflect, temp_lights, 0);
+				switch(shader_h.type)
+				{
+					case(noob::shader_type::BASIC):
+					{
+						globals->basic_drawer.draw(globals->basic_models.get(model_h), world_mat, normal_mat, eye_pos, globals->basic_shaders.get(shader_h.handle), temp_reflect, temp_lights, 0);
+						break;
+					}
+					case(noob::shader_type::TRIPLANAR):
+					{
+						globals->triplanar_drawer.draw(globals->basic_models.get(model_h), world_mat, normal_mat, eye_pos, globals->triplanar_shaders.get(shader_h.handle), temp_reflect, temp_lights, 0);
+						break;
+					}
+					default:
+					{
+						fmt::MemoryWriter ww;
+						ww << "[Stage] Attempting to draw with a shader that doesn't exist. WHYY??";
+						logger::log(ww.str());
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -234,8 +253,8 @@ void noob::stage::draw(float window_width, float window_height) const
 		for (lemon::ListDigraph::OutArcIt shader_it(draw_graph, model_node); shader_it != lemon::INVALID; ++shader_it)
 		{
 			lemon::ListDigraph::Node temp_shader_node = draw_graph.target(shader_it);
-			size_t test_value = shaders_mapping[temp_shader_node];
-			if (shader_h.get_inner() == test_value)
+			noob::globals::shader_results test_value = shaders_mapping[temp_shader_node];
+			if (shader_h == test_value)
 			{
 				shader_found = true;
 				shader_node = temp_shader_node;
@@ -245,7 +264,7 @@ void noob::stage::draw(float window_width, float window_height) const
 		if (!shader_found)
 		{
 			shader_node = draw_graph.addNode();
-			shaders_mapping[shader_node] = shader_h.get_inner();
+			shaders_mapping[shader_node] = shader_h;
 			draw_graph.addArc(model_node, shader_node);
 		}
 
@@ -258,9 +277,9 @@ void noob::stage::draw(float window_width, float window_height) const
 		noob::lights_holder::handle light_h = globals->default_light;
 		lights_mapping[body_node] = {light_h.get_inner(), light_h.get_inner(), light_h.get_inner(), light_h.get_inner()};
 
-		fmt::MemoryWriter ww;
-		ww << "[Stage] Created actor with model " << model_info.model_h.get_inner() << ", shader " << shader_h.get_inner() << ", reflectance " << model_info.reflect_h.get_inner() << " and body " << body_h.get_inner() << ".";
-		logger::log(ww.str());
+		// fmt::MemoryWriter ww;
+		// ww << "[Stage] Created actor with model " << model_info.model_h.get_inner() << ", shader " << shader_h.get_inner() << ", reflectance " << model_info.reflect_h.get_inner() << " and body " << body_h.get_inner() << ".";
+		// logger::log(ww.str());
 	}
 
 

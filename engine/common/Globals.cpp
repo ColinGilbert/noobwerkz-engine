@@ -142,7 +142,6 @@ noob::scaled_model noob::globals::cylinder_model(float r, float h)
 	noob::scaled_model temp = unit_cylinder_model;
 	temp.scales = noob::vec3(r*2.0, h, r*2.0);
 	return temp;
-
 }
 
 
@@ -151,13 +150,11 @@ noob::scaled_model noob::globals::cone_model(float r, float h)
 	noob::scaled_model temp = unit_cone_model;
 	temp.scales = noob::vec3(r*2.0, h, r*2.0);
 	return temp;
-
 }
 
 
 noob::scaled_model noob::globals::model_from_mesh(const noob::basic_mesh& m, const std::string& name)
 {
-
 	std::unique_ptr<noob::basic_model> temp = std::make_unique<noob::basic_model>();
 	temp->init(m);
 	noob::basic_models_holder::handle h;
@@ -183,19 +180,19 @@ noob::scaled_model noob::globals::model_from_mesh(const noob::basic_mesh& m, con
 
 noob::scaled_model noob::globals::model_by_shape(const noob::shapes_holder::handle h)
 {
-	fmt::MemoryWriter ww;
-	ww << "[Globals] about to get model from shape " << h.get_inner();
-	logger::log(ww.str());
+	// fmt::MemoryWriter ww;
+	// ww << "[Globals] about to get model from shape " << h.get_inner();
+	// logger::log(ww.str());
 
 	scaled_model results;
 	//results.scales = noob::vec3(1.0, 1.0, 1.0);
 	noob::shape* s = shapes.get(h);
 
-	logger::log("[Globals] got shape pointer");
+	// logger::log("[Globals] got shape pointer");
 
 	switch(s->shape_type)
 	{
-		logger::log("[Globals] choosing shape type");
+		// logger::log("[Globals] choosing shape type");
 
 		case(noob::shape::type::SPHERE):
 		results.model_h = unit_sphere_model.model_h;
@@ -234,8 +231,10 @@ noob::scaled_model noob::globals::model_by_shape(const noob::shapes_holder::hand
 			}
 		}
 		default:
-		logger::log("[Globals] - USER DATA WARNING - INVALID SHAPE TO MODEL :(");
-		break;
+		{
+			logger::log("[Globals] - USER DATA WARNING - INVALID SHAPE TO MODEL :(");
+			break;
+		}
 	};
 	return results; 
 }

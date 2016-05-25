@@ -69,6 +69,10 @@ namespace noob
 			struct shader_results
 			{
 				shader_results() : type(shader_type::BASIC), handle(0) {}
+				bool operator==(const noob::globals::shader_results& other) const
+				{
+					return (type == other.type && handle == other.handle);
+				}
 				shader_type type;
 				size_t handle;
 			};
@@ -77,7 +81,6 @@ namespace noob
 
 			noob::light_handle set_light(const noob::light&, const std::string& name);
 			noob::light_handle get_light(const std::string& name) const;
-
 
 			noob::reflectance_handle set_reflectance(const noob::reflectance&, const std::string& name);
 			noob::reflectance_handle get_reflectance(const std::string& name) const;
