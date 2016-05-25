@@ -1,13 +1,18 @@
 CHANGELOG:
 
 
-Version 0.2.1 AKA: "iOS port + Graphics Magix, Act Two" (in progress)
+Version 0.3 AKA: "Android and iOS ports" (in progress)
 ```
-Port to iOS (in progress.)
-Added random number function.
-Fix lots of nasty bugs, major repo cleanup.
-Add convenient actor-adding functions.
-Add lighting.```
+Port to iOS and Android
+```
+
+Version 0.2.5: "Deboostify feat. Graphix Magix, Act Two"
+```
+Removed all calls to Boost in response to horrible porting experiences.
+Added RNG function
+Lighting
+Repo cleanup
+Nice API for scripts and C++
 ```
 
 Version 0.2.0 AKA: "Graphix Magix, Act One"
