@@ -25,6 +25,7 @@ void set_shaders()
 	purple_shader.set_colour(3, vec4(0.0, 0.0, 1.0, 0.0));
 	purple_shader.blend = vec4(0.2, 0.0, 0.5, 0.0);
 	purple_shader.scales = vec4(1.0/25.0, 1.0/25.0, 1.0/25.0, 0.0);
+	// purple_shader.scales = vec4(1.0, 1.0, 1.0, 0.0);
 	purple_shader.colour_positions = vec4(0.2, 0.7, 0.0, 0.0);
 	purple_shader.texture_map = get_texture("grad_map");
 	set_shader(purple_shader, "purple");
@@ -106,15 +107,13 @@ void set_stage()
 	// TODO: Keep track of transformations in scriptable mesh class.
 	// b.translate(vec3(0.0, -10.0, 0.0));
 
-	basic_mesh c = box_mesh(50.0, 50.0, 50.0);
+	basic_mesh c = box_mesh(100.0, 100.0, 100.0);
 
 	default_stage.scenery(a, vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), purple_shader_h, rh, "one");
 	default_stage.scenery(b, vec3(0.0, 0.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), moon_shader_h, rh, "two");
-	default_stage.scenery(c, vec3(0.0, 100.0, 0.0), versor(0.0, 0.0, 0.0, 1.0), red_shader_h, rh, "three");
+	default_stage.scenery(c, vec3(300.0, 300.0, 300.0), versor(0.0, 0.0, 0.0, 1.0), purple_shader_h, rh, "three");
 
-
-
-	float y_pos = 50.0;
+	float y_pos = 500.0;
 	float cube_length = 4.0;
 	shape_handle box_h = box_shape(cube_length, cube_length, cube_length);
 
@@ -122,15 +121,14 @@ void set_stage()
 	{
 		float x_pos = i * cube_length;
 		float z_pos = i * cube_length;
-		default_stage.actor(box_h, 1.0, vec3(x_pos, y_pos, z_pos), versor(0.0, 0.0, 0.0, 1.0), purple_shader_h, rh);
+		default_stage.actor(box_h, 1.0, vec3(x_pos, y_pos, z_pos), versor(0.0, 0.0, 0.0, 1.0), red_shader_h, rh);
 	}
 
 	for (int i = -300 ; i < 300; ++i)
 	{
 		float x_pos = i * cube_length;
 		float z_pos = -i * cube_length;
-		
-		default_stage.actor(box_h, 1.0, vec3(x_pos, y_pos, z_pos), versor(0.0, 0.0, 0.0, 1.0), purple_shader_h, rh);
+		default_stage.actor(box_h, 1.0, vec3(x_pos, y_pos, z_pos), versor(0.0, 0.0, 0.0, 1.0), red_shader_h, rh);
 	}
 }
 

@@ -63,7 +63,8 @@ namespace noob
 			static application& get();
 
 			void set_init_script(const std::string& name);
-			void eval(const std::string& string_to_eval);
+
+			bool eval(const std::string& name, const std::string& string_to_eval);
 
 			uint32_t get_height() const { return static_cast<uint32_t>(window_height); }
 			uint32_t get_width() const { return static_cast<uint32_t>(window_width); }
@@ -74,6 +75,7 @@ namespace noob
 			void pause();
 			void resume();
 			void gc();
+
 
 			typedef std::tuple<const std::array<int, 2>&, const std::array<float,2>&> touch_instance;
 

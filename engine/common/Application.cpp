@@ -45,12 +45,6 @@ void noob::application::set_init_script(const std::string& name)
 }
 
 
-void noob::application::eval(const std::string& s)
-{
-
-}
-
-
 void angel_message_callback(const asSMessageInfo *msg, void *param)
 {
 	std::string message_type;
@@ -177,13 +171,21 @@ void noob::application::update(double delta)
 */
 }
 
+
 bool noob::application::load_init_script()
+{
+	return eval(script_name, noob::utils::load_file_as_string(script_name));
+}
+
+
+bool noob::application::eval(const std::string& name, const std::string& string_to_eval)
 {
 	std::string user_message = "\n[Application] Loading script. Success? {0}";
 
 	script_module = script_engine->GetModule(0, asGM_ALWAYS_CREATE);
 
-	int r = script_module->AddScriptSection(script_name.c_str(), noob::utils::load_file_as_string(script_name).c_str());
+	// int r = script_module->AddScriptSection(script_name.c_str(), noob::utils::load_file_as_string(script_name).c_str());
+	int r = script_module->AddScriptSection(name.c_str(), string_to_eval.c_str());
 	if (r < 0)
 	{
 		logger::log(fmt::format(user_message, "False - Add section failed."));
@@ -260,7 +262,6 @@ bool noob::application::load_init_script()
 	logger::log(fmt::format(user_message, "True. :)"));
 	return true;
 }
-
 
 void noob::application::draw()
 {

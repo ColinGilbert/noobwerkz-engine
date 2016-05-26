@@ -21,8 +21,8 @@
 #include <ozz/animation/offline/animation_optimizer.h>
 #include <ozz/base/memory/allocator.h>
 
-#include <lemon/list_graph.h>
-#include <lemon/static_graph.h>
+// #include <lemon/list_graph.h>
+// #include <lemon/static_graph.h>
 
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
@@ -105,6 +105,7 @@ namespace noob
 			// size_t num_layers;
 			// lemon::StaticDigraph blend_tree;
 			// ozz::Range<ozz::math::SoaTransform> blended_locals;
+			
 			ozz::animation::Skeleton skeleton;
 			ozz::Range<ozz::math::Float4x4> model_matrices;
 			ozz::memory::Allocator* allocator;

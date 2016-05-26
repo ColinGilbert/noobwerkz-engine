@@ -78,13 +78,18 @@ bool noob::active_mesh::face_exists(const std::vector<noob::vec3>& verts) const
 		// Now we must test all verts in faces with the first vertex to see if one of them matches.
 		for (PolyMesh::VertexFaceIter vf_it = half_edges.cvf_iter(get_vertex_handle(verts[0])); vf_it.is_valid(); ++vf_it)
 		{
-			int iteration = -1;
+			// int iteration = -1;
+			size_t iteration = 0;
 			for (PolyMesh::FaceVertexIter fv_it = half_edges.cfv_iter(*vf_it); fv_it.is_valid(); ++fv_it)
 			{
+				// ++iteration;
+				// if (static_cast<size_t>(iteration) > verts.size()) break;
+				// if (vhandles_to_test[static_cast<size_t>(iteration)] != *fv_it) break;
+				// if (vhandles_to_test[static_cast<size_t>(iteration)] == *fv_it && static_cast<size_t>(iteration) == verts.size()) return true;
+				if (iteration > verts.size() - 1) break;
+				if (vhandles_to_test[iteration] != *fv_it) break;
+				if (vhandles_to_test[iteration] == *fv_it && iteration == verts.size() - 1) return true;
 				++iteration;
-				if (static_cast<size_t>(iteration) > verts.size()) break;
-				if (vhandles_to_test[static_cast<size_t>(iteration)] != *fv_it) break;
-				if (vhandles_to_test[static_cast<size_t>(iteration)] == *fv_it && static_cast<size_t>(iteration) == verts.size()) return true;
 			}
 		}
 	}
