@@ -159,10 +159,10 @@ noob::basic_mesh noob::basic_mesh::decimate(size_t num_verts) const
 }
 
 
-void noob::basic_mesh::update_normals() 
+void noob::basic_mesh::normalize() 
 {
-	TriMesh half_edges = to_half_edges();
-	vert_normals_from_trimesh(half_edges);
+	std::string temp = save();
+	load_mem(temp);
 }
 
 /*
@@ -203,18 +203,104 @@ void noob::basic_mesh::save(const std::string& filename) const
 	// logger::log("[Mesh] - save() - half-edges created");
 	OpenMesh::IO::write_mesh(half_edges, filename);
 }
-/*
 
-   bool noob::basic_mesh::load_mem(const std::string& file, const std::string& name)
-   {
-   std::sstream
-   }
+bool noob::basic_mesh::load_mem(const std::string& file, const std::string& name)
+{
+	const aiScene* scene = aiImportFileFromMemory(file.c_str(), file.size(), aiProcessPreset_TargetRealtime_Fast, "");
+	return load_assimp(scene, name);
+}
 
 
-   bool noob::basic_mesh::load_file(const std::string& filename, const std::string& name)
-   {
-   }
-   */
+bool noob::basic_mesh::load_file(const std::string& filename, const std::string& name)
+{
+	const aiScene* scene = aiImportFile(filename.c_str(), aiProcessPreset_TargetRealtime_Fast);
+	return load_assimp(scene, name);
+}
+
+bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name)
+{
+	// logger::log("[Mesh] load() - begin");
+	if (!scene)
+	{
+		logger::log(fmt::format("[Mesh] load({0}) - cannot open", name));
+		return false;
+	}
+
+	vertices.clear();
+	indices.clear();
+	normals.clear();
+
+	const aiMesh* mesh_data = scene->mMeshes[0];
+
+	
+	{
+		// fmt::MemoryWriter ww;
+		// ww << "[BasicMesh[ Loading " << name << " - Attempting to obtain mesh data";
+		// logger::log(ww.str());
+	}
+
+	size_t num_verts = mesh_data->mNumVertices;
+	size_t num_faces = mesh_data->mNumFaces;
+	auto num_indices = mesh_data->mNumFaces / 3;
+
+	bool has_normals = mesh_data->HasNormals();
+	
+	{
+		// fmt::MemoryWriter ww;
+		// ww << "[BasicMesh] Loading: " << name << ", mesh has " << num_verts << " verts and " << has_normals << " normals.";
+		// logger::log(ww.str());
+	}
+
+	double accum_x, accum_y, accum_z = 0.0f;
+	bbox.min = bbox.max = bbox.center = noob::vec3(0.0, 0.0, 0.0);	
+
+	for ( size_t n = 0; n < num_verts; ++n)
+	{
+		aiVector3D pt = mesh_data->mVertices[n];
+		noob::vec3 v;
+		v.v[0] = pt[0];
+		v.v[1] = pt[1];
+		v.v[2] = pt[2];
+		vertices.push_back(v);
+
+		bbox.min[0] = std::min(bbox.min[0], v[0]);
+		bbox.min[1] = std::min(bbox.min[1], v[1]);
+		bbox.min[2] = std::min(bbox.min[2], v[2]);
+
+		bbox.max[0] = std::max(bbox.max[0], v[0]);
+		bbox.max[1] = std::max(bbox.max[1], v[1]);
+		bbox.max[2] = std::max(bbox.max[2], v[2]);
+
+		if (has_normals)
+		{
+			aiVector3D normal = mesh_data->mNormals[n];
+			noob::vec3 norm;
+			norm.v[0] = normal[0];
+			norm.v[1] = normal[1];
+			norm.v[2] = normal[2];
+			normals.push_back(norm);
+		}
+	}
+
+	if (num_verts == 0)
+	{
+		num_verts = 1;
+	}
+
+	bbox.center = noob::vec3((bbox.max[0] + bbox.min[0])/2, (bbox.max[1] + bbox.min[1])/2, (bbox.max[2] + bbox.min[2])/2);
+
+	for (size_t n = 0; n < num_faces; ++n)
+	{
+		const struct aiFace* face = &mesh_data->mFaces[n];
+		indices.push_back(face->mIndices[0]);
+		indices.push_back(face->mIndices[1]);
+		indices.push_back(face->mIndices[2]);
+	}
+
+	aiReleaseImport(scene);
+
+	return true;
+}
 
 /*
    void noob::basic_mesh::transform(const noob::mat4& transform)
@@ -304,11 +390,11 @@ void noob::basic_mesh::from_half_edges(TriMesh half_edges)
 			indices.push_back(static_cast<uint16_t>(fv_it->idx()));
 		}
 	}
-
-	vert_normals_from_trimesh(half_edges);
-	fmt::MemoryWriter ww;
-	ww << "[BasicMesh] Created basic_mesh with verts = " << vertices.size() << ", indices = " << indices.size() << " from TriMesh with verts = " << half_edges.n_vertices();
-	logger::log(ww.str());
+	normalize();
+	// vert_normals_from_trimesh(half_edges);
+	// fmt::MemoryWriter ww;
+	// ww << "[BasicMesh] Created basic_mesh with verts = " << vertices.size() << ", indices = " << indices.size() << " from TriMesh with verts = " << half_edges.n_vertices();
+	// logger::log(ww.str());
 }
 
 
@@ -349,7 +435,7 @@ void noob::basic_mesh::from_half_edges(PolyMesh half_edges)
 	from_half_edges(temp_trimesh);
 }
 
-
+/*
 void noob::basic_mesh::vert_normals_from_trimesh(TriMesh half_edges)
 {
 	half_edges.request_vertex_normals();
@@ -374,3 +460,4 @@ void noob::basic_mesh::vert_normals_from_trimesh(TriMesh half_edges)
 		}
 	}
 }
+*/
