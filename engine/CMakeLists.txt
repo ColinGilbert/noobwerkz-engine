@@ -19,6 +19,7 @@ list (APPEND rdestl_src
 	lib/rdestl/list.cpp
 	)
 
+add_subdirectory(lib/enet)
 
 include_directories(lib/cppformat)
 list (APPEND cppformat_src
