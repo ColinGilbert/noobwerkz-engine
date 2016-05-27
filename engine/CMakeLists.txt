@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 project(NoobWerkz)
 
 #set(CMAKE_BUILD_TYPE "DEBUG")
@@ -517,9 +517,7 @@ include_directories(lib/lemon)
 
 include_directories(lib/stb)
 
-include_directories(lib/inline_variant_visitor)
-
-include_directories(lib/angelscript-sdk/angelscript/include)
+#include_directories(lib/inline_variant_visitor)
 
 include_directories(common)
 include_directories(common/scripting)

@@ -47,12 +47,14 @@ BEGIN_AS_NAMESPACE
 
 struct asSTypeBehaviour;
 class asCScriptEngine;
-class asCObjectType;
+class asCTypeInfo;
 class asCScriptFunction;
 class asCModule;
+class asCObjectType;
+class asCEnumType;
 struct asSNameSpace;
 
-// TODO: refactor: Reference should not be part of the datatype. This should be stored separately, e.g. in asCTypeInfo
+// TODO: refactor: Reference should not be part of the datatype. This should be stored separately, e.g. in asCExprValue
 //                 MakeReference, MakeReadOnly, IsReference, IsReadOnly should be removed
 
 class asCDataType
@@ -67,10 +69,9 @@ public:
 	asCString Format(asSNameSpace *currNs, bool includeNamespace = false) const;
 
 	static asCDataType CreatePrimitive(eTokenType tt, bool isConst);
-	static asCDataType CreateObject(asCObjectType *ot, bool isConst);
+	static asCDataType CreateType(asCTypeInfo *ti, bool isConst);
 	static asCDataType CreateAuto(bool isConst);
-	static asCDataType CreateObjectHandle(asCObjectType *ot, bool isConst);
-	static asCDataType CreateFuncDef(asCScriptFunction *ot);
+	static asCDataType CreateObjectHandle(asCTypeInfo *ot, bool isConst);
 	static asCDataType CreateNullHandle();
 
 	int MakeHandle(bool b, bool acceptHandleForScope = false);
@@ -101,6 +102,7 @@ public:
 	bool IsHandleToAsHandleType() const {return isHandleToAsHandleType;}
 	bool IsAbstractClass()        const;
 	bool IsInterface()            const;
+	bool IsFuncdef()              const;
 
 	bool IsObjectConst()    const;
 
@@ -118,8 +120,7 @@ public:
 
 	asCDataType        GetSubType(asUINT subtypeIndex = 0)    const;
 	eTokenType         GetTokenType()  const {return tokenType;}
-	asCObjectType     *GetObjectType() const {return objectType;}
-	asCScriptFunction *GetFuncDef()    const {return funcDef;}
+	asCTypeInfo       *GetTypeInfo() const { return typeInfo; }
 
 	int  GetSizeOnStackDWords()  const;
 	int  GetSizeInMemoryBytes()  const;
@@ -129,8 +130,7 @@ public:
 #endif
 
 	void SetTokenType(eTokenType tt)         {tokenType = tt;}
-	void SetObjectType(asCObjectType *obj)   {objectType = obj;}
-	void SetFuncDef(asCScriptFunction *func) {asASSERT(funcDef); funcDef = func; }
+	void SetTypeInfo(asCTypeInfo *ti)       {typeInfo = ti;}
 
 	asCDataType &operator =(const asCDataType &);
 
@@ -141,8 +141,7 @@ protected:
 	eTokenType tokenType;
 
 	// Behaviour type
-	asCObjectType *objectType;
-	asCScriptFunction *funcDef;
+	asCTypeInfo *typeInfo;
 
 	// Top level
 	bool isReference:1;
