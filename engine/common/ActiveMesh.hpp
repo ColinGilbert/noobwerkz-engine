@@ -95,12 +95,8 @@ namespace noob
 			
 			void fill_holes();
 			
-			// --------------------------------------------------------------------------------------------------------------------------------------
 			// TODO: Before implementing the next two methods, come up with a proper plane representation (probably using Eigen or Geometric Tools.)
-			// --------------------------------------------------------------------------------------------------------------------------------------
-
 			// void cut_mesh(const noob::vec3& point_on_plane, const noob::vec3 plane_normal);
-			
 			// void cut_faces(std::vector<PolyMesh::FaceHandle>&, const noob::vec3& point_on_plane, const noob::vec3& plane_normal);
 			
 			void extrude_face(const PolyMesh::FaceHandle, float magnitude, const noob::vec3& normal);

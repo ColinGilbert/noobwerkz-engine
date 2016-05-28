@@ -20,7 +20,6 @@ noob::application::application()
 	// noob::filesystem::init(*prefix);
 	set_init_script("init.as");
 	view_mat = noob::look_at(noob::vec3(0, 50.0, -100.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
-
 }
 
 
@@ -119,8 +118,6 @@ void noob::application::init()
 	r = script_engine->RegisterGlobalProperty("stage default_stage", &stage); assert (r >= 0);
 	register_voxels(script_engine);
 	r = script_engine->RegisterGlobalProperty("voxel_world voxels", &voxels); assert (r >= 0);
-
-
 
 	logger::log("[Application] Done basic init.");
 	bool b = user_init();
@@ -258,7 +255,6 @@ bool noob::application::eval(const std::string& name, const std::string& string_
 		return false;
 	}
 
-
 	logger::log(fmt::format(user_message, "True. :)"));
 	return true;
 }
@@ -285,6 +281,7 @@ void noob::application::accept_ndof_data(const noob::ndof::data& info)
 		stage.eye_pos = stage.eye_pos - translation;//translation);
 	}
 }
+
 
 // TODO: Refactor
 void noob::application::step()
@@ -319,7 +316,6 @@ void noob::application::resume()
 
 void noob::application::set_archive_dir(const std::string& filepath)
 {
-
 	logger::log(fmt::format("[Application] Setting archive directory (\"{0}\")", filepath));
 	prefix = std::unique_ptr<std::string>(new std::string(filepath));
 	logger::log(fmt::format("[Application] Archive dir = {0}", *prefix));
