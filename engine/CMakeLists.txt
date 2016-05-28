@@ -678,6 +678,7 @@ list(APPEND common_src
 	common/drawing/BasicRenderer.cpp
 	common/SimpleNavMesh.cpp
 	common/FileSystem.cpp
+	common/Network.cpp
 	common/CSG.cpp
 	common/scripting/RegisterMath.cpp
 	common/scripting/RegisterGraphics.cpp

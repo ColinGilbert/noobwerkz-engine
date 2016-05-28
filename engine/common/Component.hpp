@@ -22,29 +22,29 @@ namespace noob
 
 				public:
 
-				handle() : inner(0) {}
+				handle() noexcept(true) : inner(0) {}
 
-				bool operator==(const noob::component<T>::handle other) const
+				bool operator==(const noob::component<T>::handle other) const noexcept(true)
 				{
 					return (inner == other.inner);
 				}
 
-				bool operator!=(const noob::component<T>::handle other) const
+				bool operator!=(const noob::component<T>::handle other) const noexcept(true)
 				{
 					return (inner != other.inner);
 				}
 
-				bool operator<(const noob::component<T>::handle other) const
+				bool operator<(const noob::component<T>::handle other) const noexcept(true)
 				{
 					return (inner < other.inner); 
 				}
 
-				bool operator>(const noob::component<T>::handle other) const
+				bool operator>(const noob::component<T>::handle other) const noexcept(true)
 				{
 					return (inner > other.inner); 
 				}
 
-				size_t get_inner() const
+				size_t get_inner() const noexcept(true)
 				{
 					return inner;
 				}
@@ -54,7 +54,7 @@ namespace noob
 				size_t inner;
 			};
 
-			T get(component<T>::handle h)
+			T get(component<T>::handle h) noexcept(true)
 			{
 				if (exists(h)) return items[h.inner];
 				else 
@@ -64,7 +64,7 @@ namespace noob
 				}	
 			}
 
-			T get(size_t i)
+			T get(size_t i) noexcept(true)
 			{
 				handle h = make_handle(i);
 				if (exists(h)) return items[h.inner];
@@ -76,7 +76,7 @@ namespace noob
 			}
 
 
-			component<T>::handle add(const T& t)
+			component<T>::handle add(const T& t) noexcept(true)
 			{
 				items.push_back(t);
 				handle h;
@@ -84,12 +84,12 @@ namespace noob
 				return h;
 			}
 
-			bool exists(component<T>::handle h)
+			bool exists(component<T>::handle h) noexcept(true)
 			{
 				return (h.inner < items.size());
 			}
 
-			void set(component<T>::handle h, const T t)
+			void set(component<T>::handle h, const T t) noexcept(true)
 			{
 				if (exists(h))
 				{
@@ -97,14 +97,14 @@ namespace noob
 				}
 			}
 
-			component<T>::handle make_handle(unsigned int i)
+			component<T>::handle make_handle(unsigned int i) noexcept(true)
 			{
 				handle h;
 				h.inner = i;
 				return h;
 			}
 
-			void empty()
+			void empty() noexcept(true)
 			{
 				items.resize(0);
 				names.empty();
