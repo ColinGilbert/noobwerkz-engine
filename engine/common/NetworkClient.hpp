@@ -11,7 +11,7 @@ namespace noob
 	class network_client
 	{
 		public:
-			network_client() noexcept(true) : local_host(NULL), peer(NULL) {}
+			network_client() noexcept(true) : connected(false), local_host(NULL), peer(NULL) {}
 
 			~network_client() noexcept(true);
 
@@ -29,6 +29,7 @@ namespace noob
 			void tick() noexcept(true);
 
 		protected:
+			bool connected;
 			ENetHost* local_host;
 			ENetPeer* peer;
 			std::deque<std::string> packets;
