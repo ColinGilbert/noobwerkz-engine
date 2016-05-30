@@ -128,30 +128,30 @@ namespace noob
 
 					public:
 
-					handle() : inner(0) {}
+					handle() noexcept(true) : inner(0) {}
 
-					bool operator==(const noob::component<std::unique_ptr<T>>::handle other) const
+					bool operator==(const noob::component<std::unique_ptr<T>>::handle other) const noexcept(true)
 					{
 						return (inner == other.inner);
 					}
 
-					bool operator!=(const noob::component<std::unique_ptr<T>>::handle other) const
+					bool operator!=(const noob::component<std::unique_ptr<T>>::handle other) const noexcept(true)
 					{
 						return (inner != other.inner);
 					}
 
-					bool operator<(const noob::component<std::unique_ptr<T>>::handle other) const
+					bool operator<(const noob::component<std::unique_ptr<T>>::handle other) const noexcept(true)
 					{
 						return (inner < other.inner); 
 					}
 
-					bool operator>(const noob::component<std::unique_ptr<T>>::handle other) const
+					bool operator>(const noob::component<std::unique_ptr<T>>::handle other) const noexcept(true)
 					{
 						return (inner > other.inner); 
 					}
 
 
-					size_t get_inner() const
+					size_t get_inner() const noexcept(true)
 					{
 						return inner;
 					}
@@ -161,7 +161,7 @@ namespace noob
 					size_t inner;
 				};
 
-				T* get(component<std::unique_ptr<T>>::handle h)
+				T* get(component<std::unique_ptr<T>>::handle h) noexcept(true)
 				{
 					if (exists(h)) 
 					{
@@ -176,7 +176,7 @@ namespace noob
 				}
 
 
-				T* get(size_t i)
+				T* get(size_t i) noexcept(true)
 				{
 					handle h = make_handle(i);
 					if (exists(h)) 
@@ -191,7 +191,7 @@ namespace noob
 					}
 				}
 
-				component<std::unique_ptr<T>>::handle add(std::unique_ptr<T>&& t)
+				component<std::unique_ptr<T>>::handle add(std::unique_ptr<T>&& t) noexcept(true)
 				{
 					// items.emplace_back(std::move(t));
 					items.push_back(std::move(t));
@@ -200,13 +200,13 @@ namespace noob
 					return h;
 				}
 
-				bool exists(component<std::unique_ptr<T>>::handle h)
+				bool exists(component<std::unique_ptr<T>>::handle h) noexcept(true)
 				{
 					bool results = h.inner < items.size();
 					return results;
 				}
 
-				void set(component<std::unique_ptr<T>>::handle h, std::unique_ptr<T>&& t)
+				void set(component<std::unique_ptr<T>>::handle h, std::unique_ptr<T>&& t) noexcept(true)
 				{
 					if (exists(h))
 					{
@@ -214,14 +214,14 @@ namespace noob
 					}
 				}
 
-				component<std::unique_ptr<T>>::handle make_handle(unsigned int i)
+				component<std::unique_ptr<T>>::handle make_handle(unsigned int i) noexcept (true)
 				{
 					handle h;
 					h.inner = i;
 					return h;
 				}
 
-				void empty()
+				void empty() noexcept(true)
 				{
 					items.resize(0);
 					names.empty();

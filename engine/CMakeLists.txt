@@ -19,7 +19,9 @@ list (APPEND rdestl_src
 	lib/rdestl/list.cpp
 	)
 
+include_directories(lib/enet/src)
 add_subdirectory(lib/enet)
+
 
 include_directories(lib/cppformat)
 list (APPEND cppformat_src
@@ -106,7 +108,6 @@ list(APPEND ozz_src
 	lib/ozz-animation/src/geometry/runtime/skinning_job.cc
 	)	
 
-#add_subdirectory(lib/zlib)
 
 include_directories(lib/assimp/include)
 include_directories(lib/assimp/code)
@@ -678,7 +679,7 @@ list(APPEND common_src
 	common/drawing/BasicRenderer.cpp
 	common/SimpleNavMesh.cpp
 	common/FileSystem.cpp
-	common/Network.cpp
+	common/NetworkClient.cpp
 	common/CSG.cpp
 	common/scripting/RegisterMath.cpp
 	common/scripting/RegisterGraphics.cpp
@@ -713,7 +714,7 @@ add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src} ${bg
 	${bgfx_utils_src} ${openmesh_src} ${rdestl_src} ${cppformat_src} ${recast_src}
 	${angelscript_src} ${bullet_src} ${voropp_src} ${ozz_src})
 
-target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype rt dl pthread m)
+target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype rt dl pthread m Enet)
 
 if (DEFINED NOOB_PLATFORM_LINUX)
 	target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES})	
