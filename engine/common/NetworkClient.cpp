@@ -13,70 +13,86 @@ noob::network_client::~network_client() noexcept(true)
 
 bool noob::network_client::init(size_t num_channels, uint32_t incoming_bandwidth = 0, uint32_t outgoing_bandwidth = 0) noexcept(true)
 {
-	if (!enet_initialize())
+	if (!connected)
 	{
-		connected = false;
-		logger::log("[NetworkClient] Failed to init eNet");
+		if (!enet_initialize())
+		{
+			connected = false;
+			logger::log("[NetworkClient] Failed to init eNet");
+			return false;
+		}
+
+		local_host = enet_host_create(NULL, 1, num_channels, incoming_bandwidth, outgoing_bandwidth);
+
+		if (local_host == NULL)
+		{
+			connected = false;
+			logger::log("[NetworkClient] Failed to create eNet localhost");
+			return false;
+		}
+
+
+		return true;
+	}
+	else
+	{
 		return false;
 	}
-
-	local_host = enet_host_create(NULL, 1, num_channels, incoming_bandwidth, outgoing_bandwidth);
-
-	if (local_host == NULL)
-	{
-		connected = false;
-		logger::log("[NetworkClient] Failed to create eNet localhost");
-		return false;
-	}
-
-	
-	return true;
 }
 
 
 bool noob::network_client::connect(const std::string& address, uint16_t port, uint32_t timeout_in_millis) noexcept(true)
 {
-	if (local_host == NULL)
+	if (!connected)
 	{
-		connected = false;
-		return false;
-	}
+		if (local_host == NULL)
+		{
+			connected = false;
+			return false;
+		}
 
-	ENetAddress address_struct;
-	enet_address_set_host(&address_struct, address.c_str());
-	address_struct.port = port;
+		ENetAddress address_struct;
+		enet_address_set_host(&address_struct, address.c_str());
+		address_struct.port = port;
 
-	peer = enet_host_connect(local_host, &address_struct, local_host->channelLimit, 0);
+		peer = enet_host_connect(local_host, &address_struct, local_host->channelLimit, 0);
 
-	if (peer == NULL)
-	{
-		connected = false;
-		logger::log("[NetworkClient] No available peers tto initiate an eNet connection.");
-		return false;
-	}
+		if (peer == NULL)
+		{
+			connected = false;
 
-	ENetEvent event;
+			logger::log("[NetworkClient] No available peers to initiate an eNet connection.");
+			return false;
+		}
 
-	if (enet_host_service(local_host, &event, timeout_in_millis) > 0 && event.type == ENET_EVENT_TYPE_CONNECT)
-	{
-		connected = true;
-		fmt::MemoryWriter ww;
-		ww << "[NetworkClient] Connection to " << address << " success!";
-		logger::log(ww.str());
-		
-		return true;
+		ENetEvent event;
+
+		if (enet_host_service(local_host, &event, timeout_in_millis) > 0 && event.type == ENET_EVENT_TYPE_CONNECT)
+		{
+			connected = true;
+
+			fmt::MemoryWriter ww;
+			ww << "[NetworkClient] Connection to " << address << " success!";
+			logger::log(ww.str());
+
+			return true;
+		}
+		else
+		{
+			connected = false;
+
+			enet_peer_reset(peer);
+			fmt::MemoryWriter ww;
+			ww << "[NetworkClient] Connection attempt to " << address << " timed out.";
+			logger::log(ww.str());
+
+			return false;
+		}
 	}
 	else
 	{
-		connected = false;
-		enet_peer_reset(peer);
-		fmt::MemoryWriter ww;
-		ww << "[NetworkClient] Connection attempt to " << address << " timed out.";
-		logger::log(ww.str());
-		
 		return false;
 	}
-
 }
 
 
@@ -137,23 +153,62 @@ void noob::network_client::tick() noexcept(true)
 			{
 				switch(event.type)
 				{
-					case ENET_EVENT_TYPE_CONNECT:
-						{
-							logger::log("[NetworkClient] Connection to server succeeded!");
-							break;
-						}
+					// case ENET_EVENT_TYPE_CONNECT:
+					//	{
+					//		logger::log("[NetworkClient] WARNING: Receiving connect packet during regular tick() function!");
+					//		break;
+					//	}
 					case ENET_EVENT_TYPE_RECEIVE:
 						{
 							packets.push_back(std::string(event.packet->data));
 							enet_packet_destroy(event.packet);
 							break;
 						}
-					case ENET_EVENT_TYPE_DISCONNECT:
+					default:
 						{
-							logger::log("[NetworkClient] Disconnected from server.");
+							break;
 						}
+						// case ENET_EVENT_TYPE_DISCONNECT:
+						// {
+						//	logger::log("[NetworkClient] Disconnected from server.");
+
+						//}
 				}
 			}
 		}
+	}
+}
+
+
+void noob::network_client::disconnect(size_t timeout_in_millis) noexcept(true)
+{
+	if (!connected)
+	{
+		enet_peer_disconnect(peer, 0);
+		ENetEvent event;
+		while (enet_host_service(local_host, &event, timeout_in_millis) > 0)
+		{
+			switch (event.type)
+			{
+				case ENET_EVENT_TYPE_RECEIVE:
+					{
+						enet_packet_destroy(event.packet);
+						break;
+					}
+				case ENET_EVENT_TYPE_DISCONNECT:
+					{
+						logger::log("[NetworkClient] Disconnected success.");
+						break;
+					}
+				default:
+					{
+						break;
+					}
+
+			}
+		}
+		enet_peer_reset(peer);
+		logger::log("[NetworkClient] Could not politely disconnect. Killing connection rudely.");
+		connected = false;
 	}
 }

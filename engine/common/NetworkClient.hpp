@@ -28,6 +28,8 @@ namespace noob
 			
 			void tick() noexcept(true);
 
+			void disconnect(size_t timeout_in_millis) noexcept(true);
+
 		protected:
 			bool connected;
 			ENetHost* local_host;

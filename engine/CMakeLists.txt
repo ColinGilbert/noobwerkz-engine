@@ -13,10 +13,10 @@ include_directories(lib/brigand)
 
 include_directories(lib/rdestl)
 list (APPEND rdestl_src
-	lib/rdestl/allocator.cpp
-	lib/rdestl/intrusive_list.cpp
-	lib/rdestl/intrusive_slist.cpp
-	lib/rdestl/list.cpp
+	lib/rdestl/rdestl/allocator.cpp
+	lib/rdestl/rdestl/intrusive_list.cpp
+	lib/rdestl/rdestl/intrusive_slist.cpp
+	lib/rdestl/rdestl/list.cpp
 	)
 
 include_directories(lib/enet/src)
@@ -680,6 +680,7 @@ list(APPEND common_src
 	common/SimpleNavMesh.cpp
 	common/FileSystem.cpp
 	common/NetworkClient.cpp
+	common/NetworkHost.cpp
 	common/CSG.cpp
 	common/scripting/RegisterMath.cpp
 	common/scripting/RegisterGraphics.cpp
