@@ -1,7 +1,5 @@
 #pragma once
 
-
-#include <unordered_map>
 #include <memory>
 #include <vector>
 
@@ -10,8 +8,9 @@
 namespace noob
 {
 	class application;
+
 	template <typename T>
-		class component 
+	class component 
 		{
 			friend class application;
 			public:
@@ -107,7 +106,6 @@ namespace noob
 			void empty() noexcept(true)
 			{
 				items.resize(0);
-				names.empty();
 			}
 
 			size_t count() const noexcept(true)
@@ -118,7 +116,6 @@ namespace noob
 			protected:
 
 			std::vector<T> items;
-			std::unordered_map<std::string, size_t> names;
 		};
 
 
@@ -165,7 +162,7 @@ namespace noob
 
 					size_t inner;
 				};
-
+				
 				T* get(component<std::unique_ptr<T>>::handle h) noexcept(true)
 				{
 					if (exists(h)) 
@@ -229,7 +226,6 @@ namespace noob
 				void empty() noexcept(true)
 				{
 					items.resize(0);
-					names.empty();
 				}
 
 				size_t count() const noexcept(true)
@@ -241,6 +237,5 @@ namespace noob
 			protected:
 
 				std::vector<std::unique_ptr<T>> items;
-				std::unordered_map<std::string, size_t> names;
 		};
 }
