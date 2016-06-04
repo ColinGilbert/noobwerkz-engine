@@ -72,16 +72,14 @@ namespace noob
 
 			std::string get_debug_string() const;
 			
+			void set_ccd(bool); 
+			
 			// This is a hack to allow Bullet (or anyone else) to introspect whether this is a physical or ghost object. Useful when filtering collisions between bodies and ghosts.
 			const bool is_physical;
 		
 		protected:
 			noob::body_type type;
-
-			void set_ccd(bool); 
 			bool ccd, physics_valid;
-			noob::shape* shape;
-			// btCollisionShape* inner_shape;			
 			btDynamicsWorld* dynamics_world;
 			btRigidBody* inner_body;
 	};

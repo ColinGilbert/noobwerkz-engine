@@ -19,7 +19,7 @@
 namespace noob
 {
 	typedef noob::component<std::unique_ptr<noob::basic_mesh>> meshes_holder;
-	typedef noob::component<std::unique_ptr<noob::body>> bodies_holder;
+	typedef noob::component<noob::body> bodies_holder;
 	typedef noob::component<noob::joint> joints_holder;
 	typedef noob::component<std::unique_ptr<noob::ghost>> ghosts_holder;
 	typedef noob::component<std::unique_ptr<noob::shape>> shapes_holder;

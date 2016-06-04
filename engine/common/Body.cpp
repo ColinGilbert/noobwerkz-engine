@@ -17,10 +17,10 @@ noob::body::~body()
 
 
 
-void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg, const noob::shape* _shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
+void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg, const noob::shape* shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
 {
 	dynamics_world = _dynamics_world;
-	type = type_arg;
+	
 	btTransform start_transform;
 	start_transform.setIdentity();
 	start_transform.setOrigin(btVector3(pos.v[0], pos.v[1], pos.v[2]));
@@ -28,6 +28,7 @@ void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg
 
 	float _mass = mass;
 	
+	type = type_arg;
 	switch(type)
 	{
 		case(noob::body_type::DYNAMIC):
@@ -58,7 +59,6 @@ void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg
 
 	btVector3 inertia(0.0, 0.0, 0.0);
 	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
-	shape = const_cast<noob::shape*>(_shape);
 	
 	if (type == noob::body_type::DYNAMIC)
 	{
@@ -76,7 +76,7 @@ void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg
 	physics_valid = true;	
 }
 
-void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg, const noob::shape* _shape, const noob::body::info& _info)
+void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg, const noob::shape* shape, const noob::body::info& _info)
 {
 	dynamics_world = _dynamics_world;
 	btTransform start_transform;
@@ -85,7 +85,6 @@ void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg
 	start_transform.setRotation(btQuaternion(_info.orientation.q[0], _info.orientation.q[1], _info.orientation.q[2], _info.orientation.q[3]));
 	btVector3 inertia(0, 0, 0);
 	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
-	shape = const_cast<noob::shape*>(_shape);
 	shape->inner_shape->calculateLocalInertia(_info.mass, inertia);
 	btRigidBody::btRigidBodyConstructionInfo ci(_info.mass, motion_state, shape->inner_shape, inertia);
 	inner_body = new btRigidBody(ci);
@@ -296,7 +295,7 @@ void noob::body::set_ccd(bool b)
 	{
 		btVector3 center;
 		btScalar radius;
-		shape->inner_shape->getBoundingSphere(center, radius);
+		inner_body->getCollisionShape()->getBoundingSphere(center, radius);
 		inner_body->setCcdMotionThreshold(radius);
 	}
 }
