@@ -1,6 +1,10 @@
+
 #include "Application.hpp"
 
 #include "RegisterScripts.hpp"
+
+#include <string>
+
 
 noob::application* noob::application::app_pointer = nullptr;
 // noob::globals noob::application::global_storage;
@@ -77,9 +81,10 @@ void noob::application::init()
 	logger::log("[Application] Begin init.");
 	ui_enabled = true;
 	gui.init(*prefix, window_width, window_height);
-	if (global_storage.init())
+	noob::globals& g = noob::globals::get_instance();
+	if (g.init())
 	{
-		stage.init(&global_storage);
+		stage.init();
 	}
 	else 
 	{
@@ -113,7 +118,7 @@ void noob::application::init()
 	register_uniforms(script_engine);
 	register_handles(script_engine);
 	register_scaled_model(script_engine);
-	register_globals(script_engine, global_storage);
+	register_globals(script_engine);
 	register_stage(script_engine);
 	r = script_engine->RegisterGlobalProperty("stage default_stage", &stage); assert (r >= 0);
 	register_voxels(script_engine);
@@ -121,15 +126,32 @@ void noob::application::init()
 
 	logger::log("[Application] Done basic init.");
 	bool b = user_init();
-	b = load_init_script();
+	// b = load_init_script();
+	network.init(3);
+	network.connect("localhost", 4242);
+
 }
 
 
 void noob::application::update(double delta)
 {
 	gui.window_dims(window_width, window_height);
+	
+	network.tick();
+	
+	while (network.has_message())
+	{
+		std::string s = network.get_message();
+		if (s.compare(0, 6, "INIT: ") == 0)
+		{
+			eval(script_name, s.substr(6, std::string::npos), true);
+		}
+	}
+
 	stage.update(delta);
 	user_update(delta);
+
+
 /*
 	static double time_elapsed = 0.0;
 	time_elapsed += delta;
@@ -175,11 +197,18 @@ bool noob::application::load_init_script()
 }
 
 
-bool noob::application::eval(const std::string& name, const std::string& string_to_eval)
+bool noob::application::eval(const std::string& name, const std::string& string_to_eval, bool reset)
 {
 	std::string user_message = "\n[Application] Loading script. Success? {0}";
 
-	script_module = script_engine->GetModule(0, asGM_ALWAYS_CREATE);
+	if (reset)
+	{
+		script_module = script_engine->GetModule(0, asGM_ALWAYS_CREATE);
+	}
+	else
+	{
+		script_module = script_engine->GetModule(0, asGM_CREATE_IF_NOT_EXISTS);
+	}
 
 	// int r = script_module->AddScriptSection(script_name.c_str(), noob::utils::load_file_as_string(script_name).c_str());
 	int r = script_module->AddScriptSection(name.c_str(), string_to_eval.c_str());

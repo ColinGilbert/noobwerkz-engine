@@ -12,7 +12,7 @@ noob::stage::~stage()
 }
 
 
-void noob::stage::init(const noob::globals* g)
+void noob::stage::init()
 {
 	broadphase = new btDbvtBroadphase();
 	collision_configuration = new btDefaultCollisionConfiguration();
@@ -31,8 +31,6 @@ void noob::stage::init(const noob::globals* g)
 		//noob::lights_holder::handle;
 		//lights[i] =
 	//}
-
-	globals = g;
 
 	// noob::bodies_holder::handle temp = body(noob::body_type::ghost, globals->unit_sphere_shape, 0.0, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0), false);
 
@@ -112,9 +110,11 @@ void noob::stage::draw(float window_width, float window_height) const
 	// static const noob::graphics::uniform invalid_uniform, colour_0, colour_1, colour_2, colour_3, blend_0, blend_1, tex_scales, normal_mat, normal_mat_modelspace, eye_pos, eye_pos_normalized, ambient, light_pos_radius, light_rgb_falloff, specular_shine, diffuse, emissive, fog, rough_albedo_fresnel;
 	std::array<noob::light, MAX_LIGHTS> temp_lights;
 
+	noob::globals& g = noob::globals::get_instance();
+
 	for (size_t i = 0; i < MAX_LIGHTS; ++i)
 	{
-		temp_lights[i] = globals->lights.get(lights[i]);
+		temp_lights[i] = g.lights.get(lights[i]);
 	}
 
 	for (lemon::ListDigraph::OutArcIt model_it(draw_graph, root_node); model_it != lemon::INVALID; ++model_it)
@@ -143,7 +143,7 @@ void noob::stage::draw(float window_width, float window_height) const
 				noob::mat4 normal_mat = noob::transpose(noob::inverse((world_mat * view_mat)));
 
 				noob::reflectance temp_reflect;
-				temp_reflect = globals->reflectances.get(reflectances_mapping[body_node]);
+				temp_reflect = g.reflectances.get(reflectances_mapping[body_node]);
 
 
 				// std::array<noob::light, 4> temp_lights;
@@ -158,12 +158,12 @@ void noob::stage::draw(float window_width, float window_height) const
 				{
 					case(noob::shader_type::BASIC):
 					{
-						globals->basic_drawer.draw(globals->basic_models.get(model_h), world_mat, normal_mat, eye_pos, globals->basic_shaders.get(shader_h.handle), temp_reflect, temp_lights, 0);
+						g.basic_drawer.draw(g.basic_models.get(model_h), world_mat, normal_mat, eye_pos, g.basic_shaders.get(shader_h.handle), temp_reflect, temp_lights, 0);
 						break;
 					}
 					case(noob::shader_type::TRIPLANAR):
 					{
-						globals->triplanar_drawer.draw(globals->basic_models.get(model_h), world_mat, normal_mat, eye_pos, globals->triplanar_shaders.get(shader_h.handle), temp_reflect, temp_lights, 0);
+						g.triplanar_drawer.draw(g.basic_models.get(model_h), world_mat, normal_mat, eye_pos, g.triplanar_shaders.get(shader_h.handle), temp_reflect, temp_lights, 0);
 						break;
 					}
 					default:
@@ -194,8 +194,9 @@ void noob::stage::draw(float window_width, float window_height) const
 
 	noob::bodies_holder::handle noob::stage::body(const noob::body_type b_type, const noob::shapes_holder::handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
 	{
+		noob::globals& g = noob::globals::get_instance();
 		std::unique_ptr<noob::body> b = std::make_unique<noob::body>();
-		b->init(dynamics_world, b_type, globals->shapes.get(shape_h), mass, pos, orient, ccd);	
+		b->init(dynamics_world, b_type, g.shapes.get(shape_h), mass, pos, orient, ccd);	
 		body_handle bod_h = bodies.add(std::move(b));
 		noob::body* temp = bodies.get(bod_h);
 		temp->inner_body->setUserIndex(bod_h.get_inner());
@@ -274,7 +275,8 @@ void noob::stage::draw(float window_width, float window_height) const
 		reflectances_mapping[body_node] = model_info.reflect_h.get_inner();
 		draw_graph.addArc(shader_node, body_node);
 
-		noob::lights_holder::handle light_h = globals->default_light;
+		noob::globals& g = noob::globals::get_instance();
+		noob::lights_holder::handle light_h = g.default_light;
 		lights_mapping[body_node] = {light_h.get_inner(), light_h.get_inner(), light_h.get_inner(), light_h.get_inner()};
 
 		// fmt::MemoryWriter ww;
@@ -294,11 +296,12 @@ void noob::stage::draw(float window_width, float window_height) const
 
 	void noob::stage::actor(const noob::shapes_holder::handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results shader_h, const noob::reflectances_holder::handle reflect_arg)
 	{
-		noob::shape* s = globals->shapes.get(shape_h);
+		noob::globals& g = noob::globals::get_instance();
+		noob::shape* s = g.shapes.get(shape_h);
 		if (s->get_type() != noob::shape::type::TRIMESH)
 		{
 			noob::bodies_holder::handle body_h = body(noob::body_type::DYNAMIC, shape_h, mass, pos, orient);
-			noob::scaled_model model_info = globals->model_by_shape(shape_h);
+			noob::scaled_model model_info = g.model_by_shape(shape_h);
 			model_info.reflect_h = reflect_arg;
 			actor(body_h, model_info, shader_h);
 		}
@@ -308,10 +311,11 @@ void noob::stage::draw(float window_width, float window_height) const
 
 	void noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results shader_h, const noob::reflectances_holder::handle reflect_arg, const std::string& name)
 	{
-		noob::shapes_holder::handle shape_h = globals->static_trimesh_shape(m, name);
+		noob::globals& g = noob::globals::get_instance();
+		noob::shapes_holder::handle shape_h = g.static_trimesh_shape(m, name);
 		noob::bodies_holder::handle body_h = body(noob::body_type::STATIC, shape_h, 0.0, pos, orient);
 		noob::scaled_model model_info;
-		model_info = globals->model_from_mesh(m, name);
+		model_info = g.model_from_mesh(m, name);
 		model_info.reflect_h = reflect_arg;
 		actor(body_h, model_info, shader_h);
 	}

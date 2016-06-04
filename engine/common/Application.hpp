@@ -25,8 +25,8 @@
 #include <fstream>
 #include <atomic>
 
-#include <lemon/list_graph.h>
-#include <lemon/static_graph.h>
+// #include <lemon/list_graph.h>
+// #include <lemon/static_graph.h>
 
 #include "Globals.hpp"
 #include "Logger.hpp"
@@ -46,7 +46,7 @@
 #include "FileSystem.hpp"
 #include "Body.hpp"
 #include "RandomGenerator.hpp"
-
+#include "NetworkClient.hpp"
 
 #include <btBulletDynamicsCommon.h>
 #include <angelscript.h>
@@ -64,7 +64,7 @@ namespace noob
 
 			void set_init_script(const std::string& name);
 
-			bool eval(const std::string& name, const std::string& string_to_eval);
+			bool eval(const std::string& name, const std::string& string_to_eval, bool reset = false);
 
 			uint32_t get_height() const { return static_cast<uint32_t>(window_height); }
 			uint32_t get_width() const { return static_cast<uint32_t>(window_width); }
@@ -115,8 +115,9 @@ namespace noob
 			noob::voxel_world voxels;
 			noob::stage stage;
 			noob::mat4 view_mat;
+			noob::network_client network;
 			noob::random_generator randomz;
 			std::string script_name;
-			noob::globals global_storage;
+			noob::globals& global_storage;
 	};
 }

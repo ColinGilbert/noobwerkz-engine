@@ -650,6 +650,9 @@ list(APPEND angelscript_src
 	lib/angelscript-sdk/add_on/scriptstdstring/scriptstdstring_utils.cpp
 	)
 
+include_directories(lib/network-host)
+include_directories(lib/logger)
+
 list(APPEND common_src
 	common/Globals.cpp
 	common/BasicMesh.cpp
@@ -680,7 +683,6 @@ list(APPEND common_src
 	common/SimpleNavMesh.cpp
 	common/FileSystem.cpp
 	common/NetworkClient.cpp
-	common/NetworkHost.cpp
 	common/CSG.cpp
 	common/scripting/RegisterMath.cpp
 	common/scripting/RegisterGraphics.cpp

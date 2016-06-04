@@ -1,5 +1,6 @@
 #include "Globals.hpp"
 
+noob::globals* noob::globals::ptr_to_instance;
 
 bool noob::globals::init()
 {

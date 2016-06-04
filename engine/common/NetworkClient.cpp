@@ -15,7 +15,7 @@ bool noob::network_client::init(size_t num_channels, uint32_t incoming_bandwidth
 {
 	if (!connected)
 	{
-		if (!enet_initialize())
+		if (enet_initialize() > 0)
 		{
 			connected = false;
 			logger::log("[NetworkClient] Failed to init eNet");

@@ -7,5 +7,5 @@
 
 namespace noob
 {
-	void register_globals(asIScriptEngine*, const noob::globals&);
+	void register_globals(asIScriptEngine*);
 }

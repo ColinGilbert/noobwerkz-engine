@@ -41,7 +41,7 @@ namespace noob
 			~stage();
 
 			// This one must be called by the application. It really sucks but that's because the graphics API is (currently) static. This may well change soon enough.
-			void init(const noob::globals*);
+			void init();
 
 			// This one provides a way to bring everything back to scratch 
 			void tear_down();
@@ -116,6 +116,6 @@ namespace noob
 
 			std::array<noob::lights_holder::handle, MAX_LIGHTS> lights;
 
-			noob::globals* globals;
+			// noob::globals* globals;
 	};
 }

@@ -35,7 +35,32 @@ namespace noob
 
 	class globals
 	{
+		protected:
+			static globals* ptr_to_instance;
+
+			globals() {}
+			globals(const globals& rhs)
+			{
+				ptr_to_instance = rhs.ptr_to_instance;
+			}
+			globals& operator=(const globals& rhs)
+			{
+				if (this != &rhs)
+				{
+					ptr_to_instance = rhs.ptr_to_instance;
+				}
+				return *this;
+			}
+			~globals() {}
 		public:
+			static globals& get_instance()
+			{
+				static globals the_instance;
+				ptr_to_instance = &the_instance;
+				
+				return *ptr_to_instance;
+			}
+			
 			// Provides sane defaults in order not to crash the app in case of erroneous access.
 			bool init();
 
