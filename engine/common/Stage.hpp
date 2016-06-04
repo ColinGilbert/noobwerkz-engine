@@ -75,6 +75,8 @@ namespace noob
 
 			void set_light(unsigned int, const noob::lights_holder::handle);
 
+			void set_directional_light(const noob::directional_light&);
+
 			noob::lights_holder::handle get_light(unsigned int i) const;
 
 			void write_graph(const std::string& filename) const;
@@ -85,8 +87,6 @@ namespace noob
 			
 			noob::vec4 ambient_light;
 			noob::vec3 eye_pos;
-
-			// noob::prepared_shaders renderer;
 
 
 		protected:
@@ -116,7 +116,7 @@ namespace noob
 			std::map<size_t, lemon::ListDigraph::Node> bodies_to_nodes;
 			std::map<size_t, lemon::ListDigraph::Node> basic_models_to_nodes;
 			// std::map<size_t, lemon::ListDigraph::Node> shaders_to_nodes;
-
+			noob::directional_light directional_light;
 			std::array<noob::lights_holder::handle, MAX_LIGHTS> lights;
 
 			// noob::globals* globals;

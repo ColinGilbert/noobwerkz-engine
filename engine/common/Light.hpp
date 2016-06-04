@@ -6,10 +6,47 @@
 
 namespace noob
 {
+	struct directional_light
+	{
+			directional_light() : rgb_blank(noob::vec4(1.0, 1.0, 1.0, 1.0)), direction_blank(noob::vec4(1.0, 1.0, 1.0, 1.0)) {}
+			
+			void set_rgb(const noob::vec3& arg)
+			{
+				rgb_blank.v[0] = arg.v[0];
+				rgb_blank.v[1] = arg.v[1];
+				rgb_blank.v[2] = arg.v[2];
+			}
+
+			void set_direction(const noob::vec3& arg)
+			{
+				direction_blank.v[0] = arg.v[0];
+				direction_blank.v[1] = arg.v[1];
+				direction_blank.v[2] = arg.v[2];
+			}
+
+			noob::vec3 get_rgb() const
+			{
+				noob:vec3 results;
+				results.v[0] = rgb_blank.v[0];
+				results.v[1] = rgb_blank.v[1];
+				results.v[2] = rgb_blank.v[2];
+
+				return results;
+			}
+
+			noob::vec3 get_direction() const
+			{
+				noob::vec3 results;
+				results.v[0] = direction_blank.v[0];
+				results.v[1] = direction_blank.v[1];
+				results.v[2] = direction_blank.v[2];
+			}
+
+			noob::vec4 rgb_blank, direction_blank;
+	};
+
 	struct light 
 	{
-		public:
-
 		light() : rgb_falloff(noob::vec4(1.0, 1.0, 1.0, 1.0)), pos_radius(noob::vec4(0.0, 200.0, 0.0, 300.0)) {}
 
 		void set_position(const noob::vec3& arg)
@@ -56,6 +93,7 @@ namespace noob
 			retval.v[2] = rgb_falloff.v[2];
 			return retval;
 		}
+		
 		float get_radius(float r)
 		{
 			return pos_radius.v[3];
