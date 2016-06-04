@@ -106,13 +106,13 @@ void noob::stage::draw(float window_width, float window_height) const
 				size_t body_h = bodies_mapping[body_node];
 				noob::vec3 scales = noob::vec3(scales_mapping[body_node]);
 
-				noob::body* body_ptr = bodies.get(bodies.make_handle(body_h));
+				noob::body body_ptr = bodies.get(bodies.make_handle(body_h));
 				// noob::mat4 world_mat = noob::identity_mat4();
 				// world_mat = noob::scale(world_mat, scales); //noob::scale(world_mat, bodies.get(bodies.make_handle(body_h))->get_transform();
 				noob::mat4 world_mat = noob::identity_mat4();
 				world_mat = noob::scale(world_mat, noob::vec3(scales_mapping[body_node]));												
-				world_mat = noob::rotate(world_mat, bodies.get(body_h)->get_orientation());
-				world_mat = noob::translate(world_mat, bodies.get(body_h)->get_position());												
+				world_mat = noob::rotate(world_mat, bodies.get(body_h).get_orientation());
+				world_mat = noob::translate(world_mat, bodies.get(body_h).get_position());												
 				noob::mat4 normal_mat = noob::transpose(noob::inverse((world_mat * view_mat)));
 
 				noob::reflectance temp_reflect;
@@ -168,12 +168,12 @@ void noob::stage::draw(float window_width, float window_height) const
 	noob::bodies_holder::handle noob::stage::body(const noob::body_type b_type, const noob::shapes_holder::handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
 	{
 		noob::globals& g = noob::globals::get_instance();
-		std::unique_ptr<noob::body> b = std::make_unique<noob::body>();
-		b->init(dynamics_world, b_type, g.shapes.get(shape_h), mass, pos, orient, ccd);	
-		body_handle bod_h = bodies.add(std::move(b));
-		noob::body* temp = bodies.get(bod_h);
-		temp->inner_body->setUserIndex(bod_h.get_inner());
-		
+		//std::unique_ptr<noob::body> b = std::make_unique<noob::body>();
+		noob::body b;
+		b.init(dynamics_world, b_type, g.shapes.get(shape_h), mass, pos, orient, ccd);	
+		body_handle bod_h = bodies.add(b);
+		b = bodies.get(bod_h);
+		b.inner_body->setUserIndex(bod_h.get_inner());
 		// bodies_to_shapes.insert(std::make_pair(bod_h.get_inner(), shape_h));
 		return bod_h;
 	}
@@ -313,6 +313,19 @@ void noob::stage::draw(float window_width, float window_height) const
 		}
 		
 		return l;
+	}
+
+	void noob::stage::remove_body(noob::body_handle h)
+	{
+		if (bodies.exists(h) && h.get_inner() != 0)
+		{
+			noob::body b = bodies.get(h);
+			if (b.physics_valid)
+			{
+				dynamics_world->removeRigidBody(b.inner_body);
+				delete b.inner_body;
+			}
+		}	
 	}
 
 /*

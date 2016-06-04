@@ -90,6 +90,9 @@ namespace noob
 
 
 		protected:
+			
+			void remove_body(noob::body_handle);
+			
 			const int NUM_RESERVED_NODES = 12000;			
 			const int NUM_RESERVED_ARCS = 12000;
 

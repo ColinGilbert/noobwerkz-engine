@@ -11,14 +11,16 @@ namespace noob
 {
 	class stage;
 	class joint;
-	enum class body_type {DYNAMIC = 0, KINEMATIC = 1, STATIC = 2}; //, GHOST = 3};
+	enum class body_type {DYNAMIC = 0, KINEMATIC = 1, STATIC = 2};
 
 	class body 
 	{
 		friend class stage;
 		friend class joint;
-
-		public:
+		
+		public:	
+			body() : is_physical(true), physics_valid(false), ccd(true) {}
+		
 			struct info
 			{
 				void init(btRigidBody* _body, noob::body_type _type, bool _ccd)
@@ -28,7 +30,10 @@ namespace noob
 					{
 						mass = 1.0 / inv_mass;
 					}
-					else mass = 0.0;
+					else
+					{
+						mass = 0.0;
+					}
 					type = _type;
 					friction = _body->getFriction();
 					restitution = _body->getRestitution();
@@ -50,8 +55,6 @@ namespace noob
 			};
 
 
-			body() : physics_valid(false), is_physical(true) {}
-			~body();
 
 			void init(btDynamicsWorld*, noob::body_type, const noob::shape*, float mass, const noob::vec3& position, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0), bool ccd = false);
 			void init(btDynamicsWorld*, noob::body_type, const noob::shape*, const noob::body::info&);
@@ -74,13 +77,17 @@ namespace noob
 			
 			void set_ccd(bool); 
 			
-			// This is a hack to allow Bullet (or anyone else) to introspect whether this is a physical or ghost object. Useful when filtering collisions between bodies and ghosts.
-			const bool is_physical;
+			bool physical()
+			{
+				return is_physical;
+			}
+
 		
 		protected:
+			
 			noob::body_type type;
-			bool ccd, physics_valid;
-			btDynamicsWorld* dynamics_world;
+			bool is_physical, physics_valid, ccd;
+			// btDynamicsWorld* dynamics_world;
 			btRigidBody* inner_body;
 	};
 }

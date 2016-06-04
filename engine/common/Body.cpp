@@ -5,22 +5,9 @@
 
 #include <cmath>
 
-noob::body::~body()
+
+void noob::body::init(btDynamicsWorld* dynamics_world, noob::body_type type_arg, const noob::shape* shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
 {
-	if (physics_valid)
-	{
-		dynamics_world->removeRigidBody(inner_body);
-		delete inner_body;
-	}
-}
-
-
-
-
-void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg, const noob::shape* shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
-{
-	dynamics_world = _dynamics_world;
-	
 	btTransform start_transform;
 	start_transform.setIdentity();
 	start_transform.setOrigin(btVector3(pos.v[0], pos.v[1], pos.v[2]));
@@ -49,11 +36,6 @@ void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg
 		{
 			break;
 		}
-		// case(noob::body_type::GHOST):
-		// {
-		//	break;
-		// }
-
 	};
 
 
@@ -76,9 +58,8 @@ void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg
 	physics_valid = true;	
 }
 
-void noob::body::init(btDynamicsWorld* _dynamics_world, noob::body_type type_arg, const noob::shape* shape, const noob::body::info& _info)
+void noob::body::init(btDynamicsWorld* dynamics_world, noob::body_type type_arg, const noob::shape* shape, const noob::body::info& _info)
 {
-	dynamics_world = _dynamics_world;
 	btTransform start_transform;
 	start_transform.setIdentity();
 	start_transform.setOrigin(btVector3(_info.position.v[0], _info.position.v[1], _info.position.v[2]));
