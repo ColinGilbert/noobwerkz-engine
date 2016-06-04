@@ -144,6 +144,7 @@ void noob::application::update(double delta)
 		std::string s = network.get_message();
 		if (s.compare(0, 6, "INIT: ") == 0)
 		{
+			stage.tear_down();
 			eval(script_name, s.substr(6, std::string::npos), true);
 		}
 	}

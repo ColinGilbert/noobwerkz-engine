@@ -42,8 +42,8 @@ namespace noob
 
 			// This one must be called by the application. It really sucks but that's because the graphics API is (currently) static. This may well change soon enough.
 			void init();
-
-			// This one provides a way to bring everything back to scratch 
+		
+			// Brings everything back to scratch
 			void tear_down();
 
 			// Call those every frame or so.

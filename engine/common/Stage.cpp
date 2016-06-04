@@ -41,55 +41,30 @@ void noob::stage::init()
 	logger::log("[Stage] Done init.");
 }
 
-
-// TODO: Implement
 void noob::stage::tear_down()
 {
-	/*
-	// TODO: Split this mess into separate funnctions
-	// bodies.empty();
-	bodies_to_nodes.empty();
-
-	// bodies_mapping.clear();
-	// basic_models_mapping.clear();
-	// shaders_mapping.clear();
-
-	bodies_to_shapes.empty();
-	bodies_to_nodes.empty();
-	basic_models_to_nodes.empty();
-	shaders_to_nodes.empty();
-
 	draw_graph.clear();
 
-	root_node = draw_graph.addNode();
-	*/
-	// delete dynamics_world;
-	// delete solver;
-	// delete collision_configuration;
-	// delete collision_dispatcher;
-	// delete broadphase;
+	bodies.empty();
+	joints.empty();
+	ghosts.empty();
 
-	// broadphase = new btDbvtBroadphase();
-	// collision_configuration = new btDefaultCollisionConfiguration();
-	// collision_dispatcher = new btCollisionDispatcher(collision_configuration);
-	// solver = new btSequentialImpulseConstraintSolver();
-	// dynamics_world = new btDiscreteDynamicsWorld(collision_dispatcher, broadphase, solver, collision_configuration);
-	// dynamics_world->setGravity(btVector3(0, -10, 0));
+	bodies_to_nodes.clear();
+	basic_models_to_nodes.clear();
 
-	//noob::bodies_holder::handle temp = body(noob::body_type::STATIC, globals.unit_sphere_shape, 0.0, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0), false);
-
-	// bodies_mapping(draw_graph);
-	// basic_models_mapping(draw_graph);
-	// shaders_mapping(draw_graph);
+	delete dynamics_world;
+	delete broadphase;
+	delete solver;
+	delete collision_dispatcher;
+	delete collision_configuration;
+	
+	init();
 }
-
 
 void noob::stage::update(double dt)
 {
 	dynamics_world->stepSimulation(1.0/60.0, 10);
 }
-
-
 
 
 void noob::stage::draw(float window_width, float window_height) const
@@ -103,8 +78,6 @@ void noob::stage::draw(float window_width, float window_height) const
 	bgfx::setUniform(noob::graphics::ambient.handle, &ambient_light.v[0]);
 	bgfx::setUniform(noob::graphics::eye_pos.handle, &eye_pos.v[0]);	
 	bgfx::setUniform(noob::graphics::eye_pos_normalized.handle, &(noob::normalize(eye_pos)).v[0]);
-
-
 
 
 	// static const noob::graphics::uniform invalid_uniform, colour_0, colour_1, colour_2, colour_3, blend_0, blend_1, tex_scales, normal_mat, normal_mat_modelspace, eye_pos, eye_pos_normalized, ambient, light_pos_radius, light_rgb_falloff, specular_shine, diffuse, emissive, fog, rough_albedo_fresnel;
