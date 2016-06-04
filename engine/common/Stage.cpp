@@ -45,7 +45,7 @@ void noob::stage::tear_down()
 {
 	draw_graph.clear();
 
-	for (size_t i = 1; i < bodies.count(); ++i)
+	for (size_t i = 0; i < bodies.count(); ++i)
 	{
 		remove_body(bodies.make_handle(i));
 	}
