@@ -62,7 +62,6 @@ namespace noob
 			virtual ~application();
 			static application& get();
 
-			void set_init_script(const std::string& name);
 
 			bool eval(const std::string& name, const std::string& string_to_eval, bool reset = false);
 
@@ -98,7 +97,6 @@ namespace noob
 			// Overload these if you're writing a game that is setup and/or developing the engine in C++.
 			bool user_init();
 			void user_update(double);
-			bool load_init_script();
 
 			asIScriptEngine* script_engine;
 			asIScriptModule* script_module; //  = engine->GetModule("module", asGM_ALWAYS_CREATE);

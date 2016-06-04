@@ -22,7 +22,6 @@ noob::application::application()
 	assert(script_engine > 0);
 	// TODO: Uncomment once noob::filesystem is fixed
 	// noob::filesystem::init(*prefix);
-	set_init_script("init.as");
 	view_mat = noob::look_at(noob::vec3(0, 50.0, -100.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
 }
 
@@ -39,12 +38,6 @@ noob::application& noob::application::get()
 	logger::log("application::get()");
 	assert(app_pointer && "application not created!");
 	return *app_pointer;
-}
-
-
-void noob::application::set_init_script(const std::string& name)
-{
-	script_name = name;
 }
 
 
@@ -126,7 +119,6 @@ void noob::application::init()
 
 	logger::log("[Application] Done basic init.");
 	bool b = user_init();
-	// b = load_init_script();
 	network.init(3);
 	network.connect("localhost", 4242);
 
@@ -145,62 +137,26 @@ void noob::application::update(double delta)
 		if (s.compare(0, 6, "INIT: ") == 0)
 		{
 			stage.tear_down();
-			eval(script_name, s.substr(6, std::string::npos), true);
+			eval("init", s.substr(6, std::string::npos), true);
+		}
+		else if (s.compare(0, 8, "UPDATE: ") == 0)
+		{
+			// TODO: Implement
+		}
+		else if (s.compare(0, 5, "CMD: ") == 0)
+		{
+			eval("cmd", s.substr(5, std::string::npos), true);
 		}
 	}
 
 	stage.update(delta);
 	user_update(delta);
-
-
-/*
-	static double time_elapsed = 0.0;
-	time_elapsed += delta;
-
-
-	if (time_elapsed > 0.25)
-	{
-		filesystem::path p1(*prefix);
-
-		
-		filesystem::path p2(script_name);
-
-
-		static std::time_t last_write = 0;
-		std::time_t t = boost::filesystem::last_write_time(p, ec);
-		if (ec != 0)
-		{
-			logger::log(fmt::format("[Application] - update() - error reading {0}: {1}", p.generic_string(), ec.message()));
-		}	
-		else if (last_write != t)
-		{
-			try
-			{
-				// script_module; = script_engine->GetModule("user_module", asGM_ALWAYS_CREATE);
-				stage.tear_down();
-				load_init_script();
-			}
-			catch(std::exception e)
-			{
-				logger::log(fmt::format("[Application]. Init script failed! Caught AngelScript exception: ", e.what()));
-			}
-			last_write = t;
-		}
-		time_elapsed = 0.0;
-	}
-*/
-}
-
-
-bool noob::application::load_init_script()
-{
-	return eval(script_name, noob::utils::load_file_as_string(script_name));
 }
 
 
 bool noob::application::eval(const std::string& name, const std::string& string_to_eval, bool reset)
 {
-	std::string user_message = "\n[Application] Loading script. Success? {0}";
+	std::string user_message = "[Application] Loading script. Success? {0}";
 
 	if (reset)
 	{
@@ -211,7 +167,6 @@ bool noob::application::eval(const std::string& name, const std::string& string_
 		script_module = script_engine->GetModule(0, asGM_CREATE_IF_NOT_EXISTS);
 	}
 
-	// int r = script_module->AddScriptSection(script_name.c_str(), noob::utils::load_file_as_string(script_name).c_str());
 	int r = script_module->AddScriptSection(name.c_str(), string_to_eval.c_str());
 	if (r < 0)
 	{

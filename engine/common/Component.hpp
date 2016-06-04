@@ -110,6 +110,11 @@ namespace noob
 				names.empty();
 			}
 
+			size_t count() const noexcept(true)
+			{
+				return items.size();
+			}
+
 			protected:
 
 			std::vector<T> items;
@@ -226,6 +231,12 @@ namespace noob
 					items.resize(0);
 					names.empty();
 				}
+
+				size_t count() const noexcept(true)
+				{
+					return items.size();
+				}
+
 
 			protected:
 

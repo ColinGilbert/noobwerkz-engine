@@ -39,10 +39,12 @@ namespace noob
 			static globals* ptr_to_instance;
 
 			globals() {}
+			
 			globals(const globals& rhs)
 			{
 				ptr_to_instance = rhs.ptr_to_instance;
 			}
+			
 			globals& operator=(const globals& rhs)
 			{
 				if (this != &rhs)
@@ -51,6 +53,7 @@ namespace noob
 				}
 				return *this;
 			}
+			
 			~globals() {}
 		public:
 			static globals& get_instance()
