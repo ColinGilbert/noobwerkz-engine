@@ -1,14 +1,5 @@
 #include "Shape.hpp"
 
-noob::shape::~shape()
-{
-	if (physics_valid)
-	{
-		// TODO: Remove shape from physics world
-		delete inner_shape;
-	}
-}
-
 void noob::shape::sphere(float radius)
 {
 	if (!physics_valid)

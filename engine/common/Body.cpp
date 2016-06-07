@@ -6,7 +6,7 @@
 #include <cmath>
 
 
-void noob::body::init(btDynamicsWorld* dynamics_world, noob::body_type type_arg, const noob::shape* shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
+void noob::body::init(btDynamicsWorld* dynamics_world, noob::body_type type_arg, const noob::shape& shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
 {
 	btTransform start_transform;
 	start_transform.setIdentity();
@@ -44,10 +44,10 @@ void noob::body::init(btDynamicsWorld* dynamics_world, noob::body_type type_arg,
 	
 	if (type == noob::body_type::DYNAMIC)
 	{
-		shape->inner_shape->calculateLocalInertia(_mass, inertia);
+		shape.inner_shape->calculateLocalInertia(_mass, inertia);
 	}
 
-	btRigidBody::btRigidBodyConstructionInfo ci(_mass, motion_state, shape->inner_shape, inertia);
+	btRigidBody::btRigidBodyConstructionInfo ci(_mass, motion_state, shape.inner_shape, inertia);
 	inner_body = new btRigidBody(ci);
 	
 	set_ccd(ccd);
@@ -58,7 +58,7 @@ void noob::body::init(btDynamicsWorld* dynamics_world, noob::body_type type_arg,
 	physics_valid = true;	
 }
 
-void noob::body::init(btDynamicsWorld* dynamics_world, noob::body_type type_arg, const noob::shape* shape, const noob::body::info& _info)
+void noob::body::init(btDynamicsWorld* dynamics_world, noob::body_type type_arg, const noob::shape& shape, const noob::body::info& _info)
 {
 	btTransform start_transform;
 	start_transform.setIdentity();
@@ -66,8 +66,8 @@ void noob::body::init(btDynamicsWorld* dynamics_world, noob::body_type type_arg,
 	start_transform.setRotation(btQuaternion(_info.orientation.q[0], _info.orientation.q[1], _info.orientation.q[2], _info.orientation.q[3]));
 	btVector3 inertia(0, 0, 0);
 	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
-	shape->inner_shape->calculateLocalInertia(_info.mass, inertia);
-	btRigidBody::btRigidBodyConstructionInfo ci(_info.mass, motion_state, shape->inner_shape, inertia);
+	shape.inner_shape->calculateLocalInertia(_info.mass, inertia);
+	btRigidBody::btRigidBodyConstructionInfo ci(_info.mass, motion_state, shape.inner_shape, inertia);
 	inner_body = new btRigidBody(ci);
 	inner_body->setFriction(_info.friction);
 	inner_body->setRestitution(_info.restitution);

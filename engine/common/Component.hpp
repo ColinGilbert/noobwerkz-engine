@@ -74,6 +74,20 @@ namespace noob
 				}	
 			}
 
+			T& get_ref(size_t i) noexcept(true)
+			{
+				handle h = make_handle(i);
+				if (exists(h)) return items[h.inner];
+				else
+				{
+					logger::log("Invalid access to component ref");
+				}
+			}
+
+			T& get_ref(component<T>::handle h) noexcept(true)
+			{
+				return get_ref(h.inner);
+			}
 
 			component<T>::handle add(const T& t) noexcept(true)
 			{

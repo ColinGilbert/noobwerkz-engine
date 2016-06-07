@@ -187,55 +187,63 @@ noob::scaled_model noob::globals::model_by_shape(const noob::shapes_holder::hand
 
 	scaled_model results;
 	//results.scales = noob::vec3(1.0, 1.0, 1.0);
-	noob::shape* s = shapes.get(h);
+	noob::shape& s = shapes.get_ref(h);
 
 	// logger::log("[Globals] got shape pointer");
 
-	switch(s->shape_type)
+	switch(s.shape_type)
 	{
 		// logger::log("[Globals] choosing shape type");
 
 		case(noob::shape::type::SPHERE):
-		results.model_h = unit_sphere_model.model_h;
-		results.scales = s->scales;
-		return results;
+			{
+				results.model_h = unit_sphere_model.model_h;
+				results.scales = s.scales;
+				return results;
+			}
 		case(noob::shape::type::BOX):
-		results.model_h = unit_cube_model.model_h;
-		results.scales = s->scales;
-		return results;
+			{
+				results.model_h = unit_cube_model.model_h;
+				results.scales = s.scales;
+				return results;
+			}
 		case(noob::shape::type::CYLINDER):
-		results.model_h = unit_cylinder_model.model_h;
-		results.scales = s->scales;
-		return results;
+			{
+				results.model_h = unit_cylinder_model.model_h;
+				results.scales = s.scales;
+				return results;
+			}
 		case(noob::shape::type::CONE):
-		results.model_h = unit_cone_model.model_h;
-		results.scales = s->scales;
-		return results;
+			{
+				results.model_h = unit_cone_model.model_h;
+				results.scales = s.scales;
+				return results;
+			}
 		case(noob::shape::type::HULL):
-		{
-			auto search = shapes_to_models.find(h.get_inner());
-			if (search == shapes_to_models.end())
 			{
-				results.model_h = search->second;
-				results.scales = noob::vec3(1.0, 1.0, 1.0);
-				return results;
+				auto search = shapes_to_models.find(h.get_inner());
+				if (search == shapes_to_models.end())
+				{
+					results.model_h = search->second;
+					results.scales = noob::vec3(1.0, 1.0, 1.0);
+					return results;
+				}
 			}
-		}
 		case(noob::shape::type::TRIMESH):
-		{
-			auto search = shapes_to_models.find(h.get_inner());
-			if (search == shapes_to_models.end())
 			{
-				results.model_h = search->second;
-				results.scales = noob::vec3(1.0, 1.0, 1.0);					
-				return results;
+				auto search = shapes_to_models.find(h.get_inner());
+				if (search == shapes_to_models.end())
+				{
+					results.model_h = search->second;
+					results.scales = noob::vec3(1.0, 1.0, 1.0);					
+					return results;
+				}
 			}
-		}
 		default:
-		{
-			logger::log("[Globals] - USER DATA WARNING - INVALID SHAPE TO MODEL :(");
-			break;
-		}
+			{
+				logger::log("[Globals] - USER DATA WARNING - INVALID SHAPE TO MODEL :(");
+				break;
+			}
 	};
 	return results; 
 }
@@ -250,13 +258,13 @@ noob::shapes_holder::handle noob::globals::sphere_shape(float r)
 	// auto search = sphere_shapes.find(r);
 	if (search == names_to_shapes.end())
 	{
-		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
-		temp->sphere(r);
+		noob::shape temp;
+		temp.sphere(r);
 
 		fmt::MemoryWriter ww;
 		ww << "sphere-" << static_cast<uint32_t>(r);
 
-		auto results = names_to_shapes.insert(std::make_pair(ww.str(), shapes.add(std::move(temp))));
+		auto results = names_to_shapes.insert(std::make_pair(ww.str(), shapes.add(temp)));
 		return (results.first)->second;
 
 	}
@@ -272,13 +280,13 @@ noob::shapes_holder::handle noob::globals::box_shape(float x, float y, float z)
 	//auto search = box_shapes.find(std::make_tuple(x,y,z));
 	if (search == names_to_shapes.end())
 	{
-		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
-		temp->box(x, y, z);
+		noob::shape temp;
+		temp.box(x, y, z);
 
 		fmt::MemoryWriter ww;
 		ww << "box-" << static_cast<uint32_t>(x) << "-" << static_cast<uint32_t>(y) << "-" << static_cast<uint32_t>(z);
 
-		auto results = names_to_shapes.insert(std::make_pair(ww.str(), shapes.add(std::move(temp))));
+		auto results = names_to_shapes.insert(std::make_pair(ww.str(), shapes.add(temp)));
 		return (results.first)->second;
 	}
 	return search->second;
@@ -293,8 +301,8 @@ noob::shapes_holder::handle noob::globals::cylinder_shape(float r, float h)
 	auto search = names_to_shapes.find(w.str());
 	if (search == names_to_shapes.end())
 	{
-		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
-		temp->cylinder(r, h);
+		noob::shape temp;
+		temp.cylinder(r, h);
 
 		fmt::MemoryWriter ww;
 		ww << "cylinder-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
@@ -313,13 +321,13 @@ noob::shapes_holder::handle noob::globals::cone_shape(float r, float h)
 	auto search = names_to_shapes.find(w.str());
 	if (search == names_to_shapes.end())
 	{
-		std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
-		temp->cone(r, h);
+		noob::shape temp;
+		temp.cone(r, h);
 
 		fmt::MemoryWriter ww;
 		ww << "cone-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
 
-		auto results = names_to_shapes.insert(std::make_pair(ww.str(), shapes.add(std::move(temp))));
+		auto results = names_to_shapes.insert(std::make_pair(ww.str(), shapes.add(temp)));
 		return (results.first)->second;
 	}
 	return search->second;
@@ -360,9 +368,9 @@ noob::shapes_holder::handle noob::globals::hull_shape(const std::vector<vec3>& p
 	if (search == names_to_shapes.end())
 	{
 		// TODO: Add to shapes_to_meshes
-		std::unique_ptr<noob::shape> temp_shape = std::make_unique<noob::shape>();
-		temp_shape->hull(points);
-		return shapes.add(std::move(temp_shape));
+		noob::shape temp;
+		temp.hull(points);
+		return shapes.add(temp);
 	}
 	return search->second;
 }
@@ -373,9 +381,9 @@ noob::shapes_holder::handle noob::globals::static_trimesh_shape(const noob::basi
 	auto search = names_to_shapes.find(name);
 	if (search == names_to_shapes.end())
 	{
-		std::unique_ptr<noob::shape> temp_shape_ptr = std::make_unique<noob::shape>();
-		temp_shape_ptr->trimesh(&m);
-		return shapes.add(std::move(temp_shape_ptr));
+		noob::shape temp;
+		temp.trimesh(&m);
+		return shapes.add(temp);
 	}
 	return search->second;
 }

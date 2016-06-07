@@ -56,8 +56,8 @@ namespace noob
 
 
 
-			void init(btDynamicsWorld*, noob::body_type, const noob::shape*, float mass, const noob::vec3& position, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0), bool ccd = false);
-			void init(btDynamicsWorld*, noob::body_type, const noob::shape*, const noob::body::info&);
+			void init(btDynamicsWorld*, noob::body_type, const noob::shape&, float mass, const noob::vec3& position, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0), bool ccd = false);
+			void init(btDynamicsWorld*, noob::body_type, const noob::shape&, const noob::body::info&);
 
 			// void set_type(noob::body_type);
 			

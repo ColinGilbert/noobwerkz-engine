@@ -97,6 +97,8 @@ namespace noob
 			// Overload these if you're writing a game that is setup and/or developing the engine in C++.
 			bool user_init();
 			void user_update(double);
+			
+			void remove_shapes();
 
 			asIScriptEngine* script_engine;
 			asIScriptModule* script_module; //  = engine->GetModule("module", asGM_ALWAYS_CREATE);

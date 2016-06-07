@@ -29,6 +29,7 @@ noob::application::application()
 noob::application::~application()
 {
 	script_engine->ShutDownAndRelease();
+	remove_shapes();
 	app_pointer = nullptr;
 }
 
@@ -342,4 +343,16 @@ void noob::application::window_resize(uint32_t w, uint32_t h)
 void noob::application::key_input(char c)
 {
 
+}
+
+void noob::application::remove_shapes()
+{
+	noob::globals& g = noob::globals::get_instance();
+	for (size_t i = 0; i < g.shapes.items.size(); ++i)
+	{
+		if (g.shapes.items[i].physics_valid)
+		{
+			delete g.shapes.items[i].inner_shape;
+		}
+	}
 }

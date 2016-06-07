@@ -140,7 +140,6 @@ namespace noob
 			noob::light_handle default_light;
 			noob::reflectance_handle default_reflectance;
 
-			meshes_holder meshes;
 			basic_models_holder basic_models;
 			animated_models_holder animated_models;
 			shapes_holder shapes;

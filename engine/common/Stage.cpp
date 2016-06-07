@@ -156,7 +156,7 @@ void noob::stage::draw(float window_width, float window_height) const
 }
 
 
-noob::bodies_holder::handle noob::stage::body(const noob::body_type b_type, const noob::shapes_holder::handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
+noob::bodies_holder::handle noob::stage::add_body(const noob::body_type b_type, const noob::shapes_holder::handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
 {
 	noob::globals& g = noob::globals::get_instance();
 	noob::body b;
@@ -259,10 +259,10 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::sc
 void noob::stage::actor(const noob::shapes_holder::handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results shader_h, const noob::reflectances_holder::handle reflect_arg)
 {
 	noob::globals& g = noob::globals::get_instance();
-	noob::shape* s = g.shapes.get(shape_h);
-	if (s->get_type() != noob::shape::type::TRIMESH)
+	noob::shape s = g.shapes.get(shape_h);
+	if (s.get_type() != noob::shape::type::TRIMESH)
 	{
-		noob::bodies_holder::handle body_h = body(noob::body_type::DYNAMIC, shape_h, mass, pos, orient);
+		noob::bodies_holder::handle body_h = add_body(noob::body_type::DYNAMIC, shape_h, mass, pos, orient);
 		noob::scaled_model model_info = g.model_by_shape(shape_h);
 		model_info.reflect_h = reflect_arg;
 		actor(body_h, model_info, shader_h);
@@ -275,7 +275,7 @@ void noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, cons
 {
 	noob::globals& g = noob::globals::get_instance();
 	noob::shapes_holder::handle shape_h = g.static_trimesh_shape(m, name);
-	noob::bodies_holder::handle body_h = body(noob::body_type::STATIC, shape_h, 0.0, pos, orient);
+	noob::bodies_holder::handle body_h = add_body(noob::body_type::STATIC, shape_h, 0.0, pos, orient);
 	noob::scaled_model model_info;
 	model_info = g.model_from_mesh(m, name);
 	model_info.reflect_h = reflect_arg;

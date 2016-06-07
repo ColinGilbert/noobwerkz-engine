@@ -18,11 +18,11 @@
 
 namespace noob
 {
-	typedef noob::component<std::unique_ptr<noob::basic_mesh>> meshes_holder;
+	// typedef noob::component<std::unique_ptr<noob::basic_mesh>> meshes_holder;
 	typedef noob::component<noob::body> bodies_holder;
 	typedef noob::component<noob::joint> joints_holder;
-	typedef noob::component<std::unique_ptr<noob::ghost>> ghosts_holder;
-	typedef noob::component<std::unique_ptr<noob::shape>> shapes_holder;
+	typedef noob::component<noob::ghost> ghosts_holder;
+	typedef noob::component<noob::shape> shapes_holder;
 	typedef noob::component<std::unique_ptr<noob::skeletal_anim>> skeletal_anims_holder;
 	typedef noob::component<noob::light> lights_holder;
 	typedef noob::component<noob::reflectance> reflectances_holder;
@@ -32,7 +32,7 @@ namespace noob
 	typedef noob::component<noob::basic_renderer::uniform> basic_shaders_holder;
 	typedef noob::component<noob::triplanar_gradient_map_renderer::uniform> triplanar_shaders_holder;
 
-	typedef meshes_holder::handle mesh_handle;
+	// typedef meshes_holder::handle mesh_handle;
 	typedef bodies_holder::handle body_handle;
 	typedef joints_holder::handle joint_handle;
 	typedef ghosts_holder::handle ghost_handle;	
@@ -43,7 +43,6 @@ namespace noob
 	typedef basic_models_holder::handle model_handle;
 	typedef animated_models_holder::handle animated_model_handle;
 	// typedef shaders_holder::handle shader_handle;
-
 	typedef basic_shaders_holder::handle basic_shader_handle;
 	typedef triplanar_shaders_holder::handle triplanar_shader_handle;
 }
