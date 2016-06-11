@@ -98,7 +98,7 @@ void noob::stage::draw(float window_width, float window_height) const
 				size_t body_h = bodies_mapping[body_node];
 				noob::vec3 scales = noob::vec3(scales_mapping[body_node]);
 
-				noob::body body_ptr = bodies.get(bodies.make_handle(body_h));
+				// noob::body bod = bodies.get(bodies.make_handle(body_h));
 				// noob::mat4 world_mat = noob::identity_mat4();
 				// world_mat = noob::scale(world_mat, scales); //noob::scale(world_mat, bodies.get(bodies.make_handle(body_h))->get_transform();
 				noob::mat4 world_mat = noob::identity_mat4();
@@ -186,6 +186,7 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::an
 void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::scaled_model model_info, const noob::globals::shader_results shader_h)
 {
 	auto body_results = bodies_to_nodes.find(body_h.get_inner());
+	
 	if (body_results != bodies_to_nodes.end())
 	{
 		logger::log("[Stage] Warning: Attempting to use duplicate body. Aborted.");
@@ -195,6 +196,7 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::sc
 	lemon::ListDigraph::Node model_node;
 
 	auto model_results = basic_models_to_nodes.find(model_info.model_h.get_inner());
+	
 	if (model_results != basic_models_to_nodes.end())
 	{
 		model_node = model_results->second;
@@ -213,6 +215,7 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::sc
 
 	bool shader_found = false;
 	lemon::ListDigraph::Node shader_node;
+	
 	for (lemon::ListDigraph::OutArcIt shader_it(draw_graph, model_node); shader_it != lemon::INVALID; ++shader_it)
 	{
 		lemon::ListDigraph::Node temp_shader_node = draw_graph.target(shader_it);
@@ -224,6 +227,7 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::sc
 			break;
 		}
 	}
+
 	if (!shader_found)
 	{
 		shader_node = draw_graph.addNode();

@@ -19,8 +19,11 @@ void noob::shape::box(float width, float height, float depth)
 	if (!physics_valid)
 	{
 		shape_type = noob::shape::type::BOX;
-		inner_shape = new btBoxShape(btVector3(width, height, depth));
+		inner_shape = new btBoxShape(btVector3(width * 0.5, height * 0.5, depth * 0.5));
+		
+		// inner_shape = new btBoxShape(btVector3(width, height, depth));
 	}
+	// scales = noob::vec3(width * 0.5, height * 0.5, depth * 0.5);
 	scales = noob::vec3(width, height, depth);
 	physics_valid = true;
 }

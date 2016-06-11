@@ -4,7 +4,7 @@
 #include "Graphics.hpp"
 #include "Application.hpp"
 #include "Logger.hpp"
-#include "NDOF.hpp"
+// #include "NDOF.hpp"
 
 #include <GLFW/glfw3.h>
 #include <bgfx/bgfxplatform.h>
@@ -16,7 +16,7 @@ static uint32_t debug = BGFX_DEBUG_TEXT;
 static uint32_t reset = BGFX_RESET_VSYNC;
 
 static noob::application* app;
-static noob::ndof ndof;
+// static noob::ndof ndof;
 
 void window_close_callback(GLFWwindow* window)
 {
@@ -112,12 +112,12 @@ int main(int /*_argc*/, char** /*_argv*/)
 	// Note: The ext time seems to have been there for a while and everything was fine. Now (nVidia 361.28
 	//glfwMakeContextCurrent(window);
 
-	ndof.run();
+	// ndof.run();
 
 	while (!glfwWindowShouldClose(window))
 	{
-		noob::ndof::data info = ndof.get_data();
-		app->accept_ndof_data(info);
+		// noob::ndof::data info = ndof.get_data();
+		// app->accept_ndof_data(info);
 		app->step();
 		noob::graphics::frame(width, height);
 		glfwPollEvents();

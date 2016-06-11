@@ -706,7 +706,7 @@ list(APPEND user_src
 
 if (DEFINED NOOB_PLATFORM_LINUX)
 	include_directories(platform/nix)
-	list(APPEND main_src platform/nix/EngineDesktop.cpp platform/nix/NDOF.cpp)	
+	list(APPEND main_src platform/nix/EngineDesktop.cpp) # platform/nix/NDOF.cpp)	
 endif()
 
 # if (DEFINED IOS)
@@ -722,5 +722,5 @@ target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype rt dl pt
 
 if (DEFINED NOOB_PLATFORM_LINUX)
 	target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES})	
-	target_link_libraries(NoobEdit LINK_PUBLIC spnav)
+	# target_link_libraries(NoobEdit LINK_PUBLIC spnav)
 endif()

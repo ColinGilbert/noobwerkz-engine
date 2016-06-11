@@ -9,7 +9,7 @@ bool noob::globals::init()
 
 	// renderer.init();
 	unit_sphere_shape = sphere_shape(0.5);
-	unit_cube_shape = box_shape(1.0, 1.0, 1.0);
+	unit_cube_shape = box_shape(0.5, 0.5, 0.5);
 	unit_cylinder_shape = cylinder_shape(0.5, 1.0);
 	unit_cone_shape = cone_shape(0.5, 1.0);
 
@@ -20,7 +20,7 @@ bool noob::globals::init()
 	// logger::log("[Globals] Making unit sphere model");
 	unit_sphere_model = model_from_mesh(noob::mesh_utils::sphere(0.5), "unit-sphere");//basic_models.add(std::move(temp));
 	// logger::log("[Globals] Making unit cube model");
-	unit_cube_model = model_from_mesh(noob::mesh_utils::box(1.0, 1.0, 1.0), "unit-cube");
+	unit_cube_model = model_from_mesh(noob::mesh_utils::box(0.5, 0.5, 0.5), "unit-cube");
 	// unit_cube_model = model_from_mesh(noob::mesh_utils::box(1.0, 1.0, 1.0));
 	// logger::log("[Globals] Making unit cylinder model");
 	// unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(1.0, 0.5));
@@ -131,8 +131,7 @@ noob::scaled_model noob::globals::sphere_model(float r)
 
 noob::scaled_model noob::globals::box_model(float x, float y, float z)
 {
-	noob::scaled_model temp;
-	temp.model_h= unit_cube_model.model_h;
+	noob::scaled_model temp = unit_cube_model;
 	temp.scales = noob::vec3(x, y, z);
 	return temp;
 }
@@ -187,7 +186,7 @@ noob::scaled_model noob::globals::model_by_shape(const noob::shapes_holder::hand
 
 	scaled_model results;
 	//results.scales = noob::vec3(1.0, 1.0, 1.0);
-	noob::shape& s = shapes.get_ref(h);
+	noob::shape s = shapes.get(h);
 
 	// logger::log("[Globals] got shape pointer");
 
