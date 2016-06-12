@@ -685,6 +685,7 @@ list(APPEND common_src
 	common/FileSystem.cpp
 	common/NetworkClient.cpp
 	common/CSG.cpp
+	common/GraphTest.cpp
 	common/scripting/RegisterMath.cpp
 	common/scripting/RegisterGraphics.cpp
 	common/scripting/RegisterBasicMesh.cpp

@@ -29,7 +29,7 @@ noob::vec3 noob::basic_mesh::get_vertex(unsigned int i)
 	else return vertices[i];
 }
 
-
+/*
 noob::vec3 noob::basic_mesh::get_normal(unsigned int i)
 {
 	if (i > normals.size())
@@ -50,7 +50,7 @@ noob::vec3 noob::basic_mesh::get_texcoord(unsigned int i)
 	}
 	else return texcoords[i];
 }
-
+*/
 
 unsigned int noob::basic_mesh::get_index(unsigned int i)
 {
@@ -73,7 +73,7 @@ void noob::basic_mesh::set_vertex(unsigned int i, const noob::vec3& v)
 	else vertices[i] = v;
 }
 
-
+/*
 void noob::basic_mesh::set_normal(unsigned int i, const noob::vec3& v)
 {
 	if (i > normals.size())
@@ -92,7 +92,7 @@ void noob::basic_mesh::set_texcoord(unsigned int i, const noob::vec3& v)
 	}
 	else texcoords[i] = v;
 }
-
+*/
 
 void noob::basic_mesh::set_index(unsigned int i, unsigned int v)
 {
@@ -124,13 +124,13 @@ double noob::basic_mesh::get_volume()
 
 		}
 		volume_calculated = true;
-		return accum;
+		volume = accum;
 	}
 
 	return volume;
 }
 
-
+/*
 noob::basic_mesh noob::basic_mesh::decimate(size_t num_verts) const
 {
 	//logger::log("[Mesh] decimating");
@@ -164,7 +164,7 @@ void noob::basic_mesh::normalize()
 	std::string temp = save();
 	load_mem(temp);
 }
-
+*/
 /*
 // TODO
 void noob::basic_mesh::to_origin()
@@ -219,23 +219,23 @@ bool noob::basic_mesh::load_file(const std::string& filename, const std::string&
 
 bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name)
 {
-	// logger::log("[Mesh] load() - begin");
+	// logger::log("[mesh] load() - begin");
 	if (!scene)
 	{
-		logger::log(fmt::format("[Mesh] load({0}) - cannot open", name));
+		logger::log(fmt::format("[mesh] load({0}) - cannot open", name));
 		return false;
 	}
 
 	vertices.clear();
 	indices.clear();
-	normals.clear();
+	// normals.clear();
 
 	const aiMesh* mesh_data = scene->mMeshes[0];
 
 	
 	{
-		// fmt::MemoryWriter ww;
-		// ww << "[BasicMesh[ Loading " << name << " - Attempting to obtain mesh data";
+		// fmt::memorywriter ww;
+		// ww << "[basicmesh[ loading " << name << " - attempting to obtain mesh data";
 		// logger::log(ww.str());
 	}
 
@@ -246,12 +246,13 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 	bool has_normals = mesh_data->HasNormals();
 	
 	{
-		// fmt::MemoryWriter ww;
-		// ww << "[BasicMesh] Loading: " << name << ", mesh has " << num_verts << " verts and " << has_normals << " normals.";
+		// fmt::memorywriter ww;
+		// ww << "[basicmesh] loading: " << name << ", mesh has " << num_verts << " verts and " << has_normals << " normals.";
 		// logger::log(ww.str());
 	}
 
-	double accum_x, accum_y, accum_z = 0.0f;
+	double accum_x, accum_y, accum_z;
+	accum_x = accum_y = accum_z = 0.0f;
 	bbox.min = bbox.max = bbox.center = noob::vec3(0.0, 0.0, 0.0);	
 
 	for ( size_t n = 0; n < num_verts; ++n)
@@ -270,7 +271,7 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 		bbox.max[0] = std::max(bbox.max[0], v[0]);
 		bbox.max[1] = std::max(bbox.max[1], v[1]);
 		bbox.max[2] = std::max(bbox.max[2], v[2]);
-
+/*
 		if (has_normals)
 		{
 			aiVector3D normal = mesh_data->mNormals[n];
@@ -278,8 +279,9 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 			norm.v[0] = normal[0];
 			norm.v[1] = normal[1];
 			norm.v[2] = normal[2];
-			normals.push_back(norm);
+			// normals.push_back(norm);
 		}
+*/
 	}
 
 	if (num_verts == 0)
@@ -390,7 +392,7 @@ void noob::basic_mesh::from_half_edges(TriMesh half_edges)
 			indices.push_back(static_cast<uint16_t>(fv_it->idx()));
 		}
 	}
-	normalize();
+	// normalize();
 	// vert_normals_from_trimesh(half_edges);
 	// fmt::MemoryWriter ww;
 	// ww << "[BasicMesh] Created basic_mesh with verts = " << vertices.size() << ", indices = " << indices.size() << " from TriMesh with verts = " << half_edges.n_vertices();

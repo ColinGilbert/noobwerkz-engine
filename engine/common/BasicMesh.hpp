@@ -52,13 +52,13 @@ namespace noob
 			basic_mesh() : volume_calculated(false), volume(0.0) {}
 			
 			noob::vec3 get_vertex(unsigned int);
-			noob::vec3 get_normal(unsigned int);
-			noob::vec3 get_texcoord(unsigned int);
+			// noob::vec3 get_normal(unsigned int);
+			// noob::vec3 get_texcoord(unsigned int);
 			unsigned int get_index(unsigned int);
 			
 			void set_vertex(unsigned int, const noob::vec3&);
-			void set_normal(unsigned int, const noob::vec3&);
-			void set_texcoord(unsigned int, const noob::vec3&);
+			// void set_normal(unsigned int, const noob::vec3&);
+			// void set_texcoord(unsigned int, const noob::vec3&);
 			void set_index(unsigned int, unsigned int);
 			
 			double get_volume();
@@ -71,7 +71,7 @@ namespace noob
 			bool load_mem(const std::string&, const std::string& name = "");
 			bool load_file(const std::string& filename, const std::string& name = "");
 			
-			void normalize();
+			// void normalize();
 			// void transform(const noob::mat4& transform);
 			// void to_origin();
 			// void translate(const noob::vec3&);
@@ -83,7 +83,7 @@ namespace noob
 			
 		protected:
 			bool load_assimp(const aiScene* scene, const std::string& name);
-			
+		
 			TriMesh to_half_edges() const;
 			
 			void from_half_edges(TriMesh);
@@ -92,8 +92,8 @@ namespace noob
 			// void vert_normals_from_trimesh(TriMesh);
 			
 			std::vector<noob::vec3> vertices;
-			std::vector<noob::vec3> normals;
-			std::vector<noob::vec3> texcoords;
+			// std::vector<noob::vec3> normals;
+			// std::vector<noob::vec3> texcoords;
 			std::vector<uint32_t> indices;
 			
 			noob::bbox bbox;

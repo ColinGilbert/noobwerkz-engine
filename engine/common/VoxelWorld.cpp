@@ -192,7 +192,7 @@ noob::basic_mesh noob::voxel_world::extract_region_smooth(size_t lower_x, size_t
 		world_mesh.indices.push_back(decoded_mesh.getIndex(i));
 	}
 
-	world_mesh.normalize();
+	// world_mesh.normalize();
 	return world_mesh;
 }
 
@@ -224,7 +224,7 @@ noob::basic_mesh noob::voxel_world::extract_region_cubic(size_t lower_x, size_t 
 		world_mesh.indices.push_back(decoded_mesh.getIndex(i));
 	}
 
-	world_mesh.normalize();
+	// world_mesh.normalize();
 	return world_mesh;
 }
 
@@ -269,6 +269,6 @@ noob::basic_mesh noob::voxel_world::extract_region_cubic(size_t lower_x, size_t 
 		world_mesh.indices.push_back(decoded_mesh.getIndex(i));
 	}
 
-	world_mesh.normalize();
+	// world_mesh.normalize();
 	return world_mesh;
 }
