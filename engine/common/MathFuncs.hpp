@@ -341,11 +341,16 @@ namespace noob
 
 	struct bbox
 	{
-		template <class Archive>
-			void serialize( Archive & ar )
-			{
-				ar(min, max, center);
-			}
+		//template <class Archive>
+		//	void serialize( Archive & ar )
+		//	{
+		//		ar(min, max, center);
+		//	}
+		
+		noob::vec3 get_dims() const
+		{
+			return noob::vec3(std::fabs(min.v[0]) + std::fabs(max.v[0]), std::fabs(min.v[1]) + std::fabs(max.v[1]), std::fabs(max.v[2]) + std::fabs(max.v[2]));
+		}
 
 		noob::vec3 min, max, center;
 	};

@@ -50,7 +50,8 @@ namespace noob
 
 		std::vector<noob::basic_model::vertex> vertices;
 		std::vector<uint16_t> indices;
-		noob::vec3 dimensions;
+		noob::bbox bbox;
+		
 		bgfx::VertexBufferHandle vertex_buffer;
 		bgfx::IndexBufferHandle index_buffer;
 		bool ready;

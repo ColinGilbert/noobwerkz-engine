@@ -255,7 +255,7 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 	accum_x = accum_y = accum_z = 0.0f;
 	bbox.min = bbox.max = bbox.center = noob::vec3(0.0, 0.0, 0.0);	
 
-	for ( size_t n = 0; n < num_verts; ++n)
+	for (size_t n = 0; n < num_verts; ++n)
 	{
 		aiVector3D pt = mesh_data->mVertices[n];
 		noob::vec3 v;
