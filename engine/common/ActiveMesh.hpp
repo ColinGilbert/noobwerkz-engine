@@ -27,29 +27,32 @@ namespace noob
 	{
 		public:
 
-			typedef PolyMesh::VertexHandle vertex_handle;
-			typedef PolyMesh::FaceHandle face_handle;
-			typedef PolyMesh::EdgeHandle edge_handle;
-			typedef PolyMesh::HalfedgeHandle halfedge_handle;
+			typedef PolyMesh::VertexHandle vertex_h;
+			typedef PolyMesh::FaceHandle face_h;
+			typedef PolyMesh::EdgeHandle edge_h;
+			typedef PolyMesh::HalfedgeHandle halfedge_h;
 			
 			bool vertex_exists(const noob::vec3&) const;
-			bool vertex_exists(const PolyMesh::VertexHandle) const;
+			
+			bool vertex_exists(const noob::active_mesh::vertex_h) const;
 
-			std::tuple<bool, noob::vec3> get_vertex(const PolyMesh::VertexHandle) const;
+			std::tuple<bool, noob::vec3> get_vertex(const noob::active_mesh::vertex_h) const;
 
-			noob::vec3 get_face_normal(const PolyMesh::FaceHandle) const;
-
-			PolyMesh::VertexHandle get_vertex_handle(const noob::vec3&) const;
-
-			// Caution: This function has the potential to do lots of iterations, as it tests against all faces sharing the first vertex/
+			std::tuple<bool, noob::active_mesh::vertex_h> get_vertex_handle(const noob::vec3&) const;
+			
+			// Caution: This function has the potential to do lots of iterations, as it tests against all faces sharing the first vertex
 			bool face_exists(const std::vector<noob::vec3>&) const;
 
-			bool face_exists(const PolyMesh::FaceHandle) const;
+			bool face_exists(const noob::active_mesh::face_h) const;
+
+			noob::vec3 get_face_normal(const noob::active_mesh::face_h) const;
+
+			std::vector<noob::active_mesh::face_h> get_faces_with_vert(const noob::active_mesh::vertex_h) const; 
+
+			std::vector<noob::active_mesh::face_h> get_faces_with_edge(const noob::active_mesh::edge_h) const; 
+
+			noob::active_mesh::face_h get_face_with_halfedge(const noob::active_mesh::halfedge_h) const;
 			
-			// PolyMesh::FaceHandle get_face_handle(const noob::vec3&) const;
-
-			const std::tuple<bool, std::vector<noob::vec3>> get_face(const PolyMesh::VertexHandle) const; 
-
 			size_t num_vertices() const;
 
 			size_t num_half_edges() const;
@@ -58,17 +61,15 @@ namespace noob
 
 			size_t num_faces() const;
 
-			std::vector<PolyMesh::VertexHandle> get_vertex_handles_for_face(const PolyMesh::FaceHandle) const;
+			std::vector<noob::active_mesh::vertex_h> get_verts_in_face(const noob::active_mesh::face_h) const;
 			
-			std::vector<noob::vec3> get_verts_for_face(const PolyMesh::FaceHandle) const;
+			std::vector<noob::active_mesh::halfedge_h> get_halfedges_in_face(const noob::active_mesh::face_h) const;
 
-			std::tuple<bool, std::vector<noob::vec3>> get_face(const PolyMesh::FaceHandle) const;
+			std::vector<noob::active_mesh::edge_h> get_adjacent_edges(const noob::active_mesh::face_h, const noob::active_mesh::face_h) const;
+
+			std::vector<noob::active_mesh::face_h> get_adjacent_faces(const noob::active_mesh::face_h) const;
 		
-			std::vector<PolyMesh::EdgeHandle> get_adjacent_edges(const PolyMesh::FaceHandle, const PolyMesh::FaceHandle) const;
-
 			noob::basic_mesh to_basic_mesh() const;
-			
-			std::vector<PolyMesh::FaceHandle> get_adjacent_faces(const PolyMesh::FaceHandle) const;
 
 			// Implemented as an iterator that copies verts + faces until certain size is reached, then creates new one. Repeats until exhaustion.
 			std::vector<noob::active_mesh> split(size_t max_vertices) const;
@@ -81,43 +82,48 @@ namespace noob
 			
 			void from_basic_mesh(const noob::basic_mesh&);
 
-			PolyMesh::VertexHandle add_vertex(const noob::vec3&);
+			noob::active_mesh::vertex_h add_vertex(const noob::vec3&);
 
-			PolyMesh::FaceHandle add_face(const std::array<noob::vec3, 3>&);
-			
-			PolyMesh::FaceHandle add_face(const std::array<noob::vec3, 4>&);
-			
-			PolyMesh::FaceHandle add_face(const std::vector<noob::vec3>&);
-			
-			PolyMesh::FaceHandle add_face(const std::vector<PolyMesh::VertexHandle>&);
+			noob::active_mesh::face_h add_face(const std::vector<noob::active_mesh::vertex_h>&);
 
-			void make_hole(const PolyMesh::FaceHandle);
+			void make_hole(const noob::active_mesh::face_h);
 			
 			void fill_holes();
 			
 			// TODO: Before implementing the next two methods, come up with a proper plane representation (probably using Eigen or Geometric Tools.)
 			// void cut_mesh(const noob::vec3& point_on_plane, const noob::vec3 plane_normal);
-			// void cut_faces(std::vector<PolyMesh::FaceHandle>&, const noob::vec3& point_on_plane, const noob::vec3& plane_normal);
+			// void cut_faces(std::vector<noob::active_mesh::face_h>&, const noob::vec3& point_on_plane, const noob::vec3& plane_normal);
 			
-			void extrude_face(const PolyMesh::FaceHandle, float magnitude, const noob::vec3& normal);
+			void sweep_line(const noob::active_mesh::halfedge_h, const noob::vec3&);
+
+			void extrude_face(const noob::active_mesh::face_h, float magnitude);
 			
-			// void connect_faces(PolyMesh::FaceHandle first, PolyMesh::FaceHandle second);
+			// void connect_faces(noob::active_mesh::face_h first, noob::active_mesh::face_h second);
 			
-			// void move_vertex(const noob::vec3& vertex, const noob::vec3& normal, float magnitude);
+			void move_vertex(const noob::active_mesh::vertex_h, const noob::vec3&);
 			
-			void move_vertex(const PolyMesh::VertexHandle, const noob::vec3& direction);
+			void move_edge(const noob::active_mesh::edge_h, const noob::vec3&);
+
+			void move_halfedge(const noob::active_mesh::halfedge_h, const noob::vec3&);
+
+			void move_face(const noob::active_mesh::face_h, const noob::vec3&);
+
+			void move_vertices(const std::vector<noob::active_mesh::vertex_h>&, const noob::vec3&);
 			
-			void move_vertices(const std::vector<PolyMesh::VertexHandle>&, const noob::vec3& direction);
+			void move_edges(const std::vector<noob::active_mesh::edge_h>&, const noob::vec3&);
+
+			void move_halfedges(const std::vector<noob::active_mesh::halfedge_h>&, const noob::vec3&);
+
+			void move_faces(const std::vector<noob::active_mesh::face_h>&, const noob::vec3&);
 			
 			void merge_adjacent_coplanars();
 			
 			// This function is static because it acts on two objects. The static modifier makes it explicit.
-			// static void join_meshes_at_face(const noob::active_mesh& first_mesh, const PolyMesh::FaceHandle first_handle, const noob::active_mesh& second, const PolyMesh::FaceHandle second_handle);
-			
+			// static void join_meshes_at_face(const noob::active_mesh& first_mesh, const noob::active_mesh::face_h first_handle, const noob::active_mesh& second, const noob::active_mesh::face_h second_handle);
 			
 		protected:
 			PolyMesh half_edges;
-			std::map<std::array<float, 3>, PolyMesh::VertexHandle> xyz_to_vhandles;
+			std::map<std::array<float, 3>, noob::active_mesh::vertex_h> xyz_to_vhandles;
 
 	};
 }

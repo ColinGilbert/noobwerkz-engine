@@ -12,7 +12,6 @@ noob::basic_mesh noob::mesh_utils::sphere(float radius)
 }
 
 
-
 noob::basic_mesh noob::mesh_utils::cone(float radius, float height, size_t segments)
 {
 	TriMesh half_edges;
@@ -172,12 +171,6 @@ noob::basic_mesh noob::mesh_utils::cylinder(float radius, float height, size_t s
 	// logger::log(fmt::format("Created cylinder with height = {0}, radius = {1} with {2} segments.", height, radius, _segments));
 	return mesh;
 }
-/*
-noob::basic_mesh noob::mesh_utils::capsule(float radius, float height, size_t segments)
-{
-	return noob::mesh_utils::cylinder(radius, height, segments);
-}
-*/
 
 
 noob::basic_mesh noob::mesh_utils::box(float width, float height, float depth, size_t subdivides)
@@ -250,12 +243,9 @@ noob::basic_mesh noob::mesh_utils::box(float width, float height, float depth, s
 
 	half_edges.triangulate();
 	half_edges.garbage_collection();
-	//OpenMesh::IO::write_mesh(half_edges, "temp/box.off");
 
 	noob::basic_mesh mesh;
 	mesh.from_half_edges(half_edges);
-	//mesh.load_file("temp/box.off", "box-temp");
-	// logger::log(fmt::format("Created box with width = {0}, height = {1}, depth = {2} with {3} subdivides.", width, height, depth, subdivides));
 	return mesh;
 }
 
@@ -264,7 +254,6 @@ noob::basic_mesh noob::mesh_utils::catmull_sphere(float radius)
 {
 	float diameter = radius * 2;
 	noob::basic_mesh mesh = noob::mesh_utils::box(diameter, diameter, diameter, 2);
-	// logger::log(fmt::format("Created sphere of radius {0}.", radius));
 	return mesh;
 }
 
@@ -298,10 +287,24 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 		mesh.indices.push_back(static_cast<uint16_t>(hull_result.m_Indices[i]));
 	}
 
-	// mesh.normalize();
 	return mesh;
 }
 
+
+static noob::basic_mesh lathe(const std::vector<noob::vec2>& points, float clip_one, float clip_two)
+{
+	noob::active_mesh substrate;
+
+	std::vector<noob::vec3> points_in_three_dee;
+	for (noob::vec2 p : points)
+	{
+		points_in_three_dee.push_back(p.v[0], p.v[1], 0.0);
+	}
+
+	std::vector<noob::active_mesh::vertex_h> first_ring, second_ring;
+
+
+}
 
 // noob::basic_mesh noob::mesh_utils::csg(const noob::basic_mesh& _a, const noob::basic_mesh& _b, const noob::csg_op op)
 // {

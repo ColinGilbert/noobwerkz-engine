@@ -26,6 +26,7 @@ sandbox/shaders/gles/*
 sandbox/shaders/dx9/*
 sandbox/shaders/dx11/*
 sandbox/temp/volumetric/*
+sandbox/COMPILE_LOG
 **/e
 **/shaderc
 **/geometryc
