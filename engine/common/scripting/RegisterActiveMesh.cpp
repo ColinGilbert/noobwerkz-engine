@@ -23,7 +23,6 @@ void noob::register_active_mesh(asIScriptEngine* script_engine)
 	r = script_engine->RegisterObjectMethod("active_mesh", "void reset()", asMETHOD(noob::active_mesh, reset), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("active_mesh", "void from_basic_mesh(const basic_mesh& in)", asMETHOD(noob::active_mesh, from_basic_mesh), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("active_mesh", "vertex_h add_vertex(const vec3& in)", asMETHOD(noob::active_mesh, add_vertex), asCALL_THISCALL); assert(r >= 0);
-	r = script_engine->RegisterObjectMethod("active_mesh", "void add_face(const vector_vec3& in)", asMETHODPR(noob::active_mesh, add_face, (const std::vector<noob::vec3>&), noob::active_mesh::face_h), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("active_mesh", "void add_face(const vector_vertex_h& in)", asMETHODPR(noob::active_mesh, add_face, (const std::vector<noob::active_mesh::vertex_h>&), noob::active_mesh::face_h), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("active_mesh", "bool vertex_exists(const vec3& in) const", asMETHODPR(noob::active_mesh, vertex_exists, (const noob::vec3&) const, bool), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("active_mesh", "bool vertex_exists(vertex_h) const", asMETHODPR(noob::active_mesh, vertex_exists, (const noob::active_mesh::vertex_h) const, bool), asCALL_THISCALL); assert( r >= 0 );
@@ -31,15 +30,14 @@ void noob::register_active_mesh(asIScriptEngine* script_engine)
 	r = script_engine->RegisterObjectMethod("active_mesh", "vec3 get_face_normal(face_h) const", asMETHOD(noob::active_mesh, get_face_normal), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("active_mesh", "vertex_h get_vertex_handle(const vec3& in) const", asMETHOD(noob::active_mesh, get_vertex_handle), asCALL_THISCALL); assert(r >= 0);
 	// Caution: This function has the potential to do lots of iterations, as it tests against all faces sharing the first vertex/
-	r = script_engine->RegisterObjectMethod("active_mesh", "bool face_exists(const vector_vec3& in) const", asMETHODPR(noob::active_mesh, face_exists, (const std::vector<noob::vec3>&) const, bool), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("active_mesh", "bool face_exists(const vector_vert_h& in) const", asMETHODPR(noob::active_mesh, face_exists, (const std::vector<noob::active_mesh::vertex_h>&) const, bool), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("active_mesh", "bool face_exists(face_h) const", asMETHODPR(noob::active_mesh, face_exists, (const noob::active_mesh::face_h) const, bool), asCALL_THISCALL); assert( r >= 0 );
 	// const std::tuple<bool, std::vector<noob::vec3>> get_face(PolyMesh::VertexHandle) const; 
 	r = script_engine->RegisterObjectMethod("active_mesh", "uint64 num_vertices() const", asMETHOD(noob::active_mesh, num_vertices), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("active_mesh", "uint64 num_half_edges() const", asMETHOD(noob::active_mesh, num_half_edges), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("active_mesh", "uint64 num_edges() const", asMETHOD(noob::active_mesh, num_edges), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("active_mesh", "uint64 num_faces() const", asMETHOD(noob::active_mesh, num_faces), asCALL_THISCALL); assert(r >= 0);
-	r = script_engine->RegisterObjectMethod("active_mesh", "vector_vertex_h get_vertex_handles_for_face(face_h) const", asMETHOD(noob::active_mesh, get_vertex_handles_for_face), asCALL_THISCALL); assert(r >= 0);
-	r = script_engine->RegisterObjectMethod("active_mesh", "vector_vec3 get_verts_for_face(face_h) const", asMETHOD(noob::active_mesh, get_verts_for_face), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("active_mesh", "vector_vertex_h get_verts_in_face(face_h) const", asMETHOD(noob::active_mesh, get_verts_in_face), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("active_mesh", "vector_edge_h get_adjacent_edges(face_h, face_h) const", asMETHOD(noob::active_mesh, get_adjacent_edges), asCALL_THISCALL); assert(r >= 0);	
 	r = script_engine->RegisterObjectMethod("active_mesh", "basic_mesh to_basic_mesh() const", asMETHOD(noob::active_mesh, to_basic_mesh), asCALL_THISCALL); assert(r >= 0);
 	// std::vector<PolyMesh::FaceHandle> get_adjacent_faces(PolyMesh::FaceHandle) const;

@@ -36,12 +36,27 @@ namespace noob
 			
 			bool vertex_exists(const noob::active_mesh::vertex_h) const;
 
-			std::tuple<bool, noob::vec3> get_vertex(const noob::active_mesh::vertex_h) const;
+			struct vertex_results
+			{
+				vertex_results() : valid(false) {}
+				bool valid;
+				noob::vec3 vertex;
+			};
 
-			std::tuple<bool, noob::active_mesh::vertex_h> get_vertex_handle(const noob::vec3&) const;
+			noob::active_mesh::vertex_results get_vertex(const noob::active_mesh::vertex_h) const;
+
+			struct vertex_handle_results
+			{
+				vertex_handle_results() : valid(false) {}
+				bool valid;
+				noob::active_mesh::vertex_h handle;
+			};
+
+			noob::active_mesh::vertex_handle_results get_vertex_handle(const noob::vec3&) const;
 			
 			// Caution: This function has the potential to do lots of iterations, as it tests against all faces sharing the first vertex
-			bool face_exists(const std::vector<noob::vec3>&) const;
+			// bool face_exists(const std::vector<noob::vec3>&) const;
+			bool face_exists(const std::vector<noob::active_mesh::vertex_h>&) const;
 
 			bool face_exists(const noob::active_mesh::face_h) const;
 

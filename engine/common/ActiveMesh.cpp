@@ -53,49 +53,85 @@ noob::vec3 noob::active_mesh::get_face_normal(const noob::active_mesh::face_h fh
 	return noob::get_normal(tri);
 }
 
-
-bool noob::active_mesh::face_exists(const std::vector<noob::vec3>& verts) const 
+std::vector<noob::active_mesh::face_h> noob::active_mesh::get_faces_with_vert(const noob::active_mesh::vertex_h) const
 {
-	// First the base case
-	if (!verts.empty())
-	{
-		// Then if one of the verts is invalid, we can shortcut this away.
-		for (noob::vec3 v : verts)
-		{
-			if (!vertex_exists(v))
-			{
-				return false;
-			}
-		}
-
-		std::vector<noob::active_mesh::vertex_h> vhandles_to_test;
-
-		for (noob::vec3 v : verts)
-		{
-			vhandles_to_test.push_back(xyz_to_vhandles[v.v]);
-		}
-
-		// Now we must test all verts in faces with the first vertex to see if one of them matches.
-		for (PolyMesh::VertexFaceIter vf_it = half_edges.cvf_iter(get_vertex_handle(verts[0])); vf_it.is_valid(); ++vf_it)
-		{
-			// int iteration = -1;
-			size_t iteration = 0;
-			for (PolyMesh::FaceVertexIter fv_it = half_edges.cfv_iter(*vf_it); fv_it.is_valid(); ++fv_it)
-			{
-				// ++iteration;
-				// if (static_cast<size_t>(iteration) > verts.size()) break;
-				// if (vhandles_to_test[static_cast<size_t>(iteration)] != *fv_it) break;
-				// if (vhandles_to_test[static_cast<size_t>(iteration)] == *fv_it && static_cast<size_t>(iteration) == verts.size()) return true;
-				if (iteration > verts.size() - 1) break;
-				if (vhandles_to_test[iteration] != *fv_it) break;
-				if (vhandles_to_test[iteration] == *fv_it && iteration == verts.size() - 1) return true;
-				++iteration;
-			}
-		}
-	}
-	return false;
 }
 
+std::vector<noob::active_mesh::face_h> noob::active_mesh::get_faces_with_edge(const noob::active_mesh::edge_h) const
+{
+}
+
+noob::active_mesh::face_h noob::active_mesh::get_face_with_halfedge(const noob::active_mesh::halfedge_h) const
+{
+}
+
+std::vector<noob::active_mesh::halfedge_h> noob::active_mesh::get_halfedges_in_face(const noob::active_mesh::face_h) const
+{
+}
+
+/*
+   bool noob::active_mesh::face_exists(const std::vector<noob::vec3>& verts) const 
+   {
+// First the base case
+if (!verts.empty())
+{
+// Then if one of the verts is invalid, we can shortcut this away.
+for (noob::vec3 v : verts)
+{
+if (!vertex_exists(v))
+{
+return false;
+}
+}
+
+std::vector<noob::active_mesh::vertex_h> vhandles_to_test;
+
+for (noob::vec3 v : verts)
+{
+vhandles_to_test.push_back(xyz_to_vhandles[v.v]);
+}
+
+// Now we must test all verts in faces with the first vertex to see if one of them matches.
+for (PolyMesh::VertexFaceIter vf_it = half_edges.cvf_iter(std::get<1>(get_vertex_handle(verts[0]))); vf_it.is_valid(); ++vf_it)
+{
+// int iteration = -1;
+size_t iteration = 0;
+for (PolyMesh::FaceVertexIter fv_it = half_edges.cfv_iter(*vf_it); fv_it.is_valid(); ++fv_it)
+{
+// ++iteration;
+// if (static_cast<size_t>(iteration) > verts.size()) break;
+// if (vhandles_to_test[static_cast<size_t>(iteration)] != *fv_it) break;
+// if (vhandles_to_test[static_cast<size_t>(iteration)] == *fv_it && static_cast<size_t>(iteration) == verts.size()) return true;
+if (iteration > verts.size() - 1) break;
+if (vhandles_to_test[iteration] != *fv_it) break;
+if (vhandles_to_test[iteration] == *fv_it && iteration == verts.size() - 1) return true;
+++iteration;
+}
+}
+}
+return false;
+}
+*/
+
+bool noob::active_mesh::face_exists(const std::vector<noob::active_mesh::vertex_h>& verts) const
+{
+	// Now we must test all faces sharing the first vertex, with the full number of vertices needing testing.
+	// We are able to get away with not testing the other verts since a vertex->face search with any vertex in the list would already return all relevant faces.
+	for (PolyMesh::VertexFaceIter vf_it = half_edges.cvf_iter(verts[0]); vf_it.is_valid(); ++vf_it)
+	{
+		size_t iteration = 0;
+		for (PolyMesh::FaceVertexIter fv_it = half_edges.cfv_iter(*vf_it); fv_it.is_valid(); ++fv_it)
+		{
+			// This inner loop is basically graph isomorphism (ie: brute force search to see if two groups of vertices are lined up the same way.)
+			if (iteration > verts.size() - 1) break;
+			if (verts[iteration] != *fv_it) break;
+			if (verts[iteration] == *fv_it && iteration == verts.size() - 1) return true;
+			++iteration;
+		}
+	}
+
+	return false;
+}
 
 bool noob::active_mesh::face_exists(const noob::active_mesh::face_h h) const 
 {
@@ -103,25 +139,32 @@ bool noob::active_mesh::face_exists(const noob::active_mesh::face_h h) const
 }
 
 
-std::tuple<bool, noob::vec3> noob::active_mesh::get_vertex(const noob::active_mesh::vertex_h h) const 
+noob::active_mesh::vertex_results noob::active_mesh::get_vertex(const noob::active_mesh::vertex_h h) const 
 {
+	noob::active_mesh::vertex_results results;
 	if (vertex_exists(h))
 	{
+		results.valid = true;
 		auto p = half_edges.point(h);
-		return std::make_tuple(true, noob::vec3(p[0], p[1], p[2]));
+		results.vertex = noob::vec3(p[0], p[1], p[2]);
 	}
-	return std::make_tuple(false, noob::vec3(0.0, 0.0, 0.0));
+	return results;
 }
 
 
-noob::active_mesh::vertex_h noob::active_mesh::get_vertex_handle(const noob::vec3& v) const
+noob::active_mesh::vertex_handle_results noob::active_mesh::get_vertex_handle(const noob::vec3& v) const
 {
-	if (!vertex_exists(v)) return noob::active_mesh::vertex_h(-1);
-	else return xyz_to_vhandles[v.v];
+	noob::active_mesh::vertex_handle_results results;
+	if (vertex_exists(v))
+	{
+		results.valid = true;
+		results.handle = xyz_to_vhandles[v.v];
+	}
+	return results;
 }
 
 
-std::vector<noob::active_mesh::vertex_h> noob::active_mesh::get_vertex_handles_for_face(const noob::active_mesh::face_h h) const 
+std::vector<noob::active_mesh::vertex_h> noob::active_mesh::get_verts_in_face(const noob::active_mesh::face_h h) const 
 {
 	std::vector<noob::active_mesh::vertex_h> vert_handles;
 	for (auto vit = half_edges.cfv_iter(h); vit.is_valid(); ++vit)
@@ -129,29 +172,6 @@ std::vector<noob::active_mesh::vertex_h> noob::active_mesh::get_vertex_handles_f
 		vert_handles.push_back(*vit);
 	}
 	return vert_handles;
-}
-
-
-std::vector<noob::vec3> noob::active_mesh::get_verts_for_face(const noob::active_mesh::face_h h) const
-{
-	std::vector<noob::vec3> verts;
-	for (auto vit = half_edges.cfv_iter(h); vit.is_valid(); ++vit)
-	{
-		verts.push_back(half_edges.point(*vit));
-	}
-	return verts;
-}
-
-
-std::tuple<bool, std::vector<noob::vec3>> noob::active_mesh::get_face(const noob::active_mesh::face_h h) const 
-{
-	std::vector<noob::vec3> results;
-	if (face_exists(h))
-	{
-		results = get_verts_for_face(h);
-		return std::make_tuple(true, results);
-	}
-	return std::make_tuple(false, results);
 }
 
 
@@ -271,13 +291,13 @@ void noob::active_mesh::reset()
 void noob::active_mesh::from_basic_mesh(const noob::basic_mesh& m)
 {
 	reset();
-
-	std::array<noob::vec3, 3> faces;
+	std::vector<noob::active_mesh::vertex_h> faces;
+	faces.reserve(3);
 	for (size_t i = 0; i < m.indices.size(); i += 3)
 	{
-		faces[0] = m.vertices[i];
-		faces[1] = m.vertices[i+1];
-		faces[2] = m.vertices[i+2];
+		faces[0] = add_vertex(m.vertices[i]);
+		faces[1] = add_vertex(m.vertices[i+1]);
+		faces[2] = add_vertex(m.vertices[i+2]);
 		add_face(faces);
 	}
 }
@@ -391,7 +411,7 @@ void noob::active_mesh::extrude_face(const noob::active_mesh::face_h fh, float m
 
 void noob::active_mesh::move_vertex(const noob::active_mesh::vertex_h vh, const noob::vec3& direction) 
 {
-	half_edges.set_point(vh, half_edges.point(vh) + PolyMesh::Point(direction[0], direction[1], direction[2]));
+	half_edges.set_point(vh, half_edges.point(vh) + PolyMesh::Point(direction.v[0], direction.v[1], direction.v[2]));
 }
 
 
@@ -399,7 +419,7 @@ void noob::active_mesh::move_vertices(const std::vector<noob::active_mesh::verte
 {
 	for (noob::active_mesh::vertex_h vh : handles)
 	{
-		half_edges.set_point(vh, half_edges.point(vh) + PolyMesh::Point(direction[0], direction[1], direction[2]));
+		move_vertex(vh, direction);
 	}
 }
 
@@ -434,3 +454,29 @@ void noob::active_mesh::merge_adjacent_coplanars()
 
 	half_edges.garbage_collection();
 }
+
+
+
+
+
+// std::vector<noob::active_mesh::face_h> get_faces_with_vert(const noob::active_mesh::vertex_h) const; 
+
+// std::vector<noob::active_mesh::face_h> get_faces_with_edge(const noob::active_mesh::edge_h) const; 
+
+// noob::active_mesh::face_h get_face_with_halfedge(const noob::active_mesh::halfedge_h) const;
+
+// std::vector<noob::active_mesh::halfedge_h> get_halfedges_in_face(const noob::active_mesh::face_h) const;
+
+// void sweep_line(const noob::active_mesh::halfedge_h, const noob::vec3&);
+
+// void move_edge(const noob::active_mesh::edge_h, const noob::vec3&);
+
+// void move_halfedge(const noob::active_mesh::halfedge_h, const noob::vec3&);
+
+// void move_face(const noob::active_mesh::face_h, const noob::vec3&);
+
+// void move_edges(const std::vector<noob::active_mesh::edge_h>&, const noob::vec3&);
+
+// void move_halfedges(const std::vector<noob::active_mesh::halfedge_h>&, const noob::vec3&);
+
+// void move_faces(const std::vector<noob::active_mesh::face_h>&, const noob::vec3&);

@@ -1,4 +1,5 @@
 #include "MeshUtils.hpp"
+#include "ActiveMesh.hpp"
 
 #include <LinearMath/btConvexHull.h>
 
@@ -298,11 +299,12 @@ static noob::basic_mesh lathe(const std::vector<noob::vec2>& points, float clip_
 	std::vector<noob::vec3> points_in_three_dee;
 	for (noob::vec2 p : points)
 	{
-		points_in_three_dee.push_back(p.v[0], p.v[1], 0.0);
+		points_in_three_dee.push_back(noob::vec3(p.v[0], p.v[1], 0.0));
 	}
 
-	std::vector<noob::active_mesh::vertex_h> first_ring, second_ring;
+	std::vector<noob::active_mesh::vertex_h> first_ring, last_ring;
 
+	
 
 }
 
