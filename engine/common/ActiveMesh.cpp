@@ -45,7 +45,7 @@ noob::vec3 noob::active_mesh::get_face_normal(const noob::active_mesh::face_h fh
 
 	std::array<noob::vec3, 3> tri;
 	size_t count = 0;
-	for (auto it = half_edges.cfv_iter(fh); it.is_valid() && count < 3; ++it, ++it)
+	for (auto it = half_edges.cfv_iter(fh); it.is_valid() && count < 3; ++it)
 	{
 		tri[count] = noob::vec3(half_edges.point(*it));
 	}
@@ -53,65 +53,39 @@ noob::vec3 noob::active_mesh::get_face_normal(const noob::active_mesh::face_h fh
 	return noob::get_normal(tri);
 }
 
-std::vector<noob::active_mesh::face_h> noob::active_mesh::get_faces_with_vert(const noob::active_mesh::vertex_h) const
-{
-}
 
-std::vector<noob::active_mesh::face_h> noob::active_mesh::get_faces_with_edge(const noob::active_mesh::edge_h) const
+std::vector<noob::active_mesh::face_h> noob::active_mesh::get_faces_with_vert(const noob::active_mesh::vertex_h vh) const
 {
-}
-
-noob::active_mesh::face_h noob::active_mesh::get_face_with_halfedge(const noob::active_mesh::halfedge_h) const
-{
-}
-
-std::vector<noob::active_mesh::halfedge_h> noob::active_mesh::get_halfedges_in_face(const noob::active_mesh::face_h) const
-{
+	std::vector<noob::active_mesh::face_h> results;
+	for (auto it = half_edges.cvf_iter(vh); it.is_valid(); ++it)
+	{
+		results.push_back(*it);
+	}
+	return results;
 }
 
 /*
-   bool noob::active_mesh::face_exists(const std::vector<noob::vec3>& verts) const 
-   {
-// First the base case
-if (!verts.empty())
+std::vector<noob::active_mesh::face_h> noob::active_mesh::get_faces_with_edge(const noob::active_mesh::edge_h eh) const
 {
-// Then if one of the verts is invalid, we can shortcut this away.
-for (noob::vec3 v : verts)
-{
-if (!vertex_exists(v))
-{
-return false;
-}
 }
 
-std::vector<noob::active_mesh::vertex_h> vhandles_to_test;
 
-for (noob::vec3 v : verts)
+noob::active_mesh::face_h noob::active_mesh::get_face_with_halfedge(const noob::active_mesh::halfedge_h) const
 {
-vhandles_to_test.push_back(xyz_to_vhandles[v.v]);
-}
 
-// Now we must test all verts in faces with the first vertex to see if one of them matches.
-for (PolyMesh::VertexFaceIter vf_it = half_edges.cvf_iter(std::get<1>(get_vertex_handle(verts[0]))); vf_it.is_valid(); ++vf_it)
-{
-// int iteration = -1;
-size_t iteration = 0;
-for (PolyMesh::FaceVertexIter fv_it = half_edges.cfv_iter(*vf_it); fv_it.is_valid(); ++fv_it)
-{
-// ++iteration;
-// if (static_cast<size_t>(iteration) > verts.size()) break;
-// if (vhandles_to_test[static_cast<size_t>(iteration)] != *fv_it) break;
-// if (vhandles_to_test[static_cast<size_t>(iteration)] == *fv_it && static_cast<size_t>(iteration) == verts.size()) return true;
-if (iteration > verts.size() - 1) break;
-if (vhandles_to_test[iteration] != *fv_it) break;
-if (vhandles_to_test[iteration] == *fv_it && iteration == verts.size() - 1) return true;
-++iteration;
-}
-}
-}
-return false;
 }
 */
+
+std::vector<noob::active_mesh::halfedge_h> noob::active_mesh::get_halfedges_in_face(const noob::active_mesh::face_h fh) const
+{
+	std::vector<noob::active_mesh::halfedge_h> results;
+	for (auto it = half_edges.cfh_iter(fh); it.is_valid(); ++it)
+	{
+		results.push_back(*it);
+	}
+	return results;
+}
+
 
 bool noob::active_mesh::face_exists(const std::vector<noob::active_mesh::vertex_h>& verts) const
 {
@@ -132,6 +106,7 @@ bool noob::active_mesh::face_exists(const std::vector<noob::active_mesh::vertex_
 
 	return false;
 }
+
 
 bool noob::active_mesh::face_exists(const noob::active_mesh::face_h h) const 
 {
@@ -351,6 +326,12 @@ void noob::active_mesh::fill_holes()
 	}
 }
 
+/*
+void sweep_line(const noob::active_mesh::halfedge_h, const noob::vec3&)
+{
+
+}
+*/
 
 // void noob::active_mesh::cut_mesh(const noob::vec3& point_on_plane, const noob::vec3 plane_normal) 
 // {
@@ -423,6 +404,42 @@ void noob::active_mesh::move_vertices(const std::vector<noob::active_mesh::verte
 	}
 }
 
+/*
+void move_edge(const noob::active_mesh::edge_h, const noob::vec3&)
+{
+
+}
+
+
+void move_edges(const std::vector<noob::active_mesh::edge_h>&, const noob::vec3&)
+{
+
+}
+
+
+void move_halfedge(const noob::active_mesh::halfedge_h, const noob::vec3&)
+{
+
+}
+
+
+void move_halfedges(const std::vector<noob::active_mesh::halfedge_h>&, const noob::vec3&)
+{
+
+}
+
+
+void move_face(const noob::active_mesh::face_h, const noob::vec3&)
+{
+
+}
+
+
+void move_faces(const std::vector<noob::active_mesh::face_h>&, const noob::vec3&)
+{
+
+}
+*/
 
 void noob::active_mesh::merge_adjacent_coplanars()
 {
@@ -448,6 +465,7 @@ void noob::active_mesh::merge_adjacent_coplanars()
 			}
 		}
 	}
+
 	fmt::MemoryWriter ww;
 	ww << "[ActiveMesh] merge_adjacent_coplanars(), Edges removed = " << removed_edges;
 	logger::log(ww.str());
@@ -466,6 +484,8 @@ void noob::active_mesh::merge_adjacent_coplanars()
 // noob::active_mesh::face_h get_face_with_halfedge(const noob::active_mesh::halfedge_h) const;
 
 // std::vector<noob::active_mesh::halfedge_h> get_halfedges_in_face(const noob::active_mesh::face_h) const;
+
+
 
 // void sweep_line(const noob::active_mesh::halfedge_h, const noob::vec3&);
 

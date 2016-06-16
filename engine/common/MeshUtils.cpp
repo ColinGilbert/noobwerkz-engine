@@ -10,6 +10,21 @@
 noob::basic_mesh noob::mesh_utils::sphere(float radius)
 {
 	return catmull_sphere(radius);
+/*
+	float _segments = 12;
+
+	double increment_amount = TWO_PI / _segments;
+
+	std::vector<noob::active_mesh::vertex_h> verts;
+
+	// Eigen::Vector3f p(0.0f, 0.0f, radius);
+
+	// for (size_t seg = 0; seg < _segments; seg++)
+	// {
+	// 	double diff = increment_amount * seg;
+	// 	Eigen::AngleAxis<float> angle_axis(diff, Eigen::Vector3f::UnitY());
+	//	Eigen::Vector3f rotated_point = angle_axis * p;
+*/
 }
 
 
@@ -292,219 +307,143 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 }
 
 
-static noob::basic_mesh lathe(const std::vector<noob::vec2>& points, float clip_one, float clip_two)
+noob::basic_mesh noob::mesh_utils::lathe(const std::vector<noob::vec2>& points, float taper_one, float taper_two, size_t segments)
 {
-	noob::active_mesh substrate;
+	std::vector<noob::vec3> initial_points;
 
-	std::vector<noob::vec3> points_in_three_dee;
 	for (noob::vec2 p : points)
 	{
-		points_in_three_dee.push_back(noob::vec3(p.v[0], p.v[1], 0.0));
+		initial_points.push_back(noob::vec3(p.v[0], p.v[1], 0.0));
 	}
 
-	std::vector<noob::active_mesh::vertex_h> first_ring, last_ring;
 
-	
+	size_t _segments = 12;
 
-}
-
-// noob::basic_mesh noob::mesh_utils::csg(const noob::basic_mesh& _a, const noob::basic_mesh& _b, const noob::csg_op op)
-// {
-
-
-
-/*
-	NewtonWorld* const csg_world = NewtonCreate ();
-	
-	NewtonMesh* a = noob_to_newton(_a, csg_world);
-	NewtonMesh* b = noob_to_newton(_b, csg_world);
-
-	NewtonMesh* raw_results;
-	noob::mat4 id = noob::identity_mat4();
-
-	switch(op)
+	if (segments < 3)
 	{
-		case(noob::csg_op::UNION):
-		{	
-			raw_results = NewtonMeshUnion(a, b, &id.m[0]);	
-		}
-		case(noob::csg_op::DIFFERENCE):
+		_segments = segments;
+	}
+
+	double increment_amount = TWO_PI / _segments;
+
+	// Eigen::Vector3f p(0.0f, 0.0f, radius);
+
+	size_t num_points = initial_points.size();
+	
+	// first_ring and last_ring refers to the verts at  each endpoint
+	std::vector<noob::active_mesh::vertex_h> first_ring(_segments);
+	std::vector<noob::active_mesh::vertex_h> last_ring(_segments);
+	std::vector<noob::active_mesh::vertex_h> current_ring(_segments);
+	std::vector<noob::active_mesh::vertex_h> previous_ring(_segments);
+
+	noob::active_mesh halfedges;
+
+	for (size_t ring_count = 0; ring_count < num_points; ++ring_count)
+	{
+		// Create a segment's worth of vertices and store them into a temporary vector.
+		// Also, if the vertex being evaluated happens to be first or last in our original points add it to first_ring and last_ring, respectively.
+		for (size_t seg = 0; seg <= _segments; ++seg)
 		{
-			raw_results = NewtonMeshDifference(a, b, &id.m[0]);
+			double diff = increment_amount * seg;
+			Eigen::AngleAxis<float> angle_axis(diff, Eigen::Vector3f::UnitY());
+			
+			// Eigen::Vector3f p(initial_points[ring_count].v[0], initial_points[ring_count].v[1], initial_points[ring_count].v[2]);
+			
+			Eigen::Vector3f p(initial_points[ring_count].v[0], initial_points[ring_count].v[1], 0.0); //initial_points[ring_count].v[1]);
+			Eigen::Vector3f rotated_point = angle_axis * p;
+			
+			{
+				fmt::MemoryWriter ww;
+				ww << "[MeshUtils] adding vertex " << seg << " of ring " << ring_count;
+				logger::log(ww.str());
+			}
+
+
+			noob::active_mesh::vertex_h temp_vert = halfedges.add_vertex(noob::vec3(rotated_point[0], rotated_point[1], rotated_point[2]));
+			
+			if (ring_count == 0)
+			{
+				first_ring[seg] = temp_vert;
+			}
+			
+			if (ring_count == num_points - 1)
+			{
+				last_ring[seg] = temp_vert;
+			
+			}
+
+			else
+			{
+				previous_ring[seg] = current_ring[seg]; // Warning. May copy garbage into previous_ring when ring_count == 1. However, previous_ring won't get used if ring_count == 1. Therefore we're good. :)
+				current_ring[seg] = temp_vert;
+			}
 		}
-		case(noob::csg_op::INTERSECTION):
+
+
 		{
-			raw_results = NewtonMeshIntersection(a, b, &id.m[0]);
+			fmt::MemoryWriter ww;
+			ww << "[MeshUtils] Adding faces for ring " << ring_count;
+			logger::log(ww.str());
 		}
-	}
-	
-	return newton_to_noob(raw_results);
-*/
-// }
 
+		// Now that we have a full ring of vertices all the way around, use those vertices to make a full ring of faces.
 
-/*
-noob::basic_mesh noob::mesh_utils::csg(const noob::basic_mesh& _a, const noob::basic_mesh& _b, const noob::csg_op op)
-{
-	// noob::basic_mesh a = _a;
-	// noob::basic_mesh b = _b;
-	// a.update_normals();
-	// b.update_normals();
-
-	csgjs_model model_a = get_csg_model(_a);
-	csgjs_model model_b = get_csg_model(_b);
-
-	csgjs_model resulting_csg_model;
-	switch (op)
-	{
-		case (noob::csg_op::UNION):
-			resulting_csg_model = csgjs_union(model_a, model_b);
-			break;
-
-		case(noob::csg_op::DIFFERENCE):
-			resulting_csg_model = csgjs_difference(model_a, model_b);
-			break;
-		case(noob::csg_op::INTERSECTION):
-			resulting_csg_model = csgjs_intersection(model_a, model_b);
-			break;
-	};
-	noob::basic_mesh results;
-
-	for (size_t i = 0; i < resulting_csg_model.vertices.size(); i++)
-	{
-		noob::vec3 vert;
-		vert.v[0] = resulting_csg_model.vertices[i].pos.x;
-		vert.v[1] = resulting_csg_model.vertices[i].pos.y;
-		vert.v[2] = resulting_csg_model.vertices[i].pos.z;
-		results.vertices.push_back(vert);
-
-		noob::vec3 norm;
-		norm.v[0] = resulting_csg_model.vertices[i].normal.x;
-		norm.v[1] = resulting_csg_model.vertices[i].normal.y;
-		norm.v[2] = resulting_csg_model.vertices[i].normal.z;
-		results.normals.push_back(norm);
-
-		noob::vec3 uvw;
-		uvw.v[0] = resulting_csg_model.vertices[i].uv.x;
-		uvw.v[1] = resulting_csg_model.vertices[i].uv.y;
-		results.texcoords.push_back(uvw);
-	}
-
-	for (int i : resulting_csg_model.indices)
-	{
-		results.indices.push_back(i);
-	}
-
-	results.update_normals();
-
-	return results;
-}
-
-
-noob::basic_mesh noob::mesh_utils::copy(const noob::basic_mesh& m)
-{
-	noob::basic_mesh temp;
-	temp.vertices.reserve(m.vertices.size());
-	temp.normals.reserve(m.normals.size());
-	temp.texcoords.reserve(m.texcoords.size());
-	temp.indices.reserve(m.indices.size());
-
-	for (noob::vec3 v : m.vertices)
-	{
-		temp.vertices.emplace_back(v);
-	}
-
-	for (noob::vec3 n : m.normals)
-	{
-		temp.normals.emplace_back(n);
-	}
-
-	for (noob::vec3 u : m.texcoords)
-	{
-		temp.texcoords.emplace_back(u);
-	}
-
-	for (size_t i : m.indices)
-	{
-		temp.indices.emplace_back(i);
-	}
-
-	return temp;
-}
-
-
-csgjs_model noob::mesh_utils::get_csg_model(const noob::basic_mesh& m)
-{
-	csgjs_model model;
-
-	for (size_t j = 0; j < m.vertices.size(); j++)
-	{
-		csgjs_vertex vert;
-		vert.pos.x = m.vertices[j].v[0];
-		vert.pos.y = m.vertices[j].v[1];
-		vert.pos.z = m.vertices[j].v[2];
-
-		vert.normal.x = m.normals[j].v[0];
-		vert.normal.y = m.normals[j].v[1];
-		vert.normal.z = m.normals[j].v[2];
-
-		vert.uv.x = m.texcoords[j].v[0];
-		vert.uv.y = m.texcoords[j].v[1];
-
-		model.vertices.push_back(vert);
-	}
-
-	for (uint16_t i : m.indices)
-	{
-		model.indices.push_back(static_cast<int>(i));
-	}
-
-	return model;
-}
-
-*/
-/*
-NewtonMesh* noob::mesh_utils::noob_to_newton(const noob::basic_mesh& m_arg, const NewtonWorld* const w_arg)
-{
-	NewtonMesh* newton_mesh = NewtonMeshCreate(w_arg);
-	for(size_t i = 0; i < m_arg.indices.size(); i += 3)
-	{
-		NewtonMeshBeginFace(newton_mesh);
+		if (ring_count == 0)
+		{
+			continue;
+		}
 		
-		std::array<noob::vec3, 3> verts;
-		verts[0] = m_arg.vertices[i];
-		verts[1] = m_arg.vertices[i+1];
-		verts[2] = m_arg.vertices[i+2];
+		else if (ring_count == 1)
+		{
 
-		NewtonMeshAddFace(newton_mesh, 3, &verts[0].v[0], sizeof(noob::vec3)*3, 0);
+			// Use first_ring and current_ring to create the faces.
+			std::vector<noob::active_mesh::vertex_h> face_verts(4);
+			for (size_t seg = 1; seg <= _segments; ++seg)
+			{
+				face_verts[0] = first_ring[seg];
+				face_verts[1] = first_ring[seg-1];
+				face_verts[2] = current_ring[seg-1];
+				face_verts[3] = current_ring[seg];
+				halfedges.add_face(face_verts);
+			}
+		}
 
-		NewtonMeshEndFace(newton_mesh);
+		else if (ring_count == num_points - 1)
+		{
+			// Use current_ring and last_ring to create the faces.
+			logger::log("Last ring!");
+
+			std::vector<noob::active_mesh::vertex_h> face_verts(4);
+			for (size_t seg = 1; seg <= _segments; ++seg)
+			{
+				face_verts[0] = current_ring[seg];
+				face_verts[1] = current_ring[seg-1];
+				face_verts[2] = last_ring[seg-1];
+				face_verts[3] = last_ring[seg];
+				halfedges.add_face(face_verts);
+			}
+		
+		}
+
+		else
+		{
+			// Use previous_ring and current_ring to create the faces.
+			std::vector<noob::active_mesh::vertex_h> face_verts(4);
+			for (size_t seg = 1; seg <= _segments; ++seg)
+			{
+				face_verts[0] = previous_ring[seg];
+				face_verts[1] = previous_ring[seg-1];
+				face_verts[2] = current_ring[seg-1];
+				face_verts[3] = current_ring[seg];
+				halfedges.add_face(face_verts);
+			}		
+		}
 	}
 
-	return newton_mesh;
+	// Now, cap the ends
+	
+
+
+
+	return halfedges.to_basic_mesh();
 }
-
-
-noob::basic_mesh noob::mesh_utils::newton_to_noob(const NewtonMesh* const newton_mesh)
-{
-
-
-	NewtonMeshSaveOFF(newton_mesh, "temp/temp_newton_to_noob.off");
-	noob::basic_mesh results;
-	results.load_file("temp/temp_newton_to_noob.off", "temp-newton-to-noob");
-	return results;
-	// void NewtonMeshGetIndirectVertexStreams(const NewtonMesh* const mesh, int vertexStrideInByte, dFloat* const vertex, int* const vertexIndices, int* const vertexCount, int normalStrideInByte, dFloat* const normal, int* const normalIndices, int* const normalCount, int uvStrideInByte0, dFloat* const uv0, int* const uvIndices0, int* const uvCount0, int uvStrideInByte1, dFloat* const uv1, int* const uvIndices1, int* const uvCount1);
-	//
-	// NewtonMeshGetIndirectVertexStreams(newton_mesh, NewtonMeshGetVertexStrideInByte(newton_mesh), dFloat* const vertex, int* const vertexIndices, int* const vertexCount, int normalStrideInByte, dFloat* const normal, int* const normalIndices, int* const normalCount, int uvStrideInByte0, dFloat* const uv0, int* const uvIndices0, int* const uvCount0, int uvStrideInByte1, dFloat* const uv1, int* const uvIndices1, int* const uvCount1);
-
-	// NewtonMeshGetVertexStrideInByte (const NewtonMesh* const mesh)
-	//
-	// NewtonMeshGetPointStrideInByte (const NewtonMesh* const mesh);
-	// NewtonMeshGetPointCount (const NewtonMesh* const mesh);
-	// NewtonMeshGetTotalIndexCount (const NewtonMesh* const mesh);
-	// NewtonMeshMaterialGetIndexStreamShort (const NewtonMesh* const mesh, void* const handle, int materialId, short int* const index); 
-	//
-	//
-}
-
-*/

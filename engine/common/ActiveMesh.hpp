@@ -109,7 +109,7 @@ namespace noob
 			// void cut_mesh(const noob::vec3& point_on_plane, const noob::vec3 plane_normal);
 			// void cut_faces(std::vector<noob::active_mesh::face_h>&, const noob::vec3& point_on_plane, const noob::vec3& plane_normal);
 			
-			void sweep_line(const noob::active_mesh::halfedge_h, const noob::vec3&);
+			// void sweep_line(const noob::active_mesh::halfedge_h, const noob::vec3&);
 
 			void extrude_face(const noob::active_mesh::face_h, float magnitude);
 			
@@ -117,19 +117,19 @@ namespace noob
 			
 			void move_vertex(const noob::active_mesh::vertex_h, const noob::vec3&);
 			
-			void move_edge(const noob::active_mesh::edge_h, const noob::vec3&);
-
-			void move_halfedge(const noob::active_mesh::halfedge_h, const noob::vec3&);
-
-			void move_face(const noob::active_mesh::face_h, const noob::vec3&);
-
 			void move_vertices(const std::vector<noob::active_mesh::vertex_h>&, const noob::vec3&);
 			
-			void move_edges(const std::vector<noob::active_mesh::edge_h>&, const noob::vec3&);
+			// void move_edge(const noob::active_mesh::edge_h, const noob::vec3&);
 
-			void move_halfedges(const std::vector<noob::active_mesh::halfedge_h>&, const noob::vec3&);
+			// void move_edges(const std::vector<noob::active_mesh::edge_h>&, const noob::vec3&);
+			
+			// void move_halfedge(const noob::active_mesh::halfedge_h, const noob::vec3&);
 
-			void move_faces(const std::vector<noob::active_mesh::face_h>&, const noob::vec3&);
+			// void move_halfedges(const std::vector<noob::active_mesh::halfedge_h>&, const noob::vec3&);
+			
+			// void move_face(const noob::active_mesh::face_h, const noob::vec3&);
+
+			// void move_faces(const std::vector<noob::active_mesh::face_h>&, const noob::vec3&);
 			
 			void merge_adjacent_coplanars();
 			

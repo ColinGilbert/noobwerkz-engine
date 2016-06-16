@@ -30,7 +30,7 @@ void noob::register_active_mesh(asIScriptEngine* script_engine)
 	r = script_engine->RegisterObjectMethod("active_mesh", "vec3 get_face_normal(face_h) const", asMETHOD(noob::active_mesh, get_face_normal), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("active_mesh", "vertex_h get_vertex_handle(const vec3& in) const", asMETHOD(noob::active_mesh, get_vertex_handle), asCALL_THISCALL); assert(r >= 0);
 	// Caution: This function has the potential to do lots of iterations, as it tests against all faces sharing the first vertex/
-	r = script_engine->RegisterObjectMethod("active_mesh", "bool face_exists(const vector_vert_h& in) const", asMETHODPR(noob::active_mesh, face_exists, (const std::vector<noob::active_mesh::vertex_h>&) const, bool), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("active_mesh", "bool face_exists(const vector_vertex_h& in) const", asMETHODPR(noob::active_mesh, face_exists, (const std::vector<noob::active_mesh::vertex_h>&) const, bool), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("active_mesh", "bool face_exists(face_h) const", asMETHODPR(noob::active_mesh, face_exists, (const noob::active_mesh::face_h) const, bool), asCALL_THISCALL); assert( r >= 0 );
 	// const std::tuple<bool, std::vector<noob::vec3>> get_face(PolyMesh::VertexHandle) const; 
 	r = script_engine->RegisterObjectMethod("active_mesh", "uint64 num_vertices() const", asMETHOD(noob::active_mesh, num_vertices), asCALL_THISCALL); assert(r >= 0);

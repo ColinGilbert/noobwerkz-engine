@@ -38,4 +38,5 @@ void noob::register_basic_mesh(asIScriptEngine* script_engine)
 	r = script_engine->RegisterGlobalFunction("basic_mesh cone_mesh(float, float)", asFUNCTION(mesh_utils::cone), asCALL_CDECL); assert(r >= 0);
 	r = script_engine->RegisterGlobalFunction("basic_mesh cylinder_mesh(float, float)", asFUNCTION(mesh_utils::cylinder), asCALL_CDECL); assert(r >= 0);
 	r = script_engine->RegisterGlobalFunction("basic_mesh hull_mesh(const vector_vec3& in)", asFUNCTION(mesh_utils::hull), asCALL_CDECL); assert(r >= 0);
+	r = script_engine->RegisterGlobalFunction("basic_mesh lathe(const vector_vec2& in, float, float, uint64)", asFUNCTION(mesh_utils::lathe), asCALL_CDECL); assert(r >= 0);
 }

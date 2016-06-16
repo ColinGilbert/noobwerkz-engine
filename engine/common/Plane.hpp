@@ -1,31 +1,36 @@
 #pragma once
-#pragma once
 
 #include "MathFuncs.hpp"
+
 namespace noob
 {
-struct plane
-{
-	noob::vec3 normal;
-	float w;
-
-	through(noob::vec3& a, const noob::vec3& b, const noob::vec3& c)
+	class plane
 	{
-		normal = noob::normalize(noob::cross(b - a, c - a));
-		w = noob::dot(normal, a);
-	}
-	
-	bool ok() const
-	{
-		return noob::length(normal) > 0.0f; 
-	}
+		public:
+			through(noob::vec3& a, const noob::vec3& b, const noob::vec3& c)
+			{
+				normal = noob::normalize(noob::cross(b - a, c - a));
+				w = noob::dot(normal, a);
+			}
 
-	void flip()
-	{
-		normal = noob::negate(normal);
-		w *= -1.0;
-	}
+			bool ok() const
+			{
+				return noob::length(normal) > 0.0f; 
+			}
 
-	// void split_polygon(const csgjs_polygon & polygon, std::vector<csgjs_polygon> & coplanarFront, std::vector<csgjs_polygon> & coplanarBack, std::vector<csgjs_polygon> & front, std::vector<csgjs_polygon> & back) const;
-};
+			void flip()
+			{
+				normal = noob::negate(normal);
+				w *= -1.0;
+			}
+
+			float signed_distance(const noob::vec3& p)
+			{
+				noob::dot(normal, p - w);
+			}
+
+		protected:
+			noob::vec3 normal;
+			float w;
+	};
 }
