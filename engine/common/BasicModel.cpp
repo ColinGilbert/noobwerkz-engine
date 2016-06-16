@@ -1,6 +1,6 @@
 #include "BasicModel.hpp"
 
-#include <assimp/quaternion.h>
+//#include <assimp/quaternion.h>
 #include <assimp/anim.h>
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
@@ -94,7 +94,7 @@ void noob::basic_model::init(const noob::basic_mesh& input_mesh)
 			num_verts = 1;
 		}
 
-		bbox.center = noob::vec3((bbox.max[0] + bbox.min[0])/2, (bbox.max[1] + bbox.min[1])/2, (bbox.max[2] + bbox.min[2])/2);
+		// bbox.center = noob::vec3((bbox.max[0] + bbox.min[0])/2, (bbox.max[1] + bbox.min[1])/2, (bbox.max[2] + bbox.min[2])/2);
 
 		for (size_t n = 0; n < num_faces; ++n)
 		{

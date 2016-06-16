@@ -197,6 +197,7 @@ noob::basic_mesh noob::active_mesh::to_basic_mesh() const
 {
 	noob::basic_mesh m;
 	m.from_half_edges(half_edges);
+	m.to_origin();
 	return m;
 }
 

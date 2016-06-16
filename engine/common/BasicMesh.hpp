@@ -73,13 +73,12 @@ namespace noob
 			
 			// void normalize();
 			// void transform(const noob::mat4& transform);
-			// void to_origin();
+			void to_origin();
 			// void translate(const noob::vec3&);
 			// void rotate(const noob::versor&);
 			// void scale(const noob::vec3&);
 			
 			noob::bbox get_bbox() const { return bbox; }
-			
 			
 		protected:
 			bool load_assimp(const aiScene* scene, const std::string& name);

@@ -3,6 +3,7 @@
 
 #include <LinearMath/btConvexHull.h>
 
+#include <algorithm>
 
 #include <Eigen/Geometry> 
 
@@ -317,6 +318,8 @@ noob::basic_mesh noob::mesh_utils::lathe(const std::vector<noob::vec2>& points, 
 	}
 
 
+	// std::reverse(initial_points.begin(), initial_points.end());
+
 	size_t _segments = 12;
 
 	if (segments < 3)
@@ -347,9 +350,7 @@ noob::basic_mesh noob::mesh_utils::lathe(const std::vector<noob::vec2>& points, 
 			double diff = increment_amount * seg;
 			Eigen::AngleAxis<float> angle_axis(diff, Eigen::Vector3f::UnitY());
 			
-			// Eigen::Vector3f p(initial_points[ring_count].v[0], initial_points[ring_count].v[1], initial_points[ring_count].v[2]);
-			
-			Eigen::Vector3f p(initial_points[ring_count].v[0], initial_points[ring_count].v[1], 0.0); //initial_points[ring_count].v[1]);
+			Eigen::Vector3f p(initial_points[ring_count].v[0], initial_points[ring_count].v[1], 0.0);
 			Eigen::Vector3f rotated_point = angle_axis * p;
 			
 			{
@@ -357,7 +358,6 @@ noob::basic_mesh noob::mesh_utils::lathe(const std::vector<noob::vec2>& points, 
 				ww << "[MeshUtils] adding vertex " << seg << " of ring " << ring_count;
 				logger::log(ww.str());
 			}
-
 
 			noob::active_mesh::vertex_h temp_vert = halfedges.add_vertex(noob::vec3(rotated_point[0], rotated_point[1], rotated_point[2]));
 			
@@ -440,10 +440,27 @@ noob::basic_mesh noob::mesh_utils::lathe(const std::vector<noob::vec2>& points, 
 		}
 	}
 
-	// Now, cap the ends
+	std::vector<noob::active_mesh::vertex_h> face_verts(3);
 	
+	// Now, cap the ends
+	noob::active_mesh::vertex_h first_cap = halfedges.add_vertex(noob::vec3(0.0, initial_points[0].v[1] + taper_one, 0.0));
+	noob::active_mesh::vertex_h last_cap = halfedges.add_vertex(noob::vec3(0.0, initial_points[initial_points.size()-1].v[1] + taper_two, 0.0));
+	
+	for (size_t seg = 1; seg <= _segments; ++seg)
+	{
+
+		face_verts[0] = first_cap;
+		face_verts[1] = first_ring[seg-1];
+		face_verts[2] = first_ring[seg];
+		halfedges.add_face(face_verts);
+
+		face_verts[0] = last_cap;
+		face_verts[1] = last_ring[seg];
+		face_verts[2] = last_ring[seg-1];
+		halfedges.add_face(face_verts);
+	}
 
 
-
+	// Return our friend the basic_mesh
 	return halfedges.to_basic_mesh();
 }

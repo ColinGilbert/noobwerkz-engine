@@ -9,9 +9,9 @@
 void noob::body::init(btDynamicsWorld* dynamics_world, noob::body_type type_arg, const noob::shape& shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
 {
 	btTransform start_transform;
-	start_transform.setIdentity();
-	start_transform.setOrigin(btVector3(pos.v[0], pos.v[1], pos.v[2]));
+	// start_transform.setIdentity();
 	start_transform.setRotation(btQuaternion(orient.q[0], orient.q[1], orient.q[2], orient.q[3]));
+	start_transform.setOrigin(btVector3(pos.v[0], pos.v[1], pos.v[2]));
 
 	float _mass = mass;
 	
@@ -61,9 +61,9 @@ void noob::body::init(btDynamicsWorld* dynamics_world, noob::body_type type_arg,
 void noob::body::init(btDynamicsWorld* dynamics_world, noob::body_type type_arg, const noob::shape& shape, const noob::body::info& _info)
 {
 	btTransform start_transform;
-	start_transform.setIdentity();
-	start_transform.setOrigin(btVector3(_info.position.v[0], _info.position.v[1], _info.position.v[2]));
+	// start_transform.setIdentity();
 	start_transform.setRotation(btQuaternion(_info.orientation.q[0], _info.orientation.q[1], _info.orientation.q[2], _info.orientation.q[3]));
+	start_transform.setOrigin(btVector3(_info.position.v[0], _info.position.v[1], _info.position.v[2]));
 	btVector3 inertia(0, 0, 0);
 	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
 	shape.inner_shape->calculateLocalInertia(_info.mass, inertia);
@@ -257,8 +257,8 @@ noob::mat4 noob::body::get_transform() const
 	btTransform xform;
 	inner_body->getMotionState()->getWorldTransform(xform);
 	noob::transform_helper t;
-	t.translate(get_position());
 	t.rotate(get_orientation());
+	t.translate(get_position());
 	return t.get_matrix();
 }
 

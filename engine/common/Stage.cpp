@@ -102,8 +102,14 @@ void noob::stage::draw(float window_width, float window_height) const
 				// noob::mat4 world_mat = noob::identity_mat4();
 				// world_mat = noob::scale(world_mat, scales); //noob::scale(world_mat, bodies.get(bodies.make_handle(body_h))->get_transform();
 				noob::mat4 world_mat = noob::identity_mat4();
+				
+				// Prior to this hack, we fed the results of body.get_orientation directly into the rotate() function.
+				// This caused all objects drawn flipped about the x-axis 180 degrees
+				noob::versor original_quat = bodies.get(body_h).get_orientation();
+				noob::versor temp_quat(original_quat.q[3], original_quat.q[2], original_quat.q[1], original_quat.q[0]); 
+				
+				world_mat = noob::rotate(world_mat, temp_quat);//bodies.get(body_h).get_orientation());
 				world_mat = noob::scale(world_mat, noob::vec3(scales_mapping[body_node]));												
-				world_mat = noob::rotate(world_mat, bodies.get(body_h).get_orientation());
 				world_mat = noob::translate(world_mat, bodies.get(body_h).get_position());												
 				noob::mat4 normal_mat = noob::transpose(noob::inverse((world_mat * view_mat)));
 

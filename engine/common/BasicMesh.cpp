@@ -30,27 +30,27 @@ noob::vec3 noob::basic_mesh::get_vertex(unsigned int i)
 }
 
 /*
-noob::vec3 noob::basic_mesh::get_normal(unsigned int i)
-{
-	if (i > normals.size())
-	{
-		logger::log("[BasicMesh] - Attempting to get invalid normal");
-		return normals[0];
-	}
-	else return normals[i];
-}
+   noob::vec3 noob::basic_mesh::get_normal(unsigned int i)
+   {
+   if (i > normals.size())
+   {
+   logger::log("[BasicMesh] - Attempting to get invalid normal");
+   return normals[0];
+   }
+   else return normals[i];
+   }
 
 
-noob::vec3 noob::basic_mesh::get_texcoord(unsigned int i)
-{
-	if (i > texcoords.size())
-	{
-		logger::log("[BasicMesh] - Attempting to get invalid texcoord");
-		return texcoords[0];
-	}
-	else return texcoords[i];
-}
-*/
+   noob::vec3 noob::basic_mesh::get_texcoord(unsigned int i)
+   {
+   if (i > texcoords.size())
+   {
+   logger::log("[BasicMesh] - Attempting to get invalid texcoord");
+   return texcoords[0];
+   }
+   else return texcoords[i];
+   }
+   */
 
 unsigned int noob::basic_mesh::get_index(unsigned int i)
 {
@@ -74,25 +74,25 @@ void noob::basic_mesh::set_vertex(unsigned int i, const noob::vec3& v)
 }
 
 /*
-void noob::basic_mesh::set_normal(unsigned int i, const noob::vec3& v)
-{
-	if (i > normals.size())
-	{
-		logger::log("[BasicMesh] - Attempting to set invalid normal");
-	}
-	else normals[i] = v;
-}
+   void noob::basic_mesh::set_normal(unsigned int i, const noob::vec3& v)
+   {
+   if (i > normals.size())
+   {
+   logger::log("[BasicMesh] - Attempting to set invalid normal");
+   }
+   else normals[i] = v;
+   }
 
 
-void noob::basic_mesh::set_texcoord(unsigned int i, const noob::vec3& v)
-{
-	if (i > texcoords.size())
-	{
-		logger::log("[BasicMesh] - Attempting to set invalid texcoord");
-	}
-	else texcoords[i] = v;
-}
-*/
+   void noob::basic_mesh::set_texcoord(unsigned int i, const noob::vec3& v)
+   {
+   if (i > texcoords.size())
+   {
+   logger::log("[BasicMesh] - Attempting to set invalid texcoord");
+   }
+   else texcoords[i] = v;
+   }
+   */
 
 void noob::basic_mesh::set_index(unsigned int i, unsigned int v)
 {
@@ -131,53 +131,51 @@ double noob::basic_mesh::get_volume()
 }
 
 /*
-noob::basic_mesh noob::basic_mesh::decimate(size_t num_verts) const
+   noob::basic_mesh noob::basic_mesh::decimate(size_t num_verts) const
+   {
+//logger::log("[Mesh] decimating");
+TriMesh half_edges = to_half_edges();
+// logger::log(fmt::format("[Mesh] decimating - Half edges generated. num verts = {0}", half_edges.n_vertices()));
+
+OpenMesh::Decimater::DecimaterT<TriMesh> decimator(half_edges);
+OpenMesh::Decimater::ModQuadricT<TriMesh>::Handle mod;
+decimator.add(mod);
+decimator.initialize();
+
+auto did_init = decimator.initialize();
+if (!did_init) 
 {
-	//logger::log("[Mesh] decimating");
-	TriMesh half_edges = to_half_edges();
-	// logger::log(fmt::format("[Mesh] decimating - Half edges generated. num verts = {0}", half_edges.n_vertices()));
+// logger::log("[Mesh] decimate() - init failed!");
+return noob::basic_mesh(*this);
+}
 
-	OpenMesh::Decimater::DecimaterT<TriMesh> decimator(half_edges);
-	OpenMesh::Decimater::ModQuadricT<TriMesh>::Handle mod;
-	decimator.add(mod);
-	decimator.initialize();
-
-	auto did_init = decimator.initialize();
-	if (!did_init) 
-	{
-		// logger::log("[Mesh] decimate() - init failed!");
-		return noob::basic_mesh(*this);
-	}
-
-	size_t verts_removed = decimator.decimate_to(num_verts);
-	logger::log(fmt::format("[Mesh] decimate() - Vertices removed = {0}", verts_removed));
-	decimator.mesh().garbage_collection();
-	half_edges.garbage_collection();
-	noob::basic_mesh temp;
-	temp.from_half_edges(half_edges);
-	return temp;
+size_t verts_removed = decimator.decimate_to(num_verts);
+logger::log(fmt::format("[Mesh] decimate() - Vertices removed = {0}", verts_removed));
+decimator.mesh().garbage_collection();
+half_edges.garbage_collection();
+noob::basic_mesh temp;
+temp.from_half_edges(half_edges);
+return temp;
 }
 
 
 void noob::basic_mesh::normalize() 
 {
-	std::string temp = save();
-	load_mem(temp);
+std::string temp = save();
+load_mem(temp);
 }
 */
-/*
-// TODO
+
+
 void noob::basic_mesh::to_origin()
 {
-// noob::basic_mesh temp;
-for (size_t i = 0; i < vertices.size(); ++i)
-{
-vertices[i] = (vertices[i] - bbox_info.center);
+	noob::vec3 dims = bbox.get_dims();
+	for (size_t i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i] = (vertices[i] + dims);
+	}
 }
-update_normals();
 
-}
-*/
 
 std::string noob::basic_mesh::save() const
 {
@@ -232,7 +230,7 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 
 	const aiMesh* mesh_data = scene->mMeshes[0];
 
-	
+
 	{
 		// fmt::memorywriter ww;
 		// ww << "[basicmesh[ loading " << name << " - attempting to obtain mesh data";
@@ -244,7 +242,7 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 	auto num_indices = mesh_data->mNumFaces / 3;
 
 	bool has_normals = mesh_data->HasNormals();
-	
+
 	{
 		// fmt::memorywriter ww;
 		// ww << "[basicmesh] loading: " << name << ", mesh has " << num_verts << " verts and " << has_normals << " normals.";
@@ -253,7 +251,7 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 
 	double accum_x, accum_y, accum_z;
 	accum_x = accum_y = accum_z = 0.0f;
-	bbox.min = bbox.max = bbox.center = noob::vec3(0.0, 0.0, 0.0);	
+	bbox.min = bbox.max = noob::vec3(0.0, 0.0, 0.0);	
 
 	for (size_t n = 0; n < num_verts; ++n)
 	{
@@ -271,17 +269,17 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 		bbox.max[0] = std::max(bbox.max[0], v[0]);
 		bbox.max[1] = std::max(bbox.max[1], v[1]);
 		bbox.max[2] = std::max(bbox.max[2], v[2]);
-/*
-		if (has_normals)
-		{
-			aiVector3D normal = mesh_data->mNormals[n];
-			noob::vec3 norm;
-			norm.v[0] = normal[0];
-			norm.v[1] = normal[1];
-			norm.v[2] = normal[2];
-			// normals.push_back(norm);
+		/*
+		   if (has_normals)
+		   {
+		   aiVector3D normal = mesh_data->mNormals[n];
+		   noob::vec3 norm;
+		   norm.v[0] = normal[0];
+		   norm.v[1] = normal[1];
+		   norm.v[2] = normal[2];
+		// normals.push_back(norm);
 		}
-*/
+		*/
 	}
 
 	if (num_verts == 0)
@@ -289,7 +287,7 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 		num_verts = 1;
 	}
 
-	bbox.center = noob::vec3((bbox.max[0] + bbox.min[0])/2, (bbox.max[1] + bbox.min[1])/2, (bbox.max[2] + bbox.min[2])/2);
+	// bbox.center = noob::vec3((bbox.max[0] + bbox.min[0])/2, (bbox.max[1] + bbox.min[1])/2, (bbox.max[2] + bbox.min[2])/2);
 
 	for (size_t n = 0; n < num_faces; ++n)
 	{
@@ -437,29 +435,31 @@ void noob::basic_mesh::from_half_edges(PolyMesh half_edges)
 	from_half_edges(temp_trimesh);
 }
 
+
+
 /*
-void noob::basic_mesh::vert_normals_from_trimesh(TriMesh half_edges)
+   void noob::basic_mesh::vert_normals_from_trimesh(TriMesh half_edges)
+   {
+   half_edges.request_vertex_normals();
+// Assure we have vertex normals
+assert(half_edges.has_vertex_normals());
+if (!half_edges.has_vertex_normals())
 {
-	half_edges.request_vertex_normals();
-	// Assure we have vertex normals
-	assert(half_edges.has_vertex_normals());
-	if (!half_edges.has_vertex_normals())
-	{
-		logger::log("[BasicMesh] RUNTIME BAD NONO: Vertex normals not available. Mesh goes *pop* and disappears!"); //Standard vertex property 'Normals' not available!");
-	}
-	else
-	{
-		logger::log("[BasicMesh] Got our vertex normals!");
-		// Ee need face normals to update the vertex normals
-		half_edges.request_face_normals();
-		// Let the half_edges update the normals
-		half_edges.update_normals();
-		normals.resize(half_edges.n_vertices());
-		for (TriMesh::VertexIter v_it = half_edges.vertices_begin(); v_it != half_edges.vertices_end(); ++v_it)
-		{	
-			// auto p = half_edges.normal(*v_it);
-			normals[v_it->idx()] = half_edges.normal(*v_it);
-		}
-	}
+logger::log("[BasicMesh] RUNTIME BAD NONO: Vertex normals not available. Mesh goes *pop* and disappears!"); //Standard vertex property 'Normals' not available!");
+}
+else
+{
+logger::log("[BasicMesh] Got our vertex normals!");
+// Ee need face normals to update the vertex normals
+half_edges.request_face_normals();
+// Let the half_edges update the normals
+half_edges.update_normals();
+normals.resize(half_edges.n_vertices());
+for (TriMesh::VertexIter v_it = half_edges.vertices_begin(); v_it != half_edges.vertices_end(); ++v_it)
+{	
+// auto p = half_edges.normal(*v_it);
+normals[v_it->idx()] = half_edges.normal(*v_it);
+}
+}
 }
 */

@@ -79,8 +79,8 @@ void noob::register_math(asIScriptEngine* script_engine)
 	RegisterVector<noob::cubic_region>("bbox", script_engine);
 	r = script_engine->RegisterObjectProperty("bbox", "vec3 min", asOFFSET(noob::bbox, min)); assert (r >= 0);
 	r = script_engine->RegisterObjectProperty("bbox", "vec3 max", asOFFSET(noob::bbox, max)); assert (r >= 0);
-	r = script_engine->RegisterObjectProperty("bbox", "vec3 center", asOFFSET(noob::bbox, center)); assert (r >= 0);
-
+	r = script_engine->RegisterObjectMethod("bbox", "vec3 get_dims() const", asMETHOD(noob::bbox, get_dims), asCALL_THISCALL); assert(r >= 0 );
+	
 	r = script_engine->RegisterObjectType("cubic_region", sizeof(cubic_region), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::cubic_region>() | asOBJ_APP_CLASS_ALLINTS); assert(r >= 0 );
 	RegisterVector<noob::cubic_region>("cubic_region", script_engine);
 	r = script_engine->RegisterObjectProperty("cubic_region", "vec3 lower_corner", asOFFSET(noob::cubic_region, lower_corner)); assert (r >= 0);
