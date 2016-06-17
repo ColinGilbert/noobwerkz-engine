@@ -42,7 +42,7 @@ namespace noob
 		void capsule(float radius, float height);
 		void cone(float radius, float height);
 		void hull(const std::vector<noob::vec3>&);
-		void trimesh(const noob::basic_mesh*);
+		void trimesh(const noob::basic_mesh&);
 		
 		// void plane(const noob::vec3& normal, float offset);
 		

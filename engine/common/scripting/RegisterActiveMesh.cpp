@@ -46,6 +46,7 @@ void noob::register_active_mesh(asIScriptEngine* script_engine)
 	r = script_engine->RegisterObjectMethod("active_mesh", "void make_hole(face_h)", asMETHOD(noob::active_mesh, make_hole), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("active_mesh", "void fill_holes()", asMETHOD(noob::active_mesh, fill_holes), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("active_mesh", "void extrude_face(face_h, float, const vec3& in)", asMETHOD(noob::active_mesh, extrude_face), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("active_mesh", "void split_face(face_h, const plane& in)", asMETHOD(noob::active_mesh, split_face), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("active_mesh", "void move_vertex(vertex_h, const vec3& in)", asMETHOD(noob::active_mesh, move_vertex), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("active_mesh", "void move_vertices(const vector_vertex_h& in, const vec3& in)", asMETHOD(noob::active_mesh, move_vertices), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("active_mesh", "void merge_adjacent_coplanars()", asMETHOD(noob::active_mesh, merge_adjacent_coplanars), asCALL_THISCALL); assert(r >= 0);

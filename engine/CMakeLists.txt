@@ -687,6 +687,7 @@ list(APPEND common_src
 	common/CSG.cpp
 	common/GraphTest.cpp
 	common/scripting/RegisterMath.cpp
+	common/scripting/RegisterPlane.cpp
 	common/scripting/RegisterGraphics.cpp
 	common/scripting/RegisterBasicMesh.cpp
 	common/scripting/RegisterActiveMesh.cpp

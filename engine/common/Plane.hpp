@@ -1,36 +1,45 @@
 #pragma once
 
 #include "MathFuncs.hpp"
+#include <Eigen/Geometry>
 
 namespace noob
 {
 	class plane
 	{
 		public:
-			through(noob::vec3& a, const noob::vec3& b, const noob::vec3& c)
+			void through(noob::vec3& a, const noob::vec3& b, const noob::vec3& c)
 			{
-				normal = noob::normalize(noob::cross(b - a, c - a));
-				w = noob::dot(normal, a);
+				inner = Eigen::Hyperplane<float, 3>::Through(Eigen::Vector3f(b.v[0], b.v[1], b.v[2]), Eigen::Vector3f(c.v[0], c.v[1], c.v[2]));
 			}
 
-			bool ok() const
+			void normalize()
 			{
-				return noob::length(normal) > 0.0f; 
+				inner.normalize();
 			}
 
-			void flip()
+			float signed_distance(const noob::vec3& p) const
 			{
-				normal = noob::negate(normal);
-				w *= -1.0;
+				return inner.signedDistance(Eigen::Vector3f(p.v[0], p.v[1], p.v[2]));
 			}
 
-			float signed_distance(const noob::vec3& p)
+			noob::vec3 normal() const
 			{
-				noob::dot(normal, p - w);
+				return inner.normal();
 			}
+
+			float offset() const
+			{
+				return inner.offset();
+			}
+
+			noob::vec3 projection(const noob::vec3& p) const
+			{
+				return inner.projection(Eigen::Vector3f(p.v[0], p.v[1], p.v[2]));
+			}
+
 
 		protected:
-			noob::vec3 normal;
-			float w;
+			Eigen::Hyperplane<float, 3> inner;
 	};
 }

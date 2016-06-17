@@ -73,6 +73,14 @@ namespace noob
 		v[2] = p[2];
 	}
 
+	vec3::vec3(const Eigen::Vector3f& p)
+	{
+		v[0] = p[0];
+		v[1] = p[1];
+		v[2] = p[2];
+	}
+
+
 	vec3::vec3(const std::array<float, 3>& a)
 	{
 		v[0] = a[0];

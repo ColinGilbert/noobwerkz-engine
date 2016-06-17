@@ -15,7 +15,7 @@
 
 #include "MathFuncs.hpp"
 #include "BasicMesh.hpp"
-
+#include "Plane.hpp"
 #include "MeshUtils.hpp"
 
 typedef OpenMesh::PolyMesh_ArrayKernelT<> PolyMesh;
@@ -87,7 +87,7 @@ namespace noob
 			noob::basic_mesh to_basic_mesh() const;
 
 			// Implemented as an iterator that copies verts + faces until certain size is reached, then creates new one. Repeats until exhaustion.
-			std::vector<noob::active_mesh> split(size_t max_vertices) const;
+			std::vector<noob::active_mesh> reduce_verts(size_t max_vertices) const;
 
 			// -----------------------
 			// Destructive utiiities.
@@ -112,6 +112,16 @@ namespace noob
 			// void sweep_line(const noob::active_mesh::halfedge_h, const noob::vec3&);
 
 			void extrude_face(const noob::active_mesh::face_h, float magnitude);
+
+			struct face_split_results
+			{
+				face_split_results() : valid(false) {}
+				bool valid;
+				std::array<noob::active_mesh::face_h, 2> faces;
+			};
+
+			// Note: This function may craete grabage if faces aren't kept convex.
+			face_split_results split_face(const noob::active_mesh::face_h, const noob::plane&);
 			
 			// void connect_faces(noob::active_mesh::face_h first, noob::active_mesh::face_h second);
 			

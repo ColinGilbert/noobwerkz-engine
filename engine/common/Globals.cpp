@@ -381,7 +381,7 @@ noob::shapes_holder::handle noob::globals::static_trimesh_shape(const noob::basi
 	if (search == names_to_shapes.end())
 	{
 		noob::shape temp;
-		temp.trimesh(&m);
+		temp.trimesh(m);
 		return shapes.add(temp);
 	}
 	return search->second;

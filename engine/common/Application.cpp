@@ -101,6 +101,7 @@ void noob::application::init()
 	// r = script_engine->RegisterGlobalFunction("void log(const string& in)", asFUNCTIONPR(logger::log, (const std::string&), void), asCALL_CDECL); assert (r >= 0);
 	
 	register_math(script_engine);
+	register_plane(script_engine);
 	register_graphics(script_engine);
 	register_basic_mesh(script_engine);
 	register_active_mesh(script_engine);

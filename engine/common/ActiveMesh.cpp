@@ -65,16 +65,16 @@ std::vector<noob::active_mesh::face_h> noob::active_mesh::get_faces_with_vert(co
 }
 
 /*
-std::vector<noob::active_mesh::face_h> noob::active_mesh::get_faces_with_edge(const noob::active_mesh::edge_h eh) const
-{
-}
+   std::vector<noob::active_mesh::face_h> noob::active_mesh::get_faces_with_edge(const noob::active_mesh::edge_h eh) const
+   {
+   }
 
 
-noob::active_mesh::face_h noob::active_mesh::get_face_with_halfedge(const noob::active_mesh::halfedge_h) const
-{
+   noob::active_mesh::face_h noob::active_mesh::get_face_with_halfedge(const noob::active_mesh::halfedge_h) const
+   {
 
-}
-*/
+   }
+   */
 
 std::vector<noob::active_mesh::halfedge_h> noob::active_mesh::get_halfedges_in_face(const noob::active_mesh::face_h fh) const
 {
@@ -213,7 +213,7 @@ std::vector<noob::active_mesh::face_h> noob::active_mesh::get_adjacent_faces(con
 }
 
 
-std::vector<noob::active_mesh> noob::active_mesh::split(size_t max_vertices) const 
+std::vector<noob::active_mesh> noob::active_mesh::reduce_verts(size_t max_vertices) const 
 {
 	std::vector<noob::active_mesh> results;
 
@@ -328,11 +328,11 @@ void noob::active_mesh::fill_holes()
 }
 
 /*
-void sweep_line(const noob::active_mesh::halfedge_h, const noob::vec3&)
-{
+   void sweep_line(const noob::active_mesh::halfedge_h, const noob::vec3&)
+   {
 
-}
-*/
+   }
+   */
 
 // void noob::active_mesh::cut_mesh(const noob::vec3& point_on_plane, const noob::vec3 plane_normal) 
 // {
@@ -385,11 +385,79 @@ void noob::active_mesh::extrude_face(const noob::active_mesh::face_h fh, float m
 }
 
 
-//   void noob::active_mesh::connect_faces(noob::active_mesh::face_h first_handle, noob::active_mesh::face_h second_handle) 
-//   {
+noob::active_mesh::face_split_results noob::active_mesh::split_face(const noob::active_mesh::face_h fh, const noob::plane& splitter)
+{
+	std::vector<noob::active_mesh::edge_h> edges;
+	for (auto it = half_edges.cfe_iter(fh); it.is_valid(); ++it)
+	{
+		edges.push_back(*it);
+	}
 
-//   }
+	std::vector<noob::vec3> split_points(2);
+	noob::active_mesh::edge_h created_edge;
+	bool valid = false;
+	
+	noob::active_mesh::halfedge_h he1, he2;
+	for (auto e : edges)
+	{
+		auto half = half_edges.halfedge_handle(e, 1);
+		auto p1 = half_edges.point(half_edges.from_vertex_handle(half));
+		auto p2 = half_edges.point(half_edges.to_vertex_handle(half));
 
+		// If the two signs differ...
+		bool first = true;
+		noob::active_mesh::vertex_h v1, v2;
+		noob::active_mesh::edge_h e1, e2;
+
+		if (splitter.signed_distance(p1) > 0 ^ splitter.signed_distance(p2) > 0)
+		{
+			if (first)
+			{
+				e1 = e;
+				first = false;
+			}
+			else
+			{
+				e2 = e;
+				valid = true;
+				break;
+			}
+		}
+
+		if (valid)
+		{
+
+			v1 = add_vertex(splitter.projection(p1));
+
+			half_edges.split(e1, v1);
+			v2 = add_vertex(splitter.projection(p2));
+
+			half_edges.split(e2, v2);
+			he1 = half_edges.new_edge(v1, v2);
+			he2 = half_edges.new_edge(v2, v1);
+		}
+	}
+
+	noob::active_mesh::face_split_results results;
+	if (valid)
+	{
+		results.valid = true;
+		results.faces[0] = half_edges.face_handle(he1);
+		results.faces[1] = half_edges.face_handle(he2);
+	}
+	return results;
+}
+
+/*
+   void noob::active_mesh::connect_faces(noob::active_mesh::face_h first_handle, noob::active_mesh::face_h second_handle) 
+   {
+   std::vector<noob::active_mesh::> face_one_verts;
+   for (auto it = half_egdes.cfv_iter(first_handle); it.id_valid(); ++it)
+   {
+   face
+   }
+   }
+   */
 
 void noob::active_mesh::move_vertex(const noob::active_mesh::vertex_h vh, const noob::vec3& direction) 
 {
@@ -406,41 +474,41 @@ void noob::active_mesh::move_vertices(const std::vector<noob::active_mesh::verte
 }
 
 /*
-void move_edge(const noob::active_mesh::edge_h, const noob::vec3&)
-{
+   void move_edge(const noob::active_mesh::edge_h, const noob::vec3&)
+   {
 
-}
-
-
-void move_edges(const std::vector<noob::active_mesh::edge_h>&, const noob::vec3&)
-{
-
-}
+   }
 
 
-void move_halfedge(const noob::active_mesh::halfedge_h, const noob::vec3&)
-{
+   void move_edges(const std::vector<noob::active_mesh::edge_h>&, const noob::vec3&)
+   {
 
-}
-
-
-void move_halfedges(const std::vector<noob::active_mesh::halfedge_h>&, const noob::vec3&)
-{
-
-}
+   }
 
 
-void move_face(const noob::active_mesh::face_h, const noob::vec3&)
-{
+   void move_halfedge(const noob::active_mesh::halfedge_h, const noob::vec3&)
+   {
 
-}
+   }
 
 
-void move_faces(const std::vector<noob::active_mesh::face_h>&, const noob::vec3&)
-{
+   void move_halfedges(const std::vector<noob::active_mesh::halfedge_h>&, const noob::vec3&)
+   {
 
-}
-*/
+   }
+
+
+   void move_face(const noob::active_mesh::face_h, const noob::vec3&)
+   {
+
+   }
+
+
+   void move_faces(const std::vector<noob::active_mesh::face_h>&, const noob::vec3&)
+   {
+
+   }
+   */
 
 void noob::active_mesh::merge_adjacent_coplanars()
 {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RegisterMath.hpp"
+#include "RegisterPlane.hpp"
 #include "RegisterGraphics.hpp"
 #include "RegisterBasicMesh.hpp"
 #include "RegisterActiveMesh.hpp"

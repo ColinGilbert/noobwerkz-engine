@@ -317,9 +317,6 @@ noob::basic_mesh noob::mesh_utils::lathe(const std::vector<noob::vec2>& points, 
 		initial_points.push_back(noob::vec3(p.v[0], p.v[1], 0.0));
 	}
 
-
-	// std::reverse(initial_points.begin(), initial_points.end());
-
 	size_t _segments = 12;
 
 	if (segments < 3)
@@ -328,8 +325,6 @@ noob::basic_mesh noob::mesh_utils::lathe(const std::vector<noob::vec2>& points, 
 	}
 
 	double increment_amount = TWO_PI / _segments;
-
-	// Eigen::Vector3f p(0.0f, 0.0f, radius);
 
 	size_t num_points = initial_points.size();
 	
@@ -353,11 +348,11 @@ noob::basic_mesh noob::mesh_utils::lathe(const std::vector<noob::vec2>& points, 
 			Eigen::Vector3f p(initial_points[ring_count].v[0], initial_points[ring_count].v[1], 0.0);
 			Eigen::Vector3f rotated_point = angle_axis * p;
 			
-			{
-				fmt::MemoryWriter ww;
-				ww << "[MeshUtils] adding vertex " << seg << " of ring " << ring_count;
-				logger::log(ww.str());
-			}
+			// {
+			// 	fmt::MemoryWriter ww;
+			//	ww << "[MeshUtils] adding vertex " << seg << " of ring " << ring_count;
+			//	logger::log(ww.str());
+			// }
 
 			noob::active_mesh::vertex_h temp_vert = halfedges.add_vertex(noob::vec3(rotated_point[0], rotated_point[1], rotated_point[2]));
 			
@@ -380,11 +375,11 @@ noob::basic_mesh noob::mesh_utils::lathe(const std::vector<noob::vec2>& points, 
 		}
 
 
-		{
-			fmt::MemoryWriter ww;
-			ww << "[MeshUtils] Adding faces for ring " << ring_count;
-			logger::log(ww.str());
-		}
+		// {
+		// 	fmt::MemoryWriter ww;
+		// 	ww << "[MeshUtils] Adding faces for ring " << ring_count;
+		//	logger::log(ww.str());
+		// }
 
 		// Now that we have a full ring of vertices all the way around, use those vertices to make a full ring of faces.
 
@@ -411,7 +406,7 @@ noob::basic_mesh noob::mesh_utils::lathe(const std::vector<noob::vec2>& points, 
 		else if (ring_count == num_points - 1)
 		{
 			// Use current_ring and last_ring to create the faces.
-			logger::log("Last ring!");
+			// logger::log("Last ring!");
 
 			std::vector<noob::active_mesh::vertex_h> face_verts(4);
 			for (size_t seg = 1; seg <= _segments; ++seg)

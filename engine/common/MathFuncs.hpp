@@ -1,3 +1,5 @@
+// This class is used for convenience, and for providing a convenient API for AngelScript
+// TODO: Convert to Eigen
 #pragma once
 #include <cmath>
 
@@ -5,6 +7,7 @@
 //#include <assimp/types.h>
 #include <btBulletDynamicsCommon.h>
 #include <glm/glm.hpp>
+#include <Eigen/Geometry>
 #include "format.h"
 
 #include <OpenMesh/Core/IO/MeshIO.hh>
@@ -98,6 +101,14 @@ namespace noob
 		vec3(const vec3& vv);
 		vec3(const btVector3&);
 		vec3(const PolyMesh::Point&);
+		vec3(const Eigen::Vector3f&);
+		// Whatever the hell you gotta do to compile, man...
+		vec3(const Eigen::Block<const Eigen::Matrix<float, 4, 1>, 3, 1, false> n)
+		{
+			v[0] = n[0];
+			v[1] = n[1];
+			v[2] = n[2];
+		}
 		vec3(const std::array<float, 3>&);
 
 		// add vector to vector
