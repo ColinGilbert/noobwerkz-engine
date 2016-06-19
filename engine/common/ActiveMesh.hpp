@@ -8,7 +8,6 @@
 
 #pragma once
 
-
 #include <set>
 
 #include "Component.hpp"

@@ -1,12 +1,11 @@
 #include "Joint.hpp"
 
-void noob::joint::init(btDynamicsWorld* w, noob::body* a, noob::body* b, const noob::mat4& local_a, const noob::mat4& local_b)
+void noob::joint::init(const btDynamicsWorld* w, const noob::body& a, const noob::body& b, const noob::mat4& local_a, const noob::mat4& local_b)
 {
-	btTransform tr_a;
+	btTransform tr_a, tr_b;
 	tr_a.setFromOpenGLMatrix(&local_a.m[0]);
-	btTransform tr_b;
 	tr_b.setFromOpenGLMatrix(&local_b.m[0]);
-	inner =  new btGeneric6DofSpringConstraint(*(a->inner_body), *(b->inner_body), tr_a, tr_b, true);
+	inner = new btGeneric6DofSpringConstraint(*(a.inner), *(b.inner), tr_a, tr_b, true);
 	inner->setEquilibriumPoint();//0, 0);
 	w->addConstraint(inner, true);
 }

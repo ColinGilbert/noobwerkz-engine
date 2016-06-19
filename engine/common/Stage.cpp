@@ -54,23 +54,22 @@ void noob::stage::tear_down()
 	init();
 }
 
+
 void noob::stage::update(double dt)
 {
 	dynamics_world->stepSimulation(1.0/60.0, 10);
 }
 
 
-void noob::stage::draw(float window_width, float window_height) const
+void noob::stage::draw(float window_width, float window_height, const noob::vec3& eye_pos, const noob::vec3& eye_target, const noob::vec3& eye_up, const noob::mat4& projection_mat) const
 {
-
+	noob::mat4 view_mat(noob::look_at(eye_pos, eye_target, eye_up));
 	bgfx::setViewTransform(0, &view_mat.m[0], &projection_mat.m[0]);
 	bgfx::setViewRect(0, 0, 0, window_width, window_height);
 	bgfx::setViewTransform(1, &view_mat.m[0], &projection_mat.m[0]);
 	bgfx::setViewRect(1, 0, 0, window_width, window_height);
 
 	bgfx::setUniform(noob::graphics::ambient.handle, &ambient_light.v[0]);
-	bgfx::setUniform(noob::graphics::eye_pos.handle, &eye_pos.v[0]);	
-	bgfx::setUniform(noob::graphics::eye_pos_normalized.handle, &(noob::normalize(eye_pos)).v[0]);
 
 	// static const noob::graphics::uniform invalid_uniform, colour_0, colour_1, colour_2, colour_3, blend_0, blend_1, tex_scales, normal_mat, normal_mat_modelspace, eye_pos, eye_pos_normalized, ambient, light_pos_radius, light_rgb_falloff, specular_shine, diffuse, emissive, fog, rough_albedo_fresnel;
 	std::array<noob::light, MAX_LIGHTS> temp_lights;
@@ -98,16 +97,13 @@ void noob::stage::draw(float window_width, float window_height) const
 				size_t body_h = bodies_mapping[body_node];
 				noob::vec3 scales = noob::vec3(scales_mapping[body_node]);
 
-				// noob::body bod = bodies.get(bodies.make_handle(body_h));
-				// noob::mat4 world_mat = noob::identity_mat4();
-				// world_mat = noob::scale(world_mat, scales); //noob::scale(world_mat, bodies.get(bodies.make_handle(body_h))->get_transform();
 				noob::mat4 world_mat = noob::identity_mat4();
-				
+
 				// Prior to this hack, we fed the results of body.get_orientation directly into the rotate() function.
 				// This caused all objects drawn flipped about the x-axis 180 degrees
 				noob::versor original_quat = bodies.get(body_h).get_orientation();
 				noob::versor temp_quat(original_quat.q[3], original_quat.q[2], original_quat.q[1], original_quat.q[0]); 
-				
+
 				world_mat = noob::rotate(world_mat, temp_quat);//bodies.get(body_h).get_orientation());
 				world_mat = noob::scale(world_mat, noob::vec3(scales_mapping[body_node]));												
 				world_mat = noob::translate(world_mat, bodies.get(body_h).get_position());												
@@ -162,15 +158,34 @@ void noob::stage::draw(float window_width, float window_height) const
 }
 
 
-noob::bodies_holder::handle noob::stage::add_body(const noob::body_type b_type, const noob::shapes_holder::handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
+noob::body_handle noob::stage::add_body(const noob::body_type b_type, const noob::shapes_holder::handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
 {
 	noob::globals& g = noob::globals::get_instance();
 	noob::body b;
 	b.init(dynamics_world, b_type, g.shapes.get(shape_h), mass, pos, orient, ccd);	
 	body_handle bod_h = bodies.add(b);
 	b = bodies.get(bod_h);
-	b.inner_body->setUserIndex(bod_h.get_inner());
+	b.inner->setUserIndex(bod_h.get_inner());
 	return bod_h;
+}
+
+
+noob::ghost_handle noob::stage::add_ghost(const noob::shapes_holder::handle shape_h, const noob::vec3& pos, const noob::versor& orient)
+{
+	if (!ghosts_initialized)
+	{
+		// For the ghost object to work correctly, we need to add a callback to our world.
+		dynamics_world->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+		ghosts_initialized = true;
+	}
+	noob::globals& g = noob::globals::get_instance();
+	noob::ghost temp_ghost;
+	temp_ghost.init(g.shapes.get(shape_h), pos, orient);
+	dynamics_world->addCollisionObject(temp_ghost.inner);
+	noob::ghost_handle ghost_h = ghosts.add(temp_ghost);
+	temp_ghost = ghosts.get(ghost_h);
+	temp_ghost.inner->setUserIndex(ghost_h.get_inner());
+	return ghost_h;
 }
 
 
@@ -192,7 +207,7 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::an
 void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::scaled_model model_info, const noob::globals::shader_results shader_h)
 {
 	auto body_results = bodies_to_nodes.find(body_h.get_inner());
-	
+
 	if (body_results != bodies_to_nodes.end())
 	{
 		logger::log("[Stage] Warning: Attempting to use duplicate body. Aborted.");
@@ -202,7 +217,7 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::sc
 	lemon::ListDigraph::Node model_node;
 
 	auto model_results = basic_models_to_nodes.find(model_info.model_h.get_inner());
-	
+
 	if (model_results != basic_models_to_nodes.end())
 	{
 		model_node = model_results->second;
@@ -221,7 +236,7 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::sc
 
 	bool shader_found = false;
 	lemon::ListDigraph::Node shader_node;
-	
+
 	for (lemon::ListDigraph::OutArcIt shader_it(draw_graph, model_node); shader_it != lemon::INVALID; ++shader_it)
 	{
 		lemon::ListDigraph::Node temp_shader_node = draw_graph.target(shader_it);
@@ -327,10 +342,88 @@ void noob::stage::remove_body(noob::body_handle h)
 		noob::body b = bodies.get(h);
 		if (b.physics_valid)
 		{
-			dynamics_world->removeRigidBody(b.inner_body);
-			delete b.inner_body;
+			dynamics_world->removeRigidBody(b.inner);
+			delete b.inner;
 		}
 	}	
+}
+
+noob::stage::ghost_intersection_results noob::stage::get_intersections(const noob::ghost_handle ghost_h) const
+{
+	noob::ghost temp_ghost = ghosts.get(ghost_h);
+
+	btManifoldArray manifold_array;
+
+	btBroadphasePairArray& pairArray = temp_ghost.inner->getOverlappingPairCache()->getOverlappingPairArray();
+
+	noob::stage::ghost_intersection_results results;
+	results.ghost = ghosts.make_handle(temp_ghost.inner->getUserIndex());
+
+	size_t num_pairs = pairArray.size();
+	
+	for (size_t i = 0; i < num_pairs; ++i)
+	{
+		manifold_array.clear();
+
+		const btBroadphasePair& pair = pairArray[i];
+
+		btBroadphasePair* collision_pair = dynamics_world->getPairCache()->findPair(pair.m_pProxy0, pair.m_pProxy1);
+
+		if (!collision_pair)
+		{
+			continue;
+		}
+
+		if (collision_pair->m_algorithm)
+		{
+			collision_pair->m_algorithm->getAllContactManifolds(manifold_array);
+		}
+
+		for (size_t j = 0; j < manifold_array.size(); ++j)
+		{
+			btPersistentManifold* manifold = manifold_array[j];
+
+			// Avoid duplicates
+			if (manifold->getBody0() == temp_ghost.inner)
+			{
+				const btCollisionObject* bt_obj = manifold->getBody1();
+				// Sanity check
+				const int index = bt_obj->getUserIndex();
+				if (index > -1)
+				{
+					if (static_cast<noob::body_descriptor*>(bt_obj->getUserPointer())->is_physical() == true)
+					{
+						results.bodies.push_back(bodies.make_handle(index));
+					}
+					else
+					{
+						results.ghosts.push_back(ghosts.make_handle(index));
+					}
+				}
+				// btScalar direction = is_first_body ? btScalar(-1.0) : btScalar(1.0);
+
+				// for (size_t p = 0; p < manifold->getNumContacts(); ++p)
+				// {
+				// const btManifoldPoint& pt = manifold->getContactPoint(p);
+
+				// if (pt.getDistance() < 0.0f)
+				// {
+				// const btVector3& pt_a = pt.getPositionWorldOnA();
+				// const btVector3& pt_b = pt.getPositionWorldOnB();
+				// const btVector3& normal_on_b = pt.m_normalWorldOnB;
+
+
+
+				// Handle collisions here. Thanks Bullet Wiki :)
+
+
+				// }
+				// }
+			}
+		}
+	}
+
+	return results;
 }
 
 /*

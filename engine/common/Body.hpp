@@ -1,11 +1,10 @@
-// Kinematic, until self_controlled == false. The it beomes dynamic body
 #pragma once
 
 #include <btBulletDynamicsCommon.h>
-#include <memory>
 
 #include "MathFuncs.hpp"
 #include "Shape.hpp"
+
 
 namespace noob
 {
@@ -19,7 +18,7 @@ namespace noob
 		friend class joint;
 		
 		public:	
-			body() : is_physical(true), physics_valid(false), ccd(true) {}
+			body() noexcept(true) : physics_valid(false), ccd(false) {}
 		
 			struct info
 			{
@@ -54,10 +53,8 @@ namespace noob
 				noob::body_type type;
 			};
 
-
-
-			void init(btDynamicsWorld*, noob::body_type, const noob::shape&, float mass, const noob::vec3& position, const noob::versor& orientation = noob::versor(0.0, 0.0, 0.0, 1.0), bool ccd = false);
-			void init(btDynamicsWorld*, noob::body_type, const noob::shape&, const noob::body::info&);
+			void init(const btDynamicsWorld*, noob::body_type, const noob::shape&, float mass, const noob::vec3& position, const noob::versor& orientation, bool ccd);
+			void init(const btDynamicsWorld*, noob::body_type, const noob::shape&, const noob::body::info&);
 
 			// void set_type(noob::body_type);
 			
@@ -77,17 +74,10 @@ namespace noob
 			
 			void set_ccd(bool); 
 			
-			bool physical()
-			{
-				return is_physical;
-			}
-
 		
 		protected:
-			
 			noob::body_type type;
-			bool is_physical, physics_valid, ccd;
-			// btDynamicsWorld* dynamics_world;
-			btRigidBody* inner_body;
+			bool physics_valid, ccd;
+			btRigidBody* inner;
 	};
 }

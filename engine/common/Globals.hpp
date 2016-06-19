@@ -33,6 +33,17 @@ namespace noob
 		TRIPLANAR = 1 << 1,
 	};
 
+	class globals;
+
+	class body_descriptor
+	{
+		friend class globals;
+		public:
+			bool is_physical() { return physical; }
+		protected:
+			bool physical;
+	};
+
 	class globals
 	{
 		protected:
@@ -128,6 +139,11 @@ namespace noob
 			// Causes crashes with scripts. Therefore, keep indoors.
 			scaled_model model_by_shape(const noob::shapes_holder::handle);
 
+
+			//
+			// Data members:
+			//
+
 			// The following are basic, commonly-used objects that we provide as a convenience.
 			noob::shapes_holder::handle unit_sphere_shape, unit_cube_shape, unit_capsule_shape, unit_cylinder_shape, unit_cone_shape;
 
@@ -165,7 +181,8 @@ namespace noob
 				TEAM_B = 1 << 4,
 				POWERUP = 1 << 5,
 			};
-
+		
+			noob::body_descriptor physical_body_descriptor, ghost_body_descriptor;
 
 		protected:
 			std::map<size_t, noob::model_handle> shapes_to_models;

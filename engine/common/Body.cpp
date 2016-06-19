@@ -1,21 +1,25 @@
 #include "Body.hpp"
+
+
 #include "TransformHelper.hpp"
 #include "Logger.hpp"
 
 
-#include <cmath>
+#include "Globals.hpp"
 
 
-void noob::body::init(btDynamicsWorld* dynamics_world, noob::body_type type_arg, const noob::shape& shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
+
+void noob::body::init(const btDynamicsWorld* dynamics_world, noob::body_type type_arg, const noob::shape& shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
 {
 	btTransform start_transform;
-	// start_transform.setIdentity();
+	
 	start_transform.setRotation(btQuaternion(orient.q[0], orient.q[1], orient.q[2], orient.q[3]));
 	start_transform.setOrigin(btVector3(pos.v[0], pos.v[1], pos.v[2]));
 
 	float _mass = mass;
 	
 	type = type_arg;
+	
 	switch(type)
 	{
 		case(noob::body_type::DYNAMIC):
@@ -48,17 +52,19 @@ void noob::body::init(btDynamicsWorld* dynamics_world, noob::body_type type_arg,
 	}
 
 	btRigidBody::btRigidBodyConstructionInfo ci(_mass, motion_state, shape.inner_shape, inertia);
-	inner_body = new btRigidBody(ci);
+	inner = new btRigidBody(ci);
 	
 	set_ccd(ccd);
 	
-	dynamics_world->addRigidBody(inner_body);
-	inner_body->setUserPointer(this);
-	inner_body->setUserIndex(-1);
+	dynamics_world->addRigidBody(inner);
+	noob::globals& g = noob::globals::get_instance();
+	inner->setUserPointer(static_cast<void*>(&g.physical_body_descriptor));
+	inner->setUserIndex(-1);
 	physics_valid = true;	
 }
 
-void noob::body::init(btDynamicsWorld* dynamics_world, noob::body_type type_arg, const noob::shape& shape, const noob::body::info& _info)
+
+void noob::body::init(const btDynamicsWorld* dynamics_world, noob::body_type type_arg, const noob::shape& shape, const noob::body::info& _info)
 {
 	btTransform start_transform;
 	// start_transform.setIdentity();
@@ -68,46 +74,20 @@ void noob::body::init(btDynamicsWorld* dynamics_world, noob::body_type type_arg,
 	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
 	shape.inner_shape->calculateLocalInertia(_info.mass, inertia);
 	btRigidBody::btRigidBodyConstructionInfo ci(_info.mass, motion_state, shape.inner_shape, inertia);
-	inner_body = new btRigidBody(ci);
-	inner_body->setFriction(_info.friction);
-	inner_body->setRestitution(_info.restitution);
-	inner_body->setAngularFactor(btVector3(_info.angular_factor.v[0], _info.angular_factor.v[1], _info.angular_factor.v[2]));
-	inner_body->setLinearFactor(btVector3(_info.linear_factor.v[0], _info.linear_factor.v[1], _info.linear_factor.v[2]));
-	inner_body->setLinearVelocity(btVector3(_info.linear_velocity.v[0], _info.linear_velocity.v[1], _info.linear_velocity.v[2]));
-	inner_body->setAngularVelocity(btVector3(_info.angular_velocity.v[0], _info.angular_velocity.v[1], _info.angular_velocity.v[2]));
-	inner_body->setUserPointer(this);
-	inner_body->setUserIndex(-1);
+	inner = new btRigidBody(ci);
+	inner->setFriction(_info.friction);
+	inner->setRestitution(_info.restitution);
+	inner->setAngularFactor(btVector3(_info.angular_factor.v[0], _info.angular_factor.v[1], _info.angular_factor.v[2]));
+	inner->setLinearFactor(btVector3(_info.linear_factor.v[0], _info.linear_factor.v[1], _info.linear_factor.v[2]));
+	inner->setLinearVelocity(btVector3(_info.linear_velocity.v[0], _info.linear_velocity.v[1], _info.linear_velocity.v[2]));
+	inner->setAngularVelocity(btVector3(_info.angular_velocity.v[0], _info.angular_velocity.v[1], _info.angular_velocity.v[2]));
+	inner->setUserPointer(this);
+	inner->setUserIndex(-1);
 	set_ccd(_info.ccd);
-	dynamics_world->addRigidBody(inner_body);	
+	dynamics_world->addRigidBody(inner);	
 	physics_valid = true;
 }
 
-/*
-void noob::body::set_type(noob::body_type type_arg)
-{
-	if (type != type_arg)
-	{
-		switch (type_arg)
-		{
-			case(noob::body_type::DYNAMIC):
-				
-				break;
-			case(noob::body_type::KINEMATIC):
-				
-				break;
-			case(noob::body_type::STATIC):
-				
-				break;
-			//case(noob::body_type::GHOST):
-				
-			//	break;
-		};
-	}
-	
-	type = type_arg;
-
-}
-*/
 
 /*
    void noob::body::set_position(const noob::vec3& pos)
@@ -125,10 +105,10 @@ void noob::body::set_self_controlled(bool b)
 	if (b == true)
 	{
 		self_controlled = true;
-		// inner_body->setLinearSleepingThreshold(btScalar(0.8));
-		// inner_body->setAngularSleepingThreshold(btScalar(1.0));
-		// inner_body->setAngularFactor(btVector2(0.0, 0.0));
-		// inner_body->setLinearFactor(btVector3(1.0, 1.0, 1.0));
+		// inner->setLinearSleepingThreshold(btScalar(0.8));
+		// inner->setAngularSleepingThreshold(btScalar(1.0));
+		// inner->setAngularFactor(btVector2(0.0, 0.0));
+		// inner->setLinearFactor(btVector3(1.0, 1.0, 1.0));
 	}
 	else
 	{
@@ -143,7 +123,7 @@ void noob::body::update()
 	{
 		btTransform xform;
 
-		inner_body->getMotionState()->getWorldTransform(xform);
+		inner->getMotionState()->getWorldTransform(xform);
 
 		btVector3 down = -xform.getBasis()[1];
 		btVector3 forward = xform.getBasis()[2];
@@ -183,10 +163,10 @@ void noob::body::move(bool forward, bool backward, bool left, bool right, bool j
 		if (on_ground())
 		{
 			btTransform xform;
-			inner_body->getMotionState()->getWorldTransform(xform);
+			inner->getMotionState()->getWorldTransform(xform);
 
-			btVector3 linear_velocity = inner_body->getLinearVelocity();
-			btScalar speed = inner_body->getLinearVelocity().length();
+			btVector3 linear_velocity = inner->getLinearVelocity();
+			btScalar speed = inner->getLinearVelocity().length();
 			btVector3 walk_direction = btVector3(0.0, 0.0, 0.0);
 
 			btVector3 forward_dir(walk_speed, 0.0, 0.0);
@@ -226,7 +206,7 @@ bool noob::body::on_ground() const
 noob::vec3 noob::body::get_position() const
 {
 	btTransform xform;
-	inner_body->getMotionState()->getWorldTransform(xform);
+	inner->getMotionState()->getWorldTransform(xform);
 	return xform.getOrigin();
 }
 
@@ -234,20 +214,20 @@ noob::vec3 noob::body::get_position() const
 noob::versor noob::body::get_orientation() const
 {
 	btTransform xform;
-	inner_body->getMotionState()->getWorldTransform(xform);
+	inner->getMotionState()->getWorldTransform(xform);
 	return xform.getRotation();
 }
 
 
 noob::vec3 noob::body::get_linear_velocity() const
 {
-	return inner_body->getLinearVelocity();
+	return inner->getLinearVelocity();
 }
 
 
 noob::vec3 noob::body::get_angular_velocity() const
 {
-	return inner_body->getAngularVelocity();	
+	return inner->getAngularVelocity();	
 }
 
 
@@ -255,11 +235,8 @@ noob::vec3 noob::body::get_angular_velocity() const
 noob::mat4 noob::body::get_transform() const
 {
 	btTransform xform;
-	inner_body->getMotionState()->getWorldTransform(xform);
-	noob::transform_helper t;
-	t.rotate(get_orientation());
-	t.translate(get_position());
-	return t.get_matrix();
+	inner->getMotionState()->getWorldTransform(xform);
+	return xform;
 }
 
 
@@ -276,7 +253,7 @@ void noob::body::set_ccd(bool b)
 	{
 		btVector3 center;
 		btScalar radius;
-		inner_body->getCollisionShape()->getBoundingSphere(center, radius);
-		inner_body->setCcdMotionThreshold(radius);
+		inner->getCollisionShape()->getBoundingSphere(center, radius);
+		inner->setCcdMotionThreshold(radius);
 	}
 }

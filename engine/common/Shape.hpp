@@ -22,6 +22,7 @@ namespace noob
 		friend class application;
 		friend class stage;
 		friend class body;
+		friend class ghost;
 		friend class globals;
 		
 		public:

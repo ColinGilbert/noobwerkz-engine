@@ -22,7 +22,6 @@ noob::application::application()
 	assert(script_engine > 0);
 	// TODO: Uncomment once noob::filesystem is fixed
 	// noob::filesystem::init(*prefix);
-	view_mat = noob::look_at(noob::vec3(0, 50.0, -100.0), noob::vec3(0.0, 0.0, 0.0), noob::vec3(0.0, 1.0, 0.0));
 }
 
 
@@ -75,7 +74,13 @@ void noob::application::init()
 	logger::log("[Application] Begin init.");
 	ui_enabled = true;
 	gui.init(*prefix, window_width, window_height);
+	
+	controller.set_eye_pos(noob::vec3(0.0, 300.0, -100.0));
+	controller.set_eye_target(noob::vec3(0.0, 0.0, 0.0));
+	controller.set_eye_up(noob::vec3(0.0, 1.0, 0.0));
+	
 	noob::globals& g = noob::globals::get_instance();
+	
 	if (g.init())
 	{
 		stage.init();
@@ -84,6 +89,7 @@ void noob::application::init()
 	{
 		logger::log("[Application] Global storage init failed :(");
 	}
+	
 	voxels.init(512, 512, 512);
 
 	// Used by AngelScript to capture the result of the last registration.
@@ -92,17 +98,19 @@ void noob::application::init()
 	script_engine->SetMessageCallback(asFUNCTION(angel_message_callback), 0, asCALL_CDECL);
 
 	RegisterStdString(script_engine);
-	
+
 	// Does not work! TODO: Report on forums.
 	// RegisterVector<bool>("bool", script_engine);
-	
+
 	// Neither those two seem to work. They register just fine but there's literally no output to the commandline.
 	r = script_engine->RegisterGlobalFunction("void log(const string& in)", asFUNCTION(logger::log), asCALL_CDECL); assert (r >= 0);
 	// r = script_engine->RegisterGlobalFunction("void log(const string& in)", asFUNCTIONPR(logger::log, (const std::string&), void), asCALL_CDECL); assert (r >= 0);
-	
+
 	register_math(script_engine);
 	register_plane(script_engine);
 	register_graphics(script_engine);
+	register_controls(script_engine);
+	r = script_engine->RegisterGlobalProperty("controls controller", &controller); assert (r >= 0);
 	register_basic_mesh(script_engine);
 	register_active_mesh(script_engine);
 	// TODO: Implement
@@ -130,9 +138,9 @@ void noob::application::init()
 void noob::application::update(double delta)
 {
 	gui.window_dims(window_width, window_height);
-	
+
 	network.tick();
-	
+
 	while (network.has_message())
 	{
 		std::string s = network.get_message();
@@ -248,8 +256,9 @@ bool noob::application::eval(const std::string& name, const std::string& string_
 
 void noob::application::draw()
 {
-	stage.projection_mat = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 1.0, 2000.0);
-	stage.draw(window_width, window_height);
+	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 1.0, 2000.0);
+
+	stage.draw(window_width, window_height, controller.get_eye_pos(), controller.get_eye_target(), controller.get_eye_up(), proj_mat);
 }
 
 
@@ -257,15 +266,15 @@ void noob::application::accept_ndof_data(const noob::ndof::data& info)
 {
 	if (info.movement == true)
 	{
-		//logger::log(fmt::format("[Sandbox] NDOF data: T({0}, {1}, {2}) R({3}, {4}, {5})", info.translation[0], info.translation[1], info.translation[2], info.rotation[0], info.rotation[1], info.rotation[2]));
-		float damping = 360.0;
-		noob::vec3 rotation(info.rotation);
-		noob::vec3 translation(info.translation);
-		stage.view_mat = noob::rotate_x_deg(stage.view_mat, -rotation[0]/damping);
-		stage.view_mat = noob::rotate_y_deg(stage.view_mat, -rotation[1]/damping);
-		stage.view_mat = noob::rotate_z_deg(stage.view_mat, -rotation[2]/damping);
-		stage.view_mat = noob::translate(stage.view_mat, noob::vec3(-translation[0]/damping, -translation[1]/damping, -translation[2]/damping));
-		stage.eye_pos = stage.eye_pos - translation;//translation);
+		// logger::log(fmt::format("[Sandbox] NDOF data: T({0}, {1}, {2}) R({3}, {4}, {5})", info.translation[0], info.translation[1], info.translation[2], info.rotation[0], info.rotation[1], info.rotation[2]));
+		// float damping = 360.0;
+		// noob::vec3 rotation(info.rotation);
+		// noob::vec3 translation(info.translation);
+		// view_mat = noob::rotate_x_deg(stage.view_mat, -rotation[0]/damping);
+		// view_mat = noob::rotate_y_deg(stage.view_mat, -rotation[1]/damping);
+		// view_mat = noob::rotate_z_deg(stage.view_mat, -rotation[2]/damping);
+		// view_mat = noob::translate(stage.view_mat, noob::vec3(-translation[0]/damping, -translation[1]/damping, -translation[2]/damping));
+		// stage.eye_pos = stage.eye_pos - translation;//translation);
 	}
 }
 

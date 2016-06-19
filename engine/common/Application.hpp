@@ -29,6 +29,7 @@
 // #include <lemon/static_graph.h>
 
 #include "Globals.hpp"
+#include "Controls.hpp"
 #include "Logger.hpp"
 #include "NoobUtils.hpp"
 #include "MathFuncs.hpp"
@@ -70,11 +71,11 @@ namespace noob
 
 			// Init must always be called.
 			void init();
+			
 			// Those three allow an app to be controlled better by an external environment (ie: Android/iOS)
 			void pause();
 			void resume();
 			void gc();
-
 
 			typedef std::tuple<const std::array<int, 2>&, const std::array<float,2>&> touch_instance;
 
@@ -84,10 +85,13 @@ namespace noob
 			void set_archive_dir(const std::string & filepath);
 			void window_resize(uint32_t w, uint32_t h);
 			void key_input(char c);
+			
 			void accept_ndof_data(const noob::ndof::data& info);
 
 			// step() is called by the target platform, which calculates the delta-time and drives the update() function. It is an ugly hack that had to be made public in order to be callable from the main app.
 			void step();
+			
+			noob::controls controller;
 
 		protected:
 
@@ -114,10 +118,8 @@ namespace noob
 			std::vector<noob::vec2> finger_positions;
 			noob::voxel_world voxels;
 			noob::stage stage;
-			noob::mat4 view_mat;
 			noob::network_client network;
 			noob::random_generator randomz;
 			std::string script_name;
-			noob::globals& global_storage;
 	};
 }

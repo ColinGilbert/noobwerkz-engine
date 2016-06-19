@@ -216,11 +216,10 @@ namespace noob
 		}
 	}
 
-
-	// mat4::mat4(const rp3d::Transform& t)
-	// {
-	//	t.getOpenGLMatrix(&m[0]);
-	// }
+	mat4::mat4(const btTransform& xform)
+	{
+		xform.getOpenGLMatrix(&m[0]);
+	}
 
 
 	/*------------------------------VECTOR FUNCTIONS------------------------------*/

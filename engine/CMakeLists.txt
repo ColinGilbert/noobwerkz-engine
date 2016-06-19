@@ -689,6 +689,7 @@ list(APPEND common_src
 	common/scripting/RegisterMath.cpp
 	common/scripting/RegisterPlane.cpp
 	common/scripting/RegisterGraphics.cpp
+	common/scripting/RegisterControls.cpp
 	common/scripting/RegisterBasicMesh.cpp
 	common/scripting/RegisterActiveMesh.cpp
 	common/scripting/RegisterGlobals.cpp

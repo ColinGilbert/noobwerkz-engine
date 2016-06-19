@@ -31,36 +31,61 @@
 #include <lemon/list_graph.h>
 #include <lemon/lgf_writer.h>
 
+
 namespace noob
 {
 	class stage
 	{
 		public:
-			stage() : show_origin(true), view_mat(noob::identity_mat4()), projection_mat(noob::identity_mat4()), ambient_light(noob::vec4(0.1, 0.1, 0.1, 0.1)), eye_pos(noob::vec3(0.0, 0.0, 0.0)), bodies_mapping(draw_graph), model_mats_mapping(draw_graph),  basic_models_mapping(draw_graph), shaders_mapping(draw_graph), reflectances_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph) {}
 
-			~stage();
-
-			// This one must be called by the application. It really sucks but that's because the graphics API is (currently) static. This may well change soon enough.
-			void init();
-		
-			// Brings everything back to scratch
-			void tear_down();
-
-			// Call those every frame or so.
-			void update(double dt);
-			// TODO: Implement
-			void draw(float window_width, float window_height) const;
-
-			// Creates physics body. Those get made lots.
-			noob::body_handle add_body(const noob::body_type, const noob::shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient = noob::versor(0.0, 0.0, 0.0, 1.0), bool ccd = false);
-
-			noob::joint_handle joint(const noob::body_handle a, const noob::vec3& point_on_a, const noob::body_handle b, const noob::vec3& point_on_b);
+			// First, we declare a few structs.
+			struct contact_point
+			{
+				size_t handle;
+				noob::vec3 pos_a, pos_b, normal_on_b;
+			};
 			
+			struct ghost_intersection_results
+			{
+				noob::ghost_handle ghost;
+				std::vector<noob::body_handle> bodies;
+				std::vector<noob::ghost_handle> ghosts;
+			};
+
+			// We'll happen to use these members a lot.
 			noob::bodies_holder bodies;
 			noob::joints_holder joints;
 			noob::ghosts_holder ghosts;
 
-			// Functions to create commonly-used configurations:
+			bool show_origin;
+
+			noob::vec4 ambient_light;
+
+			// Now, onto the class itself.
+
+			stage() : show_origin(true), ambient_light(noob::vec4(0.1, 0.1, 0.1, 0.1)), bodies_mapping(draw_graph), model_mats_mapping(draw_graph), basic_models_mapping(draw_graph), shaders_mapping(draw_graph), reflectances_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph), ghosts_initialized(false) {}
+
+			~stage();
+
+			// This one must be called by the application.
+			void init();
+		
+			// Brings everything back to scratch.
+			void tear_down();
+
+			// Call those every frame or so.
+			void update(double dt);
+			
+			void draw(float window_width, float window_height, const noob::vec3& eye_pos, const noob::vec3& eye_target, const noob::vec3& eye_up, const noob::mat4& projection_mat) const;
+
+			// Creates physics body. Those get made lots.
+			noob::body_handle add_body(const noob::body_type, const noob::shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient = noob::versor(1.0, 0.0, 0.0, 0.0), bool ccd = false);
+			noob::ghost_handle add_ghost(const noob::shape_handle, const noob::vec3& pos, const noob::versor& orient = noob::versor(1.0, 0.0, 0.0, 0.0));
+
+			noob::joint_handle joint(const noob::body_handle a, const noob::vec3& point_on_a, const noob::body_handle b, const noob::vec3& point_on_b);
+			
+			
+			// Functions to create commonly-used configurations. Soon they'll return a tag used by the component system (in construction)
 			void actor(const noob::bodies_holder::handle, const noob::animated_models_holder::handle, const noob::globals::shader_results);
 
 			void actor(const noob::bodies_holder::handle, const noob::scaled_model, const noob::globals::shader_results);
@@ -78,16 +103,13 @@ namespace noob
 			void set_directional_light(const noob::directional_light&);
 
 			noob::lights_holder::handle get_light(unsigned int i) const;
-
+			
+			noob::stage::ghost_intersection_results get_intersections(const noob::ghost_handle) const;
+			
+			// Dumps a readable graph format onto disk. Super useful for debug.
 			void write_graph(const std::string& filename) const;
 
-			bool show_origin;
-
-			noob::mat4 view_mat, projection_mat;
 			
-			noob::vec4 ambient_light;
-			noob::vec3 eye_pos;
-
 
 		protected:
 			
@@ -103,6 +125,7 @@ namespace noob
 			btDiscreteDynamicsWorld* dynamics_world;
 			
 			lemon::ListDigraph draw_graph;
+			lemon::ListDigraph::Node root_node;
 			lemon::ListDigraph::NodeMap<size_t> bodies_mapping;
 			lemon::ListDigraph::NodeMap<std::function<noob::mat4(void)>> model_mats_mapping;
 			lemon::ListDigraph::NodeMap<size_t> basic_models_mapping;
@@ -110,7 +133,6 @@ namespace noob
 			lemon::ListDigraph::NodeMap<size_t> reflectances_mapping;
 			lemon::ListDigraph::NodeMap<std::array<size_t, 4>> lights_mapping;
 			lemon::ListDigraph::NodeMap<std::array<float, 3>> scales_mapping;
-			lemon::ListDigraph::Node root_node;
 
 			// std::unordered_map<size_t, noob::shapes_holder::handle> bodies_to_shapes;
 			std::map<size_t, lemon::ListDigraph::Node> bodies_to_nodes;
@@ -119,6 +141,6 @@ namespace noob
 			noob::directional_light directional_light;
 			std::array<noob::lights_holder::handle, MAX_LIGHTS> lights;
 
-			// noob::globals* globals;
+			bool ghosts_initialized;
 	};
 }

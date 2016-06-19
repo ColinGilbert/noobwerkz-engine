@@ -263,7 +263,7 @@ namespace noob
 		// mat4(const aiMatrix3x3& AssimpMatrix);
 		// mat4(const aiMatrix4x4&);
 		mat4(const glm::mat4&);
-
+		mat4(const btTransform&);
 		vec4 operator*(const vec4& rhs) const;
 		mat4 operator*(const mat4& rhs) const;
 		mat4& operator=(const mat4& rhs);
