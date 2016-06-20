@@ -13,8 +13,8 @@ static struct SoundIoOutStream* outstream;
 static void write_callback(struct SoundIoOutStream *outstream, int frame_count_min, int frame_count_max)
 {
 	const struct SoundIoChannelLayout* layout = &outstream->layout;
-	float float_sample_rate = outstream->sample_rate;
-	float seconds_per_frame = 1.0f / float_sample_rate;
+	double float_sample_rate = outstream->sample_rate;
+	double seconds_per_frame = 1.0f / float_sample_rate;
 	struct SoundIoChannelArea *areas;
 	int frames_left = frame_count_max;
 	int err;
@@ -36,8 +36,8 @@ static void write_callback(struct SoundIoOutStream *outstream, int frame_count_m
 			break;
 		}
 
-		float pitch = 440.0f;
-		float radians_per_second = pitch * 2.0f * NOOB_PI;
+		double pitch = 110.0f;
+		double radians_per_second = pitch * 2.0f * NOOB_PI;
 
 		for (int frame = 0; frame < frame_count; frame += 1)
 		{
@@ -109,7 +109,7 @@ void noob::sound::init()
 
 	outstream = soundio_outstream_create(device);
 
-	outstream->format = SoundIoFormatU16LE;
+	outstream->format = SoundIoFormatFloat32NE;
 	outstream->write_callback = write_callback;
 
 	if ((err = soundio_outstream_open(outstream)))
@@ -124,13 +124,13 @@ void noob::sound::init()
 	{
 		fmt::MemoryWriter ww;
 
-		ww << "[Sound] Error: Unable to set SoundIO channel layout - " << soundio_strerror(outstream->layout_error) << " - Trying different configs.";
+		ww << "[Sound] Error: Unable to set SoundIO channel layout - " << soundio_strerror(outstream->layout_error);
 		noob::logger::log(ww.str());
-		
-		
-		
-		
-		//return false;
+
+
+
+
+		// return false;
 	}
 
 
@@ -167,5 +167,5 @@ void noob::sound::tear_down()
 
 void noob::sound::play(const std::vector<uint16_t>& sample)
 {
-	
+
 }
