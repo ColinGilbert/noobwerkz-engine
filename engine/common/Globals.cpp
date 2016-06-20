@@ -66,6 +66,10 @@ bool noob::globals::init()
 	noob::reflectance r;
 	default_reflectance = set_reflectance(r, "default");
 	// logger::log("[Globals] Got default triplanar shader handle.");
+	
+	audio.init();
+	
+	
 	logger::log("[Globals] Init complete.");
 	return true;
 }

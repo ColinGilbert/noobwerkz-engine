@@ -30,6 +30,8 @@ list (APPEND cppformat_src
 	lib/cppformat/format.cc
 	lib/cppformat/posix.cc
 	)
+#include_directories(lib/libsoundio/soundio)
+#add_subdirectory(lib/libsoundio)
 
 if (DEFINED NOOB_PLATFORM_LINUX)
 	add_subdirectory(lib/glfw)
@@ -665,6 +667,7 @@ list(APPEND common_src
 	common/EditorUtils.cpp
 	common/VoxelWorld.cpp
 	common/ActiveMesh.cpp
+	common/ActiveMeshNG.cpp
 	common/UIFont.cpp
 	common/GUI.cpp
 	common/Camera.cpp
@@ -709,7 +712,7 @@ list(APPEND user_src
 
 if (DEFINED NOOB_PLATFORM_LINUX)
 	include_directories(platform/nix)
-	list(APPEND main_src platform/nix/EngineDesktop.cpp) # platform/nix/NDOF.cpp)	
+	list(APPEND main_src platform/nix/EngineDesktop.cpp platform/desktop/Sound.cpp) # platform/nix/NDOF.cpp)
 endif()
 
 # if (DEFINED IOS)
@@ -721,7 +724,8 @@ add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src} ${bg
 	${bgfx_utils_src} ${openmesh_src} ${rdestl_src} ${cppformat_src} ${recast_src}
 	${angelscript_src} ${bullet_src} ${voropp_src} ${ozz_src})
 
-target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype rt dl pthread m Enet)
+target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype rt dl
+	pthread m Enet soundio.a asound)
 
 if (DEFINED NOOB_PLATFORM_LINUX)
 	target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES})	

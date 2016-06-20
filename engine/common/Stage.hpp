@@ -87,14 +87,9 @@ namespace noob
 			
 			// Functions to create commonly-used configurations. Soon they'll return a tag used by the component system (in construction)
 			void actor(const noob::bodies_holder::handle, const noob::animated_models_holder::handle, const noob::globals::shader_results);
-
 			void actor(const noob::bodies_holder::handle, const noob::scaled_model, const noob::globals::shader_results);
-
 			// void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::scaled_model, const noob::globals::shader_results);
 			void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results, const noob::reflectances_holder::handle);
-
-			// void actor(const noob::shapes_holder::handle, const noob::vec3& pos, const noob::vec3& orient, const noob::vec3& scale, const noob::globals::shader_results);
-
 			// Scenery is a non-movable item that uses indexed triangle meshes as input.
 			void scenery(const noob::basic_mesh&, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results, const noob::reflectances_holder::handle, const std::string& name);
 

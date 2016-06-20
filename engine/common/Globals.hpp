@@ -24,6 +24,8 @@
 #include "ComponentDefines.hpp"
 #include "BasicRenderer.hpp"
 #include "TriplanarGradientMap.hpp"
+#include "Sound.hpp"
+
 
 namespace noob
 {
@@ -183,6 +185,8 @@ namespace noob
 			};
 		
 			noob::body_descriptor physical_body_descriptor, ghost_body_descriptor;
+
+			noob::sound audio;
 
 		protected:
 			std::map<size_t, noob::model_handle> shapes_to_models;

@@ -1,13 +1,7 @@
 #include "MathFuncs.hpp"
-#include <stdio.h>
-#define _USE_MATH_DEFINES
-#include <math.h>
 
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/quaternion.hpp>
-
-//#include <Eigen/Dense>
-
+// #include <glm/gtc/type_ptr.hpp>
+// #include <glm/gtc/quaternion.hpp>
 
 namespace noob
 {
