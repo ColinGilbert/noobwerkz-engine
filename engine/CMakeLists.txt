@@ -724,10 +724,9 @@ add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src} ${bg
 	${bgfx_utils_src} ${openmesh_src} ${rdestl_src} ${cppformat_src} ${recast_src}
 	${angelscript_src} ${bullet_src} ${voropp_src} ${ozz_src})
 
-target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype rt dl
-	pthread m Enet soundio.a asound)
+target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype Enet)
 
 if (DEFINED NOOB_PLATFORM_LINUX)
-	target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES})	
+	target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} rt dl pthread m soundio.a asound)	
 	# target_link_libraries(NoobEdit LINK_PUBLIC spnav)
 endif()
