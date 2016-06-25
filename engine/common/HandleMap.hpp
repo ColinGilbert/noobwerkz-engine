@@ -1,51 +1,53 @@
 #pragma once
 
-#include <rdestl/vector.h>
 #include <limits>
+#include <rdestl/rdestl.h>
+#include <rdestl/fixed_vector.h>
 
 namespace noob
 {
+	template <uint32_t N>
 	class handle_map
 	{
 		public:
-			handle_map() noexcept(true) {}
+			static const uint16_t limits = std::numeric_limits<uint16_t>::max();
+		
 			
-			static const uint32_t invalid = std::numeric_limits<uint32_t>::max();
-			
-			void add_pair(uint32_t k, uint32_t v) noexcept(true)
-			{
 
-			}
-			
-			void del_pair(uint32_t k, uint32_t v) noexcept(true)
-			{
 
+			uint32_t add(uint32_t k) noexcept(true)
+			{
 			}
 
-			void add_pairs(const rde::vector<rde::pair<uint32_t, uint32_t>>& p) noexcept(true)
+			rde::pair<uint32_t, uint32_t> erase(uint32_t k) noexcept(true)
 			{
-			
+				if (size > 0)
+				{
+					uint16_t val = keys[k];
+					uint16_t last_physical = size - 1;
+				}
 			}
 
-			void del_pairs(const rde::vector<rde::pair<uint32_t, uint32_t>>& p) noexcept(true)
+			uint32_t get_val_for_key(uint32_t k) noexcept(true)
 			{
-
+				
 			}
 
-			rde::vector<uint32_t> get_values_for_key(uint32_t k) noexcept(true)
+			uint32_t get_key_for_val(uint32_t v) noexcept(true)
 			{
-
+				
 			}
 
-			rde::vector<uint32_t> get_keys_for_value(uint32_t v) noexcept(true)
+			void clear() noexcept(true)
 			{
 				
 			}
 
 
 		protected:
-			rde::vector<uint32_t> keys;
-			rde::vector<uint32_t> values;
+			uint32_t size;
+			rde::fixed_vector<uint16_t, N, false> keys;
+			rde::fixed_vector<uint16_t, N, false> values;
 			
 	};
 }
