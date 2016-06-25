@@ -1,14 +1,17 @@
 cmake_minimum_required(VERSION 3.5)
 project(NoobWerkz)
 
-#set(CMAKE_BUILD_TYPE "DEBUG")
-set(CMAKE_BUILD_TYPE "RELEASE")
+set(CMAKE_BUILD_TYPE "DEBUG")
+#set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
 set(ASSIMP_FLAGS "-DASSIMP_BUILD_BOOST_WORKAROUND -DASSIMP_BUILD_NO_EXPORT -DASSIMP_BUILD_NO_XGL_IMPORTER -DASSIMP_BUILD_NO_FBX_IMPORTER -DASSIMP_BUILD_NO_C4D_IMPORTER -DASSIMP_BUILD_NO_X_IMPORTER -DASSIMP_BUILD_NO_OBJ_IMPORTER -DASSIMP_BUILD_NO_MD3_IMPORTER -DASSIMP_BUILD_NO_MD2_IMPORTER -DASSIMP_BUILD_NO_MDL_IMPORTER -DASSIMP_BUILD_NO_ASE_IMPORTER -DASSIMP_BUILD_NO_HMP_IMPORTER -DASSIMP_BUILD_NO_SMD_IMPORTER -DASSIMP_BUILD_NO_MDC_IMPORTER -DASSIMP_BUILD_NO_MD5_IMPORTER -DASSIMP_BUILD_NO_LWO_IMPORTER -DASSIMP_BUILD_NO_DXF_IMPORTER -DASSIMP_BUILD_NO_NFF_IMPORTER -DASSIMP_BUILD_NO_RAW_IMPORTER -DASSIMP_BUILD_NO_AC_IMPORTER -DASSIMP_BUILD_NO_BVH_IMPORTER -DASSIMP_BUILD_NO_IRRMESH_IMPORTER -DASSIMP_BUILD_NO_IRR_IMPORTER -DASSIMP_BUILD_NO_Q3D_IMPORTER -DASSIMP_BUILD_NO_B3D_IMPORTER -DASSIMP_BUILD_NO_COLLADA_IMPORTER -DASSIMP_BUILD_NO_TERRAGEN_IMPORTER -DASSIMP_BUILD_NO_CSM_IMPORTER -DASSIMP_BUILD_NO_3D_IMPORTER -DASSIMP_BUILD_NO_LWS_IMPORTER -DASSIMP_BUILD_NO_OGRE_IMPORTER -DASSIMP_BUILD_NO_OPENGEX_IMPORTER -DASSIMP_BUILD_NO_COB_IMPORTER -DASSIMP_BUILD_NO_BLEND_IMPORTER -DASSIMP_BUILD_NO_Q3BSP_IMPORTER -DASSIMP_BUILD_NO_NDO_IMPORTER -DASSIMP_BUILD_NO_IFC_IMPORTER ")
 
 set(CMAKE_CXX_FLAGS "-std=c++1y -fpermissive -DOM_STATIC_BUILD -DOM_GARBAGE_NO_STATUS_WARNING -DAS_CAN_USE_CPP11 -DEIGEN_MPL2_ONLY ${ASSIMP_FLAGS} ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-DSTB_IMAGE_STATIC -Wall ${CMAKE_C_FLAGS}")
+
+add_subdirectory(lib/freetype)
+include_directories(lib/freetype/include)
 
 include_directories(lib/eigen)
 include_directories(lib/brigand)
@@ -24,20 +27,16 @@ list (APPEND rdestl_src
 include_directories(lib/enet/src)
 add_subdirectory(lib/enet)
 
-
 include_directories(lib/cppformat)
 list (APPEND cppformat_src
 	lib/cppformat/format.cc
 	lib/cppformat/posix.cc
 	)
-#include_directories(lib/libsoundio/soundio)
-#add_subdirectory(lib/libsoundio)
 
 if (DEFINED NOOB_PLATFORM_LINUX)
 	add_subdirectory(lib/glfw)
 	include_directories(lib/glfw/include)	
 endif()
-
 
 include_directories(lib/bx/include)
 include_directories(lib/bgfx/include)
@@ -56,9 +55,6 @@ list(APPEND bgfx_utils_src
 	common/drawing/font/text_buffer_manager.cpp
 	common/drawing/font/cube_atlas.cpp
 	)
-
-add_subdirectory(lib/freetype)
-include_directories(lib/freetype/include)
 
 include_directories(lib/voropp/src)
 list (APPEND voropp_src
@@ -115,7 +111,6 @@ list(APPEND ozz_src
 
 include_directories(lib/assimp/include)
 include_directories(lib/assimp/code)
-#include_directories(lib/assimp/contrib/unzip)
 include_directories(lib/assimp/contrib/zlib)
 include_directories(lib/assimp/contrib/openddlparser/include)
 include_directories(lib/assimp/contrib/poly2tri)
@@ -476,7 +471,6 @@ list (APPEND bullet_src
 	)
 
 include_directories(lib/polyvox/include)
-#add_subdirectory(lib/rbdl)
 
 include_directories(lib/OpenMesh/src)
 list (APPEND openmesh_src
@@ -520,8 +514,6 @@ list (APPEND openmesh_src
 include_directories(lib/lemon)
 
 include_directories(lib/stb)
-
-#include_directories(lib/inline_variant_visitor)
 
 include_directories(common)
 include_directories(common/scripting)
@@ -656,6 +648,9 @@ list(APPEND angelscript_src
 include_directories(lib/network-host)
 include_directories(lib/logger)
 
+include_directories(lib/int-hashtable)
+list(APPEND hashtable-src lib/int-hashtable/FastHashTable.cpp)
+
 list(APPEND common_src
 	common/Globals.cpp
 	common/BasicMesh.cpp
@@ -712,7 +707,7 @@ list(APPEND user_src
 
 if (DEFINED NOOB_PLATFORM_LINUX)
 	include_directories(platform/nix)
-	list(APPEND main_src platform/nix/EngineDesktop.cpp platform/desktop/Sound.cpp) # platform/nix/NDOF.cpp)
+	list(APPEND main_src platform/nix/EngineDesktop.cpp platform/desktop/Sound.cpp)
 endif()
 
 # if (DEFINED IOS)
@@ -720,9 +715,7 @@ endif()
 # endif()
 
 
-add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src} ${bgfx_src}
-	${bgfx_utils_src} ${openmesh_src} ${rdestl_src} ${cppformat_src} ${recast_src}
-	${angelscript_src} ${bullet_src} ${voropp_src} ${ozz_src})
+add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${openmesh_src} ${rdestl_src}	${cppformat_src} ${recast_src} ${angelscript_src} ${bullet_src}	${voropp_src} ${ozz_src} ${hashtable-src})
 
 target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype Enet)
 

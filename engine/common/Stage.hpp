@@ -24,6 +24,8 @@
 #include "Component.hpp"
 #include "Globals.hpp"
 #include "ComponentDefines.hpp"
+#include "HandleMap.hpp"
+#include "FastHashTable.hpp"
 
 #include <standalone/brigand.hpp>
 
@@ -84,9 +86,9 @@ namespace noob
 
 			noob::joint_handle joint(const noob::body_handle a, const noob::vec3& point_on_a, const noob::body_handle b, const noob::vec3& point_on_b);
 			
-			
 			// Functions to create commonly-used configurations. Soon they'll return a tag used by the component system (in construction)
 			void actor(const noob::bodies_holder::handle, const noob::animated_models_holder::handle, const noob::globals::shader_results);
+			
 			void actor(const noob::bodies_holder::handle, const noob::scaled_model, const noob::globals::shader_results);
 			// void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::scaled_model, const noob::globals::shader_results);
 			void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results, const noob::reflectances_holder::handle);
@@ -110,8 +112,8 @@ namespace noob
 			
 			void remove_body(noob::body_handle);
 			
-			const int NUM_RESERVED_NODES = 12000;			
-			const int NUM_RESERVED_ARCS = 12000;
+			const int NUM_RESERVED_NODES = 8192;			
+			const int NUM_RESERVED_ARCS = 8192;
 
 			btBroadphaseInterface* broadphase;
 			btDefaultCollisionConfiguration* collision_configuration;
@@ -130,8 +132,8 @@ namespace noob
 			lemon::ListDigraph::NodeMap<std::array<float, 3>> scales_mapping;
 
 			// std::unordered_map<size_t, noob::shapes_holder::handle> bodies_to_shapes;
-			std::map<size_t, lemon::ListDigraph::Node> bodies_to_nodes;
-			std::map<size_t, lemon::ListDigraph::Node> basic_models_to_nodes;
+			noob::fast_hashtable bodies_to_nodes;
+			noob::fast_hashtable basic_models_to_nodes;
 			// std::map<size_t, lemon::ListDigraph::Node> shaders_to_nodes;
 			noob::directional_light directional_light;
 			std::array<noob::lights_holder::handle, MAX_LIGHTS> lights;

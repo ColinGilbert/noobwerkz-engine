@@ -227,20 +227,20 @@ noob::scaled_model noob::globals::model_by_shape(const noob::shapes_holder::hand
 			}
 		case(noob::shape::type::HULL):
 			{
-				auto search = shapes_to_models.find(h.get_inner());
-				if (search == shapes_to_models.end())
+				noob::fast_hashtable::cell* search = shapes_to_models.lookup(h.get_inner());
+				if (shapes_to_models.is_valid(search))
 				{
-					results.model_h = search->second;
+					results.model_h = basic_models.make_handle(search->value);
 					results.scales = noob::vec3(1.0, 1.0, 1.0);
 					return results;
 				}
 			}
 		case(noob::shape::type::TRIMESH):
 			{
-				auto search = shapes_to_models.find(h.get_inner());
-				if (search == shapes_to_models.end())
+				noob::fast_hashtable::cell* search = shapes_to_models.lookup(h.get_inner());
+				if (shapes_to_models.is_valid(search))
 				{
-					results.model_h = search->second;
+					results.model_h = basic_models.make_handle(search->value);
 					results.scales = noob::vec3(1.0, 1.0, 1.0);					
 					return results;
 				}

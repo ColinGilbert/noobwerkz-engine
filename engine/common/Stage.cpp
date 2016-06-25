@@ -206,21 +206,23 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::an
 
 void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::scaled_model model_info, const noob::globals::shader_results shader_h)
 {
-	auto body_results = bodies_to_nodes.find(body_h.get_inner());
 
-	if (body_results != bodies_to_nodes.end())
+	auto body_results = bodies_to_nodes.lookup(body_h.get_inner());
+
+	// Filter out duplicate bodies by checking existence in the table
+	if (bodies_to_nodes.is_valid(body_results))
 	{
-		logger::log("[Stage] Warning: Attempting to use duplicate body. Aborted.");
+		logger::log("[Stage] Warning: Attempting to create actor with duplicate body. Aborted.");
 		return;
 	}
 
 	lemon::ListDigraph::Node model_node;
 
-	auto model_results = basic_models_to_nodes.find(model_info.model_h.get_inner());
+	noob::fast_hashtable::cell* model_results = basic_models_to_nodes.lookup(model_info.model_h.get_inner());
 
-	if (model_results != basic_models_to_nodes.end())
+	if (basic_models_to_nodes.is_valid(model_results))
 	{
-		model_node = model_results->second;
+		model_node = draw_graph.nodeFromId(model_results->value);
 	}
 
 	else
@@ -231,7 +233,8 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::sc
 
 		draw_graph.addArc(root_node, model_node);
 
-		basic_models_to_nodes.insert(std::make_pair(model_info.model_h.get_inner(), model_node));
+		auto temp_cell = basic_models_to_nodes.insert(model_info.model_h.get_inner());
+		temp_cell->value = draw_graph.id(model_node);
 	}
 
 	bool shader_found = false;
@@ -258,6 +261,10 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::sc
 
 	lemon::ListDigraph::Node body_node = draw_graph.addNode();
 	bodies_mapping[body_node] = body_h.get_inner();
+
+	auto temp_body_cell = bodies_to_nodes.insert(body_h.get_inner());
+	temp_body_cell->value = draw_graph.id(body_node);
+
 	scales_mapping[body_node] = model_info.scales.v;
 	reflectances_mapping[body_node] = model_info.reflect_h.get_inner();
 	draw_graph.addArc(shader_node, body_node);
@@ -292,7 +299,10 @@ void noob::stage::actor(const noob::shapes_holder::handle shape_h , float mass, 
 		model_info.reflect_h = reflect_arg;
 		actor(body_h, model_info, shader_h);
 	}
-	else logger::log("[Stage] Attempting to create actor with static mesh.");
+	else
+	{
+		logger::log("[Stage] Attempting to create actor with static mesh.");
+	}
 }
 
 
@@ -360,7 +370,7 @@ noob::stage::ghost_intersection_results noob::stage::get_intersections(const noo
 	results.ghost = ghosts.make_handle(temp_ghost.inner->getUserIndex());
 
 	size_t num_pairs = pairArray.size();
-	
+
 	for (size_t i = 0; i < num_pairs; ++i)
 	{
 		manifold_array.clear();

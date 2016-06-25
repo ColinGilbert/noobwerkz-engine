@@ -8,6 +8,8 @@
 #pragma once
 
 #include <memory>
+#include <rdestl/hash_map.h>
+#include <rdestl/sorted_vector.h>
 
 #include "MathFuncs.hpp"
 #include "BasicMesh.hpp"
@@ -25,7 +27,7 @@
 #include "BasicRenderer.hpp"
 #include "TriplanarGradientMap.hpp"
 #include "Sound.hpp"
-
+#include "FastHashTable.hpp"
 
 namespace noob
 {
@@ -94,14 +96,11 @@ namespace noob
 			noob::shapes_holder::handle static_trimesh_shape(const noob::basic_mesh&, const std::string& name);
 
 			// Basic model creation. Those don't have bone weights built-in, so its lighter on the video card. Great for non-animated meshes and also scenery.
-			// If the name is the same as an existing model the new one replaces it, and everything should still work because the end-user only sees handles. :)
+			// If the name is the same as an existing model the new one replaces it, and everything should still work because the end-user only sees handles and the engine handles it under-the-hood. :)
 			noob::basic_models_holder::handle basic_model(const noob::basic_mesh&, const std::string& name);
 
-			// Loads a serialized model (from cereal binary)
-			// TODO: Expand all such functions to load from cereal binary (and soon also sqlite)
 			noob::animated_models_holder::handle animated_model(const std::string& filename);
 
-			// Skeletal animations (encompassing basic, single-bone animation...)
 			noob::skeletal_anims_holder::handle skeleton(const std::string& filename);
 
 			void set_shader(const noob::basic_renderer::uniform&, const std::string& name);
@@ -189,7 +188,9 @@ namespace noob
 			noob::sound audio;
 
 		protected:
-			std::map<size_t, noob::model_handle> shapes_to_models;
+
+			noob::fast_hashtable shapes_to_models;
+			rde::sorted_vector<float,size_t> spheres;
 			std::unordered_map<std::string, noob::shape_handle> names_to_shapes;
 			std::unordered_map<std::string, noob::model_handle> names_to_basic_models;
 			std::unordered_map<std::string, noob::globals::shader_results> names_to_shaders;
