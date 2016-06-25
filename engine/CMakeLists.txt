@@ -16,12 +16,12 @@ include_directories(lib/freetype/include)
 include_directories(lib/eigen)
 include_directories(lib/brigand)
 
-include_directories(lib/rdestl)
+include_directories(lib/rde)
 list (APPEND rdestl_src
-	lib/rdestl/rdestl/allocator.cpp
-	lib/rdestl/rdestl/intrusive_list.cpp
-	lib/rdestl/rdestl/intrusive_slist.cpp
-	lib/rdestl/rdestl/list.cpp
+	lib/rde/rdestl/allocator.cpp
+	lib/rde/rdestl/intrusive_list.cpp
+	lib/rde/rdestl/intrusive_slist.cpp
+	lib/rde/rdestl/list.cpp
 	)
 
 include_directories(lib/enet/src)

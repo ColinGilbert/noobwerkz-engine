@@ -2,7 +2,7 @@
 
 #include <limits>
 #include <rdestl/rdestl.h>
-#include <rdestl/fixed_vector.h>
+#include <rdestl/fixed_array.h>
 
 namespace noob
 {
@@ -46,8 +46,8 @@ namespace noob
 
 		protected:
 			uint32_t size;
-			rde::fixed_vector<uint16_t, N, false> keys;
-			rde::fixed_vector<uint16_t, N, false> values;
+			rde::fixed_array<uint16_t, N> keys;
+			rde::fixed_array<uint16_t, N> values;
 			
 	};
 }
