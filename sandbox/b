@@ -4,4 +4,5 @@ cmake -DNOOB_PLATFORM_LINUX:bool=true .. &&
 make -j8 &&
 #make &&
 cp NoobEdit ../../sandbox/e &&
-cd ../../sandbox
+cd ../../sandbox &&
+strip ./e

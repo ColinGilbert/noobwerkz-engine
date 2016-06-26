@@ -6,48 +6,71 @@
 
 namespace noob
 {
-	template <uint32_t N>
-	class handle_map
-	{
-		public:
-			static const uint16_t limits = std::numeric_limits<uint16_t>::max();
-		
-			
+	template <typename T>
+		class handle_map
+		{
+			public:
+				static const T invalid = std::numeric_limits<T>::max();
 
-
-			uint32_t add(uint32_t k) noexcept(true)
-			{
-			}
-
-			rde::pair<uint32_t, uint32_t> erase(uint32_t k) noexcept(true)
-			{
-				if (size > 0)
+				struct key_h
 				{
-					uint16_t val = keys[k];
-					uint16_t last_physical = size - 1;
+					key_h() noexcept(true) : inner(invalid) {}
+					key_h(T t) noexcept(true) : inner(t) {}
+					T inner;
+				};
+
+				struct val_h
+				{
+					val_h() noexcept(true) : inner(invalid) {}
+					val_h(T t) noexcept(true) : inner(invalid) {}
+					T inner;
+				};
+
+				void init(uint32_t n) noexcept(true)
+				{
+					keys.resize(n);
+					keys.resize(n);
+					rde::fill_n<T>(&keys[0], keys.size(), invalid);
+					rde::fill_n<T>(&values[0], values.size(), invalid);
 				}
-			}
 
-			uint32_t get_val_for_key(uint32_t k) noexcept(true)
-			{
-				
-			}
+				val_h add(key_h k) noexcept(true)
+				{
+					++size;
+					val_h val;
+					val.v = size;
+					values[val.v] = k;
+					keys[k] = val.inner;
+					return val;
+				}
 
-			uint32_t get_key_for_val(uint32_t v) noexcept(true)
-			{
-				
-			}
+				rde::pair<val_h, val_h> erase(key_h k) noexcept(true)
+				{
+					val_h val, last_val;
+					val.inner = keys[k.inner];
+					last_val.inner = size - 1;
+					--size;
+					T last_key = values[last_val.inner];
+					values[val] = last_key;
+					keys[last_key] = val.inner;
+					return rde::make_pair(last_val, val);
+				}
 
-			void clear() noexcept(true)
-			{
-				
-			}
+				val_h get_val_for_key(key_h k) noexcept(true)
+				{
+					return val_h(keys[k.inner]);
+				}
+
+				key_h get_key_for_val(val_h v) noexcept(true)
+				{
+					return key_h(values[v.inner]);
+				}
 
 
-		protected:
-			uint32_t size;
-			rde::fixed_array<uint16_t, N> keys;
-			rde::fixed_array<uint16_t, N> values;
-			
-	};
+			protected:
+				uint32_t size;
+				rde::vector<T> keys;
+				rde::vector<T> values;
+
+		};
 }
