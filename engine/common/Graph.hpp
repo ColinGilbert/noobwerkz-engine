@@ -192,16 +192,18 @@ namespace noob
 				return n_edges;
 			}
 
-
-			// TODO: Multithread.
 			bool has_loops() const noexcept(true)
 			{
+				// garbage_collection();
 				bool found, exhausted;
 				found = exhausted = false;
 
 				traveller t = get_traveller();
 				t.teleport(0);
 
+				// Add traversal code here.
+				
+				
 				return false;
 			}
 
@@ -261,6 +263,11 @@ namespace noob
 				uint32_t get_depth() const noexcept(true)
 				{
 					return depth;
+				}
+
+				const rde::vector<uint32_t>& get_path() const noexcept(true)
+				{
+					return path;
 				}
 
 				bool go_up() noexcept(true)
