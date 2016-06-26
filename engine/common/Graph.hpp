@@ -58,19 +58,12 @@ namespace noob
 			{
 				if (n == 0) return;
 
-				bool found = false;
 				if (n < nodes.size())
 				{
-					bool valid = false;
 					if (nodes[n])
 					{
-						valid = true;
 						--n_nodes;
 						nodes[n] = false;
-					}
-
-					if (valid)
-					{
 						garbage_collect();
 					}
 				}
@@ -102,6 +95,7 @@ namespace noob
 						if (i == b)
 						{
 							b_found = true;
+							break;
 						}
 					}
 					// If not, add it.
@@ -202,8 +196,8 @@ namespace noob
 				// t.teleport(0);
 
 				// Add traversal code here.
-				
-				
+
+
 				return false;
 			}
 
@@ -313,10 +307,10 @@ namespace noob
 
 				//bool has_next() const noexcept(true)
 				//{
-					// if (!nodes_ref[path[depth-1]]) return false;
-					//if (get_lookat_node() == invalid) return false;
+				// if (!nodes_ref[path[depth-1]]) return false;
+				//if (get_lookat_node() == invalid) return false;
 
-					//return true;
+				//return true;
 				// }
 
 				const rde::vector<uint32_t>& get_path() const noexcept(true)
