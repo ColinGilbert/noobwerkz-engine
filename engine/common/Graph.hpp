@@ -199,7 +199,7 @@ namespace noob
 				found = exhausted = false;
 
 				traveller t = get_traveller();
-				t.teleport(0);
+				// t.teleport(0);
 
 				// Add traversal code here.
 				
@@ -250,67 +250,79 @@ namespace noob
 					return path[depth];
 				}
 
-				uint32_t get_lookat_node() const noexcept(true)
-				{
-					return (it_ref->second)[lookat];
-				}
-
-				uint32_t get_lookat_index() const noexcept(true)
-				{
-					return lookat;
-				}
-
 				uint32_t get_depth() const noexcept(true)
 				{
 					return depth;
-				}
-
-				const rde::vector<uint32_t>& get_path() const noexcept(true)
-				{
-					return path;
 				}
 
 				bool go_up() noexcept(true)
 				{
 					// Nowhere to go upward.
 					if (depth == 0) return false;
-					// Parent invalidated since last visit.
-					if (!nodes_ref[path[depth-1]]) return false;
 
 					--depth;
-					it_ref = map_ref.find(nodes_ref[path[depth]]);
+					it_ref = map_ref.find(nodes_ref[path[depth-1]]);
 					lookat = 0;
 					return true;
 				}
 
+				bool can_go_down() const noexcept(true)
+				{
+					if (lookat >= (it_ref->second).size()) return false;
+					else return true;
+				}
+
 				bool go_down() noexcept(true)
 				{
+					if (!can_go_down()) return false;
+
 					uint32_t target = (it_ref->second)[lookat];
-					if (!nodes_ref[target]) return false;
 					it_ref = map_ref.find(target);
 					lookat = 0;
 					++depth;
 					path.reserve(depth);
-					path[depth] = target;
+					path[depth-1] = target;
+					return true;
+				}
+
+				bool can_go_left() const noexcept(true)
+				{
+					if (lookat == 0) return false;
 				}
 
 				bool go_left() noexcept(true)
 				{
-					if (lookat == 0) return false;
+					if (!can_go_left()) return false;
 
 					--lookat;
 					return true;
 				}
 
-				bool go_right() noexcept(true)
+				bool can_go_right() const noexcept(true)
 				{
 					if (lookat >= (it_ref->second).size()) return false;
+				}
+
+				bool go_right() noexcept(true)
+				{
+					if (!can_go_right()) return false;
 
 					++lookat;
 					return true;
 				}
 
+				//bool has_next() const noexcept(true)
+				//{
+					// if (!nodes_ref[path[depth-1]]) return false;
+					//if (get_lookat_node() == invalid) return false;
 
+					//return true;
+				// }
+
+				const rde::vector<uint32_t>& get_path() const noexcept(true)
+				{
+					return path;
+				}
 
 				protected:
 				uint32_t lookat, depth;
@@ -328,7 +340,8 @@ namespace noob
 
 				results.map_ref = edges;
 				results.nodes_ref = nodes;
-				results.it_ref = edges.end();
+				results.it_ref = edges.find(0);
+
 				return results;
 			}
 

@@ -26,6 +26,7 @@
 #include "ComponentDefines.hpp"
 #include "HandleMap.hpp"
 #include "FastHashTable.hpp"
+#include "Graph.hpp"
 
 #include <standalone/brigand.hpp>
 
@@ -114,6 +115,8 @@ namespace noob
 			
 			const int NUM_RESERVED_NODES = 8192;			
 			const int NUM_RESERVED_ARCS = 8192;
+
+			noob::dynamic_graph ng_graph;
 
 			btBroadphaseInterface* broadphase;
 			btDefaultCollisionConfiguration* collision_configuration;
