@@ -1,5 +1,5 @@
-// Currently, this map lacks the ability to lookup parents. This may change. Also, the edges are stored as a hash-map, which takes up more memory than it otherwise could. Benchmark and fix?
-// Also: Nodes that are marked as invalid get iterated over. This means
+// Currently, this map lacks the ability to rapidly lookup parents. This may change. Also, the edges are stored as a hash-map, which takes up more memory than it otherwise could. Benchmark and fix?
+// Nodes that are marked as invalid get ignored until discarded upon rebuild.
 
 #include <cstdint>
 #include <limits>
@@ -30,6 +30,13 @@ namespace noob
 	{
 		public:
 			static const uint32_t invalid = std::numeric_limits<uint32_t>::max();
+
+			struct node_h
+			{
+				node_h() noexcept(true) : inner(invalid) {}
+				node_h(uint32_t i) noexcept(true) : inner(i) {}
+				uint32_t inner;
+			};
 
 			dynamic_graph() noexcept(true) : n_edges(0), n_nodes(1), nodes({true}) {}
 
@@ -170,7 +177,7 @@ namespace noob
 				}
 			}
 
-			rde::vector<uint32_t> get_children(uint32_t n) noexcept(true)
+			rde::vector<uint32_t> get_children(uint32_t n) const noexcept(true)
 			{
 				auto it = edges.find(n);
 				if (it != edges.end())
@@ -180,7 +187,6 @@ namespace noob
 				rde::vector<uint32_t> results;
 				return results;
 			}
-
 
 			uint32_t num_nodes() const noexcept(true)
 			{
@@ -192,46 +198,20 @@ namespace noob
 				return n_edges;
 			}
 
-			/*
-			   void find_loops() noexcept(true)
-			   {
-			// garbage_collect();
 
-			// loops.clear();
-
-			bool exhausted = false;
-
-			rde::vector<uint32_t> path;
-
-			rde::vector<bool> visited(nodes.size());
-
-			for (uint32_t i = 0; i < visited.size(); ++i)
+			// TODO: Multithread.
+			bool has_loops() const noexcept(true)
 			{
-			visited[i] = false;
+				bool found, exhausted;
+				found = exhausted = false;
+
+				traveller t = get_traveller();
+				t.teleport(0);
+
+				return false;
 			}
 
-			uint32_t i = 0;
-			while (!exhausted)
-			{
-			if (i == visited.size() - 1)
-			{
-			exhausted = true;
-			}
-
-			visited[i] = true;
-			fix_children(i);
-
-			path.push_back(i);
-			rde::vector<uint32_t> res = find_first_loop(path);
-			if (!res.empty())
-			{
-			// We have a loop! Test each of its nodes in the loops hashmap to see if its a duplicate or not.
-
-			}
-			}
-			}
-
-*/			// NOTE: Gets rid of all edges between invalid nodes.
+			// NOTE: Gets rid of all edges between invalid nodes.
 			void garbage_collect() noexcept(true)
 			{	
 				// First, always ensure the root node always exists. :)
@@ -256,8 +236,106 @@ namespace noob
 
 			}
 
+			class traveller
+			{
+				friend class dynamic_graph;
+				public:
+					traveller() noexcept(true) : lookat(0), depth(0) {}
+
+					void teleport(uint32_t n) noexcept(true)
+					{
+						path.clear();
+						lookat = 0;
+						depth = 0;
+					}
+
+					uint32_t get_current() const noexcept(true)
+					{
+						return path[depth];
+					}
+
+					uint32_t get_lookat_node() const noexcept(true)
+					{
+						return (it_ref->second)[lookat];
+					}
+
+					uint32_t get_lookat_index() const noexcept(true)
+					{
+						return lookat;
+					}
+
+					uint32_t get_depth() const noexcept(true)
+					{
+						return depth;
+					}
+
+					bool go_up() noexcept(true)
+					{
+						// Nowhere to go upward.
+						if (depth == 0) return false;
+						// Parent invalidated since last visit.
+						if (!nodes_ref[path[depth-1]]) return false;
+					
+						--depth;
+						it_ref = map_ref.find(nodes_ref[path[depth]]);
+						lookat = 0;
+						return true;
+					}
+
+					bool go_down() noexcept(true)
+					{
+						uint32_t target = (it_ref->second)[lookat];
+						if (!nodes_ref[target]) return false;
+						it_ref = map_ref.find(target);
+						lookat = 0;
+						++depth;
+						path.reserve(depth);
+						path[depth] = target;
+					}
+
+					bool go_left() noexcept(true)
+					{
+						if (lookat == 0) return false;
+						
+						--lookat;
+						return true;
+					}
+
+					bool go_right() noexcept(true)
+					{
+						if (lookat <= (it_ref->second).size()) return false;
+					
+						++lookat;
+						return true;
+					}
+
+
+
+				protected:
+					uint32_t lookat, depth;
+					rde::hash_map<uint32_t, rde::vector<uint32_t>>& map_ref;
+					rde::vector<bool>& nodes_ref;
+					rde::hash_map<uint32_t, rde::vector<uint32_t>>::iterator& it_ref; 
+					rde::vector<uint32_t> path;
+			};
+
+
+
+			traveller get_traveller() const
+			{
+				traveller results;
+
+				results.map_ref = edges;
+				results.nodes_ref = nodes;
+				results.it_ref = edges.end();
+				return results;
+			}
+
+
+
 		protected:
-			// Both the methods below require you to pass in a number that is below nodes.size(). This is why they're marked as protected
+
+			// Both the methods below require you to pass in a number < nodes.size(). This is why they're marked as protected
 			// This simply calls the fix_children_with_ret function and does nothing with the results.
 			void fix_children(uint32_t n) noexcept(true)
 			{
@@ -322,10 +400,9 @@ namespace noob
 				return filtered;
 			}
 
-
 			// This is given a path with the candidate at the end and returns the first index that loops with it. The search starts at index "from".
 			// TODO: This is a rather general numerical function, and should be in a better-planned header
-			// NOTE: Will likely crash if "from" isn't lower than path.size() and if "path" is smaller than 2. :P This is why this function is (temporarily) in a protected namespace.
+			// NOTE: Will likely crash if "from" isn't lower than path.size() and if "path" is smaller than 1. :P This is why this function is (temporarily) in a protected namespace.
 			uint32_t find_first_loop(const rde::vector<uint32_t>& path, uint32_t from)
 			{
 				const uint32_t candidate_pos = path.size() - 1;
@@ -343,9 +420,9 @@ namespace noob
 						}
 					}
 				}
+
 				return invalid;
 			}
-
 
 			uint32_t n_edges, n_nodes;
 			// The boolean indicates whether the node is still valid (or whether it got deleted and is awaiting garbage collection)
