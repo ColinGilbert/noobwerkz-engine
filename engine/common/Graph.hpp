@@ -207,16 +207,17 @@ namespace noob
 				// First, always ensure the root node always exists. :)
 				nodes[0] = true;
 
-				rde::vector<bool> visited(nodes.size());
-				rde::fill_n<bool>(&visited[0], visited.size(), false);
+				// rde::vector<bool> visited(nodes.size());
+				// rde::fill_n<bool>(&visited[0], visited.size(), false);
 
 				for (uint32_t i = 0; i < nodes.size(); ++i)
 				{
-					rde::vector<uint32_t> children = fix_children_with_retval(i);
-					for (uint32_t c : children)
-					{
-						visited[c] = true;
-					}
+					fix_children(i);
+					// rde::vector<uint32_t> children = fix_children_with_retval(i);
+					// for (uint32_t c : children)
+					// {
+						// visited[c] = true;
+					// }
 				}
 			}
 
@@ -230,11 +231,12 @@ namespace noob
 			{
 				friend class dynamic_graph;
 				public:
-				traveller() noexcept(true) : lookat(0), depth(0) {}
+				traveller() noexcept(true) : lookat(0), depth(0), path({0}) {}
 
 				void teleport(uint32_t n) noexcept(true)
 				{
 					path.clear();
+					path.push_back(n);
 					lookat = 0;
 					depth = 0;
 				}
@@ -255,7 +257,7 @@ namespace noob
 					if (depth == 0) return false;
 
 					--depth;
-					it_ref = map_ref.find(nodes_ref[path[depth-1]]);
+					it_ref = map_ref.find(path[depth-1]);
 					lookat = 0;
 					return true;
 				}
@@ -321,7 +323,7 @@ namespace noob
 				protected:
 				uint32_t lookat, depth;
 				rde::hash_map<uint32_t, rde::vector<uint32_t>>& map_ref;
-				rde::vector<bool>& nodes_ref;
+				// rde::vector<bool>& nodes_ref;
 				rde::hash_map<uint32_t, rde::vector<uint32_t>>::iterator& it_ref; 
 				rde::vector<uint32_t> path;
 			};
@@ -333,7 +335,7 @@ namespace noob
 				traveller results;
 
 				results.map_ref = edges;
-				results.nodes_ref = nodes;
+				// results.nodes_ref = nodes;
 				results.it_ref = edges.find(0);
 
 				return results;
