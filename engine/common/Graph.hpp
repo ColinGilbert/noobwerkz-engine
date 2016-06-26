@@ -56,123 +56,117 @@ namespace noob
 
 			void del_node(uint32_t n) 
 			{
-				if (n > 0)
-				{
-					bool found = false;
-					if (n < nodes.size())
-					{
-						bool valid = false;
-						if (nodes[n])
-						{
-							valid = true;
-							--n_nodes;
-							nodes[n] = false;
-						}
+				if (n == 0) return;
 
-						if (valid)
-						{
-							garbage_collect();
-						}
+				bool found = false;
+				if (n < nodes.size())
+				{
+					bool valid = false;
+					if (nodes[n])
+					{
+						valid = true;
+						--n_nodes;
+						nodes[n] = false;
+					}
+
+					if (valid)
+					{
+						garbage_collect();
 					}
 				}
+
 			}
 
 			void add_edge(uint32_t a, uint32_t b) noexcept(true)
 			{
-				if (a < nodes.size() && b < nodes.size())
-				{
-					if (nodes[a] && nodes[b])
-					{
-						// No entry in the hashtable for A means no children. Create a vector with B in it and insert it.
-						auto it = edges.find(a);
-						if (it == edges.end())
-						{
-							// Create a vector with B.
-							rde::vector<uint32_t> v;
-							v.push_back(b);
-							// Insert it.
-							edges.insert(rde::make_pair(a, v));
-						}
+				if (a >= nodes.size() || b >= nodes.size()) return;
+				if (!nodes[a] || !nodes[b]) return;
 
-						// Iterate through A's children to see if there is already an edge between A and B.
-						else
+				// No entry in the hashtable for A means no children. Create a vector with B in it and insert it.
+				auto it = edges.find(a);
+				if (it == edges.end())
+				{
+					// Create a vector with B.
+					rde::vector<uint32_t> v;
+					v.push_back(b);
+					// Insert it.
+					edges.insert(rde::make_pair(a, v));
+				}
+
+				// Iterate through A's children to see if there is already an edge between A and B.
+				else
+				{
+					bool b_found = false;
+					for (uint32_t i: (it->second))
+					{
+						if (i == b)
 						{
-							bool b_found = false;
-							for (uint32_t i: (it->second))
-							{
-								if (i == b)
-								{
-									b_found = true;
-								}
-							}
-							// If not, add it.
-							if (!b_found)
-							{
-								++n_edges;
-								rde::vector<uint32_t> v(it->second);
-								v.push_back(b);
-								rde::quick_sort(&v[0], &v[0]+ v.size());
-								edges.erase(a);
-								edges.insert(rde::make_pair(a, v));
-							}
+							b_found = true;
 						}
+					}
+					// If not, add it.
+					if (!b_found)
+					{
+						++n_edges;
+						rde::vector<uint32_t> v(it->second);
+						v.push_back(b);
+						rde::quick_sort(&v[0], &v[0]+ v.size());
+						edges.erase(a);
+						edges.insert(rde::make_pair(a, v));
 					}
 				}
 			}
 
 			void del_edge(uint32_t a, uint32_t b) noexcept(true)
 			{
-				if (a < nodes.size() && b < nodes.size())
+				if (a > nodes.size() || b > nodes.size()) return;
+				if (!nodes[a] || !nodes[b]) return;
+
+				// Find A's children
+				auto it = edges.find(a);
+				// Now, if A even has any...
+				if (it != edges.end())
 				{
-					if (nodes[a] && nodes[b])
+					uint32_t found_at = invalid;
+
+					// Find if B is on the list and if so, record where it was found.
+					for (uint32_t i = 0; i < (it->second).size(); ++i)
 					{
-						// Find A's children
-						auto it = edges.find(a);
-						// Now, if A even has any...
-						if (it != edges.end())
+						if ((it->second)[i] == b)
 						{
-							uint32_t found_at = invalid;
+							found_at = i;
+							break;
+						}
+					}
 
-							// Find if B is on the list and if so, record where it was found.
-							for (uint32_t i = 0; i < (it->second).size(); ++i)
+					// If we actually found node B on our list, we proceed with the rest of our method...
+					if (found_at != invalid)
+					{
+						// We can assume that we're getting rid of at least one edge.
+						--n_edges;
+						// Get rid of our old list...
+						rde::vector<uint32_t> temp;
+						for (uint32_t i = 0; i < (it->second).size(); ++i)
+						{
+							if (i != found_at)
 							{
-								if ((it->second)[i] == b)
+								uint32_t index = (it->second)[i];
+								// If our child hasn't been deleted, we keep it.
+								if (nodes[index])
 								{
-									found_at = i;
-									break;
+									temp.push_back(index);
 								}
-							}
-
-							// If we actually found node B on our list, we proceed with the rest of our method...
-							if (found_at != invalid)
-							{
-								// We can assume that we're getting rid of at least one edge.
-								--n_edges;
-								// Get rid of our old list...
-								rde::vector<uint32_t> temp;
-								for (uint32_t i = 0; i < (it->second).size(); ++i)
+								// Otherwise decrement the edge count.
+								else
 								{
-									if (i != found_at)
-									{
-										uint32_t index = (it->second)[i];
-										// If our child hasn't been deleted, we keep it.
-										if (nodes[index])
-										{
-											temp.push_back(index);
-										}
-										// Otherwise decrement the edge count.
-										else
-										{
-											--n_edges;
-										}
-									}
+									--n_edges;
 								}
-
-								// Replace the edges.
-								edges.erase(a);
-								edges.insert(rde::make_pair(a, temp));
 							}
 						}
+
+						// Replace the edges.
+						edges.erase(a);
+						edges.insert(rde::make_pair(a, temp));
 					}
 				}
 			}
