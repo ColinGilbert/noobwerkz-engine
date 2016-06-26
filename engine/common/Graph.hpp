@@ -240,83 +240,83 @@ namespace noob
 			{
 				friend class dynamic_graph;
 				public:
-					traveller() noexcept(true) : lookat(0), depth(0) {}
+				traveller() noexcept(true) : lookat(0), depth(0) {}
 
-					void teleport(uint32_t n) noexcept(true)
-					{
-						path.clear();
-						lookat = 0;
-						depth = 0;
-					}
+				void teleport(uint32_t n) noexcept(true)
+				{
+					path.clear();
+					lookat = 0;
+					depth = 0;
+				}
 
-					uint32_t get_current() const noexcept(true)
-					{
-						return path[depth];
-					}
+				uint32_t get_current() const noexcept(true)
+				{
+					return path[depth];
+				}
 
-					uint32_t get_lookat_node() const noexcept(true)
-					{
-						return (it_ref->second)[lookat];
-					}
+				uint32_t get_lookat_node() const noexcept(true)
+				{
+					return (it_ref->second)[lookat];
+				}
 
-					uint32_t get_lookat_index() const noexcept(true)
-					{
-						return lookat;
-					}
+				uint32_t get_lookat_index() const noexcept(true)
+				{
+					return lookat;
+				}
 
-					uint32_t get_depth() const noexcept(true)
-					{
-						return depth;
-					}
+				uint32_t get_depth() const noexcept(true)
+				{
+					return depth;
+				}
 
-					bool go_up() noexcept(true)
-					{
-						// Nowhere to go upward.
-						if (depth == 0) return false;
-						// Parent invalidated since last visit.
-						if (!nodes_ref[path[depth-1]]) return false;
-					
-						--depth;
-						it_ref = map_ref.find(nodes_ref[path[depth]]);
-						lookat = 0;
-						return true;
-					}
+				bool go_up() noexcept(true)
+				{
+					// Nowhere to go upward.
+					if (depth == 0) return false;
+					// Parent invalidated since last visit.
+					if (!nodes_ref[path[depth-1]]) return false;
 
-					bool go_down() noexcept(true)
-					{
-						uint32_t target = (it_ref->second)[lookat];
-						if (!nodes_ref[target]) return false;
-						it_ref = map_ref.find(target);
-						lookat = 0;
-						++depth;
-						path.reserve(depth);
-						path[depth] = target;
-					}
+					--depth;
+					it_ref = map_ref.find(nodes_ref[path[depth]]);
+					lookat = 0;
+					return true;
+				}
 
-					bool go_left() noexcept(true)
-					{
-						if (lookat == 0) return false;
-						
-						--lookat;
-						return true;
-					}
+				bool go_down() noexcept(true)
+				{
+					uint32_t target = (it_ref->second)[lookat];
+					if (!nodes_ref[target]) return false;
+					it_ref = map_ref.find(target);
+					lookat = 0;
+					++depth;
+					path.reserve(depth);
+					path[depth] = target;
+				}
 
-					bool go_right() noexcept(true)
-					{
-						if (lookat <= (it_ref->second).size()) return false;
-					
-						++lookat;
-						return true;
-					}
+				bool go_left() noexcept(true)
+				{
+					if (lookat == 0) return false;
+
+					--lookat;
+					return true;
+				}
+
+				bool go_right() noexcept(true)
+				{
+					if (lookat >= (it_ref->second).size()) return false;
+
+					++lookat;
+					return true;
+				}
 
 
 
 				protected:
-					uint32_t lookat, depth;
-					rde::hash_map<uint32_t, rde::vector<uint32_t>>& map_ref;
-					rde::vector<bool>& nodes_ref;
-					rde::hash_map<uint32_t, rde::vector<uint32_t>>::iterator& it_ref; 
-					rde::vector<uint32_t> path;
+				uint32_t lookat, depth;
+				rde::hash_map<uint32_t, rde::vector<uint32_t>>& map_ref;
+				rde::vector<bool>& nodes_ref;
+				rde::hash_map<uint32_t, rde::vector<uint32_t>>::iterator& it_ref; 
+				rde::vector<uint32_t> path;
 			};
 
 
@@ -423,6 +423,9 @@ namespace noob
 
 				return invalid;
 			}
+
+			// Data members
+		protected:
 
 			uint32_t n_edges, n_nodes;
 			// The boolean indicates whether the node is still valid (or whether it got deleted and is awaiting garbage collection)
