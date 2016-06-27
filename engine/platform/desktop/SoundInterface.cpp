@@ -1,4 +1,4 @@
-#include "Sound.hpp"
+#include "SoundInterface.hpp"
 #include "Logger.hpp"
 
 #include <soundio/soundio.h>
@@ -63,7 +63,7 @@ static void write_callback(struct SoundIoOutStream *outstream, int frame_count_m
 	}
 }
 
-void noob::sound::init()
+void noob::sound_interface::init()
 {
 	int err;
 
@@ -124,7 +124,7 @@ void noob::sound::init()
 	{
 		fmt::MemoryWriter ww;
 
-		ww << "[Sound] Error: Unable to set SoundIO channel layout - " << soundio_strerror(outstream->layout_error);
+		ww << "[Sound] Warning: Unable to set SoundIO channel layout - " << soundio_strerror(outstream->layout_error);
 		noob::logger::log(ww.str());
 
 
@@ -146,7 +146,7 @@ void noob::sound::init()
 }
 
 
-void noob::sound::run()
+void noob::sound_interface::run()
 {
 	for (;;)
 	{
@@ -157,7 +157,7 @@ void noob::sound::run()
 	}
 }
 
-void noob::sound::tear_down()
+void noob::sound_interface::tear_down()
 {
 	valid = false;
 	soundio_outstream_destroy(outstream);
@@ -165,7 +165,6 @@ void noob::sound::tear_down()
 	soundio_destroy(soundio);
 }
 
-void noob::sound::play(const rde::vector<uint16_t>& sample)
-{
-
-}
+// void noob::sound_interface::play(const rde::vector<float>& sample)
+//{
+//}

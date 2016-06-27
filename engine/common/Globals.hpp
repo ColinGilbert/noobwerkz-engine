@@ -26,7 +26,7 @@
 #include "ComponentDefines.hpp"
 #include "BasicRenderer.hpp"
 #include "TriplanarGradientMap.hpp"
-#include "Sound.hpp"
+#include "SoundInterface.hpp"
 #include "FastHashTable.hpp"
 
 namespace noob
@@ -185,7 +185,7 @@ namespace noob
 		
 			noob::body_descriptor physical_body_descriptor, ghost_body_descriptor;
 
-			noob::sound audio;
+			noob::sound_interface audio_interface;
 
 		protected:
 

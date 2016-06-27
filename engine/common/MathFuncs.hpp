@@ -1,5 +1,5 @@
-// This class is used for convenience, and for providing a convenient API for AngelScript
-// TODO: Convert to Eigen
+// This class is used for C++ convenience, and for providing an API for AngelScript
+// TODO: Convert to Eigen and test
 #pragma once
 
 #include <cmath>
@@ -320,22 +320,6 @@ namespace noob
 		{
 			return q[x];
 		}
-
-		/*
-		   float get_opIndex(int i) const
-
-		   {
-		   if (i > 8 ) return m[8];
-		   if (i < 0) return m[0];
-		   return m[i];
-		   }
-
-		   void set_opIndex(int i, float value)
-		   {
-		   if (i > 8 && i < 0) return;
-		   m[i] = value;
-		   }
-		   */
 
 		float get_opIndex(int i) const
 		{

@@ -707,7 +707,7 @@ list(APPEND user_src
 
 if (DEFINED NOOB_PLATFORM_LINUX)
 	include_directories(platform/nix)
-	list(APPEND main_src platform/nix/EngineDesktop.cpp platform/desktop/Sound.cpp)
+	list(APPEND main_src platform/nix/EngineDesktop.cpp platform/desktop/SoundInterface.cpp)
 endif()
 
 # if (DEFINED IOS)

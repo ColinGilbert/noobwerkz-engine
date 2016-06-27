@@ -9,11 +9,9 @@
 #include <rdestl/rdestl.h>
 #include <rdestl/hash_map.h>
 #include <rdestl/algorithm.h>
-// #include "HandleMap.hpp"
 
 namespace noob
 {
-
 	class implicit_graph
 	{
 		public:
@@ -189,30 +187,44 @@ namespace noob
 
 			bool has_loops() const noexcept(true)
 			{
-				// garbage_collection();
 				bool exhausted = false;
 
 				traveller t = get_traveller();
-				
+
+				rde::vector<bool> visited(nodes.size());
+				rde::fill_n<bool>(&visited[0], visited.size(), false);
+
 				while(!exhausted)
 				{
-					// Test path for loops
-					
-					// if (!find_first_loop(t.get_path()).empty()) return true;
-					// Go down, the right (dfs)
-					if (t.go_down())
+					if (!visited[t.get_current()])
 					{
-						if(find_first_loop(t.get_path(),0) != invalid) return true;
+						if (find_first_loop(t.get_path(), 0) != invalid)
+						{
+							return true;
+						}
+					}
+
+					if (!visited[t.get_lookat()])
+					{
+						if (t.go_down())
+						{
+							visited[t.get_current()] = true;
+						}
 					}
 					else 
 					{
-						
+						if (!t.go_right())
+						{
+							if (!t.go_up())
+							{
+								exhausted = true;
+							}
+						}
 					}
+
+					return false;
 				}
-
-				return false;
 			}
-
 			// NOTE: Gets rid of all edges between invalid nodes.
 			void garbage_collect() noexcept(true)
 			{	
@@ -228,7 +240,7 @@ namespace noob
 					// rde::vector<uint32_t> children = fix_children_with_retval(i);
 					// for (uint32_t c : children)
 					// {
-						// visited[c] = true;
+					// visited[c] = true;
 					// }
 				}
 			}
@@ -256,20 +268,25 @@ namespace noob
 					current_depth = 0;
 				}
 
-				uint32_t get_node_id() const noexcept(true)
+				uint32_t get_current() const noexcept(true)
 				{
 					return path[current_depth];
+				}
+
+				uint32_t get_lookat() const noexcept(true)
+				{
+					return path[lookat];
 				}
 
 				uint32_t get_depth() const noexcept(true)
 				{
 					return current_depth;
 				}
-				
+
 				bool can_go_up() const noexcept(true)
 				{
 					if (current_depth == 0) return false;
-					
+
 					return true;
 				}
 
@@ -295,7 +312,7 @@ namespace noob
 
 					uint32_t target = (it_ref->second)[lookat];
 					it_ref = map_ref.find(target);
-					
+
 					lookat = 0;
 					++current_depth;
 					max_depth = rde::max(max_depth, current_depth);
@@ -346,8 +363,6 @@ namespace noob
 				rde::hash_map<uint32_t, rde::vector<uint32_t>>::iterator& it_ref; 
 				rde::vector<uint32_t> path;
 			};
-
-
 
 			traveller get_traveller() const
 			{

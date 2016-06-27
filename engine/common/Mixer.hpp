@@ -1,24 +1,27 @@
 #pragma once
 
-#include <rdestl/vector.h>
-#include <rdestl/pair.h>
-#include "Component.hpp"
-#include "ComponentDefines.hpp"
+nclude <Eigen/Eigen.h>
 
 namespace noob
 {
-	class sound_pool
+	class mixer
 	{
-		
 		public:
-			// First element is start index. Last element is stop index.
-			uint32_t add_clip(const rde::vector<uint16_t>& samples, const rde::string& name)
+			mixer() noexcept(true) : current(0.0) {}
+			
+			float get_sample() const noexcept(true)
 			{
-				
+			}
+
+			void mix_sample(float s) const noexcept(true)
+			{
+			}
+
+			void next_sample() const noexcept(true)
+			{
 			}
 
 		protected:
-			rde::vector<uint16_t> pool;
-			noob::component<uint32_t> start_positions;
-	};
+			float current;
+	}
 }
