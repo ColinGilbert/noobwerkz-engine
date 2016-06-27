@@ -1,6 +1,6 @@
 #pragma once
 
-nclude <Eigen/Eigen.h>
+#include <Eigen/Eigen.h>
 
 namespace noob
 {
