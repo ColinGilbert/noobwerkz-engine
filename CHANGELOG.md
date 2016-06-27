@@ -1,9 +1,13 @@
 CHANGELOG:
 
 
-Version 0.3 AKA: "Android and iOS ports" (in progress)
+Version 0.3 AKA: "Smorgasbord of Delights"
 ```
-Port to iOS and Android
+Began adding sound
+Performance enhancements
+Cleaned up components system
+Created graph class (without exceptions!) to implement our own algorithms. Will eventually replace more cumbersome third-party libs that link in lots of extra binary and force exceptions onto the whole project.
+Cleanups all over :P
 ```
 
 Version 0.2.5: "Deboostify feat. Graphix Magix, Act Two"

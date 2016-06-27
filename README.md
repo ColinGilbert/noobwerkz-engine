@@ -13,7 +13,7 @@ These can provide a sense of direction as to the direction of the project; I enc
 
 High-quality tutorials and real unit tests will come when the implementation is more or less set in stone.
 
-Current version: Version 0.2.5: "Deboostify feat. Graphix Magix, Act Two"
+Current version: Version 0.3: "Smorgasbord of Delights"
 
 Specific features:
 ```
