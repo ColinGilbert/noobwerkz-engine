@@ -6,7 +6,7 @@ bool noob::globals::init()
 {
 	physical_body_descriptor.physical = true;
 	ghost_body_descriptor.physical = false;
-	
+
 	basic_drawer.init();
 	triplanar_drawer.init();
 
@@ -66,10 +66,10 @@ bool noob::globals::init()
 	noob::reflectance r;
 	default_reflectance = set_reflectance(r, "default");
 	// logger::log("[Globals] Got default triplanar shader handle.");
-	
+
 	audio_interface.init();
-	
-	
+
+
 	logger::log("[Globals] Init complete.");
 	return true;
 }
@@ -460,7 +460,6 @@ noob::light_handle noob::globals::get_light(const std::string& s) const
 }
 
 
-
 noob::reflectance_handle noob::globals::set_reflectance(const noob::reflectance& r, const std::string& s)
 {
 	auto search = names_to_reflectances.find(s);
@@ -489,15 +488,6 @@ noob::reflectance_handle noob::globals::get_reflectance(const std::string& s) co
 	return temp;
 }
 
-
-
-
-/*
-   noob::light noob::globals::get_light(const noob::light_handle h) const
-   {
-   return lights.get(h);
-   }
-   */
 
 void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std::string& name)
 {

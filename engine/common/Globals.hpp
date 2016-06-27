@@ -43,9 +43,9 @@ namespace noob
 	{
 		friend class globals;
 		public:
-			bool is_physical() { return physical; }
+		bool is_physical() { return physical; }
 		protected:
-			bool physical;
+		bool physical;
 	};
 
 	class globals
@@ -54,12 +54,12 @@ namespace noob
 			static globals* ptr_to_instance;
 
 			globals() {}
-			
+
 			globals(const globals& rhs)
 			{
 				ptr_to_instance = rhs.ptr_to_instance;
 			}
-			
+
 			globals& operator=(const globals& rhs)
 			{
 				if (this != &rhs)
@@ -68,17 +68,17 @@ namespace noob
 				}
 				return *this;
 			}
-			
+
 			~globals() {}
 		public:
 			static globals& get_instance()
 			{
 				static globals the_instance;
 				ptr_to_instance = &the_instance;
-				
+
 				return *ptr_to_instance;
 			}
-			
+
 			// Provides sane defaults in order not to crash the app in case of erroneous access.
 			bool init();
 
@@ -182,7 +182,7 @@ namespace noob
 				TEAM_B = 1 << 4,
 				POWERUP = 1 << 5,
 			};
-		
+
 			noob::body_descriptor physical_body_descriptor, ghost_body_descriptor;
 
 			noob::sound_interface audio_interface;
