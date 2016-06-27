@@ -88,19 +88,19 @@ namespace noob
 			noob::joint_handle joint(const noob::body_handle a, const noob::vec3& point_on_a, const noob::body_handle b, const noob::vec3& point_on_b);
 			
 			// Functions to create commonly-used configurations. Soon they'll return a tag used by the component system (in construction)
-			void actor(const noob::bodies_holder::handle, const noob::animated_models_holder::handle, const noob::globals::shader_results);
+			void actor(const noob::body_handle, const noob::animated_model_handle, const noob::globals::shader_results);
 			
-			void actor(const noob::bodies_holder::handle, const noob::scaled_model, const noob::globals::shader_results);
-			// void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::scaled_model, const noob::globals::shader_results);
-			void actor(const noob::shapes_holder::handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results, const noob::reflectances_holder::handle);
+			void actor(const noob::body_handle, const noob::scaled_model, const noob::globals::shader_results);
+			// void actor(const noob::shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::scaled_model, const noob::globals::shader_results);
+			void actor(const noob::shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results, const noob::reflectance_handle);
 			// Scenery is a non-movable item that uses indexed triangle meshes as input.
-			void scenery(const noob::basic_mesh&, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results, const noob::reflectances_holder::handle, const std::string& name);
+			void scenery(const noob::basic_mesh&, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results, const noob::reflectance_handle, const std::string& name);
 
-			void set_light(unsigned int, const noob::lights_holder::handle);
+			void set_light(unsigned int, const noob::light_handle);
 
 			void set_directional_light(const noob::directional_light&);
 
-			noob::lights_holder::handle get_light(unsigned int i) const;
+			noob::light_handle get_light(unsigned int i) const;
 			
 			noob::stage::ghost_intersection_results get_intersections(const noob::ghost_handle) const;
 			
@@ -134,12 +134,12 @@ namespace noob
 			lemon::ListDigraph::NodeMap<std::array<size_t, 4>> lights_mapping;
 			lemon::ListDigraph::NodeMap<std::array<float, 3>> scales_mapping;
 
-			// std::unordered_map<size_t, noob::shapes_holder::handle> bodies_to_shapes;
+			// std::unordered_map<size_t, noob::shape_handle> bodies_to_shapes;
 			noob::fast_hashtable bodies_to_nodes;
 			noob::fast_hashtable basic_models_to_nodes;
 			// std::map<size_t, lemon::ListDigraph::Node> shaders_to_nodes;
 			noob::directional_light directional_light;
-			std::array<noob::lights_holder::handle, MAX_LIGHTS> lights;
+			std::array<noob::light_handle, MAX_LIGHTS> lights;
 
 			bool ghosts_initialized;
 	};

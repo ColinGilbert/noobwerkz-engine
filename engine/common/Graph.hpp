@@ -66,7 +66,6 @@ namespace noob
 						garbage_collect();
 					}
 				}
-
 			}
 
 			void add_edge(uint32_t a, uint32_t b) noexcept(true)
@@ -196,12 +195,9 @@ namespace noob
 
 				while(!exhausted)
 				{
-					if (!visited[t.get_current()])
+					if (visited[t.get_current()] && t.get_current() != 0)
 					{
-						if (find_first_loop(t.get_path(), 0) != invalid)
-						{
-							return true;
-						}
+						return true;
 					}
 
 					if (!visited[t.get_lookat()])
@@ -225,6 +221,7 @@ namespace noob
 					return false;
 				}
 			}
+
 			// NOTE: Gets rid of all edges between invalid nodes.
 			void garbage_collect() noexcept(true)
 			{	
@@ -244,11 +241,19 @@ namespace noob
 					// }
 				}
 			}
-
+			
 			// The bool refers to whether the sort succeeded or not, and each pair symbolizes a mapping from an old position to a new one. These results are used to update client-side code.
-			rde::pair<bool, rde::vector<rde::pair<uint32_t, uint32_t>>> topological_sort() noexcept(true)
+			rde::pair<bool, noob::implicit_graph> topological_sort() noexcept(true)
 			{
+				noob::implicit_graph results;
+				if (has_loops())
+				{
+					return rde::make_pair(false, results);
+				}
+				
+				
 
+				return rde::make_pair(true, results);
 			}
 
 			// IMPORTANT: Graph travellers are a very thin abstraction intended for transient scopes and under NO circumstances should they EVER be kept around after your function is done using them.

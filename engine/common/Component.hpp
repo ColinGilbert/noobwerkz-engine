@@ -11,111 +11,88 @@ namespace noob
 	class application;
 
 	template <typename T>
-	class component 
+		class handle
 		{
-			friend class application;
 			public:
-			class handle
+
+			handle() noexcept(true) : inner(0) {}
+
+			bool operator==(const noob::handle<T> other) const noexcept(true)
 			{
-				friend class component;
-				friend class application;
-
-				public:
-
-				handle() noexcept(true) : inner(0) {}
-
-				bool operator==(const noob::component<T>::handle other) const noexcept(true)
-				{
-					return (inner == other.inner);
-				}
-
-				bool operator!=(const noob::component<T>::handle other) const noexcept(true)
-				{
-					return (inner != other.inner);
-				}
-
-				bool operator<(const noob::component<T>::handle other) const noexcept(true)
-				{
-					return (inner < other.inner); 
-				}
-
-				bool operator>(const noob::component<T>::handle other) const noexcept(true)
-				{
-					return (inner > other.inner); 
-				}
-
-				uint32_t get_inner() const noexcept(true)
-				{
-					return inner;
-				}
-
-				protected:
-
-				uint32_t inner;
-			};
-
-			T get(component<T>::handle h) noexcept(true)
-			{
-				if (exists(h)) return items[h.inner];
-				else 
-				{
-					logger::log("Invalid access to component");
-					return items[0];
-				}	
+				return (inner == other.inner);
 			}
 
-			T get(uint32_t i) noexcept(true)
+			bool operator!=(const noob::handle<T> other) const noexcept(true)
 			{
-				handle h = make_handle(i);
-				if (exists(h)) return items[h.inner];
-				else 
-				{
-					logger::log("Invalid access to component");
-					return items[0];
-				}	
+				return (inner != other.inner);
 			}
 
-			T& get_ref(uint32_t i) noexcept(true)
+			bool operator<(const noob::handle<T> other) const noexcept(true)
 			{
-				handle h = make_handle(i);
-				if (exists(h)) return items[h.inner];
-				else
-				{
-					logger::log("Invalid access to component ref");
-				}
+				return (inner < other.inner); 
 			}
 
-			T& get_ref(component<T>::handle h) noexcept(true)
+			bool operator>(const noob::handle<T> other) const noexcept(true)
 			{
-				return get_ref(h.inner);
+				return (inner > other.inner); 
 			}
 
-			component<T>::handle add(const T& t) noexcept(true)
+			uint32_t get_inner() const noexcept(true)
 			{
-				items.push_back(t);
-				handle h;
-				h.inner = items.size() - 1;
-				return h;
+				return inner;
 			}
 
-			bool exists(component<T>::handle h) noexcept(true)
-			{
-				return (h.inner < items.size());
-			}
-
-			void set(component<T>::handle h, const T t) noexcept(true)
-			{
-				if (exists(h))
-				{
-					items[h.inner] = t;
-				}
-			}
-
-			component<T>::handle make_handle(unsigned int i) noexcept(true)
+			static handle make(uint32_t i)
 			{
 				handle h;
 				h.inner = i;
 				return h;
+			}
+
+			protected:
+
+			uint32_t inner;
+		};
+
+	template <typename T>
+		class component 
+		{
+			friend class application;
+			public:
+
+			T get(noob::handle<T> h) noexcept(true)
+			{
+				if (exists(h)) return items[h.get_inner()];
+				else 
+				{
+					logger::log("Invalid access to component");
+					return items[0];
+				}	
+			}
+
+			T& get_ref(handle<T> h) noexcept(true)
+			{
+				return get_ref(h.get_inner());
+			}
+
+			handle<T> add(const T& t) noexcept(true)
+			{
+				items.push_back(t);
+				
+				return handle<T>::make(items.size() - 1);
+			}
+
+			bool exists(handle<T> h) noexcept(true)
+			{
+				return (h.get_inner() < items.size());
+			}
+
+			void set(handle<T> h, const T t) noexcept(true)
+			{
+				if (exists(h))
+				{
+					items[h.get_inner()] = t;
+				}
 			}
 
 			void empty() noexcept(true)
@@ -133,56 +110,15 @@ namespace noob
 			rde::vector<T> items;
 		};
 
-
-	template<typename T>
-		class component <std::unique_ptr<T>> 
+	template <typename T>
+		class component_dynamic
 		{
 			public:
-				class handle
-				{
-					friend class application;					
-					friend class component;
-
-					public:
-
-					handle() noexcept(true) : inner(0) {}
-
-					bool operator==(const noob::component<std::unique_ptr<T>>::handle other) const noexcept(true)
-					{
-						return (inner == other.inner);
-					}
-
-					bool operator!=(const noob::component<std::unique_ptr<T>>::handle other) const noexcept(true)
-					{
-						return (inner != other.inner);
-					}
-
-					bool operator<(const noob::component<std::unique_ptr<T>>::handle other) const noexcept(true)
-					{
-						return (inner < other.inner); 
-					}
-
-					bool operator>(const noob::component<std::unique_ptr<T>>::handle other) const noexcept(true)
-					{
-						return (inner > other.inner); 
-					}
-
-
-					uint32_t get_inner() const noexcept(true)
-					{
-						return inner;
-					}
-
-					protected:
-
-					uint32_t inner;
-				};
-				
-				T* get(component<std::unique_ptr<T>>::handle h) noexcept(true)
+				T* get(handle<T> h) noexcept(true)
 				{
 					if (exists(h)) 
 					{
-						T* temp = items[h.inner].get();
+						T* temp = items[h.get_inner()].get();
 						return temp;
 					}
 					else 
@@ -192,50 +128,25 @@ namespace noob
 					}
 				}
 
-
-				T* get(uint32_t i) noexcept(true)
-				{
-					handle h = make_handle(i);
-					if (exists(h)) 
-					{
-						T* temp = items[h.inner].get();
-						return temp;
-					}
-					else 
-					{
-						logger::log("Invalid access to component");
-						return items[0].get();
-					}
-				}
-
-				component<std::unique_ptr<T>>::handle add(std::unique_ptr<T>&& t) noexcept(true)
+				handle<T> add(std::unique_ptr<T>&& t) noexcept(true)
 				{
 					// items.emplace_back(std::move(t));
 					items.push_back(std::move(t));
-					handle h;
-					h.inner = items.size() - 1;
-					return h;
+					return handle<T>::make(items.size()-1);
 				}
 
-				bool exists(component<std::unique_ptr<T>>::handle h) noexcept(true)
+				bool exists(handle<T> h) noexcept(true)
 				{
-					bool results = h.inner < items.size();
+					bool results = h.get_inner() < items.size();
 					return results;
 				}
 
-				void set(component<std::unique_ptr<T>>::handle h, std::unique_ptr<T>&& t) noexcept(true)
+				void set(handle<T> h, std::unique_ptr<T>&& t) noexcept(true)
 				{
 					if (exists(h))
 					{
-						items[h.inner] = std::move(t);
+						items[h.get_inner()] = std::move(t);
 					}
-				}
-
-				component<std::unique_ptr<T>>::handle make_handle(unsigned int i) noexcept (true)
-				{
-					handle h;
-					h.inner = i;
-					return h;
 				}
 
 				void empty() noexcept(true)
@@ -247,7 +158,6 @@ namespace noob
 				{
 					return items.size();
 				}
-
 
 			protected:
 

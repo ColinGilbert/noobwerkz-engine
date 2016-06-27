@@ -35,7 +35,7 @@ void noob::stage::tear_down()
 
 	for (size_t i = 0; i < bodies.count(); ++i)
 	{
-		remove_body(bodies.make_handle(i));
+		remove_body(body_handle::make(i));
 	}
 
 	bodies.empty();
@@ -101,16 +101,16 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 
 				// Prior to this hack, we fed the results of body.get_orientation directly into the rotate() function.
 				// This caused all objects drawn flipped about the x-axis 180 degrees
-				noob::versor original_quat = bodies.get(body_h).get_orientation();
+				noob::versor original_quat = bodies.get(body_handle::make(body_h)).get_orientation();
 				noob::versor temp_quat(original_quat.q[3], original_quat.q[2], original_quat.q[1], original_quat.q[0]); 
 
 				world_mat = noob::rotate(world_mat, temp_quat);//bodies.get(body_h).get_orientation());
 				world_mat = noob::scale(world_mat, noob::vec3(scales_mapping[body_node]));												
-				world_mat = noob::translate(world_mat, bodies.get(body_h).get_position());												
+				world_mat = noob::translate(world_mat, bodies.get(body_handle::make(body_h)).get_position());												
 				noob::mat4 normal_mat = noob::transpose(noob::inverse((world_mat * view_mat)));
 
 				noob::reflectance temp_reflect;
-				temp_reflect = g.reflectances.get(reflectances_mapping[body_node]);
+				temp_reflect = g.reflectances.get(reflectance_handle::make(reflectances_mapping[body_node]));
 
 				// std::array<noob::light, 4> temp_lights;
 				// std::array<size_t, 4> lights_h = lights_mapping[body_node];
@@ -124,12 +124,12 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 				{
 					case(noob::shader_type::BASIC):
 						{
-							g.basic_drawer.draw(g.basic_models.get(model_h), world_mat, normal_mat, eye_pos, g.basic_shaders.get(shader_h.handle), temp_reflect, temp_lights, 0);
+							g.basic_drawer.draw(g.basic_models.get(model_handle::make(model_h)), world_mat, normal_mat, eye_pos, g.basic_shaders.get(basic_shader_handle::make(shader_h.handle)), temp_reflect, temp_lights, 0);
 							break;
 						}
 					case(noob::shader_type::TRIPLANAR):
 						{
-							g.triplanar_drawer.draw(g.basic_models.get(model_h), world_mat, normal_mat, eye_pos, g.triplanar_shaders.get(shader_h.handle), temp_reflect, temp_lights, 0);
+							g.triplanar_drawer.draw(g.basic_models.get(model_handle::make(model_h)), world_mat, normal_mat, eye_pos, g.triplanar_shaders.get(triplanar_shader_handle::make(shader_h.handle)), temp_reflect, temp_lights, 0);
 							break;
 						}
 					default:
@@ -158,7 +158,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 }
 
 
-noob::body_handle noob::stage::add_body(const noob::body_type b_type, const noob::shapes_holder::handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
+noob::body_handle noob::stage::add_body(const noob::body_type b_type, const noob::shape_handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
 {
 	noob::globals& g = noob::globals::get_instance();
 	noob::body b;
@@ -170,7 +170,7 @@ noob::body_handle noob::stage::add_body(const noob::body_type b_type, const noob
 }
 
 
-noob::ghost_handle noob::stage::add_ghost(const noob::shapes_holder::handle shape_h, const noob::vec3& pos, const noob::versor& orient)
+noob::ghost_handle noob::stage::add_ghost(const noob::shape_handle shape_h, const noob::vec3& pos, const noob::versor& orient)
 {
 	if (!ghosts_initialized)
 	{
@@ -198,13 +198,13 @@ noob::joint_handle noob::stage::joint(const noob::body_handle a, const noob::vec
 }
 
 
-void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::animated_models_holder::handle model_h, const noob::globals::shader_results shader_h)
+void noob::stage::actor(const noob::body_handle body_h, const noob::animated_model_handle model_h, const noob::globals::shader_results shader_h)
 {
 
 }
 
 
-void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::scaled_model model_info, const noob::globals::shader_results shader_h)
+void noob::stage::actor(const noob::body_handle body_h, const noob::scaled_model model_info, const noob::globals::shader_results shader_h)
 {
 
 	auto body_results = bodies_to_nodes.lookup(body_h.get_inner());
@@ -270,7 +270,7 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::sc
 	draw_graph.addArc(shader_node, body_node);
 
 	noob::globals& g = noob::globals::get_instance();
-	noob::lights_holder::handle light_h = g.default_light;
+	noob::light_handle light_h = g.default_light;
 	lights_mapping[body_node] = {light_h.get_inner(), light_h.get_inner(), light_h.get_inner(), light_h.get_inner()};
 
 	// fmt::MemoryWriter ww;
@@ -280,21 +280,21 @@ void noob::stage::actor(const noob::bodies_holder::handle body_h, const noob::sc
 
 
 /*
-   void noob::stage::actor(const noob::shapes_holder::handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::scaled_model model_info, const noob::globals::shader_results shader_h)
+   void noob::stage::actor(const noob::shape_handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::scaled_model model_info, const noob::globals::shader_results shader_h)
    {
-   noob::bodies_holder::handle body_h = body(noob::body_type::DYNAMIC, shape_h, mass, pos, orient);
+   noob::body_handle body_h = body(noob::body_type::DYNAMIC, shape_h, mass, pos, orient);
    actor(body_h, model_info, shader_h);
    }
    */
 
 
-void noob::stage::actor(const noob::shapes_holder::handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results shader_h, const noob::reflectances_holder::handle reflect_arg)
+void noob::stage::actor(const noob::shape_handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results shader_h, const noob::reflectance_handle reflect_arg)
 {
 	noob::globals& g = noob::globals::get_instance();
 	noob::shape s = g.shapes.get(shape_h);
 	if (s.get_type() != noob::shape::type::TRIMESH)
 	{
-		noob::bodies_holder::handle body_h = add_body(noob::body_type::DYNAMIC, shape_h, mass, pos, orient);
+		noob::body_handle body_h = add_body(noob::body_type::DYNAMIC, shape_h, mass, pos, orient);
 		noob::scaled_model model_info = g.model_by_shape(shape_h);
 		model_info.reflect_h = reflect_arg;
 		actor(body_h, model_info, shader_h);
@@ -306,11 +306,11 @@ void noob::stage::actor(const noob::shapes_holder::handle shape_h , float mass, 
 }
 
 
-void noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results shader_h, const noob::reflectances_holder::handle reflect_arg, const std::string& name)
+void noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results shader_h, const noob::reflectance_handle reflect_arg, const std::string& name)
 {
 	noob::globals& g = noob::globals::get_instance();
-	noob::shapes_holder::handle shape_h = g.static_trimesh_shape(m, name);
-	noob::bodies_holder::handle body_h = add_body(noob::body_type::STATIC, shape_h, 0.0, pos, orient);
+	noob::shape_handle shape_h = g.static_trimesh_shape(m, name);
+	noob::body_handle body_h = add_body(noob::body_type::STATIC, shape_h, 0.0, pos, orient);
 	noob::scaled_model model_info;
 	model_info = g.model_from_mesh(m, name);
 	model_info.reflect_h = reflect_arg;
@@ -318,7 +318,7 @@ void noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, cons
 }
 
 
-void noob::stage::set_light(unsigned int i, const noob::lights_holder::handle h)
+void noob::stage::set_light(unsigned int i, const noob::light_handle h)
 {
 	if (i < MAX_LIGHTS)
 	{
@@ -333,9 +333,9 @@ void noob::stage::set_directional_light(const noob::directional_light& l)
 }
 
 
-noob::lights_holder::handle noob::stage::get_light(unsigned int i) const
+noob::light_handle noob::stage::get_light(unsigned int i) const
 {
-	noob::lights_holder::handle l;
+	noob::light_handle l;
 
 	if (i < MAX_LIGHTS)
 	{
@@ -367,7 +367,7 @@ noob::stage::ghost_intersection_results noob::stage::get_intersections(const noo
 	btBroadphasePairArray& pairArray = temp_ghost.inner->getOverlappingPairCache()->getOverlappingPairArray();
 
 	noob::stage::ghost_intersection_results results;
-	results.ghost = ghosts.make_handle(temp_ghost.inner->getUserIndex());
+	results.ghost = ghost_handle::make(temp_ghost.inner->getUserIndex());
 
 	size_t num_pairs = pairArray.size();
 
@@ -403,11 +403,11 @@ noob::stage::ghost_intersection_results noob::stage::get_intersections(const noo
 				{
 					if (static_cast<noob::body_descriptor*>(bt_obj->getUserPointer())->is_physical() == true)
 					{
-						results.bodies.push_back(bodies.make_handle(index));
+						results.bodies.push_back(body_handle::make(index));
 					}
 					else
 					{
-						results.ghosts.push_back(ghosts.make_handle(index));
+						results.ghosts.push_back(ghost_handle::make(index));
 					}
 				}
 				// btScalar direction = is_first_body ? btScalar(-1.0) : btScalar(1.0);

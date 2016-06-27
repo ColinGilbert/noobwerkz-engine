@@ -83,25 +83,25 @@ namespace noob
 			bool init();
 
 			// Parametric shapes. These get cached for reuse by the physics engine.
-			noob::shapes_holder::handle sphere_shape(float r);
+			noob::shape_handle sphere_shape(float r);
 
-			noob::shapes_holder::handle box_shape(float x, float y, float z);
+			noob::shape_handle box_shape(float x, float y, float z);
 
-			noob::shapes_holder::handle cylinder_shape(float r, float h);
+			noob::shape_handle cylinder_shape(float r, float h);
 
-			noob::shapes_holder::handle cone_shape(float r, float h);
+			noob::shape_handle cone_shape(float r, float h);
 
-			noob::shapes_holder::handle hull_shape(const std::vector<noob::vec3>&, const std::string& name);
+			noob::shape_handle hull_shape(const std::vector<noob::vec3>&, const std::string& name);
 
-			noob::shapes_holder::handle static_trimesh_shape(const noob::basic_mesh&, const std::string& name);
+			noob::shape_handle static_trimesh_shape(const noob::basic_mesh&, const std::string& name);
 
 			// Basic model creation. Those don't have bone weights built-in, so its lighter on the video card. Great for non-animated meshes and also scenery.
 			// If the name is the same as an existing model the new one replaces it, and everything should still work because the end-user only sees handles and the engine handles it under-the-hood. :)
-			noob::basic_models_holder::handle basic_model(const noob::basic_mesh&, const std::string& name);
+			noob::model_handle basic_model(const noob::basic_mesh&, const std::string& name);
 
-			noob::animated_models_holder::handle animated_model(const std::string& filename);
+			noob::animated_model_handle animated_model(const std::string& filename);
 
-			noob::skeletal_anims_holder::handle skeleton(const std::string& filename);
+			noob::skeletal_anim_handle skeleton(const std::string& filename);
 
 			void set_shader(const noob::basic_renderer::uniform&, const std::string& name);
 			void set_shader(const noob::triplanar_gradient_map_renderer::uniform&, const std::string& name);
@@ -125,10 +125,10 @@ namespace noob
 			noob::reflectance_handle set_reflectance(const noob::reflectance&, const std::string& name);
 			noob::reflectance_handle get_reflectance(const std::string& name) const;
 			// void set_point_light(const noob::point_light&, const std::string& name);
-			// noob::point_lights_holder::handle get_point_light(const std::string& name);
+			// noob::point_light_handle get_point_light(const std::string& name);
 
 			// void set_spotlight(const noob::spotlight&, const std::string& name);
-			// noob::spotlights_holder::handle get_spotlight(const std::string& name);
+			// noob::spotlight_handle get_spotlight(const std::string& name);
 
 			// Those are easy to represent as a scaled item, and save a lot on the video card if repeated.
 			scaled_model sphere_model(float r);
@@ -138,7 +138,7 @@ namespace noob
 			// Those will create lots more data
 			scaled_model model_from_mesh(const noob::basic_mesh&, const std::string& name);
 			// Causes crashes with scripts. Therefore, keep indoors.
-			scaled_model model_by_shape(const noob::shapes_holder::handle);
+			scaled_model model_by_shape(const noob::shape_handle);
 
 
 			//
@@ -146,7 +146,7 @@ namespace noob
 			//
 
 			// The following are basic, commonly-used objects that we provide as a convenience.
-			noob::shapes_holder::handle unit_sphere_shape, unit_cube_shape, unit_capsule_shape, unit_cylinder_shape, unit_cone_shape;
+			noob::shape_handle unit_sphere_shape, unit_cube_shape, unit_capsule_shape, unit_cylinder_shape, unit_cone_shape;
 
 			// These represent models in the graphics card buffer
 			noob::scaled_model unit_sphere_model, unit_cube_model, unit_capsule_model, unit_cylinder_model, unit_cone_model;

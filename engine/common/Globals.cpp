@@ -41,7 +41,7 @@ bool noob::globals::init()
 	set_shader(dbg, "debug");
 	// logger::log("[Globals] Set debug shader");
 	shader_results t1 = get_shader("debug");
-	debug_shader = basic_shaders.make_handle(t1.handle);
+	debug_shader = basic_shader_handle::make(t1.handle);
 	// logger::log("[Globals] Got debug shader handle");
 	// Init triplanar shader. For fun.
 	noob::triplanar_gradient_map_renderer::uniform triplanar_info;
@@ -57,7 +57,7 @@ bool noob::globals::init()
 	// logger::log("[Globals] Set default triplanar shader.");
 
 	shader_results t2 = get_shader("default-triplanar");
-	default_triplanar_shader = triplanar_shaders.make_handle(t2.handle);
+	default_triplanar_shader = triplanar_shader_handle::make(t2.handle);
 
 	noob::light l;
 	l.set_colour(noob::vec3(0.0, 1.0, 1.0));
@@ -75,7 +75,7 @@ bool noob::globals::init()
 }
 
 /*
-   noob::basic_mesh noob::globals::mesh_from_shape(const noob::shapes_holder::handle h)
+   noob::basic_mesh noob::globals::mesh_from_shape(const noob::shape_handle h)
    {
    noob::shape* s = shapes.get(h);
    switch(s->shape_type)
@@ -164,7 +164,7 @@ noob::scaled_model noob::globals::model_from_mesh(const noob::basic_mesh& m, con
 {
 	std::unique_ptr<noob::basic_model> temp = std::make_unique<noob::basic_model>();
 	temp->init(m);
-	noob::basic_models_holder::handle h;
+	noob::model_handle h;
 	auto results = names_to_basic_models.find(name);
 	if (results != names_to_basic_models.end())
 	{
@@ -185,7 +185,7 @@ noob::scaled_model noob::globals::model_from_mesh(const noob::basic_mesh& m, con
 }
 
 
-noob::scaled_model noob::globals::model_by_shape(const noob::shapes_holder::handle h)
+noob::scaled_model noob::globals::model_by_shape(const noob::shape_handle h)
 {
 	// fmt::MemoryWriter ww;
 	// ww << "[Globals] about to get model from shape " << h.get_inner();
@@ -230,7 +230,7 @@ noob::scaled_model noob::globals::model_by_shape(const noob::shapes_holder::hand
 				noob::fast_hashtable::cell* search = shapes_to_models.lookup(h.get_inner());
 				if (shapes_to_models.is_valid(search))
 				{
-					results.model_h = basic_models.make_handle(search->value);
+					results.model_h = model_handle::make(search->value);
 					results.scales = noob::vec3(1.0, 1.0, 1.0);
 					return results;
 				}
@@ -240,7 +240,7 @@ noob::scaled_model noob::globals::model_by_shape(const noob::shapes_holder::hand
 				noob::fast_hashtable::cell* search = shapes_to_models.lookup(h.get_inner());
 				if (shapes_to_models.is_valid(search))
 				{
-					results.model_h = basic_models.make_handle(search->value);
+					results.model_h = model_handle::make(search->value);
 					results.scales = noob::vec3(1.0, 1.0, 1.0);					
 					return results;
 				}
@@ -255,7 +255,7 @@ noob::scaled_model noob::globals::model_by_shape(const noob::shapes_holder::hand
 }
 
 
-noob::shapes_holder::handle noob::globals::sphere_shape(float r)
+noob::shape_handle noob::globals::sphere_shape(float r)
 {
 	fmt::MemoryWriter w;
 	w << "sphere-" << static_cast<uint32_t>(r);
@@ -278,7 +278,7 @@ noob::shapes_holder::handle noob::globals::sphere_shape(float r)
 }
 
 
-noob::shapes_holder::handle noob::globals::box_shape(float x, float y, float z)
+noob::shape_handle noob::globals::box_shape(float x, float y, float z)
 {
 	fmt::MemoryWriter w;
 	w << "box-" << static_cast<uint32_t>(x) << "-" << static_cast<uint32_t>(y)  << "-" << static_cast<uint32_t>(z);
@@ -299,7 +299,7 @@ noob::shapes_holder::handle noob::globals::box_shape(float x, float y, float z)
 }
 
 
-noob::shapes_holder::handle noob::globals::cylinder_shape(float r, float h)
+noob::shape_handle noob::globals::cylinder_shape(float r, float h)
 {
 	// auto search = cylinder_shapes.find(std::make_tuple(r, h));
 	fmt::MemoryWriter w;
@@ -320,7 +320,7 @@ noob::shapes_holder::handle noob::globals::cylinder_shape(float r, float h)
 }
 
 
-noob::shapes_holder::handle noob::globals::cone_shape(float r, float h)
+noob::shape_handle noob::globals::cone_shape(float r, float h)
 {
 	fmt::MemoryWriter w;
 	w << "cone-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
@@ -340,7 +340,7 @@ noob::shapes_holder::handle noob::globals::cone_shape(float r, float h)
 }
 
 
-//   noob::shapes_holder::handle noob::globals::capsule(float r, float h)
+//   noob::shape_handle noob::globals::capsule(float r, float h)
 //   {
 //   auto search = capsule_shapes.find(std::make_tuple(r, h));
 //   if (search == capsule_shapes.end())
@@ -354,7 +354,7 @@ noob::shapes_holder::handle noob::globals::cone_shape(float r, float h)
 //   }
 
 
-//  noob::shapes_holder::handle noob::globals::plane(const noob::vec3& normal, float offset)
+//  noob::shape_handle noob::globals::plane(const noob::vec3& normal, float offset)
 // {
 // auto search = planes.find(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset));
 // if (search == planes.end())
@@ -368,7 +368,7 @@ noob::shapes_holder::handle noob::globals::cone_shape(float r, float h)
 // }
 
 
-noob::shapes_holder::handle noob::globals::hull_shape(const std::vector<vec3>& points, const std::string& name)
+noob::shape_handle noob::globals::hull_shape(const std::vector<vec3>& points, const std::string& name)
 {
 	auto search = names_to_shapes.find(name);
 	if (search == names_to_shapes.end())
@@ -382,7 +382,7 @@ noob::shapes_holder::handle noob::globals::hull_shape(const std::vector<vec3>& p
 }
 
 
-noob::shapes_holder::handle noob::globals::static_trimesh_shape(const noob::basic_mesh& m, const std::string& name)
+noob::shape_handle noob::globals::static_trimesh_shape(const noob::basic_mesh& m, const std::string& name)
 {
 	auto search = names_to_shapes.find(name);
 	if (search == names_to_shapes.end())
@@ -406,7 +406,7 @@ noob::shapes_holder::handle noob::globals::static_trimesh_shape(const noob::basi
 fmt::MemoryWriter ww;
 ww << "[Globals] Failed to get model " << name << ", returning defaults.";
 logger::log(ww.str());
-noob::basic_models_holder::handle h;
+noob::model_handle h;
 return h;
 }
 // logger::log("[Globals] Getting model by name failed.");
@@ -414,7 +414,7 @@ return search->second;
 }
 */
 
-noob::animated_models_holder::handle noob::globals::animated_model(const std::string& filename)
+noob::animated_model_handle noob::globals::animated_model(const std::string& filename)
 {
 	std::unique_ptr<noob::animated_model> temp = std::make_unique<noob::animated_model>();
 	temp->init(filename);
@@ -422,7 +422,7 @@ noob::animated_models_holder::handle noob::globals::animated_model(const std::st
 }
 
 
-noob::skeletal_anims_holder::handle noob::globals::skeleton(const std::string& filename)
+noob::skeletal_anim_handle noob::globals::skeleton(const std::string& filename)
 {
 	std::unique_ptr<noob::skeletal_anim> temp = std::make_unique<noob::skeletal_anim>();
 	temp->init(filename);
@@ -430,7 +430,7 @@ noob::skeletal_anims_holder::handle noob::globals::skeleton(const std::string& f
 }
 
 
-noob::lights_holder::handle noob::globals::set_light(const noob::light& l, const std::string& s)
+noob::light_handle noob::globals::set_light(const noob::light& l, const std::string& s)
 {
 	auto search = names_to_lights.find(s);
 	if (search != names_to_lights.end())
@@ -440,7 +440,7 @@ noob::lights_holder::handle noob::globals::set_light(const noob::light& l, const
 	}
 	else
 	{
-		noob::lights_holder::handle h = lights.add(l);
+		noob::light_handle h = lights.add(l);
 		names_to_lights.insert(std::make_pair(s, h));
 		return h;
 	}
@@ -448,9 +448,9 @@ noob::lights_holder::handle noob::globals::set_light(const noob::light& l, const
 }
 
 
-noob::lights_holder::handle noob::globals::get_light(const std::string& s) const
+noob::light_handle noob::globals::get_light(const std::string& s) const
 {
-	noob::lights_holder::handle temp;
+	noob::light_handle temp;
 	auto search = names_to_lights.find(s);
 	if (search != names_to_lights.end())
 	{		
@@ -461,7 +461,7 @@ noob::lights_holder::handle noob::globals::get_light(const std::string& s) const
 
 
 
-noob::reflectances_holder::handle noob::globals::set_reflectance(const noob::reflectance& r, const std::string& s)
+noob::reflectance_handle noob::globals::set_reflectance(const noob::reflectance& r, const std::string& s)
 {
 	auto search = names_to_reflectances.find(s);
 	if (search != names_to_reflectances.end())
@@ -471,16 +471,16 @@ noob::reflectances_holder::handle noob::globals::set_reflectance(const noob::ref
 	}
 	else
 	{
-		noob::reflectances_holder::handle h = reflectances.add(r);
+		noob::reflectance_handle h = reflectances.add(r);
 		names_to_reflectances.insert(std::make_pair(s, h));
 		return h;
 	}
 }
 
 
-noob::reflectances_holder::handle noob::globals::get_reflectance(const std::string& s) const
+noob::reflectance_handle noob::globals::get_reflectance(const std::string& s) const
 {
-	noob::reflectances_holder::handle temp;
+	noob::reflectance_handle temp;
 	auto search = names_to_reflectances.find(s);
 	if (search != names_to_reflectances.end())
 	{		
@@ -493,7 +493,7 @@ noob::reflectances_holder::handle noob::globals::get_reflectance(const std::stri
 
 
 /*
-   noob::light noob::globals::get_light(const noob::lights_holder::handle h) const
+   noob::light noob::globals::get_light(const noob::light_handle h) const
    {
    return lights.get(h);
    }
