@@ -1,5 +1,7 @@
 #pragma once
 
+#include <rdestl/pair.h>
+
 #include "MathFuncs.hpp"
 #include "Body.hpp"
 #include "Ghost.hpp"
@@ -26,6 +28,7 @@ namespace noob
 	typedef noob::component<std::unique_ptr<noob::skeletal_anim>> skeletal_anims_holder;
 	typedef noob::component<noob::light> lights_holder;
 	typedef noob::component<noob::reflectance> reflectances_holder;
+	typedef noob::component<rde::pair<uint32_t, uint32_t>> indexpair_holder;
 	typedef noob::component<std::unique_ptr<noob::basic_model>> basic_models_holder;
 	typedef noob::component<std::unique_ptr<noob::animated_model>> animated_models_holder;
 	// typedef noob::component<noob::prepared_shaders::uniform> shaders_holder;
@@ -40,6 +43,7 @@ namespace noob
 	typedef skeletal_anims_holder::handle skeletal_anim_handle;
 	typedef lights_holder::handle light_handle;
 	typedef reflectances_holder::handle reflectance_handle;
+	typedef indexpair_holder::handle indexpair_handle;
 	typedef basic_models_holder::handle model_handle;
 	typedef animated_models_holder::handle animated_model_handle;
 	// typedef shaders_holder::handle shader_handle;

@@ -72,7 +72,7 @@ void noob::sound::init()
 	if (!soundio)
 	{
 		noob::logger::log("[Sound] Init: Error starting SoundIO.");
-		return false;
+		return;
 	}
 
 	if ((err = soundio_connect(soundio)))
@@ -80,7 +80,7 @@ void noob::sound::init()
 		fmt::MemoryWriter ww;
 		ww << "[Sound] Init: Error connecting with SoundIO - " << soundio_strerror(err);
 		noob::logger::log(ww.str());
-		return false;
+		return;
 	}
 
 	soundio_flush_events(soundio);
@@ -90,7 +90,7 @@ void noob::sound::init()
 	if (default_out_device_index < 0)
 	{
 		noob::logger::log("[Sound] Init: No SoundIO output device found.");
-		return false;
+		return;
 	}
 
 	device = soundio_get_output_device(soundio, default_out_device_index);
@@ -98,7 +98,7 @@ void noob::sound::init()
 	if (!device)
 	{
 		noob::logger::log("[Sound] Init: Cannot get SoundIO output device!");
-		return false;
+		return;
 	}
 
 	{
@@ -117,7 +117,7 @@ void noob::sound::init()
 		fmt::MemoryWriter ww;
 		ww << "[Sound] Error: Unable to open SoundIO device" << soundio_strerror(err);
 		noob::logger::log(ww.str());
-		return false;
+		return;
 	}
 
 	if (outstream->layout_error)
@@ -139,7 +139,7 @@ void noob::sound::init()
 		fmt::MemoryWriter ww;
 		ww << "[Sound] Error: Unable to start SoundIO outstream - " <<  soundio_strerror(err);
 		noob::logger::log(ww.str());
-		return false;
+		return;
 	}
 
 	valid = true;
@@ -148,9 +148,9 @@ void noob::sound::init()
 
 void noob::sound::run()
 {
-	if (valid)
+	for (;;)
 	{
-		for (;;)
+		if (valid)
 		{
 			soundio_wait_events(soundio);
 		}
@@ -165,7 +165,7 @@ void noob::sound::tear_down()
 	soundio_destroy(soundio);
 }
 
-void noob::sound::play(const std::vector<uint16_t>& sample)
+void noob::sound::play(const rde::vector<uint16_t>& sample)
 {
 
 }

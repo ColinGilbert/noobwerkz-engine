@@ -9,7 +9,7 @@
 #include <rdestl/rdestl.h>
 #include <rdestl/hash_map.h>
 #include <rdestl/algorithm.h>
-#include "HandleMap.hpp"
+// #include "HandleMap.hpp"
 
 namespace noob
 {
@@ -40,12 +40,13 @@ namespace noob
 
 			dynamic_graph() noexcept(true) : n_edges(0), n_nodes(1), nodes({true}) {}
 
-			//dynamic_graph(const noob::dynamic_graph&) = delete;
-			//dynamic_graph(const noob::dynamic_graph&&) = delete;
-			~dynamic_graph() noexcept(true) {}
+			// No copy/move construction
+			// dynamic_graph(const noob::dynamic_graph&) = delete;
+			// dynamic_graph(const noob::dynamic_graph&&) = delete;
+			// ~dynamic_graph() noexcept(true) {}
 			// No assignment (for now...)
-			//noob::dynamic_graph& operator=(const noob::dynamic_graph&) = delete;
-			//noob::dynamic_graph& operator=(const noob::dynamic_graph&&) = delete;
+			// noob::dynamic_graph& operator=(const noob::dynamic_graph&) = delete;
+			// noob::dynamic_graph& operator=(const noob::dynamic_graph&&) = delete;
 
 			uint32_t add_node() noexcept(true)
 			{
@@ -189,14 +190,25 @@ namespace noob
 			bool has_loops() const noexcept(true)
 			{
 				// garbage_collection();
-				bool found, exhausted;
-				found = exhausted = false;
+				bool exhausted = false;
 
 				traveller t = get_traveller();
-				// t.teleport(0);
-
-				// Add traversal code here.
-
+				
+				while(!exhausted)
+				{
+					// Test path for loops
+					
+					// if (!find_first_loop(t.get_path()).empty()) return true;
+					// Go down, the right (dfs)
+					if (t.go_down())
+					{
+						if(find_first_loop(t.get_path(),0) != invalid) return true;
+					}
+					else 
+					{
+						
+					}
+				}
 
 				return false;
 			}
@@ -227,37 +239,46 @@ namespace noob
 
 			}
 
+			// IMPORTANT: Graph travellers are a very thin abstraction intended for transient scopes and under NO circumstances should they EVER be kept around after your function is done using them.
+			// They wrap around references to the hashmap and its current iterator (to avoid searching too often) and a stack of visited node id's, current one last in place.
+			// This makes them very much a "read-only" tool: You cannot change the topology of an associated graph by using the tools presented in the public API of this class.
 			class traveller
 			{
 				friend class dynamic_graph;
 				public:
-				traveller() noexcept(true) : lookat(0), depth(0), path({0}) {}
+				traveller() noexcept(true) : lookat(0), current_depth(0), max_depth(0), path({0}) {}
 
-				void teleport(uint32_t n) noexcept(true)
+				void visit(uint32_t n) noexcept(true)
 				{
 					path.clear();
 					path.push_back(n);
 					lookat = 0;
-					depth = 0;
+					current_depth = 0;
 				}
 
-				uint32_t get_current() const noexcept(true)
+				uint32_t get_node_id() const noexcept(true)
 				{
-					return path[depth];
+					return path[current_depth];
 				}
 
 				uint32_t get_depth() const noexcept(true)
 				{
-					return depth;
+					return current_depth;
+				}
+				
+				bool can_go_up() const noexcept(true)
+				{
+					if (current_depth == 0) return false;
+					
+					return true;
 				}
 
 				bool go_up() noexcept(true)
 				{
-					// Nowhere to go upward.
-					if (depth == 0) return false;
+					if (!can_go_up()) return false;
 
-					--depth;
-					it_ref = map_ref.find(path[depth-1]);
+					--current_depth;
+					it_ref = map_ref.find(path[current_depth-1]);
 					lookat = 0;
 					return true;
 				}
@@ -274,10 +295,15 @@ namespace noob
 
 					uint32_t target = (it_ref->second)[lookat];
 					it_ref = map_ref.find(target);
+					
 					lookat = 0;
-					++depth;
-					path.reserve(depth);
-					path[depth-1] = target;
+					++current_depth;
+					max_depth = rde::max(max_depth, current_depth);
+					if (current_depth == max_depth)
+					{
+						path.reserve(max_depth);
+					}
+					path[current_depth-1] = target;
 					return true;
 				}
 
@@ -307,21 +333,14 @@ namespace noob
 					return true;
 				}
 
-				//bool has_next() const noexcept(true)
-				//{
-				// if (!nodes_ref[path[depth-1]]) return false;
-				//if (get_lookat_node() == invalid) return false;
-
-				//return true;
-				// }
-
 				const rde::vector<uint32_t>& get_path() const noexcept(true)
 				{
 					return path;
 				}
 
+
 				protected:
-				uint32_t lookat, depth;
+				uint32_t lookat, current_depth, max_depth;
 				rde::hash_map<uint32_t, rde::vector<uint32_t>>& map_ref;
 				// rde::vector<bool>& nodes_ref;
 				rde::hash_map<uint32_t, rde::vector<uint32_t>>::iterator& it_ref; 

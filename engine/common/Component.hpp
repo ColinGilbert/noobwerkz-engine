@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include <rdestl/vector.h>
 
 #include "Logger.hpp"
 
@@ -43,14 +44,14 @@ namespace noob
 					return (inner > other.inner); 
 				}
 
-				size_t get_inner() const noexcept(true)
+				uint32_t get_inner() const noexcept(true)
 				{
 					return inner;
 				}
 
 				protected:
 
-				size_t inner;
+				uint32_t inner;
 			};
 
 			T get(component<T>::handle h) noexcept(true)
@@ -63,7 +64,7 @@ namespace noob
 				}	
 			}
 
-			T get(size_t i) noexcept(true)
+			T get(uint32_t i) noexcept(true)
 			{
 				handle h = make_handle(i);
 				if (exists(h)) return items[h.inner];
@@ -74,7 +75,7 @@ namespace noob
 				}	
 			}
 
-			T& get_ref(size_t i) noexcept(true)
+			T& get_ref(uint32_t i) noexcept(true)
 			{
 				handle h = make_handle(i);
 				if (exists(h)) return items[h.inner];
@@ -122,14 +123,14 @@ namespace noob
 				items.resize(0);
 			}
 
-			size_t count() const noexcept(true)
+			uint32_t count() const noexcept(true)
 			{
 				return items.size();
 			}
 
 			protected:
 
-			std::vector<T> items;
+			rde::vector<T> items;
 		};
 
 
@@ -167,14 +168,14 @@ namespace noob
 					}
 
 
-					size_t get_inner() const noexcept(true)
+					uint32_t get_inner() const noexcept(true)
 					{
 						return inner;
 					}
 
 					protected:
 
-					size_t inner;
+					uint32_t inner;
 				};
 				
 				T* get(component<std::unique_ptr<T>>::handle h) noexcept(true)
@@ -192,7 +193,7 @@ namespace noob
 				}
 
 
-				T* get(size_t i) noexcept(true)
+				T* get(uint32_t i) noexcept(true)
 				{
 					handle h = make_handle(i);
 					if (exists(h)) 
@@ -242,7 +243,7 @@ namespace noob
 					items.resize(0);
 				}
 
-				size_t count() const noexcept(true)
+				uint32_t count() const noexcept(true)
 				{
 					return items.size();
 				}

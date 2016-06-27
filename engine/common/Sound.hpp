@@ -1,9 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include <vector>
-
-#include <soundio/soundio.h>
+#include <rdestl/vector.h>
 
 namespace noob
 {
@@ -15,13 +13,13 @@ namespace noob
 			void init();
 			void run();
 			void tear_down();
-			void play(const std::vector<uint16_t>& sample);
+			void play(const rde::vector<uint16_t>& sample);
 
 		protected:
 			bool valid;
 			float seconds_offset = 0.0f;
-			struct SoundIo* soundio;
-			struct SoundIoDevice* device;
-			struct SoundIoOutStream* outstream; 
+			// struct SoundIo* soundio;
+			// struct SoundIoDevice* device;
+			// struct SoundIoOutStream* outstream; 
 	};
 }
