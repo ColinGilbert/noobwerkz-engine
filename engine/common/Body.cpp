@@ -207,7 +207,7 @@ noob::vec3 noob::body::get_position() const
 {
 	btTransform xform;
 	inner->getMotionState()->getWorldTransform(xform);
-	return xform.getOrigin();
+	return vec3_from_bullet(xform.getOrigin());
 }
 
 
@@ -221,13 +221,13 @@ noob::versor noob::body::get_orientation() const
 
 noob::vec3 noob::body::get_linear_velocity() const
 {
-	return inner->getLinearVelocity();
+	return vec3_from_bullet(inner->getLinearVelocity());
 }
 
 
 noob::vec3 noob::body::get_angular_velocity() const
 {
-	return inner->getAngularVelocity();	
+	return vec3_from_bullet(inner->getAngularVelocity());
 }
 
 

@@ -47,7 +47,7 @@ noob::vec3 noob::active_mesh::get_face_normal(const noob::active_mesh::face_h fh
 	size_t count = 0;
 	for (auto it = half_edges.cfv_iter(fh); it.is_valid() && count < 3; ++it)
 	{
-		tri[count] = noob::vec3(half_edges.point(*it));
+		tri[count] = noob::vec3_from_polymesh(half_edges.point(*it));
 	}
 
 	return noob::get_normal(tri);
@@ -227,7 +227,7 @@ std::vector<noob::active_mesh> noob::active_mesh::reduce_verts(size_t max_vertic
 
 			for (auto inner_it = half_edges.cfv_iter(*outer_it); inner_it.is_valid(); ++inner_it)
 			{
-				verts_list.push_back(output_mesh.add_vertex(half_edges.point(*inner_it)));
+				verts_list.push_back(output_mesh.add_vertex(noob::vec3_from_polymesh(half_edges.point(*inner_it))));
 			}
 
 			if ((verts_list.size() + output_mesh.num_vertices()) > max_vertices)
@@ -360,7 +360,7 @@ void noob::active_mesh::extrude_face(const noob::active_mesh::face_h fh, float m
 	// Calculate the extruded points and add them to the mesh
 	for (noob::active_mesh::vertex_h h : original_points)
 	{
-		noob::vec3 p(half_edges.point(h));
+		noob::vec3 p(vec3_from_polymesh(half_edges.point(h)));
 		extruded_points.push_back(add_vertex(p + weighted_normal));
 	}
 
@@ -409,7 +409,7 @@ noob::active_mesh::face_split_results noob::active_mesh::split_face(const noob::
 		noob::active_mesh::vertex_h v1, v2;
 		noob::active_mesh::edge_h e1, e2;
 
-		if (splitter.signed_distance(p1) > 0 ^ splitter.signed_distance(p2) > 0)
+		if (splitter.signed_distance(noob::vec3_from_polymesh(p1)) > 0 ^ splitter.signed_distance(vec3_from_polymesh(p2)) > 0)
 		{
 			if (first)
 			{
@@ -427,10 +427,10 @@ noob::active_mesh::face_split_results noob::active_mesh::split_face(const noob::
 		if (valid)
 		{
 
-			v1 = add_vertex(splitter.projection(p1));
+			v1 = add_vertex(splitter.projection(vec3_from_polymesh(p1)));
 
 			half_edges.split(e1, v1);
-			v2 = add_vertex(splitter.projection(p2));
+			v2 = add_vertex(splitter.projection(vec3_from_polymesh(p2)));
 
 			half_edges.split(e2, v2);
 			he1 = half_edges.new_edge(v1, v2);
@@ -522,7 +522,7 @@ void noob::active_mesh::merge_adjacent_coplanars()
 			noob::active_mesh::face_h second_face = *ff_it;
 			noob::vec3 second_normal = get_face_normal(second_face);
 
-			if (first_normal == second_normal)
+			if (vec3_equality(first_normal, second_normal))
 			{
 				// Find adjacent edge(s). TODO: Move out of this and keep it around as function
 				std::vector<noob::active_mesh::edge_h> edges = get_adjacent_edges(*f_it, *ff_it);

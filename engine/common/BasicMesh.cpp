@@ -380,7 +380,7 @@ void noob::basic_mesh::from_half_edges(TriMesh half_edges)
 
 	for (TriMesh::ConstVertexIter v_it = half_edges.vertices_begin(); v_it != half_edges.vertices_end(); ++v_it)
 	{
-		vertices[v_it->idx()] = noob::vec3(half_edges.point(*v_it));
+		vertices[v_it->idx()] = vec3_from_polymesh(half_edges.point(*v_it));
 	}
 
 	for (TriMesh::ConstFaceIter f_it = half_edges.faces_begin(); f_it != half_edges.faces_end(); ++f_it)

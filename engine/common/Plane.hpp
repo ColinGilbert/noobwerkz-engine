@@ -25,7 +25,7 @@ namespace noob
 
 			noob::vec3 normal() const
 			{
-				return inner.normal();
+				return vec3_from_eigen_vec3(inner.normal());
 			}
 
 			float offset() const
@@ -35,7 +35,7 @@ namespace noob
 
 			noob::vec3 projection(const noob::vec3& p) const
 			{
-				return inner.projection(Eigen::Vector3f(p.v[0], p.v[1], p.v[2]));
+				return vec3_from_eigen_vec3(inner.projection(Eigen::Vector3f(p.v[0], p.v[1], p.v[2])));
 			}
 
 

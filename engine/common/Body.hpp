@@ -36,21 +36,20 @@ namespace noob
 					type = _type;
 					friction = _body->getFriction();
 					restitution = _body->getRestitution();
-					position = _body->getCenterOfMassPosition();
+					position = vec3_from_bullet(_body->getCenterOfMassPosition());
+					linear_velocity = vec3_from_bullet(_body->getLinearVelocity());
+					angular_velocity = vec3_from_bullet(_body->getAngularVelocity());
+					linear_factor = vec3_from_bullet(_body->getLinearFactor());
+					angular_factor = vec3_from_bullet(_body->getAngularFactor());
 					orientation =  _body->getOrientation();
-					linear_velocity = _body->getLinearVelocity();
-					angular_velocity = _body->getAngularVelocity();
-					linear_factor = _body->getLinearFactor();
-					angular_factor = _body->getAngularFactor();
-					type = _type;
 					ccd = _ccd;
 				}
 
+				noob::body_type type;
 				float mass, friction, restitution;
 				noob::vec3 position, linear_velocity, angular_velocity, linear_factor, angular_factor;
 				noob::versor orientation;
 				bool ccd;
-				noob::body_type type;
 			};
 
 			void init(const btDynamicsWorld*, noob::body_type, const noob::shape&, float mass, const noob::vec3& position, const noob::versor& orientation, bool ccd);

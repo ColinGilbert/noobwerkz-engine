@@ -296,7 +296,7 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 
 	for (unsigned int i = 0; i < hull_result.mNumOutputVertices; ++i)
 	{
-		mesh.vertices.push_back(hull_result.m_OutputVertices[i]);
+		mesh.vertices.push_back(noob::vec3_from_bullet(hull_result.m_OutputVertices[i]));
 	}
 
 	for (unsigned int i = 0; i < hull_result.mNumIndices; ++i)

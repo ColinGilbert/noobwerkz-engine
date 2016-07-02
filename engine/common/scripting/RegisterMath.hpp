@@ -39,11 +39,6 @@ namespace noob
 		new(memory) noob::vec3(vv, z);
 	}
 
-	static void as_vec3_constructor_wrapper_vec4(uint8_t* memory, const noob::vec4& vv)
-	{
-		new(memory) noob::vec3(vv);
-	}
-
 	static void as_vec3_constructor_wrapper_vec3(uint8_t* memory, const noob::vec3& vv)
 	{
 		new(memory) noob::vec3(vv);

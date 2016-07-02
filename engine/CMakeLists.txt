@@ -684,6 +684,8 @@ list(APPEND common_src
 	common/NetworkClient.cpp
 	common/CSG.cpp
 	common/GraphTest.cpp
+	common/Mixer.cpp
+	common/AudioSample.cpp
 	common/scripting/RegisterMath.cpp
 	common/scripting/RegisterPlane.cpp
 	common/scripting/RegisterGraphics.cpp

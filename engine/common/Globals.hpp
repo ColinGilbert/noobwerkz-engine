@@ -3,7 +3,7 @@
 // Meshes (TODO: Abolish)
 // Stages
 // Skeletal animations
-// Mmodels
+// Models
 
 #pragma once
 

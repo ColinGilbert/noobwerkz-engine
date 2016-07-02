@@ -3,16 +3,7 @@
 #pragma once
 
 #include <cmath>
-
 #include <array>
-#include <btBulletDynamicsCommon.h>
-#include <glm/glm.hpp>
-#include <Eigen/Geometry>
-
-#include "format.h"
-
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/quaternion.hpp>
 
 #include <OpenMesh/Core/IO/MeshIO.hh>
 #include <OpenMesh/Core/Mesh/PolyMesh_ArrayKernelT.hh>
@@ -20,6 +11,13 @@
 
 typedef OpenMesh::PolyMesh_ArrayKernelT<> PolyMesh;
 typedef OpenMesh::TriMesh_ArrayKernelT<> TriMesh;
+
+#include <btBulletDynamicsCommon.h>
+#include <glm/glm.hpp>
+#include <Eigen/Geometry>
+
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 #define NOOB_PI 3.1415926535
 #define TAU 2.0 * NOOB_PI
@@ -29,6 +27,12 @@ typedef OpenMesh::TriMesh_ArrayKernelT<> TriMesh;
 #define TWO_PI (2.0 * NOOB_PI)
 
 #define NOOB_EPSILON 0.0001
+
+
+#include "format.h"
+
+#include "Vec2.hpp"
+#include "Vec3.hpp"
 
 namespace noob
 {
@@ -51,129 +55,140 @@ namespace noob
 	template <typename T> int sign(T val)
 	{
 		return (T(0) < val) - (val < T(0));
-	};
+	}
 
-	struct vec2;
-	struct vec3;
-	struct vec4;
-	struct versor;
+	//	struct vec2;
+	//	struct vec3;
+	// struct vec4;
+	// struct versor;
+	/*
+	   struct vec2
+	   {
+	   vec2(); 
+	   vec2(float x, float y);
 
-	struct vec2
+	   std::array<float,2> v;
+
+	   float& operator[](int x) 
+	   {
+	   return v[x];
+	   }
+
+
+	   float get_opIndex(int i) const
+
+	   {
+	   if (i > 1 ) return v[1];
+	   if (i < 0) return v[0];
+	   return v[i];
+	   }
+
+	   void set_opIndex(int i, float value)
+	   {
+	   if (i > 2 && i < 0) return;
+	   v[i] = value;
+	   }
+
+
+	   std::string to_string() const
+	   {
+	   fmt::MemoryWriter w;
+	   w << "(" << v[0] << ", " << v[1] << ")";
+	   return w.str();
+	   }
+	   };
+
+	   struct vec3
+	   {
+	   vec3();
+	// create from 3 scalars
+	vec3(float x, float y, float z);
+	// create from vec2 and a scalar
+	vec3(const vec2& vv, float z);
+	// create from truncated vec4
+	vec3(const vec4& vv);
+	vec3(const vec3& vv);
+	vec3(const btVector3&);
+	vec3(const PolyMesh::Point&);
+	vec3(const Eigen::Vector3f&);
+	// Whatever the hell you gotta do to compile, man...
+	vec3(const Eigen::Block<const Eigen::Matrix<float, 4, 1>, 3, 1, false> n)
 	{
-		vec2(); 
-		vec2(float x, float y);
+	v[0] = n[0];
+	v[1] = n[1];
+	v[2] = n[2];
+	}
+	vec3(const std::array<float, 3>&);
 
-		std::array<float,2> v;
+	// add vector to vector
+	vec3 operator+(const vec3& rhs) const;
+	// add scalar to vector
+	vec3 operator+(float rhs) const;
+	// because user's expect this too
+	vec3& operator+=(const vec3& rhs);
+	// subtract vector from vector
+	vec3 operator-(const vec3& rhs) const;
+	// add vector to vector
+	vec3 operator-(float rhs) const;
+	// because users expect this too
+	vec3& operator-=(const vec3& rhs);
+	// multiply with scalar
+	vec3 operator*(float rhs) const;
+	// because users expect this too
+	vec3& operator*=(float rhs);
+	// divide vector by scalar
+	vec3 operator/(float rhs) const;
+	// because users expect this too
+	vec3& operator=(const vec3& rhs);
 
-		float& operator[](int x) 
-		{
-			return v[x];
-		}
+	bool operator==(const vec3& rhs) const;
+	bool operator!=(const vec3& rhs) const;
 
+	// internal data
+	std::array<float,3> v;
 
-		float get_opIndex(int i) const
-
-		{
-			if (i > 1 ) return v[1];
-			if (i < 0) return v[0];
-			return v[i];
-		}
-
-		void set_opIndex(int i, float value)
-		{
-			if (i > 2 && i < 0) return;
-			v[i] = value;
-		}
-
-
-		std::string to_string() const
-		{
-			fmt::MemoryWriter w;
-			w << "(" << v[0] << ", " << v[1] << ")";
-			return w.str();
-		}
-	};
-
-	struct vec3
+	float& operator[](int x)
 	{
-		vec3();
-		// create from 3 scalars
-		vec3(float x, float y, float z);
-		// create from vec2 and a scalar
-		vec3(const vec2& vv, float z);
-		// create from truncated vec4
-		vec3(const vec4& vv);
-		vec3(const vec3& vv);
-		vec3(const btVector3&);
-		vec3(const PolyMesh::Point&);
-		vec3(const Eigen::Vector3f&);
-		// Whatever the hell you gotta do to compile, man...
-		vec3(const Eigen::Block<const Eigen::Matrix<float, 4, 1>, 3, 1, false> n)
-		{
-			v[0] = n[0];
-			v[1] = n[1];
-			v[2] = n[2];
-		}
-		vec3(const std::array<float, 3>&);
+		return v[x];
+	}
 
-		// add vector to vector
-		vec3 operator+(const vec3& rhs) const;
-		// add scalar to vector
-		vec3 operator+(float rhs) const;
-		// because user's expect this too
-		vec3& operator+=(const vec3& rhs);
-		// subtract vector from vector
-		vec3 operator-(const vec3& rhs) const;
-		// add vector to vector
-		vec3 operator-(float rhs) const;
-		// because users expect this too
-		vec3& operator-=(const vec3& rhs);
-		// multiply with scalar
-		vec3 operator*(float rhs) const;
-		// because users expect this too
-		vec3& operator*=(float rhs);
-		// divide vector by scalar
-		vec3 operator/(float rhs) const;
-		// because users expect this too
-		vec3& operator=(const vec3& rhs);
+	float get_opIndex(int i) const
 
-		bool operator==(const vec3& rhs) const;
-		bool operator!=(const vec3& rhs) const;
-
-		// internal data
-		std::array<float,3> v;
-
-		float& operator[](int x)
-		{
-			return v[x];
-		}
-
-		float get_opIndex(int i) const
-
-		{
-			if (i > 2 ) return v[2];
-			if (i < 0) return v[0];
-			return v[i];
-		}
-
-		void set_opIndex(int i, float value)
-		{
-			if (i > 2 && i < 0) return;
-			v[i] = value;
-		}
-
-		std::string to_string() const
-		{
-			fmt::MemoryWriter w;
-			w << "(" << v[0] << ", " << v[1] << ", " << v[2] << ")";
-			return w.str();
-		}
-
-	};
-
-	static noob::vec3 negate(const noob::vec3& arg)
 	{
-		return arg * -1.0;
+		if (i > 2 ) return v[2];
+		if (i < 0) return v[0];
+		return v[i];
+	}
+
+	void set_opIndex(int i, float value)
+	{
+		if (i > 2 && i < 0) return;
+		v[i] = value;
+	}
+
+	std::string to_string() const
+	{
+		fmt::MemoryWriter w;
+		w << "(" << v[0] << ", " << v[1] << ", " << v[2] << ")";
+		return w.str();
+	}
+
+};
+*/
+
+
+	static bool compare_floats(float a, float b)
+	{
+		// http://c-faq.com/fp/fpequal.html
+		if (std::fabs(a - b) <= NOOB_EPSILON * std::fabs(a)) return false;
+		else return true;
+	}
+
+	static bool approximately_zero(float a)
+	{
+		// http://c-faq.com/fp/fpequal.html
+		if (std::fabs(a) <= NOOB_EPSILON) return false;
+		else return true;
 	}
 
 	struct vec4
@@ -339,6 +354,80 @@ namespace noob
 		std::array<float,4> q;
 	};
 
+
+
+	static vec3 vec3_from_vec4(const vec4& vv)
+	{
+		noob::vec3 v;
+		v.v[0] = vv.v[0];
+		v.v[1] = vv.v[1];
+		v.v[2] = vv.v[2];
+		return v;
+	}
+
+	static vec3 vec3_from_array(const std::array<float, 3>& a)
+	{
+		noob::vec3 v;
+		v.v[0] = a[0];
+		v.v[1] = a[1];
+		v.v[2] = a[2];
+		return v;
+		// v = a;
+	}
+
+	static vec3 vec3_from_bullet(const btVector3& btVec)
+	{
+		noob::vec3 v;
+		v.v[0] = btVec[0];
+		v.v[1] = btVec[1];
+		v.v[2] = btVec[2];
+		return v;
+	}
+
+	static vec3 vec3_from_polymesh(const PolyMesh::Point& p)
+	{
+		noob::vec3 v;
+		v.v[0] = p[0];
+		v.v[1] = p[1];
+		v.v[2] = p[2];
+		return v;
+	}
+
+	static vec3 vec3_from_eigen_vec3(const Eigen::Vector3f& p)
+	{
+		noob::vec3 v;
+		v.v[0] = p[0];
+		v.v[1] = p[1];
+		v.v[2] = p[2];
+		return v;
+	}
+
+	// Whatever the hell you gotta do to compile, man...
+	static vec3 vec3_from_eigen_block(const Eigen::Block<const Eigen::Matrix<float, 4, 1>, 3, 1, false> n)
+	{
+		noob::vec3 v;
+		v.v[0] = n[0];
+		v.v[1] = n[1];
+		v.v[2] = n[2];
+		return v;
+	}
+
+	static noob::vec3 negate(const noob::vec3& arg)
+	{
+		return arg * -1.0;
+	}
+
+
+
+	static bool vec3_equality(const vec3& first, const vec3& second)
+	{
+		for (size_t i = 0; i < 3; ++i)
+		{
+			if (!compare_floats(first.v[i], second.v[i])) return false;
+		}
+		return true;
+	}
+
 	struct bbox
 	{
 		//template <class Archive>
@@ -346,7 +435,7 @@ namespace noob
 		//	{
 		//		ar(min, max, center);
 		//	}
-		
+
 		noob::vec3 get_dims() const
 		{
 			return noob::vec3(std::fabs(min.v[0]) + std::fabs(max.v[0]), std::fabs(min.v[1]) + std::fabs(max.v[1]), std::fabs(max.v[2]) + std::fabs(max.v[2]));
@@ -366,24 +455,9 @@ namespace noob
 		vec3 lower_corner, upper_corner;
 	};
 
-	inline bool compare_floats(float a, float b)
-	{
-		// http://c-faq.com/fp/fpequal.html
-		if (std::fabs(a - b) <= NOOB_EPSILON * std::fabs(a)) return false;
-		else return true;
-	}
-
-	inline bool approximately_zero(float a)
-	{
-		// http://c-faq.com/fp/fpequal.html
-		if (std::fabs(a) <= NOOB_EPSILON) return false;
-		else return true;
-	}
-
-
 	// vector functions
 	float length(const vec3& v);
-	inline float length_squared(const vec3& v)
+	inline static float length_squared(const vec3& v)
 	{
 		return v.v[0] * v.v[0] + v.v[1] * v.v[1] + v.v[2] * v.v[2];
 	}
@@ -445,7 +519,8 @@ namespace noob
 	// versor slerp(const versor& q, const versor& r); 
 	versor normalize(const versor& q);
 	versor slerp(const versor& q, const versor& r, float t);
-};
+}
+
 
 // void create_versor(float* q, float a, float x, float y, float z);
 // void mult_quat_quat(float* result, float* r, float* s);

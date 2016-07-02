@@ -30,7 +30,7 @@ void noob::ghost::set_orientation(const noob::versor& orient)
 noob::vec3 noob::ghost::get_position() const
 {
 	btTransform xform(inner->getWorldTransform());
-	return xform.getOrigin();
+	return noob::vec3_from_bullet(xform.getOrigin());
 }
 
 

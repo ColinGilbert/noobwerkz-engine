@@ -41,7 +41,7 @@ void noob::joint::set_frames(const noob::mat4& local_a, const noob::mat4& local_
 
 noob::vec3 noob::joint::get_axis(uint8_t i) const
 {
-	return inner->getAxis(i);
+	return noob::vec3_from_bullet(inner->getAxis(i));
 }
 
 /*

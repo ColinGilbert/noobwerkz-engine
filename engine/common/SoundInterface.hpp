@@ -13,7 +13,6 @@ namespace noob
 			void init();
 			void run();
 			void tear_down();
-			// void play(const rde::vector<float>& sample);
 
 		protected:
 			bool valid;

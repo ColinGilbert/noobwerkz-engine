@@ -6,7 +6,7 @@
 namespace noob
 {
 	/*--------------------------------CONSTRUCTORS--------------------------------*/
-	vec2::vec2()
+/*	vec2::vec2()
 	{
 		v[0] = 0.0;
 		v[1] = 0.0;
@@ -45,7 +45,6 @@ namespace noob
 		v[1] = vv.v[1];
 		v[2] = vv.v[2];
 	}
-
 	vec3::vec3(const vec4& vv)
 	{
 		v[0] = vv.v[0];
@@ -74,7 +73,6 @@ namespace noob
 		v[2] = p[2];
 	}
 
-
 	vec3::vec3(const std::array<float, 3>& a)
 	{
 		v[0] = a[0];
@@ -83,15 +81,13 @@ namespace noob
 		// v = a;
 	}
 
-
-
 	// vec3::vec3(const rp3d::Vector3& vv)
 	//{
 	//	v[0] = vv.x;
 	//	v[1] = vv.y;
 	//	v[2] = vv.z;
 	//}
-
+*/
 	vec4::vec4() 
 	{
 		v[0] = 0.0;
@@ -240,7 +236,7 @@ namespace noob
 		vb.v[2] = v.v[2] / l;
 		return vb;
 	}
-
+/*
 	vec3 vec3::operator+(const vec3& rhs) const
 	{
 		vec3 vc;
@@ -340,7 +336,7 @@ namespace noob
 	{
 		return !(operator==(rhs));
 	}
-
+*/
 	float dot(const vec3& a, const vec3& b)
 	{
 		return a.v[0] * b.v[0] + a.v[1] * b.v[1] + a.v[2] * b.v[2];
@@ -1092,4 +1088,3 @@ namespace noob
 	vec3 lerp(const noob::vec3& a, const noob::vec3& b, float t) { return a + (b - a) * t; }
 
 }
-

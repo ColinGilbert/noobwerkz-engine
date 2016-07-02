@@ -95,7 +95,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 			{
 				lemon::ListDigraph::Node body_node = draw_graph.target(body_it);
 				size_t body_h = bodies_mapping[body_node];
-				noob::vec3 scales = noob::vec3(scales_mapping[body_node]);
+				noob::vec3 scales = noob::vec3_from_array(scales_mapping[body_node]);
 
 				noob::mat4 world_mat = noob::identity_mat4();
 
@@ -105,7 +105,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 				noob::versor temp_quat(original_quat.q[3], original_quat.q[2], original_quat.q[1], original_quat.q[0]); 
 
 				world_mat = noob::rotate(world_mat, temp_quat);//bodies.get(body_h).get_orientation());
-				world_mat = noob::scale(world_mat, noob::vec3(scales_mapping[body_node]));												
+				world_mat = noob::scale(world_mat, noob::vec3_from_array(scales_mapping[body_node]));												
 				world_mat = noob::translate(world_mat, bodies.get(body_handle::make(body_h)).get_position());												
 				noob::mat4 normal_mat = noob::transpose(noob::inverse((world_mat * view_mat)));
 
