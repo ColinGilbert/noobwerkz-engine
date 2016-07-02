@@ -189,7 +189,6 @@ namespace noob
 				bool exhausted = false;
 
 				traveller t = get_traveller();
-
 				rde::vector<bool> visited(nodes.size());
 				rde::fill_n<bool>(&visited[0], visited.size(), false);
 
@@ -250,8 +249,6 @@ namespace noob
 				{
 					return rde::make_pair(false, results);
 				}
-				
-				
 
 				return rde::make_pair(true, results);
 			}
@@ -262,6 +259,7 @@ namespace noob
 			class traveller
 			{
 				friend class dynamic_graph;
+				
 				public:
 				traveller() noexcept(true) : lookat(0), current_depth(0), max_depth(0), path({0}) {}
 
@@ -291,7 +289,6 @@ namespace noob
 				bool can_go_up() const noexcept(true)
 				{
 					if (current_depth == 0) return false;
-
 					return true;
 				}
 
@@ -360,8 +357,17 @@ namespace noob
 					return path;
 				}
 
+				bool is_in_path(uint32_t n) const noexcept(true)
+				{
+					for (uint32_t p : path)
+					{
+						if (p == n) return true;
+					}
+					return false;
+				}
 
 				protected:
+				
 				uint32_t lookat, current_depth, max_depth;
 				rde::hash_map<uint32_t, rde::vector<uint32_t>>& map_ref;
 				// rde::vector<bool>& nodes_ref;
@@ -391,7 +397,7 @@ namespace noob
 				auto a = fix_children_with_retval(n);
 			}
 
-			// Gives you back the list of valid children.
+			// Gives you back the list of valid children. This function is useful because you don't need to search again if you need to do stuff with the returned values.
 			rde::vector<uint32_t> fix_children_with_retval(uint32_t n) noexcept(true)
 			{
 				// The vector of filtered children that are safe to travel.

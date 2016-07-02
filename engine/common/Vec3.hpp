@@ -14,7 +14,7 @@ namespace noob
 	{
 
 		std::array<float,3> v;
-		
+
 		vec3() {}
 
 		vec3(float x, float y, float z)
@@ -146,9 +146,9 @@ namespace noob
 
 		std::string to_string() const
 		{
-		fmt::MemoryWriter w;
-		w << "(" << v[0] << ", " << v[1] << ", " << v[2] << ")";
-		return w.str();
+			fmt::MemoryWriter w;
+			w << "(" << v[0] << ", " << v[1] << ", " << v[2] << ")";
+			return w.str();
 		}
 
 	};

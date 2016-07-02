@@ -32,8 +32,6 @@ namespace noob
 	typedef noob::component_dynamic<noob::audio_sample> samples_holder;
 	
 	// typedef noob::component<noob::prepared_shaders::uniform> shaders_holder;
-	
-	
 	typedef noob::component<noob::basic_renderer::uniform> basic_shaders_holder;
 	typedef noob::component<noob::triplanar_gradient_map_renderer::uniform> triplanar_shaders_holder;
 

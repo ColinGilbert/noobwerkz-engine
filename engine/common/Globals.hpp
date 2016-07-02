@@ -26,6 +26,7 @@
 #include "ComponentDefines.hpp"
 #include "BasicRenderer.hpp"
 #include "TriplanarGradientMap.hpp"
+#include "AudioSample.hpp"
 #include "SoundInterface.hpp"
 #include "FastHashTable.hpp"
 
@@ -165,7 +166,7 @@ namespace noob
 			reflectances_holder reflectances;
 			basic_shaders_holder basic_shaders;
 			triplanar_shaders_holder triplanar_shaders;
-
+			samples_holder samples;
 			noob::basic_renderer basic_drawer;
 			noob::triplanar_gradient_map_renderer triplanar_drawer;
 
