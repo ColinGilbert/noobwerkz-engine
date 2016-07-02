@@ -9,7 +9,7 @@ std::vector<std::tuple<noob::keyboard::keys, noob::keyboard::mod_keys, std::stri
 
 bool noob::application::user_init()
 {
-	keystrokes.push_back(std::make_tuple(noob::keyboard::keys::NUM_5, noob::keyboard::mod_keys::NONE, "switch view"));
+	keystrokes.push_back(std::make_tuple(noob::keyboard::keys::NUM_5, noob::keyboard::mod_keys::NONE, "switch view (currently does nothing)"));
 	logger::log("[Application] Successfully done (C++) user init.");
 	return true;
 }
@@ -30,6 +30,8 @@ void noob::application::user_update(double dt)
 		}
 		ww << noob::keyboard::to_string(std::get<0>(k)) << "\n";
 	}
+	
+	dynamic_graph graph;
 
 	gui.text(ww.str(), static_cast<float>(window_width - 500), static_cast<float>(window_height - 50), noob::gui::font_size::HEADER);
 }

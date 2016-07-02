@@ -60,7 +60,7 @@ namespace noob
 			friend class application;
 			public:
 
-			T get(noob::handle<T> h) noexcept(true)
+			T get(noob::handle<T> h) const  noexcept(true)
 			{
 				if (exists(h)) return items[h.get_inner()];
 				else 
@@ -69,12 +69,12 @@ namespace noob
 					return items[0];
 				}	
 			}
-
+/*
 			T& get_ref(handle<T> h) noexcept(true)
 			{
 				return get_ref(h.get_inner());
 			}
-
+*/
 			handle<T> add(const T& t) noexcept(true)
 			{
 				items.push_back(t);
@@ -82,7 +82,7 @@ namespace noob
 				return handle<T>::make(items.size() - 1);
 			}
 
-			bool exists(handle<T> h) noexcept(true)
+			bool exists(handle<T> h) const noexcept(true)
 			{
 				return (h.get_inner() < items.size());
 			}
@@ -114,7 +114,7 @@ namespace noob
 		class component_dynamic
 		{
 			public:
-				T* get(handle<T> h) noexcept(true)
+				T* get(handle<T> h) const noexcept(true)
 				{
 					if (exists(h)) 
 					{
@@ -135,7 +135,7 @@ namespace noob
 					return handle<T>::make(items.size()-1);
 				}
 
-				bool exists(handle<T> h) noexcept(true)
+				bool exists(handle<T> h) const noexcept(true)
 				{
 					bool results = h.get_inner() < items.size();
 					return results;

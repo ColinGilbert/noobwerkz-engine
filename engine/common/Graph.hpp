@@ -261,7 +261,6 @@ namespace noob
 				friend class dynamic_graph;
 				
 				public:
-				traveller() noexcept(true) : lookat(0), current_depth(0), max_depth(0), path({0}) {}
 
 				void visit(uint32_t n) noexcept(true)
 				{
@@ -367,6 +366,8 @@ namespace noob
 				}
 
 				protected:
+				// HOLY CRAP the things you'll do to suppress warnings...
+				traveller(const rde::hash_map<uint32_t, rde::vector<uint32_t>>& map_ref_arg, const rde::hash_map<uint32_t, rde::vector<uint32_t>>::iterator& it_ref_arg) noexcept(true) : lookat(0), current_depth(0), max_depth(0), map_ref(const_cast<rde::hash_map<uint32_t, rde::vector<uint32_t>>&>(map_ref_arg)), it_ref(const_cast<rde::hash_map<uint32_t, rde::vector<uint32_t>>::iterator&>(it_ref_arg)), path({0}) {}
 				
 				uint32_t lookat, current_depth, max_depth;
 				rde::hash_map<uint32_t, rde::vector<uint32_t>>& map_ref;
@@ -377,11 +378,11 @@ namespace noob
 
 			traveller get_traveller() const
 			{
-				traveller results;
+				
+				const rde::hash_map<uint32_t, rde::vector<uint32_t>>::iterator& it_ref = edges.find(0);
+				traveller results(edges, it_ref) ;
 
-				results.map_ref = edges;
 				// results.nodes_ref = nodes;
-				results.it_ref = edges.find(0);
 
 				return results;
 			}
