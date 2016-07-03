@@ -22,56 +22,48 @@ namespace noob
 
 		public:
 
+		mixer() noexcept(true) : dirty(false), num_playing(0), max_playing(64), output_buffer_size(0) {}
+
 		// Returns false for three reasons: First: Invalid handle (ie: sample doesn't exist.) Second: Not enough free voices. Third: Trying to play sample prior to its minimum allowed offset being reached (each sample has a minimum offset to ensurei two clips being played at the same time don't cause horrible-sounding interference.
-		bool play_clip(noob::sample_handle, float volume);
-		bool loop_clip(noob::sample_handle, float volume, uint32_t max);
-		void tick(uint32_t num_frames);
+		bool play_clip(noob::sample_handle, float volume) noexcept(true);
+		bool loop_clip(noob::sample_handle, float volume, uint32_t max) noexcept(true);
+
+		void tick(uint32_t num_frames) noexcept(true);
 
 		protected:
 
-		void build_playlist();
+		// void build_playlist() noexcept(true);
 
 		struct voice_instance
 		{
+			// Protects against glitches (a little...)
+			voice_instance() noexcept(true) : active(false), index(0), volume(0.0) {}
 
-			bool operator<(const noob::mixer::voice_instance& rhs)
+			bool operator<(const noob::mixer::voice_instance& rhs) const noexcept(true)
 			{
+				if (active < !rhs.active) return true;
 				if (index < rhs.index) return true;
-				if (index == rhs.index && volume < rhs.volume) return true;
+				if (offset < rhs.offset) return true;
 				return false; 
 			}
-			bool operator==(const noob::mixer::voice_instance& rhs)
-			{
+		
+			bool operator==(const noob::mixer::voice_instance& rhs) const noexcept(true)
+			{	
+				if (active == rhs.active) return true;
 				if (index == rhs.index) return true;
+				//if (offset < rhs.offset) return true;
 				return false;
 			}
-			uint32_t index;
+
+			bool active;
+			uint32_t index, offset;
 			float volume;
 		};
 
-
-		struct loop_command
-		{
-			bool operator<(const noob::mixer::loop_command& rhs)
-			{
-				if (voice < rhs.voice) return true;
-				if (count < 0 && rhs.count > 0) return true;
-				return false; 
-			}
-			voice_instance voice;
-			// Negative if it's not supposed to stop.
-			int32_t count;
-		};
-
+		bool dirty;
+		uint32_t num_playing, max_playing, output_buffer_size;
 		rde::vector<voice_instance> now_playing;
-		rde::vector<loop_command> now_looping;
+		rde::vector<double> output_buffer;
 
-		// uint32 is the sample handle's inner member
-		// rde::vector<size_t> refers to the current offset
-		// rde::hash_map<voice_instance, rde::vector<size_t>> sequencer;
-
-		rde::vector<double> buffer;
-
-		uint32_t buffer_size;
 	};
 }

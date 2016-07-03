@@ -683,7 +683,7 @@ list(APPEND common_src
 	common/FileSystem.cpp
 	common/NetworkClient.cpp
 	common/CSG.cpp
-	common/GraphTest.cpp
+	common/Graph.cpp
 	common/Mixer.cpp
 	common/AudioSample.cpp
 	common/scripting/RegisterMath.cpp
