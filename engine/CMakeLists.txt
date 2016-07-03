@@ -520,6 +520,56 @@ include_directories(common/scripting)
 include_directories(common/drawing)
 include_directories(common/drawing/font)
 
+include_directories(lib/libogg/ogg/include)
+list (APPEND ogg_src
+	lib/libogg/src/framing.c
+	lib/libogg/src/bitwise.c
+	)
+
+include_directories(lib/libvorbis/include)
+include_directories(lib/libvorbis/lib)
+
+include_directories(lib/libvorbis/lib/modes)
+include_directories(lib/libvorbis/lib/books/coupled)
+include_directories(lib/libvorbis/lib/books/uncoupled)
+include_directories(lib/libvorbis/lib/books/floor)
+
+include_directories(lib/libvorbis/vq)
+list (APPEND vorbis_src
+	lib/libvorbis/lib/codebook.c
+	lib/libvorbis/lib/psytune.c
+	lib/libvorbis/lib/block.c
+	lib/libvorbis/lib/bitrate.c
+	lib/libvorbis/lib/lookup.c
+	lib/libvorbis/lib/envelope.c
+	lib/libvorbis/lib/lsp.c
+	lib/libvorbis/lib/vorbisenc.c
+	lib/libvorbis/lib/floor0.c
+	lib/libvorbis/lib/psy.c
+	lib/libvorbis/lib/mapping0.c
+	#lib/libvorbis/lib/tone.c
+	lib/libvorbis/lib/vorbisfile.c
+	lib/libvorbis/lib/smallft.c
+	lib/libvorbis/lib/window.c
+	lib/libvorbis/lib/floor1.c
+	lib/libvorbis/lib/sharedbook.c
+	#lib/libvorbis/lib/barkmel.c
+	lib/libvorbis/lib/mdct.c
+	lib/libvorbis/lib/lpc.c
+	lib/libvorbis/lib/analysis.c
+	lib/libvorbis/lib/info.c
+	lib/libvorbis/lib/res0.c
+	lib/libvorbis/lib/synthesis.c
+	lib/libvorbis/lib/registry.c
+	#lib/libvorbis/vq/latticetune.c
+	#lib/libvorbis/vq/huffbuild.c
+	#lib/libvorbis/vq/distribution.c
+	#lib/libvorbis/vq/metrics.c
+	#lib/libvorbis/vq/latticebuild.c
+	#lib/libvorbis/vq/vqgen.c
+	#lib/libvorbis/vq/bookutil.c
+	)
+
 include_directories(lib/recastnavigation/Detour/Include)
 include_directories(lib/recastnavigation/Recast/Include)
 include_directories(lib/recastnavigation/RecastDemo/Include)
@@ -717,7 +767,10 @@ endif()
 # endif()
 
 
-add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${openmesh_src} ${rdestl_src}	${cppformat_src} ${recast_src} ${angelscript_src} ${bullet_src}	${voropp_src} ${ozz_src} ${hashtable-src})
+add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src}
+	${bgfx_src} ${bgfx_utils_src} ${openmesh_src} ${rdestl_src}
+	${cppformat_src} ${recast_src} ${angelscript_src} ${bullet_src}
+	${voropp_src} ${ozz_src} ${hashtable-src} ${ogg_src} ${vorbis_src})
 
 target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype Enet)
 

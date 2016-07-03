@@ -47,8 +47,8 @@ bool noob::mixer::play_clip(const noob::sample_handle clip, float volume) noexce
 			now_playing[num_playing] = v;
 		}
 
-		dirty = true;
 		++num_playing;
+		dirty = true;
 	}
 }
 
