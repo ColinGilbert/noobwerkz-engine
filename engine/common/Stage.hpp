@@ -26,7 +26,6 @@
 #include "ComponentDefines.hpp"
 #include "HandleMap.hpp"
 #include "FastHashTable.hpp"
-#include "Graph.hpp"
 
 #include <standalone/brigand.hpp>
 
@@ -116,8 +115,6 @@ namespace noob
 			const int NUM_RESERVED_NODES = 8192;			
 			const int NUM_RESERVED_ARCS = 8192;
 
-			noob::dynamic_graph ng_graph;
-
 			btBroadphaseInterface* broadphase;
 			btDefaultCollisionConfiguration* collision_configuration;
 			btCollisionDispatcher* collision_dispatcher;
@@ -134,10 +131,8 @@ namespace noob
 			lemon::ListDigraph::NodeMap<std::array<size_t, 4>> lights_mapping;
 			lemon::ListDigraph::NodeMap<std::array<float, 3>> scales_mapping;
 
-			// std::unordered_map<size_t, noob::shape_handle> bodies_to_shapes;
 			noob::fast_hashtable bodies_to_nodes;
 			noob::fast_hashtable basic_models_to_nodes;
-			// std::map<size_t, lemon::ListDigraph::Node> shaders_to_nodes;
 			noob::directional_light directional_light;
 			std::array<noob::light_handle, MAX_LIGHTS> lights;
 
