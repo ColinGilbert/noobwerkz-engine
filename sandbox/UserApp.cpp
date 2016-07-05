@@ -11,8 +11,11 @@ bool noob::application::user_init()
 {
 	noob::audio_sample samp;
 	bool b = samp.load_file("./BlanketedLama.ogg");
+	noob::globals& g = noob::globals::get_instance();
+	noob::sample_handle h = g.samples.add(std::make_unique<noob::audio_sample>(samp));	
 
-	
+	g.master_mixer.play_clip(h, 1.0);
+
 
 	// keystrokes.push_back(std::make_tuple(noob::keyboard::keys::NUM_5, noob::keyboard::mod_keys::NONE, "switch view (currently does nothing)"));
 	logger::log("[Application] Successfully done (C++) user init.");

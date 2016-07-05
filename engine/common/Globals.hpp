@@ -29,6 +29,8 @@
 #include "AudioSample.hpp"
 #include "SoundInterface.hpp"
 #include "FastHashTable.hpp"
+#include "Mixer.hpp"
+
 
 namespace noob
 {
@@ -185,6 +187,9 @@ namespace noob
 			};
 
 			noob::body_descriptor physical_body_descriptor, ghost_body_descriptor;
+
+
+			noob::mixer master_mixer;
 
 			noob::sound_interface audio_interface;
 

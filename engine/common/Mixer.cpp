@@ -1,5 +1,6 @@
 #include "Mixer.hpp"
 
+#include "Globals.hpp"
 
 bool noob::mixer::play_clip(const noob::sample_handle clip, float volume) noexcept(true)
 {

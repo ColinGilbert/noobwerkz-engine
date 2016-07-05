@@ -99,7 +99,7 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 		}
 	}
 	fmt::MemoryWriter ww;
-	ww << "[AudioSample] Sample buffer size " << samples.size() << ". Accummulated values: " << accum << ".";
+	ww << "[AudioSample] Sample buffer size " << samples.size() << ". Accumulated values: " << accum << ".";
 	logger::log(ww.str());
 
 	return true;

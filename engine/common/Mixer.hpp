@@ -11,7 +11,6 @@
 
 #include "Component.hpp"
 #include "ComponentDefines.hpp"
-#include "Globals.hpp"
 #include "AudioSample.hpp"
 
 namespace noob
