@@ -36,27 +36,44 @@ namespace noob
 		struct voice_instance
 		{
 			// Protects against glitches (a little...)
-			voice_instance() noexcept(true) : active(false), index(0), volume(0.0) {}
+			voice_instance() noexcept(true) : active(true), index(0) {}
 
 			bool operator<(const noob::mixer::voice_instance& rhs) const noexcept(true)
 			{
-				if (active < !rhs.active) return true;
 				if (index < rhs.index) return true;
-				if (offset < rhs.offset) return true;
 				return false; 
 			}
-		
+
 			bool operator==(const noob::mixer::voice_instance& rhs) const noexcept(true)
 			{	
-				if (active == rhs.active) return true;
 				if (index == rhs.index) return true;
-				//if (offset < rhs.offset) return true;
 				return false;
 			}
 
+			struct playback_info
+			{
+				playback_info() noexcept(true) : offset(0), volume(0.0) {}
+
+				bool operator<(const noob::mixer::voice_instance::playback_info& rhs) const noexcept(true)
+				{
+					if (offset < rhs.offset) return true;
+					return false; 
+				}
+
+				bool operator==(const noob::mixer::voice_instance::playback_info& rhs) const noexcept(true)
+				{	
+					if (offset == rhs.offset) return true;
+					return false;
+				}
+
+				size_t offset;
+				float volume;
+			};
+
+
+			uint32_t index;
 			bool active;
-			uint32_t index, offset;
-			float volume;
+			rde::fixed_array<noob::mixer::voice_instance::playback_info, 4> queue;
 		};
 
 		bool dirty;

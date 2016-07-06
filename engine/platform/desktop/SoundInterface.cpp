@@ -1,5 +1,6 @@
 #include "SoundInterface.hpp"
 #include "Logger.hpp"
+#include "Globals.hpp"
 
 #include <soundio/soundio.h>
 
@@ -18,6 +19,10 @@ static void write_callback(struct SoundIoOutStream *outstream, int frame_count_m
 	struct SoundIoChannelArea *areas;
 	int frames_left = frame_count_max;
 	int err;
+	
+	noob::globals& g = noob::globals::get_instance();
+
+
 
 	while (frames_left > 0)
 	{
@@ -35,6 +40,10 @@ static void write_callback(struct SoundIoOutStream *outstream, int frame_count_m
 		{
 			break;
 		}
+		
+
+
+		g.master_mixer.tick(frame_count);
 
 		double pitch = 110.0f;
 		double radians_per_second = pitch * 2.0f * NOOB_PI;
