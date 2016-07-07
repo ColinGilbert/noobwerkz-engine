@@ -49,13 +49,13 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 	samples.resize(total_size);
 
 	// Holy crap blame Ogg Vorbis for that C++-to-triple-pointer-C hack and not Colin...
-	float* ptr_to_samples = &samples[0];
-	float** ptr_to_ptr_to_samples = &ptr_to_samples;
 
 	bool done = false;
 	long accum  = 0;
 	while (!done)
 	{
+		float* ptr_to_samples = &samples[accum];
+		float** ptr_to_ptr_to_samples = &ptr_to_samples;
 		long return_val = ov_read_float(&vf, &ptr_to_ptr_to_samples, total_size, &current_section);
 		accum += return_val;
 		switch (return_val)
@@ -87,7 +87,7 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 			default:
 				{
 					fmt::MemoryWriter ww;
-					ww << "[AudioSample] " << return_val << " samples read.";
+					ww << "[AudioSample] " << return_val << " samples read. Current section: " << current_section;
 					logger::log(ww.str());
 					break;
 				}

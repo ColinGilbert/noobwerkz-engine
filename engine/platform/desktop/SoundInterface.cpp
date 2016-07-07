@@ -41,16 +41,15 @@ static void write_callback(struct SoundIoOutStream *outstream, int frame_count_m
 			break;
 		}
 		
-
-
 		g.master_mixer.tick(frame_count);
 
-		double pitch = 110.0f;
-		double radians_per_second = pitch * 2.0f * NOOB_PI;
+		// double pitch = 110.0f;
+		// double radians_per_second = pitch * 2.0f * NOOB_PI;
 
-		for (int frame = 0; frame < frame_count; frame += 1)
+		for (int frame = 0; frame < frame_count; ++frame)
 		{
-			float sample = sinf((seconds_offset + frame * seconds_per_frame) * radians_per_second);
+			// float sample = sinf((seconds_offset + frame * seconds_per_frame) * radians_per_second);
+			float sample = g.master_mixer.output_buffer[frame];
 			for (int channel = 0; channel < layout->channel_count; channel += 1)
 			{
 				float *ptr = (float*)(areas[channel].ptr + areas[channel].step * frame);

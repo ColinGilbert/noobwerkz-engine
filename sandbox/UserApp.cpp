@@ -14,6 +14,15 @@ bool noob::application::user_init()
 	noob::globals& g = noob::globals::get_instance();
 	noob::sample_handle h = g.samples.add(std::make_unique<noob::audio_sample>(samp));	
 
+	noob::audio_sample* s = g.samples.get(h);
+
+	fmt::MemoryWriter ww;
+	for (float f : s->samples)
+	{
+		ww << f;
+	}
+	logger::log(ww.str());
+
 	g.master_mixer.play_clip(h, 1.0);
 
 
