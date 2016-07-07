@@ -150,6 +150,11 @@ void noob::sound_interface::init()
 		return;
 	}
 
+
+	fmt::MemoryWriter ww;
+	ww << "[SoundInterface] Sound init success! Sample rate:" << outstream->sample_rate << ". Bytes per frame: " << outstream->bytes_per_frame << ". Bytes per sample: " << outstream->bytes_per_sample;
+	logger::log(ww.str());
+
 	valid = true;
 }
 

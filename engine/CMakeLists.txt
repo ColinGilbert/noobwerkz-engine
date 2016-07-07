@@ -56,6 +56,7 @@ list(APPEND bgfx_utils_src
 	common/drawing/font/cube_atlas.cpp
 	)
 
+
 include_directories(lib/voropp/src)
 list (APPEND voropp_src
 	lib/voropp/src/voro++.cc
@@ -534,7 +535,7 @@ include_directories(lib/libvorbis/lib/books/coupled)
 include_directories(lib/libvorbis/lib/books/uncoupled)
 include_directories(lib/libvorbis/lib/books/floor)
 
-include_directories(lib/libvorbis/vq)
+#include_directories(lib/libvorbis/vq)
 list (APPEND vorbis_src
 	lib/libvorbis/lib/codebook.c
 	lib/libvorbis/lib/psytune.c
@@ -569,6 +570,15 @@ list (APPEND vorbis_src
 	#lib/libvorbis/vq/vqgen.c
 	#lib/libvorbis/vq/bookutil.c
 	)
+
+
+include_directories(lib/r8brain-free-src)
+
+list(APPEND r8_src
+	lib/r8brain-free-src/r8bbase.cpp
+)
+
+
 
 include_directories(lib/recastnavigation/Detour/Include)
 include_directories(lib/recastnavigation/Recast/Include)
@@ -770,7 +780,8 @@ endif()
 add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src}
 	${bgfx_src} ${bgfx_utils_src} ${openmesh_src} ${rdestl_src}
 	${cppformat_src} ${recast_src} ${angelscript_src} ${bullet_src}
-	${voropp_src} ${ozz_src} ${hashtable-src} ${ogg_src} ${vorbis_src})
+	${voropp_src} ${ozz_src} ${hashtable-src} ${ogg_src} ${vorbis_src}
+	${r8_src})
 
 target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype Enet)
 

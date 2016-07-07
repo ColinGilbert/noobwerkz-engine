@@ -15,6 +15,6 @@ namespace noob
 
 			uint32_t num_channels;
 			size_t rate, min_before_next;
-			std::vector<float> samples;
+			std::vector<int16_t> samples;
 	};
 }

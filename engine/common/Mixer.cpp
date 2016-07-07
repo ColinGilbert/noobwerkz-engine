@@ -81,18 +81,18 @@ void noob::mixer::tick(uint32_t num_frames) noexcept(true)
 				noob::mixer::voice_instance::playback_info inf = now_playing[v].queue[q];
 				if (inf.offset != std::numeric_limits<size_t>::max())
 				{
-					++times_played;
-					fmt::MemoryWriter ww;
-					ww << "[Mixer] Playing active voice " << times_played << "th time. Offset " << inf.offset;
-					logger::log(ww.str());
+					// ++times_played;
+					// fmt::MemoryWriter ww;
+					// ww << "[Mixer] Playing active voice " << times_played << "th time. Offset " << inf.offset;
+					// logger::log(ww.str());
 					++queue_count;
 					for (uint32_t i = 0; i < num_frames; ++i)
 					{
 						size_t sample_pos = inf.offset + i;
 						if (sample_pos < sample_size)
 						{
-							float f = samp->samples[sample_pos];
-							output_buffer[i] += (f * inf.volume);
+							double d = static_cast<double>(samp->samples[sample_pos]) * (1.0f/32768.0);
+							output_buffer[i] += (d * inf.volume);
 						}
 					}
 

@@ -190,9 +190,10 @@ namespace noob
 
 
 			noob::mixer master_mixer;
-
 			noob::sound_interface audio_interface;
-
+			// While resampling data, some samples may suffer from overflow of a few values.
+			// This catches them so that they may be used in the next audio callback.
+			std::vector<double> mixer_overflow;
 		protected:
 
 			noob::fast_hashtable shapes_to_models;
