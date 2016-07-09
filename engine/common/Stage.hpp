@@ -12,7 +12,6 @@
 #include "BasicRenderer.hpp"
 #include "TriplanarGradientMap.hpp"
 #include "TransformHelper.hpp"
-#include "Actor.hpp"
 #include "SkeletalAnim.hpp"
 #include "BasicModel.hpp"
 #include "ScaledModel.hpp"
@@ -121,6 +120,8 @@ namespace noob
 			btSequentialImpulseConstraintSolver* solver;
 			btDiscreteDynamicsWorld* dynamics_world;
 			
+
+
 			lemon::ListDigraph draw_graph;
 			lemon::ListDigraph::Node root_node;
 			lemon::ListDigraph::NodeMap<size_t> bodies_mapping;

@@ -13,7 +13,7 @@ These can provide a sense of direction as to the direction of the project; I enc
 
 High-quality tutorials and real unit tests will come when the implementation is more or less set in stone.
 
-Current version: Version 0.3: "Smorgasbord of Delights"
+Current version: Version 0.4: "Auditory Delights"
 
 Specific features:
 ```
@@ -28,6 +28,8 @@ BGFX
 Bullet Physics
 PolyVox
 AngelScript
+libogg/libvorbis (soon Opus)
+r8brain's excellent resampling routines
 ```
 
 To clone:
@@ -62,8 +64,6 @@ sandbox/g for git. Adds changes to git and commits them (for my use, mostly)
 
 Future:
 ```
-Scripting (done!)
-Sound
 Serialization
 Ports to Android, iOS, Windows, OSX, Emscripten, Steam
 Basic AI

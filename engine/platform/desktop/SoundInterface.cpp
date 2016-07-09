@@ -6,7 +6,6 @@
 
 #define NOOB_PI 3.1415926535
 
-static float seconds_offset = 0.0f;
 static struct SoundIo* soundio;
 static struct SoundIoDevice* device;
 static struct SoundIoOutStream* outstream;
@@ -41,12 +40,8 @@ static void write_callback(struct SoundIoOutStream *outstream, int frame_count_m
 		
 		g.master_mixer.tick(frame_count);
 
-		// double pitch = 110.0f;
-		// double radians_per_second = pitch * 2.0f * NOOB_PI;
-
 		for (int frame = 0; frame < frame_count; ++frame)
 		{
-			// float sample = sinf((seconds_offset + frame * seconds_per_frame) * radians_per_second);
 			float sample = g.master_mixer.output_buffer[frame];
 			for (int channel = 0; channel < layout->channel_count; ++channel)
 			{
@@ -54,8 +49,6 @@ static void write_callback(struct SoundIoOutStream *outstream, int frame_count_m
 				*ptr = sample;
 			}
 		}
-
-		// seconds_offset += seconds_per_frame * frame_count;
 
 		if ((err = soundio_outstream_end_write(outstream)))
 		{
@@ -129,14 +122,8 @@ void noob::sound_interface::init()
 	if (outstream->layout_error)
 	{
 		fmt::MemoryWriter ww;
-
 		ww << "[Sound] Warning: Unable to set SoundIO channel layout - " << soundio_strerror(outstream->layout_error);
 		noob::logger::log(ww.str());
-
-
-
-
-		// return false;
 	}
 
 
@@ -152,7 +139,7 @@ void noob::sound_interface::init()
 	g.sample_rate = outstream->sample_rate;
 
 	fmt::MemoryWriter ww;
-	ww << "[SoundInterface] Sound init success! Sample rate:" << outstream->sample_rate << ". Bytes per frame: " << outstream->bytes_per_frame << ". Bytes per sample: " << outstream->bytes_per_sample;
+	ww << "[SoundInterface] Sound init success! Sample rate: " << outstream->sample_rate << ". Bytes per frame: " << outstream->bytes_per_frame << ". Bytes per sample: " << outstream->bytes_per_sample;
 	logger::log(ww.str());
 
 	valid = true;
