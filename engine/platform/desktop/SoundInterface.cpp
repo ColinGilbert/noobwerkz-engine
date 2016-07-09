@@ -145,7 +145,6 @@ void noob::sound_interface::init()
 	valid = true;
 }
 
-
 void noob::sound_interface::run()
 {
 	for (;;)

@@ -10,6 +10,7 @@ namespace noob
 {
 	class stage;
 	class joint;
+
 	enum class body_type {DYNAMIC = 0, KINEMATIC = 1, STATIC = 2};
 
 	class body 
@@ -22,7 +23,7 @@ namespace noob
 		
 			struct info
 			{
-				void init(btRigidBody* _body, noob::body_type _type, bool _ccd)
+				void init(btRigidBody* _body, noob::body_type _type, bool _ccd) noexcept(true)
 				{
 					float inv_mass = _body->getInvMass();
 					if (inv_mass > 0.0)

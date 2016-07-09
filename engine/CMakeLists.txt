@@ -722,7 +722,6 @@ list(APPEND common_src
 	common/EditorUtils.cpp
 	common/VoxelWorld.cpp
 	common/ActiveMesh.cpp
-	common/ActiveMeshNG.cpp
 	common/UIFont.cpp
 	common/GUI.cpp
 	common/Camera.cpp
@@ -741,8 +740,6 @@ list(APPEND common_src
 	common/SimpleNavMesh.cpp
 	common/FileSystem.cpp
 	common/NetworkClient.cpp
-	common/CSG.cpp
-	# common/Graph.cpp
 	common/Mixer.cpp
 	common/AudioSample.cpp
 	common/scripting/RegisterMath.cpp
