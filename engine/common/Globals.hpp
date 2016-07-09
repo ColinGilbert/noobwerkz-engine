@@ -1,9 +1,9 @@
 // Stores singletons that should only be stored once each. This means:
 // Shapes
-// Meshes (TODO: Abolish)
 // Stages
 // Skeletal animations
 // Models
+// Audio samples
 
 #pragma once
 
@@ -56,7 +56,7 @@ namespace noob
 		protected:
 			static globals* ptr_to_instance;
 
-			globals() {}
+			globals() : sample_rate(44100), num_overflows(0) {}
 
 			globals(const globals& rhs)
 			{
@@ -191,9 +191,11 @@ namespace noob
 
 			noob::mixer master_mixer;
 			noob::sound_interface audio_interface;
+			size_t sample_rate;
 			// While resampling data, some samples may suffer from overflow of a few values.
 			// This catches them so that they may be used in the next audio callback.
-			std::vector<double> mixer_overflow;
+			std::vector<double> resample_overflow;
+			uint32_t num_overflows;
 		protected:
 
 			noob::fast_hashtable shapes_to_models;

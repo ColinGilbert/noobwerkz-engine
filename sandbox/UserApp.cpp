@@ -16,12 +16,6 @@ bool noob::application::user_init()
 
 	noob::audio_sample* s = g.samples.get(h);
 
-	fmt::MemoryWriter ww;
-	for (float f : s->samples)
-	{
-		ww << f;
-	}
-	logger::log(ww.str());
 
 	g.master_mixer.play_clip(h, 1.0);
 

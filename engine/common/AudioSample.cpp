@@ -1,5 +1,6 @@
 #include "AudioSample.hpp"
 #include "Logger.hpp"
+#include "Globals.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -7,6 +8,7 @@
 #include <vorbis/codec.h>
 #include <vorbis/vorbisfile.h>
 
+#include <CDSPResampler.h>
 
 bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 {
@@ -52,7 +54,7 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 	long accum  = 0;
 	while (!done)
 	{
-		long return_val = ov_read(&vf, reinterpret_cast<char*>(&samples[accum]), total_size, 0, 2, 1, &current_section);
+		long return_val = ov_read(&vf, reinterpret_cast<char*>(&samples[accum/2]), total_size, 0, 2, 1, &current_section);
 		accum += return_val;
 		switch (return_val)
 		{
@@ -98,6 +100,59 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 	fmt::MemoryWriter ww;
 	ww << "[AudioSample] Sample buffer size " << samples.size() << ". Samples read: " << accum << ".";
 	logger::log(ww.str());
+
+	noob::globals& g = noob::globals::get_instance();
+
+	if (g.sample_rate != 44100)
+	{
+		size_t num_samples_old = samples.size();
+
+		std::vector<double> old_samps;
+
+		for (int16_t s : samples)
+		{
+			double d = static_cast<double>(s) / 32768.0;
+			old_samps.push_back(d);
+		}
+
+		r8b::CDSPResampler24 resamp(44100.0, static_cast<double>(g.sample_rate), num_samples_old);
+
+		size_t num_samples_new = (num_samples_old * g.sample_rate) / 44100.0;
+
+		// samples.reserve(num_samples_new);
+		samples.clear();
+
+		size_t ol = num_samples_new;
+		while (ol > 0)
+		{
+
+			double* opp;
+			size_t write_count;
+
+			double* output;
+			write_count = resamp.process(&old_samps[0], num_samples_old, output);
+
+			if (write_count > ol)
+			{
+				write_count = ol;
+			}
+
+			for (size_t i = 0; i < write_count; ++i)
+			{
+				double f = output[i] * 32768.0;
+				int16_t s = static_cast<int16_t>(f);
+				samples.push_back(s);
+			}
+
+			ol -= write_count;
+		}
+
+		fmt::MemoryWriter resamp_log;
+		resamp_log << "[AudioSample] Resampling from 44100 to " << g.sample_rate << ". Old number of samples: " << num_samples_old << ". New number of samples: " << num_samples_new;
+		logger::log(resamp_log.str());
+
+	}
+
 
 	return true;
 }

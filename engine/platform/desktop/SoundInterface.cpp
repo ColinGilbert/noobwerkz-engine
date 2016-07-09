@@ -22,8 +22,6 @@ static void write_callback(struct SoundIoOutStream *outstream, int frame_count_m
 	
 	noob::globals& g = noob::globals::get_instance();
 
-
-
 	while (frames_left > 0)
 	{
 		int frame_count = frames_left;
@@ -50,14 +48,14 @@ static void write_callback(struct SoundIoOutStream *outstream, int frame_count_m
 		{
 			// float sample = sinf((seconds_offset + frame * seconds_per_frame) * radians_per_second);
 			float sample = g.master_mixer.output_buffer[frame];
-			for (int channel = 0; channel < layout->channel_count; channel += 1)
+			for (int channel = 0; channel < layout->channel_count; ++channel)
 			{
 				float *ptr = (float*)(areas[channel].ptr + areas[channel].step * frame);
 				*ptr = sample;
 			}
 		}
 
-		seconds_offset += seconds_per_frame * frame_count;
+		// seconds_offset += seconds_per_frame * frame_count;
 
 		if ((err = soundio_outstream_end_write(outstream)))
 		{
@@ -150,6 +148,8 @@ void noob::sound_interface::init()
 		return;
 	}
 
+	noob::globals& g = noob::globals::get_instance();
+	g.sample_rate = outstream->sample_rate;
 
 	fmt::MemoryWriter ww;
 	ww << "[SoundInterface] Sound init success! Sample rate:" << outstream->sample_rate << ". Bytes per frame: " << outstream->bytes_per_frame << ". Bytes per sample: " << outstream->bytes_per_sample;

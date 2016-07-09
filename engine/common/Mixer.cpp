@@ -60,15 +60,13 @@ void noob::mixer::tick(uint32_t num_frames) noexcept(true)
 		output_buffer.resize(num_frames);
 	}
 
-	rde::fill_n(&output_buffer[0], output_buffer.size() -1, 0.0);
+	rde::fill_n(&output_buffer[0], output_buffer.size(), 0.0);
 
 	noob::globals& g = noob::globals::get_instance();
 
 	uint32_t num_voices = now_playing.size();
 	for (uint32_t v = 0; v < num_voices; ++v)
 	{
-	static size_t times_played = 0;
-
 		if (now_playing[v].active)
 		{
 			noob::audio_sample* samp = g.samples.get(noob::sample_handle::make(now_playing[v].index));
@@ -81,10 +79,6 @@ void noob::mixer::tick(uint32_t num_frames) noexcept(true)
 				noob::mixer::voice_instance::playback_info inf = now_playing[v].queue[q];
 				if (inf.offset != std::numeric_limits<size_t>::max())
 				{
-					// ++times_played;
-					// fmt::MemoryWriter ww;
-					// ww << "[Mixer] Playing active voice " << times_played << "th time. Offset " << inf.offset;
-					// logger::log(ww.str());
 					++queue_count;
 					for (uint32_t i = 0; i < num_frames; ++i)
 					{
