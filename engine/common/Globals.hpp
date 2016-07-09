@@ -1,8 +1,8 @@
-// Stores singletons that should only be stored once each. This means:
+// Stores objects that should be pooled. This means:
 // Shapes
 // Stages
 // Skeletal animations
-// Models
+// 3D Models
 // Audio samples
 
 #pragma once
