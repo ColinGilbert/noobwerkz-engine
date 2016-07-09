@@ -9,7 +9,7 @@
 
 
 
-void noob::body::init(const btDynamicsWorld* dynamics_world, noob::body_type type_arg, const noob::shape& shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
+void noob::body::init(const btDynamicsWorld* dynamics_world, noob::body_type type_arg, const noob::shape& shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true) 
 {
 	btTransform start_transform;
 	
@@ -64,7 +64,7 @@ void noob::body::init(const btDynamicsWorld* dynamics_world, noob::body_type typ
 }
 
 
-void noob::body::init(const btDynamicsWorld* dynamics_world, noob::body_type type_arg, const noob::shape& shape, const noob::body::info& _info)
+void noob::body::init(const btDynamicsWorld* dynamics_world, noob::body_type type_arg, const noob::shape& shape, const noob::body::info& _info) noexcept(true) 
 {
 	btTransform start_transform;
 	// start_transform.setIdentity();
@@ -100,7 +100,7 @@ void noob::body::init(const btDynamicsWorld* dynamics_world, noob::body_type typ
    }
    */
 /*
-void noob::body::set_self_controlled(bool b)
+void noob::body::set_self_controlled(bool b) noexcept(true) 
 {
 	if (b == true)
 	{
@@ -156,7 +156,7 @@ void noob::body::update()
 }
 
 
-void noob::body::move(bool forward, bool backward, bool left, bool right, bool jump)
+void noob::body::move(bool forward, bool backward, bool left, bool right, bool jump) noexcept(true) 
 {
 	if (self_controlled)
 	{
@@ -195,7 +195,7 @@ void noob::body::move(bool forward, bool backward, bool left, bool right, bool j
 }
 
 
-bool noob::body::on_ground() const
+bool noob::body::on_ground() const noexcept(true) 
 {
 	return (!(airborne && obstacled));
 	//	return ray_lambda[0] < btScalar(1.0);
@@ -203,7 +203,7 @@ bool noob::body::on_ground() const
 */
 
 
-noob::vec3 noob::body::get_position() const
+noob::vec3 noob::body::get_position() const noexcept(true) 
 {
 	btTransform xform;
 	inner->getMotionState()->getWorldTransform(xform);
@@ -211,7 +211,7 @@ noob::vec3 noob::body::get_position() const
 }
 
 
-noob::versor noob::body::get_orientation() const
+noob::versor noob::body::get_orientation() const noexcept(true) 
 {
 	btTransform xform;
 	inner->getMotionState()->getWorldTransform(xform);
@@ -219,20 +219,20 @@ noob::versor noob::body::get_orientation() const
 }
 
 
-noob::vec3 noob::body::get_linear_velocity() const
+noob::vec3 noob::body::get_linear_velocity() const noexcept(true) 
 {
 	return vec3_from_bullet(inner->getLinearVelocity());
 }
 
 
-noob::vec3 noob::body::get_angular_velocity() const
+noob::vec3 noob::body::get_angular_velocity() const noexcept(true) 
 {
 	return vec3_from_bullet(inner->getAngularVelocity());
 }
 
 
 
-noob::mat4 noob::body::get_transform() const
+noob::mat4 noob::body::get_transform() const noexcept(true) 
 {
 	btTransform xform;
 	inner->getMotionState()->getWorldTransform(xform);
@@ -240,14 +240,14 @@ noob::mat4 noob::body::get_transform() const
 }
 
 
-std::string noob::body::get_debug_string() const
+std::string noob::body::get_debug_string() const noexcept(true) 
 {
 	fmt::MemoryWriter w;
 	w << "[Body] position " << get_position().to_string() << ", orientation " << get_orientation().to_string() << ", linear velocity " << get_linear_velocity().to_string() << ", angular velocity " << get_angular_velocity().to_string();// << ", on ground? " << on_ground() << ", ray lambda  = " << ray_lambda; //<< " ray lambda # 2 = " << ray_lambda[1];
 	return w.str();
 }
 
-void noob::body::set_ccd(bool b)
+void noob::body::set_ccd(bool b) noexcept(true) 
 {
 	if (b == true)
 	{

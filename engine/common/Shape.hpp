@@ -28,27 +28,27 @@ namespace noob
 		public:
 		enum class type { SPHERE, BOX, CYLINDER, CONE, HULL, TRIMESH };
 
-		shape() : physics_valid(false) {}
+		shape() noexcept(true) : physics_valid(false) {}
 
-		void set_margin(float);
-		float get_margin() const;
+		void set_margin(float) noexcept(true);
+		float get_margin() const noexcept(true);
 
-		noob::shape::type get_type() const;
+		noob::shape::type get_type() const noexcept(true);
 
 		protected:
 		// Initializers. Used by noob::stage
-		void sphere(float radius);
-		void box(float width, float height, float depth);
-		void cylinder(float radius, float height);
-		void capsule(float radius, float height);
-		void cone(float radius, float height);
-		void hull(const std::vector<noob::vec3>&);
-		void trimesh(const noob::basic_mesh&);
+		void sphere(float radius) noexcept(true);
+		void box(float width, float height, float depth) noexcept(true);
+		void cylinder(float radius, float height) noexcept(true);
+		void capsule(float radius, float height) noexcept(true);
+		void cone(float radius, float height) noexcept(true);
+		void hull(const std::vector<noob::vec3>&) noexcept(true);
+		void trimesh(const noob::basic_mesh&) noexcept(true);
 		
-		// void plane(const noob::vec3& normal, float offset);
+		// void plane(const noob::vec3& normal, float offset) noexcept(true);
 		
 		// Used to calculate scale of world transform for drawing purposes (so that only one copy of the model gets kept in-buffer, which is a supremely useful optimization.)
-		noob::vec3 get_scales() const;
+		noob::vec3 get_scales() const noexcept(true);
 
 		noob::shape::type shape_type;
 		bool physics_valid;

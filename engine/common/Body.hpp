@@ -52,26 +52,26 @@ namespace noob
 				bool ccd;
 			};
 
-			void init(const btDynamicsWorld*, noob::body_type, const noob::shape&, float mass, const noob::vec3& position, const noob::versor& orientation, bool ccd);
-			void init(const btDynamicsWorld*, noob::body_type, const noob::shape&, const noob::body::info&);
+			void init(const btDynamicsWorld*, noob::body_type, const noob::shape&, float mass, const noob::vec3& position, const noob::versor& orientation, bool ccd) noexcept(true);
+			void init(const btDynamicsWorld*, noob::body_type, const noob::shape&, const noob::body::info&) noexcept(true);
 
-			// void set_type(noob::body_type);
+			// void set_type(noob::body_type) noexcept(true);
 			
-			void set_position(const noob::vec3&);
-			void set_orientation(const noob::versor&);
+			void set_position(const noob::vec3&) noexcept(true);
+			void set_orientation(const noob::versor&) noexcept(true);
 
-			noob::vec3 get_position() const;
-			noob::versor get_orientation() const;
+			noob::vec3 get_position() const noexcept(true);
+			noob::versor get_orientation() const noexcept(true);
 
-			noob::mat4 get_transform() const;
-			noob::vec3 get_linear_velocity() const;
-			noob::vec3 get_angular_velocity() const;
+			noob::mat4 get_transform() const noexcept(true);
+			noob::vec3 get_linear_velocity() const noexcept(true);
+			noob::vec3 get_angular_velocity() const noexcept(true);
 
-			noob::body::info get_info() const;
+			noob::body::info get_info() const noexcept(true);
 
-			std::string get_debug_string() const;
+			std::string get_debug_string() const noexcept(true);
 			
-			void set_ccd(bool); 
+			void set_ccd(bool) noexcept(true); 
 			
 		
 		protected:

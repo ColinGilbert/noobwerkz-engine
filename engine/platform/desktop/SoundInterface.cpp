@@ -70,14 +70,14 @@ void noob::sound_interface::init()
 
 	if (!soundio)
 	{
-		noob::logger::log("[Sound] Init: Error starting SoundIO.");
+		noob::logger::log("[Sound] ERROR: Couldn't even start SoundIO!");
 		return;
 	}
 
 	if ((err = soundio_connect(soundio)))
 	{
 		fmt::MemoryWriter ww;
-		ww << "[Sound] Init: Error connecting with SoundIO - " << soundio_strerror(err);
+		ww << "[Sound] ERROR: Error connecting SoundIO - " << soundio_strerror(err);
 		noob::logger::log(ww.str());
 		return;
 	}
@@ -88,7 +88,7 @@ void noob::sound_interface::init()
 
 	if (default_out_device_index < 0)
 	{
-		noob::logger::log("[Sound] Init: No SoundIO output device found.");
+		noob::logger::log("[Sound] ERROR: No SoundIO output device found!");
 		return;
 	}
 
@@ -96,7 +96,7 @@ void noob::sound_interface::init()
 
 	if (!device)
 	{
-		noob::logger::log("[Sound] Init: Cannot get SoundIO output device!");
+		noob::logger::log("[Sound] ERROR: Cannot get SoundIO output device!");
 		return;
 	}
 
@@ -114,7 +114,7 @@ void noob::sound_interface::init()
 	if ((err = soundio_outstream_open(outstream)))
 	{
 		fmt::MemoryWriter ww;
-		ww << "[Sound] Error: Unable to open SoundIO device" << soundio_strerror(err);
+		ww << "[Sound] ERROR: Unable to open SoundIO device - " << soundio_strerror(err);
 		noob::logger::log(ww.str());
 		return;
 	}
@@ -122,7 +122,7 @@ void noob::sound_interface::init()
 	if (outstream->layout_error)
 	{
 		fmt::MemoryWriter ww;
-		ww << "[Sound] Warning: Unable to set SoundIO channel layout - " << soundio_strerror(outstream->layout_error);
+		ww << "[Sound] WARNING: Unable to set SoundIO channel layout - " << soundio_strerror(outstream->layout_error);
 		noob::logger::log(ww.str());
 	}
 
@@ -130,7 +130,7 @@ void noob::sound_interface::init()
 	if ((err = soundio_outstream_start(outstream)))
 	{
 		fmt::MemoryWriter ww;
-		ww << "[Sound] Error: Unable to start SoundIO outstream - " <<  soundio_strerror(err);
+		ww << "[Sound] ERROR: Unable to start SoundIO outstream - " <<  soundio_strerror(err);
 		noob::logger::log(ww.str());
 		return;
 	}

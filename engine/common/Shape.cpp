@@ -1,6 +1,6 @@
 #include "Shape.hpp"
 
-void noob::shape::sphere(float radius)
+void noob::shape::sphere(float radius) noexcept(true) 
 {
 	if (!physics_valid)
 	{
@@ -14,7 +14,7 @@ void noob::shape::sphere(float radius)
 }
 
 
-void noob::shape::box(float width, float height, float depth)
+void noob::shape::box(float width, float height, float depth) noexcept(true) 
 {
 	if (!physics_valid)
 	{
@@ -29,7 +29,7 @@ void noob::shape::box(float width, float height, float depth)
 }
 
 
-void noob::shape::cylinder(float radius, float height)
+void noob::shape::cylinder(float radius, float height) noexcept(true) 
 {
 	if (!physics_valid)
 	{
@@ -41,7 +41,7 @@ void noob::shape::cylinder(float radius, float height)
 }
 
 /*
-void noob::shape::capsule(float radius, float height)
+void noob::shape::capsule(float radius, float height) noexcept(true) 
 {
 	if (!physics_valid)
 	{
@@ -53,7 +53,7 @@ void noob::shape::capsule(float radius, float height)
 }
 */
 
-void noob::shape::cone(float radius, float height)
+void noob::shape::cone(float radius, float height) noexcept(true) 
 {
 	if (!physics_valid)
 	{
@@ -65,7 +65,7 @@ void noob::shape::cone(float radius, float height)
 }
 
 
-void noob::shape::hull(const std::vector<noob::vec3>& points)
+void noob::shape::hull(const std::vector<noob::vec3>& points) noexcept(true) 
 {
 	if (!physics_valid)
 	{
@@ -79,7 +79,7 @@ void noob::shape::hull(const std::vector<noob::vec3>& points)
 }
 
 
-void noob::shape::trimesh(const noob::basic_mesh& mesh)
+void noob::shape::trimesh(const noob::basic_mesh& mesh) noexcept(true) 
 {
 	if (!physics_valid)
 	{
@@ -110,7 +110,7 @@ void noob::shape::trimesh(const noob::basic_mesh& mesh)
 }
 
 /*
-void noob::shape::plane(const noob::vec3& normal, float offset)
+void noob::shape::plane(const noob::vec3& normal, float offset) noexcept(true) 
 {
 	if (!physics_valid)
 	{
@@ -121,24 +121,24 @@ void noob::shape::plane(const noob::vec3& normal, float offset)
 }
 */
 
-void noob::shape::set_margin(float m)
+void noob::shape::set_margin(float m) noexcept(true) 
 {
 	inner_shape->setMargin(m);
 }
 
 
-float noob::shape::get_margin() const
+float noob::shape::get_margin() const noexcept(true) 
 {
 	return inner_shape->getMargin();
 }
 
 
-noob::vec3 noob::shape::get_scales() const
+noob::vec3 noob::shape::get_scales() const noexcept(true) 
 {
 	return scales;
 }
 
-noob::shape::type noob::shape::get_type() const
+noob::shape::type noob::shape::get_type() const noexcept(true) 
 {
 	return shape_type;
 }
