@@ -53,10 +53,6 @@ namespace noob
 				std::vector<noob::ghost_handle> ghosts;
 			};
 
-			// We'll happen to use these members a lot.
-			noob::bodies_holder bodies;
-			noob::joints_holder joints;
-			noob::ghosts_holder ghosts;
 
 			bool show_origin;
 
@@ -119,7 +115,42 @@ namespace noob
 			btSequentialImpulseConstraintSolver* solver;
 			btDiscreteDynamicsWorld* dynamics_world;
 
+			// We'll happen to use these members a lot.
+			noob::bodies_holder bodies;
+			noob::joints_holder joints;
+			noob::ghosts_holder ghosts;
+
+			// In effect, an actor is a token encoded with the necessary info to get world position + models.
+			class actor_info
+			{
+				friend class stage;
+
+				public:
+				actor_info() noexcept(true) : debug(false), index(std::numeric_limits<uint32_t>::max()), shader(std::numeric_limits<uint32_t>::max()) {}
+				
+				protected:
+
+				// An explanation of the code paths taken for each type:
+				// BODY gets its position from bodies[n]. It is associated with its shape. That and the shader info determines how and where to draw it.
+				// GHOST gets drawn the same, except its position is drawn from ghosta[n].
+				// Note For ARMATURE and SKELETAL actor types: If debug is set, the bounding volume gets drawn.
+				// ARMATURE refers to a set of basic models being drawn hierarchically. This actor's position/orientation becomes that of the root node.
+				// SKELETAL refers to a mesh with bone weights being drawn along with skinning matrices. This actor's position/orientation becomes that of the root node.
+				// The only real difference in how these are treated is that a rigid armature can be drawn more quickly than skeletal animations.
+				// Under the hood, either the armature actors or skeletal actors can be driven by an active rig, a set of prebaked matrices, an IK effector - or an arbitrary combination of all these things!
+				// In fact, a skeletal animation's skinning matrices often start their lives as armatures which get exported to canned animations via ozz-anim's excellent toolkit. This can even be done at runtime if desired.
+				enum class type { BODY = 0, GHOST = 1, ARMATURE = 2, SKELETAL = 3 };
+				enum class shading_type { BASIC = 0, TRIPLANAR = 1 };
 			
+				// The shader of a multipart actor root is for debugging. We can safely skip it if we're drawing normally, as the other actors in the armature contain the relevant shading info.
+				bool debug;
+				positioning_type type;
+				shading_type shading;
+				uint32_t index, shader;
+			};
+
+			typedef noob::component<actor_info> actors_holder;
+
 
 			lemon::ListDigraph draw_graph;
 			lemon::ListDigraph::Node root_node;

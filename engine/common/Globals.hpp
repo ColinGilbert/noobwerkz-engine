@@ -111,7 +111,7 @@ namespace noob
 
 			struct shader_results
 			{
-				shader_results() : type(shader_type::BASIC), handle(0) {}
+				shader_results() noexcept(true) : type(shader_type::BASIC), handle(0) {}
 				bool operator==(const noob::globals::shader_results& other) const noexcept(true)
 				{
 					return (type == other.type && handle == other.handle);
