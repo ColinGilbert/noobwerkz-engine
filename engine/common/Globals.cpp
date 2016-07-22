@@ -270,7 +270,7 @@ noob::shape_handle noob::globals::sphere_shape(float r) noexcept(true)
 		fmt::MemoryWriter ww;
 		ww << "sphere-" << static_cast<uint32_t>(r);
 
-		auto results = names_to_shapes.insert(std::make_pair(ww.str(), shapes.add(temp)));
+		auto results = names_to_shapes.insert(std::make_pair(ww.str(), add_shape(temp)));
 		return (results.first)->second;
 
 	}
@@ -292,7 +292,7 @@ noob::shape_handle noob::globals::box_shape(float x, float y, float z) noexcept(
 		fmt::MemoryWriter ww;
 		ww << "box-" << static_cast<uint32_t>(x) << "-" << static_cast<uint32_t>(y) << "-" << static_cast<uint32_t>(z);
 
-		auto results = names_to_shapes.insert(std::make_pair(ww.str(), shapes.add(temp)));
+		auto results = names_to_shapes.insert(std::make_pair(ww.str(), add_shape(temp)));
 		return (results.first)->second;
 	}
 	return search->second;
@@ -313,7 +313,7 @@ noob::shape_handle noob::globals::cylinder_shape(float r, float h) noexcept(true
 		fmt::MemoryWriter ww;
 		ww << "cylinder-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
 
-		auto results = names_to_shapes.insert(std::make_pair(ww.str(), shapes.add(std::move(temp))));
+		auto results = names_to_shapes.insert(std::make_pair(ww.str(), add_shape(std::move(temp))));
 		return (results.first)->second;
 	}
 	return search->second;
@@ -333,7 +333,7 @@ noob::shape_handle noob::globals::cone_shape(float r, float h) noexcept(true)
 		fmt::MemoryWriter ww;
 		ww << "cone-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
 
-		auto results = names_to_shapes.insert(std::make_pair(ww.str(), shapes.add(temp)));
+		auto results = names_to_shapes.insert(std::make_pair(ww.str(), add_shape(temp)));
 		return (results.first)->second;
 	}
 	return search->second;
@@ -347,7 +347,7 @@ noob::shape_handle noob::globals::cone_shape(float r, float h) noexcept(true)
 //   {
 //   std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
 //   temp->capsule(r, h);
-//   auto results = capsule_shapes.insert(std::make_pair(std::make_tuple(r, h), shapes.add(std::move(temp))));
+//   auto results = capsule_shapes.insert(std::make_pair(std::make_tuple(r, h), add_shape(std::move(temp))));
 //   return (results.first)->second;
 //   }
 //   return capsule_shapes[std::make_tuple(r, h)];
@@ -361,7 +361,7 @@ noob::shape_handle noob::globals::cone_shape(float r, float h) noexcept(true)
 // {
 // std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
 // temp->plane(normal, offset);
-// auto results = planes.insert(std::make_pair(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset), shapes.add(std::move(temp))));
+// auto results = planes.insert(std::make_pair(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset), add_shape(std::move(temp))));
 // return (results.first)->second;
 // }
 // return planes[std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset)];
@@ -376,7 +376,7 @@ noob::shape_handle noob::globals::hull_shape(const std::vector<vec3>& points, co
 		// TODO: Add to shapes_to_meshes
 		noob::shape temp;
 		temp.hull(points);
-		return shapes.add(temp);
+		return add_shape(temp);
 	}
 	return search->second;
 }
@@ -389,7 +389,7 @@ noob::shape_handle noob::globals::static_trimesh_shape(const noob::basic_mesh& m
 	{
 		noob::shape temp;
 		temp.trimesh(m);
-		return shapes.add(temp);
+		return add_shape(temp);
 	}
 	return search->second;
 }

@@ -20,6 +20,7 @@
 #include "Body.hpp"
 #include "Joint.hpp"
 #include "Shape.hpp"
+#include "Armature.hpp"
 #include "Component.hpp"
 #include "Globals.hpp"
 #include "ComponentDefines.hpp"
@@ -52,7 +53,6 @@ namespace noob
 				std::vector<noob::body_handle> bodies;
 				std::vector<noob::ghost_handle> ghosts;
 			};
-
 
 			bool show_origin;
 
@@ -96,11 +96,10 @@ namespace noob
 			noob::light_handle get_light(unsigned int i) const noexcept(true);
 			
 			noob::stage::ghost_intersection_results get_intersections(const noob::ghost_handle) const noexcept(true);
-			
+
 			// Dumps a readable graph format onto disk. Super useful for debug.
 			void write_graph(const std::string& filename) const noexcept(true);
 
-			
 
 		protected:
 			
@@ -131,26 +130,25 @@ namespace noob
 				protected:
 
 				// An explanation of the code paths taken for each type:
-				// BODY gets its position from bodies[n]. It is associated with its shape. That and the shader info determines how and where to draw it.
-				// GHOST gets drawn the same, except its position is drawn from ghosta[n].
+				// BODY gets its position from bodies[n], using the "index" variable as n . It is associated with its shape. That and the shader info determines how and where to draw it.
+				// GHOST gets drawn the same, except its position is drawn from ghosts[n], using "index" variable as n.
 				// Note For ARMATURE and SKELETAL actor types: If debug is set, the bounding volume gets drawn.
 				// ARMATURE refers to a set of basic models being drawn hierarchically. This actor's position/orientation becomes that of the root node.
 				// SKELETAL refers to a mesh with bone weights being drawn along with skinning matrices. This actor's position/orientation becomes that of the root node.
 				// The only real difference in how these are treated is that a rigid armature can be drawn more quickly than skeletal animations.
-				// Under the hood, either the armature actors or skeletal actors can be driven by an active rig, a set of prebaked matrices, an IK effector - or an arbitrary combination of all these things!
-				// In fact, a skeletal animation's skinning matrices often start their lives as armatures which get exported to canned animations via ozz-anim's excellent toolkit. This can even be done at runtime if desired.
-				enum class type { BODY = 0, GHOST = 1, ARMATURE = 2, SKELETAL = 3 };
+				enum class actor_type { BODY = 0, GHOST = 1, ARMATURE = 2, SKELETAL = 3 };
 				enum class shading_type { BASIC = 0, TRIPLANAR = 1 };
 			
 				// The shader of a multipart actor root is for debugging. We can safely skip it if we're drawing normally, as the other actors in the armature contain the relevant shading info.
 				bool debug;
-				positioning_type type;
+				actor_type type;
 				shading_type shading;
 				uint32_t index, shader;
 			};
 
 			typedef noob::component<actor_info> actors_holder;
-
+			
+			actors_holder actors;
 
 			lemon::ListDigraph draw_graph;
 			lemon::ListDigraph::Node root_node;

@@ -1,0 +1,4 @@
+# Pulls in git repos that are constantly in tweaking (ie: NoobWerkz's own libs, mirror of RDESTL, etc...)
+
+cd ../engine/lib/rde/rdestl && git pull && cd ../../noob-graph && git pull
+

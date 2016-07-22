@@ -49,11 +49,11 @@ namespace noob
 		
 		// Used to calculate scale of world transform for drawing purposes (so that only one copy of the model gets kept in-buffer, which is a supremely useful optimization.)
 		noob::vec3 get_scales() const noexcept(true);
-
+		uint32_t index; // Hack to allow bodies to get shape handles from bodies and ghosts,
 		noob::shape::type shape_type;
 		bool physics_valid;
 		noob::vec3 scales;
-		std::array<float, 4> dims;
+		std::array<float, 4> dims; // Hack to allow finding out model dimensions
 		btCollisionShape* inner_shape;
 	};
 }

@@ -206,7 +206,6 @@ void noob::stage::actor(const noob::body_handle body_h, const noob::animated_mod
 
 void noob::stage::actor(const noob::body_handle body_h, const noob::scaled_model model_info, const noob::globals::shader_results shader_h) noexcept(true) 
 {
-
 	auto body_results = bodies_to_nodes.lookup(body_h.get_inner());
 
 	// Filter out duplicate bodies by checking existence in the table

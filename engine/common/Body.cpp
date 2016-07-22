@@ -9,7 +9,7 @@
 
 
 
-void noob::body::init(const btDynamicsWorld* dynamics_world, noob::body_type type_arg, const noob::shape& shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true) 
+void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type type_arg, const noob::shape& shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true) 
 {
 	btTransform start_transform;
 	
@@ -64,7 +64,7 @@ void noob::body::init(const btDynamicsWorld* dynamics_world, noob::body_type typ
 }
 
 
-void noob::body::init(const btDynamicsWorld* dynamics_world, noob::body_type type_arg, const noob::shape& shape, const noob::body::info& _info) noexcept(true) 
+void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type type_arg, const noob::shape& shape, const noob::body::info& _info) noexcept(true) 
 {
 	btTransform start_transform;
 	// start_transform.setIdentity();
@@ -257,3 +257,6 @@ void noob::body::set_ccd(bool b) noexcept(true)
 		inner->setCcdMotionThreshold(radius);
 	}
 }
+
+
+

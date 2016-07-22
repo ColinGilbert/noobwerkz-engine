@@ -49,4 +49,5 @@ namespace noob
 
 	typedef handle<noob::basic_renderer::uniform> basic_shader_handle;
 	typedef handle<noob::triplanar_gradient_map_renderer::uniform> triplanar_shader_handle;
+
 }

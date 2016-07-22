@@ -51,6 +51,7 @@ namespace noob
 		bool physical;
 	};
 
+
 	class globals
 	{
 		protected:
@@ -198,6 +199,16 @@ namespace noob
 			uint32_t num_overflows;
 		
 		protected:
+
+
+			shape_handle add_shape(const noob::shape& s)
+			{
+				noob::shape temp = s;
+				noob::shape_handle h = shapes.add(s);
+				temp.index = h.get_inner();
+				shapes.set(h, temp);
+				return h;
+			}
 
 			noob::fast_hashtable shapes_to_models;
 			rde::sorted_vector<float,size_t> spheres;

@@ -62,9 +62,13 @@ list (APPEND voropp_src
 	lib/voropp/src/voro++.cc
 	)
 
+include_directories(lib/noob-graph/include)
+
 include_directories(lib/ozz-animation/include)
 include_directories(lib/ozz-animation/include/ozz)
 include_directories(lib/ozz-animation/src)
+
+
 list(APPEND ozz_src
 	lib/ozz-animation/src/animation/runtime/local_to_model_job.cc
 	lib/ozz-animation/src/animation/runtime/skeleton_utils.cc
