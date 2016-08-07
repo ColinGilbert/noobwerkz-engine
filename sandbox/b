@@ -1,5 +1,5 @@
 # "b" for "build"
-./p &&
+#./p &&
 cd ../engine/build &&
 cmake -DNOOB_PLATFORM_LINUX:bool=true .. &&
 make -j8 &&
