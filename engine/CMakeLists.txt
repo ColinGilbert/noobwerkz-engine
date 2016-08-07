@@ -56,14 +56,19 @@ list(APPEND bgfx_utils_src
 	common/drawing/font/cube_atlas.cpp
 	)
 
+
 include_directories(lib/voropp/src)
 list (APPEND voropp_src
 	lib/voropp/src/voro++.cc
 	)
 
+include_directories(lib/noob-graph/include)
+
 include_directories(lib/ozz-animation/include)
 include_directories(lib/ozz-animation/include/ozz)
 include_directories(lib/ozz-animation/src)
+
+
 list(APPEND ozz_src
 	lib/ozz-animation/src/animation/runtime/local_to_model_job.cc
 	lib/ozz-animation/src/animation/runtime/skeleton_utils.cc
@@ -520,6 +525,65 @@ include_directories(common/scripting)
 include_directories(common/drawing)
 include_directories(common/drawing/font)
 
+include_directories(lib/libogg/ogg/include)
+list (APPEND ogg_src
+	lib/libogg/src/framing.c
+	lib/libogg/src/bitwise.c
+	)
+
+include_directories(lib/libvorbis/include)
+include_directories(lib/libvorbis/lib)
+
+include_directories(lib/libvorbis/lib/modes)
+include_directories(lib/libvorbis/lib/books/coupled)
+include_directories(lib/libvorbis/lib/books/uncoupled)
+include_directories(lib/libvorbis/lib/books/floor)
+
+#include_directories(lib/libvorbis/vq)
+list (APPEND vorbis_src
+	lib/libvorbis/lib/codebook.c
+	lib/libvorbis/lib/psytune.c
+	lib/libvorbis/lib/block.c
+	lib/libvorbis/lib/bitrate.c
+	lib/libvorbis/lib/lookup.c
+	lib/libvorbis/lib/envelope.c
+	lib/libvorbis/lib/lsp.c
+	lib/libvorbis/lib/vorbisenc.c
+	lib/libvorbis/lib/floor0.c
+	lib/libvorbis/lib/psy.c
+	lib/libvorbis/lib/mapping0.c
+	#lib/libvorbis/lib/tone.c
+	lib/libvorbis/lib/vorbisfile.c
+	lib/libvorbis/lib/smallft.c
+	lib/libvorbis/lib/window.c
+	lib/libvorbis/lib/floor1.c
+	lib/libvorbis/lib/sharedbook.c
+	#lib/libvorbis/lib/barkmel.c
+	lib/libvorbis/lib/mdct.c
+	lib/libvorbis/lib/lpc.c
+	lib/libvorbis/lib/analysis.c
+	lib/libvorbis/lib/info.c
+	lib/libvorbis/lib/res0.c
+	lib/libvorbis/lib/synthesis.c
+	lib/libvorbis/lib/registry.c
+	#lib/libvorbis/vq/latticetune.c
+	#lib/libvorbis/vq/huffbuild.c
+	#lib/libvorbis/vq/distribution.c
+	#lib/libvorbis/vq/metrics.c
+	#lib/libvorbis/vq/latticebuild.c
+	#lib/libvorbis/vq/vqgen.c
+	#lib/libvorbis/vq/bookutil.c
+	)
+
+
+include_directories(lib/r8brain-free-src)
+
+list(APPEND r8_src
+	lib/r8brain-free-src/r8bbase.cpp
+)
+
+
+
 include_directories(lib/recastnavigation/Detour/Include)
 include_directories(lib/recastnavigation/Recast/Include)
 include_directories(lib/recastnavigation/RecastDemo/Include)
@@ -651,6 +715,15 @@ include_directories(lib/logger)
 include_directories(lib/int-hashtable)
 list(APPEND hashtable-src lib/int-hashtable/FastHashTable.cpp)
 
+include_directories(lib/Shiny/include)
+list(APPEND shiny-src
+	lib/Shiny/src/ShinyManager.cpp
+	lib/Shiny/src/ShinyNode.cpp
+	lib/Shiny/src/ShinyNodePool.cpp
+	lib/Shiny/src/ShinyOutput.cpp
+	lib/Shiny/src/ShinyTools.cpp
+	)
+
 list(APPEND common_src
 	common/Globals.cpp
 	common/BasicMesh.cpp
@@ -662,14 +735,12 @@ list(APPEND common_src
 	common/EditorUtils.cpp
 	common/VoxelWorld.cpp
 	common/ActiveMesh.cpp
-	common/ActiveMeshNG.cpp
 	common/UIFont.cpp
 	common/GUI.cpp
 	common/Camera.cpp
 	common/Stage.cpp
 	common/Body.cpp
 	common/Joint.cpp
-	common/Armature.cpp
 	common/Ghost.cpp
 	common/Shape.cpp
 	common/MeshUtils.cpp
@@ -682,8 +753,6 @@ list(APPEND common_src
 	common/SimpleNavMesh.cpp
 	common/FileSystem.cpp
 	common/NetworkClient.cpp
-	common/CSG.cpp
-	common/Graph.cpp
 	common/Mixer.cpp
 	common/AudioSample.cpp
 	common/scripting/RegisterMath.cpp
@@ -717,7 +786,11 @@ endif()
 # endif()
 
 
-add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${openmesh_src} ${rdestl_src}	${cppformat_src} ${recast_src} ${angelscript_src} ${bullet_src}	${voropp_src} ${ozz_src} ${hashtable-src})
+add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src}
+	${bgfx_src} ${bgfx_utils_src} ${openmesh_src} ${rdestl_src}
+	${cppformat_src} ${recast_src} ${angelscript_src} ${bullet_src}
+	${voropp_src} ${ozz_src} ${hashtable-src} ${ogg_src} ${vorbis_src}
+	${r8_src} ${shiny-src})
 
 target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype Enet)
 

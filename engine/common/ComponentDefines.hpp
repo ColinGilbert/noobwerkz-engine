@@ -17,9 +17,9 @@
 #include "TriplanarGradientMap.hpp"
 #include "AudioSample.hpp"
 
+
 namespace noob
 {
-	// typedef noob::component<std::unique_ptr<noob::basic_mesh>> meshes_holder;
 	typedef noob::component<noob::body> bodies_holder;
 	typedef noob::component<noob::joint> joints_holder;
 	typedef noob::component<noob::ghost> ghosts_holder;
@@ -31,13 +31,11 @@ namespace noob
 	typedef noob::component_dynamic<noob::skeletal_anim> skeletal_anims_holder;
 	typedef noob::component_dynamic<noob::audio_sample> samples_holder;
 	
-	// typedef noob::component<noob::prepared_shaders::uniform> shaders_holder;
 	typedef noob::component<noob::basic_renderer::uniform> basic_shaders_holder;
 	typedef noob::component<noob::triplanar_gradient_map_renderer::uniform> triplanar_shaders_holder;
 
 
 
-	// typedef meshes_holder::handle mesh_handle;
 	typedef handle<noob::body> body_handle;
 	typedef handle<noob::joint> joint_handle;
 	typedef handle<noob::ghost> ghost_handle;	
@@ -49,7 +47,7 @@ namespace noob
 	typedef handle<noob::skeletal_anim> skeletal_anim_handle;
 	typedef handle<noob::audio_sample> sample_handle;
 
-	// typedef shaders_holder::handle shader_handle;
 	typedef handle<noob::basic_renderer::uniform> basic_shader_handle;
 	typedef handle<noob::triplanar_gradient_map_renderer::uniform> triplanar_shader_handle;
+
 }

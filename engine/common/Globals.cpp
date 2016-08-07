@@ -2,7 +2,7 @@
 
 noob::globals* noob::globals::ptr_to_instance;
 
-bool noob::globals::init()
+bool noob::globals::init() noexcept(true) 
 {
 	physical_body_descriptor.physical = true;
 	ghost_body_descriptor.physical = false;
@@ -128,7 +128,7 @@ break;
 }
 */
 
-noob::scaled_model noob::globals::sphere_model(float r)
+noob::scaled_model noob::globals::sphere_model(float r) noexcept(true) 
 {
 	noob::scaled_model temp = unit_sphere_model;
 	temp.scales = noob::vec3(r*2.0, r*2.0, r*2.0);
@@ -136,7 +136,7 @@ noob::scaled_model noob::globals::sphere_model(float r)
 }
 
 
-noob::scaled_model noob::globals::box_model(float x, float y, float z)
+noob::scaled_model noob::globals::box_model(float x, float y, float z) noexcept(true) 
 {
 	noob::scaled_model temp = unit_cube_model;
 	temp.scales = noob::vec3(x, y, z);
@@ -144,7 +144,7 @@ noob::scaled_model noob::globals::box_model(float x, float y, float z)
 }
 
 
-noob::scaled_model noob::globals::cylinder_model(float r, float h)
+noob::scaled_model noob::globals::cylinder_model(float r, float h) noexcept(true) 
 {
 	noob::scaled_model temp = unit_cylinder_model;
 	temp.scales = noob::vec3(r*2.0, h, r*2.0);
@@ -152,7 +152,7 @@ noob::scaled_model noob::globals::cylinder_model(float r, float h)
 }
 
 
-noob::scaled_model noob::globals::cone_model(float r, float h)
+noob::scaled_model noob::globals::cone_model(float r, float h) noexcept(true) 
 {
 	noob::scaled_model temp = unit_cone_model;
 	temp.scales = noob::vec3(r*2.0, h, r*2.0);
@@ -160,7 +160,7 @@ noob::scaled_model noob::globals::cone_model(float r, float h)
 }
 
 
-noob::scaled_model noob::globals::model_from_mesh(const noob::basic_mesh& m, const std::string& name)
+noob::scaled_model noob::globals::model_from_mesh(const noob::basic_mesh& m, const std::string& name) noexcept(true) 
 {
 	std::unique_ptr<noob::basic_model> temp = std::make_unique<noob::basic_model>();
 	temp->init(m);
@@ -185,7 +185,7 @@ noob::scaled_model noob::globals::model_from_mesh(const noob::basic_mesh& m, con
 }
 
 
-noob::scaled_model noob::globals::model_by_shape(const noob::shape_handle h)
+noob::scaled_model noob::globals::model_by_shape(const noob::shape_handle h) noexcept(true) 
 {
 	// fmt::MemoryWriter ww;
 	// ww << "[Globals] about to get model from shape " << h.get_inner();
@@ -255,7 +255,7 @@ noob::scaled_model noob::globals::model_by_shape(const noob::shape_handle h)
 }
 
 
-noob::shape_handle noob::globals::sphere_shape(float r)
+noob::shape_handle noob::globals::sphere_shape(float r) noexcept(true) 
 {
 	fmt::MemoryWriter w;
 	w << "sphere-" << static_cast<uint32_t>(r);
@@ -270,7 +270,7 @@ noob::shape_handle noob::globals::sphere_shape(float r)
 		fmt::MemoryWriter ww;
 		ww << "sphere-" << static_cast<uint32_t>(r);
 
-		auto results = names_to_shapes.insert(std::make_pair(ww.str(), shapes.add(temp)));
+		auto results = names_to_shapes.insert(std::make_pair(ww.str(), add_shape(temp)));
 		return (results.first)->second;
 
 	}
@@ -278,7 +278,7 @@ noob::shape_handle noob::globals::sphere_shape(float r)
 }
 
 
-noob::shape_handle noob::globals::box_shape(float x, float y, float z)
+noob::shape_handle noob::globals::box_shape(float x, float y, float z) noexcept(true) 
 {
 	fmt::MemoryWriter w;
 	w << "box-" << static_cast<uint32_t>(x) << "-" << static_cast<uint32_t>(y)  << "-" << static_cast<uint32_t>(z);
@@ -292,14 +292,14 @@ noob::shape_handle noob::globals::box_shape(float x, float y, float z)
 		fmt::MemoryWriter ww;
 		ww << "box-" << static_cast<uint32_t>(x) << "-" << static_cast<uint32_t>(y) << "-" << static_cast<uint32_t>(z);
 
-		auto results = names_to_shapes.insert(std::make_pair(ww.str(), shapes.add(temp)));
+		auto results = names_to_shapes.insert(std::make_pair(ww.str(), add_shape(temp)));
 		return (results.first)->second;
 	}
 	return search->second;
 }
 
 
-noob::shape_handle noob::globals::cylinder_shape(float r, float h)
+noob::shape_handle noob::globals::cylinder_shape(float r, float h) noexcept(true) 
 {
 	// auto search = cylinder_shapes.find(std::make_tuple(r, h));
 	fmt::MemoryWriter w;
@@ -313,14 +313,14 @@ noob::shape_handle noob::globals::cylinder_shape(float r, float h)
 		fmt::MemoryWriter ww;
 		ww << "cylinder-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
 
-		auto results = names_to_shapes.insert(std::make_pair(ww.str(), shapes.add(std::move(temp))));
+		auto results = names_to_shapes.insert(std::make_pair(ww.str(), add_shape(std::move(temp))));
 		return (results.first)->second;
 	}
 	return search->second;
 }
 
 
-noob::shape_handle noob::globals::cone_shape(float r, float h)
+noob::shape_handle noob::globals::cone_shape(float r, float h) noexcept(true) 
 {
 	fmt::MemoryWriter w;
 	w << "cone-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
@@ -333,7 +333,7 @@ noob::shape_handle noob::globals::cone_shape(float r, float h)
 		fmt::MemoryWriter ww;
 		ww << "cone-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
 
-		auto results = names_to_shapes.insert(std::make_pair(ww.str(), shapes.add(temp)));
+		auto results = names_to_shapes.insert(std::make_pair(ww.str(), add_shape(temp)));
 		return (results.first)->second;
 	}
 	return search->second;
@@ -347,7 +347,7 @@ noob::shape_handle noob::globals::cone_shape(float r, float h)
 //   {
 //   std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
 //   temp->capsule(r, h);
-//   auto results = capsule_shapes.insert(std::make_pair(std::make_tuple(r, h), shapes.add(std::move(temp))));
+//   auto results = capsule_shapes.insert(std::make_pair(std::make_tuple(r, h), add_shape(std::move(temp))));
 //   return (results.first)->second;
 //   }
 //   return capsule_shapes[std::make_tuple(r, h)];
@@ -361,14 +361,14 @@ noob::shape_handle noob::globals::cone_shape(float r, float h)
 // {
 // std::unique_ptr<noob::shape> temp = std::make_unique<noob::shape>();
 // temp->plane(normal, offset);
-// auto results = planes.insert(std::make_pair(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset), shapes.add(std::move(temp))));
+// auto results = planes.insert(std::make_pair(std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset), add_shape(std::move(temp))));
 // return (results.first)->second;
 // }
 // return planes[std::make_tuple(normal.v[0], normal.v[1], normal.v[2], offset)];
 // }
 
 
-noob::shape_handle noob::globals::hull_shape(const std::vector<vec3>& points, const std::string& name)
+noob::shape_handle noob::globals::hull_shape(const std::vector<vec3>& points, const std::string& name) noexcept(true) 
 {
 	auto search = names_to_shapes.find(name);
 	if (search == names_to_shapes.end())
@@ -376,20 +376,20 @@ noob::shape_handle noob::globals::hull_shape(const std::vector<vec3>& points, co
 		// TODO: Add to shapes_to_meshes
 		noob::shape temp;
 		temp.hull(points);
-		return shapes.add(temp);
+		return add_shape(temp);
 	}
 	return search->second;
 }
 
 
-noob::shape_handle noob::globals::static_trimesh_shape(const noob::basic_mesh& m, const std::string& name)
+noob::shape_handle noob::globals::static_trimesh_shape(const noob::basic_mesh& m, const std::string& name) noexcept(true) 
 {
 	auto search = names_to_shapes.find(name);
 	if (search == names_to_shapes.end())
 	{
 		noob::shape temp;
 		temp.trimesh(m);
-		return shapes.add(temp);
+		return add_shape(temp);
 	}
 	return search->second;
 }
@@ -414,7 +414,7 @@ return search->second;
 }
 */
 
-noob::animated_model_handle noob::globals::animated_model(const std::string& filename)
+noob::animated_model_handle noob::globals::animated_model(const std::string& filename) noexcept(true) 
 {
 	std::unique_ptr<noob::animated_model> temp = std::make_unique<noob::animated_model>();
 	temp->init(filename);
@@ -422,7 +422,7 @@ noob::animated_model_handle noob::globals::animated_model(const std::string& fil
 }
 
 
-noob::skeletal_anim_handle noob::globals::skeleton(const std::string& filename)
+noob::skeletal_anim_handle noob::globals::skeleton(const std::string& filename) noexcept(true) 
 {
 	std::unique_ptr<noob::skeletal_anim> temp = std::make_unique<noob::skeletal_anim>();
 	temp->init(filename);
@@ -430,7 +430,7 @@ noob::skeletal_anim_handle noob::globals::skeleton(const std::string& filename)
 }
 
 
-noob::light_handle noob::globals::set_light(const noob::light& l, const std::string& s)
+noob::light_handle noob::globals::set_light(const noob::light& l, const std::string& s) noexcept(true) 
 {
 	auto search = names_to_lights.find(s);
 	if (search != names_to_lights.end())
@@ -448,7 +448,7 @@ noob::light_handle noob::globals::set_light(const noob::light& l, const std::str
 }
 
 
-noob::light_handle noob::globals::get_light(const std::string& s) const
+noob::light_handle noob::globals::get_light(const std::string& s) const noexcept(true) 
 {
 	noob::light_handle temp;
 	auto search = names_to_lights.find(s);
@@ -460,7 +460,7 @@ noob::light_handle noob::globals::get_light(const std::string& s) const
 }
 
 
-noob::reflectance_handle noob::globals::set_reflectance(const noob::reflectance& r, const std::string& s)
+noob::reflectance_handle noob::globals::set_reflectance(const noob::reflectance& r, const std::string& s) noexcept(true) 
 {
 	auto search = names_to_reflectances.find(s);
 	if (search != names_to_reflectances.end())
@@ -477,7 +477,7 @@ noob::reflectance_handle noob::globals::set_reflectance(const noob::reflectance&
 }
 
 
-noob::reflectance_handle noob::globals::get_reflectance(const std::string& s) const
+noob::reflectance_handle noob::globals::get_reflectance(const std::string& s) const noexcept(true) 
 {
 	noob::reflectance_handle temp;
 	auto search = names_to_reflectances.find(s);
@@ -489,7 +489,7 @@ noob::reflectance_handle noob::globals::get_reflectance(const std::string& s) co
 }
 
 
-void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std::string& name)
+void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std::string& name) noexcept(true) 
 {
 	auto search = names_to_shaders.find(name);
 	if (search == names_to_shaders.end())
@@ -504,7 +504,7 @@ void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std
 }
 
 
-void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::uniform& u, const std::string& name)
+void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::uniform& u, const std::string& name) noexcept(true) 
 {
 	// set_shader(noob::prepared_shaders::uniform(u), name);
 	auto search = names_to_shaders.find(name);
@@ -520,7 +520,7 @@ void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::unif
 }
 
 
-noob::globals::shader_results noob::globals::get_shader(const std::string& s) const
+noob::globals::shader_results noob::globals::get_shader(const std::string& s) const noexcept(true) 
 {
 	noob::globals::shader_results results;
 	auto search = names_to_shaders.find(s);

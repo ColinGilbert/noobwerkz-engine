@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-noob::stage::~stage()
+noob::stage::~stage() noexcept(true) 
 {
 	delete dynamics_world;
 	delete solver;
@@ -12,7 +12,7 @@ noob::stage::~stage()
 }
 
 
-void noob::stage::init()
+void noob::stage::init() noexcept(true) 
 {
 	broadphase = new btDbvtBroadphase();
 	collision_configuration = new btDefaultCollisionConfiguration();
@@ -29,7 +29,7 @@ void noob::stage::init()
 	logger::log("[Stage] Done init.");
 }
 
-void noob::stage::tear_down()
+void noob::stage::tear_down() noexcept(true) 
 {
 	draw_graph.clear();
 
@@ -55,13 +55,13 @@ void noob::stage::tear_down()
 }
 
 
-void noob::stage::update(double dt)
+void noob::stage::update(double dt) noexcept(true) 
 {
 	dynamics_world->stepSimulation(1.0/60.0, 10);
 }
 
 
-void noob::stage::draw(float window_width, float window_height, const noob::vec3& eye_pos, const noob::vec3& eye_target, const noob::vec3& eye_up, const noob::mat4& projection_mat) const
+void noob::stage::draw(float window_width, float window_height, const noob::vec3& eye_pos, const noob::vec3& eye_target, const noob::vec3& eye_up, const noob::mat4& projection_mat) const noexcept(true) 
 {
 	noob::mat4 view_mat(noob::look_at(eye_pos, eye_target, eye_up));
 	bgfx::setViewTransform(0, &view_mat.m[0], &projection_mat.m[0]);
@@ -158,7 +158,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 }
 
 
-noob::body_handle noob::stage::add_body(const noob::body_type b_type, const noob::shape_handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd)
+noob::body_handle noob::stage::add_body(const noob::body_type b_type, const noob::shape_handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true) 
 {
 	noob::globals& g = noob::globals::get_instance();
 	noob::body b;
@@ -170,7 +170,7 @@ noob::body_handle noob::stage::add_body(const noob::body_type b_type, const noob
 }
 
 
-noob::ghost_handle noob::stage::add_ghost(const noob::shape_handle shape_h, const noob::vec3& pos, const noob::versor& orient)
+noob::ghost_handle noob::stage::add_ghost(const noob::shape_handle shape_h, const noob::vec3& pos, const noob::versor& orient) noexcept(true) 
 {
 	if (!ghosts_initialized)
 	{
@@ -189,7 +189,7 @@ noob::ghost_handle noob::stage::add_ghost(const noob::shape_handle shape_h, cons
 }
 
 
-noob::joint_handle noob::stage::joint(const noob::body_handle a, const noob::vec3& local_point_on_a, const noob::body_handle b, const noob::vec3& point_on_b)
+noob::joint_handle noob::stage::joint(const noob::body_handle a, const noob::vec3& local_point_on_a, const noob::body_handle b, const noob::vec3& point_on_b) noexcept(true) 
 {
 	noob::joint_handle h;
 
@@ -198,15 +198,14 @@ noob::joint_handle noob::stage::joint(const noob::body_handle a, const noob::vec
 }
 
 
-void noob::stage::actor(const noob::body_handle body_h, const noob::animated_model_handle model_h, const noob::globals::shader_results shader_h)
+void noob::stage::actor(const noob::body_handle body_h, const noob::animated_model_handle model_h, const noob::globals::shader_results shader_h) noexcept(true) 
 {
 
 }
 
 
-void noob::stage::actor(const noob::body_handle body_h, const noob::scaled_model model_info, const noob::globals::shader_results shader_h)
+void noob::stage::actor(const noob::body_handle body_h, const noob::scaled_model model_info, const noob::globals::shader_results shader_h) noexcept(true) 
 {
-
 	auto body_results = bodies_to_nodes.lookup(body_h.get_inner());
 
 	// Filter out duplicate bodies by checking existence in the table
@@ -288,7 +287,7 @@ void noob::stage::actor(const noob::body_handle body_h, const noob::scaled_model
    */
 
 
-void noob::stage::actor(const noob::shape_handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results shader_h, const noob::reflectance_handle reflect_arg)
+void noob::stage::actor(const noob::shape_handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results shader_h, const noob::reflectance_handle reflect_arg) noexcept(true) 
 {
 	noob::globals& g = noob::globals::get_instance();
 	noob::shape s = g.shapes.get(shape_h);
@@ -306,7 +305,7 @@ void noob::stage::actor(const noob::shape_handle shape_h , float mass, const noo
 }
 
 
-void noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results shader_h, const noob::reflectance_handle reflect_arg, const std::string& name)
+void noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, const noob::versor& orient, const noob::globals::shader_results shader_h, const noob::reflectance_handle reflect_arg, const std::string& name) noexcept(true) 
 {
 	noob::globals& g = noob::globals::get_instance();
 	noob::shape_handle shape_h = g.static_trimesh_shape(m, name);
@@ -318,7 +317,7 @@ void noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, cons
 }
 
 
-void noob::stage::set_light(unsigned int i, const noob::light_handle h)
+void noob::stage::set_light(unsigned int i, const noob::light_handle h) noexcept(true) 
 {
 	if (i < MAX_LIGHTS)
 	{
@@ -327,13 +326,13 @@ void noob::stage::set_light(unsigned int i, const noob::light_handle h)
 }
 
 
-void noob::stage::set_directional_light(const noob::directional_light& l)
+void noob::stage::set_directional_light(const noob::directional_light& l) noexcept(true) 
 {
 	directional_light = l;
 }
 
 
-noob::light_handle noob::stage::get_light(unsigned int i) const
+noob::light_handle noob::stage::get_light(unsigned int i) const noexcept(true) 
 {
 	noob::light_handle l;
 
@@ -345,7 +344,7 @@ noob::light_handle noob::stage::get_light(unsigned int i) const
 	return l;
 }
 
-void noob::stage::remove_body(noob::body_handle h)
+void noob::stage::remove_body(noob::body_handle h) noexcept(true) 
 {
 	if (bodies.exists(h) && h.get_inner() != 0)
 	{
@@ -358,7 +357,7 @@ void noob::stage::remove_body(noob::body_handle h)
 	}	
 }
 
-noob::stage::ghost_intersection_results noob::stage::get_intersections(const noob::ghost_handle ghost_h) const
+noob::stage::ghost_intersection_results noob::stage::get_intersections(const noob::ghost_handle ghost_h) const noexcept(true) 
 {
 	noob::ghost temp_ghost = ghosts.get(ghost_h);
 

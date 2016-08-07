@@ -1,9 +1,9 @@
-// Stores singletons that should only be stored once each. This means:
+// Stores objects that should be pooled. This means:
 // Shapes
-// Meshes (TODO: Abolish)
 // Stages
 // Skeletal animations
-// Models
+// 3D Models
+// Audio samples
 
 #pragma once
 
@@ -29,6 +29,8 @@
 #include "AudioSample.hpp"
 #include "SoundInterface.hpp"
 #include "FastHashTable.hpp"
+#include "Mixer.hpp"
+
 
 namespace noob
 {
@@ -44,24 +46,25 @@ namespace noob
 	{
 		friend class globals;
 		public:
-		bool is_physical() { return physical; }
+		bool is_physical() noexcept(true) { return physical; }
 		protected:
 		bool physical;
 	};
+
 
 	class globals
 	{
 		protected:
 			static globals* ptr_to_instance;
 
-			globals() {}
+			globals() noexcept(true) : sample_rate(44100), num_overflows(0) {}
 
-			globals(const globals& rhs)
+			globals(const globals& rhs) noexcept(true)
 			{
 				ptr_to_instance = rhs.ptr_to_instance;
 			}
 
-			globals& operator=(const globals& rhs)
+			globals& operator=(const globals& rhs) noexcept(true)
 			{
 				if (this != &rhs)
 				{
@@ -70,9 +73,9 @@ namespace noob
 				return *this;
 			}
 
-			~globals() {}
+			~globals() noexcept(true) {}
 		public:
-			static globals& get_instance()
+			static globals& get_instance() noexcept(true)
 			{
 				static globals the_instance;
 				ptr_to_instance = &the_instance;
@@ -81,36 +84,36 @@ namespace noob
 			}
 
 			// Provides sane defaults in order not to crash the app in case of erroneous access.
-			bool init();
+			bool init() noexcept(true);
 
 			// Parametric shapes. These get cached for reuse by the physics engine.
-			noob::shape_handle sphere_shape(float r);
+			noob::shape_handle sphere_shape(float r) noexcept(true);
 
-			noob::shape_handle box_shape(float x, float y, float z);
+			noob::shape_handle box_shape(float x, float y, float z) noexcept(true);
 
-			noob::shape_handle cylinder_shape(float r, float h);
+			noob::shape_handle cylinder_shape(float r, float h) noexcept(true);
 
-			noob::shape_handle cone_shape(float r, float h);
+			noob::shape_handle cone_shape(float r, float h) noexcept(true);
 
-			noob::shape_handle hull_shape(const std::vector<noob::vec3>&, const std::string& name);
+			noob::shape_handle hull_shape(const std::vector<noob::vec3>&, const std::string& name) noexcept(true);
 
-			noob::shape_handle static_trimesh_shape(const noob::basic_mesh&, const std::string& name);
+			noob::shape_handle static_trimesh_shape(const noob::basic_mesh&, const std::string& name) noexcept(true);
 
 			// Basic model creation. Those don't have bone weights built-in, so its lighter on the video card. Great for non-animated meshes and also scenery.
 			// If the name is the same as an existing model the new one replaces it, and everything should still work because the end-user only sees handles and the engine handles it under-the-hood. :)
-			noob::model_handle basic_model(const noob::basic_mesh&, const std::string& name);
+			noob::model_handle basic_model(const noob::basic_mesh&, const std::string& name) noexcept(true);
 
-			noob::animated_model_handle animated_model(const std::string& filename);
+			noob::animated_model_handle animated_model(const std::string& filename) noexcept(true);
 
-			noob::skeletal_anim_handle skeleton(const std::string& filename);
+			noob::skeletal_anim_handle skeleton(const std::string& filename) noexcept(true);
 
-			void set_shader(const noob::basic_renderer::uniform&, const std::string& name);
-			void set_shader(const noob::triplanar_gradient_map_renderer::uniform&, const std::string& name);
+			void set_shader(const noob::basic_renderer::uniform&, const std::string& name) noexcept(true);
+			void set_shader(const noob::triplanar_gradient_map_renderer::uniform&, const std::string& name) noexcept(true);
 
 			struct shader_results
 			{
-				shader_results() : type(shader_type::BASIC), handle(0) {}
-				bool operator==(const noob::globals::shader_results& other) const
+				shader_results() noexcept(true) : type(shader_type::BASIC), handle(0) {}
+				bool operator==(const noob::globals::shader_results& other) const noexcept(true)
 				{
 					return (type == other.type && handle == other.handle);
 				}
@@ -118,28 +121,28 @@ namespace noob
 				size_t handle;
 			};
 
-			noob::globals::shader_results get_shader(const std::string& name) const;
+			noob::globals::shader_results get_shader(const std::string& name) const noexcept(true);
 
-			noob::light_handle set_light(const noob::light&, const std::string& name);
-			noob::light_handle get_light(const std::string& name) const;
+			noob::light_handle set_light(const noob::light&, const std::string& name) noexcept(true);
+			noob::light_handle get_light(const std::string& name) const noexcept(true);
 
-			noob::reflectance_handle set_reflectance(const noob::reflectance&, const std::string& name);
-			noob::reflectance_handle get_reflectance(const std::string& name) const;
-			// void set_point_light(const noob::point_light&, const std::string& name);
-			// noob::point_light_handle get_point_light(const std::string& name);
+			noob::reflectance_handle set_reflectance(const noob::reflectance&, const std::string& name) noexcept(true);
+			noob::reflectance_handle get_reflectance(const std::string& name) const noexcept(true);
+			// void set_point_light(const noob::point_light&, const std::string& name) noexcept(true);
+			// noob::point_light_handle get_point_light(const std::string& name) noexcept(true);
 
-			// void set_spotlight(const noob::spotlight&, const std::string& name);
-			// noob::spotlight_handle get_spotlight(const std::string& name);
+			// void set_spotlight(const noob::spotlight&, const std::string& name) noexcept(true);
+			// noob::spotlight_handle get_spotlight(const std::string& name) noexcept(true);
 
 			// Those are easy to represent as a scaled item, and save a lot on the video card if repeated.
-			scaled_model sphere_model(float r);
-			scaled_model box_model(float x, float y, float z);
-			scaled_model cylinder_model(float r, float h);
-			scaled_model cone_model(float r, float h);
+			scaled_model sphere_model(float r) noexcept(true);
+			scaled_model box_model(float x, float y, float z) noexcept(true);
+			scaled_model cylinder_model(float r, float h) noexcept(true);
+			scaled_model cone_model(float r, float h) noexcept(true);
 			// Those will create lots more data
-			scaled_model model_from_mesh(const noob::basic_mesh&, const std::string& name);
+			scaled_model model_from_mesh(const noob::basic_mesh&, const std::string& name) noexcept(true);
 			// Causes crashes with scripts. Therefore, keep indoors.
-			scaled_model model_by_shape(const noob::shape_handle);
+			scaled_model model_by_shape(const noob::shape_handle) noexcept(true);
 
 
 			//
@@ -186,9 +189,26 @@ namespace noob
 
 			noob::body_descriptor physical_body_descriptor, ghost_body_descriptor;
 
-			noob::sound_interface audio_interface;
 
+			noob::mixer master_mixer;
+			noob::sound_interface audio_interface;
+			size_t sample_rate;
+			// While resampling data, some samples may suffer from overflow of a few values.
+			// This catches them so that they may be used in the next audio callback.
+			rde::vector<double> resample_overflow;
+			uint32_t num_overflows;
+		
 		protected:
+
+
+			shape_handle add_shape(const noob::shape& s)
+			{
+				noob::shape temp = s;
+				noob::shape_handle h = shapes.add(s);
+				temp.index = h.get_inner();
+				shapes.set(h, temp);
+				return h;
+			}
 
 			noob::fast_hashtable shapes_to_models;
 			rde::sorted_vector<float,size_t> spheres;

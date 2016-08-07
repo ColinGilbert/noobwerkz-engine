@@ -9,44 +9,15 @@ std::vector<std::tuple<noob::keyboard::keys, noob::keyboard::mod_keys, std::stri
 
 bool noob::application::user_init()
 {
-	dynamic_graph graph;
+	noob::audio_sample samp;
+	bool b = samp.load_file("./BlanketedLama.ogg");
+	noob::globals& g = noob::globals::get_instance();
+	noob::sample_handle h = g.samples.add(std::make_unique<noob::audio_sample>(samp));	
 
-	auto first = graph.add_node();
-	auto second = graph.add_node();
-	auto third = graph.add_node();
-	auto fourth = graph.add_node();
-
-
-	fmt::MemoryWriter ww_n;
-	ww_n << "[UserApp] First node = " << first << " Second node = " << second << " Third node = " << third << " Fourth node = " << fourth; 
-	logger::log(ww_n.str());
+	noob::audio_sample* s = g.samples.get(h);
 
 
-	graph.add_edge(0, first);
-
-	graph.add_edge(first, second);
-
-	graph.add_edge(first, third);
-
-	graph.add_edge(second, third);
-
-	graph.add_edge(third, fourth);
-
-	// auto t1 = graph.get_traveller();
-
-	bool has_loops = graph.has_loops();
-
-	fmt::MemoryWriter ww_loops;
-	ww_loops << "[UserApp] Has loops (should have)? ";
-	if (has_loops)
-	{
-		ww_loops << "Yes.";
-	}
-	else
-	{
-		ww_loops << "No.";
-	}
-	logger::log(ww_loops.str());
+	g.master_mixer.play_clip(h, 1.0);
 
 
 	// keystrokes.push_back(std::make_tuple(noob::keyboard::keys::NUM_5, noob::keyboard::mod_keys::NONE, "switch view (currently does nothing)"));

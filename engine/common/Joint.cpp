@@ -1,6 +1,6 @@
 #include "Joint.hpp"
 
-void noob::joint::init(const btDynamicsWorld* w, const noob::body& a, const noob::body& b, const noob::mat4& local_a, const noob::mat4& local_b)
+void noob::joint::init(const btDynamicsWorld* w, const noob::body& a, const noob::body& b, const noob::mat4& local_a, const noob::mat4& local_b) noexcept(true) 
 {
 	btTransform tr_a, tr_b;
 	tr_a.setFromOpenGLMatrix(&local_a.m[0]);
@@ -10,27 +10,27 @@ void noob::joint::init(const btDynamicsWorld* w, const noob::body& a, const noob
 	w->addConstraint(inner, true);
 }
 
-void noob::joint::set_spring(uint8_t i, bool val)
+void noob::joint::set_spring(uint8_t i, bool val) noexcept(true) 
 {
 	inner->enableSpring (i, val);
 }
 
-void noob::joint::set_stiffness(uint8_t i, float val)
+void noob::joint::set_stiffness(uint8_t i, float val) noexcept(true) 
 {
 	inner->setStiffness(i, val);
 }
 
-void noob::joint::set_damping(uint8_t i, float val)
+void noob::joint::set_damping(uint8_t i, float val) noexcept(true) 
 {
 	inner->setDamping(i, val);
 }
 
-void noob::joint::set_limits(uint8_t i, const noob::vec2& lims)
+void noob::joint::set_limits(uint8_t i, const noob::vec2& lims) noexcept(true) 
 {
 	inner->setLimit(i, lims.v[0], lims.v[1]);
 }
 
-void noob::joint::set_frames(const noob::mat4& local_a, const noob::mat4& local_b)
+void noob::joint::set_frames(const noob::mat4& local_a, const noob::mat4& local_b) noexcept(true) 
 {
 	btTransform tr_a;
 	tr_a.setFromOpenGLMatrix(&local_a.m[0]);
@@ -39,7 +39,7 @@ void noob::joint::set_frames(const noob::mat4& local_a, const noob::mat4& local_
 	inner->setFrames(tr_a, tr_b);
 }
 
-noob::vec3 noob::joint::get_axis(uint8_t i) const
+noob::vec3 noob::joint::get_axis(uint8_t i) const noexcept(true) 
 {
 	return noob::vec3_from_bullet(inner->getAxis(i));
 }
