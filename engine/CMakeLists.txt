@@ -715,6 +715,15 @@ include_directories(lib/logger)
 include_directories(lib/int-hashtable)
 list(APPEND hashtable-src lib/int-hashtable/FastHashTable.cpp)
 
+include_directories(lib/Shiny/include)
+list(APPEND shiny-src
+	lib/Shiny/src/ShinyManager.cpp
+	lib/Shiny/src/ShinyNode.cpp
+	lib/Shiny/src/ShinyNodePool.cpp
+	lib/Shiny/src/ShinyOutput.cpp
+	lib/Shiny/src/ShinyTools.cpp
+	)
+
 list(APPEND common_src
 	common/Globals.cpp
 	common/BasicMesh.cpp
@@ -781,7 +790,7 @@ add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src}
 	${bgfx_src} ${bgfx_utils_src} ${openmesh_src} ${rdestl_src}
 	${cppformat_src} ${recast_src} ${angelscript_src} ${bullet_src}
 	${voropp_src} ${ozz_src} ${hashtable-src} ${ogg_src} ${vorbis_src}
-	${r8_src})
+	${r8_src} ${shiny-src})
 
 target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype Enet)
 

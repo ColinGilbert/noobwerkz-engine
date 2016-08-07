@@ -1,0 +1,15 @@
+ShinyManager.o: src/ShinyManager.cpp include/ShinyManager.h \
+  include/ShinyZone.h include/ShinyData.h include/ShinyPrereqs.h \
+  include/ShinyConfig.h include/ShinyNode.h include/ShinyTools.h \
+  include/ShinyNodePool.h include/ShinyOutput.h
+ShinyNode.o: src/ShinyNode.cpp include/ShinyNode.h include/ShinyData.h \
+  include/ShinyPrereqs.h include/ShinyConfig.h include/ShinyTools.h \
+  include/ShinyZone.h
+ShinyNodePool.o: src/ShinyNodePool.cpp include/ShinyNodePool.h \
+  include/ShinyNode.h include/ShinyData.h include/ShinyPrereqs.h \
+  include/ShinyConfig.h include/ShinyTools.h include/ShinyTools.h
+ShinyOutput.o: src/ShinyOutput.cpp include/ShinyOutput.h \
+  include/ShinyNode.h include/ShinyData.h include/ShinyPrereqs.h \
+  include/ShinyConfig.h include/ShinyTools.h include/ShinyZone.h
+ShinyTools.o: src/ShinyTools.cpp include/ShinyTools.h \
+  include/ShinyPrereqs.h include/ShinyConfig.h
