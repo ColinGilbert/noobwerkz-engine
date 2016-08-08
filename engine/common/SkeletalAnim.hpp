@@ -40,7 +40,7 @@ namespace noob
 			void init(const std::string& filename);
 			// Loads a raw animation. You then create runtime animations via optimize()
 			bool load_animation(const std::string& filename, const std::string& anim_name);
-			// If name = "" all animations get processed. If all the tolerances == 0.0 it doesn't run an optimization pre-pass prior prior to creating runtime animations. 
+			// If name = "" all animations get processed. If all the tolerances == 0.0 it doesn't run an optimization pre-pass prior to creating runtime animations. 
 			void optimize(float translation_tolerance = 0.0, float rotation_tolerance = 0.0, float scale_tolerance = 0.0, const std::string& name = "");
 
 			void update(float dt = 0.0);
@@ -56,6 +56,7 @@ namespace noob
 			/// std::array<noob::vec3,4> get_skeleton_bounds() const;
 
 		protected:
+			
 			class playback_controller
 			{
 				public:
@@ -111,61 +112,3 @@ namespace noob
 			ozz::memory::Allocator* allocator;
 	};
 }
-
-/*	
-	enum class posture_type
-	{
-	STANDING, CROUCHING, PRONE, SITTING, RIDING
-	};
-
-	enum class equipment_type
-	{
-	UNARMED, SHIELD, SWORD, CLUB, SPEAR, PIKE, BOW
-	};
-
-	enum class movement_type
-	{
-	STATIONARY, WALK, RUN, CREEP
-	};
-
-	enum class movement_direction
-	{
-	FORWARD, LEFT, RIGHT, BACKWARD
-	};
-
-	enum class action_type
-	{
-	IDLE, MELEE, SHOOT, RELOAD, SALUTE, INSULT, COVER, JUMP, BRACE
-	};
-
-	struct animation_type
-	{
-	noob::skeletal_anim::equipment_type gear;
-	noob::skeletal_anim::posture_type posture;
-	noob::skeletal_anim::movement_type movement;
-	noob::skeletal_anim::movement_direction direction;
-	noob::skeletal_anim::action_type action;
-	};
-	*/
-
-/*
-   void posture(noob::skeletal_anim::posture_type current_posture);
-   void equipment(noob::skeletal_anim::equipment_type current_equipment);
-   void movement(noob::skeletal_anim::movement_type current_movement);
-   void direction(noob::skeletal_anim::movement_direction current_direction);
-   void action(noob::skeletal_anim::action_type current_action);
-   bool noob::skeletal_anim::load_animation(const std::string& filename, noob::animation_type anim)
-   */
-// Returns if current state is valid. For example, jumping and lying on the ground at the same time is quite difficult...
-//bool current_state_valid() const;
-
-// Return value: <from_anim, to_anim, normalized_blend>
-//std::tuple<noob::skeletal_anim::animation_type,noob::skeletal_anim::animation_type,float> get_current_anim() const;
-
-// Sets the default at the most specific blend tree level possible
-//bool set_default(const noob::skeletal_anim::animation_type& anim);
-//bool anim_exists(noob::skeletal_anim::animation_type anim) const;
-// If the desired animation isn't present, this will go to the most specific valid item in the blend tree.
-
-
-

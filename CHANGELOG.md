@@ -1,5 +1,22 @@
 CHANGELOG:
 
+Version 0.5 AKA: "StageCraft" (in progress)
+```
+Additions:
+Integrate actors into engine (WIP)
+
+Cleanups:
+Remove git modules as they were causing problems.
+```
+
+
+Version 0.4 AKA: "Auditory Delights"
+```
+Sound works properly
+Engine finds native audio rate and resamples sound effects to it upon load.
+Engine always plays audio at native rate.
+```
+
 
 Version 0.3 AKA: "Smorgasbord of Delights"
 ```

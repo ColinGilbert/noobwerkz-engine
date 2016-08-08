@@ -21,6 +21,7 @@
 #include "Joint.hpp"
 #include "Shape.hpp"
 #include "Armature.hpp"
+#include "Actor.hpp"
 #include "Component.hpp"
 #include "Globals.hpp"
 #include "ComponentDefines.hpp"
@@ -40,19 +41,6 @@ namespace noob
 	{
 		public:
 
-			// First, we declare a few structs.
-			struct contact_point
-			{
-				size_t handle;
-				noob::vec3 pos_a, pos_b, normal_on_b;
-			};
-			
-			struct ghost_intersection_results
-			{
-				noob::ghost_handle ghost;
-				std::vector<noob::body_handle> bodies;
-				std::vector<noob::ghost_handle> ghosts;
-			};
 
 			bool show_origin;
 
@@ -95,7 +83,7 @@ namespace noob
 
 			noob::light_handle get_light(unsigned int i) const noexcept(true);
 			
-			noob::stage::ghost_intersection_results get_intersections(const noob::ghost_handle) const noexcept(true);
+			noob::ghost_intersection_results get_intersections(const noob::ghost_handle) const noexcept(true);
 
 			// Dumps a readable graph format onto disk. Super useful for debug.
 			void write_graph(const std::string& filename) const noexcept(true);

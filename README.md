@@ -1,19 +1,23 @@
 Hi,
 
 
-I am developing a solid, fast, easy-to-use cross-platform game engine. This toolkit is made specifically to reduce wasted time (*cough cough* aside from the time it took to design and build this software *cough cough*.) Much of it consists of integrating external libraries, most of which are in C++ and using their useful features along with an efficient component system. It currently runs on Linux and Android. We can expect Windows, OSX, and iOS support quite soon. As a design goal, the legalese is designed to be extremely liberal (Apache 2.0.)
+I am developing a solid, fast, easy-to-use cross-platform game engine. This toolkit is made specifically to reduce wasted time (*cough cough* aside from the time it took to design and build this software *cough cough*.) Much of it consists of integrating external libraries, most of which are in C++ and using their useful features along with an efficient component system. Work is also underway on homegrown tools. It currently runs on Linux. We can expect Android, Windows, OSX, and iOS support quite soon. Legalese is quite liberal (Apache 2.0.)
 
-Still WIP. Not yet recommended for use. Please feel free to bookmark this repo and come by later because this thing is living with me and awesome things will soon come out of it. :)
+Still WIP. Not yet recommended for day-to-day use. Please feel free to bookmark this repo and come by later because this thing is living with me and awesome things will soon come out of it. :)
 
 Documentation is rather sparse at the moment, and consists of code comments, this page, and issues on the tracker. The issues are well-written, thoughtfully labeled, and organized into the right milestones. Link:
 
 https://github.com/ColinGilbert/noobwerkz-engine/milestones
 
-These can provide a sense of direction as to the direction of the project; I encourage you to browse in there (or the source code.)
+These can provide a broad sense as to the direction of the project; I encourage you to browse in there (or even better, the source code itself.)
 
-High-quality tutorials and real unit tests will come when the implementation is more or less set in stone.
+High-quality tutorials and real unit tests will come when the implementation is more or less mature.
 
-Current version: Version 0.4: "Auditory Delights"
+Current versions:
+```
+Master: 0.4 "Auditory Delights"
+Dev: 0.5 "StageCraft"
+```
 
 Specific features:
 ```
@@ -26,15 +30,18 @@ Currently brings in (among others):
 ```
 BGFX
 Bullet Physics
+Assimp
 PolyVox
 AngelScript
 libogg/libvorbis (soon Opus)
 r8brain's excellent resampling routines
 ```
 
-To clone:
 ```
-git clone --recursive https://github.com/ColinGilbert/noobwerkz-engine.git
+
+To bootstrap:
+```
+Proper bootstrap scripts coming very soon. I promise. :)
 ```
 
 Structure:
@@ -51,7 +58,8 @@ Short scripts with tiny names are used to do routine work (compiles, archivals, 
 Platforms:
 ```
 Current setup uses linux as main controller.
-Designed so as to be stupidly easy to port (set up your platform-specific code and define an entry point and we're good to go!)
+Designed so as to be stupidly easy to port: Set up your platform-specific bootstrap code, define entry points, compile your shaders (soon unnecessary) and we're good to go!
+Ports coming soon.
 ```
 
 Little *nix scripts (currently runs on bash but I don't believe it uses any bashisms:

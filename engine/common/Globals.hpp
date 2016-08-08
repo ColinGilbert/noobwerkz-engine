@@ -30,18 +30,11 @@
 #include "SoundInterface.hpp"
 #include "FastHashTable.hpp"
 #include "Mixer.hpp"
-
+#include "NoobCommon.hpp"
 
 namespace noob
 {
-	enum shader_type
-	{       
-		BASIC = 0,
-		TRIPLANAR = 1 << 1,
-	};
-
-	class globals;
-
+	
 	class body_descriptor
 	{
 		friend class globals;
@@ -50,8 +43,7 @@ namespace noob
 		protected:
 		bool physical;
 	};
-
-
+	
 	class globals
 	{
 		protected:

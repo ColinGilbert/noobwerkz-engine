@@ -357,7 +357,7 @@ void noob::stage::remove_body(noob::body_handle h) noexcept(true)
 	}	
 }
 
-noob::stage::ghost_intersection_results noob::stage::get_intersections(const noob::ghost_handle ghost_h) const noexcept(true) 
+noob::ghost_intersection_results noob::stage::get_intersections(const noob::ghost_handle ghost_h) const noexcept(true) 
 {
 	noob::ghost temp_ghost = ghosts.get(ghost_h);
 
@@ -365,7 +365,7 @@ noob::stage::ghost_intersection_results noob::stage::get_intersections(const noo
 
 	btBroadphasePairArray& pairArray = temp_ghost.inner->getOverlappingPairCache()->getOverlappingPairArray();
 
-	noob::stage::ghost_intersection_results results;
+	noob::ghost_intersection_results results;
 	results.ghost = ghost_handle::make(temp_ghost.inner->getUserIndex());
 
 	size_t num_pairs = pairArray.size();
