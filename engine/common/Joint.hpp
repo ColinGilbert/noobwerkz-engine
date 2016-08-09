@@ -14,22 +14,18 @@ namespace noob
 			void set_frames(const noob::mat4& local_a, const noob::mat4& local_b) noexcept(true);
 
 
-			void set_spring(uint8_t, bool) noexcept(true);
+			void set_enabled(uint8_t, bool) noexcept(true);
 			void set_stiffness(uint8_t, float) noexcept(true);
 			void set_damping(uint8_t, float) noexcept(true);
 			void set_limits(uint8_t, const noob::vec2&) noexcept(true);
 		
-			// bool get_spring(uint8_t) noexcept(true);
-			// float get_stiffness(uint8_t) noexcept(true);
-			// float get_damping(uint8_t) noexcept(true);
-			// noob::vec2 get_limits(uint8_t) noexcept(true);
+			bool is_enabled(uint8_t) const noexcept(true);
+			float get_stiffness(uint8_t) const noexcept(true);
+			float get_damping(uint8_t) const noexcept(true);
+			noob::vec2 get_limits(uint8_t) const noexcept(true);
 			
-		
 			noob::vec3 get_axis(uint8_t) const noexcept(true);
 			float get_angle(uint8_t) const noexcept(true);
-
-			// btVector3 getAxis (int axis_index) const
-			// btScalar getAngle (int axis_index) const
 
 		protected:
 			btGeneric6DofSpringConstraint* inner;

@@ -4,6 +4,8 @@ Version 0.5 AKA: "StageCraft" (in progress)
 ```
 Additions:
 Integrate actors into engine (WIP)
+Add joints to scripting.
+Improve joints API (WIP)
 
 Cleanups:
 Remove git modules as they were causing problems

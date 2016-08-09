@@ -3,10 +3,10 @@
 void noob::register_joint(asIScriptEngine* script_engine)
 {
 	// NOT IMPLEMENTED YET 
-	// bool get_spring(uint8_t) noexcept(true);
-	// float get_stiffness(uint8_t) noexcept(true);
-	// float get_damping(uint8_t) noexcept(true);
-	// noob::vec2 get_limits(uint8_t) noexcept(true);
+	// bool is_enabled(uint8) const
+	// float get_stiffness(uint8) const
+	// float get_damping(uint8) const
+	// vec2 get_limits(uint8) const
 
 	int r;
 	r = script_engine->RegisterObjectType("joint", sizeof(noob::joint), asOBJ_VALUE); assert(r >= 0 );
@@ -16,7 +16,7 @@ void noob::register_joint(asIScriptEngine* script_engine)
 
 	r = script_engine->RegisterObjectMethod("joint", "void set_frames(const mat4& in, const mat4& in)", asMETHOD(noob::joint, set_frames), asCALL_THISCALL); assert( r >= 0 );
 
-	r = script_engine->RegisterObjectMethod("joint", "void set_spring(uint8, bool)", asMETHOD(noob::joint, set_spring), asCALL_THISCALL); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("joint", "void set_enabled(uint8, bool)", asMETHOD(noob::joint, set_enabled), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("joint", "void set_stiffness(uint8, bool)", asMETHOD(noob::joint, set_stiffness), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("joint", "void set_damping(uint8, float)", asMETHOD(noob::joint, set_damping), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("joint", "void set_limits(uint8, const vec2& in)", asMETHOD(noob::joint, set_limits), asCALL_THISCALL); assert( r >= 0 );
