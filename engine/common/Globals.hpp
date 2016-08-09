@@ -8,6 +8,7 @@
 #pragma once
 
 #include <memory>
+#include <rdestl/rde_string.h>
 #include <rdestl/hash_map.h>
 #include <rdestl/sorted_vector.h>
 #include "MathFuncs.hpp"
@@ -203,10 +204,10 @@ namespace noob
 
 			noob::fast_hashtable shapes_to_models;
 			rde::sorted_vector<float,size_t> spheres;
-			std::unordered_map<std::string, noob::shape_handle> names_to_shapes;
-			std::unordered_map<std::string, noob::model_handle> names_to_basic_models;
-			std::unordered_map<std::string, noob::globals::shader_results> names_to_shaders;
-			std::unordered_map<std::string, noob::light_handle> names_to_lights;
-			std::unordered_map<std::string, noob::reflectance_handle> names_to_reflectances;
+			rde::hash_map<rde::string, noob::shape_handle> names_to_shapes;
+			rde::hash_map<rde::string, noob::model_handle> names_to_basic_models;
+			rde::hash_map<rde::string, noob::globals::shader_results> names_to_shaders;
+			rde::hash_map<rde::string, noob::light_handle> names_to_lights;
+			rde::hash_map<rde::string, noob::reflectance_handle> names_to_reflectances;
 	};
 }

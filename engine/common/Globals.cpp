@@ -162,10 +162,12 @@ noob::scaled_model noob::globals::cone_model(float r, float h) noexcept(true)
 
 noob::scaled_model noob::globals::model_from_mesh(const noob::basic_mesh& m, const std::string& name) noexcept(true) 
 {
+
+
 	std::unique_ptr<noob::basic_model> temp = std::make_unique<noob::basic_model>();
 	temp->init(m);
-	noob::model_handle h;
-	auto results = names_to_basic_models.find(name);
+	noob::model_handle h = basic_models.add(std::move(temp));
+	auto results = names_to_basic_models.find(rde::string(name.c_str()));
 	if (results != names_to_basic_models.end())
 	{
 		basic_models.set(results->second, std::move(temp));
@@ -173,9 +175,8 @@ noob::scaled_model noob::globals::model_from_mesh(const noob::basic_mesh& m, con
 	}
 	else
 	{
-		h = basic_models.add(std::move(temp));
 		//h = temp.model_h;
-		names_to_basic_models.insert(std::make_pair(name, h));
+		names_to_basic_models.insert(rde::make_pair(rde::string(name.c_str()), h));
 	}
 
 	noob::scaled_model retval;
@@ -251,6 +252,7 @@ noob::scaled_model noob::globals::model_by_shape(const noob::shape_handle h) noe
 				break;
 			}
 	};
+
 	return results; 
 }
 
@@ -260,17 +262,14 @@ noob::shape_handle noob::globals::sphere_shape(float r) noexcept(true)
 	fmt::MemoryWriter w;
 	w << "sphere-" << static_cast<uint32_t>(r);
 
-	auto search = names_to_shapes.find(w.str());
+	auto search = names_to_shapes.find(rde::string(w.c_str()));
 	// auto search = sphere_shapes.find(r);
 	if (search == names_to_shapes.end())
 	{
 		noob::shape temp;
 		temp.sphere(r);
 
-		fmt::MemoryWriter ww;
-		ww << "sphere-" << static_cast<uint32_t>(r);
-
-		auto results = names_to_shapes.insert(std::make_pair(ww.str(), add_shape(temp)));
+		auto results = names_to_shapes.insert(rde::make_pair(rde::string(w.c_str()), add_shape(temp)));
 		return (results.first)->second;
 
 	}
@@ -282,17 +281,14 @@ noob::shape_handle noob::globals::box_shape(float x, float y, float z) noexcept(
 {
 	fmt::MemoryWriter w;
 	w << "box-" << static_cast<uint32_t>(x) << "-" << static_cast<uint32_t>(y)  << "-" << static_cast<uint32_t>(z);
-	auto search = names_to_shapes.find(w.str());
+	auto search = names_to_shapes.find(rde::string(w.c_str()));
 	//auto search = box_shapes.find(std::make_tuple(x,y,z));
 	if (search == names_to_shapes.end())
 	{
 		noob::shape temp;
 		temp.box(x, y, z);
 
-		fmt::MemoryWriter ww;
-		ww << "box-" << static_cast<uint32_t>(x) << "-" << static_cast<uint32_t>(y) << "-" << static_cast<uint32_t>(z);
-
-		auto results = names_to_shapes.insert(std::make_pair(ww.str(), add_shape(temp)));
+		auto results = names_to_shapes.insert(rde::make_pair(rde::string(w.c_str()), add_shape(temp)));
 		return (results.first)->second;
 	}
 	return search->second;
@@ -303,17 +299,14 @@ noob::shape_handle noob::globals::cylinder_shape(float r, float h) noexcept(true
 {
 	// auto search = cylinder_shapes.find(std::make_tuple(r, h));
 	fmt::MemoryWriter w;
-	w << "cylinder-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
-	auto search = names_to_shapes.find(w.str());
+	w << "cyl-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
+	auto search = names_to_shapes.find(rde::string(w.c_str()));
 	if (search == names_to_shapes.end())
 	{
 		noob::shape temp;
 		temp.cylinder(r, h);
 
-		fmt::MemoryWriter ww;
-		ww << "cylinder-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
-
-		auto results = names_to_shapes.insert(std::make_pair(ww.str(), add_shape(std::move(temp))));
+		auto results = names_to_shapes.insert(rde::make_pair(rde::string(w.c_str()), add_shape(temp)));
 		return (results.first)->second;
 	}
 	return search->second;
@@ -324,16 +317,13 @@ noob::shape_handle noob::globals::cone_shape(float r, float h) noexcept(true)
 {
 	fmt::MemoryWriter w;
 	w << "cone-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
-	auto search = names_to_shapes.find(w.str());
+	auto search = names_to_shapes.find(rde::string(w.c_str()));
 	if (search == names_to_shapes.end())
 	{
 		noob::shape temp;
 		temp.cone(r, h);
 
-		fmt::MemoryWriter ww;
-		ww << "cone-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
-
-		auto results = names_to_shapes.insert(std::make_pair(ww.str(), add_shape(temp)));
+		auto results = names_to_shapes.insert(rde::make_pair(rde::string(w.c_str()), add_shape(temp)));
 		return (results.first)->second;
 	}
 	return search->second;
@@ -370,7 +360,7 @@ noob::shape_handle noob::globals::cone_shape(float r, float h) noexcept(true)
 
 noob::shape_handle noob::globals::hull_shape(const std::vector<vec3>& points, const std::string& name) noexcept(true) 
 {
-	auto search = names_to_shapes.find(name);
+	auto search = names_to_shapes.find(rde::string(name.c_str()));
 	if (search == names_to_shapes.end())
 	{
 		// TODO: Add to shapes_to_meshes
@@ -384,7 +374,7 @@ noob::shape_handle noob::globals::hull_shape(const std::vector<vec3>& points, co
 
 noob::shape_handle noob::globals::static_trimesh_shape(const noob::basic_mesh& m, const std::string& name) noexcept(true) 
 {
-	auto search = names_to_shapes.find(name);
+	auto search = names_to_shapes.find(rde::string(name.c_str()));
 	if (search == names_to_shapes.end())
 	{
 		noob::shape temp;
@@ -432,7 +422,7 @@ noob::skeletal_anim_handle noob::globals::skeleton(const std::string& filename) 
 
 noob::light_handle noob::globals::set_light(const noob::light& l, const std::string& s) noexcept(true) 
 {
-	auto search = names_to_lights.find(s);
+	auto search = names_to_lights.find(rde::string(s.c_str()));
 	if (search != names_to_lights.end())
 	{
 		lights.set(search->second, l);
@@ -441,7 +431,7 @@ noob::light_handle noob::globals::set_light(const noob::light& l, const std::str
 	else
 	{
 		noob::light_handle h = lights.add(l);
-		names_to_lights.insert(std::make_pair(s, h));
+		names_to_lights.insert(rde::make_pair(rde::string(s.c_str()), h));
 		return h;
 	}
 
@@ -451,7 +441,7 @@ noob::light_handle noob::globals::set_light(const noob::light& l, const std::str
 noob::light_handle noob::globals::get_light(const std::string& s) const noexcept(true) 
 {
 	noob::light_handle temp;
-	auto search = names_to_lights.find(s);
+	auto search = names_to_lights.find(rde::string(s.c_str()));
 	if (search != names_to_lights.end())
 	{		
 		temp = search->second;
@@ -462,7 +452,7 @@ noob::light_handle noob::globals::get_light(const std::string& s) const noexcept
 
 noob::reflectance_handle noob::globals::set_reflectance(const noob::reflectance& r, const std::string& s) noexcept(true) 
 {
-	auto search = names_to_reflectances.find(s);
+	auto search = names_to_reflectances.find(rde::string(s.c_str()));
 	if (search != names_to_reflectances.end())
 	{
 		reflectances.set(search->second, r);
@@ -471,7 +461,7 @@ noob::reflectance_handle noob::globals::set_reflectance(const noob::reflectance&
 	else
 	{
 		noob::reflectance_handle h = reflectances.add(r);
-		names_to_reflectances.insert(std::make_pair(s, h));
+		names_to_reflectances.insert(rde::make_pair(rde::string(s.c_str()), h));
 		return h;
 	}
 }
@@ -480,7 +470,7 @@ noob::reflectance_handle noob::globals::set_reflectance(const noob::reflectance&
 noob::reflectance_handle noob::globals::get_reflectance(const std::string& s) const noexcept(true) 
 {
 	noob::reflectance_handle temp;
-	auto search = names_to_reflectances.find(s);
+	auto search = names_to_reflectances.find(rde::string(s.c_str()));
 	if (search != names_to_reflectances.end())
 	{		
 		temp = search->second;
@@ -491,7 +481,7 @@ noob::reflectance_handle noob::globals::get_reflectance(const std::string& s) co
 
 void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std::string& name) noexcept(true) 
 {
-	auto search = names_to_shaders.find(name);
+	auto search = names_to_shaders.find(rde::string(name.c_str()));
 	if (search == names_to_shaders.end())
 	{
 		noob::basic_shader_handle h = basic_shaders.add(u);
@@ -499,7 +489,7 @@ void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std
 		r.type = noob::shader_type::BASIC;
 		r.handle = h.get_inner();
 
-		names_to_shaders.insert(std::make_pair(name, r));
+		names_to_shaders.insert(rde::make_pair(rde::string(name.c_str()), r));
 	}
 }
 
@@ -507,7 +497,7 @@ void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std
 void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::uniform& u, const std::string& name) noexcept(true) 
 {
 	// set_shader(noob::prepared_shaders::uniform(u), name);
-	auto search = names_to_shaders.find(name);
+	auto search = names_to_shaders.find(rde::string(name.c_str()));
 	if (search == names_to_shaders.end())
 	{
 		noob::triplanar_shader_handle h = triplanar_shaders.add(u);
@@ -515,7 +505,7 @@ void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::unif
 		r.type = noob::shader_type::TRIPLANAR;
 		r.handle = h.get_inner();
 
-		names_to_shaders.insert(std::make_pair(name, r));
+		names_to_shaders.insert(rde::make_pair(rde::string(name.c_str()), r));
 	}
 }
 
@@ -523,7 +513,7 @@ void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::unif
 noob::globals::shader_results noob::globals::get_shader(const std::string& s) const noexcept(true) 
 {
 	noob::globals::shader_results results;
-	auto search = names_to_shaders.find(s);
+	auto search = names_to_shaders.find(rde::string(s.c_str()));
 	if (search != names_to_shaders.end())
 	{
 		// fmt::MemoryWriter ww;		
