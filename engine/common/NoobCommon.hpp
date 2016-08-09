@@ -8,7 +8,6 @@ namespace noob
 		TRIPLANAR = 1
 	};
 
-
 	struct drawing_info
 	{
 		noob::shader_type type;

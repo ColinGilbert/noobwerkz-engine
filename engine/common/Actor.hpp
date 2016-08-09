@@ -13,7 +13,6 @@ namespace noob
 {
 	struct actor
 	{
-		
 		// These are basic stances upon which all other activities are animated.
 		enum class stance { STANDING = 0, MOUNTED = 1, PRONE = 2, SITTING = 3, KNEELING = 4, KO = 5, RAGDOLL = 6 };
 

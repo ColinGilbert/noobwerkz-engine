@@ -41,13 +41,6 @@ namespace noob
 	{
 		public:
 
-
-			bool show_origin;
-
-			noob::vec4 ambient_light;
-
-			// Now, onto the class itself.
-
 			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.1, 0.1, 0.1, 0.1)), bodies_mapping(draw_graph), model_mats_mapping(draw_graph), basic_models_mapping(draw_graph), shaders_mapping(draw_graph), reflectances_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph), ghosts_initialized(false) {}
 
 			~stage() noexcept(true);
@@ -87,6 +80,12 @@ namespace noob
 
 			// Dumps a readable graph format onto disk. Super useful for debug.
 			void write_graph(const std::string& filename) const noexcept(true);
+
+
+
+			bool show_origin;
+
+			noob::vec4 ambient_light;
 
 
 		protected:
