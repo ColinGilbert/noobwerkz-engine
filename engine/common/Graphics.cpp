@@ -8,7 +8,7 @@
 //#include "shaderc.h"
 
 // bgfx::VertexDecl noob::graphics::mesh_vertex::ms_decl;
-
+/*
 std::unordered_map<std::string, noob::graphics::texture> noob::graphics::global_textures;
 std::unordered_map<std::string, noob::graphics::uniform> noob::graphics::uniforms;
 std::unordered_map<std::string, noob::graphics::sampler> noob::graphics::samplers;
@@ -44,6 +44,7 @@ const noob::graphics::uniform noob::graphics::rough_albedo_fresnel;
 
 const noob::graphics::sampler noob::graphics::invalid_texture;
 const noob::graphics::sampler noob::graphics::texture_0;
+*/
 
 void noob::graphics::init(uint32_t width, uint32_t height)
 {

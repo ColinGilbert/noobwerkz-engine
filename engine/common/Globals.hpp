@@ -10,8 +10,8 @@
 #include <memory>
 #include <rdestl/hash_map.h>
 #include <rdestl/sorted_vector.h>
-
 #include "MathFuncs.hpp"
+#include "Graphics.hpp"
 #include "BasicMesh.hpp"
 #include "MeshUtils.hpp"
 #include "BasicModel.hpp"
@@ -191,7 +191,6 @@ namespace noob
 			uint32_t num_overflows;
 		
 		protected:
-
 
 			shape_handle add_shape(const noob::shape& s)
 			{
