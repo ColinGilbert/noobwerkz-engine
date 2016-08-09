@@ -487,7 +487,7 @@ void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std
 	if (search == names_to_shaders.end())
 	{
 		noob::basic_shader_handle h = basic_shaders.add(u);
-		noob::globals::shader_results r;
+		noob::shader_results r;
 		r.type = noob::shader_type::BASIC;
 		r.handle = h.get_inner();
 
@@ -503,7 +503,7 @@ void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::unif
 	if (search == names_to_shaders.end())
 	{
 		noob::triplanar_shader_handle h = triplanar_shaders.add(u);
-		noob::globals::shader_results r;
+		noob::shader_results r;
 		r.type = noob::shader_type::TRIPLANAR;
 		r.handle = h.get_inner();
 
@@ -512,9 +512,9 @@ void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::unif
 }
 
 
-noob::globals::shader_results noob::globals::get_shader(const std::string& s) const noexcept(true) 
+noob::shader_results noob::globals::get_shader(const std::string& s) const noexcept(true) 
 {
-	noob::globals::shader_results results;
+	noob::shader_results results;
 	auto search = names_to_shaders.find(rde::string(s.c_str()));
 	if (search != names_to_shaders.end())
 	{

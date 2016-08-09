@@ -13,6 +13,17 @@ namespace noob
 		TRIPLANAR = 1
 	};
 
+	struct shader_results
+	{
+		shader_results() noexcept(true) : type(shader_type::BASIC), handle(0) {}
+		bool operator==(const noob::shader_results& other) const noexcept(true)
+		{
+			return (type == other.type && handle == other.handle);
+		}
+		shader_type type;
+		size_t handle;
+	};
+
 	struct drawing_info
 	{
 		noob::shader_type type;
@@ -28,7 +39,17 @@ namespace noob
 
 	typedef handle<noob::character_colour_scheme> character_shading_handle;
 	typedef handle<noob::boss_colour_scheme> boss_shading_handle;
-	
+
+	enum class collision_type
+	{
+		NOTHING = 0,
+		TERRAIN = 1 << 1,
+		CHARACTER = 1 << 2,
+		TEAM_A = 1 << 3,
+		TEAM_B = 1 << 4,
+		POWERUP = 1 << 5,
+	};
+
 	struct contact_point
 	{
 		size_t handle;

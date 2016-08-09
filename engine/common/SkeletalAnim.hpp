@@ -21,9 +21,6 @@
 #include <ozz/animation/offline/animation_optimizer.h>
 #include <ozz/base/memory/allocator.h>
 
-// #include <lemon/list_graph.h>
-// #include <lemon/static_graph.h>
-
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
 

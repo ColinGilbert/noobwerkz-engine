@@ -108,30 +108,15 @@ namespace noob
 			void set_shader(const noob::basic_renderer::uniform&, const std::string& name) noexcept(true);
 			void set_shader(const noob::triplanar_gradient_map_renderer::uniform&, const std::string& name) noexcept(true);
 
-			struct shader_results
-			{
-				shader_results() noexcept(true) : type(shader_type::BASIC), handle(0) {}
-				bool operator==(const noob::globals::shader_results& other) const noexcept(true)
-				{
-					return (type == other.type && handle == other.handle);
-				}
-				shader_type type;
-				size_t handle;
-			};
 
-			noob::globals::shader_results get_shader(const std::string& name) const noexcept(true);
+			noob::shader_results get_shader(const std::string& name) const noexcept(true);
 
 			noob::light_handle set_light(const noob::light&, const std::string& name) noexcept(true);
 			noob::light_handle get_light(const std::string& name) const noexcept(true);
 
 			noob::reflectance_handle set_reflectance(const noob::reflectance&, const std::string& name) noexcept(true);
 			noob::reflectance_handle get_reflectance(const std::string& name) const noexcept(true);
-			// void set_point_light(const noob::point_light&, const std::string& name) noexcept(true);
-			// noob::point_light_handle get_point_light(const std::string& name) noexcept(true);
-
-			// void set_spotlight(const noob::spotlight&, const std::string& name) noexcept(true);
-			// noob::spotlight_handle get_spotlight(const std::string& name) noexcept(true);
-
+			
 			// Those are easy to represent as a scaled item, and save a lot on the video card if repeated.
 			scaled_model sphere_model(float r) noexcept(true);
 			scaled_model box_model(float x, float y, float z) noexcept(true);
@@ -143,9 +128,9 @@ namespace noob
 			scaled_model model_by_shape(const noob::shape_handle) noexcept(true);
 
 
-			//
+			// ---------------
 			// Data members:
-			//
+			// ---------------
 
 			// The following are basic, commonly-used objects that we provide as a convenience.
 			noob::shape_handle unit_sphere_shape, unit_cube_shape, unit_capsule_shape, unit_cylinder_shape, unit_cone_shape;
@@ -173,25 +158,10 @@ namespace noob
 			character_shading_holder character_shadings;
 			boss_shading_holder boss_shadings;
 
-
-
 			noob::basic_renderer basic_drawer;
 			noob::triplanar_gradient_map_renderer triplanar_drawer;
 
-
-
-			enum collision_type
-			{
-				NOTHING = 0,
-				TERRAIN = 1 << 1,
-				CHARACTER = 1 << 2,
-				TEAM_A = 1 << 3,
-				TEAM_B = 1 << 4,
-				POWERUP = 1 << 5,
-			};
-
 			noob::body_descriptor physical_body_descriptor, ghost_body_descriptor;
-
 
 			noob::mixer master_mixer;
 			noob::sound_interface audio_interface;
@@ -218,7 +188,7 @@ namespace noob
 
 			rde::hash_map<rde::string, noob::shape_handle> names_to_shapes;
 			rde::hash_map<rde::string, noob::model_handle> names_to_basic_models;
-			rde::hash_map<rde::string, noob::globals::shader_results> names_to_shaders;
+			rde::hash_map<rde::string, noob::shader_results> names_to_shaders;
 			rde::hash_map<rde::string, noob::light_handle> names_to_lights;
 			rde::hash_map<rde::string, noob::reflectance_handle> names_to_reflectances;
 	};
