@@ -26,7 +26,6 @@ restrictions:
 
 #include "ShinyPrereqs.h"
 
-
 namespace Shiny {
 
 
@@ -57,7 +56,8 @@ namespace Shiny {
 #endif
 
 	inline uint32_t ptr32(const void *a_Ptr) {
-		return reinterpret_cast<uint32_t>(a_Ptr);
+		// Colin: Had to add trickery to make it work :P
+		return static_cast<uint32_t>(reinterpret_cast<uint64_t>(a_Ptr));
 	}
 
 #if SHINY_COMPILER == SHINY_COMPILER_MSVC

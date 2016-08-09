@@ -133,7 +133,7 @@ noob::active_mesh::vertex_handle_results noob::active_mesh::get_vertex_handle(co
 	if (vertex_exists(v))
 	{
 		results.valid = true;
-		results.handle = xyz_to_vhandles[v.v];
+		results.handle = xyz_to_vhandles.find(v.v)->second;
 	}
 	return results;
 }
@@ -179,9 +179,9 @@ size_t noob::active_mesh::num_faces() const
 std::vector<noob::active_mesh::edge_h> noob::active_mesh::get_adjacent_edges(const noob::active_mesh::face_h first_face, const noob::active_mesh::face_h second_face) const
 {
 	std::vector<noob::active_mesh::edge_h> results;
-	for (auto first_iter = half_edges.fe_iter(first_face); first_iter.is_valid(); ++first_iter)
+	for (auto first_iter = half_edges.cfe_iter(first_face); first_iter.is_valid(); ++first_iter)
 	{
-		for (auto second_iter = half_edges.fe_iter(second_face); second_iter.is_valid(); ++second_iter)
+		for (auto second_iter = half_edges.cfe_iter(second_face); second_iter.is_valid(); ++second_iter)
 		{
 			if (first_iter == second_iter)
 			{

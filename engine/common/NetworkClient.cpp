@@ -11,7 +11,7 @@ noob::network_client::~network_client() noexcept(true)
 }
 
 
-bool noob::network_client::init(size_t num_channels, uint32_t incoming_bandwidth = 0, uint32_t outgoing_bandwidth = 0) noexcept(true)
+bool noob::network_client::init(size_t num_channels, uint32_t incoming_bandwidth, uint32_t outgoing_bandwidth) noexcept(true)
 {
 	if (!connected)
 	{
@@ -160,7 +160,7 @@ void noob::network_client::tick() noexcept(true)
 					//	}
 					case ENET_EVENT_TYPE_RECEIVE:
 						{
-							packets.push_back(std::string(event.packet->data));
+							packets.push_back(std::string(reinterpret_cast<const char*>(event.packet->data)));
 							enet_packet_destroy(event.packet);
 							break;
 						}
