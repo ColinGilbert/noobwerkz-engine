@@ -15,7 +15,6 @@ namespace noob
 		noob::reflectance_handle reflect;
 	};
 
-
 	struct contact_point
 	{
 		size_t handle;

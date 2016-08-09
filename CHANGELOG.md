@@ -6,7 +6,9 @@ Additions:
 Integrate actors into engine (WIP)
 
 Cleanups:
-Remove git modules as they were causing problems.
+Remove git modules as they were causing problems
+Make graphics class non-static
+Banish use of -fpermissive from entire codebase
 ```
 
 
