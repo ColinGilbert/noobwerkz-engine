@@ -106,6 +106,9 @@ namespace noob
 			noob::joints_holder joints;
 			noob::ghosts_holder ghosts;
 
+			rde::vector<noob::actor_event> actor_mq;
+			uint32_t actor_mq_count;
+
 			noob::component<uint64_t> actor_mask;
 			noob::component<noob::actor::movement> actor_moving;
 			noob::component<noob::actor_specs_handle> actor_specs;

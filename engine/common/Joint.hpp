@@ -20,9 +20,10 @@ namespace noob
 			void set_limits(uint8_t, const noob::vec2&) noexcept(true);
 		
 			bool is_enabled(uint8_t) const noexcept(true);
-			float get_stiffness(uint8_t) const noexcept(true);
-			float get_damping(uint8_t) const noexcept(true);
-			noob::vec2 get_limits(uint8_t) const noexcept(true);
+			// TODO: Patch Bullet? Maybe good reason?
+			// float get_stiffness(uint8_t) const noexcept(true);
+			// float get_damping(uint8_t) const noexcept(true);
+			// noob::vec2 get_limits(uint8_t) const noexcept(true);
 			
 			noob::vec3 get_axis(uint8_t) const noexcept(true);
 			float get_angle(uint8_t) const noexcept(true);

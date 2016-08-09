@@ -41,9 +41,10 @@ void noob::joint::set_limits(uint8_t i, const noob::vec2& lims) noexcept(true)
 
 bool noob::joint::is_enabled(uint8_t i) const noexcept(true)
 {
-	
+	return inner->isEnabled();
 }
 
+/*
 float noob::joint::get_stiffness(uint8_t i) const noexcept(true)
 {
 
@@ -58,6 +59,7 @@ noob::vec2 noob::joint::get_limits(uint8_t i) const noexcept(true)
 {
 
 }
+*/
 
 noob::vec3 noob::joint::get_axis(uint8_t i) const noexcept(true) 
 {
