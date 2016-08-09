@@ -20,7 +20,7 @@ void noob::register_joint(asIScriptEngine* script_engine)
 	// r = script_engine->RegisterObjectMethod("joint", "float get_stiffness(uint8) const", asMETHOD(noob::joint, get_stiffness), asCALL_THISCALL); assert( r >= 0 );
 	// r = script_engine->RegisterObjectMethod("joint", "float get_damping(uint8) const", asMETHOD(noob::joint, get_damping), asCALL_THISCALL); assert( r >= 0 );
 	// r = script_engine->RegisterObjectMethod("joint", "vec2 get_limits(uint8) const", asMETHOD(noob::joint, get_limits), asCALL_THISCALL); assert( r >= 0 );
+	
 	r = script_engine->RegisterObjectMethod("joint", "vec3 get_axis(uint8) const", asMETHOD(noob::joint, get_axis), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("joint", "float get_angle(uint8) const", asMETHOD(noob::joint, get_angle), asCALL_THISCALL); assert( r >= 0 );
-
 }

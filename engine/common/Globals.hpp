@@ -39,7 +39,7 @@
 
 namespace noob
 {
-	// Each physics body in Bullet has a pointer that the user is free to use. We keep two instances of this object type: One for true and another for false. This is so that we can quickly tell whether a collision object is physics/kinematic or ghost. I have not yet found a proper method of doing so from inside Bullet itself.
+	// Each physics body in Bullet has a pointer that the user is free to use. We keep two instances of this object type: One for true and another for false. This is so that we can quickly tell whether a collision object is physics/kinematic or ghost. (I have not yet found a proper method of doing so from inside Bullet itself.)
 	// Going through these measures is an ugly kludge, but until we write our own physics (not too long...) we may have to live with it.
 	class body_descriptor
 	{

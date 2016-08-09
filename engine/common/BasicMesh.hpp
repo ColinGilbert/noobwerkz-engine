@@ -31,7 +31,6 @@ typedef OpenMesh::PolyMesh_ArrayKernelT<> PolyMesh;
 #include <assimp/types.h>
 
 #include "MathFuncs.hpp"
-#include "TransformHelper.hpp"
 
 #include "Logger.hpp"
 

@@ -11,12 +11,10 @@
 #include "VoxelWorld.hpp"
 #include "BasicRenderer.hpp"
 #include "TriplanarGradientMap.hpp"
-#include "TransformHelper.hpp"
 #include "SkeletalAnim.hpp"
 #include "BasicModel.hpp"
 #include "ScaledModel.hpp"
 #include "AnimatedModel.hpp"
-#include "TransformHelper.hpp"
 #include "Body.hpp"
 #include "Joint.hpp"
 #include "Shape.hpp"
@@ -28,8 +26,6 @@
 #include "HandleMap.hpp"
 #include "FastHashTable.hpp"
 #include "NoobCommon.hpp"
-
-// #include <standalone/brigand.hpp>
 
 #include <lemon/smart_graph.h>
 #include <lemon/list_graph.h>
@@ -106,12 +102,13 @@ namespace noob
 			noob::joints_holder joints;
 			noob::ghosts_holder ghosts;
 
+			rde::vector<uint64_t> actor_mask;
+			rde::vector<noob::actor_movement> actor_move;
+			rde::vector<noob::actor_specs_handle> actor_specs;
+			uint32_t actor_count;
+			
 			rde::vector<noob::actor_event> actor_mq;
 			uint32_t actor_mq_count;
-
-			noob::component<uint64_t> actor_mask;
-			noob::component<noob::actor::movement> actor_moving;
-			noob::component<noob::actor_specs_handle> actor_specs;
 
 			lemon::ListDigraph draw_graph;
 			lemon::ListDigraph::Node root_node;

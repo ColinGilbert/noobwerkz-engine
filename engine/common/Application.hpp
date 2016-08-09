@@ -41,7 +41,6 @@
 #include "Camera.hpp"
 #include "NDOF.hpp"
 #include "Stage.hpp"
-#include "TransformHelper.hpp"
 #include "Keys.hpp"
 #include "format.h"
 #include "FileSystem.hpp"

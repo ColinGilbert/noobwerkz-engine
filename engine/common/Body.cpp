@@ -1,10 +1,6 @@
 #include "Body.hpp"
 
-
-#include "TransformHelper.hpp"
 #include "Logger.hpp"
-
-
 #include "Globals.hpp"
 
 

@@ -36,11 +36,6 @@ namespace noob
 		// Unconscious greatly increases damage taken, reduces speed and damage given to 0. No LOS.
 		enum class mentality : uint16_t { ALERT = 0, AGGRESSIVE = 1, DEFENSIVE = 2, DESPERATE = 3, RELAXED = 4, UNCONSCIOUS = 5 };
 
-		struct alignas(16)  movement
-		{
-			noob::vec3 velocity;
-			float incline;
-		};
 
 		uint16_t hp;
 		noob::actor::stance standing;
@@ -51,6 +46,12 @@ namespace noob
 
 	typedef noob::component<noob::actor> actor_holder;
 	typedef noob::handle<noob::actor> actor_handle;
+
+	struct alignas(16) actor_movement
+	{
+		noob::vec3 velocity;
+		float incline;
+	};
 
 	// Events play a dual role: They can either be commands to an actor, or requests to make an actor interact with the world.
 	// Upon being fired off, events are pushed onto a pre-allocated stack.
@@ -63,6 +64,4 @@ namespace noob
 		noob::actor_handle from, to;
 		uint32_t index;
 	};
-
-
 }
