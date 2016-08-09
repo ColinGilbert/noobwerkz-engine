@@ -35,7 +35,9 @@ void framebuffer_size_callback(GLFWwindow* window, int w, int h)
 {
 	width = std::abs(w);
 	height = std::abs(h);
-	noob::graphics::init(width, height);
+	
+	noob::graphics& gfx = noob::graphics::get_instance();
+	gfx.init(width, height);
 	//std::stringstream ss;
 	//ss << "[glfw] framebuffer_size_callback " << width << ", " << height;
 	//logger::log(ss.str());
@@ -102,7 +104,11 @@ int main(int /*_argc*/, char** /*_argv*/)
 	bgfx::glfwSetWindow(window);
 
 	bgfx::init();
-	noob::graphics::init(width, height);
+
+	noob::graphics& gfx = noob::graphics::get_instance();
+
+	gfx.init(width, height);
+	
 	app->init();
 
 	glfwSetWindowCloseCallback(window, window_close_callback);
@@ -119,7 +125,8 @@ int main(int /*_argc*/, char** /*_argv*/)
 		// noob::ndof::data info = ndof.get_data();
 		// app->accept_ndof_data(info);
 		app->step();
-		noob::graphics::frame(width, height);
+		noob::graphics& tmp_gfx = noob::graphics::get_instance();
+		tmp_gfx.frame(width, height);
 		glfwPollEvents();
 	}
 

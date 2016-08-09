@@ -1,6 +1,6 @@
 #include "Joint.hpp"
 
-void noob::joint::init(const btDynamicsWorld* w, const noob::body& a, const noob::body& b, const noob::mat4& local_a, const noob::mat4& local_b) noexcept(true) 
+void noob::joint::init(btDynamicsWorld* const w, const noob::body& a, const noob::body& b, const noob::mat4& local_a, const noob::mat4& local_b) noexcept(true) 
 {
 	btTransform tr_a, tr_b;
 	tr_a.setFromOpenGLMatrix(&local_a.m[0]);

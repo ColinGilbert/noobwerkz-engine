@@ -88,22 +88,16 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	blend_0 = noob::graphics::add_uniform(std::string("blend_0"), bgfx::UniformType::Enum::Vec4, 1);
 	blend_1 = noob::graphics::add_uniform(std::string("blend_1"), bgfx::UniformType::Enum::Vec4, 1);
 	tex_scales = noob::graphics::add_uniform(std::string("tex_scales"), bgfx::UniformType::Enum::Vec4, 1);
-	
 	normal_mat = add_uniform(std::string("normal_mat"), bgfx::UniformType::Enum::Mat4, 1);
 	// transpose(inverse(modelMat) Used to do normal calculations in modelspace.
 	normal_mat_modelspace = add_uniform(std::string("u_normal_mat_modelspace"), bgfx::UniformType::Enum::Mat4, 1);
-	
 	eye_pos = noob::graphics::add_uniform(std::string("eye_pos"), bgfx::UniformType::Enum::Vec4, 1);
 	eye_pos_normalized = noob::graphics::add_uniform(std::string("eye_pos_normalized"), bgfx::UniformType::Enum::Vec4, 1);
-
-	
 	ambient = noob::graphics::add_uniform(std::string("ambient"), bgfx::UniformType::Enum::Vec4, 1);
-	
 	light_rgb_falloff = noob::graphics::add_uniform(std::string("u_light_rgb_falloff"), bgfx::UniformType::Enum::Vec4, MAX_LIGHTS);
 	light_pos_radius = noob::graphics::add_uniform(std::string("u_light_pos_r"), bgfx::UniformType::Enum::Vec4, MAX_LIGHTS);
 	// colour_attenuation = noob::graphics::add_uniform(std::string("colour_attenuation"), bgfx::UniformType::Enum::Vec4, 1);
 	// ambient_falloff = noob::graphics::add_uniform(std::string("ambient_falloff"), bgfx::UniformType::Enum::Vec4, 1);
-
 	specular_shine = noob::graphics::add_uniform(std::string("u_specular_shine"), bgfx::UniformType::Enum::Vec4, 1);
 	diffuse = noob::graphics::add_uniform(std::string("u_diffuse"), bgfx::UniformType::Enum::Vec4, 1);
 	ambient = noob::graphics::add_uniform(std::string("u_ambient"), bgfx::UniformType::Enum::Vec4, 1);

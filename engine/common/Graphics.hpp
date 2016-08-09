@@ -37,8 +37,17 @@ namespace noob
 
 
 
-
 		public:
+
+		static graphics& get_instance() noexcept(true)
+		{
+			static graphics the_instance;
+			ptr_to_instance = &the_instance;
+
+			return *ptr_to_instance;
+		}
+
+
 		struct uniform
 		{
 			void init(const std::string& name, bgfx::UniformType::Enum _type, uint16_t _count = 1)
@@ -114,6 +123,33 @@ namespace noob
 		{
 			return bgfx::copy(&payload[0], payload.size());
 		}
+
+
+
+		// Uniform getters
+		noob::graphics::uniform get_invalid_uniform() { return invalid_uniform; }
+		noob::graphics::uniform get_colour_0() { return colour_0; } 
+		noob::graphics::uniform get_colour_1() { return colour_1; }
+		noob::graphics::uniform get_colour_2() { return colour_2; }
+		noob::graphics::uniform get_colour_3() { return colour_3; }
+		noob::graphics::uniform get_blend_0() { return blend_0; }
+		noob::graphics::uniform get_blend_1() { return blend_1; }
+		noob::graphics::uniform get_tex_scales() { return tex_scales; }
+		noob::graphics::uniform get_normal_mat() { return normal_mat; }
+		noob::graphics::uniform get_normal_mat_modelspace() { return normal_mat_modelspace; }
+		noob::graphics::uniform get_eye_pos() { return eye_pos; }
+		noob::graphics::uniform get_eye_pos_normalize() { return eye_pos_normalized; }
+		noob::graphics::uniform get_ambient() { return  ambient; }
+		noob::graphics::uniform get_light_pos_radius() { return light_pos_radius; }
+		noob::graphics::uniform get_light_rgb_falloff() { return light_rgb_falloff; } 
+		noob::graphics::uniform get_specular_shine() { return specular_shine; }
+		noob::graphics::uniform get_diffuse() { return diffuse; }
+		noob::graphics::uniform get_emissive() { return emissive; }
+		noob::graphics::uniform get_fog() { return fog; }
+		noob::graphics::uniform get_rough_albedo_fresnel() { return rough_albedo_fresnel; }
+
+		noob::graphics::sampler get_invalid_texture() { return invalid_texture; }
+		noob::graphics::sampler get_texture_0() { return texture_0; }
 
 		protected:
 

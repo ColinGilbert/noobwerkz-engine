@@ -9,7 +9,7 @@ namespace noob
 	class joint
 	{
 		public:
-			void init(const btDynamicsWorld* w, const noob::body& a, const noob::body& b, const noob::mat4& local_a, const noob::mat4& local_b) noexcept(true);
+			void init(btDynamicsWorld* const w, const noob::body& a, const noob::body& b, const noob::mat4& local_a, const noob::mat4& local_b) noexcept(true);
 
 			void set_frames(const noob::mat4& local_a, const noob::mat4& local_b) noexcept(true);
 

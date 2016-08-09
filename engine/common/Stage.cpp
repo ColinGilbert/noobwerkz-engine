@@ -69,8 +69,10 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 	bgfx::setViewTransform(1, &view_mat.m[0], &projection_mat.m[0]);
 	bgfx::setViewRect(1, 0, 0, window_width, window_height);
 
-	bgfx::setUniform(noob::graphics::ambient.handle, &ambient_light.v[0]);
+	noob::graphics& gfx = noob::graphics::get_instance();
+	bgfx::setUniform(gfx.get_ambient().handle, &ambient_light.v[0]);
 
+	// Just a loving reminder:
 	// static const noob::graphics::uniform invalid_uniform, colour_0, colour_1, colour_2, colour_3, blend_0, blend_1, tex_scales, normal_mat, normal_mat_modelspace, eye_pos, eye_pos_normalized, ambient, light_pos_radius, light_rgb_falloff, specular_shine, diffuse, emissive, fog, rough_albedo_fresnel;
 	std::array<noob::light, MAX_LIGHTS> temp_lights;
 
