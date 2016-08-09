@@ -116,6 +116,7 @@ void noob::application::init()
 	// TODO: Implement
 	r = script_engine->RegisterGlobalFunction("double random()", asMETHOD(noob::random_generator, get), asCALL_THISCALL_ASGLOBAL, &randomz); assert( r >= 0 );
 	register_body(script_engine);
+	register_joint(script_engine);
 	register_light(script_engine);
 	register_reflectance(script_engine);
 	register_uniforms(script_engine);

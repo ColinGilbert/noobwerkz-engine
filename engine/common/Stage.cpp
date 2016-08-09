@@ -86,7 +86,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 	for (lemon::ListDigraph::OutArcIt model_it(draw_graph, root_node); model_it != lemon::INVALID; ++model_it)
 	{
 		lemon::ListDigraph::Node model_node = draw_graph.target(model_it);
-		size_t model_h = basic_models_mapping[model_node];
+		uint64_t model_h = basic_models_mapping[model_node];
 
 		for (lemon::ListDigraph::OutArcIt shading_it(draw_graph, model_node); shading_it != lemon::INVALID; ++shading_it)
 		{
@@ -96,7 +96,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 			for (lemon::ListDigraph::OutArcIt body_it(draw_graph, shading_node); body_it != lemon::INVALID; ++body_it)
 			{
 				lemon::ListDigraph::Node body_node = draw_graph.target(body_it);
-				size_t body_h = bodies_mapping[body_node];
+				uint64_t body_h = bodies_mapping[body_node];
 				noob::vec3 scales = noob::vec3_from_array(scales_mapping[body_node]);
 
 				noob::mat4 world_mat = noob::identity_mat4();

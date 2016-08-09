@@ -1,9 +1,11 @@
 // Stores objects that should be pooled. This means:
 // Shapes
-// Stages
-// Skeletal animations
 // 3D Models
+// Textures, shader uniforms
+// Armatures and skeletal animations
+// Actor configurations
 // Audio samples
+// Stages (potentially)
 
 #pragma once
 
@@ -32,10 +34,13 @@
 #include "FastHashTable.hpp"
 #include "Mixer.hpp"
 #include "NoobCommon.hpp"
+#include "Actor.hpp"
+#include "Armature.hpp"
 
 namespace noob
 {
-	
+	// Each physics body in Bullet has a pointer that the user is free to use. We keep two instances of this object type: One for true and another for false. This is so that we can quickly tell whether a collision object is physics/kinematic or ghost. I have not yet found a proper method of doing so from inside Bullet itself.
+	// Going through these measures is an ugly kludge, but until we write our own physics (not too long...) we may have to live with it.
 	class body_descriptor
 	{
 		friend class globals;
@@ -44,7 +49,7 @@ namespace noob
 		protected:
 		bool physical;
 	};
-	
+
 	class globals
 	{
 		protected:
@@ -163,12 +168,17 @@ namespace noob
 			basic_shaders_holder basic_shaders;
 			triplanar_shaders_holder triplanar_shaders;
 			samples_holder samples;
+			actor_specs_holder actor_specs;
+
+			character_shading_holder character_shadings;
+			boss_shading_holder boss_shadings;
+
+
+
 			noob::basic_renderer basic_drawer;
 			noob::triplanar_gradient_map_renderer triplanar_drawer;
 
-			// directional_lights_holder directional_lights;
-			// point_lights_holder point_lights;
-			// spotlights_holder spotlights;
+
 
 			enum collision_type
 			{
@@ -190,7 +200,7 @@ namespace noob
 			// This catches them so that they may be used in the next audio callback.
 			rde::vector<double> resample_overflow;
 			uint32_t num_overflows;
-		
+
 		protected:
 
 			shape_handle add_shape(const noob::shape& s)
@@ -203,7 +213,9 @@ namespace noob
 			}
 
 			noob::fast_hashtable shapes_to_models;
-			rde::sorted_vector<float,size_t> spheres;
+			// rde::sorted_vector<float,size_t> spheres;
+
+
 			rde::hash_map<rde::string, noob::shape_handle> names_to_shapes;
 			rde::hash_map<rde::string, noob::model_handle> names_to_basic_models;
 			rde::hash_map<rde::string, noob::globals::shader_results> names_to_shaders;

@@ -1,5 +1,10 @@
 #pragma once
 
+#include <rdestl/fixed_array.h>
+#include <rdestl/vector.h>
+
+#include "Vec3.hpp"
+
 namespace noob
 {
 	enum class shader_type
@@ -12,9 +17,18 @@ namespace noob
 	{
 		noob::shader_type type;
 		uint32_t shader_index;
-		noob::reflectance_handle reflect;
+		uint32_t reflect;
 	};
 
+	typedef rde::fixed_array<noob::drawing_info, 32> character_colour_scheme;
+	typedef rde::vector<noob::drawing_info> boss_colour_scheme;
+
+	typedef noob::component<noob::character_colour_scheme> character_shading_holder;
+	typedef noob::component_dynamic<noob::boss_colour_scheme> boss_shading_holder;
+
+	typedef handle<noob::character_colour_scheme> character_shading_handle;
+	typedef handle<noob::boss_colour_scheme> boss_shading_handle;
+	
 	struct contact_point
 	{
 		size_t handle;
@@ -27,5 +41,4 @@ namespace noob
 		std::vector<noob::body_handle> bodies;
 		std::vector<noob::ghost_handle> ghosts;
 	};
-
 }

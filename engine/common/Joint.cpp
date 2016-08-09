@@ -44,6 +44,11 @@ noob::vec3 noob::joint::get_axis(uint8_t i) const noexcept(true)
 	return noob::vec3_from_bullet(inner->getAxis(i));
 }
 
+float noob::joint::get_angle(uint8_t i) const noexcept(true)
+{
+	return inner->getAngle(i);
+}
+
 /*
    bool noob::joint::get_spring(uint8_t)
    {

@@ -26,7 +26,8 @@ namespace noob
 			
 		
 			noob::vec3 get_axis(uint8_t) const noexcept(true);
-			
+			float get_angle(uint8_t) const noexcept(true);
+
 			// btVector3 getAxis (int axis_index) const
 			// btScalar getAngle (int axis_index) const
 

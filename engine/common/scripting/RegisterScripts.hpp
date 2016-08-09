@@ -14,5 +14,5 @@
 #include "RegisterScaledModel.hpp"
 #include "RegisterHandles.hpp"
 #include "RegisterBody.hpp"
+#include "RegisterJoint.hpp"
 #include "RegisterUniforms.hpp"
-

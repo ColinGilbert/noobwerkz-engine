@@ -69,6 +69,8 @@ bool noob::globals::init() noexcept(true)
 
 	audio_interface.init();
 
+	// Init default actor type.
+
 
 	logger::log("[Globals] Init complete.");
 	return true;

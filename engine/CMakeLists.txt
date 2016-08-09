@@ -769,6 +769,7 @@ list(APPEND common_src
 	common/scripting/RegisterScaledModel.cpp
 	common/scripting/RegisterHandles.cpp
 	common/scripting/RegisterBody.cpp
+	common/scripting/RegisterJoint.cpp
 	common/scripting/RegisterUniforms.cpp
 	)
 
