@@ -213,7 +213,7 @@ noob::joint_handle noob::stage::add_joint(const noob::body_handle a, const noob:
 }
 
 
-noob::actor_handle noob::stage::actor(const noob::actor_blueprints_handle h, noob::vec3& pos, const noob::versor& orient) 
+noob::actor_handle noob::stage::actor(const noob::actor_blueprints_handle h, uint8_t team, const noob::vec3& pos, const noob::versor& orient) 
 {
 	
 
@@ -313,7 +313,7 @@ void noob::stage::actor(const noob::shape_handle shape_h , float mass, const noo
 }
 
 
-void noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, const noob::versor& orient, const noob::shader_variant shader_h, const noob::reflectance_handle reflect_arg, const std::string& name) noexcept(true) 
+noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, const noob::versor& orient, const noob::shader_variant shader_h, const noob::reflectance_handle reflect_arg, const std::string& name) noexcept(true) 
 {
 	noob::globals& g = noob::globals::get_instance();
 	noob::shape_handle shape_h = g.static_trimesh_shape(m, name);

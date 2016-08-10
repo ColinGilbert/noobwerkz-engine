@@ -59,7 +59,7 @@ namespace noob
 
 			typedef noob::handle<noob::actor> actor_handle;
 
-			noob::actor_handle actor(const noob::actor_blueprints_handle, noob::vec3&, const noob::versor&);
+			noob::actor_handle actor(const noob::actor_blueprints_handle, uint8_t team, const noob::vec3&, const noob::versor&);
 
 			// Functions to create commonly-used configurations. Soon they'll return a tag used by the component system (in construction)
 			// void actor(const noob::body_handle, const noob::animated_model_handle, const noob::shader_variant) noexcept(true);
