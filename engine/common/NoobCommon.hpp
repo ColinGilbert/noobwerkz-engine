@@ -13,10 +13,10 @@ namespace noob
 		TRIPLANAR = 1
 	};
 
-	struct shader_results
+	struct shader_variant
 	{
-		shader_results() noexcept(true) : type(shader_type::BASIC), handle(0) {}
-		bool operator==(const noob::shader_results& other) const noexcept(true)
+		shader_variant() noexcept(true) : type(shader_type::BASIC), handle(0) {}
+		bool operator==(const noob::shader_variant& other) const noexcept(true)
 		{
 			return (type == other.type && handle == other.handle);
 		}
@@ -24,15 +24,18 @@ namespace noob
 		size_t handle;
 	};
 
-	struct drawing_info
+	struct shading
 	{
 		noob::shader_type type;
 		uint32_t shader_index;
 		uint32_t reflect;
 	};
 
-	typedef rde::fixed_array<noob::drawing_info, 32> character_colour_scheme;
-	typedef rde::vector<noob::drawing_info> boss_colour_scheme;
+	typedef noob::component<noob::shading> shading_holder;
+	typedef noob::handle<noob::shading> shading_handle;
+
+	typedef rde::fixed_array<noob::shading, 32> character_colour_scheme;
+	typedef rde::vector<noob::shading> boss_colour_scheme;
 
 	typedef noob::component<noob::character_colour_scheme> character_shading_holder;
 	typedef noob::component_dynamic<noob::boss_colour_scheme> boss_shading_holder;

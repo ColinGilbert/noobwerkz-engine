@@ -42,7 +42,7 @@ namespace noob
 		protected:
 			lemon::StaticDigraph graph;
 			lemon::StaticDigraph::NodeMap<noob::body_handle> bodies;
-			lemon::StaticDigraph::NodeMap<noob::drawing_info> shadings;
+			lemon::StaticDigraph::NodeMap<noob::shading> shadings;
 			lemon::StaticDigraph::ArcMap<noob::joint_handle> joints;
 	};
 
@@ -59,7 +59,7 @@ namespace noob
 		protected:
 			lemon::ListDigraph graph;
 			lemon::ListDigraph::NodeMap<noob::body_handle> bodies;
-			lemon::ListDigraph::NodeMap<noob::drawing_info> shadings;
+			lemon::ListDigraph::NodeMap<noob::shading> shadings;
 			lemon::ListDigraph::ArcMap<noob::joint_handle> joints;
 	};
 	

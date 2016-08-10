@@ -1,6 +1,7 @@
 #include "RegisterHandles.hpp"
 
 #include "NoobCommon.hpp"
+#include "Actor.hpp"
 
 void noob::register_handles(asIScriptEngine* script_engine)
 {
@@ -18,10 +19,16 @@ void noob::register_handles(asIScriptEngine* script_engine)
 	r = script_engine->RegisterObjectType("animated_model_handle", sizeof(noob::animated_model_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::animated_model_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	
 	r = script_engine->RegisterObjectType("skeletal_anim_handle", sizeof(noob::skeletal_anim_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::skeletal_anim_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
-	
+
+	r = script_engine->RegisterObjectType("actor_blueprints_handle", sizeof(noob::actor_blueprints_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::actor_blueprints_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+
+	r = script_engine->RegisterObjectType("actor_handle", sizeof(noob::actor_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::actor_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+
+	r = script_engine->RegisterObjectType("shading_handle", sizeof(noob::shading_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::shading_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+
 	r = script_engine->RegisterObjectType("light_handle", sizeof(noob::light_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::light_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	
 	r = script_engine->RegisterObjectType("reflectance_handle", sizeof(noob::reflectance_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::reflectance_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	
-	r = script_engine->RegisterObjectType("shader_handle", sizeof(noob::shader_results), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::shader_results>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectType("shader_handle", sizeof(noob::shader_variant), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::shader_variant>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 }

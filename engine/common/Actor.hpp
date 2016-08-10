@@ -8,7 +8,7 @@
 
 namespace noob
 {
-	struct alignas(32) actor_specs
+	struct alignas(32) actor_blueprints
 	{
 		uint16_t strength, range, armour, defense, movement_speed, attack_speed, stamina, morale, los;
 		noob::character_shading_handle shading;
@@ -16,8 +16,8 @@ namespace noob
 		noob::shape_handle bounds;
 	};
 
-	typedef noob::component<noob::actor_specs> actor_specs_holder;
-	typedef noob::handle<noob::actor_specs> actor_specs_handle;
+	typedef noob::component<noob::actor_blueprints> actor_blueprints_holder;
+	typedef noob::handle<noob::actor_blueprints> actor_blueprints_handle;
 
 	struct alignas(16) actor
 	{

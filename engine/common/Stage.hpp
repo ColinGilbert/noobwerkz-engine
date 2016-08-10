@@ -59,14 +59,15 @@ namespace noob
 
 			typedef noob::handle<noob::actor> actor_handle;
 
-			// Functions to create commonly-used configurations. Soon they'll return a tag used by the component system (in construction)
-			void actor(const noob::body_handle, const noob::animated_model_handle, const noob::shader_results) noexcept(true);
+			noob::actor_handle actor(const noob::actor_blueprints_handle, noob::vec3&, const noob::versor&);
 
-			void actor(const noob::body_handle, const noob::scaled_model, const noob::shader_results) noexcept(true);
-			void actor(const noob::shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::shader_results, const noob::reflectance_handle) noexcept(true);
+			// Functions to create commonly-used configurations. Soon they'll return a tag used by the component system (in construction)
+			// void actor(const noob::body_handle, const noob::animated_model_handle, const noob::shader_variant) noexcept(true);
+			// void actor(const noob::body_handle, const noob::scaled_model, const noob::shader_variant) noexcept(true);
+			// void actor(const noob::shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::shader_variant, const noob::reflectance_handle) noexcept(true);
 			
 			// Scenery is a non-movable item that uses indexed triangle meshes as input. It doesn't get looped over unless needed.
-			void scenery(const noob::basic_mesh&, const noob::vec3& pos, const noob::versor& orient, const noob::shader_results, const noob::reflectance_handle, const std::string& name) noexcept(true);
+			// void scenery(const noob::basic_mesh&, const noob::vec3& pos, const noob::versor& orient, const noob::shader_variant, const noob::reflectance_handle, const std::string& name) noexcept(true);
 
 			void set_light(unsigned int, const noob::light_handle) noexcept(true);
 
@@ -102,7 +103,7 @@ namespace noob
 
 			rde::vector<noob::actor> actors;
 			rde::vector<noob::actor_movement> actor_moves;
-			rde::vector<noob::actor_specs_handle> actor_specs;
+			rde::vector<noob::actor_blueprints_handle> actor_blueprints;
 			uint32_t actor_count;
 			
 			rde::vector<noob::actor_event> actor_mq;
@@ -115,7 +116,7 @@ namespace noob
 			lemon::ListDigraph::NodeMap<uint64_t> bodies_mapping;
 			lemon::ListDigraph::NodeMap<std::function<noob::mat4(void)>> model_mats_mapping;
 			lemon::ListDigraph::NodeMap<uint64_t> basic_models_mapping;
-			lemon::ListDigraph::NodeMap<noob::shader_results> shaders_mapping;
+			lemon::ListDigraph::NodeMap<noob::shader_variant> shaders_mapping;
 			lemon::ListDigraph::NodeMap<uint64_t> reflectances_mapping;
 			lemon::ListDigraph::NodeMap<std::array<uint64_t, 4>> lights_mapping;
 			lemon::ListDigraph::NodeMap<std::array<float, 3>> scales_mapping;

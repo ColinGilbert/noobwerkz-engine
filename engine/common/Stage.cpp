@@ -91,7 +91,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 		for (lemon::ListDigraph::OutArcIt shading_it(draw_graph, model_node); shading_it != lemon::INVALID; ++shading_it)
 		{
 			lemon::ListDigraph::Node shading_node = draw_graph.target(shading_it);
-			noob::shader_results shader_h = shaders_mapping[shading_node];
+			noob::shader_variant shader_h = shaders_mapping[shading_node];
 
 			for (lemon::ListDigraph::OutArcIt body_it(draw_graph, shading_node); body_it != lemon::INVALID; ++body_it)
 			{
@@ -180,10 +180,13 @@ noob::ghost_handle noob::stage::add_ghost(const noob::shape_handle shape_h, cons
 		dynamics_world->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 		ghosts_initialized = true;
 	}
+	
 	noob::globals& g = noob::globals::get_instance();
+	
 	noob::ghost temp_ghost;
 	temp_ghost.init(g.shapes.get(shape_h), pos, orient);
 	dynamics_world->addCollisionObject(temp_ghost.inner);
+	
 	noob::ghost_handle ghost_h = ghosts.add(temp_ghost);
 	temp_ghost = ghosts.get(ghost_h);
 	temp_ghost.inner->setUserIndex(ghost_h.get_inner());
@@ -210,8 +213,15 @@ noob::joint_handle noob::stage::add_joint(const noob::body_handle a, const noob:
 }
 
 
+noob::actor_handle noob::stage::actor(const noob::actor_blueprints_handle h, noob::vec3& pos, const noob::versor& orient) 
+{
+	
 
-void noob::stage::actor(const noob::body_handle body_h, const noob::scaled_model model_info, const noob::shader_results shader_h) noexcept(true) 
+}
+
+
+/*
+void noob::stage::actor(const noob::body_handle body_h, const noob::scaled_model model_info, const noob::shader_variant shader_h) noexcept(true) 
 {
 	auto body_results = bodies_to_nodes.lookup(body_h.get_inner());
 
@@ -249,7 +259,7 @@ void noob::stage::actor(const noob::body_handle body_h, const noob::scaled_model
 	for (lemon::ListDigraph::OutArcIt shader_it(draw_graph, model_node); shader_it != lemon::INVALID; ++shader_it)
 	{
 		lemon::ListDigraph::Node temp_shader_node = draw_graph.target(shader_it);
-		noob::shader_results test_value = shaders_mapping[temp_shader_node];
+		noob::shader_variant test_value = shaders_mapping[temp_shader_node];
 		if (shader_h == test_value)
 		{
 			shader_found = true;
@@ -285,16 +295,7 @@ void noob::stage::actor(const noob::body_handle body_h, const noob::scaled_model
 }
 
 
-/*
-   void noob::stage::actor(const noob::shape_handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::scaled_model model_info, const noob::shader_results shader_h)
-   {
-   noob::body_handle body_h = body(noob::body_type::DYNAMIC, shape_h, mass, pos, orient);
-   actor(body_h, model_info, shader_h);
-   }
-   */
-
-
-void noob::stage::actor(const noob::shape_handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::shader_results shader_h, const noob::reflectance_handle reflect_arg) noexcept(true) 
+void noob::stage::actor(const noob::shape_handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::shader_variant shader_h, const noob::reflectance_handle reflect_arg) noexcept(true) 
 {
 	noob::globals& g = noob::globals::get_instance();
 	noob::shape s = g.shapes.get(shape_h);
@@ -312,7 +313,7 @@ void noob::stage::actor(const noob::shape_handle shape_h , float mass, const noo
 }
 
 
-void noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, const noob::versor& orient, const noob::shader_results shader_h, const noob::reflectance_handle reflect_arg, const std::string& name) noexcept(true) 
+void noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, const noob::versor& orient, const noob::shader_variant shader_h, const noob::reflectance_handle reflect_arg, const std::string& name) noexcept(true) 
 {
 	noob::globals& g = noob::globals::get_instance();
 	noob::shape_handle shape_h = g.static_trimesh_shape(m, name);
@@ -324,6 +325,7 @@ void noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, cons
 }
 
 
+*/
 void noob::stage::set_light(unsigned int i, const noob::light_handle h) noexcept(true) 
 {
 	if (i < MAX_LIGHTS)
