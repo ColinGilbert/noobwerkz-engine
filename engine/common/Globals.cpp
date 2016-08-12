@@ -404,16 +404,11 @@ noob::shape_handle noob::globals::hull_shape(const std::vector<vec3>& points) no
 }
 
 
-noob::shape_handle noob::globals::static_trimesh_shape(const noob::basic_mesh& m, const std::string& name) noexcept(true) 
+noob::shape_handle noob::globals::static_trimesh_shape(const noob::basic_mesh& m) noexcept(true) 
 {
-	auto search = names_to_shapes.find(rde::string(name.c_str()));
-	if (search == names_to_shapes.end())
-	{
 		noob::shape temp;
 		temp.trimesh(m);
 		return add_shape(temp);
-	}
-	return search->second;
 }
 
 

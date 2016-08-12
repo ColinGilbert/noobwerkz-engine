@@ -15,7 +15,6 @@ void noob::register_stage(asIScriptEngine* script_engine)
 	r = script_engine->RegisterObjectMethod("stage", "body_handle add_body(body_type, const shape_handle, float, const vec3& in, const versor& in, bool)", asMETHOD(noob::stage, add_ghost), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("stage", "ghost_handle add_ghost(const shape_handle, const vec3& in, const versor& in)", asMETHOD(noob::stage, add_ghost), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("stage", "joint_handle add_joint(const body_handle, const vec3& in, const body_handle, const vec3& in)", asMETHOD(noob::stage, add_joint), asCALL_THISCALL); assert( r >= 0 );	
-	
 	r = script_engine->RegisterObjectMethod("stage", "actor_handle add_actor(const actor_blueprints_handle, uint32, const vec3& in, const versor& in)", asMETHOD(noob::stage, add_actor), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("stage", "void scenery(const shape_handle, shader_handle, reflectance_handle, const vec3& in, const versor& in)", asMETHOD(noob::stage, scenery), asCALL_THISCALL); assert(r >= 0);
 	

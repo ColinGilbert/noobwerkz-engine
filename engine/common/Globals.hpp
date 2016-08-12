@@ -96,7 +96,7 @@ namespace noob
 
 			noob::shape_handle hull_shape(const std::vector<noob::vec3>&) noexcept(true);
 
-			noob::shape_handle static_trimesh_shape(const noob::basic_mesh&, const std::string& name) noexcept(true);
+			noob::shape_handle static_trimesh_shape(const noob::basic_mesh&) noexcept(true);
 
 			// Basic model creation. Those don't have bone weights built-in, so its lighter on the video card. Great for non-animated meshes and also scenery.
 			// If the name is the same as an existing model the new one replaces it, and everything should still work because the end-user only sees handles and the engine handles it under-the-hood. :)
