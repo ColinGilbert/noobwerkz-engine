@@ -67,6 +67,10 @@ bool noob::globals::init() noexcept(true)
 	default_reflectance = set_reflectance(r, "default");
 	// logger::log("[Globals] Got default triplanar shader handle.");
 
+	noob::actor_blueprints bp;
+	set_actor_blueprints(bp, "default");
+
+
 	audio_interface.init();
 
 	// Init default actor type.
@@ -544,4 +548,11 @@ void noob::globals::set_actor_blueprints(const noob::actor_blueprints& bp, const
 noob::actor_blueprints_handle noob::globals::get_actor_blueprints(const std::string& name) const noexcept(true)
 {
 
+	auto search = names_to_actor_blueprints.find(rde::string(name.c_str()));
+	if (search != names_to_actor_blueprints.end())
+	{
+		return search->second;
+	}
+	
+	return noob::actor_blueprints_handle::make(0);
 }

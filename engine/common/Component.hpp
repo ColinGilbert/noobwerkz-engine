@@ -60,7 +60,7 @@ namespace noob
 			friend class application;
 			public:
 
-			T get(noob::handle<T> h) const  noexcept(true)
+			inline T get(noob::handle<T> h) const  noexcept(true)
 			{
 				if (exists(h)) return items[h.get_inner()];
 				else 
@@ -75,19 +75,19 @@ namespace noob
 				return get_ref(h.get_inner());
 			}
 */
-			handle<T> add(const T& t) noexcept(true)
+			inline handle<T> add(const T& t) noexcept(true)
 			{
 				items.push_back(t);
 				
 				return handle<T>::make(items.size() - 1);
 			}
 
-			bool exists(handle<T> h) const noexcept(true)
+			inline bool exists(handle<T> h) const noexcept(true)
 			{
 				return (h.get_inner() < items.size());
 			}
 
-			void set(handle<T> h, const T t) noexcept(true)
+			inline void set(handle<T> h, const T t) noexcept(true)
 			{
 				if (exists(h))
 				{
@@ -100,7 +100,7 @@ namespace noob
 				items.resize(0);
 			}
 
-			uint32_t count() const noexcept(true)
+			inline uint32_t count() const noexcept(true)
 			{
 				return items.size();
 			}

@@ -14,7 +14,7 @@ namespace noob
 		friend class stage;
 
 		public:
-			void init(const noob::shape&, const noob::vec3&, const noob::versor&) noexcept(true);
+			void init(btCollisionWorld* const world, const noob::shape&, const noob::vec3&, const noob::versor&) noexcept(true);
 
 			void set_position(const noob::vec3&) noexcept(true);
 			void set_orientation(const noob::versor&) noexcept(true);

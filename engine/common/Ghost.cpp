@@ -2,11 +2,15 @@
 
 #include "Globals.hpp"
 
-void noob::ghost::init(const noob::shape& shape_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg) noexcept(true) 
+void noob::ghost::init(btCollisionWorld* const world, const noob::shape& shape_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg) noexcept(true) 
 {
+	inner = new btPairCachingGhostObject();
+	//logger::log("[Ghost] about to add collision object to world");
 	inner->setCollisionShape(shape_arg.inner_shape);
 	btTransform trans(btQuaternion(orient_arg.q[0], orient_arg.q[1], orient_arg.q[2], orient_arg.q[3]), btVector3(pos_arg.v[0], pos_arg.v[1], pos_arg.v[2]));
+	//logger::log("[Ghost] about to set world transform");
 	inner->setWorldTransform(trans);
+	world->addCollisionObject(inner);
 	noob::globals& g = noob::globals::get_instance();
 	inner->setUserPointer(reinterpret_cast<void*>(&g.ghost_body_descriptor));
 	inner->setUserIndex(-1);

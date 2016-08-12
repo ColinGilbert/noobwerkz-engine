@@ -109,7 +109,6 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 							noob::versor original_quat = ghosts.get(ghost_handle::make(body_var.index)).get_orientation();
 							noob::versor temp_quat(original_quat.q[3], original_quat.q[2], original_quat.q[1], original_quat.q[0]); 
 
-
 							world_mat = noob::rotate(world_mat, temp_quat); //ghosts.get(body_var.index).get_orientation());
 							world_mat = noob::scale(world_mat, noob::vec3_from_array(scales_mapping[body_node]));												
 							world_mat = noob::translate(world_mat, ghosts.get(ghost_handle::make(body_var.index)).get_position());
@@ -135,6 +134,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 							logger::log("[Stage] draw - Attempting to draw invalid body node type!");
 						}
 				}
+
 				noob::mat4 normal_mat = noob::transpose(noob::inverse((world_mat * view_mat)));
 
 				noob::reflectance temp_reflect;
@@ -210,13 +210,11 @@ noob::ghost_handle noob::stage::add_ghost(const noob::shape_handle shape_h, cons
 	noob::globals& g = noob::globals::get_instance();
 
 	noob::ghost temp_ghost;
-	temp_ghost.init(g.shapes.get(shape_h), pos, orient);
-	dynamics_world->addCollisionObject(temp_ghost.inner);
+	temp_ghost.init(dynamics_world, g.shapes.get(shape_h), pos, orient);
 
 	noob::ghost_handle ghost_h = ghosts.add(temp_ghost);
 	temp_ghost = ghosts.get(ghost_h);
 	temp_ghost.inner->setUserIndex(ghost_h.get_inner());
-
 	return ghost_h;
 }
 
@@ -242,17 +240,13 @@ noob::joint_handle noob::stage::add_joint(const noob::body_handle a, const noob:
 noob::actor_handle noob::stage::add_actor(const noob::actor_blueprints_handle blueprints_h, uint32_t team, const noob::vec3& pos, const noob::versor& orient) 
 {
 	noob::globals& g = noob::globals::get_instance();
-	
 	noob::actor_blueprints bp = g.actor_blueprints.get(blueprints_h);
-	
 	noob::actor a;
 	a.ghost = add_ghost(bp.bounds, pos, orient);
 	noob::body_variant b_var;
 	b_var.type = noob::pos_type::GHOST;
 	b_var.index = a.ghost.get_inner();	
-
 	add_to_graph(b_var, bp.bounds, bp.shader, bp.reflect);
-
 	return actors.add(a);
 }
 
@@ -273,6 +267,7 @@ void noob::stage::scenery(const noob::shape_handle shape_arg, const noob::shader
 
 void noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg) 
 {
+
 	noob::globals& g = noob::globals::get_instance();
 	
 	// Find out if the model node is in the graph. If so, cache it. If not, add it.
@@ -321,7 +316,6 @@ void noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::sha
 
 	// Now, put actor's ghost into draw-graph.
 	lemon::ListDigraph::Node bod_node = draw_graph.addNode();
-	//bodies_mapping[ghost_node] = bod_arg;
 	
 	switch (bod_arg.type)
 	{
@@ -330,12 +324,14 @@ void noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::sha
 			auto temp = bodies_to_nodes.insert(bod_arg.index);
 			temp->value = draw_graph.id(bod_node);
 			bodies_mapping[bod_node] = bod_arg;
+			break;
 		}
 		case (noob::pos_type::GHOST):
 		{
 			auto temp = ghosts_to_nodes.insert(bod_arg.index);
 			temp->value = draw_graph.id(bod_node);
 			bodies_mapping[bod_node] = bod_arg;
+			break;
 		}
 
 		default:
