@@ -1,7 +1,12 @@
 #pragma once
 
 #include <rdestl/fixed_array.h>
+
+
 #include <limits>
+
+#include "format.h"
+
 #include "Shape.hpp"
 #include "Component.hpp"
 #include "ComponentDefines.hpp"
@@ -19,6 +24,13 @@ namespace noob
 		// noob::surface drawing;
 		noob::shader shader;
 		noob::reflectance_handle reflect;
+
+		std::string to_string() const noexcept(true)
+		{
+			fmt::MemoryWriter ww;
+			ww << "shape " << bounds.get_inner() << ", shader " << shader.to_string() << ", reflection " << reflect.get_inner() << ", strength " << strength << ", range " << range << ", defense " << defense << ", move speed " << movement_speed << ", attack speed " << attack_speed << ", stamina " << stamina << ", morale " << morale << ", LOS " << los;
+			return ww.str();
+		}
 	};
 
 	typedef noob::component<noob::actor_blueprints> actor_blueprints_holder;
@@ -43,11 +55,6 @@ namespace noob
 		// Relaxed increases damage taken. LOS 75%.
 		// Unconscious greatly increases damage taken, reduces speed and damage given to 0. No LOS.
 		enum class mentality_type : uint16_t { ALERT = 0, AGGRESSIVE = 1, DEFENSIVE = 2, PANIC = 3, RELAXED = 4, UNCONSCIOUS = 5 };
-
-
-
-
-
 
 		bool alive;
 

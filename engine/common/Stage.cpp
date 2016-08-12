@@ -140,13 +140,6 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 				noob::reflectance temp_reflect;
 				temp_reflect = g.reflectances.get(reflectance_handle::make(reflectances_mapping[body_node]));
 
-				// std::array<noob::light, 4> temp_lights;
-				// std::array<size_t, 4> lights_h = lights_mapping[body_node];
-
-				// for(size_t i = 0; i < 3; ++i)
-				// {
-				// 	temp_lights[i] = globals->lights.get(lights_h[i]);
-				// }
 
 				switch(shader_h.type)
 				{
@@ -237,17 +230,29 @@ noob::joint_handle noob::stage::add_joint(const noob::body_handle a, const noob:
 }
 
 
-noob::actor_handle noob::stage::add_actor(const noob::actor_blueprints_handle blueprints_h, uint32_t team, const noob::vec3& pos, const noob::versor& orient) 
+noob::actor_handle noob::stage::add_actor(const noob::actor_blueprints_handle bp_h, uint32_t team, const noob::vec3& pos, const noob::versor& orient) 
 {
 	noob::globals& g = noob::globals::get_instance();
-	noob::actor_blueprints bp = g.actor_blueprints.get(blueprints_h);
+	noob::actor_blueprints bp = g.actor_blueprints.get(bp_h);
+
+	
 	noob::actor a;
 	a.ghost = add_ghost(bp.bounds, pos, orient);
 	noob::body_variant b_var;
 	b_var.type = noob::pos_type::GHOST;
 	b_var.index = a.ghost.get_inner();	
+	
+
 	add_to_graph(b_var, bp.bounds, bp.shader, bp.reflect);
-	return actors.add(a);
+
+	noob::actor_handle a_h = actors.add(a);
+
+	// fmt::MemoryWriter ww;
+	// ww << "[Stage] - Created actor " << a_h.get_inner() << " with actor blueprints " << bp_h.get_inner() << ", details: " << bp.to_string();
+	// logger::log(ww.str());
+
+	return a_h;
+
 }
 
 
@@ -298,7 +303,7 @@ void noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::sha
 	{
 		lemon::ListDigraph::Node temp_shader_node = draw_graph.target(shader_it);
 		noob::shader test_value = shaders_mapping[temp_shader_node];
-		if (shader_arg == test_value)
+		if (test_value == shader_arg)
 		{
 			shader_found = true;
 			shader_node = temp_shader_node;

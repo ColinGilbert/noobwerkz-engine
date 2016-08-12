@@ -4,6 +4,7 @@
 // #include "Reflectance.hpp"
 // #include "ComponentDefines.hpp"
 
+#include "format.h"
 
 namespace noob
 {
@@ -22,5 +23,29 @@ namespace noob
 		}
 		shader_type type;
 		uint32_t handle;
+
+		std::string to_string() const
+		{
+			fmt::MemoryWriter ww;
+			
+			switch (type)
+			{
+				case (noob::shader_type::BASIC):
+				{
+					ww << "basic ";
+					break;
+				}
+				case (noob::shader_type::TRIPLANAR):
+				{
+					ww << "triplanar ";
+					break;
+				}
+			}
+			
+			ww << handle;
+
+			return ww.str();
+
+		}
 	};
 };
