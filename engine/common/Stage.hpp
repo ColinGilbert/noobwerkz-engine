@@ -26,6 +26,8 @@
 #include "HandleMap.hpp"
 #include "FastHashTable.hpp"
 #include "NoobCommon.hpp"
+#include "DynamicArray.hpp"
+#include "ShadingVariant.hpp"
 
 #include <lemon/smart_graph.h>
 #include <lemon/list_graph.h>
@@ -59,16 +61,15 @@ namespace noob
 
 			typedef noob::handle<noob::actor> actor_handle;
 
-			noob::actor_handle actor(const noob::actor_blueprints_handle, uint8_t team, const noob::vec3&, const noob::versor&);
+			noob::actor_handle add_actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3&, const noob::versor&);
 
 			// Functions to create commonly-used configurations. Soon they'll return a tag used by the component system (in construction)
-			// void actor(const noob::body_handle, const noob::animated_model_handle, const noob::shader_variant) noexcept(true);
-			// void actor(const noob::body_handle, const noob::scaled_model, const noob::shader_variant) noexcept(true);
-			// void actor(const noob::shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::shader_variant, const noob::reflectance_handle) noexcept(true);
+			// void actor(const noob::body_handle, const noob::animated_model_handle, const noob::shader) noexcept(true);
+			// void actor(const noob::body_handle, const noob::scaled_model, const noob::shader) noexcept(true);
+			// void actor(const noob::shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::shader, const noob::reflectance_handle) noexcept(true);
 			
-			// Scenery is a non-movable item that uses indexed triangle meshes as input. It doesn't get looped over unless needed.
-			// void scenery(const noob::basic_mesh&, const noob::vec3& pos, const noob::versor& orient, const noob::shader_variant, const noob::reflectance_handle, const std::string& name) noexcept(true);
-
+			void scenery(const noob::shape_handle shape_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg, const noob::surface& surface_arg);
+			
 			void set_light(unsigned int, const noob::light_handle) noexcept(true);
 
 			void set_directional_light(const noob::directional_light&) noexcept(true);
@@ -88,6 +89,8 @@ namespace noob
 		protected:
 			void remove_body(noob::body_handle) noexcept(true);
 
+			void add_to_graph(const noob::body_variant bod_arg, const noob::shape_handle shape_arg, const noob::surface& surface_arg); 
+
 			const int NUM_RESERVED_NODES = 8192;			
 			const int NUM_RESERVED_ARCS = 8192;
 
@@ -101,10 +104,7 @@ namespace noob
 			noob::joints_holder joints;
 			noob::ghosts_holder ghosts;
 
-			rde::vector<noob::actor> actors;
-			rde::vector<noob::actor_movement> actor_moves;
-			rde::vector<noob::actor_blueprints_handle> actor_blueprints;
-			uint32_t actor_count;
+			noob::component<noob::actor> actors;
 			
 			rde::vector<noob::actor_event> actor_mq;
 			uint32_t actor_mq_count;
@@ -113,15 +113,16 @@ namespace noob
 			// TODO: Optimize:
 			lemon::ListDigraph draw_graph;
 			lemon::ListDigraph::Node root_node;
-			lemon::ListDigraph::NodeMap<uint64_t> bodies_mapping;
+			lemon::ListDigraph::NodeMap<noob::body_variant> bodies_mapping;
 			lemon::ListDigraph::NodeMap<std::function<noob::mat4(void)>> model_mats_mapping;
-			lemon::ListDigraph::NodeMap<uint64_t> basic_models_mapping;
-			lemon::ListDigraph::NodeMap<noob::shader_variant> shaders_mapping;
-			lemon::ListDigraph::NodeMap<uint64_t> reflectances_mapping;
-			lemon::ListDigraph::NodeMap<std::array<uint64_t, 4>> lights_mapping;
+			lemon::ListDigraph::NodeMap<uint32_t> basic_models_mapping;
+			lemon::ListDigraph::NodeMap<noob::shader> shaders_mapping;
+			lemon::ListDigraph::NodeMap<uint32_t> reflectances_mapping;
+			lemon::ListDigraph::NodeMap<std::array<uint32_t, 4>> lights_mapping;
 			lemon::ListDigraph::NodeMap<std::array<float, 3>> scales_mapping;
 
 			noob::fast_hashtable bodies_to_nodes;
+			noob::fast_hashtable ghosts_to_nodes;
 			noob::fast_hashtable basic_models_to_nodes;
 			
 			noob::directional_light directional_light;

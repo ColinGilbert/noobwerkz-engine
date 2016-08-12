@@ -106,6 +106,7 @@ void noob::application::init()
 	r = script_engine->RegisterGlobalFunction("void log(const string& in)", asFUNCTION(logger::log), asCALL_CDECL); assert (r >= 0);
 	// r = script_engine->RegisterGlobalFunction("void log(const string& in)", asFUNCTIONPR(logger::log, (const std::string&), void), asCALL_CDECL); assert (r >= 0);
 
+	register_handles(script_engine);
 	register_math(script_engine);
 	register_plane(script_engine);
 	register_graphics(script_engine);
@@ -113,21 +114,23 @@ void noob::application::init()
 	r = script_engine->RegisterGlobalProperty("controls controller", &controller); assert (r >= 0);
 	register_basic_mesh(script_engine);
 	register_active_mesh(script_engine);
-	// TODO: Implement
 	r = script_engine->RegisterGlobalFunction("double random()", asMETHOD(noob::random_generator, get), asCALL_THISCALL_ASGLOBAL, &randomz); assert( r >= 0 );
 	register_body(script_engine);
 	register_joint(script_engine);
+	// register_ghost(script_engine);
 	register_light(script_engine);
 	register_reflectance(script_engine);
+	register_shading_variant(script_engine);
+	register_actor(script_engine);
 	register_uniforms(script_engine);
-	register_handles(script_engine);
 	register_scaled_model(script_engine);
-	register_globals(script_engine);
 	register_stage(script_engine);
 	r = script_engine->RegisterGlobalProperty("stage default_stage", &stage); assert (r >= 0);
 	register_voxels(script_engine);
 	r = script_engine->RegisterGlobalProperty("voxel_world voxels", &voxels); assert (r >= 0);
 
+	register_globals(script_engine);
+	
 	logger::log("[Application] Done basic init.");
 	bool b = user_init();
 	network.init(3);

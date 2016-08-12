@@ -9,23 +9,25 @@
 #include <rdestl/fixed_array.h>
 #include <rdestl/vector.h>
 
-#include "Globals.hpp"
 #include "NoobDefines.hpp"
 #include "Component.hpp"
 #include "ComponentDefines.hpp"
 #include "NoobCommon.hpp"
-
+#include "ScaledModel.hpp"
+#include "ShadingVariant.hpp"
 
 namespace noob
 {
 	class armature
 	{
 		public:
-			armature() : models(graph), bind_pose(graph) {}
+			armature() : models(graph), surfaces(graph), bind_pose(graph) {}
 
 		protected:
 			lemon::StaticDigraph graph;
-			lemon::StaticDigraph::NodeMap<noob::model_handle> models;
+			
+			lemon::StaticDigraph::NodeMap<noob::scaled_model> models;
+			lemon::StaticDigraph::NodeMap<noob::surface> surfaces;
 			lemon::StaticDigraph::NodeMap<std::tuple<noob::vec3, noob::versor>> bind_pose;
 	};
 
@@ -37,12 +39,12 @@ namespace noob
 	class boss_armature
 	{
 		public:
-			boss_armature() : bodies(graph), shadings(graph), joints(graph) {}
+			boss_armature() : bodies(graph), surfaces(graph), joints(graph) {}
 
 		protected:
 			lemon::StaticDigraph graph;
 			lemon::StaticDigraph::NodeMap<noob::body_handle> bodies;
-			lemon::StaticDigraph::NodeMap<noob::shading> shadings;
+			lemon::StaticDigraph::NodeMap<noob::surface> surfaces;
 			lemon::StaticDigraph::ArcMap<noob::joint_handle> joints;
 	};
 
@@ -54,12 +56,12 @@ namespace noob
 	class dynamic_armature
 	{
 		public:	
-			dynamic_armature() : bodies(graph), shadings(graph), joints(graph) {}
+			dynamic_armature() : bodies(graph), surfaces(graph), joints(graph) {}
 
 		protected:
 			lemon::ListDigraph graph;
 			lemon::ListDigraph::NodeMap<noob::body_handle> bodies;
-			lemon::ListDigraph::NodeMap<noob::shading> shadings;
+			lemon::ListDigraph::NodeMap<noob::surface> surfaces;
 			lemon::ListDigraph::ArcMap<noob::joint_handle> joints;
 	};
 	

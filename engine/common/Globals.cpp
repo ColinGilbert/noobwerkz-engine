@@ -40,7 +40,7 @@ bool noob::globals::init() noexcept(true)
 	dbg.colour = noob::vec4(1.0, 1.0, 1.0, 0.0);
 	set_shader(dbg, "debug");
 	// logger::log("[Globals] Set debug shader");
-	shader_variant t1 = get_shader("debug");
+	shader t1 = get_shader("debug");
 	debug_shader = basic_shader_handle::make(t1.handle);
 	// logger::log("[Globals] Got debug shader handle");
 	// Init triplanar shader. For fun.
@@ -56,7 +56,7 @@ bool noob::globals::init() noexcept(true)
 	set_shader(triplanar_info, "default-triplanar");
 	// logger::log("[Globals] Set default triplanar shader.");
 
-	shader_variant t2 = get_shader("default-triplanar");
+	shader t2 = get_shader("default-triplanar");
 	default_triplanar_shader = triplanar_shader_handle::make(t2.handle);
 
 	noob::light l;
@@ -164,8 +164,6 @@ noob::scaled_model noob::globals::cone_model(float r, float h) noexcept(true)
 
 noob::scaled_model noob::globals::model_from_mesh(const noob::basic_mesh& m, const std::string& name) noexcept(true) 
 {
-
-
 	std::unique_ptr<noob::basic_model> temp = std::make_unique<noob::basic_model>();
 	temp->init(m);
 	noob::model_handle h = basic_models.add(std::move(temp));
@@ -188,14 +186,13 @@ noob::scaled_model noob::globals::model_from_mesh(const noob::basic_mesh& m, con
 }
 
 
-noob::scaled_model noob::globals::model_by_shape(const noob::shape_handle h) noexcept(true) 
+noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) noexcept(true) 
 {
 	// fmt::MemoryWriter ww;
 	// ww << "[Globals] about to get model from shape " << h.get_inner();
 	// logger::log(ww.str());
 
 	scaled_model results;
-	//results.scales = noob::vec3(1.0, 1.0, 1.0);
 	noob::shape s = shapes.get(h);
 
 	// logger::log("[Globals] got shape pointer");
@@ -273,7 +270,6 @@ noob::shape_handle noob::globals::sphere_shape(float r) noexcept(true)
 
 		auto results = names_to_shapes.insert(rde::make_pair(rde::string(w.c_str()), add_shape(temp)));
 		return (results.first)->second;
-
 	}
 	return search->second;
 }
@@ -488,7 +484,7 @@ void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std
 	{
 		noob::basic_shader_handle h = basic_shaders.add(u);
 		noob::shader_variant r;
-		r.type = noob::shader_type::BASIC;
+		r.type = noob::shader_variant_type::BASIC;
 		r.handle = h.get_inner();
 
 		names_to_shaders.insert(rde::make_pair(rde::string(name.c_str()), r));
@@ -504,7 +500,7 @@ void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::unif
 	{
 		noob::triplanar_shader_handle h = triplanar_shaders.add(u);
 		noob::shader_variant r;
-		r.type = noob::shader_type::TRIPLANAR;
+		r.type = noob::shader_variant_type::TRIPLANAR;
 		r.handle = h.get_inner();
 
 		names_to_shaders.insert(rde::make_pair(rde::string(name.c_str()), r));

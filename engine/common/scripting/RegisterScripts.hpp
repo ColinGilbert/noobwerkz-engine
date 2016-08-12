@@ -15,4 +15,8 @@
 #include "RegisterHandles.hpp"
 #include "RegisterBody.hpp"
 #include "RegisterJoint.hpp"
+#include "RegisterActor.hpp"
 #include "RegisterUniforms.hpp"
+#include "RegisterCommon.hpp"
+
+// #include "RegisterShadingVariant.hpp"

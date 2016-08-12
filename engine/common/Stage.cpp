@@ -62,6 +62,7 @@ void noob::stage::update(double dt) noexcept(true)
 
 
 void noob::stage::draw(float window_width, float window_height, const noob::vec3& eye_pos, const noob::vec3& eye_target, const noob::vec3& eye_up, const noob::mat4& projection_mat) const noexcept(true) 
+
 {
 	noob::mat4 view_mat(noob::look_at(eye_pos, eye_target, eye_up));
 	bgfx::setViewTransform(0, &view_mat.m[0], &projection_mat.m[0]);
@@ -86,29 +87,55 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 	for (lemon::ListDigraph::OutArcIt model_it(draw_graph, root_node); model_it != lemon::INVALID; ++model_it)
 	{
 		lemon::ListDigraph::Node model_node = draw_graph.target(model_it);
-		uint64_t model_h = basic_models_mapping[model_node];
+		uint32_t model_h = basic_models_mapping[model_node];
 
 		for (lemon::ListDigraph::OutArcIt shading_it(draw_graph, model_node); shading_it != lemon::INVALID; ++shading_it)
 		{
 			lemon::ListDigraph::Node shading_node = draw_graph.target(shading_it);
-			noob::shader_variant shader_h = shaders_mapping[shading_node];
+			noob::shader shader_h = shaders_mapping[shading_node];
 
 			for (lemon::ListDigraph::OutArcIt body_it(draw_graph, shading_node); body_it != lemon::INVALID; ++body_it)
 			{
 				lemon::ListDigraph::Node body_node = draw_graph.target(body_it);
-				uint64_t body_h = bodies_mapping[body_node];
+				noob::body_variant body_var = bodies_mapping[body_node];
 				noob::vec3 scales = noob::vec3_from_array(scales_mapping[body_node]);
 
 				noob::mat4 world_mat = noob::identity_mat4();
 
-				// Prior to this hack, we fed the results of body.get_orientation directly into the rotate() function.
-				// This caused all objects drawn flipped about the x-axis 180 degrees
-				noob::versor original_quat = bodies.get(body_handle::make(body_h)).get_orientation();
-				noob::versor temp_quat(original_quat.q[3], original_quat.q[2], original_quat.q[1], original_quat.q[0]); 
+				switch (body_var.type)
+				{
+					case (noob::pos_type::GHOST):
+						{
+							// TODO: Hopefully remove this hack
+							noob::versor original_quat = ghosts.get(ghost_handle::make(body_var.index)).get_orientation();
+							noob::versor temp_quat(original_quat.q[3], original_quat.q[2], original_quat.q[1], original_quat.q[0]); 
 
-				world_mat = noob::rotate(world_mat, temp_quat);//bodies.get(body_h).get_orientation());
-				world_mat = noob::scale(world_mat, noob::vec3_from_array(scales_mapping[body_node]));												
-				world_mat = noob::translate(world_mat, bodies.get(body_handle::make(body_h)).get_position());												
+
+							world_mat = noob::rotate(world_mat, temp_quat); //ghosts.get(body_var.index).get_orientation());
+							world_mat = noob::scale(world_mat, noob::vec3_from_array(scales_mapping[body_node]));												
+							world_mat = noob::translate(world_mat, ghosts.get(ghost_handle::make(body_var.index)).get_position());
+
+							break;
+						}
+
+					case (noob::pos_type::PHYSICAL):
+						{
+
+							// TODO: Hopefully remove this hack
+							noob::versor original_quat = bodies.get(body_handle::make(body_var.index)).get_orientation();
+							noob::versor temp_quat(original_quat.q[3], original_quat.q[2], original_quat.q[1], original_quat.q[0]); 
+
+							world_mat = noob::rotate(world_mat, temp_quat); //bodies.get(body_var.index).get_orientation());
+							world_mat = noob::scale(world_mat, noob::vec3_from_array(scales_mapping[body_node]));												
+							world_mat = noob::translate(world_mat, bodies.get(body_handle::make(body_var.index)).get_position());
+
+							break;
+						}
+					default:
+						{
+							logger::log("[Stage] draw - Attempting to draw invalid body node type!");
+						}
+				}
 				noob::mat4 normal_mat = noob::transpose(noob::inverse((world_mat * view_mat)));
 
 				noob::reflectance temp_reflect;
@@ -180,17 +207,17 @@ noob::ghost_handle noob::stage::add_ghost(const noob::shape_handle shape_h, cons
 		dynamics_world->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 		ghosts_initialized = true;
 	}
-	
+
 	noob::globals& g = noob::globals::get_instance();
-	
+
 	noob::ghost temp_ghost;
 	temp_ghost.init(g.shapes.get(shape_h), pos, orient);
 	dynamics_world->addCollisionObject(temp_ghost.inner);
-	
+
 	noob::ghost_handle ghost_h = ghosts.add(temp_ghost);
 	temp_ghost = ghosts.get(ghost_h);
 	temp_ghost.inner->setUserIndex(ghost_h.get_inner());
-	
+
 	return ghost_h;
 }
 
@@ -213,54 +240,71 @@ noob::joint_handle noob::stage::add_joint(const noob::body_handle a, const noob:
 }
 
 
-noob::actor_handle noob::stage::actor(const noob::actor_blueprints_handle h, uint8_t team, const noob::vec3& pos, const noob::versor& orient) 
+noob::actor_handle noob::stage::add_actor(const noob::actor_blueprints_handle blueprints_h, uint32_t team, const noob::vec3& pos, const noob::versor& orient) 
 {
+	noob::globals& g = noob::globals::get_instance();
 	
+	noob::actor_blueprints bp = g.actor_blueprints.get(blueprints_h);
+	
+	noob::actor a;
+	a.ghost = add_ghost(bp.bounds, pos, orient);
+	noob::body_variant b_var;
+	b_var.type = noob::pos_type::GHOST;
+	b_var.index = a.ghost.get_inner();	
 
+	add_to_graph(b_var, bp.bounds, bp.drawing);
+
+	return actors.add(a);
 }
 
 
-/*
-void noob::stage::actor(const noob::body_handle body_h, const noob::scaled_model model_info, const noob::shader_variant shader_h) noexcept(true) 
+void noob::stage::scenery(const noob::shape_handle shape_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg, const noob::surface& surface_arg)
 {
-	auto body_results = bodies_to_nodes.lookup(body_h.get_inner());
+	noob::globals& g = noob::globals::get_instance();
+	
+	noob::body_handle bod_h = add_body(noob::body_type::STATIC, shape_arg, 0.0, pos_arg, orient_arg, false);
+	noob::body_variant b_var;
+	b_var.type = noob::pos_type::PHYSICAL;
+	b_var.index = bod_h.get_inner();
 
-	// Filter out duplicate bodies by checking existence in the table
-	if (bodies_to_nodes.is_valid(body_results))
-	{
-		logger::log("[Stage] Warning: Attempting to create actor with duplicate body. Aborted.");
-		return;
-	}
+	
+	add_to_graph(b_var, shape_arg, surface_arg);
+}
 
+
+void noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::shape_handle shape_arg, const noob::surface& surface_arg) 
+{
+	noob::globals& g = noob::globals::get_instance();
+	
+	// Find out if the model node is in the graph. If so, cache it. If not, add it.
+	noob::scaled_model model_info = g.model_from_shape(shape_arg);
 	lemon::ListDigraph::Node model_node;
-
 	noob::fast_hashtable::cell* model_results = basic_models_to_nodes.lookup(model_info.model_h.get_inner());
-
+	
 	if (basic_models_to_nodes.is_valid(model_results))
 	{
 		model_node = draw_graph.nodeFromId(model_results->value);
 	}
-
 	else
 	{
 		model_node = draw_graph.addNode();
 
+		auto temp_cell = basic_models_to_nodes.insert(model_info.model_h.get_inner());
+		temp_cell->value = draw_graph.id(model_node);
 		basic_models_mapping[model_node] = model_info.model_h.get_inner();
 
 		draw_graph.addArc(root_node, model_node);
-
-		auto temp_cell = basic_models_to_nodes.insert(model_info.model_h.get_inner());
-		temp_cell->value = draw_graph.id(model_node);
 	}
 
+	// Find out if the shader node is already in graph. If so, cache it. If not, add one and cache it.
 	bool shader_found = false;
 	lemon::ListDigraph::Node shader_node;
 
 	for (lemon::ListDigraph::OutArcIt shader_it(draw_graph, model_node); shader_it != lemon::INVALID; ++shader_it)
 	{
 		lemon::ListDigraph::Node temp_shader_node = draw_graph.target(shader_it);
-		noob::shader_variant test_value = shaders_mapping[temp_shader_node];
-		if (shader_h == test_value)
+		noob::shader test_value = shaders_mapping[temp_shader_node];
+		if (surface_arg.shading == test_value)
 		{
 			shader_found = true;
 			shader_node = temp_shader_node;
@@ -271,61 +315,48 @@ void noob::stage::actor(const noob::body_handle body_h, const noob::scaled_model
 	if (!shader_found)
 	{
 		shader_node = draw_graph.addNode();
-		shaders_mapping[shader_node] = shader_h;
+		shaders_mapping[shader_node] = surface_arg.shading;
+
 		draw_graph.addArc(model_node, shader_node);
 	}
 
-	lemon::ListDigraph::Node body_node = draw_graph.addNode();
-	bodies_mapping[body_node] = body_h.get_inner();
+	// Now, put actor's ghost into draw-graph.
+	lemon::ListDigraph::Node bod_node = draw_graph.addNode();
+	//bodies_mapping[ghost_node] = bod_arg;
+	
+	switch (bod_arg.type)
+	{
+		case (noob::pos_type::PHYSICAL):
+		{
+			auto temp = bodies_to_nodes.insert(bod_arg.index);
+			temp->value = draw_graph.id(bod_node);
+			bodies_mapping[bod_node] = bod_arg;
+		}
+		case (noob::pos_type::GHOST):
+		{
+			auto temp = ghosts_to_nodes.insert(bod_arg.index);
+			temp->value = draw_graph.id(bod_node);
+			bodies_mapping[bod_node] = bod_arg;
+		}
 
-	auto temp_body_cell = bodies_to_nodes.insert(body_h.get_inner());
-	temp_body_cell->value = draw_graph.id(body_node);
+		default:
+		{
+			logger::log("[Stage] add_to_drawgraph() - Trying to insert invalid type.");
+		}
+	}
 
-	scales_mapping[body_node] = model_info.scales.v;
-	reflectances_mapping[body_node] = model_info.reflect_h.get_inner();
-	draw_graph.addArc(shader_node, body_node);
+	scales_mapping[bod_node] = model_info.scales.v;
 
-	noob::globals& g = noob::globals::get_instance();
+	reflectances_mapping[bod_node] = surface_arg.reflect.get_inner();
+
+	draw_graph.addArc(shader_node, bod_node);
+
+	// TODO: Replace with stage's directional light
 	noob::light_handle light_h = g.default_light;
-	lights_mapping[body_node] = {light_h.get_inner(), light_h.get_inner(), light_h.get_inner(), light_h.get_inner()};
-
-	// fmt::MemoryWriter ww;
-	// ww << "[Stage] Created actor with model " << model_info.model_h.get_inner() << ", shader " << shader_h.get_inner() << ", reflectance " << model_info.reflect_h.get_inner() << " and body " << body_h.get_inner() << ".";
-	// logger::log(ww.str());
+	lights_mapping[bod_node] = {light_h.get_inner(), light_h.get_inner(), light_h.get_inner(), light_h.get_inner()};
 }
 
 
-void noob::stage::actor(const noob::shape_handle shape_h , float mass, const noob::vec3& pos, const noob::versor& orient, const noob::shader_variant shader_h, const noob::reflectance_handle reflect_arg) noexcept(true) 
-{
-	noob::globals& g = noob::globals::get_instance();
-	noob::shape s = g.shapes.get(shape_h);
-	if (s.get_type() != noob::shape::type::TRIMESH)
-	{
-		noob::body_handle body_h = add_body(noob::body_type::DYNAMIC, shape_h, mass, pos, orient);
-		noob::scaled_model model_info = g.model_by_shape(shape_h);
-		model_info.reflect_h = reflect_arg;
-		actor(body_h, model_info, shader_h);
-	}
-	else
-	{
-		logger::log("[Stage] Attempting to create actor with static mesh.");
-	}
-}
-
-
-noob::stage::scenery(const noob::basic_mesh& m, const noob::vec3& pos, const noob::versor& orient, const noob::shader_variant shader_h, const noob::reflectance_handle reflect_arg, const std::string& name) noexcept(true) 
-{
-	noob::globals& g = noob::globals::get_instance();
-	noob::shape_handle shape_h = g.static_trimesh_shape(m, name);
-	noob::body_handle body_h = add_body(noob::body_type::STATIC, shape_h, 0.0, pos, orient);
-	noob::scaled_model model_info;
-	model_info = g.model_from_mesh(m, name);
-	model_info.reflect_h = reflect_arg;
-	actor(body_h, model_info, shader_h);
-}
-
-
-*/
 void noob::stage::set_light(unsigned int i, const noob::light_handle h) noexcept(true) 
 {
 	if (i < MAX_LIGHTS)

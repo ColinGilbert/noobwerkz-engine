@@ -24,11 +24,11 @@ void noob::register_handles(asIScriptEngine* script_engine)
 
 	r = script_engine->RegisterObjectType("actor_handle", sizeof(noob::actor_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::actor_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 
-	r = script_engine->RegisterObjectType("shading_handle", sizeof(noob::shading_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::shading_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	// r = script_engine->RegisterObjectType("shading_handle", sizeof(noob::shading_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::shading_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 
 	r = script_engine->RegisterObjectType("light_handle", sizeof(noob::light_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::light_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	
 	r = script_engine->RegisterObjectType("reflectance_handle", sizeof(noob::reflectance_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::reflectance_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	
-	r = script_engine->RegisterObjectType("shader_handle", sizeof(noob::shader_variant), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::shader_variant>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectType("shader_handle", sizeof(noob::shader_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::shader_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 }

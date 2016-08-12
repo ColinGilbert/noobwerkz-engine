@@ -770,7 +770,10 @@ list(APPEND common_src
 	common/scripting/RegisterHandles.cpp
 	common/scripting/RegisterBody.cpp
 	common/scripting/RegisterJoint.cpp
+	#common/scripting/RegisterGhost.cpp
+	common/scripting/RegisterActor.cpp
 	common/scripting/RegisterUniforms.cpp
+	common/scripting/RegisterShadingVariant.cpp
 	)
 
 list(APPEND user_src

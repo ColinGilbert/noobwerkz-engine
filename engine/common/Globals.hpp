@@ -36,6 +36,7 @@
 #include "NoobCommon.hpp"
 #include "Actor.hpp"
 #include "Armature.hpp"
+#include "ShadingVariant.hpp"
 
 namespace noob
 {
@@ -122,10 +123,9 @@ namespace noob
 			scaled_model box_model(float x, float y, float z) noexcept(true);
 			scaled_model cylinder_model(float r, float h) noexcept(true);
 			scaled_model cone_model(float r, float h) noexcept(true);
-			// Those will create lots more data
+			
 			scaled_model model_from_mesh(const noob::basic_mesh&, const std::string& name) noexcept(true);
-			// Causes crashes with scripts. Therefore, keep indoors.
-			scaled_model model_by_shape(const noob::shape_handle) noexcept(true);
+			scaled_model model_from_shape(const noob::shape_handle) noexcept(true);
 
 
 			// ---------------
@@ -154,9 +154,6 @@ namespace noob
 			triplanar_shaders_holder triplanar_shaders;
 			samples_holder samples;
 			actor_blueprints_holder actor_blueprints;
-
-			character_shading_holder character_shadings;
-			boss_shading_holder boss_shadings;
 
 			noob::basic_renderer basic_drawer;
 			noob::triplanar_gradient_map_renderer triplanar_drawer;
