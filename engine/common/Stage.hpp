@@ -63,19 +63,21 @@ namespace noob
 
 			noob::actor_handle add_actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3&, const noob::versor&);
 
-			
+
 			void scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
-			
+
 			void set_light(unsigned int, const noob::light_handle) noexcept(true);
 
 			void set_directional_light(const noob::directional_light&) noexcept(true);
 
 			noob::light_handle get_light(unsigned int i) const noexcept(true);
 
-			noob::ghost_intersection_results get_intersections(const noob::ghost_handle) const noexcept(true);
+			std::vector<noob::contact_point> get_intersections(const noob::ghost_handle) const noexcept(true);
 
 			// Dumps a readable graph format onto disk. Super useful for debug.
 			void write_graph(const std::string& filename) const noexcept(true);
+
+			void print_ghost_intersections(const noob::ghost_handle h) const noexcept(true);
 
 			bool show_origin;
 
@@ -84,6 +86,10 @@ namespace noob
 
 		protected:
 			void remove_body(noob::body_handle) noexcept(true);
+			void remove_ghost(noob::ghost_handle) noexcept(true);
+			// void remove_joint(noob::joint_handle) noexcept(true);
+
+			void actor_dither(noob::actor_handle h) noexcept(true);
 
 			void add_to_graph(const noob::body_variant bod_arg, const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg); 
 
@@ -101,10 +107,10 @@ namespace noob
 			noob::ghosts_holder ghosts;
 
 			noob::component<noob::actor> actors;
-			
+
 			rde::vector<noob::actor_event> actor_mq;
 			uint32_t actor_mq_count;
-			
+
 
 			// TODO: Optimize:
 			lemon::ListDigraph draw_graph;
@@ -120,9 +126,9 @@ namespace noob
 			noob::fast_hashtable bodies_to_nodes;
 			noob::fast_hashtable ghosts_to_nodes;
 			noob::fast_hashtable basic_models_to_nodes;
-			
+
 			noob::directional_light directional_light;
-			
+
 			// TODO: Make more flexible.
 			std::array<noob::light_handle, MAX_LIGHTS> lights;
 

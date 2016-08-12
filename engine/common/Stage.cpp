@@ -37,12 +37,23 @@ void noob::stage::tear_down() noexcept(true)
 	{
 		remove_body(body_handle::make(i));
 	}
-
 	bodies.empty();
+
+	// Joints are automatically cleaned up by Bullet once all bodies have been destroyed. I think...
 	joints.empty();
+
+	for (size_t i = 0; i < ghosts.count(); ++i)
+	{
+		remove_ghost(ghost_handle::make(i));
+	}
 	ghosts.empty();
 
+	actors.empty();
+	actor_mq.clear();
+	actor_mq_count = 0;
+
 	bodies_to_nodes.clear();
+	ghosts_to_nodes.clear();
 	basic_models_to_nodes.clear();
 
 	delete dynamics_world;
@@ -110,7 +121,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 							noob::versor temp_quat(original_quat.q[3], original_quat.q[2], original_quat.q[1], original_quat.q[0]); 
 
 							world_mat = noob::rotate(world_mat, temp_quat); //ghosts.get(body_var.index).get_orientation());
-							world_mat = noob::scale(world_mat, noob::vec3_from_array(scales_mapping[body_node]));												
+							world_mat = noob::scale(world_mat, scales);												
 							world_mat = noob::translate(world_mat, ghosts.get(ghost_handle::make(body_var.index)).get_position());
 
 							break;
@@ -118,13 +129,12 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 
 					case (noob::pos_type::PHYSICAL):
 						{
-
 							// TODO: Hopefully remove this hack
 							noob::versor original_quat = bodies.get(body_handle::make(body_var.index)).get_orientation();
 							noob::versor temp_quat(original_quat.q[3], original_quat.q[2], original_quat.q[1], original_quat.q[0]); 
 
 							world_mat = noob::rotate(world_mat, temp_quat); //bodies.get(body_var.index).get_orientation());
-							world_mat = noob::scale(world_mat, noob::vec3_from_array(scales_mapping[body_node]));												
+							world_mat = noob::scale(world_mat, scales);												
 							world_mat = noob::translate(world_mat, bodies.get(body_handle::make(body_var.index)).get_position());
 
 							break;
@@ -235,13 +245,13 @@ noob::actor_handle noob::stage::add_actor(const noob::actor_blueprints_handle bp
 	noob::globals& g = noob::globals::get_instance();
 	noob::actor_blueprints bp = g.actor_blueprints.get(bp_h);
 
-	
+
 	noob::actor a;
 	a.ghost = add_ghost(bp.bounds, pos, orient);
 	noob::body_variant b_var;
 	b_var.type = noob::pos_type::GHOST;
 	b_var.index = a.ghost.get_inner();	
-	
+
 
 	add_to_graph(b_var, bp.bounds, bp.shader, bp.reflect);
 
@@ -266,9 +276,10 @@ void noob::stage::scenery(const noob::shape_handle shape_arg, const noob::shader
 	b_var.type = noob::pos_type::PHYSICAL;
 	b_var.index = bod_h.get_inner();
 
-	fmt::MemoryWriter ww;
-	ww << "[Stage] About to add scenery item with body " << b_var.index << ", shape " << shape_arg.get_inner() << ", shader: " << shader_arg.to_string() << ", reflectance " << reflect_arg.get_inner();
-	logger::log(ww.str());
+	// fmt::MemoryWriter ww;
+	// ww << "[Stage] About to add scenery item with body " << b_var.index << ", shape " << shape_arg.get_inner() << ", shader: " << shader_arg.to_string() << ", reflectance " << reflect_arg.get_inner();
+	// logger::log(ww.str());
+
 	add_to_graph(b_var, shape_arg, shader_arg, reflect_arg);
 }
 
@@ -277,12 +288,12 @@ void noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::sha
 {
 
 	noob::globals& g = noob::globals::get_instance();
-	
+
 	// Find out if the model node is in the graph. If so, cache it. If not, add it.
 	noob::scaled_model model_info = g.model_from_shape(shape_arg);
 	lemon::ListDigraph::Node model_node;
 	noob::fast_hashtable::cell* model_results = basic_models_to_nodes.lookup(model_info.model_h.get_inner());
-	
+
 	if (basic_models_to_nodes.is_valid(model_results))
 	{
 		model_node = draw_graph.nodeFromId(model_results->value);
@@ -301,7 +312,7 @@ void noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::sha
 	// Find out if the shader node is already in graph. If so, cache it. If not, add one and cache it.
 	bool shader_found = false;
 	lemon::ListDigraph::Node shader_node;
-	
+
 	for (lemon::ListDigraph::OutArcIt shader_it(draw_graph, model_node); shader_it != lemon::INVALID; ++shader_it)
 	{
 		lemon::ListDigraph::Node temp_shader_node = draw_graph.target(shader_it);
@@ -324,28 +335,28 @@ void noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::sha
 
 	// Now, put actor's ghost into draw-graph.
 	lemon::ListDigraph::Node bod_node = draw_graph.addNode();
-	
+
 	switch (bod_arg.type)
 	{
 		case (noob::pos_type::PHYSICAL):
-		{
-			auto temp = bodies_to_nodes.insert(bod_arg.index);
-			temp->value = draw_graph.id(bod_node);
-			bodies_mapping[bod_node] = bod_arg;
-			break;
-		}
+			{
+				auto temp = bodies_to_nodes.insert(bod_arg.index);
+				temp->value = draw_graph.id(bod_node);
+				bodies_mapping[bod_node] = bod_arg;
+				break;
+			}
 		case (noob::pos_type::GHOST):
-		{
-			auto temp = ghosts_to_nodes.insert(bod_arg.index);
-			temp->value = draw_graph.id(bod_node);
-			bodies_mapping[bod_node] = bod_arg;
-			break;
-		}
+			{
+				auto temp = ghosts_to_nodes.insert(bod_arg.index);
+				temp->value = draw_graph.id(bod_node);
+				bodies_mapping[bod_node] = bod_arg;
+				break;
+			}
 
 		default:
-		{
-			logger::log("[Stage] add_to_drawgraph() - Trying to insert invalid type.");
-		}
+			{
+				logger::log("[Stage] Trying to insert invalid type into drawgraph.");
+			}
 	}
 
 	scales_mapping[bod_node] = model_info.scales.v;
@@ -400,7 +411,19 @@ void noob::stage::remove_body(noob::body_handle h) noexcept(true)
 	}	
 }
 
-noob::ghost_intersection_results noob::stage::get_intersections(const noob::ghost_handle ghost_h) const noexcept(true) 
+
+void noob::stage::remove_ghost(noob::ghost_handle h) noexcept(true) 
+{
+	if (ghosts.exists(h) && h.get_inner() != 0)
+	{
+		noob::ghost b = ghosts.get(h);
+		dynamics_world->removeCollisionObject(b.inner);
+		delete b.inner;
+	}	
+}
+
+
+std::vector<noob::contact_point> noob::stage::get_intersections(const noob::ghost_handle ghost_h) const noexcept(true) 
 {
 	noob::ghost temp_ghost = ghosts.get(ghost_h);
 
@@ -408,8 +431,7 @@ noob::ghost_intersection_results noob::stage::get_intersections(const noob::ghos
 
 	btBroadphasePairArray& pairArray = temp_ghost.inner->getOverlappingPairCache()->getOverlappingPairArray();
 
-	noob::ghost_intersection_results results;
-	results.ghost = ghost_handle::make(temp_ghost.inner->getUserIndex());
+	std::vector<noob::contact_point> results;
 
 	size_t num_pairs = pairArray.size();
 
@@ -443,39 +465,79 @@ noob::ghost_intersection_results noob::stage::get_intersections(const noob::ghos
 				const int index = bt_obj->getUserIndex();
 				if (index > -1)
 				{
-					if (static_cast<noob::body_descriptor*>(bt_obj->getUserPointer())->is_physical() == true)
+					for (size_t p = 0; p < manifold->getNumContacts(); ++p)
 					{
-						results.bodies.push_back(body_handle::make(index));
-					}
-					else
-					{
-						results.ghosts.push_back(ghost_handle::make(index));
+						const btManifoldPoint& pt = manifold->getContactPoint(p);
+
+						if (pt.getDistance() < 0.0f)
+						{
+							noob::contact_point cp;
+
+							if (static_cast<noob::body_descriptor*>(bt_obj->getUserPointer())->is_physical() == true)
+							{
+								cp.handle.type = noob::pos_type::PHYSICAL;
+							}
+							else
+							{
+								cp.handle.type = noob::pos_type::GHOST;
+							}
+
+							cp.handle.index = bt_obj->getUserIndex();
+
+							cp.pos_a = vec3_from_bullet(pt.getPositionWorldOnA());
+							cp.pos_b = vec3_from_bullet(pt.getPositionWorldOnB());
+							cp.normal_on_b = vec3_from_bullet(pt.m_normalWorldOnB);
+
+							results.push_back(cp);
+						}
 					}
 				}
-				// btScalar direction = is_first_body ? btScalar(-1.0) : btScalar(1.0);
-
-				// for (size_t p = 0; p < manifold->getNumContacts(); ++p)
-				// {
-				// const btManifoldPoint& pt = manifold->getContactPoint(p);
-
-				// if (pt.getDistance() < 0.0f)
-				// {
-				// const btVector3& pt_a = pt.getPositionWorldOnA();
-				// const btVector3& pt_b = pt.getPositionWorldOnB();
-				// const btVector3& normal_on_b = pt.m_normalWorldOnB;
-
-
-
-				// Handle collisions here. Thanks Bullet Wiki :)
-
-
-				// }
-				// }
 			}
 		}
 	}
 
 	return results;
+}
+
+void noob::stage::print_ghost_intersections(const noob::ghost_handle h) const noexcept(true)
+{
+	std::vector<noob::contact_point> cps = get_intersections(h);
+	fmt::MemoryWriter ww;
+	ww << "[Stage] Ghost A " << h.get_inner() << " intersects with: ";
+
+	for (noob::contact_point c : cps)
+	{
+		ww << "(" << c.to_string() << "), ";
+	}
+}
+
+// TODO: Remove once we don't need:
+// btScalar direction = is_first_body ? btScalar(-1.0) : btScalar(1.0);
+
+// for (size_t p = 0; p < manifold->getNumContacts(); ++p)
+// {
+// const btManifoldPoint& pt = manifold->getContactPoint(p);
+
+// if (pt.getDistance() < 0.0f)
+// {
+// const btVector3& pt_a = pt.getPositionWorldOnA();
+// const btVector3& pt_b = pt.getPositionWorldOnB();
+// const btVector3& normal_on_b = pt.m_normalWorldOnB;
+
+
+
+// Handle collisions here. Thanks Bullet Wiki :)
+
+
+// }
+// }
+
+
+void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
+{
+	noob::actor a = actors.get(ah);
+
+
 }
 
 /*

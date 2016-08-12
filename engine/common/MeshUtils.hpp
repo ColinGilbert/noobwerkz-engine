@@ -5,10 +5,6 @@
 #include "MathFuncs.hpp"
 
 
-// #include <Newton.h>
-//#define CSGJS_HEADER_ONLY
-// #include <csgjs.hpp>
-
 namespace noob
 {
 	class mesh_utils

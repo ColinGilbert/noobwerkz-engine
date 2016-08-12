@@ -94,7 +94,7 @@ namespace noob
 
 			noob::shape_handle cone_shape(float r, float h) noexcept(true);
 
-			noob::shape_handle hull_shape(const std::vector<noob::vec3>&, const std::string& name) noexcept(true);
+			noob::shape_handle hull_shape(const std::vector<noob::vec3>&) noexcept(true);
 
 			noob::shape_handle static_trimesh_shape(const noob::basic_mesh&, const std::string& name) noexcept(true);
 
@@ -116,7 +116,7 @@ namespace noob
 
 			noob::reflectance_handle set_reflectance(const noob::reflectance&, const std::string& name) noexcept(true);
 			noob::reflectance_handle get_reflectance(const std::string& name) const noexcept(true);
-		
+
 			void set_actor_blueprints(const noob::actor_blueprints&, const std::string& name) noexcept(true);
 			noob::actor_blueprints_handle get_actor_blueprints(const std::string& name) const noexcept(true);
 
@@ -125,8 +125,8 @@ namespace noob
 			scaled_model box_model(float x, float y, float z) noexcept(true);
 			scaled_model cylinder_model(float r, float h) noexcept(true);
 			scaled_model cone_model(float r, float h) noexcept(true);
-			
-			scaled_model model_from_mesh(const noob::basic_mesh&, const std::string& name) noexcept(true);
+
+			scaled_model model_from_mesh(const noob::basic_mesh&) noexcept(true);
 			scaled_model model_from_shape(const noob::shape_handle) noexcept(true);
 
 			// ---------------

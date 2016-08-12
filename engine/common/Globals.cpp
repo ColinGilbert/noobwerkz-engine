@@ -21,15 +21,15 @@ bool noob::globals::init() noexcept(true)
 	logger::log(ww.str());
 
 	// logger::log("[Globals] Making unit sphere model");
-	unit_sphere_model = model_from_mesh(noob::mesh_utils::sphere(0.5), "unit-sphere");//basic_models.add(std::move(temp));
+	unit_sphere_model = model_from_mesh(noob::mesh_utils::sphere(0.5));//basic_models.add(std::move(temp));
 	// logger::log("[Globals] Making unit cube model");
-	unit_cube_model = model_from_mesh(noob::mesh_utils::box(0.5, 0.5, 0.5), "unit-cube");
+	unit_cube_model = model_from_mesh(noob::mesh_utils::box(0.5, 0.5, 0.5));
 	// unit_cube_model = model_from_mesh(noob::mesh_utils::box(1.0, 1.0, 1.0));
 	// logger::log("[Globals] Making unit cylinder model");
 	// unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(1.0, 0.5));
-	unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(0.5, 1.0), "unit-cylinder");
+	unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(0.5, 1.0));
 	// logger::log("[Globals] Making unit cone model");
-	unit_cone_model = model_from_mesh(noob::mesh_utils::cone(0.5, 1.0), "unit-cone");
+	unit_cone_model = model_from_mesh(noob::mesh_utils::cone(0.5, 1.0));
 
 	fmt::MemoryWriter ww_2;
 	ww_2 << "[Globals] unit sphere model handle " << unit_sphere_model.model_h.get_inner() << ", unit cube model handle " << unit_cube_model.model_h.get_inner() << ", unit cylinder model handle " << unit_cylinder_model.model_h.get_inner() << ", unit cone model handle " << unit_cone_model.model_h.get_inner();
@@ -113,23 +113,11 @@ noob::scaled_model noob::globals::cone_model(float r, float h) noexcept(true)
 }
 
 
-noob::scaled_model noob::globals::model_from_mesh(const noob::basic_mesh& m, const std::string& name) noexcept(true) 
+noob::scaled_model noob::globals::model_from_mesh(const noob::basic_mesh& m) noexcept(true) 
 {
 	std::unique_ptr<noob::basic_model> temp = std::make_unique<noob::basic_model>();
 	temp->init(m);
 	noob::model_handle h = basic_models.add(std::move(temp));
-	auto results = names_to_basic_models.find(rde::string(name.c_str()));
-	if (results != names_to_basic_models.end())
-	{
-		basic_models.set(results->second, std::move(temp));
-		h = results->second;//std::move(temp);
-	}
-	else
-	{
-		//h = temp.model_h;
-		names_to_basic_models.insert(rde::make_pair(rde::string(name.c_str()), h));
-	}
-
 	noob::scaled_model retval;
 	retval.model_h = h;
 	retval.scales = noob::vec3(1.0, 1.0, 1.0);
@@ -148,7 +136,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 
 	// logger::log("[Globals] got shape pointer");
 
-	
+
 	switch(s.shape_type)
 	{
 		// logger::log("[Globals] choosing shape type");
@@ -182,28 +170,120 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 				noob::fast_hashtable::cell* search = shapes_to_models.lookup(h.get_inner());
 				if (shapes_to_models.is_valid(search))
 				{
-					results.model_h = model_handle::make(search->value);
-					results.scales = noob::vec3(1.0, 1.0, 1.0);
+					size_t val = search->value;
+					results.model_h = model_handle::make(val);
 				}
-				break;
+				else
+				{
+					logger::log("[Globals] DATA ERROR: Attempted to get a hull model with an invalid shape handle.");
+				}
+				results.scales = noob::vec3(1.0, 1.0, 1.0);					
+				break; 
 			}
+
 		case(noob::shape::type::TRIMESH):
 			{
+				static uint32_t trimesh_model_count = 0;
 				noob::fast_hashtable::cell* search = shapes_to_models.lookup(h.get_inner());
 				if (shapes_to_models.is_valid(search))
 				{
-					results.model_h = model_handle::make(search->value);
-					results.scales = noob::vec3(1.0, 1.0, 1.0);					
-				}
-				break;
-			}
-		default:
-			{
-				logger::log("[Globals] - USER DATA WARNING - INVALID SHAPE TO MODEL :(");
-				break;
-			}
-	};
+					size_t val = search->value;
+					if (val != std::numeric_limits<size_t>::max())
+					{
+						// We can simply give back the results:
+						results.model_h = model_handle::make(val);
+					}	
+					// We must first create the model:
+					else
+					{
+						// We must first create the model:
+						fmt::MemoryWriter ww;
+						ww << "mesh-" << trimesh_model_count;
+						++trimesh_model_count;
 
+						const btBvhTriangleMeshShape* shape_ptr = static_cast<btBvhTriangleMeshShape*>((shapes.get(h)).inner_shape);
+						btVector3 scaling = shape_ptr->getLocalScaling();
+						const btStridingMeshInterface* striding_mesh = shape_ptr->getMeshInterface();
+						PHY_ScalarType scalar_type, index_type;
+						scalar_type = index_type;
+						int num_verts, scalar_stride, index_stride, num_faces;
+						const unsigned char** vertex_base;
+						const unsigned char** index_base;
+
+						striding_mesh->getLockedReadOnlyVertexIndexBase(vertex_base, num_verts, scalar_type, scalar_stride, index_base, index_stride, num_faces, index_type, 0);
+						
+						size_t num_indices = num_faces * 3;
+						
+						uint32_t scalar_width, index_width;
+						
+						if (scalar_type == PHY_FLOAT)
+						{
+							scalar_width = sizeof(float);
+						}
+						else
+						{
+							scalar_width = sizeof(double);
+						}
+
+						if (index_width == PHY_SHORT)
+						{
+							index_width = sizeof(uint16_t);
+							
+						}
+						else
+						{
+							index_width = sizeof(uint32_t);
+
+						}
+
+						noob::basic_mesh m;
+						
+						rde::fixed_array<btVector3, 3> triangle_verts;
+
+						for (int tri_index = 0; tri_index < num_faces; ++tri_index)
+						{
+							unsigned int* gfx_base = (unsigned int*)(index_base + tri_index * index_stride);
+
+							for (int j = 2; j >= 0; --j)
+							{
+								int graphics_index = index_type == PHY_SHORT ? ((unsigned short*)gfx_base)[j] : gfx_base[j];
+
+								if (scalar_type == PHY_FLOAT)
+								{
+									float* graphics_base = (float*)(vertex_base + graphics_index * scalar_stride);
+									triangle_verts[j] = btVector3(graphics_base[0] * scaling.getX(), graphics_base[1] * scaling.getY(), graphics_base[2] * scaling.getZ());
+								}
+								else
+								{
+									double* graphics_base = (double*)(vertex_base + graphics_index * scalar_stride);
+									triangle_verts[j] = btVector3(btScalar(graphics_base[0] * scaling.getX()), btScalar(graphics_base[1] * scaling.getY()), btScalar(graphics_base[2] * scaling.getZ()));
+								}
+							}
+
+							m.indices.push_back(m.vertices.size());
+							m.vertices.push_back(vec3_from_bullet(triangle_verts[0]));
+							m.indices.push_back(m.vertices.size());
+							m.vertices.push_back(vec3_from_bullet(triangle_verts[1]));
+							m.indices.push_back(m.vertices.size());
+							m.vertices.push_back(vec3_from_bullet(triangle_verts[2]));
+						}
+
+						striding_mesh->unLockReadOnlyVertexBase(0);
+
+						noob::scaled_model temp_scaled_model = model_from_mesh(m);
+						search->value = temp_scaled_model.model_h.get_inner();
+						results.model_h = temp_scaled_model.model_h;
+					}
+				}
+				else
+				{
+					logger::log("[Globals] DATA ERROR: Attempted to get a trimesh model with an invalid shape handle.");
+				}
+
+				results.scales = noob::vec3(1.0, 1.0, 1.0);					
+				break;
+			}
+	}
 	return results; 
 }
 
@@ -308,17 +388,19 @@ noob::shape_handle noob::globals::cone_shape(float r, float h) noexcept(true)
 // }
 
 
-noob::shape_handle noob::globals::hull_shape(const std::vector<vec3>& points, const std::string& name) noexcept(true) 
+noob::shape_handle noob::globals::hull_shape(const std::vector<vec3>& points) noexcept(true) 
 {
-	auto search = names_to_shapes.find(rde::string(name.c_str()));
-	if (search == names_to_shapes.end())
-	{
-		// TODO: Add to shapes_to_meshes
 		noob::shape temp;
 		temp.hull(points);
-		return add_shape(temp);
-	}
-	return search->second;
+		noob::shape_handle shape_h = add_shape(temp);
+
+		noob::basic_mesh temp_mesh = noob::mesh_utils::hull(points);
+		noob::scaled_model temp_scaled_model = model_from_mesh(temp_mesh);
+
+		auto temp_cell = shapes_to_models.insert(shape_h.get_inner());
+		temp_cell->value = temp_scaled_model.model_h.get_inner();
+
+		return shape_h;
 }
 
 
@@ -448,7 +530,7 @@ noob::shader noob::globals::get_shader(const std::string& s) const noexcept(true
 	fmt::MemoryWriter ww;
 	if (search != names_to_shaders.end())
 	{
-		ww << "[Globals] Found shader " << s << ", with handle " << (search->second).to_string() << ".";// << ". Returning default.";
+		ww << "[Globals] Found shader " << s << ", with handle " << (search->second).to_string() << ".";
 		results = search->second;
 	}
 	else
@@ -463,7 +545,7 @@ noob::shader noob::globals::get_shader(const std::string& s) const noexcept(true
 
 void noob::globals::set_actor_blueprints(const noob::actor_blueprints& bp, const std::string& name) noexcept(true)
 {
-	
+
 	auto search = names_to_actor_blueprints.find(rde::string(name.c_str()));
 	if (search == names_to_actor_blueprints.end())
 	{
@@ -482,6 +564,6 @@ noob::actor_blueprints_handle noob::globals::get_actor_blueprints(const std::str
 	{
 		return search->second;
 	}
-	
+
 	return noob::actor_blueprints_handle::make(0);
 }

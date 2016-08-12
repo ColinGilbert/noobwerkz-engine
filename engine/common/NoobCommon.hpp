@@ -3,7 +3,10 @@
 #include <rdestl/fixed_array.h>
 #include <rdestl/vector.h>
 
+#include <LinearMath/btConvexHull.h>
+
 #include "Vec3.hpp"
+#include "format.h"
 
 namespace noob
 {
@@ -26,18 +29,87 @@ namespace noob
 	{
 		pos_type type;
 		uint32_t index;
+
+		std::string to_string() const noexcept(true)
+		{
+			fmt::MemoryWriter ww;
+
+			switch(type)
+			{
+				case (noob::pos_type::GHOST):
+					{
+						ww << "ghost, ";
+						break;
+					}
+				case (noob::pos_type::PHYSICAL):
+					{
+						ww << "body, ";
+						break;
+					}
+				case (noob::pos_type::ANIM):
+					{
+						ww << "anim, ";
+						break;
+					}
+			}
+
+			ww << index;
+			return ww.str();
+		}
 	};
 
 	struct contact_point
 	{
-		size_t handle;
+		noob::body_variant handle;
 		noob::vec3 pos_a, pos_b, normal_on_b;
+
+		std::string to_string() const noexcept(true)
+		{
+			fmt::MemoryWriter ww;
+
+			ww << handle.to_string() << ", pos a " << pos_a.to_string() << ", pos b" << pos_b.to_string() << ", normal on b " << normal_on_b.to_string();
+			return ww.str();
+		}
 	};
 
-	struct ghost_intersection_results
+
+	inline uint32_t get_bullet_stride_multiplier(PHY_ScalarType stride_width)
 	{
-		noob::ghost_handle ghost;
-		std::vector<noob::body_handle> bodies;
-		std::vector<noob::ghost_handle> ghosts;
-	};
+		uint32_t vertex_multiplier = 1;
+		switch (stride_width)
+		{
+			case(PHY_FLOAT):
+				{
+					vertex_multiplier = 4;
+					break;
+				}
+			case (PHY_DOUBLE):
+				{
+					vertex_multiplier = 8;
+					break;
+				}
+			case (PHY_INTEGER):
+				{
+					vertex_multiplier = 4;
+					break;
+				}
+			case (PHY_SHORT):
+				{
+					vertex_multiplier = 2;
+					break;
+				}
+			case (PHY_FIXEDPOINT88):
+				{
+					vertex_multiplier = 2;
+					break;
+				}
+			case (PHY_UCHAR):
+				{
+					vertex_multiplier = 1;
+					break;
+				}
+
+		}
+		return vertex_multiplier;
+	}
 }

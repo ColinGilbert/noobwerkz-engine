@@ -23,7 +23,7 @@ Specific features:
 ```
 A highly tunable gradient mapping shader by default. Comes with three XY-tileable textures blended into one.
 Triplanar shader for non-UV mapped objects. Texture reads are kept to a minimum (3) by using the gradient mapping technique.
-Provides clean interfaces over to those libraries and tools on top via both a scripting API for quick scene setups or a C++ level API for faster runtimes (or) extension.
+Provides clean interfaces over to those libraries and tools on top via a scripting API for quick scene setups or a C++ level API for faster runtimes (or) extension.
 ```
 
 Currently brings in (among others):

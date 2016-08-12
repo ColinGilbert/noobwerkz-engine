@@ -36,19 +36,19 @@ typedef OpenMesh::PolyMesh_ArrayKernelT<> PolyMesh;
 
 namespace noob
 {
-	class basic_mesh 
+	struct basic_mesh 
 	{
-		friend class stage;
-		friend class basic_model;
-		friend class active_mesh;
-		friend class shape;
-		friend class mesh_utils;
-		friend class voxel_world;
-		friend class voxel_world_stable;
+		//friend class stage;
+		//friend class basic_model;
+		//friend class active_mesh;
+		//friend class shape;
+		//friend class mesh_utils;
+		//friend class voxel_world;
+		//friend class voxel_world_stable;
 		
-		public:
+		//public:
 			
-			basic_mesh() : volume_calculated(false), volume(0.0) {}
+			basic_mesh() noexcept(true) : volume_calculated(false), volume(0.0) {}
 			
 			noob::vec3 get_vertex(unsigned int);
 			// noob::vec3 get_normal(unsigned int);
@@ -79,7 +79,7 @@ namespace noob
 			
 			noob::bbox get_bbox() const { return bbox; }
 			
-		protected:
+	//	protected:
 			bool load_assimp(const aiScene* scene, const std::string& name);
 		
 			TriMesh to_half_edges() const;
