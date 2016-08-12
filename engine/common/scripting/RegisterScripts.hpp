@@ -18,5 +18,3 @@
 #include "RegisterActor.hpp"
 #include "RegisterUniforms.hpp"
 #include "RegisterCommon.hpp"
-
-// #include "RegisterShadingVariant.hpp"

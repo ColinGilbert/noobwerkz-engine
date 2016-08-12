@@ -46,7 +46,6 @@ namespace noob
 	typedef handle<noob::audio_sample> sample_handle;
 	typedef handle<noob::basic_renderer::uniform> basic_shader_handle;
 	typedef handle<noob::triplanar_gradient_map_renderer::uniform> triplanar_shader_handle;
-	// typedef handle<noob::triplanar_gradient_map::uniform> triplanar_shader_handle;
 	typedef handle<noob::shader> shader_handle;
 	typedef handle<noob::surface> surface_handle;
 }

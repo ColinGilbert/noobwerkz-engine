@@ -110,7 +110,7 @@ namespace noob
 			void set_shader(const noob::triplanar_gradient_map_renderer::uniform&, const std::string& name) noexcept(true);
 
 
-			noob::shader_variant get_shader(const std::string& name) const noexcept(true);
+			noob::shader get_shader(const std::string& name) const noexcept(true);
 
 			noob::light_handle set_light(const noob::light&, const std::string& name) noexcept(true);
 			noob::light_handle get_light(const std::string& name) const noexcept(true);
@@ -185,7 +185,7 @@ namespace noob
 
 			rde::hash_map<rde::string, noob::shape_handle> names_to_shapes;
 			rde::hash_map<rde::string, noob::model_handle> names_to_basic_models;
-			rde::hash_map<rde::string, noob::shader_variant> names_to_shaders;
+			rde::hash_map<rde::string, noob::shader> names_to_shaders;
 			rde::hash_map<rde::string, noob::light_handle> names_to_lights;
 			rde::hash_map<rde::string, noob::reflectance_handle> names_to_reflectances;
 	};

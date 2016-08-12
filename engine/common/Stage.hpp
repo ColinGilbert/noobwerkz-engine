@@ -63,11 +63,6 @@ namespace noob
 
 			noob::actor_handle add_actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3&, const noob::versor&);
 
-			// Functions to create commonly-used configurations. Soon they'll return a tag used by the component system (in construction)
-			// void actor(const noob::body_handle, const noob::animated_model_handle, const noob::shader) noexcept(true);
-			// void actor(const noob::body_handle, const noob::scaled_model, const noob::shader) noexcept(true);
-			// void actor(const noob::shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient, const noob::shader, const noob::reflectance_handle) noexcept(true);
-			
 			void scenery(const noob::shape_handle shape_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg, const noob::surface& surface_arg);
 			
 			void set_light(unsigned int, const noob::light_handle) noexcept(true);

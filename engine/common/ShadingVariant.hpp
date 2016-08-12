@@ -1,7 +1,9 @@
 #pragma once
 
-#include "Component.hpp"
-#include "Reflectance.hpp"
+// #include "Component.hpp"
+// #include "Reflectance.hpp"
+// #include "ComponentDefines.hpp"
+
 
 namespace noob
 {
@@ -11,20 +13,14 @@ namespace noob
 		TRIPLANAR = 1
 	};
 
-	struct shader_variant
+	struct shader
 	{
-		shader_variant() noexcept(true) : type(shader_type::BASIC), handle(0) {}
-		bool operator==(const noob::shader_variant& other) const noexcept(true)
+		shader() noexcept(true) : type(shader_type::BASIC), handle(0) {}
+		bool operator==(const noob::shader& other) const noexcept(true)
 		{
 			return (type == other.type && handle == other.handle);
 		}
 		shader_type type;
 		uint32_t handle;
-	};
-
-	struct surface
-	{
-		shader_variant shading;
-		noob::handle<noob::reflectance> reflect;
 	};
 };

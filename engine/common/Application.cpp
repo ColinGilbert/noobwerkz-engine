@@ -120,7 +120,6 @@ void noob::application::init()
 	// register_ghost(script_engine);
 	register_light(script_engine);
 	register_reflectance(script_engine);
-	register_shading_variant(script_engine);
 	register_actor(script_engine);
 	register_uniforms(script_engine);
 	register_scaled_model(script_engine);
