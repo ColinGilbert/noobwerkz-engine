@@ -21,13 +21,13 @@ namespace noob
 	class armature
 	{
 		public:
-			armature() : models(graph), surfaces(graph), bind_pose(graph) {}
+			armature() : models(graph), /*surfaces(graph),*/ bind_pose(graph) {}
 
 		protected:
 			lemon::StaticDigraph graph;
 			
 			lemon::StaticDigraph::NodeMap<noob::scaled_model> models;
-			lemon::StaticDigraph::NodeMap<noob::surface> surfaces;
+			// lemon::StaticDigraph::NodeMap<noob::surface> surfaces;
 			lemon::StaticDigraph::NodeMap<std::tuple<noob::vec3, noob::versor>> bind_pose;
 	};
 
@@ -39,12 +39,12 @@ namespace noob
 	class boss_armature
 	{
 		public:
-			boss_armature() : bodies(graph), surfaces(graph), joints(graph) {}
+			boss_armature() : bodies(graph), /*surfaces(graph),*/ joints(graph) {}
 
 		protected:
 			lemon::StaticDigraph graph;
 			lemon::StaticDigraph::NodeMap<noob::body_handle> bodies;
-			lemon::StaticDigraph::NodeMap<noob::surface> surfaces;
+			// lemon::StaticDigraph::NodeMap<noob::surface> surfaces;
 			lemon::StaticDigraph::ArcMap<noob::joint_handle> joints;
 	};
 
@@ -56,12 +56,12 @@ namespace noob
 	class dynamic_armature
 	{
 		public:	
-			dynamic_armature() : bodies(graph), surfaces(graph), joints(graph) {}
+			dynamic_armature() : bodies(graph), /*surfaces(graph),*/ joints(graph) {}
 
 		protected:
 			lemon::ListDigraph graph;
 			lemon::ListDigraph::NodeMap<noob::body_handle> bodies;
-			lemon::ListDigraph::NodeMap<noob::surface> surfaces;
+			// lemon::ListDigraph::NodeMap<noob::surface> surfaces;
 			lemon::ListDigraph::ArcMap<noob::joint_handle> joints;
 	};
 	

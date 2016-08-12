@@ -109,7 +109,6 @@ namespace noob
 			void set_shader(const noob::basic_renderer::uniform&, const std::string& name) noexcept(true);
 			void set_shader(const noob::triplanar_gradient_map_renderer::uniform&, const std::string& name) noexcept(true);
 
-
 			noob::shader get_shader(const std::string& name) const noexcept(true);
 
 			noob::light_handle set_light(const noob::light&, const std::string& name) noexcept(true);
@@ -117,7 +116,10 @@ namespace noob
 
 			noob::reflectance_handle set_reflectance(const noob::reflectance&, const std::string& name) noexcept(true);
 			noob::reflectance_handle get_reflectance(const std::string& name) const noexcept(true);
-			
+		
+			void set_actor_blueprints(const noob::actor_blueprints&, const std::string& name) noexcept(true);
+			noob::actor_blueprints_handle get_actor_blueprints(const std::string& name) const noexcept(true);
+
 			// Those are easy to represent as a scaled item, and save a lot on the video card if repeated.
 			scaled_model sphere_model(float r) noexcept(true);
 			scaled_model box_model(float x, float y, float z) noexcept(true);
@@ -126,7 +128,6 @@ namespace noob
 			
 			scaled_model model_from_mesh(const noob::basic_mesh&, const std::string& name) noexcept(true);
 			scaled_model model_from_shape(const noob::shape_handle) noexcept(true);
-
 
 			// ---------------
 			// Data members:
@@ -152,6 +153,7 @@ namespace noob
 			reflectances_holder reflectances;
 			basic_shaders_holder basic_shaders;
 			triplanar_shaders_holder triplanar_shaders;
+			// shaders_holder shaders;
 			samples_holder samples;
 			actor_blueprints_holder actor_blueprints;
 
@@ -180,13 +182,12 @@ namespace noob
 			}
 
 			noob::fast_hashtable shapes_to_models;
-			// rde::sorted_vector<float,size_t> spheres;
-
 
 			rde::hash_map<rde::string, noob::shape_handle> names_to_shapes;
 			rde::hash_map<rde::string, noob::model_handle> names_to_basic_models;
 			rde::hash_map<rde::string, noob::shader> names_to_shaders;
 			rde::hash_map<rde::string, noob::light_handle> names_to_lights;
 			rde::hash_map<rde::string, noob::reflectance_handle> names_to_reflectances;
+			rde::hash_map<rde::string, noob::actor_blueprints_handle> names_to_actor_blueprints;
 	};
 }

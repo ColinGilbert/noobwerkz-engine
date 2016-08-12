@@ -63,7 +63,8 @@ namespace noob
 
 			noob::actor_handle add_actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3&, const noob::versor&);
 
-			void scenery(const noob::shape_handle shape_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg, const noob::surface& surface_arg);
+			
+			void scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
 			
 			void set_light(unsigned int, const noob::light_handle) noexcept(true);
 
@@ -84,7 +85,7 @@ namespace noob
 		protected:
 			void remove_body(noob::body_handle) noexcept(true);
 
-			void add_to_graph(const noob::body_variant bod_arg, const noob::shape_handle shape_arg, const noob::surface& surface_arg); 
+			void add_to_graph(const noob::body_variant bod_arg, const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg); 
 
 			const int NUM_RESERVED_NODES = 8192;			
 			const int NUM_RESERVED_ARCS = 8192;

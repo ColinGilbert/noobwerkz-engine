@@ -62,7 +62,6 @@ void noob::stage::update(double dt) noexcept(true)
 
 
 void noob::stage::draw(float window_width, float window_height, const noob::vec3& eye_pos, const noob::vec3& eye_target, const noob::vec3& eye_up, const noob::mat4& projection_mat) const noexcept(true) 
-
 {
 	noob::mat4 view_mat(noob::look_at(eye_pos, eye_target, eye_up));
 	bgfx::setViewTransform(0, &view_mat.m[0], &projection_mat.m[0]);
@@ -252,13 +251,13 @@ noob::actor_handle noob::stage::add_actor(const noob::actor_blueprints_handle bl
 	b_var.type = noob::pos_type::GHOST;
 	b_var.index = a.ghost.get_inner();	
 
-	add_to_graph(b_var, bp.bounds, bp.drawing);
+	add_to_graph(b_var, bp.bounds, bp.shader, bp.reflect);
 
 	return actors.add(a);
 }
 
 
-void noob::stage::scenery(const noob::shape_handle shape_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg, const noob::surface& surface_arg)
+void noob::stage::scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg)
 {
 	noob::globals& g = noob::globals::get_instance();
 	
@@ -268,11 +267,11 @@ void noob::stage::scenery(const noob::shape_handle shape_arg, const noob::vec3& 
 	b_var.index = bod_h.get_inner();
 
 	
-	add_to_graph(b_var, shape_arg, surface_arg);
+	add_to_graph(b_var, shape_arg, shader_arg, reflect_arg);
 }
 
 
-void noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::shape_handle shape_arg, const noob::surface& surface_arg) 
+void noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg) 
 {
 	noob::globals& g = noob::globals::get_instance();
 	
@@ -299,12 +298,12 @@ void noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::sha
 	// Find out if the shader node is already in graph. If so, cache it. If not, add one and cache it.
 	bool shader_found = false;
 	lemon::ListDigraph::Node shader_node;
-
+	
 	for (lemon::ListDigraph::OutArcIt shader_it(draw_graph, model_node); shader_it != lemon::INVALID; ++shader_it)
 	{
 		lemon::ListDigraph::Node temp_shader_node = draw_graph.target(shader_it);
 		noob::shader test_value = shaders_mapping[temp_shader_node];
-		if (surface_arg.shading == test_value)
+		if (shader_arg == test_value)
 		{
 			shader_found = true;
 			shader_node = temp_shader_node;
@@ -315,7 +314,7 @@ void noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::sha
 	if (!shader_found)
 	{
 		shader_node = draw_graph.addNode();
-		shaders_mapping[shader_node] = surface_arg.shading;
+		shaders_mapping[shader_node] = shader_arg;
 
 		draw_graph.addArc(model_node, shader_node);
 	}
@@ -347,7 +346,7 @@ void noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::sha
 
 	scales_mapping[bod_node] = model_info.scales.v;
 
-	reflectances_mapping[bod_node] = surface_arg.reflect.get_inner();
+	reflectances_mapping[bod_node] = reflect_arg.get_inner();
 
 	draw_graph.addArc(shader_node, bod_node);
 

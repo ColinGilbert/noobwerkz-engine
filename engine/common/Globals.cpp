@@ -494,7 +494,6 @@ void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std
 
 void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::uniform& u, const std::string& name) noexcept(true) 
 {
-	// set_shader(noob::prepared_shaders::uniform(u), name);
 	auto search = names_to_shaders.find(rde::string(name.c_str()));
 	if (search == names_to_shaders.end())
 	{
@@ -526,4 +525,23 @@ noob::shader noob::globals::get_shader(const std::string& s) const noexcept(true
 		logger::log(ww.str());
 	}
 	return results;
+}
+
+
+void noob::globals::set_actor_blueprints(const noob::actor_blueprints& bp, const std::string& name) noexcept(true)
+{
+	
+	auto search = names_to_actor_blueprints.find(rde::string(name.c_str()));
+	if (search == names_to_actor_blueprints.end())
+	{
+		noob::actor_blueprints_handle h = actor_blueprints.add(bp);
+
+		names_to_actor_blueprints.insert(rde::make_pair(rde::string(name.c_str()), h));
+	}
+}
+
+
+noob::actor_blueprints_handle noob::globals::get_actor_blueprints(const std::string& name) const noexcept(true)
+{
+
 }

@@ -21,5 +21,6 @@ void noob::register_actor(asIScriptEngine* script_engine)
 	r = script_engine->RegisterObjectProperty("actor_blueprints", "uint16 los", asOFFSET(noob::actor_blueprints, los)); assert(r >= 0);	
 	
 	r = script_engine->RegisterObjectProperty("actor_blueprints", "shape_handle bounds", asOFFSET(noob::actor_blueprints, bounds)); assert(r >= 0);	
-	// r = script_engine->RegisterObjectProperty("actor_blueprints", "surface drawing", asOFFSET(noob::actor_blueprints, drawing)); assert(r >= 0);	
+	r = script_engine->RegisterObjectProperty("actor_blueprints", "shader_handle shader", asOFFSET(noob::actor_blueprints, shader)); assert(r >= 0);	
+	r = script_engine->RegisterObjectProperty("actor_blueprints", "reflectance_handle reflect", asOFFSET(noob::actor_blueprints, reflect)); assert(r >= 0);	
 }

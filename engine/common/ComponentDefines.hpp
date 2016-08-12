@@ -40,12 +40,11 @@ namespace noob
 	typedef handle<noob::shape> shape_handle;
 	typedef handle<noob::light> light_handle;
 	typedef handle<noob::reflectance> reflectance_handle;
+	typedef handle<noob::basic_renderer::uniform> basic_shader_handle;
+	typedef handle<noob::triplanar_gradient_map_renderer::uniform> triplanar_shader_handle;
+	typedef handle<noob::shader> shader_handle;
 	typedef handle<noob::basic_model> model_handle;
 	typedef handle<noob::animated_model> animated_model_handle;
 	typedef handle<noob::skeletal_anim> skeletal_anim_handle;
 	typedef handle<noob::audio_sample> sample_handle;
-	typedef handle<noob::basic_renderer::uniform> basic_shader_handle;
-	typedef handle<noob::triplanar_gradient_map_renderer::uniform> triplanar_shader_handle;
-	typedef handle<noob::shader> shader_handle;
-	typedef handle<noob::surface> surface_handle;
 }

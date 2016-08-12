@@ -16,7 +16,9 @@ namespace noob
 		uint16_t strength, range, armour, defense, movement_speed, attack_speed, stamina, morale, los;
 	//	noob::armature_handle arma;
 		noob::shape_handle bounds;
-		noob::surface drawing;
+		// noob::surface drawing;
+		noob::shader shader;
+		noob::reflectance_handle reflect;
 	};
 
 	typedef noob::component<noob::actor_blueprints> actor_blueprints_holder;
