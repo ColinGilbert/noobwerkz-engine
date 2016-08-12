@@ -9,8 +9,8 @@ void noob::register_globals(asIScriptEngine* script_engine)
 	r = script_engine->RegisterGlobalFunction("shape_handle box_shape(float, float, float)", asMETHOD(noob::globals, box_shape), asCALL_THISCALL_ASGLOBAL, &g); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("shape_handle cylinder_shape(float, float)", asMETHOD(noob::globals, cylinder_shape), asCALL_THISCALL_ASGLOBAL, &g); assert( r >= 0 );
 	r = script_engine->RegisterGlobalFunction("shape_handle cone_shape(float, float)", asMETHOD(noob::globals, cone_shape), asCALL_THISCALL_ASGLOBAL, &g); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("shape_handle hull_shape(const vector_vec3& in)", asMETHOD(noob::globals, hull_shape), asCALL_THISCALL_ASGLOBAL, &g); assert( r >= 0 );
-	r = script_engine->RegisterGlobalFunction("shape_handle static_trimesh_shape(const basic_mesh& in)", asMETHOD(noob::globals, static_trimesh_shape), asCALL_THISCALL_ASGLOBAL, &g); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("shape_handle hull_shape(const vector_vec3& in, const string& in)", asMETHOD(noob::globals, hull_shape), asCALL_THISCALL_ASGLOBAL, &g); assert( r >= 0 );
+	r = script_engine->RegisterGlobalFunction("shape_handle static_trimesh_shape(const basic_mesh& in, const string& in)", asMETHOD(noob::globals, static_trimesh_shape), asCALL_THISCALL_ASGLOBAL, &g); assert( r >= 0 );
 	// r = script_engine->RegisterGlobalFunction("mesh_handle add_mesh(const basic_mesh& in)", asMETHOD(noob::globals, add_mesh), asCALL_THISCALL_ASGLOBAL, &g); assert( r >= 0 );
 	// r = script_engine->RegisterGlobalFunction("model_handle model_by_shape(const shape_handle)", asMETHOD(noob::globals, model_by_shape), asCALL_THISCALL_ASGLOBAL, &g); assert(r >= 0);
 	r = script_engine->RegisterGlobalFunction("scaled_model sphere_model(float)", asMETHOD(noob::globals, sphere_model), asCALL_THISCALL_ASGLOBAL, &g); assert( r >= 0 );

@@ -17,7 +17,8 @@ void noob::register_stage(asIScriptEngine* script_engine)
 	r = script_engine->RegisterObjectMethod("stage", "joint_handle add_joint(const body_handle, const vec3& in, const body_handle, const vec3& in)", asMETHOD(noob::stage, add_joint), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("stage", "actor_handle add_actor(const actor_blueprints_handle, uint32, const vec3& in, const versor& in)", asMETHOD(noob::stage, add_actor), asCALL_THISCALL); assert( r >= 0 );	
 
-	r = script_engine->RegisterObjectMethod("stage", "void scenery(const basic_mesh& in, const vec3& in, const versor& in, const shader_handle, const reflectance_handle, const string& in)", asMETHOD(noob::stage, scenery), asCALL_THISCALL); assert(r >= 0);
+	// void scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
+	r = script_engine->RegisterObjectMethod("stage", "void scenery(const shape_handle, shader_handle, reflectance_handle, const vec3& in, const versor& in)", asMETHOD(noob::stage, scenery), asCALL_THISCALL); assert(r >= 0);
 	
 	r = script_engine->RegisterObjectMethod("stage", "void set_light(uint, const light_handle)", asMETHOD(noob::stage, set_light), asCALL_THISCALL); assert(r >= 0);
 	// r = script_engine->RegisterObjectMethod("stage", "light_handle get_light()", asMETHOD(noob::stage, get_light), asCALL_THISCALL); assert(r >= 0);

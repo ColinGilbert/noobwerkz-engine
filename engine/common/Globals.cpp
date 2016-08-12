@@ -201,6 +201,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 
 	// logger::log("[Globals] got shape pointer");
 
+	
 	switch(s.shape_type)
 	{
 		// logger::log("[Globals] choosing shape type");
@@ -209,25 +210,25 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 			{
 				results.model_h = unit_sphere_model.model_h;
 				results.scales = s.scales;
-				return results;
+				break;
 			}
 		case(noob::shape::type::BOX):
 			{
 				results.model_h = unit_cube_model.model_h;
 				results.scales = s.scales;
-				return results;
+				break;
 			}
 		case(noob::shape::type::CYLINDER):
 			{
 				results.model_h = unit_cylinder_model.model_h;
 				results.scales = s.scales;
-				return results;
+				break;
 			}
 		case(noob::shape::type::CONE):
 			{
 				results.model_h = unit_cone_model.model_h;
 				results.scales = s.scales;
-				return results;
+				break;
 			}
 		case(noob::shape::type::HULL):
 			{
@@ -236,8 +237,8 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 				{
 					results.model_h = model_handle::make(search->value);
 					results.scales = noob::vec3(1.0, 1.0, 1.0);
-					return results;
 				}
+				break;
 			}
 		case(noob::shape::type::TRIMESH):
 			{
@@ -246,8 +247,8 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 				{
 					results.model_h = model_handle::make(search->value);
 					results.scales = noob::vec3(1.0, 1.0, 1.0);					
-					return results;
 				}
+				break;
 			}
 		default:
 			{

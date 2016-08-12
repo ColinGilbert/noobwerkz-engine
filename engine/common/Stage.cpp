@@ -259,13 +259,16 @@ noob::actor_handle noob::stage::add_actor(const noob::actor_blueprints_handle bp
 void noob::stage::scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg)
 {
 	noob::globals& g = noob::globals::get_instance();
-	
+
 	noob::body_handle bod_h = add_body(noob::body_type::STATIC, shape_arg, 0.0, pos_arg, orient_arg, false);
+
 	noob::body_variant b_var;
 	b_var.type = noob::pos_type::PHYSICAL;
 	b_var.index = bod_h.get_inner();
 
-	
+	fmt::MemoryWriter ww;
+	ww << "[Stage] About to add scenery item with body " << b_var.index << ", shape " << shape_arg.get_inner() << ", shader: " << shader_arg.to_string() << ", reflectance " << reflect_arg.get_inner();
+	logger::log(ww.str());
 	add_to_graph(b_var, shape_arg, shader_arg, reflect_arg);
 }
 
