@@ -80,59 +80,6 @@ bool noob::globals::init() noexcept(true)
 	return true;
 }
 
-/*
-   noob::basic_mesh noob::globals::mesh_from_shape(const noob::shape_handle h)
-   {
-   noob::shape* s = shapes.get(h);
-   switch(s->shape_type)
-   {
-   case(noob::shape::type::SPHERE):
-   {
-// logger::log("[Globals] making sphere mesh");
-// return noob::mesh_utils::sphere(static_cast<btSphereShape*>(s->inner_shape)->getRadius());
-}
-case(noob::shape::type::BOX):
-{
-// logger::log("[Globals] making box mesh");
-noob::vec3 half_extents = static_cast<btBoxShape*>(s->inner_shape)->getHalfExtentsWithoutMargin();
-// return noob::mesh_utils::box(half_extents.v[0]*2, half_extents.v[1]*2, half_extents.v[2]*2);
-}
-// case(noob::shape::type::CAPSULE):
-//	{
-// logger::log("[Globals] making capsule mesh");
-//		btCapsuleShape* temp = static_cast<btCapsuleShape*>(s->inner_shape);
-//		return noob::mesh_utils::capsule(temp->getRadius(), temp->getHalfHeight()*2);
-//	}
-case(noob::shape::type::CYLINDER):
-{
-// logger::log("[Globals] making cylinder mesh");
-btCylinderShape* temp = static_cast<btCylinderShape*>(s->inner_shape);// return std::make_tuple(unit_cylinder_model, s->scales);
-noob::vec3 half_extents = temp->getHalfExtentsWithoutMargin();
-// return noob::mesh_utils::cylinder(temp->getRadius(), half_extents.v[1]*2);
-}
-case(noob::shape::type::CONE):
-{
-// logger::log("[Globals] making cone mesh");
-btConeShape* temp = static_cast<btConeShape*>(s->inner_shape);
-// return noob::mesh_utils::cone(temp->getRadius(), temp->getHeight());
-}
-case(noob::shape::type::HULL):
-{
-// logger::log("[Globals] making convex mesh");
-// return *meshes.get(shapes_to_meshes[h.get_inner()]);
-}
-case(noob::shape::type::TRIMESH):
-{
-// logger::log("[Globals] making trimesh");
-// return *meshes.get(shapes_to_meshes[h.get_inner()]);
-}
-default:
-logger::log("[Globals] - USER DATA WARNING - INVALID SHAPE TO MESH :(");
-break;
-};
-// return  *meshes.get(unit_sphere_mesh);
-}
-*/
 
 noob::scaled_model noob::globals::sphere_model(float r) noexcept(true) 
 {
@@ -387,25 +334,6 @@ noob::shape_handle noob::globals::static_trimesh_shape(const noob::basic_mesh& m
 	return search->second;
 }
 
-/*
-   scaled_model noob::globals::get_model_by_name(const std::string& name)
-   {
-   auto search = names_to_models.find(name);
-   if (search == names_to_models.end())
-   {		
-// std::unique_ptr<noob::basic_model> temp = std::make_unique<noob::basic_model>();
-// temp->init(*meshes.get(_mesh));
-// return basic_models.add(std::move(temp));
-fmt::MemoryWriter ww;
-ww << "[Globals] Failed to get model " << name << ", returning defaults.";
-logger::log(ww.str());
-noob::model_handle h;
-return h;
-}
-// logger::log("[Globals] Getting model by name failed.");
-return search->second;
-}
-*/
 
 noob::animated_model_handle noob::globals::animated_model(const std::string& filename) noexcept(true) 
 {
@@ -516,19 +444,19 @@ noob::shader noob::globals::get_shader(const std::string& s) const noexcept(true
 {
 	noob::shader results;
 	auto search = names_to_shaders.find(rde::string(s.c_str()));
+
+	fmt::MemoryWriter ww;
 	if (search != names_to_shaders.end())
 	{
-		// fmt::MemoryWriter ww;		
-		// ww << "[Globals] Found shader " << s << " with handle " << names_to_shaders[s].get_inner() << ".";// << ". Returning default.";
-		// logger::log(ww.str());		
+		ww << "[Globals] Found shader " << s << ", with handle " << (search->second).to_string() << ".";// << ". Returning default.";
 		results = search->second;
 	}
 	else
 	{
-		fmt::MemoryWriter ww;
 		ww << "[Globals] Could not find shader " << s << ". Returning default.";
-		logger::log(ww.str());
 	}
+
+	logger::log(ww.str());
 	return results;
 }
 

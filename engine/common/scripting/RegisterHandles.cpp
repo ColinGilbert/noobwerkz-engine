@@ -30,5 +30,5 @@ void noob::register_handles(asIScriptEngine* script_engine)
 	
 	r = script_engine->RegisterObjectType("reflectance_handle", sizeof(noob::reflectance_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::reflectance_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	
-	r = script_engine->RegisterObjectType("shader_handle", sizeof(noob::shader_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::shader_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectType("shader_handle", sizeof(noob::shader), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::shader>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 }
