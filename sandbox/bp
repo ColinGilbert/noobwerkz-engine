@@ -1,0 +1,2 @@
+cd ../engine/lib && rm -rf bgfx && git clone https://www.github.com/bkaradzic/bgfx.git && cd bgfx && rm -rf .git* &&
+cd .. &&rm -rf bx && git clone https://www.github.com/bkaradzic/bx.git && cd bx && rm -rf .git*
