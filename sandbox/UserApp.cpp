@@ -31,7 +31,7 @@ bool noob::application::user_init()
 void noob::application::user_update(double dt)
 {
 	gui.text("Noobwerkz Editor", 50.0, 50.0, noob::gui::font_size::HEADER);
-	fmt::MemoryWriter ww;
+	// fmt::MemoryWriter ww;
 	/*
 	// Quick loop to help print key bindings to screen
 	for (auto k : keystrokes)
@@ -52,6 +52,16 @@ void noob::application::user_update(double dt)
 	// output_profiling();
 	// ww << *profiler_text;
 
+	noob::globals& g = noob::globals::get_instance();
 
-	// gui.text(*profiler_text, static_cast<float>(window_width - 500), static_cast<float>(window_height - 500), noob::gui::font_size::HEADER);
+	noob::duration time_since_update = noob::clock::now() - last_ui_update;
+
+	if (noob::millis(time_since_update) > 500)
+	{
+		fmt::MemoryWriter ww;
+		ww << "Profiling: " << g.profile_run.to_string();
+		g.strings.set(noob::string_handle::make(0), std::move(std::make_unique<std::string>(ww.str())));
+	}
+	
+	gui.text(*(g.strings.get(noob::string_handle::make(0))), static_cast<float>(window_width - 500), static_cast<float>(window_height - 500), noob::gui::font_size::HEADER);
 }

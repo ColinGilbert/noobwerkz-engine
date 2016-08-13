@@ -1,7 +1,9 @@
 #pragma once
 
+#include "NoobDefines.hpp"
 
 #include "Component.hpp"
+
 #include "MathFuncs.hpp"
 #include "Body.hpp"
 #include "Ghost.hpp"
@@ -17,6 +19,7 @@
 #include "TriplanarGradientMap.hpp"
 #include "AudioSample.hpp"
 #include "ShadingVariant.hpp"
+#include "TextLabel.hpp"
 
 namespace noob
 {
@@ -29,10 +32,13 @@ namespace noob
 	typedef noob::component<noob::basic_renderer::uniform> basic_shaders_holder;
 	typedef noob::component<noob::triplanar_gradient_map_renderer::uniform> triplanar_shaders_holder;
 	typedef noob::component<noob::shader> shaders_holder;
+	typedef noob::component<noob::time> times_holder;
 	typedef noob::component_dynamic<noob::basic_model> basic_models_holder;
 	typedef noob::component_dynamic<noob::animated_model> animated_models_holder;
 	typedef noob::component_dynamic<noob::skeletal_anim> skeletal_anims_holder;
 	typedef noob::component_dynamic<noob::audio_sample> samples_holder;
+	typedef noob::component_dynamic<std::string> strings_holder;
+
 
 	typedef handle<noob::body> body_handle;
 	typedef handle<noob::joint> joint_handle;
@@ -43,8 +49,10 @@ namespace noob
 	typedef handle<noob::basic_renderer::uniform> basic_shader_handle;
 	typedef handle<noob::triplanar_gradient_map_renderer::uniform> triplanar_shader_handle;
 	typedef handle<noob::shader> shader_handle;
+	typedef handle<noob::time> time_handle;
 	typedef handle<noob::basic_model> model_handle;
 	typedef handle<noob::animated_model> animated_model_handle;
 	typedef handle<noob::skeletal_anim> skeletal_anim_handle;
 	typedef handle<noob::audio_sample> sample_handle;
+	typedef handle<std::string> string_handle;
 }

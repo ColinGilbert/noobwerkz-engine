@@ -5,15 +5,10 @@
 #include "font_manager.h"
 #include "text_buffer_manager.h"
 
+#include "TextLabel.hpp"
+
 namespace noob
 {
-	struct ui_label
-	{
-		uint8_t view_id;
-		float x, y;
-		std::string message;
-	};
-
 	class ui_font
 	{
 		public:
@@ -25,6 +20,9 @@ namespace noob
 			void set_window_dims(float width, float height);
 
 		protected:
+
+			TrueTypeHandle load_ttf(FontManager* _fm, const std::string& file_path);
+
 			bool valid;
 			float window_width, window_height;
 			uint32_t font_colour;

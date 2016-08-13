@@ -191,7 +191,7 @@ namespace noob
 		else return true;
 	}
 
-	struct vec4
+	struct vec4 final
 	{
 		vec4();
 		vec4(float x, float y, float z, float w);
@@ -232,7 +232,7 @@ namespace noob
 	   0 3 6
 	   1 4 7
 	   2 5 8  */
-	struct mat3
+	struct mat3 final
 	{
 		mat3();
 		// note! this is entering components in ROW-major order
@@ -274,7 +274,7 @@ namespace noob
 	   1 5 9  13
 	   2 6 10 14
 	   3 7 11 15 */
-	struct mat4
+	struct mat4 final
 	{
 		mat4();
 		// note! this is entering components in ROW-major order
@@ -317,7 +317,7 @@ namespace noob
 
 	};
 
-	struct versor
+	struct versor final
 	{
 		versor();
 		versor(float,float,float,float);

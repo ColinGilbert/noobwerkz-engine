@@ -9,7 +9,7 @@
 
 
 
-TrueTypeHandle load_ttf(FontManager* _fm, const std::string& file_path)
+TrueTypeHandle noob::ui_font::load_ttf(FontManager* _fm, const std::string& file_path)
 {
 	std::string mem = noob::utils::load_file_as_string(file_path);
 	TrueTypeHandle handle = _fm->createTtf(reinterpret_cast<const unsigned char*>(mem.c_str()), mem.size());
@@ -54,6 +54,7 @@ void noob::ui_font::draw_text(uint8_t view_id, const std::string& message, float
 	textBufferManager->clearTextBuffer(transientText);
 	textBufferManager->setPenPosition(transientText, x, y);
 	textBufferManager->appendText(transientText, font_handle, message.c_str());
+	TextRectangle rect = textBufferManager->getRectangle(transientText);
 	// bgfx::setState(BGFX_STATE_RGB_WRITE |BGFX_STATE_ALPHA_WRITE |BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA));
 	textBufferManager->submitTextBuffer(transientText, view_id);
 }

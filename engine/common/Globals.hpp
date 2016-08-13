@@ -10,9 +10,14 @@
 #pragma once
 
 #include <memory>
+
 #include <rdestl/rde_string.h>
+#include <rdestl/sort.h>
 #include <rdestl/hash_map.h>
-#include <rdestl/sorted_vector.h>
+// #include <rdestl/sorted_vector.h>
+
+
+#include "NoobDefines.hpp"
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
 #include "BasicMesh.hpp"
@@ -37,6 +42,7 @@
 #include "Actor.hpp"
 #include "Armature.hpp"
 #include "ShadingVariant.hpp"
+#include "ProfilingInfo.hpp"
 
 namespace noob
 {
@@ -133,6 +139,8 @@ namespace noob
 			// Data members:
 			// ---------------
 
+			noob::profiler_snap profile_run;
+
 			// The following are basic, commonly-used objects that we provide as a convenience.
 			noob::shape_handle unit_sphere_shape, unit_cube_shape, unit_capsule_shape, unit_cylinder_shape, unit_cone_shape;
 
@@ -156,6 +164,7 @@ namespace noob
 			// shaders_holder shaders;
 			samples_holder samples;
 			actor_blueprints_holder actor_blueprints;
+			strings_holder strings;
 
 			noob::basic_renderer basic_drawer;
 			noob::triplanar_gradient_map_renderer triplanar_drawer;

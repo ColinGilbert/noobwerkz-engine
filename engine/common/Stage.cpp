@@ -12,7 +12,6 @@ noob::stage::~stage() noexcept(true)
 	delete broadphase;
 }
 
-
 void noob::stage::init() noexcept(true) 
 {
 	broadphase = new btDbvtBroadphase();
@@ -70,14 +69,24 @@ void noob::stage::tear_down() noexcept(true)
 void noob::stage::update(double dt) noexcept(true) 
 {
 	// PROFILE_FUNC();
+	noob::time start_time = noob::clock::now();
 
 	dynamics_world->stepSimulation(1.0/60.0, 10);
+
+	noob::time end_time = noob::clock::now();
+
+	update_time = end_time - start_time;
+
+	noob::globals& g = noob::globals::get_instance();
+	g.profile_run.stage_physics_time += update_time;
+
 }
 
 
-void noob::stage::draw(float window_width, float window_height, const noob::vec3& eye_pos, const noob::vec3& eye_target, const noob::vec3& eye_up, const noob::mat4& projection_mat) const noexcept(true) 
+void noob::stage::draw(float window_width, float window_height, const noob::vec3& eye_pos, const noob::vec3& eye_target, const noob::vec3& eye_up, const noob::mat4& projection_mat) noexcept(true) 
 {
 	// PROFILE_FUNC();
+	noob::time start_time = noob::clock::now();
 
 	noob::mat4 view_mat(noob::look_at(eye_pos, eye_target, eye_up));
 	bgfx::setViewTransform(0, &view_mat.m[0], &projection_mat.m[0]);
@@ -191,6 +200,11 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 
 		// renderer.draw(basic_models.get(unit_cube_model), shaders.get(debug_shader), noob::scale(noob::identity_mat4(), noob::vec3(10.0, 10.0, 10.0)), normal_mat, basic_lights);
 	}
+
+	noob::time end_time = noob::clock::now();
+	draw_time = end_time - start_time;
+	
+	g.profile_run.stage_draw_time += draw_time;
 }
 
 

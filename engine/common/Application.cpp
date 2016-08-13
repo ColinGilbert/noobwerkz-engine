@@ -10,17 +10,6 @@ noob::application* noob::application::app_pointer = nullptr;
 noob::application::application() 
 {
 	app_pointer = this;
-	paused = input_has_started = false;
-	timespec timeNow;
-	clock_gettime(CLOCK_MONOTONIC, &timeNow);
-	time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
-	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
-	prefix = std::unique_ptr<std::string>(new std::string("./"));
-	// profiler_text = std::unique_ptr<std::string>(new std::string());
-	script_engine = asCreateScriptEngine();
-	assert(script_engine > 0);
-	// TODO: Uncomment once noob::filesystem is fixed
-	// noob::filesystem::init(*prefix);
 }
 
 
@@ -71,6 +60,18 @@ void angel_message_callback(const asSMessageInfo *msg, void *param)
 void noob::application::init()
 {
 	logger::log("[Application] Begin init.");
+
+	started = paused = input_has_started = false;
+	// timespec timeNow;
+	// clock_gettime(CLOCK_MONOTONIC, &timeNow);
+	// time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
+	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
+	prefix = std::unique_ptr<std::string>(new std::string("./"));
+	script_engine = asCreateScriptEngine();
+	assert(script_engine > 0);
+	// TODO: Uncomment once noob::filesystem is fixed
+	// noob::filesystem::init(*prefix);
+
 	ui_enabled = true;
 	gui.init(*prefix, window_width, window_height);
 
@@ -130,7 +131,9 @@ void noob::application::init()
 	register_globals(script_engine);
 
 	logger::log("[Application] Done basic init.");
+	
 	bool b = user_init();
+	
 	network.init(3);
 	network.connect("localhost", 4242);
 }
@@ -167,10 +170,14 @@ void noob::application::update(double delta)
 
 bool noob::application::eval(const std::string& name, const std::string& string_to_eval, bool reset)
 {
-	PROFILE_END();
-	PROFILE_BEGIN(loading);
+	// PROFILE_END();
+	// PROFILE_BEGIN(loading);
+	
+	noob::time prior_to_loading = noob::clock::now();
 
-	std::string user_message = "[Application] Loading script. Success? {0}";
+	logger::log("\n[Application] Begin loading script...");
+	fmt::MemoryWriter to_log;
+	to_log << "[Application] Script loaded? ";
 
 	if (reset)
 	{
@@ -184,14 +191,17 @@ bool noob::application::eval(const std::string& name, const std::string& string_
 	int r = script_module->AddScriptSection(name.c_str(), string_to_eval.c_str());
 	if (r < 0)
 	{
-		logger::log(fmt::format(user_message, "False - Add section failed."));
+		to_log << "False - Add section failed.";
+		logger::log(to_log.str());
 		return false;
 	}
 
 	r = script_module->Build();
 	if (r < 0 )
 	{
-		logger::log(fmt::format(user_message, "False - Compile failed."));
+		
+		to_log << "False - Compile failed.";
+		logger::log(to_log.str());
 		return false;
 		// The build failed. The message stream will have received  
 		// compiler errors that shows what needs to be fixed
@@ -199,65 +209,74 @@ bool noob::application::eval(const std::string& name, const std::string& string_
 	asIScriptContext* ctx = script_engine->CreateContext();
 	if (ctx == 0)
 	{
-		logger::log(fmt::format(user_message, "False - Failed to create context."));
+		
+		to_log << "False - Failed to create context.";
+		logger::log(to_log.str());
 	}
 
 	asIScriptFunction* func = script_engine->GetModule(0)->GetFunctionByDecl("void main()");
 
 	if (func == 0)
 	{
-		logger::log(fmt::format(user_message, "False - Function main() not found."));
+		to_log << "False - Function main() not found.";
+		logger::log(to_log.str());
 		return false;
 	}
 
 	r = ctx->Prepare(func);
 
-	if( r < 0 ) 
+	if (r < 0) 
 	{
-		logger::log(fmt::format(user_message, "False - Failed to prepare the context."));
+		
+		to_log << "False - Failed to prepare the context.";
+		logger::log(to_log.str());
 		return false;
 	}
 
 	r = ctx->Execute();
 
-	if( r != asEXECUTION_FINISHED )
+	if (r != asEXECUTION_FINISHED)
 	{
 		// The execution didn't finish as we had planned. Determine why.
-		if( r == asEXECUTION_ABORTED )
+		if (r == asEXECUTION_ABORTED)
 		{
-			logger::log(fmt::format(user_message, "False - Script aborted."));
+			to_log << "False - Script aborted.";
+			logger::log(to_log.str());
 		}
 
-		else if( r == asEXECUTION_EXCEPTION )
+		else if (r == asEXECUTION_EXCEPTION)
 		{
-			fmt::MemoryWriter ww;
-			ww << "False - Script ended with an exception: ";
+			to_log << "False - Script ended with an exception: ";
 
 			asIScriptFunction* exception_func = ctx->GetExceptionFunction();
 
-			ww << "function: " << exception_func->GetDeclaration() << ", ";
-			ww << "module: " << exception_func->GetModuleName() << ", ";
-			ww << "section: " << exception_func->GetScriptSectionName() << ", ";
-			ww << "line: " << ctx->GetExceptionLineNumber() << ", ";
-			ww << "description: " << ctx->GetExceptionString();
+			to_log << "function: " << exception_func->GetDeclaration() << ", ";
+			to_log << "module: " << exception_func->GetModuleName() << ", ";
+			to_log << "section: " << exception_func->GetScriptSectionName() << ", ";
+			to_log << "line: " << ctx->GetExceptionLineNumber() << ", ";
+			to_log << "description: " << ctx->GetExceptionString();
 
-			logger::log(fmt::format(user_message, ww.str()));
+			logger::log(to_log.str());
 		}
 
 		else
 		{
-			fmt ::MemoryWriter ww;
-			ww << "False - Ended with reason code: " << r;
-			logger::log(fmt::format(user_message, ww.str()));
+			to_log << "False - Ended with reason code: " << r;
+			logger::log(to_log.str());
 		}
 
 		return false;
 	}
 
-	logger::log(fmt::format(user_message, "True. :)"));
 
-	PROFILE_END();
-	PROFILE_BEGIN(runtime);
+	noob::time post_loading = noob::clock::now();
+	noob::duration loading_time = post_loading - prior_to_loading;
+
+	to_log << "True. Time: " << std::chrono::duration_cast<std::chrono::milliseconds>(loading_time).count() << " milliseconds (" << std::chrono::duration_cast<std::chrono::microseconds>(loading_time).count() << " microseconds)\n";
+	logger::log(to_log.str());
+	
+	// PROFILE_END();
+	// PROFILE_BEGIN(runtime);
 
 	return true;
 }
@@ -290,20 +309,32 @@ void noob::application::accept_ndof_data(const noob::ndof::data& info)
 // TODO: Refactor
 void noob::application::step()
 {
-	PROFILER_UPDATE();
-
-	timespec timeNow;
-	clock_gettime(CLOCK_MONOTONIC, &timeNow);
-	uint64_t uNowNano = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
-	double delta = (uNowNano - time) * 0.000000001f;
-	time = uNowNano;
+	// PROFILER_UPDATE();
+	noob::time start_time = noob::clock::now();
+	noob::duration time_since = last_step - start_time;
+	
+	// timespec timeNow;
+	// clock_gettime(CLOCK_MONOTONIC, &timeNow);
+	// uint64_t uNowNano = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
+	// double delta = (uNowNano - time) * 0.000000001f;
+	// time = uNowNano;
 
 	if (!paused)
 	{
-		update(delta);
+		// start_time 
+		double d = (1.0/ static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(time_since).count()));
+		update(d);
 	}
 
 	draw();
+
+	noob::time end_time = noob::clock::now();
+	last_step = end_time;
+	noob::duration time_taken = end_time - start_time;
+	
+	noob::globals& g = noob::globals::get_instance();
+	g.profile_run.total_time += time_taken;
+
 }
 
 

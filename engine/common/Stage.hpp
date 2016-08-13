@@ -52,7 +52,7 @@ namespace noob
 			// Call those every frame or so.
 			void update(double dt) noexcept(true);
 
-			void draw(float window_width, float window_height, const noob::vec3& eye_pos, const noob::vec3& eye_target, const noob::vec3& eye_up, const noob::mat4& projection_mat) const noexcept(true);
+			void draw(float window_width, float window_height, const noob::vec3& eye_pos, const noob::vec3& eye_target, const noob::vec3& eye_up, const noob::mat4& projection_mat) noexcept(true);
 
 			// Creates physics body, sensors, joints. Those get made lots.
 			noob::body_handle add_body(const noob::body_type, const noob::shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient = noob::versor(1.0, 0.0, 0.0, 0.0), bool ccd = false) noexcept(true);
@@ -95,6 +95,10 @@ namespace noob
 
 			const int NUM_RESERVED_NODES = 8192;			
 			const int NUM_RESERVED_ARCS = 8192;
+
+
+			noob::duration update_time;
+			noob::duration draw_time;
 
 			btBroadphaseInterface* broadphase;
 			btDefaultCollisionConfiguration* collision_configuration;

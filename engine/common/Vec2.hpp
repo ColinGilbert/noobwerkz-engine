@@ -5,7 +5,7 @@
 
 namespace noob
 {
-	struct vec2
+	struct vec2 final
 	{
 		vec2() {}
 

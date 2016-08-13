@@ -70,6 +70,7 @@ bool noob::globals::init() noexcept(true)
 	noob::actor_blueprints bp;
 	set_actor_blueprints(bp, "default");
 
+	strings.add(std::move(std::make_unique<std::string>("default")));
 
 	audio_interface.init();
 

@@ -8,7 +8,7 @@
 
 //#define PI (float)3.14159265
 #include <tuple>
-#include <time.h>
+// #include <time.h>
 #include <assert.h>
 #include <memory>
 #include <cstdlib>
@@ -25,9 +25,10 @@
 #include <fstream>
 #include <atomic>
 
-// #include <lemon/list_graph.h>
-// #include <lemon/static_graph.h>
+#include <btBulletDynamicsCommon.h>
+#include <angelscript.h>
 
+#include "NoobDefines.hpp"
 #include "Globals.hpp"
 #include "Controls.hpp"
 #include "Logger.hpp"
@@ -47,9 +48,9 @@
 #include "Body.hpp"
 #include "RandomGenerator.hpp"
 #include "NetworkClient.hpp"
+#include "ProfilingInfo.hpp"
 
-#include <btBulletDynamicsCommon.h>
-#include <angelscript.h>
+
 #include "AngelVector.hpp"
 #include "scriptstdstring.h"
 
@@ -58,11 +59,11 @@
 
 namespace noob
 {
-	class application
+	class application final
 	{
 		public:
 			application();
-			virtual ~application();
+			~application();
 			static application& get();
 
 
@@ -97,36 +98,47 @@ namespace noob
 
 		protected:
 
+			static application* app_pointer;
+
 			void update(double delta);
 			void draw();
 
-			// Overload these if you're writing a game that is setup and/or developing the engine in C++.
+			// See these in sandbox/UserApp.cpp if you're writing a game that is setup or developing the engine in C++.
 			bool user_init();
 			void user_update(double);
 
 			void remove_shapes();
 
-			// std::unique_ptr<std::string> profiler_text;
-
-			// std::string get_profiler_text();
-			// void output_profiling();
+			noob::time last_step;
 
 			asIScriptEngine* script_engine;
-			asIScriptModule* script_module; //  = engine->GetModule("module", asGM_ALWAYS_CREATE);
+			asIScriptModule* script_module;
 			asIScriptContext* script_context;
 
-			static application* app_pointer;
-			std::unique_ptr<std::string> prefix;
-			bool paused, input_has_started, ui_enabled;
-			std::atomic<bool> started;
-			uint64_t time;
+			noob::profiler_snap current_timings;
+
+			noob::time last_ui_update;
+
+			bool paused, started, input_has_started, ui_enabled;
+			
+			// uint64_t time;
+			
 			uint32_t window_width, window_height;
+			
 			noob::gui gui;
+			
 			std::vector<noob::vec2> finger_positions;
+			
 			noob::voxel_world voxels;
+			
 			noob::stage stage;
+			
 			noob::network_client network;
+			
 			noob::random_generator randomz;
+			
 			std::string script_name;
+
+			std::unique_ptr<std::string> prefix;
 	};
 }

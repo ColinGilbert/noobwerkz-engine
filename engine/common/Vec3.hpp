@@ -10,7 +10,7 @@
 
 namespace noob
 {
-	struct vec3
+	struct vec3 final
 	{
 
 		std::array<float,3> v;
