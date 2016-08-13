@@ -19,6 +19,7 @@ bool noob::application::user_init()
 
 	g.master_mixer.play_clip(h, 1.0);
 
+	// *profiler_text = get_profiler_text();
 
 	// keystrokes.push_back(std::make_tuple(noob::keyboard::keys::NUM_5, noob::keyboard::mod_keys::NONE, "switch view (currently does nothing)"));
 	logger::log("[Application] Successfully done (C++) user init.");
@@ -26,21 +27,31 @@ bool noob::application::user_init()
 }
 
 
+
 void noob::application::user_update(double dt)
 {
 	gui.text("Noobwerkz Editor", 50.0, 50.0, noob::gui::font_size::HEADER);
 	fmt::MemoryWriter ww;
-
+	/*
 	// Quick loop to help print key bindings to screen
 	for (auto k : keystrokes)
 	{
-		ww << std::get<2>(k) << ": " << noob::keyboard::to_string(std::get<1>(k));
-		if (noob::keyboard::to_string(std::get<1>(k)) != "")
-		{
-			ww << " ";
-		}
-		ww << noob::keyboard::to_string(std::get<0>(k)) << "\n";
+	ww << std::get<2>(k) << ": " << noob::keyboard::to_string(std::get<1>(k));
+	if (noob::keyboard::to_string(std::get<1>(k)) != "")
+	{
+	ww << " ";
 	}
+	ww << noob::keyboard::to_string(std::get<0>(k)) << "\n";
+	}
+	*/
+	// std::ostringstream profile_out;
+	// PROFILER_OUTPUT(profile_out);
+	// logger::log(profile_out.str());
 
-	// gui.text(ww.str(), static_cast<float>(window_width - 500), static_cast<float>(window_height - 50), noob::gui::font_size::HEADER);
+
+	// output_profiling();
+	// ww << *profiler_text;
+
+
+	// gui.text(*profiler_text, static_cast<float>(window_width - 500), static_cast<float>(window_height - 500), noob::gui::font_size::HEADER);
 }

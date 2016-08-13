@@ -68,7 +68,7 @@ namespace noob
 	struct alignas(16) actor_event
 	{
 
-	//	noob::actor_event::action todo;
+		//	noob::actor_event::action todo;
 		noob::actor_handle from, to;
 		uint32_t index;
 	};

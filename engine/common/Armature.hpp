@@ -25,7 +25,7 @@ namespace noob
 
 		protected:
 			lemon::StaticDigraph graph;
-			
+
 			lemon::StaticDigraph::NodeMap<noob::scaled_model> models;
 			// lemon::StaticDigraph::NodeMap<noob::surface> surfaces;
 			lemon::StaticDigraph::NodeMap<std::tuple<noob::vec3, noob::versor>> bind_pose;
@@ -64,7 +64,7 @@ namespace noob
 			// lemon::ListDigraph::NodeMap<noob::surface> surfaces;
 			lemon::ListDigraph::ArcMap<noob::joint_handle> joints;
 	};
-	
+
 	typedef noob::component_dynamic<noob::dynamic_armature> dynamic_armatures_holder;
 	typedef noob::handle<noob::dynamic_armature> dynamic_armature_handle;
 
@@ -72,7 +72,7 @@ namespace noob
 	struct armature_keyframe
 	{
 		armature_keyframe(lemon::StaticDigraph& g) : keyframes(g) {}
-		
+
 		float t;
 		lemon::StaticDigraph::NodeMap<std::tuple<noob::vec3, noob::versor>> keyframes;
 	};

@@ -33,7 +33,7 @@ namespace noob
 	typedef noob::component_dynamic<noob::animated_model> animated_models_holder;
 	typedef noob::component_dynamic<noob::skeletal_anim> skeletal_anims_holder;
 	typedef noob::component_dynamic<noob::audio_sample> samples_holder;
-	
+
 	typedef handle<noob::body> body_handle;
 	typedef handle<noob::joint> joint_handle;
 	typedef handle<noob::ghost> ghost_handle;	

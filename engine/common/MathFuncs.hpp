@@ -355,7 +355,6 @@ namespace noob
 	};
 
 
-
 	static vec3 vec3_from_vec4(const vec4& vv)
 	{
 		noob::vec3 v;

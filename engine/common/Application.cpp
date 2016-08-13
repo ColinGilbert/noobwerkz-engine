@@ -3,10 +3,6 @@
 
 #include "RegisterScripts.hpp"
 
-#include <string>
-
-#include "Shiny.h"
-#include "ShinyMacros.h"
 
 noob::application* noob::application::app_pointer = nullptr;
 // noob::globals noob::application::global_storage;
@@ -20,6 +16,7 @@ noob::application::application()
 	time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
+	// profiler_text = std::unique_ptr<std::string>(new std::string());
 	script_engine = asCreateScriptEngine();
 	assert(script_engine > 0);
 	// TODO: Uncomment once noob::filesystem is fixed
@@ -76,13 +73,13 @@ void noob::application::init()
 	logger::log("[Application] Begin init.");
 	ui_enabled = true;
 	gui.init(*prefix, window_width, window_height);
-	
+
 	controller.set_eye_pos(noob::vec3(0.0, 300.0, -100.0));
 	controller.set_eye_target(noob::vec3(0.0, 0.0, 0.0));
 	controller.set_eye_up(noob::vec3(0.0, 1.0, 0.0));
-	
+
 	noob::globals& g = noob::globals::get_instance();
-	
+
 	if (g.init())
 	{
 		stage.init();
@@ -91,7 +88,7 @@ void noob::application::init()
 	{
 		logger::log("[Application] Global storage init failed :(");
 	}
-	
+
 	voxels.init(512, 512, 512);
 
 	// Used by AngelScript to capture the result of the last registration.
@@ -131,13 +128,11 @@ void noob::application::init()
 	r = script_engine->RegisterGlobalProperty("voxel_world voxels", &voxels); assert (r >= 0);
 
 	register_globals(script_engine);
-	
+
 	logger::log("[Application] Done basic init.");
 	bool b = user_init();
 	network.init(3);
 	network.connect("localhost", 4242);
-	PROFILE_BEGIN(noobwerkz);
-
 }
 
 
@@ -172,8 +167,8 @@ void noob::application::update(double delta)
 
 bool noob::application::eval(const std::string& name, const std::string& string_to_eval, bool reset)
 {
-
 	PROFILE_END();
+	PROFILE_BEGIN(loading);
 
 	std::string user_message = "[Application] Loading script. Success? {0}";
 
@@ -261,10 +256,9 @@ bool noob::application::eval(const std::string& name, const std::string& string_
 
 	logger::log(fmt::format(user_message, "True. :)"));
 
-	std::ostringstream profile_out;
-	PROFILER_OUTPUT(profile_out);
-	PROFILE_BEGIN(noobwerkz);
-	logger::log(profile_out.str());//std::string(profile_out));
+	PROFILE_END();
+	PROFILE_BEGIN(runtime);
+
 	return true;
 }
 
@@ -381,3 +375,22 @@ void noob::application::remove_shapes()
 		}
 	}
 }
+
+
+/*
+   std::string noob::application::get_profiler_text()
+   {
+   std::ostringstream profile_out;
+   PROFILER_OUTPUT(profile_out);
+   return profile_out.str();
+// *profiler_text = output_profiling();
+// logger::log(s);
+//logger::log(profile_out.str());
+}
+
+void noob::application::output_profiling()
+{
+logger::log(get_profiler_text());//PROFILER_OUTPUT());
+}
+
+*/

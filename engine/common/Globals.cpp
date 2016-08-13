@@ -211,11 +211,11 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 						const unsigned char** index_base;
 
 						striding_mesh->getLockedReadOnlyVertexIndexBase(vertex_base, num_verts, scalar_type, scalar_stride, index_base, index_stride, num_faces, index_type, 0);
-						
+
 						size_t num_indices = num_faces * 3;
-						
+
 						uint32_t scalar_width, index_width;
-						
+
 						if (scalar_type == PHY_FLOAT)
 						{
 							scalar_width = sizeof(float);
@@ -228,7 +228,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 						if (index_width == PHY_SHORT)
 						{
 							index_width = sizeof(uint16_t);
-							
+
 						}
 						else
 						{
@@ -237,7 +237,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 						}
 
 						noob::basic_mesh m;
-						
+
 						rde::fixed_array<btVector3, 3> triangle_verts;
 
 						for (int tri_index = 0; tri_index < num_faces; ++tri_index)
@@ -390,25 +390,25 @@ noob::shape_handle noob::globals::cone_shape(float r, float h) noexcept(true)
 
 noob::shape_handle noob::globals::hull_shape(const std::vector<vec3>& points) noexcept(true) 
 {
-		noob::shape temp;
-		temp.hull(points);
-		noob::shape_handle shape_h = add_shape(temp);
+	noob::shape temp;
+	temp.hull(points);
+	noob::shape_handle shape_h = add_shape(temp);
 
-		noob::basic_mesh temp_mesh = noob::mesh_utils::hull(points);
-		noob::scaled_model temp_scaled_model = model_from_mesh(temp_mesh);
+	noob::basic_mesh temp_mesh = noob::mesh_utils::hull(points);
+	noob::scaled_model temp_scaled_model = model_from_mesh(temp_mesh);
 
-		auto temp_cell = shapes_to_models.insert(shape_h.get_inner());
-		temp_cell->value = temp_scaled_model.model_h.get_inner();
+	auto temp_cell = shapes_to_models.insert(shape_h.get_inner());
+	temp_cell->value = temp_scaled_model.model_h.get_inner();
 
-		return shape_h;
+	return shape_h;
 }
 
 
 noob::shape_handle noob::globals::static_trimesh_shape(const noob::basic_mesh& m) noexcept(true) 
 {
-		noob::shape temp;
-		temp.trimesh(m);
-		return add_shape(temp);
+	noob::shape temp;
+	temp.trimesh(m);
+	return add_shape(temp);
 }
 
 

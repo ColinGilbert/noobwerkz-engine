@@ -53,7 +53,8 @@
 #include "AngelVector.hpp"
 #include "scriptstdstring.h"
 
-// #include "Shiny.h"
+#include "Shiny.h"
+#include "ShinyMacros.h"
 
 namespace noob
 {
@@ -72,7 +73,7 @@ namespace noob
 
 			// Init must always be called.
 			void init();
-			
+
 			// Those three allow an app to be controlled better by an external environment (ie: Android/iOS)
 			void pause();
 			void resume();
@@ -86,12 +87,12 @@ namespace noob
 			void set_archive_dir(const std::string & filepath);
 			void window_resize(uint32_t w, uint32_t h);
 			void key_input(char c);
-			
+
 			void accept_ndof_data(const noob::ndof::data& info);
 
 			// step() is called by the target platform, which calculates the delta-time and drives the update() function. It is an ugly hack that had to be made public in order to be callable from the main app.
 			void step();
-			
+
 			noob::controls controller;
 
 		protected:
@@ -102,8 +103,13 @@ namespace noob
 			// Overload these if you're writing a game that is setup and/or developing the engine in C++.
 			bool user_init();
 			void user_update(double);
-			
+
 			void remove_shapes();
+
+			// std::unique_ptr<std::string> profiler_text;
+
+			// std::string get_profiler_text();
+			// void output_profiling();
 
 			asIScriptEngine* script_engine;
 			asIScriptModule* script_module; //  = engine->GetModule("module", asGM_ALWAYS_CREATE);
