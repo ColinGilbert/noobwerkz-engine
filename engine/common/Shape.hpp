@@ -28,7 +28,7 @@ namespace noob
 		public:
 		enum class type { SPHERE, BOX, CYLINDER, CONE, HULL, TRIMESH };
 
-		shape() noexcept(true) : physics_valid(false) {}
+		shape() noexcept(true) : physics_valid(false), scales(noob::vec3(1.0, 1.0, 1.0)) {}
 
 		void set_margin(float) noexcept(true);
 		float get_margin() const noexcept(true);

@@ -174,7 +174,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 						}
 					case(noob::shader_type::TRIPLANAR):
 						{
-							g.triplanar_drawer.draw(g.basic_models.get(model_handle::make(model_h)), world_mat, normal_mat, eye_pos, g.triplanar_shaders.get(triplanar_shader_handle::make(shader_h.handle)), temp_reflect, temp_lights, 0);
+							g.triplanar_drawer.draw(g.basic_models.get(model_handle::make(model_h)), scales, world_mat, normal_mat, eye_pos, g.triplanar_shaders.get(triplanar_shader_handle::make(shader_h.handle)), temp_reflect, temp_lights, 0);
 							break;
 						}
 					default:

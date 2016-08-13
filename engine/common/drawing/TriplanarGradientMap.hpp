@@ -8,10 +8,10 @@
 
 namespace noob
 {
-	class triplanar_gradient_map_renderer : protected renderer
+	class triplanar_gradient_map_renderer
 	{
 		public:
-			
+
 			struct uniform
 			{
 				// Functions used by scripting engine to access colours. TODO: Wrap around/remove
@@ -26,7 +26,7 @@ namespace noob
 					if (i > 3) return colours[3];
 					else return colours[i];
 				}
-				
+
 				std::array<noob::vec4, 4> colours;
 				noob::vec4 blend;
 				noob::vec4 scales;
@@ -35,9 +35,11 @@ namespace noob
 			};
 
 			void init();
-			void draw(const noob::drawable*, const noob::mat4& wvp_mat, const noob::mat4& normal_mat, const noob::vec3& eye_pos, const noob::triplanar_gradient_map_renderer::uniform&, const noob::reflectance&, const std::array<noob::light, MAX_LIGHTS>&, uint8_t view_id) const;
+			void draw(const noob::drawable*, const noob::vec3& scales, const noob::mat4& wvp_mat, const noob::mat4& normal_mat, const noob::vec3& eye_pos, const noob::triplanar_gradient_map_renderer::uniform&, const noob::reflectance&, const std::array<noob::light, MAX_LIGHTS>&, uint8_t view_id) const;
 
 		protected:
+
+			noob::renderer_base renderbase;
 	};
 
 }

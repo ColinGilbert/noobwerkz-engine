@@ -3,13 +3,13 @@
 #include "NoobDefines.hpp"
 #include "Light.hpp"
 #include "Reflectance.hpp"
+#include "Graphics.hpp"
 
 namespace noob
 {
-	class renderer
+	struct renderer_base
 	{
-		protected:
-			noob::graphics::shader shader;
-			bool program_valid;
+		bool program_valid;
+		noob::graphics::shader shader;
 	};
 }

@@ -7,14 +7,14 @@ void noob::basic_renderer::init()
 
 	std::string ss;
 
-	program_valid = (bgfx::invalidHandle != program_handle.idx);
+	renderbase.program_valid = (bgfx::invalidHandle != program_handle.idx);
 	
 	// gfx.get_add_uniform(std::string("colour_1"), bgfx::UniformType::Enum::Vec4);
 	
-	shader.program = program_handle;
-	gfx.add_shader("basic", shader);
+	renderbase.shader.program = program_handle;
+	gfx.add_shader("basic", renderbase.shader);
 	fmt::MemoryWriter ww;
-	ww <<"[BasicRenderer] Program valid? " << program_valid;
+	ww <<"[BasicRenderer] Program valid? " << renderbase.program_valid;
 	logger::log(ww.str());
 }
 
@@ -59,6 +59,6 @@ void noob::basic_renderer::draw(const noob::drawable* model, const noob::mat4& w
 	bgfx::setUniform(gfx.get_light_pos_radius().handle, &lights_pos_radii[0].v[0], MAX_LIGHTS);
 	
 
-	model->draw(view_id, w_mat, shader.program,  0 | BGFX_STATE_RGB_WRITE | BGFX_STATE_ALPHA_WRITE | BGFX_STATE_DEPTH_WRITE | BGFX_STATE_DEPTH_TEST_LESS | BGFX_STATE_MSAA);
+	model->draw(view_id, w_mat, renderbase.shader.program,  0 | BGFX_STATE_RGB_WRITE | BGFX_STATE_ALPHA_WRITE | BGFX_STATE_DEPTH_WRITE | BGFX_STATE_DEPTH_TEST_LESS | BGFX_STATE_MSAA);
 
 }

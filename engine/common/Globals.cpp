@@ -207,12 +207,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 				// We must first create the model:
 				else
 				{
-					logger::log("[Globals] Creating model for trimesh shape");
 					// We must first create the model:
-					fmt::MemoryWriter ww;
-					ww << "mesh-" << trimesh_model_count;
-					++trimesh_model_count;
-
 					const btBvhTriangleMeshShape* shape_ptr = static_cast<btBvhTriangleMeshShape*>((shapes.get(h)).inner_shape);
 					btVector3 scaling = shape_ptr->getLocalScaling();
 					const btStridingMeshInterface* striding_mesh = shape_ptr->getMeshInterface();
@@ -222,11 +217,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 					const unsigned char* vertex_base = 0;
 					const unsigned char* index_base = 0;
 
-					logger::log("[Globals] About to enter read-only vertex pool");
-
 					striding_mesh->getLockedReadOnlyVertexIndexBase(&vertex_base, num_verts, scalar_type, scalar_stride, &index_base, index_stride, num_faces, index_type, 0);
-
-					logger::log("[Globals] inside read-only vertex pool");
 
 					size_t num_indices = num_faces * 3;
 
@@ -284,38 +275,17 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 						m.vertices.push_back(vec3_from_bullet(triangle_verts[2]));
 					}
 
-					logger::log("[Globals] About to leave read-only vertex access");
-
 					striding_mesh->unLockReadOnlyVertexBase(0);
 
-					logger::log("[Globals] About to create model from mesh");
 					noob::scaled_model temp_scaled_model = model_from_mesh(m);
-					fmt::MemoryWriter www;
-					www << "[Globals] Assigning cell value to model index " << temp_scaled_model.model_h.get_inner();
-					logger::log(www.str());
-					//search->value = temp_scaled_model.model_h.get_inner();
-					//logger::log("Assigned cell value");
 					results.model_h = temp_scaled_model.model_h;
-					logger::log("Assigned results value");
-					// Now, insert our new model into its mapping
-					// auto search = shapes_to_models.insert(h.get_inner());
-					// search->value = results.model_h.get_inner();
 					please_insert = true;
 				}
 				
-				fmt::MemoryWriter ww;
-				ww << "[Globals] About to return model " << results.model_h.get_inner() << " from shape " << h.get_inner();
-				logger::log(ww.str());
+				results.scales = noob::vec3(1.0, 1.0, 1.0);					
 				break;
 			}
-			// else
-			// {
-			//	fmt::MemoryWriter ww;
-			//	ww << "[Globals] DATA ERROR: Attempted to get a trimesh model with invalid shape handle " << h.get_inner();
-			//	logger::log(ww.str());
-			// }
 
-			results.scales = noob::vec3(1.0, 1.0, 1.0);					
 			//break;
 	}
 	

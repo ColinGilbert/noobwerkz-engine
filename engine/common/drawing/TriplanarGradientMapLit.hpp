@@ -1,3 +1,4 @@
+/*
 #pragma once
 
 #include "MathFuncs.hpp"
@@ -8,7 +9,7 @@
 
 namespace noob
 {
-	class triplanar_gradient_map_renderer_lit  : protected renderer
+	class triplanar_gradient_map_renderer_lit
 	{
 		public:
 			
@@ -35,9 +36,12 @@ namespace noob
 			};
 
 			void init();
-			void draw(const noob::drawable*, const noob::mat4& w_mat, const noob::mat4& normal_mat, const noob::vec3& eye_pos, const noob::triplanar_gradient_map_renderer_lit::uniform&, const noob::reflectance&, const std::array<noob::light, MAX_LIGHTS>&, uint8_t view_id) const;
+			void draw(const noob::drawable*, const noob::vec3& model_scales, const noob::mat4& w_mat, const noob::mat4& normal_mat, const noob::vec3& eye_pos, const noob::triplanar_gradient_map_renderer_lit::uniform&, const noob::reflectance&, const std::array<noob::light, MAX_LIGHTS>&, uint8_t view_id) const;
 
 		protected:
+			noob::renderer_base renderbase;
 	};
 
 }
+
+*/

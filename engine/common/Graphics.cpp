@@ -87,6 +87,7 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	colour_3 = noob::graphics::add_uniform(std::string("colour_3"), bgfx::UniformType::Enum::Vec4, 1);
 	blend_0 = noob::graphics::add_uniform(std::string("blend_0"), bgfx::UniformType::Enum::Vec4, 1);
 	blend_1 = noob::graphics::add_uniform(std::string("blend_1"), bgfx::UniformType::Enum::Vec4, 1);
+	model_scales = noob::graphics::add_uniform(std::string("model_scales"), bgfx::UniformType::Enum::Vec4, 1);
 	tex_scales = noob::graphics::add_uniform(std::string("tex_scales"), bgfx::UniformType::Enum::Vec4, 1);
 	normal_mat = add_uniform(std::string("normal_mat"), bgfx::UniformType::Enum::Mat4, 1);
 	// transpose(inverse(modelMat) Used to do normal calculations in modelspace.

@@ -33,7 +33,7 @@
 #include "Ghost.hpp"
 #include "ComponentDefines.hpp"
 #include "BasicRenderer.hpp"
-#include "TriplanarGradientMap.hpp"
+#include "TriplanarGradientMapLit.hpp"
 #include "AudioSample.hpp"
 #include "SoundInterface.hpp"
 #include "FastHashTable.hpp"

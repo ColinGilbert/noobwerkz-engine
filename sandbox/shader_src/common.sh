@@ -23,7 +23,8 @@ uniform vec4 blend_0;
 // Positions are only required for the two mid-gradient colours, as the other two are at the ends
 uniform vec4 blend_1;
 
-// Scaling factors (for the texture)
+// Scaling factors
+uniform vec4 model_scales;
 uniform vec4 tex_scales;
 
 uniform mat4 normal_mat;

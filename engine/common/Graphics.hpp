@@ -134,6 +134,7 @@ namespace noob
 		noob::graphics::uniform get_colour_3() { return colour_3; }
 		noob::graphics::uniform get_blend_0() { return blend_0; }
 		noob::graphics::uniform get_blend_1() { return blend_1; }
+		noob::graphics::uniform get_model_scales() { return model_scales; }
 		noob::graphics::uniform get_tex_scales() { return tex_scales; }
 		noob::graphics::uniform get_normal_mat() { return normal_mat; }
 		noob::graphics::uniform get_normal_mat_modelspace() { return normal_mat_modelspace; }
@@ -154,7 +155,7 @@ namespace noob
 		protected:
 
 		// Uniforms
-		noob::graphics::uniform invalid_uniform, colour_0, colour_1, colour_2, colour_3, blend_0, blend_1, tex_scales, normal_mat, normal_mat_modelspace, eye_pos, eye_pos_normalized, ambient, light_pos_radius, light_rgb_falloff, specular_shine, diffuse, emissive, fog, rough_albedo_fresnel;
+		noob::graphics::uniform invalid_uniform, colour_0, colour_1, colour_2, colour_3, blend_0, blend_1, model_scales, tex_scales, normal_mat, normal_mat_modelspace, eye_pos, eye_pos_normalized, ambient, light_pos_radius, light_rgb_falloff, specular_shine, diffuse, emissive, fog, rough_albedo_fresnel;
 		noob::graphics::sampler invalid_texture, texture_0;
 
 		// ---------------- Mappings --------------------
