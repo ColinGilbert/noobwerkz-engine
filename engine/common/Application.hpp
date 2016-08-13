@@ -53,6 +53,8 @@
 #include "AngelVector.hpp"
 #include "scriptstdstring.h"
 
+// #include "Shiny.h"
+
 namespace noob
 {
 	class application

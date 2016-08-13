@@ -5,6 +5,8 @@
 
 #include <string>
 
+#include "Shiny.h"
+#include "ShinyMacros.h"
 
 noob::application* noob::application::app_pointer = nullptr;
 // noob::globals noob::application::global_storage;
@@ -134,6 +136,7 @@ void noob::application::init()
 	bool b = user_init();
 	network.init(3);
 	network.connect("localhost", 4242);
+	PROFILE_BEGIN(noobwerkz);
 
 }
 
@@ -169,6 +172,9 @@ void noob::application::update(double delta)
 
 bool noob::application::eval(const std::string& name, const std::string& string_to_eval, bool reset)
 {
+
+	PROFILE_END();
+
 	std::string user_message = "[Application] Loading script. Success? {0}";
 
 	if (reset)
@@ -254,6 +260,11 @@ bool noob::application::eval(const std::string& name, const std::string& string_
 	}
 
 	logger::log(fmt::format(user_message, "True. :)"));
+
+	std::ostringstream profile_out;
+	PROFILER_OUTPUT(profile_out);
+	PROFILE_BEGIN(noobwerkz);
+	logger::log(profile_out.str());//std::string(profile_out));
 	return true;
 }
 
@@ -285,11 +296,12 @@ void noob::application::accept_ndof_data(const noob::ndof::data& info)
 // TODO: Refactor
 void noob::application::step()
 {
+	PROFILER_UPDATE();
+
 	timespec timeNow;
 	clock_gettime(CLOCK_MONOTONIC, &timeNow);
 	uint64_t uNowNano = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
 	double delta = (uNowNano - time) * 0.000000001f;
-
 	time = uNowNano;
 
 	if (!paused)
