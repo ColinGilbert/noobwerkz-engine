@@ -136,7 +136,8 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 	noob::shape s = shapes.get(h);
 
 	// logger::log("[Globals] got shape pointer");
-
+	
+	bool please_insert = false;
 
 	switch(s.shape_type)
 	{
@@ -176,7 +177,9 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 				}
 				else
 				{
-					logger::log("[Globals] DATA ERROR: Attempted to get a hull model with an invalid shape handle.");
+					fmt::MemoryWriter ww;
+					ww << "[Globals] DATA ERROR: Attempted to get a hull model with an invalid shape handle.";
+					logger::log(ww.str());
 				}
 				results.scales = noob::vec3(1.0, 1.0, 1.0);					
 				break; 
@@ -193,97 +196,134 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 					{
 						// We can simply give back the results:
 						results.model_h = model_handle::make(val);
-					}	
-					// We must first create the model:
+					}
 					else
 					{
-						// We must first create the model:
 						fmt::MemoryWriter ww;
-						ww << "mesh-" << trimesh_model_count;
-						++trimesh_model_count;
-
-						const btBvhTriangleMeshShape* shape_ptr = static_cast<btBvhTriangleMeshShape*>((shapes.get(h)).inner_shape);
-						btVector3 scaling = shape_ptr->getLocalScaling();
-						const btStridingMeshInterface* striding_mesh = shape_ptr->getMeshInterface();
-						PHY_ScalarType scalar_type, index_type;
-						scalar_type = index_type;
-						int num_verts, scalar_stride, index_stride, num_faces;
-						const unsigned char** vertex_base;
-						const unsigned char** index_base;
-
-						striding_mesh->getLockedReadOnlyVertexIndexBase(vertex_base, num_verts, scalar_type, scalar_stride, index_base, index_stride, num_faces, index_type, 0);
-
-						size_t num_indices = num_faces * 3;
-
-						uint32_t scalar_width, index_width;
-
-						if (scalar_type == PHY_FLOAT)
-						{
-							scalar_width = sizeof(float);
-						}
-						else
-						{
-							scalar_width = sizeof(double);
-						}
-
-						if (index_width == PHY_SHORT)
-						{
-							index_width = sizeof(uint16_t);
-
-						}
-						else
-						{
-							index_width = sizeof(uint32_t);
-
-						}
-
-						noob::basic_mesh m;
-
-						rde::fixed_array<btVector3, 3> triangle_verts;
-
-						for (int tri_index = 0; tri_index < num_faces; ++tri_index)
-						{
-							unsigned int* gfx_base = (unsigned int*)(index_base + tri_index * index_stride);
-
-							for (int j = 2; j >= 0; --j)
-							{
-								int graphics_index = index_type == PHY_SHORT ? ((unsigned short*)gfx_base)[j] : gfx_base[j];
-
-								if (scalar_type == PHY_FLOAT)
-								{
-									float* graphics_base = (float*)(vertex_base + graphics_index * scalar_stride);
-									triangle_verts[j] = btVector3(graphics_base[0] * scaling.getX(), graphics_base[1] * scaling.getY(), graphics_base[2] * scaling.getZ());
-								}
-								else
-								{
-									double* graphics_base = (double*)(vertex_base + graphics_index * scalar_stride);
-									triangle_verts[j] = btVector3(btScalar(graphics_base[0] * scaling.getX()), btScalar(graphics_base[1] * scaling.getY()), btScalar(graphics_base[2] * scaling.getZ()));
-								}
-							}
-
-							m.indices.push_back(m.vertices.size());
-							m.vertices.push_back(vec3_from_bullet(triangle_verts[0]));
-							m.indices.push_back(m.vertices.size());
-							m.vertices.push_back(vec3_from_bullet(triangle_verts[1]));
-							m.indices.push_back(m.vertices.size());
-							m.vertices.push_back(vec3_from_bullet(triangle_verts[2]));
-						}
-
-						striding_mesh->unLockReadOnlyVertexBase(0);
-
-						noob::scaled_model temp_scaled_model = model_from_mesh(m);
-						search->value = temp_scaled_model.model_h.get_inner();
-						results.model_h = temp_scaled_model.model_h;
+						ww << "[Globals] DATA ERROR: Shape handle " << h.get_inner() << " has invalid model mapping.";
+						logger::log(ww.str());
 					}
-				}
+				}	
+				// We must first create the model:
 				else
 				{
-					logger::log("[Globals] DATA ERROR: Attempted to get a trimesh model with an invalid shape handle.");
-				}
+					logger::log("[Globals] Creating model for trimesh shape");
+					// We must first create the model:
+					fmt::MemoryWriter ww;
+					ww << "mesh-" << trimesh_model_count;
+					++trimesh_model_count;
 
-				results.scales = noob::vec3(1.0, 1.0, 1.0);					
+					const btBvhTriangleMeshShape* shape_ptr = static_cast<btBvhTriangleMeshShape*>((shapes.get(h)).inner_shape);
+					btVector3 scaling = shape_ptr->getLocalScaling();
+					const btStridingMeshInterface* striding_mesh = shape_ptr->getMeshInterface();
+					PHY_ScalarType scalar_type, index_type;
+					scalar_type = index_type;
+					int num_verts, scalar_stride, index_stride, num_faces;
+					const unsigned char* vertex_base = 0;
+					const unsigned char* index_base = 0;
+
+					logger::log("[Globals] About to enter read-only vertex pool");
+
+					striding_mesh->getLockedReadOnlyVertexIndexBase(&vertex_base, num_verts, scalar_type, scalar_stride, &index_base, index_stride, num_faces, index_type, 0);
+
+					logger::log("[Globals] inside read-only vertex pool");
+
+					size_t num_indices = num_faces * 3;
+
+					uint32_t scalar_width, index_width;
+
+					if (scalar_type == PHY_FLOAT)
+					{
+						scalar_width = sizeof(float);
+					}
+					else
+					{
+						scalar_width = sizeof(double);
+					}
+
+					if (index_width == PHY_SHORT)
+					{
+						index_width = sizeof(uint16_t);
+
+					}
+					else
+					{
+						index_width = sizeof(uint32_t);
+
+					}
+
+					noob::basic_mesh m;
+
+					rde::fixed_array<btVector3, 3> triangle_verts;
+
+					for (int tri_index = 0; tri_index < num_faces; ++tri_index)
+					{
+						unsigned int* gfx_base = (unsigned int*)(index_base + tri_index * index_stride);
+
+						for (int j = 2; j >= 0; --j)
+						{
+							int graphics_index = index_type == PHY_SHORT ? ((unsigned short*)gfx_base)[j] : gfx_base[j];
+
+							if (scalar_type == PHY_FLOAT)
+							{
+								float* graphics_base = (float*)(vertex_base + graphics_index * scalar_stride);
+								triangle_verts[j] = btVector3(graphics_base[0] * scaling.getX(), graphics_base[1] * scaling.getY(), graphics_base[2] * scaling.getZ());
+							}
+							else
+							{
+								double* graphics_base = (double*)(vertex_base + graphics_index * scalar_stride);
+								triangle_verts[j] = btVector3(btScalar(graphics_base[0] * scaling.getX()), btScalar(graphics_base[1] * scaling.getY()), btScalar(graphics_base[2] * scaling.getZ()));
+							}
+						}
+
+						m.indices.push_back(m.vertices.size());
+						m.vertices.push_back(vec3_from_bullet(triangle_verts[0]));
+						m.indices.push_back(m.vertices.size());
+						m.vertices.push_back(vec3_from_bullet(triangle_verts[1]));
+						m.indices.push_back(m.vertices.size());
+						m.vertices.push_back(vec3_from_bullet(triangle_verts[2]));
+					}
+
+					logger::log("[Globals] About to leave read-only vertex access");
+
+					striding_mesh->unLockReadOnlyVertexBase(0);
+
+					logger::log("[Globals] About to create model from mesh");
+					noob::scaled_model temp_scaled_model = model_from_mesh(m);
+					fmt::MemoryWriter www;
+					www << "[Globals] Assigning cell value to model index " << temp_scaled_model.model_h.get_inner();
+					logger::log(www.str());
+					//search->value = temp_scaled_model.model_h.get_inner();
+					//logger::log("Assigned cell value");
+					results.model_h = temp_scaled_model.model_h;
+					logger::log("Assigned results value");
+					// Now, insert our new model into its mapping
+					// auto search = shapes_to_models.insert(h.get_inner());
+					// search->value = results.model_h.get_inner();
+					please_insert = true;
+				}
+				
+				fmt::MemoryWriter ww;
+				ww << "[Globals] About to return model " << results.model_h.get_inner() << " from shape " << h.get_inner();
+				logger::log(ww.str());
 				break;
 			}
+			// else
+			// {
+			//	fmt::MemoryWriter ww;
+			//	ww << "[Globals] DATA ERROR: Attempted to get a trimesh model with invalid shape handle " << h.get_inner();
+			//	logger::log(ww.str());
+			// }
+
+			results.scales = noob::vec3(1.0, 1.0, 1.0);					
+			//break;
+	}
+	
+	if (please_insert)
+	{
+		noob::fast_hashtable::cell* search = shapes_to_models.insert(h.get_inner());
+		search->value = results.model_h.get_inner();
+
 	}
 	return results; 
 }

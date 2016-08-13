@@ -54,7 +54,7 @@ void noob::ui_font::draw_text(uint8_t view_id, const std::string& message, float
 	textBufferManager->clearTextBuffer(transientText);
 	textBufferManager->setPenPosition(transientText, x, y);
 	textBufferManager->appendText(transientText, font_handle, message.c_str());
-	TextRectangle rect = textBufferManager->getRectangle(transientText);
+	// TextRectangle rect = textBufferManager->getRectangle(transientText);
 	// bgfx::setState(BGFX_STATE_RGB_WRITE |BGFX_STATE_ALPHA_WRITE |BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA));
 	textBufferManager->submitTextBuffer(transientText, view_id);
 }

@@ -54,14 +54,18 @@ void noob::application::user_update(double dt)
 
 	noob::globals& g = noob::globals::get_instance();
 
-	noob::duration time_since_update = noob::clock::now() - last_ui_update;
+	noob::time nowtime = noob::clock::now();
+	noob::duration time_since_update = nowtime - last_ui_update;
 
-	if (noob::millis(time_since_update) > 500)
+	if (noob::millis(time_since_update) > 5)
 	{
-		fmt::MemoryWriter ww;
-		ww << "Profiling: " << g.profile_run.to_string();
-		g.strings.set(noob::string_handle::make(0), std::move(std::make_unique<std::string>(ww.str())));
+		// fmt::MemoryWriter ww;
+		// ww << "[Application] Profiling: " << g.profile_run.to_string();
+		// logger::log(ww.str());
+		
+		g.profile_run.total_time = g.profile_run.stage_physics_time = g.profile_run.stage_draw_time = time_since_update = noob::duration(0);
+		last_ui_update = nowtime;
 	}
 	
-	gui.text(*(g.strings.get(noob::string_handle::make(0))), static_cast<float>(window_width - 500), static_cast<float>(window_height - 500), noob::gui::font_size::HEADER);
+	// gui.text(*(g.strings.get(noob::string_handle::make(0))), static_cast<float>(window_width - 500), static_cast<float>(window_height - 500), noob::gui::font_size::HEADER);
 }
