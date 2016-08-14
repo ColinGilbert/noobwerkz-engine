@@ -1,9 +1,7 @@
 #pragma once
 
-
 #include <btBulletDynamicsCommon.h>
 #include "BulletCollision/CollisionDispatch/btGhostObject.h"
-
 
 #include "Shape.hpp"
 

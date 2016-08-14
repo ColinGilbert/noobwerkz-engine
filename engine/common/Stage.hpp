@@ -28,6 +28,9 @@
 #include "NoobCommon.hpp"
 #include "DynamicArray.hpp"
 #include "ShadingVariant.hpp"
+#include "ContactPoint.hpp"
+#include "StageTypes.hpp"
+#include "NoobCommon.hpp"
 
 #include <lemon/smart_graph.h>
 #include <lemon/list_graph.h>
@@ -88,6 +91,7 @@ namespace noob
 
 
 		protected:
+			
 			void remove_body(noob::body_handle) noexcept(true);
 			void remove_ghost(noob::ghost_handle) noexcept(true);
 			// void remove_joint(noob::joint_handle) noexcept(true);
@@ -98,7 +102,6 @@ namespace noob
 
 			const int NUM_RESERVED_NODES = 8192;			
 			const int NUM_RESERVED_ARCS = 8192;
-
 
 			noob::duration update_time;
 			noob::duration draw_time;
@@ -114,6 +117,9 @@ namespace noob
 			noob::ghosts_holder ghosts;
 
 			noob::component<noob::actor> actors;
+
+			// Used as reflection for void*.
+			rde::vector<uint64_t> bt_info;	
 
 			rde::vector<noob::actor_event> actor_mq;
 			uint32_t actor_mq_count;

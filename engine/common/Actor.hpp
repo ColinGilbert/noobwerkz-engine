@@ -13,6 +13,8 @@
 #include "ScaledModel.hpp"
 #include "Armature.hpp"
 #include "ShadingVariant.hpp"
+#include "NoobCommon.hpp"
+#include "StageTypes.hpp"
 
 namespace noob
 {
@@ -39,7 +41,7 @@ namespace noob
 	struct actor
 	{
 		actor() noexcept(true) : alive(true), stance(noob::actor::stance_type::STANDING), activity(noob::actor::activity_type::GUARDING), mentality(noob::actor::mentality_type::ALERT), velocity(noob::vec3(0.0, 0.0, 0.0)), incline(0.0) {}
-
+		
 		// These are basic stances upon which all other activities are animated.
 		enum class stance_type : uint16_t { STANDING = 0, MOUNTED = 4, SITTING = 5, KNEELING = 6, PRONE = 7, DOWN = 8 };
 
@@ -47,6 +49,7 @@ namespace noob
 
 		enum class mentality_type : uint16_t { ALERT = 0, AGGRESSIVE = 1, DEFENSIVE = 2, PANIC = 3, RELAXED = 4, UNCONSCIOUS = 5 };
 
+		static const noob::stage_item_type type = noob::stage_item_type::ACTOR;
 		bool alive;
 
 		noob::actor::stance_type stance;
@@ -56,7 +59,14 @@ namespace noob
 		noob::ghost_handle ghost;
 		noob::vec3 velocity, target_pos;
 		float incline;
+	};
 
+	struct scenery
+	{
+		//constexpr noob::stage_item::type type = 
+		noob::body_handle body;
+		noob::shader shading;
+		noob::reflectance reflect;
 	};
 
 	typedef noob::component<noob::actor> actor_holder;

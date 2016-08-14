@@ -51,131 +51,22 @@ namespace noob
 		X, Y, Z
 	};
 
+	static uint64_t pack_32_to_64(uint32_t x, uint32_t y)
+	{
+		return static_cast<uint64_t>(x) << 32 | y;
+	}
+
+	static std::tuple<uint32_t, uint32_t> pack_64_to_32(uint64_t arg)
+	{
+		uint32_t x = static_cast<uint32_t>(arg >> 32);
+		uint32_t y = static_cast<uint32_t>(x);
+		return std::make_tuple(x,y);
+	}
 
 	template <typename T> int sign(T val)
 	{
 		return (T(0) < val) - (val < T(0));
 	}
-
-	//	struct vec2;
-	//	struct vec3;
-	// struct vec4;
-	// struct versor;
-	/*
-	   struct vec2
-	   {
-	   vec2(); 
-	   vec2(float x, float y);
-
-	   std::array<float,2> v;
-
-	   float& operator[](int x) 
-	   {
-	   return v[x];
-	   }
-
-
-	   float get_opIndex(int i) const
-
-	   {
-	   if (i > 1 ) return v[1];
-	   if (i < 0) return v[0];
-	   return v[i];
-	   }
-
-	   void set_opIndex(int i, float value)
-	   {
-	   if (i > 2 && i < 0) return;
-	   v[i] = value;
-	   }
-
-
-	   std::string to_string() const
-	   {
-	   fmt::MemoryWriter w;
-	   w << "(" << v[0] << ", " << v[1] << ")";
-	   return w.str();
-	   }
-	   };
-
-	   struct vec3
-	   {
-	   vec3();
-	// create from 3 scalars
-	vec3(float x, float y, float z);
-	// create from vec2 and a scalar
-	vec3(const vec2& vv, float z);
-	// create from truncated vec4
-	vec3(const vec4& vv);
-	vec3(const vec3& vv);
-	vec3(const btVector3&);
-	vec3(const PolyMesh::Point&);
-	vec3(const Eigen::Vector3f&);
-	// Whatever the hell you gotta do to compile, man...
-	vec3(const Eigen::Block<const Eigen::Matrix<float, 4, 1>, 3, 1, false> n)
-	{
-	v[0] = n[0];
-	v[1] = n[1];
-	v[2] = n[2];
-	}
-	vec3(const std::array<float, 3>&);
-
-	// add vector to vector
-	vec3 operator+(const vec3& rhs) const;
-	// add scalar to vector
-	vec3 operator+(float rhs) const;
-	// because user's expect this too
-	vec3& operator+=(const vec3& rhs);
-	// subtract vector from vector
-	vec3 operator-(const vec3& rhs) const;
-	// add vector to vector
-	vec3 operator-(float rhs) const;
-	// because users expect this too
-	vec3& operator-=(const vec3& rhs);
-	// multiply with scalar
-	vec3 operator*(float rhs) const;
-	// because users expect this too
-	vec3& operator*=(float rhs);
-	// divide vector by scalar
-	vec3 operator/(float rhs) const;
-	// because users expect this too
-	vec3& operator=(const vec3& rhs);
-
-	bool operator==(const vec3& rhs) const;
-	bool operator!=(const vec3& rhs) const;
-
-	// internal data
-	std::array<float,3> v;
-
-	float& operator[](int x)
-	{
-		return v[x];
-	}
-
-	float get_opIndex(int i) const
-
-	{
-		if (i > 2 ) return v[2];
-		if (i < 0) return v[0];
-		return v[i];
-	}
-
-	void set_opIndex(int i, float value)
-	{
-		if (i > 2 && i < 0) return;
-		v[i] = value;
-	}
-
-	std::string to_string() const
-	{
-		fmt::MemoryWriter w;
-		w << "(" << v[0] << ", " << v[1] << ", " << v[2] << ")";
-		return w.str();
-	}
-
-};
-*/
-
 
 	static bool compare_floats(float a, float b)
 	{

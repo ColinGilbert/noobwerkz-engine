@@ -11,8 +11,8 @@ void noob::ghost::init(btCollisionWorld* world, const noob::shape& shape_arg, co
 	//logger::log("[Ghost] about to set world transform");
 	inner->setWorldTransform(trans);
 	world->addCollisionObject(inner);
-	noob::globals& g = noob::globals::get_instance();
-	inner->setUserPointer(reinterpret_cast<void*>(&g.ghost_body_descriptor));
+	// noob::globals& g = noob::globals::get_instance();
+	// inner->setUserPointer(static_cast<void*>(&g.ghost_body_descriptor));
 	// inner->setUserIndex(std::numeric_limits<uint32_t>::max());
 }
 

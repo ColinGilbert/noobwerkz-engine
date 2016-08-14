@@ -83,7 +83,6 @@ void noob::stage::update(double dt) noexcept(true)
 
 	noob::globals& g = noob::globals::get_instance();
 	g.profile_run.stage_physics_time += update_time;
-
 }
 
 
@@ -215,13 +214,16 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 noob::body_handle noob::stage::add_body(const noob::body_type b_type, const noob::shape_handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true) 
 {
 	noob::globals& g = noob::globals::get_instance();
+	
 	noob::body b;
 	b.init(dynamics_world, b_type, g.shapes.get(shape_h), mass, pos, orient, ccd);	
+	
 	body_handle bod_h = bodies.add(b);
-	b = bodies.get(bod_h);
-	// uint32_t prepped_int = bod_h.get_inner() - std::numeric_limits<uint32_t>::max() - 1;
-	// b.inner->setUserIndex(bod_h.get_inner());//static_cast<int>(prepped_int));
-	b.inner->setUserPointer(static_cast<void*>(&g.physical_body_descriptor));
+	noob::body* b_ptr = std::get<1>(bodies.get_ptr_mutable(bod_h));
+	
+	b_ptr->inner->setUserIndex(bod_h.get_inner());
+	b_ptr->inner->setUserPointer(static_cast<void*>(&g.physical_body_descriptor));
+
 	return bod_h;
 }
 
@@ -234,14 +236,10 @@ noob::ghost_handle noob::stage::add_ghost(const noob::shape_handle shape_h, cons
 	temp_ghost.init(dynamics_world, g.shapes.get(shape_h), pos, orient);
 
 	noob::ghost_handle ghost_h = ghosts.add(temp_ghost);
-	temp_ghost = ghosts.get(ghost_h);
-/*
-	fmt::MemoryWriter ww;
-	ww << ghost_h.get_inner();
-	logger::log(ww.str());
-*/
-	temp_ghost.inner->setUserIndex(ghost_h.get_inner());
-	temp_ghost.inner->setUserPointer(static_cast<void*>(&g.ghost_body_descriptor));
+	noob::ghost* g_ptr = std::get<1>(ghosts.get_ptr_mutable(ghost_h));
+
+	g_ptr->inner->setUserIndex(ghost_h.get_inner());
+	g_ptr->inner->setUserPointer(static_cast<void*>(&g.ghost_body_descriptor));
 	
 	return ghost_h;
 }
@@ -272,6 +270,7 @@ noob::actor_handle noob::stage::add_actor(const noob::actor_blueprints_handle bp
 
 	noob::actor a;
 	a.ghost = add_ghost(bp.bounds, pos, orient);
+	
 	noob::body_variant b_var;
 	b_var.type = noob::pos_type::GHOST;
 	b_var.index = a.ghost.get_inner();	
@@ -279,6 +278,11 @@ noob::actor_handle noob::stage::add_actor(const noob::actor_blueprints_handle bp
 	add_to_graph(b_var, bp.bounds, bp.shader, bp.reflect);
 
 	noob::actor_handle a_h = actors.add(a);
+	bt_info.push_back(pack_32_to_64(static_cast<uint32_t>(a.type), a_h.get_inner()));
+
+	ghost* g_ptr = std::get<1>(ghosts.get_ptr_mutable(a.ghost));
+	
+	g_ptr->inner->setUserPointer(static_cast<void*>(&(bt_info[bt_info.size() - 1])));
 
 	// fmt::MemoryWriter ww;
 	// ww << "[Stage] - Created actor " << a_h.get_inner() << " with actor blueprints " << bp_h.get_inner() << ", details: " << bp.to_string();
@@ -420,6 +424,7 @@ noob::light_handle noob::stage::get_light(unsigned int i) const noexcept(true)
 	return l;
 }
 
+
 void noob::stage::remove_body(noob::body_handle h) noexcept(true) 
 {
 	//if (bodies.exists(h) && h.get_inner() != 0)
@@ -493,19 +498,14 @@ std::vector<noob::contact_point> noob::stage::get_intersections(const noob::ghos
 						if (pt.getDistance() < 0.0f)
 						{
 							noob::contact_point cp;
-							noob::body_descriptor* bd_ptr = static_cast<noob::body_descriptor*>(bt_obj->getUserPointer());
-							bool is_phyz = bd_ptr->is_physical();
-							if (is_phyz == true)
-							{
-								cp.handle.type = noob::pos_type::PHYSICAL;
-							}
-							else
-							{
-								cp.handle.type = noob::pos_type::GHOST;
-							}
-
-							cp.handle.index = bt_obj->getUserIndex();
-							cp.handle.index;// -= std::numeric_limits<int>::max() + 1;
+							//noob::body_descriptor* bd_ptr = static_cast<noob::body_descriptor*>(bt_obj->getUserPointer());
+							//bool is_phyz = bd_ptr->is_physical();
+							
+							uint64_t bt_info = *(static_cast<uint64_t*>(bt_obj->getUserPointer()));
+							
+							std::tuple<uint32_t, uint32_t> unpacked = noob::pack_64_to_32(bt_info);
+							cp.item_type = static_cast<noob::stage_item_type>(std::get<0>(unpacked));
+							cp.index = std::get<1>(unpacked);
 							cp.pos_a = vec3_from_bullet(pt.getPositionWorldOnA());
 							cp.pos_b = vec3_from_bullet(pt.getPositionWorldOnB());
 							cp.normal_on_b = vec3_from_bullet(pt.m_normalWorldOnB);
@@ -553,6 +553,7 @@ void noob::stage::print_ghost_intersections(const noob::ghost_handle h) const no
 
 // }
 // }
+
 
 std::vector<noob::contact_point> noob::stage::get_intersections(const noob::actor_handle ah) const noexcept(true)
 {

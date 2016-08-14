@@ -53,7 +53,7 @@ namespace noob
 		noob::shape::type shape_type;
 		bool physics_valid;
 		noob::vec3 scales;
-		std::array<float, 4> dims; // Hack to allow finding out model dimensions
+		std::array<float, 4> dims; // Hack to allow finding out model dimensions. TODO: Remove soon!
 		btCollisionShape* inner_shape;
 	};
 }

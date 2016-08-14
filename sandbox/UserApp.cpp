@@ -1,6 +1,8 @@
 #include "Application.hpp"
 #include <cmath>
 #include <random>
+#include "ContactPoint.hpp"
+
 // #include "Shiny.h"
 
 // TODO: Insert the callback function here
@@ -45,7 +47,7 @@ void noob::application::user_update(double dt)
 	noob::globals& g = noob::globals::get_instance();
 	noob::time nowtime = noob::clock::now();
 	noob::duration time_since_update = nowtime - last_ui_update;
-	const uint64_t interval = 500;
+	const uint64_t interval = 3000;
 	if (noob::millis(time_since_update) > interval - 1)
 	{
 		noob::profiler_snap snap = g.profile_run;
