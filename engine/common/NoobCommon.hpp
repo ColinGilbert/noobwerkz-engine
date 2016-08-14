@@ -27,13 +27,14 @@ namespace noob
 
 	struct body_variant
 	{
+		body_variant() noexcept(true) : index(std::numeric_limits<uint32_t>::max()) {}
 		pos_type type;
 		uint32_t index;
 
 		std::string to_string() const noexcept(true)
 		{
 			fmt::MemoryWriter ww;
-
+			ww << "bod(";
 			switch(type)
 			{
 				case (noob::pos_type::GHOST):
@@ -53,7 +54,7 @@ namespace noob
 					}
 			}
 
-			ww << index;
+			ww << index << ")";
 			return ww.str();
 		}
 	};
@@ -66,7 +67,6 @@ namespace noob
 		std::string to_string() const noexcept(true)
 		{
 			fmt::MemoryWriter ww;
-
 			ww << handle.to_string() << ", pos a " << pos_a.to_string() << ", pos b" << pos_b.to_string() << ", normal on b " << normal_on_b.to_string();
 			return ww.str();
 		}

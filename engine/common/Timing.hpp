@@ -20,9 +20,9 @@ namespace noob
 		return (std::chrono::duration_cast<std::chrono::nanoseconds>(d)).count();
 	}
 
-	static noob::duration divide_duration(const noob::duration d, uint64_t denom)
+	static noob::duration_fp divide_duration(const noob::duration d, uint64_t denom)
 	{
-		return noob::duration(static_cast<uint64_t>(static_cast<double>(d.count()) / static_cast<double>(denom)));
+		return noob::duration_fp(static_cast<double>(d.count()) / static_cast<double>(denom));
 	}
 
 	static std::string pretty_print_timing(const noob::duration d)
@@ -48,4 +48,32 @@ namespace noob
 
 		return ww.str();
 	}
+
+
+	static std::string pretty_print_timing(const noob::duration_fp d)
+	{
+		fmt::MemoryWriter ww;
+		double time_in_nanos = d.count();
+		double time_in_millis = time_in_nanos / 1000000.0;
+		if (time_in_millis > 1.0)
+		{
+			ww << time_in_millis << " millis";
+		}
+		else
+		{
+			double time_in_micros = time_in_nanos / 1000.0;
+			if (time_in_micros > 1.0)
+			{
+				ww << time_in_micros << " micros";
+			}
+			else
+			{
+				ww << time_in_nanos << " nanos";
+			}
+		}
+
+		return ww.str();
+	}
+
+
 }

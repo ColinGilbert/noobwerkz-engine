@@ -2,7 +2,7 @@
 
 #include "Globals.hpp"
 
-void noob::ghost::init(btCollisionWorld* const world, const noob::shape& shape_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg) noexcept(true) 
+void noob::ghost::init(btCollisionWorld* world, const noob::shape& shape_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg) noexcept(true) 
 {
 	inner = new btPairCachingGhostObject();
 	//logger::log("[Ghost] about to add collision object to world");
@@ -13,7 +13,7 @@ void noob::ghost::init(btCollisionWorld* const world, const noob::shape& shape_a
 	world->addCollisionObject(inner);
 	noob::globals& g = noob::globals::get_instance();
 	inner->setUserPointer(reinterpret_cast<void*>(&g.ghost_body_descriptor));
-	inner->setUserIndex(-1);
+	// inner->setUserIndex(std::numeric_limits<uint32_t>::max());
 }
 
 

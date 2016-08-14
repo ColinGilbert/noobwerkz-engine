@@ -21,6 +21,9 @@ void noob::stage::init() noexcept(true)
 	dynamics_world = new btDiscreteDynamicsWorld(collision_dispatcher, broadphase, solver, collision_configuration);
 	dynamics_world->setGravity(btVector3(0, -10, 0));
 
+	// For the ghost object to work correctly, we need to add a callback to our world.
+	dynamics_world->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+
 	draw_graph.reserveNode(NUM_RESERVED_NODES);
 	draw_graph.reserveArc(NUM_RESERVED_ARCS);
 
@@ -46,6 +49,7 @@ void noob::stage::tear_down() noexcept(true)
 	{
 		remove_ghost(ghost_handle::make(i));
 	}
+
 	ghosts.empty();
 
 	actors.empty();
@@ -203,7 +207,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 
 	noob::time end_time = noob::clock::now();
 	draw_time = end_time - start_time;
-	
+
 	g.profile_run.stage_draw_time += draw_time;
 }
 
@@ -215,20 +219,15 @@ noob::body_handle noob::stage::add_body(const noob::body_type b_type, const noob
 	b.init(dynamics_world, b_type, g.shapes.get(shape_h), mass, pos, orient, ccd);	
 	body_handle bod_h = bodies.add(b);
 	b = bodies.get(bod_h);
-	b.inner->setUserIndex(bod_h.get_inner());
+	// uint32_t prepped_int = bod_h.get_inner() - std::numeric_limits<uint32_t>::max() - 1;
+	// b.inner->setUserIndex(bod_h.get_inner());//static_cast<int>(prepped_int));
+	b.inner->setUserPointer(static_cast<void*>(&g.physical_body_descriptor));
 	return bod_h;
 }
 
 
 noob::ghost_handle noob::stage::add_ghost(const noob::shape_handle shape_h, const noob::vec3& pos, const noob::versor& orient) noexcept(true) 
 {
-	if (!ghosts_initialized)
-	{
-		// For the ghost object to work correctly, we need to add a callback to our world.
-		dynamics_world->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
-		ghosts_initialized = true;
-	}
-
 	noob::globals& g = noob::globals::get_instance();
 
 	noob::ghost temp_ghost;
@@ -236,7 +235,14 @@ noob::ghost_handle noob::stage::add_ghost(const noob::shape_handle shape_h, cons
 
 	noob::ghost_handle ghost_h = ghosts.add(temp_ghost);
 	temp_ghost = ghosts.get(ghost_h);
+/*
+	fmt::MemoryWriter ww;
+	ww << ghost_h.get_inner();
+	logger::log(ww.str());
+*/
 	temp_ghost.inner->setUserIndex(ghost_h.get_inner());
+	temp_ghost.inner->setUserPointer(static_cast<void*>(&g.ghost_body_descriptor));
+	
 	return ghost_h;
 }
 
@@ -264,13 +270,11 @@ noob::actor_handle noob::stage::add_actor(const noob::actor_blueprints_handle bp
 	noob::globals& g = noob::globals::get_instance();
 	noob::actor_blueprints bp = g.actor_blueprints.get(bp_h);
 
-
 	noob::actor a;
 	a.ghost = add_ghost(bp.bounds, pos, orient);
 	noob::body_variant b_var;
 	b_var.type = noob::pos_type::GHOST;
 	b_var.index = a.ghost.get_inner();	
-
 
 	add_to_graph(b_var, bp.bounds, bp.shader, bp.reflect);
 
@@ -418,26 +422,27 @@ noob::light_handle noob::stage::get_light(unsigned int i) const noexcept(true)
 
 void noob::stage::remove_body(noob::body_handle h) noexcept(true) 
 {
-	if (bodies.exists(h) && h.get_inner() != 0)
+	//if (bodies.exists(h) && h.get_inner() != 0)
+	//{
+	noob::body b = bodies.get(h);
+	if (b.physics_valid)
 	{
-		noob::body b = bodies.get(h);
-		if (b.physics_valid)
-		{
-			dynamics_world->removeRigidBody(b.inner);
-			delete b.inner;
-		}
-	}	
+		dynamics_world->removeRigidBody(b.inner);
+		delete b.inner;
+	}
+	//}	
 }
 
 
 void noob::stage::remove_ghost(noob::ghost_handle h) noexcept(true) 
 {
-	if (ghosts.exists(h) && h.get_inner() != 0)
-	{
-		noob::ghost b = ghosts.get(h);
-		dynamics_world->removeCollisionObject(b.inner);
-		delete b.inner;
-	}	
+
+	// if (ghosts.exists(h) && h.get_inner() != 0)
+	//{
+	noob::ghost b = ghosts.get(h);
+	dynamics_world->removeCollisionObject(b.inner);
+	delete b.inner;
+	//}	
 }
 
 
@@ -470,14 +475,13 @@ std::vector<noob::contact_point> noob::stage::get_intersections(const noob::ghos
 		{
 			collision_pair->m_algorithm->getAllContactManifolds(manifold_array);
 		}
-
 		for (size_t j = 0; j < manifold_array.size(); ++j)
 		{
 			btPersistentManifold* manifold = manifold_array[j];
 
 			// Avoid duplicates
-			if (manifold->getBody0() == temp_ghost.inner)
-			{
+			// if (manifold->getBody1() != temp_ghost.inner)
+			// {
 				const btCollisionObject* bt_obj = manifold->getBody1();
 				// Sanity check
 				const int index = bt_obj->getUserIndex();
@@ -486,12 +490,12 @@ std::vector<noob::contact_point> noob::stage::get_intersections(const noob::ghos
 					for (size_t p = 0; p < manifold->getNumContacts(); ++p)
 					{
 						const btManifoldPoint& pt = manifold->getContactPoint(p);
-
 						if (pt.getDistance() < 0.0f)
 						{
 							noob::contact_point cp;
-
-							if (static_cast<noob::body_descriptor*>(bt_obj->getUserPointer())->is_physical() == true)
+							noob::body_descriptor* bd_ptr = static_cast<noob::body_descriptor*>(bt_obj->getUserPointer());
+							bool is_phyz = bd_ptr->is_physical();
+							if (is_phyz == true)
 							{
 								cp.handle.type = noob::pos_type::PHYSICAL;
 							}
@@ -501,7 +505,7 @@ std::vector<noob::contact_point> noob::stage::get_intersections(const noob::ghos
 							}
 
 							cp.handle.index = bt_obj->getUserIndex();
-
+							cp.handle.index;// -= std::numeric_limits<int>::max() + 1;
 							cp.pos_a = vec3_from_bullet(pt.getPositionWorldOnA());
 							cp.pos_b = vec3_from_bullet(pt.getPositionWorldOnB());
 							cp.normal_on_b = vec3_from_bullet(pt.m_normalWorldOnB);
@@ -511,7 +515,7 @@ std::vector<noob::contact_point> noob::stage::get_intersections(const noob::ghos
 					}
 				}
 			}
-		}
+		// }
 	}
 
 	return results;
@@ -550,12 +554,29 @@ void noob::stage::print_ghost_intersections(const noob::ghost_handle h) const no
 // }
 // }
 
+std::vector<noob::contact_point> noob::stage::get_intersections(const noob::actor_handle ah) const noexcept(true)
+{
+	noob::actor a = actors.get(ah);
+	return get_intersections(a.ghost);
+}
+
 
 void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 {
 	noob::actor a = actors.get(ah);
 
+	// noob::ghost_handle ghost;
+	// noob::vec3 velocity, target_pos;
+	// float incline;
 
+	std::vector<noob::contact_point> cps = get_intersections(ah);
+
+	noob::vec3 gravity(vec3_from_bullet(dynamics_world->getGravity()));
+
+	//if (temp_ghost)
+	{
+
+	}
 }
 
 /*

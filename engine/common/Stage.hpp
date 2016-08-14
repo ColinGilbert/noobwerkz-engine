@@ -39,7 +39,7 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.1, 0.1, 0.1, 0.1)), bodies_mapping(draw_graph), /* model_mats_mapping(draw_graph),*/ basic_models_mapping(draw_graph), shaders_mapping(draw_graph), reflectances_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph), ghosts_initialized(false) {}
+			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.1, 0.1, 0.1, 0.1)), bodies_mapping(draw_graph), /* model_mats_mapping(draw_graph),*/ basic_models_mapping(draw_graph), shaders_mapping(draw_graph), reflectances_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph) {}
 
 			~stage() noexcept(true);
 
@@ -65,7 +65,6 @@ namespace noob
 
 			noob::actor_handle add_actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3&, const noob::versor&);
 
-
 			void scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
 
 			void set_light(unsigned int, const noob::light_handle) noexcept(true);
@@ -76,6 +75,8 @@ namespace noob
 
 			std::vector<noob::contact_point> get_intersections(const noob::ghost_handle) const noexcept(true);
 
+			std::vector<noob::contact_point> get_intersections(const noob::actor_handle) const noexcept(true);
+			
 			// Dumps a readable graph format onto disk. Super useful for debug.
 			void write_graph(const std::string& filename) const noexcept(true);
 
@@ -137,7 +138,5 @@ namespace noob
 
 			// TODO: Make more flexible.
 			std::array<noob::light_handle, MAX_LIGHTS> lights;
-
-			bool ghosts_initialized;
 	};
 }
