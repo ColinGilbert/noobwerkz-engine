@@ -322,7 +322,7 @@ void noob::application::step()
 	if (!paused)
 	{
 		// start_time 
-		double d = (1.0/ static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(time_since).count()));
+		double d = (1.0 / static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(time_since).count()));
 		update(d);
 	}
 

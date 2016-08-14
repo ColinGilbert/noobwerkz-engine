@@ -7,7 +7,7 @@ SAMPLER2D(texture_0, 0);
 void main()
 {
 	// vec3 position = normalize(v_position);
-	vec3 position = v_position;
+	vec3 position = mul(v_position, model_scales.xyz);
 	vec3 normal_blend = normalize(max(abs(v_normal), 0.0001));
 
 	float b = normal_blend.x + normal_blend.y + normal_blend.z;
@@ -18,9 +18,9 @@ void main()
 	// vec4 yaxis = vec4(0.0, 1.0, 0.0, 1.0);
 	// vec4 zaxis = vec4(0.0, 0.0, 1.0, 1.0);
 
-	vec4 xaxis = vec4(texture2D(texture_0, position.yz * tex_scales.x * model_scales.x).rgb, 1.0);
-	vec4 yaxis = vec4(texture2D(texture_0, position.xz * tex_scales.y * model_scales.y).rgb, 1.0);
-	vec4 zaxis = vec4(texture2D(texture_0, position.xy * tex_scales.z * model_scales.z).rgb, 1.0);
+	vec4 xaxis = vec4(texture2D(texture_0, position.yz * tex_scales.x).rgb, 1.0);
+	vec4 yaxis = vec4(texture2D(texture_0, position.xz * tex_scales.y).rgb, 1.0);
+	vec4 zaxis = vec4(texture2D(texture_0, position.xy * tex_scales.z).rgb, 1.0);
 
 	vec4 tex = xaxis * normal_blend.x + yaxis * normal_blend.y + zaxis * normal_blend.z;
 

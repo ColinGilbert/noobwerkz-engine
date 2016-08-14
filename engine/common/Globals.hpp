@@ -193,7 +193,7 @@ namespace noob
 			noob::fast_hashtable shapes_to_models;
 
 			rde::hash_map<rde::string, noob::shape_handle> names_to_shapes;
-			rde::hash_map<rde::string, noob::model_handle> names_to_basic_models;
+			// rde::hash_map<rde::string, noob::model_handle> names_to_basic_models;
 			rde::hash_map<rde::string, noob::shader> names_to_shaders;
 			rde::hash_map<rde::string, noob::light_handle> names_to_lights;
 			rde::hash_map<rde::string, noob::reflectance_handle> names_to_reflectances;
