@@ -15,43 +15,43 @@ namespace noob
 		{
 			public:
 
-			handle() noexcept(true) : inner(0) {}
+				handle() noexcept(true) : inner(0) {}
 
-			bool operator==(const noob::handle<T> other) const noexcept(true)
-			{
-				return (inner == other.inner);
-			}
+				bool operator==(const noob::handle<T> other) const noexcept(true)
+				{
+					return (inner == other.inner);
+				}
 
-			bool operator!=(const noob::handle<T> other) const noexcept(true)
-			{
-				return (inner != other.inner);
-			}
+				bool operator!=(const noob::handle<T> other) const noexcept(true)
+				{
+					return (inner != other.inner);
+				}
 
-			bool operator<(const noob::handle<T> other) const noexcept(true)
-			{
-				return (inner < other.inner); 
-			}
+				bool operator<(const noob::handle<T> other) const noexcept(true)
+				{
+					return (inner < other.inner); 
+				}
 
-			bool operator>(const noob::handle<T> other) const noexcept(true)
-			{
-				return (inner > other.inner); 
-			}
+				bool operator>(const noob::handle<T> other) const noexcept(true)
+				{
+					return (inner > other.inner); 
+				}
 
-			uint32_t get_inner() const noexcept(true)
-			{
-				return inner;
-			}
+				uint32_t get_inner() const noexcept(true)
+				{
+					return inner;
+				}
 
-			static handle make(uint32_t i)
-			{
-				handle h;
-				h.inner = i;
-				return h;
-			}
+				static handle make(uint32_t i)
+				{
+					handle h;
+					h.inner = i;
+					return h;
+				}
 
 			protected:
 
-			uint32_t inner;
+				uint32_t inner;
 		};
 
 	template <typename T>
@@ -69,16 +69,22 @@ namespace noob
 					return items[0];
 				}	
 			}
-/*
-			T& get_ref(handle<T> h) noexcept(true)
+			std::tuple<bool, T*> get_ptr(handle<T> h) const noexcept(true)
 			{
-				return get_ref(h.get_inner());
+				if (exists(h))
+				{
+					return std::make_tuple(true, &(items[h.get_inner()]));
+				}
+				else
+				{
+					return std::make_tuple(false, &(items[h.get_inner()]));
+				}
+
 			}
-*/
 			inline handle<T> add(const T& t) noexcept(true)
 			{
 				items.push_back(t);
-				
+
 				return handle<T>::make(items.size() - 1);
 			}
 
