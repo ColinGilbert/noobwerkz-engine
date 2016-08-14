@@ -5,46 +5,6 @@
 #include "Graphics.hpp"
 
 #include "format.h"
-//#include "shaderc.h"
-
-// bgfx::VertexDecl noob::graphics::mesh_vertex::ms_decl;
-/*
-std::unordered_map<std::string, noob::graphics::texture> noob::graphics::global_textures;
-std::unordered_map<std::string, noob::graphics::uniform> noob::graphics::uniforms;
-std::unordered_map<std::string, noob::graphics::sampler> noob::graphics::samplers;
-std::unordered_map<std::string, noob::graphics::shader> noob::graphics::shaders;
-
-const noob::graphics::uniform noob::graphics::invalid_uniform;
-
-const noob::graphics::uniform noob::graphics::colour_0;
-const noob::graphics::uniform noob::graphics::colour_1;
-const noob::graphics::uniform noob::graphics::colour_2;
-const noob::graphics::uniform noob::graphics::colour_3;
-const noob::graphics::uniform noob::graphics::blend_0;
-const noob::graphics::uniform noob::graphics::blend_1;
-const noob::graphics::uniform noob::graphics::tex_scales;
-const noob::graphics::uniform noob::graphics::normal_mat;
-const noob::graphics::uniform noob::graphics::normal_mat_modelspace;
-const noob::graphics::uniform noob::graphics::eye_pos;
-const noob::graphics::uniform noob::graphics::eye_pos_normalized;
-const noob::graphics::uniform noob::graphics::ambient;
-
-const noob::graphics::uniform noob::graphics::light_rgb_falloff;
-const noob::graphics::uniform noob::graphics::light_pos_radius;
-
-// const noob::graphics::uniform noob::graphics::colour_attenuation;
-// const noob::graphics::uniform noob::graphics::ambient_falloff;
-
-const noob::graphics::uniform noob::graphics::specular_shine;
-const noob::graphics::uniform noob::graphics::diffuse;
-const noob::graphics::uniform noob::graphics::emissive;
-
-const noob::graphics::uniform noob::graphics::fog;
-const noob::graphics::uniform noob::graphics::rough_albedo_fresnel;
-
-const noob::graphics::sampler noob::graphics::invalid_texture;
-const noob::graphics::sampler noob::graphics::texture_0;
-*/
 
 void noob::graphics::init(uint32_t width, uint32_t height)
 {
@@ -71,6 +31,13 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	///   - `u_modelViewProj mat4` - concatenated model view projection matrix.
 	///   - `u_alphaRef float` - alpha reference value for alpha test.	
 	// Add initial defaults (invalid stuff) to map
+
+	const bgfx::Caps* caps = bgfx::getCaps();
+
+	if (BGFX_CAPS_INSTANCING & caps->supported)
+	{
+		instancing = true;
+	}
 
 	bgfx::ProgramHandle h;
 	h.idx = bgfx::invalidHandle;

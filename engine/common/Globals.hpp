@@ -181,6 +181,7 @@ namespace noob
 
 		protected:
 
+			// Hack used to set the shape's index-to-self (ugly and soon-to-be gone, but not in a critical codepath)
 			shape_handle add_shape(const noob::shape& s)
 			{
 				noob::shape temp = s;

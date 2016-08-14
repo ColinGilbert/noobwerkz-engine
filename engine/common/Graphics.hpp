@@ -17,7 +17,7 @@ namespace noob
 
 		static graphics* ptr_to_instance;
 
-		graphics() noexcept(true) {}
+		graphics() noexcept(true) : instancing(false) {}
 
 		graphics(const graphics& rhs) noexcept(true)
 		{
@@ -76,13 +76,14 @@ namespace noob
 		{
 			bgfx::TextureHandle handle;
 		};
-
+		
 		struct shader
 		{
 			bgfx::ProgramHandle program;
 			std::vector<noob::graphics::uniform> uniforms;
 			std::vector<noob::graphics::sampler> samplers;	
 		};
+
 
 		void init(uint32_t width, uint32_t height);
 		void destroy();
@@ -124,8 +125,6 @@ namespace noob
 			return bgfx::copy(&payload[0], payload.size());
 		}
 
-
-
 		// Uniform getters
 		noob::graphics::uniform get_invalid_uniform() { return invalid_uniform; }
 		noob::graphics::uniform get_colour_0() { return colour_0; } 
@@ -152,8 +151,11 @@ namespace noob
 		noob::graphics::sampler get_invalid_texture() { return invalid_texture; }
 		noob::graphics::sampler get_texture_0() { return texture_0; }
 
+		bool instancing_supported() const { return instancing; }
+
 		protected:
 
+		bool instancing;
 		// Uniforms
 		noob::graphics::uniform invalid_uniform, colour_0, colour_1, colour_2, colour_3, blend_0, blend_1, model_scales, tex_scales, normal_mat, normal_mat_modelspace, eye_pos, eye_pos_normalized, ambient, light_pos_radius, light_rgb_falloff, specular_shine, diffuse, emissive, fog, rough_albedo_fresnel;
 		noob::graphics::sampler invalid_texture, texture_0;

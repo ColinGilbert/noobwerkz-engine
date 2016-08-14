@@ -7,40 +7,40 @@
 void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type type_arg, const noob::shape& shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true) 
 {
 	btTransform start_transform;
-	
+
 	start_transform.setRotation(btQuaternion(orient.q[0], orient.q[1], orient.q[2], orient.q[3]));
 	start_transform.setOrigin(btVector3(pos.v[0], pos.v[1], pos.v[2]));
 
 	float _mass = mass;
-	
+
 	type = type_arg;
-	
+
 	switch(type)
 	{
 		case(noob::body_type::DYNAMIC):
-		{
-			break;
-		}
+			{
+				break;
+			}
 		case(noob::body_type::KINEMATIC):
-		{
-			_mass = 0.0;
-			break;
-		}
+			{
+				_mass = 0.0;
+				break;
+			}
 		case(noob::body_type::STATIC):
-		{
-			_mass = 0.0;
-			break;
-		}
+			{
+				_mass = 0.0;
+				break;
+			}
 		default:
-		{
-			break;
-		}
+			{
+				break;
+			}
 	};
 
 
 	btVector3 inertia(0.0, 0.0, 0.0);
 	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
-	
+
 	if (type == noob::body_type::DYNAMIC)
 	{
 		shape.inner_shape->calculateLocalInertia(_mass, inertia);
@@ -48,9 +48,9 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type typ
 
 	btRigidBody::btRigidBodyConstructionInfo ci(_mass, motion_state, shape.inner_shape, inertia);
 	inner = new btRigidBody(ci);
-	
+
 	set_ccd(ccd);
-	
+
 	dynamics_world->addRigidBody(inner);
 	noob::globals& g = noob::globals::get_instance();
 	physics_valid = true;	
@@ -79,7 +79,6 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type typ
 	physics_valid = true;
 }
 
-
 /*
    void noob::body::set_position(const noob::vec3& pos)
    {
@@ -89,8 +88,7 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type typ
    void noob::body::set_orientation(const noob::versor& orient)
    {
    }
-   */
-/*
+
 void noob::body::set_self_controlled(bool b) noexcept(true) 
 {
 	if (b == true)

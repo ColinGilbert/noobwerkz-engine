@@ -28,35 +28,7 @@ namespace noob
 		body_variant() noexcept(true) : index(std::numeric_limits<uint32_t>::max()) {}
 		pos_type type;
 		uint32_t index;
-/*
-		std::string to_string() const noexcept(true)
-		{
-			switch(type)
-			{
-				case (noob::pos_type::GHOST):
-					{
-						return "ghost";
-					}
-				case (noob::pos_type::PHYSICAL):
-					{
-						ww << "body";
-						break;
-					}
-				case (noob::pos_type::ANIM):
-					{
-						ww << "anim";
-						break;
-					}
-				default:
-				{
-					ww << "invalid";
-				}
-			}
-
-			return ww.str();
-		}
-*/	};
-
+	};
 
 
 	inline uint32_t get_bullet_stride_multiplier(PHY_ScalarType stride_width)

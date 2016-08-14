@@ -25,7 +25,4 @@ void noob::register_stage(asIScriptEngine* script_engine)
 
 	r = script_engine->RegisterObjectProperty("stage", "bool show_origin", asOFFSET(noob::stage, show_origin)); assert(r >= 0);	
 	r = script_engine->RegisterObjectProperty("stage", "vec4 ambient_light", asOFFSET(noob::stage, ambient_light)); assert(r >= 0);	
-
-
-	r = script_engine->RegisterObjectMethod("stage", "void print_ghost_intersections(const ghost_handle) const", asMETHOD(noob::stage, print_ghost_intersections), asCALL_THISCALL); assert(r >= 0);
 }

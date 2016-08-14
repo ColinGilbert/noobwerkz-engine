@@ -284,7 +284,8 @@ bool noob::application::eval(const std::string& name, const std::string& string_
 void noob::application::draw()
 {
 	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 1.0, 2000.0);
-
+	// bgfx::touch(0);
+	// bgfx::touch(1);
 	stage.draw(window_width, window_height, controller.get_eye_pos(), controller.get_eye_target(), controller.get_eye_up(), proj_mat);
 }
 

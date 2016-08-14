@@ -2,7 +2,6 @@
 
 #include <rdestl/fixed_array.h>
 
-
 #include <limits>
 
 #include "format.h"
@@ -48,6 +47,7 @@ namespace noob
 		enum class mentality_type : uint16_t { ALERT = 0, AGGRESSIVE = 1, DEFENSIVE = 2, PANIC = 3, RELAXED = 4, UNCONSCIOUS = 5 };
 
 		static const noob::stage_item_type type = noob::stage_item_type::ACTOR;
+		
 		bool alive;
 
 		noob::actor::stance_type stance;
@@ -61,7 +61,7 @@ namespace noob
 
 	struct scenery
 	{
-		//constexpr noob::stage_item::type type = 
+		static const noob::stage_item_type type = noob::stage_item_type::SCENERY;
 		noob::body_handle body;
 		noob::shader shader;
 		noob::reflectance_handle reflect;

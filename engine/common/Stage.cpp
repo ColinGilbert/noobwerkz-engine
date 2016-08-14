@@ -111,6 +111,8 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 		temp_lights[i] = g.lights.get(lights[i]);
 	}
 
+	bool doing_instanced = gfx.instancing_supported() && instancing;
+
 	for (lemon::ListDigraph::OutArcIt model_it(draw_graph, root_node); model_it != lemon::INVALID; ++model_it)
 	{
 		lemon::ListDigraph::Node model_node = draw_graph.target(model_it);
@@ -133,24 +135,18 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 				{
 					case (noob::pos_type::GHOST):
 						{
-							// TODO: Hopefully remove this hack
-							noob::versor original_quat = ghosts.get(ghost_handle::make(body_var.index)).get_orientation();
-							noob::versor temp_quat(original_quat.q[3], original_quat.q[2], original_quat.q[1], original_quat.q[0]); 
-
-							world_mat = noob::rotate(world_mat, temp_quat); //ghosts.get(body_var.index).get_orientation());
+							noob::versor temp_quat = ghosts.get(ghost_handle::make(body_var.index)).get_orientation();
+							world_mat = noob::rotate(world_mat, temp_quat);
 							world_mat = noob::scale(world_mat, scales);												
 							world_mat = noob::translate(world_mat, ghosts.get(ghost_handle::make(body_var.index)).get_position());
-
+							
 							break;
 						}
 
 					case (noob::pos_type::PHYSICAL):
 						{
-							// TODO: Hopefully remove this hack
-							noob::versor original_quat = bodies.get(body_handle::make(body_var.index)).get_orientation();
-							noob::versor temp_quat(original_quat.q[3], original_quat.q[2], original_quat.q[1], original_quat.q[0]); 
-
-							world_mat = noob::rotate(world_mat, temp_quat); //bodies.get(body_var.index).get_orientation());
+							noob::versor temp_quat = bodies.get(body_handle::make(body_var.index)).get_orientation();
+							world_mat = noob::rotate(world_mat, temp_quat);
 							world_mat = noob::scale(world_mat, scales);												
 							world_mat = noob::translate(world_mat, bodies.get(body_handle::make(body_var.index)).get_position());
 
@@ -158,32 +154,45 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 						}
 					default:
 						{
-							logger::log("[Stage] draw - Attempting to draw invalid body node type!");
+							logger::log("[Stage] DATA ERROR - draw(): Attempting to draw invalid body node type!");
 						}
 				}
 
-				noob::mat4 normal_mat = noob::transpose(noob::inverse((world_mat * view_mat)));
 
 				noob::reflectance temp_reflect;
 				temp_reflect = g.reflectances.get(reflectance_handle::make(reflectances_mapping[body_node]));
-
-
+				noob::mat4 normal_mat = noob::transpose(noob::inverse((world_mat * view_mat)));
+				// Do the actual draw-calling now...
 				switch(shader_h.type)
 				{
 					case(noob::shader_type::BASIC):
 						{
-							g.basic_drawer.draw(g.basic_models.get(model_handle::make(model_h)), world_mat, normal_mat, eye_pos, g.basic_shaders.get(basic_shader_handle::make(shader_h.handle)), temp_reflect, temp_lights, 0);
+							// TODO: Work this up the loop and profile, as exercise
+							if (doing_instanced)
+							{
+								// INSERT STUFF
+							}
+							{
+								g.basic_drawer.draw(g.basic_models.get(model_handle::make(model_h)), world_mat, normal_mat, eye_pos, g.basic_shaders.get(basic_shader_handle::make(shader_h.handle)), temp_reflect, temp_lights, 0);
+							}
 							break;
 						}
 					case(noob::shader_type::TRIPLANAR):
 						{
-							g.triplanar_drawer.draw(g.basic_models.get(model_handle::make(model_h)), scales, world_mat, normal_mat, eye_pos, g.triplanar_shaders.get(triplanar_shader_handle::make(shader_h.handle)), temp_reflect, temp_lights, 0);
+							// TODO: Work this up te loop and profile, as exercise
+							if (doing_instanced)
+							{
+								// INSERT STUFF
+							}
+							{
+								g.triplanar_drawer.draw(g.basic_models.get(model_handle::make(model_h)), scales, world_mat, normal_mat, eye_pos, g.triplanar_shaders.get(triplanar_shader_handle::make(shader_h.handle)), temp_reflect, temp_lights, 0);
+							}	
 							break;
 						}
 					default:
 						{
 							fmt::MemoryWriter ww;
-							ww << "[Stage] Attempting to draw with a shader that doesn't exist. WHYY??";
+							ww << "[Stage] DATA ERROR - draw():Attempting to draw with a shader that doesn't exist. WHYY??";
 							logger::log(ww.str());
 							break;
 						}
@@ -278,10 +287,6 @@ noob::actor_handle noob::stage::actor(const noob::actor_blueprints_handle bp_h, 
 	noob::ghost temp_ghost = ghosts.get(a.ghost);
 	temp_ghost.inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::ACTOR));
 	temp_ghost.inner->setUserIndex_2(a_h.index());
-	// temp_ghost.inner->setCollisionFlags(temp_ghost.inner->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
-	// fmt::MemoryWriter ww;
-	// ww << "[Stage] - Created actor " << a_h.index() << " with actor blueprints " << bp_h.index() << ", details: " << bp.to_string();
-	// logger::log(ww.str());
 
 	return a_h;
 
@@ -306,11 +311,6 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, co
 	noob::body b = bodies.get(bod_h);
 	b.inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::SCENERY));
 	b.inner->setUserIndex_2(scenery_h.index());
-
-
-	// fmt::MemoryWriter ww;
-	// ww << "[Stage] About to add scenery item with body " << b_var.index << ", shape " << shape_arg.index() << ", shader: " << shader_arg.to_string() << ", reflectance " << reflect_arg.index();
-	// logger::log(ww.str());
 
 	add_to_graph(b_var, shape_arg, shader_arg, reflect_arg);
 }
@@ -432,27 +432,21 @@ noob::light_handle noob::stage::get_light(uint32_t i) const noexcept(true)
 
 void noob::stage::remove_body(noob::body_handle h) noexcept(true) 
 {
-	//if (bodies.exists(h) && h.index() != 0)
-	//{
 	noob::body b = bodies.get(h);
 	if (b.physics_valid)
 	{
 		dynamics_world->removeRigidBody(b.inner);
 		delete b.inner;
 	}
-	//}	
 }
 
 
 void noob::stage::remove_ghost(noob::ghost_handle h) noexcept(true) 
 {
 
-	// if (ghosts.exists(h) && h.index() != 0)
-	//{
 	noob::ghost b = ghosts.get(h);
 	dynamics_world->removeCollisionObject(b.inner);
 	delete b.inner;
-	//}	
 }
 
 
@@ -493,6 +487,8 @@ std::vector<noob::contact_point> noob::stage::get_intersecting(const noob::ghost
 			const uint32_t index = bt_obj->getUserIndex_2();
 			if (index != std::numeric_limits<uint32_t>::max())
 			{
+
+				// btScalar direction = is_first_body ? btScalar(-1.0) : btScalar(1.0);
 				for (size_t p = 0; p < manifold->getNumContacts(); ++p)
 				{
 					const btManifoldPoint& pt = manifold->getContactPoint(p);
@@ -522,39 +518,6 @@ std::vector<noob::contact_point> noob::stage::get_intersecting(const noob::ghost
 	return results;
 }
 
-void noob::stage::print_ghost_intersections(const noob::ghost_handle h) const noexcept(true)
-{
-	std::vector<noob::contact_point> cps = get_intersecting(h);
-	fmt::MemoryWriter ww;
-	ww << "[Stage] Ghost A " << h.index() << " intersects with: ";
-
-	for (noob::contact_point c : cps)
-	{
-		ww << "(" << c.to_string() << "), ";
-	}
-}
-
-// TODO: Remove once we don't need:
-// btScalar direction = is_first_body ? btScalar(-1.0) : btScalar(1.0);
-
-// for (size_t p = 0; p < manifold->getNumContacts(); ++p)
-// {
-// const btManifoldPoint& pt = manifold->getContactPoint(p);
-
-// if (pt.getDistance() < 0.0f)
-// {
-// const btVector3& pt_a = pt.getPositionWorldOnA();
-// const btVector3& pt_b = pt.getPositionWorldOnB();
-// const btVector3& normal_on_b = pt.m_normalWorldOnB;
-
-
-
-// Handle collisions here. Thanks Bullet Wiki :)
-
-
-// }
-// }
-
 
 std::vector<noob::contact_point> noob::stage::get_intersecting(const noob::actor_handle ah) const noexcept(true)
 {
@@ -575,10 +538,6 @@ void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 
 	noob::vec3 gravity(vec3_from_bullet(dynamics_world->getGravity()));
 
-	//if (temp_ghost)
-	{
-
-	}
 }
 
 /*
