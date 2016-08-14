@@ -60,25 +60,24 @@ namespace noob
 			void run_ai() noexcept (true);
 
 			// Creates physics body, sensors, joints. Those get made lots.
-			noob::body_handle add_body(const noob::body_type, const noob::shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient = noob::versor(1.0, 0.0, 0.0, 0.0), bool ccd = false) noexcept(true);
-			noob::ghost_handle add_ghost(const noob::shape_handle, const noob::vec3& pos, const noob::versor& orient = noob::versor(1.0, 0.0, 0.0, 0.0)) noexcept(true);
-			noob::joint_handle add_joint(const noob::body_handle a, const noob::vec3& point_on_a, const noob::body_handle b, const noob::vec3& point_on_b) noexcept(true);
+			noob::body_handle body(const noob::body_type, const noob::shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient = noob::versor(1.0, 0.0, 0.0, 0.0), bool ccd = false) noexcept(true);
+			noob::ghost_handle ghost(const noob::shape_handle, const noob::vec3& pos, const noob::versor& orient = noob::versor(1.0, 0.0, 0.0, 0.0)) noexcept(true);
+			noob::joint_handle joint(const noob::body_handle a, const noob::vec3& point_on_a, const noob::body_handle b, const noob::vec3& point_on_b) noexcept(true);
 
-			typedef noob::handle<noob::actor> actor_handle;
 
-			noob::actor_handle add_actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3&, const noob::versor&);
+			noob::actor_handle actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3&, const noob::versor&);
 
-			void scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
+			noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
 
 			void set_light(unsigned int, const noob::light_handle) noexcept(true);
 
 			void set_directional_light(const noob::directional_light&) noexcept(true);
 
-			noob::light_handle get_light(unsigned int i) const noexcept(true);
+			noob::light_handle get_light(uint32_t) const noexcept(true);
 
-			std::vector<noob::contact_point> get_intersections(const noob::ghost_handle) const noexcept(true);
+			std::vector<noob::contact_point> get_intersecting(const noob::ghost_handle) const noexcept(true);
 
-			std::vector<noob::contact_point> get_intersections(const noob::actor_handle) const noexcept(true);
+			std::vector<noob::contact_point> get_intersecting(const noob::actor_handle) const noexcept(true);
 			
 			// Dumps a readable graph format onto disk. Super useful for debug.
 			void write_graph(const std::string& filename) const noexcept(true);
@@ -117,9 +116,7 @@ namespace noob
 			noob::ghosts_holder ghosts;
 
 			noob::component<noob::actor> actors;
-
-			// Used as reflection for void*.
-			rde::vector<uint64_t> bt_info;	
+			noob::component<noob::scenery> sceneries;
 
 			rde::vector<noob::actor_event> actor_mq;
 			uint32_t actor_mq_count;

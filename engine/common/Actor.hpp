@@ -30,13 +30,11 @@ namespace noob
 		std::string to_string() const noexcept(true)
 		{
 			fmt::MemoryWriter ww;
-			ww << "shape " << bounds.get_inner() << ", shader " << shader.to_string() << ", reflection " << reflect.get_inner() << ", strength " << strength << ", range " << range << ", defense " << defense << ", move speed " << movement_speed << ", attack speed " << attack_speed << ", stamina " << stamina << ", morale " << morale << ", LOS " << los;
+			ww << "shape " << bounds.index() << ", shader " << shader.to_string() << ", reflection " << reflect.index() << ", strength " << strength << ", range " << range << ", defense " << defense << ", move speed " << movement_speed << ", attack speed " << attack_speed << ", stamina " << stamina << ", morale " << morale << ", LOS " << los;
 			return ww.str();
 		}
 	};
 
-	typedef noob::component<noob::actor_blueprints> actor_blueprints_holder;
-	typedef noob::handle<noob::actor_blueprints> actor_blueprints_handle;
 
 	struct actor
 	{
@@ -65,12 +63,16 @@ namespace noob
 	{
 		//constexpr noob::stage_item::type type = 
 		noob::body_handle body;
-		noob::shader shading;
-		noob::reflectance reflect;
+		noob::shader shader;
+		noob::reflectance_handle reflect;
 	};
 
-	typedef noob::component<noob::actor> actor_holder;
+	typedef noob::component<noob::actor_blueprints> actor_blueprints_holder;
+	
+	typedef noob::handle<noob::actor_blueprints> actor_blueprints_handle;
 	typedef noob::handle<noob::actor> actor_handle;
+	typedef noob::handle<noob::scenery> scenery_handle;
+
 
 	// Events play a dual role: They can either be commands to an actor, or requests to make an actor interact with the world.
 	// Upon being fired off, events are pushed onto a pre-allocated stack.
@@ -82,4 +84,6 @@ namespace noob
 		noob::actor_handle from, to;
 		uint32_t index;
 	};
+
+
 }

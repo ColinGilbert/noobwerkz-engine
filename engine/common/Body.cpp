@@ -53,8 +53,6 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type typ
 	
 	dynamics_world->addRigidBody(inner);
 	noob::globals& g = noob::globals::get_instance();
-	inner->setUserPointer(static_cast<void*>(&g.physical_body_descriptor));
-	inner->setUserIndex(-1);
 	physics_valid = true;	
 }
 
@@ -76,8 +74,6 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type typ
 	inner->setLinearFactor(btVector3(_info.linear_factor.v[0], _info.linear_factor.v[1], _info.linear_factor.v[2]));
 	inner->setLinearVelocity(btVector3(_info.linear_velocity.v[0], _info.linear_velocity.v[1], _info.linear_velocity.v[2]));
 	inner->setAngularVelocity(btVector3(_info.angular_velocity.v[0], _info.angular_velocity.v[1], _info.angular_velocity.v[2]));
-	inner->setUserPointer(this);
-	inner->setUserIndex(-1);
 	set_ccd(_info.ccd);
 	dynamics_world->addRigidBody(inner);	
 	physics_valid = true;

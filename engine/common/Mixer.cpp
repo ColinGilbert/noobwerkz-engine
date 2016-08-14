@@ -9,7 +9,7 @@ bool noob::mixer::play_clip(const noob::sample_handle clip, float volume) noexce
 	size_t min_before_next = samp->min_before_next;
 
 	voice_instance to_search;
-	to_search.index = clip.get_inner();
+	to_search.index = clip.index();
 	to_search.active = true;
 	// rde::vector<voice_instance>::iterator it = rde::upper_bound(&now_playing[0], &now_playing[now_playing.size()-1], to_search, rde::less<voice_instance>());
 

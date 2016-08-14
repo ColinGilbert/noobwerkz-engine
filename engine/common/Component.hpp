@@ -37,7 +37,7 @@ namespace noob
 					return (inner > other.inner); 
 				}
 
-				uint32_t get_inner() const noexcept(true)
+				uint32_t index() const noexcept(true)
 				{
 					return inner;
 				}
@@ -62,7 +62,7 @@ namespace noob
 
 			T get(noob::handle<T> h) const  noexcept(true)
 			{
-				if (exists(h)) return items[h.get_inner()];
+				if (exists(h)) return items[h.index()];
 				else 
 				{
 					logger::log("Invalid access to component");
@@ -75,7 +75,7 @@ namespace noob
 			{
 				if (exists(h))
 				{
-					return std::make_tuple(true, &(items[h.get_inner()]));
+					return std::make_tuple(true, &(items[h.index()]));
 				}
 				else
 				{
@@ -88,7 +88,7 @@ namespace noob
 			{
 				if (exists(h))
 				{
-					return std::make_tuple(true, const_cast<T*>(&(items[h.get_inner()])));
+					return std::make_tuple(true, const_cast<T*>(&(items[h.index()])));
 				}
 				else
 				{
@@ -105,14 +105,14 @@ namespace noob
 
 			bool exists(handle<T> h) const noexcept(true)
 			{
-				return (h.get_inner() < items.size());
+				return (h.index() < items.size());
 			}
 
 			void set(handle<T> h, const T t) noexcept(true)
 			{
 				if (exists(h))
 				{
-					items[h.get_inner()] = t;
+					items[h.index()] = t;
 				}
 			}
 
@@ -159,7 +159,7 @@ namespace noob
 				{
 					if (exists(h)) 
 					{
-						T* temp = items[h.get_inner()].get();
+						T* temp = items[h.index()].get();
 						return temp;
 					}
 					else 
@@ -178,7 +178,7 @@ namespace noob
 
 				bool exists(handle<T> h) const noexcept(true)
 				{
-					bool results = h.get_inner() < items.size();
+					bool results = h.index() < items.size();
 					return results;
 				}
 
@@ -186,7 +186,7 @@ namespace noob
 				{
 					if (exists(h))
 					{
-						items[h.get_inner()] = std::move(t);
+						items[h.index()] = std::move(t);
 					}
 				}
 

@@ -185,7 +185,7 @@ namespace noob
 			{
 				noob::shape temp = s;
 				noob::shape_handle h = shapes.add(s);
-				temp.index = h.get_inner();
+				temp.index = h.index();
 				shapes.set(h, temp);
 				return h;
 			}

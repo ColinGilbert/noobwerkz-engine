@@ -28,11 +28,11 @@ bool noob::application::user_init()
 	// bp.shader = g.default_triplanar();
 	g.set_actor_blueprints(bp, "test-collisions");
 	noob::actor_blueprints_handle bph = g.get_actor_blueprints("test-collisions");
-	ah = stage.add_actor(bph, 0, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
+	ah = stage.actor(bph, 0, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
 	
 	// *profiler_text = get_profiler_text();
 	fmt::MemoryWriter ww;
-	ww << "[UserApp] Loaded actor " << ah.get_inner();
+	ww << "[UserApp] Loaded actor " << ah.index();
 	// keystrokes.push_back(std::make_tuple(noob::keyboard::keys::NUM_5, noob::keyboard::mod_keys::NONE, "switch view (currently does nothing)"));
 	logger::log("[Application] Successfully done (C++) user init.");
 	return true;
@@ -55,10 +55,10 @@ void noob::application::user_update(double dt)
 		ww << "[Application] Profiling: Frame time: " << pretty_print_timing(divide_duration(snap.total_time, interval)) << ", draw time: " << pretty_print_timing(divide_duration(snap.stage_draw_time, interval)) << ", physics time " << pretty_print_timing(divide_duration(snap.stage_physics_time, interval));
 		logger::log(ww.str());
 
-		std::vector<noob::contact_point> cps = stage.get_intersections(ah);
+		std::vector<noob::contact_point> cps = stage.get_intersecting(ah);
 	
 		fmt::MemoryWriter www;
-		www << "[UserApp] Actor (" << ah.get_inner() << "), num collisions = " << cps.size();
+		www << "[UserApp] Actor (" << ah.index() << "), num collisions = " << cps.size();
 		for (noob::contact_point cp : cps)
 		{
 			www << ", " << cp.to_string();

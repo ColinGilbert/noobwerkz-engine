@@ -194,7 +194,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 
 	if (show_origin)
 	{
-		// noob::mat4 world_mat = noob::scale(noob::identity_mat4(), shapes.get(bodies_to_shapes[b.get_inner()])->get_scales());
+		// noob::mat4 world_mat = noob::scale(noob::identity_mat4(), shapes.get(bodies_to_shapes[b.index()])->get_scales());
 		// world_mat = bodies.get(b)->get_transform() * world_mat;
 		// renderer.draw(basic_models.get(m), shaders.get(s), world_mat);
 		// bgfx::setViewTransform(view_id, view_matrix, ortho);
@@ -211,24 +211,24 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 }
 
 
-noob::body_handle noob::stage::add_body(const noob::body_type b_type, const noob::shape_handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true) 
+noob::body_handle noob::stage::body(const noob::body_type b_type, const noob::shape_handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true) 
 {
 	noob::globals& g = noob::globals::get_instance();
-	
+
 	noob::body b;
 	b.init(dynamics_world, b_type, g.shapes.get(shape_h), mass, pos, orient, ccd);	
-	
+
 	body_handle bod_h = bodies.add(b);
 	noob::body* b_ptr = std::get<1>(bodies.get_ptr_mutable(bod_h));
-	
-	b_ptr->inner->setUserIndex(bod_h.get_inner());
-	b_ptr->inner->setUserPointer(static_cast<void*>(&g.physical_body_descriptor));
+	// btCollisionObject* temp_inner = b_ptr->inner;
+	// temp_inner->setUserIndex_1();
+	// temp_inner->setUserIndex_2();
 
 	return bod_h;
 }
 
 
-noob::ghost_handle noob::stage::add_ghost(const noob::shape_handle shape_h, const noob::vec3& pos, const noob::versor& orient) noexcept(true) 
+noob::ghost_handle noob::stage::ghost(const noob::shape_handle shape_h, const noob::vec3& pos, const noob::versor& orient) noexcept(true) 
 {
 	noob::globals& g = noob::globals::get_instance();
 
@@ -236,16 +236,12 @@ noob::ghost_handle noob::stage::add_ghost(const noob::shape_handle shape_h, cons
 	temp_ghost.init(dynamics_world, g.shapes.get(shape_h), pos, orient);
 
 	noob::ghost_handle ghost_h = ghosts.add(temp_ghost);
-	noob::ghost* g_ptr = std::get<1>(ghosts.get_ptr_mutable(ghost_h));
 
-	g_ptr->inner->setUserIndex(ghost_h.get_inner());
-	g_ptr->inner->setUserPointer(static_cast<void*>(&g.ghost_body_descriptor));
-	
 	return ghost_h;
 }
 
 
-noob::joint_handle noob::stage::add_joint(const noob::body_handle a, const noob::vec3& local_point_on_a, const noob::body_handle b, const noob::vec3& local_point_on_b) noexcept(true) 
+noob::joint_handle noob::stage::joint(const noob::body_handle a, const noob::vec3& local_point_on_a, const noob::body_handle b, const noob::vec3& local_point_on_b) noexcept(true) 
 {
 	noob::body bod_a = bodies.get(a);
 	noob::body bod_b = bodies.get(b);
@@ -263,29 +259,28 @@ noob::joint_handle noob::stage::add_joint(const noob::body_handle a, const noob:
 }
 
 
-noob::actor_handle noob::stage::add_actor(const noob::actor_blueprints_handle bp_h, uint32_t team, const noob::vec3& pos, const noob::versor& orient) 
+noob::actor_handle noob::stage::actor(const noob::actor_blueprints_handle bp_h, uint32_t team, const noob::vec3& pos, const noob::versor& orient) 
 {
 	noob::globals& g = noob::globals::get_instance();
 	noob::actor_blueprints bp = g.actor_blueprints.get(bp_h);
 
 	noob::actor a;
-	a.ghost = add_ghost(bp.bounds, pos, orient);
-	
+	a.ghost = ghost(bp.bounds, pos, orient);
+
 	noob::body_variant b_var;
 	b_var.type = noob::pos_type::GHOST;
-	b_var.index = a.ghost.get_inner();	
+	b_var.index = a.ghost.index();	
 
 	add_to_graph(b_var, bp.bounds, bp.shader, bp.reflect);
 
 	noob::actor_handle a_h = actors.add(a);
-	bt_info.push_back(pack_32_to_64(static_cast<uint32_t>(a.type), a_h.get_inner()));
 
-	ghost* g_ptr = std::get<1>(ghosts.get_ptr_mutable(a.ghost));
-	
-	g_ptr->inner->setUserPointer(static_cast<void*>(&(bt_info[bt_info.size() - 1])));
-
+	noob::ghost temp_ghost = ghosts.get(a.ghost);
+	temp_ghost.inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::ACTOR));
+	temp_ghost.inner->setUserIndex_2(a_h.index());
+	// temp_ghost.inner->setCollisionFlags(temp_ghost.inner->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
 	// fmt::MemoryWriter ww;
-	// ww << "[Stage] - Created actor " << a_h.get_inner() << " with actor blueprints " << bp_h.get_inner() << ", details: " << bp.to_string();
+	// ww << "[Stage] - Created actor " << a_h.index() << " with actor blueprints " << bp_h.index() << ", details: " << bp.to_string();
 	// logger::log(ww.str());
 
 	return a_h;
@@ -293,18 +288,28 @@ noob::actor_handle noob::stage::add_actor(const noob::actor_blueprints_handle bp
 }
 
 
-void noob::stage::scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg)
+noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg)
 {
 	noob::globals& g = noob::globals::get_instance();
 
-	noob::body_handle bod_h = add_body(noob::body_type::STATIC, shape_arg, 0.0, pos_arg, orient_arg, false);
+	noob::body_handle bod_h = body(noob::body_type::STATIC, shape_arg, 0.0, pos_arg, orient_arg, false);
 
 	noob::body_variant b_var;
 	b_var.type = noob::pos_type::PHYSICAL;
-	b_var.index = bod_h.get_inner();
+	b_var.index = bod_h.index();
+
+	noob::scenery sc;
+	sc.body = bod_h;
+	sc.shader = shader_arg;
+	sc.reflect = reflect_arg;
+	noob::scenery_handle scenery_h = sceneries.add(sc);
+	noob::body b = bodies.get(bod_h);
+	b.inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::SCENERY));
+	b.inner->setUserIndex_2(scenery_h.index());
+
 
 	// fmt::MemoryWriter ww;
-	// ww << "[Stage] About to add scenery item with body " << b_var.index << ", shape " << shape_arg.get_inner() << ", shader: " << shader_arg.to_string() << ", reflectance " << reflect_arg.get_inner();
+	// ww << "[Stage] About to add scenery item with body " << b_var.index << ", shape " << shape_arg.index() << ", shader: " << shader_arg.to_string() << ", reflectance " << reflect_arg.index();
 	// logger::log(ww.str());
 
 	add_to_graph(b_var, shape_arg, shader_arg, reflect_arg);
@@ -318,7 +323,7 @@ void noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::sha
 	// Find out if the model node is in the graph. If so, cache it. If not, add it.
 	noob::scaled_model model_info = g.model_from_shape(shape_arg);
 	lemon::ListDigraph::Node model_node;
-	noob::fast_hashtable::cell* model_results = basic_models_to_nodes.lookup(model_info.model_h.get_inner());
+	noob::fast_hashtable::cell* model_results = basic_models_to_nodes.lookup(model_info.model_h.index());
 
 	if (basic_models_to_nodes.is_valid(model_results))
 	{
@@ -328,9 +333,9 @@ void noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::sha
 	{
 		model_node = draw_graph.addNode();
 
-		auto temp_cell = basic_models_to_nodes.insert(model_info.model_h.get_inner());
+		auto temp_cell = basic_models_to_nodes.insert(model_info.model_h.index());
 		temp_cell->value = draw_graph.id(model_node);
-		basic_models_mapping[model_node] = model_info.model_h.get_inner();
+		basic_models_mapping[model_node] = model_info.model_h.index();
 
 		draw_graph.addArc(root_node, model_node);
 	}
@@ -387,17 +392,17 @@ void noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::sha
 
 	scales_mapping[bod_node] = model_info.scales.v;
 
-	reflectances_mapping[bod_node] = reflect_arg.get_inner();
+	reflectances_mapping[bod_node] = reflect_arg.index();
 
 	draw_graph.addArc(shader_node, bod_node);
 
 	// TODO: Replace with stage's directional light
 	noob::light_handle light_h = g.default_light;
-	lights_mapping[bod_node] = {light_h.get_inner(), light_h.get_inner(), light_h.get_inner(), light_h.get_inner()};
+	lights_mapping[bod_node] = {light_h.index(), light_h.index(), light_h.index(), light_h.index()};
 }
 
 
-void noob::stage::set_light(unsigned int i, const noob::light_handle h) noexcept(true) 
+void noob::stage::set_light(uint32_t i, const noob::light_handle h) noexcept(true) 
 {
 	if (i < MAX_LIGHTS)
 	{
@@ -412,7 +417,7 @@ void noob::stage::set_directional_light(const noob::directional_light& l) noexce
 }
 
 
-noob::light_handle noob::stage::get_light(unsigned int i) const noexcept(true) 
+noob::light_handle noob::stage::get_light(uint32_t i) const noexcept(true) 
 {
 	noob::light_handle l;
 
@@ -427,7 +432,7 @@ noob::light_handle noob::stage::get_light(unsigned int i) const noexcept(true)
 
 void noob::stage::remove_body(noob::body_handle h) noexcept(true) 
 {
-	//if (bodies.exists(h) && h.get_inner() != 0)
+	//if (bodies.exists(h) && h.index() != 0)
 	//{
 	noob::body b = bodies.get(h);
 	if (b.physics_valid)
@@ -442,7 +447,7 @@ void noob::stage::remove_body(noob::body_handle h) noexcept(true)
 void noob::stage::remove_ghost(noob::ghost_handle h) noexcept(true) 
 {
 
-	// if (ghosts.exists(h) && h.get_inner() != 0)
+	// if (ghosts.exists(h) && h.index() != 0)
 	//{
 	noob::ghost b = ghosts.get(h);
 	dynamics_world->removeCollisionObject(b.inner);
@@ -451,7 +456,7 @@ void noob::stage::remove_ghost(noob::ghost_handle h) noexcept(true)
 }
 
 
-std::vector<noob::contact_point> noob::stage::get_intersections(const noob::ghost_handle ghost_h) const noexcept(true) 
+std::vector<noob::contact_point> noob::stage::get_intersecting(const noob::ghost_handle ghost_h) const noexcept(true) 
 {
 	noob::ghost temp_ghost = ghosts.get(ghost_h);
 
@@ -483,39 +488,35 @@ std::vector<noob::contact_point> noob::stage::get_intersections(const noob::ghos
 		for (size_t j = 0; j < manifold_array.size(); ++j)
 		{
 			btPersistentManifold* manifold = manifold_array[j];
-
-			// Avoid duplicates
-			// if (manifold->getBody1() != temp_ghost.inner)
-			// {
-				const btCollisionObject* bt_obj = manifold->getBody1();
-				// Sanity check
-				const int index = bt_obj->getUserIndex();
-				if (index > -1)
+			const btCollisionObject* bt_obj = manifold->getBody0();
+			// Sanity check
+			const uint32_t index = bt_obj->getUserIndex_2();
+			if (index != std::numeric_limits<uint32_t>::max())
+			{
+				for (size_t p = 0; p < manifold->getNumContacts(); ++p)
 				{
-					for (size_t p = 0; p < manifold->getNumContacts(); ++p)
+					const btManifoldPoint& pt = manifold->getContactPoint(p);
+					if (pt.getDistance() < 0.0f)
 					{
-						const btManifoldPoint& pt = manifold->getContactPoint(p);
-						if (pt.getDistance() < 0.0f)
-						{
-							noob::contact_point cp;
-							//noob::body_descriptor* bd_ptr = static_cast<noob::body_descriptor*>(bt_obj->getUserPointer());
-							//bool is_phyz = bd_ptr->is_physical();
-							
-							uint64_t bt_info = *(static_cast<uint64_t*>(bt_obj->getUserPointer()));
-							
-							std::tuple<uint32_t, uint32_t> unpacked = noob::pack_64_to_32(bt_info);
-							cp.item_type = static_cast<noob::stage_item_type>(std::get<0>(unpacked));
-							cp.index = std::get<1>(unpacked);
-							cp.pos_a = vec3_from_bullet(pt.getPositionWorldOnA());
-							cp.pos_b = vec3_from_bullet(pt.getPositionWorldOnB());
-							cp.normal_on_b = vec3_from_bullet(pt.m_normalWorldOnB);
+						noob::contact_point cp;
+						//noob::body_descriptor* bd_ptr = static_cast<noob::body_descriptor*>(bt_obj->getUserPointer());
+						//bool is_phyz = bd_ptr->is_physical();
 
-							results.push_back(cp);
-						}
+						cp.item_type = static_cast<noob::stage_item_type>(bt_obj->getUserIndex_1());
+						cp.index = index;
+						cp.pos_a = vec3_from_bullet(pt.getPositionWorldOnA());
+						cp.pos_b = vec3_from_bullet(pt.getPositionWorldOnB());
+						cp.normal_on_b = vec3_from_bullet(pt.m_normalWorldOnB);
+
+						results.push_back(cp);
 					}
 				}
 			}
-		// }
+			else
+			{
+				logger::log("[Stage] DATA ERROR: Invalid objects found during collision");
+			}
+		}
 	}
 
 	return results;
@@ -523,9 +524,9 @@ std::vector<noob::contact_point> noob::stage::get_intersections(const noob::ghos
 
 void noob::stage::print_ghost_intersections(const noob::ghost_handle h) const noexcept(true)
 {
-	std::vector<noob::contact_point> cps = get_intersections(h);
+	std::vector<noob::contact_point> cps = get_intersecting(h);
 	fmt::MemoryWriter ww;
-	ww << "[Stage] Ghost A " << h.get_inner() << " intersects with: ";
+	ww << "[Stage] Ghost A " << h.index() << " intersects with: ";
 
 	for (noob::contact_point c : cps)
 	{
@@ -555,10 +556,10 @@ void noob::stage::print_ghost_intersections(const noob::ghost_handle h) const no
 // }
 
 
-std::vector<noob::contact_point> noob::stage::get_intersections(const noob::actor_handle ah) const noexcept(true)
+std::vector<noob::contact_point> noob::stage::get_intersecting(const noob::actor_handle ah) const noexcept(true)
 {
 	noob::actor a = actors.get(ah);
-	return get_intersections(a.ghost);
+	return get_intersecting(a.ghost);
 }
 
 
@@ -570,7 +571,7 @@ void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 	// noob::vec3 velocity, target_pos;
 	// float incline;
 
-	std::vector<noob::contact_point> cps = get_intersections(ah);
+	std::vector<noob::contact_point> cps = get_intersecting(ah);
 
 	noob::vec3 gravity(vec3_from_bullet(dynamics_world->getGravity()));
 

@@ -3,14 +3,14 @@ CHANGELOG:
 Version 0.5 AKA: "StageCraft" (in progress)
 ```
 Additions:
+Implement actors.
 Add joints to scripting.
-Improve joints API (WIP)
 
 Cleanups:
-Begin properly Integrating actors
 Remove git modules as they were causing problems
 Make graphics class non-static
 Banish use of -fpermissive from entire codebase
+
 ```
 
 
@@ -48,7 +48,7 @@ Used to store extra meshes for no good reason. This stupidity was stopped and we
 
 Version 0.1.1 AKA "Live reloads"
 ```
-Moved out all non-stage components from stage into globals, enabling live reloads faster! Yay!
+Moved out all non-stage components from stage into globals, enabling faster live reloads! Yay!
 ```
 
 Version 0.1 AKA "HAHA we got scripting!"

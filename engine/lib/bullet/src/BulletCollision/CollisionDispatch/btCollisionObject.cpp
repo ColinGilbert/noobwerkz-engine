@@ -34,7 +34,10 @@ btCollisionObject::btCollisionObject()
 		m_rollingFriction(0.0f),
 		m_restitution(btScalar(0.)),
 		m_internalType(CO_COLLISION_OBJECT),
-		m_userObjectPointer(0),
+		// NOOB X 3
+		//m_userObjectPointer(0),
+		m_userIndex_1(std::numeric_limits<uint32_t>::max()),
+		m_userIndex_2(std::numeric_limits<uint32_t>::max()),
 		m_hitFraction(btScalar(1.)),
 		m_ccdSweptSphereRadius(btScalar(0.)),
 		m_ccdMotionThreshold(btScalar(0.)),

@@ -17,7 +17,7 @@ bool noob::globals::init() noexcept(true)
 	unit_cone_shape = cone_shape(0.5, 1.0);
 
 	fmt::MemoryWriter ww;
-	ww << "[Globals] unit sphere shape handle " << unit_sphere_shape.get_inner() << ", unit cube shape handle " << unit_cube_shape.get_inner() << ", unit cylinder shape handle " << unit_cylinder_shape.get_inner() << ", unit cone shape handle " << unit_cone_shape.get_inner();
+	ww << "[Globals] unit sphere shape handle " << unit_sphere_shape.index() << ", unit cube shape handle " << unit_cube_shape.index() << ", unit cylinder shape handle " << unit_cylinder_shape.index() << ", unit cone shape handle " << unit_cone_shape.index();
 	logger::log(ww.str());
 
 	// logger::log("[Globals] Making unit sphere model");
@@ -32,7 +32,7 @@ bool noob::globals::init() noexcept(true)
 	unit_cone_model = model_from_mesh(noob::mesh_utils::cone(0.5, 1.0));
 
 	fmt::MemoryWriter ww_2;
-	ww_2 << "[Globals] unit sphere model handle " << unit_sphere_model.model_h.get_inner() << ", unit cube model handle " << unit_cube_model.model_h.get_inner() << ", unit cylinder model handle " << unit_cylinder_model.model_h.get_inner() << ", unit cone model handle " << unit_cone_model.model_h.get_inner();
+	ww_2 << "[Globals] unit sphere model handle " << unit_sphere_model.model_h.index() << ", unit cube model handle " << unit_cube_model.model_h.index() << ", unit cylinder model handle " << unit_cylinder_model.model_h.index() << ", unit cone model handle " << unit_cone_model.model_h.index();
 	logger::log(ww_2.str());
 
 	//  Init basic default shader
@@ -129,7 +129,7 @@ noob::scaled_model noob::globals::model_from_mesh(const noob::basic_mesh& m) noe
 noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) noexcept(true) 
 {
 	// fmt::MemoryWriter ww;
-	// ww << "[Globals] about to get model from shape " << h.get_inner();
+	// ww << "[Globals] about to get model from shape " << h.index();
 	// logger::log(ww.str());
 
 	scaled_model results;
@@ -169,7 +169,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 			}
 		case(noob::shape::type::HULL):
 			{
-				noob::fast_hashtable::cell* search = shapes_to_models.lookup(h.get_inner());
+				noob::fast_hashtable::cell* search = shapes_to_models.lookup(h.index());
 				if (shapes_to_models.is_valid(search))
 				{
 					size_t val = search->value;
@@ -188,7 +188,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 		case(noob::shape::type::TRIMESH):
 			{
 				static uint32_t trimesh_model_count = 0;
-				noob::fast_hashtable::cell* search = shapes_to_models.lookup(h.get_inner());
+				noob::fast_hashtable::cell* search = shapes_to_models.lookup(h.index());
 				if (shapes_to_models.is_valid(search))
 				{
 					size_t val = search->value;
@@ -200,7 +200,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 					else
 					{
 						fmt::MemoryWriter ww;
-						ww << "[Globals] DATA ERROR: Shape handle " << h.get_inner() << " has invalid model mapping.";
+						ww << "[Globals] DATA ERROR: Shape handle " << h.index() << " has invalid model mapping.";
 						logger::log(ww.str());
 					}
 				}	
@@ -291,8 +291,8 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 	
 	if (please_insert)
 	{
-		noob::fast_hashtable::cell* search = shapes_to_models.insert(h.get_inner());
-		search->value = results.model_h.get_inner();
+		noob::fast_hashtable::cell* search = shapes_to_models.insert(h.index());
+		search->value = results.model_h.index();
 
 	}
 	return results; 
@@ -408,8 +408,8 @@ noob::shape_handle noob::globals::hull_shape(const std::vector<vec3>& points) no
 	noob::basic_mesh temp_mesh = noob::mesh_utils::hull(points);
 	noob::scaled_model temp_scaled_model = model_from_mesh(temp_mesh);
 
-	auto temp_cell = shapes_to_models.insert(shape_h.get_inner());
-	temp_cell->value = temp_scaled_model.model_h.get_inner();
+	auto temp_cell = shapes_to_models.insert(shape_h.index());
+	temp_cell->value = temp_scaled_model.model_h.index();
 
 	return shape_h;
 }
@@ -506,7 +506,7 @@ void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std
 		noob::basic_shader_handle h = basic_shaders.add(u);
 		noob::shader r;
 		r.type = noob::shader_type::BASIC;
-		r.handle = h.get_inner();
+		r.handle = h.index();
 
 		names_to_shaders.insert(rde::make_pair(rde::string(name.c_str()), r));
 	}
@@ -521,7 +521,7 @@ void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::unif
 		noob::triplanar_shader_handle h = triplanar_shaders.add(u);
 		noob::shader r;
 		r.type = noob::shader_type::TRIPLANAR;
-		r.handle = h.get_inner();
+		r.handle = h.index();
 
 		names_to_shaders.insert(rde::make_pair(rde::string(name.c_str()), r));
 	}
