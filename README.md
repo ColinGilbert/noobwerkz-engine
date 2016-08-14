@@ -15,8 +15,8 @@ High-quality tutorials and real unit tests will come when the implementation is 
 
 Current versions:
 ```
-Master: 0.4 "Auditory Delights"
-Dev: 0.5 "StageCraft"
+Master: 0.5 "StageCraft"
+Dev: 0.6 "AI"
 ```
 
 Specific features:

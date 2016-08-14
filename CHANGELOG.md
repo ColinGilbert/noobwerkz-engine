@@ -1,9 +1,16 @@
 CHANGELOG:
 
-Version 0.5 AKA: "StageCraft" (in progress)
+Version 0.6 AKA: "AI" (WIP)
 ```
 Additions:
-Implement actors.
+
+```
+
+
+Version 0.5 AKA: "StageCraft"
+```
+Additions:
+Implemented actors, cleanly.
 Add joints to scripting.
 
 Cleanups:
