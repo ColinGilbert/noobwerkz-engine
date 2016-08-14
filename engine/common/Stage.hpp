@@ -42,7 +42,7 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.1, 0.1, 0.1, 0.1)), instancing(true), bodies_mapping(draw_graph), /* model_mats_mapping(draw_graph),*/ basic_models_mapping(draw_graph), shaders_mapping(draw_graph), reflectances_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph), matrix_pool_count(0) {}
+			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.1, 0.1, 0.1, 0.1)), instancing(true), instance_count(0), bodies_mapping(draw_graph), /* model_mats_mapping(draw_graph),*/ basic_models_mapping(draw_graph), shaders_mapping(draw_graph), reflectances_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph), matrix_pool_count(0) {}
 
 			~stage() noexcept(true);
 
@@ -125,7 +125,8 @@ namespace noob
 			uint32_t actor_mq_count;
 			
 			bool instancing;
-			
+			uint32_t instance_count;
+
 			// TODO: Optimize:
 			lemon::ListDigraph draw_graph;
 			lemon::ListDigraph::Node root_node;
@@ -136,8 +137,11 @@ namespace noob
 			lemon::ListDigraph::NodeMap<uint32_t> reflectances_mapping;
 			lemon::ListDigraph::NodeMap<std::array<uint32_t, 4>> lights_mapping;
 			lemon::ListDigraph::NodeMap<std::array<float, 3>> scales_mapping;
+			
 			rde::vector<noob::mat4> matrix_pool;
 			uint32_t matrix_pool_count;
+			static const uint32_t matrix_pool_stride = 2;
+
 			noob::fast_hashtable bodies_to_nodes;
 			noob::fast_hashtable ghosts_to_nodes;
 			noob::fast_hashtable basic_models_to_nodes;

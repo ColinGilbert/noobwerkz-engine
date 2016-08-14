@@ -139,7 +139,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 							world_mat = noob::rotate(world_mat, temp_quat);
 							world_mat = noob::scale(world_mat, scales);												
 							world_mat = noob::translate(world_mat, ghosts.get(ghost_handle::make(body_var.index)).get_position());
-							
+
 							break;
 						}
 
@@ -158,10 +158,10 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 						}
 				}
 
-
+				//: See if moving this up or down changes anything
+				noob::mat4 normal_mat = noob::transpose(noob::inverse((world_mat * view_mat)));
 				noob::reflectance temp_reflect;
 				temp_reflect = g.reflectances.get(reflectance_handle::make(reflectances_mapping[body_node]));
-				noob::mat4 normal_mat = noob::transpose(noob::inverse((world_mat * view_mat)));
 				// Do the actual draw-calling now...
 				switch(shader_h.type)
 				{
@@ -171,6 +171,8 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 							if (doing_instanced)
 							{
 								// INSERT STUFF
+								matrix_pool.push_back(world_mat);
+								matrix_pool.push_back(normal_mat);
 							}
 							{
 								g.basic_drawer.draw(g.basic_models.get(model_handle::make(model_h)), world_mat, normal_mat, eye_pos, g.basic_shaders.get(basic_shader_handle::make(shader_h.handle)), temp_reflect, temp_lights, 0);
@@ -183,6 +185,8 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 							if (doing_instanced)
 							{
 								// INSERT STUFF
+								matrix_pool.push_back(world_mat);
+								matrix_pool.push_back(normal_mat);
 							}
 							{
 								g.triplanar_drawer.draw(g.basic_models.get(model_handle::make(model_h)), scales, world_mat, normal_mat, eye_pos, g.triplanar_shaders.get(triplanar_shader_handle::make(shader_h.handle)), temp_reflect, temp_lights, 0);
@@ -213,10 +217,15 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 		// renderer.draw(basic_models.get(unit_cube_model), shaders.get(debug_shader), noob::scale(noob::identity_mat4(), noob::vec3(10.0, 10.0, 10.0)), normal_mat, basic_lights);
 	}
 
+	// TODO: Benchmark if clear() makes any difference
+	matrix_pool.clear();
+	// matrix_pool_count = 0;
 	noob::time end_time = noob::clock::now();
 	draw_time = end_time - start_time;
 
 	g.profile_run.stage_draw_time += draw_time;
+
+
 }
 
 
