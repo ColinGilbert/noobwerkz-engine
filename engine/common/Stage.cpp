@@ -56,6 +56,8 @@ void noob::stage::tear_down() noexcept(true)
 	actor_mq.clear();
 	actor_mq_count = 0;
 
+	sceneries.empty();
+
 	bodies_to_nodes.clear();
 	ghosts_to_nodes.clear();
 	basic_models_to_nodes.clear();
