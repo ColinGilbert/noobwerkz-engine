@@ -111,6 +111,7 @@ namespace noob
 
 			noob::time last_step;
 
+			std::atomic<bool> ready_for_next_script;
 			asIScriptEngine* script_engine;
 			asIScriptModule* script_module;
 			asIScriptContext* script_context;
@@ -120,23 +121,23 @@ namespace noob
 			noob::time last_ui_update;
 
 			bool paused, started, input_has_started, ui_enabled;
-			
+
 			// uint64_t time;
-			
+
 			uint32_t window_width, window_height;
-			
+
 			noob::gui gui;
-			
+
 			std::vector<noob::vec2> finger_positions;
-			
+
 			noob::voxel_world voxels;
-			
+
 			noob::stage stage;
-			
+
 			noob::network_client network;
-			
+
 			noob::random_generator randomz;
-			
+
 			std::string script_name;
 
 			std::unique_ptr<std::string> prefix;

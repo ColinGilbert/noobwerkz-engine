@@ -111,7 +111,7 @@ void noob::basic_model::init(const noob::basic_mesh& input_mesh)
 
 		noob::vec3 dimensions = bbox.get_dims();
 		fmt::MemoryWriter ww;
-		ww << "[BasicModel] Load successful - " << vertices.size() << " vertices, " << indices.size() << " indices, max" << bbox.max.to_string() << ", min" << bbox.min.to_string() << ", dims" << dimensions.to_string();
+		ww << "[BasicModel] Load successful - " << vertices.size() << " vertices, " << indices.size() << " indices, max " << bbox.max.to_string() << ", min" << bbox.min.to_string() << ", dims" << dimensions.to_string();
 		logger::log(ww.str());
 
 		ready = true;
@@ -132,6 +132,6 @@ void noob::basic_model::draw(uint8_t view_id, const noob::mat4& model_mat, const
 	}
 	else
 	{
-		logger::log("Attempting to draw item with improper state.");
+		logger::log("[BasicModel] Attempting to draw item with improper state.");
 	}
 }

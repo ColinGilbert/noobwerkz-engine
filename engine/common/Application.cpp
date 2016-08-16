@@ -9,6 +9,7 @@ noob::application* noob::application::app_pointer = nullptr;
 noob::application::application() 
 {
 	app_pointer = this;
+	ready_for_next_script = false;
 }
 
 
@@ -61,15 +62,15 @@ void noob::application::init()
 	logger::log("[Application] Begin init.");
 
 	started = paused = input_has_started = false;
-	
+
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
-	
+
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
-	
+
 	script_engine = asCreateScriptEngine();
-	
+
 	assert(script_engine > 0);
-	
+
 	// TODO: Uncomment once noob::filesystem is fixed
 	// noob::filesystem::init(*prefix);
 
@@ -132,11 +133,19 @@ void noob::application::init()
 	register_globals(script_engine);
 
 	logger::log("[Application] Done basic init.");
-	
+
 	bool b = user_init();
-	
+
+	ready_for_next_script = b;
+
+	if (!b) 
+	{
+		logger::log("[Application] User C++ init failed!");
+	}
+
 	network.init(3);
 	network.connect("localhost", 4242);
+
 }
 
 
@@ -173,113 +182,126 @@ bool noob::application::eval(const std::string& name, const std::string& string_
 {
 	// PROFILE_END();
 	// PROFILE_BEGIN(loading);
-	
+
 	noob::time prior_to_loading = noob::clock::now();
+
 
 	logger::log("\n[Application] Begin loading script...");
 	fmt::MemoryWriter to_log;
 	to_log << "[Application] Script loaded? ";
 
-	if (reset)
+	if (ready_for_next_script)
 	{
-		script_module = script_engine->GetModule(0, asGM_ALWAYS_CREATE);
-	}
-	else
-	{
-		script_module = script_engine->GetModule(0, asGM_CREATE_IF_NOT_EXISTS);
-	}
-
-	int r = script_module->AddScriptSection(name.c_str(), string_to_eval.c_str());
-	if (r < 0)
-	{
-		to_log << "False - Add section failed.";
-		logger::log(to_log.str());
-		return false;
-	}
-
-	r = script_module->Build();
-	if (r < 0 )
-	{
-		
-		to_log << "False - Compile failed.";
-		logger::log(to_log.str());
-		return false;
-		// The build failed. The message stream will have received  
-		// compiler errors that shows what needs to be fixed
-	}
-	asIScriptContext* ctx = script_engine->CreateContext();
-	if (ctx == 0)
-	{
-		
-		to_log << "False - Failed to create context.";
-		logger::log(to_log.str());
-	}
-
-	asIScriptFunction* func = script_engine->GetModule(0)->GetFunctionByDecl("void main()");
-
-	if (func == 0)
-	{
-		to_log << "False - Function main() not found.";
-		logger::log(to_log.str());
-		return false;
-	}
-
-	r = ctx->Prepare(func);
-
-	if (r < 0) 
-	{
-		
-		to_log << "False - Failed to prepare the context.";
-		logger::log(to_log.str());
-		return false;
-	}
-
-	r = ctx->Execute();
-
-	if (r != asEXECUTION_FINISHED)
-	{
-		// The execution didn't finish as we had planned. Determine why.
-		if (r == asEXECUTION_ABORTED)
+		if (reset)
 		{
-			to_log << "False - Script aborted.";
-			logger::log(to_log.str());
+			script_module = script_engine->GetModule(0, asGM_ALWAYS_CREATE);
 		}
-
-		else if (r == asEXECUTION_EXCEPTION)
-		{
-			to_log << "False - Script ended with an exception: ";
-
-			asIScriptFunction* exception_func = ctx->GetExceptionFunction();
-
-			to_log << "function: " << exception_func->GetDeclaration() << ", ";
-			to_log << "module: " << exception_func->GetModuleName() << ", ";
-			to_log << "section: " << exception_func->GetScriptSectionName() << ", ";
-			to_log << "line: " << ctx->GetExceptionLineNumber() << ", ";
-			to_log << "description: " << ctx->GetExceptionString();
-
-			logger::log(to_log.str());
-		}
-
 		else
 		{
-			to_log << "False - Ended with reason code: " << r;
+			script_module = script_engine->GetModule(0, asGM_CREATE_IF_NOT_EXISTS);
+		}
+
+		int r = script_module->AddScriptSection(name.c_str(), string_to_eval.c_str());
+		if (r < 0)
+		{
+			to_log << "False - Add section failed.";
+			logger::log(to_log.str());
+			ready_for_next_script = true;
+			return false;
+		}
+
+		r = script_module->Build();
+		if (r < 0 )
+		{
+
+			to_log << "False - Compile failed.";
+			logger::log(to_log.str());
+			ready_for_next_script = true;
+			return false;
+			// The build failed. The message stream will have received  
+			// compiler errors that shows what needs to be fixed
+		}
+		asIScriptContext* ctx = script_engine->CreateContext();
+		if (ctx == 0)
+		{
+
+			to_log << "False - Failed to create context.";
 			logger::log(to_log.str());
 		}
 
+		asIScriptFunction* func = script_engine->GetModule(0)->GetFunctionByDecl("void main()");
+
+		if (func == 0)
+		{
+			to_log << "False - Function main() not found.";
+			logger::log(to_log.str());
+			ready_for_next_script = true;
+			return false;
+		}
+
+		r = ctx->Prepare(func);
+
+		if (r < 0) 
+		{
+
+			to_log << "False - Failed to prepare the context.";
+			logger::log(to_log.str());
+			ready_for_next_script = true;
+			return false;
+		}
+
+		r = ctx->Execute();
+
+		if (r != asEXECUTION_FINISHED)
+		{
+			// The execution didn't finish as we had planned. Determine why.
+			if (r == asEXECUTION_ABORTED)
+			{
+				to_log << "False - Script aborted.";
+				logger::log(to_log.str());
+			}
+
+			else if (r == asEXECUTION_EXCEPTION)
+			{
+				to_log << "False - Script ended with an exception: ";
+
+				asIScriptFunction* exception_func = ctx->GetExceptionFunction();
+
+				to_log << "function: " << exception_func->GetDeclaration() << ", ";
+				to_log << "module: " << exception_func->GetModuleName() << ", ";
+				to_log << "section: " << exception_func->GetScriptSectionName() << ", ";
+				to_log << "line: " << ctx->GetExceptionLineNumber() << ", ";
+				to_log << "description: " << ctx->GetExceptionString();
+
+				logger::log(to_log.str());
+			}
+
+			else
+			{
+				to_log << "False - Ended with reason code: " << r;
+				logger::log(to_log.str());
+			}
+
+			ready_for_next_script = true;
+			return false;
+		}
+
+
+		noob::time post_loading = noob::clock::now();
+		noob::duration loading_time = post_loading - prior_to_loading;
+
+		to_log << "True. Time: " << std::chrono::duration_cast<std::chrono::milliseconds>(loading_time).count() << " milliseconds (" << std::chrono::duration_cast<std::chrono::microseconds>(loading_time).count() << " microseconds)\n";
+		logger::log(to_log.str());
+
+		// PROFILE_END();
+		// PROFILE_BEGIN(runtime);
+
+		return true;
+	}
+	else 
+	{
 		return false;
 	}
-
-
-	noob::time post_loading = noob::clock::now();
-	noob::duration loading_time = post_loading - prior_to_loading;
-
-	to_log << "True. Time: " << std::chrono::duration_cast<std::chrono::milliseconds>(loading_time).count() << " milliseconds (" << std::chrono::duration_cast<std::chrono::microseconds>(loading_time).count() << " microseconds)\n";
-	logger::log(to_log.str());
-	
-	// PROFILE_END();
-	// PROFILE_BEGIN(runtime);
-
-	return true;
 }
 
 void noob::application::draw()
@@ -312,7 +334,7 @@ void noob::application::step()
 	// PROFILER_UPDATE();
 	noob::time start_time = noob::clock::now();
 	noob::duration time_since = last_step - start_time;
-	
+
 	if (!paused)
 	{
 		double d = (1.0 / static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(time_since).count()));
@@ -324,7 +346,7 @@ void noob::application::step()
 	noob::time end_time = noob::clock::now();
 	last_step = end_time;
 	noob::duration time_taken = end_time - start_time;
-	
+
 	noob::globals& g = noob::globals::get_instance();
 	g.profile_run.total_time += time_taken;
 }

@@ -42,7 +42,6 @@ bool noob::application::user_init()
 
 void noob::application::user_update(double dt)
 {
-	gui.text("Noobwerkz Editor", 50.0, 50.0, noob::gui::font_size::HEADER);
 
 	noob::globals& g = noob::globals::get_instance();
 	noob::time nowtime = noob::clock::now();
@@ -53,20 +52,24 @@ void noob::application::user_update(double dt)
 	if (noob::millis(time_since_update) > interval - 1)
 	{
 		noob::profiler_snap snap = g.profile_run;
-		ww << "Frame time: " << pretty_print_timing(divide_duration(snap.total_time, interval)) << ", draw time: " << pretty_print_timing(divide_duration(snap.stage_draw_time, interval)) << ", physics time " << pretty_print_timing(divide_duration(snap.stage_physics_time, interval));
+		ww << "NoobWerkz editor - Frame time: " << pretty_print_timing(divide_duration(snap.total_time, interval)) << ", draw time: " << pretty_print_timing(divide_duration(snap.stage_draw_time, interval)) << ", physics time " << pretty_print_timing(divide_duration(snap.stage_physics_time, interval));
 
-		std::vector<noob::contact_point> cps = stage.get_intersecting(ah);
+		/*
+		   std::vector<noob::contact_point> cps = stage.get_intersecting(ah);
 
-		www << "[UserApp] Actor (" << ah.index() << "), num collisions = " << cps.size();
-		for (noob::contact_point cp : cps)
-		{
-			www << ", " << cp.to_string();
-		}
+		   www << "[UserApp] Actor (" << ah.index() << "), num collisions = " << cps.size();
+		   for (noob::contact_point cp : cps)
+		   {
+		   www << ", " << cp.to_string();
+		   }
+
+		   logger::log(www.str());
+		   */	
+
 		message = std::make_unique<std::string>(ww.str());
-		//logger::log(www.str());
 		g.profile_run.total_time = g.profile_run.stage_physics_time = g.profile_run.stage_draw_time = time_since_update = noob::duration(0);
 		last_ui_update = nowtime;
 	}
 	// gui.text(*(g.strings.get(noob::string_handle::make(0))), static_cast<float>(window_width - 500), static_cast<float>(window_height - 500), noob::gui::font_size::HEADER);
-	gui.text(*message, 0, window_height / 2.0);
+	gui.text(*message, 50.0, 50.0);
 }

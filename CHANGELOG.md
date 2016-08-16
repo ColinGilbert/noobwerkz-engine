@@ -1,9 +1,14 @@
 CHANGELOG:
 
-Version 0.6 AKA: "AI" (WIP)
+Version 0.6 AKA: "AI and More" (WIP)
 ```
 Additions:
+Profiling
+Actor movement (WIP)
 
+Bugfixes/Cleanups:
+Cleanup/modularize/speedup drawing API (WIP)
+Banish use of friend classes and create proper accessors (WIP)
 ```
 
 
@@ -13,11 +18,10 @@ Additions:
 Implemented actors, cleanly.
 Add joints to scripting.
 
-Cleanups:
+Bugfixes/Cleanups:
 Remove git modules as they were causing problems
 Make graphics class non-static
 Banish use of -fpermissive from entire codebase
-
 ```
 
 
