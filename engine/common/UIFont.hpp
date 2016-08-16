@@ -5,7 +5,7 @@
 #include "font_manager.h"
 #include "text_buffer_manager.h"
 
-#include "TextLabel.hpp"
+#include "UITextLabel.hpp"
 
 namespace noob
 {
@@ -26,9 +26,9 @@ namespace noob
 			bool valid;
 			float window_width, window_height;
 			uint32_t font_colour;
-			FontManager* fontManager; // = new FontManager(512);
-			TextBufferManager* textBufferManager; // = new TextBufferManager(fontManager);
-			TextBufferHandle transientText;
+			FontManager* font_manager; // = new FontManager(512);
+			TextBufferManager* text_buffer_manager; // = new TextBufferManager(fontManager);
+			TextBufferHandle text_to_draw;
 			TrueTypeHandle ttf_handle;
 			FontHandle font_handle;
 
