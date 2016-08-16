@@ -125,12 +125,17 @@ namespace noob
 			return *this;
 		}
 
-		float& operator[](int x)
+		float& operator[](uint32_t x)
 		{
 			return v[x];
 		}
 
-		float get_opIndex(int i) const
+		const float& operator[](uint32_t x) const
+		{
+			return v[x];
+		}
+
+		float get_opIndex(uint32_t i) const
 
 		{
 			if (i > 2 ) return v[2];
@@ -138,7 +143,7 @@ namespace noob
 			return v[i];
 		}
 
-		void set_opIndex(int i, float value)
+		void set_opIndex(uint32_t i, float value)
 		{
 			if (i > 2 && i < 0) return;
 			v[i] = value;

@@ -138,7 +138,7 @@ namespace noob
 		noob::graphics::uniform get_normal_mat() { return normal_mat; }
 		noob::graphics::uniform get_normal_mat_modelspace() { return normal_mat_modelspace; }
 		noob::graphics::uniform get_eye_pos() { return eye_pos; }
-		noob::graphics::uniform get_eye_pos_normalize() { return eye_pos_normalized; }
+		noob::graphics::uniform get_eye_pos_normalized() { return eye_pos_normalized; }
 		noob::graphics::uniform get_ambient() { return  ambient; }
 		noob::graphics::uniform get_light_pos_radius() { return light_pos_radius; }
 		noob::graphics::uniform get_light_rgb_falloff() { return light_rgb_falloff; } 

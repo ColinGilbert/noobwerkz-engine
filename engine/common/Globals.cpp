@@ -4,9 +4,6 @@ noob::globals* noob::globals::ptr_to_instance;
 
 bool noob::globals::init() noexcept(true) 
 {
-	physical_body_descriptor.physical = true;
-	ghost_body_descriptor.physical = false;
-
 	basic_drawer.init();
 	triplanar_drawer.init();
 

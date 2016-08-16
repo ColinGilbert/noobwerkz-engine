@@ -4,22 +4,9 @@
 
 #include "NoobUtils.hpp"
 #include "UIFont.hpp"
-// #include "font_manager.h"
-// #include "text_buffer_manager.h"
 
 
-
-TrueTypeHandle noob::ui_font::load_ttf(FontManager* _fm, const std::string& file_path)
-{
-	std::string mem = noob::utils::load_file_as_string(file_path);
-	TrueTypeHandle handle = _fm->createTtf(reinterpret_cast<const unsigned char*>(mem.c_str()), mem.size());
-	return handle;
-	TrueTypeHandle invalid = BGFX_INVALID_HANDLE;
-	return invalid;
-}
-
-
-void noob::ui_font::init(const std::string& filename, size_t font_size, float win_width, float win_height)
+void noob::ui_font::init(const std::string& filename, size_t font_size, float win_width, float win_height) noexcept(true)
 {
 	window_width = win_width;
 	window_height = win_height;
@@ -34,11 +21,10 @@ void noob::ui_font::init(const std::string& filename, size_t font_size, float wi
 	font_manager->destroyTtf(ttf_handle);
 
 	text_to_draw = text_buffer_manager->createTextBuffer(FONT_TYPE_DISTANCE, BufferType::Transient);//FONT_TYPE_ALPHA, BufferType::Transient);
-
 }
 
 
-void noob::ui_font::draw_text(uint8_t view_id, const std::string& message, float x, float y)
+void noob::ui_font::draw_text(uint8_t view_id, const std::string& message, float x, float y) noexcept(true)
 {
 	float at[3] = { 0, 0, 0.0f };
 	float eye[3] = { 0, 0, -1.0f };
@@ -60,17 +46,31 @@ void noob::ui_font::draw_text(uint8_t view_id, const std::string& message, float
 }
 
 
-void noob::ui_font::set_colour(uint32_t colour)
+void noob::ui_font::set_colour(uint32_t colour) noexcept(true)
 {
 	text_buffer_manager->setTextColor(text_to_draw, colour);
 }
 
 
-void noob::ui_font::set_window_dims(float width, float height)
+void noob::ui_font::set_window_dims(float width, float height) noexcept(true)
 {
 	window_width = width;
 	window_height = height;
 }
+
+
+TrueTypeHandle noob::ui_font::load_ttf(FontManager* _fm, const std::string& file_path) noexcept(true)
+{
+	std::string mem = noob::utils::load_file_as_string(file_path);
+	TrueTypeHandle handle = _fm->createTtf(reinterpret_cast<const unsigned char*>(mem.c_str()), mem.size());
+	return handle;
+	TrueTypeHandle invalid = BGFX_INVALID_HANDLE;
+	return invalid;
+}
+
+
+
+
 
 /*
 void noob::ui_font::draw_text(uint8_t view_id, const std::string& message, float x, float y, uint32_t colour)

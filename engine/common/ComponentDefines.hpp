@@ -33,6 +33,8 @@ namespace noob
 	typedef noob::component<noob::triplanar_gradient_map_renderer::uniform> triplanar_shaders_holder;
 	typedef noob::component<noob::shader> shaders_holder;
 	typedef noob::component<noob::time> times_holder;
+	typedef noob::component<noob::text_label> text_label_holder;
+
 
 	// TOOD: Make basic_models_holder and animated_models_holder stack-based
 	typedef noob::component_dynamic<noob::basic_model> basic_models_holder;
@@ -51,7 +53,8 @@ namespace noob
 	typedef handle<noob::triplanar_gradient_map_renderer::uniform> triplanar_shader_handle;
 	typedef handle<noob::shader> shader_handle;
 	typedef handle<noob::time> time_handle;
-
+	typedef handle<noob::text_label> text_label_handle;
+	
 	typedef handle<noob::basic_model> model_handle;
 	typedef handle<noob::animated_model> animated_model_handle;
 	typedef handle<noob::skeletal_anim> skeletal_anim_handle;

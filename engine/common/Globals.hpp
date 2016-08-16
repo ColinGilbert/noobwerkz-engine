@@ -48,7 +48,7 @@ namespace noob
 {
 	// Each physics body in Bullet has a pointer that the user is free to use. We keep two instances of this object type: One for true and another for false. This is so that we can quickly tell whether a collision object is physics/kinematic or ghost. (I have not yet found a proper method of doing so from inside Bullet itself.)
 	// Going through these measures is an ugly kludge, but until we write our own physics (not too long...) we may have to live with it.
-	class body_descriptor
+/*	class body_descriptor
 	{
 		friend class globals;
 		public:
@@ -56,7 +56,7 @@ namespace noob
 		protected:
 		bool physical;
 	};
-
+*/
 	class globals
 	{
 		protected:
@@ -168,8 +168,6 @@ namespace noob
 
 			noob::basic_renderer basic_drawer;
 			noob::triplanar_gradient_map_renderer triplanar_drawer;
-
-			noob::body_descriptor physical_body_descriptor, ghost_body_descriptor;
 
 			noob::mixer master_mixer;
 			noob::sound_interface audio_interface;

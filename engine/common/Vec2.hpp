@@ -15,19 +15,19 @@ namespace noob
 			v[1] = y;
 		}
 
-		float& operator[](int x) noexcept(true)
+		float& operator[](uint32_t x) noexcept(true)
 		{
 			return v[x];
 		}
 
-		float get_opIndex(int i) const noexcept(true)
+		float get_opIndex(uint32_t i) const noexcept(true)
 		{
 			assert((i > 1) && "[Vec2] Tried to get from array over max index");
 			assert((i < 0) && "[Vec2] Tried to get from array with index under zero");
 			return v[i];
 		}
 
-		void set_opIndex(int i, float value) noexcept(true)
+		void set_opIndex(uint32_t i, float value) noexcept(true)
 		{
 			assert((i > 1) && "[Vec2] Tried to set to array over max index");
 			assert((i < 0) && "[Vec2] Tried to set to array with index under zero");

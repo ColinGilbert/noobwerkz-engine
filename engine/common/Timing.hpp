@@ -74,6 +74,4 @@ namespace noob
 
 		return ww.str();
 	}
-
-
 }

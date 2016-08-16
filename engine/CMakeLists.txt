@@ -735,8 +735,6 @@ list(APPEND common_src
 	common/EditorUtils.cpp
 	common/VoxelWorld.cpp
 	common/ActiveMesh.cpp
-	common/UIFont.cpp
-	common/GUI.cpp
 	common/Camera.cpp
 	common/Stage.cpp
 	common/Body.cpp
@@ -747,6 +745,9 @@ list(APPEND common_src
 	common/BasicModel.cpp
 	common/AnimatedModel.cpp
 	common/SkeletalAnim.cpp
+	common/Particles.cpp
+	common/UIFont.cpp
+	common/GUI.cpp
 	common/drawing/TriplanarGradientMapLit.cpp
 	common/drawing/TriplanarGradientMap.cpp
 	common/drawing/BasicRenderer.cpp

@@ -180,22 +180,26 @@ namespace noob
 		mat4& operator=(const mat4& rhs);
 		std::array<float, 16> m;
 
-		float& operator[](int x) 
+		float& operator[](uint32_t x) 
 		{
 			return m[x];
 		}
-
-		float get_opIndex(int i) const
-
+		
+		const float& operator[](uint32_t i) const
 		{
-			if (i > 15) return m[15];
-			if (i < 0) return m[0];
 			return m[i];
 		}
 
-		void set_opIndex(int i, float value)
+		float get_opIndex(uint32_t i) const
+
 		{
-			if (i > 15 && i < 0) return;
+			if (i > 15) return m[15];
+			return m[i];
+		}
+
+		void set_opIndex(uint32_t i, float value)
+		{
+			if (i > 15) return;
 			m[i] = value;
 		}
 
@@ -222,21 +226,25 @@ namespace noob
 		versor& operator=(const versor& rhs);
 
 
-		float& operator[](int x) 
+		float& operator[](uint32_t x) 
 		{
 			return q[x];
 		}
 
-		float get_opIndex(int i) const
+		const float& operator[](uint32_t x) const
+		{
+			return q[x];
+		}
+
+		float get_opIndex(uint32_t i) const
 		{
 			if (i > 3 ) return q[3];
-			if (i < 0) return q[0];
 			return q[i];
 		}
 
-		void set_opIndex(int i, float value)
+		void set_opIndex(uint32_t i, float value)
 		{
-			if (i > 3 && i < 0) return;
+			if (i > 3) return;
 			q[i] = value;
 		}
 

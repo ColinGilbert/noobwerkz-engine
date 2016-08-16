@@ -4,10 +4,12 @@
 
 namespace noob
 {
+	// This allows you to define fast-drawing, static text.
 	struct text_label
 	{
-		uint8_t view_id;
+	// noob::textbuffer_handle;
 		float x, y;
-		std::string message;
+		// noob::gui::font_size;
+		uint32_t colour;
 	};
 }

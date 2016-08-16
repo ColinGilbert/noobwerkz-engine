@@ -5,7 +5,6 @@
 
 
 noob::application* noob::application::app_pointer = nullptr;
-// noob::globals noob::application::global_storage;
 
 noob::application::application() 
 {
@@ -62,13 +61,15 @@ void noob::application::init()
 	logger::log("[Application] Begin init.");
 
 	started = paused = input_has_started = false;
-	// timespec timeNow;
-	// clock_gettime(CLOCK_MONOTONIC, &timeNow);
-	// time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
+	
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
+	
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
+	
 	script_engine = asCreateScriptEngine();
+	
 	assert(script_engine > 0);
+	
 	// TODO: Uncomment once noob::filesystem is fixed
 	// noob::filesystem::init(*prefix);
 
@@ -284,8 +285,6 @@ bool noob::application::eval(const std::string& name, const std::string& string_
 void noob::application::draw()
 {
 	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 1.0, 2000.0);
-	// bgfx::touch(0);
-	// bgfx::touch(1);
 	stage.draw(window_width, window_height, controller.get_eye_pos(), controller.get_eye_target(), controller.get_eye_up(), proj_mat);
 }
 
@@ -314,15 +313,8 @@ void noob::application::step()
 	noob::time start_time = noob::clock::now();
 	noob::duration time_since = last_step - start_time;
 	
-	// timespec timeNow;
-	// clock_gettime(CLOCK_MONOTONIC, &timeNow);
-	// uint64_t uNowNano = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
-	// double delta = (uNowNano - time) * 0.000000001f;
-	// time = uNowNano;
-
 	if (!paused)
 	{
-		// start_time 
 		double d = (1.0 / static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(time_since).count()));
 		update(d);
 	}
@@ -335,7 +327,6 @@ void noob::application::step()
 	
 	noob::globals& g = noob::globals::get_instance();
 	g.profile_run.total_time += time_taken;
-
 }
 
 
