@@ -5,6 +5,12 @@
 
 namespace noob
 {
+	static const uint64_t thousand = 1000;
+
+	static const uint64_t million = 1000000;
+
+	static const uint64_t billion = 1000000000;
+
 	static uint64_t millis(const noob::duration d)
 	{
 		return (std::chrono::duration_cast<std::chrono::milliseconds>(d)).count();

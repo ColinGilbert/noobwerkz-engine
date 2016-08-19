@@ -2,6 +2,8 @@
 
 #include <memory>
 #include <vector>
+#include <limits>
+
 #include <rdestl/vector.h>
 
 #include "Logger.hpp"
@@ -49,6 +51,12 @@ namespace noob
 					return h;
 				}
 
+				static handle make_invalid()
+				{
+					handle h;
+					h.inner = std::numeric_limits<uint32_t>::max();
+				}
+
 			protected:
 
 				uint32_t inner;
@@ -60,7 +68,7 @@ namespace noob
 			friend class application;
 			public:
 
-			T get(noob::handle<T> h) const  noexcept(true)
+			T get(noob::handle<T> h) const noexcept(true)
 			{
 				if (exists(h)) return items[h.index()];
 				else 

@@ -52,7 +52,7 @@ void noob::application::user_update(double dt)
 	if (noob::millis(time_since_update) > interval - 1)
 	{
 		noob::profiler_snap snap = g.profile_run;
-		ww << "NoobWerkz editor - Frame time: " << pretty_print_timing(divide_duration(snap.total_time, interval)) << ", draw time: " << pretty_print_timing(divide_duration(snap.stage_draw_time, interval)) << ", physics time " << pretty_print_timing(divide_duration(snap.stage_physics_time, interval));
+		ww << "NoobWerkz editor - Frame time: " << pretty_print_timing(divide_duration(snap.total_time, interval)) << ", draw time: " << pretty_print_timing(divide_duration(snap.stage_draw_duration, interval)) << ", physics time " << pretty_print_timing(divide_duration(snap.stage_physics_duration, interval));
 
 		/*
 		   std::vector<noob::contact_point> cps = stage.get_intersecting(ah);
@@ -67,7 +67,7 @@ void noob::application::user_update(double dt)
 		   */	
 
 		message = std::make_unique<std::string>(ww.str());
-		g.profile_run.total_time = g.profile_run.stage_physics_time = g.profile_run.stage_draw_time = time_since_update = noob::duration(0);
+		g.profile_run.total_time = g.profile_run.stage_physics_duration = g.profile_run.stage_draw_duration = time_since_update = noob::duration(0);
 		last_ui_update = nowtime;
 	}
 	// gui.text(*(g.strings.get(noob::string_handle::make(0))), static_cast<float>(window_width - 500), static_cast<float>(window_height - 500), noob::gui::font_size::HEADER);

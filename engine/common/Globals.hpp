@@ -14,8 +14,6 @@
 #include <rdestl/rde_string.h>
 #include <rdestl/sort.h>
 #include <rdestl/hash_map.h>
-// #include <rdestl/sorted_vector.h>
-
 
 #include "NoobDefines.hpp"
 #include "MathFuncs.hpp"
@@ -77,6 +75,8 @@ namespace noob
 				return *ptr_to_instance;
 			}
 
+			static constexpr uint32_t num_pseudo_randoms = 256;
+			
 			// Provides sane defaults in order not to crash the app in case of erroneous access.
 			bool init() noexcept(true);
 
@@ -123,6 +123,8 @@ namespace noob
 
 			scaled_model model_from_mesh(const noob::basic_mesh&) noexcept(true);
 			scaled_model model_from_shape(const noob::shape_handle) noexcept(true);
+
+			double get_random() noexcept(true);
 
 			// ---------------
 			// Data members:
@@ -179,6 +181,10 @@ namespace noob
 			}
 
 			noob::fast_hashtable shapes_to_models;
+
+			uint32_t current_random;
+			rde::fixed_array<double, num_pseudo_randoms> pseudo_randoms;
+			
 
 			rde::hash_map<rde::string, noob::shape_handle> names_to_shapes;
 			// rde::hash_map<rde::string, noob::model_handle> names_to_basic_models;

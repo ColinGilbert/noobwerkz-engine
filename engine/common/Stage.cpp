@@ -81,10 +81,10 @@ void noob::stage::update(double dt) noexcept(true)
 
 	noob::time end_time = noob::clock::now();
 
-	update_time = end_time - start_time;
+	update_duration = end_time - start_time;
 
 	noob::globals& g = noob::globals::get_instance();
-	g.profile_run.stage_physics_time += update_time;
+	g.profile_run.stage_physics_duration += update_duration;
 }
 
 
@@ -183,22 +183,13 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 						}
 					case(noob::shader_type::TRIPLANAR):
 						{
-							// TODO: Work this up te loop and profile, as exercise
-							if (doing_instanced)
-							{
-								// INSERT STUFF
-								matrix_pool.push_back(world_mat);
-								matrix_pool.push_back(normal_mat);
-							}
-							{
-								g.triplanar_drawer.draw(g.basic_models.get(model_handle::make(model_h)), scales, world_mat, normal_mat, eye_pos, g.triplanar_shaders.get(triplanar_shader_handle::make(shader_h.handle)), temp_reflect, temp_lights, 0);
-							}	
+							g.triplanar_drawer.draw(g.basic_models.get(model_handle::make(model_h)), scales, world_mat, normal_mat, eye_pos, g.triplanar_shaders.get(triplanar_shader_handle::make(shader_h.handle)), temp_reflect, temp_lights, 0);
 							break;
 						}
 					default:
 						{
 							fmt::MemoryWriter ww;
-							ww << "[Stage] DATA ERROR - draw():Attempting to draw with a shader that doesn't exist. WHYY??";
+							ww << "[Stage] DATA ERROR - draw() - Attempting to draw with a shader that doesn't exist. WHYY??";
 							logger::log(ww.str());
 							break;
 						}
@@ -206,6 +197,17 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 			}
 		}
 	}
+
+	for (uint32_t i = 0; i < particle_systems.count(); ++i)
+	{
+		noob::particle_system* sys = std::get<1>(particle_systems.get_ptr_mutable(noob::particle_system_handle::make(i)));
+
+		// sys->
+
+
+	}
+
+
 
 	if (show_origin)
 	{
@@ -223,9 +225,9 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 	matrix_pool.clear();
 	// matrix_pool_count = 0;
 	noob::time end_time = noob::clock::now();
-	draw_time = end_time - start_time;
+	draw_duration = end_time - start_time;
 
-	g.profile_run.stage_draw_time += draw_time;
+	g.profile_run.stage_draw_duration += draw_duration;
 
 
 }
@@ -324,6 +326,33 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, co
 	b.inner->setUserIndex_2(scenery_h.index());
 
 	add_to_graph(b_var, shape_arg, shader_arg, reflect_arg);
+}
+
+
+noob::particle_system_handle noob::stage::particle_system(const noob::particle_system_descriptor& desc)
+{
+	noob::globals& g = noob::globals::get_instance();
+
+	noob::particle_system ps;
+
+	ps.emits_per_second = desc.emits_per_second;
+	ps.lifespan_base = desc.lifespan_base;
+	ps.lifespan_variance = desc.lifespan_variance;
+	ps.damping = desc.damping;
+	ps.gravity_multiplier = desc.gravity_multiplier;
+	ps.center = desc.center;
+	ps.emit_direction = desc.emit_direction;
+	ps.emit_direction_variance = desc.emit_direction_variance;
+	ps.wind = desc.wind;
+
+	for (uint32_t i = 0; i < noob::particle_system::max_particles; ++i)
+	{
+		noob::ghost_handle g_h = ghost(g.unit_sphere_shape, ps.center, noob::versor(0.0, 0.0, 0.0, 1.0));
+		noob::ghost* g_ptr = std::get<1>(ghosts.get_ptr_mutable(g_h));
+		g_ptr->inner->setCollisionFlags(noob::collision_type::SCENERY | noob::collision_type::CHARACTER);
+	}
+
+	return particle_systems.add(ps);
 }
 
 
@@ -454,7 +483,6 @@ void noob::stage::remove_body(noob::body_handle h) noexcept(true)
 
 void noob::stage::remove_ghost(noob::ghost_handle h) noexcept(true) 
 {
-
 	noob::ghost b = ghosts.get(h);
 	dynamics_world->removeCollisionObject(b.inner);
 	delete b.inner;
@@ -490,6 +518,7 @@ std::vector<noob::contact_point> noob::stage::get_intersecting(const noob::ghost
 		{
 			collision_pair->m_algorithm->getAllContactManifolds(manifold_array);
 		}
+
 		for (size_t j = 0; j < manifold_array.size(); ++j)
 		{
 			btPersistentManifold* manifold = manifold_array[j];
@@ -498,7 +527,6 @@ std::vector<noob::contact_point> noob::stage::get_intersecting(const noob::ghost
 			const uint32_t index = bt_obj->getUserIndex_2();
 			if (index != std::numeric_limits<uint32_t>::max())
 			{
-
 				// btScalar direction = is_first_body ? btScalar(-1.0) : btScalar(1.0);
 				for (size_t p = 0; p < manifold->getNumContacts(); ++p)
 				{
@@ -550,6 +578,80 @@ void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 	noob::vec3 gravity(vec3_from_bullet(dynamics_world->getGravity()));
 
 }
+
+
+void noob::stage::update_particle_systems() noexcept(true)
+{
+	float seconds_since_last = static_cast<float>(noob::divide_duration(update_duration, noob::billion).count());
+
+	noob::vec3 world_gravity = noob::vec3_from_bullet(dynamics_world->getGravity());
+
+	uint32_t systems_count = particle_systems.count();
+
+	for (uint32_t i = 0; i < systems_count; ++i)
+	{
+		noob::particle_system* sys = std::get<1>(particle_systems.get_ptr_mutable(noob::particle_system_handle::make(i)));
+
+		// We calculate the new positions of our particles
+		float damping = sys->damping;
+		float gravity_multiplier = sys->gravity_multiplier;
+		noob::vec3 wind = sys->wind;
+
+		for (uint32_t i = 0; i < noob::particle_system::max_particles; ++i)
+		{
+			noob::particle p = sys->particles[i];
+			// noob::ghost ghost = ghosts.get(p.ghost);
+
+			if (p.active)
+			{
+				p.time_left -= seconds_since_last;
+				if (p.time_left > 0.0)
+				{
+					std::vector<noob::contact_point> cp = get_intersecting(p.ghost);
+					if (cp.size() == 0)
+					{
+						p.velocity = (p.velocity + wind + (world_gravity * gravity_multiplier)) * damping;
+
+						noob::ghost temp_ghost = ghosts.get(p.ghost);
+						noob::vec3 pos = temp_ghost.get_position();
+						pos += (p.velocity * seconds_since_last);
+						temp_ghost.set_position(pos);
+					}
+					else
+					{
+						p.active = false;
+						sys->first_free = i;
+					}
+				}
+				else
+				{
+					p.active = false;
+					sys->first_free = i;
+				}
+			}
+
+
+			noob::globals& g = noob::globals::get_instance();
+
+			// Now, can we possibly spawn a new particle?
+			if (update_duration.count() > sys->nanos_until_emit)
+			{
+				// Yes, we can!
+				if (sys->first_free != std::numeric_limits<uint32_t>::max())
+				{
+					noob::particle p;
+					p.active = true;
+					p.time_left = sys->lifespan_base + static_cast<float>(g.get_random()) + sys->lifespan_variance;
+					
+					sys->nanos_until_emit = sys->nanos_between_emits;
+					noob::vec3 temp = sys->emit_direction_variance;
+					noob::vec3 spread = noob::vec3(g.get_random() * temp[0], g.get_random() * temp [1], g.get_random() * temp[0]);
+				}
+			}
+		}
+	}
+}
+
 
 /*
    void noob::stage::write_graph(const std::string& filename) const

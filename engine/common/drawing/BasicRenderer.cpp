@@ -23,24 +23,13 @@ void noob::basic_renderer::draw(const noob::drawable* model, const noob::mat4& w
 {
 
 	noob::graphics& gfx = noob::graphics::get_instance();
-	// bgfx::setUniform(gfx.get_colour_0.handle, &uni.colour.v[0]);
-	// gfx.get_shader s = gfx.get_get_shader("basic");
-	// model->draw(view_id, world_mat, shader.program);
-	
-	bgfx::setUniform(gfx.get_normal_mat().handle, &normal_mat.m[0]);
-
-
 	bgfx::setUniform(gfx.get_colour_0().handle, &uni.colour.v[0]);
-
-	// noob::mat4 normal_mat = noob::transpose(noob::inverse(w_mat));
 	bgfx::setUniform(gfx.get_normal_mat().handle, &normal_mat.m[0]);
-	
 	bgfx::setUniform(gfx.get_specular_shine().handle, &reflect.specular_shine.v[0]);
 	bgfx::setUniform(gfx.get_diffuse().handle, &reflect.diffuse.v[0]);
 	// bgfx::setUniform(gfx.get_ambient.handle, &reflect.ambient.v[0]);
 	bgfx::setUniform(gfx.get_emissive().handle, &reflect.emissive.v[0]);
 	bgfx::setUniform(gfx.get_rough_albedo_fresnel().handle, &reflect.rough_albedo_fresnel.v[0]);
-	
 	// bgfx::setUniform(gfx.get_fog.handle, &noob::vec4(0.01, 0.01, 0.01, 0.0).v[0]);
 
 	std::array<noob::vec4, MAX_LIGHTS> lights_rgbi;
@@ -60,5 +49,4 @@ void noob::basic_renderer::draw(const noob::drawable* model, const noob::mat4& w
 	
 
 	model->draw(view_id, w_mat, renderbase.shader.program,  0 | BGFX_STATE_RGB_WRITE | BGFX_STATE_ALPHA_WRITE | BGFX_STATE_DEPTH_WRITE | BGFX_STATE_DEPTH_TEST_LESS | BGFX_STATE_MSAA);
-
 }
