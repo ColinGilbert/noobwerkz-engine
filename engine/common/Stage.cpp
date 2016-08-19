@@ -1,6 +1,5 @@
 #include "Stage.hpp"
 // #include "Shiny.h"
-#include <fstream>
 
 
 noob::stage::~stage() noexcept(true) 
@@ -192,6 +191,48 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 	}
 
 
+	// Now, draw particles. Particles are drawn differently from the rest due to the fact that their colours aren't really supposed to be reused.
+	for (uint32_t i = 0; i < particle_systems.count(); ++i)
+	{
+		const noob::particle_system* sys = std::get<1>(particle_systems.get_ptr(noob::particle_system_handle::make(i)));
+
+		if (sys->active)
+		{
+			const noob::scaled_model model_scaled = g.model_from_shape(sys->particle_shape);
+
+			const noob::reflectance reflect = g.reflectances.get(sys->particle_reflectance);
+
+			// const noob::shape_handle shape_h = sys->particle_shape;
+
+			// const noob::basic_shader_handle shader_h = g.debug_shader;
+
+			for (uint32_t k = 0; noob::particle_system::max_particles; ++i)
+			{
+				const noob::particle p = sys->particles[k];
+
+				if (p.active)
+				{
+					const noob::ghost ghst = ghosts.get(p.ghost);
+
+					const noob::versor temp_quat = ghst.get_orientation();
+
+					noob::mat4 world_mat(noob::identity_mat4());
+					world_mat = noob::rotate(world_mat, temp_quat);
+					world_mat = noob::scale(world_mat, model_scaled.scales);												
+					world_mat = noob::translate(world_mat, ghst.get_position());
+
+					const noob::mat4 normal_mat = noob::transpose(noob::inverse(world_mat * view_mat));
+
+					noob::basic_renderer::uniform u;
+					u.colour = p.colour;
+
+					g.basic_drawer.draw(g.basic_models.get(model_scaled.model_h), world_mat, normal_mat, eye_pos, u, reflect, temp_lights, 0);
+				}
+
+			}
+		}
+	}
+
 
 
 	if (show_origin)
@@ -314,7 +355,7 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, co
 }
 
 
-noob::particle_system_handle noob::stage::particle_system(const noob::particle_system_descriptor& desc)
+noob::particle_system_handle noob::stage::particle_system(const noob::particle_system_descriptor& desc) noexcept(true)
 {
 	noob::globals& g = noob::globals::get_instance();
 
@@ -329,15 +370,19 @@ noob::particle_system_handle noob::stage::particle_system(const noob::particle_s
 	ps.emit_direction = desc.emit_direction;
 	ps.emit_direction_variance = desc.emit_direction_variance;
 	ps.wind = desc.wind;
+	ps.particle_reflectance = desc.particle_reflectance;
+	ps.particle_shape = desc.particle_shape;
 
 	for (uint32_t i = 0; i < noob::particle_system::max_particles; ++i)
 	{
 		noob::ghost_handle g_h = ghost(g.unit_sphere_shape, ps.center, noob::versor(0.0, 0.0, 0.0, 1.0));
 		noob::ghost* g_ptr = std::get<1>(ghosts.get_ptr_mutable(g_h));
 		g_ptr->inner->setCollisionFlags(noob::collision_type::SCENERY | noob::collision_type::CHARACTER);
+		g_ptr->inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::PARTICLE));
 	}
 
 	return particle_systems.add(ps);
+
 }
 
 
@@ -577,30 +622,38 @@ void noob::stage::update_particle_systems() noexcept(true)
 	{
 		noob::particle_system* sys = std::get<1>(particle_systems.get_ptr_mutable(noob::particle_system_handle::make(i)));
 
-		// We calculate the new positions of our particles
-		float damping = sys->damping;
-		float gravity_multiplier = sys->gravity_multiplier;
-		noob::vec3 wind = sys->wind;
-
-		for (uint32_t i = 0; i < noob::particle_system::max_particles; ++i)
+		if (sys->active)
 		{
-			noob::particle p = sys->particles[i];
-			// noob::ghost ghost = ghosts.get(p.ghost);
+			// We calculate the new positions of our particles
+			float damping = sys->damping;
+			float gravity_multiplier = sys->gravity_multiplier;
+			noob::vec3 wind = sys->wind;
 
-			if (p.active)
+			for (uint32_t i = 0; i < noob::particle_system::max_particles; ++i)
 			{
-				p.time_left -= seconds_since_last;
-				if (p.time_left > 0.0)
-				{
-					std::vector<noob::contact_point> cp = get_intersecting(p.ghost);
-					if (cp.size() == 0)
-					{
-						p.velocity = (p.velocity + wind + (world_gravity * gravity_multiplier)) * damping;
+				noob::particle p = sys->particles[i];
+				// noob::ghost ghost = ghosts.get(p.ghost);
 
-						noob::ghost temp_ghost = ghosts.get(p.ghost);
-						noob::vec3 pos = temp_ghost.get_position();
-						pos += (p.velocity * seconds_since_last);
-						temp_ghost.set_position(pos);
+				if (p.active)
+				{
+					p.time_left -= seconds_since_last;
+					if (p.time_left > 0.0)
+					{
+						std::vector<noob::contact_point> cp = get_intersecting(p.ghost);
+						if (cp.size() == 0)
+						{
+							p.velocity = (p.velocity + wind + (world_gravity * gravity_multiplier)) * damping;
+
+							noob::ghost temp_ghost = ghosts.get(p.ghost);
+							noob::vec3 pos = temp_ghost.get_position();
+							pos += (p.velocity * seconds_since_last);
+							temp_ghost.set_position(pos);
+						}
+						else
+						{
+							p.active = false;
+							sys->first_free = i;
+						}
 					}
 					else
 					{
@@ -608,20 +661,15 @@ void noob::stage::update_particle_systems() noexcept(true)
 						sys->first_free = i;
 					}
 				}
-				else
+
+
+				// Now, can we possibly spawn a new particle?
+				uint64_t nanos = update_duration.count();
+				bool trying = true;
+				while (trying)
 				{
-					p.active = false;
-					sys->first_free = i;
+					trying = particle_spawn_helper(nanos, sys);
 				}
-			}
-
-
-			// Now, can we possibly spawn a new particle?
-			uint64_t nanos = update_duration.count();
-			bool trying = true;
-			while (trying)
-			{
-				trying = particle_spawn_helper(nanos, sys);
 			}
 		}
 	}

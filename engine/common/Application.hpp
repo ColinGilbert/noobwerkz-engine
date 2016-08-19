@@ -1,28 +1,5 @@
 #pragma once
 
-#include <assert.h>
-#include <math.h>
-#include <string>
-#include <stdio.h>
-#include <stdlib.h>
-
-//#define PI (float)3.14159265
-#include <tuple>
-// #include <time.h>
-#include <assert.h>
-#include <memory>
-#include <cstdlib>
-#include <string>
-#include <thread>
-#include <atomic>
-#include <mutex>
-#include <sstream>
-#include <map>
-#include <vector>
-#include <array>
-#include <algorithm>
-#include <iostream>
-#include <fstream>
 #include <atomic>
 
 #include <btBulletDynamicsCommon.h>

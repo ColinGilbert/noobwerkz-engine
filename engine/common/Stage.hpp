@@ -67,11 +67,12 @@ namespace noob
 			noob::joint_handle joint(const noob::body_handle a, const noob::vec3& point_on_a, const noob::body_handle b, const noob::vec3& point_on_b) noexcept(true);
 
 			// These are the composites that use the bodies, ghosts, and joints.
+			// TODO: Make actor and scenery noexcept once we replace lemon-graph with something more lightweight
 			noob::actor_handle actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3&, const noob::versor&);
 
 			noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
 
-			noob::particle_system_handle particle_system(const noob::particle_system_descriptor&);
+			noob::particle_system_handle particle_system(const noob::particle_system_descriptor&) noexcept(true);
 
 			void set_light(unsigned int, const noob::light_handle) noexcept(true);
 
