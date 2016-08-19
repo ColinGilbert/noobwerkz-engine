@@ -11,14 +11,15 @@
 
 namespace noob
 {
-	// These are linked to ghosts on stage, and are invalidated on either first contact with anything that isn't another particle, or on running out of time.
+	// These are linked to ghosts onstage, and are invalidated on either first contact with anything that isn't another particle, or on running out of time.
 	struct particle
 	{
 		particle() noexcept(true) : active(false), time_left(0.0) {}
 		bool active;
 		float time_left;
-		noob::ghost_handle ghost;
 		noob::vec3 velocity;
+		noob::ghost_handle ghost;
+		// noob::shader_handle shading;
 	};
 
 	struct particle_system_descriptor
@@ -38,35 +39,7 @@ namespace noob
 		particle_system() noexcept(true) : first_free(0), emits_per_second(0), nanos_until_emit(0), lifespan_base(5.0), lifespan_variance(0.2), damping(0.995), gravity_multiplier(0.05), wind_multiplier(1.0), emit_force(10.0), center(noob::vec3(0.0, 0.0, 0.0)), emit_direction(noob::vec3(0.0, 1.0, 0.0)), emit_direction_variance(noob::vec3(0.2, 0.0, 0.2)), wind(noob::vec3(0.2, 0.0, -0.3)) {}
 
 		static constexpr uint32_t max_particles = 64;
-
-		void init(const rde::fixed_array<noob::ghost_handle, max_particles>& handles)
-		{
-			for (uint32_t i = 0; i < max_particles; ++i)
-			{
-				particles[i].ghost = handles[i];
-			}
-		}
-
-		bool particle_exists(uint32_t i) const
-		{
-			if (i < max_particles) return true;
-			else return false;
-		}
-
-		noob::particle get_particle(uint32_t i) const
-		{
-			if (i < max_particles)
-			{
-				return particles[i];
-			}
-			else
-			{
-				noob::particle p;
-				logger::log("[Particle] DATA ERROR: Trying to access over index bounds.");
-				return p;
-			}
-		}
-
+		
 		void set_particle_lifespan(noob::duration d, float variance)
 		{
 			lifespan_base = static_cast<float>(d.count());
@@ -80,7 +53,18 @@ namespace noob
 			nanos_until_emit = nanos_between_emits;
 		}
 
-
+		uint32_t get_next_free(uint32_t from) const
+		{
+			for (uint32_t i = from; i < max_particles; ++i)
+			{
+				if (particles[i].active) return i;
+			}
+			for (uint32_t i = 0; i < from; ++i)
+			{
+				if (particles[i].active) return i;
+			}
+			return std::numeric_limits<uint32_t>::max();
+		}
 
 		protected:
 
@@ -94,9 +78,8 @@ namespace noob
 
 		noob::time last_update_time, current_update_time;
 
-		noob::random_generator rng;
-
 		rde::fixed_array<particle, max_particles> particles;
+
 	};
 
 	// typedef noob::component<noob::particle_system> particle_systems_holder;

@@ -44,7 +44,7 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.1, 0.1, 0.1, 0.1)), instancing(true), bodies_mapping(draw_graph), /* model_mats_mapping(draw_graph),*/ basic_models_mapping(draw_graph), shaders_mapping(draw_graph), reflectances_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph), matrix_pool_count(0) {}
+			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.1, 0.1, 0.1, 0.1)), instancing(false), bodies_mapping(draw_graph), /* model_mats_mapping(draw_graph),*/ basic_models_mapping(draw_graph), shaders_mapping(draw_graph), reflectances_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph), matrix_pool_count(0) {}
 
 			~stage() noexcept(true);
 
@@ -108,6 +108,7 @@ namespace noob
 			void actor_dither(noob::actor_handle h) noexcept(true);
 
 			void update_particle_systems() noexcept(true);
+			bool particle_spawn_helper(uint64_t nanos, noob::particle_system*) noexcept(true); 
 
 			const int NUM_RESERVED_NODES = 8192;			
 			const int NUM_RESERVED_ARCS = 8192;
@@ -128,6 +129,7 @@ namespace noob
 			noob::component<noob::actor> actors;
 			noob::component<noob::scenery> sceneries;
 			noob::component<noob::particle_system> particle_systems;
+			basic_shaders_holder particle_shaders;
 
 			rde::vector<noob::actor_event> actor_mq;
 			uint32_t actor_mq_count;

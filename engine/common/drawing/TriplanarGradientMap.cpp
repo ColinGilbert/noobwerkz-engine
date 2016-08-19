@@ -50,7 +50,6 @@ void noob::triplanar_gradient_map_renderer::draw(const noob::drawable* model, co
 	bgfx::setUniform(gfx.get_diffuse().handle, &reflect.diffuse.v[0]);
 	bgfx::setUniform(gfx.get_emissive().handle, &reflect.emissive.v[0]);
 	bgfx::setUniform(gfx.get_rough_albedo_fresnel().handle, &reflect.rough_albedo_fresnel.v[0]);
-	
 	bgfx::setUniform(gfx.get_fog().handle, &noob::vec4(0.01, 0.01, 0.01, 0.0).v[0]);
 	
 

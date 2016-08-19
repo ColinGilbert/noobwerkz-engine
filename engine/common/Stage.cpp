@@ -102,8 +102,9 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 	noob::graphics& gfx = noob::graphics::get_instance();
 	bgfx::setUniform(gfx.get_ambient().handle, &ambient_light.v[0]);
 
-	// Just a loving reminder:
-	// static const noob::graphics::uniform invalid_uniform, colour_0, colour_1, colour_2, colour_3, blend_0, blend_1, tex_scales, normal_mat, normal_mat_modelspace, eye_pos, eye_pos_normalized, ambient, light_pos_radius, light_rgb_falloff, specular_shine, diffuse, emissive, fog, rough_albedo_fresnel;
+	rde::vector<float> instancing_buffer; 
+	uint32_t instance_buffer_count = 0;
+
 	std::array<noob::light, MAX_LIGHTS> temp_lights;
 
 	noob::globals& g = noob::globals::get_instance();
@@ -160,25 +161,17 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 						}
 				}
 
-				//: See if moving this up or down changes anything
+				// See if moving this up or down changes anything
 				noob::mat4 normal_mat = noob::transpose(noob::inverse((world_mat * view_mat)));
 				noob::reflectance temp_reflect;
 				temp_reflect = g.reflectances.get(reflectance_handle::make(reflectances_mapping[body_node]));
+
 				// Do the actual draw-calling now...
 				switch(shader_h.type)
 				{
 					case(noob::shader_type::BASIC):
 						{
-							// TODO: Work this up the loop and profile, as exercise
-							if (doing_instanced)
-							{
-								// INSERT STUFF
-								matrix_pool.push_back(world_mat);
-								matrix_pool.push_back(normal_mat);
-							}
-							{
-								g.basic_drawer.draw(g.basic_models.get(model_handle::make(model_h)), world_mat, normal_mat, eye_pos, g.basic_shaders.get(basic_shader_handle::make(shader_h.handle)), temp_reflect, temp_lights, 0);
-							}
+							g.basic_drawer.draw(g.basic_models.get(model_handle::make(model_h)), world_mat, normal_mat, eye_pos, g.basic_shaders.get(basic_shader_handle::make(shader_h.handle)), temp_reflect, temp_lights, 0);
 							break;
 						}
 					case(noob::shader_type::TRIPLANAR):
@@ -198,14 +191,6 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 		}
 	}
 
-	for (uint32_t i = 0; i < particle_systems.count(); ++i)
-	{
-		noob::particle_system* sys = std::get<1>(particle_systems.get_ptr_mutable(noob::particle_system_handle::make(i)));
-
-		// sys->
-
-
-	}
 
 
 
@@ -631,25 +616,53 @@ void noob::stage::update_particle_systems() noexcept(true)
 			}
 
 
-			noob::globals& g = noob::globals::get_instance();
-
 			// Now, can we possibly spawn a new particle?
-			if (update_duration.count() > sys->nanos_until_emit)
+			uint64_t nanos = update_duration.count();
+			bool trying = true;
+			while (trying)
 			{
-				// Yes, we can!
-				if (sys->first_free != std::numeric_limits<uint32_t>::max())
-				{
-					noob::particle p;
-					p.active = true;
-					p.time_left = sys->lifespan_base + static_cast<float>(g.get_random()) + sys->lifespan_variance;
-					
-					sys->nanos_until_emit = sys->nanos_between_emits;
-					noob::vec3 temp = sys->emit_direction_variance;
-					noob::vec3 spread = noob::vec3(g.get_random() * temp[0], g.get_random() * temp [1], g.get_random() * temp[0]);
-				}
+				trying = particle_spawn_helper(nanos, sys);
 			}
 		}
 	}
+}
+
+
+bool noob::stage::particle_spawn_helper(uint64_t nanos, noob::particle_system* sys) noexcept(true)
+{
+	if (nanos > sys->nanos_until_emit)
+	{
+		if (sys->first_free != std::numeric_limits<uint32_t>::max())
+		{
+			noob::globals& g = noob::globals::get_instance();
+
+			noob::particle p;
+			p.active = true;
+			p.time_left = sys->lifespan_base + static_cast<float>(g.get_random()) + sys->lifespan_variance;
+
+			sys->nanos_until_emit = sys->nanos_between_emits;
+
+			noob::vec3 temp = sys->emit_direction_variance;
+			noob::vec3 spread = noob::vec3(g.get_random() * temp[0], g.get_random() * temp[1], g.get_random() * temp[2]);
+			noob::vec3 dir = sys->emit_direction;
+
+			p.velocity = noob::vec3(dir[0] + spread[0], dir[1] + spread[1], dir[2] + spread[2]);
+
+			noob::ghost ghst = ghosts.get(p.ghost);
+			ghst.set_position(sys->center);
+
+			uint32_t next = sys->first_free;
+			next = sys->get_next_free(next);
+			sys->first_free = next;
+
+			if (next != std::numeric_limits<uint32_t>::max())
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 
