@@ -727,3 +727,80 @@ bool noob::stage::particle_spawn_helper(uint64_t nanos, noob::particle_system* s
    else logger::log("[Stage] Could not write graph snapshot - temp directory not found.");
    }
    */
+
+
+
+
+noob::vec3 noob::stage::get_particles_center(const noob::particle_system_handle h) const
+{
+	const noob::particle_system* ps = std::get<1>(particle_systems.get_ptr(h));
+	return ps->center;
+}
+
+noob::vec3 noob::stage::get_particles_emit_direction(const noob::particle_system_handle h) const
+{
+	const noob::particle_system* ps = std::get<1>(particle_systems.get_ptr(h));
+	return ps->emit_direction;
+}
+
+noob::vec3 noob::stage::get_particles_emit_variance(const noob::particle_system_handle h) const
+{
+	const noob::particle_system* ps = std::get<1>(particle_systems.get_ptr(h));
+	return ps->emit_direction_variance;
+}
+
+noob::vec3 noob::stage::get_particles_wind(const noob::particle_system_handle h) const
+{
+	const noob::particle_system* ps = std::get<1>(particle_systems.get_ptr(h));
+	return ps->wind;
+}
+
+noob::reflectance_handle noob::stage::get_particles_reflect(const noob::particle_system_handle) const
+{
+
+}
+
+noob::shape_handle noob::stage::get_particles_shape(const noob::particle_system_handle) const
+{
+
+}
+
+noob::vec4 noob::stage::get_particles_colour(const noob::particle_system_handle, uint32_t colour_index) const
+{
+
+}
+
+void noob::stage::set_particles_center(const noob::particle_system_handle, const noob::vec3&)
+{
+
+}
+
+void noob::stage::set_particles_emit_direction(const noob::particle_system_handle, const noob::vec3&)
+{
+
+}
+
+void noob::stage::set_particles_emit_variance(const noob::particle_system_handle, const noob::vec3&)
+{
+
+}
+
+void noob::stage::set_particles_wind(const noob::particle_system_handle, const noob::vec3&)
+{
+
+}
+
+void noob::stage::set_particles_reflect(const noob::particle_system_handle, const noob::reflectance_handle)
+{
+
+}
+
+void noob::stage::set_particles_shape(const noob::particle_system_handle, const noob::shape_handle)
+{
+
+}
+
+void noob::stage::set_particles_colour(const noob::particle_system_handle, uint32_t colour_index, const noob::vec4&)
+{
+
+}

@@ -84,6 +84,35 @@ namespace noob
 
 			std::vector<noob::contact_point> get_intersecting(const noob::actor_handle) const noexcept(true);
 
+
+			//	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "vec3 center", asOFFSET(noob::particle_system_descriptor, center)); assert(r >= 0);
+			//	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "vec3 emit_direction", asOFFSET(noob::particle_system_descriptor, emit_direction)); assert(r >= 0);
+			//	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "vec3 emit_direction_variance", asOFFSET(noob::particle_system_descriptor, emit_direction_variance)); assert(r >= 0);
+			//	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "vec3 wind", asOFFSET(noob::particle_system_descriptor, wind)); assert(r >= 0);
+			//	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "reflectance_handle reflect", asOFFSET(noob::particle_system_descriptor, reflect)); assert(r >= 0);
+			//	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "shape_handle shape", asOFFSET(noob::particle_system_descriptor, shape)); assert(r >= 0);
+			//	r = script_engine->RegisterObjectMethod("particle_system_descriptor", "void set_colour(uint32, const vec4& in)", asMETHOD(noob::particle_system_descriptor, set_colour), asCALL_THISCALL); assert( r >= 0 );
+			//	r = script_engine->RegisterObjectMethod("particle_system_descriptor", "vec4 get_colour(uint32) const", asMETHOD(noob::particle_system_descriptor, get_colour), asCALL_THISCALL); assert( r >= 0 );	
+
+
+
+			// These functions are mostly for scriping use.
+			noob::vec3 get_particles_center(const noob::particle_system_handle) const;
+			noob::vec3 get_particles_emit_direction(const noob::particle_system_handle) const;
+			noob::vec3 get_particles_emit_variance(const noob::particle_system_handle) const;
+			noob::vec3 get_particles_wind(const noob::particle_system_handle) const;
+			noob::reflectance_handle get_particles_reflect(const noob::particle_system_handle) const;
+			noob::shape_handle get_particles_shape(const noob::particle_system_handle) const;
+			noob::vec4 get_particles_colour(const noob::particle_system_handle, uint32_t colour_index) const;
+
+			void set_particles_center(const noob::particle_system_handle, const noob::vec3&);
+			void set_particles_emit_direction(const noob::particle_system_handle, const noob::vec3&);
+			void set_particles_emit_variance(const noob::particle_system_handle, const noob::vec3&);
+			void set_particles_wind(const noob::particle_system_handle, const noob::vec3&);
+			void set_particles_reflect(const noob::particle_system_handle, const noob::reflectance_handle);
+			void set_particles_shape(const noob::particle_system_handle, const noob::shape_handle);
+			void set_particles_colour(const noob::particle_system_handle, uint32_t colour_index, const noob::vec4&);
+
 			// Dumps a readable graph format onto disk. Super useful for debug.
 			// void write_graph(const std::string& filename) const noexcept(true);
 
