@@ -1,11 +1,14 @@
 #include "RegisterHandles.hpp"
 
+#include "ComponentDefines.hpp"
 #include "NoobCommon.hpp"
 #include "Actor.hpp"
+#include "Particles.hpp"
 
 void noob::register_handles(asIScriptEngine* script_engine)
 {
 	int r;
+
 	r = script_engine->RegisterObjectType("shape_handle", sizeof(noob::shape_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::shape_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	
 	r = script_engine->RegisterObjectType("body_handle", sizeof(noob::body_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::body_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
@@ -25,6 +28,8 @@ void noob::register_handles(asIScriptEngine* script_engine)
 	r = script_engine->RegisterObjectType("actor_handle", sizeof(noob::actor_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::actor_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 
 	r = script_engine->RegisterObjectType("scenery_handle", sizeof(noob::scenery_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::scenery_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+
+	r = script_engine->RegisterObjectType("particle_system_handle", sizeof(noob::particle_system_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::particle_system_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 
 	r = script_engine->RegisterObjectType("light_handle", sizeof(noob::light_handle), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::light_handle>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	

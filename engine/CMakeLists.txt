@@ -774,6 +774,7 @@ list(APPEND common_src
 	#common/scripting/RegisterGhost.cpp
 	common/scripting/RegisterActor.cpp
 	common/scripting/RegisterUniforms.cpp
+	common/scripting/RegisterParticles.cpp
 	)
 
 list(APPEND user_src

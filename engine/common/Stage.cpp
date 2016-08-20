@@ -198,9 +198,9 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 
 		if (sys->active)
 		{
-			const noob::scaled_model model_scaled = g.model_from_shape(sys->particle_shape);
+			const noob::scaled_model model_scaled = g.model_from_shape(sys->shape);
 
-			const noob::reflectance reflect = g.reflectances.get(sys->particle_reflectance);
+			const noob::reflectance reflect = g.reflectances.get(sys->reflect);
 
 			// const noob::shape_handle shape_h = sys->particle_shape;
 
@@ -370,8 +370,8 @@ noob::particle_system_handle noob::stage::particle_system(const noob::particle_s
 	ps.emit_direction = desc.emit_direction;
 	ps.emit_direction_variance = desc.emit_direction_variance;
 	ps.wind = desc.wind;
-	ps.particle_reflectance = desc.particle_reflectance;
-	ps.particle_shape = desc.particle_shape;
+	ps.reflect = desc.reflect;
+	ps.shape = desc.shape;
 
 	for (uint32_t i = 0; i < noob::particle_system::max_particles; ++i)
 	{

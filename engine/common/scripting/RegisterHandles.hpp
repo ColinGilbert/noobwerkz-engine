@@ -1,9 +1,5 @@
 #pragma once
 
-#pragma once
-
-#include "ComponentDefines.hpp"
-
 #include <angelscript.h>
 #include "AngelVector.hpp"
 #include "RegisterGlobals.hpp"

@@ -30,10 +30,35 @@ namespace noob
 
 		noob::vec3 center, emit_direction, emit_direction_variance, wind;
 
-		noob::reflectance_handle particle_reflectance;
+		noob::reflectance_handle reflect;
 
-		noob::shape_handle particle_shape;
+		noob::shape_handle shape;
+
+		rde::fixed_array<noob::vec4, 4> colours;
+
+		void set_colour(uint32_t i, const noob::vec4& c)
+		{
+			if (i < 4)
+			{
+				colours[i] = c;
+			}
+			else
+			{
+				colours[3] = c;
+			}
+		}
+	
+		noob::vec4 get_colour(uint32_t i) const
+		{
+			if (i < 4)
+			{
+				return colours[i];
+			}
+			return colours[3];
+		}
+
 	};
+
 
 	class particle_system
 	{
@@ -88,9 +113,9 @@ namespace noob
 
 		rde::fixed_array<particle, max_particles> particles;
 
-		noob::shape_handle particle_shape;
+		noob::shape_handle shape;
 
-		noob::reflectance_handle particle_reflectance;
+		noob::reflectance_handle reflect;
 	};
 
 	// typedef noob::component<noob::particle_system> particle_systems_holder;

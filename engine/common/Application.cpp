@@ -125,6 +125,7 @@ void noob::application::init()
 	register_actor(script_engine);
 	register_uniforms(script_engine);
 	register_scaled_model(script_engine);
+	register_particles(script_engine);
 	register_stage(script_engine);
 	r = script_engine->RegisterGlobalProperty("stage default_stage", &stage); assert (r >= 0);
 	register_voxels(script_engine);
