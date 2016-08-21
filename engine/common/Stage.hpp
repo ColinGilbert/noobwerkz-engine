@@ -54,7 +54,11 @@ namespace noob
 			// Brings everything back to scratch.
 			void tear_down() noexcept(true);
 
-			// Call those every frame or so.
+			// It is recommended that the main stage gets both update() and draw() called each frame.
+			// It is also feasible to have other stages running alongside each other:
+			// For example, the AI could simulate a tree of possible events and choose the best solution prior to making its decision.
+			// Also, one stage could be preloading an updated scene (from file, network, or procedural content) prior to being swapped to being currently-displayed stage.
+			// Draw() can also feasibly be called more than once per frame, especially after setting the viewport to a different FOV/LOD. The results can then be treated as a texture and displayed within a game, or on a HUD.
 			void update(double dt) noexcept(true);
 
 			void draw(float window_width, float window_height, const noob::vec3& eye_pos, const noob::vec3& eye_target, const noob::vec3& eye_up, const noob::mat4& projection_mat) noexcept(true);
@@ -67,51 +71,30 @@ namespace noob
 			noob::joint_handle joint(const noob::body_handle a, const noob::vec3& point_on_a, const noob::body_handle b, const noob::vec3& point_on_b) noexcept(true);
 
 			// These are the composites that use the bodies, ghosts, and joints.
-			// TODO: Make actor and scenery noexcept once we replace lemon-graph with something more lightweight
 			noob::actor_handle actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3&, const noob::versor&);
 
 			noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
 
-			noob::particle_system_handle particle_system(const noob::particle_system_descriptor&) noexcept(true);
+			noob::particle_system_handle create_particle_system(const noob::particle_system::descriptor&) noexcept(true);
 
+			noob::particle_system::descriptor get_particle_system_properties(const noob::particle_system_handle) const noexcept(true);
+
+			void set_particle_system_properties(const noob::particle_system_handle, const noob::particle_system::descriptor&) noexcept(true);
+			
+			void activate_particle_system(const noob::particle_system_handle, bool) noexcept(true);
+			
+			// Lights.
 			void set_light(unsigned int, const noob::light_handle) noexcept(true);
 
 			void set_directional_light(const noob::directional_light&) noexcept(true);
 
 			noob::light_handle get_light(uint32_t) const noexcept(true);
 
+			
+			// Intersection enumeration.
 			std::vector<noob::contact_point> get_intersecting(const noob::ghost_handle) const noexcept(true);
 
 			std::vector<noob::contact_point> get_intersecting(const noob::actor_handle) const noexcept(true);
-
-
-			//	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "vec3 center", asOFFSET(noob::particle_system_descriptor, center)); assert(r >= 0);
-			//	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "vec3 emit_direction", asOFFSET(noob::particle_system_descriptor, emit_direction)); assert(r >= 0);
-			//	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "vec3 emit_direction_variance", asOFFSET(noob::particle_system_descriptor, emit_direction_variance)); assert(r >= 0);
-			//	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "vec3 wind", asOFFSET(noob::particle_system_descriptor, wind)); assert(r >= 0);
-			//	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "reflectance_handle reflect", asOFFSET(noob::particle_system_descriptor, reflect)); assert(r >= 0);
-			//	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "shape_handle shape", asOFFSET(noob::particle_system_descriptor, shape)); assert(r >= 0);
-			//	r = script_engine->RegisterObjectMethod("particle_system_descriptor", "void set_colour(uint32, const vec4& in)", asMETHOD(noob::particle_system_descriptor, set_colour), asCALL_THISCALL); assert( r >= 0 );
-			//	r = script_engine->RegisterObjectMethod("particle_system_descriptor", "vec4 get_colour(uint32) const", asMETHOD(noob::particle_system_descriptor, get_colour), asCALL_THISCALL); assert( r >= 0 );	
-
-
-
-			// These functions are mostly for scriping use.
-			noob::vec3 get_particles_center(const noob::particle_system_handle) const;
-			noob::vec3 get_particles_emit_direction(const noob::particle_system_handle) const;
-			noob::vec3 get_particles_emit_variance(const noob::particle_system_handle) const;
-			noob::vec3 get_particles_wind(const noob::particle_system_handle) const;
-			noob::reflectance_handle get_particles_reflect(const noob::particle_system_handle) const;
-			noob::shape_handle get_particles_shape(const noob::particle_system_handle) const;
-			noob::vec4 get_particles_colour(const noob::particle_system_handle, uint32_t colour_index) const;
-
-			void set_particles_center(const noob::particle_system_handle, const noob::vec3&);
-			void set_particles_emit_direction(const noob::particle_system_handle, const noob::vec3&);
-			void set_particles_emit_variance(const noob::particle_system_handle, const noob::vec3&);
-			void set_particles_wind(const noob::particle_system_handle, const noob::vec3&);
-			void set_particles_reflect(const noob::particle_system_handle, const noob::reflectance_handle);
-			void set_particles_shape(const noob::particle_system_handle, const noob::shape_handle);
-			void set_particles_colour(const noob::particle_system_handle, uint32_t colour_index, const noob::vec4&);
 
 			// Dumps a readable graph format onto disk. Super useful for debug.
 			// void write_graph(const std::string& filename) const noexcept(true);

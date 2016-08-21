@@ -1,3 +1,8 @@
+// In this engine, particles are linked to the simulation; they are ghost objects and are set to pop upon contact with physical objects (in reality they get reused.)
+// Particles are also affected by gravity to a user-programmable degree.
+// Particles don't collide with other particles of their own emitter.
+
+// This class can only provide data members, as the stage is responsible for ghosts and drawing.
 #pragma once
 
 #include <rdestl/fixed_array.h>
@@ -6,7 +11,7 @@
 #include "Component.hpp"
 #include "MathFuncs.hpp"
 #include "Timing.hpp"
-#include "RandomGenerator.hpp"
+//#include "RandomGenerator.hpp"
 
 
 namespace noob
@@ -14,65 +19,98 @@ namespace noob
 	// These are linked to ghosts onstage, and are invalidated on either first contact with anything that isn't another particle, or on running out of time.
 	struct particle
 	{
-		particle() noexcept(true) : active(false), time_left(0.0), colour(noob::vec4(1.0, 0.0, 1.0, 1.0)) {}
+		particle() noexcept(true) : active(false), path_point(0.0) {}
 		bool active;
-		float time_left;
+		float path_point;
 		noob::vec3 velocity;
 		noob::ghost_handle ghost;
-		noob::vec4 colour;
 	};
-
-	struct particle_system_descriptor
-	{
-		uint32_t emits_per_second;
-
-		float lifespan_base, lifespan_variance, damping, gravity_multiplier;
-
-		noob::vec3 center, emit_direction, emit_direction_variance, wind;
-
-		noob::reflectance_handle reflect;
-
-		noob::shape_handle shape;
-
-		rde::fixed_array<noob::vec4, 4> colours;
-
-		void set_colour(uint32_t i, const noob::vec4& c)
-		{
-			if (i < 4)
-			{
-				colours[i] = c;
-			}
-			else
-			{
-				colours[3] = c;
-			}
-		}
-	
-		noob::vec4 get_colour(uint32_t i) const
-		{
-			if (i < 4)
-			{
-				return colours[i];
-			}
-			return colours[3];
-		}
-
-	};
-
 
 	class particle_system
 	{
 		friend class stage;
 		public:
 
-		particle_system() noexcept(true) : active(false), first_free(0), emits_per_second(0), nanos_until_emit(0), lifespan_base(5.0), lifespan_variance(0.2), damping(0.995), gravity_multiplier(0.05), wind_multiplier(1.0), emit_force(10.0), center(noob::vec3(0.0, 0.0, 0.0)), emit_direction(noob::vec3(0.0, 1.0, 0.0)), emit_direction_variance(noob::vec3(0.2, 0.0, 0.2)), wind(noob::vec3(0.2, 0.0, -0.3)) {}
+		particle_system() noexcept(true) : active(false), first_free(0), emits_per_second(0), nanos_until_emit(0), path_length(5.0), damping(0.995), gravity_multiplier(0.05), wind_multiplier(1.0), emit_force(10.0), center(noob::vec3(0.0, 0.0, 0.0)), emit_direction(noob::vec3(0.0, 1.0, 0.0)), emit_direction_variance(noob::vec3(0.2, 0.2, 0.2)), wind(noob::vec3(0.2, 0.0, -0.3)) {}
 
 		static constexpr uint32_t max_particles = 64;
-		
-		void set_particle_lifespan(noob::duration d, float variance) noexcept(true)
+		static constexpr uint32_t max_colours = 4;
+
+		struct descriptor
 		{
-			lifespan_base = static_cast<float>(d.count());
-			lifespan_variance = variance;
+			uint32_t emits_per_second;
+
+			float path_length, damping, gravity_multiplier, emit_force;
+
+			noob::vec3 center, emit_direction, emit_direction_variance, wind;
+
+			noob::reflectance_handle reflect;
+
+			noob::shape_handle shape;
+
+			rde::fixed_array<noob::vec4, noob::particle_system::max_colours> colours;
+
+			void set_colour(uint32_t i, const noob::vec4& c)
+			{
+				if (i < noob::particle_system::max_colours)
+				{
+					colours[i] = c;
+				}
+				else
+				{
+					colours[noob::particle_system::max_colours - 1] = c;
+				}
+			}
+
+			noob::vec4 get_colour(uint32_t i) const
+			{
+				if (i < noob::particle_system::max_colours)
+				{
+					return colours[i];
+				}
+				return colours[noob::particle_system::max_colours - 1];
+			}
+		};
+
+
+		void set_properties(const noob::particle_system::descriptor& desc) noexcept(true)
+		{
+			emits_per_second = desc.emits_per_second;
+			path_length = desc.path_length;
+			damping = desc.damping;
+			gravity_multiplier = desc.gravity_multiplier;
+			emit_force = desc.emit_force;
+			center = desc.center;
+			emit_direction = desc.emit_direction;
+			emit_direction_variance = desc.emit_direction_variance;
+			wind = desc.wind;
+			reflect = desc.reflect;
+			shape = desc.shape;
+		}
+
+		noob::particle_system::descriptor get_properties() const noexcept(true)
+		{
+			noob::particle_system::descriptor desc;
+			
+			desc.emits_per_second = emits_per_second;
+			desc.path_length = path_length;
+			desc.damping = damping;
+			desc.gravity_multiplier = gravity_multiplier;
+			desc.emit_force = emit_force;
+			desc.center = center;
+			desc.emit_direction = emit_direction;
+			desc.emit_direction_variance = emit_direction_variance;
+			desc.wind = wind;
+			desc.reflect = reflect;
+			desc.shape = shape;
+			
+			return desc;
+		}
+
+		void set_particle_path_length(float length_arg) noexcept(true)
+		{
+			path_length = length_arg;
+			one_colour_in_path_travelled = path_length / noob::particle_system::max_colours;
 		}
 
 		void set_emits_per_sec(uint32_t num_emits) noexcept(true)
@@ -95,23 +133,74 @@ namespace noob
 			return std::numeric_limits<uint32_t>::max();
 		}
 
-		
+		// Could have been a get_colour(particle p), but it gets called lots and fewer arguments is better...
+		noob::vec4 get_colour_from_particle_life(float path_point) const noexcept(true)
+		{
+			for (uint32_t i = 1; i < noob::particle_system::max_colours; ++i)
+			{
+				const float next_colour_transition = one_colour_in_path_travelled * i;
+				const float path_travelled = path_length / std::max(static_cast<double>(path_point), 0.0001);
+				if (path_travelled < next_colour_transition)
+				{
+					const float previous_colour_gradient = i * next_colour_transition;
+					const float next_colour_gradient = i * next_colour_transition;
+					const float distance_from_previous = path_travelled - previous_colour_gradient;
+					const float distance_to_next = next_colour_gradient - distance_from_previous;
+					const noob::vec4 prev = colours[i - 1];
+					const noob::vec4 next = colours[i];
+					const noob::vec4 component_prev = prev * distance_to_next;
+					const noob::vec4 component_next = next * distance_from_previous;
+					noob::vec4 final_blend = component_prev;
+					final_blend += component_next;
+					return final_blend;
+					//return (noob::vec4(prev[0] * distance_to_next, prev[1] * distance_to_next, prev[2] * distance_to_next, prev[3] * distance_to_next) + noob::vec4(next[0] * distance_from_previous, next[1] * distance_from_previous, next[2] * distance_from_previous, next[3] * distance_from_previous));
+				}
+			}
+
+			logger::log("[ParticleSystem: get_colour_from_particle_life -Reached post-loop state!");
+			
+			return colours[noob::particle_system::max_colours -1 ];
+		}		
+
+		void set_colour(uint32_t i, const noob::vec4& c) noexcept(true)
+		{
+			if (i < max_colours)
+			{
+				colours[i] = c;
+			}
+			else
+			{
+				colours[max_colours - 1] = c;
+			}
+		}
+
+		noob::vec4 get_colour(uint32_t i) const noexcept(true)
+		{
+			if (i < max_colours)
+			{
+				return colours[i];
+			}
+			return colours[max_colours - 1];
+		}
+
 		bool active;
 
-		protected:
 
+		protected:
 
 		uint32_t first_free, emits_per_second;
 
 		uint64_t nanos_until_emit, nanos_between_emits;
 
-		float lifespan_base, lifespan_variance, damping, gravity_multiplier, wind_multiplier, emit_force;
-
+		float path_length, damping, gravity_multiplier, wind_multiplier, emit_force, one_colour_in_path_travelled;
+		
 		noob::vec3 center, emit_direction, emit_direction_variance, wind;
 
 		noob::time last_update_time, current_update_time;
 
 		rde::fixed_array<particle, max_particles> particles;
+		
+		rde::fixed_array<noob::vec4, max_colours> colours;
 
 		noob::shape_handle shape;
 

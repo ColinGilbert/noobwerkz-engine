@@ -224,7 +224,8 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 					const noob::mat4 normal_mat = noob::transpose(noob::inverse(world_mat * view_mat));
 
 					noob::basic_renderer::uniform u;
-					u.colour = p.colour;
+					
+					
 
 					g.basic_drawer.draw(g.basic_models.get(model_scaled.model_h), world_mat, normal_mat, eye_pos, u, reflect, temp_lights, 0);
 				}
@@ -355,23 +356,13 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, co
 }
 
 
-noob::particle_system_handle noob::stage::particle_system(const noob::particle_system_descriptor& desc) noexcept(true)
+noob::particle_system_handle noob::stage::create_particle_system(const noob::particle_system::descriptor& desc) noexcept(true)
 {
 	noob::globals& g = noob::globals::get_instance();
 
 	noob::particle_system ps;
 
-	ps.emits_per_second = desc.emits_per_second;
-	ps.lifespan_base = desc.lifespan_base;
-	ps.lifespan_variance = desc.lifespan_variance;
-	ps.damping = desc.damping;
-	ps.gravity_multiplier = desc.gravity_multiplier;
-	ps.center = desc.center;
-	ps.emit_direction = desc.emit_direction;
-	ps.emit_direction_variance = desc.emit_direction_variance;
-	ps.wind = desc.wind;
-	ps.reflect = desc.reflect;
-	ps.shape = desc.shape;
+	ps.set_properties(desc);
 
 	for (uint32_t i = 0; i < noob::particle_system::max_particles; ++i)
 	{
@@ -383,6 +374,52 @@ noob::particle_system_handle noob::stage::particle_system(const noob::particle_s
 
 	return particle_systems.add(ps);
 
+}
+
+
+noob::particle_system::descriptor noob::stage::get_particle_system_properties(const noob::particle_system_handle h) const noexcept(true)
+{
+//	return std::get<1>(particle_systems.get(h)).get_properties();
+
+	std::tuple<bool, noob::particle_system*> temp = particle_systems.get_ptr_mutable(h);
+	if (std::get<0>(temp) != false)
+	{
+		return std::get<1>(temp)->get_properties();
+	}
+	else
+	{
+		logger::log("[Stage] Attempting to obtain properties of a nonexistant particle system! Returning defaults.");
+		return std::get<1>(temp)->get_properties();
+	}
+
+}
+
+
+void noob::stage::set_particle_system_properties(const noob::particle_system_handle h, const noob::particle_system::descriptor& desc) noexcept(true)
+{
+	std::tuple<bool, noob::particle_system*> temp = particle_systems.get_ptr_mutable(h);
+	if (std::get<0>(temp) != false)
+	{
+		std::get<1>(temp)->set_properties(desc);
+	}
+	else
+	{
+		logger::log("[Stage] Attempting to set properties on a nonextant particle system!");
+	}
+}
+
+
+void noob::stage::activate_particle_system(const noob::particle_system_handle h, bool active_arg) noexcept(true)
+{
+	std::tuple<bool, noob::particle_system*> temp = particle_systems.get_ptr_mutable(h);
+	if (std::get<0>(temp) != false)
+	{
+		std::get<1>(temp)->active = active_arg;
+	}
+	else
+	{
+		logger::log("[Stage] Attempting to activate/deactivate a particle system that doesn't exist!");
+	}
 }
 
 
@@ -632,18 +669,14 @@ void noob::stage::update_particle_systems() noexcept(true)
 			for (uint32_t i = 0; i < noob::particle_system::max_particles; ++i)
 			{
 				noob::particle p = sys->particles[i];
-				// noob::ghost ghost = ghosts.get(p.ghost);
-
 				if (p.active)
 				{
-					p.time_left -= seconds_since_last;
-					if (p.time_left > 0.0)
+					if (p.path_point < sys->path_length)
 					{
 						std::vector<noob::contact_point> cp = get_intersecting(p.ghost);
 						if (cp.size() == 0)
 						{
 							p.velocity = (p.velocity + wind + (world_gravity * gravity_multiplier)) * damping;
-
 							noob::ghost temp_ghost = ghosts.get(p.ghost);
 							noob::vec3 pos = temp_ghost.get_position();
 							pos += (p.velocity * seconds_since_last);
@@ -686,7 +719,7 @@ bool noob::stage::particle_spawn_helper(uint64_t nanos, noob::particle_system* s
 
 			noob::particle p;
 			p.active = true;
-			p.time_left = sys->lifespan_base + static_cast<float>(g.get_random()) + sys->lifespan_variance;
+			p.path_point = 0.0;
 
 			sys->nanos_until_emit = sys->nanos_between_emits;
 
@@ -694,7 +727,7 @@ bool noob::stage::particle_spawn_helper(uint64_t nanos, noob::particle_system* s
 			noob::vec3 spread = noob::vec3(g.get_random() * temp[0], g.get_random() * temp[1], g.get_random() * temp[2]);
 			noob::vec3 dir = sys->emit_direction;
 
-			p.velocity = noob::vec3(dir[0] + spread[0], dir[1] + spread[1], dir[2] + spread[2]);
+			p.velocity = noob::vec3(dir[0] + spread[0], dir[1] + spread[1], dir[2] + spread[2]) * sys->emit_force;
 
 			noob::ghost ghst = ghosts.get(p.ghost);
 			ghst.set_position(sys->center);
@@ -714,6 +747,7 @@ bool noob::stage::particle_spawn_helper(uint64_t nanos, noob::particle_system* s
 }
 
 
+
 /*
    void noob::stage::write_graph(const std::string& filename) const
    {
@@ -727,80 +761,3 @@ bool noob::stage::particle_spawn_helper(uint64_t nanos, noob::particle_system* s
    else logger::log("[Stage] Could not write graph snapshot - temp directory not found.");
    }
    */
-
-
-
-
-noob::vec3 noob::stage::get_particles_center(const noob::particle_system_handle h) const
-{
-	const noob::particle_system* ps = std::get<1>(particle_systems.get_ptr(h));
-	return ps->center;
-}
-
-noob::vec3 noob::stage::get_particles_emit_direction(const noob::particle_system_handle h) const
-{
-	const noob::particle_system* ps = std::get<1>(particle_systems.get_ptr(h));
-	return ps->emit_direction;
-}
-
-noob::vec3 noob::stage::get_particles_emit_variance(const noob::particle_system_handle h) const
-{
-	const noob::particle_system* ps = std::get<1>(particle_systems.get_ptr(h));
-	return ps->emit_direction_variance;
-}
-
-noob::vec3 noob::stage::get_particles_wind(const noob::particle_system_handle h) const
-{
-	const noob::particle_system* ps = std::get<1>(particle_systems.get_ptr(h));
-	return ps->wind;
-}
-
-noob::reflectance_handle noob::stage::get_particles_reflect(const noob::particle_system_handle) const
-{
-
-}
-
-noob::shape_handle noob::stage::get_particles_shape(const noob::particle_system_handle) const
-{
-
-}
-
-noob::vec4 noob::stage::get_particles_colour(const noob::particle_system_handle, uint32_t colour_index) const
-{
-
-}
-
-void noob::stage::set_particles_center(const noob::particle_system_handle, const noob::vec3&)
-{
-
-}
-
-void noob::stage::set_particles_emit_direction(const noob::particle_system_handle, const noob::vec3&)
-{
-
-}
-
-void noob::stage::set_particles_emit_variance(const noob::particle_system_handle, const noob::vec3&)
-{
-
-}
-
-void noob::stage::set_particles_wind(const noob::particle_system_handle, const noob::vec3&)
-{
-
-}
-
-void noob::stage::set_particles_reflect(const noob::particle_system_handle, const noob::reflectance_handle)
-{
-
-}
-
-void noob::stage::set_particles_shape(const noob::particle_system_handle, const noob::shape_handle)
-{
-
-}
-
-void noob::stage::set_particles_colour(const noob::particle_system_handle, uint32_t colour_index, const noob::vec4&)
-{
-
-}

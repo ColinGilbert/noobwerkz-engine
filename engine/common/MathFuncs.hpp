@@ -33,6 +33,9 @@ typedef OpenMesh::TriMesh_ArrayKernelT<> TriMesh;
 
 #include "Vec2.hpp"
 #include "Vec3.hpp"
+#include "Vec3.hpp"
+#include "Vec4.hpp"
+
 
 namespace noob
 {
@@ -81,7 +84,7 @@ namespace noob
 		if (std::fabs(a) <= NOOB_EPSILON) return false;
 		else return true;
 	}
-
+/*
 	struct vec4 final
 	{
 		vec4();
@@ -110,15 +113,9 @@ namespace noob
 			v[i] = value;
 		}
 
-		std::string to_string() const
-		{
-			fmt::MemoryWriter w;
-			w << "(" << v[0] << ", " << v[1] << ", " << v[2] << ", " << v[3] << ")";
-			return w.str();
-		}
 
 	};
-
+*/
 	/* stored like this:
 	   0 3 6
 	   1 4 7
