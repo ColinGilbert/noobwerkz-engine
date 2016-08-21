@@ -28,7 +28,6 @@ void noob::register_math(asIScriptEngine* script_engine)
 	r = script_engine->RegisterObjectBehaviour("vec3", asBEHAVE_CONSTRUCT, "void f()", asFUNCTION(as_vec3_constructor_wrapper_basic), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	r = script_engine->RegisterObjectBehaviour("vec3", asBEHAVE_CONSTRUCT, "void f(float, float, float)", asFUNCTION(as_vec3_constructor_wrapper_float_3), asCALL_CDECL_OBJLAST); assert( r >= 0);
 	r = script_engine->RegisterObjectBehaviour("vec3", asBEHAVE_CONSTRUCT, "void f(vec2, float)", asFUNCTION(as_vec3_constructor_wrapper_vec2_float), asCALL_CDECL_OBJLAST); assert( r >= 0 );
-	// r = script_engine->RegisterObjectBehaviour("vec3", asBEHAVE_CONSTRUCT, "void f(vec4)", asFUNCTION(as_vec2_constructor_wrapper_float_2), asCALL_CDECL_OBJLAST); assert( r >= 0);
 	r = script_engine->RegisterObjectBehaviour("vec3", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_vec3_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("vec3", "vec3 opAdd(float) const", asMETHODPR(noob::vec3, operator+, (float) const, noob::vec3), asCALL_THISCALL); assert(r >= 0 );
 	r = script_engine->RegisterObjectMethod("vec3", "vec3 opAdd(const vec3& in) const", asMETHODPR(noob::vec3, operator+, (const noob::vec3&) const, noob::vec3), asCALL_THISCALL); assert(r >= 0 );
@@ -50,6 +49,16 @@ void noob::register_math(asIScriptEngine* script_engine)
 	r = script_engine->RegisterObjectBehaviour("vec4", asBEHAVE_CONSTRUCT, "void f(vec2, float, float)", asFUNCTION(as_vec4_constructor_wrapper_vec2_float_2), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	r = script_engine->RegisterObjectBehaviour("vec4", asBEHAVE_CONSTRUCT, "void f(vec3, float)", asFUNCTION(as_vec4_constructor_wrapper_vec3_float), asCALL_CDECL_OBJLAST); assert( r >= 0 );
 	r = script_engine->RegisterObjectBehaviour("vec4", asBEHAVE_DESTRUCT,  "void f()", asFUNCTION(as_vec4_destructor_wrapper), asCALL_CDECL_OBJLAST); assert( r >= 0 );
+	r = script_engine->RegisterObjectMethod("vec4", "vec4 opAdd(float) const", asMETHODPR(noob::vec4, operator+, (float) const, noob::vec4), asCALL_THISCALL); assert(r >= 0 );
+	r = script_engine->RegisterObjectMethod("vec4", "vec4 opAdd(const vec4& in) const", asMETHODPR(noob::vec4, operator+, (const noob::vec4&) const, noob::vec4), asCALL_THISCALL); assert(r >= 0 );
+	r = script_engine->RegisterObjectMethod("vec4", "vec4& opAddAssign(const vec4& in)", asMETHOD(noob::vec4, operator+=), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("vec4", "vec4 opSub(const vec4& in) const", asMETHODPR(noob::vec4, operator-, (float) const, noob::vec4), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("vec4", "vec4 opSub(float) const", asMETHODPR(noob::vec4, operator-, (const noob::vec4&) const, noob::vec4), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("vec4", "vec4& opSubAssign(const vec4& in)", asMETHOD(noob::vec4, operator-=), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("vec4", "vec4 opMult(float)", asMETHOD(noob::vec4, operator*), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("vec4", "vec4& opMultAssign(float)", asMETHOD(noob::vec4, operator*=), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("vec4", "vec4 opDiv(float)", asMETHOD(noob::vec4, operator/), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("vec4", "vec4& opAssign(const vec4& in)", asMETHOD(noob::vec4, operator=), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("vec4", "void set_opIndex(uint32, float)", asMETHOD(noob::vec4, set_opIndex), asCALL_THISCALL); assert(r >= 0 );
 	r = script_engine->RegisterObjectMethod("vec4", "float get_opIndex(uint32) const", asMETHOD(noob::vec4, get_opIndex), asCALL_THISCALL); assert(r >= 0 );
 

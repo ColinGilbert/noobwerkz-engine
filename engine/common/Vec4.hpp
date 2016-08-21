@@ -127,6 +127,15 @@ namespace noob
 			return *this;
 		}
 
+		vec4& operator=(const vec4& rhs)
+		{
+			v[0] = rhs.v[0];
+			v[1] = rhs.v[1];
+			v[2] = rhs.v[2];
+			v[3] = rhs.v[3];
+			return *this;
+		}
+
 		float& operator[](uint32_t x)
 		{
 			return v[x];

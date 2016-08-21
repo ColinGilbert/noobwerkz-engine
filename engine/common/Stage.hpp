@@ -44,7 +44,7 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.1, 0.1, 0.1, 0.1)), instancing(false), bodies_mapping(draw_graph), /* model_mats_mapping(draw_graph),*/ basic_models_mapping(draw_graph), shaders_mapping(draw_graph), reflectances_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph), matrix_pool_count(0) {}
+			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.1, 0.1, 0.1, 0.1)), instancing(false), bodies_mapping(draw_graph), enabled_mapping(draw_graph), /* model_mats_mapping(draw_graph),*/ basic_models_mapping(draw_graph), shaders_mapping(draw_graph), reflectances_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph), matrix_pool_count(0) {}
 
 			~stage() noexcept(true);
 
@@ -75,7 +75,7 @@ namespace noob
 
 			noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
 
-			noob::particle_system_handle create_particle_system(const noob::particle_system::descriptor&) noexcept(true);
+			noob::particle_system_handle add_particle_system(const noob::particle_system::descriptor&) noexcept(true);
 
 			noob::particle_system::descriptor get_particle_system_properties(const noob::particle_system_handle) const noexcept(true);
 
@@ -116,12 +116,12 @@ namespace noob
 			void remove_ghost(noob::ghost_handle) noexcept(true);
 			// void remove_joint(noob::joint_handle) noexcept(true);
 
-			void add_to_graph(const noob::body_variant bod_arg, const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg); 
+			int add_to_graph(const noob::body_variant bod_arg, const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg); 
 
 			void actor_dither(noob::actor_handle h) noexcept(true);
 
 			void update_particle_systems() noexcept(true);
-			bool particle_spawn_helper(uint64_t nanos, noob::particle_system*) noexcept(true); 
+			void particle_spawn_helper(noob::particle_system*) noexcept(true); 
 
 			const int NUM_RESERVED_NODES = 8192;			
 			const int NUM_RESERVED_ARCS = 8192;
@@ -153,6 +153,7 @@ namespace noob
 			lemon::ListDigraph draw_graph;
 			lemon::ListDigraph::Node root_node;
 			lemon::ListDigraph::NodeMap<noob::body_variant> bodies_mapping;
+			lemon::ListDigraph::NodeMap<bool> enabled_mapping;
 			// lemon::ListDigraph::NodeMap<std::function<noob::mat4(void)>> model_mats_mapping;
 			lemon::ListDigraph::NodeMap<uint32_t> basic_models_mapping;
 			lemon::ListDigraph::NodeMap<noob::shader> shaders_mapping;

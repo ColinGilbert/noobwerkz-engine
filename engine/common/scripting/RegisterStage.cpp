@@ -17,9 +17,12 @@ void noob::register_stage(asIScriptEngine* script_engine)
 	r = script_engine->RegisterObjectMethod("stage", "joint_handle joint(const body_handle, const vec3& in, const body_handle, const vec3& in)", asMETHOD(noob::stage, joint), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("stage", "actor_handle actor(const actor_blueprints_handle, uint32, const vec3& in, const versor& in)", asMETHOD(noob::stage, actor), asCALL_THISCALL); assert( r >= 0 );	
 	r = script_engine->RegisterObjectMethod("stage", "scenery_handle scenery(const shape_handle, shader_handle, reflectance_handle, const vec3& in, const versor& in)", asMETHOD(noob::stage, scenery), asCALL_THISCALL); assert(r >= 0);
-	r = script_engine->RegisterObjectMethod("stage", "particle_system_handle create_particle_system(const particle_system_descriptor& in)", asMETHOD(noob::stage, create_particle_system), asCALL_THISCALL); assert(r >= 0);
-	r = script_engine->RegisterObjectMethod("stage", "void get_particle_system_properties(const particle_system_handle) const", asMETHOD(noob::stage, set_particle_system_properties), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("stage", "particle_system_handle add_particle_system(const particle_system_descriptor& in)", asMETHOD(noob::stage, add_particle_system), asCALL_THISCALL); assert(r >= 0);
+	r = script_engine->RegisterObjectMethod("stage", "particle_system_descriptor get_particle_system_properties(const particle_system_handle) const", asMETHOD(noob::stage, get_particle_system_properties), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("stage", "void set_particle_system_properties(const particle_system_handle, const particle_system_descriptor& in)", asMETHOD(noob::stage, set_particle_system_properties), asCALL_THISCALL); assert(r >= 0);
+
+	// void activate_particle_system(const noob::particle_system_handle, bool) noexcept(true);
+	r = script_engine->RegisterObjectMethod("stage", "void activate_particle_system(const particle_system_handle, bool)", asMETHOD(noob::stage, activate_particle_system), asCALL_THISCALL); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("stage", "void set_light(uint32, const light_handle)", asMETHOD(noob::stage, set_light), asCALL_THISCALL); assert(r >= 0);
 	// r = script_engine->RegisterObjectMethod("stage", "light_handle get_light()", asMETHOD(noob::stage, get_light), asCALL_THISCALL); assert(r >= 0);
 

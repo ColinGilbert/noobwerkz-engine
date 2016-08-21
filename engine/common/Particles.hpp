@@ -19,11 +19,12 @@ namespace noob
 	// These are linked to ghosts onstage, and are invalidated on either first contact with anything that isn't another particle, or on running out of time.
 	struct particle
 	{
-		particle() noexcept(true) : active(false), path_point(0.0) {}
+		particle() noexcept(true) : active(false), lifetime(noob::duration(0)), velocity(noob::vec3(0.0, 0.0, 0.0)), ghost(noob::ghost_handle::make(0)), colour(noob::vec4(1.0, 1.0, 1.0, 0.0)) {}
 		bool active;
-		float path_point;
+		noob::duration lifetime;
 		noob::vec3 velocity;
 		noob::ghost_handle ghost;
+		noob::vec4 colour;
 	};
 
 	class particle_system
@@ -31,7 +32,7 @@ namespace noob
 		friend class stage;
 		public:
 
-		particle_system() noexcept(true) : active(false), first_free(0), emits_per_second(0), nanos_until_emit(0), path_length(5.0), damping(0.995), gravity_multiplier(0.05), wind_multiplier(1.0), emit_force(10.0), center(noob::vec3(0.0, 0.0, 0.0)), emit_direction(noob::vec3(0.0, 1.0, 0.0)), emit_direction_variance(noob::vec3(0.2, 0.2, 0.2)), wind(noob::vec3(0.2, 0.0, -0.3)) {}
+		particle_system() noexcept(true) : active(false), first_free(0), emits_per_second(10), lifespan(5000000000), nanos_accum(0), damping(0.995), gravity_multiplier(0.05), emit_force(10.0), center(noob::vec3(0.0, 0.0, 0.0)), emit_direction(noob::vec3(0.0, 1.0, 0.0)), emit_direction_variance(noob::vec3(0.2, 0.2, 0.2)), wind(noob::vec3(0.2, 0.0, -0.3)) {}
 
 		static constexpr uint32_t max_particles = 64;
 		static constexpr uint32_t max_colours = 4;
@@ -39,8 +40,10 @@ namespace noob
 		struct descriptor
 		{
 			uint32_t emits_per_second;
+			
+			uint64_t lifespan;
 
-			float path_length, damping, gravity_multiplier, emit_force;
+			float damping, gravity_multiplier, emit_force;
 
 			noob::vec3 center, emit_direction, emit_direction_variance, wind;
 
@@ -76,7 +79,7 @@ namespace noob
 		void set_properties(const noob::particle_system::descriptor& desc) noexcept(true)
 		{
 			emits_per_second = desc.emits_per_second;
-			path_length = desc.path_length;
+			lifespan = desc.lifespan;
 			damping = desc.damping;
 			gravity_multiplier = desc.gravity_multiplier;
 			emit_force = desc.emit_force;
@@ -93,7 +96,7 @@ namespace noob
 			noob::particle_system::descriptor desc;
 			
 			desc.emits_per_second = emits_per_second;
-			desc.path_length = path_length;
+			desc.lifespan = lifespan;
 			desc.damping = damping;
 			desc.gravity_multiplier = gravity_multiplier;
 			desc.emit_force = emit_force;
@@ -107,44 +110,43 @@ namespace noob
 			return desc;
 		}
 
-		void set_particle_path_length(float length_arg) noexcept(true)
+		void set_particle_lifetime(uint64_t length_arg) noexcept(true)
 		{
-			path_length = length_arg;
-			one_colour_in_path_travelled = path_length / noob::particle_system::max_colours;
+			lifespan = length_arg;
+			one_colour_in_lifetime = lifespan / noob::particle_system::max_colours;
 		}
 
 		void set_emits_per_sec(uint32_t num_emits) noexcept(true)
 		{
 			emits_per_second = num_emits;
 			nanos_between_emits = noob::billion / num_emits;
-			nanos_until_emit = nanos_between_emits;
+			nanos_accum = 0;
 		}
 
 		uint32_t get_next_free(uint32_t from) const noexcept(true)
 		{
 			for (uint32_t i = from; i < max_particles; ++i)
 			{
-				if (particles[i].active) return i;
+				if (!particles[i].active) return i;
 			}
 			for (uint32_t i = 0; i < from; ++i)
 			{
-				if (particles[i].active) return i;
+				if (!particles[i].active) return i;
 			}
 			return std::numeric_limits<uint32_t>::max();
 		}
 
 		// Could have been a get_colour(particle p), but it gets called lots and fewer arguments is better...
-		noob::vec4 get_colour_from_particle_life(float path_point) const noexcept(true)
+		noob::vec4 get_colour_from_particle_life(const noob::duration d) const noexcept(true)
 		{
-			for (uint32_t i = 1; i < noob::particle_system::max_colours; ++i)
+/*			for (uint32_t i = 1; i < noob::particle_system::max_colours; ++i)
 			{
-				const float next_colour_transition = one_colour_in_path_travelled * i;
-				const float path_travelled = path_length / std::max(static_cast<double>(path_point), 0.0001);
-				if (path_travelled < next_colour_transition)
+				const float next_colour_transition = one_colour_in_lifetime * i;
+				if (lifetime < next_colour_transition)
 				{
 					const float previous_colour_gradient = i * next_colour_transition;
 					const float next_colour_gradient = i * next_colour_transition;
-					const float distance_from_previous = path_travelled - previous_colour_gradient;
+					const float distance_from_previous = lifetime - previous_colour_gradient;
 					const float distance_to_next = next_colour_gradient - distance_from_previous;
 					const noob::vec4 prev = colours[i - 1];
 					const noob::vec4 next = colours[i];
@@ -156,10 +158,13 @@ namespace noob
 					//return (noob::vec4(prev[0] * distance_to_next, prev[1] * distance_to_next, prev[2] * distance_to_next, prev[3] * distance_to_next) + noob::vec4(next[0] * distance_from_previous, next[1] * distance_from_previous, next[2] * distance_from_previous, next[3] * distance_from_previous));
 				}
 			}
+*/
 
-			logger::log("[ParticleSystem: get_colour_from_particle_life -Reached post-loop state!");
 			
-			return colours[noob::particle_system::max_colours -1 ];
+
+			logger::log("[ParticleSystem: get_colour_from_particle_life - Reached post-loop state!");
+			
+			return noob::vec4(1.0, 0.3, 1.0, 1.0);//colours[noob::particle_system::max_colours - 1 ];
 		}		
 
 		void set_colour(uint32_t i, const noob::vec4& c) noexcept(true)
@@ -190,9 +195,11 @@ namespace noob
 
 		uint32_t first_free, emits_per_second;
 
-		uint64_t nanos_until_emit, nanos_between_emits;
+		uint64_t nanos_accum, nanos_between_emits;
 
-		float path_length, damping, gravity_multiplier, wind_multiplier, emit_force, one_colour_in_path_travelled;
+		uint64_t lifespan;
+
+		float damping, gravity_multiplier, emit_force, one_colour_in_lifetime;
 		
 		noob::vec3 center, emit_direction, emit_direction_variance, wind;
 

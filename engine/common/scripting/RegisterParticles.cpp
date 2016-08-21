@@ -6,6 +6,11 @@ void noob::register_particles(asIScriptEngine* script_engine)
 	int r;
 
 	r = script_engine->RegisterObjectType("particle_system_descriptor", sizeof(noob::particle_system::descriptor), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::particle_system::descriptor>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
+	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "uint32 emits_per_second", asOFFSET(noob::particle_system::descriptor, emits_per_second)); assert(r >= 0);
+	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "uint64 lifespan", asOFFSET(noob::particle_system::descriptor, lifespan)); assert(r >= 0);
+	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "float damping", asOFFSET(noob::particle_system::descriptor, damping)); assert(r >= 0);
+	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "float gravity_multiplier", asOFFSET(noob::particle_system::descriptor, gravity_multiplier)); assert(r >= 0);
+	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "float emit_force", asOFFSET(noob::particle_system::descriptor, emit_force)); assert(r >= 0);
 	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "vec3 center", asOFFSET(noob::particle_system::descriptor, center)); assert(r >= 0);
 	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "vec3 emit_direction", asOFFSET(noob::particle_system::descriptor, emit_direction)); assert(r >= 0);
 	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "vec3 emit_direction_variance", asOFFSET(noob::particle_system::descriptor, emit_direction_variance)); assert(r >= 0);
