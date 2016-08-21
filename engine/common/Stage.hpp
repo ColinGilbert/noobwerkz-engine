@@ -44,6 +44,7 @@ namespace noob
 	class stage
 	{
 		public:
+
 			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.1, 0.1, 0.1, 0.1)), instancing(false), bodies_mapping(draw_graph), enabled_mapping(draw_graph), /* model_mats_mapping(draw_graph),*/ basic_models_mapping(draw_graph), shaders_mapping(draw_graph), reflectances_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph), matrix_pool_count(0) {}
 
 			~stage() noexcept(true);
@@ -75,14 +76,14 @@ namespace noob
 
 			noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
 
-			noob::particle_system_handle add_particle_system(const noob::particle_system::descriptor&) noexcept(true);
+			// noob::particle_system_handle add_particle_system(const noob::particle_system::descriptor&) noexcept(true);
 
-			noob::particle_system::descriptor get_particle_system_properties(const noob::particle_system_handle) const noexcept(true);
+			// noob::particle_system::descriptor get_particle_system_properties(const noob::particle_system_handle) const noexcept(true);
 
-			void set_particle_system_properties(const noob::particle_system_handle, const noob::particle_system::descriptor&) noexcept(true);
-			
-			void activate_particle_system(const noob::particle_system_handle, bool) noexcept(true);
-			
+			// void set_particle_system_properties(const noob::particle_system_handle, const noob::particle_system::descriptor&) noexcept(true);
+
+			// void activate_particle_system(const noob::particle_system_handle, bool) noexcept(true);
+
 			// Lights.
 			void set_light(unsigned int, const noob::light_handle) noexcept(true);
 
@@ -90,7 +91,7 @@ namespace noob
 
 			noob::light_handle get_light(uint32_t) const noexcept(true);
 
-			
+
 			// Intersection enumeration.
 			std::vector<noob::contact_point> get_intersecting(const noob::ghost_handle) const noexcept(true);
 
@@ -108,7 +109,13 @@ namespace noob
 				instancing = b;
 			}
 
+
+
+
 		protected:
+
+
+			static constexpr auto dbg_name = "Stage";
 
 			void run_ai() noexcept (true);
 
@@ -120,8 +127,8 @@ namespace noob
 
 			void actor_dither(noob::actor_handle h) noexcept(true);
 
-			void update_particle_systems() noexcept(true);
-			void particle_spawn_helper(noob::particle_system*) noexcept(true); 
+			// void update_particle_systems() noexcept(true);
+			// void particle_spawn_helper(noob::particle_system*) noexcept(true); 
 
 			const int NUM_RESERVED_NODES = 8192;			
 			const int NUM_RESERVED_ARCS = 8192;

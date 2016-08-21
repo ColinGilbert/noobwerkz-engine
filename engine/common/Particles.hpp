@@ -19,11 +19,10 @@ namespace noob
 	// These are linked to ghosts onstage, and are invalidated on either first contact with anything that isn't another particle, or on running out of time.
 	struct particle
 	{
-		particle() noexcept(true) : active(false), lifetime(noob::duration(0)), velocity(noob::vec3(0.0, 0.0, 0.0)), ghost(noob::ghost_handle::make(0)), colour(noob::vec4(1.0, 1.0, 1.0, 0.0)) {}
+		particle() noexcept(true) : active(false), lifetime(noob::duration(0)), position(noob::vec3(0.0, 0.0, 0.0)), velocity(noob::vec3(0.0, 0.0, 0.0)), colour(noob::vec4(1.0, 1.0, 1.0, 0.0)) {}
 		bool active;
 		noob::duration lifetime;
-		noob::vec3 velocity;
-		noob::ghost_handle ghost;
+		noob::vec3 position, velocity;
 		noob::vec4 colour;
 	};
 
@@ -40,7 +39,7 @@ namespace noob
 		struct descriptor
 		{
 			uint32_t emits_per_second;
-			
+
 			uint64_t lifespan;
 
 			float damping, gravity_multiplier, emit_force;
@@ -94,7 +93,7 @@ namespace noob
 		noob::particle_system::descriptor get_properties() const noexcept(true)
 		{
 			noob::particle_system::descriptor desc;
-			
+
 			desc.emits_per_second = emits_per_second;
 			desc.lifespan = lifespan;
 			desc.damping = damping;
@@ -106,7 +105,7 @@ namespace noob
 			desc.wind = wind;
 			desc.reflect = reflect;
 			desc.shape = shape;
-			
+
 			return desc;
 		}
 
@@ -139,31 +138,31 @@ namespace noob
 		// Could have been a get_colour(particle p), but it gets called lots and fewer arguments is better...
 		noob::vec4 get_colour_from_particle_life(const noob::duration d) const noexcept(true)
 		{
-/*			for (uint32_t i = 1; i < noob::particle_system::max_colours; ++i)
-			{
-				const float next_colour_transition = one_colour_in_lifetime * i;
-				if (lifetime < next_colour_transition)
-				{
-					const float previous_colour_gradient = i * next_colour_transition;
-					const float next_colour_gradient = i * next_colour_transition;
-					const float distance_from_previous = lifetime - previous_colour_gradient;
-					const float distance_to_next = next_colour_gradient - distance_from_previous;
-					const noob::vec4 prev = colours[i - 1];
-					const noob::vec4 next = colours[i];
-					const noob::vec4 component_prev = prev * distance_to_next;
-					const noob::vec4 component_next = next * distance_from_previous;
-					noob::vec4 final_blend = component_prev;
-					final_blend += component_next;
-					return final_blend;
-					//return (noob::vec4(prev[0] * distance_to_next, prev[1] * distance_to_next, prev[2] * distance_to_next, prev[3] * distance_to_next) + noob::vec4(next[0] * distance_from_previous, next[1] * distance_from_previous, next[2] * distance_from_previous, next[3] * distance_from_previous));
-				}
+			/*			for (uint32_t i = 1; i < noob::particle_system::max_colours; ++i)
+						{
+						const float next_colour_transition = one_colour_in_lifetime * i;
+						if (lifetime < next_colour_transition)
+						{
+						const float previous_colour_gradient = i * next_colour_transition;
+						const float next_colour_gradient = i * next_colour_transition;
+						const float distance_from_previous = lifetime - previous_colour_gradient;
+						const float distance_to_next = next_colour_gradient - distance_from_previous;
+						const noob::vec4 prev = colours[i - 1];
+						const noob::vec4 next = colours[i];
+						const noob::vec4 component_prev = prev * distance_to_next;
+						const noob::vec4 component_next = next * distance_from_previous;
+						noob::vec4 final_blend = component_prev;
+						final_blend += component_next;
+						return final_blend;
+			//return (noob::vec4(prev[0] * distance_to_next, prev[1] * distance_to_next, prev[2] * distance_to_next, prev[3] * distance_to_next) + noob::vec4(next[0] * distance_from_previous, next[1] * distance_from_previous, next[2] * distance_from_previous, next[3] * distance_from_previous));
 			}
-*/
+			}
+			*/
 
-			
+
 
 			logger::log("[ParticleSystem: get_colour_from_particle_life - Reached post-loop state!");
-			
+
 			return noob::vec4(1.0, 0.3, 1.0, 1.0);//colours[noob::particle_system::max_colours - 1 ];
 		}		
 
@@ -200,13 +199,13 @@ namespace noob
 		uint64_t lifespan;
 
 		float damping, gravity_multiplier, emit_force, one_colour_in_lifetime;
-		
+
 		noob::vec3 center, emit_direction, emit_direction_variance, wind;
 
 		noob::time last_update_time, current_update_time;
 
 		rde::fixed_array<particle, max_particles> particles;
-		
+
 		rde::fixed_array<noob::vec4, max_colours> colours;
 
 		noob::shape_handle shape;

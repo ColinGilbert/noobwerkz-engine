@@ -4,7 +4,7 @@
 void noob::register_particles(asIScriptEngine* script_engine)
 {
 	int r;
-
+/*
 	r = script_engine->RegisterObjectType("particle_system_descriptor", sizeof(noob::particle_system::descriptor), asOBJ_VALUE | asOBJ_POD | asGetTypeTraits<noob::particle_system::descriptor>() | asOBJ_APP_CLASS_ALLINTS); assert ( r >= 0);
 	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "uint32 emits_per_second", asOFFSET(noob::particle_system::descriptor, emits_per_second)); assert(r >= 0);
 	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "uint64 lifespan", asOFFSET(noob::particle_system::descriptor, lifespan)); assert(r >= 0);
@@ -19,4 +19,5 @@ void noob::register_particles(asIScriptEngine* script_engine)
 	r = script_engine->RegisterObjectProperty("particle_system_descriptor", "shape_handle shape", asOFFSET(noob::particle_system::descriptor, shape)); assert(r >= 0);
 	r = script_engine->RegisterObjectMethod("particle_system_descriptor", "void set_colour(uint32, const vec4& in)", asMETHOD(noob::particle_system::descriptor, set_colour), asCALL_THISCALL); assert( r >= 0 );
 	r = script_engine->RegisterObjectMethod("particle_system_descriptor", "vec4 get_colour(uint32) const", asMETHOD(noob::particle_system::descriptor, get_colour), asCALL_THISCALL); assert( r >= 0 );	
+*/
 }

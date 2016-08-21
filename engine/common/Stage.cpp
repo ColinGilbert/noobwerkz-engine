@@ -1,6 +1,6 @@
 #include "Stage.hpp"
 // #include "Shiny.h"
-
+#include "LogObj.hpp"
 
 noob::stage::~stage() noexcept(true) 
 {
@@ -78,7 +78,7 @@ void noob::stage::update(double dt) noexcept(true)
 
 	dynamics_world->stepSimulation(1.0/60.0, 10);
 
-	update_particle_systems();
+	// update_particle_systems();
 
 	noob::time end_time = noob::clock::now();
 
@@ -196,7 +196,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 		}
 	}
 
-
+/*
 	for (uint32_t system_index = 0; system_index < particle_systems.count(); ++system_index)
 	{
 		const noob::particle_system* sys = std::get<1>(particle_systems.get_ptr(noob::particle_system_handle::make(system_index)));
@@ -217,7 +217,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 					world_mat = noob::scale(world_mat, model.scales);												
 					world_mat = noob::translate(world_mat, ghst.get_position());
 					noob::mat4 normal_mat = noob::transpose(noob::inverse((world_mat * view_mat)));
-					
+
 					noob::basic_renderer::uniform u;
 					u.colour = p.colour;
 					noob::reflectance temp_reflect;
@@ -227,7 +227,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 			}
 		}
 	}
-
+*/
 	if (show_origin)
 	{
 		// noob::mat4 world_mat = noob::scale(noob::identity_mat4(), shapes.get(bodies_to_shapes[b.index()])->get_scales());
@@ -343,7 +343,7 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, co
 	add_to_graph(b_var, shape_arg, shader_arg, reflect_arg);
 }
 
-
+/*
 noob::particle_system_handle noob::stage::add_particle_system(const noob::particle_system::descriptor& desc) noexcept(true)
 {
 	logger::log("[Stage] Adding particle system");
@@ -407,7 +407,7 @@ void noob::stage::activate_particle_system(const noob::particle_system_handle h,
 		logger::log("[Stage] Attempting to activate/deactivate a particle system that doesn't exist!");
 	}
 }
-
+*/
 
 int noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg) 
 {
@@ -633,7 +633,7 @@ void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 	noob::vec3 gravity(vec3_from_bullet(dynamics_world->getGravity()));
 }
 
-
+/*
 void noob::stage::update_particle_systems() noexcept(true)
 {
 	// float seconds_since_last = static_cast<float>(noob::divide_duration(update_duration, noob::billion).count());
@@ -649,6 +649,9 @@ void noob::stage::update_particle_systems() noexcept(true)
 		if (sys->active)
 		{
 			// We calculate the new positions of our particles
+			
+			sys->nanos_accum += update_duration.count();
+			
 			const float damping = sys->damping;
 			const float gravity_multiplier = sys->gravity_multiplier;
 			noob::vec3 wind = sys->wind;
@@ -667,20 +670,20 @@ void noob::stage::update_particle_systems() noexcept(true)
 						// If our particle hasn't gotten into contact with stuff yet...
 						//if (cp.size() == 0)
 						//{
-							// logger::log("updating particle");
-							p.velocity = (p.velocity + wind + (world_gravity * gravity_multiplier)) * damping;
-							noob::ghost temp_ghost = ghosts.get(p.ghost);
-							noob::vec3 pos = temp_ghost.get_position();
-							pos += p.velocity;;
-							sys->particles[i] = p;
-							temp_ghost.set_position(pos);
+						// logger::log("updating particle");
+						p.velocity = (p.velocity + wind + (world_gravity * gravity_multiplier)) * damping;
+						noob::ghost temp_ghost = ghosts.get(p.ghost);
+						noob::vec3 pos = temp_ghost.get_position();
+						pos += p.velocity;;
+						sys->particles[i] = p;
+						temp_ghost.set_position(pos);
 						//}
 						// Otherwise, deactivate it.
 						//else
 						//{
-							// p.active = false;
-							// p.lifetime = noob::duration(0);
-							// sys->first_free = i;
+						// p.active = false;
+						// p.lifetime = noob::duration(0);
+						// sys->first_free = i;
 						//}
 					}
 					else
@@ -730,7 +733,7 @@ void noob::stage::particle_spawn_helper(noob::particle_system* sys) noexcept(tru
 			noob::ghost ghst = ghosts.get(p.ghost);
 			ghst.set_position(sys->center);
 
-			
+
 			sys->particles[sys->first_free] = p;
 
 			uint32_t next = sys->first_free;
@@ -739,7 +742,7 @@ void noob::stage::particle_spawn_helper(noob::particle_system* sys) noexcept(tru
 		}
 	}
 }
-
+*/
 
 
 /*
