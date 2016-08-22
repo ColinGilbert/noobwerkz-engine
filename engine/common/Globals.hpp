@@ -46,10 +46,11 @@ namespace noob
 {
 	class globals
 	{
+		friend class sound_interface;
 		protected:
 			static globals* ptr_to_instance;
 
-			globals() noexcept(true) : sample_rate(44100), num_overflows(0) {}
+			globals() noexcept(true) : sample_rate(44100) {}
 
 			globals(const globals& rhs) noexcept(true)
 			{
@@ -76,7 +77,7 @@ namespace noob
 			}
 
 			static constexpr uint32_t num_pseudo_randoms = 256;
-			
+
 			// Provides sane defaults in order not to crash the app in case of erroneous access.
 			bool init() noexcept(true);
 
@@ -126,23 +127,17 @@ namespace noob
 
 			double get_random() noexcept(true);
 
+
+			size_t get_sample_rate() const noexcept(true)
+			{
+				return sample_rate;
+			}
 			// ---------------
 			// Data members:
 			// ---------------
 
 			noob::profiler_snap profile_run;
 
-			// The following are basic, commonly-used objects that we provide as a convenience.
-			noob::shape_handle unit_sphere_shape, unit_cube_shape, unit_capsule_shape, unit_cylinder_shape, unit_cone_shape;
-
-			// These represent models in the graphics card buffer
-			noob::scaled_model unit_sphere_model, unit_cube_model, unit_capsule_model, unit_cylinder_model, unit_cone_model;
-
-			noob::basic_shader_handle debug_shader;
-			noob::triplanar_shader_handle default_triplanar_shader;
-
-			noob::light_handle default_light;
-			noob::reflectance_handle default_reflectance;
 
 			basic_models_holder basic_models;
 			animated_models_holder animated_models;
@@ -162,29 +157,100 @@ namespace noob
 
 			noob::mixer master_mixer;
 			noob::sound_interface audio_interface;
+
+
+			// The following are basic, commonly-used objects that we provide as a convenience.
+			noob::shape_handle get_unit_sphere_shape() const noexcept(true)
+			{
+				return unit_sphere_shape;
+			}
+
+			noob::shape_handle get_unit_cube_shape() const noexcept(true)
+			{
+				return unit_cube_shape;
+			}
+		
+			noob::shape_handle get_unit_capsule_shape() const noexcept(true)
+			{
+				return unit_capsule_shape;
+			}
+			
+			noob::shape_handle get_unit_cylinder_shape() const noexcept(true)
+			{
+				return unit_cylinder_shape;
+			}
+			
+			noob::shape_handle get_unit_cone_shape() const noexcept(true)
+			{
+				return unit_cone_shape;
+			}
+
+			// These represent models in the graphics card buffer
+						
+			noob::scaled_model get_unit_sphere_model() const noexcept(true)
+			{
+				return unit_sphere_model;
+			}
+			
+			noob::scaled_model get_unit_cube_model() const noexcept(true)
+			{
+				return unit_cube_model;
+			}
+			
+			noob::scaled_model get_unit_capsule_model() const noexcept(true)
+			{
+				return unit_cylinder_model;
+			}
+			
+			noob::scaled_model get_unit_cone_model() const noexcept(true)
+			{
+				return unit_cone_model;
+			}
+
+			noob::basic_shader_handle get_debug_shader() const noexcept(true)
+			{
+				return debug_shader;
+			}
+			
+			noob::triplanar_shader_handle get_default_triplanar_shader() const noexcept(true)
+			{
+				return default_triplanar_shader;
+			}
+
+			noob::light_handle get_default_light() const noexcept(true)
+			{
+				return default_light;
+			}
+
+			noob::reflectance_handle get_default_reflectance() const noexcept(true)
+			{
+				return default_reflectance;
+			}
+
+			// sound_interface needs to set it and friend'ing it would allow it access to literally everything. However, once its completely stabilized we may do so again.	
 			size_t sample_rate;
-			// While resampling data, some samples may suffer from overflow of a few values.
-			// This catches them so that they may be used in the next audio callback.
-			rde::vector<double> resample_overflow;
-			uint32_t num_overflows;
 
 		protected:
-
 			// Hack used to set the shape's index-to-self
-			shape_handle add_shape(const noob::shape& s)
-			{
-				noob::shape temp = s;
-				noob::shape_handle h = shapes.add(s);
-				temp.index = h.index();
-				shapes.set(h, temp);
-				return h;
-			}
+			shape_handle add_shape(const noob::shape& s) noexcept(true);
+
+			// The following are basic, commonly-used objects that we provide as a convenience.
+			noob::shape_handle unit_sphere_shape, unit_cube_shape, unit_capsule_shape, unit_cylinder_shape, unit_cone_shape;
+
+			// These represent models in the graphics card buffer
+			noob::scaled_model unit_sphere_model, unit_cube_model, unit_capsule_model, unit_cylinder_model, unit_cone_model;
+
+			noob::basic_shader_handle debug_shader;
+			noob::triplanar_shader_handle default_triplanar_shader;
+
+			noob::light_handle default_light;
+			noob::reflectance_handle default_reflectance;
 
 			noob::fast_hashtable shapes_to_models;
 
 			uint32_t current_random;
 			rde::fixed_array<double, num_pseudo_randoms> pseudo_randoms;
-			
+
 
 			rde::hash_map<rde::string, noob::shape_handle> names_to_shapes;
 			// rde::hash_map<rde::string, noob::model_handle> names_to_basic_models;

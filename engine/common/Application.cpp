@@ -1,22 +1,16 @@
 
 #include "Application.hpp"
 
-#include "RegisterScripts.hpp"
-
-
 noob::application* noob::application::app_pointer = nullptr;
 
 noob::application::application() 
 {
 	app_pointer = this;
-	ready_for_next_script = false;
 }
 
 
 noob::application::~application()
 {
-	script_engine->ShutDownAndRelease();
-	remove_shapes();
 	app_pointer = nullptr;
 }
 
@@ -26,34 +20,6 @@ noob::application& noob::application::get()
 	logger::log("application::get()");
 	assert(app_pointer && "application not created!");
 	return *app_pointer;
-}
-
-
-void angel_message_callback(const asSMessageInfo *msg, void *param)
-{
-	std::string message_type;
-	switch (msg->type)
-	{
-		case (asMSGTYPE_WARNING):
-			{
-				message_type = "WARN";
-				break;
-			}
-
-		case (asMSGTYPE_INFORMATION):
-			{
-				message_type = "INFO";
-				break;
-			}
-
-		default:
-			{
-				message_type = "ERR";
-			}
-	}
-	fmt::MemoryWriter ww;
-	ww << "[AngelScript callback] " << message_type << ": " << msg->message << ", script section: " << msg->section << " row = " << msg->row << " col: " << msg->col;
-	noob::logger::log(ww.str());
 }
 
 
@@ -67,9 +33,6 @@ void noob::application::init()
 
 	prefix = std::unique_ptr<std::string>(new std::string("./"));
 
-	script_engine = asCreateScriptEngine();
-
-	assert(script_engine > 0);
 
 	// TODO: Uncomment once noob::filesystem is fixed
 	// noob::filesystem::init(*prefix);
@@ -94,66 +57,24 @@ void noob::application::init()
 
 	voxels.init(512, 512, 512);
 
-	// Used by AngelScript to capture the result of the last registration.
-	int r;
-	// Example: r = script_engine->RegisterGlobalFunction("", asFUNCTION(func_name), asCALL_CDECL);
-	script_engine->SetMessageCallback(asFUNCTION(angel_message_callback), 0, asCALL_CDECL);
-
-	RegisterStdString(script_engine);
-
-	// Does not work! TODO: Report on forums.
-	// RegisterVector<bool>("bool", script_engine);
-
-	// Neither those two seem to work. They register just fine but there's literally no output to the commandline.
-	r = script_engine->RegisterGlobalFunction("void log(const string& in)", asFUNCTION(logger::log), asCALL_CDECL); assert (r >= 0);
-	// r = script_engine->RegisterGlobalFunction("void log(const string& in)", asFUNCTIONPR(logger::log, (const std::string&), void), asCALL_CDECL); assert (r >= 0);
-
-	register_handles(script_engine);
-	register_math(script_engine);
-	register_plane(script_engine);
-	register_graphics(script_engine);
-	register_controls(script_engine);
-	r = script_engine->RegisterGlobalProperty("controls controller", &controller); assert (r >= 0);
-	register_basic_mesh(script_engine);
-	register_active_mesh(script_engine);
-	r = script_engine->RegisterGlobalFunction("double random()", asMETHOD(noob::random_generator, get), asCALL_THISCALL_ASGLOBAL, &randomz); assert( r >= 0 );
-	register_body(script_engine);
-	register_joint(script_engine);
-	// register_ghost(script_engine);
-	register_light(script_engine);
-	register_reflectance(script_engine);
-	register_actor(script_engine);
-	register_uniforms(script_engine);
-	register_scaled_model(script_engine);
-	register_particles(script_engine);
-	register_stage(script_engine);
-	r = script_engine->RegisterGlobalProperty("stage default_stage", &stage); assert (r >= 0);
-	register_voxels(script_engine);
-	r = script_engine->RegisterGlobalProperty("voxel_world voxels", &voxels); assert (r >= 0);
-
-	register_globals(script_engine);
-
 	logger::log("[Application] Done basic init.");
 
 	bool b = user_init();
-
-	ready_for_next_script = b;
 
 	if (!b) 
 	{
 		logger::log("[Application] User C++ init failed!");
 	}
 
-	network.init(3);
-	network.connect("localhost", 4242);
-
+//	network.init(3);
+//	network.connect("localhost", 4242);
 }
 
 
 void noob::application::update(double delta)
 {
 	gui.window_dims(window_width, window_height);
-
+/*
 	network.tick();
 
 	while (network.has_message())
@@ -173,137 +94,11 @@ void noob::application::update(double delta)
 			eval("cmd", s.substr(5, std::string::npos), true);
 		}
 	}
-
+*/
 	stage.update(delta);
 	user_update(delta);
 }
 
-
-bool noob::application::eval(const std::string& name, const std::string& string_to_eval, bool reset)
-{
-	// PROFILE_END();
-	// PROFILE_BEGIN(loading);
-
-	noob::time prior_to_loading = noob::clock::now();
-
-
-	logger::log("\n[Application] Begin loading script...");
-	fmt::MemoryWriter to_log;
-	to_log << "[Application] Script loaded? ";
-
-	if (ready_for_next_script)
-	{
-		if (reset)
-		{
-			script_module = script_engine->GetModule(0, asGM_ALWAYS_CREATE);
-		}
-		else
-		{
-			script_module = script_engine->GetModule(0, asGM_CREATE_IF_NOT_EXISTS);
-		}
-
-		int r = script_module->AddScriptSection(name.c_str(), string_to_eval.c_str());
-		if (r < 0)
-		{
-			to_log << "False - Add section failed.";
-			logger::log(to_log.str());
-			ready_for_next_script = true;
-			return false;
-		}
-
-		r = script_module->Build();
-		if (r < 0 )
-		{
-
-			to_log << "False - Compile failed.";
-			logger::log(to_log.str());
-			ready_for_next_script = true;
-			return false;
-			// The build failed. The message stream will have received  
-			// compiler errors that shows what needs to be fixed
-		}
-		asIScriptContext* ctx = script_engine->CreateContext();
-		if (ctx == 0)
-		{
-
-			to_log << "False - Failed to create context.";
-			logger::log(to_log.str());
-		}
-
-		asIScriptFunction* func = script_engine->GetModule(0)->GetFunctionByDecl("void main()");
-
-		if (func == 0)
-		{
-			to_log << "False - Function main() not found.";
-			logger::log(to_log.str());
-			ready_for_next_script = true;
-			return false;
-		}
-
-		r = ctx->Prepare(func);
-
-		if (r < 0) 
-		{
-
-			to_log << "False - Failed to prepare the context.";
-			logger::log(to_log.str());
-			ready_for_next_script = true;
-			return false;
-		}
-
-		r = ctx->Execute();
-
-		if (r != asEXECUTION_FINISHED)
-		{
-			// The execution didn't finish as we had planned. Determine why.
-			if (r == asEXECUTION_ABORTED)
-			{
-				to_log << "False - Script aborted.";
-				logger::log(to_log.str());
-			}
-
-			else if (r == asEXECUTION_EXCEPTION)
-			{
-				to_log << "False - Script ended with an exception: ";
-
-				asIScriptFunction* exception_func = ctx->GetExceptionFunction();
-
-				to_log << "function: " << exception_func->GetDeclaration() << ", ";
-				to_log << "module: " << exception_func->GetModuleName() << ", ";
-				to_log << "section: " << exception_func->GetScriptSectionName() << ", ";
-				to_log << "line: " << ctx->GetExceptionLineNumber() << ", ";
-				to_log << "description: " << ctx->GetExceptionString();
-
-				logger::log(to_log.str());
-			}
-
-			else
-			{
-				to_log << "False - Ended with reason code: " << r;
-				logger::log(to_log.str());
-			}
-
-			ready_for_next_script = true;
-			return false;
-		}
-
-
-		noob::time post_loading = noob::clock::now();
-		noob::duration loading_time = post_loading - prior_to_loading;
-
-		to_log << "True. Time: " << std::chrono::duration_cast<std::chrono::milliseconds>(loading_time).count() << " milliseconds (" << std::chrono::duration_cast<std::chrono::microseconds>(loading_time).count() << " microseconds)\n";
-		logger::log(to_log.str());
-
-		// PROFILE_END();
-		// PROFILE_BEGIN(runtime);
-
-		return true;
-	}
-	else 
-	{
-		return false;
-	}
-}
 
 void noob::application::draw()
 {

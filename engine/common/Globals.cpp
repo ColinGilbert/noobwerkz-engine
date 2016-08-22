@@ -64,6 +64,7 @@ bool noob::globals::init() noexcept(true)
 
 	noob::reflectance r;
 	default_reflectance = set_reflectance(r, "default");
+
 	// logger::log("[Globals] Got default triplanar shader handle.");
 
 	noob::actor_blueprints bp;
@@ -74,7 +75,7 @@ bool noob::globals::init() noexcept(true)
 	audio_interface.init();
 
 	noob::random_generator rng;
-	
+
 	for (uint32_t i = 0; i < num_pseudo_randoms; ++i)
 	{
 		pseudo_randoms[i] = rng.get();
@@ -139,7 +140,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 	noob::shape s = shapes.get(h);
 
 	// logger::log("[Globals] got shape pointer");
-	
+
 	bool please_insert = false;
 
 	switch(s.shape_type)
@@ -284,14 +285,14 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 					results.model_h = temp_scaled_model.model_h;
 					please_insert = true;
 				}
-				
+
 				results.scales = noob::vec3(1.0, 1.0, 1.0);					
 				break;
 			}
 
 			//break;
 	}
-	
+
 	if (please_insert)
 	{
 		noob::fast_hashtable::cell* search = shapes_to_models.insert(h.index());
@@ -587,3 +588,15 @@ double noob::globals::get_random() noexcept(true)
 	return pseudo_randoms[current_random];
 
 }
+
+
+// Hack used to set the shape's index-to-self
+noob::shape_handle noob::globals::add_shape(const noob::shape& s) noexcept(true)
+{
+	noob::shape temp = s;
+	noob::shape_handle h = shapes.add(s);
+	temp.index = h.index();
+	shapes.set(h, temp);
+	return h;
+}
+

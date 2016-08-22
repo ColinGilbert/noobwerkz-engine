@@ -56,7 +56,6 @@ list(APPEND bgfx_utils_src
 	common/drawing/font/cube_atlas.cpp
 	)
 
-
 include_directories(lib/voropp/src)
 list (APPEND voropp_src
 	lib/voropp/src/voro++.cc
@@ -67,7 +66,6 @@ include_directories(lib/noob-graph/include)
 include_directories(lib/ozz-animation/include)
 include_directories(lib/ozz-animation/include/ozz)
 include_directories(lib/ozz-animation/src)
-
 
 list(APPEND ozz_src
 	lib/ozz-animation/src/animation/runtime/local_to_model_job.cc
@@ -575,14 +573,11 @@ list (APPEND vorbis_src
 	#lib/libvorbis/vq/bookutil.c
 	)
 
-
 include_directories(lib/r8brain-free-src)
 
 list(APPEND r8_src
 	lib/r8brain-free-src/r8bbase.cpp
 )
-
-
 
 include_directories(lib/recastnavigation/Detour/Include)
 include_directories(lib/recastnavigation/Recast/Include)
@@ -645,75 +640,13 @@ list (APPEND recast_src
 	lib/recastnavigation/DetourCrowd/Source/DetourLocalBoundary.cpp
 	)
 
-include_directories(lib/angelscript-sdk/angelscript/include)
-include_directories(lib/angelscript-sdk/add_on/scriptbuilder)
-include_directories(lib/angelscript-sdk/add_on/scriptstdstring)
-include_directories(lib/angelscript-sdk/add_on/scripthelper)
-
-list(APPEND angelscript_src
-	lib/angelscript-sdk/angelscript/source/as_atomic.cpp
-	lib/angelscript-sdk/angelscript/source/as_builder.cpp
-	lib/angelscript-sdk/angelscript/source/as_bytecode.cpp
-	lib/angelscript-sdk/angelscript/source/as_callfunc.cpp
-	lib/angelscript-sdk/angelscript/source/as_callfunc_arm.cpp
-	lib/angelscript-sdk/angelscript/source/as_callfunc_mips.cpp
-	lib/angelscript-sdk/angelscript/source/as_callfunc_ppc.cpp
-	lib/angelscript-sdk/angelscript/source/as_callfunc_ppc_64.cpp
-	lib/angelscript-sdk/angelscript/source/as_callfunc_sh4.cpp
-	lib/angelscript-sdk/angelscript/source/as_callfunc_x64_gcc.cpp
-	lib/angelscript-sdk/angelscript/source/as_callfunc_x64_mingw.cpp
-	lib/angelscript-sdk/angelscript/source/as_callfunc_x64_msvc.cpp
-	lib/angelscript-sdk/angelscript/source/as_callfunc_x86.cpp
-	lib/angelscript-sdk/angelscript/source/as_callfunc_xenon.cpp
-	lib/angelscript-sdk/angelscript/source/as_compiler.cpp
-	lib/angelscript-sdk/angelscript/source/as_configgroup.cpp
-	lib/angelscript-sdk/angelscript/source/as_context.cpp
-	lib/angelscript-sdk/angelscript/source/as_datatype.cpp
-	lib/angelscript-sdk/angelscript/source/as_gc.cpp
-	lib/angelscript-sdk/angelscript/source/as_generic.cpp
-	lib/angelscript-sdk/angelscript/source/as_globalproperty.cpp
-	lib/angelscript-sdk/angelscript/source/as_memory.cpp
-	lib/angelscript-sdk/angelscript/source/as_module.cpp
-	lib/angelscript-sdk/angelscript/source/as_objecttype.cpp
-	lib/angelscript-sdk/angelscript/source/as_outputbuffer.cpp
-	lib/angelscript-sdk/angelscript/source/as_parser.cpp
-	lib/angelscript-sdk/angelscript/source/as_restore.cpp
-	lib/angelscript-sdk/angelscript/source/as_scriptcode.cpp
-	lib/angelscript-sdk/angelscript/source/as_scriptengine.cpp
-	lib/angelscript-sdk/angelscript/source/as_scriptfunction.cpp
-	lib/angelscript-sdk/angelscript/source/as_scriptnode.cpp
-	lib/angelscript-sdk/angelscript/source/as_scriptobject.cpp
-	lib/angelscript-sdk/angelscript/source/as_string.cpp
-	lib/angelscript-sdk/angelscript/source/as_string_util.cpp
-	lib/angelscript-sdk/angelscript/source/as_thread.cpp
-	lib/angelscript-sdk/angelscript/source/as_tokenizer.cpp
-	lib/angelscript-sdk/angelscript/source/as_typeinfo.cpp
-	lib/angelscript-sdk/angelscript/source/as_variablescope.cpp
-	lib/angelscript-sdk/add_on/scriptany/scriptany.cpp
-	lib/angelscript-sdk/add_on/scriptdictionary/scriptdictionary.cpp
-	lib/angelscript-sdk/add_on/scriptmath/scriptmathcomplex.cpp
-	lib/angelscript-sdk/add_on/scriptmath/scriptmath.cpp
-	lib/angelscript-sdk/add_on/debugger/debugger.cpp
-	lib/angelscript-sdk/add_on/contextmgr/contextmgr.cpp
-	#lib/angelscript-sdk/add_on/autowrapper/generator/generateheader.cpp
-	lib/angelscript-sdk/add_on/serializer/serializer.cpp
-	lib/angelscript-sdk/add_on/weakref/weakref.cpp
-	lib/angelscript-sdk/add_on/scriptbuilder/scriptbuilder.cpp
-	lib/angelscript-sdk/add_on/scriptarray/scriptarray.cpp
-	lib/angelscript-sdk/add_on/scriptgrid/scriptgrid.cpp
-	#lib/angelscript-sdk/add_on/scriptfile/scriptfilesystem.cpp
-	#lib/angelscript-sdk/add_on/scriptfile/scriptfile.cpp
-	lib/angelscript-sdk/add_on/scripthelper/scripthelper.cpp
-	lib/angelscript-sdk/add_on/scripthandle/scripthandle.cpp
-	lib/angelscript-sdk/add_on/scriptstdstring/scriptstdstring.cpp
-	lib/angelscript-sdk/add_on/scriptstdstring/scriptstdstring_utils.cpp
-	)
-
 include_directories(lib/network-host)
 include_directories(lib/logger)
-
+include_directories(lib/math-funcs)
+list (APPEND math-funcs-src lib/math-funcs/MathFuncs.cpp)
 include_directories(lib/int-hashtable)
 list(APPEND hashtable-src lib/int-hashtable/FastHashTable.cpp)
+include_directories(lib/component)
 
 include_directories(lib/Shiny/include)
 list(APPEND shiny-src
@@ -730,7 +663,6 @@ list(APPEND common_src
 	common/Graphics.cpp
 	common/Logger.cpp
 	common/Application.cpp
-	common/MathFuncs.cpp
 	common/NoobUtils.cpp
 	common/EditorUtils.cpp
 	common/VoxelWorld.cpp
@@ -748,7 +680,6 @@ list(APPEND common_src
 	common/Particles.cpp
 	common/UIFont.cpp
 	common/GUI.cpp
-	common/drawing/TriplanarGradientMapLit.cpp
 	common/drawing/TriplanarGradientMap.cpp
 	common/drawing/BasicRenderer.cpp
 	common/SimpleNavMesh.cpp
@@ -756,25 +687,6 @@ list(APPEND common_src
 	common/NetworkClient.cpp
 	common/Mixer.cpp
 	common/AudioSample.cpp
-	common/scripting/RegisterMath.cpp
-	common/scripting/RegisterPlane.cpp
-	common/scripting/RegisterGraphics.cpp
-	common/scripting/RegisterControls.cpp
-	common/scripting/RegisterBasicMesh.cpp
-	common/scripting/RegisterActiveMesh.cpp
-	common/scripting/RegisterGlobals.cpp
-	common/scripting/RegisterStage.cpp
-	common/scripting/RegisterLight.cpp
-	common/scripting/RegisterReflectance.cpp
-	common/scripting/RegisterVoxels.cpp
-	common/scripting/RegisterScaledModel.cpp
-	common/scripting/RegisterHandles.cpp
-	common/scripting/RegisterBody.cpp
-	common/scripting/RegisterJoint.cpp
-	#common/scripting/RegisterGhost.cpp
-	common/scripting/RegisterActor.cpp
-	common/scripting/RegisterUniforms.cpp
-	common/scripting/RegisterParticles.cpp
 	)
 
 list(APPEND user_src
@@ -793,9 +705,9 @@ endif()
 
 add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src}
 	${bgfx_src} ${bgfx_utils_src} ${openmesh_src} ${rdestl_src}
-	${cppformat_src} ${recast_src} ${angelscript_src} ${bullet_src}
+	${cppformat_src} ${recast_src} ${bullet_src}
 	${voropp_src} ${ozz_src} ${hashtable-src} ${ogg_src} ${vorbis_src}
-	${r8_src} ${shiny-src})
+	${r8_src} ${shiny-src} ${math-funcs-src})
 
 target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype Enet)
 

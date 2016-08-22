@@ -38,6 +38,8 @@
 #include <lemon/list_graph.h>
 #include <lemon/lgf_writer.h>
 
+#include <rdestl/slist.h>
+
 
 namespace noob
 {
@@ -104,28 +106,29 @@ namespace noob
 
 			noob::vec4 ambient_light;
 
-			void set_instancing(bool b)
+			void set_instancing(bool b) noexcept(true)
 			{
 				instancing = b;
 			}
 
-
-
-
 		protected:
-
 
 			static constexpr auto dbg_name = "Stage";
 
 			void run_ai() noexcept (true);
 
+			rde::slist<rde::vector<noob::vec3>> paths;
+			
 			void remove_body(noob::body_handle) noexcept(true);
 			void remove_ghost(noob::ghost_handle) noexcept(true);
 			// void remove_joint(noob::joint_handle) noexcept(true);
+			
+			void update_actors() noexcept(true);
+
+			void actor_dither(noob::actor_handle h) noexcept(true);
 
 			int add_to_graph(const noob::body_variant bod_arg, const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg); 
 
-			void actor_dither(noob::actor_handle h) noexcept(true);
 
 			// void update_particle_systems() noexcept(true);
 			// void particle_spawn_helper(noob::particle_system*) noexcept(true); 

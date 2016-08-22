@@ -23,7 +23,6 @@ Specific features:
 ```
 A highly tunable gradient mapping shader by default. Comes with three XY-tileable textures blended into one.
 Triplanar shader for non-UV mapped objects. Texture reads are kept to a minimum (3) by using the gradient mapping technique.
-Provides clean interfaces over to those libraries and tools on top via a scripting API for quick scene setups or a C++ level API for faster runtimes (or) extension.
 ```
 
 Currently brings in (among others):
@@ -32,7 +31,6 @@ BGFX
 Bullet Physics
 Assimp
 PolyVox
-AngelScript
 libogg/libvorbis (soon Opus)
 r8brain's excellent resampling routines
 ```
@@ -41,7 +39,7 @@ r8brain's excellent resampling routines
 
 To bootstrap:
 ```
-Proper bootstrap scripts coming very soon. I promise. :)
+Currently testing our bootstrap scripts :)
 ```
 
 Structure:
@@ -52,7 +50,7 @@ There are many libraries - mostly utility libraries - in the engine/lib director
 
 Most engine code is written in engine/common directory, with user-defined functionality linked-in from the sandbox directory. I know it's not correct, but in the current context it's fine.
 
-Short scripts with tiny names are used to do routine work (compiles, archivals, cleanups.) Will eventually bring it into C++ and AngelScript.
+Short scripts with tiny names are used to do routine work (compiles, archivals, cleanups.)
 ```
 
 Platforms:

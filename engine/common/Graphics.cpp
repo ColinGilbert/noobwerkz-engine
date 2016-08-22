@@ -6,6 +6,9 @@
 
 #include "format.h"
 
+
+noob::graphics* noob::graphics::ptr_to_instance;
+
 void noob::graphics::init(uint32_t width, uint32_t height)
 {
 	uint32_t reset = BGFX_RESET_VSYNC;

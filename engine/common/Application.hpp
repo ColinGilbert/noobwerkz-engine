@@ -3,7 +3,6 @@
 #include <atomic>
 
 #include <btBulletDynamicsCommon.h>
-#include <angelscript.h>
 
 #include "NoobDefines.hpp"
 #include "Globals.hpp"
@@ -27,9 +26,6 @@
 #include "NetworkClient.hpp"
 #include "ProfilingInfo.hpp"
 
-
-#include "AngelVector.hpp"
-#include "scriptstdstring.h"
 
 #include "Shiny.h"
 #include "ShinyMacros.h"
@@ -87,11 +83,6 @@ namespace noob
 			void remove_shapes();
 
 			noob::time last_step;
-
-			std::atomic<bool> ready_for_next_script;
-			asIScriptEngine* script_engine;
-			asIScriptModule* script_module;
-			asIScriptContext* script_context;
 
 			noob::profiler_snap current_timings;
 
