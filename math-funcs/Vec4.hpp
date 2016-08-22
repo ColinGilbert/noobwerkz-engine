@@ -8,9 +8,6 @@
 
 namespace noob
 {
-	// struct vec2;
-	// struct vec4;
-
 	struct vec4
 	{
 		vec4() {}
@@ -144,20 +141,6 @@ namespace noob
 		const float& operator[](uint32_t x) const
 		{
 			return v[x];
-		}
-
-
-		float get_opIndex(uint32_t i) const
-
-		{
-			if (i > 3 ) return v[3];
-			return v[i];
-		}
-
-		void set_opIndex(uint32_t i, float value)
-		{
-			if (i > 3) return;
-			v[i] = value;
 		}
 
 		std::string to_string() const

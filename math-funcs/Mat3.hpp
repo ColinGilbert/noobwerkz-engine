@@ -32,26 +32,12 @@ namespace noob
 			return m[x];
 		}
 
-		float get_opIndex(int i) const
-
-		{
-			if (i > 8 ) return m[8];
-			if (i < 0) return m[0];
-			return m[i];
+		std::string to_string() const
+		{	
+		fmt::MemoryWriter w;
+		w << m[0] << ", " << m[3] << ", " << m[6] << "\n" << m[1] << ", " << m[4] << ", " << m[7] << "\n" << m[2] << ", " << m[5] << ", " << m[8] << "\n";
+		return w.str();
 		}
-
-		void set_opIndex(int i, float value)
-		{
-			if (i > 8 && i < 0) return;
-			m[i] = value;
-		}
-
-		// std::string to_string() const
-		//{
-		//	fmt::MemoryWriter w;
-		//	w << m[0] << ", " << m[3] << ", " << m[6] << "\n" << m[1] << ", " << m[4] << ", " << m[7] << "\n" << m[2] << ", " << m[5] << ", " << m[8] << "\n";
-		//	return w.str();
-		//}
 
 
 		static mat3 zero()

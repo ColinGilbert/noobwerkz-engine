@@ -3,9 +3,7 @@
 #include <array>
 #include <assert.h>
 
-// #include "MathFuncs.hpp"
 #include "Vec2.hpp"
-
 #include "format.h"
 
 namespace noob

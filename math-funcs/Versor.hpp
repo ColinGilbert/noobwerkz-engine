@@ -59,12 +59,12 @@ namespace noob
 			return result;
 		}
 
-		// std::string to_string() const
-		// {
-		// fmt::MemoryWriter w;
-		// w << "(" << q[0] << ", " << q[1] << ", " << q[2] << ", " << q[3] << ")";
-		// return w.str();
-		// }
+		std::string to_string() const
+		{
+			fmt::MemoryWriter w;
+			w << "(" << q[0] << ", " << q[1] << ", " << q[2] << ", " << q[3] << ")";
+			return w.str();
+		}
 
 		versor operator*(const versor& rhs) const
 		{
@@ -104,19 +104,6 @@ namespace noob
 		float& operator[](int x) 
 		{
 			return q[x];
-		}
-
-		float get_opIndex(int i) const
-		{
-			if (i > 3 ) return q[3];
-			if (i < 0) return q[0];
-			return q[i];
-		}
-
-		void set_opIndex(int i, float value)
-		{
-			if (i > 3 && i < 0) return;
-			q[i] = value;
 		}
 
 

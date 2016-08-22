@@ -84,38 +84,7 @@ namespace noob
 		if (std::fabs(a) <= NOOB_EPSILON) return false;
 		else return true;
 	}
-/*
-	struct vec4 final
-	{
-		vec4();
-		vec4(float x, float y, float z, float w);
-		vec4(const vec2& vv, float z, float w);
-		vec4(const vec3& vv, float w);
-
-		std::array<float,4> v;
-
-		float& operator[](int x)
-		{
-			return v[x];
-		}
-
-		float get_opIndex(int i) const
-
-		{
-			if (i > 3 ) return v[3];
-			if (i < 0) return v[0];
-			return v[i];
-		}
-
-		void set_opIndex(int i, float value)
-		{
-			if (i > 3 && i < 0) return;
-			v[i] = value;
-		}
-
-
-	};
-*/
+	
 	/* stored like this:
 	   0 3 6
 	   1 4 7
@@ -133,20 +102,6 @@ namespace noob
 			return m[x];
 		}
 
-		float get_opIndex(int i) const
-
-		{
-			if (i > 8 ) return m[8];
-			if (i < 0) return m[0];
-			return m[i];
-		}
-
-		void set_opIndex(int i, float value)
-		{
-			if (i > 8 && i < 0) return;
-			m[i] = value;
-		}
-
 		std::string to_string() const
 		{
 			fmt::MemoryWriter w;
@@ -162,7 +117,7 @@ namespace noob
 	   1 5 9  13
 	   2 6 10 14
 	   3 7 11 15 */
-	struct mat4 final
+	struct mat4 
 	{
 		mat4();
 		// note! this is entering components in ROW-major order
@@ -185,19 +140,6 @@ namespace noob
 		const float& operator[](uint32_t i) const
 		{
 			return m[i];
-		}
-
-		float get_opIndex(uint32_t i) const
-
-		{
-			if (i > 15) return m[15];
-			return m[i];
-		}
-
-		void set_opIndex(uint32_t i, float value)
-		{
-			if (i > 15) return;
-			m[i] = value;
 		}
 
 		std::string to_string() const
