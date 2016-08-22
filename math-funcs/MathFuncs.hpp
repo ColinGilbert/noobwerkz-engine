@@ -36,227 +36,52 @@ typedef OpenMesh::TriMesh_ArrayKernelT<> TriMesh;
 #include "Vec3.hpp"
 #include "Vec4.hpp"
 #include "Versor.hpp"
+#include "Mat3.hpp"
+#include "Mat4.hpp"
+#include "MathUtilTypes.hpp"
 
 namespace noob
 {
-	enum class binary_op
-	{
-		ADD, SUBTRACT
-	};
-
-	enum class csg_op
-	{
-		UNION = 0, DIFFERENCE = 1, INTERSECTION = 2
-	};
-
-	enum class cardinal_axis
-	{
-		X, Y, Z
-	};
-
-	static uint64_t pack_32_to_64(uint32_t x, uint32_t y)
+	// ONE-FLOAT FUNCTIONS:
+	static uint64_t pack_32_to_64(uint32_t x, uint32_t y) noexcept(true)
 	{
 		return static_cast<uint64_t>(x) << 32 | y;
 	}
 
-	static std::tuple<uint32_t, uint32_t> pack_64_to_32(uint64_t arg)
+	static std::tuple<uint32_t, uint32_t> pack_64_to_32(uint64_t arg) noexcept(true)
 	{
 		uint32_t x = static_cast<uint32_t>(arg >> 32);
 		uint32_t y = static_cast<uint32_t>(x);
 		return std::make_tuple(x,y);
 	}
 
-	template <typename T> int sign(T val)
+	template <typename T> int sign(T val) noexcept(true)
 	{
 		return (T(0) < val) - (val < T(0));
 	}
 
-	static bool compare_floats(float a, float b)
+	static bool approximately_zero(float a) noexcept(true)
+	{
+		// http://c-faq.com/fp/fpequal.html
+		if (std::fabs(a) <= NOOB_EPSILON) return false;
+		else return true;
+	}
+
+	// TWO-FLOAT FUNCTION(S):
+	static bool compare_floats(float a, float b) noexcept(true)
 	{
 		// http://c-faq.com/fp/fpequal.html
 		if (std::fabs(a - b) <= NOOB_EPSILON * std::fabs(a)) return false;
 		else return true;
 	}
 
-	static bool approximately_zero(float a)
-	{
-		// http://c-faq.com/fp/fpequal.html
-		if (std::fabs(a) <= NOOB_EPSILON) return false;
-		else return true;
-	}
-	
-	/* stored like this:
-	   0 3 6
-	   1 4 7
-	   2 5 8  */
-	struct mat3 final
-	{
-		mat3();
-		// note! this is entering components in ROW-major order
-		mat3(float a, float b, float c,	float d, float e, float f, float g, float h, float i);
-
-		std::array<float,9> m;
-
-		float& operator[](int x) 
-		{
-			return m[x];
-		}
-
-		std::string to_string() const
-		{
-			fmt::MemoryWriter w;
-			w << m[0] << ", " << m[3] << ", " << m[6] << "\n" << m[1] << ", " << m[4] << ", " << m[7] << "\n" << m[2] << ", " << m[5] << ", " << m[8] << "\n";
-			return w.str();
-		}
-
-
-	};
-
-	/* stored like this:
-	   0 4 8  12
-	   1 5 9  13
-	   2 6 10 14
-	   3 7 11 15 */
-	struct mat4 
-	{
-		mat4();
-		// note! this is entering components in ROW-major order
-		mat4(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float mm, float n, float o, float p);
-		mat4(std::array<float,16> mm);
-		// mat4(const aiMatrix3x3& AssimpMatrix);
-		// mat4(const aiMatrix4x4&);
-		mat4(const glm::mat4&);
-		mat4(const btTransform&);
-		vec4 operator*(const vec4& rhs) const;
-		mat4 operator*(const mat4& rhs) const;
-		mat4& operator=(const mat4& rhs);
-		std::array<float, 16> m;
-
-		float& operator[](uint32_t x) 
-		{
-			return m[x];
-		}
-		
-		const float& operator[](uint32_t i) const
-		{
-			return m[i];
-		}
-
-		std::string to_string() const
-		{
-			fmt::MemoryWriter w;
-			w << m[0] << ", " << m[4] << ", " << m[8] << ", " << m[12] << "\n" << m[1] << ", " << m[5] << ", " << m[9] << ", " << m[13] << "\n" << m[2] << ", " << m[6] << ", " << m[10] << ", " << m[14] << "\n" << m[3] << ", " << m[7] << ", " << m[11] << ", " << m[15] << "\n";
-			return w.str();
-		}
-
-	};
-/*
-	struct versor final
-	{
-		versor();
-		versor(float,float,float,float);
-		versor(const vec4& v);
-		versor(const btQuaternion&);
-
-		versor operator/(float rhs) const;
-		versor operator*(float rhs) const;
-		versor operator*(const versor& rhs) const;
-		versor operator+(const versor& rhs) const;
-		versor& operator=(const versor& rhs);
-
-
-		float& operator[](uint32_t x) 
-		{
-			return q[x];
-		}
-
-		const float& operator[](uint32_t x) const
-		{
-			return q[x];
-		}
-
-		float get_opIndex(uint32_t i) const
-		{
-			if (i > 3 ) return q[3];
-			return q[i];
-		}
-
-		void set_opIndex(uint32_t i, float value)
-		{
-			if (i > 3) return;
-			q[i] = value;
-		}
-
-		std::string to_string() const;
-
-		std::array<float,4> q;
-	};
-*/
-
-	static vec3 vec3_from_vec4(const vec4& vv)
-	{
-		noob::vec3 v;
-		v.v[0] = vv.v[0];
-		v.v[1] = vv.v[1];
-		v.v[2] = vv.v[2];
-		return v;
-	}
-
-	static vec3 vec3_from_array(const std::array<float, 3>& a)
-	{
-		noob::vec3 v;
-		v.v[0] = a[0];
-		v.v[1] = a[1];
-		v.v[2] = a[2];
-		return v;
-		// v = a;
-	}
-
-	static vec3 vec3_from_bullet(const btVector3& btVec)
-	{
-		noob::vec3 v;
-		v.v[0] = btVec[0];
-		v.v[1] = btVec[1];
-		v.v[2] = btVec[2];
-		return v;
-	}
-
-	static vec3 vec3_from_polymesh(const PolyMesh::Point& p)
-	{
-		noob::vec3 v;
-		v.v[0] = p[0];
-		v.v[1] = p[1];
-		v.v[2] = p[2];
-		return v;
-	}
-
-	static vec3 vec3_from_eigen_vec3(const Eigen::Vector3f& p)
-	{
-		noob::vec3 v;
-		v.v[0] = p[0];
-		v.v[1] = p[1];
-		v.v[2] = p[2];
-		return v;
-	}
-
-	// Whatever the hell you gotta do to compile, man...
-	static vec3 vec3_from_eigen_block(const Eigen::Block<const Eigen::Matrix<float, 4, 1>, 3, 1, false> n)
-	{
-		noob::vec3 v;
-		v.v[0] = n[0];
-		v.v[1] = n[1];
-		v.v[2] = n[2];
-		return v;
-	}
-
-	static noob::vec3 negate(const noob::vec3& arg)
+	// VECTOR FUNCTIONS:
+	static noob::vec3 negate(const noob::vec3& arg) noexcept(true)
 	{
 		return arg * -1.0;
 	}
 
-
-
-	static bool vec3_equality(const vec3& first, const vec3& second)
+	static bool vec3_equality(const vec3& first, const vec3& second) noexcept(true)
 	{
 		for (size_t i = 0; i < 3; ++i)
 		{
@@ -265,36 +90,9 @@ namespace noob
 		return true;
 	}
 
-	struct bbox
-	{
-		//template <class Archive>
-		//	void serialize( Archive & ar )
-		//	{
-		//		ar(min, max, center);
-		//	}
-
-		noob::vec3 get_dims() const
-		{
-			return noob::vec3(std::fabs(min.v[0]) + std::fabs(max.v[0]), std::fabs(min.v[1]) + std::fabs(max.v[1]), std::fabs(max.v[2]) + std::fabs(max.v[2]));
-		}
-
-		noob::vec3 min, max;
-	};
-
-	struct cubic_region
-	{
-		template <class Archive>
-			void serialize( Archive & ar )
-			{
-				ar(lower_corner, upper_corner);
-			}
-
-		vec3 lower_corner, upper_corner;
-	};
-
-	// vector functions
 	float length(const vec3& v);
-	inline static float length_squared(const vec3& v)
+
+	inline static float length_squared(const vec3& v) noexcept(true)
 	{
 		return v.v[0] * v.v[0] + v.v[1] * v.v[1] + v.v[2] * v.v[2];
 	}
@@ -307,23 +105,189 @@ namespace noob
 	float direction_to_heading(const vec3& d);
 	vec3 heading_to_direction(float degrees);
 
-	inline bool linearly_dependent(const noob::vec3& a, const noob::vec3& b, const noob::vec3& c)
+	static bool linearly_dependent(const noob::vec3& a, const noob::vec3& b, const noob::vec3& c) noexcept(true)
 	{
 		// if (a cross b) dot c = 0
 		if (dot(cross(a, b), c) == 0.0) return true;
 		else return false;
 	}
 
-	// matrix functions
-	mat3 zero_mat3();
-	mat3 identity_mat3();
-	mat4 zero_mat4();
-	mat4 identity_mat4();
-	float determinant(const mat4& mm);
-	mat4 inverse(const mat4& mm);
-	mat4 transpose(const mat4& mm);
+	// MATRIX FUNCTIONS:
+	static mat3 zero_mat3() noexcept(true)
+	{
+		return mat3(	0.0f, 0.0f, 0.0f,
+				0.0f, 0.0f, 0.0f,
+				0.0f, 0.0f, 0.0f);
+	}
 
-	// affine functions
+	static mat3 identity_mat3() noexcept(true)
+	{
+		return mat3(	1.0f, 0.0f, 0.0f,
+				0.0f, 1.0f, 0.0f,
+				0.0f, 0.0f, 1.0f);
+	}
+
+	static mat4 zero_mat4() noexcept(true)
+	{
+		return mat4(	0.0f, 0.0f, 0.0f, 0.0f,
+				0.0f, 0.0f, 0.0f, 0.0f,
+				0.0f, 0.0f, 0.0f, 0.0f,
+				0.0f, 0.0f, 0.0f, 0.0f);
+	}
+
+	static mat4 identity_mat4() noexcept(true)
+	{
+		return mat4(	1.0f, 0.0f, 0.0f, 0.0f,
+				0.0f, 1.0f, 0.0f, 0.0f,
+				0.0f, 0.0f, 1.0f, 0.0f,
+				0.0f, 0.0f, 0.0f, 1.0f);
+	}
+
+	// Returns a scalar value with the determinant for a 4x4 matrix
+	// see http://www.euclideanspace.com/maths/algebra/matrix/functions/determinant/fourD/index.htm
+	static float determinant(const mat4& mm) noexcept(true)
+	{
+		return
+			mm.m[12] * mm.m[9] * mm.m[6] * mm.m[3] -
+			mm.m[8] * mm.m[13] * mm.m[6] * mm.m[3] -
+			mm.m[12] * mm.m[5] * mm.m[10] * mm.m[3] +
+			mm.m[4] * mm.m[13] * mm.m[10] * mm.m[3] +
+			mm.m[8] * mm.m[5] * mm.m[14] * mm.m[3] -
+			mm.m[4] * mm.m[9] * mm.m[14] * mm.m[3] -
+			mm.m[12] * mm.m[9] * mm.m[2] * mm.m[7] +
+			mm.m[8] * mm.m[13] * mm.m[2] * mm.m[7] +
+			mm.m[12] * mm.m[1] * mm.m[10] * mm.m[7] -
+			mm.m[0] * mm.m[13] * mm.m[10] * mm.m[7] -
+			mm.m[8] * mm.m[1] * mm.m[14] * mm.m[7] +
+			mm.m[0] * mm.m[9] * mm.m[14] * mm.m[7] +
+			mm.m[12] * mm.m[5] * mm.m[2] * mm.m[11] -
+			mm.m[4] * mm.m[13] * mm.m[2] * mm.m[11] -
+			mm.m[12] * mm.m[1] * mm.m[6] * mm.m[11] +
+			mm.m[0] * mm.m[13] * mm.m[6] * mm.m[11] +
+			mm.m[4] * mm.m[1] * mm.m[14] * mm.m[11] -
+			mm.m[0] * mm.m[5] * mm.m[14] * mm.m[11] -
+			mm.m[8] * mm.m[5] * mm.m[2] * mm.m[15] +
+			mm.m[4] * mm.m[9] * mm.m[2] * mm.m[15] +
+			mm.m[8] * mm.m[1] * mm.m[6] * mm.m[15] -
+			mm.m[0] * mm.m[9] * mm.m[6] * mm.m[15] -
+			mm.m[4] * mm.m[1] * mm.m[10] * mm.m[15] +
+			mm.m[0] * mm.m[5] * mm.m[10] * mm.m[15];
+	}
+
+
+	/* returns a 16-element array that is the inverse of a 16-element array (4x4
+	   matrix). see http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm */
+	static mat4 inverse(const mat4& mm) noexcept(true)
+	{
+		float det = determinant (mm);
+		/* there is no inverse if determinant is zero (not likely unless scale is
+		   broken) */
+		if (0.0f == det)
+		{
+			logger::log("WARNING. matrix has no determinant. can not invert");
+			return mm;
+		}
+		float inv_det = 1.0f / det;
+
+		return mat4 (
+				inv_det * (
+					mm.m[9] * mm.m[14] * mm.m[7] - mm.m[13] * mm.m[10] * mm.m[7] +
+					mm.m[13] * mm.m[6] * mm.m[11] - mm.m[5] * mm.m[14] * mm.m[11] -
+					mm.m[9] * mm.m[6] * mm.m[15] + mm.m[5] * mm.m[10] * mm.m[15]
+					),
+				inv_det * (
+					mm.m[13] * mm.m[10] * mm.m[3] - mm.m[9] * mm.m[14] * mm.m[3] -
+					mm.m[13] * mm.m[2] * mm.m[11] + mm.m[1] * mm.m[14] * mm.m[11] +
+					mm.m[9] * mm.m[2] * mm.m[15] - mm.m[1] * mm.m[10] * mm.m[15]
+					),
+				inv_det * (
+					mm.m[5] * mm.m[14] * mm.m[3] - mm.m[13] * mm.m[6] * mm.m[3] +
+					mm.m[13] * mm.m[2] * mm.m[7] - mm.m[1] * mm.m[14] * mm.m[7] -
+					mm.m[5] * mm.m[2] * mm.m[15] + mm.m[1] * mm.m[6] * mm.m[15]
+					),
+				inv_det * (
+					mm.m[9] * mm.m[6] * mm.m[3] - mm.m[5] * mm.m[10] * mm.m[3] -
+					mm.m[9] * mm.m[2] * mm.m[7] + mm.m[1] * mm.m[10] * mm.m[7] +
+					mm.m[5] * mm.m[2] * mm.m[11] - mm.m[1] * mm.m[6] * mm.m[11]
+					),
+				inv_det * (
+						mm.m[12] * mm.m[10] * mm.m[7] - mm.m[8] * mm.m[14] * mm.m[7] -
+						mm.m[12] * mm.m[6] * mm.m[11] + mm.m[4] * mm.m[14] * mm.m[11] +
+						mm.m[8] * mm.m[6] * mm.m[15] - mm.m[4] * mm.m[10] * mm.m[15]
+					  ),
+				inv_det * (
+						mm.m[8] * mm.m[14] * mm.m[3] - mm.m[12] * mm.m[10] * mm.m[3] +
+						mm.m[12] * mm.m[2] * mm.m[11] - mm.m[0] * mm.m[14] * mm.m[11] -
+						mm.m[8] * mm.m[2] * mm.m[15] + mm.m[0] * mm.m[10] * mm.m[15]
+					  ),
+				inv_det * (
+						mm.m[12] * mm.m[6] * mm.m[3] - mm.m[4] * mm.m[14] * mm.m[3] -
+						mm.m[12] * mm.m[2] * mm.m[7] + mm.m[0] * mm.m[14] * mm.m[7] +
+						mm.m[4] * mm.m[2] * mm.m[15] - mm.m[0] * mm.m[6] * mm.m[15]
+					  ),
+				inv_det * (
+						mm.m[4] * mm.m[10] * mm.m[3] - mm.m[8] * mm.m[6] * mm.m[3] +
+						mm.m[8] * mm.m[2] * mm.m[7] - mm.m[0] * mm.m[10] * mm.m[7] -
+						mm.m[4] * mm.m[2] * mm.m[11] + mm.m[0] * mm.m[6] * mm.m[11]
+					  ),
+				inv_det * (
+						mm.m[8] * mm.m[13] * mm.m[7] - mm.m[12] * mm.m[9] * mm.m[7] +
+						mm.m[12] * mm.m[5] * mm.m[11] - mm.m[4] * mm.m[13] * mm.m[11] -
+						mm.m[8] * mm.m[5] * mm.m[15] + mm.m[4] * mm.m[9] * mm.m[15]
+					  ),
+				inv_det * (
+						mm.m[12] * mm.m[9] * mm.m[3] - mm.m[8] * mm.m[13] * mm.m[3] -
+						mm.m[12] * mm.m[1] * mm.m[11] + mm.m[0] * mm.m[13] * mm.m[11] +
+						mm.m[8] * mm.m[1] * mm.m[15] - mm.m[0] * mm.m[9] * mm.m[15]
+					  ),
+				inv_det * (
+						mm.m[4] * mm.m[13] * mm.m[3] - mm.m[12] * mm.m[5] * mm.m[3] +
+						mm.m[12] * mm.m[1] * mm.m[7] - mm.m[0] * mm.m[13] * mm.m[7] -
+						mm.m[4] * mm.m[1] * mm.m[15] + mm.m[0] * mm.m[5] * mm.m[15]
+					  ),
+				inv_det * (
+						mm.m[8] * mm.m[5] * mm.m[3] - mm.m[4] * mm.m[9] * mm.m[3] -
+						mm.m[8] * mm.m[1] * mm.m[7] + mm.m[0] * mm.m[9] * mm.m[7] +
+						mm.m[4] * mm.m[1] * mm.m[11] - mm.m[0] * mm.m[5] * mm.m[11]
+					  ),
+				inv_det * (
+						mm.m[12] * mm.m[9] * mm.m[6] - mm.m[8] * mm.m[13] * mm.m[6] -
+						mm.m[12] * mm.m[5] * mm.m[10] + mm.m[4] * mm.m[13] * mm.m[10] +
+						mm.m[8] * mm.m[5] * mm.m[14] - mm.m[4] * mm.m[9] * mm.m[14]
+					  ),
+				inv_det * (
+						mm.m[8] * mm.m[13] * mm.m[2] - mm.m[12] * mm.m[9] * mm.m[2] +
+						mm.m[12] * mm.m[1] * mm.m[10] - mm.m[0] * mm.m[13] * mm.m[10] -
+						mm.m[8] * mm.m[1] * mm.m[14] + mm.m[0] * mm.m[9] * mm.m[14]
+					  ),
+				inv_det * (
+						mm.m[12] * mm.m[5] * mm.m[2] - mm.m[4] * mm.m[13] * mm.m[2] -
+						mm.m[12] * mm.m[1] * mm.m[6] + mm.m[0] * mm.m[13] * mm.m[6] +
+						mm.m[4] * mm.m[1] * mm.m[14] - mm.m[0] * mm.m[5] * mm.m[14]
+					  ),
+				inv_det * (
+						mm.m[4] * mm.m[9] * mm.m[2] - mm.m[8] * mm.m[5] * mm.m[2] +
+						mm.m[8] * mm.m[1] * mm.m[6] - mm.m[0] * mm.m[9] * mm.m[6] -
+						mm.m[4] * mm.m[1] * mm.m[10] + mm.m[0] * mm.m[5] * mm.m[10]
+					  )
+					);
+	}
+
+	// Returns a 16-element array flipped on the main diagonal
+	static mat4 transpose(const mat4& mm) noexcept(true)
+	{
+		return mat4 (
+				mm.m[0], mm.m[4], mm.m[8], mm.m[12],
+				mm.m[1], mm.m[5], mm.m[9], mm.m[13],
+				mm.m[2], mm.m[6], mm.m[10], mm.m[14],
+				mm.m[3], mm.m[7], mm.m[11], mm.m[15]
+			    );
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// AFFINE MATRIX FUNCTIONS:
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	mat4 translate(const mat4& m, const vec3& v);
 	// TODO: Find out if rotating a matrix by a quaternion can be done by converting the quat to a matrix and then multiplying the two.
 	mat4 rotate(const mat4& m, const versor&);
@@ -346,6 +310,12 @@ namespace noob
 	mat4 perspective(float fovy, float aspect, float near, float far);
 	mat4 ortho(float left, float right, float bottom, float top, float near, float far);
 
+
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// QUATERNION FUNCTIONS:
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	// quaternion functions
 	versor quat_from_axis_rad(float radians, float x, float y, float z);
 	versor quat_from_axis_deg(float degrees, float x, float y, float z);
@@ -353,132 +323,186 @@ namespace noob
 	mat4 quat_to_mat4(const versor& q);
 	float dot(const versor& q, const versor& r);
 	vec3 lerp(const vec3& a, const vec3& b, float t);
-	// versor slerp(const versor& q, const versor& r); 
-	// versor normalize(const versor& q);
-	//versor slerp(const versor& q, const versor& r, float t);
 
-
-
-
-		static versor normalize(const versor& q)
+	static versor normalize(const versor& q) noexcept(true)
+	{
+		// norm(q) = q / magnitude (q)
+		// magnitude (q) = sqrt (w*w + x*x...)
+		// only compute sqrt if interior sum != 1.0
+		versor qq(q);
+		float sum = qq.q[0] * qq.q[0] + qq.q[1] * qq.q[1] + qq.q[2] * qq.q[2] + qq.q[3] * qq.q[3];
+		// NB: floats have min 6 digits of precision
+		const float thresh = 0.0001f;
+		if (fabs (1.0f - sum) < thresh)
 		{
-			// norm(q) = q / magnitude (q)
-			// magnitude (q) = sqrt (w*w + x*x...)
-			// only compute sqrt if interior sum != 1.0
-			versor qq(q);
-			float sum = qq.q[0] * qq.q[0] + qq.q[1] * qq.q[1] + qq.q[2] * qq.q[2] + qq.q[3] * qq.q[3];
-			// NB: floats have min 6 digits of precision
-			const float thresh = 0.0001f;
-			if (fabs (1.0f - sum) < thresh)
-			{
-				return q;
-			}
-			float mag = sqrt(sum);
-			return qq / mag;
+			return q;
 		}
+		float mag = sqrt(sum);
+		return qq / mag;
+	}
 
-		static versor versor_from_axis_rad(float radians, float x, float y, float z)
+	static versor versor_from_axis_rad(float radians, float x, float y, float z) noexcept(true)
+	{
+		versor result;
+		result.q[0] = cos (radians / 2.0);
+		result.q[1] = sin (radians / 2.0) * x;
+		result.q[2] = sin (radians / 2.0) * y;
+		result.q[3] = sin (radians / 2.0) * z;
+		return result;
+	}
+
+	static versor versor_from_axis_deg(float degrees, float x, float y, float z) noexcept(true)
+	{
+		return versor_from_axis_rad (ONE_DEG_IN_RAD * degrees, x, y, z);
+	}
+
+	static mat4 versor_to_mat4(const noob::versor& q) noexcept(true)
+	{
+		const float w = q.q[0];
+		const float x = q.q[1];
+		const float y = q.q[2];
+		const float z = q.q[3];
+		return mat4 (1.0f - 2.0f * y * y - 2.0f * z * z,
+				2.0f * x * y + 2.0f * w * z,
+				2.0f * x * z - 2.0f * w * y,
+				0.0f,
+				2.0f * x * y - 2.0f * w * z,
+				1.0f - 2.0f * x * x - 2.0f * z * z,
+				2.0f * y * z + 2.0f * w * x,
+				0.0f,
+				2.0f * x * z + 2.0f * w * y,
+				2.0f * y * z - 2.0f * w * x,
+				1.0f - 2.0f * x * x - 2.0f * y * y,
+				0.0f,
+				0.0f,
+				0.0f,
+				0.0f,
+				1.0f
+			    );
+	}
+
+	static float dot(const versor& q, const versor& r) noexcept(true)
+	{
+		return q.q[0] * r.q[0] + q.q[1] * r.q[1] + q.q[2] * r.q[2] + q.q[3] * r.q[3];
+	}
+
+	static versor slerp(const versor& q, const versor& r, float t) noexcept(true)
+	{
+		versor temp_q(q);
+		// angle between q0-q1
+		float cos_half_theta = dot(temp_q, r);
+		// as found here http://stackoverflow.com/questions/2886606/flipping-issue-when-interpolating-rotations-using-quaternions
+		// if dot product is negative then one quaternion should be negated, to make
+		// it take the short way around, rather than the long way
+		// yeah! and furthermore Susan, I had to recalculate the d.p. after this
+
+		if (cos_half_theta < 0.0f)
 		{
-			versor result;
-			result.q[0] = cos (radians / 2.0);
-			result.q[1] = sin (radians / 2.0) * x;
-			result.q[2] = sin (radians / 2.0) * y;
-			result.q[3] = sin (radians / 2.0) * z;
-			return result;
-		}
-
-		static versor versor_from_axis_deg(float degrees, float x, float y, float z)
-		{
-			return versor_from_axis_rad (ONE_DEG_IN_RAD * degrees, x, y, z);
-		}
-
-		static mat4 versor_to_mat4(const noob::versor& q)
-		{
-			const float w = q.q[0];
-			const float x = q.q[1];
-			const float y = q.q[2];
-			const float z = q.q[3];
-			return mat4 (1.0f - 2.0f * y * y - 2.0f * z * z,
-					2.0f * x * y + 2.0f * w * z,
-					2.0f * x * z - 2.0f * w * y,
-					0.0f,
-					2.0f * x * y - 2.0f * w * z,
-					1.0f - 2.0f * x * x - 2.0f * z * z,
-					2.0f * y * z + 2.0f * w * x,
-					0.0f,
-					2.0f * x * z + 2.0f * w * y,
-					2.0f * y * z - 2.0f * w * x,
-					1.0f - 2.0f * x * x - 2.0f * y * y,
-					0.0f,
-					0.0f,
-					0.0f,
-					0.0f,
-					1.0f
-				    );
-		}
-
-		static float dot(const versor& q, const versor& r)
-		{
-			return q.q[0] * r.q[0] + q.q[1] * r.q[1] + q.q[2] * r.q[2] + q.q[3] * r.q[3];
-		}
-
-		static versor slerp(const versor& q, const versor& r, float t)
-		{
-			versor temp_q(q);
-			// angle between q0-q1
-			float cos_half_theta = dot(temp_q, r);
-			// as found here http://stackoverflow.com/questions/2886606/flipping-issue-when-interpolating-rotations-using-quaternions
-			// if dot product is negative then one quaternion should be negated, to make
-			// it take the short way around, rather than the long way
-			// yeah! and furthermore Susan, I had to recalculate the d.p. after this
-
-			if (cos_half_theta < 0.0f)
-			{
-				for (int i = 0; i < 4; i++)
-				{
-					temp_q.q[i] *= -1.0f;
-				}
-				cos_half_theta = dot (temp_q, r);
-			}
-			// if qa=qb or qa=-qb then theta = 0 and we can return qa
-			if (fabs(cos_half_theta) >= 1.0f)
-			{
-				return temp_q;
-			}
-			// Calculate temporary values
-			float sin_half_theta = sqrt(1.0f - cos_half_theta * cos_half_theta);
-			// if theta = 180 degrees then result is not fully defined
-			// we could rotate around any axis normal to qa or qb
-			versor result;
-			if (fabs(sin_half_theta) < 0.001f)
-			{
-				for (int i = 0; i < 4; i++)
-				{
-					result.q[i] = (1.0f - t) * temp_q.q[i] + t * r.q[i];
-				}
-				return result;
-			}
-			float half_theta = acos(cos_half_theta);
-			float a = sin((1.0f - t) * half_theta) / sin_half_theta;
-			float b = sin(t * half_theta) / sin_half_theta;
 			for (int i = 0; i < 4; i++)
 			{
-				result.q[i] = temp_q.q[i] * a + r.q[i] * b;
+				temp_q.q[i] *= -1.0f;
+			}
+			cos_half_theta = dot (temp_q, r);
+		}
+		// if qa=qb or qa=-qb then theta = 0 and we can return qa
+		if (fabs(cos_half_theta) >= 1.0f)
+		{
+			return temp_q;
+		}
+		// Calculate temporary values
+		float sin_half_theta = sqrt(1.0f - cos_half_theta * cos_half_theta);
+		// if theta = 180 degrees then result is not fully defined
+		// we could rotate around any axis normal to qa or qb
+		versor result;
+		if (fabs(sin_half_theta) < 0.001f)
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				result.q[i] = (1.0f - t) * temp_q.q[i] + t * r.q[i];
 			}
 			return result;
 		}
-
-		static versor from_mat4(const mat4& m)
+		float half_theta = acos(cos_half_theta);
+		float a = sin((1.0f - t) * half_theta) / sin_half_theta;
+		float b = sin(t * half_theta) / sin_half_theta;
+		for (int i = 0; i < 4; i++)
 		{
-			glm::mat4 mm = glm::make_mat4(&m.m[0]);
-			glm::quat q = glm::quat_cast(mm);
-			noob::versor qq;
-			qq.q[0] = q[0];
-			qq.q[1] = q[1];
-			qq.q[2] = q[2];
-			qq.q[3] = q[3];
-			return qq;
+			result.q[i] = temp_q.q[i] * a + r.q[i] * b;
 		}
+		return result;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// CONVERSION UTILITY FUNCTIONS:
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	static vec3 vec3_from_vec4(const vec4& vv) noexcept(true)
+	{
+		noob::vec3 v;
+		v.v[0] = vv.v[0];
+		v.v[1] = vv.v[1];
+		v.v[2] = vv.v[2];
+		return v;
+	}
+
+	static vec3 vec3_from_array(const std::array<float, 3>& a) noexcept(true)
+	{
+		noob::vec3 v;
+		v.v[0] = a[0];
+		v.v[1] = a[1];
+		v.v[2] = a[2];
+		return v;
+		// v = a;
+	}
+
+	static vec3 vec3_from_bullet(const btVector3& btVec) noexcept(true)
+	{
+		noob::vec3 v;
+		v.v[0] = btVec[0];
+		v.v[1] = btVec[1];
+		v.v[2] = btVec[2];
+		return v;
+	}
+
+	static vec3 vec3_from_polymesh(const PolyMesh::Point& p) noexcept(true)
+	{
+		noob::vec3 v;
+		v.v[0] = p[0];
+		v.v[1] = p[1];
+		v.v[2] = p[2];
+		return v;
+	}
+
+	static vec3 vec3_from_eigen_vec3(const Eigen::Vector3f& p) noexcept(true)
+	{
+		noob::vec3 v;
+		v.v[0] = p[0];
+		v.v[1] = p[1];
+		v.v[2] = p[2];
+		return v;
+	}
+
+	// Whatever the hell you gotta do to compile, man...
+	static vec3 vec3_from_eigen_block(const Eigen::Block<const Eigen::Matrix<float, 4, 1>, 3, 1, false> n) noexcept(true)
+	{
+		noob::vec3 v;
+		v.v[0] = n[0];
+		v.v[1] = n[1];
+		v.v[2] = n[2];
+		return v;
+	}
+
+	static versor versor_from_mat4(const mat4& m) noexcept(true)
+	{
+		glm::mat4 mm = glm::make_mat4(&m.m[0]);
+		glm::quat q = glm::quat_cast(mm);
+		noob::versor qq;
+		qq.q[0] = q[0];
+		qq.q[1] = q[1];
+		qq.q[2] = q[2];
+		qq.q[3] = q[3];
+		return qq;
+	}
 }
 
 

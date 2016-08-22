@@ -27,30 +27,16 @@ namespace noob
 			m[8] = i;
 		}
 
-		float& operator[](int x) 
+		float& operator[](int x) noexcept(true)
 		{
 			return m[x];
 		}
 
-		std::string to_string() const
+		std::string to_string() const noexcept(true)
 		{	
 			fmt::MemoryWriter w;
 			w << m[0] << ", " << m[3] << ", " << m[6] << "\n" << m[1] << ", " << m[4] << ", " << m[7] << "\n" << m[2] << ", " << m[5] << ", " << m[8] << "\n";
 			return w.str();
-		}
-
-		static mat3 zero()
-		{
-			return mat3(	0.0f, 0.0f, 0.0f,
-					0.0f, 0.0f, 0.0f,
-					0.0f, 0.0f, 0.0f);
-		}
-
-		static mat3 mat3::identity()
-		{
-			return mat3(	1.0f, 0.0f, 0.0f,
-					0.0f, 1.0f, 0.0f,
-					0.0f, 0.0f, 1.0f);
 		}
 
 

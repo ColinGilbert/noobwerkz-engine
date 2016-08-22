@@ -16,9 +16,9 @@ namespace noob
 	   3 7 11 15 */
 	struct mat4
 	{
-		mat4() {}
+		mat4() noexcept(true) {}
 
-		mat4(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float mm, float n, float o, float p)
+		mat4(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l, float mm, float n, float o, float p) noexcept(true)
 		{
 			m[0] = a;
 			m[1] = b;
@@ -38,7 +38,7 @@ namespace noob
 			m[15] = p;
 		}
 
-		mat4(const std::array<float,16>& mm)
+		mat4(const std::array<float,16>& mm) noexcept(true)
 		{
 			for (int i = 0; i < 16; i++)
 			{
@@ -46,26 +46,12 @@ namespace noob
 			}
 		}
 
-		mat4(const glm::mat4& mm)
-		{
-			const float *source = (const float*)glm::value_ptr(mm);
-			for (size_t i = 0; i < 16; ++i)
-			{
-				m[i] = source[i];
-			}
-		}
-
-		mat4(const btTransform& xform)
-		{
-			xform.getOpenGLMatrix(&m[0]);
-		}
-
-		float& operator[](int x) 
+		float& operator[](int x) noexcept(true)
 		{
 			return m[x];
 		}
 
-		vec4 mat4::operator*(const vec4& rhs) const
+		vec4 mat4::operator*(const vec4& rhs) const noexcept(true)
 		{
 			// 0x + 4y + 8z + 12w
 			float x = m[0] * rhs.v[0] +
@@ -90,7 +76,7 @@ namespace noob
 			return vec4 (x, y, z, w);
 		}
 
-		mat4 mat4::operator*(const mat4& rhs) const
+		mat4 mat4::operator*(const mat4& rhs) const noexcept(true)
 		{
 			mat4 r = mat4::zero();
 			int r_index = 0;
@@ -110,7 +96,7 @@ namespace noob
 			return r;
 		}
 
-		mat4& mat4::operator=(const mat4& rhs)
+		mat4& mat4::operator=(const mat4& rhs) noexcept(true)
 		{
 			for (int i = 0; i < 16; i++)
 			{
@@ -119,185 +105,8 @@ namespace noob
 			return *this;
 		}
 
-		float get_opIndex(int i) const
 
-		{
-			if (i > 15) return m[15];
-			if (i < 0) return m[0];
-			return m[i];
-		}
-
-		void set_opIndex(int i, float value)
-		{
-			if (i > 15 && i < 0) return;
-			m[i] = value;
-		}
-
-
-
-		static mat4 zero()
-		{
-			return mat4(	0.0f, 0.0f, 0.0f, 0.0f,
-					0.0f, 0.0f, 0.0f, 0.0f,
-					0.0f, 0.0f, 0.0f, 0.0f,
-					0.0f, 0.0f, 0.0f, 0.0f);
-		}
-
-		static mat4 identity()
-		{
-			return mat4(	1.0f, 0.0f, 0.0f, 0.0f,
-					0.0f, 1.0f, 0.0f, 0.0f,
-					0.0f, 0.0f, 1.0f, 0.0f,
-					0.0f, 0.0f, 0.0f, 1.0f);
-		}
-
-
-		// Returns a scalar value with the determinant for a 4x4 matrix
-		// see http://www.euclideanspace.com/maths/algebra/matrix/functions/determinant/fourD/index.htm
-		static float determinant(const mat4& mm)
-		{
-			return
-				mm.m[12] * mm.m[9] * mm.m[6] * mm.m[3] -
-				mm.m[8] * mm.m[13] * mm.m[6] * mm.m[3] -
-				mm.m[12] * mm.m[5] * mm.m[10] * mm.m[3] +
-				mm.m[4] * mm.m[13] * mm.m[10] * mm.m[3] +
-				mm.m[8] * mm.m[5] * mm.m[14] * mm.m[3] -
-				mm.m[4] * mm.m[9] * mm.m[14] * mm.m[3] -
-				mm.m[12] * mm.m[9] * mm.m[2] * mm.m[7] +
-				mm.m[8] * mm.m[13] * mm.m[2] * mm.m[7] +
-				mm.m[12] * mm.m[1] * mm.m[10] * mm.m[7] -
-				mm.m[0] * mm.m[13] * mm.m[10] * mm.m[7] -
-				mm.m[8] * mm.m[1] * mm.m[14] * mm.m[7] +
-				mm.m[0] * mm.m[9] * mm.m[14] * mm.m[7] +
-				mm.m[12] * mm.m[5] * mm.m[2] * mm.m[11] -
-				mm.m[4] * mm.m[13] * mm.m[2] * mm.m[11] -
-				mm.m[12] * mm.m[1] * mm.m[6] * mm.m[11] +
-				mm.m[0] * mm.m[13] * mm.m[6] * mm.m[11] +
-				mm.m[4] * mm.m[1] * mm.m[14] * mm.m[11] -
-				mm.m[0] * mm.m[5] * mm.m[14] * mm.m[11] -
-				mm.m[8] * mm.m[5] * mm.m[2] * mm.m[15] +
-				mm.m[4] * mm.m[9] * mm.m[2] * mm.m[15] +
-				mm.m[8] * mm.m[1] * mm.m[6] * mm.m[15] -
-				mm.m[0] * mm.m[9] * mm.m[6] * mm.m[15] -
-				mm.m[4] * mm.m[1] * mm.m[10] * mm.m[15] +
-				mm.m[0] * mm.m[5] * mm.m[10] * mm.m[15];
-		}
-
-
-
-
-		/* returns a 16-element array that is the inverse of a 16-element array (4x4
-		   matrix). see http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm */
-		static mat4 inverse(const mat4& mm)
-		{
-			float det = determinant (mm);
-			/* there is no inverse if determinant is zero (not likely unless scale is
-			   broken) */
-			if (0.0f == det)
-			{
-				fprintf (stderr, "WARNING. matrix has no determinant. can not invert\n");
-				return mm;
-			}
-			float inv_det = 1.0f / det;
-
-			return mat4 (
-					inv_det * (
-						mm.m[9] * mm.m[14] * mm.m[7] - mm.m[13] * mm.m[10] * mm.m[7] +
-						mm.m[13] * mm.m[6] * mm.m[11] - mm.m[5] * mm.m[14] * mm.m[11] -
-						mm.m[9] * mm.m[6] * mm.m[15] + mm.m[5] * mm.m[10] * mm.m[15]
-						),
-					inv_det * (
-						mm.m[13] * mm.m[10] * mm.m[3] - mm.m[9] * mm.m[14] * mm.m[3] -
-						mm.m[13] * mm.m[2] * mm.m[11] + mm.m[1] * mm.m[14] * mm.m[11] +
-						mm.m[9] * mm.m[2] * mm.m[15] - mm.m[1] * mm.m[10] * mm.m[15]
-						),
-					inv_det * (
-						mm.m[5] * mm.m[14] * mm.m[3] - mm.m[13] * mm.m[6] * mm.m[3] +
-						mm.m[13] * mm.m[2] * mm.m[7] - mm.m[1] * mm.m[14] * mm.m[7] -
-						mm.m[5] * mm.m[2] * mm.m[15] + mm.m[1] * mm.m[6] * mm.m[15]
-						),
-					inv_det * (
-						mm.m[9] * mm.m[6] * mm.m[3] - mm.m[5] * mm.m[10] * mm.m[3] -
-						mm.m[9] * mm.m[2] * mm.m[7] + mm.m[1] * mm.m[10] * mm.m[7] +
-						mm.m[5] * mm.m[2] * mm.m[11] - mm.m[1] * mm.m[6] * mm.m[11]
-						),
-					inv_det * (
-							mm.m[12] * mm.m[10] * mm.m[7] - mm.m[8] * mm.m[14] * mm.m[7] -
-							mm.m[12] * mm.m[6] * mm.m[11] + mm.m[4] * mm.m[14] * mm.m[11] +
-							mm.m[8] * mm.m[6] * mm.m[15] - mm.m[4] * mm.m[10] * mm.m[15]
-						  ),
-					inv_det * (
-							mm.m[8] * mm.m[14] * mm.m[3] - mm.m[12] * mm.m[10] * mm.m[3] +
-							mm.m[12] * mm.m[2] * mm.m[11] - mm.m[0] * mm.m[14] * mm.m[11] -
-							mm.m[8] * mm.m[2] * mm.m[15] + mm.m[0] * mm.m[10] * mm.m[15]
-						  ),
-					inv_det * (
-							mm.m[12] * mm.m[6] * mm.m[3] - mm.m[4] * mm.m[14] * mm.m[3] -
-							mm.m[12] * mm.m[2] * mm.m[7] + mm.m[0] * mm.m[14] * mm.m[7] +
-							mm.m[4] * mm.m[2] * mm.m[15] - mm.m[0] * mm.m[6] * mm.m[15]
-						  ),
-					inv_det * (
-							mm.m[4] * mm.m[10] * mm.m[3] - mm.m[8] * mm.m[6] * mm.m[3] +
-							mm.m[8] * mm.m[2] * mm.m[7] - mm.m[0] * mm.m[10] * mm.m[7] -
-							mm.m[4] * mm.m[2] * mm.m[11] + mm.m[0] * mm.m[6] * mm.m[11]
-						  ),
-					inv_det * (
-							mm.m[8] * mm.m[13] * mm.m[7] - mm.m[12] * mm.m[9] * mm.m[7] +
-							mm.m[12] * mm.m[5] * mm.m[11] - mm.m[4] * mm.m[13] * mm.m[11] -
-							mm.m[8] * mm.m[5] * mm.m[15] + mm.m[4] * mm.m[9] * mm.m[15]
-						  ),
-					inv_det * (
-							mm.m[12] * mm.m[9] * mm.m[3] - mm.m[8] * mm.m[13] * mm.m[3] -
-							mm.m[12] * mm.m[1] * mm.m[11] + mm.m[0] * mm.m[13] * mm.m[11] +
-							mm.m[8] * mm.m[1] * mm.m[15] - mm.m[0] * mm.m[9] * mm.m[15]
-						  ),
-					inv_det * (
-							mm.m[4] * mm.m[13] * mm.m[3] - mm.m[12] * mm.m[5] * mm.m[3] +
-							mm.m[12] * mm.m[1] * mm.m[7] - mm.m[0] * mm.m[13] * mm.m[7] -
-							mm.m[4] * mm.m[1] * mm.m[15] + mm.m[0] * mm.m[5] * mm.m[15]
-						  ),
-					inv_det * (
-							mm.m[8] * mm.m[5] * mm.m[3] - mm.m[4] * mm.m[9] * mm.m[3] -
-							mm.m[8] * mm.m[1] * mm.m[7] + mm.m[0] * mm.m[9] * mm.m[7] +
-							mm.m[4] * mm.m[1] * mm.m[11] - mm.m[0] * mm.m[5] * mm.m[11]
-						  ),
-					inv_det * (
-							mm.m[12] * mm.m[9] * mm.m[6] - mm.m[8] * mm.m[13] * mm.m[6] -
-							mm.m[12] * mm.m[5] * mm.m[10] + mm.m[4] * mm.m[13] * mm.m[10] +
-							mm.m[8] * mm.m[5] * mm.m[14] - mm.m[4] * mm.m[9] * mm.m[14]
-						  ),
-					inv_det * (
-							mm.m[8] * mm.m[13] * mm.m[2] - mm.m[12] * mm.m[9] * mm.m[2] +
-							mm.m[12] * mm.m[1] * mm.m[10] - mm.m[0] * mm.m[13] * mm.m[10] -
-							mm.m[8] * mm.m[1] * mm.m[14] + mm.m[0] * mm.m[9] * mm.m[14]
-						  ),
-					inv_det * (
-							mm.m[12] * mm.m[5] * mm.m[2] - mm.m[4] * mm.m[13] * mm.m[2] -
-							mm.m[12] * mm.m[1] * mm.m[6] + mm.m[0] * mm.m[13] * mm.m[6] +
-							mm.m[4] * mm.m[1] * mm.m[14] - mm.m[0] * mm.m[5] * mm.m[14]
-						  ),
-					inv_det * (
-							mm.m[4] * mm.m[9] * mm.m[2] - mm.m[8] * mm.m[5] * mm.m[2] +
-							mm.m[8] * mm.m[1] * mm.m[6] - mm.m[0] * mm.m[9] * mm.m[6] -
-							mm.m[4] * mm.m[1] * mm.m[10] + mm.m[0] * mm.m[5] * mm.m[10]
-						  )
-						);
-		}
-
-		// Returns a 16-element array flipped on the main diagonal
-		static mat4 transpose(const mat4& mm)
-		{
-			return mat4 (
-					mm.m[0], mm.m[4], mm.m[8], mm.m[12],
-					mm.m[1], mm.m[5], mm.m[9], mm.m[13],
-					mm.m[2], mm.m[6], mm.m[10], mm.m[14],
-					mm.m[3], mm.m[7], mm.m[11], mm.m[15]
-				    );
-		}
-
-
-
-		std::string to_string() const
+		std::string to_string() const noexcept(true)
 		{
 			fmt::MemoryWriter w;
 			w << m[0] << ", " << m[4] << ", " << m[8] << ", " << m[12] << "\n" << m[1] << ", " << m[5] << ", " << m[9] << ", " << m[13] << "\n" << m[2] << ", " << m[6] << ", " << m[10] << ", " << m[14] << "\n" << m[3] << ", " << m[7] << ", " << m[11] << ", " << m[15] << "\n";
