@@ -32,7 +32,7 @@
 
 #include <btBulletDynamicsCommon.h>
 
-noob::simple_navmesh::simple_navmesh() :
+noob::simple_navmesh::simple_navmesh() noexcept(true) :
 	m_keepInterResults(true),
 	m_totalBuildTimeMs(0),
 	m_triareas(0),
@@ -46,12 +46,12 @@ noob::simple_navmesh::simple_navmesh() :
 	//	setTool(new NavMeshTesterTool);
 }
 
-noob::simple_navmesh::~simple_navmesh()
+noob::simple_navmesh::~simple_navmesh() noexcept(true)
 {
 	cleanup();
 }
 
-void noob::simple_navmesh::cleanup()
+void noob::simple_navmesh::cleanup() noexcept(true)
 {
 	delete [] m_triareas;
 	m_triareas = 0;

@@ -12,7 +12,6 @@ std::unique_ptr<std::string> message_profiling, message_collision;
 
 bool noob::application::user_init()
 {
-
 	message_profiling = std::make_unique<std::string>("");
 	message_collision = std::make_unique<std::string>("");
 	noob::audio_sample samp;

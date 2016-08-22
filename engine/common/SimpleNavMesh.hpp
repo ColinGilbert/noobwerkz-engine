@@ -17,8 +17,8 @@ namespace noob
 	class simple_navmesh 
 	{
 		public:
-			simple_navmesh();
-			~simple_navmesh();
+			simple_navmesh() noexcept(true);
+			~simple_navmesh() noexcept(true);
 			/*enum SampleToolType
 			{
 				TOOL_NONE = 0,
@@ -88,7 +88,7 @@ namespace noob
 
 			bool handleBuild();
 			void handleRender();
-			void cleanup();
+			void cleanup() noexcept(true);
 			void handleSettings();
 			void handleTools();
 			void handle_debug_mode();

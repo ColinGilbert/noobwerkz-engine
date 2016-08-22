@@ -1,5 +1,6 @@
 #pragma once
 
+#include <rdestl/fixed_array.h>
 #include <array>
 #include <assert.h>
 
@@ -8,28 +9,27 @@
 
 namespace noob
 {
-	struct vec3 final
+	struct vec3
 	{
 
-		std::array<float,3> v;
 
-		vec3() {}
+		vec3() noexcept(true) {}
 
-		vec3(float x, float y, float z)
+		vec3(float x, float y, float z) noexcept(true)
 		{
 			v[0] = x;
 			v[1] = y;
 			v[2] = z;
 		}
 
-		vec3(const vec2& vv, float z)
+		vec3(const vec2& vv, float z) noexcept(true)
 		{
 			v[0] = vv.v[0];
 			v[1] = vv.v[1];
 			v[2] = z;
 		}
 
-		vec3(const vec3& vv)
+		vec3(const vec3& vv) noexcept(true)
 		{
 			v[0] = vv.v[0];
 			v[1] = vv.v[1];
@@ -37,7 +37,7 @@ namespace noob
 		}
 
 
-		vec3 operator+(const vec3& rhs) const
+		vec3 operator+(const vec3& rhs) const noexcept(true)
 		{
 			vec3 vc;
 			vc.v[0] = v[0] + rhs.v[0];
@@ -46,7 +46,7 @@ namespace noob
 			return vc;
 		}
 
-		vec3& operator+=(const vec3& rhs)
+		vec3& operator+=(const vec3& rhs) noexcept(true)
 		{
 			v[0] += rhs.v[0];
 			v[1] += rhs.v[1];
@@ -54,7 +54,7 @@ namespace noob
 			return *this; // return self
 		}
 
-		vec3 operator-(const vec3& rhs) const
+		vec3 operator-(const vec3& rhs) const noexcept(true)
 		{
 			vec3 vc;
 			vc.v[0] = v[0] - rhs.v[0];
@@ -63,7 +63,7 @@ namespace noob
 			return vc;
 		}
 
-		vec3& operator-=(const vec3& rhs)
+		vec3& operator-=(const vec3& rhs) noexcept(true)
 		{
 			v[0] -= rhs.v[0];
 			v[1] -= rhs.v[1];
@@ -71,7 +71,7 @@ namespace noob
 			return *this;
 		}
 
-		vec3 operator+(float rhs) const
+		vec3 operator+(float rhs) const noexcept(true)
 		{
 			vec3 vc;
 			vc.v[0] = v[0] + rhs;
@@ -80,7 +80,7 @@ namespace noob
 			return vc;
 		}
 
-		vec3 operator-(float rhs) const
+		vec3 operator-(float rhs) const noexcept(true)
 		{
 			vec3 vc;
 			vc.v[0] = v[0] - rhs;
@@ -89,7 +89,7 @@ namespace noob
 			return vc;
 		}
 
-		vec3 operator*(float rhs) const
+		vec3 operator*(float rhs) const noexcept(true)
 		{
 			vec3 vc;
 			vc.v[0] = v[0] * rhs;
@@ -98,7 +98,7 @@ namespace noob
 			return vc;
 		}
 
-		vec3 operator/(float rhs) const
+		vec3 operator/(float rhs) const noexcept(true)
 		{
 			vec3 vc;
 			vc.v[0] = v[0] / rhs;
@@ -107,7 +107,7 @@ namespace noob
 			return vc;
 		}
 
-		vec3& operator*=(float rhs) 
+		vec3& operator*=(float rhs) noexcept(true)
 		{
 			v[0] = v[0] * rhs;
 			v[1] = v[1] * rhs;
@@ -115,7 +115,7 @@ namespace noob
 			return *this;
 		}
 
-		vec3& operator=(const vec3& rhs)
+		vec3& operator=(const vec3& rhs) noexcept(true)
 		{
 			v[0] = rhs.v[0];
 			v[1] = rhs.v[1];
@@ -123,36 +123,23 @@ namespace noob
 			return *this;
 		}
 
-		float& operator[](uint32_t x)
+		float& operator[](uint32_t x) noexcept(true)
 		{
 			return v[x];
 		}
 
-		const float& operator[](uint32_t x) const
+		const float& operator[](uint32_t x) const noexcept(true)
 		{
 			return v[x];
 		}
 
-		float get_opIndex(uint32_t i) const
-
-		{
-			if (i > 2 ) return v[2];
-			if (i < 0) return v[0];
-			return v[i];
-		}
-
-		void set_opIndex(uint32_t i, float value)
-		{
-			if (i > 2 && i < 0) return;
-			v[i] = value;
-		}
-
-		std::string to_string() const
+		std::string to_string() const noexcept(true)
 		{
 			fmt::MemoryWriter w;
 			w << "(" << v[0] << ", " << v[1] << ", " << v[2] << ")";
 			return w.str();
 		}
 
+		rde::fixed_array<float,3> v;
 	};
 }
