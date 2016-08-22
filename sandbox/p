@@ -2,6 +2,6 @@
 # TODO: Offer local repos
 cd ../engine/lib/rde && rm -rf rdestl && git clone https://www.github.com/ColinGilbert/rdestl && cd rdestl && rm -rf .git* &&
 cd ../.. && rm -rf noob-graph && git clone https://www.github.com/ColinGilbert/noob-graph && cd noob-graph && rm -rf .git* &&
-cd ../.. && rm -rf int-hashtable && git clone https://www.github.com/ColinGilbert/int-hashtable && cd int-hashtable && rm -rf .git* &&
-cd ../.. && rm -rf math-funcs && git clone https://www.github.com/ColinGilbert/math-funcs && cd math-funcs && rm -rf .git* &&
-cd ../.. && rm -rf component && git clone https://www.github.com/ColinGilbert/component && cd component && rm -rf .git*
+cd .. && rm -rf int-hashtable && git clone https://www.github.com/ColinGilbert/int-hashtable && cd int-hashtable && rm -rf .git* &&
+cd .. && rm -rf math-funcs && git clone https://www.github.com/ColinGilbert/math-funcs && cd math-funcs && rm -rf .git* &&
+cd .. && rm -rf component && git clone https://www.github.com/ColinGilbert/component && cd component && rm -rf .git*

@@ -643,7 +643,6 @@ list (APPEND recast_src
 include_directories(lib/network-host)
 include_directories(lib/logger)
 include_directories(lib/math-funcs)
-list (APPEND math-funcs-src lib/math-funcs/MathFuncs.cpp)
 include_directories(lib/int-hashtable)
 list(APPEND hashtable-src lib/int-hashtable/FastHashTable.cpp)
 include_directories(lib/component)
@@ -707,7 +706,7 @@ add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src}
 	${bgfx_src} ${bgfx_utils_src} ${openmesh_src} ${rdestl_src}
 	${cppformat_src} ${recast_src} ${bullet_src}
 	${voropp_src} ${ozz_src} ${hashtable-src} ${ogg_src} ${vorbis_src}
-	${r8_src} ${shiny-src} ${math-funcs-src})
+	${r8_src} ${shiny-src})
 
 target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype Enet)
 

@@ -42,7 +42,7 @@ namespace noob
 				angular_velocity = vec3_from_bullet(_body->getAngularVelocity());
 				linear_factor = vec3_from_bullet(_body->getLinearFactor());
 				angular_factor = vec3_from_bullet(_body->getAngularFactor());
-				orientation =  _body->getOrientation();
+				orientation =  versor_from_bullet(_body->getOrientation());
 				ccd = _ccd;
 			}
 

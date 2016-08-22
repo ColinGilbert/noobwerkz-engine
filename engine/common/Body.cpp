@@ -204,7 +204,7 @@ noob::versor noob::body::get_orientation() const noexcept(true)
 {
 	btTransform xform;
 	inner->getMotionState()->getWorldTransform(xform);
-	return xform.getRotation();
+	return versor_from_bullet(xform.getRotation());
 }
 
 
@@ -225,7 +225,7 @@ noob::mat4 noob::body::get_transform() const noexcept(true)
 {
 	btTransform xform;
 	inner->getMotionState()->getWorldTransform(xform);
-	return xform;
+	return mat4_from_bullet(xform);
 }
 
 

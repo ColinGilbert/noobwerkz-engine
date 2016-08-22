@@ -41,11 +41,11 @@ noob::vec3 noob::ghost::get_position() const noexcept(true)
 noob::versor noob::ghost::get_orientation() const noexcept(true) 
 {
 	btTransform xform(inner->getWorldTransform());
-	return xform.getRotation();
+	return noob::versor_from_bullet(xform.getRotation());
 }
 
 
 noob::mat4 noob::ghost::get_transform() const noexcept(true) 
 {
-	return inner->getWorldTransform();
+	return mat4_from_bullet(inner->getWorldTransform());
 }
