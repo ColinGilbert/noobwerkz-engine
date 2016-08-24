@@ -12,6 +12,7 @@ Bugfixes/Cleanups:
 Templatize math types.
 Protect both global storage and graphics members.
 Cleanup/modularize/speedup drawing API (WIP.)
+Remove many unused external libraries.
 
 Also:
 With a rather heavy heart, I have removed AngelScript from the main engine. The reason was that I was always quite happy with C++ and that maintaining, testing, and debugging the engine with a scripting API was becoming an undue burden.

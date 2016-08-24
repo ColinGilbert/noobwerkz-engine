@@ -117,11 +117,11 @@ namespace noob
 			void run_ai() noexcept (true);
 
 			rde::slist<rde::vector<noob::vec3>> paths;
-			
+
 			void remove_body(noob::body_handle) noexcept(true);
 			void remove_ghost(noob::ghost_handle) noexcept(true);
 			// void remove_joint(noob::joint_handle) noexcept(true);
-			
+
 			void update_actors() noexcept(true);
 
 			void actor_dither(noob::actor_handle h) noexcept(true);

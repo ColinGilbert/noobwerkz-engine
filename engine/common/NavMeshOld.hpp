@@ -16,56 +16,56 @@ namespace noob
 {
 	struct navmesh_config
 	{
-			bool keep_intermediates;
-			float cell_size;
-			float cell_height;
-			float agent_height;
-			float agent_radius;
-			float agent_max_climb;
-			float agent_max_slope;
-			float region_min_size;
-			float region_merge_size;
-			float edge_max_length;
-			float edge_max_error;
-			float verts_per_poly;
-			// Detail samples based on distance (TODO: Readup)
-			float detail_sample_dist;
-			float detail_sample_max_error;
-			int partition_type;
+		bool keep_intermediates;
+		float cell_size;
+		float cell_height;
+		float agent_height;
+		float agent_radius;
+		float agent_max_climb;
+		float agent_max_slope;
+		float region_min_size;
+		float region_merge_size;
+		float edge_max_length;
+		float edge_max_error;
+		float verts_per_poly;
+		// Detail samples based on distance (TODO: Readup)
+		float detail_sample_dist;
+		float detail_sample_max_error;
+		int partition_type;
 	};
 
-struct nav_path
-{
-	//! The start location.
-	vec3			start_location;
+	struct nav_path
+	{
+		//! The start location.
+		vec3			start_location;
 
-	//! The end location.
-	vec3			end_location;
+		//! The end location.
+		vec3			end_location;
 
-	//! (Optional) The bit mask filter to use while querying.
-	dtQueryFilter	path_filter;
+		//! (Optional) The bit mask filter to use while querying.
+		dtQueryFilter	path_filter;
 
-	//! Upon query the start reference polygon index will be filled.
-	dtPolyRef		start_reference;
+		//! Upon query the start reference polygon index will be filled.
+		dtPolyRef		start_reference;
 
-	//! Upon query the end reference polygon index will be filled.	
-	dtPolyRef		end_reference;
-	
-	//! Upon query the total number of polygon that the path or ray traverse will be filled.
-	unsigned int	poly_count;
+		//! Upon query the end reference polygon index will be filled.	
+		dtPolyRef		end_reference;
 
-	//! Upon query the polygon index information will be filled.	
-	dtPolyRef		poly_array[ NAVIGATION_MAX_POLY ];
+		//! Upon query the total number of polygon that the path or ray traverse will be filled.
+		unsigned int	poly_count;
 
-};
+		//! Upon query the polygon index information will be filled.	
+		dtPolyRef		poly_array[ NAVIGATION_MAX_POLY ];
+
+	};
 
 
 	class simple_navmesh 
 	{
 		public:
-			
+
 			simple_navmesh() noexcept(true) : keep_intermediates(true), tri_areas(0), voxels(0), compact_heightfield(0), contour_set(0), poly_mesh(0), detail_mesh(0) { }
-			
+
 			~simple_navmesh() noexcept(true);
 
 			static constexpr uint32_t max_polys = 512;
