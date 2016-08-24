@@ -46,15 +46,19 @@ namespace noob
 
 	enum class log_msg : uint32_t
 	{
-		BAD_DATA = 0,
-		BAD_VALUE = 1
-
+		COMMENT = 0,
+		BAD_DATA = 1,
+		BAD_VALUE = 2,
 	};
 
 	static std::string to_string(noob::log_msg arg) noexcept(true)
 	{
 		switch(arg)
 		{
+			case(noob::log_msg::COMMENT):
+				{
+					return "Comment";
+				}
 			case(noob::log_msg::BAD_DATA):
 				{
 					return "Bad data";
@@ -66,17 +70,17 @@ namespace noob
 		}
 	};
 
-	class log
+	class log_obj
 	{
 		public:
-			log(const std::string& class_name_arg, noob::log_severity severity_arg, noob::log_msg msg_arg) noexcept(true) : class_name(class_name_arg), severity(severity_arg), msg(msg_arg) {}
+			log_obj(const std::string& class_name_arg, noob::log_severity severity_arg, noob::log_msg msg_arg) noexcept(true) : class_name(class_name_arg), severity(severity_arg), msg(msg_arg) {}
 
 			void operator<<(const std::string& in) noexcept(true)
 			{
 				ww << in;
 			}
 
-			void doit() const noexcept(true)
+			void log_now() const noexcept(true)
 			{
 				//logger::log(ww.str());
 				fmt::MemoryWriter results;

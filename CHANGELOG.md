@@ -3,15 +3,19 @@ CHANGELOG:
 Version 0.6 AKA: "AI and More" (WIP)
 ```
 Additions:
-Profiling
-Actor movement (WIP)
+Profiling.
+Actor movement (WIP.)
+Particle system (WIP.)
+Integrate recast & detour (WIP.)
 
 Bugfixes/Cleanups:
+Templatize math types.
 Protect both global storage and graphics members.
-Cleanup/modularize/speedup drawing API (WIP)
+Cleanup/modularize/speedup drawing API (WIP.)
 
 Also:
-With a rather heavy heart, I have removed AngelScript from the main engine. The reason was that I was always quite happy with C++ and that maintaining, testing, and debugging the engine with a scripting API was becoming an undue burden. The binary size also dropped by almost 3 megs just from getting rid of it. Going soon (or at least to be made a compile-time option) : Assimp, lemon-graph, and OpenMesh (due to their forcing exceptions on ya.)
+With a rather heavy heart, I have removed AngelScript from the main engine. The reason was that I was always quite happy with C++ and that maintaining, testing, and debugging the engine with a scripting API was becoming an undue burden.
+The binary size also dropped by almost 3 megs just from getting rid of it. Also going soon: Assimp, lemon-graph, and OpenMesh (due to their forcing exceptions on ya.)
 ```
 
 

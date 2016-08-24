@@ -681,7 +681,7 @@ list(APPEND common_src
 	common/GUI.cpp
 	common/drawing/TriplanarGradientMap.cpp
 	common/drawing/BasicRenderer.cpp
-	common/SimpleNavMesh.cpp
+	common/NavMesh.cpp
 	common/FileSystem.cpp
 	common/NetworkClient.cpp
 	common/Mixer.cpp
