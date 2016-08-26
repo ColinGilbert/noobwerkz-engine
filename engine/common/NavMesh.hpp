@@ -1,5 +1,6 @@
 #pragma once
 
+#include <rdestl/algorithm.h>
 #include <rdestl/fixed_array.h>
 #include <rdestl/vector.h>
 
@@ -20,7 +21,7 @@ namespace noob
 	{
 		public:
 
-			navigation() noexcept(true) : navmesh(nullptr), keep_temporaries(false), heightfield(nullptr), compact_heightfield(nullptr), contours(nullptr), polymesh(nullptr), polymesh_detail(nullptr) {}
+			navigation() noexcept(true) : navmesh(nullptr), keep_temporaries(false), heightfield(nullptr), compact_heightfield(nullptr), contours(nullptr), polymesh(nullptr), polymesh_detail(nullptr), cfg({0}), partitioning(partition_type::MONOTONE), offmesh_connections_count(0), convex_count(0) {}
 
 			~navigation() noexcept(true);
 
@@ -33,6 +34,20 @@ namespace noob
 			//! The maximum amount of poly that can be used with a path.
 			static constexpr uint32_t max_path_polys = 256;
 
+			static constexpr uint32_t max_offmesh_connections = 256;
+
+			static constexpr uint32_t max_convexes = 256;
+
+			static constexpr uint32_t max_convex_points = 12;
+
+			struct convex_volume
+			{
+				convex_volume() noexcept(true) : hmin(0.0), hmax(0.0), nverts(0), area(0) {}
+				rde::fixed_array<float, max_convex_points * 3> verts = {};
+				float hmin, hmax;
+				uint32_t nverts;
+				uint32_t area;
+			};
 
 			//! Structure representing the different configuration parameters when building a navigation mesh.
 			struct config
@@ -45,7 +60,7 @@ namespace noob
 
 				//! The maximum slope that the player can walk on (in degree).
 				float max_agent_slope;
-				
+
 				//! The size of the player or moving entity (in GL units).
 				float agent_height;
 
@@ -66,7 +81,7 @@ namespace noob
 
 				//! The size to use for mergin region (in GL units).
 				float region_merge_size;
-				
+
 				//! The number of vertex per polygons.
 				uint32_t max_vert_per_poly;
 
@@ -123,9 +138,34 @@ namespace noob
 
 			};
 
+			enum class partition_type { WATERSHED = 0, MONOTONE = 1, LAYERS = 2 };
+
+			enum class poly_type : uint8_t
+		{
+			GROUND,
+			WATER,
+			ROAD,
+			DOOR,
+			GRASS,
+			JUMP,
+		};
+
+			enum class poly_flag : uint16_t
+		{
+			WALK		= 0x01,		// Ability to walk (ground, grass, road)
+			SWIM		= 0x02,		// Ability to swim (water).
+			DOOR		= 0x04,		// Ability to move through doors.
+			JUMP		= 0x08,		// Ability to jump.
+			DISABLED	= 0x10,		// Disabled polygon
+			ALL		= 0xffff	// All abilities.
+		};
+
+
 			void set_config(const noob::navigation::config&) noexcept(true);
 
 			void add_geom(const noob::basic_mesh&, uint8_t flags) noexcept(true);
+
+			void add_offmesh_link(const noob::vec3& start_pos, const noob::vec3& end_pos, float radius, bool bidir, noob::navigation::poly_type, noob::navigation::poly_flag) noexcept(true);
 
 			void cleanup_temporaries() noexcept(true);
 
@@ -139,7 +179,7 @@ namespace noob
 
 			// The pointer we must hold onto:
 			dtNavMesh* navmesh;
-
+			dtNavMeshQuery* nav_query;
 
 			bool keep_temporaries;
 
@@ -154,8 +194,10 @@ namespace noob
 			rcPolyMesh* polymesh;
 
 			rcPolyMeshDetail* polymesh_detail;
-			
+
 			rcConfig cfg;
+
+			partition_type partitioning;
 
 			rde::vector<float> input_verts;
 			rde::vector<uint32_t> input_indices;
@@ -163,6 +205,16 @@ namespace noob
 			noob::bbox input_bbox;
 
 
+			rde::fixed_array<float, max_offmesh_connections * 3 * 2> offmesh_connections_verts;
+			rde::fixed_array<float, max_offmesh_connections> offmesh_connections_rads;
+			rde::fixed_array<uint8_t, max_offmesh_connections> offmesh_connections_dirs;
+			rde::fixed_array<uint8_t, max_offmesh_connections> offmesh_connections_areas;
+			rde::fixed_array<uint16_t, max_offmesh_connections> offmesh_connections_flags;
+			rde::fixed_array<uint32_t, max_offmesh_connections> offmesh_connections_ids;
+			uint32_t offmesh_connections_count;
+
+			rde::fixed_array<noob::navigation::convex_volume, max_convexes> convexes;
+			uint32_t convex_count;
 
 
 	};

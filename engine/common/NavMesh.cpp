@@ -8,30 +8,30 @@ noob::navigation::~navigation() noexcept(true)
 	navmesh = nullptr;
 }
 /*
-struct rcConfig
-{
+   struct rcConfig
+   {
 
-	int width;
-	int height;
-	int tileSize;
-	int borderSize;
-	float cs;
-	float ch;
-	float bmin[3]; 
-	float bmax[3];
-	float walkableSlopeAngle;
-	int walkableHeight;
-	int walkableClimb;
-	int walkableRadius;
-	int maxEdgeLen;
-	float maxSimplificationError;
-	int minRegionArea;
-	int mergeRegionArea;
-	int maxVertsPerPoly;
-	float detailSampleDist;
-	float detailSampleMaxError;
-};
-*/
+   int width;
+   int height;
+   int tileSize;
+   int borderSize;
+   float cs;
+   float ch;
+   float bmin[3]; 
+   float bmax[3];
+   float walkableSlopeAngle;
+   int walkableHeight;
+   int walkableClimb;
+   int walkableRadius;
+   int maxEdgeLen;
+   float maxSimplificationError;
+   int minRegionArea;
+   int mergeRegionArea;
+   int maxVertsPerPoly;
+   float detailSampleDist;
+   float detailSampleMaxError;
+   };
+   */
 void noob::navigation::set_config(const noob::navigation::config& arg) noexcept(true)
 {
 	cfg = {0};
@@ -69,7 +69,7 @@ void noob::navigation::add_geom(const noob::basic_mesh& mesh, uint8_t flag) noex
 	{
 		input_indices.push_back(i);
 	}
-	
+
 
 	input_bbox = update_bbox(input_bbox, mesh.bbox);
 }
@@ -95,6 +95,42 @@ void noob::navigation::clear_geom() noexcept(true)
 	input_verts.clear();
 	input_indices.clear();
 	input_bbox.reset();
+
+	offmesh_connections_verts = {};
+	offmesh_connections_rads = {};
+	offmesh_connections_dirs = {};
+	offmesh_connections_areas = {};
+	offmesh_connections_flags = {};
+	offmesh_connections_ids = {};
+}
+
+
+
+void noob::navigation::add_offmesh_link(const noob::vec3& start_pos, const noob::vec3& end_pos, float radius, bool bidir, noob::navigation::poly_type area, noob::navigation::poly_flag flag) noexcept(true)
+{
+	if (offmesh_connections_count >= max_offmesh_connections) return;
+	
+	offmesh_connections_rads[offmesh_connections_count] = radius;
+	offmesh_connections_dirs[offmesh_connections_count] = static_cast<uint8_t>(bidir);
+	offmesh_connections_areas[offmesh_connections_count] = static_cast<uint8_t>(area);
+	offmesh_connections_flags[offmesh_connections_count] = static_cast<uint16_t>(flag);
+	offmesh_connections_ids[offmesh_connections_count] = 1000 + offmesh_connections_count;
+	
+	uint32_t index = offmesh_connections_count * 6;
+
+	for (uint32_t i = 0; i < 3; ++i)
+	{
+		offmesh_connections_verts[index + i] = start_pos[i];
+	}
+	
+	index += 3;
+
+	for (uint32_t i = 0; i < 3; ++i)
+	{
+		offmesh_connections_verts[index + i] = end_pos[i];
+	}
+	
+	++offmesh_connections_count;
 }
 
 
@@ -110,7 +146,7 @@ bool noob::navigation::build() noexcept(true)
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Rasterize input polygon soup.
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	uint32_t num_verts = input_verts.size() / 3;
 
 	assert(input_verts.size() % 3 == 0);
@@ -231,7 +267,7 @@ bool noob::navigation::build() noexcept(true)
 	//     if you have large open areas with small obstacles (not a problem if you use tiles)
 	//   * good choice to use for tiled simple_navmesh with medium and small sized tiles
 
-	if (partition_type == PARTITION_WATERSHED)
+	if (partitioning == partition_type::WATERSHED)
 	{
 		// Prepare for region partitioning, by calculating distance field along the walkable surface.
 		if (!rcBuildDistanceField(&build_ctx, *compact_heightfield))
@@ -247,7 +283,7 @@ bool noob::navigation::build() noexcept(true)
 			return false;
 		}
 	}
-	else if (partition_type == PARTITION_MONOTONE)
+	else if (partitioning == partition_type::MONOTONE)
 	{
 		// Partition the walkable surface into simple regions without holes.
 		// Monotone partitioning does not need distancefield.
@@ -333,13 +369,13 @@ bool noob::navigation::build() noexcept(true)
 	// (Optional) Step 8. Create Detour data from Recast poly mesh.
 	//
 
-	// The GUI may allow more max points per polygon than Detour can handle.
-	// Only build the detour simple_navmesh if we do not exceed the limit.
+	// Only build the detour simple_navmesh if we do not exceed the max poly limit.
 
 	if (cfg.maxVertsPerPoly > DT_VERTS_PER_POLYGON)
 	{
 		return false;
 	}
+
 	unsigned char* nav_data = 0;
 	int nav_data_size = 0;
 
@@ -348,25 +384,25 @@ bool noob::navigation::build() noexcept(true)
 	{
 		if (polymesh->areas[i] == RC_WALKABLE_AREA)
 		{
-			polymesh->areas[i] = POLYAREA_GROUND;
+			polymesh->areas[i] = static_cast<uint8_t>(poly_type::GROUND);
 		}
 
-		if (polymesh->areas[i] == POLYAREA_GROUND || polymesh->areas[i] == POLYAREA_GRASS || polymesh->areas[i] == POLYAREA_ROAD)
+		if (polymesh->areas[i] == static_cast<uint8_t>(poly_type::GROUND) || polymesh->areas[i] == static_cast<uint8_t>(poly_type::GRASS) || polymesh->areas[i] == static_cast<uint8_t>(poly_type::ROAD))
 		{
-			polymesh->flags[i] = POLYFLAGS_WALK;
+			polymesh->flags[i] = static_cast<uint16_t>(poly_flag::WALK);
 		}
-		else if (polymesh->areas[i] == POLYAREA_WATER)
+		else if (polymesh->areas[i] == static_cast<uint8_t>(poly_type::WATER))
 		{
-			polymesh->flags[i] = POLYFLAGS_SWIM;
+			polymesh->flags[i] = static_cast<uint16_t>(poly_flag::SWIM);
 		}
-		else if (polymesh->areas[i] == POLYAREA_DOOR)
+		else if (polymesh->areas[i] == static_cast<uint8_t>(poly_type::DOOR))
 		{
-			polymesh->flags[i] = POLYFLAGS_WALK | POLYFLAGS_DOOR;
+			polymesh->flags[i] = static_cast<uint16_t>(poly_flag::WALK) | static_cast<uint16_t>(poly_flag::DOOR);
 		}
 	}
 
 	dtNavMeshCreateParams params = {0};
-	
+
 	params.verts = polymesh->verts;
 	params.vertCount = polymesh->nverts;
 	params.polys = polymesh->polys;
@@ -379,16 +415,16 @@ bool noob::navigation::build() noexcept(true)
 	params.detailVertsCount = polymesh_detail->nverts;
 	params.detailTris = polymesh_detail->tris;
 	params.detailTriCount = polymesh_detail->ntris;
-	params.offMeshConVerts = geom->getOffMeshConnectionVerts();
-	params.offMeshConRad = geom->getOffMeshConnectionRads();
-	params.offMeshConDir = geom->getOffMeshConnectionDirs();
-	params.offMeshConAreas = geom->getOffMeshConnectionAreas();
-	params.offMeshConFlags = geom->getOffMeshConnectionFlags();
-	params.offMeshConUserID = geom->getOffMeshConnectionId();
-	params.offMeshConCount = geom->getOffMeshConnectionCount();
-	params.walkableHeight = agent_height;
-	params.walkableRadius = agent_radius;
-	params.walkableClimb = agent_max_climb;
+	params.offMeshConVerts = &offmesh_connections_verts[0];
+	params.offMeshConRad = &offmesh_connections_rads[0];
+	params.offMeshConDir = &offmesh_connections_dirs[0];
+	params.offMeshConAreas = &offmesh_connections_areas[0];
+	params.offMeshConFlags = &offmesh_connections_flags[0];
+	params.offMeshConUserID = &offmesh_connections_ids[0];
+	params.offMeshConCount = offmesh_connections_count;
+	params.walkableHeight = cfg.walkableHeight;
+	params.walkableRadius = cfg.walkableRadius;
+	params.walkableClimb = cfg.walkableClimb;
 	rcVcopy(params.bmin, polymesh->bmin);
 	rcVcopy(params.bmax, polymesh->bmax);
 	params.cs = cfg.cs;
@@ -397,43 +433,39 @@ bool noob::navigation::build() noexcept(true)
 
 	if (!dtCreateNavMeshData(&params, &nav_data, &nav_data_size))
 	{
-		logger::log("[NavMesh] Could not build Detour navmesh data.");
+		logger::log("[Navigation] Could not build Detour navmesh data.");
 		return false;
 	}
 
-	nav_mesh = dtAllocNavMesh();
-	if (!nav_mesh)
+	navmesh = dtAllocNavMesh();
+	if (!navmesh)
 	{
 		dtFree(nav_data);
-		logger::log("[NavMesh] Could not build Detour navmesh");
+		logger::log("[Navigation] Could not build Detour navmesh");
 		return false;
 	}
 
 	dtStatus status;
 
-	status = nav_mesh->init(nav_data, nav_data_size, DT_TILE_FREE_DATA);
+	status = navmesh->init(nav_data, nav_data_size, DT_TILE_FREE_DATA);
 	if (dtStatusFailed(status))
 	{
 		dtFree(nav_data);
-		logger::log("[NavMesh] Could not init Detour navmesh");
+		logger::log("[Navigation] Could not init Detour navmesh");
 		return false;
 	}
 
-	status = nav_query->init(nav_mesh, 2048);
+	status = nav_query->init(navmesh, 2048);
 	if (dtStatusFailed(status))
 	{
-		logger::log("[NavMesh] Could not init Detour query");
+		logger::log("[Navigation] Could not init Detour query");
 		return false;
 	}
 
 	fmt::MemoryWriter post_build_msg;
 	post_build_msg << " Creation success! " << polymesh->nverts << ", verts and " << polymesh->npolys << " polys.";
 	logger::log(post_build_msg.str());
-	
+
 	return true;
 
-
-
-
-	return false;
 }
