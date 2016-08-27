@@ -39,6 +39,9 @@ bool noob::application::user_init()
 	ah = stage.actor(bph, 0, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
 	// noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
 	noob::scenery_handle scene_h = stage.scenery(g.box_shape(100.0, 10.0, 100.0), templol, g.get_default_reflectance(), noob::vec3(0.0, -10.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
+	scene_h = stage.scenery(g.box_shape(100.0, 10.0, 100.0), templol, g.get_default_reflectance(), noob::vec3(50.0, 0.0, -50.0), noob::versor(0.0, 0.0, 0.0, 1.0));
+	
+	
 	// *profiler_text = get_profiler_text();
 	fmt::MemoryWriter ww;
 	ww << "[UserApp] Loaded actor " << ah.index();

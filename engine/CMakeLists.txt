@@ -302,6 +302,7 @@ list (APPEND assimp_src
 
 # Used to link to the system lib, but then had problems. Now following Couman's advice in http://bulletphysics.org/Bullet/phpBB3/viewtopic.php?t=7168
 include_directories(lib/bullet/src)
+include_directories(lib/bullet/BulletCollision)
 list (APPEND bullet_src
 	lib/bullet/src/BulletDynamics/MLCPSolvers/btDantzigLCP.cpp
 	lib/bullet/src/BulletDynamics/MLCPSolvers/btMLCPSolver.cpp
@@ -681,7 +682,7 @@ list(APPEND common_src
 	common/GUI.cpp
 	common/drawing/TriplanarGradientMap.cpp
 	common/drawing/BasicRenderer.cpp
-	common/NavMesh.cpp
+	#common/NavMesh.cpp
 	common/FileSystem.cpp
 	common/NetworkClient.cpp
 	common/Mixer.cpp

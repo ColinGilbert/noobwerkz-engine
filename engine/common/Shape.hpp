@@ -35,6 +35,13 @@ namespace noob
 
 		noob::shape::type get_type() const noexcept(true);
 
+		noob::vec3 get_scales() const noexcept(true);
+
+		noob::basic_mesh get_mesh() const noexcept(true);
+
+		const btCollisionShape* get_inner() const noexcept(true);
+		btCollisionShape* get_inner_mutable() const noexcept(true);	
+
 		protected:
 		// Initializers. Used by noob::stage
 		void sphere(float radius) noexcept(true);
@@ -47,9 +54,6 @@ namespace noob
 		
 		// void plane(const noob::vec3& normal, float offset) noexcept(true);
 		
-		// Used to calculate scale of world transform for drawing purposes (so that only one copy of the model gets kept in-buffer, which is a supremely useful optimization.)
-		noob::vec3 get_scales() const noexcept(true);
-		uint32_t index; // Hack to allow bodies to get shape handles from bodies and ghosts,
 		noob::shape::type shape_type;
 		bool physics_valid;
 		noob::vec3 scales;

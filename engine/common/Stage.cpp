@@ -27,8 +27,26 @@ void noob::stage::init() noexcept(true)
 	draw_graph.reserveArc(NUM_RESERVED_ARCS);
 
 	root_node = draw_graph.addNode();
+/*	
+	noob::navigation::config nav_cfg;
+	nav_cfg.cell_size = 0.3;
+	nav_cfg.cell_height = 0.2;
+	nav_cfg.max_agent_slope = 45.0;
+	nav_cfg.agent_height = 2.0;
+	nav_cfg.agent_climb = 0.9;
+	nav_cfg.agent_radius = 0.8;
+	nav_cfg.max_edge_length = 12.0;
+	nav_cfg.max_simplification_error = 1.3;
+	nav_cfg.region_min_size = 50.0;
+	nav_cfg.region_merge_size = 20.0;
+	nav_cfg.verts_per_poly = 6.0;
+	nav_cfg.detail_sample_dist = 6.0;
+	nav_cfg.detail_sample_max_error = 1.0;
 
+	nav.set_config(nav_cfg);
+*/
 	logger::log("[Stage] Done init.");
+
 }
 
 void noob::stage::tear_down() noexcept(true) 
@@ -75,6 +93,12 @@ void noob::stage::update(double dt) noexcept(true)
 {
 	// PROFILE_FUNC();
 	noob::time start_time = noob::clock::now();
+
+	if (nav_changed)
+	{
+		// build_navmesh();
+		nav_changed = false;
+	}
 
 	dynamics_world->stepSimulation(1.0/60.0, 10);
 
@@ -249,6 +273,47 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 }
 
 
+void noob::stage::build_navmesh() noexcept(true)
+{
+/*	noob::time begin = noob::clock::now();
+	// logger::log("[Stage] Clearing out old navmesh data.");
+	nav.clear_temporaries();
+	nav.clear_geom();
+
+	noob::globals& g = noob::globals::get_instance();
+	// logger::log("[Stage] About to add scenery data to navmesh.");
+
+	for (uint32_t i = 0; i < sceneries.count(); ++i)
+	{
+		noob::scenery sc = sceneries.get(noob::scenery_handle::make(i));
+		// logger::log("Got scenery");
+		noob::shape_handle shp_h = noob::shape_handle::make(noob::body::get_shape_index(bodies.get(sc.body)));
+		// logger::log("Got shape handle");
+		noob::basic_mesh m = (g.shapes.get(shp_h)).get_mesh();
+		noob::mat4 t = bodies.get(sc.body).get_transform();
+		for (uint32_t v = 0; v < m.vertices.size(); ++v)
+		{
+			noob::vec4 temp = t * noob::vec4(m.vertices[v], 1.0);
+			m.vertices[v] = noob::vec3(temp[0], temp[1], temp[2]);
+		}
+		// fmt::MemoryWriter ww;
+		// ww << "Got mesh. v = " << m.vertices.size() << ", i = " << m.indices.size();
+		// logger::log(ww.str());
+		nav.add_geom(m);
+	}
+
+	// logger::log("[Stage] About to build navmesh.");
+	nav.build();
+	noob::time end = noob::clock::now();
+
+	fmt::MemoryWriter ww;
+	ww <<  "[Stage] Navmesh built! Total time: ";
+	last_navmesh_build_duration = end - begin;
+	ww << noob::pretty_print_timing(last_navmesh_build_duration);
+*/
+}
+
+
 noob::body_handle noob::stage::body(const noob::body_type b_type, const noob::shape_handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true) 
 {
 	noob::globals& g = noob::globals::get_instance();
@@ -341,6 +406,8 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, co
 	b.inner->setUserIndex_2(scenery_h.index());
 
 	add_to_graph(b_var, shape_arg, shader_arg, reflect_arg);
+
+	nav_changed = true;
 }
 
 /*

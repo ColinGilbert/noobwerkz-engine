@@ -1,169 +1,217 @@
-#include <vector>
+#include "NavMesh.hpp"
 
-#include "Logger.hpp"
-#include "SimpleNavMesh.hpp"
-#include "Recast.h"
-#include "RecastDebugDraw.h"
-#include "RecastDump.h"
-#include "InputGeom.h"
-#include "DetourNode.h"
-#include "DetourNavMesh.h"
-#include "DetourNavMeshBuilder.h"
-#include "DetourNavMeshQuery.h"
-#include "DetourStatus.h"
-#include "NavMeshTesterTool.h"
-#include "NavMeshPruneTool.h"
-#include "OffMeshConnectionTool.h"
-#include "ConvexVolumeTool.h"
-#include "CrowdTool.h"
-#include "MathFuncs.hpp"
+#include "Globals.hpp"
 
-#include <btBulletDynamicsCommon.h>
 
-noob::simple_navmesh::~simple_navmesh() noexcept(true)
+noob::navigation::~navigation() noexcept(true)
 {
-	cleanup();
+	clear_temporaries();
+
+	dtFreeNavMesh(navmesh);
+	navmesh = nullptr;
 }
 
-void noob::simple_navmesh::cleanup() noexcept(true)
+void noob::navigation::set_config(const noob::navigation::config& arg) noexcept(true)
 {
-	delete [] tri_areas;
-	tri_areas = 0;
-	rcFreeHeightField(voxels);
-	voxels = 0;
-	rcFreeCompactHeightfield(compact_heightfield);
-	compact_heightfield = 0;
-	rcFreeContourSet(contour_set);
-	contour_set = 0;
-	rcFreePolyMesh(poly_mesh);
-	poly_mesh = 0;
-	rcFreePolyMeshDetail(detail_mesh);
-	detail_mesh = 0;
-	dtFreeNavMesh(nav_mesh);
-	nav_mesh = 0;
+	cfg = {0};
+
+	// NOT SET HERE:
+	// int width, height, tileSize, borderSize;
+	// float[3] bmin, bmax;
+
+	cfg.cs = arg.cell_size;
+	cfg.ch = arg.cell_height;
+	cfg.walkableSlopeAngle = arg.max_agent_slope;
+	cfg.walkableHeight = static_cast<int>(std::ceil(arg.agent_height / cfg.ch));
+	cfg.walkableClimb = static_cast<int>(std::floor(arg.agent_climb / cfg.ch));
+	cfg.walkableRadius = static_cast<int>(std::ceil(arg.agent_radius / cfg.cs));
+	cfg.maxEdgeLen = static_cast<int>(arg.max_edge_length / cfg.cs);
+	cfg.maxSimplificationError = arg.max_simplification_error;
+	cfg.minRegionArea = static_cast<int>(arg.region_min_size * arg.region_min_size);
+	cfg.mergeRegionArea = static_cast<int>(arg.region_merge_size * arg.region_merge_size);
+	cfg.maxVertsPerPoly = arg.verts_per_poly;
+	cfg.detailSampleDist = arg.detail_sample_dist > 0.9f ? 0.0 : cfg.cs * arg.detail_sample_dist;
+	cfg.detailSampleMaxError = arg.detail_sample_max_error * cfg.ch;
 }
 
 
-void noob::simple_navmesh::add_mesh(const noob::basic_mesh& arg) noexcept(true)
+void noob::navigation::add_geom(const noob::basic_mesh& mesh) noexcept(true)
 {
-
-}
-
-
-bool noob::simple_navmesh::build(const noob::navmesh_config& arg) noexcept(true)
-{
-	if (!geom || !geom->getMesh())
+	
+	logger::log("[Navigation] Adding geometry");
+	for (noob::vec3 v : mesh.vertices)
 	{
-		logger::log("[SimpleNavMesh] Input mesh is not specified.");
-		return false;
+		input_verts.push_back(v[0]);
+		input_verts.push_back(v[1]);
+		input_verts.push_back(v[2]);
 	}
 
-	cleanup();
+	for (uint32_t i : mesh.indices)
+	{
+		input_indices.push_back(i);
+	}
 
-	const float* bmin = geom->getMeshBoundsMin();
-	const float* bmax = geom->getMeshBoundsMax();
-	const float* verts = geom->getMesh()->getVerts();
-	num_verts = geom->getMesh()->getVertCount();
-	const int*  tris = geom->getMesh()->getTris();
-	const int ntris = geom->getMesh()->getTriCount();
+	assert(mesh.indices.size() % 3 == 0);
 
-	keep_intermediates = arg.keep_intermediates;
-	cell_size = arg.cell_size;
-	cell_height = arg.cell_height;
-	agent_height = arg.agent_height;
-	agent_radius = arg.agent_radius;
-	agent_max_climb = arg.agent_max_climb;
-	agent_max_slope = arg.agent_max_slope;
-	region_min_size = arg.region_min_size;
-	region_merge_size = arg.region_merge_size;
-	edge_max_length = arg.edge_max_length;
-	edge_max_error = arg.edge_max_error;
-	verts_per_poly = arg.verts_per_poly;
-	// Detail samples based on distance (TODO: Readup)
-	detail_sample_dist = arg.detail_sample_dist;
-	detail_sample_max_error = arg.detail_sample_max_error;
-	partition_type = arg.partition_type;
+	uint32_t num_tris = mesh.indices.size() % 3;
+	for (uint32_t i  = 0; i < num_tris; ++i)
+	{
+		input_tri_flags.push_back(static_cast<uint8_t>(noob::navigation::poly_type::GROUND));
+	}
+
+	input_bbox = update_bbox(input_bbox, mesh.bbox);
+}
 
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Step 1. Initialize build config.
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void noob::navigation::clear_temporaries() noexcept(true)
+{
+	rcFreeHeightField(heightfield);
+	heightfield = nullptr;
+	rcFreeCompactHeightfield(compact_heightfield);
+	compact_heightfield = nullptr;
+	rcFreeContourSet(contours);
+	contours = nullptr;
+	rcFreePolyMesh(polymesh);
+	polymesh = nullptr;
+	rcFreePolyMeshDetail(polymesh_detail);
+	polymesh_detail = nullptr;
+}
 
-	// Init build configuration from GUI
-	memset(&config, 0, sizeof(config));
 
-	//noob::simple_navmesh::config config;
-	config.cs = cell_size;
-	config.ch = cell_height;
-	config.walkableSlopeAngle = agent_max_slope;
-	config.walkableHeight = static_cast<int>(ceilf(agent_height / config.ch));
-	config.walkableClimb = static_cast<int>(floorf(agent_max_climb / config.ch));
-	config.walkableRadius = static_cast<int>(ceilf(agent_radius / config.cs));
-	config.maxEdgeLen = static_cast<int>((edge_max_length / cell_size));
-	config.maxSimplificationError = edge_max_error;
-	config.minRegionArea = static_cast<int>(rcSqr(region_min_size));		// Note: area = size*size
-	config.mergeRegionArea = static_cast<int>(rcSqr(region_merge_size));	// Note: area = size*size
-	config.maxVertsPerPoly = static_cast<int>(verts_per_poly);
-	config.detailSampleDist = detail_sample_dist < 0.9f ? 0 : cell_size * detail_sample_dist;
-	config.detailSampleMaxError = cell_height * detail_sample_max_error;
+void noob::navigation::clear_geom() noexcept(true)
+{
+	input_verts.clear();
+	input_indices.clear();
+	input_tri_flags.clear();
+	input_bbox.reset();
 
-	// Calculate the area where the navigation will be built.
-	// Here, the bounds of the input mesh are used but the area could be specified by a user-defined box, etc.
-	rcVcopy(config.bmin, bmin);
-	rcVcopy(config.bmax, bmax);
-	rcCalcGridSize(config.bmin, config.bmax, config.cs, &config.width, &config.height);
+	offmesh_connections_verts = {};
+	offmesh_connections_rads = {};
+	offmesh_connections_dirs = {};
+	offmesh_connections_areas = {};
+	offmesh_connections_flags = {};
+	offmesh_connections_ids = {};
+	offmesh_connections_count = 0;
 
-	// Our blank BuildContext
-	rcContext build_ctx(false);
+	convexes = {};
+	convexes_count = 0;
+}
+
+
+
+void noob::navigation::add_offmesh_link(const noob::vec3& start_pos, const noob::vec3& end_pos, float radius, bool bidir, noob::navigation::poly_type area, noob::navigation::poly_flag flag) noexcept(true)
+{
+	if (offmesh_connections_count >= max_offmesh_connections) return;
+
+	offmesh_connections_rads[offmesh_connections_count] = radius;
+	offmesh_connections_dirs[offmesh_connections_count] = static_cast<uint8_t>(bidir);
+	offmesh_connections_areas[offmesh_connections_count] = static_cast<uint8_t>(area);
+	offmesh_connections_flags[offmesh_connections_count] = static_cast<uint16_t>(flag);
+	offmesh_connections_ids[offmesh_connections_count] = 1000 + offmesh_connections_count;
+
+	uint32_t index = offmesh_connections_count * 6;
+
+	for (uint32_t i = 0; i < 3; ++i)
+	{
+		offmesh_connections_verts[index + i] = start_pos[i];
+	}
+
+	index += 3;
+
+	for (uint32_t i = 0; i < 3; ++i)
+	{
+		offmesh_connections_verts[index + i] = end_pos[i];
+	}
+
+	++offmesh_connections_count;
+}
+
+
+bool noob::navigation::add_obstacle(const noob::vec3& scales, const noob::vec3& pos, const noob::versor& orient, float height_min, float height_max, noob::navigation::poly_type area) noexcept(true)
+{
+	if (convexes_count < max_convexes)
+	{
+		++convexes_count;
+		noob::navigation::convex_volume* vol = &convexes[convexes_count];
+
+		*vol = {};
+
+		noob::basic_mesh m = noob::mesh_utils::box(scales[0], scales[1], scales[2]);
+		uint32_t num_verts = m.vertices.size();
+		for (uint32_t i = 0; i < num_verts; ++i)
+		{
+			noob::mat4 mat = noob::identity_mat4();
+			mat = noob::rotate(mat, orient);
+			mat = noob::translate(mat, pos);
+
+			noob::vec4 temp_v = mat * noob::vec4(m.vertices[i], 1.0);
+			vol->verts[i * 3] = temp_v[0];
+			vol->verts[(i * 3) + 1] = temp_v[1];
+			vol->verts[(i * 3) + 2] = temp_v[2];
+		}
+
+		vol->hmin = height_min;
+		vol->hmax = height_max;
+		vol->area = static_cast<uint8_t>(area);
+
+		return true;	
+	}
+
+	return false;
+}
+
+
+bool noob::navigation::build() noexcept(true)
+{
+	rcVcopy(cfg.bmin, &input_bbox.min.v[0]);
+	rcVcopy(cfg.bmax, &input_bbox.max.v[0]);
+	rcCalcGridSize(cfg.bmin, cfg.bmax, cfg.cs, &cfg.width, &cfg.height);
 
 	// TODO: Insert timing code
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Step 2. Rasterize input polygon soup.
+	// Rasterize input polygon soup.
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	uint32_t num_verts = input_verts.size() / 3;
+
+	assert(input_verts.size() % 3 == 0);
+
+	uint32_t num_tris = input_indices.size() / 3;
+
+	assert(input_indices.size() % 3 == 0);
+
+	input_tri_flags.resize(num_tris);
 
 	fmt::MemoryWriter prebuild_msg;
-	prebuild_msg << "About to build navmesh - " << config.width << " x " << config.height << " = " << config.width * config.height << " cells, " << static_cast<float>(num_verts)/1000.0f << "k verts and " << static_cast<float>(ntris)/1000.0f << "k tris.";
+	prebuild_msg << "[Navigation] About to build navmesh - " << cfg.width << " x " << cfg.height << " = " << cfg.width * cfg.height << " cells, " << static_cast<float>(num_verts)/1000.0f << "k verts and " << static_cast<float>(num_tris)/1000.0f << "k tris.";
 	logger::log(prebuild_msg.str());
 
-	// Allocate voxel heightfield where we rasterize our input data to.
-	voxels = rcAllocHeightfield();
-	if (!voxels)
-	{
-		logger::log("[SimpleNavMesh] Could not allocate enough memory for voxels.");
-		return false;
-	}
-	if (!rcCreateHeightfield(&build_ctx, *voxels, config.width, config.height, config.bmin, config.bmax, config.cs, config.ch))
-	{
-		logger::log("[SimpleNavMesh] Could not create voxels.");
-		return false;
-	}
+	// Our blank BuildContext
+	rcContext build_ctx(false);
 
-	// Allocate array that can hold triangle area types.
-	// If you have multiple meshes you need to process, allocate
-	// and array which can hold the max number of triangles you need to process.
-	// TODO: Replace with vector
-	tri_areas = new unsigned char[ntris];
-	if (!tri_areas)
+	heightfield = rcAllocHeightfield();
+
+	if (!heightfield)
 	{
-		logger::log("[SimpleNavMesh] Could not allocate memory for triangles");
+		logger::log("[Navigation] Could not allocate enough memory for heightfield.");
+		return false;
+	}
+	if (!rcCreateHeightfield(&build_ctx, *heightfield, cfg.width, cfg.height, cfg.bmin, cfg.bmax, cfg.cs, cfg.ch))
+	{
+		logger::log("[Navigation] Could not create heightfield.");
 		return false;
 	}
 
-	// Find triangles which are walkable based on their slope and rasterize them.
-	// If your input data is multiple meshes, you can transform them here, calculate
-	// the are type for each of the meshes and rasterize them.
-	// TODO: Replace with fill_n
-	memset(tri_areas, 0, ntris*sizeof(unsigned char));
-	rcMarkWalkableTriangles(&build_ctx, config.walkableSlopeAngle, verts, num_verts, tris, ntris, tri_areas);
-	rcRasterizeTriangles(&build_ctx, verts, num_verts, tris, tri_areas, ntris, *voxels, config.walkableClimb);
 
-	if (!keep_intermediates)
+	rcMarkWalkableTriangles(&build_ctx, cfg.walkableSlopeAngle, &input_verts[0], num_verts, reinterpret_cast<const int*>(&input_indices[0]), num_tris, &input_tri_flags[0]);
+	if (!rcRasterizeTriangles(&build_ctx, &input_verts[0], num_verts, reinterpret_cast<const int*>(&input_indices[0]), &input_tri_flags[0], num_tris, *heightfield, cfg.walkableClimb))
 	{
-		delete [] tri_areas;
-		tri_areas = 0;
+		logger::log("[Navigation] Could not rasterize triangles.");
+		return false;
 	}
+
+
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Step 3. Filter walkables surfaces.
@@ -172,9 +220,9 @@ bool noob::simple_navmesh::build(const noob::navmesh_config& arg) noexcept(true)
 	// Once all geoemtry is rasterized, we do initial pass of filtering to
 	// remove unwanted overhangs caused by the conservative rasterization
 	// as well as filter spans where the character cannot possibly stand.
-	rcFilterLowHangingWalkableObstacles(&build_ctx, config.walkableClimb, *voxels);
-	rcFilterLedgeSpans(&build_ctx, config.walkableHeight, config.walkableClimb, *voxels);
-	rcFilterWalkableLowHeightSpans(&build_ctx, config.walkableHeight, *voxels);
+	rcFilterLowHangingWalkableObstacles(&build_ctx, cfg.walkableClimb, *heightfield);
+	rcFilterLedgeSpans(&build_ctx, cfg.walkableHeight, cfg.walkableClimb, *heightfield);
+	rcFilterWalkableLowHeightSpans(&build_ctx, cfg.walkableHeight, *heightfield);
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Step 4. Partition walkable surface to simple regions.
@@ -187,34 +235,35 @@ bool noob::simple_navmesh::build(const noob::navmesh_config& arg) noexcept(true)
 	compact_heightfield = rcAllocCompactHeightfield();
 	if (!compact_heightfield)
 	{
-		logger::log("[SimpleNavMesh] Out of memory for compact heightfield.");
+		logger::log("[Navigation] Out of memory for compact heightfield.");
 		return false;
 	}
-	if (!rcBuildCompactHeightfield(&build_ctx, config.walkableHeight, config.walkableClimb, *voxels, *compact_heightfield))
+	if (!rcBuildCompactHeightfield(&build_ctx, cfg.walkableHeight, cfg.walkableClimb, *heightfield, *compact_heightfield))
 	{
-		logger::log("[SimpleNavMesh] Could not build compact heightfield data.");
+		logger::log("[Navigation] Could not build compact heightfield data.");
 		return false;
 	}
 
-	if (!keep_intermediates)
+	if (!keep_temporaries)
 	{
-		rcFreeHeightField(voxels);
-		voxels = 0;
+		rcFreeHeightField(heightfield);
+		heightfield = nullptr;
 	}
 
 	// Erode the walkable area by agent radius.
-	if (!rcErodeWalkableArea(&build_ctx, config.walkableRadius, *compact_heightfield))
+	if (!rcErodeWalkableArea(&build_ctx, cfg.walkableRadius, *compact_heightfield))
 	{
-		logger::log("[SimpleNavMesh] Could not erode.");
+		logger::log("[Navigation] Could not erode.");
 		return false;
 	}
 
 	// (Optional) Mark areas.
-	const ConvexVolume* vols = geom->getConvexVolumes();
-	for (int i  = 0; i < geom->getConvexVolumeCount(); ++i)
+	for (uint32_t i  = 0; i < convexes_count; ++i)
 	{
-		rcMarkConvexPolyArea(&build_ctx, vols[i].verts, vols[i].nverts, vols[i].hmin, vols[i].hmax, static_cast<unsigned char>(vols[i].area), *compact_heightfield);
+		rcMarkConvexPolyArea(&build_ctx, &(convexes[i].verts[0]), convexes[i].nverts, convexes[i].hmin, convexes[i].hmax, static_cast<unsigned char>(convexes[i].area), *compact_heightfield);
 	}
+
+
 
 
 	// Partition the heightfield so that we can use simple algorithm later to triangulate the walkable areas.
@@ -243,38 +292,38 @@ bool noob::simple_navmesh::build(const noob::navmesh_config& arg) noexcept(true)
 	//     if you have large open areas with small obstacles (not a problem if you use tiles)
 	//   * good choice to use for tiled simple_navmesh with medium and small sized tiles
 
-	if (partition_type == PARTITION_WATERSHED)
+	if (partitioning == partition_type::WATERSHED)
 	{
 		// Prepare for region partitioning, by calculating distance field along the walkable surface.
 		if (!rcBuildDistanceField(&build_ctx, *compact_heightfield))
 		{
-			logger::log("[SimpleNavMesh] Could not build distance field.");
+			logger::log("[Navigation] Could not build distance field.");
 			return false;
 		}
 
 		// Partition the walkable surface into simple regions without holes.
-		if (!rcBuildRegions(&build_ctx, *compact_heightfield, 0, config.minRegionArea, config.mergeRegionArea))
+		if (!rcBuildRegions(&build_ctx, *compact_heightfield, 0, cfg.minRegionArea, cfg.mergeRegionArea))
 		{
-			logger::log("[SimpleNavMesh] Could not build watershed regions.");
+			logger::log("[Navigation] Could not build watershed regions.");
 			return false;
 		}
 	}
-	else if (partition_type == PARTITION_MONOTONE)
+	else if (partitioning == partition_type::MONOTONE)
 	{
 		// Partition the walkable surface into simple regions without holes.
 		// Monotone partitioning does not need distancefield.
-		if (!rcBuildRegionsMonotone(&build_ctx, *compact_heightfield, 0, config.minRegionArea, config.mergeRegionArea))
+		if (!rcBuildRegionsMonotone(&build_ctx, *compact_heightfield, 0, cfg.minRegionArea, cfg.mergeRegionArea))
 		{
-			logger::log("[SimpleNavMesh] Could not build monotone regions.");
+			logger::log("[Navigation] Could not build monotone regions.");
 			return false;
 		}
 	}
 	else // PARTITION_LAYERS
 	{
 		// Partition the walkable surface into simple regions without holes.
-		if (!rcBuildLayerRegions(&build_ctx, *compact_heightfield, 0, config.minRegionArea))
+		if (!rcBuildLayerRegions(&build_ctx, *compact_heightfield, 0, cfg.minRegionArea))
 		{
-			logger::log("[SimpleNavMesh] Could not build layer regions.");
+			logger::log("[Navigation] Could not build layer regions.");
 			return false;
 		}
 	}
@@ -284,15 +333,15 @@ bool noob::simple_navmesh::build(const noob::navmesh_config& arg) noexcept(true)
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Create contours.
-	contour_set = rcAllocContourSet();
-	if (!contour_set)
+	contours = rcAllocContourSet();
+	if (!contours)
 	{
-		logger::log("[SimpleNavMesh] Out of memory for contour set.");
+		logger::log("[Navigation] Out of memory for contour set.");
 		return false;
 	}
-	if (!rcBuildContours(&build_ctx, *compact_heightfield, config.maxSimplificationError, config.maxEdgeLen, *contour_set))
+	if (!rcBuildContours(&build_ctx, *compact_heightfield, cfg.maxSimplificationError, cfg.maxEdgeLen, *contours))
 	{
-		logger::log("[SimpleNavMesh] Could not create contours.");
+		logger::log("[Navigation] Could not create contours.");
 		return false;
 	}
 
@@ -301,147 +350,147 @@ bool noob::simple_navmesh::build(const noob::navmesh_config& arg) noexcept(true)
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Build polygon simple_navmesh from the contours.
-	poly_mesh = rcAllocPolyMesh();
-	if (!poly_mesh)
+	polymesh = rcAllocPolyMesh();
+	if (!polymesh)
 	{
-		logger::log("[SimpleNavMesh] Out of memory for polymesh.");
+		logger::log("[Navigation] Out of memory for polymesh.");
 		return false;
 	}
-	if (!rcBuildPolyMesh(&build_ctx, *contour_set, config.maxVertsPerPoly, *poly_mesh))
+	if (!rcBuildPolyMesh(&build_ctx, *contours, cfg.maxVertsPerPoly, *polymesh))
 	{
-		logger::log("[SimpleNavMesh] Could not build polymesh.");
+		logger::log("[Navigation] Could not build polymesh.");
 		return false;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Step 7. Create detail mesh which allows to access approximate height on each polygon.
+	// Step 7. Create detail mesh which records approximate height on each polygon.
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	detail_mesh = rcAllocPolyMeshDetail();
-	if (!detail_mesh)
+	polymesh_detail = rcAllocPolyMeshDetail();
+	if (!polymesh_detail)
 	{
-		logger::log("[SimpleNavMesh] Out of memory for detail mesh..");
+		logger::log("[Navigation] Out of memory for detail mesh..");
 		return false;
 	}
 
-	if (!rcBuildPolyMeshDetail(&build_ctx, *poly_mesh, *compact_heightfield, config.detailSampleDist, config.detailSampleMaxError, *detail_mesh))
+	if (!rcBuildPolyMeshDetail(&build_ctx, *polymesh, *compact_heightfield, cfg.detailSampleDist, cfg.detailSampleMaxError, *polymesh_detail))
 	{
-		logger::log("[SimpleNavMesh] Could not build detail mesh.");
+		logger::log("[Navigation] Could not build detail mesh.");
 		return false;
 	}
 
-	if (!keep_intermediates)
+	if (!keep_temporaries)
 	{
 		rcFreeCompactHeightfield(compact_heightfield);
-		compact_heightfield = 0;
-		rcFreeContourSet(contour_set);
-		contour_set = 0;
+		compact_heightfield = nullptr;
+		rcFreeContourSet(contours);
+		contours = nullptr;
 	}
 
-	// At this point the navigation mesh data is ready, you can access it from poly_mesh.
-	// See duDebugDrawPolyMesh or dtCreateNavMeshData as examples how to access the data.
 
-	//
+	// COOL NOTE: At this point, the navigation mesh data should be ready.
+	// See duDebugDrawPolyMesh or dtCreateNavMeshData as examples how to access it.
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// (Optional) Step 8. Create Detour data from Recast poly mesh.
-	//
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// The GUI may allow more max points per polygon than Detour can handle.
-	// Only build the detour simple_navmesh if we do not exceed the limit.
-
-	if (config.maxVertsPerPoly > DT_VERTS_PER_POLYGON)
+	// Only build the detour simple_navmesh if we do not exceed the max poly limit.
+	if (cfg.maxVertsPerPoly > DT_VERTS_PER_POLYGON)
 	{
 		return false;
 	}
-	unsigned char* nav_data = 0;
+
+	uint8_t* nav_data;
 	int nav_data_size = 0;
 
 	// Update poly flags from areas.
-	for (int i = 0; i < poly_mesh->npolys; ++i)
+	for (uint32_t i = 0; i < polymesh->npolys; ++i)
 	{
-		if (poly_mesh->areas[i] == RC_WALKABLE_AREA)
+		if (polymesh->areas[i] == RC_WALKABLE_AREA)
 		{
-			poly_mesh->areas[i] = POLYAREA_GROUND;
+			polymesh->areas[i] = static_cast<uint8_t>(poly_type::GROUND);
 		}
 
-		if (poly_mesh->areas[i] == POLYAREA_GROUND || poly_mesh->areas[i] == POLYAREA_GRASS || poly_mesh->areas[i] == POLYAREA_ROAD)
+		if (polymesh->areas[i] == static_cast<uint8_t>(poly_type::GROUND) || polymesh->areas[i] == static_cast<uint8_t>(poly_type::GRASS) || polymesh->areas[i] == static_cast<uint8_t>(poly_type::ROAD))
 		{
-			poly_mesh->flags[i] = POLYFLAGS_WALK;
+			polymesh->flags[i] = static_cast<uint16_t>(poly_flag::WALK);
 		}
-		else if (poly_mesh->areas[i] == POLYAREA_WATER)
+		else if (polymesh->areas[i] == static_cast<uint8_t>(poly_type::WATER))
 		{
-			poly_mesh->flags[i] = POLYFLAGS_SWIM;
+			polymesh->flags[i] = static_cast<uint16_t>(poly_flag::SWIM);
 		}
-		else if (poly_mesh->areas[i] == POLYAREA_DOOR)
+		else if (polymesh->areas[i] == static_cast<uint8_t>(poly_type::DOOR))
 		{
-			poly_mesh->flags[i] = POLYFLAGS_WALK | POLYFLAGS_DOOR;
+			polymesh->flags[i] = static_cast<uint16_t>(poly_flag::WALK) | static_cast<uint16_t>(poly_flag::DOOR);
 		}
 	}
 
-	dtNavMeshCreateParams params;
-	// TODO: See if its either wise or necessary to do so.
-	memset(&params, 0, sizeof(params));
-	params.verts = poly_mesh->verts;
-	params.vertCount = poly_mesh->nverts;
-	params.polys = poly_mesh->polys;
-	params.polyAreas = poly_mesh->areas;
-	params.polyFlags = poly_mesh->flags;
-	params.polyCount = poly_mesh->npolys;
-	params.nvp = poly_mesh->nvp;
-	params.detailMeshes = detail_mesh->meshes;
-	params.detailVerts = detail_mesh->verts;
-	params.detailVertsCount = detail_mesh->nverts;
-	params.detailTris = detail_mesh->tris;
-	params.detailTriCount = detail_mesh->ntris;
-	params.offMeshConVerts = geom->getOffMeshConnectionVerts();
-	params.offMeshConRad = geom->getOffMeshConnectionRads();
-	params.offMeshConDir = geom->getOffMeshConnectionDirs();
-	params.offMeshConAreas = geom->getOffMeshConnectionAreas();
-	params.offMeshConFlags = geom->getOffMeshConnectionFlags();
-	params.offMeshConUserID = geom->getOffMeshConnectionId();
-	params.offMeshConCount = geom->getOffMeshConnectionCount();
-	params.walkableHeight = agent_height;
-	params.walkableRadius = agent_radius;
-	params.walkableClimb = agent_max_climb;
-	rcVcopy(params.bmin, poly_mesh->bmin);
-	rcVcopy(params.bmax, poly_mesh->bmax);
-	params.cs = config.cs;
-	params.ch = config.ch;
+	dtNavMeshCreateParams params = {};
+
+	params.verts = polymesh->verts;
+	params.vertCount = polymesh->nverts;
+	params.polys = polymesh->polys;
+	params.polyAreas = polymesh->areas;
+	params.polyFlags = polymesh->flags;
+	params.polyCount = polymesh->npolys;
+	params.nvp = polymesh->nvp;
+	params.detailMeshes = polymesh_detail->meshes;
+	params.detailVerts = polymesh_detail->verts;
+	params.detailVertsCount = polymesh_detail->nverts;
+	params.detailTris = polymesh_detail->tris;
+	params.detailTriCount = polymesh_detail->ntris;
+	//params.offMeshConVerts = &offmesh_connections_verts[0];
+	//params.offMeshConRad = &offmesh_connections_rads[0];
+	//params.offMeshConDir = &offmesh_connections_dirs[0];
+	//params.offMeshConAreas = &offmesh_connections_areas[0];
+	//params.offMeshConFlags = &offmesh_connections_flags[0];
+	//params.offMeshConUserID = &offmesh_connections_ids[0];
+	//params.offMeshConCount = offmesh_connections_count;
+	params.walkableHeight = cfg.walkableHeight;
+	params.walkableRadius = cfg.walkableRadius;
+	params.walkableClimb = cfg.walkableClimb;
+	rcVcopy(polymesh->bmin, params.bmin);//, polymesh->bmin);
+	rcVcopy(polymesh->bmax, params.bmax);//, polymesh->bmax);
+	params.cs = cfg.cs;
+	params.ch = cfg.ch;
 	params.buildBvTree = true;
 
 	if (!dtCreateNavMeshData(&params, &nav_data, &nav_data_size))
 	{
-		logger::log("[NavMesh] Could not build Detour navmesh data.");
+		logger::log("[Navigation] Could not build Detour navmesh data.");
 		return false;
 	}
 
-	nav_mesh = dtAllocNavMesh();
-	if (!nav_mesh)
+	navmesh = dtAllocNavMesh();
+	if (!navmesh)
 	{
 		dtFree(nav_data);
-		logger::log("[NavMesh] Could not build Detour navmesh");
+		logger::log("[Navigation] Could not build Detour navmesh");
 		return false;
 	}
 
 	dtStatus status;
 
-	status = nav_mesh->init(nav_data, nav_data_size, DT_TILE_FREE_DATA);
+	status = navmesh->init(nav_data, nav_data_size, DT_TILE_FREE_DATA);
 	if (dtStatusFailed(status))
 	{
 		dtFree(nav_data);
-		logger::log("[NavMesh] Could not init Detour navmesh");
+		logger::log("[Navigation] Could not init Detour navmesh");
 		return false;
 	}
 
-	status = nav_query->init(nav_mesh, 2048);
+	status = nav_query->init(navmesh, 2048);
 	if (dtStatusFailed(status))
 	{
-		logger::log("[NavMesh] Could not init Detour query");
+		logger::log("[Navigation] Could not init Detour query");
 		return false;
 	}
 
 	fmt::MemoryWriter post_build_msg;
-	post_build_msg << " Creation success! " << poly_mesh->nverts << ", verts and " << poly_mesh->npolys << " polys.";
+	post_build_msg << " Creation success! " << polymesh->nverts << ", verts and " << polymesh->npolys << " polys.";
 	logger::log(post_build_msg.str());
-	
+
 	return true;
 }

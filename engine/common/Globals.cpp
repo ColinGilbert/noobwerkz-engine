@@ -1,5 +1,5 @@
 #include "Globals.hpp"
-
+#include "MeshUtils.hpp"
 #include "RandomGenerator.hpp"
 
 noob::globals* noob::globals::ptr_to_instance;
@@ -211,76 +211,8 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 				// We must first create the model:
 				else
 				{
-					// We must first create the model:
-					const btBvhTriangleMeshShape* shape_ptr = static_cast<btBvhTriangleMeshShape*>((shapes.get(h)).inner_shape);
-					btVector3 scaling = shape_ptr->getLocalScaling();
-					const btStridingMeshInterface* striding_mesh = shape_ptr->getMeshInterface();
-					PHY_ScalarType scalar_type, index_type;
-					scalar_type = index_type;
-					int num_verts, scalar_stride, index_stride, num_faces;
-					const unsigned char* vertex_base = 0;
-					const unsigned char* index_base = 0;
-
-					striding_mesh->getLockedReadOnlyVertexIndexBase(&vertex_base, num_verts, scalar_type, scalar_stride, &index_base, index_stride, num_faces, index_type, 0);
-
-					size_t num_indices = num_faces * 3;
-
-					uint32_t scalar_width, index_width;
-
-					if (scalar_type == PHY_FLOAT)
-					{
-						scalar_width = sizeof(float);
-					}
-					else
-					{
-						scalar_width = sizeof(double);
-					}
-
-					if (index_width == PHY_SHORT)
-					{
-						index_width = sizeof(uint16_t);
-
-					}
-					else
-					{
-						index_width = sizeof(uint32_t);
-
-					}
-
-					noob::basic_mesh m;
-
-					rde::fixed_array<btVector3, 3> triangle_verts;
-
-					for (int tri_index = 0; tri_index < num_faces; ++tri_index)
-					{
-						unsigned int* gfx_base = (unsigned int*)(index_base + tri_index * index_stride);
-
-						for (int j = 2; j >= 0; --j)
-						{
-							int graphics_index = index_type == PHY_SHORT ? ((unsigned short*)gfx_base)[j] : gfx_base[j];
-
-							if (scalar_type == PHY_FLOAT)
-							{
-								float* graphics_base = (float*)(vertex_base + graphics_index * scalar_stride);
-								triangle_verts[j] = btVector3(graphics_base[0] * scaling.getX(), graphics_base[1] * scaling.getY(), graphics_base[2] * scaling.getZ());
-							}
-							else
-							{
-								double* graphics_base = (double*)(vertex_base + graphics_index * scalar_stride);
-								triangle_verts[j] = btVector3(btScalar(graphics_base[0] * scaling.getX()), btScalar(graphics_base[1] * scaling.getY()), btScalar(graphics_base[2] * scaling.getZ()));
-							}
-						}
-
-						m.indices.push_back(m.vertices.size());
-						m.vertices.push_back(vec3_from_bullet(triangle_verts[0]));
-						m.indices.push_back(m.vertices.size());
-						m.vertices.push_back(vec3_from_bullet(triangle_verts[1]));
-						m.indices.push_back(m.vertices.size());
-						m.vertices.push_back(vec3_from_bullet(triangle_verts[2]));
-					}
-
-					striding_mesh->unLockReadOnlyVertexBase(0);
-
+					noob::shape shp = shapes.get(h);
+					noob::basic_mesh m = shp.get_mesh();
 					noob::scaled_model temp_scaled_model = model_from_mesh(m);
 					results.model_h = temp_scaled_model.model_h;
 					please_insert = true;
@@ -289,8 +221,10 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 				results.scales = noob::vec3(1.0, 1.0, 1.0);					
 				break;
 			}
-
-			//break;
+		default:
+			{
+				logger::log("[Globals] INVALID ENUM: model_from_shape()");
+			}
 	}
 
 	if (please_insert)
@@ -593,10 +527,8 @@ double noob::globals::get_random() noexcept(true)
 // Hack used to set the shape's index-to-self
 noob::shape_handle noob::globals::add_shape(const noob::shape& s) noexcept(true)
 {
-	noob::shape temp = s;
 	noob::shape_handle h = shapes.add(s);
-	temp.index = h.index();
-	shapes.set(h, temp);
+	std::get<1>(shapes.get_ptr_mutable(h))->get_inner_mutable()->setUserIndex(h.index());
 	return h;
 }
 

@@ -60,10 +60,12 @@ namespace noob
 
 	struct scenery
 	{
+		scenery() noexcept(true) : flag(0) {}
 		static const noob::stage_item_type type = noob::stage_item_type::SCENERY;
 		noob::body_handle body;
 		noob::shader shader;
 		noob::reflectance_handle reflect;
+		uint8_t flag;
 	};
 
 	typedef noob::component<noob::actor_blueprints> actor_blueprints_holder;

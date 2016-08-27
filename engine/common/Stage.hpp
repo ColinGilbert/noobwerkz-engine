@@ -3,7 +3,11 @@
 
 #include <functional>
 
+#include <rdestl/slist.h>
 #include <btBulletDynamicsCommon.h>
+#include <lemon/smart_graph.h>
+#include <lemon/list_graph.h>
+#include <lemon/lgf_writer.h>
 
 #include "NoobDefines.hpp"
 #include "Graphics.hpp"
@@ -32,12 +36,7 @@
 #include "StageTypes.hpp"
 #include "NoobCommon.hpp"
 #include "Particles.hpp"
-
-#include <lemon/smart_graph.h>
-#include <lemon/list_graph.h>
-#include <lemon/lgf_writer.h>
-
-#include <rdestl/slist.h>
+// #include "NavMesh.hpp"
 
 
 namespace noob
@@ -46,7 +45,7 @@ namespace noob
 	{
 		public:
 
-			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.1, 0.1, 0.1, 0.1)), instancing(false), bodies_mapping(draw_graph), enabled_mapping(draw_graph), /* model_mats_mapping(draw_graph),*/ basic_models_mapping(draw_graph), shaders_mapping(draw_graph), reflectances_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph), matrix_pool_count(0) {}
+			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.1, 0.1, 0.1, 0.1)), instancing(false), bodies_mapping(draw_graph), enabled_mapping(draw_graph), /* model_mats_mapping(draw_graph),*/ basic_models_mapping(draw_graph), shaders_mapping(draw_graph), reflectances_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph), matrix_pool_count(0), nav_changed(false) {}
 
 			~stage() noexcept(true);
 
@@ -64,6 +63,8 @@ namespace noob
 			void update(double dt) noexcept(true);
 
 			void draw(float window_width, float window_height, const noob::vec3& eye_pos, const noob::vec3& eye_target, const noob::vec3& eye_up, const noob::mat4& projection_mat) noexcept(true);
+
+			void build_navmesh() noexcept(true);
 
 			// Creates physics body, sensors, joints. Those get made lots.
 			noob::body_handle body(const noob::body_type, const noob::shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient = noob::versor(1.0, 0.0, 0.0, 0.0), bool ccd = false) noexcept(true);
@@ -116,7 +117,7 @@ namespace noob
 
 			void run_ai() noexcept (true);
 
-			rde::slist<rde::vector<noob::vec3>> paths;
+			// rde::slist<rde::vector<noob::vec3>> paths;
 
 			void remove_body(noob::body_handle) noexcept(true);
 			void remove_ghost(noob::ghost_handle) noexcept(true);
@@ -137,6 +138,7 @@ namespace noob
 
 			noob::duration update_duration;
 			noob::duration draw_duration;
+			noob::duration last_navmesh_build_duration;
 
 			btBroadphaseInterface* broadphase;
 			btDefaultCollisionConfiguration* collision_configuration;
@@ -180,7 +182,9 @@ namespace noob
 			noob::fast_hashtable basic_models_to_nodes;
 
 			noob::directional_light directional_light;
-
+			
+			// noob::navigation nav;
+			bool nav_changed;
 			// TODO: Make more flexible.
 			std::array<noob::light_handle, MAX_LIGHTS> lights;
 	};

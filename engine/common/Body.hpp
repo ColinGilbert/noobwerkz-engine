@@ -77,9 +77,7 @@ namespace noob
 
 		static uint32_t get_shape_index(const noob::body& b) noexcept(true)
 		{
-			btCollisionShape* bt_shape = b.inner->getCollisionShape();
-			noob::shape* noob_shape = static_cast<noob::shape*>(bt_shape->getUserPointer());
-			return noob_shape->index;
+			return b.inner->getCollisionShape()->getUserIndex();
 		}
 
 

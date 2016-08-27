@@ -20,6 +20,6 @@ namespace noob
 
 		// x,y coords spun around the y-axis; first vert in vector is top-most
 		// taper_one and taper_two refer to the y-distance getting tapered away from the endpoints
-		static noob::basic_mesh lathe(const std::vector<noob::vec2>& points, float taper_one, float taper_two, size_t segments);
+		// static noob::basic_mesh lathe(const std::vector<noob::vec2>& points, float taper_one, float taper_two, size_t segments);
 	};
 }

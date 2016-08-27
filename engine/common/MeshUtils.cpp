@@ -307,7 +307,7 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 	return mesh;
 }
 
-
+/*
 noob::basic_mesh noob::mesh_utils::lathe(const std::vector<noob::vec2>& points, float taper_one, float taper_two, size_t segments)
 {
 	std::vector<noob::vec3> initial_points;
@@ -459,3 +459,4 @@ noob::basic_mesh noob::mesh_utils::lathe(const std::vector<noob::vec2>& points, 
 	// Return our friend the basic_mesh
 	return halfedges.to_basic_mesh();
 }
+*/
