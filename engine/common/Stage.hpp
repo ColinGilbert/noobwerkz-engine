@@ -78,14 +78,6 @@ namespace noob
 
 			noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
 
-			// noob::particle_system_handle add_particle_system(const noob::particle_system::descriptor&) noexcept(true);
-
-			// noob::particle_system::descriptor get_particle_system_properties(const noob::particle_system_handle) const noexcept(true);
-
-			// void set_particle_system_properties(const noob::particle_system_handle, const noob::particle_system::descriptor&) noexcept(true);
-
-			// void activate_particle_system(const noob::particle_system_handle, bool) noexcept(true);
-
 			// Lights.
 			void set_light(unsigned int, const noob::light_handle) noexcept(true);
 

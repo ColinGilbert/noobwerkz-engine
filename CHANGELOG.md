@@ -6,7 +6,7 @@ Additions:
 Profiling.
 Actor movement (WIP.)
 Particle system (WIP.)
-Integrate recast & detour (WIP.)
+Integrate recast & detour (WIP.) NOTE: Buggy and slow. Now trying it ourselves.
 
 Bugfixes/Cleanups:
 Templatize math types.

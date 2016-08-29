@@ -66,35 +66,35 @@ void noob::application::init()
 		logger::log("[Application] User C++ init failed!");
 	}
 
-//	network.init(3);
-//	network.connect("localhost", 4242);
+	//	network.init(3);
+	//	network.connect("localhost", 4242);
 }
 
 
 void noob::application::update(double delta)
 {
 	gui.window_dims(window_width, window_height);
-/*
-	network.tick();
+	/*
+	   network.tick();
 
-	while (network.has_message())
-	{
-		std::string s = network.get_message();
-		if (s.compare(0, 6, "INIT: ") == 0)
-		{
-			stage.tear_down();
-			eval("init", s.substr(6, std::string::npos), true);
-		}
-		else if (s.compare(0, 8, "UPDATE: ") == 0)
-		{
-			// TODO: Implement
-		}
-		else if (s.compare(0, 5, "CMD: ") == 0)
-		{
-			eval("cmd", s.substr(5, std::string::npos), true);
-		}
+	   while (network.has_message())
+	   {
+	   std::string s = network.get_message();
+	   if (s.compare(0, 6, "INIT: ") == 0)
+	   {
+	   stage.tear_down();
+	   eval("init", s.substr(6, std::string::npos), true);
+	   }
+	   else if (s.compare(0, 8, "UPDATE: ") == 0)
+	   {
+	// TODO: Implement
 	}
-*/
+	else if (s.compare(0, 5, "CMD: ") == 0)
+	{
+	eval("cmd", s.substr(5, std::string::npos), true);
+	}
+	}
+	*/
 	stage.update(delta);
 	user_update(delta);
 }
@@ -127,24 +127,28 @@ void noob::application::accept_ndof_data(const noob::ndof::data& info)
 // TODO: Refactor
 void noob::application::step()
 {
-	// PROFILER_UPDATE();
-	noob::time start_time = noob::clock::now();
-	noob::duration time_since = last_step - start_time;
-
-	if (!paused)
-	{
-		double d = (1.0 / static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(time_since).count()));
-		update(d);
-	}
-
-	draw();
-
-	noob::time end_time = noob::clock::now();
-	last_step = end_time;
-	noob::duration time_taken = end_time - start_time;
-
 	noob::globals& g = noob::globals::get_instance();
-	g.profile_run.total_time += time_taken;
+	if (g.finished_init())
+	{
+		// PROFILER_UPDATE();
+		noob::time start_time = noob::clock::now();
+		noob::duration time_since = last_step - start_time;
+
+		if (!paused)
+		{
+			double d = (1.0 / static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(time_since).count()));
+			update(d);
+		}
+
+		draw();
+
+		noob::time end_time = noob::clock::now();
+		last_step = end_time;
+		noob::duration time_taken = end_time - start_time;
+
+		noob::globals& g = noob::globals::get_instance();
+		g.profile_run.total_time += time_taken;
+	}
 }
 
 

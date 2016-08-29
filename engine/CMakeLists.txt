@@ -1,13 +1,12 @@
 cmake_minimum_required(VERSION 3.5)
 project(NoobWerkz)
 
-#set(CMAKE_BUILD_TYPE "DEBUG")
-set(CMAKE_BUILD_TYPE "RELEASE")
+set(CMAKE_BUILD_TYPE "DEBUG")
+#set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
-set(ASSIMP_FLAGS "-DASSIMP_BUILD_BOOST_WORKAROUND -DASSIMP_BUILD_NO_EXPORT -DASSIMP_BUILD_NO_XGL_IMPORTER -DASSIMP_BUILD_NO_FBX_IMPORTER -DASSIMP_BUILD_NO_C4D_IMPORTER -DASSIMP_BUILD_NO_X_IMPORTER -DASSIMP_BUILD_NO_OBJ_IMPORTER -DASSIMP_BUILD_NO_MD3_IMPORTER -DASSIMP_BUILD_NO_MD2_IMPORTER -DASSIMP_BUILD_NO_MDL_IMPORTER -DASSIMP_BUILD_NO_ASE_IMPORTER -DASSIMP_BUILD_NO_HMP_IMPORTER -DASSIMP_BUILD_NO_SMD_IMPORTER -DASSIMP_BUILD_NO_MDC_IMPORTER -DASSIMP_BUILD_NO_MD5_IMPORTER -DASSIMP_BUILD_NO_LWO_IMPORTER -DASSIMP_BUILD_NO_DXF_IMPORTER -DASSIMP_BUILD_NO_NFF_IMPORTER -DASSIMP_BUILD_NO_RAW_IMPORTER -DASSIMP_BUILD_NO_AC_IMPORTER -DASSIMP_BUILD_NO_BVH_IMPORTER -DASSIMP_BUILD_NO_IRRMESH_IMPORTER -DASSIMP_BUILD_NO_IRR_IMPORTER -DASSIMP_BUILD_NO_Q3D_IMPORTER -DASSIMP_BUILD_NO_B3D_IMPORTER -DASSIMP_BUILD_NO_COLLADA_IMPORTER -DASSIMP_BUILD_NO_TERRAGEN_IMPORTER -DASSIMP_BUILD_NO_CSM_IMPORTER -DASSIMP_BUILD_NO_3D_IMPORTER -DASSIMP_BUILD_NO_LWS_IMPORTER -DASSIMP_BUILD_NO_OGRE_IMPORTER -DASSIMP_BUILD_NO_OPENGEX_IMPORTER -DASSIMP_BUILD_NO_COB_IMPORTER -DASSIMP_BUILD_NO_BLEND_IMPORTER -DASSIMP_BUILD_NO_Q3BSP_IMPORTER -DASSIMP_BUILD_NO_NDO_IMPORTER -DASSIMP_BUILD_NO_IFC_IMPORTER ")
 
-set(CMAKE_CXX_FLAGS "-std=c++1y -DOM_STATIC_BUILD -DOM_GARBAGE_NO_STATUS_WARNING -DAS_CAN_USE_CPP11 -DEIGEN_MPL2_ONLY -DSHINY_IS_COMPILED=TRUE  ${ASSIMP_FLAGS} ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++1y -DAS_CAN_USE_CPP11 -DEIGEN_MPL2_ONLY -DSHINY_IS_COMPILED=TRUE  ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-DSTB_IMAGE_STATIC ${CMAKE_C_FLAGS}")
 
 add_subdirectory(lib/freetype)
@@ -110,6 +109,14 @@ list(APPEND ozz_src
 	lib/ozz-animation/src/base/maths/simd_math.cc
 	lib/ozz-animation/src/geometry/runtime/skinning_job.cc
 	)	
+
+list (APPEND assimp_src)
+
+if (DEFINED NOOB_USE_ASSIMP)
+
+set(ASSIMP_FLAGS " -DNOOB_USE_ASSIMP -DASSIMP_BUILD_BOOST_WORKAROUND -DASSIMP_BUILD_NO_EXPORT -DASSIMP_BUILD_NO_XGL_IMPORTER -DASSIMP_BUILD_NO_FBX_IMPORTER -DASSIMP_BUILD_NO_C4D_IMPORTER -DASSIMP_BUILD_NO_X_IMPORTER -DASSIMP_BUILD_NO_OBJ_IMPORTER -DASSIMP_BUILD_NO_MD3_IMPORTER -DASSIMP_BUILD_NO_MD2_IMPORTER -DASSIMP_BUILD_NO_MDL_IMPORTER -DASSIMP_BUILD_NO_ASE_IMPORTER -DASSIMP_BUILD_NO_HMP_IMPORTER -DASSIMP_BUILD_NO_SMD_IMPORTER -DASSIMP_BUILD_NO_MDC_IMPORTER -DASSIMP_BUILD_NO_MD5_IMPORTER -DASSIMP_BUILD_NO_LWO_IMPORTER -DASSIMP_BUILD_NO_DXF_IMPORTER -DASSIMP_BUILD_NO_NFF_IMPORTER -DASSIMP_BUILD_NO_RAW_IMPORTER -DASSIMP_BUILD_NO_AC_IMPORTER -DASSIMP_BUILD_NO_BVH_IMPORTER -DASSIMP_BUILD_NO_IRRMESH_IMPORTER -DASSIMP_BUILD_NO_IRR_IMPORTER -DASSIMP_BUILD_NO_Q3D_IMPORTER -DASSIMP_BUILD_NO_B3D_IMPORTER -DASSIMP_BUILD_NO_COLLADA_IMPORTER -DASSIMP_BUILD_NO_TERRAGEN_IMPORTER -DASSIMP_BUILD_NO_CSM_IMPORTER -DASSIMP_BUILD_NO_3D_IMPORTER -DASSIMP_BUILD_NO_LWS_IMPORTER -DASSIMP_BUILD_NO_OGRE_IMPORTER -DASSIMP_BUILD_NO_OPENGEX_IMPORTER -DASSIMP_BUILD_NO_COB_IMPORTER -DASSIMP_BUILD_NO_BLEND_IMPORTER -DASSIMP_BUILD_NO_Q3BSP_IMPORTER -DASSIMP_BUILD_NO_NDO_IMPORTER -DASSIMP_BUILD_NO_IFC_IMPORTER")
+
+set(CMAKE_CXX_FLAGS "-DNOOB_USE_ASSIMP ${ASSIMP_FLAGS} ${CMAKE_CXX_FLAGS}")
 
 
 include_directories(lib/assimp/include)
@@ -300,6 +307,10 @@ list (APPEND assimp_src
 	lib/assimp/code/FBXNodeAttribute.cpp
 	)
 
+
+endif()
+
+
 # Used to link to the system lib, but then had problems. Now following Couman's advice in http://bulletphysics.org/Bullet/phpBB3/viewtopic.php?t=7168
 include_directories(lib/bullet/src)
 include_directories(lib/bullet/BulletCollision)
@@ -476,45 +487,6 @@ list (APPEND bullet_src
 
 include_directories(lib/polyvox/include)
 
-include_directories(lib/OpenMesh/src)
-list (APPEND openmesh_src
-	lib/OpenMesh/src/OpenMesh/Core/System/omstream.cc
-	#lib/OpenMesh/src/OpenMesh/Core/Templates/newClass.cc
-	#lib/OpenMesh/src/OpenMesh/Core/Templates/newClassT.cc
-	lib/OpenMesh/src/OpenMesh/Core/Utils/SingletonT.cc
-	lib/OpenMesh/src/OpenMesh/Core/Utils/BaseProperty.cc
-	lib/OpenMesh/src/OpenMesh/Core/Utils/RandomNumberGenerator.cc
-	lib/OpenMesh/src/OpenMesh/Core/Utils/Endian.cc
-	lib/OpenMesh/src/OpenMesh/Core/Geometry/NormalConeT.cc
-	lib/OpenMesh/src/OpenMesh/Core/IO/OMFormatT.cc
-	lib/OpenMesh/src/OpenMesh/Core/IO/BinaryHelper.cc
-	lib/OpenMesh/src/OpenMesh/Core/IO/reader/BaseReader.cc
-	lib/OpenMesh/src/OpenMesh/Core/IO/reader/PLYReader.cc
-	lib/OpenMesh/src/OpenMesh/Core/IO/reader/OBJReader.cc
-	lib/OpenMesh/src/OpenMesh/Core/IO/reader/STLReader.cc
-	lib/OpenMesh/src/OpenMesh/Core/IO/reader/OMReader.cc
-	lib/OpenMesh/src/OpenMesh/Core/IO/reader/OFFReader.cc
-	lib/OpenMesh/src/OpenMesh/Core/IO/IOManager.cc
-	lib/OpenMesh/src/OpenMesh/Core/IO/OMFormat.cc
-	lib/OpenMesh/src/OpenMesh/Core/IO/writer/STLWriter.cc
-	lib/OpenMesh/src/OpenMesh/Core/IO/writer/BaseWriter.cc
-	lib/OpenMesh/src/OpenMesh/Core/IO/writer/OBJWriter.cc
-	lib/OpenMesh/src/OpenMesh/Core/IO/writer/VTKWriter.cc
-	lib/OpenMesh/src/OpenMesh/Core/IO/writer/PLYWriter.cc
-	lib/OpenMesh/src/OpenMesh/Core/IO/writer/OFFWriter.cc
-	lib/OpenMesh/src/OpenMesh/Core/IO/writer/OMWriter.cc
-	lib/OpenMesh/src/OpenMesh/Core/Mesh/TriMeshT.cc
-	lib/OpenMesh/src/OpenMesh/Core/Mesh/PolyConnectivity.cc
-	lib/OpenMesh/src/OpenMesh/Core/Mesh/TriConnectivity.cc
-	lib/OpenMesh/src/OpenMesh/Core/Mesh/PolyMeshT.cc
-	lib/OpenMesh/src/OpenMesh/Core/Mesh/BaseKernel.cc
-	lib/OpenMesh/src/OpenMesh/Core/Mesh/ArrayKernelT.cc
-	lib/OpenMesh/src/OpenMesh/Core/Mesh/ArrayKernel.cc
-	lib/OpenMesh/src/OpenMesh/Tools/Decimater/ModQuadricT.cc
-	lib/OpenMesh/src/OpenMesh/Tools/Decimater/DecimaterT.cc
-	lib/OpenMesh/src/OpenMesh/Tools/Decimater/Observer.cc
-	)
-
 include_directories(lib/lemon)
 
 include_directories(lib/stb)
@@ -578,69 +550,75 @@ include_directories(lib/r8brain-free-src)
 
 list(APPEND r8_src
 	lib/r8brain-free-src/r8bbase.cpp
-)
-
-include_directories(lib/recastnavigation/Detour/Include)
-include_directories(lib/recastnavigation/Recast/Include)
-include_directories(lib/recastnavigation/RecastDemo/Include)
-include_directories(lib/recastnavigation/DebugUtils/Include)
-include_directories(lib/recastnavigation/DetourTileCache/Include)
-include_directories(lib/recastnavigation/DetourCrowd/Include)
-
-list (APPEND recast_src
-	lib/recastnavigation/Recast/Source/RecastAlloc.cpp
-	lib/recastnavigation/Recast/Source/RecastLayers.cpp
-	lib/recastnavigation/Recast/Source/RecastContour.cpp
-	lib/recastnavigation/Recast/Source/RecastArea.cpp
-	lib/recastnavigation/Recast/Source/RecastMeshDetail.cpp
-	lib/recastnavigation/Recast/Source/RecastRasterization.cpp
-	lib/recastnavigation/Recast/Source/RecastMesh.cpp
-	lib/recastnavigation/Recast/Source/RecastFilter.cpp
-	lib/recastnavigation/Recast/Source/Recast.cpp
-	lib/recastnavigation/Recast/Source/RecastRegion.cpp
-	lib/recastnavigation/DetourTileCache/Source/DetourTileCacheBuilder.cpp
-	lib/recastnavigation/DetourTileCache/Source/DetourTileCache.cpp
-	#lib/recastnavigation/DebugUtils/Source/DetourDebugDraw.cpp
-	#lib/recastnavigation/DebugUtils/Source/RecastDebugDraw.cpp
-	#lib/recastnavigation/DebugUtils/Source/RecastDump.cpp
-	#lib/recastnavigation/DebugUtils/Source/DebugDraw.cpp
-	#lib/recastnavigation/RecastDemo/Source/CrowdTool.cpp
-	#lib/recastnavigation/RecastDemo/Source/Sample_TempObstacles.cpp
-	#lib/recastnavigation/RecastDemo/Source/main.cpp
-	#lib/recastnavigation/RecastDemo/Source/imguiRenderGL.cpp
-	#lib/recastnavigation/RecastDemo/Source/Sample.cpp
-	#lib/recastnavigation/RecastDemo/Source/Filelist.cpp
-	#lib/recastnavigation/RecastDemo/Source/ConvexVolumeTool.cpp
-	#lib/recastnavigation/RecastDemo/Source/imgui.cpp
-	#lib/recastnavigation/RecastDemo/Source/Sample_Debug.cpp
-	#lib/recastnavigation/RecastDemo/Source/SlideShow.cpp
-	#lib/recastnavigation/RecastDemo/Source/NavMeshPruneTool.cpp
-	#lib/recastnavigation/RecastDemo/Source/PerfTimer.cpp
-	#lib/recastnavigation/RecastDemo/Source/InputGeom.cpp
-	#lib/recastnavigation/RecastDemo/Source/NavMeshTesterTool.cpp
-	#lib/recastnavigation/RecastDemo/Source/MeshLoaderObj.cpp
-	#lib/recastnavigation/RecastDemo/Source/ChunkyTriMesh.cpp
-	#lib/recastnavigation/RecastDemo/Source/Sample_SoloMesh.cpp
-	#lib/recastnavigation/RecastDemo/Source/Sample_TileMesh.cpp
-	#lib/recastnavigation/RecastDemo/Source/SampleInterfaces.cpp
-	#lib/recastnavigation/RecastDemo/Source/OffMeshConnectionTool.cpp
-	#lib/recastnavigation/RecastDemo/Source/TestCase.cpp
-	#lib/recastnavigation/RecastDemo/Source/ValueHistory.cpp
-	#lib/recastnavigation/RecastDemo/Contrib/fastlz/fastlz.c
-	lib/recastnavigation/Detour/Source/DetourCommon.cpp
-	lib/recastnavigation/Detour/Source/DetourNavMesh.cpp
-	lib/recastnavigation/Detour/Source/DetourNavMeshBuilder.cpp
-	lib/recastnavigation/Detour/Source/DetourAlloc.cpp
-	lib/recastnavigation/Detour/Source/DetourNode.cpp
-	lib/recastnavigation/Detour/Source/DetourNavMeshQuery.cpp
-	lib/recastnavigation/DetourCrowd/Source/DetourPathQueue.cpp
-	lib/recastnavigation/DetourCrowd/Source/DetourObstacleAvoidance.cpp
-	lib/recastnavigation/DetourCrowd/Source/DetourProximityGrid.cpp
-	lib/recastnavigation/DetourCrowd/Source/DetourPathCorridor.cpp
-	lib/recastnavigation/DetourCrowd/Source/DetourCrowd.cpp
-	lib/recastnavigation/DetourCrowd/Source/DetourLocalBoundary.cpp
 	)
 
+list (APPEND recast_src)
+
+if (DEFINED NOOB_USE_RECAST)
+
+	include_directories(lib/recastnavigation/Detour/Include)
+	include_directories(lib/recastnavigation/Recast/Include)
+	include_directories(lib/recastnavigation/RecastDemo/Include)
+	include_directories(lib/recastnavigation/DebugUtils/Include)
+	include_directories(lib/recastnavigation/DetourTileCache/Include)
+	include_directories(lib/recastnavigation/DetourCrowd/Include)
+
+	list (APPEND recast_src
+		lib/recastnavigation/Recast/Source/RecastAlloc.cpp
+		lib/recastnavigation/Recast/Source/RecastLayers.cpp
+		lib/recastnavigation/Recast/Source/RecastContour.cpp
+		lib/recastnavigation/Recast/Source/RecastArea.cpp
+		lib/recastnavigation/Recast/Source/RecastMeshDetail.cpp
+		lib/recastnavigation/Recast/Source/RecastRasterization.cpp
+		lib/recastnavigation/Recast/Source/RecastMesh.cpp
+		lib/recastnavigation/Recast/Source/RecastFilter.cpp
+		lib/recastnavigation/Recast/Source/Recast.cpp
+		lib/recastnavigation/Recast/Source/RecastRegion.cpp
+		lib/recastnavigation/DetourTileCache/Source/DetourTileCacheBuilder.cpp
+		lib/recastnavigation/DetourTileCache/Source/DetourTileCache.cpp
+		#lib/recastnavigation/DebugUtils/Source/DetourDebugDraw.cpp
+		#lib/recastnavigation/DebugUtils/Source/RecastDebugDraw.cpp
+		#lib/recastnavigation/DebugUtils/Source/RecastDump.cpp
+		#lib/recastnavigation/DebugUtils/Source/DebugDraw.cpp
+		#lib/recastnavigation/RecastDemo/Source/CrowdTool.cpp
+		#lib/recastnavigation/RecastDemo/Source/Sample_TempObstacles.cpp
+		#lib/recastnavigation/RecastDemo/Source/main.cpp
+		#lib/recastnavigation/RecastDemo/Source/imguiRenderGL.cpp
+		#lib/recastnavigation/RecastDemo/Source/Sample.cpp
+		#lib/recastnavigation/RecastDemo/Source/Filelist.cpp
+		#lib/recastnavigation/RecastDemo/Source/ConvexVolumeTool.cpp
+		#lib/recastnavigation/RecastDemo/Source/imgui.cpp
+		#lib/recastnavigation/RecastDemo/Source/Sample_Debug.cpp
+		#lib/recastnavigation/RecastDemo/Source/SlideShow.cpp
+		#lib/recastnavigation/RecastDemo/Source/NavMeshPruneTool.cpp
+		#lib/recastnavigation/RecastDemo/Source/PerfTimer.cpp
+		#lib/recastnavigation/RecastDemo/Source/InputGeom.cpp
+		#lib/recastnavigation/RecastDemo/Source/NavMeshTesterTool.cpp
+		#lib/recastnavigation/RecastDemo/Source/MeshLoaderObj.cpp
+		#lib/recastnavigation/RecastDemo/Source/ChunkyTriMesh.cpp
+		#lib/recastnavigation/RecastDemo/Source/Sample_SoloMesh.cpp
+		#lib/recastnavigation/RecastDemo/Source/Sample_TileMesh.cpp
+		#lib/recastnavigation/RecastDemo/Source/SampleInterfaces.cpp
+		#lib/recastnavigation/RecastDemo/Source/OffMeshConnectionTool.cpp
+		#lib/recastnavigation/RecastDemo/Source/TestCase.cpp
+		#lib/recastnavigation/RecastDemo/Source/ValueHistory.cpp
+		#lib/recastnavigation/RecastDemo/Contrib/fastlz/fastlz.c
+		lib/recastnavigation/Detour/Source/DetourCommon.cpp
+		lib/recastnavigation/Detour/Source/DetourNavMesh.cpp
+		lib/recastnavigation/Detour/Source/DetourNavMeshBuilder.cpp
+		lib/recastnavigation/Detour/Source/DetourAlloc.cpp
+		lib/recastnavigation/Detour/Source/DetourNode.cpp
+		lib/recastnavigation/Detour/Source/DetourNavMeshQuery.cpp
+		lib/recastnavigation/DetourCrowd/Source/DetourPathQueue.cpp
+		lib/recastnavigation/DetourCrowd/Source/DetourObstacleAvoidance.cpp
+		lib/recastnavigation/DetourCrowd/Source/DetourProximityGrid.cpp
+		lib/recastnavigation/DetourCrowd/Source/DetourPathCorridor.cpp
+		lib/recastnavigation/DetourCrowd/Source/DetourCrowd.cpp
+		lib/recastnavigation/DetourCrowd/Source/DetourLocalBoundary.cpp
+		)
+endif()
+
+include_directories(lib/short-alloc)
 include_directories(lib/network-host)
 include_directories(lib/logger)
 include_directories(lib/math-funcs)
@@ -703,11 +681,7 @@ endif()
 # endif()
 
 
-add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src}
-	${bgfx_src} ${bgfx_utils_src} ${openmesh_src} ${rdestl_src}
-	${cppformat_src} ${recast_src} ${bullet_src}
-	${voropp_src} ${ozz_src} ${hashtable-src} ${ogg_src} ${vorbis_src}
-	${r8_src} ${shiny-src})
+add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${rdestl_src} ${cppformat_src} ${recast_src} ${bullet_src} ${voropp_src} ${ozz_src} ${hashtable-src} ${ogg_src} ${vorbis_src}	${r8_src} ${shiny-src})
 
 target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype Enet)
 

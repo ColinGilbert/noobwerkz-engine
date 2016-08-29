@@ -97,7 +97,7 @@ void noob::stage::update(double dt) noexcept(true)
 	if (nav_changed)
 	{
 		// build_navmesh();
-		nav_changed = false;
+		// nav_changed = false;
 	}
 
 	dynamics_world->stepSimulation(1.0/60.0, 10);
@@ -409,72 +409,6 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, co
 
 	nav_changed = true;
 }
-
-/*
-   noob::particle_system_handle noob::stage::add_particle_system(const noob::particle_system::descriptor& desc) noexcept(true)
-   {
-   logger::log("[Stage] Adding particle system");
-   noob::globals& g = noob::globals::get_instance();
-
-   noob::particle_system ps;
-
-   ps.set_properties(desc);
-
-   for (uint32_t i = 0; i < noob::particle_system::max_particles; ++i)
-   {
-   noob::ghost_handle g_h = ghost(g.unit_sphere_shape, ps.center, noob::versor(0.0, 0.0, 0.0, 1.0));
-   noob::ghost* g_ptr = std::get<1>(ghosts.get_ptr_mutable(g_h));
-// g_ptr->inner->setCollisionFlags(noob::collision_type::SCENERY | noob::collision_type::CHARACTER);
-g_ptr->inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::PARTICLE));
-}
-logger::log("[Stage] Returning new particle system");
-return particle_systems.add(ps);
-
-}
-
-
-noob::particle_system::descriptor noob::stage::get_particle_system_properties(const noob::particle_system_handle h) const noexcept(true)
-{
-std::tuple<bool, noob::particle_system*> temp = particle_systems.get_ptr_mutable(h);
-if (std::get<0>(temp) != false)
-{
-return std::get<1>(temp)->get_properties();
-}
-else
-{
-logger::log("[Stage] Attempting to obtain properties of a nonexistant particle system! Returning defaults.");
-return std::get<1>(temp)->get_properties();
-}
-}
-
-
-void noob::stage::set_particle_system_properties(const noob::particle_system_handle h, const noob::particle_system::descriptor& desc) noexcept(true)
-{
-std::tuple<bool, noob::particle_system*> temp = particle_systems.get_ptr_mutable(h);
-if (std::get<0>(temp) != false)
-{
-std::get<1>(temp)->set_properties(desc);
-}
-else
-{
-logger::log("[Stage] Attempting to set properties on a nonextant particle system!");
-}
-}
-
-
-void noob::stage::activate_particle_system(const noob::particle_system_handle h, bool active_arg) noexcept(true)
-{
-std::tuple<bool, noob::particle_system*> temp = particle_systems.get_ptr_mutable(h);
-if (std::get<0>(temp) != false)
-{
-std::get<1>(temp)->active = active_arg;
-}
-else
-{
-logger::log("[Stage] Attempting to activate/deactivate a particle system that doesn't exist!");
-}
-}
-*/
 
 
 void noob::stage::set_light(uint32_t i, const noob::light_handle h) noexcept(true) 

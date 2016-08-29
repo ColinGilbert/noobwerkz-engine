@@ -35,8 +35,6 @@ libogg/libvorbis (soon Opus)
 r8brain's excellent resampling routines
 ```
 
-```
-
 To bootstrap:
 ```
 Currently testing our bootstrap scripts :)

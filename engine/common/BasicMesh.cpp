@@ -29,7 +29,7 @@ double noob::basic_mesh::get_volume()
 	return volume;
 }
 
-
+/*
 void noob::basic_mesh::to_origin()
 {
 	noob::vec3 dims = bbox.get_dims();
@@ -38,7 +38,6 @@ void noob::basic_mesh::to_origin()
 		vertices[i] = (vertices[i] + dims);
 	}
 }
-
 
 std::string noob::basic_mesh::save() const
 {
@@ -56,40 +55,38 @@ std::string noob::basic_mesh::save() const
 	return w.str();
 }
 
-
 void noob::basic_mesh::save(const std::string& filename) const
 {
-	// logger::log("[Mesh] - save() - begin");
-	TriMesh half_edges = to_half_edges();
-	// logger::log("[Mesh] - save() - half-edges created");
-	OpenMesh::IO::write_mesh(half_edges, filename);
-}
 
-bool noob::basic_mesh::load_mem(const std::string& file, const std::string& name)
+}
+*/
+#if defined(NOOB_USE_ASSIMP)
+bool noob::basic_mesh::load_mem_assimp(const std::string& file)
 {
 	const aiScene* scene = aiImportFileFromMemory(file.c_str(), file.size(), aiProcessPreset_TargetRealtime_Fast, "");
-	return load_assimp(scene, name);
+	return load_assimp(scene);
 }
 
 
-bool noob::basic_mesh::load_file(const std::string& filename, const std::string& name)
+bool noob::basic_mesh::load_file_assimp(const std::string& filename)
 {
 	const aiScene* scene = aiImportFile(filename.c_str(), aiProcessPreset_TargetRealtime_Fast);
-	return load_assimp(scene, name);
+	return load_assimp(scene);
 }
 
-bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name)
+bool noob::basic_mesh::load_assimp(const aiScene* scene)
 {
+	logger::log("[BasicMesh] Load Asssimp");
 	// logger::log("[mesh] load() - begin");
 	if (!scene)
 	{
-		logger::log(fmt::format("[mesh] load({0}) - cannot open", name));
+		logger::log("[BasicMesh] (Assimp) cannot open!");
 		return false;
 	}
 
 	vertices.clear();
 	indices.clear();
-	// normals.clear();
+	normals.clear();
 
 	const aiMesh* mesh_data = scene->mMeshes[0];
 
@@ -112,14 +109,16 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 		v.v[2] = pt[2];
 		vertices.push_back(v);
 
-		update_bbox(bbox, v);
-		//bbox.min[0] = std::min(bbox.min[0], v[0]);
-		//bbox.min[1] = std::min(bbox.min[1], v[1]);
-		//bbox.min[2] = std::min(bbox.min[2], v[2]);
 
-		//bbox.max[0] = std::max(bbox.max[0], v[0]);
-		//bbox.max[1] = std::max(bbox.max[1], v[1]);
-		// bbox.max[2] = std::max(bbox.max[2], v[2]);
+		if (has_normals)
+		{
+			aiVector3D normal = mesh_data->mNormals[n];
+			noob::vec3 n(normal[0], normal[1], normal[2]);
+			normals.push_back(n);
+		}
+
+
+		update_bbox(bbox, v);
 	}
 
 	if (num_verts == 0)
@@ -139,84 +138,4 @@ bool noob::basic_mesh::load_assimp(const aiScene* scene, const std::string& name
 
 	return true;
 }
-
-
-TriMesh noob::basic_mesh::to_half_edges() const
-{
-	TriMesh half_edges;
-	std::vector<TriMesh::VertexHandle> vert_handles;
-
-	for (auto v : vertices)
-	{
-		vert_handles.push_back(half_edges.add_vertex(TriMesh::Point(v.v[0], v.v[1], v.v[2])));
-	}
-
-	for (size_t i = 0; i < indices.size(); i = i + 3)
-	{
-		std::vector<TriMesh::VertexHandle> face_verts;
-		face_verts.push_back(vert_handles[indices[i]]);
-		face_verts.push_back(vert_handles[indices[i+1]]);
-		face_verts.push_back(vert_handles[indices[i+2]]);
-		half_edges.add_face(face_verts);
-	}
-
-	return half_edges;
-}
-
-
-void noob::basic_mesh::from_half_edges(TriMesh half_edges)
-{
-	vertices.resize(half_edges.n_vertices());
-	indices.clear();
-
-	for (TriMesh::ConstVertexIter v_it = half_edges.vertices_begin(); v_it != half_edges.vertices_end(); ++v_it)
-	{
-		vertices[v_it->idx()] = vec3_from_polymesh(half_edges.point(*v_it));
-	}
-
-	for (TriMesh::ConstFaceIter f_it = half_edges.faces_begin(); f_it != half_edges.faces_end(); ++f_it)
-	{
-		for (TriMesh::FaceVertexCCWIter fv_it = half_edges.fv_ccwiter(*f_it); fv_it.is_valid(); ++fv_it)
-		{
-			indices.push_back(static_cast<uint16_t>(fv_it->idx()));
-		}
-	}
-}
-
-
-void noob::basic_mesh::from_half_edges(PolyMesh half_edges)
-{
-	PolyMesh temp_polymesh(half_edges);
-
-	temp_polymesh.triangulate();
-	temp_polymesh.garbage_collection();
-
-	TriMesh temp_trimesh;
-
-	for (PolyMesh::ConstVertexIter v_it = temp_polymesh.vertices_begin(); v_it != temp_polymesh.vertices_end(); ++v_it)
-	{
-		PolyMesh::Point temp(temp_polymesh.point(*v_it));
-		TriMesh::Point p;
-
-		p[0] = temp[0];
-		p[1] = temp[1];
-		p[2] = temp[2];
-
-		temp_trimesh.add_vertex(p);
-	}
-
-	std::vector<PolyMesh::VertexHandle> temp_face;
-	temp_face.resize(3);
-	for (PolyMesh::ConstFaceIter f_it = temp_polymesh.faces_begin(); f_it != temp_polymesh.faces_end(); ++f_it)
-	{
-		size_t index = 0;
-		for (PolyMesh::FaceVertexCCWIter fv_it = temp_polymesh.fv_ccwiter(*f_it); fv_it.is_valid(); ++fv_it)
-		{
-			temp_face[index] = *fv_it;
-			++index;
-		}
-		temp_trimesh.add_face(temp_face);
-	}
-
-	from_half_edges(temp_trimesh);
-}
+#endif

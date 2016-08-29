@@ -10,14 +10,7 @@ namespace noob
 	class basic_model : public drawable
 	{
 		public:
-		template <class Archive>
-			void serialize( Archive & ar )
-			{
-				ar(vertices, indices, ready);
-			}
-
-
-
+		
 		basic_model() : ready(false) {}
 		
 		virtual ~basic_model();
@@ -29,11 +22,6 @@ namespace noob
 		protected:
 		struct vertex
 		{
-			template <class Archive>
-				void serialize( Archive & ar )
-				{
-					ar(position, normal, ready);
-				}
 			vertex() : position({0.0f, 0.0f, 0.0f}), normal({0.0f, 0.0f, 0.0f}) {}
 			std::array<float, 3> position, normal;
 

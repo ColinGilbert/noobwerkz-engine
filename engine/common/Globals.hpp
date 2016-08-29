@@ -10,6 +10,7 @@
 #pragma once
 
 #include <memory>
+#include <atomic>
 
 #include <rdestl/rde_string.h>
 #include <rdestl/sort.h>
@@ -50,7 +51,7 @@ namespace noob
 		protected:
 			static globals* ptr_to_instance;
 
-			globals() noexcept(true) : sample_rate(44100) {}
+			globals() noexcept(true) : sample_rate(44100), init_done(false) {}
 
 			globals(const globals& rhs) noexcept(true)
 			{
@@ -230,6 +231,12 @@ namespace noob
 			// sound_interface needs to set it and friend'ing it would allow it access to literally everything. However, once its completely stabilized we may do so again.	
 			size_t sample_rate;
 
+
+			bool finished_init() const
+			{
+				return init_done;
+			}
+
 		protected:
 			// Hack used to set the shape's index-to-self
 			shape_handle add_shape(const noob::shape& s) noexcept(true);
@@ -258,5 +265,7 @@ namespace noob
 			rde::hash_map<rde::string, noob::light_handle> names_to_lights;
 			rde::hash_map<rde::string, noob::reflectance_handle> names_to_reflectances;
 			rde::hash_map<rde::string, noob::actor_blueprints_handle> names_to_actor_blueprints;
+
+			std::atomic<bool> init_done;
 	};
 }
