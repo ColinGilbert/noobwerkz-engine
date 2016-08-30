@@ -23,6 +23,7 @@ void noob::basic_model::init(const noob::basic_mesh& arg)
 {
 	if (!ready)
 	{
+		logger::log("[BasicModel] About to load.");
 		noob::basic_model::vertex::init();
 
 		vertices.clear();

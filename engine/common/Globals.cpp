@@ -18,17 +18,17 @@ bool noob::globals::init() noexcept(true)
 	fmt::MemoryWriter ww;
 	ww << "[Globals] unit sphere shape handle " << unit_sphere_shape.index() << ", unit cube shape handle " << unit_cube_shape.index() << ", unit cylinder shape handle " << unit_cylinder_shape.index() << ", unit cone shape handle " << unit_cone_shape.index();
 	logger::log(ww.str());
-
-	// logger::log("[Globals] Making unit sphere model");
-	unit_sphere_model = model_from_mesh(noob::mesh_utils::sphere(0.5));//basic_models.add(std::move(temp));
-	// logger::log("[Globals] Making unit cube model");
+	logger::log("[Globals] Making unit sphere model");
+	unit_sphere_model = model_from_mesh(noob::mesh_utils::sphere(0.5, 1));//basic_models.add(std::move(temp));
+	logger::log("[Globals] Making unit cube model");
 	unit_cube_model = model_from_mesh(noob::mesh_utils::box(0.5, 0.5, 0.5));
-	// unit_cube_model = model_from_mesh(noob::mesh_utils::box(1.0, 1.0, 1.0));
-	// logger::log("[Globals] Making unit cylinder model");
-	// unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(1.0, 0.5));
-	unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(0.4, 5.0));
-	// logger::log("[Globals] Making unit cone model");
-	unit_cone_model = model_from_mesh(noob::mesh_utils::cone(0.6, 1.7));
+	
+
+	logger::log("[Globals] Making unit cone model");
+	unit_cone_model = model_from_mesh(noob::mesh_utils::cone(1.0, 0.5, 8));
+	
+	logger::log("[Globals] Making unit cylinder model");
+	unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(1.0, 0.5, 8));
 
 	fmt::MemoryWriter ww_2;
 	ww_2 << "[Globals] unit sphere model handle " << unit_sphere_model.model_h.index() << ", unit cube model handle " << unit_cube_model.model_h.index() << ", unit cylinder model handle " << unit_cylinder_model.model_h.index() << ", unit cone model handle " << unit_cone_model.model_h.index();

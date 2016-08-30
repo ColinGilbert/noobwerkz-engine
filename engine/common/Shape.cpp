@@ -151,7 +151,7 @@ noob::basic_mesh noob::shape::get_mesh() const noexcept(true)
 	{
 		case (noob::shape::type::SPHERE):
 			{
-				return noob::mesh_utils::sphere(scales[0] * 0.5);
+				return noob::mesh_utils::sphere(scales[0] * 0.5, 2);
 			}
 		case (noob::shape::type::BOX):
 			{
@@ -159,11 +159,11 @@ noob::basic_mesh noob::shape::get_mesh() const noexcept(true)
 			}
 		case (noob::shape::type::CYLINDER):
 			{
-				return noob::mesh_utils::cylinder(scales[0] * 0.5, scales[1]);
+				return noob::mesh_utils::cylinder(scales[0] * 0.5, scales[1], 8);
 			}
 		case (noob::shape::type::CONE):
 			{
-				return noob::mesh_utils::cone(scales[0] * 0.5, scales[1]);
+				return noob::mesh_utils::cone(scales[0] * 0.5, scales[1], 8);
 			}
 		case (noob::shape::type::HULL):
 			{
@@ -253,7 +253,8 @@ noob::basic_mesh noob::shape::get_mesh() const noexcept(true)
 		default:
 			{
 				logger::log("[Shape] Trying to turn invalid shape type into mesh! Returning unit sphere mesh instead to prevent crash!");
-				return noob::mesh_utils::sphere(0.5);
+				assert(0 && "[Shape] Tried to turn invalid shape type into mesh! This shouldn't happen, ever.");
+				return noob::mesh_utils::sphere(0.5, 2);
 			}
 	}
 }
