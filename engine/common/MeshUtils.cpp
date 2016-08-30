@@ -89,6 +89,8 @@ noob::basic_mesh noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
 		results.indices.push_back(i);
 	}
 
+	results.bbox.min = noob::vec3(-radius, -radius, -radius);
+	results.bbox.max = noob::vec3(radius, radius, radius);
 
 	return results;
 }
@@ -121,7 +123,7 @@ noob::basic_mesh noob::mesh_utils::box(float width, float height, float depth)
 
 
 	noob::basic_mesh results;
-	results.vertices = {
+	/*results.vertices = {
 		a1, a2, a3, a3, a0, a1,
 		a2, a6, a7, a7, a3, a2,
 		a6, a5, a4, a4, a7, a6,
@@ -129,7 +131,8 @@ noob::basic_mesh noob::mesh_utils::box(float width, float height, float depth)
 		a0, a3, a7, a7, a4, a0,
 		a5, a6, a2, a2, a1, a5
 	};
-
+*/
+	results.vertices.resize(6*4);
 	results.normals.resize(6*4);
 	results.indices.resize(6*6);
 
@@ -244,6 +247,9 @@ noob::basic_mesh noob::mesh_utils::box(float width, float height, float depth)
 
 	// Man, that kinda sucked!
 
+	results.bbox.min = noob::vec3(-x, -y, -z);
+	results.bbox.max = noob::vec3(x, y, z);
+
 	return results;
 
 }
@@ -260,6 +266,11 @@ noob::basic_mesh noob::mesh_utils::cone(float radius, float height, uint32_t seg
 	const uint32_t num_verts = top.vertices.size();
 	const uint32_t num_indices = top.indices.size();
 
+	{
+	fmt::MemoryWriter ww;
+	ww << "[MeshUtils] Cone mesh circles verts = " << num_verts << ", indices = " << num_indices;
+	logger::log(ww.str());
+	}
 	// Position our vertices
 	
 	top.vertices[0] = noob::vec3(0.0, half_height, 0.0);
@@ -319,13 +330,17 @@ noob::basic_mesh noob::mesh_utils::cone(float radius, float height, uint32_t seg
 	
 	// std::fill(bottom.normals.begin(), bottom.normals.end(), noob::vec3(0.0, -1.0, 0.0));
 
+	results.bbox.min = noob::vec3(-radius, -half_height, -radius);
+	results.bbox.max = noob::vec3(radius, half_height, radius);
+
 	return results;	
 }
 
 
 noob::basic_mesh noob::mesh_utils::cylinder(float radius, float height, uint32_t segments)
 {
-
+	// TODO: Implement!
+	return noob::mesh_utils::cone(radius, height, segments);
 }
 
 
@@ -333,10 +348,25 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 {
 	// TODO: Optimize this	
 	std::vector<btVector3> bt_points;
+	
+	noob::basic_mesh mesh;
+	
+	noob::bbox accum;
 	for (noob::vec3 p : points)
 	{
-		bt_points.push_back(btVector3(p.v[0], p.v[1], p.v[2]));
+		accum.min[0] = std::min(accum.min[0], p[0]);
+		accum.min[1] = std::min(accum.min[1], p[1]);
+		accum.min[2] = std::min(accum.min[2], p[2]);
+		
+		accum.max[0] = std::max(accum.max[0], p[0]);
+		accum.max[1] = std::max(accum.max[1], p[1]);
+		accum.max[2] = std::max(accum.max[2], p[2]);
+
+
+		bt_points.push_back(btVector3(p[0], p[1], p[2]));
 	}
+
+	mesh.bbox = accum;//.max - accum.min;//noob::vec3();//accum.max + accum.min
 
 	HullDesc hull_desc(QF_DEFAULT, points.size(), &bt_points[0]);
 
@@ -346,7 +376,6 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 	HullError error_msg = hull_lib.CreateConvexHull(hull_desc, hull_result);
 	if (error_msg == HullError::QE_FAIL) logger::log("FAILED TO CREATE CONVEX HULL. WTF?");
 
-	noob::basic_mesh mesh;
 
 	for (uint32_t i = 0; i < hull_result.mNumOutputVertices; ++i)
 	{
@@ -357,6 +386,8 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 	{
 		mesh.indices.push_back(static_cast<uint16_t>(hull_result.m_Indices[i]));
 	}
+
+	
 
 	return mesh;
 }
@@ -372,7 +403,7 @@ noob::basic_mesh noob::mesh_utils::circle(float radius, uint32_t segments_arg)
 	results.vertices.reserve(segments + 1);
 	results.normals.reserve(segments + 1);
 	const uint32_t num_indices = segments * 3;
-	results.indices.reserve(num_indices);
+	// results.indices.reserve(num_indices);
 
 	std::fill(results.normals.begin(), results.normals.end(), noob::vec3(0.0, 1.0, 0.0));
 	
@@ -384,18 +415,20 @@ noob::basic_mesh noob::mesh_utils::circle(float radius, uint32_t segments_arg)
 		const float diff = increment_amount * static_cast<float>(seg);
 		const Eigen::AngleAxis<float> angle_axis(diff, Eigen::Vector3f::UnitY());
 		const Eigen::Vector3f rotated_point = angle_axis * p;
-		noob::vec3 pt = noob::vec3_from_eigen_vec3(rotated_point);
-		results.vertices[seg] = pt;
+		results.vertices.push_back(noob::vec3_from_eigen_vec3(rotated_point));
 	}
 	
 	uint32_t accum = 1;;
 	for (uint32_t i = 0; i < num_indices; i += 3)
 	{
-		results.indices[i] = 0;
-		results.indices[i + 1] = accum;
+		results.indices.push_back(0);
+		results.indices.push_back(accum);
 		++accum;
-		results.indices[i + 2] = accum;
+		results.indices.push_back(accum);
 	}
+	
+	results.bbox.min = noob::vec3(-radius, 0.0, -radius);
+	results.bbox.max = noob::vec3(radius, 0.0 , radius);
 
 	return results;
 }

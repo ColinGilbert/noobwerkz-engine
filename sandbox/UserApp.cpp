@@ -22,24 +22,27 @@ bool noob::application::user_init()
 	noob::audio_sample* s = g.samples.get(h);
 
 	noob::basic_renderer::uniform u;
-	u.colour = noob::vec4(1.0, 0.0, 1.0, 1.0);
+	u.colour = noob::vec4(0.0, 0.0, 1.0, 1.0);
 	
 	g.set_shader(u, "templol");
 	noob::shader templol = g.get_shader("templol");
 
 	g.master_mixer.play_clip(h, 1.0);
 
-	noob::shape_handle sh = g.sphere_shape(6.0);
+	noob::shape_handle sh = g.sphere_shape(10.0);
 
 	noob::actor_blueprints bp;
 	bp.bounds = sh;
-	// bp.shader = g.default_triplanar();
+	bp.shader.type = noob::shader_type::TRIPLANAR;
+	bp.shader.handle = g.get_default_triplanar_shader().index();
 	g.set_actor_blueprints(bp, "test-collisions");
 	noob::actor_blueprints_handle bph = g.get_actor_blueprints("test-collisions");
 	ah = stage.actor(bph, 0, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
 	// noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
 	noob::scenery_handle scene_h = stage.scenery(g.box_shape(100.0, 10.0, 100.0), templol, g.get_default_reflectance(), noob::vec3(0.0, -10.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
-	scene_h = stage.scenery(g.box_shape(100.0, 10.0, 100.0), templol, g.get_default_reflectance(), noob::vec3(50.0, 0.0, -50.0), noob::versor(0.0, 0.0, 0.0, 1.0));
+	
+	
+	scene_h = stage.scenery(g.box_shape(100.0, 10.0, 100.0), templol, g.get_default_reflectance(), noob::vec3(-150.0, 0.0, -150.0), noob::versor(0.0, 0.0, 0.0, 1.0));
 	
 	
 	// *profiler_text = get_profiler_text();

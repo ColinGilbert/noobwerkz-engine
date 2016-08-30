@@ -53,11 +53,14 @@ void noob::basic_model::init(const noob::basic_mesh& arg)
 		vertex_buffer = bgfx::createVertexBuffer(bgfx::copy(&vertices[0], vertices.size() * sizeof(noob::basic_model::vertex)), noob::basic_model::vertex::ms_decl);
 		index_buffer = bgfx::createIndexBuffer(bgfx::copy(&indices[0], indices.size() * sizeof(uint16_t)));
 
+		bbox = arg.bbox;
+
 		// bbox = arg.bbox;
 		noob::vec3 dimensions = bbox.get_dims();
 		fmt::MemoryWriter ww;
 		ww << "[BasicModel] Load successful - " << vertices.size() << " vertices, " << indices.size() << " indices, max " << bbox.max.to_string() << ", min" << bbox.min.to_string() << ", dims" << dimensions.to_string();
 		logger::log(ww.str());
+
 
 		ready = true;
 	}

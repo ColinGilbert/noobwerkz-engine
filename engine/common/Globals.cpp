@@ -21,14 +21,14 @@ bool noob::globals::init() noexcept(true)
 	logger::log("[Globals] Making unit sphere model");
 	unit_sphere_model = model_from_mesh(noob::mesh_utils::sphere(0.5, 1));//basic_models.add(std::move(temp));
 	logger::log("[Globals] Making unit cube model");
-	unit_cube_model = model_from_mesh(noob::mesh_utils::box(0.5, 0.5, 0.5));
+	unit_cube_model = model_from_mesh(noob::mesh_utils::box(1.0, 1.0, 1.0));
 	
 
 	logger::log("[Globals] Making unit cone model");
-	unit_cone_model = model_from_mesh(noob::mesh_utils::cone(1.0, 0.5, 8));
+	unit_cone_model = model_from_mesh(noob::mesh_utils::cone(0.5, 1.0, 8));
 	
 	logger::log("[Globals] Making unit cylinder model");
-	unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(1.0, 0.5, 8));
+	unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(0.5, 1.0, 8));
 
 	fmt::MemoryWriter ww_2;
 	ww_2 << "[Globals] unit sphere model handle " << unit_sphere_model.model_h.index() << ", unit cube model handle " << unit_cube_model.model_h.index() << ", unit cylinder model handle " << unit_cylinder_model.model_h.index() << ", unit cone model handle " << unit_cone_model.model_h.index();
