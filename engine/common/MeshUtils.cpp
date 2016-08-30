@@ -254,7 +254,7 @@ noob::basic_mesh noob::mesh_utils::box(float width, float height, float depth)
 
 }
 
-
+/*
 noob::basic_mesh noob::mesh_utils::cone(float radius, float height, uint32_t segments_arg)
 {
 	const float half_height = height * 0.5;
@@ -342,7 +342,7 @@ noob::basic_mesh noob::mesh_utils::cylinder(float radius, float height, uint32_t
 	// TODO: Implement!
 	return noob::mesh_utils::cone(radius, height, segments);
 }
-
+*/
 
 noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 {

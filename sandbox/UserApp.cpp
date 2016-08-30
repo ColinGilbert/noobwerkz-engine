@@ -30,7 +30,7 @@ bool noob::application::user_init()
 	g.master_mixer.play_clip(h, 1.0);
 
 	noob::shape_handle sh = g.sphere_shape(10.0);
-
+	
 	noob::actor_blueprints bp;
 	bp.bounds = sh;
 	bp.shader.type = noob::shader_type::TRIPLANAR;

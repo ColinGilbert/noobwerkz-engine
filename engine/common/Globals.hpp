@@ -87,9 +87,9 @@ namespace noob
 
 			noob::shape_handle box_shape(float x, float y, float z) noexcept(true);
 
-			noob::shape_handle cylinder_shape(float r, float h) noexcept(true);
+			// noob::shape_handle cylinder_shape(float r, float h) noexcept(true);
 
-			noob::shape_handle cone_shape(float r, float h) noexcept(true);
+			// noob::shape_handle cone_shape(float r, float h) noexcept(true);
 
 			noob::shape_handle hull_shape(const std::vector<noob::vec3>&) noexcept(true);
 
@@ -170,7 +170,7 @@ namespace noob
 			{
 				return unit_cube_shape;
 			}
-		
+		/*
 			noob::shape_handle get_unit_capsule_shape() const noexcept(true)
 			{
 				return unit_capsule_shape;
@@ -185,7 +185,7 @@ namespace noob
 			{
 				return unit_cone_shape;
 			}
-
+*/
 			// These represent models in the graphics card buffer
 						
 			noob::scaled_model get_unit_sphere_model() const noexcept(true)
@@ -197,17 +197,22 @@ namespace noob
 			{
 				return unit_cube_model;
 			}
-			
+/*			
 			noob::scaled_model get_unit_capsule_model() const noexcept(true)
 			{
 				return unit_cylinder_model;
 			}
 			
+			noob::scaled_model get_unit_cylinder_model() const noexcept(true)
+			{
+				return unit_cylinder_model;
+			}
+
 			noob::scaled_model get_unit_cone_model() const noexcept(true)
 			{
 				return unit_cone_model;
 			}
-
+*/
 			noob::basic_shader_handle get_debug_shader() const noexcept(true)
 			{
 				return debug_shader;
@@ -242,10 +247,10 @@ namespace noob
 			shape_handle add_shape(const noob::shape& s) noexcept(true);
 
 			// The following are basic, commonly-used objects that we provide as a convenience.
-			noob::shape_handle unit_sphere_shape, unit_cube_shape, unit_capsule_shape, unit_cylinder_shape, unit_cone_shape;
+			noob::shape_handle unit_sphere_shape, unit_cube_shape;//, unit_capsule_shape, unit_cylinder_shape, unit_cone_shape;
 
 			// These represent models in the graphics card buffer
-			noob::scaled_model unit_sphere_model, unit_cube_model, unit_capsule_model, unit_cylinder_model, unit_cone_model;
+			noob::scaled_model unit_sphere_model, unit_cube_model;//, unit_capsule_model, unit_cylinder_model, unit_cone_model;
 
 			noob::basic_shader_handle debug_shader;
 			noob::triplanar_shader_handle default_triplanar_shader;

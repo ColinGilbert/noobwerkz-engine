@@ -6,13 +6,14 @@ Additions:
 Profiling.
 Actor movement (WIP.)
 Particle system (WIP.)
-Integrate recast & detour (WIP.) NOTE: Buggy and slow. Now trying it ourselves.
 
 Bugfixes/Cleanups:
 Templatize math types.
 Protect both global storage and graphics members.
 Cleanup/modularize/speedup drawing API (WIP.)
 Remove many unused external libraries.
+Remove OpenMesh and replace with own meshgen code (WIP)
+Remove Assimp from main codebase (WIP)
 
 Also:
 With a rather heavy heart, I have removed AngelScript from the main engine. The reason was that I was always quite happy with C++ and that maintaining, testing, and debugging the engine with a scripting API was becoming an undue burden.

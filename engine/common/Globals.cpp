@@ -12,11 +12,11 @@ bool noob::globals::init() noexcept(true)
 	// renderer.init();
 	unit_sphere_shape = sphere_shape(0.5);
 	unit_cube_shape = box_shape(0.5, 0.5, 0.5);
-	unit_cylinder_shape = cylinder_shape(0.5, 1.0);
-	unit_cone_shape = cone_shape(0.5, 1.0);
+	// unit_cylinder_shape = cylinder_shape(0.5, 1.0);
+	// unit_cone_shape = cone_shape(0.5, 1.0);
 
 	fmt::MemoryWriter ww;
-	ww << "[Globals] unit sphere shape handle " << unit_sphere_shape.index() << ", unit cube shape handle " << unit_cube_shape.index() << ", unit cylinder shape handle " << unit_cylinder_shape.index() << ", unit cone shape handle " << unit_cone_shape.index();
+	ww << "[Globals] unit sphere shape handle " << unit_sphere_shape.index() << ", unit cube shape handle " << unit_cube_shape.index();// << ", unit cylinder shape handle " << unit_cylinder_shape.index() << ", unit cone shape handle " << unit_cone_shape.index();
 	logger::log(ww.str());
 	logger::log("[Globals] Making unit sphere model");
 	unit_sphere_model = model_from_mesh(noob::mesh_utils::sphere(0.5, 1));//basic_models.add(std::move(temp));
@@ -24,14 +24,14 @@ bool noob::globals::init() noexcept(true)
 	unit_cube_model = model_from_mesh(noob::mesh_utils::box(1.0, 1.0, 1.0));
 	
 
-	logger::log("[Globals] Making unit cone model");
-	unit_cone_model = model_from_mesh(noob::mesh_utils::cone(0.5, 1.0, 8));
+	// logger::log("[Globals] Making unit cone model");
+	// unit_cone_model = model_from_mesh(noob::mesh_utils::cone(0.5, 1.0, 8));
 	
-	logger::log("[Globals] Making unit cylinder model");
-	unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(0.5, 1.0, 8));
+	// logger::log("[Globals] Making unit cylinder model");
+	// unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(0.5, 1.0, 8));
 
 	fmt::MemoryWriter ww_2;
-	ww_2 << "[Globals] unit sphere model handle " << unit_sphere_model.model_h.index() << ", unit cube model handle " << unit_cube_model.model_h.index() << ", unit cylinder model handle " << unit_cylinder_model.model_h.index() << ", unit cone model handle " << unit_cone_model.model_h.index();
+	ww_2 << "[Globals] unit sphere model handle " << unit_sphere_model.model_h.index() << ", unit cube model handle " << unit_cube_model.model_h.index();// << ", unit cylinder model handle " << unit_cylinder_model.model_h.index() << ", unit cone model handle " << unit_cone_model.model_h.index();
 	logger::log(ww_2.str());
 
 	//  Init basic default shader
@@ -102,7 +102,7 @@ noob::scaled_model noob::globals::box_model(float x, float y, float z) noexcept(
 	return temp;
 }
 
-
+/*
 noob::scaled_model noob::globals::cylinder_model(float r, float h) noexcept(true) 
 {
 	noob::scaled_model temp = unit_cylinder_model;
@@ -117,7 +117,7 @@ noob::scaled_model noob::globals::cone_model(float r, float h) noexcept(true)
 	temp.scales = noob::vec3(r*2.0, h, r*2.0);
 	return temp;
 }
-
+*/
 
 noob::scaled_model noob::globals::model_from_mesh(const noob::basic_mesh& m) noexcept(true) 
 {
@@ -160,6 +160,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 				results.scales = s.scales;
 				break;
 			}
+			/*
 		case(noob::shape::type::CYLINDER):
 			{
 				results.model_h = unit_cylinder_model.model_h;
@@ -172,6 +173,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 				results.scales = s.scales;
 				break;
 			}
+			*/
 		case(noob::shape::type::HULL):
 			{
 				noob::fast_hashtable::cell* search = shapes_to_models.lookup(h.index());
@@ -274,7 +276,7 @@ noob::shape_handle noob::globals::box_shape(float x, float y, float z) noexcept(
 	return search->second;
 }
 
-
+/*
 noob::shape_handle noob::globals::cylinder_shape(float r, float h) noexcept(true) 
 {
 	// auto search = cylinder_shapes.find(std::make_tuple(r, h));
@@ -308,7 +310,7 @@ noob::shape_handle noob::globals::cone_shape(float r, float h) noexcept(true)
 	}
 	return search->second;
 }
-
+*/
 
 //   noob::shape_handle noob::globals::capsule(float r, float h)
 //   {
