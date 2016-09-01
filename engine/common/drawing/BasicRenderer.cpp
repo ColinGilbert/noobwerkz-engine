@@ -13,9 +13,7 @@ void noob::basic_renderer::init()
 	
 	renderbase.shader.program = program_handle;
 	gfx.add_shader("basic", renderbase.shader);
-	fmt::MemoryWriter ww;
-	ww <<"[BasicRenderer] Program valid? " << renderbase.program_valid;
-	logger::log(ww.str());
+	logger::log(noob::concat("[BasicRenderer] Program valid? ", noob::to_string(renderbase.program_valid)));
 }
 
 

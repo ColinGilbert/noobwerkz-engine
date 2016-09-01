@@ -34,8 +34,8 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 	char **ptr=ov_comment(&vf,-1)->user_comments;
 
 
-	fmt::MemoryWriter log_msg;
-	log_msg << "[AudioSample] Bitstream is " << num_channels << " channel, " << rate << "Hz. Decoded lengths: " << static_cast<long>(ov_pcm_total(&vf,-1)) << ". Encoded by: " << ov_comment(&vf,-1)->vendor << ". User comment: "; 
+	noob::logger::log(noob::concat("[AudioSample] Bitstream is ", noob::to_string(num_channels), " channel, ", noob::to_string(rate), "Hz. Decoded lengths: ", noob::to_string(static_cast<long>(ov_pcm_total(&vf,-1))), ". Encoded by: ", ov_comment(&vf,-1)->vendor));//". User comment: "; 
+/*
 	while(*ptr)
 	{	
 		log_msg << *ptr;
@@ -43,7 +43,7 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 	}	
 
 	logger::log(log_msg.str());
-
+*/
 
 	int current_section;
 	int64_t total_size = ov_pcm_total(&vf, -1);
@@ -97,9 +97,7 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 		}
 	}
 
-	fmt::MemoryWriter ww;
-	ww << "[AudioSample] Sample buffer size " << samples.size() << ". Samples read: " << accum << ".";
-	logger::log(ww.str());
+	logger::log(noob::concat("[AudioSample] Sample buffer size ", noob::to_string(samples.size()), ". Samples read: ", noob::to_string(accum), "."));
 
 	noob::globals& g = noob::globals::get_instance();
 
@@ -147,11 +145,7 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 			ol -= write_count;
 		}
 
-		fmt::MemoryWriter resamp_log;
-		resamp_log << "[AudioSample] Resampling from 44100 to " << g.sample_rate << ". Old number of samples: " << num_samples_old << ". New number of samples: " << num_samples_new;
-		logger::log(resamp_log.str());
-
-	}
+	noob::logger::log(noob::concat("[AudioSample] Resampling from 44100 to ", noob::to_string(g.sample_rate), ". Old number of samples: ", noob::to_string(num_samples_old), ". New number of samples: ", noob::to_string(num_samples_new)));
 
 
 	return true;

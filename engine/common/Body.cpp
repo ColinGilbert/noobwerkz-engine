@@ -231,9 +231,7 @@ noob::mat4 noob::body::get_transform() const noexcept(true)
 
 std::string noob::body::get_debug_string() const noexcept(true) 
 {
-	fmt::MemoryWriter w;
-	w << "[Body] position " << get_position().to_string() << ", orientation " << get_orientation().to_string() << ", linear velocity " << get_linear_velocity().to_string() << ", angular velocity " << get_angular_velocity().to_string();// << ", on ground? " << on_ground() << ", ray lambda  = " << ray_lambda; //<< " ray lambda # 2 = " << ray_lambda[1];
-	return w.str();
+	return noob::concat("[Body] position ", noob::to_string(get_position()), ", orientation ", noob::to_string(get_orientation()), ", linear velocity ", noob::to_string(get_linear_velocity()), ", angular velocity ", noob::to_string(get_angular_velocity()));// << ", on ground? " << on_ground() << ", ray lambda  = " << ray_lambda; //<< " ray lambda # 2 = " << ray_lambda[1];
 }
 
 void noob::body::set_ccd(bool b) noexcept(true) 

@@ -27,9 +27,7 @@ static void write_callback(struct SoundIoOutStream *outstream, int frame_count_m
 
 		if ((err = soundio_outstream_begin_write(outstream, &areas, &frame_count)))
 		{
-			fmt::MemoryWriter ww;
-			ww << "[Sound] SoundIO error at beginning of frame " << frame_count << " - " << soundio_strerror(err);
-			noob::logger::log(ww.str());
+			noob::logger::log(noob::concat("[Sound] SoundIO error at beginning of frame ", noob::to_string(frame_count) ," - ", soundio_strerror(err)));
 			return;
 		}
 
@@ -52,9 +50,7 @@ static void write_callback(struct SoundIoOutStream *outstream, int frame_count_m
 
 		if ((err = soundio_outstream_end_write(outstream)))
 		{
-			fmt::MemoryWriter ww;
-			ww << "[Sound] SoundIO error at end of frame " << frame_count << " - " << soundio_strerror(err);
-			noob::logger::log(ww.str());
+			noob::logger::log(noob::concat("[Sound] SoundIO error at end of frame ", noob::to_string(frame_count), " - ", soundio_strerror(err)));
 			return;
 		}
 
@@ -76,9 +72,7 @@ void noob::sound_interface::init()
 
 	if ((err = soundio_connect(soundio)))
 	{
-		fmt::MemoryWriter ww;
-		ww << "[Sound] ERROR: Error connecting SoundIO - " << soundio_strerror(err);
-		noob::logger::log(ww.str());
+		noob::logger::log(noob::concat("[Sound] ERROR: Error connecting SoundIO - ", soundio_strerror(err)));
 		return;
 	}
 
@@ -101,9 +95,7 @@ void noob::sound_interface::init()
 	}
 
 	{
-		fmt::MemoryWriter ww;
-		ww << "[Sound] Init: Got SoundIO output device - " << device->name;
-		noob::logger::log(ww.str());
+		noob::logger::log(noob::concat("[Sound] Init: Got SoundIO output device - ", device->name));
 	}
 
 	outstream = soundio_outstream_create(device);
@@ -113,34 +105,26 @@ void noob::sound_interface::init()
 
 	if ((err = soundio_outstream_open(outstream)))
 	{
-		fmt::MemoryWriter ww;
-		ww << "[Sound] ERROR: Unable to open SoundIO device - " << soundio_strerror(err);
-		noob::logger::log(ww.str());
+		noob::logger::log(noob::concat("[Sound] ERROR: Unable to open SoundIO device - ", soundio_strerror(err)));
 		return;
 	}
 
 	if (outstream->layout_error)
 	{
-		fmt::MemoryWriter ww;
-		ww << "[Sound] WARNING: Unable to set SoundIO channel layout - " << soundio_strerror(outstream->layout_error);
-		noob::logger::log(ww.str());
+		noob::logger::log(noob::concat("[Sound] WARNING: Unable to set SoundIO channel layout - ", soundio_strerror(outstream->layout_error)));
 	}
 
 
 	if ((err = soundio_outstream_start(outstream)))
 	{
-		fmt::MemoryWriter ww;
-		ww << "[Sound] ERROR: Unable to start SoundIO outstream - " <<  soundio_strerror(err);
-		noob::logger::log(ww.str());
+		noob::logger::log(noob::concat("[Sound] ERROR: Unable to start SoundIO outstream - ", soundio_strerror(err)));
 		return;
 	}
 
 	noob::globals& g = noob::globals::get_instance();
 	g.sample_rate = outstream->sample_rate;
 
-	fmt::MemoryWriter ww;
-	ww << "[SoundInterface] Sound init success! Sample rate: " << outstream->sample_rate << ". Bytes per frame: " << outstream->bytes_per_frame << ". Bytes per sample: " << outstream->bytes_per_sample;
-	logger::log(ww.str());
+	noob::logger::log(noob::concat("[SoundInterface] Sound init success! Sample rate: ", noob::to_string(outstream->sample_rate), ". Bytes per frame: ", noob::to_string(outstream->bytes_per_frame), ". Bytes per sample: ", noob::to_string(outstream->bytes_per_sample)));
 
 	valid = true;
 }

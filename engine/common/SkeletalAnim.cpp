@@ -19,7 +19,7 @@ void noob::skeletal_anim::init(const std::string& filename)
 	ozz::io::File file(filename.c_str(), "rb");
 	if (!file.opened())
 	{
-		logger::log(fmt::format("[AnimatedModel] - load_skeleton({0}) fail. Cannot open file.", filename));
+		logger::log(noob::concat("[AnimatedModel] - load_skeleton(", filename, ") fail. Cannot open file."));
 		valid = false;
 		return;
 	}
@@ -27,7 +27,7 @@ void noob::skeletal_anim::init(const std::string& filename)
 	ozz::io::IArchive archive(&file);
 	if (!archive.TestTag<ozz::animation::Skeleton>())
 	{
-		logger::log(fmt::format("[AnimatedModel] - load_skeleton({0}) fail. Archive corrupt.", filename));
+		logger::log(noob::concat("[AnimatedModel] - load_skeleton(", filename , ") fail. Archive corrupt."));
 		valid = false;
 		return;
 	}
@@ -35,7 +35,7 @@ void noob::skeletal_anim::init(const std::string& filename)
 	archive >> skeleton;
 	model_matrices = allocator->AllocateRange<ozz::math::Float4x4>(skeleton.num_joints());
 	
-	logger::log(fmt::format("[AnimatedModel] - load_skeleton({0}) success!", filename));
+	logger::log(noob::concat("[AnimatedModel] - load_skeleton(", filename, ") success!"));
 	
 	valid = true;
 }
@@ -258,7 +258,7 @@ void noob::skeletal_anim::sampler::update(float dt)
 	sampling_job.output = locals;
 	if (!sampling_job.Run())
 	{
-		logger::log(fmt::format("[noob::skeletal_anim::sampler.update({0}) - sampling job failed.", dt));
+		logger::log(noob::concat("[noob::skeletal_anim::sampler.update(", noob::to_string(dt), ") - sampling job failed."));
 		return;
 	}
 

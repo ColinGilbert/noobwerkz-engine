@@ -1,6 +1,6 @@
 CHANGELOG:
 
-Version 0.6 AKA: "AI and More" (WIP)
+Version 0.6 AKA: "AI and More!" (WIP)
 ```
 Additions:
 Profiling.
@@ -9,14 +9,15 @@ Particle system (WIP.)
 
 Bugfixes/Cleanups:
 Templatize math types.
-Protect both global storage and graphics members.
+Protect constant globals and graphics members.
 Cleanup/modularize/speedup drawing API (WIP.)
 Remove unused libraries from libs folder
 Removed AngelScript due to bugs and maintenance.
 Removed OpenMesh due to exceptions.
 Made Assimp and Shiny into compile-time options.
 Removed PolyVox due to lack of need.
-
+Remove cppformat (exceptions, WIP) and added stringencoders library 
+Remove lemon-graph and replace with homegrown.
 
 (Overall, trimmed executable size by roughly half.)
 ```

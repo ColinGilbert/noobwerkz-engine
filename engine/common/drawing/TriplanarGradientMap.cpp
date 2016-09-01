@@ -9,9 +9,7 @@ void noob::triplanar_gradient_map_renderer::init()
 	renderbase.shader.program = program_handle;
 	renderbase.shader.samplers.push_back(gfx.get_texture_0());
 	gfx.add_shader("gradient_map_triplanar", renderbase.shader);
-	fmt::MemoryWriter ww;
-	ww << "[TriplanarGradientMap] Program valid? " << renderbase.program_valid;
-	logger::log(ww.str());
+	noob::logger::log(noob::concat("[TriplanarGradientMap] Program valid? ", noob::to_string(renderbase.program_valid)));
 }
 
 

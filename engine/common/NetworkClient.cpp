@@ -71,9 +71,7 @@ bool noob::network_client::connect(const std::string& address, uint16_t port, ui
 		{
 			connected = true;
 
-			fmt::MemoryWriter ww;
-			ww << "[NetworkClient] Connection to " << address << " success!";
-			logger::log(ww.str());
+			logger::log(noob::concat("[NetworkClient] Connection to ", address, " success!"));
 
 			return true;
 		}
@@ -82,9 +80,8 @@ bool noob::network_client::connect(const std::string& address, uint16_t port, ui
 			connected = false;
 
 			enet_peer_reset(peer);
-			fmt::MemoryWriter ww;
-			ww << "[NetworkClient] Connection attempt to " << address << " timed out.";
-			logger::log(ww.str());
+			
+			logger::log(noob::concat("[NetworkClient] Connection attempt to ", address, " timed out."));
 
 			return false;
 		}

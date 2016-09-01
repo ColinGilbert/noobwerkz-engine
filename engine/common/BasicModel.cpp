@@ -57,9 +57,7 @@ void noob::basic_model::init(const noob::basic_mesh& arg)
 
 		// bbox = arg.bbox;
 		noob::vec3 dimensions = bbox.get_dims();
-		fmt::MemoryWriter ww;
-		ww << "[BasicModel] Load successful - " << vertices.size() << " vertices, " << indices.size() << " indices, max " << bbox.max.to_string() << ", min" << bbox.min.to_string() << ", dims" << dimensions.to_string();
-		logger::log(ww.str());
+		noob::logger::log(noob::concat("[BasicModel] Load successful - ", noob::to_string(vertices.size()), " vertices, ", noob::to_string(indices.size()), " indices, max ", noob::to_string(bbox.max), ", min", noob::to_string(bbox.min), ", dims", noob::to_string(dimensions)));
 
 
 		ready = true;
