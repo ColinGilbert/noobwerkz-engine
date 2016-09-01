@@ -5,7 +5,7 @@ project(NoobWerkz)
 set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
-set(CMAKE_CXX_FLAGS "-std=c++1y -fno-exceptions -fno-rtti -DEIGEN_MPL2_ONLY ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++1y -DEIGEN_MPL2_ONLY -DWORDS_BIGENDIAN ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-DSTB_IMAGE_STATIC ${CMAKE_C_FLAGS}")
 
 add_subdirectory(lib/freetype)
@@ -29,29 +29,29 @@ include_directories(lib/stringencoders/src)
 
 list (APPEND stringencoders_src
 
-	lib/stringencoders/src/modp_b85.c
-	lib/stringencoders/src/modp_xml.c
-	lib/stringencoders/src/modp_b36.c
-	lib/stringencoders/src/modp_burl_gen.c
-	lib/stringencoders/src/modp_b16_gen.c
-	lib/stringencoders/src/modp_b16.c
-	lib/stringencoders/src/modp_b2.c
-	lib/stringencoders/src/modp_bjavascript_gen.c
-	lib/stringencoders/src/arraytoc.c
-	lib/stringencoders/src/modp_b64_gen.c
-	lib/stringencoders/src/modp_b64.c
-	lib/stringencoders/src/modp_bjavascript.c
-	lib/stringencoders/src/modp_b2_gen.c
+	#lib/stringencoders/src/modp_b85.c
+	#lib/stringencoders/src/modp_xml.c
+	#lib/stringencoders/src/modp_b36.c
+	#lib/stringencoders/src/modp_burl_gen.c
+	#lib/stringencoders/src/modp_b16_gen.c
+	#lib/stringencoders/src/modp_b16.c
+	#lib/stringencoders/src/modp_b2.c
+	#lib/stringencoders/src/modp_bjavascript_gen.c
+	#lib/stringencoders/src/arraytoc.c
+	#lib/stringencoders/src/modp_b64_gen.c
+	#lib/stringencoders/src/modp_b64.c
+	#lib/stringencoders/src/modp_bjavascript.c
+	#lib/stringencoders/src/modp_b2_gen.c
 	lib/stringencoders/src/modp_numtoa.c
-	lib/stringencoders/src/modp_ascii_gen.c
-	lib/stringencoders/src/modp_utf8.c
-	lib/stringencoders/src/modp_ascii.c
-	lib/stringencoders/src/modp_messagepack.c
-	lib/stringencoders/src/modp_b85_gen.c
-	lib/stringencoders/src/modp_qsiter.c
-	lib/stringencoders/src/modp_html.c
-	lib/stringencoders/src/modp_json.c
-	lib/stringencoders/src/modp_burl.c
+	#lib/stringencoders/src/modp_ascii_gen.c
+	#lib/stringencoders/src/modp_utf8.c
+	#lib/stringencoders/src/modp_ascii.c
+	#lib/stringencoders/src/modp_messagepack.c
+	#lib/stringencoders/src/modp_b85_gen.c
+	#lib/stringencoders/src/modp_qsiter.c
+	#lib/stringencoders/src/modp_html.c
+	#lib/stringencoders/src/modp_json.c
+	#lib/stringencoders/src/modp_burl.c
 	)
 
 if (DEFINED NOOB_PLATFORM_LINUX)

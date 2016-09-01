@@ -174,8 +174,7 @@ void noob::application::touch(int pointerID, float x, float y, int action)
 {
 	if (input_has_started == true)
 	{
-		logger::log(noob::concat("[Application] Touch - pointer ID = ", pointerID, << ", " << x << ", " << y << ", action = " << action;
-		logger::log(w.str());
+		logger::log(noob::concat("[Application] Touch - pointer ID = ", noob::to_string(pointerID), ", ", noob::to_string(x), ", ", noob::to_string(y), ", action = ", noob::to_string(action)));
 
 		if (pointerID < 3)
 		{
@@ -195,9 +194,7 @@ void noob::application::window_resize(uint32_t w, uint32_t h)
 		window_height = 1;
 	}
 
-	fmt::MemoryWriter ww;
-	ww << "[Application] Resize window to (" << window_width << ", " << window_height << ")";
-	logger::log(ww.str());
+	logger::log(noob::concat("[Application] Resize window to (", noob::to_string(window_width), ", ", noob::to_string(window_height), ")"));
 }
 
 

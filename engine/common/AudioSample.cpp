@@ -22,9 +22,8 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 	// if (ov_open_callbacks(), &vf, NULL, 0, OV_CALLBACKS_NOCLOSE) < 0)
 	if (ov_fopen(filename.c_str(), &vf) < 0)
 	{
-		logger::log("Error opening vorbis file!");
+		logger::log("[AudioSample] Error opening vorbis file!");
 	}
-
 
 	vorbis_info* vi = ov_info(&vf,-1);
 
@@ -33,17 +32,16 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 
 	char **ptr=ov_comment(&vf,-1)->user_comments;
 
-
 	noob::logger::log(noob::concat("[AudioSample] Bitstream is ", noob::to_string(num_channels), " channel, ", noob::to_string(rate), "Hz. Decoded lengths: ", noob::to_string(static_cast<long>(ov_pcm_total(&vf,-1))), ". Encoded by: ", ov_comment(&vf,-1)->vendor));//". User comment: "; 
-/*
-	while(*ptr)
-	{	
-		log_msg << *ptr;
-		++ptr;
-	}	
+	/*
+	   while(*ptr)
+	   {	
+	   log_msg << *ptr;
+	   ++ptr;
+	   }	
 
-	logger::log(log_msg.str());
-*/
+	   logger::log(log_msg.str());
+	   */
 
 	int current_section;
 	int64_t total_size = ov_pcm_total(&vf, -1);
@@ -97,7 +95,7 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 		}
 	}
 
-	logger::log(noob::concat("[AudioSample] Sample buffer size ", noob::to_string(samples.size()), ". Samples read: ", noob::to_string(accum), "."));
+	noob::logger::log(noob::concat("[AudioSample] Sample buffer size ", noob::to_string(samples.size()), ". Samples read: ", noob::to_string(accum), "."));
 
 	noob::globals& g = noob::globals::get_instance();
 
@@ -144,16 +142,14 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 
 			ol -= write_count;
 		}
+		noob::logger::log(noob::concat("[AudioSample] Resampling from 44100 to ", noob::to_string(g.sample_rate), ". Old number of samples: ", noob::to_string(num_samples_old), ". New number of samples: ", noob::to_string(num_samples_new)));
 
-	noob::logger::log(noob::concat("[AudioSample] Resampling from 44100 to ", noob::to_string(g.sample_rate), ". Old number of samples: ", noob::to_string(num_samples_old), ". New number of samples: ", noob::to_string(num_samples_new)));
-
-
+	}
 	return true;
 }
 
 
 bool noob::audio_sample::load_mem(const std::string& file) noexcept(true)
 {
-
 	return false;
 }

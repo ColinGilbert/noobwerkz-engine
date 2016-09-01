@@ -6,7 +6,20 @@
 #include "Logger.hpp"
 // #include "NDOF.hpp"
 
+#if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
+#	define GLFW_EXPOSE_NATIVE_X11
+#	define GLFW_EXPOSE_NATIVE_GLX
+#elif BX_PLATFORM_OSX
+#	define GLFW_EXPOSE_NATIVE_COCOA
+#	define GLFW_EXPOSE_NATIVE_NSGL
+#elif BX_PLATFORM_WINDOWS
+#	define GLFW_EXPOSE_NATIVE_WIN32
+#	define GLFW_EXPOSE_NATIVE_WGL
+#endif
+
 #include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
+
 #include <bgfx/bgfxplatform.h>
 
 std::atomic<uint32_t> width(1280);
@@ -25,8 +38,8 @@ void window_close_callback(GLFWwindow* window)
 
 void window_size_callback(GLFWwindow* window, int w, int h)
 {
-//	width = w;
-//	height = h;
+	//	width = w;
+	//	height = h;
 	// set_renderer(width, height); // No difference from calling in framebuffer_size_callback()
 	// app->window_resize(width, height);
 }
@@ -35,7 +48,7 @@ void framebuffer_size_callback(GLFWwindow* window, int w, int h)
 {
 	width = std::abs(w);
 	height = std::abs(h);
-	
+
 	noob::graphics& gfx = noob::graphics::get_instance();
 	gfx.init(width, height);
 	//std::stringstream ss;
@@ -46,40 +59,60 @@ void framebuffer_size_callback(GLFWwindow* window, int w, int h)
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-/*	if (action == GLFW_REPEAT || action == GLFW_PRESS)
-	{
+	/*	if (action == GLFW_REPEAT || action == GLFW_PRESS)
+		{
 		switch (key)
 		{
-			case GLFW_KEY_UP:
-			//	app->cam.pitch_up();
-			case GLFW_KEY_DOWN:
-			//	app->cam.pitch_down();
-			case GLFW_KEY_LEFT:
-			//	app->cam.yaw_left();
-			case GLFW_KEY_RIGHT:
-			//	app->cam.yaw_right();
-			case GLFW_KEY_A:
-			//	app->cam.move_west();
-			case GLFW_KEY_D:
-			//	app->cam.move_east();
-			case GLFW_KEY_W:
-			//	app->cam.move_north();
-			case GLFW_KEY_S:
-			//	app->cam.move_south();
-			case GLFW_KEY_C:
-			//	app->cam.roll_clockwise();
-			case GLFW_KEY_Z:
-			//	app->cam.roll_counterclockwise();
-		}
-		// logger::log("GLFW: Key pressed");
+		case GLFW_KEY_UP:
+	//	app->cam.pitch_up();
+	case GLFW_KEY_DOWN:
+	//	app->cam.pitch_down();
+	case GLFW_KEY_LEFT:
+	//	app->cam.yaw_left();
+	case GLFW_KEY_RIGHT:
+	//	app->cam.yaw_right();
+	case GLFW_KEY_A:
+	//	app->cam.move_west();
+	case GLFW_KEY_D:
+	//	app->cam.move_east();
+	case GLFW_KEY_W:
+	//	app->cam.move_north();
+	case GLFW_KEY_S:
+	//	app->cam.move_south();
+	case GLFW_KEY_C:
+	//	app->cam.roll_clockwise();
+	case GLFW_KEY_Z:
+	//	app->cam.roll_counterclockwise();
+	}
+	// logger::log("GLFW: Key pressed");
 	} */
 
+}
+inline void glfwSetWindow(GLFWwindow* _window)
+{
+	bgfx::PlatformData pd;
+#	if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
+	pd.ndt          = glfwGetX11Display();
+	pd.nwh          = (void*)(uintptr_t)glfwGetGLXWindow(_window);
+	pd.context      = glfwGetGLXContext(_window);
+#	elif BX_PLATFORM_OSX
+	pd.ndt          = NULL;
+	pd.nwh          = glfwGetCocoaWindow(_window);
+	pd.context      = glfwGetNSGLContext(_window);
+#	elif BX_PLATFORM_WINDOWS
+	pd.ndt          = NULL;
+	pd.nwh          = glfwGetWin32Window(_window);
+	pd.context      = NULL;
+#	endif // BX_PLATFORM_WINDOWS
+	pd.backBuffer   = NULL;
+	pd.backBufferDS = NULL;
+	bgfx::setPlatformData(pd);
 }
 
 int main(int /*_argc*/, char** /*_argv*/)
 {
 	GLFWwindow* window;
-	
+
 	if (!glfwInit())
 	{
 		return -1;
@@ -101,14 +134,14 @@ int main(int /*_argc*/, char** /*_argv*/)
 	}
 
 
-	bgfx::glfwSetWindow(window);
+	glfwSetWindow(window);
 
 	bgfx::init();
 
 	noob::graphics& gfx = noob::graphics::get_instance();
 
 	gfx.init(width, height);
-	
+
 	app->init();
 
 	glfwSetWindowCloseCallback(window, window_close_callback);

@@ -12,7 +12,7 @@ namespace noob
 	static std::string to_string(int32_t i)
 	{
 		std::string s;
-		s.reserve(16);
+		s.resize(16);
 		modp_itoa10(i, &s[0]);
 		return s;
 	}
@@ -20,7 +20,7 @@ namespace noob
 	static std::string to_string(uint32_t i)
 	{
 		std::string s;
-		s.reserve(16);
+		s.resize(16);
 		modp_uitoa10(i, &s[0]);
 		return s;
 	}
@@ -28,7 +28,7 @@ namespace noob
 	static std::string to_string(int64_t i)
 	{
 		std::string s;
-		s.reserve(24);
+		s.resize(24);
 		modp_litoa10(i, &s[0]);
 		return s;
 	}
@@ -36,7 +36,7 @@ namespace noob
 	static std::string to_string(uint64_t i)
 	{
 		std::string s;
-		s.reserve(24);
+		s.resize(24);
 		modp_ulitoa10(i, &s[0]);
 		return s;
 	}
@@ -44,7 +44,7 @@ namespace noob
 	static std::string to_string(double f, uint32_t precision)
 	{
 		std::string s;
-		s.reserve(32);
+		s.resize(32);
 		modp_dtoa2(f, &s[0], precision);
 		return s;
 	}
@@ -52,7 +52,7 @@ namespace noob
 	{
 		std::string s;
 		uint32_t precision = 24;
-		s.reserve(32);
+		s.resize(32);
 		modp_dtoa2(f, &s[0], precision);
 		return s;
 	}

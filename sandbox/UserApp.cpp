@@ -10,10 +10,13 @@ std::vector<std::tuple<noob::keyboard::keys, noob::keyboard::mod_keys, std::stri
 std::unique_ptr<std::string> message_profiling, message_collision;
 noob::actor_handle ah;
 
+std::string message_profiling_two;
+
 bool noob::application::user_init()
 {
 	message_profiling = std::make_unique<std::string>("");
 	message_collision = std::make_unique<std::string>("");
+	message_profiling_two = "";
 	noob::audio_sample samp;
 	bool b = samp.load_file("./BlanketedLama.ogg");
 	noob::globals& g = noob::globals::get_instance();
@@ -75,35 +78,34 @@ void noob::application::user_update(double dt)
 	const uint64_t collision_display_interval = 500;
 	if (noob::millis(time_since_update) > profiling_interval - 1)
 	{
-		fmt::MemoryWriter ww;
+		
 		noob::profiler_snap snap = g.profile_run;
-	
-		ww << "NoobWerkz editor - Frame time: " << pretty_print_timing(divide_duration(snap.total_time, profiling_interval)) << ", draw time: " << pretty_print_timing(divide_duration(snap.stage_draw_duration, profiling_interval)) << ", physics time " << pretty_print_timing(divide_duration(snap.stage_physics_duration, profiling_interval));
 
-
-		message_profiling = std::make_unique<std::string>(ww.str());
+	//	std::string msg = noob::pretty_print_timing(noob::divide_duration(snap.total_time, profiling_interval));//noob::concat(s, noob::pretty_print_timing(noob::divide_duration(snap.total_time, profiling_interval)));
+		//message_profiling = std::make_unique<std::string>(noob::concat("NoobWerkz editor - Frame time: ", pretty_print_timing(divide_duration(snap.total_time, profiling_interval)), std::string(", draw time: "), pretty_print_timing(divide_duration(snap.stage_draw_duration, profiling_interval)), ", physics time ", pretty_print_timing(divide_duration(snap.stage_physics_duration, profiling_interval)))); 
+		message_profiling_two = "";
+		message_profiling_two = noob::pretty_print_timing(noob::divide_duration(snap.total_time, profiling_interval));
+		noob::logger::log(message_profiling_two);
+		// message_profiling.reset();
+		//message_profiling = std::make_unique<std::string>(msg);
+		// message_profiling = std::make_unique<std::string>(ww.str());
 		g.profile_run.total_time = g.profile_run.stage_physics_duration = g.profile_run.stage_draw_duration = time_since_update = noob::duration(0);
 		last_ui_update = nowtime;
 	}
 
 
 
-
+/*
 	if (noob::millis(time_since_update) > collision_display_interval -1)
 	{
-		fmt::MemoryWriter ww;
-
 		std::vector<noob::contact_point> cps = stage.get_intersecting(ah);
 
-		ww << "[UserApp] Actor (" << ah.index() << "), num collisions = " << cps.size();
+		std::string s = noob::concat("[UserApp] Actor (", noob::to_string(ah.index()), "), num collisions = ", noob::to_string(cps.size()));
 		
-		for (noob::contact_point cp : cps)
-		{
-			ww << ", " << cp.to_string();
-		}
-		message_collision = std::make_unique<std::string>(ww.str());
+		message_collision = std::make_unique<std::string>(s);
 	}
+*/
 	// gui.text(*(g.strings.get(noob::string_handle::make(0))), static_cast<float>(window_width - 500), static_cast<float>(window_height - 500), noob::gui::font_size::HEADER);
-	gui.text(*message_profiling, 50.0, 50.0);
-	gui.text(*message_collision, 50.0, 150.0);
+	gui.text(message_profiling_two, 50.0, 50.0);
+// 	gui.text(*message_collision, 50.0, 150.0);
 }

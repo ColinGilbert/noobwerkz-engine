@@ -15,12 +15,12 @@ bool noob::globals::init() noexcept(true)
 	// unit_cylinder_shape = cylinder_shape(0.5, 1.0);
 	// unit_cone_shape = cone_shape(0.5, 1.0);
 
-	fmt::MemoryWriter ww;
-	ww << "[Globals] unit sphere shape handle " << unit_sphere_shape.index() << ", unit cube shape handle " << unit_cube_shape.index();// << ", unit cylinder shape handle " << unit_cylinder_shape.index() << ", unit cone shape handle " << unit_cone_shape.index();
-	logger::log(ww.str());
-	logger::log("[Globals] Making unit sphere model");
+	noob::logger::log(noob::concat("[Globals] unit sphere shape handle ", noob::to_string(unit_sphere_shape.index()) ,", unit cube shape handle ", noob::to_string(unit_cube_shape.index())));
+	// << ", unit cylinder shape handle " << unit_cylinder_shape.index() << ", unit cone shape handle " << unit_cone_shape.index();
+	
+	noob::logger::log("[Globals] Making unit sphere model");
 	unit_sphere_model = model_from_mesh(noob::mesh_utils::sphere(0.5, 1));//basic_models.add(std::move(temp));
-	logger::log("[Globals] Making unit cube model");
+	noob::logger::log("[Globals] Making unit cube model");
 	unit_cube_model = model_from_mesh(noob::mesh_utils::box(1.0, 1.0, 1.0));
 	
 
@@ -30,9 +30,7 @@ bool noob::globals::init() noexcept(true)
 	// logger::log("[Globals] Making unit cylinder model");
 	// unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(0.5, 1.0, 8));
 
-	fmt::MemoryWriter ww_2;
-	ww_2 << "[Globals] unit sphere model handle " << unit_sphere_model.model_h.index() << ", unit cube model handle " << unit_cube_model.model_h.index();// << ", unit cylinder model handle " << unit_cylinder_model.model_h.index() << ", unit cone model handle " << unit_cone_model.model_h.index();
-	logger::log(ww_2.str());
+	noob::logger::log(noob::concat("[Globals] unit sphere model handle ", noob::to_string(unit_sphere_model.model_h.index()) ,", unit cube model handle ", noob::to_string(unit_cube_model.model_h.index())));// << ", unit cylinder model handle " << unit_cylinder_model.model_h.index() << ", unit cone model handle " << unit_cone_model.model_h.index();
 
 	//  Init basic default shader
 	noob::basic_renderer::uniform dbg;
@@ -81,7 +79,7 @@ bool noob::globals::init() noexcept(true)
 		pseudo_randoms[i] = rng.get();
 	}
 
-	logger::log("[Globals] Init complete.");
+	noob::logger::log("[Globals] Init complete.");
 	init_done = true;
 	return true;
 }
@@ -184,9 +182,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 				}
 				else
 				{
-					fmt::MemoryWriter ww;
-					ww << "[Globals] DATA ERROR: Attempted to get a hull model with an invalid shape handle.";
-					logger::log(ww.str());
+					noob::logger::log("[Globals] DATA ERROR: Attempted to get a hull model with an invalid shape handle.");
 				}
 				results.scales = noob::vec3(1.0, 1.0, 1.0);					
 				break; 
@@ -206,9 +202,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 					}
 					else
 					{
-						fmt::MemoryWriter ww;
-						ww << "[Globals] DATA ERROR: Shape handle " << h.index() << " has invalid model mapping.";
-						logger::log(ww.str());
+						noob::logger::log(noob::concat("[Globals] DATA ERROR: Shape handle ", noob::to_string(h.index()), " has invalid model mapping."));
 					}
 				}	
 				// We must first create the model:
@@ -226,7 +220,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 			}
 		default:
 			{
-				logger::log("[Globals] INVALID ENUM: model_from_shape()");
+				noob::logger::log("[Globals] INVALID ENUM: model_from_shape()");
 			}
 	}
 
@@ -242,17 +236,16 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 
 noob::shape_handle noob::globals::sphere_shape(float r) noexcept(true) 
 {
-	fmt::MemoryWriter w;
-	w << "sphere-" << static_cast<uint32_t>(r);
+	std::string s = noob::concat("sphere-", noob::to_string(static_cast<uint32_t>(r)));
 
-	auto search = names_to_shapes.find(rde::string(w.c_str()));
+	auto search = names_to_shapes.find(rde::string(s.c_str()));
 	// auto search = sphere_shapes.find(r);
 	if (search == names_to_shapes.end())
 	{
 		noob::shape temp;
 		temp.sphere(r);
 
-		auto results = names_to_shapes.insert(rde::make_pair(rde::string(w.c_str()), add_shape(temp)));
+		auto results = names_to_shapes.insert(rde::make_pair(rde::string(s.c_str()), add_shape(temp)));
 		return (results.first)->second;
 	}
 	return search->second;
@@ -261,16 +254,15 @@ noob::shape_handle noob::globals::sphere_shape(float r) noexcept(true)
 
 noob::shape_handle noob::globals::box_shape(float x, float y, float z) noexcept(true) 
 {
-	fmt::MemoryWriter w;
-	w << "box-" << static_cast<uint32_t>(x) << "-" << static_cast<uint32_t>(y)  << "-" << static_cast<uint32_t>(z);
-	auto search = names_to_shapes.find(rde::string(w.c_str()));
+	std::string s = noob::concat("box-", noob::to_string(static_cast<uint32_t>(x)), "-", noob::to_string(static_cast<uint32_t>(y)), "-", noob::to_string(static_cast<uint32_t>(z)));
+	auto search = names_to_shapes.find(rde::string(s.c_str()));
 	//auto search = box_shapes.find(std::make_tuple(x,y,z));
 	if (search == names_to_shapes.end())
 	{
 		noob::shape temp;
 		temp.box(x, y, z);
 
-		auto results = names_to_shapes.insert(rde::make_pair(rde::string(w.c_str()), add_shape(temp)));
+		auto results = names_to_shapes.insert(rde::make_pair(rde::string(s.c_str()), add_shape(temp)));
 		return (results.first)->second;
 	}
 	return search->second;
@@ -474,18 +466,16 @@ noob::shader noob::globals::get_shader(const std::string& s) const noexcept(true
 	noob::shader results;
 	auto search = names_to_shaders.find(rde::string(s.c_str()));
 
-	fmt::MemoryWriter ww;
 	if (search != names_to_shaders.end())
 	{
-		ww << "[Globals] Found shader " << s << ", with handle " << (search->second).to_string() << ".";
+		noob::logger::log(noob::concat("[Globals] Found shader ", s, ", with handle ", (search->second).to_string(), "."));
 		results = search->second;
 	}
 	else
 	{
-		ww << "[Globals] Could not find shader " << s << ". Returning default.";
+		noob::logger::log(noob::concat("[Globals] Could not find shader ", s ,". Returning default."));
 	}
 
-	logger::log(ww.str());
 	return results;
 }
 
