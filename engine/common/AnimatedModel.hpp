@@ -5,7 +5,6 @@
 
 // #include <bgfx/bgfx.h>
 
-#include "format.h"
 #include "Drawable.hpp"
 #include "MathFuncs.hpp"
 #include "BasicMesh.hpp"

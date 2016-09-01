@@ -4,9 +4,6 @@
 #include "stb_image.h"
 #include "Graphics.hpp"
 
-#include "format.h"
-
-
 noob::graphics* noob::graphics::ptr_to_instance;
 
 void noob::graphics::init(uint32_t width, uint32_t height)
@@ -104,8 +101,6 @@ noob::graphics::texture noob::graphics::get_texture(const std::string& name)
 
 bgfx::ShaderHandle noob::graphics::load_shader(const std::string& filename)
 {
-	fmt::MemoryWriter ww;
-	ww <<"[Graphics] Loading shader at ";
 
 	std::string shader_path = "shaders/dx9/";
 
@@ -131,8 +126,7 @@ bgfx::ShaderHandle noob::graphics::load_shader(const std::string& filename)
 	shader_path.append(filename);
 	shader_path.append(".bin");
 
-	ww << shader_path;
-	logger::log(ww.str());
+	logger::log(noob::concat("[Graphics] Loading shader at ", shader_path));
 
 	// noob::utils::data.insert(std::make_pair(shader_path, noob::utils::load_file_as_string(shader_path)));
 	const bgfx::Memory* mem = get_bgfx_mem(noob::utils::load_file_as_string(shader_path));
@@ -155,21 +149,20 @@ noob::graphics::texture noob::graphics::load_texture(const std::string& friendly
 	int width, height, channels;
 	width = height = channels = 0;
 
-	fmt::MemoryWriter ww;
-	ww << "[Graphics] Loading Texture: " << filename << ". ";
 
 	std::string texture_file = noob::utils::load_file_as_string(filename);
 
-	ww << "Loaded size = " << texture_file.size() << " bytes. ";
+	// ww << "Loaded size = " << texture_file.size() << " bytes. ";
 
 	bgfx::TextureInfo tex_info;
 	bgfx::TextureHandle tex = bgfx::createTexture(bgfx::copy(&texture_file[0], sizeof(char) * texture_file.size()), flags, 0, &tex_info);
 
 	// bgfx::TextureHandle tex = bgfx::createTexture2D(static_cast<uint16_t>(width), static_cast<uint16_t>(height), static_cast<uint8_t>(0), bgfx::TextureFormat::RGBA32, static_cast<uint32_t>(flags), bgfx::copy(&texture_file[0], sizeof(char) * texture_file.size()));
 
-	ww << "BGFX texture info: Storage size is " << tex_info.storageSize << " bytes, width of " << tex_info.width << ", height of " << tex_info.height << ", depth of " << tex_info.depth << ". Num mips is " << tex_info.numMips << ". Bpp " << tex_info.bitsPerPixel << ". Cube map? " << tex_info.cubeMap << ".";
+	// ww << "BGFX texture info: Storage size is " << tex_info.storageSize << " bytes, width of " << tex_info.width << ", height of " << tex_info.height << ", depth of " << tex_info.depth << ". Num mips is " << tex_info.numMips << ". Bpp " << tex_info.bitsPerPixel << ". Cube map? " << tex_info.cubeMap << ".";
 
-	logger::log(ww.str());
+	
+	logger::log(noob::concat("[Graphics] Loading Texture - ", filename, ". Loaded size = ", noob::to_string(texture_file.size()), " bytes. BGFX info: ", noob::to_string(tex_info.storageSize), " bytes, width of ", noob::to_string(tex_info.width), ", height of ", noob::to_string(tex_info.height), "depth of ", noob::to_string(tex_info.depth), ". Num mips ", noob::to_string(tex_info.numMips), ". Bpp ", noob::to_string(tex_info.bitsPerPixel), ", cube map? ", noob::to_string(tex_info.cubeMap)));
 
 	noob::graphics::texture t;
 	t.handle = tex;

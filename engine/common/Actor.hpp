@@ -4,8 +4,6 @@
 
 #include <limits>
 
-#include "format.h"
-
 #include "Shape.hpp"
 #include "Component.hpp"
 #include "ComponentDefines.hpp"
@@ -27,9 +25,7 @@ namespace noob
 
 		std::string to_string() const noexcept(true)
 		{
-			fmt::MemoryWriter ww;
-			ww << "shape " << bounds.index() << ", shader " << shader.to_string() << ", reflection " << reflect.index() << ", strength " << strength << ", range " << range << ", defense " << defense << ", move speed " << movement_speed << ", attack speed " << attack_speed << ", stamina " << stamina << ", morale " << morale << ", LOS " << los;
-			return ww.str();
+			 return noob::concat("shape ", noob::to_string(bounds.index()), ", shader ", shader.to_string(), ", reflection ", noob::to_string(reflect.index()), ", strength ", noob::to_string(strength), ", range ", noob::to_string(range), ", defense ", noob::to_string(defense), ", move speed ", noob::to_string(movement_speed), ", attack speed ", noob::to_string(attack_speed), ", stamina ", noob::to_string(stamina), ", morale ", noob::to_string(morale), ", LOS ", noob::to_string(los));
 		}
 	};
 

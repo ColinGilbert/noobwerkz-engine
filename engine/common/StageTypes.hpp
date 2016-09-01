@@ -3,8 +3,6 @@
 #include <rdestl/fixed_array.h>
 #include <rdestl/vector.h>
 
-#include "format.h"
-
 namespace noob
 {
 	enum class stage_item_type : uint32_t

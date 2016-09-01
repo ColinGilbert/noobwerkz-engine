@@ -3,8 +3,6 @@
 #include <LinearMath/btConvexHull.h>
 
 #include "Vec3.hpp"
-#include "format.h"
-
 
 namespace noob
 {

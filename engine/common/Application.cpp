@@ -164,9 +164,9 @@ void noob::application::resume()
 
 void noob::application::set_archive_dir(const std::string& filepath)
 {
-	logger::log(fmt::format("[Application] Setting archive directory (\"{0}\")", filepath));
+	logger::log(noob::concat("[Application] Setting archive directory {", filepath, "}"));
 	prefix = std::unique_ptr<std::string>(new std::string(filepath));
-	logger::log(fmt::format("[Application] Archive dir = {0}", *prefix));
+	logger::log(noob::concat("[Application] Archive dir = {",  *prefix, "}"));
 }
 
 
@@ -174,8 +174,7 @@ void noob::application::touch(int pointerID, float x, float y, int action)
 {
 	if (input_has_started == true)
 	{
-		fmt::MemoryWriter w;
-		w << "[Application] Touch - pointer ID = " << pointerID << ", " << x << ", " << y << ", action = " << action;
+		logger::log(noob::concat("[Application] Touch - pointer ID = ", pointerID, << ", " << x << ", " << y << ", action = " << action;
 		logger::log(w.str());
 
 		if (pointerID < 3)

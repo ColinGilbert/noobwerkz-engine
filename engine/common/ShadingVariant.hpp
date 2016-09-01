@@ -1,6 +1,6 @@
 #pragma once
 
-#include "format.h"
+#include "StringFuncs.hpp"
 
 namespace noob
 {
@@ -22,25 +22,23 @@ namespace noob
 
 		std::string to_string() const
 		{
-			fmt::MemoryWriter ww;
 
+			std::string results;
 			switch (type)
 			{
 				case (noob::shader_type::BASIC):
 					{
-						ww << "basic ";
+						results += "basic ";
 						break;
 					}
 				case (noob::shader_type::TRIPLANAR):
 					{
-						ww << "triplanar ";
+						results += "triplanar ";
 						break;
 					}
 			}
 
-			ww << handle;
-
-			return ww.str();
+			return noob::concat(results, noob::to_string(handle));
 
 		}
 	};

@@ -23,36 +23,12 @@ void noob::stage::init() noexcept(true)
 	// For the ghost object to work correctly, we need to add a callback to our world.
 	dynamics_world->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 
-	draw_graph.reserveNode(NUM_RESERVED_NODES);
-	draw_graph.reserveArc(NUM_RESERVED_ARCS);
-
-	root_node = draw_graph.addNode();
-/*	
-	noob::navigation::config nav_cfg;
-	nav_cfg.cell_size = 0.3;
-	nav_cfg.cell_height = 0.2;
-	nav_cfg.max_agent_slope = 45.0;
-	nav_cfg.agent_height = 2.0;
-	nav_cfg.agent_climb = 0.9;
-	nav_cfg.agent_radius = 0.8;
-	nav_cfg.max_edge_length = 12.0;
-	nav_cfg.max_simplification_error = 1.3;
-	nav_cfg.region_min_size = 50.0;
-	nav_cfg.region_merge_size = 20.0;
-	nav_cfg.verts_per_poly = 6.0;
-	nav_cfg.detail_sample_dist = 6.0;
-	nav_cfg.detail_sample_max_error = 1.0;
-
-	nav.set_config(nav_cfg);
-*/
 	logger::log("[Stage] Done init.");
 
 }
 
 void noob::stage::tear_down() noexcept(true) 
 {
-	draw_graph.clear();
-
 	for (size_t i = 0; i < bodies.count(); ++i)
 	{
 		remove_body(body_handle::make(i));
@@ -130,95 +106,9 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 	rde::vector<float> instancing_buffer; 
 	uint32_t instance_buffer_count = 0;
 
-	std::array<noob::light, MAX_LIGHTS> temp_lights;
-
 	noob::globals& g = noob::globals::get_instance();
 
-	for (size_t i = 0; i < MAX_LIGHTS; ++i)
-	{
-		temp_lights[i] = g.lights.get(lights[i]);
-	}
-
 	bool doing_instanced = gfx.instancing_supported() && instancing;
-
-	for (lemon::ListDigraph::OutArcIt model_it(draw_graph, root_node); model_it != lemon::INVALID; ++model_it)
-	{
-		lemon::ListDigraph::Node model_node = draw_graph.target(model_it);
-		uint32_t model_h = basic_models_mapping[model_node];
-
-		for (lemon::ListDigraph::OutArcIt shading_it(draw_graph, model_node); shading_it != lemon::INVALID; ++shading_it)
-		{
-			lemon::ListDigraph::Node shading_node = draw_graph.target(shading_it);
-			noob::shader shader_h = shaders_mapping[shading_node];
-
-			for (lemon::ListDigraph::OutArcIt body_it(draw_graph, shading_node); body_it != lemon::INVALID; ++body_it)
-			{
-				lemon::ListDigraph::Node body_node = draw_graph.target(body_it);
-
-				if (enabled_mapping[body_node] == true)
-				{
-					noob::body_variant body_var = bodies_mapping[body_node];
-
-					noob::vec3 scales = noob::vec3_from_array(scales_mapping[body_node]);
-					noob::mat4 world_mat = noob::identity_mat4();
-
-					switch (body_var.type)
-					{
-						case (noob::pos_type::GHOST):
-							{
-								noob::versor temp_quat = ghosts.get(ghost_handle::make(body_var.index)).get_orientation();
-								world_mat = noob::rotate(world_mat, temp_quat);
-								world_mat = noob::scale(world_mat, scales);												
-								world_mat = noob::translate(world_mat, ghosts.get(ghost_handle::make(body_var.index)).get_position());
-
-								break;
-							}
-
-						case (noob::pos_type::PHYSICAL):
-							{
-								noob::versor temp_quat = bodies.get(body_handle::make(body_var.index)).get_orientation();
-								world_mat = noob::rotate(world_mat, temp_quat);
-								world_mat = noob::scale(world_mat, scales);												
-								world_mat = noob::translate(world_mat, bodies.get(body_handle::make(body_var.index)).get_position());
-
-								break;
-							}
-						default:
-							{
-								logger::log("[Stage] DATA ERROR - draw(): Attempting to draw invalid body node type!");
-							}
-					}
-
-					// See if moving this up or down changes anything
-					noob::mat4 normal_mat = noob::transpose(noob::inverse((world_mat * view_mat)));
-					noob::reflectance temp_reflect;
-					temp_reflect = g.reflectances.get(reflectance_handle::make(reflectances_mapping[body_node]));
-
-					// Do the actual draw-calling now...
-					switch(shader_h.type)
-					{
-						case(noob::shader_type::BASIC):
-							{
-								g.basic_drawer.draw(g.basic_models.get(model_handle::make(model_h)), world_mat, normal_mat, eye_pos, g.basic_shaders.get(basic_shader_handle::make(shader_h.handle)), temp_reflect, temp_lights, 0);
-								break;
-							}
-						case(noob::shader_type::TRIPLANAR):
-							{
-								g.triplanar_drawer.draw(g.basic_models.get(model_handle::make(model_h)), scales, world_mat, normal_mat, eye_pos, g.triplanar_shaders.get(triplanar_shader_handle::make(shader_h.handle)), temp_reflect, temp_lights, 0);
-								break;
-							}
-						default:
-							{
-								fmt::MemoryWriter ww;
-								ww << "[Stage] DATA ERROR - draw() - Attempting to draw with a shader that doesn't exist. WHYY??";
-								logger::log(ww.str());
-								break;
-							}
-					}
-				}
-			}
-		}
-	}
 
 	/*
 	   for (uint32_t system_index = 0; system_index < particle_systems.count(); ++system_index)
@@ -562,92 +452,10 @@ void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 }
 
 
-int noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg) 
+uint32_t noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg) 
 {
 	noob::globals& g = noob::globals::get_instance();
 
-	// Find out if the model node is in the graph. If so, cache it. If not, add it.
-	noob::scaled_model model_info = g.model_from_shape(shape_arg);
-	lemon::ListDigraph::Node model_node;
-	noob::fast_hashtable::cell* model_results = basic_models_to_nodes.lookup(model_info.model_h.index());
-
-	if (basic_models_to_nodes.is_valid(model_results))
-	{
-		model_node = draw_graph.nodeFromId(model_results->value);
-	}
-	else
-	{
-		model_node = draw_graph.addNode();
-
-		auto temp_cell = basic_models_to_nodes.insert(model_info.model_h.index());
-		temp_cell->value = draw_graph.id(model_node);
-		basic_models_mapping[model_node] = model_info.model_h.index();
-
-		draw_graph.addArc(root_node, model_node);
-	}
-
-	// Find out if the shader node is already in graph. If so, cache it. If not, add one and cache it.
-	bool shader_found = false;
-	lemon::ListDigraph::Node shader_node;
-
-	for (lemon::ListDigraph::OutArcIt shader_it(draw_graph, model_node); shader_it != lemon::INVALID; ++shader_it)
-	{
-		lemon::ListDigraph::Node temp_shader_node = draw_graph.target(shader_it);
-		noob::shader test_value = shaders_mapping[temp_shader_node];
-		if (test_value == shader_arg)
-		{
-			shader_found = true;
-			shader_node = temp_shader_node;
-			break;
-		}
-	}
-
-	if (!shader_found)
-	{
-		shader_node = draw_graph.addNode();
-		shaders_mapping[shader_node] = shader_arg;
-
-		draw_graph.addArc(model_node, shader_node);
-	}
-
-	lemon::ListDigraph::Node bod_node = draw_graph.addNode();
-
-	switch (bod_arg.type)
-	{
-		case (noob::pos_type::PHYSICAL):
-			{
-				auto temp = bodies_to_nodes.insert(bod_arg.index);
-				temp->value = draw_graph.id(bod_node);
-				bodies_mapping[bod_node] = bod_arg;
-				break;
-			}
-		case (noob::pos_type::GHOST):
-			{
-				auto temp = ghosts_to_nodes.insert(bod_arg.index);
-				temp->value = draw_graph.id(bod_node);
-				bodies_mapping[bod_node] = bod_arg;
-				break;
-			}
-
-		default:
-			{
-				logger::log("[Stage] Trying to insert invalid type into drawgraph.");
-			}
-	}
-
-	scales_mapping[bod_node] = model_info.scales.v;
-
-	reflectances_mapping[bod_node] = reflect_arg.index();
-
-	draw_graph.addArc(shader_node, bod_node);
-
-	// TODO: Replace with stage's directional light
-	noob::light_handle light_h = g.get_default_light();
-	lights_mapping[bod_node] = {light_h.index(), light_h.index(), light_h.index(), light_h.index()};
-
-	enabled_mapping[bod_node] = true;
-
-	return draw_graph.id(bod_node);
 }
 
 /*

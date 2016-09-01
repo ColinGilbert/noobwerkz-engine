@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 #include "Logger.hpp"//<format.h>
 
 namespace noob
@@ -96,3 +96,4 @@ namespace noob
 			fmt::MemoryWriter ww;
 	};
 }
+*/

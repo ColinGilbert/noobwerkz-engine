@@ -1,6 +1,7 @@
 #pragma once
 
-#include "format.h"
+#include "Concatenate.hpp"
+#include "StringFuncs.hpp"
 
 namespace noob
 {

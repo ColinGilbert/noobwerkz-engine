@@ -27,29 +27,6 @@ void noob::animated_model::init(const std::string& filename)
 {
 	ready = false;
 	noob::animated_model::mesh::vertex::init();
-	
-	/*
-	std::ifstream is(filename.c_str(), std::ios::binary);
-	
-	cereal::BinaryInputArchive archive(is);
-	try
-	{
-		archive(*this);
-	}
-	catch (const cereal::Exception& e)
-	{
-		logger::log(fmt::format("Could not properly open archive {0}", filename));
-		return;
-	}
-
-	for (noob::animated_model::mesh m : meshes)
-	{
-		m.vertex_buffer = bgfx::createVertexBuffer(bgfx::copy(&m.vertices[0], m.vertices.size() * sizeof(noob::animated_model::mesh::vertex)), noob::animated_model::mesh::vertex::ms_decl);
-		m.index_buffer = bgfx::createIndexBuffer(bgfx::copy(&m.indices[0], m.indices.size() * sizeof(uint16_t)));
-	}
-	
-	ready = true;
-*/
 }
 
 

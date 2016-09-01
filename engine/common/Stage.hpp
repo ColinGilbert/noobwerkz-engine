@@ -5,9 +5,6 @@
 
 #include <rdestl/slist.h>
 #include <btBulletDynamicsCommon.h>
-#include <lemon/smart_graph.h>
-#include <lemon/list_graph.h>
-#include <lemon/lgf_writer.h>
 
 #include "NoobDefines.hpp"
 #include "Graphics.hpp"
@@ -39,6 +36,7 @@
 // #include "NavMesh.hpp"
 
 #include "Graph.hpp"
+#include "Concatenate.hpp"
 
 namespace noob
 {
@@ -46,7 +44,7 @@ namespace noob
 	{
 		public:
 
-			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.1, 0.1, 0.1, 0.1)), instancing(false), bodies_mapping(draw_graph), enabled_mapping(draw_graph), /* model_mats_mapping(draw_graph),*/ basic_models_mapping(draw_graph), shaders_mapping(draw_graph), reflectances_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph) {}
+			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.1, 0.1, 0.1, 0.1)), instancing(false) {}
 
 			~stage() noexcept(true);
 
@@ -120,16 +118,13 @@ namespace noob
 
 			void actor_dither(noob::actor_handle h) noexcept(true);
 
-			int add_to_graph(const noob::body_variant bod_arg, const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg); 
+			uint32_t add_to_graph(const noob::body_variant bod_arg, const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg); 
 
 
 			// void update_particle_systems() noexcept(true);
 			// void particle_spawn_helper(noob::particle_system*) noexcept(true); 
 
-			const int NUM_RESERVED_NODES = 8192;			
-			const int NUM_RESERVED_ARCS = 8192;
-
-			noob::graph drawgraph;
+			noob::graph draw_graph_two;
 
 			noob::duration update_duration;
 			noob::duration draw_duration;
@@ -154,21 +149,6 @@ namespace noob
 			uint32_t actor_mq_count;
 
 			bool instancing;
-
-			// TODO: Optimize:
-			lemon::ListDigraph draw_graph;
-			lemon::ListDigraph::Node root_node;
-			lemon::ListDigraph::NodeMap<noob::body_variant> bodies_mapping;
-			lemon::ListDigraph::NodeMap<bool> enabled_mapping;
-			lemon::ListDigraph::NodeMap<uint32_t> basic_models_mapping;
-			lemon::ListDigraph::NodeMap<noob::shader> shaders_mapping;
-			lemon::ListDigraph::NodeMap<uint32_t> reflectances_mapping;
-			lemon::ListDigraph::NodeMap<std::array<uint32_t, 4>> lights_mapping;
-			lemon::ListDigraph::NodeMap<std::array<float, 3>> scales_mapping;
-
-			// rde::vector<noob::mat4> matrix_pool;
-			// uint32_t matrix_pool_count;
-			// static const uint32_t matrix_pool_stride = 2;
 
 			// For drawing
 			noob::fast_hashtable bodies_to_nodes;

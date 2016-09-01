@@ -19,7 +19,6 @@
 #include "NDOF.hpp"
 #include "Stage.hpp"
 #include "Keys.hpp"
-#include "format.h"
 #include "FileSystem.hpp"
 #include "Body.hpp"
 #include "RandomGenerator.hpp"

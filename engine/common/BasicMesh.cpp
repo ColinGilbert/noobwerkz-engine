@@ -1,6 +1,5 @@
 #include "Logger.hpp"
 #include "BasicMesh.hpp"
-#include "format.h"
 
 #include <Eigen/Geometry>
 
@@ -30,36 +29,36 @@ double noob::basic_mesh::get_volume()
 }
 
 /*
-void noob::basic_mesh::to_origin()
-{
-	noob::vec3 dims = bbox.get_dims();
-	for (size_t i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i] = (vertices[i] + dims);
-	}
-}
+   void noob::basic_mesh::to_origin()
+   {
+   noob::vec3 dims = bbox.get_dims();
+   for (size_t i = 0; i < vertices.size(); ++i)
+   {
+   vertices[i] = (vertices[i] + dims);
+   }
+   }
 
-std::string noob::basic_mesh::save() const
-{
-	fmt::MemoryWriter w;
-	w << "OFF" << "\n" << vertices.size() << " " << indices.size() / 3 << " " << 0 <<  "\n";
-	for (auto v : vertices)
-	{
-		w << v.v[0] << " " << v.v[1] << " " << v.v[2] <<  "\n";
-	}
-	for (size_t i = 0; i < indices.size(); i = i + 3)
-	{
-		w << 3 << " " << indices[i] << " " << indices[i+1] << " " << indices[i+2] << "\n";
-	}
+   std::string noob::basic_mesh::save() const
+   {
+   fmt::MemoryWriter w;
+   w << "OFF" << "\n" << vertices.size() << " " << indices.size() / 3 << " " << 0 <<  "\n";
+   for (auto v : vertices)
+   {
+   w << v.v[0] << " " << v.v[1] << " " << v.v[2] <<  "\n";
+   }
+   for (size_t i = 0; i < indices.size(); i = i + 3)
+   {
+   w << 3 << " " << indices[i] << " " << indices[i+1] << " " << indices[i+2] << "\n";
+   }
 
-	return w.str();
-}
+   return w.str();
+   }
 
-void noob::basic_mesh::save(const std::string& filename) const
-{
+   void noob::basic_mesh::save(const std::string& filename) const
+   {
 
-}
-*/
+   }
+   */
 #if defined(NOOB_USE_ASSIMP)
 bool noob::basic_mesh::load_mem_assimp(const std::string& file)
 {

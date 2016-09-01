@@ -1,6 +1,7 @@
 #pragma once
 
 #include "StageTypes.hpp"
+#include "StringFuncs.hpp"
 
 namespace noob
 {
@@ -12,9 +13,7 @@ namespace noob
 
 		std::string to_string() const noexcept(true)
 		{
-			fmt::MemoryWriter ww;
-			ww << noob::to_string(item_type) << " at index " << index << ", pos a" << pos_a.to_string() << ", pos b" << pos_b.to_string() << ", normal on b" << normal_on_b.to_string();
-			return ww.str();
+			return noob::concat(noob::to_string(item_type), " at index ", noob::to_string(index), ", pos a", noob::to_string(pos_a), ", pos b", noob::to_string(pos_b), ", normal on b", noob::to_string(normal_on_b));
 		}
 	};
 }
