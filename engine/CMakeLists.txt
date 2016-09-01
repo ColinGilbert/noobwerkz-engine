@@ -5,7 +5,7 @@ project(NoobWerkz)
 set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
-set(CMAKE_CXX_FLAGS "-std=c++1y -DEIGEN_MPL2_ONLY -DWORDS_BIGENDIAN ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++1y -fno-exceptions -fno-rtti -DEIGEN_MPL2_ONLY ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-DSTB_IMAGE_STATIC ${CMAKE_C_FLAGS}")
 
 add_subdirectory(lib/freetype)

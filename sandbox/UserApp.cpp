@@ -16,7 +16,7 @@ bool noob::application::user_init()
 {
 	message_profiling = std::make_unique<std::string>("");
 	message_collision = std::make_unique<std::string>("");
-	message_profiling_two = "";
+	message_profiling_two.reserve(128);// = "";
 	noob::audio_sample samp;
 	bool b = samp.load_file("./BlanketedLama.ogg");
 	noob::globals& g = noob::globals::get_instance();
@@ -83,7 +83,6 @@ void noob::application::user_update(double dt)
 
 	//	std::string msg = noob::pretty_print_timing(noob::divide_duration(snap.total_time, profiling_interval));//noob::concat(s, noob::pretty_print_timing(noob::divide_duration(snap.total_time, profiling_interval)));
 		//message_profiling = std::make_unique<std::string>(noob::concat("NoobWerkz editor - Frame time: ", pretty_print_timing(divide_duration(snap.total_time, profiling_interval)), std::string(", draw time: "), pretty_print_timing(divide_duration(snap.stage_draw_duration, profiling_interval)), ", physics time ", pretty_print_timing(divide_duration(snap.stage_physics_duration, profiling_interval)))); 
-		message_profiling_two = "";
 		message_profiling_two = noob::pretty_print_timing(noob::divide_duration(snap.total_time, profiling_interval));
 		noob::logger::log(message_profiling_two);
 		// message_profiling.reset();

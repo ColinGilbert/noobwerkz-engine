@@ -37,21 +37,18 @@ namespace noob
 		uint64_t time_in_millis = millis(d);
 		if (time_in_millis > 0)
 		{
-			results.append(noob::to_string(time_in_millis));
-			results = results.append(" millis");
+			return noob::concat(noob::to_string(time_in_millis), " millis");
 		}
 		else
 		{
 			uint64_t time_in_micros = micros(d);
 			if (time_in_micros > 0)
 			{
-				results.append(noob::to_string(time_in_micros));
-				results = results.append(" micros");
+				return noob::concat(noob::to_string(time_in_micros), " micros");
 			}
 			else
 			{
-				results.append(noob::to_string(nanos(d)));
-				results = results.append(" nanos");
+				return noob::concat(noob::to_string(nanos(d)), " nanos");
 			}
 		}
 
@@ -67,24 +64,18 @@ namespace noob
 		if (time_in_millis > 1.0)
 		{
 			
-			std::string t = noob::to_string(time_in_millis);
-			std::string results = t += " millis";//return results.append, std::string(" millis")));
-			return results;
+			return noob::concat(noob::to_string(time_in_millis), " millis");;
 		}
 		else
 		{
 			double time_in_micros = time_in_nanos / 1000.0;
 			if (time_in_micros > 1.0)
 			{
-				std::string t = noob::to_string(time_in_micros);
-				std::string results = t += " micros";
-				return results;
+				return noob::concat(noob::to_string(time_in_micros), " micros");
 			}
 			else
 			{
-				std::string t = noob::to_string(time_in_nanos);
-				std::string results = t += " nanos";
-				return results;
+				return noob::concat(noob::to_string(time_in_nanos), " nanos");
 			}
 		}
 

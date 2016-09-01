@@ -11,15 +11,16 @@ Bugfixes/Cleanups:
 Templatize math types.
 Protect constant globals and graphics members.
 Cleanup/modularize/speedup drawing API (WIP.)
-Remove unused libraries from libs folder
-Removed AngelScript due to bugs and maintenance.
-Removed OpenMesh due to exceptions.
+Removed many unused libraries from libs folder
+NO MORE RTTI/EXCEPTIONS! JUST LIKE A REAL GAME ENGINE!
+Removed AngelScript due to maintenance burden.
+Removed OpenMesh due to rtti/exceptions.
 Made Assimp and Shiny into compile-time options.
-Removed PolyVox due to lack of need.
-Remove cppformat (exceptions, WIP) and added stringencoders library 
-Remove lemon-graph and replace with homegrown.
+Removed PolyVox due to utter lack of need.
+Removed cppformat (due to exceptions) and added stringencoders library.
+Remove lemon-graph and replace with homegrown (WIP).
 
-(Overall, trimmed executable size by roughly half.)
+Overall, the executable size is trimmed to a little under half of what it used to be.
 ```
 
 
