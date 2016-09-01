@@ -1,5 +1,6 @@
 // This class extends the voxel world by providing dynamically-resized voxel worlds. Future: Multithreading and serialization.
 // NOTE: Will need to be std::move'd into things
+/*
 #pragma once
 
 
@@ -51,3 +52,5 @@ namespace noob
 			std::unique_ptr<PolyVox::RawVolume<uint8_t>> world;
 	};
 }
+
+*/

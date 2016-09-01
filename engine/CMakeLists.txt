@@ -1,12 +1,11 @@
 cmake_minimum_required(VERSION 3.5)
 project(NoobWerkz)
 
-set(CMAKE_BUILD_TYPE "DEBUG")
-#set(CMAKE_BUILD_TYPE "RELEASE")
+#set(CMAKE_BUILD_TYPE "DEBUG")
+set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
-
-set(CMAKE_CXX_FLAGS "-std=c++1y -DAS_CAN_USE_CPP11 -DEIGEN_MPL2_ONLY -DSHINY_IS_COMPILED=TRUE  ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++1y  -DAS_CAN_USE_CPP11 -DEIGEN_MPL2_ONLY -DSHINY_IS_COMPILED=TRUE  ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-DSTB_IMAGE_STATIC ${CMAKE_C_FLAGS}")
 
 add_subdirectory(lib/freetype)
@@ -485,7 +484,7 @@ list (APPEND bullet_src
 	lib/bullet/src/BulletMultiThreaded/SpuSampleTask/SpuSampleTask.cpp
 	)
 
-include_directories(lib/polyvox/include)
+#include_directories(lib/polyvox/include)
 
 include_directories(lib/lemon)
 
@@ -626,6 +625,9 @@ include_directories(lib/int-hashtable)
 list(APPEND hashtable-src lib/int-hashtable/FastHashTable.cpp)
 include_directories(lib/component)
 
+list (APPEND shiny_src )
+
+if (DEFINED NOOB_USE_SHINY)
 include_directories(lib/Shiny/include)
 list(APPEND shiny-src
 	lib/Shiny/src/ShinyManager.cpp
@@ -635,6 +637,8 @@ list(APPEND shiny-src
 	lib/Shiny/src/ShinyTools.cpp
 	)
 
+endif()
+
 list(APPEND common_src
 	common/Globals.cpp
 	common/BasicMesh.cpp
@@ -643,7 +647,7 @@ list(APPEND common_src
 	common/Application.cpp
 	common/NoobUtils.cpp
 	common/EditorUtils.cpp
-	common/VoxelWorld.cpp
+	#common/VoxelWorld.cpp
 	common/ActiveMesh.cpp
 	common/Camera.cpp
 	common/Stage.cpp

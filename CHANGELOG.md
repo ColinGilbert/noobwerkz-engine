@@ -11,13 +11,14 @@ Bugfixes/Cleanups:
 Templatize math types.
 Protect both global storage and graphics members.
 Cleanup/modularize/speedup drawing API (WIP.)
-Remove many unused external libraries.
-Remove OpenMesh and replace with own meshgen code (WIP)
-Remove Assimp from main codebase (WIP)
+Remove unused libraries from libs folder
+Removed AngelScript due to bugs and maintenance.
+Removed OpenMesh due to exceptions.
+Made Assimp and Shiny into compile-time options.
+Removed PolyVox due to lack of need.
 
-Also:
-With a rather heavy heart, I have removed AngelScript from the main engine. The reason was that I was always quite happy with C++ and that maintaining, testing, and debugging the engine with a scripting API was becoming an undue burden.
-The binary size also dropped by almost 3 megs just from getting rid of it. Also going soon: Assimp, lemon-graph, and OpenMesh (due to their forcing exceptions on ya.)
+
+(Overall, trimmed executable size by roughly half.)
 ```
 
 

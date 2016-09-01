@@ -7,8 +7,8 @@
 
 // TODO: Insert the callback function here
 std::vector<std::tuple<noob::keyboard::keys, noob::keyboard::mod_keys, std::string>> keystrokes;
-noob::actor_handle ah;
 std::unique_ptr<std::string> message_profiling, message_collision;
+noob::actor_handle ah;
 
 bool noob::application::user_init()
 {
@@ -22,32 +22,42 @@ bool noob::application::user_init()
 	noob::audio_sample* s = g.samples.get(h);
 
 	noob::basic_renderer::uniform u;
-	u.colour = noob::vec4(0.0, 0.0, 1.0, 1.0);
+	u.colour = noob::vec4(1.0, 0.0, 1.0, 1.0);
 	
-	g.set_shader(u, "templol");
-	noob::shader templol = g.get_shader("templol");
+	g.set_shader(u, "example-shader");
+	noob::shader example_shader = g.get_shader("example-shader");
+
+	
+	noob::shader example_shader_two;
+	example_shader_two.type = noob::shader_type::TRIPLANAR;
+	example_shader_two.handle = g.get_default_triplanar_shader().index();
 
 	g.master_mixer.play_clip(h, 1.0);
 
-	noob::shape_handle sh = g.sphere_shape(10.0);
+	const float actor_radius = 10.0;
+	noob::shape_handle sh = g.sphere_shape(actor_radius);
 	
 	noob::actor_blueprints bp;
 	bp.bounds = sh;
-	bp.shader.type = noob::shader_type::TRIPLANAR;
-	bp.shader.handle = g.get_default_triplanar_shader().index();
-	g.set_actor_blueprints(bp, "test-collisions");
-	noob::actor_blueprints_handle bph = g.get_actor_blueprints("test-collisions");
-	ah = stage.actor(bph, 0, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
-	// noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
-	noob::scenery_handle scene_h = stage.scenery(g.box_shape(100.0, 10.0, 100.0), templol, g.get_default_reflectance(), noob::vec3(0.0, -10.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
+	bp.shader.type = example_shader.type;
+	bp.shader.handle = example_shader.handle;
+	g.set_actor_blueprints(bp, "example-actor-bp");
+	noob::actor_blueprints_handle bph = g.get_actor_blueprints("example-actor-bp");
 	
+	const uint32_t num_actors = 500;
+	const float actor_height = 100.0;
+	const float actor_offset = 2.15;
+
+	for (uint32_t i = 0; i < num_actors; ++i)
+	{	
+		ah = stage.actor(bph, 0, noob::vec3((actor_radius*2.0*i)+actor_offset, actor_height, (actor_radius*2.0)+actor_offset*i), noob::versor(0.0, 0.0, 0.0, 1.0));
+	}
+
+	noob::scenery_handle scene_h = stage.scenery(g.box_shape(1000.0, 10.0, 1000.0), example_shader_two, g.get_default_reflectance(), noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
 	
-	scene_h = stage.scenery(g.box_shape(100.0, 10.0, 100.0), templol, g.get_default_reflectance(), noob::vec3(-150.0, 0.0, -150.0), noob::versor(0.0, 0.0, 0.0, 1.0));
-	
-	
-	// *profiler_text = get_profiler_text();
-	fmt::MemoryWriter ww;
-	ww << "[UserApp] Loaded actor " << ah.index();
+
+	eye_pos = noob::vec3(0.0, 500.0, -100.0);
+
 	// keystrokes.push_back(std::make_tuple(noob::keyboard::keys::NUM_5, noob::keyboard::mod_keys::NONE, "switch view (currently does nothing)"));
 	logger::log("[Application] Successfully done (C++) user init.");
 	return true;
@@ -75,6 +85,9 @@ void noob::application::user_update(double dt)
 		g.profile_run.total_time = g.profile_run.stage_physics_duration = g.profile_run.stage_draw_duration = time_since_update = noob::duration(0);
 		last_ui_update = nowtime;
 	}
+
+
+
 
 	if (noob::millis(time_since_update) > collision_display_interval -1)
 	{

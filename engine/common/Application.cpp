@@ -40,9 +40,9 @@ void noob::application::init()
 	ui_enabled = true;
 	gui.init(*prefix, window_width, window_height);
 
-	controller.set_eye_pos(noob::vec3(0.0, 300.0, -100.0));
-	controller.set_eye_target(noob::vec3(0.0, 0.0, 0.0));
-	controller.set_eye_up(noob::vec3(0.0, 1.0, 0.0));
+	eye_pos = noob::vec3(0.0, 300.0, -100.0);
+	eye_target = noob::vec3(0.0, 0.0, 0.0);
+	eye_up = noob::vec3(0.0, 1.0, 0.0);
 
 	noob::globals& g = noob::globals::get_instance();
 
@@ -54,8 +54,6 @@ void noob::application::init()
 	{
 		logger::log("[Application] Global storage init failed :(");
 	}
-
-	voxels.init(512, 512, 512);
 
 	logger::log("[Application] Done basic init.");
 
@@ -103,7 +101,7 @@ void noob::application::update(double delta)
 void noob::application::draw()
 {
 	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 1.0, 2000.0);
-	stage.draw(window_width, window_height, controller.get_eye_pos(), controller.get_eye_target(), controller.get_eye_up(), proj_mat);
+	stage.draw(window_width, window_height, eye_pos, eye_target, eye_up, proj_mat);
 }
 
 

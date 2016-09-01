@@ -94,11 +94,11 @@ void noob::stage::update(double dt) noexcept(true)
 	// PROFILE_FUNC();
 	noob::time start_time = noob::clock::now();
 
-	if (nav_changed)
-	{
+	//if (nav_changed)
+	//{
 		// build_navmesh();
 		// nav_changed = false;
-	}
+	//}
 
 	dynamics_world->stepSimulation(1.0/60.0, 10);
 
@@ -265,7 +265,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 	}
 
 	// TODO: Benchmark if clear() makes any difference
-	matrix_pool.clear();
+	// matrix_pool.clear();
 	// matrix_pool_count = 0;
 	noob::time end_time = noob::clock::now();
 	draw_duration = end_time - start_time;
@@ -407,7 +407,7 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, co
 
 	add_to_graph(b_var, shape_arg, shader_arg, reflect_arg);
 
-	nav_changed = true;
+	// nav_changed = true;
 }
 
 

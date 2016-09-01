@@ -45,7 +45,7 @@ namespace noob
 	{
 		public:
 
-			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.1, 0.1, 0.1, 0.1)), instancing(false), bodies_mapping(draw_graph), enabled_mapping(draw_graph), /* model_mats_mapping(draw_graph),*/ basic_models_mapping(draw_graph), shaders_mapping(draw_graph), reflectances_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph), matrix_pool_count(0), nav_changed(false) {}
+			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.1, 0.1, 0.1, 0.1)), instancing(false), bodies_mapping(draw_graph), enabled_mapping(draw_graph), /* model_mats_mapping(draw_graph),*/ basic_models_mapping(draw_graph), shaders_mapping(draw_graph), reflectances_mapping(draw_graph), scales_mapping(draw_graph), lights_mapping(draw_graph) {}
 
 			~stage() noexcept(true);
 
@@ -157,16 +157,15 @@ namespace noob
 			lemon::ListDigraph::Node root_node;
 			lemon::ListDigraph::NodeMap<noob::body_variant> bodies_mapping;
 			lemon::ListDigraph::NodeMap<bool> enabled_mapping;
-			// lemon::ListDigraph::NodeMap<std::function<noob::mat4(void)>> model_mats_mapping;
 			lemon::ListDigraph::NodeMap<uint32_t> basic_models_mapping;
 			lemon::ListDigraph::NodeMap<noob::shader> shaders_mapping;
 			lemon::ListDigraph::NodeMap<uint32_t> reflectances_mapping;
 			lemon::ListDigraph::NodeMap<std::array<uint32_t, 4>> lights_mapping;
 			lemon::ListDigraph::NodeMap<std::array<float, 3>> scales_mapping;
 
-			rde::vector<noob::mat4> matrix_pool;
-			uint32_t matrix_pool_count;
-			static const uint32_t matrix_pool_stride = 2;
+			// rde::vector<noob::mat4> matrix_pool;
+			// uint32_t matrix_pool_count;
+			// static const uint32_t matrix_pool_stride = 2;
 
 			// For drawing
 			noob::fast_hashtable bodies_to_nodes;
@@ -176,7 +175,7 @@ namespace noob
 			noob::directional_light directional_light;
 			
 			// noob::navigation nav;
-			bool nav_changed;
+			// bool nav_changed;
 			// TODO: Make more flexible.
 			std::array<noob::light_handle, MAX_LIGHTS> lights;
 	};

@@ -1,3 +1,4 @@
+/*
 #pragma once
 
 #include "MathFuncs.hpp"
@@ -56,3 +57,4 @@ namespace noob
 			noob::vec3 eye_pos, eye_target, eye_up;
 	};
 }
+*/

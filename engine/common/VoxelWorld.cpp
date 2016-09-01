@@ -1,9 +1,9 @@
-#include "VoxelWorld.hpp"
+/*#include "VoxelWorld.hpp"
 
 #include <PolyVox/CubicSurfaceExtractor.h>
 #include <PolyVox/MarchingCubesSurfaceExtractor.h>
 #include <PolyVox/Mesh.h>
-
+*/
 
 
 /*
@@ -16,6 +16,7 @@ noob::voxel_world::voxel_world()
 }
 */
 
+/*
 void noob::voxel_world::init(size_t x, size_t y, size_t z)
 {
 	world_width = x;
@@ -272,3 +273,4 @@ noob::basic_mesh noob::voxel_world::extract_region_cubic(size_t lower_x, size_t 
 	// world_mesh.normalize();
 	return world_mesh;
 }
+*/

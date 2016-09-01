@@ -11,7 +11,7 @@
 #include "NoobUtils.hpp"
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
-#include "VoxelWorld.hpp"
+// #include "VoxelWorld.hpp"
 #include "GUI.hpp"
 #include "BasicMesh.hpp"
 #include "ActiveMesh.hpp"
@@ -26,13 +26,14 @@
 #include "NetworkClient.hpp"
 #include "ProfilingInfo.hpp"
 
-
+#if defined(NOOB_USE_SHINY)
 #include "Shiny.h"
 #include "ShinyMacros.h"
+#endif
 
 namespace noob
 {
-	class application final
+	class application
 	{
 		public:
 			application();
@@ -67,7 +68,7 @@ namespace noob
 			// step() is called by the target platform, which calculates the delta-time and drives the update() function. It is an ugly hack that had to be made public in order to be callable from the main app.
 			void step();
 
-			noob::controls controller;
+			// noob::controls controller;
 
 		protected:
 
@@ -96,9 +97,11 @@ namespace noob
 
 			noob::gui gui;
 
+			noob::vec3 eye_pos, eye_target, eye_up;
+
 			std::vector<noob::vec2> finger_positions;
 
-			noob::voxel_world voxels;
+			// noob::voxel_world voxels;
 
 			noob::stage stage;
 
