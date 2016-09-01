@@ -5,7 +5,7 @@ project(NoobWerkz)
 set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
-set(CMAKE_CXX_FLAGS "-std=c++1y  -DAS_CAN_USE_CPP11 -DEIGEN_MPL2_ONLY -DSHINY_IS_COMPILED=TRUE  ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++1y -DEIGEN_MPL2_ONLY ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-DSTB_IMAGE_STATIC ${CMAKE_C_FLAGS}")
 
 add_subdirectory(lib/freetype)
@@ -628,7 +628,11 @@ include_directories(lib/component)
 list (APPEND shiny_src )
 
 if (DEFINED NOOB_USE_SHINY)
+
+SET(CMAKE_CXX_FLAGS "-DSHINY_IS_COMPILED=TRUE  ${CMAKE_CXX_FLAGS}")
+
 include_directories(lib/Shiny/include)
+
 list(APPEND shiny-src
 	lib/Shiny/src/ShinyManager.cpp
 	lib/Shiny/src/ShinyNode.cpp

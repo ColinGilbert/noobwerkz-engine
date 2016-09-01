@@ -3,9 +3,10 @@ project(NoobMapTest)
 
 set(CMAKE_CXX_FLAGS "-std=c++11 -fno-exceptions -fno-rtti ${CMAKE_CXX_FLAGS}")
 
+include_directories(test/extern/rdestl)
+
 include_directories(include)
 
-include_directories(test/extern)
 list (APPEND rdestl_src
 	test/extern/rdestl/allocator.cpp
 	test/extern/rdestl/intrusive_list.cpp

@@ -610,7 +610,6 @@ int noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::shap
 		draw_graph.addArc(model_node, shader_node);
 	}
 
-	// Now, put actor's ghost into draw-graph.
 	lemon::ListDigraph::Node bod_node = draw_graph.addNode();
 
 	switch (bod_arg.type)

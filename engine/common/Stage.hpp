@@ -38,6 +38,7 @@
 #include "Particles.hpp"
 // #include "NavMesh.hpp"
 
+#include "Graph.hpp"
 
 namespace noob
 {
@@ -127,6 +128,8 @@ namespace noob
 
 			const int NUM_RESERVED_NODES = 8192;			
 			const int NUM_RESERVED_ARCS = 8192;
+
+			noob::graph drawgraph;
 
 			noob::duration update_duration;
 			noob::duration draw_duration;
