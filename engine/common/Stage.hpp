@@ -1,6 +1,7 @@
 // TODO: Implement all creation functions (*) and ensure that they take constructor args
 #pragma once
 
+
 #include <functional>
 
 #include <rdestl/slist.h>
@@ -31,8 +32,7 @@
 #include "ContactPoint.hpp"
 #include "StageTypes.hpp"
 #include "Particles.hpp"
-// #include "NavMesh.hpp"
-
+#include "ShaderUnion.hpp"
 #include "Graph.hpp"
 #include "Concatenate.hpp"
 
@@ -42,7 +42,7 @@ namespace noob
 	{
 		public:
 
-			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.1, 0.1, 0.1, 0.1)), instancing(false) {}
+			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.6, 0.6, 0.6, 1.0)), instancing(false), actor_mq_count(0) {}
 
 			~stage() noexcept(true);
 
@@ -75,13 +75,6 @@ namespace noob
 
 			noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::shader_variant shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
 
-			// Lights.
-			void set_light(unsigned int, const noob::light_handle) noexcept(true);
-
-			void set_directional_light(const noob::directional_light&) noexcept(true);
-
-			noob::light_handle get_light(uint32_t) const noexcept(true);
-
 
 			// Intersection enumeration.
 			std::vector<noob::contact_point> get_intersecting(const noob::ghost_handle) const noexcept(true);
@@ -95,10 +88,10 @@ namespace noob
 
 			noob::vec4 ambient_light;
 
-			void set_instancing(bool b) noexcept(true)
-			{
-				instancing = b;
-			}
+			bool instancing;
+
+			// TODO: Make more flexible.
+			std::array<noob::light, MAX_LIGHTS> lights;
 
 		protected:
 
@@ -148,7 +141,6 @@ namespace noob
 			rde::vector<noob::actor_event> actor_mq;
 			uint32_t actor_mq_count;
 
-			bool instancing;
 
 			// For drawing
 			// noob::fast_hashtable bodies_to_nodes;
@@ -159,7 +151,5 @@ namespace noob
 			
 			// noob::navigation nav;
 			// bool nav_changed;
-			// TODO: Make more flexible.
-			std::array<noob::light_handle, MAX_LIGHTS> lights;
 	};
 }

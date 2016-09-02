@@ -30,12 +30,7 @@ bool noob::application::user_init()
 	
 	g.set_shader(u, "example-shader");
 	noob::shader_variant example_shader = g.get_shader("example-shader");
-
 	
-	noob::shader_variant example_shader_two;
-	example_shader_two.type = noob::shader_type::TRIPLANAR;
-	example_shader_two.handle = g.get_default_triplanar_shader().index();
-
 	g.master_mixer.play_clip(h, 1.0);
 
 	const float actor_radius = 10.0;
@@ -43,8 +38,7 @@ bool noob::application::user_init()
 	
 	noob::actor_blueprints bp;
 	bp.bounds = sh;
-	bp.shader.type = example_shader.type;
-	bp.shader.handle = example_shader.handle;
+	bp.shader = example_shader;
 	g.set_actor_blueprints(bp, "example-actor-bp");
 	noob::actor_blueprints_handle bph = g.get_actor_blueprints("example-actor-bp");
 	
@@ -56,6 +50,12 @@ bool noob::application::user_init()
 	{	
 		ah = stage.actor(bph, 0, noob::vec3((actor_radius*2.0*i)+actor_offset, actor_height, (actor_radius*2.0)+actor_offset*i), noob::versor(0.0, 0.0, 0.0, 1.0));
 	}
+
+
+	noob::triplanar_gradient_map_renderer::uniform uu;
+	g.set_shader(uu, "example-shader-two");
+	noob::shader_variant example_shader_two = g.get_shader("example-shader-two");
+
 
 	noob::scenery_handle scene_h = stage.scenery(g.box_shape(1000.0, 10.0, 1000.0), example_shader_two, g.get_default_reflectance(), noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
 	

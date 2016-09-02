@@ -52,7 +52,7 @@ void noob::application::init()
 	}
 	else 
 	{
-		logger::log("[Application] Global storage init failed :(");
+		assert(0 && "[Application] Global storage init failed");
 	}
 
 	logger::log("[Application] Done basic init.");

@@ -1,5 +1,6 @@
 #pragma once
 
+
 namespace noob
 {
 	enum class stage_item_type : uint32_t

@@ -25,6 +25,19 @@ void noob::stage::init() noexcept(true)
 
 	draw_graph.add_node();
 	node_masks.push_back(0);
+
+
+
+	for (uint32_t i = 0; i < MAX_LIGHTS; ++i)
+	{
+		noob::light temp;
+		temp.rgb_falloff = noob::vec4(1.0, 1.0, 1.0, 0.2);
+		temp.pos_radius = noob::vec4(0.0, 0.0, 0.0, 750.0);
+		lights[i] = temp;
+	}
+
+
+
 	logger::log("[Stage] Done init.");
 }
 
@@ -113,22 +126,104 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 
 	const bool doing_instanced = (gfx.instancing_supported() && instancing);
 
-
 	const noob::node_handle root_node = noob::node_handle::make(0);
 
 	rde::vector<noob::node_handle> shaders = draw_graph.get_children(root_node);
 	for (noob::node_handle shader_node : shaders)
 	{
+		const std::tuple<uint32_t, uint32_t> shader_unpacked = noob::pack_64_to_32(node_masks[shader_node.index()]);
+
+		noob::shader_union shading;
+		switch (static_cast<noob::shader_type>(std::get<0>(shader_unpacked)))
+		{
+			case (noob::shader_type::BASIC):
+				{
+					shading.basic = g.basic_shaders.get(noob::basic_shader_handle::make(std::get<1>(shader_unpacked)));
+					break;
+				}
+			case (noob::shader_type::TRIPLANAR):
+				{
+					// logger::log(noob::concat("Attempting to draw with triplanar shader # ", noob::to_string(std::get<1>(shader_unpacked))));
+					shading.triplanar = g.triplanar_shaders.get(noob::triplanar_shader_handle::make(std::get<1>(shader_unpacked)));
+					break;
+				}
+			default:
+				{	const std::string shader_enum_error_str = "[Stage] Draw() - WTF?? INVALID SHADER ENUM TYPE!!!";
+					assert(0 && shader_enum_error_str.c_str());
+					// To catch on builds with asserts disabled...
+					logger::log(shader_enum_error_str);
+					shading.basic = g.basic_shaders.get(noob::basic_shader_handle::make(0));
+				}
+		}
+
 		rde::vector<noob::node_handle> models = draw_graph.get_children(shader_node);
 		for (noob::node_handle model_node : models)
 		{
+			const noob::model_handle model_h = noob::model_handle::make(node_masks[model_node.index()]);
+
 			rde::vector<noob::node_handle> reflections = draw_graph.get_children(model_node);
-			for (noob::node_handle reflect_node: reflections)
+			for (noob::node_handle reflect_node : reflections)
 			{
+				const noob::reflectance temp_reflect = g.reflectances.get(noob::reflectance_handle::make(static_cast<uint32_t>(node_masks[reflect_node.index()])));
+
 				rde::vector<noob::node_handle> variants = draw_graph.get_children(reflect_node);
 				for (noob::node_handle variant_node : variants)
 				{
-					// logger::log(noob::concat("[Stage] Drawing node shading/model/reflect/variant = ", noob::to_string(shader_node.index()), "/", noob::to_string(model_node.index()), "/", noob::to_string(reflect_node.index()), "/", noob::to_string(variant_node.index()), "."));
+					const std::tuple<uint32_t, uint32_t> variant_unpacked = noob::pack_64_to_32(node_masks[variant_node.index()]);
+
+					noob::mat4 xform(noob::identity_mat4());
+					noob::vec3 scales;
+					
+					switch (static_cast<noob::stage_item_type>(std::get<0>(variant_unpacked)))
+					{
+						case (noob::stage_item_type::ACTOR):
+							{
+								const noob::actor a = actors.get(noob::actor_handle::make(std::get<1>(variant_unpacked)));
+								const noob::ghost ghst = ghosts.get(a.ghost);
+								scales = g.shapes.get((g.actor_blueprints.get(a.bp_handle).bounds)).get_scales();
+
+								xform = noob::rotate(xform, ghst.get_orientation());
+								xform = noob::scale(xform, scales);
+								xform = noob::translate(xform, ghst.get_position());
+							
+								break;
+							}
+						case (stage_item_type::SCENERY):
+							{
+								const noob::scenery sc = sceneries.get(noob::scenery_handle::make(std::get<1>(variant_unpacked)));
+								const noob::body bod = bodies.get(sc.body);
+								scales = g.shapes.get(noob::shape_handle::make(body::get_shape_index(bod))).get_scales();
+
+								xform = noob::rotate(xform, bod.get_orientation());
+								xform = noob::scale(xform, scales);
+								xform = noob::translate(xform, bod.get_position());
+								
+								break;
+
+							}
+						default:
+							{
+								assert(0 &&noob::concat("[Stage] Trying to draw invalid type \"", noob::to_string(static_cast<noob::stage_item_type>(std::get<0>(variant_unpacked))), "\"").c_str());
+							}
+
+					}
+					
+					const noob::mat4 normal_mat = noob::transpose(noob::inverse((xform * view_mat)));
+					
+					switch (static_cast<noob::shader_type>(std::get<0>(shader_unpacked)))
+					{
+						case (noob::shader_type::BASIC):
+							{
+								g.basic_drawer.draw(g.basic_models.get(model_h), xform, normal_mat, eye_pos, shading.basic, temp_reflect, lights, 0);
+								break;
+							}
+						case (noob::shader_type::TRIPLANAR):
+							{
+								g.triplanar_drawer.draw(g.basic_models.get(model_h), scales, xform, normal_mat, eye_pos, shading.triplanar, temp_reflect, lights, 0);
+								break;
+							}
+					}
+
 				}
 			}
 		}
@@ -234,8 +329,7 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, co
 
 	noob::stage_item_variant var;
 	var.type = noob::stage_item_type::SCENERY;
-	var.index = bod_h.index();
-	// noob::handle<noob::stage_item_variant> var_h = stage_item_variants.add(var);
+	var.index = scenery_h.index();
 
 	add_to_graph(shader_arg, shape_arg, reflect_arg, var);
 
@@ -244,36 +338,10 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, co
 	b.inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::SCENERY));
 	b.inner->setUserIndex_2(scenery_h.index());
 
+
+	logger::log(noob::concat("[Stage] Scenery added! Handle ", noob::to_string(scenery_h.index())) );
+
 	return scenery_h;
-	// nav_changed = true;
-}
-
-
-void noob::stage::set_light(uint32_t i, const noob::light_handle h) noexcept(true) 
-{
-	if (i < MAX_LIGHTS)
-	{
-		lights[i] = h;
-	}	
-}
-
-
-void noob::stage::set_directional_light(const noob::directional_light& l) noexcept(true) 
-{
-	directional_light = l;
-}
-
-
-noob::light_handle noob::stage::get_light(uint32_t i) const noexcept(true) 
-{
-	noob::light_handle l;
-
-	if (i < MAX_LIGHTS)
-	{
-		l = lights[i];
-	}
-
-	return l;
 }
 
 
@@ -405,7 +473,6 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 {
 	noob::globals& g = noob::globals::get_instance();
 
-
 	// First, get our root node.
 	const noob::node_handle root_node = noob::node_handle::make(0);	
 
@@ -430,23 +497,23 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 	{
 		shading_node = draw_graph.add_node();
 		draw_graph.add_path(root_node, shading_node);
-		node_masks.push_back(noob::pack_32_to_64(static_cast<uint32_t>(shader_arg.type), shader_arg.handle));
+		node_masks.push_back(noob::pack_32_to_64(static_cast<uint32_t>(shader_arg.type), static_cast<uint32_t>(shader_arg.handle)));
 
 		assert(draw_graph.num_nodes() == node_masks.size() && "[Stage] node_masks num must be == draw_graph nodes num");
 	}
 
 
 	// Now onto model node
-	
+
 	noob::scaled_model model_scaled = g.model_from_shape(shape_arg);
-	
+
 	bool model_found = false;
 	noob::node_handle model_node;
 	rde::vector<noob::node_handle> shading_children = draw_graph.get_children(shading_node);
 
 	for (noob::node_handle n : shading_children)
 	{
-		if (node_masks[n.index()] == static_cast<uint64_t>(model_scaled.model_h.index()))
+		if (node_masks[n.index()] == model_scaled.model_h.index())
 		{
 			model_found = true;
 			model_node = n;
@@ -458,7 +525,7 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 	{
 		model_node = draw_graph.add_node();
 		draw_graph.add_path(shading_node, model_node);
-		node_masks.push_back(static_cast<uint64_t>(model_node.index()));
+		node_masks.push_back(model_scaled.model_h.index());
 
 		assert(draw_graph.num_nodes() == node_masks.size() && "[Stage] node_masks num must be == draw_graph nodes num");
 	}
@@ -485,14 +552,14 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 		reflect_node = draw_graph.add_node();
 		draw_graph.add_path(model_node, reflect_node);
 		node_masks.push_back(static_cast<uint64_t>(reflect_arg.index()));
-	
+
 		assert(draw_graph.num_nodes() == node_masks.size() && "[Stage] node_masks num must be == draw_graph nodes num");
 	}
 
-	
+
 	// Now (finally) do the stage item itself :)
 
-	
+
 	bool item_found = false;
 	noob::node_handle item_node;
 	rde::vector<noob::node_handle> reflect_children = draw_graph.get_children(reflect_node);
@@ -514,6 +581,7 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 		item_node = draw_graph.add_node();
 		draw_graph.add_path(reflect_node, item_node);
 		node_masks.push_back(noob::pack_32_to_64(static_cast<uint32_t>(variant_arg.type), variant_arg.index));
+		// item_node = noob::node_handle::make(node_masks.size() - 1);
 
 		assert(draw_graph.num_nodes() == node_masks.size() && "[Stage] node_masks num must be == draw_graph nodes num");
 

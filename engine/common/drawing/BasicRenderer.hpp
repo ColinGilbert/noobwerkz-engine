@@ -13,7 +13,7 @@ namespace noob
 		public:
 			struct uniform
 			{
-				uniform() : colour(1.0, 1.0, 1.0, 1.0) {}
+				uniform() noexcept(true) : colour(1.0, 1.0, 1.0, 1.0) {}
 				noob::vec4 colour;
 			};
 
