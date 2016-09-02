@@ -273,9 +273,9 @@ noob::actor_handle noob::stage::actor(const noob::actor_blueprints_handle bp_h, 
 	noob::stage_item_variant var;
 	var.type = noob::stage_item_type::ACTOR;
 	var.index = a_h.index();
-	noob::handle<noob::stage_item_variant> var_h = stage_item_variants.add(var);
+	//noob::handle<noob::stage_item_variant> var_h = stage_item_variants.add(var);
 
-	add_to_graph(bp.shader, bp.bounds, bp.reflect, var_h);
+	add_to_graph(bp.shader, bp.bounds, bp.reflect, var);
 
 	noob::ghost temp_ghost = ghosts.get(a.ghost);
 	temp_ghost.inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::ACTOR));
@@ -301,9 +301,9 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, co
 	noob::stage_item_variant var;
 	var.type = noob::stage_item_type::SCENERY;
 	var.index = bod_h.index();
-	noob::handle<noob::stage_item_variant> var_h = stage_item_variants.add(var);
+	// noob::handle<noob::stage_item_variant> var_h = stage_item_variants.add(var);
 
-	add_to_graph(shader_arg, shape_arg, reflect_arg, var_h);
+	add_to_graph(shader_arg, shape_arg, reflect_arg, var);
 
 
 	noob::body b = bodies.get(bod_h);
@@ -467,7 +467,7 @@ void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 
 
 // Start with shader type + index (pack bits). Then do models, and then reflectance. Finally, do stage item type + index (again, pack bits.)
-uint32_t noob::stage::add_to_graph(const noob::shader_variant shader_arg, const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::handle<noob::stage_item_variant> variant_arg) 
+noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_arg, const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::stage_item_variant variant_arg) 
 {
 	noob::globals& g = noob::globals::get_instance();
 
@@ -502,10 +502,11 @@ uint32_t noob::stage::add_to_graph(const noob::shader_variant shader_arg, const 
 
 
 	// Now onto model node
+	
+	noob::scaled_model model_scaled = g.model_from_shape(shape_arg);
+	
 	bool model_found = false;
 	noob::node_handle model_node;
-
-	noob::scaled_model model_scaled = g.model_from_shape(shape_arg);
 	rde::vector<noob::node_handle> shading_children = draw_graph.get_children(shading_node);
 
 	for (noob::node_handle n : shading_children)
@@ -552,10 +553,35 @@ uint32_t noob::stage::add_to_graph(const noob::shader_variant shader_arg, const 
 	}
 
 	
-	// Now (finally) do the stage item itself !:)
+	// Now (finally) do the stage item itself :)
 
 	
+	bool item_found = false;
+	noob::node_handle item_node;
+	rde::vector<noob::node_handle> reflect_children = draw_graph.get_children(reflect_node);
 
+	for (noob::node_handle n : reflect_children)
+	{
+		std::tuple<uint32_t, uint32_t> unpacked = pack_64_to_32(node_masks[n.index()]);
+
+		if (std::get<0>(unpacked) == static_cast<uint32_t>(variant_arg.type) && std::get<1>(unpacked) == static_cast<uint32_t>(variant_arg.index))
+		{
+			item_found = true;
+			item_node = n;
+			break;
+		}
+	}
+
+	if (!item_found)
+	{
+		item_node = draw_graph.add_node();
+		node_masks.push_back(noob::pack_32_to_64(static_cast<uint32_t>(variant_arg.type), variant_arg.index));
+
+		assert(draw_graph.num_nodes() == node_masks.size() && "[Stage] node_masks num must be == draw_graph nodes num");
+
+	}	
+
+	return item_node;
 
 }
 /*

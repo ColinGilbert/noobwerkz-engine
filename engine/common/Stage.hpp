@@ -116,7 +116,7 @@ namespace noob
 
 			void actor_dither(noob::actor_handle h) noexcept(true);
 
-			uint32_t add_to_graph(const noob::shader_variant, const noob::shape_handle, const noob::reflectance_handle, const noob::handle<noob::stage_item_variant>) noexcept(true); 
+			noob::node_handle add_to_graph(const noob::shader_variant, const noob::shape_handle, const noob::reflectance_handle, const noob::stage_item_variant) noexcept(true); 
 
 
 			// void update_particle_systems() noexcept(true);
