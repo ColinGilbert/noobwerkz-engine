@@ -116,14 +116,15 @@ namespace noob
 
 			void actor_dither(noob::actor_handle h) noexcept(true);
 
-			uint32_t add_to_graph(const noob::handle<noob::stage_item_variant>, const noob::shader_variant, const noob::shape_handle, const noob::reflectance_handle) noexcept(true); 
+			uint32_t add_to_graph(const noob::shader_variant, const noob::shape_handle, const noob::reflectance_handle, const noob::handle<noob::stage_item_variant>) noexcept(true); 
 
 
 			// void update_particle_systems() noexcept(true);
 			// void particle_spawn_helper(noob::particle_system*) noexcept(true); 
 
 			noob::graph draw_graph;
-
+			rde::vector<uint64_t> node_masks;
+	
 			noob::duration update_duration;
 			noob::duration draw_duration;
 			noob::duration last_navmesh_build_duration;
@@ -144,9 +145,6 @@ namespace noob
 			basic_shaders_holder particle_shaders;
 
 			noob::component<noob::stage_item_variant> stage_item_variants;
-			// noob::component<noob::shader_variant> bod_shaders;
-			// noob::component<noob::vec3> bod_scales;
-			
 
 			rde::vector<noob::actor_event> actor_mq;
 			uint32_t actor_mq_count;

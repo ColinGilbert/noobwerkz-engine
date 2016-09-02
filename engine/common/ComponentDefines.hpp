@@ -53,6 +53,8 @@ namespace noob
 	typedef handle<noob::shader_variant> shader_variant_handle;
 	typedef handle<noob::time> time_handle;
 	typedef handle<noob::text_label> text_label_handle;
+	typedef handle<noob::vec3> vec3_handle;
+
 
 	typedef handle<noob::basic_model> model_handle;
 	typedef handle<noob::animated_model> animated_model_handle;

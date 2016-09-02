@@ -12,8 +12,8 @@
 
 namespace noob
 {
-
 	typedef noob::handle<uint32_t> node_handle;
+	
 	class graph
 	{
 		public:
