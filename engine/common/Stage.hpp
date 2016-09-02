@@ -118,7 +118,6 @@ namespace noob
 
 			noob::node_handle add_to_graph(const noob::shader_variant, const noob::shape_handle, const noob::reflectance_handle, const noob::stage_item_variant) noexcept(true); 
 
-
 			// void update_particle_systems() noexcept(true);
 			// void particle_spawn_helper(noob::particle_system*) noexcept(true); 
 

@@ -24,7 +24,7 @@ void noob::stage::init() noexcept(true)
 	dynamics_world->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 
 	draw_graph.add_node();
-
+	node_masks.push_back(0);
 	logger::log("[Stage] Done init.");
 }
 
@@ -60,6 +60,7 @@ void noob::stage::tear_down() noexcept(true)
 	delete collision_configuration;
 
 	draw_graph.empty();
+	node_masks.empty();
 
 	init();
 }
@@ -89,6 +90,7 @@ void noob::stage::update(double dt) noexcept(true)
 }
 
 
+// Start with shader type + index (pack bits). Then do models, and then reflectance. Finally, do stage item type + index (again, pack bits.)
 void noob::stage::draw(float window_width, float window_height, const noob::vec3& eye_pos, const noob::vec3& eye_target, const noob::vec3& eye_up, const noob::mat4& projection_mat) noexcept(true) 
 {
 	// PROFILE_FUNC();
@@ -112,61 +114,29 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 	const bool doing_instanced = (gfx.instancing_supported() && instancing);
 
 
+	const noob::node_handle root_node = noob::node_handle::make(0);
 
-
-
-
-
-
-
-
-	/*
-	   for (uint32_t system_index = 0; system_index < particle_systems.count(); ++system_index)
-	   {
-	   const noob::particle_system* sys = std::get<1>(particle_systems.get_ptr(noob::particle_system_handle::make(system_index)));
-	   if (sys->active)
-	   {
-	   const noob::scaled_model model = g.model_from_shape(sys->shape);
-	   for (uint32_t i = 0; i < noob::particle_system::max_particles; ++i)
-	   {
-	   const noob::particle p = sys->particles[i];
-	   if (p.active)
-	   {
-	// logger::log("drawing particle!");
-	noob::ghost ghst = ghosts.get(p.ghost);
-
-	noob::versor temp_quat = ghst.get_orientation();
-	noob::mat4 world_mat = noob::identity_mat4();
-	world_mat = noob::rotate(world_mat, temp_quat);
-	world_mat = noob::scale(world_mat, model.scales);												
-	world_mat = noob::translate(world_mat, ghst.get_position());
-	noob::mat4 normal_mat = noob::transpose(noob::inverse((world_mat * view_mat)));
-
-	noob::basic_renderer::uniform u;
-	u.colour = p.colour;
-	noob::reflectance temp_reflect;
-
-	g.basic_drawer.draw(g.basic_models.get(model.model_h), world_mat, normal_mat, eye_pos, u, g.reflectances.get(sys->reflect), temp_lights, 0);
-	}
-	}
-	}
-	}
-	*/
-	if (show_origin)
+	rde::vector<noob::node_handle> shaders = draw_graph.get_children(root_node);
+	for (noob::node_handle shader_node : shaders)
 	{
-		// noob::mat4 world_mat = noob::scale(noob::identity_mat4(), shapes.get(bodies_to_shapes[b.index()])->get_scales());
-		// world_mat = bodies.get(b)->get_transform() * world_mat;
-		// renderer.draw(basic_models.get(m), shaders.get(s), world_mat);
-		// bgfx::setViewTransform(view_id, view_matrix, ortho);
-		// bgfx::setViewRect(view_id, 0, 0, window_width, window_height);
-		noob::mat4 normal_mat = noob::identity_mat4();
-
-		// renderer.draw(basic_models.get(unit_cube_model), shaders.get(debug_shader), noob::scale(noob::identity_mat4(), noob::vec3(10.0, 10.0, 10.0)), normal_mat, basic_lights);
+		rde::vector<noob::node_handle> models = draw_graph.get_children(shader_node);
+		for (noob::node_handle model_node : models)
+		{
+			rde::vector<noob::node_handle> reflections = draw_graph.get_children(model_node);
+			for (noob::node_handle reflect_node: reflections)
+			{
+				rde::vector<noob::node_handle> variants = draw_graph.get_children(reflect_node);
+				for (noob::node_handle variant_node : variants)
+				{
+					// logger::log(noob::concat("[Stage] Drawing node shading/model/reflect/variant = ", noob::to_string(shader_node.index()), "/", noob::to_string(model_node.index()), "/", noob::to_string(reflect_node.index()), "/", noob::to_string(variant_node.index()), "."));
+				}
+			}
+		}
 	}
 
-	// TODO: Benchmark if clear() makes any difference
-	// matrix_pool.clear();
-	// matrix_pool_count = 0;
+
+
+
 	noob::time end_time = noob::clock::now();
 	draw_duration = end_time - start_time;
 	g.profile_run.stage_draw_duration += draw_duration;
@@ -175,42 +145,6 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 
 void noob::stage::build_navmesh() noexcept(true)
 {
-	/*	noob::time begin = noob::clock::now();
-	// logger::log("[Stage] Clearing out old navmesh data.");
-	nav.clear_temporaries();
-	nav.clear_geom();
-
-	noob::globals& g = noob::globals::get_instance();
-	// logger::log("[Stage] About to add scenery data to navmesh.");
-
-	for (uint32_t i = 0; i < sceneries.count(); ++i)
-	{
-	noob::scenery sc = sceneries.get(noob::scenery_handle::make(i));
-	// logger::log("Got scenery");
-	noob::shape_handle shp_h = noob::shape_handle::make(noob::body::get_shape_index(bodies.get(sc.body)));
-	// logger::log("Got shape handle");
-	noob::basic_mesh m = (g.shapes.get(shp_h)).get_mesh();
-	noob::mat4 t = bodies.get(sc.body).get_transform();
-	for (uint32_t v = 0; v < m.vertices.size(); ++v)
-	{
-	noob::vec4 temp = t * noob::vec4(m.vertices[v], 1.0);
-	m.vertices[v] = noob::vec3(temp[0], temp[1], temp[2]);
-	}
-	// fmt::MemoryWriter ww;
-	// ww << "Got mesh. v = " << m.vertices.size() << ", i = " << m.indices.size();
-	// logger::log(ww.str());
-	nav.add_geom(m);
-	}
-
-	// logger::log("[Stage] About to build navmesh.");
-	nav.build();
-	noob::time end = noob::clock::now();
-
-	fmt::MemoryWriter ww;
-	ww <<  "[Stage] Navmesh built! Total time: ";
-	last_navmesh_build_duration = end - begin;
-	ww << noob::pretty_print_timing(last_navmesh_build_duration);
-	*/
 }
 
 
@@ -495,6 +429,7 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 	if (!shading_found)
 	{
 		shading_node = draw_graph.add_node();
+		draw_graph.add_path(root_node, shading_node);
 		node_masks.push_back(noob::pack_32_to_64(static_cast<uint32_t>(shader_arg.type), shader_arg.handle));
 
 		assert(draw_graph.num_nodes() == node_masks.size() && "[Stage] node_masks num must be == draw_graph nodes num");
@@ -522,6 +457,7 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 	if (!model_found)
 	{
 		model_node = draw_graph.add_node();
+		draw_graph.add_path(shading_node, model_node);
 		node_masks.push_back(static_cast<uint64_t>(model_node.index()));
 
 		assert(draw_graph.num_nodes() == node_masks.size() && "[Stage] node_masks num must be == draw_graph nodes num");
@@ -547,6 +483,7 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 	if (!reflect_found)
 	{
 		reflect_node = draw_graph.add_node();
+		draw_graph.add_path(model_node, reflect_node);
 		node_masks.push_back(static_cast<uint64_t>(reflect_arg.index()));
 	
 		assert(draw_graph.num_nodes() == node_masks.size() && "[Stage] node_masks num must be == draw_graph nodes num");
@@ -575,6 +512,7 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 	if (!item_found)
 	{
 		item_node = draw_graph.add_node();
+		draw_graph.add_path(reflect_node, item_node);
 		node_masks.push_back(noob::pack_32_to_64(static_cast<uint32_t>(variant_arg.type), variant_arg.index));
 
 		assert(draw_graph.num_nodes() == node_masks.size() && "[Stage] node_masks num must be == draw_graph nodes num");
@@ -584,128 +522,3 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 	return item_node;
 
 }
-/*
-   void noob::stage::update_particle_systems() noexcept(true)
-   {
-// float seconds_since_last = static_cast<float>(noob::divide_duration(update_duration, noob::billion).count());
-
-noob::vec3 world_gravity = noob::vec3_from_bullet(dynamics_world->getGravity());
-
-uint32_t systems_count = particle_systems.count();
-
-for (uint32_t systems_index = 0; systems_index < systems_count; ++systems_index)
-{
-noob::particle_system* sys = std::get<1>(particle_systems.get_ptr_mutable(noob::particle_system_handle::make(systems_index)));
-
-if (sys->active)
-{
-// We calculate the new positions of our particles
-
-sys->nanos_accum += update_duration.count();
-
-const float damping = sys->damping;
-const float gravity_multiplier = sys->gravity_multiplier;
-noob::vec3 wind = sys->wind;
-
-for (uint32_t i = 0; i < noob::particle_system::max_particles; ++i)
-{
-noob::particle p = sys->particles[i];
-if (p.active)
-{
-p.lifetime += update_duration;
-
-if (p.lifetime.count() < sys->lifespan)
-{
-// logger::log("updating particle");
-std::vector<noob::contact_point> cp = get_intersecting(p.ghost);
-// If our particle hasn't gotten into contact with stuff yet...
-//if (cp.size() == 0)
-//{
-// logger::log("updating particle");
-p.velocity = (p.velocity + wind + (world_gravity * gravity_multiplier)) * damping;
-noob::ghost temp_ghost = ghosts.get(p.ghost);
-noob::vec3 pos = temp_ghost.get_position();
-pos += p.velocity;;
-sys->particles[i] = p;
-temp_ghost.set_position(pos);
-//}
-// Otherwise, deactivate it.
-//else
-//{
-// p.active = false;
-// p.lifetime = noob::duration(0);
-// sys->first_free = i;
-//}
-}
-else
-{
-logger::log("kill particle");
-p.active = false;
-p.lifetime = noob::duration(0);
-sys->particles[i] = p;
-sys->first_free = i;
-}
-
-}
-
-}
-
-// Now, can we possibly spawn a new particle?
-particle_spawn_helper(sys);
-}
-}
-}
-
-
-void noob::stage::particle_spawn_helper(noob::particle_system* sys) noexcept(true)
-{
-	sys->nanos_accum += update_duration.count();
-
-	if (sys->nanos_accum > sys->nanos_between_emits)
-	{
-		if (sys->first_free != std::numeric_limits<uint32_t>::max())
-		{
-			// logger::log("emitting");
-			sys->nanos_accum = 0;
-
-			noob::globals& g = noob::globals::get_instance();
-
-			noob::particle p;
-			p.active = true;
-			p.lifetime = noob::duration(0);
-
-			noob::vec3 temp = sys->emit_direction_variance;
-			//noob::vec3 spread = noob::vec3(g.get_random() * temp[0], g.get_random() * temp[1], g.get_random() * temp[2]);
-			noob::vec3 spread = noob::vec3(1.0, 1.0, 1.0);
-			noob::vec3 dir = sys->emit_direction;
-
-			p.velocity = noob::vec3(dir[0] + spread[0], dir[1] + spread[1], dir[2] + spread[2]) * sys->emit_force;
-
-			noob::ghost ghst = ghosts.get(p.ghost);
-			ghst.set_position(sys->center);
-
-
-			sys->particles[sys->first_free] = p;
-
-			uint32_t next = sys->first_free;
-			next = sys->get_next_free(next);
-			sys->first_free = next;
-		}
-	}
-}
-*/
-
-
-/*
-   void noob::stage::write_graph(const std::string& filename) const
-   {
-   logger::log("About to write graph");
-   boost::filesystem::path p("temp/");
-   if (boost::filesystem::exists(p))
-   {
-   std::string full_path_str = p.generic_string() + filename;
-   lemon::digraphWriter(draw_graph, full_path_str).nodeMap("model", basic_models_mapping).nodeMap("body", bodies_mapping).nodeMap("shader", shaders_mapping).node("root", root_node).run();
-   }
-   else logger::log("[Stage] Could not write graph snapshot - temp directory not found.");
-   }
-   */
