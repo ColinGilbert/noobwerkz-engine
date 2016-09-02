@@ -37,10 +37,9 @@
 #include "SoundInterface.hpp"
 #include "FastHashTable.hpp"
 #include "Mixer.hpp"
-#include "NoobCommon.hpp"
 #include "Actor.hpp"
 #include "Armature.hpp"
-#include "ShadingVariant.hpp"
+#include "ShaderVariant.hpp"
 #include "ProfilingInfo.hpp"
 
 namespace noob
@@ -106,7 +105,7 @@ namespace noob
 			void set_shader(const noob::basic_renderer::uniform&, const std::string& name) noexcept(true);
 			void set_shader(const noob::triplanar_gradient_map_renderer::uniform&, const std::string& name) noexcept(true);
 
-			noob::shader get_shader(const std::string& name) const noexcept(true);
+			noob::shader_variant get_shader(const std::string& name) const noexcept(true);
 
 			noob::light_handle set_light(const noob::light&, const std::string& name) noexcept(true);
 			noob::light_handle get_light(const std::string& name) const noexcept(true);
@@ -148,7 +147,7 @@ namespace noob
 			reflectances_holder reflectances;
 			basic_shaders_holder basic_shaders;
 			triplanar_shaders_holder triplanar_shaders;
-			// shaders_holder shaders;
+			shader_variants_holder shaders_variants;
 			samples_holder samples;
 			actor_blueprints_holder actor_blueprints;
 			strings_holder strings;
@@ -266,7 +265,7 @@ namespace noob
 
 			rde::hash_map<rde::string, noob::shape_handle> names_to_shapes;
 			// rde::hash_map<rde::string, noob::model_handle> names_to_basic_models;
-			rde::hash_map<rde::string, noob::shader> names_to_shaders;
+			rde::hash_map<rde::string, noob::shader_variant> names_to_shaders;
 			rde::hash_map<rde::string, noob::light_handle> names_to_lights;
 			rde::hash_map<rde::string, noob::reflectance_handle> names_to_reflectances;
 			rde::hash_map<rde::string, noob::actor_blueprints_handle> names_to_actor_blueprints;

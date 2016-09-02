@@ -23,8 +23,9 @@ void noob::stage::init() noexcept(true)
 	// For the ghost object to work correctly, we need to add a callback to our world.
 	dynamics_world->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 
-	logger::log("[Stage] Done init.");
+	draw_graph.add_node();
 
+	logger::log("[Stage] Done init.");
 }
 
 void noob::stage::tear_down() noexcept(true) 
@@ -33,6 +34,7 @@ void noob::stage::tear_down() noexcept(true)
 	{
 		remove_body(body_handle::make(i));
 	}
+
 	bodies.empty();
 
 	// Joints are automatically cleaned up by Bullet once all bodies have been destroyed. I think...
@@ -50,17 +52,15 @@ void noob::stage::tear_down() noexcept(true)
 	actor_mq_count = 0;
 
 	sceneries.empty();
-
-	bodies_to_nodes.clear();
-	ghosts_to_nodes.clear();
-	basic_models_to_nodes.clear();
-
+	
 	delete dynamics_world;
 	delete broadphase;
 	delete solver;
 	delete collision_dispatcher;
 	delete collision_configuration;
 
+	draw_graph.empty();
+	
 	init();
 }
 
@@ -72,8 +72,8 @@ void noob::stage::update(double dt) noexcept(true)
 
 	//if (nav_changed)
 	//{
-		// build_navmesh();
-		// nav_changed = false;
+	// build_navmesh();
+	// nav_changed = false;
 	//}
 
 	dynamics_world->stepSimulation(1.0/60.0, 10);
@@ -92,9 +92,10 @@ void noob::stage::update(double dt) noexcept(true)
 void noob::stage::draw(float window_width, float window_height, const noob::vec3& eye_pos, const noob::vec3& eye_target, const noob::vec3& eye_up, const noob::mat4& projection_mat) noexcept(true) 
 {
 	// PROFILE_FUNC();
-	noob::time start_time = noob::clock::now();
+	const noob::time start_time = noob::clock::now();
 
-	noob::mat4 view_mat(noob::look_at(eye_pos, eye_target, eye_up));
+	const noob::mat4 view_mat(noob::look_at(eye_pos, eye_target, eye_up));
+
 	bgfx::setViewTransform(0, &view_mat.m[0], &projection_mat.m[0]);
 	bgfx::setViewRect(0, 0, 0, window_width, window_height);
 	bgfx::setViewTransform(1, &view_mat.m[0], &projection_mat.m[0]);
@@ -108,7 +109,16 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 
 	noob::globals& g = noob::globals::get_instance();
 
-	bool doing_instanced = gfx.instancing_supported() && instancing;
+	const bool doing_instanced = gfx.instancing_supported() && instancing;
+
+
+
+
+
+
+
+
+
 
 	/*
 	   for (uint32_t system_index = 0; system_index < particle_systems.count(); ++system_index)
@@ -165,7 +175,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 
 void noob::stage::build_navmesh() noexcept(true)
 {
-/*	noob::time begin = noob::clock::now();
+	/*	noob::time begin = noob::clock::now();
 	// logger::log("[Stage] Clearing out old navmesh data.");
 	nav.clear_temporaries();
 	nav.clear_geom();
@@ -175,21 +185,21 @@ void noob::stage::build_navmesh() noexcept(true)
 
 	for (uint32_t i = 0; i < sceneries.count(); ++i)
 	{
-		noob::scenery sc = sceneries.get(noob::scenery_handle::make(i));
-		// logger::log("Got scenery");
-		noob::shape_handle shp_h = noob::shape_handle::make(noob::body::get_shape_index(bodies.get(sc.body)));
-		// logger::log("Got shape handle");
-		noob::basic_mesh m = (g.shapes.get(shp_h)).get_mesh();
-		noob::mat4 t = bodies.get(sc.body).get_transform();
-		for (uint32_t v = 0; v < m.vertices.size(); ++v)
-		{
-			noob::vec4 temp = t * noob::vec4(m.vertices[v], 1.0);
-			m.vertices[v] = noob::vec3(temp[0], temp[1], temp[2]);
-		}
-		// fmt::MemoryWriter ww;
-		// ww << "Got mesh. v = " << m.vertices.size() << ", i = " << m.indices.size();
-		// logger::log(ww.str());
-		nav.add_geom(m);
+	noob::scenery sc = sceneries.get(noob::scenery_handle::make(i));
+	// logger::log("Got scenery");
+	noob::shape_handle shp_h = noob::shape_handle::make(noob::body::get_shape_index(bodies.get(sc.body)));
+	// logger::log("Got shape handle");
+	noob::basic_mesh m = (g.shapes.get(shp_h)).get_mesh();
+	noob::mat4 t = bodies.get(sc.body).get_transform();
+	for (uint32_t v = 0; v < m.vertices.size(); ++v)
+	{
+	noob::vec4 temp = t * noob::vec4(m.vertices[v], 1.0);
+	m.vertices[v] = noob::vec3(temp[0], temp[1], temp[2]);
+	}
+	// fmt::MemoryWriter ww;
+	// ww << "Got mesh. v = " << m.vertices.size() << ", i = " << m.indices.size();
+	// logger::log(ww.str());
+	nav.add_geom(m);
 	}
 
 	// logger::log("[Stage] About to build navmesh.");
@@ -200,7 +210,7 @@ void noob::stage::build_navmesh() noexcept(true)
 	ww <<  "[Stage] Navmesh built! Total time: ";
 	last_navmesh_build_duration = end - begin;
 	ww << noob::pretty_print_timing(last_navmesh_build_duration);
-*/
+	*/
 }
 
 
@@ -213,9 +223,6 @@ noob::body_handle noob::stage::body(const noob::body_type b_type, const noob::sh
 
 	body_handle bod_h = bodies.add(b);
 	noob::body* b_ptr = std::get<1>(bodies.get_ptr_mutable(bod_h));
-	// btCollisionObject* temp_inner = b_ptr->inner;
-	// temp_inner->setUserIndex_1();
-	// temp_inner->setUserIndex_2();
 
 	return bod_h;
 }
@@ -255,18 +262,20 @@ noob::joint_handle noob::stage::joint(const noob::body_handle a, const noob::vec
 noob::actor_handle noob::stage::actor(const noob::actor_blueprints_handle bp_h, uint32_t team, const noob::vec3& pos, const noob::versor& orient) 
 {
 	noob::globals& g = noob::globals::get_instance();
-	noob::actor_blueprints bp = g.actor_blueprints.get(bp_h);
+	const noob::actor_blueprints bp = g.actor_blueprints.get(bp_h);
 
 	noob::actor a;
 	a.ghost = ghost(bp.bounds, pos, orient);
-
-	noob::body_variant b_var;
-	b_var.type = noob::pos_type::GHOST;
-	b_var.index = a.ghost.index();	
-
-	add_to_graph(b_var, bp.bounds, bp.shader, bp.reflect);
+	a.bp_handle = bp_h;
 
 	noob::actor_handle a_h = actors.add(a);
+
+	noob::stage_item_variant var;
+	var.type = noob::stage_item_type::ACTOR;
+	var.index = a_h.index();
+	noob::handle<noob::stage_item_variant> var_h = stage_item_variants.add(var);
+
+	add_to_graph(var_h, bp.shader, bp.bounds, bp.reflect);
 
 	noob::ghost temp_ghost = ghosts.get(a.ghost);
 	temp_ghost.inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::ACTOR));
@@ -276,27 +285,32 @@ noob::actor_handle noob::stage::actor(const noob::actor_blueprints_handle bp_h, 
 }
 
 
-noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg)
+noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, const noob::shader_variant shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg)
 {
 	noob::globals& g = noob::globals::get_instance();
 
-	noob::body_handle bod_h = body(noob::body_type::STATIC, shape_arg, 0.0, pos_arg, orient_arg, false);
-
-	noob::body_variant b_var;
-	b_var.type = noob::pos_type::PHYSICAL;
-	b_var.index = bod_h.index();
-
+	const noob::body_handle bod_h = body(noob::body_type::STATIC, shape_arg, 0.0, pos_arg, orient_arg, false);
+	
 	noob::scenery sc;
 	sc.body = bod_h;
 	sc.shader = shader_arg;
 	sc.reflect = reflect_arg;
 	noob::scenery_handle scenery_h = sceneries.add(sc);
+
+
+	noob::stage_item_variant var;
+	var.type = noob::stage_item_type::SCENERY;
+	var.index = bod_h.index();
+	noob::handle<noob::stage_item_variant> var_h = stage_item_variants.add(var);
+
+	add_to_graph(var_h, shader_arg, shape_arg, reflect_arg);
+
+
 	noob::body b = bodies.get(bod_h);
 	b.inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::SCENERY));
 	b.inner->setUserIndex_2(scenery_h.index());
 
-	add_to_graph(b_var, shape_arg, shader_arg, reflect_arg);
-
+	return scenery_h;
 	// nav_changed = true;
 }
 
@@ -452,9 +466,21 @@ void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 }
 
 
-uint32_t noob::stage::add_to_graph(const noob::body_variant bod_arg, const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg) 
+uint32_t noob::stage::add_to_graph(const noob::handle<noob::stage_item_variant> variant_arg, const noob::shader_variant shader_arg, const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg) 
 {
 	noob::globals& g = noob::globals::get_instance();
+
+	// Start with shader, then do models, then do reflectance, then stage item variant.
+	const noob::node_handle root_node = noob::node_handle::make(0);
+
+	
+	
+
+	bool shading_found = false;
+
+	
+	
+	
 
 }
 

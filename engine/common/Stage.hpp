@@ -26,12 +26,10 @@
 #include "ComponentDefines.hpp"
 #include "HandleMap.hpp"
 #include "FastHashTable.hpp"
-#include "NoobCommon.hpp"
 #include "DynamicArray.hpp"
-#include "ShadingVariant.hpp"
+#include "ShaderVariant.hpp"
 #include "ContactPoint.hpp"
 #include "StageTypes.hpp"
-#include "NoobCommon.hpp"
 #include "Particles.hpp"
 // #include "NavMesh.hpp"
 
@@ -75,7 +73,7 @@ namespace noob
 			// These are the composites that use the bodies, ghosts, and joints.
 			noob::actor_handle actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3&, const noob::versor&);
 
-			noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
+			noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::shader_variant shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
 
 			// Lights.
 			void set_light(unsigned int, const noob::light_handle) noexcept(true);
@@ -118,13 +116,13 @@ namespace noob
 
 			void actor_dither(noob::actor_handle h) noexcept(true);
 
-			uint32_t add_to_graph(const noob::body_variant bod_arg, const noob::shape_handle shape_arg, const noob::shader shader_arg, const noob::reflectance_handle reflect_arg); 
+			uint32_t add_to_graph(const noob::handle<noob::stage_item_variant>, const noob::shader_variant, const noob::shape_handle, const noob::reflectance_handle) noexcept(true); 
 
 
 			// void update_particle_systems() noexcept(true);
 			// void particle_spawn_helper(noob::particle_system*) noexcept(true); 
 
-			noob::graph draw_graph_two;
+			noob::graph draw_graph;
 
 			noob::duration update_duration;
 			noob::duration draw_duration;
@@ -145,15 +143,20 @@ namespace noob
 			noob::component<noob::particle_system> particle_systems;
 			basic_shaders_holder particle_shaders;
 
+			noob::component<noob::stage_item_variant> stage_item_variants;
+			// noob::component<noob::shader_variant> bod_shaders;
+			// noob::component<noob::vec3> bod_scales;
+			
+
 			rde::vector<noob::actor_event> actor_mq;
 			uint32_t actor_mq_count;
 
 			bool instancing;
 
 			// For drawing
-			noob::fast_hashtable bodies_to_nodes;
-			noob::fast_hashtable ghosts_to_nodes;
-			noob::fast_hashtable basic_models_to_nodes;
+			// noob::fast_hashtable bodies_to_nodes;
+			// noob::fast_hashtable ghosts_to_nodes;
+			// noob::fast_hashtable basic_models_to_nodes;
 
 			noob::directional_light directional_light;
 			

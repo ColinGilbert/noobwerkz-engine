@@ -51,7 +51,7 @@ namespace noob
 	static std::string to_string(double f)
 	{
 		std::string s;
-		uint32_t precision = 24;
+		uint32_t precision = 3;
 		s.resize(32);
 		modp_dtoa2(f, &s[0], precision);
 		return s;

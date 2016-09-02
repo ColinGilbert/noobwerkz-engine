@@ -8,9 +8,8 @@
 #include "NoobDefines.hpp"
 #include "Component.hpp"
 #include "ComponentDefines.hpp"
-#include "NoobCommon.hpp"
 #include "ScaledModel.hpp"
-#include "ShadingVariant.hpp"
+#include "ShaderVariant.hpp"
 
 namespace noob
 {

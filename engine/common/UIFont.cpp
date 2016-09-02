@@ -14,13 +14,13 @@ void noob::ui_font::init(const std::string& filename, size_t font_size, float wi
 	text_buffer_manager = new TextBufferManager(font_manager);
 
 	ttf_handle = load_ttf(font_manager, filename);
-	font_handle = font_manager->createFontByPixelSize(ttf_handle, 0, font_size, FONT_TYPE_DISTANCE);
+	font_handle = font_manager->createFontByPixelSize(ttf_handle, 0, font_size, FONT_TYPE_ALPHA);
 
 	font_manager->preloadGlyph(font_handle, L"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=_+[]{}!@#$%^&*()`~,<>/?\\|'\";:. \n");
 
 	font_manager->destroyTtf(ttf_handle);
 
-	text_to_draw = text_buffer_manager->createTextBuffer(FONT_TYPE_DISTANCE, BufferType::Transient);//FONT_TYPE_ALPHA, BufferType::Transient);
+	text_to_draw = text_buffer_manager->createTextBuffer(FONT_TYPE_ALPHA, BufferType::Transient);//FONT_TYPE_ALPHA, BufferType::Transient);
 }
 
 
@@ -34,9 +34,10 @@ void noob::ui_font::draw_text(uint8_t view_id, const std::string& message, float
 	float ortho[16];
 	bx::mtxOrtho(ortho, centering, window_width + centering, window_height + centering, centering, -1.0f, 1.0f);
 
+	bgfx::setViewClear(view_id, BGFX_CLEAR_COLOR);// | BGFX_CLEAR_DEPTH | BGFX_CLEAR_STENCIL);
 	bgfx::setViewTransform(view_id, view_matrix, ortho);
 	bgfx::setViewRect(view_id, 0, 0, window_width, window_height);
-
+	
 	text_buffer_manager->clearTextBuffer(text_to_draw);
 	text_buffer_manager->setPenPosition(text_to_draw, x, y);
 	text_buffer_manager->appendText(text_to_draw, font_handle, message.c_str());

@@ -16,7 +16,7 @@ namespace noob
 	{
 		float center_x, center_y, length, height;
 		noob::model_handle model;
-		noob::shader shader;
+		noob::shader_variant shader;
 	};
 
 	class gui
@@ -33,7 +33,6 @@ namespace noob
 			// noob::vec2 dims(const std::string& text); 
 			void text(const noob::text_label lbl) noexcept(true);
 			void text(const std::string& text, float x, float y, noob::gui::font_size size = noob::gui::font_size::READING, uint32_t colour = 0xFFFF00FF) noexcept(true);
-			void frame() noexcept(true);
 
 			bool crosshairs_enabled;
 			noob::vec4 crosshairs_colour;

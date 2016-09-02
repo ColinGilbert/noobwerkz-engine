@@ -10,10 +10,10 @@ namespace noob
 		TRIPLANAR = 1
 	};
 
-	struct shader
+	struct shader_variant
 	{
-		shader() noexcept(true) : type(shader_type::BASIC), handle(0) {}
-		bool operator==(const noob::shader& other) const noexcept(true)
+		shader_variant() noexcept(true) : type(shader_type::BASIC), handle(0) {}
+		bool operator==(const noob::shader_variant& other) const noexcept(true)
 		{
 			return (type == other.type && handle == other.handle);
 		}

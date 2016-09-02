@@ -8,17 +8,14 @@ Actor movement (WIP.)
 Particle system (WIP.)
 
 Bugfixes/Cleanups:
+NO MORE RTTI/EXCEPTIONS! JUST LIKE A REAL GAME ENGINE!
 Templatize math types.
 Protect constant globals and graphics members.
-Cleanup/modularize/speedup drawing API (WIP.)
-Removed many unused libraries from libs folder
-NO MORE RTTI/EXCEPTIONS! JUST LIKE A REAL GAME ENGINE!
-Removed AngelScript due to maintenance burden.
-Removed OpenMesh due to rtti/exceptions.
-Made Assimp and Shiny into compile-time options.
-Removed PolyVox due to utter lack of need.
-Removed cppformat (due to exceptions) and added stringencoders library.
+Removed many unused libraries from libs folder.
+Removed AngelScript, OpenMesh, PolyVox, fmtlib, Assimp and Shiny from codebase.
+
 Remove lemon-graph and replace with homegrown (WIP).
+Cleanup/modularize/speedup drawing API (WIP.)
 
 Overall, the executable size is trimmed to a little under half of what it used to be.
 ```

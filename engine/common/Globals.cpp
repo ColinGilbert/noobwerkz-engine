@@ -37,7 +37,7 @@ bool noob::globals::init() noexcept(true)
 	dbg.colour = noob::vec4(1.0, 1.0, 1.0, 0.0);
 	set_shader(dbg, "debug");
 	// logger::log("[Globals] Set debug shader");
-	shader t1 = get_shader("debug");
+	noob::shader_variant t1 = get_shader("debug");
 	debug_shader = basic_shader_handle::make(t1.handle);
 	// logger::log("[Globals] Got debug shader handle");
 	// Init triplanar shader. For fun.
@@ -53,7 +53,7 @@ bool noob::globals::init() noexcept(true)
 	set_shader(triplanar_info, "default-triplanar");
 	// logger::log("[Globals] Set default triplanar shader.");
 
-	shader t2 = get_shader("default-triplanar");
+	noob::shader_variant t2 = get_shader("default-triplanar");
 	default_triplanar_shader = triplanar_shader_handle::make(t2.handle);
 
 	noob::light l;
@@ -437,7 +437,7 @@ void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std
 	if (search == names_to_shaders.end())
 	{
 		noob::basic_shader_handle h = basic_shaders.add(u);
-		noob::shader r;
+		noob::shader_variant r;
 		r.type = noob::shader_type::BASIC;
 		r.handle = h.index();
 
@@ -452,7 +452,7 @@ void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::unif
 	if (search == names_to_shaders.end())
 	{
 		noob::triplanar_shader_handle h = triplanar_shaders.add(u);
-		noob::shader r;
+		noob::shader_variant r;
 		r.type = noob::shader_type::TRIPLANAR;
 		r.handle = h.index();
 
@@ -461,9 +461,9 @@ void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::unif
 }
 
 
-noob::shader noob::globals::get_shader(const std::string& s) const noexcept(true) 
+noob::shader_variant noob::globals::get_shader(const std::string& s) const noexcept(true) 
 {
-	noob::shader results;
+	noob::shader_variant results;
 	auto search = names_to_shaders.find(rde::string(s.c_str()));
 
 	if (search != names_to_shaders.end())

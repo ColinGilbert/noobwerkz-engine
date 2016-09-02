@@ -82,7 +82,6 @@ list (APPEND voropp_src
 	lib/voropp/src/voro++.cc
 	)
 
-include_directories(lib/noob-graph/include)
 
 include_directories(lib/ozz-animation/include)
 include_directories(lib/ozz-animation/include/ozz)
@@ -647,6 +646,7 @@ include_directories(lib/math-funcs)
 include_directories(lib/int-hashtable)
 list(APPEND hashtable_src lib/int-hashtable/FastHashTable.cpp)
 include_directories(lib/component)
+include_directories(lib/noob-graph/include)
 
 list (APPEND shiny_src )
 
