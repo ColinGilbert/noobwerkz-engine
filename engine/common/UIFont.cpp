@@ -34,7 +34,7 @@ void noob::ui_font::draw_text(uint8_t view_id, const std::string& message, float
 	float ortho[16];
 	bx::mtxOrtho(ortho, centering, window_width + centering, window_height + centering, centering, -1.0f, 1.0f);
 
-	bgfx::setViewClear(view_id, BGFX_CLEAR_COLOR);// | BGFX_CLEAR_DEPTH | BGFX_CLEAR_STENCIL);
+	// bgfx::setViewClear(view_id, BGFX_CLEAR_COLOR);// | BGFX_CLEAR_DEPTH | BGFX_CLEAR_STENCIL);
 	bgfx::setViewTransform(view_id, view_matrix, ortho);
 	bgfx::setViewRect(view_id, 0, 0, window_width, window_height);
 	

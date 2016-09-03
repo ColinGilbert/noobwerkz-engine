@@ -31,8 +31,8 @@ void noob::stage::init() noexcept(true)
 	for (uint32_t i = 0; i < MAX_LIGHTS; ++i)
 	{
 		noob::light temp;
-		temp.rgb_falloff = noob::vec4(1.0, 1.0, 1.0, 0.2);
-		temp.pos_radius = noob::vec4(0.0, 0.0, 0.0, 750.0);
+		temp.rgb_falloff = noob::vec4(1.0, 1.0, 1.0, 0.8);
+		temp.pos_radius = noob::vec4(0.0, 100.0, 0.0, 500.0);
 		lights[i] = temp;
 	}
 
@@ -128,31 +128,32 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 
 	const noob::node_handle root_node = noob::node_handle::make(0);
 
+
 	rde::vector<noob::node_handle> shaders = draw_graph.get_children(root_node);
 	for (noob::node_handle shader_node : shaders)
 	{
 		const std::tuple<uint32_t, uint32_t> shader_unpacked = noob::pack_64_to_32(node_masks[shader_node.index()]);
 
-		noob::shader_union shading;
+		noob::basic_renderer::uniform basic_u;
+		noob::triplanar_gradient_map_renderer::uniform triplanar_u;
+
+
 		switch (static_cast<noob::shader_type>(std::get<0>(shader_unpacked)))
 		{
 			case (noob::shader_type::BASIC):
 				{
-					shading.basic = g.basic_shaders.get(noob::basic_shader_handle::make(std::get<1>(shader_unpacked)));
+					basic_u = g.basic_shaders.get(noob::basic_shader_handle::make(std::get<1>(shader_unpacked)));
 					break;
 				}
 			case (noob::shader_type::TRIPLANAR):
 				{
 					// logger::log(noob::concat("Attempting to draw with triplanar shader # ", noob::to_string(std::get<1>(shader_unpacked))));
-					shading.triplanar = g.triplanar_shaders.get(noob::triplanar_shader_handle::make(std::get<1>(shader_unpacked)));
+					triplanar_u = g.triplanar_shaders.get(noob::triplanar_shader_handle::make(std::get<1>(shader_unpacked)));
 					break;
 				}
 			default:
-				{	const std::string shader_enum_error_str = "[Stage] Draw() - WTF?? INVALID SHADER ENUM TYPE!!!";
-					assert(0 && shader_enum_error_str.c_str());
-					// To catch on builds with asserts disabled...
-					logger::log(shader_enum_error_str);
-					shading.basic = g.basic_shaders.get(noob::basic_shader_handle::make(0));
+				{	assert(0 && "[Stage] Draw() - WTF?? INVALID SHADER ENUM TYPE!!!");
+					basic_u = g.basic_shaders.get(noob::basic_shader_handle::make(0));
 				}
 		}
 
@@ -173,7 +174,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 
 					noob::mat4 xform(noob::identity_mat4());
 					noob::vec3 scales;
-					
+
 					switch (static_cast<noob::stage_item_type>(std::get<0>(variant_unpacked)))
 					{
 						case (noob::stage_item_type::ACTOR):
@@ -185,7 +186,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 								xform = noob::rotate(xform, ghst.get_orientation());
 								xform = noob::scale(xform, scales);
 								xform = noob::translate(xform, ghst.get_position());
-							
+
 								break;
 							}
 						case (stage_item_type::SCENERY):
@@ -197,7 +198,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 								xform = noob::rotate(xform, bod.get_orientation());
 								xform = noob::scale(xform, scales);
 								xform = noob::translate(xform, bod.get_position());
-								
+
 								break;
 
 							}
@@ -207,19 +208,19 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 							}
 
 					}
-					
+
 					const noob::mat4 normal_mat = noob::transpose(noob::inverse((xform * view_mat)));
-					
+
 					switch (static_cast<noob::shader_type>(std::get<0>(shader_unpacked)))
 					{
 						case (noob::shader_type::BASIC):
 							{
-								g.basic_drawer.draw(g.basic_models.get(model_h), xform, normal_mat, eye_pos, shading.basic, temp_reflect, lights, 0);
+								g.basic_drawer.draw(g.basic_models.get(model_h), xform, normal_mat, eye_pos, basic_u, temp_reflect, lights, 0);
 								break;
 							}
 						case (noob::shader_type::TRIPLANAR):
 							{
-								g.triplanar_drawer.draw(g.basic_models.get(model_h), scales, xform, normal_mat, eye_pos, shading.triplanar, temp_reflect, lights, 0);
+								g.triplanar_drawer.draw(g.basic_models.get(model_h), scales, xform, normal_mat, eye_pos, triplanar_u, temp_reflect, lights, 0);
 								break;
 							}
 					}

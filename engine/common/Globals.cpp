@@ -34,7 +34,7 @@ bool noob::globals::init() noexcept(true)
 
 	//  Init basic default shader
 	noob::basic_renderer::uniform dbg;
-	dbg.colour = noob::vec4(1.0, 1.0, 1.0, 0.0);
+	dbg.colour = noob::vec4(1.0, 1.0, 1.0, 1.0);
 	set_shader(dbg, "debug");
 	// logger::log("[Globals] Set debug shader");
 	noob::shader_variant t1 = get_shader("debug");

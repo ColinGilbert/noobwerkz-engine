@@ -42,7 +42,7 @@ bool noob::application::user_init()
 	g.set_actor_blueprints(bp, "example-actor-bp");
 	noob::actor_blueprints_handle bph = g.get_actor_blueprints("example-actor-bp");
 	
-	const uint32_t num_actors = 500;
+	const uint32_t num_actors = 100;
 	const float actor_height = 100.0;
 	const float actor_offset = 2.15;
 
@@ -52,16 +52,16 @@ bool noob::application::user_init()
 	}
 
 
-	noob::triplanar_gradient_map_renderer::uniform uu;
-	g.set_shader(uu, "example-shader-two");
-	noob::shader_variant example_shader_two = g.get_shader("example-shader-two");
+	// noob::triplanar_gradient_map_renderer::uniform uu;
+	// g.set_shader(uu, "example-shader-two");
+	// noob::shader_variant example_shader_two = g.get_shader("example-shader-two");
 
 
-	noob::scenery_handle scene_h = stage.scenery(g.box_shape(1000.0, 10.0, 1000.0), example_shader_two, g.get_default_reflectance(), noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
+	noob::scenery_handle scene_h = stage.scenery(g.box_shape(200.0, 10.0, 200.0), example_shader, g.get_default_reflectance(), noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
 	
 
-	eye_pos = noob::vec3(0.0, 500.0, -100.0);
-
+	eye_pos = noob::vec3(0.0, 200.0, -100.0);
+	eye_target = noob::vec3(0.0, 0.0, 0.0);
 	// keystrokes.push_back(std::make_tuple(noob::keyboard::keys::NUM_5, noob::keyboard::mod_keys::NONE, "switch view (currently does nothing)"));
 	logger::log("[Application] Successfully done (C++) user init.");
 	return true;
