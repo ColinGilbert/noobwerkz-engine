@@ -6,7 +6,6 @@
 #include <rdestl/vector.h>
 
 #include "NoobDefines.hpp"
-#include "Component.hpp"
 #include "ComponentDefines.hpp"
 #include "ScaledModel.hpp"
 #include "ShaderVariant.hpp"

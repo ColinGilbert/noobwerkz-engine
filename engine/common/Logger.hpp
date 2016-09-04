@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Concatenate.hpp"
 #include "StringFuncs.hpp"
 
 namespace noob

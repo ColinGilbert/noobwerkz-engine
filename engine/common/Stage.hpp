@@ -6,6 +6,8 @@
 
 #include <rdestl/slist.h>
 #include <btBulletDynamicsCommon.h>
+#include <noob/fast_hashtable/fast_hashtable.hpp>
+#include <noob/graph/graph.hpp>
 
 #include "NoobDefines.hpp"
 #include "Graphics.hpp"
@@ -22,19 +24,15 @@
 #include "Shape.hpp"
 #include "Armature.hpp"
 #include "Actor.hpp"
-#include "Component.hpp"
 #include "Globals.hpp"
 #include "ComponentDefines.hpp"
 #include "HandleMap.hpp"
-#include "FastHashTable.hpp"
 #include "DynamicArray.hpp"
 #include "ShaderVariant.hpp"
 #include "ContactPoint.hpp"
 #include "StageTypes.hpp"
 #include "Particles.hpp"
 #include "ShaderUnion.hpp"
-#include "Graph.hpp"
-#include "Concatenate.hpp"
 
 namespace noob
 {

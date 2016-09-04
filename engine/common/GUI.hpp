@@ -5,7 +5,6 @@
 
 #include "MathFuncs.hpp"
 #include "UIFont.hpp"
-#include "Component.hpp"
 #include "ComponentDefines.hpp"
 
 

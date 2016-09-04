@@ -5,7 +5,6 @@
 #include <limits>
 
 #include "Shape.hpp"
-#include "Component.hpp"
 #include "ComponentDefines.hpp"
 #include "ScaledModel.hpp"
 #include "Armature.hpp"

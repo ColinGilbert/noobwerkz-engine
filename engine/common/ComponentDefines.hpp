@@ -2,7 +2,7 @@
 
 #include "NoobDefines.hpp"
 
-#include "Component.hpp"
+#include <noob/component/component.hpp>
 
 #include "MathFuncs.hpp"
 #include "Body.hpp"

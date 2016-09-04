@@ -16,6 +16,9 @@
 #include <rdestl/sort.h>
 #include <rdestl/hash_map.h>
 
+// #include <noob/component/component.hpp>
+#include <noob/fast_hashtable/fast_hashtable.hpp>
+
 #include "NoobDefines.hpp"
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
@@ -28,14 +31,13 @@
 #include "Body.hpp"
 #include "SkeletalAnim.hpp"
 #include "Light.hpp"
-#include "Component.hpp"
 #include "Ghost.hpp"
 #include "ComponentDefines.hpp"
 #include "BasicRenderer.hpp"
 #include "TriplanarGradientMapLit.hpp"
 #include "AudioSample.hpp"
 #include "SoundInterface.hpp"
-#include "FastHashTable.hpp"
+
 #include "Mixer.hpp"
 #include "Actor.hpp"
 #include "Armature.hpp"

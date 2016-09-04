@@ -8,7 +8,6 @@
 #include <rdestl/fixed_array.h>
 
 #include "ComponentDefines.hpp"
-#include "Component.hpp"
 #include "MathFuncs.hpp"
 #include "Timing.hpp"
 //#include "RandomGenerator.hpp"

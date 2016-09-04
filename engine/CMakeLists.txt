@@ -20,6 +20,7 @@ include_directories(lib/eigen)
 include_directories(lib/brigand)
 
 include_directories(lib/base-utils/include)
+include_directories(lib/base-utils/rde)
 list (APPEND base_src
 	lib/base-utils/rde/rdestl/allocator.cpp
 	lib/base-utils/rde/rdestl/intrusive_list.cpp
