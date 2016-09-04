@@ -8,24 +8,29 @@ set(BUILD_SHARED_LIBS false)
 set(CMAKE_CXX_FLAGS "-std=c++1y -fno-exceptions -fno-rtti -DEIGEN_MPL2_ONLY ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-DSTB_IMAGE_STATIC ${CMAKE_C_FLAGS}")
 
+if (DEFINED NOOB_PLATFORM_LINUX)
+	add_subdirectory(lib/glfw)
+	include_directories(lib/glfw/include)	
+endif()
+
 add_subdirectory(lib/freetype)
 include_directories(lib/freetype/include)
 
 include_directories(lib/eigen)
 include_directories(lib/brigand)
 
-include_directories(lib/rde)
-list (APPEND rdestl_src
-	lib/rde/rdestl/allocator.cpp
-	lib/rde/rdestl/intrusive_list.cpp
-	lib/rde/rdestl/intrusive_slist.cpp
-	lib/rde/rdestl/list.cpp
+include_directories(lib/base-utils/include)
+list (APPEND base_src
+	lib/base-utils/rde/rdestl/allocator.cpp
+	lib/base-utils/rde/rdestl/intrusive_list.cpp
+	lib/base-utils/rde/rdestl/intrusive_slist.cpp
+	lib/base-utils/rde/rdestl/list.cpp
+	lib/base-utils/include/noob/strings/modp_numtoa.c
+	lib/base-utils/include/noob/fast_hashtable/fast_hashtable.cpp
 	)
 
 include_directories(lib/enet/src)
 add_subdirectory(lib/enet)
-
-include_directories(lib/stringencoders/src)
 
 list (APPEND stringencoders_src
 
@@ -42,7 +47,6 @@ list (APPEND stringencoders_src
 	#lib/stringencoders/src/modp_b64.c
 	#lib/stringencoders/src/modp_bjavascript.c
 	#lib/stringencoders/src/modp_b2_gen.c
-	lib/stringencoders/src/modp_numtoa.c
 	#lib/stringencoders/src/modp_ascii_gen.c
 	#lib/stringencoders/src/modp_utf8.c
 	#lib/stringencoders/src/modp_ascii.c
@@ -54,10 +58,6 @@ list (APPEND stringencoders_src
 	#lib/stringencoders/src/modp_burl.c
 	)
 
-if (DEFINED NOOB_PLATFORM_LINUX)
-	add_subdirectory(lib/glfw)
-	include_directories(lib/glfw/include)	
-endif()
 
 include_directories(lib/bx/include)
 include_directories(lib/bgfx/include)
@@ -506,14 +506,9 @@ list (APPEND bullet_src
 	lib/bullet/src/BulletMultiThreaded/SpuSampleTask/SpuSampleTask.cpp
 	)
 
-#include_directories(lib/polyvox/include)
-
-include_directories(lib/lemon)
-
 include_directories(lib/stb)
 
 include_directories(common)
-include_directories(common/scripting)
 include_directories(common/drawing)
 include_directories(common/drawing/font)
 
@@ -641,12 +636,7 @@ endif()
 
 include_directories(lib/short-alloc)
 include_directories(lib/network-host)
-include_directories(lib/logger)
 include_directories(lib/math-funcs)
-include_directories(lib/int-hashtable)
-list(APPEND hashtable_src lib/int-hashtable/FastHashTable.cpp)
-include_directories(lib/component)
-include_directories(lib/noob-graph/include)
 
 list (APPEND shiny_src )
 
@@ -712,10 +702,7 @@ endif()
 # endif()
 
 
-add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src}
-	${bgfx_src} ${bgfx_utils_src} ${rdestl_src} ${recast_src}
-	${bullet_src} ${voropp_src} ${ozz_src} ${hashtable_src} ${ogg_src}
-	${vorbis_src} ${r8_src} ${shiny-src} ${stringencoders_src} )
+add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${base_src} ${recast_src} ${bullet_src} ${voropp_src} ${ozz_src} ${ogg_src} ${vorbis_src} ${r8_src} ${shiny-src})
 
 target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype Enet)
 
