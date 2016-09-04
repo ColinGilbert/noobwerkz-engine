@@ -470,7 +470,7 @@ void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 
 
 // Start with shader type + index (pack bits). Then do models, and then reflectance. Finally, do stage item type + index (again, pack bits.)
-noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_arg, const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::stage_item_variant variant_arg) 
+noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_arg, const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::stage_item_variant variant_arg) noexcept(true)
 {
 	noob::globals& g = noob::globals::get_instance();
 

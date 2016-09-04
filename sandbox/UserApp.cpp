@@ -42,7 +42,7 @@ bool noob::application::user_init()
 	g.set_actor_blueprints(bp, "example-actor-bp");
 	noob::actor_blueprints_handle bph = g.get_actor_blueprints("example-actor-bp");
 	
-	const uint32_t num_actors = 100;
+	const uint32_t num_actors = 2000;
 	const float actor_height = 100.0;
 	const float actor_offset = 2.15;
 
