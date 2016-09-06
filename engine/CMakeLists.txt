@@ -30,10 +30,6 @@ list (APPEND base_src
 	lib/base-utils/include/noob/fast_hashtable/fast_hashtable.cpp
 	)
 
-include_directories(lib/enet/src)
-add_subdirectory(lib/enet)
-
-
 include_directories(lib/bx/include)
 include_directories(lib/bgfx/include)
 include_directories(lib/bgfx/3rdparty/sdf)
@@ -650,7 +646,6 @@ list(APPEND common_src
 	common/drawing/BasicRenderer.cpp
 	#common/NavMesh.cpp
 	common/FileSystem.cpp
-	common/NetworkClient.cpp
 	common/Mixer.cpp
 	common/AudioSample.cpp
 	)
@@ -671,7 +666,7 @@ endif()
 
 add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${base_src} ${recast_src} ${bullet_src} ${voropp_src} ${ozz_src} ${ogg_src} ${vorbis_src} ${r8_src} ${shiny_src})
 
-target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype Enet)
+target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype)
 
 if (DEFINED NOOB_PLATFORM_LINUX)
 	target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} GL rt dl pthread m soundio.a asound)	

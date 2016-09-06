@@ -19,7 +19,6 @@
 #include "FileSystem.hpp"
 #include "Body.hpp"
 #include "RandomGenerator.hpp"
-#include "NetworkClient.hpp"
 #include "ProfilingInfo.hpp"
 
 #if defined(NOOB_USE_SHINY)
@@ -100,8 +99,6 @@ namespace noob
 			// noob::voxel_world voxels;
 
 			noob::stage stage;
-
-			noob::network_client network;
 
 			noob::random_generator randomz;
 
