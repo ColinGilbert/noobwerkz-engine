@@ -11,7 +11,6 @@
 #include "Light.hpp"
 #include "Reflectance.hpp"
 #include "BasicMesh.hpp"
-#include "ActiveMesh.hpp"
 #include "SkeletalAnim.hpp"
 #include "BasicModel.hpp"
 #include "AnimatedModel.hpp"

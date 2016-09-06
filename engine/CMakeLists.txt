@@ -633,8 +633,6 @@ list(APPEND common_src
 	common/Logger.cpp
 	common/Application.cpp
 	common/NoobUtils.cpp
-	common/EditorUtils.cpp
-	common/ActiveMesh.cpp
 	common/Camera.cpp
 	common/Stage.cpp
 	common/Body.cpp

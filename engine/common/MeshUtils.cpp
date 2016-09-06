@@ -1,5 +1,4 @@
 #include "MeshUtils.hpp"
-#include "ActiveMesh.hpp"
 
 #include <LinearMath/btConvexHull.h>
 
