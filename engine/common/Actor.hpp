@@ -7,7 +7,6 @@
 #include "Shape.hpp"
 #include "ComponentDefines.hpp"
 #include "ScaledModel.hpp"
-#include "Armature.hpp"
 #include "ShaderVariant.hpp"
 #include "StageTypes.hpp"
 
@@ -16,7 +15,6 @@ namespace noob
 	struct actor_blueprints
 	{
 		uint16_t strength, range, armour, defense, movement_speed, attack_speed, stamina, morale, los;
-		// noob::armature_handle arma;
 		noob::shape_handle bounds;
 		noob::shader_variant shader;
 		noob::reflectance_handle reflect;

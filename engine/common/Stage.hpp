@@ -1,7 +1,6 @@
 // TODO: Implement all creation functions (*) and ensure that they take constructor args
 #pragma once
 
-
 #include <functional>
 
 #include <rdestl/slist.h>
@@ -22,17 +21,16 @@
 #include "Body.hpp"
 #include "Joint.hpp"
 #include "Shape.hpp"
-#include "Armature.hpp"
 #include "Actor.hpp"
 #include "Globals.hpp"
 #include "ComponentDefines.hpp"
-#include "HandleMap.hpp"
-#include "DynamicArray.hpp"
+//#include "HandleMap.hpp"
 #include "ShaderVariant.hpp"
 #include "ContactPoint.hpp"
 #include "StageTypes.hpp"
 #include "Particles.hpp"
-#include "ShaderUnion.hpp"
+
+
 
 namespace noob
 {
@@ -73,7 +71,6 @@ namespace noob
 
 			noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::shader_variant shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
 
-
 			// Intersection enumeration.
 			std::vector<noob::contact_point> get_intersecting(const noob::ghost_handle) const noexcept(true);
 
@@ -103,16 +100,18 @@ namespace noob
 			void remove_ghost(noob::ghost_handle) noexcept(true);
 			// void remove_joint(noob::joint_handle) noexcept(true);
 
+
+
 			void update_actors() noexcept(true);
 
 			void actor_dither(noob::actor_handle h) noexcept(true);
-
 			noob::node_handle add_to_graph(const noob::shader_variant, const noob::shape_handle, const noob::reflectance_handle, const noob::stage_item_variant) noexcept(true); 
 
 			// void update_particle_systems() noexcept(true);
 			// void particle_spawn_helper(noob::particle_system*) noexcept(true); 
 
-			noob::graph draw_graph;
+			noob::digraph draw_graph;
+
 			rde::vector<uint64_t> node_masks;
 	
 			noob::duration update_duration;

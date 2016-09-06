@@ -22,7 +22,8 @@ void noob::stage::init() noexcept(true)
 
 	// For the ghost object to work correctly, we need to add a callback to our world.
 	dynamics_world->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
-
+	draw_graph.reserve_nodes(8192);
+	draw_graph.reserve_edges(8192);
 	draw_graph.add_node();
 	node_masks.push_back(0);
 
@@ -72,7 +73,7 @@ void noob::stage::tear_down() noexcept(true)
 	delete collision_dispatcher;
 	delete collision_configuration;
 
-	draw_graph.empty();
+	draw_graph.clear();
 	node_masks.empty();
 
 	init();
@@ -102,8 +103,6 @@ void noob::stage::update(double dt) noexcept(true)
 	g.profile_run.stage_physics_duration += update_duration;
 }
 
-
-// Start with shader type + index (pack bits). Then do models, and then reflectance. Finally, do stage item type + index (again, pack bits.)
 void noob::stage::draw(float window_width, float window_height, const noob::vec3& eye_pos, const noob::vec3& eye_target, const noob::vec3& eye_up, const noob::mat4& projection_mat) noexcept(true) 
 {
 	// PROFILE_FUNC();
@@ -128,10 +127,10 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 
 	const noob::node_handle root_node = noob::node_handle::make(0);
 
-
-	rde::vector<noob::node_handle> shaders = draw_graph.get_children(root_node);
-	for (noob::node_handle shader_node : shaders)
+	noob::digraph::visitor shaders_it = draw_graph.get_visitor(root_node);
+	while (shaders_it.has_child())
 	{
+		const noob::node_handle shader_node = shaders_it.get_child();
 		const std::tuple<uint32_t, uint32_t> shader_unpacked = noob::pack_64_to_32(node_masks[shader_node.index()]);
 
 		noob::basic_renderer::uniform basic_u;
@@ -157,19 +156,24 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 				}
 		}
 
-		rde::vector<noob::node_handle> models = draw_graph.get_children(shader_node);
-		for (noob::node_handle model_node : models)
+		noob::digraph::visitor models_it = draw_graph.get_visitor(shader_node);
+		while (models_it.has_child())
 		{
+			const noob::node_handle model_node = models_it.get_child();
 			const noob::model_handle model_h = noob::model_handle::make(node_masks[model_node.index()]);
 
-			rde::vector<noob::node_handle> reflections = draw_graph.get_children(model_node);
-			for (noob::node_handle reflect_node : reflections)
+			noob::digraph::visitor reflections_it = draw_graph.get_visitor(model_node);
+			while (reflections_it.has_child())
 			{
+				const noob::node_handle reflect_node = reflections_it.get_child();
+
 				const noob::reflectance temp_reflect = g.reflectances.get(noob::reflectance_handle::make(static_cast<uint32_t>(node_masks[reflect_node.index()])));
 
-				rde::vector<noob::node_handle> variants = draw_graph.get_children(reflect_node);
-				for (noob::node_handle variant_node : variants)
+				noob::digraph::visitor variants_it = draw_graph.get_visitor(reflect_node);
+				while (variants_it.has_child())
 				{
+					const noob::node_handle variant_node = variants_it.get_child();
+
 					const std::tuple<uint32_t, uint32_t> variant_unpacked = noob::pack_64_to_32(node_masks[variant_node.index()]);
 
 					noob::mat4 xform(noob::identity_mat4());
@@ -468,23 +472,20 @@ void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 	}
 }
 
-
-// Start with shader type + index (pack bits). Then do models, and then reflectance. Finally, do stage item type + index (again, pack bits.)
 noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_arg, const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::stage_item_variant variant_arg) noexcept(true)
 {
-	noob::globals& g = noob::globals::get_instance();
-
 	// First, get our root node.
 	const noob::node_handle root_node = noob::node_handle::make(0);	
 
+	noob::globals& g = noob::globals::get_instance();
 
 	// Find or create shading node.
 	bool shading_found = false;
 	noob::node_handle shading_node;
-	rde::vector<noob::node_handle> root_children = draw_graph.get_children(root_node);
-
-	for (noob::node_handle n : root_children)
+	auto shaders_it = draw_graph.get_visitor(root_node);
+	while (shaders_it.has_child())
 	{
+		const noob::node_handle n = shaders_it.get_child();
 		std::tuple<uint32_t, uint32_t> unpacked = noob::pack_64_to_32(node_masks[n.index()]);
 		if (std::get<0>(unpacked) == static_cast<uint32_t>(shader_arg.type) && std::get<1>(unpacked) == static_cast<uint32_t>(shader_arg.handle))
 		{
@@ -497,23 +498,21 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 	if (!shading_found)
 	{
 		shading_node = draw_graph.add_node();
-		draw_graph.add_path(root_node, shading_node);
+		draw_graph.add_edge(root_node, shading_node);
 		node_masks.push_back(noob::pack_32_to_64(static_cast<uint32_t>(shader_arg.type), static_cast<uint32_t>(shader_arg.handle)));
-
+		draw_graph.sort();
 		assert(draw_graph.num_nodes() == node_masks.size() && "[Stage] node_masks num must be == draw_graph nodes num");
 	}
 
-
 	// Now onto model node
-
-	noob::scaled_model model_scaled = g.model_from_shape(shape_arg);
-
+	const noob::scaled_model model_scaled = g.model_from_shape(shape_arg);
 	bool model_found = false;
 	noob::node_handle model_node;
-	rde::vector<noob::node_handle> shading_children = draw_graph.get_children(shading_node);
-
-	for (noob::node_handle n : shading_children)
+	auto models_it = draw_graph.get_visitor(shading_node);
+	while(models_it.has_child())
 	{
+		const noob::node_handle n = models_it.get_child();
+
 		if (node_masks[n.index()] == model_scaled.model_h.index())
 		{
 			model_found = true;
@@ -525,21 +524,19 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 	if (!model_found)
 	{
 		model_node = draw_graph.add_node();
-		draw_graph.add_path(shading_node, model_node);
+		draw_graph.add_edge(shading_node, model_node);
 		node_masks.push_back(model_scaled.model_h.index());
-
+		draw_graph.sort();
 		assert(draw_graph.num_nodes() == node_masks.size() && "[Stage] node_masks num must be == draw_graph nodes num");
 	}
 
-
 	// Reflectance
-
 	bool reflect_found = false;
 	noob::node_handle reflect_node;
-	rde::vector<noob::node_handle> model_children = draw_graph.get_children(model_node);
-
-	for (noob::node_handle n : model_children)
+	auto reflects_it = draw_graph.get_visitor(model_node);
+	while (reflects_it.has_child())
 	{
+		const noob::node_handle n = reflects_it.get_child();
 		if (node_masks[n.index()] == static_cast<uint64_t>(reflect_arg.index()));
 		{
 			reflect_found = true;
@@ -551,22 +548,19 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 	if (!reflect_found)
 	{
 		reflect_node = draw_graph.add_node();
-		draw_graph.add_path(model_node, reflect_node);
+		draw_graph.add_edge(model_node, reflect_node);
 		node_masks.push_back(static_cast<uint64_t>(reflect_arg.index()));
-
+		draw_graph.sort();
 		assert(draw_graph.num_nodes() == node_masks.size() && "[Stage] node_masks num must be == draw_graph nodes num");
 	}
 
-
 	// Now (finally) do the stage item itself :)
-
-
 	bool item_found = false;
 	noob::node_handle item_node;
-	rde::vector<noob::node_handle> reflect_children = draw_graph.get_children(reflect_node);
-
-	for (noob::node_handle n : reflect_children)
+	auto stage_variants_it = draw_graph.get_visitor(reflect_node);
+	while (stage_variants_it.has_child())
 	{
+		const noob::node_handle n = stage_variants_it.get_child();
 		std::tuple<uint32_t, uint32_t> unpacked = pack_64_to_32(node_masks[n.index()]);
 
 		if (std::get<0>(unpacked) == static_cast<uint32_t>(variant_arg.type) && std::get<1>(unpacked) == static_cast<uint32_t>(variant_arg.index))
@@ -580,14 +574,12 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 	if (!item_found)
 	{
 		item_node = draw_graph.add_node();
-		draw_graph.add_path(reflect_node, item_node);
+		draw_graph.add_edge(reflect_node, item_node);
 		node_masks.push_back(noob::pack_32_to_64(static_cast<uint32_t>(variant_arg.type), variant_arg.index));
-		// item_node = noob::node_handle::make(node_masks.size() - 1);
-
+		draw_graph.sort();
 		assert(draw_graph.num_nodes() == node_masks.size() && "[Stage] node_masks num must be == draw_graph nodes num");
 
 	}	
 
 	return item_node;
-
 }

@@ -40,7 +40,6 @@
 
 #include "Mixer.hpp"
 #include "Actor.hpp"
-#include "Armature.hpp"
 #include "ShaderVariant.hpp"
 #include "ProfilingInfo.hpp"
 

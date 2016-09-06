@@ -5,7 +5,7 @@ project(NoobWerkz)
 set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
-set(CMAKE_CXX_FLAGS "-std=c++1y -fno-exceptions -fno-rtti -DEIGEN_MPL2_ONLY ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++1y  -fno-exceptions -fno-rtti -DEIGEN_MPL2_ONLY ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-DSTB_IMAGE_STATIC ${CMAKE_C_FLAGS}")
 
 if (DEFINED NOOB_PLATFORM_LINUX)
@@ -17,7 +17,7 @@ add_subdirectory(lib/freetype)
 include_directories(lib/freetype/include)
 
 include_directories(lib/eigen)
-include_directories(lib/brigand)
+include_directories(lib/lemon-minimal)
 
 include_directories(lib/base-utils/include)
 include_directories(lib/base-utils/rde)
@@ -32,32 +32,6 @@ list (APPEND base_src
 
 include_directories(lib/enet/src)
 add_subdirectory(lib/enet)
-
-list (APPEND stringencoders_src
-
-	#lib/stringencoders/src/modp_b85.c
-	#lib/stringencoders/src/modp_xml.c
-	#lib/stringencoders/src/modp_b36.c
-	#lib/stringencoders/src/modp_burl_gen.c
-	#lib/stringencoders/src/modp_b16_gen.c
-	#lib/stringencoders/src/modp_b16.c
-	#lib/stringencoders/src/modp_b2.c
-	#lib/stringencoders/src/modp_bjavascript_gen.c
-	#lib/stringencoders/src/arraytoc.c
-	#lib/stringencoders/src/modp_b64_gen.c
-	#lib/stringencoders/src/modp_b64.c
-	#lib/stringencoders/src/modp_bjavascript.c
-	#lib/stringencoders/src/modp_b2_gen.c
-	#lib/stringencoders/src/modp_ascii_gen.c
-	#lib/stringencoders/src/modp_utf8.c
-	#lib/stringencoders/src/modp_ascii.c
-	#lib/stringencoders/src/modp_messagepack.c
-	#lib/stringencoders/src/modp_b85_gen.c
-	#lib/stringencoders/src/modp_qsiter.c
-	#lib/stringencoders/src/modp_html.c
-	#lib/stringencoders/src/modp_json.c
-	#lib/stringencoders/src/modp_burl.c
-	)
 
 
 include_directories(lib/bx/include)
@@ -328,8 +302,6 @@ if (DEFINED NOOB_USE_ASSIMP)
 		lib/assimp/code/SortByPTypeProcess.cpp
 		lib/assimp/code/FBXNodeAttribute.cpp
 		)
-
-
 endif()
 
 
@@ -477,15 +449,15 @@ list (APPEND bullet_src
 	lib/bullet/src/BulletSoftBody/btSoftRigidDynamicsWorld.cpp
 	lib/bullet/src/BulletSoftBody/btSoftSoftCollisionAlgorithm.cpp
 	lib/bullet/src/BulletSoftBody/btSoftBodyHelpers.cpp
-	#lib/bullet/src/MiniCL/MiniCL.cpp
-	#lib/bullet/src/MiniCL/MiniCLTask/MiniCLTask.cpp
-	#lib/bullet/src/MiniCL/MiniCLTaskScheduler.cpp
-	#lib/bullet/src/BulletMultiThreaded/GpuSoftBodySolvers/DX11/btSoftBodySolver_DX11SIMDAware.cpp
-	#lib/bullet/src/BulletMultiThreaded/GpuSoftBodySolvers/DX11/btSoftBodySolver_DX11.cpp
-	#lib/bullet/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/btSoftBodySolver_OpenCL.cpp
-	#lib/bullet/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/btSoftBodySolverOutputCLtoGL.cpp
-	#lib/bullet/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/btSoftBodySolver_OpenCLSIMDAware.cpp
-	#lib/bullet/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/MiniCL/MiniCLTaskWrap.cpp
+	# lib/bullet/src/MiniCL/MiniCL.cpp
+	# lib/bullet/src/MiniCL/MiniCLTask/MiniCLTask.cpp
+	# lib/bullet/src/MiniCL/MiniCLTaskScheduler.cpp
+	# lib/bullet/src/BulletMultiThreaded/GpuSoftBodySolvers/DX11/btSoftBodySolver_DX11SIMDAware.cpp
+	# lib/bullet/src/BulletMultiThreaded/GpuSoftBodySolvers/DX11/btSoftBodySolver_DX11.cpp
+	# lib/bullet/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/btSoftBodySolver_OpenCL.cpp
+	# lib/bullet/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/btSoftBodySolverOutputCLtoGL.cpp
+	# lib/bullet/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/btSoftBodySolver_OpenCLSIMDAware.cpp
+	# lib/bullet/src/BulletMultiThreaded/GpuSoftBodySolvers/OpenCL/MiniCL/MiniCLTaskWrap.cpp
 	lib/bullet/src/BulletMultiThreaded/btParallelConstraintSolver.cpp
 	lib/bullet/src/BulletMultiThreaded/SpuSampleTaskProcess.cpp
 	lib/bullet/src/BulletMultiThreaded/SpuLibspe2Support.cpp
@@ -527,7 +499,6 @@ include_directories(lib/libvorbis/lib/books/coupled)
 include_directories(lib/libvorbis/lib/books/uncoupled)
 include_directories(lib/libvorbis/lib/books/floor)
 
-#include_directories(lib/libvorbis/vq)
 list (APPEND vorbis_src
 	lib/libvorbis/lib/codebook.c
 	lib/libvorbis/lib/psytune.c
@@ -642,19 +613,17 @@ include_directories(lib/math-funcs)
 list (APPEND shiny_src )
 
 if (DEFINED NOOB_USE_SHINY)
-
 	SET(CMAKE_CXX_FLAGS "-DSHINY_IS_COMPILED=TRUE  ${CMAKE_CXX_FLAGS}")
 
 	include_directories(lib/Shiny/include)
 
-	list(APPEND shiny-src
+	list(APPEND shiny_src
 		lib/Shiny/src/ShinyManager.cpp
 		lib/Shiny/src/ShinyNode.cpp
 		lib/Shiny/src/ShinyNodePool.cpp
 		lib/Shiny/src/ShinyOutput.cpp
 		lib/Shiny/src/ShinyTools.cpp
 		)
-
 endif()
 
 list(APPEND common_src
@@ -665,7 +634,6 @@ list(APPEND common_src
 	common/Application.cpp
 	common/NoobUtils.cpp
 	common/EditorUtils.cpp
-	#common/VoxelWorld.cpp
 	common/ActiveMesh.cpp
 	common/Camera.cpp
 	common/Stage.cpp
@@ -703,7 +671,7 @@ endif()
 # endif()
 
 
-add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${base_src} ${recast_src} ${bullet_src} ${voropp_src} ${ozz_src} ${ogg_src} ${vorbis_src} ${r8_src} ${shiny-src})
+add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${base_src} ${recast_src} ${bullet_src} ${voropp_src} ${ozz_src} ${ogg_src} ${vorbis_src} ${r8_src} ${shiny_src})
 
 target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype Enet)
 
