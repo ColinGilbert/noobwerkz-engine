@@ -1,6 +1,5 @@
 #include "Stage.hpp"
 // #include "Shiny.h"
-#include "LogObj.hpp"
 
 noob::stage::~stage() noexcept(true) 
 {
