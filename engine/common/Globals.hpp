@@ -43,11 +43,21 @@
 #include "ShaderVariant.hpp"
 #include "ProfilingInfo.hpp"
 
+
+
+//        Globals: Currently holds classes requiring data held in common storage.
+// TODO: Implement singleton class template.
+// TODO: Separate into different classes.
+// TODO: Make immutable upon assignment.
+// TODO: Allocate storage ahead-of-time.
+// TODO: Get a better allocator.
+
 namespace noob
 {
 	class globals
 	{
 		friend class sound_interface;
+		
 		protected:
 			static globals* ptr_to_instance;
 

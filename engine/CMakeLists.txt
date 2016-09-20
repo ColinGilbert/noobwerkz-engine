@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(NoobWerkz)
 
-#set(CMAKE_BUILD_TYPE "DEBUG")
+# set(CMAKE_BUILD_TYPE "DEBUG")
 set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
@@ -17,7 +17,6 @@ add_subdirectory(lib/freetype)
 include_directories(lib/freetype/include)
 
 include_directories(lib/eigen)
-include_directories(lib/lemon-minimal)
 
 include_directories(lib/base-utils/include)
 include_directories(lib/base-utils/rde)
@@ -53,7 +52,6 @@ list (APPEND voropp_src
 	lib/voropp/src/voro++.cc
 	)
 
-
 include_directories(lib/ozz-animation/include)
 include_directories(lib/ozz-animation/include/ozz)
 include_directories(lib/ozz-animation/src)
@@ -65,30 +63,30 @@ list(APPEND ozz_src
 	lib/ozz-animation/src/animation/runtime/animation.cc
 	lib/ozz-animation/src/animation/runtime/blending_job.cc
 	lib/ozz-animation/src/animation/runtime/skeleton.cc
-	#lib/ozz-animation/src/animation/offline/collada/dae2skel.cc
-	#lib/ozz-animation/src/animation/offline/collada/collada_transform.cc
-	#lib/ozz-animation/src/animation/offline/collada/collada_base.cc
-	#lib/ozz-animation/src/animation/offline/collada/collada_skeleton.cc
-	#lib/ozz-animation/src/animation/offline/collada/dae2anim.cc
-	#lib/ozz-animation/src/animation/offline/collada/collada_animation.cc
-	#lib/ozz-animation/src/animation/offline/collada/collada.cc
+	# lib/ozz-animation/src/animation/offline/collada/dae2skel.cc
+	# lib/ozz-animation/src/animation/offline/collada/collada_transform.cc
+	# lib/ozz-animation/src/animation/offline/collada/collada_base.cc
+	# lib/ozz-animation/src/animation/offline/collada/collada_skeleton.cc
+	# lib/ozz-animation/src/animation/offline/collada/dae2anim.cc
+	# lib/ozz-animation/src/animation/offline/collada/collada_animation.cc
+	# lib/ozz-animation/src/animation/offline/collada/collada.cc
 	lib/ozz-animation/src/animation/offline/animation_optimizer.cc
 	lib/ozz-animation/src/animation/offline/skeleton_builder.cc
 	lib/ozz-animation/src/animation/offline/additive_animation_builder.cc
 	lib/ozz-animation/src/animation/offline/raw_skeleton.cc
 	lib/ozz-animation/src/animation/offline/animation_builder.cc
 	lib/ozz-animation/src/animation/offline/raw_animation.cc
-	#lib/ozz-animation/src/animation/offline/fbx/fbx_base.cc
-	#lib/ozz-animation/src/animation/offline/fbx/fbx2anim.cc
-	#lib/ozz-animation/src/animation/offline/fbx/fbx.cc
-	#lib/ozz-animation/src/animation/offline/fbx/fbx_skeleton.cc
-	#lib/ozz-animation/src/animation/offline/fbx/fbx_animation.cc
-	#lib/ozz-animation/src/animation/offline/fbx/fbx2skel.cc
+	# lib/ozz-animation/src/animation/offline/fbx/fbx_base.cc
+	# lib/ozz-animation/src/animation/offline/fbx/fbx2anim.cc
+	# lib/ozz-animation/src/animation/offline/fbx/fbx.cc
+	# lib/ozz-animation/src/animation/offline/fbx/fbx_skeleton.cc
+	# lib/ozz-animation/src/animation/offline/fbx/fbx_animation.cc
+	# lib/ozz-animation/src/animation/offline/fbx/fbx2skel.cc
 	lib/ozz-animation/src/animation/offline/raw_animation_archive.cc
 	lib/ozz-animation/src/animation/offline/raw_animation_utils.cc
 	lib/ozz-animation/src/animation/offline/raw_skeleton_archive.cc
-	#lib/ozz-animation/src/animation/offline/tools/convert2anim.cc
-	#lib/ozz-animation/src/animation/offline/tools/convert2skel.cc
+	# lib/ozz-animation/src/animation/offline/tools/convert2anim.cc
+	# lib/ozz-animation/src/animation/offline/tools/convert2skel.cc
 	lib/ozz-animation/src/base/io/archive.cc
 	lib/ozz-animation/src/base/io/stream.cc
 	lib/ozz-animation/src/base/memory/allocator.cc
@@ -109,7 +107,6 @@ if (DEFINED NOOB_USE_ASSIMP)
 	set(ASSIMP_FLAGS " -DNOOB_USE_ASSIMP -DASSIMP_BUILD_BOOST_WORKAROUND -DASSIMP_BUILD_NO_EXPORT -DASSIMP_BUILD_NO_XGL_IMPORTER -DASSIMP_BUILD_NO_FBX_IMPORTER -DASSIMP_BUILD_NO_C4D_IMPORTER -DASSIMP_BUILD_NO_X_IMPORTER -DASSIMP_BUILD_NO_OBJ_IMPORTER -DASSIMP_BUILD_NO_MD3_IMPORTER -DASSIMP_BUILD_NO_MD2_IMPORTER -DASSIMP_BUILD_NO_MDL_IMPORTER -DASSIMP_BUILD_NO_ASE_IMPORTER -DASSIMP_BUILD_NO_HMP_IMPORTER -DASSIMP_BUILD_NO_SMD_IMPORTER -DASSIMP_BUILD_NO_MDC_IMPORTER -DASSIMP_BUILD_NO_MD5_IMPORTER -DASSIMP_BUILD_NO_LWO_IMPORTER -DASSIMP_BUILD_NO_DXF_IMPORTER -DASSIMP_BUILD_NO_NFF_IMPORTER -DASSIMP_BUILD_NO_RAW_IMPORTER -DASSIMP_BUILD_NO_AC_IMPORTER -DASSIMP_BUILD_NO_BVH_IMPORTER -DASSIMP_BUILD_NO_IRRMESH_IMPORTER -DASSIMP_BUILD_NO_IRR_IMPORTER -DASSIMP_BUILD_NO_Q3D_IMPORTER -DASSIMP_BUILD_NO_B3D_IMPORTER -DASSIMP_BUILD_NO_COLLADA_IMPORTER -DASSIMP_BUILD_NO_TERRAGEN_IMPORTER -DASSIMP_BUILD_NO_CSM_IMPORTER -DASSIMP_BUILD_NO_3D_IMPORTER -DASSIMP_BUILD_NO_LWS_IMPORTER -DASSIMP_BUILD_NO_OGRE_IMPORTER -DASSIMP_BUILD_NO_OPENGEX_IMPORTER -DASSIMP_BUILD_NO_COB_IMPORTER -DASSIMP_BUILD_NO_BLEND_IMPORTER -DASSIMP_BUILD_NO_Q3BSP_IMPORTER -DASSIMP_BUILD_NO_NDO_IMPORTER -DASSIMP_BUILD_NO_IFC_IMPORTER")
 
 	set(CMAKE_CXX_FLAGS "-DNOOB_USE_ASSIMP ${ASSIMP_FLAGS} ${CMAKE_CXX_FLAGS}")
-
 
 	include_directories(lib/assimp/include)
 	include_directories(lib/assimp/code)
@@ -146,10 +143,10 @@ if (DEFINED NOOB_USE_ASSIMP)
 		lib/assimp/contrib/poly2tri/poly2tri/sweep/sweep_context.cc
 		lib/assimp/contrib/poly2tri/poly2tri/sweep/advancing_front.cc
 		lib/assimp/contrib/poly2tri/poly2tri/common/shapes.cc
-		#lib/assimp/port/jassimp/jassimp-native/src/jassimp.cpp
-		#lib/assimp/port/AndroidJNI/AndroidJNIIOSystem.cpp
-		#lib/assimp/samples/SimpleOpenGL/Sample_SimpleOpenGL.c
-		#lib/assimp/samples/SimpleTexturedOpenGL/SimpleTexturedOpenGL/src/model_loading.cpp
+		# lib/assimp/port/jassimp/jassimp-native/src/jassimp.cpp
+		# lib/assimp/port/AndroidJNI/AndroidJNIIOSystem.cpp
+		# lib/assimp/samples/SimpleOpenGL/Sample_SimpleOpenGL.c
+		# lib/assimp/samples/SimpleTexturedOpenGL/SimpleTexturedOpenGL/src/model_loading.cpp
 		lib/assimp/code/UnrealLoader.cpp
 		lib/assimp/code/SkeletonMeshBuilder.cpp
 		lib/assimp/code/NFFLoader.cpp
@@ -275,7 +272,7 @@ if (DEFINED NOOB_USE_ASSIMP)
 		lib/assimp/code/STLLoader.cpp
 		lib/assimp/code/DefaultIOSystem.cpp
 		lib/assimp/code/BVHLoader.cpp
-		#lib/assimp/code/C4DImporter.cpp
+		# lib/assimp/code/C4DImporter.cpp
 		lib/assimp/code/GenFaceNormalsProcess.cpp
 		lib/assimp/code/AssbinExporter.cpp
 		lib/assimp/code/ScenePreprocessor.cpp
@@ -507,13 +504,13 @@ list (APPEND vorbis_src
 	lib/libvorbis/lib/floor0.c
 	lib/libvorbis/lib/psy.c
 	lib/libvorbis/lib/mapping0.c
-	#lib/libvorbis/lib/tone.c
+	# lib/libvorbis/lib/tone.c
 	lib/libvorbis/lib/vorbisfile.c
 	lib/libvorbis/lib/smallft.c
 	lib/libvorbis/lib/window.c
 	lib/libvorbis/lib/floor1.c
 	lib/libvorbis/lib/sharedbook.c
-	#lib/libvorbis/lib/barkmel.c
+	# lib/libvorbis/lib/barkmel.c
 	lib/libvorbis/lib/mdct.c
 	lib/libvorbis/lib/lpc.c
 	lib/libvorbis/lib/analysis.c
@@ -521,13 +518,13 @@ list (APPEND vorbis_src
 	lib/libvorbis/lib/res0.c
 	lib/libvorbis/lib/synthesis.c
 	lib/libvorbis/lib/registry.c
-	#lib/libvorbis/vq/latticetune.c
-	#lib/libvorbis/vq/huffbuild.c
-	#lib/libvorbis/vq/distribution.c
-	#lib/libvorbis/vq/metrics.c
-	#lib/libvorbis/vq/latticebuild.c
-	#lib/libvorbis/vq/vqgen.c
-	#lib/libvorbis/vq/bookutil.c
+	# lib/libvorbis/vq/latticetune.c
+	# lib/libvorbis/vq/huffbuild.c
+	# lib/libvorbis/vq/distribution.c
+	# lib/libvorbis/vq/metrics.c
+	# lib/libvorbis/vq/latticebuild.c
+	# lib/libvorbis/vq/vqgen.c
+	# lib/libvorbis/vq/bookutil.c
 	)
 
 include_directories(lib/r8brain-free-src)
@@ -560,33 +557,33 @@ if (DEFINED NOOB_USE_RECAST)
 		lib/recastnavigation/Recast/Source/RecastRegion.cpp
 		lib/recastnavigation/DetourTileCache/Source/DetourTileCacheBuilder.cpp
 		lib/recastnavigation/DetourTileCache/Source/DetourTileCache.cpp
-		#lib/recastnavigation/DebugUtils/Source/DetourDebugDraw.cpp
-		#lib/recastnavigation/DebugUtils/Source/RecastDebugDraw.cpp
-		#lib/recastnavigation/DebugUtils/Source/RecastDump.cpp
-		#lib/recastnavigation/DebugUtils/Source/DebugDraw.cpp
-		#lib/recastnavigation/RecastDemo/Source/CrowdTool.cpp
-		#lib/recastnavigation/RecastDemo/Source/Sample_TempObstacles.cpp
-		#lib/recastnavigation/RecastDemo/Source/main.cpp
-		#lib/recastnavigation/RecastDemo/Source/imguiRenderGL.cpp
-		#lib/recastnavigation/RecastDemo/Source/Sample.cpp
-		#lib/recastnavigation/RecastDemo/Source/Filelist.cpp
-		#lib/recastnavigation/RecastDemo/Source/ConvexVolumeTool.cpp
-		#lib/recastnavigation/RecastDemo/Source/imgui.cpp
-		#lib/recastnavigation/RecastDemo/Source/Sample_Debug.cpp
-		#lib/recastnavigation/RecastDemo/Source/SlideShow.cpp
-		#lib/recastnavigation/RecastDemo/Source/NavMeshPruneTool.cpp
-		#lib/recastnavigation/RecastDemo/Source/PerfTimer.cpp
-		#lib/recastnavigation/RecastDemo/Source/InputGeom.cpp
-		#lib/recastnavigation/RecastDemo/Source/NavMeshTesterTool.cpp
-		#lib/recastnavigation/RecastDemo/Source/MeshLoaderObj.cpp
-		#lib/recastnavigation/RecastDemo/Source/ChunkyTriMesh.cpp
-		#lib/recastnavigation/RecastDemo/Source/Sample_SoloMesh.cpp
-		#lib/recastnavigation/RecastDemo/Source/Sample_TileMesh.cpp
-		#lib/recastnavigation/RecastDemo/Source/SampleInterfaces.cpp
-		#lib/recastnavigation/RecastDemo/Source/OffMeshConnectionTool.cpp
-		#lib/recastnavigation/RecastDemo/Source/TestCase.cpp
-		#lib/recastnavigation/RecastDemo/Source/ValueHistory.cpp
-		#lib/recastnavigation/RecastDemo/Contrib/fastlz/fastlz.c
+		# lib/recastnavigation/DebugUtils/Source/DetourDebugDraw.cpp
+		# lib/recastnavigation/DebugUtils/Source/RecastDebugDraw.cpp
+		# lib/recastnavigation/DebugUtils/Source/RecastDump.cpp
+		# lib/recastnavigation/DebugUtils/Source/DebugDraw.cpp
+		# lib/recastnavigation/RecastDemo/Source/CrowdTool.cpp
+		# lib/recastnavigation/RecastDemo/Source/Sample_TempObstacles.cpp
+		# lib/recastnavigation/RecastDemo/Source/main.cpp
+		# lib/recastnavigation/RecastDemo/Source/imguiRenderGL.cpp
+		# lib/recastnavigation/RecastDemo/Source/Sample.cpp
+		# lib/recastnavigation/RecastDemo/Source/Filelist.cpp
+		# lib/recastnavigation/RecastDemo/Source/ConvexVolumeTool.cpp
+		# lib/recastnavigation/RecastDemo/Source/imgui.cpp
+		# lib/recastnavigation/RecastDemo/Source/Sample_Debug.cpp
+		# lib/recastnavigation/RecastDemo/Source/SlideShow.cpp
+		# lib/recastnavigation/RecastDemo/Source/NavMeshPruneTool.cpp
+		# lib/recastnavigation/RecastDemo/Source/PerfTimer.cpp
+		# lib/recastnavigation/RecastDemo/Source/InputGeom.cpp
+		# lib/recastnavigation/RecastDemo/Source/NavMeshTesterTool.cpp
+		# lib/recastnavigation/RecastDemo/Source/MeshLoaderObj.cpp
+		# lib/recastnavigation/RecastDemo/Source/ChunkyTriMesh.cpp
+		# lib/recastnavigation/RecastDemo/Source/Sample_SoloMesh.cpp
+		# lib/recastnavigation/RecastDemo/Source/Sample_TileMesh.cpp
+		# lib/recastnavigation/RecastDemo/Source/SampleInterfaces.cpp
+		# lib/recastnavigation/RecastDemo/Source/OffMeshConnectionTool.cpp
+		# lib/recastnavigation/RecastDemo/Source/TestCase.cpp
+		# lib/recastnavigation/RecastDemo/Source/ValueHistory.cpp
+		# lib/recastnavigation/RecastDemo/Contrib/fastlz/fastlz.c
 		lib/recastnavigation/Detour/Source/DetourCommon.cpp
 		lib/recastnavigation/Detour/Source/DetourNavMesh.cpp
 		lib/recastnavigation/Detour/Source/DetourNavMeshBuilder.cpp
@@ -644,7 +641,7 @@ list(APPEND common_src
 	common/GUI.cpp
 	common/drawing/TriplanarGradientMap.cpp
 	common/drawing/BasicRenderer.cpp
-	#common/NavMesh.cpp
+	# common/NavMesh.cpp
 	common/FileSystem.cpp
 	common/Mixer.cpp
 	common/AudioSample.cpp

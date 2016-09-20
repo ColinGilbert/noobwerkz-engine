@@ -31,10 +31,10 @@ namespace noob
 
 	struct actor
 	{
-		actor() noexcept(true) : alive(true), stance(noob::actor::stance_type::STANDING), activity(noob::actor::activity_type::GUARDING), mentality(noob::actor::mentality_type::ALERT), velocity(noob::vec3(0.0, 0.0, 0.0)), incline(0.0), gravity_coeff(1.0) {}
+		actor() noexcept(true) : alive(true), stance(noob::actor::stance_type::STAND), activity(noob::actor::activity_type::GUARDING), mentality(noob::actor::mentality_type::ALERT), velocity(noob::vec3(0.0, 0.0, 0.0)), incline(0.0), gravity_coeff(1.0) {}
 		
 		// These are basic stances upon which all other activities are animated.
-		enum class stance_type : uint16_t { STANDING = 0, MOUNTED = 4, SITTING = 5, KNEELING = 6, PRONE = 7, DOWN = 8 };
+		enum class stance_type : uint16_t { STAND = 0, MOUNT = 1, SIT = 2, KNEEL = 3, PRONE = 4, KO = 5 };
 
 		enum class activity_type : uint16_t { GUARDING = 0, CHARGING = 1, BRACING = 2, MELEE = 3, SHOOTING = 4, RELOADING = 5, TAUNTING = 6, DEAD = 7, PRAYING = 8, SALUTING = 9, WORKING = 10, CELEBRATING = 11, SLEEPING = 12 };
 
@@ -42,7 +42,7 @@ namespace noob
 
 		static const noob::stage_item_type type = noob::stage_item_type::ACTOR;
 		
-		bool alive;//, flying;
+		bool alive;
 
 		noob::actor::stance_type stance;
 		noob::actor::activity_type activity;

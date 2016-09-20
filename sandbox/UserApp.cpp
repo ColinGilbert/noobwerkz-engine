@@ -26,11 +26,21 @@ bool noob::application::user_init()
 	noob::audio_sample* s = g.samples.get(h);
 
 	noob::basic_renderer::uniform u;
-	u.colour = noob::vec4(1.0, 0.0, 1.0, 1.0);
+	u.colour = noob::vec4(0.3, 0.0, 0.8, 1.0);
 	
 	g.set_shader(u, "example-shader");
 	noob::shader_variant example_shader = g.get_shader("example-shader");
 	
+	noob::reflectance r;
+	r.set_specular(noob::vec3(0.1, 0.1, 0.1));
+	r.set_diffuse(noob::vec3(0.1, 0.1, 0.1));
+	r.set_emissive(noob::vec3(0.0, 0.0, 0.0));
+	r.set_shine(8.0);
+	r.set_albedo(0.3);
+	r.set_fresnel(0.2);
+
+	noob::reflectance_handle rh = g.reflectances.add(r);
+
 	g.master_mixer.play_clip(h, 1.0);
 
 	const float actor_radius = 10.0;
@@ -39,25 +49,27 @@ bool noob::application::user_init()
 	noob::actor_blueprints bp;
 	bp.bounds = sh;
 	bp.shader = example_shader;
+	bp.reflect = rh;
 	g.set_actor_blueprints(bp, "example-actor-bp");
 	noob::actor_blueprints_handle bph = g.get_actor_blueprints("example-actor-bp");
 	
-	const uint32_t num_actors = 2000;
+	const uint32_t num_actors = 3000;
 	const float actor_height = 100.0;
 	const float actor_offset = 2.15;
 
 	for (uint32_t i = 0; i < num_actors; ++i)
 	{	
-		ah = stage.actor(bph, 0, noob::vec3((actor_radius*2.0*i)+actor_offset, actor_height, (actor_radius*2.0)+actor_offset*i), noob::versor(0.0, 0.0, 0.0, 1.0));
+		ah = stage.actor(bph, 0, noob::vec3((actor_radius * 2.0 * i) + actor_offset, actor_height, (actor_radius * 2.0 * i) + actor_offset), noob::versor(0.0, 0.0, 0.0, 1.0));
 	}
 
 
 	// noob::triplanar_gradient_map_renderer::uniform uu;
 	// g.set_shader(uu, "example-shader-two");
 	// noob::shader_variant example_shader_two = g.get_shader("example-shader-two");
+	
 
 
-	noob::scenery_handle scene_h = stage.scenery(g.box_shape(200.0, 10.0, 200.0), example_shader, g.get_default_reflectance(), noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
+	noob::scenery_handle scene_h = stage.scenery(g.box_shape(200.0, 10.0, 200.0), example_shader, rh, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
 	
 
 	eye_pos = noob::vec3(0.0, 200.0, -100.0);

@@ -35,8 +35,7 @@ namespace noob
 	class stage
 	{
 		public:
-
-			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.6, 0.6, 0.6, 1.0)), instancing(false), actor_mq_count(0) {}
+			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.6, 0.6, 0.6, 3.0)), instancing(false), actor_mq_count(0) {}
 
 			~stage() noexcept(true);
 
@@ -69,9 +68,6 @@ namespace noob
 
 			noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::shader_variant shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
 
-			// Intersection enumeration.
-			std::vector<noob::contact_point> get_intersecting(const noob::ghost_handle) const noexcept(true);
-
 			std::vector<noob::contact_point> get_intersecting(const noob::actor_handle) const noexcept(true);
 
 			// Dumps a readable graph format onto disk. Super useful for debug.
@@ -97,6 +93,9 @@ namespace noob
 			void remove_body(noob::body_handle) noexcept(true);
 			void remove_ghost(noob::ghost_handle) noexcept(true);
 			// void remove_joint(noob::joint_handle) noexcept(true);
+			
+			std::vector<noob::contact_point> get_intersecting(const noob::ghost_handle) const noexcept(true);
+
 
 
 
@@ -142,7 +141,7 @@ namespace noob
 			// noob::fast_hashtable ghosts_to_nodes;
 			// noob::fast_hashtable basic_models_to_nodes;
 
-			noob::directional_light directional_light;
+			// noob::directional_light directional_light;
 			
 			// noob::navigation nav;
 			// bool nav_changed;

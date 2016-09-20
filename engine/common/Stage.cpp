@@ -26,13 +26,17 @@ void noob::stage::init() noexcept(true)
 	draw_graph.add_node();
 	node_masks.push_back(0);
 
+	noob::light temp;
+	temp.rgb_falloff = noob::vec4(1.0, 1.0, 1.0, 0.6);
+	temp.pos_radius = noob::vec4(0.0, 450.0, 0.0, 500.0);
+	lights[0] = temp;
 
 
-	for (uint32_t i = 0; i < MAX_LIGHTS; ++i)
+	for (uint32_t i = 1; i < MAX_LIGHTS; ++i)
 	{
 		noob::light temp;
-		temp.rgb_falloff = noob::vec4(1.0, 1.0, 1.0, 0.8);
-		temp.pos_radius = noob::vec4(0.0, 100.0, 0.0, 500.0);
+		temp.rgb_falloff = noob::vec4(0.0, 0.0, 0.0, 0.0);
+		temp.pos_radius = noob::vec4(0.0, 450.0, 0.0, 500.0);
 		lights[i] = temp;
 	}
 

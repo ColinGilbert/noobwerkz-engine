@@ -505,6 +505,7 @@ noob::actor_blueprints_handle noob::globals::get_actor_blueprints(const std::str
 	return noob::actor_blueprints_handle::make(0);
 }
 
+
 double noob::globals::get_random() noexcept(true)
 {
 	if (current_random == num_pseudo_randoms - 1)

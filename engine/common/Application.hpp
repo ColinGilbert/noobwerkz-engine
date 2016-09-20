@@ -60,10 +60,8 @@ namespace noob
 
 			void accept_ndof_data(const noob::ndof::data& info);
 
-			// step() is called by the target platform, which calculates the delta-time and drives the update() function. It is an ugly hack that had to be made public in order to be callable from the main app.
+			// step() is called by the target platform. It calculates the delta-time and drives the app's main logic loop.
 			void step();
-
-			// noob::controls controller;
 
 		protected:
 
@@ -72,10 +70,11 @@ namespace noob
 			void update(double delta);
 			void draw();
 
-			// See these in sandbox/UserApp.cpp if you're writing a game that is setup or developing the engine in C++.
+			// You these were needed, as See these in sandbox/UserApp.cpp if you're writing a game that is setup or developing the engine in C++.
 			bool user_init();
 			void user_update(double);
 
+			// TODO: Make a method of noob::globals
 			void remove_shapes();
 
 			noob::time last_step;
@@ -86,8 +85,6 @@ namespace noob
 
 			bool paused, started, input_has_started, ui_enabled;
 
-			// uint64_t time;
-
 			uint32_t window_width, window_height;
 
 			noob::gui gui;
@@ -95,8 +92,6 @@ namespace noob
 			noob::vec3 eye_pos, eye_target, eye_up;
 
 			std::vector<noob::vec2> finger_positions;
-
-			// noob::voxel_world voxels;
 
 			noob::stage stage;
 

@@ -34,43 +34,48 @@ namespace noob
 	static std::string to_string(int32_t i)
 	{
 		std::string s(16, ' ');
-		modp_itoa10(i, &s[0]);
-		return trim(s);		
+		size_t num = modp_itoa10(i, &s[0]);
+		return s.substr(0, num);//trim(s);		
 	}
 
 	static std::string to_string(uint32_t i)
 	{
 		std::string s(16, ' ');
-		modp_uitoa10(i, &s[0]);
-		return trim(s);
+		size_t num = modp_uitoa10(i, &s[0]);
+		return s.substr(0, num);
+		// return trim(s);
 	}
 
 	static std::string to_string(int64_t i)
 	{
 		std::string s(24, ' ');
-		modp_litoa10(i, &s[0]);
-		return trim(s);
+		size_t num = modp_litoa10(i, &s[0]);
+		return s.substr(0, num);
+		//return trim(s);
 	}
 
 	static std::string to_string(uint64_t i)
 	{
 		std::string s(24, ' ');
-		modp_ulitoa10(i, &s[0]);
-		return trim(s);
+		size_t num = modp_ulitoa10(i, &s[0]);
+		return s.substr(0, num);
+		//return trim(s);
 	}
 
 	static std::string to_string(double f, uint32_t precision)
 	{
 		std::string s(32, ' ');
-		modp_dtoa2(f, &s[0], precision);
-		return trim(s);
+		size_t num = modp_dtoa2(f, &s[0], precision);
+		return s.substr(0, num);
+		//return trim(s);
 	}
 	static std::string to_string(double f)
 	{
 		std::string s(32, ' ');
 		uint32_t precision = 5;
-		modp_dtoa2(f, &s[0], precision);
-		return trim(s);
+		size_t num = modp_dtoa2(f, &s[0], precision);
+		return s.substr(0, num);
+		//return trim(s);
 	}
 
 	// NOTE: Concatenation routines from:  http://stackoverflow.com/questions/18892281/most-optimized-way-of-concatenation-in-strings/18899027#18899027

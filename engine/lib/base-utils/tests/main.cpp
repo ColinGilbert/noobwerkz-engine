@@ -92,7 +92,6 @@ int main()
 
 	noob::logger::log(noob::importance::INFO, noob::concat("Sorted graph - ", g.to_string()));
 
-
 	const noob::node_handle d = g.add_node();
 	const noob::node_handle e = g.add_node();
 	const noob::node_handle f = g.add_node();
