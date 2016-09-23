@@ -26,6 +26,6 @@ public class JNILib
 	
 	static
 	{
-		System.loadLibrary("Engine");
+		System.loadLibrary("NoobEdit");
 	}
 }
