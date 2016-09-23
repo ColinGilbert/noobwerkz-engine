@@ -1,10 +1,10 @@
 #include "SoundInterface.hpp"
-#include "Logger.hpp"
-#include "Globals.hpp"
 
 #include <soundio/soundio.h>
 
-#define NOOB_PI 3.1415926535
+#include "NoobUtils.hpp"
+#include "Globals.hpp"
+
 
 static struct SoundIo* soundio;
 static struct SoundIoDevice* device;
@@ -27,7 +27,7 @@ static void write_callback(struct SoundIoOutStream *outstream, int frame_count_m
 
 		if ((err = soundio_outstream_begin_write(outstream, &areas, &frame_count)))
 		{
-			noob::logger::log(noob::concat("[Sound] SoundIO error at beginning of frame ", noob::to_string(frame_count) ," - ", soundio_strerror(err)));
+			noob::logger::log(noob::importance::ERROR, noob::concat("[Sound] SoundIO error at beginning of frame ", noob::to_string(frame_count) ," - ", soundio_strerror(err)));
 			return;
 		}
 
@@ -50,7 +50,7 @@ static void write_callback(struct SoundIoOutStream *outstream, int frame_count_m
 
 		if ((err = soundio_outstream_end_write(outstream)))
 		{
-			noob::logger::log(noob::concat("[Sound] SoundIO error at end of frame ", noob::to_string(frame_count), " - ", soundio_strerror(err)));
+			noob::logger::log(noob::importance::ERROR, noob::concat("[Sound] SoundIO error at end of frame ", noob::to_string(frame_count), " - ", soundio_strerror(err)));
 			return;
 		}
 
@@ -66,13 +66,13 @@ void noob::sound_interface::init()
 
 	if (!soundio)
 	{
-		noob::logger::log("[Sound] ERROR: Couldn't even start SoundIO!");
+		noob::logger::log(noob::importance::ERROR, "[Sound] ERROR: Couldn't even start SoundIO!");
 		return;
 	}
 
 	if ((err = soundio_connect(soundio)))
 	{
-		noob::logger::log(noob::concat("[Sound] ERROR: Error connecting SoundIO - ", soundio_strerror(err)));
+		noob::logger::log(noob::importance::ERROR, noob::concat("[Sound] ERROR: Error connecting SoundIO - ", soundio_strerror(err)));
 		return;
 	}
 
@@ -82,7 +82,7 @@ void noob::sound_interface::init()
 
 	if (default_out_device_index < 0)
 	{
-		noob::logger::log("[Sound] ERROR: No SoundIO output device found!");
+		noob::logger::log(noob::importance::ERROR, "[Sound] ERROR: No SoundIO output device found!");
 		return;
 	}
 
@@ -90,14 +90,13 @@ void noob::sound_interface::init()
 
 	if (!device)
 	{
-		noob::logger::log("[Sound] ERROR: Cannot get SoundIO output device!");
+		noob::logger::log(noob::importance::ERROR, "[Sound] ERROR: Cannot get SoundIO output device!");
 		return;
 	}
-
+	else
 	{
-		noob::logger::log(noob::concat("[Sound] Init: Got SoundIO output device - ", device->name));
+		noob::logger::log(noob::importance::INFO, noob::concat("[Sound] Init: Got SoundIO output device - ", device->name));
 	}
-
 	outstream = soundio_outstream_create(device);
 
 	outstream->format = SoundIoFormatFloat32NE;
@@ -105,26 +104,26 @@ void noob::sound_interface::init()
 
 	if ((err = soundio_outstream_open(outstream)))
 	{
-		noob::logger::log(noob::concat("[Sound] ERROR: Unable to open SoundIO device - ", soundio_strerror(err)));
+		noob::logger::log(noob::importance::ERROR, noob::concat("[Sound] ERROR: Unable to open SoundIO device - ", soundio_strerror(err)));
 		return;
 	}
 
 	if (outstream->layout_error)
 	{
-		noob::logger::log(noob::concat("[Sound] WARNING: Unable to set SoundIO channel layout - ", soundio_strerror(outstream->layout_error)));
+		noob::logger::log(noob::importance::WARNING, noob::concat("[Sound] WARNING: Unable to set SoundIO channel layout - ", soundio_strerror(outstream->layout_error)));
 	}
 
 
 	if ((err = soundio_outstream_start(outstream)))
 	{
-		noob::logger::log(noob::concat("[Sound] ERROR: Unable to start SoundIO outstream - ", soundio_strerror(err)));
+		noob::logger::log(noob::importance::ERROR, noob::concat("[Sound] ERROR: Unable to start SoundIO outstream - ", soundio_strerror(err)));
 		return;
 	}
 
 	noob::globals& g = noob::globals::get_instance();
 	g.sample_rate = outstream->sample_rate;
 
-	noob::logger::log(noob::concat("[SoundInterface] Sound init success! Sample rate: ", noob::to_string(outstream->sample_rate), ". Bytes per frame: ", noob::to_string(outstream->bytes_per_frame), ". Bytes per sample: ", noob::to_string(outstream->bytes_per_sample)));
+	noob::logger::log(noob::importance::INFO, noob::concat("[SoundInterface] Sound init success! Sample rate: ", noob::to_string(outstream->sample_rate), ". Bytes per frame: ", noob::to_string(outstream->bytes_per_frame), ". Bytes per sample: ", noob::to_string(outstream->bytes_per_sample)));
 
 	valid = true;
 }

@@ -5,17 +5,16 @@ project(NoobWerkz)
 set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
-set(CMAKE_CXX_FLAGS "-std=c++1y  -fno-exceptions -fno-rtti -DEIGEN_MPL2_ONLY ${CMAKE_CXX_FLAGS}")
+set (bgfx_macros "-D__STDC_LIMIT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_CONSTANT_MACROS")
+
+set(CMAKE_CXX_FLAGS "-std=c++1y  -fno-exceptions -fno-rtti -DEIGEN_MPL2_ONLY ${bgfx_macros} ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-DSTB_IMAGE_STATIC ${CMAKE_C_FLAGS}")
 
-if (DEFINED NOOB_PLATFORM_LINUX)
-	add_subdirectory(lib/glfw)
-	include_directories(lib/glfw/include)	
-endif()
 
 add_subdirectory(lib/freetype)
 include_directories(lib/freetype/include)
 
+include_directories(lib/glm)
 include_directories(lib/eigen)
 
 include_directories(lib/base-utils/include)
@@ -478,7 +477,7 @@ include_directories(common)
 include_directories(common/drawing)
 include_directories(common/drawing/font)
 
-include_directories(lib/libogg/ogg/include)
+include_directories(lib/libogg/include)
 list (APPEND ogg_src
 	lib/libogg/src/framing.c
 	lib/libogg/src/bitwise.c
@@ -623,7 +622,6 @@ list(APPEND common_src
 	common/Globals.cpp
 	common/BasicMesh.cpp
 	common/Graphics.cpp
-	common/Logger.cpp
 	common/Application.cpp
 	common/NoobUtils.cpp
 	common/Camera.cpp
@@ -651,21 +649,42 @@ list(APPEND user_src
 	../sandbox/UserApp.cpp
 	)
 
-if (DEFINED NOOB_PLATFORM_LINUX)
+# Platform-specific:
+if (NOOB_PLATFORM_LINUX)
+	add_subdirectory(lib/glfw)
+	include_directories(lib/glfw/include)	
 	include_directories(platform/nix)
 	list(APPEND main_src platform/nix/EngineDesktop.cpp platform/desktop/SoundInterface.cpp)
 endif()
 
-# if (DEFINED IOS)
-# list(APPEND main_src platform/ios/EngineIOS.mm)
-# endif()
+
+if (NOOB_PLATFORM_ANDROID)
+	include_directories(platform/droid)
+	list(APPEND main_src platform/droid/EngineDroid.cpp platform/droid/SoundInterface.cpp)
+endif()
 
 
-add_executable(NoobEdit ${assimp_src} ${user_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${base_src} ${recast_src} ${bullet_src} ${voropp_src} ${ozz_src} ${ogg_src} ${vorbis_src} ${r8_src} ${shiny_src})
+# All platforms get these:
+list (APPEND app_src ${assimp_src} ${user_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${base_src} ${recast_src} ${bullet_src} ${voropp_src} ${ozz_src} ${ogg_src} ${vorbis_src} ${r8_src} ${shiny_src})
 
-target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype)
+#target_link_libraries(NoobEdit LINK_PUBLIC ${OPENGL_LIBRARIES} freetype)
 
-if (DEFINED NOOB_PLATFORM_LINUX)
-	target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} GL rt dl pthread m soundio.a asound)	
+
+# More platform-specific:
+if (NOOB_PLATFORM_LINUX)
+	add_executable(NoobEdit ${app_src})
+	target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} rt dl pthread m soundio.a asound ${OPENGL_LIBRARIES} freetype)	
 	# target_link_libraries(NoobEdit LINK_PUBLIC spnav)
 endif()
+
+
+if (NOOB_PLATFORM_ANDROID)
+	include("$ENV{ANDROID_CMAKE_HOME}/android.apk.cmake" REQUIRED)
+	#include_directories($ENV{ANDROID_NDK_HOME}/sources/android/native_app_glue)
+	#list (APPEND app_src "$ENV{ANDROID_NDK_HOME}/sources/android/native_app_glue/android_native_app_glue.c")
+	add_library(NoobEdit SHARED ${app_src})
+	target_link_libraries(NoobEdit log android EGL GLESv2 freetype m dl)
+	set_target_properties(NoobEdit PROPERTIES COMPILE_DEFINITIONS "ANDROID")
+	android_create_apk(NoobEdit "net.noobwerkz.SampleApp" "${CMAKE_BINARY_DIR}/apk" "${CMAKE_SOURCE_DIR}/libs" "${CMAKE_SOURCE_DIR}/android" "${CMAKE_SOURCE_DIR}/assets")
+endif()
+

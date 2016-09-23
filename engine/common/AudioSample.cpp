@@ -1,14 +1,14 @@
 #include "AudioSample.hpp"
-#include "Logger.hpp"
-#include "Globals.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
 
 #include <vorbis/codec.h>
 #include <vorbis/vorbisfile.h>
-
 #include <CDSPResampler.h>
+
+#include "Globals.hpp"
+#include "NoobUtils.hpp"
 
 bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 {
@@ -17,12 +17,12 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 	_setmode( _fileno( stdin ), _O_BINARY );
 #endif
 
-	logger::log("[AudioSample] About to open vorbis file...");
+	logger::log(noob::importance::INFO, "[AudioSample] About to open vorbis file...");
 
 	// if (ov_open_callbacks(), &vf, NULL, 0, OV_CALLBACKS_NOCLOSE) < 0)
 	if (ov_fopen(filename.c_str(), &vf) < 0)
 	{
-		logger::log("[AudioSample] Error opening vorbis file!");
+		logger::log(noob::importance::ERROR, "[AudioSample] Error opening vorbis file!");
 	}
 
 	vorbis_info* vi = ov_info(&vf,-1);
@@ -32,7 +32,7 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 
 	char **ptr=ov_comment(&vf,-1)->user_comments;
 
-	noob::logger::log(noob::concat("[AudioSample] Bitstream is ", noob::to_string(num_channels), " channel, ", noob::to_string(rate), "Hz. Decoded lengths: ", noob::to_string(static_cast<long>(ov_pcm_total(&vf,-1))), ". Encoded by: ", ov_comment(&vf,-1)->vendor));//". User comment: "; 
+	noob::logger::log(noob::importance::INFO, noob::concat("[AudioSample] Bitstream is ", noob::to_string(num_channels), " channel, ", noob::to_string(rate), "Hz. Decoded lengths: ", noob::to_string(static_cast<int64_t>(ov_pcm_total(&vf,-1))), ". Encoded by: ", ov_comment(&vf,-1)->vendor));//". User comment: "; 
 	/*
 	   while(*ptr)
 	   {	
@@ -59,25 +59,25 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 			case(OV_HOLE):
 				{
 					done = true;
-					logger::log("[AudioSample] Data interrupted while reading.");
+					logger::log(noob::importance::ERROR, "[AudioSample] Data interrupted while reading.");
 					return false;
 				}
 			case(OV_EBADLINK):
 				{
-					logger::log("[AudioSample] Bad link exception.");
+					logger::log(noob::importance::ERROR, "[AudioSample] Bad link exception.");
 					done = true;
 					return false;
 				}
 			case(OV_EINVAL):
 				{
-					logger::log("[AudioSample] Initial file headers could not be read.");
+					logger::log(noob::importance::ERROR, "[AudioSample] Initial file headers could not be read.");
 					done = true;
 					return false;
 				}
 			case (0):
 				{
 					done = true;
-					logger::log("[AudioSample] EOF");
+					logger::log(noob::importance::INFO, "[AudioSample] EOF");
 					break;
 				}
 			default:
@@ -95,7 +95,7 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 		}
 	}
 
-	noob::logger::log(noob::concat("[AudioSample] Sample buffer size ", noob::to_string(samples.size()), ". Samples read: ", noob::to_string(accum), "."));
+	noob::logger::log(noob::importance::INFO, noob::concat("[AudioSample] Sample buffer size ", noob::to_string(samples.size()), ". Samples read: ", noob::to_string(static_cast<int64_t>(accum)), "."));
 
 	noob::globals& g = noob::globals::get_instance();
 
@@ -142,7 +142,7 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 
 			ol -= write_count;
 		}
-		noob::logger::log(noob::concat("[AudioSample] Resampling from 44100 to ", noob::to_string(g.sample_rate), ". Old number of samples: ", noob::to_string(num_samples_old), ". New number of samples: ", noob::to_string(num_samples_new)));
+		noob::logger::log(noob::importance::INFO, noob::concat("[AudioSample] Resampling from 44100 to ", noob::to_string(g.sample_rate), ". Old number of samples: ", noob::to_string(num_samples_old), ". New number of samples: ", noob::to_string(num_samples_new)));
 
 	}
 	return true;

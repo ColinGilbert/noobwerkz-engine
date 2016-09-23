@@ -160,7 +160,7 @@ namespace noob
 
 
 
-			logger::log("[ParticleSystem: get_colour_from_particle_life - Reached post-loop state!");
+			logger::log(noob::importance::CRITICAL, "[ParticleSystem: get_colour_from_particle_life - Reached post-loop state!");
 
 			return noob::vec4(1.0, 0.3, 1.0, 1.0);//colours[noob::particle_system::max_colours - 1 ];
 		}		

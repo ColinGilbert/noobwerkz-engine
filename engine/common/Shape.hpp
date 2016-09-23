@@ -2,14 +2,15 @@
 // Limitation: btCollisionShape* inner_shape pointer must be delete'd by the application.
 // Reason: The destructor used to do the above, but that unfortunately led to deletion of the btCollisionShape*  every time it went out of scope in a local block. This led to all sorts of fun.
 // Comment: This breaks pure OOP principles but pure OOP isn't necessarily the best way forward. That goes doubly do when working with third party libraries.
-
 #pragma once
-
 
 #include <vector>
 #include <memory>
 
+#include <rdestl/fixed_array.h>
 #include <btBulletDynamicsCommon.h>
+
+#include "NoobUtils.hpp"
 #include "BasicMesh.hpp"
 #include "MeshUtils.hpp"
 #include "MathFuncs.hpp"

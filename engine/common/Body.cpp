@@ -1,6 +1,5 @@
 #include "Body.hpp"
 
-#include "Logger.hpp"
 #include "Globals.hpp"
 
 

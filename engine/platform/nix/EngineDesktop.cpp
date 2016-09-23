@@ -1,9 +1,10 @@
 #include <atomic>
 
 #include <bgfx/bgfx.h>
+
 #include "Graphics.hpp"
 #include "Application.hpp"
-#include "Logger.hpp"
+#include "NoobUtils.hpp"
 // #include "NDOF.hpp"
 
 #if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
@@ -130,7 +131,8 @@ int main(int /*_argc*/, char** /*_argv*/)
 
 	if (!app)
 	{
-		noob::logger::log("Could not init user app");
+		noob::logger::log(noob::importance::ERROR, "Could not init application!");
+		return 0;
 	}
 
 

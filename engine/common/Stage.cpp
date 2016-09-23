@@ -42,7 +42,7 @@ void noob::stage::init() noexcept(true)
 
 
 
-	logger::log("[Stage] Done init.");
+	logger::log(noob::importance::INFO, "[Stage] Done init.");
 }
 
 void noob::stage::tear_down() noexcept(true) 
@@ -154,7 +154,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 					break;
 				}
 			default:
-				{	assert(0 && "[Stage] Draw() - WTF?? INVALID SHADER ENUM TYPE!!!");
+				{	logger::log(noob::importance::ERROR, "[Stage] draw() - WTF?? Invalid shader enum type?!?!");
 					basic_u = g.basic_shaders.get(noob::basic_shader_handle::make(0));
 				}
 		}
@@ -211,7 +211,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 							}
 						default:
 							{
-								assert(0 &&noob::concat("[Stage] Trying to draw invalid type \"", noob::to_string(static_cast<noob::stage_item_type>(std::get<0>(variant_unpacked))), "\"").c_str());
+								logger::log(noob::importance::ERROR, noob::concat("[Stage] Trying to draw invalid type \"", noob::to_string(static_cast<noob::stage_item_type>(std::get<0>(variant_unpacked))), "\""));
 							}
 
 					}
@@ -347,7 +347,7 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, co
 	b.inner->setUserIndex_2(scenery_h.index());
 
 
-	logger::log(noob::concat("[Stage] Scenery added! Handle ", noob::to_string(scenery_h.index())) );
+	logger::log(noob::importance::INFO, noob::concat("[Stage] Scenery added! Handle ", noob::to_string(scenery_h.index())) );
 
 	return scenery_h;
 }
@@ -411,7 +411,7 @@ std::vector<noob::contact_point> noob::stage::get_intersecting(const noob::ghost
 			}
 			else
 			{
-				logger::log("[Stage] DATA ERROR: Invalid objects found during collision");
+				logger::log(noob::importance::ERROR, "[Stage] DATA ERROR: Invalid objects found during collision");
 			}
 		}
 	}

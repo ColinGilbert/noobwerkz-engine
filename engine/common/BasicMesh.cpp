@@ -1,4 +1,3 @@
-#include "Logger.hpp"
 #include "BasicMesh.hpp"
 
 #include <Eigen/Geometry>
@@ -75,11 +74,11 @@ bool noob::basic_mesh::load_file_assimp(const std::string& filename)
 
 bool noob::basic_mesh::load_assimp(const aiScene* scene)
 {
-	logger::log("[BasicMesh] Load Asssimp");
-	// logger::log("[mesh] load() - begin");
+	logger::log(noob::importance::INFO, "[BasicMesh] Load Asssimp");
+	// logger::log(noob::importance::INFO, "[mesh] load() - begin");
 	if (!scene)
 	{
-		logger::log("[BasicMesh] (Assimp) cannot open!");
+		logger::log(noob::importance::INFO, "[BasicMesh] (Assimp) cannot open!");
 		return false;
 	}
 

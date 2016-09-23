@@ -1,4 +1,5 @@
 #include "TriplanarGradientMap.hpp"
+#include "NoobUtils.hpp"
 
 void noob::triplanar_gradient_map_renderer::init()
 {
@@ -9,7 +10,15 @@ void noob::triplanar_gradient_map_renderer::init()
 	renderbase.shader.program = program_handle;
 	renderbase.shader.samplers.push_back(gfx.get_texture_0());
 	gfx.add_shader("gradient_map_triplanar", renderbase.shader);
-	noob::logger::log(noob::concat("[TriplanarGradientMap] Program valid? ", noob::to_string(renderbase.program_valid)));
+	
+	if (renderbase.program_valid)
+	{
+		noob::logger::log(noob::importance::INFO, "Triplanar gradient map load success.");
+	}
+	else
+	{
+		noob::logger::log(noob::importance::ERROR, "Triplanar gradient map load fail.");
+	}
 }
 
 

@@ -1,6 +1,5 @@
 #include "AnimatedModel.hpp"
-#include "Logger.hpp"
-
+#include "NoobUtils.hpp"
 
 bgfx::VertexDecl noob::animated_model::mesh::vertex::ms_decl;
 
@@ -46,6 +45,6 @@ void noob::animated_model::draw(uint8_t view_id, const noob::mat4& model_mat, co
 	}
 	else
 	{
-		logger::log("Attempting to draw item with improper state.");
+		logger::log(noob::importance::ERROR, "Attempting to draw item with improper state.");
 	}
 }

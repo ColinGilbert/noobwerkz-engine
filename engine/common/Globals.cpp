@@ -15,31 +15,31 @@ bool noob::globals::init() noexcept(true)
 	// unit_cylinder_shape = cylinder_shape(0.5, 1.0);
 	// unit_cone_shape = cone_shape(0.5, 1.0);
 
-	noob::logger::log(noob::concat("[Globals] unit sphere shape handle ", noob::to_string(unit_sphere_shape.index()) ,", unit cube shape handle ", noob::to_string(unit_cube_shape.index())));
+	noob::logger::log(noob::importance::INFO, noob::concat("[Globals] unit sphere shape handle ", noob::to_string(unit_sphere_shape.index()) ,", unit cube shape handle ", noob::to_string(unit_cube_shape.index())));
 	// << ", unit cylinder shape handle " << unit_cylinder_shape.index() << ", unit cone shape handle " << unit_cone_shape.index();
 	
-	noob::logger::log("[Globals] Making unit sphere model");
+	noob::logger::log(noob::importance::INFO, "[Globals] Making unit sphere model");
 	unit_sphere_model = model_from_mesh(noob::mesh_utils::sphere(0.5, 1));//basic_models.add(std::move(temp));
-	noob::logger::log("[Globals] Making unit cube model");
+	noob::logger::log(noob::importance::INFO, "[Globals] Making unit cube model");
 	unit_cube_model = model_from_mesh(noob::mesh_utils::box(1.0, 1.0, 1.0));
 	
 
-	// logger::log("[Globals] Making unit cone model");
+	// logger::log(noob::importance::INFO, "[Globals] Making unit cone model");
 	// unit_cone_model = model_from_mesh(noob::mesh_utils::cone(0.5, 1.0, 8));
 	
-	// logger::log("[Globals] Making unit cylinder model");
+	// logger::log(noob::importance::INFO, "[Globals] Making unit cylinder model");
 	// unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(0.5, 1.0, 8));
 
-	noob::logger::log(noob::concat("[Globals] unit sphere model handle ", noob::to_string(unit_sphere_model.model_h.index()) ,", unit cube model handle ", noob::to_string(unit_cube_model.model_h.index())));// << ", unit cylinder model handle " << unit_cylinder_model.model_h.index() << ", unit cone model handle " << unit_cone_model.model_h.index();
+	noob::logger::log(noob::importance::INFO, noob::concat("[Globals] unit sphere model handle ", noob::to_string(unit_sphere_model.model_h.index()) ,", unit cube model handle ", noob::to_string(unit_cube_model.model_h.index())));// << ", unit cylinder model handle " << unit_cylinder_model.model_h.index() << ", unit cone model handle " << unit_cone_model.model_h.index();
 
 	//  Init basic default shader
 	noob::basic_renderer::uniform dbg;
 	dbg.colour = noob::vec4(1.0, 1.0, 1.0, 1.0);
 	set_shader(dbg, "debug");
-	// logger::log("[Globals] Set debug shader");
+	// logger::log(noob::importance::INFO, "[Globals] Set debug shader");
 	noob::shader_variant t1 = get_shader("debug");
 	debug_shader = basic_shader_handle::make(t1.handle);
-	// logger::log("[Globals] Got debug shader handle");
+	// logger::log(noob::importance::INFO, "[Globals] Got debug shader handle");
 	// Init triplanar shader. For fun.
 	noob::triplanar_gradient_map_renderer::uniform triplanar_info;
 
@@ -51,7 +51,7 @@ bool noob::globals::init() noexcept(true)
 	triplanar_info.scales = noob::vec4(1.0, 1.0, 1.0, 0.0);
 	triplanar_info.colour_positions = noob::vec4(0.3, 0.6, 0.0, 0.0);
 	set_shader(triplanar_info, "default-triplanar");
-	// logger::log("[Globals] Set default triplanar shader.");
+	// logger::log(noob::importance::INFO, "[Globals] Set default triplanar shader.");
 
 	noob::shader_variant t2 = get_shader("default-triplanar");
 	default_triplanar_shader = triplanar_shader_handle::make(t2.handle);
@@ -63,7 +63,7 @@ bool noob::globals::init() noexcept(true)
 	noob::reflectance r;
 	default_reflectance = set_reflectance(r, "default");
 
-	// logger::log("[Globals] Got default triplanar shader handle.");
+	// logger::log(noob::importance::INFO, "[Globals] Got default triplanar shader handle.");
 
 	noob::actor_blueprints bp;
 	set_actor_blueprints(bp, "default");
@@ -79,7 +79,7 @@ bool noob::globals::init() noexcept(true)
 		pseudo_randoms[i] = rng.get();
 	}
 
-	noob::logger::log("[Globals] Init complete.");
+	noob::logger::log(noob::importance::INFO, "[Globals] Init complete.");
 	init_done = true;
 	return true;
 }
@@ -133,18 +133,18 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 {
 	// fmt::MemoryWriter ww;
 	// ww << "[Globals] about to get model from shape " << h.index();
-	// logger::log(ww.str());
+	// logger::log(noob::importance::INFO, ww.str());
 
 	scaled_model results;
 	noob::shape s = shapes.get(h);
 
-	// logger::log("[Globals] got shape pointer");
+	// logger::log(noob::importance::INFO, "[Globals] got shape pointer");
 
 	bool please_insert = false;
 
 	switch(s.shape_type)
 	{
-		// logger::log("[Globals] choosing shape type");
+		// logger::log(noob::importance::INFO, "[Globals] choosing shape type");
 
 		case(noob::shape::type::SPHERE):
 			{
@@ -182,7 +182,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 				}
 				else
 				{
-					noob::logger::log("[Globals] DATA ERROR: Attempted to get a hull model with an invalid shape handle.");
+					noob::logger::log(noob::importance::INFO, "[Globals] DATA ERROR: Attempted to get a hull model with an invalid shape handle.");
 				}
 				results.scales = noob::vec3(1.0, 1.0, 1.0);					
 				break; 
@@ -202,7 +202,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 					}
 					else
 					{
-						noob::logger::log(noob::concat("[Globals] DATA ERROR: Shape handle ", noob::to_string(h.index()), " has invalid model mapping."));
+						noob::logger::log(noob::importance::INFO, noob::concat("[Globals] DATA ERROR: Shape handle ", noob::to_string(h.index()), " has invalid model mapping."));
 					}
 				}	
 				// We must first create the model:
@@ -220,7 +220,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 			}
 		default:
 			{
-				noob::logger::log("[Globals] INVALID ENUM: model_from_shape()");
+				noob::logger::log(noob::importance::INFO, "[Globals] INVALID ENUM: model_from_shape()");
 			}
 	}
 
@@ -468,12 +468,12 @@ noob::shader_variant noob::globals::get_shader(const std::string& s) const noexc
 
 	if (search != names_to_shaders.end())
 	{
-		noob::logger::log(noob::concat("[Globals] Found shader ", s, ", with handle ", (search->second).to_string(), "."));
+		noob::logger::log(noob::importance::INFO, noob::concat("[Globals] Found shader ", s, ", with handle ", (search->second).to_string(), "."));
 		results = search->second;
 	}
 	else
 	{
-		noob::logger::log(noob::concat("[Globals] Could not find shader ", s ,". Returning default."));
+		noob::logger::log(noob::importance::INFO, noob::concat("[Globals] Could not find shader ", s ,". Returning default."));
 	}
 
 	return results;

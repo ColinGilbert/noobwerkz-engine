@@ -126,7 +126,7 @@ bgfx::ShaderHandle noob::graphics::load_shader(const std::string& filename)
 	shader_path.append(filename);
 	shader_path.append(".bin");
 
-	logger::log(noob::concat("[Graphics] Loading shader at ", shader_path));
+	logger::log(noob::importance::INFO, noob::concat("[Graphics] Loading shader at ", shader_path));
 
 	// noob::utils::data.insert(std::make_pair(shader_path, noob::utils::load_file_as_string(shader_path)));
 	const bgfx::Memory* mem = get_bgfx_mem(noob::utils::load_file_as_string(shader_path));
@@ -162,7 +162,7 @@ noob::graphics::texture noob::graphics::load_texture(const std::string& friendly
 	// ww << "BGFX texture info: Storage size is " << tex_info.storageSize << " bytes, width of " << tex_info.width << ", height of " << tex_info.height << ", depth of " << tex_info.depth << ". Num mips is " << tex_info.numMips << ". Bpp " << tex_info.bitsPerPixel << ". Cube map? " << tex_info.cubeMap << ".";
 
 	
-	logger::log(noob::concat("[Graphics] Loading Texture - ", filename, ". Loaded size = ", noob::to_string(texture_file.size()), " bytes. BGFX info: ", noob::to_string(tex_info.storageSize), " bytes, width of ", noob::to_string(tex_info.width), ", height of ", noob::to_string(tex_info.height), "depth of ", noob::to_string(tex_info.depth), ". Num mips ", noob::to_string(tex_info.numMips), ". Bpp ", noob::to_string(tex_info.bitsPerPixel), ", cube map? ", noob::to_string(tex_info.cubeMap)));
+	logger::log(noob::importance::INFO, noob::concat("[Graphics] Loading Texture - ", filename, ". Loaded size = ", noob::to_string(texture_file.size()), " bytes. BGFX info: ", noob::to_string(tex_info.storageSize), " bytes, width of ", noob::to_string(tex_info.width), ", height of ", noob::to_string(tex_info.height), "depth of ", noob::to_string(tex_info.depth), ". Num mips ", noob::to_string(tex_info.numMips), ". Bpp ", noob::to_string(tex_info.bitsPerPixel), ", cube map? ", noob::to_string(tex_info.cubeMap)));
 
 	noob::graphics::texture t;
 	t.handle = tex;

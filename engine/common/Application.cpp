@@ -1,4 +1,3 @@
-
 #include "Application.hpp"
 
 noob::application* noob::application::app_pointer = nullptr;
@@ -17,7 +16,6 @@ noob::application::~application()
 
 noob::application& noob::application::get()
 {
-	logger::log("application::get()");
 	assert(app_pointer && "application not created!");
 	return *app_pointer;
 }
@@ -25,7 +23,7 @@ noob::application& noob::application::get()
 
 void noob::application::init()
 {
-	logger::log("[Application] Begin init.");
+	logger::log(noob::importance::INFO, "[Application] Begin init.");
 
 	started = paused = input_has_started = false;
 
@@ -46,22 +44,18 @@ void noob::application::init()
 
 	noob::globals& g = noob::globals::get_instance();
 
-	if (g.init())
-	{
-		stage.init();
-	}
-	else 
-	{
-		assert(0 && "[Application] Global storage init failed");
-	}
-
-	logger::log("[Application] Done basic init.");
+	bool are_globals_initialized = g.init();
+	assert(are_globals_initialized);
+	
+	stage.init();
+	
+	logger::log(noob::importance::INFO, "[Application] Done basic init.");
 
 	bool b = user_init();
 
 	if (!b) 
 	{
-		logger::log("[Application] User C++ init failed!");
+		logger::log(noob::importance::WARNING, "[Application] User C++ init failed!");
 	}
 
 	//	network.init(3);
@@ -104,7 +98,7 @@ void noob::application::draw()
 	stage.draw(window_width, window_height, eye_pos, eye_target, eye_up, proj_mat);
 }
 
-
+/*
 void noob::application::accept_ndof_data(const noob::ndof::data& info)
 {
 	if (info.movement == true)
@@ -120,7 +114,7 @@ void noob::application::accept_ndof_data(const noob::ndof::data& info)
 		// stage.eye_pos = stage.eye_pos - translation;//translation);
 	}
 }
-
+*/
 
 // TODO: Refactor
 void noob::application::step()
@@ -164,9 +158,9 @@ void noob::application::resume()
 
 void noob::application::set_archive_dir(const std::string& filepath)
 {
-	logger::log(noob::concat("[Application] Setting archive directory {", filepath, "}"));
+	logger::log(noob::importance::INFO, noob::concat("[Application] Setting archive directory {", filepath, "}"));
 	prefix = std::unique_ptr<std::string>(new std::string(filepath));
-	logger::log(noob::concat("[Application] Archive dir = {",  *prefix, "}"));
+	logger::log(noob::importance::INFO, noob::concat("[Application] Archive dir = {",  *prefix, "}"));
 }
 
 
@@ -174,7 +168,7 @@ void noob::application::touch(int pointerID, float x, float y, int action)
 {
 	if (input_has_started == true)
 	{
-		logger::log(noob::concat("[Application] Touch - pointer ID = ", noob::to_string(pointerID), ", ", noob::to_string(x), ", ", noob::to_string(y), ", action = ", noob::to_string(action)));
+		logger::log(noob::importance::INFO, noob::concat("[Application] Touch - pointer ID = ", noob::to_string(pointerID), ", ", noob::to_string(x), ", ", noob::to_string(y), ", action = ", noob::to_string(action)));
 
 		if (pointerID < 3)
 		{
@@ -194,7 +188,7 @@ void noob::application::window_resize(uint32_t w, uint32_t h)
 		window_height = 1;
 	}
 
-	logger::log(noob::concat("[Application] Resize window to (", noob::to_string(window_width), ", ", noob::to_string(window_height), ")"));
+	logger::log(noob::importance::INFO, noob::concat("[Application] Resize window to (", noob::to_string(window_width), ", ", noob::to_string(window_height), ")"));
 }
 
 

@@ -1,5 +1,7 @@
 #include "BasicRenderer.hpp"
 
+#include "NoobUtils.hpp"
+
 void noob::basic_renderer::init()
 {
 	noob::graphics& gfx = noob::graphics::get_instance();
@@ -13,7 +15,14 @@ void noob::basic_renderer::init()
 	
 	renderbase.shader.program = program_handle;
 	gfx.add_shader("basic", renderbase.shader);
-	logger::log(noob::concat("[BasicRenderer] Program valid? ", noob::to_string(renderbase.program_valid)));
+	if (renderbase.program_valid)
+	{
+		logger::log(noob::importance::INFO, "Basic renderer load success.");
+	}
+	else
+	{
+		logger::log(noob::importance::ERROR, "Basic renderer load failed.");
+	}
 }
 
 

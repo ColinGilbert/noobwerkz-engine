@@ -1,6 +1,6 @@
 #include "SkeletalAnim.hpp"
 
-#include "Logger.hpp"
+#include "NoobUtils.hpp"
 
 
 noob::skeletal_anim::~skeletal_anim()
@@ -19,7 +19,7 @@ void noob::skeletal_anim::init(const std::string& filename)
 	ozz::io::File file(filename.c_str(), "rb");
 	if (!file.opened())
 	{
-		logger::log(noob::concat("[AnimatedModel] - load_skeleton(", filename, ") fail. Cannot open file."));
+		logger::log(noob::importance::ERROR, noob::concat("[AnimatedModel] - load_skeleton(", filename, ") fail. Cannot open file."));
 		valid = false;
 		return;
 	}
@@ -27,7 +27,7 @@ void noob::skeletal_anim::init(const std::string& filename)
 	ozz::io::IArchive archive(&file);
 	if (!archive.TestTag<ozz::animation::Skeleton>())
 	{
-		logger::log(noob::concat("[AnimatedModel] - load_skeleton(", filename , ") fail. Archive corrupt."));
+		logger::log(noob::importance::ERROR, noob::concat("[AnimatedModel] - load_skeleton(", filename , ") fail. Archive corrupt."));
 		valid = false;
 		return;
 	}
@@ -35,7 +35,7 @@ void noob::skeletal_anim::init(const std::string& filename)
 	archive >> skeleton;
 	model_matrices = allocator->AllocateRange<ozz::math::Float4x4>(skeleton.num_joints());
 	
-	logger::log(noob::concat("[AnimatedModel] - load_skeleton(", filename, ") success!"));
+	logger::log(noob::importance::INFO, noob::concat("[AnimatedModel] - load_skeleton(", filename, ") success!"));
 	
 	valid = true;
 }
@@ -258,7 +258,7 @@ void noob::skeletal_anim::sampler::update(float dt)
 	sampling_job.output = locals;
 	if (!sampling_job.Run())
 	{
-		logger::log(noob::concat("[noob::skeletal_anim::sampler.update(", noob::to_string(dt), ") - sampling job failed."));
+		logger::log(noob::importance::ERROR, noob::concat("[noob::skeletal_anim::sampler.update(", noob::to_string(dt), ") - sampling job failed."));
 		return;
 	}
 
@@ -280,7 +280,7 @@ void noob::skeletal_anim::sampler::get_model_mats(ozz::Range<ozz::math::Float4x4
 	ltm_job.output = models;
 	if (!ltm_job.Run())
 	{
-		logger::log("noob::skeletal_anim::sampler.get_model_mats() - ltm job failed.");
+		logger::log(noob::importance::ERROR, "noob::skeletal_anim::sampler.get_model_mats() - local-to-model job failed.");
 		return;
 	}
 }

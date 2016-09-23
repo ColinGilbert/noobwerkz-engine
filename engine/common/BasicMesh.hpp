@@ -1,6 +1,8 @@
 // TODO: Replace hard-coded cylinder, cone, sphere functions with more generic swept shape algorithm. Low priority.
 #pragma once
 
+#include <rdestl/vector.h>
+
 #if defined(NOOB_USE_ASSIMP)
 #include <assimp/quaternion.h>
 #include <assimp/anim.h>
@@ -9,9 +11,9 @@
 #include <assimp/postprocess.h>
 #include <assimp/types.h>
 #endif
+
 #include "MathFuncs.hpp"
 
-#include "Logger.hpp"
 
 namespace noob
 {
@@ -39,9 +41,9 @@ namespace noob
 
 		noob::bbox get_bbox() const { return bbox; }
 
-		std::vector<noob::vec3> vertices;
-		std::vector<noob::vec3> normals;
-		std::vector<uint32_t> indices;
+		rde::vector<noob::vec3> vertices;
+		rde::vector<noob::vec3> normals;
+		rde::vector<uint32_t> indices;
 		// std::vector<uint8_t> flags;
 
 		noob::bbox bbox;

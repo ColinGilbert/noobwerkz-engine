@@ -1,5 +1,6 @@
 #include "BasicModel.hpp"
-
+#include "NoobUtils.hpp"
+#include "StringFuncs.hpp"
 
 bgfx::VertexDecl noob::basic_model::vertex::ms_decl;
 
@@ -23,7 +24,7 @@ void noob::basic_model::init(const noob::basic_mesh& arg)
 {
 	if (!ready)
 	{
-		logger::log("[BasicModel] About to load.");
+		logger::log(noob::importance::INFO, "[BasicModel] About to load.");
 		noob::basic_model::vertex::init();
 
 		vertices.clear();
@@ -44,7 +45,7 @@ void noob::basic_model::init(const noob::basic_mesh& arg)
 			vertices.push_back(v);
 		}
 		// NOTE: This doesn't take into account any integer overflow; the programmer is responsible for splitting huge meshes. This is to enforce machine-imposed size limits for 3D models.
-		const uint32_t num_indices = std::min(arg.indices.size(), static_cast<size_t>(std::numeric_limits<uint16_t>::max()));
+		const uint32_t num_indices = std::min(static_cast<uint32_t>(arg.indices.size()), static_cast<uint32_t>(std::numeric_limits<uint16_t>::max()));
 		for (uint32_t i = 0; i < num_indices; ++i)
 		{
 			indices.push_back(static_cast<uint16_t>(arg.indices[i]));
@@ -57,7 +58,7 @@ void noob::basic_model::init(const noob::basic_mesh& arg)
 
 		// bbox = arg.bbox;
 		noob::vec3 dimensions = bbox.get_dims();
-		noob::logger::log(noob::concat("[BasicModel] Load successful - ", noob::to_string(vertices.size()), " vertices, ", noob::to_string(indices.size()), " indices, max ", noob::to_string(bbox.max), ", min", noob::to_string(bbox.min), ", dims", noob::to_string(dimensions)));
+		noob::logger::log(noob::importance::INFO, noob::concat("[BasicModel] Load successful - ", noob::to_string(vertices.size()), " vertices, ", noob::to_string(indices.size()), " indices, max ", noob::to_string(bbox.max), ", min", noob::to_string(bbox.min), ", dims", noob::to_string(dimensions)));
 
 
 		ready = true;
@@ -78,6 +79,6 @@ void noob::basic_model::draw(uint8_t view_id, const noob::mat4& model_mat, const
 	}
 	else
 	{
-		logger::log("[BasicModel] Attempting to draw item with improper state.");
+		logger::log(noob::importance::ERROR, "[BasicModel] Attempting to draw item with improper state.");
 	}
 }

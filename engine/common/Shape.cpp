@@ -252,8 +252,8 @@ noob::basic_mesh noob::shape::get_mesh() const noexcept(true)
 			}
 		default:
 			{
-				logger::log("[Shape] Trying to turn invalid shape type into mesh! Returning unit sphere mesh instead to prevent crash!");
-				assert(0 && "[Shape] Tried to turn invalid shape type into mesh! This shouldn't happen, ever.");
+				logger::log(noob::importance::ERROR, "[Shape] Trying to turn invalid shape type into mesh! If this is build has asserts disabled, we will return a unit sphere mesh instead to prevent a crash. Dear Dev: Get your act together!");
+				assert(0 && "[Shape] Tried to turn invalid shape type into mesh! This shouldn't happen in release mode. Ever.");
 				return noob::mesh_utils::sphere(0.5, 2);
 			}
 	}

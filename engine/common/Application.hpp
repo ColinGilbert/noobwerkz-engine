@@ -1,19 +1,22 @@
 #pragma once
 
 #include <atomic>
-
+#include <stdint.h>
+#include <cmath>
 #include <btBulletDynamicsCommon.h>
+
+
+#include <noob/logger/logger.hpp>
 
 #include "NoobDefines.hpp"
 #include "Globals.hpp"
-#include "Logger.hpp"
 #include "NoobUtils.hpp"
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
 #include "GUI.hpp"
 #include "BasicMesh.hpp"
 #include "Camera.hpp"
-#include "NDOF.hpp"
+//#include "NDOF.hpp"
 #include "Stage.hpp"
 #include "Keys.hpp"
 #include "FileSystem.hpp"
@@ -58,7 +61,7 @@ namespace noob
 			void window_resize(uint32_t w, uint32_t h);
 			void key_input(char c);
 
-			void accept_ndof_data(const noob::ndof::data& info);
+			// void accept_ndof_data(const noob::ndof::data& info);
 
 			// step() is called by the target platform. It calculates the delta-time and drives the app's main logic loop.
 			void step();

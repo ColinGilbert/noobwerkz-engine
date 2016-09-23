@@ -1,10 +1,11 @@
 #include "MeshUtils.hpp"
 
-#include <LinearMath/btConvexHull.h>
-
 #include <algorithm>
 
 #include <Eigen/Geometry> 
+#include <LinearMath/btConvexHull.h>
+
+#include "NoobUtils.hpp"
 
 // icosphere code https://github.com/MicBosi/VisualizationLibrary
 noob::basic_mesh noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
@@ -373,7 +374,11 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 	HullResult hull_result;
 
 	HullError error_msg = hull_lib.CreateConvexHull(hull_desc, hull_result);
-	if (error_msg == HullError::QE_FAIL) logger::log("FAILED TO CREATE CONVEX HULL. WTF?");
+	
+	if (error_msg == HullError::QE_FAIL) 
+	{
+		logger::log(noob::importance::ERROR, "FAILED TO CREATE CONVEX HULL. WTF?");
+	}
 
 
 	for (uint32_t i = 0; i < hull_result.mNumOutputVertices; ++i)
@@ -395,7 +400,7 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 noob::basic_mesh noob::mesh_utils::circle(float radius, uint32_t segments_arg)
 {
 	const uint32_t segments = std::max(segments_arg, static_cast<uint32_t>(3));
-	const float increment_amount = TWO_PI / segments;
+	const float increment_amount = NOOB_TWO_PI / segments;
 	const Eigen::Vector3f p(radius, 0.0, radius);
 
 	noob::basic_mesh results;
@@ -414,7 +419,7 @@ noob::basic_mesh noob::mesh_utils::circle(float radius, uint32_t segments_arg)
 		const float diff = increment_amount * static_cast<float>(seg);
 		const Eigen::AngleAxis<float> angle_axis(diff, Eigen::Vector3f::UnitY());
 		const Eigen::Vector3f rotated_point = angle_axis * p;
-		results.vertices.push_back(noob::vec3_from_eigen_vec3(rotated_point));
+		results.vertices.push_back(noob::vec3_from_eigen(rotated_point));
 	}
 	
 	uint32_t accum = 1;;
