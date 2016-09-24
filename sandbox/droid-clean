@@ -1,0 +1,3 @@
+rm -rf ../engine/android/libs/* &&
+rm -rf ../engine/android/assets/* &&
+rm -rf ../engine/android/shaders/gles/*

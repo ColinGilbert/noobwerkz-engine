@@ -1,0 +1,3 @@
+cp ../engine/build/libnative-activity.so ../engine/android/libs/armeabi-v7a/libnative-activity.so &&
+cd ../engine/android &&
+ndk-build &&

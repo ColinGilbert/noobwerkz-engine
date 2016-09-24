@@ -688,9 +688,9 @@ if (NOOB_PLATFORM_ANDROID)
 		)
 	add_library(native-activity SHARED ${app_src})
 	target_link_libraries(native-activity log android EGL GLESv2 freetype dl)
-	# set_target_properties(NoobEdit PROPERTIES COMPILE_DEFINITIONS "ANDROID")
-
+	#set_target_properties(native-activity PROPERTIES COMPILE_DEFINITIONS "ANDROID")
+	
 	# macro(android_create_apk name apk_package_name apk_directory libs_directory android_directory assets_directory)
-	# android_create_apk(native-activity "net.noobwerkz.sampleapp" "${CMAKE_BINARY_DIR}/apk" "${CMAKE_BINARY_DIR}/apk/libs" "${CMAKE_SOURCE_DIR}/android" "${CMAKE_SOURCE_DIR}/android/assets")
+	# android_create_apk(native-activity "net.noobwerkz.sampleapp" "${CMAKE_BINARY_DIR}/apk""${CMAKE_BINARY_DIR}" "${CMAKE_SOURCE_DIR}/android" "${CMAKE_SOURCE_DIR}/android/assets")
 endif()
 

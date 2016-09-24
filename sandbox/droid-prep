@@ -1,0 +1,6 @@
+mkdir ../engine/android/libs/armeabi-v7a &&
+cp -R font ../engine/android/assets &&
+cp BlanketedLama.ogg ../engine/android &&
+mkdir ../engine/android/assets/shaders &&
+cp -R shaders/gles/* ../engine/android/assets/shaders/gles &&
+cp gradient_map.tga ../engine/android/assets
