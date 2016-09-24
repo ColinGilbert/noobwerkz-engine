@@ -9,7 +9,7 @@
 **/obj/*
 **/bin/*
 **/libs/*
-**/jni/*
+#**/jni/*
 **/gen/**
 **/assets/**
 **/local.properties
