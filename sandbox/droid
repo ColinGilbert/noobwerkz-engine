@@ -1,5 +1,5 @@
-rsync -av font ../engine/android/assets &&
-rsync -av shaders ../engine/android/assets &&
-rsync -av gradient_map.tga ../engine/android/assets &&
+cp -R font ../engine/android/assets &&
+#rsync -av shaders ../engine/android/assets &&
+cp gradient_map.tga ../engine/android/assets &&
 cd ../engine/build &&
-cmake -DNOOB_PLATFORM_LINUX:BOOL=false -DNOOB_PLATFORM_ANDROID:BOOL=true -DCMAKE_TOOLCHAIN_FILE=~/devel/android-cmake/android.toolchain.cmake .. && make -j8
+cmake -DNOOB_PLATFORM_ANDROID:BOOL=true -DCMAKE_TOOLCHAIN_FILE=~/devel/android-cmake/android.toolchain.cmake --build .. && make -j8

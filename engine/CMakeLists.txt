@@ -679,7 +679,7 @@ endif()
 
 
 if (NOOB_PLATFORM_ANDROID)
-	include("$ENV{ANDROID_CMAKE_HOME}/android.apk.cmake" REQUIRED)
+	#include("$ENV{ANDROID_CMAKE_HOME}/android.apk.cmake" REQUIRED)
 	include_directories($ENV{ANDROID_NDK_HOME}/sources/android/native_app_glue)
 	list (APPEND app_src
 		"$ENV{ANDROID_NDK_HOME}/sources/android/native_app_glue/android_native_app_glue.c" #/native_app_glue.c"
@@ -689,6 +689,8 @@ if (NOOB_PLATFORM_ANDROID)
 	add_library(native-activity SHARED ${app_src})
 	target_link_libraries(native-activity log android EGL GLESv2 freetype dl)
 	# set_target_properties(NoobEdit PROPERTIES COMPILE_DEFINITIONS "ANDROID")
-	android_create_apk(native-activity "net.noobwerkz.sampleapp" "${CMAKE_BINARY_DIR}/apk" "${CMAKE_BINARY_DIR}/libs/native-activity.so" "${CMAKE_SOURCE_DIR}/android" "${CMAKE_SOURCE_DIR}/android/assets")
+
+	# macro(android_create_apk name apk_package_name apk_directory libs_directory android_directory assets_directory)
+	# android_create_apk(native-activity "net.noobwerkz.sampleapp" "${CMAKE_BINARY_DIR}/apk" "${CMAKE_BINARY_DIR}/apk/libs" "${CMAKE_SOURCE_DIR}/android" "${CMAKE_SOURCE_DIR}/android/assets")
 endif()
 
