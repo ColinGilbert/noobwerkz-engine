@@ -10,12 +10,10 @@ android:versionName="1.0">
 <application
 android:label="Noobwerkz"
 android:icon="@drawable/ic_launcher"
-android:hasCode="false"
-android:debuggable="true"
+android:hasCode="true"
 >
-<activity android:name="android.app.NativeActivity"
+<activity android:name="net.noobwerkz.sampleapp.MainActivity"
 android:label="@string/app_name">
-<meta-data android:name="android.app.lib_name" android:value="native-activity" />
 
 <intent-filter>
 <action android:name="android.intent.action.MAIN" />

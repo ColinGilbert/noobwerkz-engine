@@ -1,5 +1,5 @@
 #cp ../engine/build/libnative-activity.so ../engine/android/libs/armeabi-v7a &&
-cp ../engine/build/libnative-activity.so ../engine/android/jni &&
+cp ../engine/build/libNoobwerkzActivity.so ../engine/android/jni &&
 cd ../engine/android &&
 $ANDROID_NDK_HOME/ndk-build &&
 ant debug

@@ -5,7 +5,7 @@ project(NoobWerkz)
 set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
-set (bgfx_macros "-D__STDC_LIMIT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_CONSTANT_MACROS")
+set (bgfx_macros "-D__STDC_LIMIT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_CONSTANT_MACROS  -DBGFX_CONFIG_MULTITHREADED=0")
 
 set(CMAKE_CXX_FLAGS "-std=c++1y  -fno-exceptions -fno-rtti -DEIGEN_MPL2_ONLY ${bgfx_macros} ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-DSTB_IMAGE_STATIC ${CMAKE_C_FLAGS}")
@@ -673,21 +673,21 @@ list (APPEND app_src ${assimp_src} ${user_src} ${main_src} ${common_src} ${bgfx_
 # More platform-specific:
 if (NOOB_PLATFORM_LINUX)
 	add_executable(NoobEdit ${app_src})
-	target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} rt dl pthread m soundio.a asound ${OPENGL_LIBRARIES} freetype)	
+	target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} GL rt dl pthread m soundio.a asound ${OPENGL_LIBRARIES} freetype)	
 	# target_link_libraries(NoobEdit LINK_PUBLIC spnav)
 endif()
 
 
 if (NOOB_PLATFORM_ANDROID)
 	#include("$ENV{ANDROID_CMAKE_HOME}/android.apk.cmake" REQUIRED)
-	include_directories($ENV{ANDROID_NDK_HOME}/sources/android/native_app_glue)
+	#include_directories($ENV{ANDROID_NDK_HOME}/sources/android/native_app_glue)
 	list (APPEND app_src
-		"$ENV{ANDROID_NDK_HOME}/sources/android/native_app_glue/android_native_app_glue.c" #/native_app_glue.c"
+		#"$ENV{ANDROID_NDK_HOME}/sources/android/native_app_glue/android_native_app_glue.c" #/native_app_glue.c"
 		platform/droid/EngineDroid.cpp
 		platform/droid/SoundInterface.cpp
 		)
-	add_library(native-activity SHARED ${app_src})
-	target_link_libraries(native-activity log android EGL GLESv2 freetype dl)
+	add_library(NoobwerkzActivity SHARED ${app_src})
+	target_link_libraries(NoobwerkzActivity log android EGL GLESv2 freetype dl)
 	#set_target_properties(native-activity PROPERTIES COMPILE_DEFINITIONS "ANDROID")
 	
 	# macro(android_create_apk name apk_package_name apk_directory libs_directory android_directory assets_directory)

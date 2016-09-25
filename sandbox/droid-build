@@ -1,2 +1,2 @@
 cd ../engine/build &&
-cmake -DNOOB_PLATFORM_ANDROID:BOOL=true -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=~/devel/android-cmake/android.toolchain.cmake --build .. && make -j8
+cmake -DNOOB_PLATFORM_ANDROID:BOOL=true -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=~/devel/android-cmake/android.toolchain.cmake --build .. && make -j8
