@@ -10,11 +10,6 @@
 #include <bgfx/bgfx.h>
 #include <bgfx/bgfxplatform.h>
 
-#include "Application.hpp"
-#include "Graphics.hpp"
-#include "NoobUtils.hpp"
-
-
 #include <jni.h>
 #include <errno.h>
 
@@ -25,25 +20,24 @@
 #include <android/log.h>
 #include <android_native_app_glue.h>
 
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
-#define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "native-activity", __VA_ARGS__))
+// #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
+// #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "native-activity", __VA_ARGS__))
+
+
+#include "Application.hpp"
+#include "Graphics.hpp"
+#include "NoobUtils.hpp"
 
 
 static ANativeWindow* droid_window;
 static android_app* droid_app;
+static noob::application* user_app;
 
-
+/*
 inline void android_set_window(ANativeWindow* _window)
 {
-	bgfx::PlatformData pd;
-	pd.ndt          = NULL;
-	pd.nwh          = _window;
-	pd.context      = NULL;
-	pd.backBuffer   = NULL;
-	pd.backBufferDS = NULL;
-	bgfx::setPlatformData(pd);
 }
-
+*/
 
 // Our saved state data.
 struct saved_state
@@ -70,10 +64,24 @@ struct engine
 };
 
 
-// Initialize an EGL context for the current display.
-static void init_display(struct engine* engine)
+static inline void init_display(struct engine* engine)
 {
-	// initialize OpenGL ES and EGL
+	// uint32_t win_width = std::max(0, ANativeWindow_getWidth(droid_window));
+	// uint32_t win_height = std::max(0, ANativeWindow_getHeight(droid_window));
+	
+	// noob::graphics& gfx = noob::graphics::get_instance();
+	// gfx.init(win_width, win_height);
+	
+	bgfx::PlatformData pd;
+	pd.ndt          = NULL;
+	pd.nwh          = droid_window;
+	pd.context      = NULL;
+	pd.backBuffer   = NULL;
+	pd.backBufferDS = NULL;
+	bgfx::setPlatformData(pd);
+	bgfx::init();
+	
+	// user_app->window_resize(win_width, win_height);
 }
 
 
@@ -92,7 +100,8 @@ static void draw_frame(struct engine* engine)
 	// glClear(GL_COLOR_BUFFER_BIT);
 
 	// eglSwapBuffers(engine->display, engine->surface);
-
+	//noob::application& a = noob::application::get();
+	user_app->step();
 }
 
 
@@ -158,6 +167,15 @@ static void handle_cmd(struct android_app* app, int32_t cmd)
 			}
 			break;
 		}
+		case APP_CMD_WINDOW_RESIZED:
+		{
+			//init_display(engine);
+			uint32_t win_width = std::max(0, ANativeWindow_getWidth(droid_window));
+			uint32_t win_height = std::max(0, ANativeWindow_getHeight(droid_window));
+			user_app->window_resize(win_width, win_height);
+			draw_frame(engine);
+			break;
+		}
 		case APP_CMD_TERM_WINDOW:
 		{
 			// The window is being hidden or closed, clean it up.
@@ -183,7 +201,7 @@ static void handle_cmd(struct android_app* app, int32_t cmd)
 			}
 			// Also stop animating.
 			engine->animating = false;
-			draw_frame(engine);
+			// draw_frame(engine);
 			break;
 		}
 	}
@@ -197,6 +215,20 @@ void android_main(struct android_app* state)
 
 	// Make sure glue isn't stripped.
 	app_dummy();
+
+	ANativeActivity_setWindowFlags(state->activity, 0 | AWINDOW_FLAG_FULLSCREEN | AWINDOW_FLAG_KEEP_SCREEN_ON, 0);
+
+	user_app = new noob::application();
+
+	init_display(&engine);
+	
+	noob::graphics& gfx = noob::graphics::get_instance();
+
+	uint32_t win_width = std::max(0, ANativeWindow_getWidth(droid_window));
+	uint32_t win_height = std::max(0, ANativeWindow_getHeight(droid_window));
+	
+	gfx.init(win_width, win_height);
+	user_app->init();
 
 	//    memset(&engine, 0, sizeof(engine));
 	state->userData = &engine;

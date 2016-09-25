@@ -45,7 +45,7 @@ void noob::application::init()
 	noob::globals& g = noob::globals::get_instance();
 
 	bool are_globals_initialized = g.init();
-	assert(are_globals_initialized);
+	assert(are_globals_initialized && "Globals not initialized!");
 	
 	stage.init();
 	
