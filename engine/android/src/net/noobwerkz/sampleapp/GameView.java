@@ -6,8 +6,15 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
+
+import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLContext;
+import javax.microedition.khronos.egl.EGLDisplay;
+import javax.microedition.khronos.opengles.GL10;
 
 public class GameView extends GLSurfaceView
 {
@@ -35,10 +42,10 @@ public class GameView extends GLSurfaceView
 	{
 		super(context);
 
-		// Pick an EGLConfig with RGBA8 color, 16-bit depth, no stencil,
-		// supporting OpenGL ES 3.0 or later backwards-compatible versions.
-		// setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+		// Pick an EGLConfig with RGBA8 color, 16-bit depth, no stencil, supporting OpenGL ES 3.0 or later backwards-compatible versions.
 		
+		setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+		// setEGLConfigChooser(5, 6, 5, 0, 16, 0);
 		setEGLContextClientVersion(2);
 
 		setRenderer(new Renderer());

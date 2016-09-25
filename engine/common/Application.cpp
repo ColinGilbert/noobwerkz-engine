@@ -29,14 +29,14 @@ void noob::application::init()
 
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 
-	prefix = std::unique_ptr<std::string>(new std::string("./"));
+//	prefix = std::unique_ptr<std::string>(new std::string("./"));
 
 
 	// TODO: Uncomment once noob::filesystem is fixed
 	// noob::filesystem::init(*prefix);
 
 	ui_enabled = true;
-	gui.init(*prefix, window_width, window_height);
+	gui.init("", window_width, window_height);
 
 	eye_pos = noob::vec3(0.0, 300.0, -100.0);
 	eye_target = noob::vec3(0.0, 0.0, 0.0);
@@ -155,14 +155,14 @@ void noob::application::resume()
 	paused = false;
 }
 
-
+/*
 void noob::application::set_archive_dir(const std::string& filepath)
 {
 	logger::log(noob::importance::INFO, noob::concat("[Application] Setting archive directory {", filepath, "}"));
 	prefix = std::unique_ptr<std::string>(new std::string(filepath));
 	logger::log(noob::importance::INFO, noob::concat("[Application] Archive dir = {",  *prefix, "}"));
 }
-
+*/
 
 void noob::application::touch(int pointerID, float x, float y, int action)
 {
@@ -172,7 +172,7 @@ void noob::application::touch(int pointerID, float x, float y, int action)
 
 		if (pointerID < 3)
 		{
-			finger_positions[pointerID] = noob::vec2(x,y);
+		//	finger_positions[pointerID] = noob::vec2(x,y);
 		}
 	}
 	else input_has_started = true;

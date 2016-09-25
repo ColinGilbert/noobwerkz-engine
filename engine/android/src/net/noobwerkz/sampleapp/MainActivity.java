@@ -18,7 +18,7 @@ public class MainActivity extends Activity
 		super.onCreate(savedInstanceState);
 		mView = new GameView(getApplication());
 		setContentView(mView);
-		copyAssets();
+		// copyAssets();
 	}
 
 	@Override protected void onPause() 
@@ -116,6 +116,8 @@ public class MainActivity extends Activity
 	}
 	*/
 
+
+/*
 	private void copyAssets()
 	{
 		AssetManager assetManager = getAssets();
@@ -183,4 +185,5 @@ public class MainActivity extends Activity
 			out.write(buffer, 0, read);
 		}
 	}
+	*/
 }

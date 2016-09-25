@@ -19,7 +19,7 @@ bool noob::application::user_init()
 	message_collision = std::make_unique<std::string>("");
 	//message_profiling_two.resize(128);
 	noob::audio_sample samp;
-	bool b = samp.load_file("./BlanketedLama.ogg");
+	bool b = samp.load_file("BlanketedLama.ogg");
 	noob::globals& g = noob::globals::get_instance();
 	noob::sample_handle h = g.samples.add(std::make_unique<noob::audio_sample>(samp));	
 

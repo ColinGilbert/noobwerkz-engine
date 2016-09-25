@@ -57,7 +57,7 @@ namespace noob
 			// Callbacks
 			void touch(int pointerID, float x, float y, int action);
 			void touch(const touch_instance& t);
-			void set_archive_dir(const std::string & filepath);
+			// void set_archive_dir(const std::string & filepath);
 			void window_resize(uint32_t w, uint32_t h);
 			void key_input(char c);
 
@@ -102,6 +102,6 @@ namespace noob
 
 			std::string script_name;
 
-			std::unique_ptr<std::string> prefix;
+			// std::unique_ptr<std::string> prefix;
 	};
 }

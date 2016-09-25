@@ -14,22 +14,23 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x00000000, 1.0f, 0);
 	bgfx::setViewClear(1, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x00000000, 1.0f, 0);
 	bgfx::setState(BGFX_STATE_DEFAULT);
-	/// Predefined uniforms (declared in `bgfx_shader.sh`):
-	///   - `u_viewRect vec4(x, y, width, height)` - view rectangle for current
-	///     view.
-	///   - `u_viewTexel vec4(1.0/width, 1.0/height, undef, undef)` - inverse
-	///     width and height
-	///   - `u_view mat4` - view matrix
-	///   - `u_invView mat4` - inverted view matrix
-	///   - `u_proj mat4` - projection matrix
-	///   - `u_invProj mat4` - inverted projection matrix
-	///   - `u_viewProj mat4` - concatenated view projection matrix
-	///   - `u_invViewProj mat4` - concatenated inverted view projection matrix
-	///   - `u_model mat4[BGFX_CONFIG_MAX_BONES]` - array of model matrices.
-	///   - `u_modelView mat4` - concatenated model view matrix, only first
-	///     model matrix from array is used.
-	///   - `u_modelViewProj mat4` - concatenated model view projection matrix.
-	///   - `u_alphaRef float` - alpha reference value for alpha test.	
+	
+	// Predefined uniforms (declared in `bgfx_shader.sh`):
+	//   - `u_viewRect vec4(x, y, width, height)` - view rectangle for current
+	//     view.
+	//   - `u_viewTexel vec4(1.0/width, 1.0/height, undef, undef)` - inverse
+	//     width and height
+	//   - `u_view mat4` - view matrix
+	//   - `u_invView mat4` - inverted view matrix
+	//   - `u_proj mat4` - projection matrix
+	//   - `u_invProj mat4` - inverted projection matrix
+	//   - `u_viewProj mat4` - concatenated view projection matrix
+	//   - `u_invViewProj mat4` - concatenated inverted view projection matrix
+	//   - `u_model mat4[BGFX_CONFIG_MAX_BONES]` - array of model matrices.
+	//   - `u_modelView mat4` - concatenated model view matrix, only first
+	//     model matrix from array is used.
+	//   - `u_modelViewProj mat4` - concatenated model view projection matrix.
+	//   - `u_alphaRef float` - alpha reference value for alpha test.	
 	// Add initial defaults (invalid stuff) to map
 
 	const bgfx::Caps* caps = bgfx::getCaps();

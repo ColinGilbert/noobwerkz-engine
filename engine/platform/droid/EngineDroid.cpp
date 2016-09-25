@@ -6,14 +6,14 @@
 #include <android/window.h>
 #include <android/log.h>
 
+#include <EGL/egl.h>
+#include <GLES3/gl3.h>
+
 #include <bgfx/bgfx.h>
 #include <bgfx/bgfxplatform.h>
 
 #include <jni.h>
 #include <errno.h>
-
-#include <EGL/egl.h>
-#include <GLES/gl.h>
 
 // #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
 // #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "native-activity", __VA_ARGS__))
@@ -25,8 +25,9 @@
 
 uint32_t _width;
 uint32_t _height;
-// EGLint current_context; 
+EGLint current_context; 
 std::string archive_dir;
+std::unique_ptr<noob::application> app = nullptr;
 
 extern "C"
 {
@@ -42,7 +43,6 @@ extern "C"
 	JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_NativeSetSurface(JNIEnv* eng, jobject obj, jobject surface);
 };
 
-std::unique_ptr<noob::application> app = nullptr;
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnInit(JNIEnv* env, jobject obj)
 {
@@ -72,22 +72,20 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 	_height = height;
 	_width = width;
 
-	// auto last_context = current_context;
-	// current_context = reinterpret_cast<EGLint>(eglGetCurrentContext());
+	auto last_context = current_context;
+	current_context = reinterpret_cast<EGLint>(eglGetCurrentContext());
 
-	//if (current_context != last_context)
-	//{
-		//if (last_context != 0)
-		//{
-		//	noob::logger::log(noob::importance::INFO, "bgfx::shutdown()");
-		//	bgfx::shutdown();
-		//}
-
-		noob::logger::log(noob::importance::INFO, "About to set BGFX platform data");
+	if (current_context != last_context)
+	{
+		if (last_context != 0)
+		{
+			noob::logger::log(noob::importance::INFO, "bgfx::shutdown()");
+			bgfx::shutdown();
+		}
 
 		bgfx::PlatformData pd = {};
-		// pd.context = (void*)(uintptr_t)current_context; // eglGetCurrentContext(); // Pass the EGLContext created by GLSurfaceView.
-		pd.context = eglGetCurrentContext();
+		pd.context = (void*)(uintptr_t)current_context; // eglGetCurrentContext(); // Pass the EGLContext created by GLSurfaceView.
+		//pd.context = eglGetCurrentContext();
 		bgfx::setPlatformData(pd);
 
 		noob::logger::log(noob::importance::INFO, "BGFX platform data set!");
@@ -96,16 +94,18 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 		noob::graphics& gfx = noob::graphics::get_instance();
 		gfx.init(_width, _height);
 
-		//app->frame(_width, _height);
+		gfx.frame(_width, _height);
 
-	//	if (app)
-	//	{
-	//		app->init();
-	//	}
-	//}
+		// if (app)
+		// {
+		//	app->init();
+		// }
+	}
 
-
-	//  app->window_resize(width, height);
+	if (app)
+	{
+		app->window_resize(width, height);
+	}
 }
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnFrame(JNIEnv* env, jobject obj)
@@ -113,8 +113,8 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnFrame(JNIEnv* env, 
 	if (app)
 	{
 		app->step();
-		// noob::graphics& gfx = noob::graphics::get_instance();
-		// gfx.frame(_width, _height);
+		noob::graphics& gfx = noob::graphics::get_instance();
+		gfx.frame(_width, _height);
 	}
 }
 
@@ -137,6 +137,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnPause(JNIEnv* env, 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResume(JNIEnv* env, jobject obj)
 {
 	noob::logger::log(noob::importance::INFO, "JNILib.OnResume()");
+	
 	if(app)
 	{
 		app->resume();
@@ -158,21 +159,21 @@ std::string ConvertJString(JNIEnv* env, jstring str)
 
 	return Result;
 }
+/*
+   JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_SetupArchiveDir(JNIEnv * env, jobject obj, jstring dir)
+   {
+   const char* temp = env->GetStringUTFChars(dir, NULL);
+   archive_dir = std::string(temp);
 
-JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_SetupArchiveDir(JNIEnv * env, jobject obj, jstring dir)
-{
-	const char* temp = env->GetStringUTFChars(dir, NULL);
-	archive_dir = std::string(temp);
+   noob::logger::log(noob::importance::INFO, noob::concat("JNILib.SetupArchiveDir(", archive_dir, ")"));
 
-	noob::logger::log(noob::importance::INFO, noob::concat("JNILib.SetupArchiveDir(", archive_dir, ")"));
+   if (app)
+   {
+   app->set_archive_dir(archive_dir);
+   }
 
-	if (app)
-	{
-		app->set_archive_dir(archive_dir);
-	}
-
-}
-
+   }
+   */
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_Log(JNIEnv* env, jobject obj, jstring message)
 {
 	const char* temp = env->GetStringUTFChars(message, NULL);
