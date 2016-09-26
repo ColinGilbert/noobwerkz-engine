@@ -1,11 +1,8 @@
 #include <string>
-#include <atomic>
 
-#include <android/input.h>
-#include <android/log.h>
+// #include <android/log.h>
 #include <android/looper.h>
 #include <android/window.h>
-#include <android/native_window_jni.h>
 #include <android/log.h>
 
 #include <EGL/egl.h>
@@ -30,9 +27,6 @@ uint32_t _height;
 EGLint current_context; 
 std::string archive_dir;
 std::unique_ptr<noob::application> app = nullptr;
-ANativeWindow* android_win = nullptr;
-
-std::atomic<bool> started(false);
 
 extern "C"
 {
@@ -77,13 +71,39 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 	_height = height;
 	_width = width;
 
+	auto last_context = current_context;
+	current_context = reinterpret_cast<EGLint>(eglGetCurrentContext());
+
+	if (current_context != last_context)
+	{
+		if (last_context != 0)
+		{
+			noob::logger::log(noob::importance::INFO, "bgfx::shutdown()");
+			bgfx::shutdown();
+		}
+
+		bgfx::PlatformData pd = {};
+		pd.context = (void*)(uintptr_t)current_context; // eglGetCurrentContext(); // Pass the EGLContext created by GLSurfaceView.
+		//pd.context = eglGetCurrentContext();
+		bgfx::setPlatformData(pd);
+
+		noob::logger::log(noob::importance::INFO, "BGFX platform data set!");
+
+		bgfx::init();
+		noob::graphics& gfx = noob::graphics::get_instance();
+		gfx.init(_width, _height);
+
+		gfx.frame(_width, _height);
+
+		// if (app)
+		// {
+		//	app->init();
+		// }
+	}
+
 	if (app)
 	{
-		app->window_resize(_width, _height);
-	}
-	else
-	{
-		noob::logger::log(noob::importance::ERROR, "[EngineDroid] Attempting to resize uninitialized app.");
+		app->window_resize(width, height);
 	}
 }
 
@@ -116,7 +136,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnPause(JNIEnv* env, 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResume(JNIEnv* env, jobject obj)
 {
 	noob::logger::log(noob::importance::INFO, "JNILib.OnResume()");
-
+	
 	if(app)
 	{
 		app->resume();
@@ -138,7 +158,6 @@ std::string ConvertJString(JNIEnv* env, jstring str)
 
 	return Result;
 }
-
 /*
    JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_SetupArchiveDir(JNIEnv * env, jobject obj, jstring dir)
    {
@@ -154,46 +173,9 @@ std::string ConvertJString(JNIEnv* env, jstring str)
 
    }
    */
-
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_Log(JNIEnv* env, jobject obj, jstring message)
 {
 	const char* temp = env->GetStringUTFChars(message, NULL);
 
 	noob::logger::log(noob::importance::INFO, temp);
-}
-
-
-JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_NativeSetSurface(JNIEnv* env, jobject obj, jobject surface)
-{
-
-	noob::logger::log(noob::importance::INFO, "[DroidEngine] Setting GLES surface!");
-
-	if (started)
-	{
-		ANativeWindow_release(android_win);
-		started = true;
-	}
-
-	android_win = ANativeWindow_fromSurface(env, surface);
-
-	_width = ANativeWindow_getWidth(android_win);
-	_height = ANativeWindow_getHeight(android_win);
-
-
-	ANativeWindow_setBuffersGeometry(android_win, _width, _height, WINDOW_FORMAT_RGBA_8888);
-
-	bgfx::PlatformData pd = {};
-	pd.nwh = android_win;
-	bgfx::setPlatformData(pd);
-
-	bgfx::init();
-	noob::graphics& gfx = noob::graphics::get_instance();
-	gfx.init(_width, _height);
-
-	gfx.frame(_width, _height);
-
-	if (app)
-	{
-		app->init();
-	}
 }

@@ -35,7 +35,6 @@ public class GameView extends GLSurfaceView
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) 
 		{
 			JNILib.Log("(Java) GameView - onSurfaceCreated");
-
 		}
 	}
 
@@ -51,11 +50,12 @@ public class GameView extends GLSurfaceView
 
 		setRenderer(new Renderer());
 
+		setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 		JNILib.OnInit();
 
 
 
-		JNILib.NativeSetSurface(getHolder().getSurface());
+		// JNILib.NativeSetSurface(getHolder().getSurface());
 
 	
 	}
