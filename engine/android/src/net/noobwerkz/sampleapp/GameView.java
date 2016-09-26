@@ -6,7 +6,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.opengl.GLES30;
+// import android.opengl.GLES30;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
@@ -35,6 +35,7 @@ public class GameView extends GLSurfaceView
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) 
 		{
 			JNILib.Log("(Java) GameView - onSurfaceCreated");
+
 		}
 	}
 
@@ -49,9 +50,14 @@ public class GameView extends GLSurfaceView
 		setEGLContextClientVersion(2);
 
 		setRenderer(new Renderer());
-		// JNILib.NativeSetSurface(getHolder().getSurface());
 
 		JNILib.OnInit();
+
+
+
+		JNILib.NativeSetSurface(getHolder().getSurface());
+
+	
 	}
 
 	public void onDestroy()
