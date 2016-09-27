@@ -42,22 +42,13 @@ public class GameView extends GLSurfaceView
 	{
 		super(context);
 
-		// Pick an EGLConfig with RGBA8 color, 16-bit depth, no stencil, supporting OpenGL ES 3.0 or later backwards-compatible versions.
-		
-		setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-		// setEGLConfigChooser(5, 6, 5, 0, 16, 0);
 		setEGLContextClientVersion(2);
+		setEGLConfigChooser(8, 8, 8, 8, 16, 0);
 
 		setRenderer(new Renderer());
 
 		setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 		JNILib.OnInit();
-
-
-
-		// JNILib.NativeSetSurface(getHolder().getSurface());
-
-	
 	}
 
 	public void onDestroy()

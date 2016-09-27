@@ -12,7 +12,7 @@ android:label="Noobwerkz"
 android:icon="@drawable/ic_launcher"
 android:hasCode="true"
 >
-<activity android:configChanges="orientation|keyboardHidden" android:label="@string/app_name" android:name="net.noobwerkz.sampleapp.MainActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.Translucent.NoTitleBar">
+<activity android:configChanges="orientation|keyboardHidden" android:label="@string/app_name" android:name="net.noobwerkz.sampleapp.MainActivity" android:screenOrientation="landscape" android:theme="@android:style/Theme.Translucent.NoTitleBar">
 
 
 <intent-filter>

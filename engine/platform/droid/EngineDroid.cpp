@@ -71,15 +71,21 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 	_height = height;
 	_width = width;
 
-	auto last_context = current_context;
-	current_context = reinterpret_cast<EGLint>(eglGetCurrentContext());
+	EGLint last_context = current_context;
+
+ 	current_context = reinterpret_cast<EGLint>(eglGetCurrentContext());
+
+
+
+
+
 
 	if (current_context != last_context)
 	{
 		if (last_context != 0)
 		{
 			noob::logger::log(noob::importance::INFO, "bgfx::shutdown()");
-			bgfx::shutdown();
+			 bgfx::shutdown();
 		}
 
 		bgfx::PlatformData pd = {};

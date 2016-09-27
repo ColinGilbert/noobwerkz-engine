@@ -3,4 +3,4 @@ cp ../engine/build/libNoobwerkzActivity.so ../engine/android/jni &&
 cd ../engine/android &&
 $ANDROID_NDK_HOME/ndk-build &&
 ant debug
-adb install -r bin/SampleApp-debug.apk
+adb install -r bin/MainActivity-debug.apk
