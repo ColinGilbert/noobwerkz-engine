@@ -21,8 +21,9 @@
 #include <EGL/egl.h> // requires ndk r5 or newer
 #include <GLES/gl.h>
 
-#include "logger.h"
-#include "renderer.h"
+#include "NoobUtils.hpp"
+
+#include "engine_droid.hpp"
 
 #define LOG_TAG "EglSample"
 
@@ -61,28 +62,28 @@ GLubyte indices[] = {
 engine_droid::engine_droid()
     : _msg(MSG_NONE), _display(0), _surface(0), _context(0), _angle(0)
 {
-    noob::logger::log(noob::importance::INFO, noob::concat("engine_droid instance created");
+    noob::logger::log(noob::importance::INFO, "engine_droid instance created");
     pthread_mutex_init(&_mutex, 0);    
     return;
 }
 
 engine_droid::~engine_droid()
 {
-    noob::logger::log(noob::importance::INFO, noob::concat("engine_droid instance destroyed");
+    noob::logger::log(noob::importance::INFO, "engine_droid instance destroyed");
     pthread_mutex_destroy(&_mutex);
     return;
 }
 
 void engine_droid::start()
 {
-    noob::logger::log(noob::importance::INFO, noob::concat("Creating renderer thread");
+    noob::logger::log(noob::importance::INFO, "Creating renderer thread");
     pthread_create(&_threadId, 0, threadStartCallback, this);
     return;
 }
 
 void engine_droid::stop()
 {
-    noob::logger::log(noob::importance::INFO, noob::concat("Stopping renderer thread");
+    noob::logger::log(noob::importance::INFO, "Stopping renderer thread");
 
     // send message to render thread to stop rendering
     pthread_mutex_lock(&_mutex);
@@ -90,7 +91,7 @@ void engine_droid::stop()
     pthread_mutex_unlock(&_mutex);    
 
     pthread_join(_threadId, 0);
-    noob::logger::log(noob::importance::INFO, noob::concat("engine_droid thread stopped");
+    noob::logger::log(noob::importance::INFO, "engine_droid thread stopped");
 
     return;
 }
@@ -145,7 +146,7 @@ void engine_droid::renderLoop()
         pthread_mutex_unlock(&_mutex);
     }
     
-    noob::logger::log(noob::importance::INFO, noob::concat("Render loop exits");
+    noob::logger::log(noob::importance::INFO, "Render loop exits");
     
     return;
 }
@@ -169,7 +170,7 @@ bool engine_droid::initialize()
     EGLint height;
     GLfloat ratio;
     
-    noob::logger::log("Initializing context");
+    noob::logger::log(noob::importance::INFO, "Initializing context");
     
     if ((display = eglGetDisplay(EGL_DEFAULT_DISPLAY)) == EGL_NO_DISPLAY)
     {

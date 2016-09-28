@@ -887,13 +887,12 @@ if (NOOB_PLATFORM_ANDROID)
 	set (CMAKE_CXX_FLAGS "-DNOOB_PLATFORM_ANDROID ${CMAKE_CXX_FLAGS}")
 	
 	list (APPEND app_src
-		platform/droid/EngineDroid.cpp
 		platform/droid/SoundInterface.cpp
 		platform/android/jni/engine_droid.cpp
 		platform/android/jni/jni_api.cpp
 		)
 
 	add_library(EngineEntry SHARED ${app_src})
-	target_link_libraries(EngineEntry log android GLESv1_CM EGL dl)
+	target_link_libraries(EngineEntry log android GLESv1_CM GLESv2 EGL dl)
 endif()
 

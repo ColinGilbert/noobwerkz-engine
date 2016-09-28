@@ -19,40 +19,40 @@
 #include <android/native_window.h> // requires ndk r5 or newer
 #include <android/native_window_jni.h> // requires ndk r5 or newer
 
-#include "jniapi.h"
-#include "logger.h"
+#include "NoobUtils.hpp"
+
+#include "jni_api.hpp"
 #include "engine_droid.hpp"
 
-
 static ANativeWindow *window = 0;
-static Renderer *renderer = 0;
+static engine_droid *engine = 0;
 
 JNIEXPORT void JNICALL net_noobwerkz_engine_EngineEntry_nativeOnStart(JNIEnv* jenv, jobject obj)
 {
-    LOG_INFO("nativeOnStart");
-    renderer = new Renderer();
+    noob::logger::log(noob::importance::INFO, "nativeOnStart");
+    engine = new engine_droid();
     return;
 }
 
 JNIEXPORT void JNICALL net_noobwerkz_engine_EngineEntry_nativeOnResume(JNIEnv* jenv, jobject obj)
 {
-    LOG_INFO("nativeOnResume");
-    renderer->start();
+    noob::logger::log(noob::importance::INFO, "nativeOnResume");
+    engine->start();
     return;
 }
 
 JNIEXPORT void JNICALL net_noobwerkz_engine_EngineEntry_nativeOnPause(JNIEnv* jenv, jobject obj)
 {
-    LOG_INFO("nativeOnPause");
-    renderer->stop();
+    noob::logger::log(noob::importance::INFO, "nativeOnPause");
+    engine->stop();
     return;
 }
 
 JNIEXPORT void JNICALL net_noobwerkz_engine_EngineEntry_nativeOnStop(JNIEnv* jenv, jobject obj)
 {
-    LOG_INFO("nativeOnStop");
-    delete renderer;
-    renderer = 0;
+    noob::logger::log(noob::importance::INFO, "nativeOnStop");
+    delete engine;
+    engine = 0;
     return;
 }
 
@@ -61,8 +61,8 @@ JNIEXPORT void JNICALL net_noobwerkz_engine_EngineEntry_nativeSetSurface(JNIEnv*
     if (surface != 0)
     {
         window = ANativeWindow_fromSurface(jenv, surface);
-	noob::logger::log(noob::importance::INFO, noob::concat("Got window ", noob::to_string(window), "."));
-        renderer->setWindow(window);
+	noob::logger::log(noob::importance::INFO, noob::concat("Got window ", noob::to_string(reinterpret_cast<size_t>(window)), "."));
+        engine->setWindow(window);
     }
     else
     {
