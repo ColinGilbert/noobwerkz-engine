@@ -1,6 +1,6 @@
-rm -rf ../engine/android/libs/* &&
-rm -rf ../engine/android/bin/* &&
-rm -rf ../engine/android/obj/* &&
-rm -rf ../engine/android/assets/* &&
-rm -rf ../engine/android/shaders/gles/* &&
-rm ../engine/android/jni/*.so
+rm -rf ../engine/platform/android/libs/* &&
+rm -rf ../engine/plaform/android/bin/* &&
+rm -rf ../engine/platform/android/obj/* &&
+rm -rf ../engine/platform/android/assets/* &&
+rm -rf ../engine/platform/android/shaders/gles/* &&
+rm ../platform/engine/android/jni/*.so

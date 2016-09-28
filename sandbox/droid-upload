@@ -1,6 +1,6 @@
-#cp ../engine/build/libnative-activity.so ../engine/android/libs/armeabi-v7a &&
-cp ../engine/build/libNoobwerkzActivity.so ../engine/android/jni &&
-cd ../engine/android &&
+#cp ../platform/engine/build/libnative-activity.so ../platform/engine/android/libs/armeabi-v7a &&
+cp ../platform/engine/build/libEngineEntry.so ../platform/engine/android/jni &&
+cd ../platform/engine/android &&
 $ANDROID_NDK_HOME/ndk-build &&
 ant debug
 adb install -r bin/MainActivity-debug.apk
