@@ -886,33 +886,18 @@ endif()
 
 
 if (NOOB_PLATFORM_ANDROID)
-	#include("$ENV{ANDROID_CMAKE_HOME}/android.apk.cmake" REQUIRED)
 	#include_directories($ENV{ANDROID_NDK_HOME}/sources/android/native_app_glue)
 
-	find_path(OPENGL_INCLUDE_DIR GLES3/gl3.h
-	${ANDROID_NDK}/platforms/android-${ANDROID_NATIVE_API_LEVEL}/arch-${ANDROID_ARCH_NAME}/usr/include
-	${_OPENGL_INCLUDE_PATH}
-	)
-	find_library(OPENGL_gl_LIBRARY
-	NAMES GLESv3
-	PATHS
-	${ANDROID_NDK}/platforms/android-${ANDROID_NATIVE_API_LEVEL}/arch-${ANDROID_ARCH_NAME}/usr/lib
-	${_OPENGL_LIB_PATH}
-	)
-
+	set (CMAKE_C_FLAGS "-DNOOB_PLATFORM_ANDROID ${CMAKE_C_FLAGS}")
+	set (CMAKE_CXX_FLAGS "-DNOOB_PLATFORM_ANDROID ${CMAKE_CXX_FLAGS}")
+	
 	list (APPEND app_src
 		#"$ENV{ANDROID_NDK_HOME}/sources/android/native_app_glue/android_native_app_glue.c" #/native_app_glue.c"
 		platform/droid/EngineDroid.cpp
 		platform/droid/SoundInterface.cpp
 		)
 
-	# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DDYNAMIC_ES3")
-	# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDYNAMIC_ES3")
 	add_library(NoobwerkzActivity SHARED ${app_src})
 	target_link_libraries(NoobwerkzActivity log android GLESv2 EGL dl)
-	#set_target_properties(native-activity PROPERTIES COMPILE_DEFINITIONS "ANDROID")
-
-	# macro(android_create_apk name apk_package_name apk_directory libs_directory android_directory assets_directory)
-	# android_create_apk(native-activity "net.noobwerkz.sampleapp" "${CMAKE_BINARY_DIR}/apk""${CMAKE_BINARY_DIR}" "${CMAKE_SOURCE_DIR}/android" "${CMAKE_SOURCE_DIR}/android/assets")
 endif()
 

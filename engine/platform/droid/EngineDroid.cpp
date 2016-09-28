@@ -77,9 +77,6 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 
 
 
-
-
-
 	if (current_context != last_context)
 	{
 		if (last_context != 0)
@@ -90,7 +87,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 
 		bgfx::PlatformData pd = {};
 		pd.context = (void*)(uintptr_t)current_context; // eglGetCurrentContext(); // Pass the EGLContext created by GLSurfaceView.
-		//pd.context = eglGetCurrentContext();
+		pd.context = eglGetCurrentContext();
 		bgfx::setPlatformData(pd);
 
 		noob::logger::log(noob::importance::INFO, "BGFX platform data set!");
@@ -117,6 +114,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnFrame(JNIEnv* env, 
 {
 	if (app)
 	{
+		noob::logger::log(noob::importance::INFO, "[C++] Drawing frame");
 		app->step();
 		noob::graphics& gfx = noob::graphics::get_instance();
 		gfx.frame(_width, _height);
