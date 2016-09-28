@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-package="net.noobwerkz.sampleapp"
+package="net.noobwerkz.engine"
 android:versionCode="1"
 android:versionName="1.0">
 
@@ -12,7 +12,10 @@ android:label="Noobwerkz"
 android:icon="@drawable/ic_launcher"
 android:hasCode="true"
 >
-<activity android:configChanges="orientation|keyboardHidden" android:label="@string/app_name" android:name="net.noobwerkz.sampleapp.MainActivity" android:screenOrientation="landscape" android:theme="@android:style/Theme.Translucent.NoTitleBar">
+        <activity android:name="net.noobwerkz.engine.EngineEntry"
+                  android:label="@string/app_name">
+<!-- <activity android:configChanges="orientation|keyboardHidden" android:label="@string/app_name" android:name="net.noobwerkz.engine.MainActivity" android:screenOrientation="landscape" android:theme="@android:style/Theme.Translucent.NoTitleBar"> -->
+
 
 
 <intent-filter>
