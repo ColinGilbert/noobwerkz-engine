@@ -15,13 +15,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+#include <stdint.h>
+#include <jni.h>
+#include <android/native_window.h> // requires ndk r5 or newer
+#include <android/native_window_jni.h> // requires ndk r5 or newer
 
 extern "C"
 {
-	JNIEXPORT void JNICALL net_noobwerkz_engine_EngineEntry_nativeOnStart(JNIEnv* jenv, jobject obj);
-	JNIEXPORT void JNICALL net_noobwerkz_engine_EngineEntry_nativeOnResume(JNIEnv* jenv, jobject obj);
-	JNIEXPORT void JNICALL net_noobwerkz_engine_EngineEntry_nativeOnPause(JNIEnv* jenv, jobject obj);
-	JNIEXPORT void JNICALL net_noobwerkz_engine_EngineEntry_nativeOnStop(JNIEnv* jenv, jobject obj);
-	JNIEXPORT void JNICALL net_noobwerkz_engine_EngineEntry_nativeSetSurface(JNIEnv* jenv, jobject obj, jobject surface);
-	JNIEXPORT void JNICALL net_noobwerkz_engine_EngineEntry_nativeLog(JNIEnv* env, jobject obj, jstring message);
+	JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineEntry_nativeOnStart(JNIEnv* jenv, jobject obj);
+	JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineEntry_nativeOnResume(JNIEnv* jenv, jobject obj);
+	JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineEntry_nativeOnPause(JNIEnv* jenv, jobject obj);
+	JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineEntry_nativeOnStop(JNIEnv* jenv, jobject obj);
+	JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineEntry_nativeSetSurface(JNIEnv* jenv, jobject obj, jobject surface);
+	JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineEntry_nativeLog(JNIEnv* env, jobject obj, jstring message);
 };

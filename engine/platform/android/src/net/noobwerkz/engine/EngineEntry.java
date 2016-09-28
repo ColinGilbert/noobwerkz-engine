@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-package tsaarni.nativeeglexample;
+package net.noobwerkz.engine;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -27,10 +27,9 @@ import android.view.View.OnClickListener;
 import android.util.Log;
 
 
-public class NativeEglExample extends Activity implements SurfaceHolder.Callback
+public class EngineEntry extends Activity implements SurfaceHolder.Callback
 {
-
-    // private static String TAG = "EglSample";
+    private static String TAG = "Engine";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +42,7 @@ public class NativeEglExample extends Activity implements SurfaceHolder.Callback
         surfaceView.getHolder().addCallback(this);
         surfaceView.setOnClickListener(new OnClickListener() {
                 public void onClick(View view) {
-                    Toast toast = Toast.makeText(NativeEglExample.this, "This demo combines Java UI and native EGL + OpenGL renderer", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(EngineEntry.this, "This demo combines Java UI and native EGL + OpenGL renderer", Toast.LENGTH_LONG);
                     toast.show();
                 }});
     }
@@ -99,7 +98,7 @@ public class NativeEglExample extends Activity implements SurfaceHolder.Callback
 
     static
     {
-        System.loadLibrary("NoobEngine");
+        System.loadLibrary("Entry");
     }
 
 }

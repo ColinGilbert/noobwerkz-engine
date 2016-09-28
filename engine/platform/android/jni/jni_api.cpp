@@ -14,10 +14,7 @@
 // limitations under the License.
 //
 
-#include <stdint.h>
-#include <jni.h>
-#include <android/native_window.h> // requires ndk r5 or newer
-#include <android/native_window_jni.h> // requires ndk r5 or newer
+
 
 #include "NoobUtils.hpp"
 
@@ -27,28 +24,28 @@
 static ANativeWindow *window = 0;
 static engine_droid *engine = 0;
 
-JNIEXPORT void JNICALL net_noobwerkz_engine_EngineEntry_nativeOnStart(JNIEnv* jenv, jobject obj)
+JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineEntry_nativeOnStart(JNIEnv* jenv, jobject obj)
 {
     noob::logger::log(noob::importance::INFO, "nativeOnStart");
     engine = new engine_droid();
     return;
 }
 
-JNIEXPORT void JNICALL net_noobwerkz_engine_EngineEntry_nativeOnResume(JNIEnv* jenv, jobject obj)
+JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineEntry_nativeOnResume(JNIEnv* jenv, jobject obj)
 {
     noob::logger::log(noob::importance::INFO, "nativeOnResume");
     engine->start();
     return;
 }
 
-JNIEXPORT void JNICALL net_noobwerkz_engine_EngineEntry_nativeOnPause(JNIEnv* jenv, jobject obj)
+JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineEntry_nativeOnPause(JNIEnv* jenv, jobject obj)
 {
     noob::logger::log(noob::importance::INFO, "nativeOnPause");
     engine->stop();
     return;
 }
 
-JNIEXPORT void JNICALL net_noobwerkz_engine_EngineEntry_nativeOnStop(JNIEnv* jenv, jobject obj)
+JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineEntry_nativeOnStop(JNIEnv* jenv, jobject obj)
 {
     noob::logger::log(noob::importance::INFO, "nativeOnStop");
     delete engine;
@@ -56,7 +53,7 @@ JNIEXPORT void JNICALL net_noobwerkz_engine_EngineEntry_nativeOnStop(JNIEnv* jen
     return;
 }
 
-JNIEXPORT void JNICALL net_noobwerkz_engine_EngineEntry_nativeSetSurface(JNIEnv* jenv, jobject obj, jobject surface)
+JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineEntry_nativeSetSurface(JNIEnv* jenv, jobject obj, jobject surface)
 {
     if (surface != 0)
     {
@@ -89,7 +86,7 @@ std::string ConvertJString(JNIEnv* env, jstring str)
 }
 
 /*
-   JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_SetupArchiveDir(JNIEnv * env, jobject obj, jstring dir)
+   JNIEXPORT void JNICALL Java_Java_net_noobwerkz_sampleapp_JNILib_SetupArchiveDir(JNIEnv * env, jobject obj, jstring dir)
    {
    const char* temp = env->GetStringUTFChars(dir, NULL);
    archive_dir = std::string(temp);
@@ -104,7 +101,7 @@ std::string ConvertJString(JNIEnv* env, jstring str)
    }
    */
 
-JNIEXPORT void JNICALL  net_noobwerkz_engine_EngineEntry_nativeLog(JNIEnv* env, jobject obj, jstring message)
+JNIEXPORT void JNICALL  Java_net_noobwerkz_engine_EngineEntry_nativeLog(JNIEnv* env, jobject obj, jstring message)
 {
 	const char* temp = env->GetStringUTFChars(message, NULL);
 

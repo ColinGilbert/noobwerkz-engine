@@ -866,10 +866,6 @@ if (NOOB_PLATFORM_LINUX)
 endif()
 
 
-if (NOOB_PLATFORM_ANDROID)
-	list(APPEND main_src platform/droid/SoundInterface.cpp)
-endif()
-
 
 # All platforms get these:
 list (APPEND app_src ${assimp_src} ${freetype_src} ${user_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${base_src} ${recast_src} ${bullet_src} ${voropp_src} ${ozz_src} ${ogg_src} ${vorbis_src} ${r8_src} ${shiny_src})
@@ -885,14 +881,14 @@ endif()
 if (NOOB_PLATFORM_ANDROID)
 	set (CMAKE_C_FLAGS "-DNOOB_PLATFORM_ANDROID ${CMAKE_C_FLAGS}")
 	set (CMAKE_CXX_FLAGS "-DNOOB_PLATFORM_ANDROID ${CMAKE_CXX_FLAGS}")
-	
+	include_directories(platform/android/jni)
 	list (APPEND app_src
 		platform/droid/SoundInterface.cpp
 		platform/android/jni/engine_droid.cpp
 		platform/android/jni/jni_api.cpp
 		)
 
-	add_library(EngineEntry SHARED ${app_src})
-	target_link_libraries(EngineEntry log android GLESv1_CM GLESv2 EGL dl)
+	add_library(Entry SHARED ${app_src})
+	target_link_libraries(Entry log android GLESv1_CM GLESv2 EGL dl m)
 endif()
 
