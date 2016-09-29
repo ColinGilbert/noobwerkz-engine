@@ -3,4 +3,4 @@ cp ../engine/build/libEntry.so ../engine/platform/android/jni &&
 cd ../engine/platform/android &&
 $ANDROID_NDK_HOME/ndk-build &&
 ant debug &&
-adb install -r bin/EngineEntry-debug.apk
+adb install -r bin/NativeActivity-debug.apk

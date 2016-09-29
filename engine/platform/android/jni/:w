@@ -1,0 +1,63 @@
+#include <jni.h>
+#include <GLES2/gl2.h>
+#include <EGL/egl.h>
+
+#include <bgfx/bgfx.h>
+#include <bgfx/platform.h>
+
+#include "Application.hpp"
+
+noob::application* user_appr = nullptr;
+int32_t _width, _height;
+
+extern "C"
+{
+	JNIEXPORT void JNICALL Java_com_android_gles3jni_GLES3JNILib_init(JNIEnv* env, jobject obj);
+	JNIEXPORT void JNICALL Java_com_android_gles3jni_GLES3JNILib_resize(JNIEnv* env, jobject obj, jint width, jint height);
+	JNIEXPORT void JNICALL Java_com_android_gles3jni_GLES3JNILib_step(JNIEnv* env, jobject obj);
+};
+
+JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineJNI_init(JNIEnv* env, jobject obj) {
+	if (user_app) {
+		delete user_app;
+		user_app = nullptr;
+	}
+
+	const char* versionStr = (const char*)glGetString(GL_VERSION);
+
+	noob::logger::log(noob::importance::INFO, versionStr);
+
+	bgfx::PlatformData pd = {};
+	pd.ctx = eglGetCurrentContext();
+
+	bgfx::setUserData(pd);
+
+	bgfx::init();
+	noob::graphics& gfx = noob::graphics::get_instance();
+	gfx.init();
+
+	user_app = new noob::application();
+	user_app->init();
+
+}
+
+JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineJNI_resize(JNIEnv* env, jobject obj, jint width, jint height)
+{
+	if (user_app)
+	{
+		_width = width;
+		_height = height;
+		user_app->window_resize(width, height);
+	}
+}
+
+JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineJNI_step(JNIEnv* env, jobject obj)
+{
+	if (user_app)
+	{
+		user_app->step();
+		noob::graphics& gfx = noob::graphics::get_instance();
+		gfx.frame();
+	}
+}
+

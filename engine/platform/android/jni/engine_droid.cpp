@@ -1,328 +1,207 @@
-//
-// Copyright 2011 Tero Saarni
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
+#include <jni.h>
+#include <errno.h>
+#include <math.h>
 
-#include <stdint.h>
-#include <unistd.h>
-#include <pthread.h>
-#include <android/native_window.h> // requires ndk r5 or newer
-#include <EGL/egl.h> // requires ndk r5 or newer
-#include <GLES3/gl3.h>
+#include <EGL/egl.h>
+#include <GLES/gl.h>
 
+#include <android/sensor.h>
+#include <android/log.h>
+#include <android_native_app_glue.h>
 #include <bgfx/bgfx.h>
 #include <bgfx/bgfxplatform.h>
 
 #include "NoobUtils.hpp"
 
-#include "engine_droid.hpp"
 
-#define LOG_TAG "EglSample"
+struct engine {
+	struct android_app* app;
+
+	EGLDisplay display;
+	EGLSurface surface;
+	EGLContext context;
+	int32_t width;
+	int32_t height;
+
+	int32_t touchX;
+	int32_t touchY;
+};
+
+
+// Initialize an EGL context for the current display.
+// TODO tidy this up, currently it's mostly Google example code.
+int init_display(struct engine* engine) {
 /*
-   static GLint vertices[][3] = {
-   { -0x10000, -0x10000, -0x10000 },
-   {  0x10000, -0x10000, -0x10000 },
-   {  0x10000,  0x10000, -0x10000 },
-   { -0x10000,  0x10000, -0x10000 },
-   { -0x10000, -0x10000,  0x10000 },
-   {  0x10000, -0x10000,  0x10000 },
-   {  0x10000,  0x10000,  0x10000 },
-   { -0x10000,  0x10000,  0x10000 }
-   };
+	// Setup OpenGL ES 2
+	// http://stackoverflow.com/questions/11478957/how-do-i-create-an-opengl-es-2-context-in-a-native-activity
+	const EGLint attribs[] = {
+			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT, //important
+			EGL_BLUE_SIZE, 8,
+			EGL_GREEN_SIZE, 8,
+			EGL_RED_SIZE, 8,
+			EGL_NONE
+	};
 
-   static GLint colors[][4] = {
-   { 0x00000, 0x00000, 0x00000, 0x10000 },
-   { 0x10000, 0x00000, 0x00000, 0x10000 },
-   { 0x10000, 0x10000, 0x00000, 0x10000 },
-   { 0x00000, 0x10000, 0x00000, 0x10000 },
-   { 0x00000, 0x00000, 0x10000, 0x10000 },
-   { 0x10000, 0x00000, 0x10000, 0x10000 },
-   { 0x10000, 0x10000, 0x10000, 0x10000 },
-   { 0x00000, 0x10000, 0x10000, 0x10000 }
-   };
-
-   GLubyte indices[] = {
-   0, 4, 5,    0, 5, 1,
-   1, 5, 6,    1, 6, 2,
-   2, 6, 7,    2, 7, 3,
-   3, 7, 4,    3, 4, 0,
-   4, 7, 6,    4, 6, 5,
-   3, 0, 1,    3, 1, 2
-   };
-   */
-
-engine_droid::engine_droid() : _msg(MSG_NONE), _display(0), _surface(0), _context(0), _angle(0)
-{
-	noob::logger::log(noob::importance::INFO, "engine_droid instance created");
-	pthread_mutex_init(&_mutex, 0);    
-	return;
-}
-
-engine_droid::~engine_droid()
-{
-	noob::logger::log(noob::importance::INFO, "engine_droid instance destroyed");
-	pthread_mutex_destroy(&_mutex);
-	return;
-}
-
-void engine_droid::start()
-{
-	noob::logger::log(noob::importance::INFO, "Creating renderer thread");
-	pthread_create(&_threadId, 0, threadStartCallback, this);
-	return;
-}
-
-void engine_droid::stop()
-{
-	noob::logger::log(noob::importance::INFO, "Stopping renderer thread");
-
-	// send message to render thread to stop rendering
-	pthread_mutex_lock(&_mutex);
-	_msg = MSG_RENDER_LOOP_EXIT;
-	pthread_mutex_unlock(&_mutex);    
-
-	pthread_join(_threadId, 0);
-	noob::logger::log(noob::importance::INFO, "engine_droid thread stopped");
-
-	return;
-}
-
-void engine_droid::setWindow(ANativeWindow *window)
-{
-	// notify render thread that window has changed
-	pthread_mutex_lock(&_mutex);
-	_msg = MSG_WINDOW_SET;
-	_window = window;
-	pthread_mutex_unlock(&_mutex);
-
-	return;
-}
-
-
-
-void engine_droid::renderLoop()
-{
-	bool renderingEnabled = true;
-
-	noob::logger::log(noob::importance::INFO, "renderLoop()");
-
-	while (renderingEnabled)
+	EGLint attribList[] =
 	{
+			EGL_CONTEXT_CLIENT_VERSION, 2,
+			EGL_NONE
+	};
 
-		pthread_mutex_lock(&_mutex);
+	EGLint w, h, dummy, format;
+	EGLint numConfigs;
+	EGLConfig config;
+	EGLSurface surface;
+	EGLContext context;
 
-		// process incoming messages
-		switch (_msg)
-		{
+	EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 
-			case MSG_WINDOW_SET:
-				initialize();
-				break;
+	eglInitialize(display, 0, 0);
 
-			case MSG_RENDER_LOOP_EXIT:
-				renderingEnabled = false;
-				destroy();
-				break;
+	// Here, the application chooses the configuration it desires.
+	// In this sample, we have a very simplified selection process, where we pick the first EGLConfig that matches our criteria.
+	eglChooseConfig(display, attribs, &config, 1, &numConfigs);
 
-			default:
-				break;
-		}
-		_msg = MSG_NONE;
+	// EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is guaranteed to be accepted by ANativeWindow_setBuffersGeometry().
+	// As soon as we picked a EGLConfig, we can safely reconfigure the ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID.
+	eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
 
-		if (_display)
-		{
-			drawFrame();
-			//if (!eglSwapBuffers(_display, _surface)) {
-			//	noob::logger::log(noob::importance::ERROR, noob::concat("eglSwapBuffers() returned error ", noob::to_string(eglGetError())));
-			//}
-		}
+	ANativeWindow_setBuffersGeometry(engine->app->window, 0, 0, format);
 
-		pthread_mutex_unlock(&_mutex);
+	surface = eglCreateWindowSurface(display, config, engine->app->window, NULL);
+
+	context = eglCreateContext(display, config, NULL, attribList);
+
+	if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE)
+	{
+		// LOGW("Unable to eglMakeCurrent");
+		return -1;
 	}
 
-	noob::logger::log(noob::importance::INFO, "Render loop exits");
+	// Grab the width and height of the surface
+	eglQuerySurface(display, surface, EGL_WIDTH, &w);
+	eglQuerySurface(display, surface, EGL_HEIGHT, &h);
 
-	return;
-}
+	engine->display = display;
+	engine->context = context;
+	engine->surface = surface;
+	engine->width = w;
+	engine->height = h;
 
-bool engine_droid::initialize()
-{
-	/*
-	   const EGLint attribs[] =
-	   {
-	   EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-	   EGL_BLUE_SIZE, 8,
-	   EGL_GREEN_SIZE, 8,
-	   EGL_RED_SIZE, 8,
-	   EGL_NONE
-	   };
-	   EGLDisplay display;
-	   EGLConfig config;    
-	   EGLint numConfigs;
-	   EGLint format;
-	   EGLSurface surface;
-	   EGLContext context;
-	   EGLint width;
-	   EGLint height;
-	   GLfloat ratio;
+	// Initialize GL state.
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+	glEnable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
+	glViewport(0, 0, w, h);
 
-	   noob::logger::log(noob::importance::INFO, "Initializing context");
+	noob::logger::log(noob::importance::INFO, std::string(reinterpret_cast<const char*>(glGetString(GL_VERSION))));
 
-	   if ((display = eglGetDisplay(EGL_DEFAULT_DISPLAY)) == EGL_NO_DISPLAY)
-	   {
-	   noob::logger::log(noob::importance::ERROR, noob::concat("eglGetDisplay() returned error ", noob::to_string(eglGetError())));
-	   return false;
-	   }
-	   if (!eglInitialize(display, 0, 0))
-	   {
-	   noob::logger::log(noob::importance::ERROR, noob::concat("eglInitialize() returned error ", noob::to_string(eglGetError())));
-	   return false;
-	   }
-
-	   if (!eglChooseConfig(display, attribs, &config, 1, &numConfigs))
-	   {
-	   noob::logger::log(noob::importance::ERROR, noob::concat("eglChooseConfig() returned error ", noob::to_string(eglGetError())));
-	   destroy();
-	   return false;
-	   }
-
-	   if (!eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format))
-	   {
-	   noob::logger::log(noob::importance::ERROR, noob::concat("eglGetConfigAttrib() returned error ", noob::to_string(eglGetError())));
-	   destroy();
-	   return false;
-	   }
-
-	   ANativeWindow_setBuffersGeometry(_window, 0, 0, format);
-
-	   if (!(surface = eglCreateWindowSurface(display, config, _window, 0)))
-	   {
-	   noob::logger::log(noob::importance::ERROR, noob::concat("eglCreateWindowSurface() returned error ", noob::to_string(eglGetError())));
-	   destroy();
-	   return false;
-	   }
-
-	   if (!(context = eglCreateContext(display, config, 0, 0)))
-	   {
-	   noob::logger::log(noob::importance::ERROR, noob::concat("eglCreateContext() returned error ", noob::to_string(eglGetError())));
-	   destroy();
-	   return false;
-	   }
-
-	   if (!eglMakeCurrent(display, surface, surface, context))
-	   {
-	   noob::logger::log(noob::importance::ERROR, noob::concat("eglMakeCurrent() returned error ", noob::to_string(eglGetError())));
-	   destroy();
-	   return false;
-	   }
-
-	   if (!eglQuerySurface(display, surface, EGL_WIDTH, &width) || !eglQuerySurface(display, surface, EGL_HEIGHT, &height))
-	   {
-	noob::logger::log(noob::importance::ERROR, noob::concat("eglQuerySurface() returned error ", noob::to_string(eglGetError())));
-	destroy();
-	return false;
-}
-
-_display = display;
-_surface = surface;
-_context = context;
-
-glDisable(GL_DITHER);
-glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
-glClearColor(0, 0, 0, 0);
-glEnable(GL_CULL_FACE);
-glShadeModel(GL_SMOOTH);
-glEnable(GL_DEPTH_TEST);
-
-glViewport(0, 0, width, height);
-
-ratio = (GLfloat) width / height;
-glMatrixMode(GL_PROJECTION);
-glLoadIdentity();
-glFrustumf(-ratio, ratio, -1, 1, 1, 10);
-
-return true;
+	return 0;
 */
-_width = ANativeWindow_getWidth(_window);
-_height = ANativeWindow_getHeight(_window);
-
-bgfx::PlatformData pd = {};
-pd.nwh = _window;
-bgfx::setPlatformData(pd);
-bgfx::init();
-
-noob::graphics& gfx = noob::graphics::get_instance();
-gfx.init(_width, _height);
-_app = new noob::application();
-_app->init();
-_app->window_resize(_width, _height);
 }
 
-void engine_droid::destroy()
-{
-	noob::logger::log(noob::importance::INFO, "Destroying context");
-	/*
-	   eglMakeCurrent(_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-	   eglDestroyContext(_display, _context);
-	   eglDestroySurface(_display, _surface);
-	   eglTerminate(_display);
 
-	   _display = EGL_NO_DISPLAY;
-	   _surface = EGL_NO_SURFACE;
-	   _context = EGL_NO_CONTEXT;
+// Just the current frame in the display.
+void draw_frame(struct engine* engine) {
+	// No display.
+	if (engine->display == NULL) {
+		return;
+	}
 
-	   return;
-
-*/
-	delete _app;
-	bgfx::shutdown();
+	glClearColor(255,0,0, 1);
+	glClear(GL_COLOR_BUFFER_BIT);
+	eglSwapBuffers(engine->display, engine->surface);
 }
 
-void engine_droid::drawFrame()
-{
-	/*
-	   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	   glMatrixMode(GL_MODELVIEW);
-	   glLoadIdentity();
-	   glTranslatef(0, 0, -3.0f);
-	   glRotatef(_angle, 0, 1, 0);
-	   glRotatef(_angle*0.25f, 1, 0, 0);
-
-	   glEnableClientState(GL_VERTEX_ARRAY);
-	   glEnableClientState(GL_COLOR_ARRAY);
-
-	   glFrontFace(GL_CW);
-	   glVertexPointer(3, GL_FIXED, 0, vertices);
-	   glColorPointer(4, GL_FIXED, 0, colors);
-	   glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, indices);
-
-	   _angle += 1.2f;    
-	   */
-	_app->step();
-	noob::graphics& gfx = noob::graphics::get_instance();
-	gfx.frame(_width, _height);
-
+// Tear down the EGL context currently associated with the display.
+void terminate_display(struct engine* engine) {
+	if (engine->display != EGL_NO_DISPLAY) {
+		eglMakeCurrent(engine->display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+		if (engine->context != EGL_NO_CONTEXT) {
+			eglDestroyContext(engine->display, engine->context);
+		}
+		if (engine->surface != EGL_NO_SURFACE) {
+			eglDestroySurface(engine->display, engine->surface);
+		}
+		eglTerminate(engine->display);
+	}
+	engine->display = EGL_NO_DISPLAY;
+	engine->context = EGL_NO_CONTEXT;
+	engine->surface = EGL_NO_SURFACE;
 }
 
-void* engine_droid::threadStartCallback(void *myself)
-{
-	engine_droid *renderer = (engine_droid*)myself;
-
-	renderer->renderLoop();
-	pthread_exit(0);
-
+// Process the next input event.
+int32_t handle_input(struct android_app* app, AInputEvent* event) {
+	struct engine* engine = (struct engine*)app->userData;
+	if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
+		engine->touchX = AMotionEvent_getX(event, 0);
+		engine->touchY = AMotionEvent_getY(event, 0);
+		// LOGI("x %d\ty %d\n",engine->touchX,engine->touchY);
+		return 1;
+	}
 	return 0;
 }
 
+
+// Process the next main command.
+void handle_cmd(struct android_app* app, int32_t cmd) {
+	struct engine* engine = (struct engine*)app->userData;
+	switch (cmd) {
+	case APP_CMD_SAVE_STATE:
+		break;
+	case APP_CMD_INIT_WINDOW:
+		// The window is being shown, get it ready.
+		if (engine->app->window != NULL) {
+			init_display(engine);
+			draw_frame(engine);
+		}
+		break;
+	case APP_CMD_TERM_WINDOW:
+		// The window is being hidden or closed, clean it up.
+		terminate_display(engine);
+		break;
+	case APP_CMD_LOST_FOCUS:
+		draw_frame(engine);
+		break;
+	}
+}
+
+
+// Main entry point, handles events
+void android_main(struct android_app* state) {
+	app_dummy();
+
+	struct engine engine;
+
+	memset(&engine, 0, sizeof(engine));
+	state->userData = &engine;
+	state->onAppCmd = handle_cmd;
+	state->onInputEvent = handle_input;
+	engine.app = state;
+
+	// Read all pending events.
+	while (1)
+	{
+		int ident;
+		int events;
+		struct android_poll_source* source;
+
+		while ((ident=ALooper_pollAll(0, NULL, &events,(void**)&source)) >= 0) {
+
+			// Process this event.
+			if (source != NULL) {
+				source->process(state, source);
+			}
+
+			// Check if we are exiting.
+			if (state->destroyRequested != 0) {
+				terminate_display(&engine);
+				return;
+			}
+		}
+
+		// Draw the current frame
+		draw_frame(&engine);
+	}
+}

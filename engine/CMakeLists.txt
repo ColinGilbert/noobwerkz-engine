@@ -884,15 +884,15 @@ endif()
 
 
 if (NOOB_PLATFORM_ANDROID)
-	set (CMAKE_C_FLAGS "-DNOOB_PLATFORM_ANDROID -include '${CMAKE_SOURCE_DIR}/platform/android/jni/android_fopen.h'  ${CMAKE_C_FLAGS}")
-	set (CMAKE_CXX_FLAGS "-DNOOB_PLATFORM_ANDROID -include '${CMAKE_SOURCE_DIR}/platform/android/jni/android_fopen.h' ${CMAKE_CXX_FLAGS}")
- 
+	set (CMAKE_C_FLAGS "-DNOOB_PLATFORM_ANDROID -DBGFX_CONFIG_RENDERER_OPENGLES=20 -include '${CMAKE_SOURCE_DIR}/platform/android/jni/android_fopen.h'  ${CMAKE_C_FLAGS}")
+	set (CMAKE_CXX_FLAGS "-DNOOB_PLATFORM_ANDROID -DBGFX_CONFIG_RENDERER_OPENGLES=20 -include '${CMAKE_SOURCE_DIR}/platform/android/jni/android_fopen.h' ${CMAKE_CXX_FLAGS}")
+	include_directories($ENV{ANDROID_NDK_HOME}/sources/android/native_app_glue) 
 
 	include_directories(platform/android/jni)
 	list (APPEND app_src
+		$ENV{ANDROID_NDK_HOME}/sources/android/native_app_glue/android_native_app_glue.c
 		platform/droid/SoundInterface.cpp
 		platform/android/jni/engine_droid.cpp
-		platform/android/jni/jni_api.cpp
 		platform/android/jni/android_fopen.c
 		)
 
