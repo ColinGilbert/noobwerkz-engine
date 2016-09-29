@@ -9,6 +9,11 @@ set (bgfx_macros "-D__STDC_LIMIT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_CONSTANT
 
 set(CMAKE_CXX_FLAGS "-std=c++1y  -fno-exceptions -fno-rtti -DEIGEN_MPL2_ONLY ${bgfx_macros} ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-DSTB_IMAGE_STATIC -DFT2_BUILD_LIBRARY ${CMAKE_C_FLAGS}")
+# This is to ensure that platform/android/jni/android_fopen.h gets to be among the top includes
+if (NOOB_PLATFORM_ANDROID)
+endif()
+
+
 
 include_directories(lib/freetype/include)
 list (APPEND freetype_src
@@ -879,16 +884,19 @@ endif()
 
 
 if (NOOB_PLATFORM_ANDROID)
-	set (CMAKE_C_FLAGS "-DNOOB_PLATFORM_ANDROID ${CMAKE_C_FLAGS}")
-	set (CMAKE_CXX_FLAGS "-DNOOB_PLATFORM_ANDROID ${CMAKE_CXX_FLAGS}")
+	set (CMAKE_C_FLAGS "-DNOOB_PLATFORM_ANDROID -include '${CMAKE_SOURCE_DIR}/platform/android/jni/android_fopen.h'  ${CMAKE_C_FLAGS}")
+	set (CMAKE_CXX_FLAGS "-DNOOB_PLATFORM_ANDROID -include '${CMAKE_SOURCE_DIR}/platform/android/jni/android_fopen.h' ${CMAKE_CXX_FLAGS}")
+ 
+
 	include_directories(platform/android/jni)
 	list (APPEND app_src
 		platform/droid/SoundInterface.cpp
 		platform/android/jni/engine_droid.cpp
 		platform/android/jni/jni_api.cpp
+		platform/android/jni/android_fopen.c
 		)
 
 	add_library(Entry SHARED ${app_src})
-	target_link_libraries(Entry log android GLESv1_CM GLESv2 EGL dl m)
+	target_link_libraries(Entry log android GLESv2 EGL dl m)
 endif()
 

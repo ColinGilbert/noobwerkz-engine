@@ -20,6 +20,9 @@
 #include <android/native_window.h> // requires ndk r5 or newer
 #include <android/native_window_jni.h> // requires ndk r5 or newer
 
+
+#include "android_fopen.h"
+
 extern "C"
 {
 	JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineEntry_nativeOnStart(JNIEnv* jenv, jobject obj);
@@ -27,5 +30,6 @@ extern "C"
 	JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineEntry_nativeOnPause(JNIEnv* jenv, jobject obj);
 	JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineEntry_nativeOnStop(JNIEnv* jenv, jobject obj);
 	JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineEntry_nativeSetSurface(JNIEnv* jenv, jobject obj, jobject surface);
+	JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineEntry_nativeSetAssets(JNIEnv* jenv, jobject obj, jobject assets);	
 	JNIEXPORT void JNICALL Java_net_noobwerkz_engine_EngineEntry_nativeLog(JNIEnv* env, jobject obj, jstring message);
 };

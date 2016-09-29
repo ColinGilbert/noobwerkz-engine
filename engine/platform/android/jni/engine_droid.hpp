@@ -19,53 +19,59 @@
 
 #include <pthread.h>
 #include <EGL/egl.h> // requires ndk r5 or newer
-#include <GLES/gl.h>
+#include <GLES3/gl3.h>
+
+#include "Application.hpp"
+#include "android_fopen.h"
+
+class engine_droid
+{
+	public:
+		engine_droid();
+		virtual ~engine_droid();
+
+		// Following methods can be called from any thread.
+		// They send message to render thread which executes required actions.
+		void start();
+		void stop();
+		void setWindow(ANativeWindow* window);
 
 
-class engine_droid {
+	private:
 
-public:
-    engine_droid();
-    virtual ~engine_droid();
+		enum render_thread_message
+		{
+			MSG_NONE = 0,
+			MSG_WINDOW_SET,
+			MSG_RENDER_LOOP_EXIT
+		};
 
-    // Following methods can be called from any thread.
-    // They send message to render thread which executes required actions.
-    void start();
-    void stop();
-    void setWindow(ANativeWindow* window);
-    
-    
-private:
+		pthread_t _threadId;
+		pthread_mutex_t _mutex;
+		enum render_thread_message _msg;
 
-    enum RenderThreadMessage {
-        MSG_NONE = 0,
-        MSG_WINDOW_SET,
-        MSG_RENDER_LOOP_EXIT
-    };
+		// android window, supported by NDK r5 and newer
+		ANativeWindow* _window;
+		uint32_t _width, _height;
 
-    pthread_t _threadId;
-    pthread_mutex_t _mutex;
-    enum RenderThreadMessage _msg;
-    
-    // android window, supported by NDK r5 and newer
-    ANativeWindow* _window;
+		EGLDisplay _display;
+		EGLSurface _surface;
+		EGLContext _context;
+		GLfloat _angle;
 
-    EGLDisplay _display;
-    EGLSurface _surface;
-    EGLContext _context;
-    GLfloat _angle;
-    
-    // RenderLoop is called in a rendering thread started in start() method
-    // It creates rendering context and renders scene until stop() is called
-    void renderLoop();
-    
-    bool initialize();
-    void destroy();
+		noob::application* _app;
 
-    void drawFrame();
+		// RenderLoop is called in a rendering thread started in start() method
+		// It creates rendering context and renders scene until stop() is called
+		void renderLoop();
 
-    // Helper method for starting the thread 
-    static void* threadStartCallback(void *myself);
+		bool initialize();
+		void destroy();
+
+		void drawFrame();
+
+		// Helper method for starting the thread 
+		static void* threadStartCallback(void *myself);
 
 };
 

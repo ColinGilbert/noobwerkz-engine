@@ -25,7 +25,7 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.util.Log;
-
+import android.content.res.AssetManager; 
 
 public class EngineEntry extends Activity implements SurfaceHolder.Callback
 {
@@ -40,6 +40,7 @@ public class EngineEntry extends Activity implements SurfaceHolder.Callback
         setContentView(R.layout.main);
         SurfaceView surfaceView = (SurfaceView)findViewById(R.id.surfaceview);
         surfaceView.getHolder().addCallback(this);
+
         surfaceView.setOnClickListener(new OnClickListener() {
                 public void onClick(View view) {
                     Toast toast = Toast.makeText(EngineEntry.this, "This demo combines Java UI and native EGL + OpenGL renderer", Toast.LENGTH_LONG);
@@ -51,6 +52,8 @@ public class EngineEntry extends Activity implements SurfaceHolder.Callback
     protected void onStart() {
         super.onStart();
         Log.i(TAG, "onStart()");
+	nativeSetAssets(getAssets());
+	
         nativeOnStart();
     }
 
@@ -95,6 +98,7 @@ public class EngineEntry extends Activity implements SurfaceHolder.Callback
     public static native void nativeOnPause();
     public static native void nativeOnStop();
     public static native void nativeSetSurface(Surface surface);
+    public static native void nativeSetAssets(AssetManager assets);
 
     static
     {
