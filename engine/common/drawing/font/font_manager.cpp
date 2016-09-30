@@ -710,29 +710,21 @@ const FontInfo& FontManager::getFontInfo(FontHandle _handle) const
 
 const GlyphInfo* FontManager::getGlyphInfo(FontHandle _handle, CodePoint _codePoint)
 {
-	noob::logger::log(noob::importance::INFO, "GETGLYPHINFO 1");
 	const GlyphHashMap& cachedGlyphs = m_cachedFonts[_handle.idx].cachedGlyphs;
-	noob::logger::log(noob::importance::INFO, "GETGLYPHINFO 2");
 	
 	GlyphHashMap::const_iterator it = cachedGlyphs.find(_codePoint);
-	noob::logger::log(noob::importance::INFO, "GETGLYPHINFO 3");
 
 	if (it == cachedGlyphs.end() )
 	{
 
-	noob::logger::log(noob::importance::INFO, "GETGLYPHINFO 4-1");
 		if (!preloadGlyph(_handle, _codePoint) )
 		{
-	noob::logger::log(noob::importance::INFO, "GETGLYPHINFO 4-2");
 		
 			return NULL;
 		}
 
-	noob::logger::log(noob::importance::INFO, "GETGLYPHINFO 4-3");
 		it = cachedGlyphs.find(_codePoint);
 	}
-
-	noob::logger::log(noob::importance::INFO, "GETGLYPHINFO 5");
 
 	BX_CHECK(it != cachedGlyphs.end(), "Failed to preload glyph.");
 	return &it->second;

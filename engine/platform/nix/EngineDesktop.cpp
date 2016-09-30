@@ -160,8 +160,8 @@ int main(int /*_argc*/, char** /*_argv*/)
 		// noob::ndof::data info = ndof.get_data();
 		// app->accept_ndof_data(info);
 		app->step();
-		noob::graphics& tmp_gfx = noob::graphics::get_instance();
-		tmp_gfx.frame(width, height);
+		noob::graphics& gfx = noob::graphics::get_instance();
+		gfx.frame(width, height);
 		glfwPollEvents();
 	}
 

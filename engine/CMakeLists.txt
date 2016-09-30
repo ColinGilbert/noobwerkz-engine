@@ -5,7 +5,7 @@ project(NoobWerkz)
 set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
-set (bgfx_macros "-D__STDC_LIMIT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_CONSTANT_MACROS  -DBGFX_CONFIG_MULTITHREADED=0")
+set (bgfx_macros "-D__STDC_LIMIT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_CONSTANT_MACROS -DBGFX_CONFIG_MULTITHREADED=1")
 
 set(CMAKE_CXX_FLAGS "-std=c++1y  -fno-exceptions -fno-rtti -DEIGEN_MPL2_ONLY ${bgfx_macros} ${CMAKE_CXX_FLAGS}")
 set(CMAKE_C_FLAGS "-DSTB_IMAGE_STATIC -DFT2_BUILD_LIBRARY ${CMAKE_C_FLAGS}")
@@ -884,8 +884,8 @@ endif()
 
 
 if (NOOB_PLATFORM_ANDROID)
-	set (CMAKE_C_FLAGS "-DNOOB_PLATFORM_ANDROID -DBGFX_CONFIG_RENDERER_OPENGLES=20 -include '${CMAKE_SOURCE_DIR}/platform/android/jni/android_fopen.h'  ${CMAKE_C_FLAGS}")
-	set (CMAKE_CXX_FLAGS "-DNOOB_PLATFORM_ANDROID -DBGFX_CONFIG_RENDERER_OPENGLES=20 -include '${CMAKE_SOURCE_DIR}/platform/android/jni/android_fopen.h' ${CMAKE_CXX_FLAGS}")
+	set (CMAKE_C_FLAGS "-DNOOB_PLATFORM_ANDROID -include '${CMAKE_SOURCE_DIR}/platform/android/jni/android_fopen.h'  ${CMAKE_C_FLAGS}")
+	set (CMAKE_CXX_FLAGS "-DNOOB_PLATFORM_ANDROID -include '${CMAKE_SOURCE_DIR}/platform/android/jni/android_fopen.h' ${CMAKE_CXX_FLAGS}")
 	include_directories($ENV{ANDROID_NDK_HOME}/sources/android/native_app_glue) 
 
 	include_directories(platform/android/jni)
