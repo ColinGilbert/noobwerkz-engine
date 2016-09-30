@@ -104,7 +104,7 @@ namespace noob
 		bool add_shader(const std::string&, const noob::graphics::shader&);
 
 		// ---------------- Getters -----------------
-	//	noob::graphics::shader get_shader(const std::string&) const;
+		// noob::graphics::shader get_shader(const std::string&) const;
 		noob::graphics::texture get_texture(const std::string&) const;
 		noob::graphics::uniform get_uniform(const std::string&) const;
 		noob::graphics::sampler get_sampler(const std::string&) const;
