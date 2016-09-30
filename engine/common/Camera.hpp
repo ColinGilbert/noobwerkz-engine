@@ -16,9 +16,10 @@ namespace noob
 			void init(float move_speed, float heading_speed, const noob::vec3& pos);
 			void update(double delta, const noob::camera::cam_movement& movement);
 			noob::mat4 get_view_matrix() { return view_mat; }
+			float cam_speed, cam_heading_speed;
+		
 		protected:
 			double previous_seconds;
-			float cam_speed, cam_heading_speed;
 			noob::vec4 fwd, rgt, up;
 			noob::mat4 T, R, view_mat;
 			noob::vec3 cam_pos;

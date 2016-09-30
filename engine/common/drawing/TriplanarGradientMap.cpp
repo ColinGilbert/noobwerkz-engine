@@ -1,4 +1,5 @@
 #include "TriplanarGradientMap.hpp"
+#include "NoobUtils.hpp"
 
 void noob::triplanar_gradient_map_renderer::init()
 {
@@ -9,9 +10,15 @@ void noob::triplanar_gradient_map_renderer::init()
 	renderbase.shader.program = program_handle;
 	renderbase.shader.samplers.push_back(gfx.get_texture_0());
 	gfx.add_shader("gradient_map_triplanar", renderbase.shader);
-	fmt::MemoryWriter ww;
-	ww << "[TriplanarGradientMap] Program valid? " << renderbase.program_valid;
-	logger::log(ww.str());
+	
+	if (renderbase.program_valid)
+	{
+		noob::logger::log(noob::importance::INFO, "Triplanar gradient map load success.");
+	}
+	else
+	{
+		noob::logger::log(noob::importance::ERROR, "Triplanar gradient map load fail.");
+	}
 }
 
 
@@ -42,19 +49,14 @@ void noob::triplanar_gradient_map_renderer::draw(const noob::drawable* model, co
 	bgfx::setUniform(gfx.get_colour_3().handle, &uni.colours[3].v[0]);
 	bgfx::setUniform(gfx.get_blend_0().handle, &uni.blend.v[0]);
 	bgfx::setUniform(gfx.get_blend_1().handle, &uni.colour_positions.v[0]);
-	
 	bgfx::setUniform(gfx.get_model_scales().handle, &model_scales.v[0]);
 	bgfx::setUniform(gfx.get_tex_scales().handle, &uni.scales.v[0]);
-
-	// noob::mat4 normal_mat = noob::transpose(noob::inverse(w_mat));
 	bgfx::setUniform(gfx.get_normal_mat().handle, &normal_mat.m[0]);
-	
+	// bgfx::setUniform(gfx.get_eye_pos().handle, &eye_pos[0]);
 	bgfx::setUniform(gfx.get_specular_shine().handle, &reflect.specular_shine.v[0]);
 	bgfx::setUniform(gfx.get_diffuse().handle, &reflect.diffuse.v[0]);
-	// bgfx::setUniform(gfx.get_ambient.handle, &reflect.ambient.v[0]);
 	bgfx::setUniform(gfx.get_emissive().handle, &reflect.emissive.v[0]);
 	bgfx::setUniform(gfx.get_rough_albedo_fresnel().handle, &reflect.rough_albedo_fresnel.v[0]);
-	
 	bgfx::setUniform(gfx.get_fog().handle, &noob::vec4(0.01, 0.01, 0.01, 0.0).v[0]);
 	
 

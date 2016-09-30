@@ -1,10 +1,16 @@
 #pragma once
 
 #include "NoobDefines.hpp"
-
+#include "StringFuncs.hpp"
 
 namespace noob
 {
+	static const uint64_t thousand = 1000;
+
+	static const uint64_t million = 1000000;
+
+	static const uint64_t billion = 1000000000;
+
 	static uint64_t millis(const noob::duration d)
 	{
 		return (std::chrono::duration_cast<std::chrono::milliseconds>(d)).count();
@@ -27,53 +33,47 @@ namespace noob
 
 	static std::string pretty_print_timing(const noob::duration d)
 	{
-		fmt::MemoryWriter ww;
 		uint64_t time_in_millis = millis(d);
 		if (time_in_millis > 0)
 		{
-			ww << time_in_millis << " millis";
+			return noob::concat(noob::to_string(time_in_millis), std::string(" millis"));
 		}
 		else
 		{
 			uint64_t time_in_micros = micros(d);
 			if (time_in_micros > 0)
 			{
-				ww << time_in_micros << " micros";
+				return noob::concat(noob::to_string(time_in_micros), std::string(" micros"));
 			}
 			else
 			{
-				ww << nanos(d) << " nanos";
+				return noob::concat(noob::to_string(nanos(d)), std::string(" nanos"));
 			}
 		}
-
-		return ww.str();
 	}
 
 
 	static std::string pretty_print_timing(const noob::duration_fp d)
 	{
-		fmt::MemoryWriter ww;
 		double time_in_nanos = d.count();
 		double time_in_millis = time_in_nanos / 1000000.0;
+		
 		if (time_in_millis > 1.0)
 		{
-			ww << time_in_millis << " millis";
+			return noob::concat(noob::to_string(time_in_millis), std::string(" millis"));
 		}
 		else
 		{
 			double time_in_micros = time_in_nanos / 1000.0;
 			if (time_in_micros > 1.0)
 			{
-				ww << time_in_micros << " micros";
+				return noob::concat(noob::to_string(time_in_micros), std::string(" micros"));
 			}
 			else
 			{
-				ww << time_in_nanos << " nanos";
+				return noob::concat(noob::to_string(time_in_nanos), std::string(" nanos"));
 			}
 		}
 
-		return ww.str();
 	}
-
-
 }

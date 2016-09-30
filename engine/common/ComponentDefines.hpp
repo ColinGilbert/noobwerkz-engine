@@ -2,7 +2,7 @@
 
 #include "NoobDefines.hpp"
 
-#include "Component.hpp"
+#include <noob/component/component.hpp>
 
 #include "MathFuncs.hpp"
 #include "Body.hpp"
@@ -11,14 +11,13 @@
 #include "Light.hpp"
 #include "Reflectance.hpp"
 #include "BasicMesh.hpp"
-#include "ActiveMesh.hpp"
 #include "SkeletalAnim.hpp"
 #include "BasicModel.hpp"
 #include "AnimatedModel.hpp"
 #include "BasicRenderer.hpp"
 #include "TriplanarGradientMap.hpp"
 #include "AudioSample.hpp"
-#include "ShadingVariant.hpp"
+#include "ShaderVariant.hpp"
 #include "TextLabel.hpp"
 
 namespace noob
@@ -31,8 +30,9 @@ namespace noob
 	typedef noob::component<noob::reflectance> reflectances_holder;
 	typedef noob::component<noob::basic_renderer::uniform> basic_shaders_holder;
 	typedef noob::component<noob::triplanar_gradient_map_renderer::uniform> triplanar_shaders_holder;
-	typedef noob::component<noob::shader> shaders_holder;
+	typedef noob::component<noob::shader_variant> shader_variants_holder;
 	typedef noob::component<noob::time> times_holder;
+	typedef noob::component<noob::text_label> text_label_holder;
 
 	// TOOD: Make basic_models_holder and animated_models_holder stack-based
 	typedef noob::component_dynamic<noob::basic_model> basic_models_holder;
@@ -49,8 +49,11 @@ namespace noob
 	typedef handle<noob::reflectance> reflectance_handle;
 	typedef handle<noob::basic_renderer::uniform> basic_shader_handle;
 	typedef handle<noob::triplanar_gradient_map_renderer::uniform> triplanar_shader_handle;
-	typedef handle<noob::shader> shader_handle;
+	typedef handle<noob::shader_variant> shader_variant_handle;
 	typedef handle<noob::time> time_handle;
+	typedef handle<noob::text_label> text_label_handle;
+	typedef handle<noob::vec3> vec3_handle;
+
 
 	typedef handle<noob::basic_model> model_handle;
 	typedef handle<noob::animated_model> animated_model_handle;

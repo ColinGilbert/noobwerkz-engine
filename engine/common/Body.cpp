@@ -1,46 +1,45 @@
 #include "Body.hpp"
 
-#include "Logger.hpp"
 #include "Globals.hpp"
 
 
 void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type type_arg, const noob::shape& shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true) 
 {
 	btTransform start_transform;
-	
+
 	start_transform.setRotation(btQuaternion(orient.q[0], orient.q[1], orient.q[2], orient.q[3]));
 	start_transform.setOrigin(btVector3(pos.v[0], pos.v[1], pos.v[2]));
 
 	float _mass = mass;
-	
+
 	type = type_arg;
-	
+
 	switch(type)
 	{
 		case(noob::body_type::DYNAMIC):
-		{
-			break;
-		}
+			{
+				break;
+			}
 		case(noob::body_type::KINEMATIC):
-		{
-			_mass = 0.0;
-			break;
-		}
+			{
+				_mass = 0.0;
+				break;
+			}
 		case(noob::body_type::STATIC):
-		{
-			_mass = 0.0;
-			break;
-		}
+			{
+				_mass = 0.0;
+				break;
+			}
 		default:
-		{
-			break;
-		}
+			{
+				break;
+			}
 	};
 
 
 	btVector3 inertia(0.0, 0.0, 0.0);
 	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
-	
+
 	if (type == noob::body_type::DYNAMIC)
 	{
 		shape.inner_shape->calculateLocalInertia(_mass, inertia);
@@ -48,9 +47,9 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type typ
 
 	btRigidBody::btRigidBodyConstructionInfo ci(_mass, motion_state, shape.inner_shape, inertia);
 	inner = new btRigidBody(ci);
-	
+
 	set_ccd(ccd);
-	
+
 	dynamics_world->addRigidBody(inner);
 	noob::globals& g = noob::globals::get_instance();
 	physics_valid = true;	
@@ -79,7 +78,6 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type typ
 	physics_valid = true;
 }
 
-
 /*
    void noob::body::set_position(const noob::vec3& pos)
    {
@@ -89,8 +87,7 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type typ
    void noob::body::set_orientation(const noob::versor& orient)
    {
    }
-   */
-/*
+
 void noob::body::set_self_controlled(bool b) noexcept(true) 
 {
 	if (b == true)
@@ -206,7 +203,7 @@ noob::versor noob::body::get_orientation() const noexcept(true)
 {
 	btTransform xform;
 	inner->getMotionState()->getWorldTransform(xform);
-	return xform.getRotation();
+	return versor_from_bullet(xform.getRotation());
 }
 
 
@@ -227,15 +224,13 @@ noob::mat4 noob::body::get_transform() const noexcept(true)
 {
 	btTransform xform;
 	inner->getMotionState()->getWorldTransform(xform);
-	return xform;
+	return mat4_from_bullet(xform);
 }
 
 
 std::string noob::body::get_debug_string() const noexcept(true) 
 {
-	fmt::MemoryWriter w;
-	w << "[Body] position " << get_position().to_string() << ", orientation " << get_orientation().to_string() << ", linear velocity " << get_linear_velocity().to_string() << ", angular velocity " << get_angular_velocity().to_string();// << ", on ground? " << on_ground() << ", ray lambda  = " << ray_lambda; //<< " ray lambda # 2 = " << ray_lambda[1];
-	return w.str();
+	return noob::concat("[Body] position ", noob::to_string(get_position()), ", orientation ", noob::to_string(get_orientation()), ", linear velocity ", noob::to_string(get_linear_velocity()), ", angular velocity ", noob::to_string(get_angular_velocity()));// << ", on ground? " << on_ground() << ", ray lambda  = " << ray_lambda; //<< " ray lambda # 2 = " << ray_lambda[1];
 }
 
 void noob::body::set_ccd(bool b) noexcept(true) 

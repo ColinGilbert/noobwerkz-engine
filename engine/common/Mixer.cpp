@@ -1,6 +1,7 @@
 #include "Mixer.hpp"
 
 #include "Globals.hpp"
+#include "NoobUtils.hpp"
 
 bool noob::mixer::play_clip(const noob::sample_handle clip, float volume) noexcept(true)
 {
@@ -22,7 +23,7 @@ bool noob::mixer::play_clip(const noob::sample_handle clip, float volume) noexce
 		now_playing.push_back(to_search);
 		dirty = true;
 
-		logger::log("[Mixer] Adding new sound to mixer's soundbank.");
+		logger::log(noob::importance::INFO, "[Mixer] Adding new sound to mixer's soundbank.");
 	}
 	else
 	{
@@ -35,11 +36,11 @@ bool noob::mixer::play_clip(const noob::sample_handle clip, float volume) noexce
 				(it->queue[i]).offset = 0;
 				(it->queue[i]).volume = volume;
 
-				logger::log("[Mixer] Found song in existing soundbank. Making it play again.");
+				// logger::log(noob::importance::INFO, "[Mixer] Found song in existing soundbank. Making it play again.");
 
 				return true;
 			}
-			logger::log("[Mixer] Sound found in soundbank, but unable to enque as its queue is already full. Try again later.");
+			// logger::log(noob::importance::INFO, "[Mixer] Sound found in soundbank, but unable to enque as its queue is already full. Try again later.");
 		}
 	}
 

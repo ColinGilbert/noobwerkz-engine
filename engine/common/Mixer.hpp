@@ -9,7 +9,6 @@
 #include <rdestl/fixed_array.h>
 #include <rdestl/hash_map.h>
 
-#include "Component.hpp"
 #include "ComponentDefines.hpp"
 #include "AudioSample.hpp"
 

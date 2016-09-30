@@ -1,11 +1,6 @@
-
 #include "Application.hpp"
 
-#include "RegisterScripts.hpp"
-
-
 noob::application* noob::application::app_pointer = nullptr;
-// noob::globals noob::application::global_storage;
 
 noob::application::application() 
 {
@@ -15,280 +10,95 @@ noob::application::application()
 
 noob::application::~application()
 {
-	script_engine->ShutDownAndRelease();
-	remove_shapes();
 	app_pointer = nullptr;
 }
 
 
 noob::application& noob::application::get()
 {
-	logger::log("application::get()");
 	assert(app_pointer && "application not created!");
 	return *app_pointer;
 }
 
 
-void angel_message_callback(const asSMessageInfo *msg, void *param)
-{
-	std::string message_type;
-	switch (msg->type)
-	{
-		case (asMSGTYPE_WARNING):
-			{
-				message_type = "WARN";
-				break;
-			}
-
-		case (asMSGTYPE_INFORMATION):
-			{
-				message_type = "INFO";
-				break;
-			}
-
-		default:
-			{
-				message_type = "ERR";
-			}
-	}
-	fmt::MemoryWriter ww;
-	ww << "[AngelScript callback] " << message_type << ": " << msg->message << ", script section: " << msg->section << " row = " << msg->row << " col: " << msg->col;
-	noob::logger::log(ww.str());
-}
-
-
 void noob::application::init()
 {
-	logger::log("[Application] Begin init.");
+	logger::log(noob::importance::INFO, "[Application] Begin init.");
 
 	started = paused = input_has_started = false;
-	// timespec timeNow;
-	// clock_gettime(CLOCK_MONOTONIC, &timeNow);
-	// time = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
+
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
-	prefix = std::unique_ptr<std::string>(new std::string("./"));
-	script_engine = asCreateScriptEngine();
-	assert(script_engine > 0);
+
+//	prefix = std::unique_ptr<std::string>(new std::string("./"));
+
+
 	// TODO: Uncomment once noob::filesystem is fixed
 	// noob::filesystem::init(*prefix);
 
 	ui_enabled = true;
-	gui.init(*prefix, window_width, window_height);
+	gui.init("", window_width, window_height);
 
-	controller.set_eye_pos(noob::vec3(0.0, 300.0, -100.0));
-	controller.set_eye_target(noob::vec3(0.0, 0.0, 0.0));
-	controller.set_eye_up(noob::vec3(0.0, 1.0, 0.0));
+	eye_pos = noob::vec3(0.0, 300.0, -100.0);
+	eye_target = noob::vec3(0.0, 0.0, 0.0);
+	eye_up = noob::vec3(0.0, 1.0, 0.0);
 
 	noob::globals& g = noob::globals::get_instance();
 
-	if (g.init())
-	{
-		stage.init();
-	}
-	else 
-	{
-		logger::log("[Application] Global storage init failed :(");
-	}
-
-	voxels.init(512, 512, 512);
-
-	// Used by AngelScript to capture the result of the last registration.
-	int r;
-	// Example: r = script_engine->RegisterGlobalFunction("", asFUNCTION(func_name), asCALL_CDECL);
-	script_engine->SetMessageCallback(asFUNCTION(angel_message_callback), 0, asCALL_CDECL);
-
-	RegisterStdString(script_engine);
-
-	// Does not work! TODO: Report on forums.
-	// RegisterVector<bool>("bool", script_engine);
-
-	// Neither those two seem to work. They register just fine but there's literally no output to the commandline.
-	r = script_engine->RegisterGlobalFunction("void log(const string& in)", asFUNCTION(logger::log), asCALL_CDECL); assert (r >= 0);
-	// r = script_engine->RegisterGlobalFunction("void log(const string& in)", asFUNCTIONPR(logger::log, (const std::string&), void), asCALL_CDECL); assert (r >= 0);
-
-	register_handles(script_engine);
-	register_math(script_engine);
-	register_plane(script_engine);
-	register_graphics(script_engine);
-	register_controls(script_engine);
-	r = script_engine->RegisterGlobalProperty("controls controller", &controller); assert (r >= 0);
-	register_basic_mesh(script_engine);
-	register_active_mesh(script_engine);
-	r = script_engine->RegisterGlobalFunction("double random()", asMETHOD(noob::random_generator, get), asCALL_THISCALL_ASGLOBAL, &randomz); assert( r >= 0 );
-	register_body(script_engine);
-	register_joint(script_engine);
-	// register_ghost(script_engine);
-	register_light(script_engine);
-	register_reflectance(script_engine);
-	register_actor(script_engine);
-	register_uniforms(script_engine);
-	register_scaled_model(script_engine);
-	register_stage(script_engine);
-	r = script_engine->RegisterGlobalProperty("stage default_stage", &stage); assert (r >= 0);
-	register_voxels(script_engine);
-	r = script_engine->RegisterGlobalProperty("voxel_world voxels", &voxels); assert (r >= 0);
-
-	register_globals(script_engine);
-
-	logger::log("[Application] Done basic init.");
+	bool are_globals_initialized = g.init();
+	assert(are_globals_initialized && "Globals not initialized!");
 	
+	stage.init();
+	
+	logger::log(noob::importance::INFO, "[Application] Done basic init.");
+
 	bool b = user_init();
-	
-	network.init(3);
-	network.connect("localhost", 4242);
+
+	if (!b) 
+	{
+		logger::log(noob::importance::WARNING, "[Application] User C++ init failed!");
+	}
+
+	//	network.init(3);
+	//	network.connect("localhost", 4242);
 }
 
 
 void noob::application::update(double delta)
 {
 	gui.window_dims(window_width, window_height);
+	/*
+	   network.tick();
 
-	network.tick();
-
-	while (network.has_message())
-	{
-		std::string s = network.get_message();
-		if (s.compare(0, 6, "INIT: ") == 0)
-		{
-			stage.tear_down();
-			eval("init", s.substr(6, std::string::npos), true);
-		}
-		else if (s.compare(0, 8, "UPDATE: ") == 0)
-		{
-			// TODO: Implement
-		}
-		else if (s.compare(0, 5, "CMD: ") == 0)
-		{
-			eval("cmd", s.substr(5, std::string::npos), true);
-		}
+	   while (network.has_message())
+	   {
+	   std::string s = network.get_message();
+	   if (s.compare(0, 6, "INIT: ") == 0)
+	   {
+	   stage.tear_down();
+	   eval("init", s.substr(6, std::string::npos), true);
+	   }
+	   else if (s.compare(0, 8, "UPDATE: ") == 0)
+	   {
+	// TODO: Implement
 	}
-
+	else if (s.compare(0, 5, "CMD: ") == 0)
+	{
+	eval("cmd", s.substr(5, std::string::npos), true);
+	}
+	}
+	*/
 	stage.update(delta);
 	user_update(delta);
 }
 
 
-bool noob::application::eval(const std::string& name, const std::string& string_to_eval, bool reset)
-{
-	// PROFILE_END();
-	// PROFILE_BEGIN(loading);
-	
-	noob::time prior_to_loading = noob::clock::now();
-
-	logger::log("\n[Application] Begin loading script...");
-	fmt::MemoryWriter to_log;
-	to_log << "[Application] Script loaded? ";
-
-	if (reset)
-	{
-		script_module = script_engine->GetModule(0, asGM_ALWAYS_CREATE);
-	}
-	else
-	{
-		script_module = script_engine->GetModule(0, asGM_CREATE_IF_NOT_EXISTS);
-	}
-
-	int r = script_module->AddScriptSection(name.c_str(), string_to_eval.c_str());
-	if (r < 0)
-	{
-		to_log << "False - Add section failed.";
-		logger::log(to_log.str());
-		return false;
-	}
-
-	r = script_module->Build();
-	if (r < 0 )
-	{
-		
-		to_log << "False - Compile failed.";
-		logger::log(to_log.str());
-		return false;
-		// The build failed. The message stream will have received  
-		// compiler errors that shows what needs to be fixed
-	}
-	asIScriptContext* ctx = script_engine->CreateContext();
-	if (ctx == 0)
-	{
-		
-		to_log << "False - Failed to create context.";
-		logger::log(to_log.str());
-	}
-
-	asIScriptFunction* func = script_engine->GetModule(0)->GetFunctionByDecl("void main()");
-
-	if (func == 0)
-	{
-		to_log << "False - Function main() not found.";
-		logger::log(to_log.str());
-		return false;
-	}
-
-	r = ctx->Prepare(func);
-
-	if (r < 0) 
-	{
-		
-		to_log << "False - Failed to prepare the context.";
-		logger::log(to_log.str());
-		return false;
-	}
-
-	r = ctx->Execute();
-
-	if (r != asEXECUTION_FINISHED)
-	{
-		// The execution didn't finish as we had planned. Determine why.
-		if (r == asEXECUTION_ABORTED)
-		{
-			to_log << "False - Script aborted.";
-			logger::log(to_log.str());
-		}
-
-		else if (r == asEXECUTION_EXCEPTION)
-		{
-			to_log << "False - Script ended with an exception: ";
-
-			asIScriptFunction* exception_func = ctx->GetExceptionFunction();
-
-			to_log << "function: " << exception_func->GetDeclaration() << ", ";
-			to_log << "module: " << exception_func->GetModuleName() << ", ";
-			to_log << "section: " << exception_func->GetScriptSectionName() << ", ";
-			to_log << "line: " << ctx->GetExceptionLineNumber() << ", ";
-			to_log << "description: " << ctx->GetExceptionString();
-
-			logger::log(to_log.str());
-		}
-
-		else
-		{
-			to_log << "False - Ended with reason code: " << r;
-			logger::log(to_log.str());
-		}
-
-		return false;
-	}
-
-
-	noob::time post_loading = noob::clock::now();
-	noob::duration loading_time = post_loading - prior_to_loading;
-
-	to_log << "True. Time: " << std::chrono::duration_cast<std::chrono::milliseconds>(loading_time).count() << " milliseconds (" << std::chrono::duration_cast<std::chrono::microseconds>(loading_time).count() << " microseconds)\n";
-	logger::log(to_log.str());
-	
-	// PROFILE_END();
-	// PROFILE_BEGIN(runtime);
-
-	return true;
-}
-
 void noob::application::draw()
 {
 	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 1.0, 2000.0);
-
-	stage.draw(window_width, window_height, controller.get_eye_pos(), controller.get_eye_target(), controller.get_eye_up(), proj_mat);
+	stage.draw(window_width, window_height, eye_pos, eye_target, eye_up, proj_mat);
 }
 
-
+/*
 void noob::application::accept_ndof_data(const noob::ndof::data& info)
 {
 	if (info.movement == true)
@@ -304,37 +114,33 @@ void noob::application::accept_ndof_data(const noob::ndof::data& info)
 		// stage.eye_pos = stage.eye_pos - translation;//translation);
 	}
 }
-
+*/
 
 // TODO: Refactor
 void noob::application::step()
 {
-	// PROFILER_UPDATE();
-	noob::time start_time = noob::clock::now();
-	noob::duration time_since = last_step - start_time;
-	
-	// timespec timeNow;
-	// clock_gettime(CLOCK_MONOTONIC, &timeNow);
-	// uint64_t uNowNano = timeNow.tv_sec * 1000000000ull + timeNow.tv_nsec;
-	// double delta = (uNowNano - time) * 0.000000001f;
-	// time = uNowNano;
-
-	if (!paused)
-	{
-		// start_time 
-		double d = (1.0 / static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(time_since).count()));
-		update(d);
-	}
-
-	draw();
-
-	noob::time end_time = noob::clock::now();
-	last_step = end_time;
-	noob::duration time_taken = end_time - start_time;
-	
 	noob::globals& g = noob::globals::get_instance();
-	g.profile_run.total_time += time_taken;
+	if (g.finished_init())
+	{
+		// PROFILER_UPDATE();
+		noob::time start_time = noob::clock::now();
+		noob::duration time_since = last_step - start_time;
 
+		if (!paused)
+		{
+			double d = (1.0 / static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(time_since).count()));
+			update(d);
+		}
+
+		draw();
+
+		noob::time end_time = noob::clock::now();
+		last_step = end_time;
+		noob::duration time_taken = end_time - start_time;
+
+		noob::globals& g = noob::globals::get_instance();
+		g.profile_run.total_time += time_taken;
+	}
 }
 
 
@@ -349,26 +155,24 @@ void noob::application::resume()
 	paused = false;
 }
 
-
+/*
 void noob::application::set_archive_dir(const std::string& filepath)
 {
-	logger::log(fmt::format("[Application] Setting archive directory (\"{0}\")", filepath));
+	logger::log(noob::importance::INFO, noob::concat("[Application] Setting archive directory {", filepath, "}"));
 	prefix = std::unique_ptr<std::string>(new std::string(filepath));
-	logger::log(fmt::format("[Application] Archive dir = {0}", *prefix));
+	logger::log(noob::importance::INFO, noob::concat("[Application] Archive dir = {",  *prefix, "}"));
 }
-
+*/
 
 void noob::application::touch(int pointerID, float x, float y, int action)
 {
 	if (input_has_started == true)
 	{
-		fmt::MemoryWriter w;
-		w << "[Application] Touch - pointer ID = " << pointerID << ", " << x << ", " << y << ", action = " << action;
-		logger::log(w.str());
+		logger::log(noob::importance::INFO, noob::concat("[Application] Touch - pointer ID = ", noob::to_string(pointerID), ", ", noob::to_string(x), ", ", noob::to_string(y), ", action = ", noob::to_string(action)));
 
 		if (pointerID < 3)
 		{
-			finger_positions[pointerID] = noob::vec2(x,y);
+		//	finger_positions[pointerID] = noob::vec2(x,y);
 		}
 	}
 	else input_has_started = true;
@@ -384,9 +188,7 @@ void noob::application::window_resize(uint32_t w, uint32_t h)
 		window_height = 1;
 	}
 
-	fmt::MemoryWriter ww;
-	ww << "[Application] Resize window to (" << window_width << ", " << window_height << ")";
-	logger::log(ww.str());
+	logger::log(noob::importance::INFO, noob::concat("[Application] Resize window to (", noob::to_string(window_width), ", ", noob::to_string(window_height), ")"));
 }
 
 

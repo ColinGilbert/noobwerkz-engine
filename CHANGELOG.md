@@ -1,9 +1,27 @@
 CHANGELOG:
 
-Version 0.6 AKA: "AI" (WIP)
+Version 0.6 AKA: "Cleaning House!" (WIP)
 ```
 Additions:
+Profiling
+Actor movement (WIP.)
+Particle system (WIP.)
 
+
+Bugfixes/Cleanups:
+NO MORE RTTI/EXCEPTIONS! JUST LIKE A REAL GAME ENGINE!
+Templatize math types.
+Protect constant globals and graphics members.
+Removed many unused libraries from libs folder.
+Removed AngelScript, OpenMesh, PolyVox, fmtlib and Assimp from codebase.
+Remove lemon-graph and replace with homegrown.
+
+Overall, the executable size is trimmed to a little under half of what it used to be.
+
+Notes:
+
+Tried and failed to use recast/detour
+Ran into showstopper while trying to port to Android. Tried literally everything. Posted bug report and if we don't soon get it fixed we'll have to redo graphics entirely.
 ```
 
 
@@ -13,11 +31,10 @@ Additions:
 Implemented actors, cleanly.
 Add joints to scripting.
 
-Cleanups:
+Bugfixes/Cleanups:
 Remove git modules as they were causing problems
 Make graphics class non-static
 Banish use of -fpermissive from entire codebase
-
 ```
 
 

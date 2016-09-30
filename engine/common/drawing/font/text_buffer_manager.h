@@ -42,6 +42,9 @@ class TextBuffer;
 class TextBufferManager
 {
 public:
+
+	/// TextBuffer is bound to a fontManager for glyph retrieval
+	/// @remark the ownership of the manager is not taken
 	TextBufferManager(FontManager* _fontManager);
 	~TextBufferManager();
 

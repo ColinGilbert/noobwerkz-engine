@@ -1,7 +1,7 @@
 # "b" for "build"
 #./p &&
 cd ../engine/build &&
-cmake -DNOOB_PLATFORM_LINUX:bool=true .. &&
+cmake -DNOOB_PLATFORM_LINUX:bool=true .. && #-DNOOB_USE_ASSIMP:bool=true .. &&
 make -j8 &&
 #make &&
 cp NoobEdit ../../sandbox/e &&

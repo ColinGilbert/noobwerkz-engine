@@ -1,16 +1,16 @@
 /*
 #include "Camera.hpp"
 
-void noob::camera::init(float move_speed, float heading_speed, const noob::vec3& initial_pos)
+void noob::camera::init(float move_speed, float heading_speed, const noob::vec3& pos)
 {
 	cam_speed = move_speed;
 	cam_heading_speed = heading_speed;
-	std::copy(initial_pos.v.begin(), initial_pos.v.end(), cam_pos.v.begin());
+	cam_pos = pos;//std::copy(initial_pos.v.begin(), initial_pos.v.end(), cam_pos.v.begin());
 	T = noob::translate(noob::identity_mat4(), noob::vec3(-cam_pos[0], -cam_pos[1], -cam_pos[2]));
 	noob::versor q;
 	float initial_heading = 0.0;
 	noob::create_versor(&q.q[0], -initial_heading, 0.0, 1.0, 0.0);
-	R = noob::quat_to_mat4(q);
+	R = noob::versor_to_mat4(q);
 	view_mat = R * T;
 	fwd = noob::vec4(0.0, 0.0, -1.0, 0.0);
 	rgt = noob::vec4(1.0, 0.0, 0.0, 0.0);
@@ -75,7 +75,7 @@ void noob::camera::update(double delta, const noob::camera::cam_movement& moveme
 		noob::mult_quat_quat(&quaternion.q[0], q_yaw, &quaternion.q[0]);
 
 		// recalc axes to suit new orientation
-		R = noob::quat_to_mat4(quaternion);
+		R = noob::versor_to_mat4(quaternion);
 		fwd = R * noob::vec4(0.0, 0.0, -1.0, 0.0);
 		rgt = R * noob::vec4(1.0, 0.0, 0.0, 0.0);
 		up = R * noob::vec4(0.0, 1.0, 0.0, 0.0);
@@ -90,7 +90,7 @@ void noob::camera::update(double delta, const noob::camera::cam_movement& moveme
 		noob::mult_quat_quat(&quaternion.q[0], q_yaw, &quaternion.q[0]);
 
 		// recalc axes to suit new orientation
-		R = noob::quat_to_mat4(quaternion);
+		R = noob::versor_to_mat4(quaternion);
 		fwd = R * noob::vec4(0.0, 0.0, -1.0, 0.0);
 		rgt = R * noob::vec4(1.0, 0.0, 0.0, 0.0);
 		up = R * noob::vec4(0.0, 1.0, 0.0, 0.0);
@@ -105,7 +105,7 @@ void noob::camera::update(double delta, const noob::camera::cam_movement& moveme
 		noob::mult_quat_quat(&quaternion.q[0], q_pitch, &quaternion.q[0]);
 
 		// recalc axes to suit new orientation
-		R = noob::quat_to_mat4(quaternion);
+		R = noob::versor_to_mat4(quaternion);
 		fwd = R * noob::vec4(0.0, 0.0, -1.0, 0.0);
 		rgt = R * noob::vec4(1.0, 0.0, 0.0, 0.0);
 		up = R * noob::vec4(0.0, 1.0, 0.0, 0.0);
@@ -120,7 +120,7 @@ void noob::camera::update(double delta, const noob::camera::cam_movement& moveme
 		noob::mult_quat_quat(&quaternion.q[0], q_pitch, &quaternion.q[0]);
 
 		// recalc axes to suit new orientation
-		R = noob::quat_to_mat4(quaternion);
+		R = noob::versor_to_mat4(quaternion);
 		fwd = R * noob::vec4(0.0, 0.0, -1.0, 0.0);
 		rgt = R * noob::vec4(1.0, 0.0, 0.0, 0.0);
 		up = R * noob::vec4(0.0, 1.0, 0.0, 0.0);
@@ -135,7 +135,7 @@ void noob::camera::update(double delta, const noob::camera::cam_movement& moveme
 		noob::mult_quat_quat(&quaternion.q[0], q_roll, &quaternion.q[0]);
 
 		// recalc axes to suit new orientation
-		R = noob::quat_to_mat4(quaternion);
+		R = noob::versor_to_mat4(quaternion);
 		fwd = R * noob::vec4(0.0, 0.0, -1.0, 0.0);
 		rgt = R * noob::vec4(1.0, 0.0, 0.0, 0.0);
 		up = R * noob::vec4(0.0, 1.0, 0.0, 0.0);
@@ -150,7 +150,7 @@ void noob::camera::update(double delta, const noob::camera::cam_movement& moveme
 		noob::mult_quat_quat(&quaternion.q[0], q_roll, &quaternion.q[0]);
 
 		// recalc axes to suit new orientation
-		R = noob::quat_to_mat4(quaternion);
+		R = noob::versor_to_mat4(quaternion);
 		fwd = R * noob::vec4(0.0, 0.0, -1.0, 0.0);
 		rgt = R * noob::vec4(1.0, 0.0, 0.0, 0.0);
 		up = R * noob::vec4(0.0, 1.0, 0.0, 0.0);
@@ -158,15 +158,16 @@ void noob::camera::update(double delta, const noob::camera::cam_movement& moveme
 	
 	if (cam_moved)
 	{
-		R = noob::quat_to_mat4(quaternion);
+		R = noob::versor_to_mat4(quaternion);
 
-		cam_pos = cam_pos + noob::vec3(fwd) * -move.v[2];
-		cam_pos = cam_pos + noob::vec3(up) * move.v[1];
-		cam_pos = cam_pos + noob::vec3(rgt) * move.v[0];
+		cam_pos = cam_pos + (noob::vec3(fwd[0], fwd[1], fwd[2]) * -move.v[2]);
+		cam_pos = cam_pos + (noob::vec3(up[0], up[1], up[2]) * move.v[1]);
+		cam_pos = cam_pos + (noob::vec3(rgt[0], rgt[1], rgt[2]) * move.v[0]);
 		
 		noob::mat4 T = noob::translate(noob::identity_mat4(), noob::vec3(cam_pos));
 
 		view_mat = noob::inverse(R) * noob::inverse(T);
 	}
 }
+
 */

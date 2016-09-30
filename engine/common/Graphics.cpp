@@ -4,47 +4,7 @@
 #include "stb_image.h"
 #include "Graphics.hpp"
 
-#include "format.h"
-//#include "shaderc.h"
-
-// bgfx::VertexDecl noob::graphics::mesh_vertex::ms_decl;
-/*
-std::unordered_map<std::string, noob::graphics::texture> noob::graphics::global_textures;
-std::unordered_map<std::string, noob::graphics::uniform> noob::graphics::uniforms;
-std::unordered_map<std::string, noob::graphics::sampler> noob::graphics::samplers;
-std::unordered_map<std::string, noob::graphics::shader> noob::graphics::shaders;
-
-const noob::graphics::uniform noob::graphics::invalid_uniform;
-
-const noob::graphics::uniform noob::graphics::colour_0;
-const noob::graphics::uniform noob::graphics::colour_1;
-const noob::graphics::uniform noob::graphics::colour_2;
-const noob::graphics::uniform noob::graphics::colour_3;
-const noob::graphics::uniform noob::graphics::blend_0;
-const noob::graphics::uniform noob::graphics::blend_1;
-const noob::graphics::uniform noob::graphics::tex_scales;
-const noob::graphics::uniform noob::graphics::normal_mat;
-const noob::graphics::uniform noob::graphics::normal_mat_modelspace;
-const noob::graphics::uniform noob::graphics::eye_pos;
-const noob::graphics::uniform noob::graphics::eye_pos_normalized;
-const noob::graphics::uniform noob::graphics::ambient;
-
-const noob::graphics::uniform noob::graphics::light_rgb_falloff;
-const noob::graphics::uniform noob::graphics::light_pos_radius;
-
-// const noob::graphics::uniform noob::graphics::colour_attenuation;
-// const noob::graphics::uniform noob::graphics::ambient_falloff;
-
-const noob::graphics::uniform noob::graphics::specular_shine;
-const noob::graphics::uniform noob::graphics::diffuse;
-const noob::graphics::uniform noob::graphics::emissive;
-
-const noob::graphics::uniform noob::graphics::fog;
-const noob::graphics::uniform noob::graphics::rough_albedo_fresnel;
-
-const noob::graphics::sampler noob::graphics::invalid_texture;
-const noob::graphics::sampler noob::graphics::texture_0;
-*/
+noob::graphics* noob::graphics::ptr_to_instance;
 
 void noob::graphics::init(uint32_t width, uint32_t height)
 {
@@ -54,23 +14,31 @@ void noob::graphics::init(uint32_t width, uint32_t height)
 	bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x00000000, 1.0f, 0);
 	bgfx::setViewClear(1, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x00000000, 1.0f, 0);
 	bgfx::setState(BGFX_STATE_DEFAULT);
-	/// Predefined uniforms (declared in `bgfx_shader.sh`):
-	///   - `u_viewRect vec4(x, y, width, height)` - view rectangle for current
-	///     view.
-	///   - `u_viewTexel vec4(1.0/width, 1.0/height, undef, undef)` - inverse
-	///     width and height
-	///   - `u_view mat4` - view matrix
-	///   - `u_invView mat4` - inverted view matrix
-	///   - `u_proj mat4` - projection matrix
-	///   - `u_invProj mat4` - inverted projection matrix
-	///   - `u_viewProj mat4` - concatenated view projection matrix
-	///   - `u_invViewProj mat4` - concatenated inverted view projection matrix
-	///   - `u_model mat4[BGFX_CONFIG_MAX_BONES]` - array of model matrices.
-	///   - `u_modelView mat4` - concatenated model view matrix, only first
-	///     model matrix from array is used.
-	///   - `u_modelViewProj mat4` - concatenated model view projection matrix.
-	///   - `u_alphaRef float` - alpha reference value for alpha test.	
+	
+	// Predefined uniforms (declared in `bgfx_shader.sh`):
+	//   - `u_viewRect vec4(x, y, width, height)` - view rectangle for current
+	//     view.
+	//   - `u_viewTexel vec4(1.0/width, 1.0/height, undef, undef)` - inverse
+	//     width and height
+	//   - `u_view mat4` - view matrix
+	//   - `u_invView mat4` - inverted view matrix
+	//   - `u_proj mat4` - projection matrix
+	//   - `u_invProj mat4` - inverted projection matrix
+	//   - `u_viewProj mat4` - concatenated view projection matrix
+	//   - `u_invViewProj mat4` - concatenated inverted view projection matrix
+	//   - `u_model mat4[BGFX_CONFIG_MAX_BONES]` - array of model matrices.
+	//   - `u_modelView mat4` - concatenated model view matrix, only first
+	//     model matrix from array is used.
+	//   - `u_modelViewProj mat4` - concatenated model view projection matrix.
+	//   - `u_alphaRef float` - alpha reference value for alpha test.	
 	// Add initial defaults (invalid stuff) to map
+
+	const bgfx::Caps* caps = bgfx::getCaps();
+
+	if (BGFX_CAPS_INSTANCING & caps->supported)
+	{
+		instancing = true;
+	}
 
 	bgfx::ProgramHandle h;
 	h.idx = bgfx::invalidHandle;
@@ -134,8 +102,6 @@ noob::graphics::texture noob::graphics::get_texture(const std::string& name)
 
 bgfx::ShaderHandle noob::graphics::load_shader(const std::string& filename)
 {
-	fmt::MemoryWriter ww;
-	ww <<"[Graphics] Loading shader at ";
 
 	std::string shader_path = "shaders/dx9/";
 
@@ -161,8 +127,7 @@ bgfx::ShaderHandle noob::graphics::load_shader(const std::string& filename)
 	shader_path.append(filename);
 	shader_path.append(".bin");
 
-	ww << shader_path;
-	logger::log(ww.str());
+	logger::log(noob::importance::INFO, noob::concat("[Graphics] Loading shader at ", shader_path));
 
 	// noob::utils::data.insert(std::make_pair(shader_path, noob::utils::load_file_as_string(shader_path)));
 	const bgfx::Memory* mem = get_bgfx_mem(noob::utils::load_file_as_string(shader_path));
@@ -185,21 +150,20 @@ noob::graphics::texture noob::graphics::load_texture(const std::string& friendly
 	int width, height, channels;
 	width = height = channels = 0;
 
-	fmt::MemoryWriter ww;
-	ww << "[Graphics] Loading Texture: " << filename << ". ";
 
 	std::string texture_file = noob::utils::load_file_as_string(filename);
 
-	ww << "Loaded size = " << texture_file.size() << " bytes. ";
+	// ww << "Loaded size = " << texture_file.size() << " bytes. ";
 
 	bgfx::TextureInfo tex_info;
 	bgfx::TextureHandle tex = bgfx::createTexture(bgfx::copy(&texture_file[0], sizeof(char) * texture_file.size()), flags, 0, &tex_info);
 
 	// bgfx::TextureHandle tex = bgfx::createTexture2D(static_cast<uint16_t>(width), static_cast<uint16_t>(height), static_cast<uint8_t>(0), bgfx::TextureFormat::RGBA32, static_cast<uint32_t>(flags), bgfx::copy(&texture_file[0], sizeof(char) * texture_file.size()));
 
-	ww << "BGFX texture info: Storage size is " << tex_info.storageSize << " bytes, width of " << tex_info.width << ", height of " << tex_info.height << ", depth of " << tex_info.depth << ". Num mips is " << tex_info.numMips << ". Bpp " << tex_info.bitsPerPixel << ". Cube map? " << tex_info.cubeMap << ".";
+	// ww << "BGFX texture info: Storage size is " << tex_info.storageSize << " bytes, width of " << tex_info.width << ", height of " << tex_info.height << ", depth of " << tex_info.depth << ". Num mips is " << tex_info.numMips << ". Bpp " << tex_info.bitsPerPixel << ". Cube map? " << tex_info.cubeMap << ".";
 
-	logger::log(ww.str());
+	
+	logger::log(noob::importance::INFO, noob::concat("[Graphics] Loading Texture - ", filename, ". Loaded size = ", noob::to_string(texture_file.size()), " bytes. BGFX info: ", noob::to_string(tex_info.storageSize), " bytes, width of ", noob::to_string(tex_info.width), ", height of ", noob::to_string(tex_info.height), "depth of ", noob::to_string(tex_info.depth), ". Num mips ", noob::to_string(tex_info.numMips), ". Bpp ", noob::to_string(tex_info.bitsPerPixel), ", cube map? ", noob::to_string(tex_info.cubeMap)));
 
 	noob::graphics::texture t;
 	t.handle = tex;

@@ -1,48 +1,45 @@
 #include "Globals.hpp"
+#include "MeshUtils.hpp"
+#include "RandomGenerator.hpp"
 
 noob::globals* noob::globals::ptr_to_instance;
 
 bool noob::globals::init() noexcept(true) 
 {
-	physical_body_descriptor.physical = true;
-	ghost_body_descriptor.physical = false;
-
 	basic_drawer.init();
 	triplanar_drawer.init();
 
 	// renderer.init();
 	unit_sphere_shape = sphere_shape(0.5);
 	unit_cube_shape = box_shape(0.5, 0.5, 0.5);
-	unit_cylinder_shape = cylinder_shape(0.5, 1.0);
-	unit_cone_shape = cone_shape(0.5, 1.0);
+	// unit_cylinder_shape = cylinder_shape(0.5, 1.0);
+	// unit_cone_shape = cone_shape(0.5, 1.0);
 
-	fmt::MemoryWriter ww;
-	ww << "[Globals] unit sphere shape handle " << unit_sphere_shape.index() << ", unit cube shape handle " << unit_cube_shape.index() << ", unit cylinder shape handle " << unit_cylinder_shape.index() << ", unit cone shape handle " << unit_cone_shape.index();
-	logger::log(ww.str());
+	noob::logger::log(noob::importance::INFO, noob::concat("[Globals] unit sphere shape handle ", noob::to_string(unit_sphere_shape.index()) ,", unit cube shape handle ", noob::to_string(unit_cube_shape.index())));
+	// << ", unit cylinder shape handle " << unit_cylinder_shape.index() << ", unit cone shape handle " << unit_cone_shape.index();
+	
+	noob::logger::log(noob::importance::INFO, "[Globals] Making unit sphere model");
+	unit_sphere_model = model_from_mesh(noob::mesh_utils::sphere(0.5, 1));//basic_models.add(std::move(temp));
+	noob::logger::log(noob::importance::INFO, "[Globals] Making unit cube model");
+	unit_cube_model = model_from_mesh(noob::mesh_utils::box(1.0, 1.0, 1.0));
+	
 
-	// logger::log("[Globals] Making unit sphere model");
-	unit_sphere_model = model_from_mesh(noob::mesh_utils::sphere(0.5));//basic_models.add(std::move(temp));
-	// logger::log("[Globals] Making unit cube model");
-	unit_cube_model = model_from_mesh(noob::mesh_utils::box(0.5, 0.5, 0.5));
-	// unit_cube_model = model_from_mesh(noob::mesh_utils::box(1.0, 1.0, 1.0));
-	// logger::log("[Globals] Making unit cylinder model");
-	// unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(1.0, 0.5));
-	unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(0.5, 1.0));
-	// logger::log("[Globals] Making unit cone model");
-	unit_cone_model = model_from_mesh(noob::mesh_utils::cone(0.5, 1.0));
+	// logger::log(noob::importance::INFO, "[Globals] Making unit cone model");
+	// unit_cone_model = model_from_mesh(noob::mesh_utils::cone(0.5, 1.0, 8));
+	
+	// logger::log(noob::importance::INFO, "[Globals] Making unit cylinder model");
+	// unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(0.5, 1.0, 8));
 
-	fmt::MemoryWriter ww_2;
-	ww_2 << "[Globals] unit sphere model handle " << unit_sphere_model.model_h.index() << ", unit cube model handle " << unit_cube_model.model_h.index() << ", unit cylinder model handle " << unit_cylinder_model.model_h.index() << ", unit cone model handle " << unit_cone_model.model_h.index();
-	logger::log(ww_2.str());
+	noob::logger::log(noob::importance::INFO, noob::concat("[Globals] unit sphere model handle ", noob::to_string(unit_sphere_model.model_h.index()) ,", unit cube model handle ", noob::to_string(unit_cube_model.model_h.index())));// << ", unit cylinder model handle " << unit_cylinder_model.model_h.index() << ", unit cone model handle " << unit_cone_model.model_h.index();
 
 	//  Init basic default shader
 	noob::basic_renderer::uniform dbg;
-	dbg.colour = noob::vec4(1.0, 1.0, 1.0, 0.0);
+	dbg.colour = noob::vec4(1.0, 1.0, 1.0, 1.0);
 	set_shader(dbg, "debug");
-	// logger::log("[Globals] Set debug shader");
-	shader t1 = get_shader("debug");
+	// logger::log(noob::importance::INFO, "[Globals] Set debug shader");
+	noob::shader_variant t1 = get_shader("debug");
 	debug_shader = basic_shader_handle::make(t1.handle);
-	// logger::log("[Globals] Got debug shader handle");
+	// logger::log(noob::importance::INFO, "[Globals] Got debug shader handle");
 	// Init triplanar shader. For fun.
 	noob::triplanar_gradient_map_renderer::uniform triplanar_info;
 
@@ -54,9 +51,9 @@ bool noob::globals::init() noexcept(true)
 	triplanar_info.scales = noob::vec4(1.0, 1.0, 1.0, 0.0);
 	triplanar_info.colour_positions = noob::vec4(0.3, 0.6, 0.0, 0.0);
 	set_shader(triplanar_info, "default-triplanar");
-	// logger::log("[Globals] Set default triplanar shader.");
+	// logger::log(noob::importance::INFO, "[Globals] Set default triplanar shader.");
 
-	shader t2 = get_shader("default-triplanar");
+	noob::shader_variant t2 = get_shader("default-triplanar");
 	default_triplanar_shader = triplanar_shader_handle::make(t2.handle);
 
 	noob::light l;
@@ -65,7 +62,8 @@ bool noob::globals::init() noexcept(true)
 
 	noob::reflectance r;
 	default_reflectance = set_reflectance(r, "default");
-	// logger::log("[Globals] Got default triplanar shader handle.");
+
+	// logger::log(noob::importance::INFO, "[Globals] Got default triplanar shader handle.");
 
 	noob::actor_blueprints bp;
 	set_actor_blueprints(bp, "default");
@@ -74,10 +72,15 @@ bool noob::globals::init() noexcept(true)
 
 	audio_interface.init();
 
-	// Init default actor type.
+	noob::random_generator rng;
 
+	for (uint32_t i = 0; i < num_pseudo_randoms; ++i)
+	{
+		pseudo_randoms[i] = rng.get();
+	}
 
-	logger::log("[Globals] Init complete.");
+	noob::logger::log(noob::importance::INFO, "[Globals] Init complete.");
+	init_done = true;
 	return true;
 }
 
@@ -97,7 +100,7 @@ noob::scaled_model noob::globals::box_model(float x, float y, float z) noexcept(
 	return temp;
 }
 
-
+/*
 noob::scaled_model noob::globals::cylinder_model(float r, float h) noexcept(true) 
 {
 	noob::scaled_model temp = unit_cylinder_model;
@@ -112,7 +115,7 @@ noob::scaled_model noob::globals::cone_model(float r, float h) noexcept(true)
 	temp.scales = noob::vec3(r*2.0, h, r*2.0);
 	return temp;
 }
-
+*/
 
 noob::scaled_model noob::globals::model_from_mesh(const noob::basic_mesh& m) noexcept(true) 
 {
@@ -130,18 +133,18 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 {
 	// fmt::MemoryWriter ww;
 	// ww << "[Globals] about to get model from shape " << h.index();
-	// logger::log(ww.str());
+	// logger::log(noob::importance::INFO, ww.str());
 
 	scaled_model results;
 	noob::shape s = shapes.get(h);
 
-	// logger::log("[Globals] got shape pointer");
-	
+	// logger::log(noob::importance::INFO, "[Globals] got shape pointer");
+
 	bool please_insert = false;
 
 	switch(s.shape_type)
 	{
-		// logger::log("[Globals] choosing shape type");
+		// logger::log(noob::importance::INFO, "[Globals] choosing shape type");
 
 		case(noob::shape::type::SPHERE):
 			{
@@ -155,6 +158,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 				results.scales = s.scales;
 				break;
 			}
+			/*
 		case(noob::shape::type::CYLINDER):
 			{
 				results.model_h = unit_cylinder_model.model_h;
@@ -167,6 +171,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 				results.scales = s.scales;
 				break;
 			}
+			*/
 		case(noob::shape::type::HULL):
 			{
 				noob::fast_hashtable::cell* search = shapes_to_models.lookup(h.index());
@@ -177,9 +182,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 				}
 				else
 				{
-					fmt::MemoryWriter ww;
-					ww << "[Globals] DATA ERROR: Attempted to get a hull model with an invalid shape handle.";
-					logger::log(ww.str());
+					noob::logger::log(noob::importance::INFO, "[Globals] DATA ERROR: Attempted to get a hull model with an invalid shape handle.");
 				}
 				results.scales = noob::vec3(1.0, 1.0, 1.0);					
 				break; 
@@ -199,96 +202,28 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 					}
 					else
 					{
-						fmt::MemoryWriter ww;
-						ww << "[Globals] DATA ERROR: Shape handle " << h.index() << " has invalid model mapping.";
-						logger::log(ww.str());
+						noob::logger::log(noob::importance::INFO, noob::concat("[Globals] DATA ERROR: Shape handle ", noob::to_string(h.index()), " has invalid model mapping."));
 					}
 				}	
 				// We must first create the model:
 				else
 				{
-					// We must first create the model:
-					const btBvhTriangleMeshShape* shape_ptr = static_cast<btBvhTriangleMeshShape*>((shapes.get(h)).inner_shape);
-					btVector3 scaling = shape_ptr->getLocalScaling();
-					const btStridingMeshInterface* striding_mesh = shape_ptr->getMeshInterface();
-					PHY_ScalarType scalar_type, index_type;
-					scalar_type = index_type;
-					int num_verts, scalar_stride, index_stride, num_faces;
-					const unsigned char* vertex_base = 0;
-					const unsigned char* index_base = 0;
-
-					striding_mesh->getLockedReadOnlyVertexIndexBase(&vertex_base, num_verts, scalar_type, scalar_stride, &index_base, index_stride, num_faces, index_type, 0);
-
-					size_t num_indices = num_faces * 3;
-
-					uint32_t scalar_width, index_width;
-
-					if (scalar_type == PHY_FLOAT)
-					{
-						scalar_width = sizeof(float);
-					}
-					else
-					{
-						scalar_width = sizeof(double);
-					}
-
-					if (index_width == PHY_SHORT)
-					{
-						index_width = sizeof(uint16_t);
-
-					}
-					else
-					{
-						index_width = sizeof(uint32_t);
-
-					}
-
-					noob::basic_mesh m;
-
-					rde::fixed_array<btVector3, 3> triangle_verts;
-
-					for (int tri_index = 0; tri_index < num_faces; ++tri_index)
-					{
-						unsigned int* gfx_base = (unsigned int*)(index_base + tri_index * index_stride);
-
-						for (int j = 2; j >= 0; --j)
-						{
-							int graphics_index = index_type == PHY_SHORT ? ((unsigned short*)gfx_base)[j] : gfx_base[j];
-
-							if (scalar_type == PHY_FLOAT)
-							{
-								float* graphics_base = (float*)(vertex_base + graphics_index * scalar_stride);
-								triangle_verts[j] = btVector3(graphics_base[0] * scaling.getX(), graphics_base[1] * scaling.getY(), graphics_base[2] * scaling.getZ());
-							}
-							else
-							{
-								double* graphics_base = (double*)(vertex_base + graphics_index * scalar_stride);
-								triangle_verts[j] = btVector3(btScalar(graphics_base[0] * scaling.getX()), btScalar(graphics_base[1] * scaling.getY()), btScalar(graphics_base[2] * scaling.getZ()));
-							}
-						}
-
-						m.indices.push_back(m.vertices.size());
-						m.vertices.push_back(vec3_from_bullet(triangle_verts[0]));
-						m.indices.push_back(m.vertices.size());
-						m.vertices.push_back(vec3_from_bullet(triangle_verts[1]));
-						m.indices.push_back(m.vertices.size());
-						m.vertices.push_back(vec3_from_bullet(triangle_verts[2]));
-					}
-
-					striding_mesh->unLockReadOnlyVertexBase(0);
-
+					noob::shape shp = shapes.get(h);
+					noob::basic_mesh m = shp.get_mesh();
 					noob::scaled_model temp_scaled_model = model_from_mesh(m);
 					results.model_h = temp_scaled_model.model_h;
 					please_insert = true;
 				}
-				
+
 				results.scales = noob::vec3(1.0, 1.0, 1.0);					
 				break;
 			}
-
-			//break;
+		default:
+			{
+				noob::logger::log(noob::importance::INFO, "[Globals] INVALID ENUM: model_from_shape()");
+			}
 	}
-	
+
 	if (please_insert)
 	{
 		noob::fast_hashtable::cell* search = shapes_to_models.insert(h.index());
@@ -301,17 +236,16 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 
 noob::shape_handle noob::globals::sphere_shape(float r) noexcept(true) 
 {
-	fmt::MemoryWriter w;
-	w << "sphere-" << static_cast<uint32_t>(r);
+	std::string s = noob::concat("sphere-", noob::to_string(static_cast<uint32_t>(r)));
 
-	auto search = names_to_shapes.find(rde::string(w.c_str()));
+	auto search = names_to_shapes.find(rde::string(s.c_str()));
 	// auto search = sphere_shapes.find(r);
 	if (search == names_to_shapes.end())
 	{
 		noob::shape temp;
 		temp.sphere(r);
 
-		auto results = names_to_shapes.insert(rde::make_pair(rde::string(w.c_str()), add_shape(temp)));
+		auto results = names_to_shapes.insert(rde::make_pair(rde::string(s.c_str()), add_shape(temp)));
 		return (results.first)->second;
 	}
 	return search->second;
@@ -320,22 +254,21 @@ noob::shape_handle noob::globals::sphere_shape(float r) noexcept(true)
 
 noob::shape_handle noob::globals::box_shape(float x, float y, float z) noexcept(true) 
 {
-	fmt::MemoryWriter w;
-	w << "box-" << static_cast<uint32_t>(x) << "-" << static_cast<uint32_t>(y)  << "-" << static_cast<uint32_t>(z);
-	auto search = names_to_shapes.find(rde::string(w.c_str()));
+	std::string s = noob::concat("box-", noob::to_string(static_cast<uint32_t>(x)), "-", noob::to_string(static_cast<uint32_t>(y)), "-", noob::to_string(static_cast<uint32_t>(z)));
+	auto search = names_to_shapes.find(rde::string(s.c_str()));
 	//auto search = box_shapes.find(std::make_tuple(x,y,z));
 	if (search == names_to_shapes.end())
 	{
 		noob::shape temp;
 		temp.box(x, y, z);
 
-		auto results = names_to_shapes.insert(rde::make_pair(rde::string(w.c_str()), add_shape(temp)));
+		auto results = names_to_shapes.insert(rde::make_pair(rde::string(s.c_str()), add_shape(temp)));
 		return (results.first)->second;
 	}
 	return search->second;
 }
 
-
+/*
 noob::shape_handle noob::globals::cylinder_shape(float r, float h) noexcept(true) 
 {
 	// auto search = cylinder_shapes.find(std::make_tuple(r, h));
@@ -369,7 +302,7 @@ noob::shape_handle noob::globals::cone_shape(float r, float h) noexcept(true)
 	}
 	return search->second;
 }
-
+*/
 
 //   noob::shape_handle noob::globals::capsule(float r, float h)
 //   {
@@ -504,7 +437,7 @@ void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std
 	if (search == names_to_shaders.end())
 	{
 		noob::basic_shader_handle h = basic_shaders.add(u);
-		noob::shader r;
+		noob::shader_variant r;
 		r.type = noob::shader_type::BASIC;
 		r.handle = h.index();
 
@@ -519,7 +452,7 @@ void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::unif
 	if (search == names_to_shaders.end())
 	{
 		noob::triplanar_shader_handle h = triplanar_shaders.add(u);
-		noob::shader r;
+		noob::shader_variant r;
 		r.type = noob::shader_type::TRIPLANAR;
 		r.handle = h.index();
 
@@ -528,23 +461,21 @@ void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::unif
 }
 
 
-noob::shader noob::globals::get_shader(const std::string& s) const noexcept(true) 
+noob::shader_variant noob::globals::get_shader(const std::string& s) const noexcept(true) 
 {
-	noob::shader results;
+	noob::shader_variant results;
 	auto search = names_to_shaders.find(rde::string(s.c_str()));
 
-	fmt::MemoryWriter ww;
 	if (search != names_to_shaders.end())
 	{
-		ww << "[Globals] Found shader " << s << ", with handle " << (search->second).to_string() << ".";
+		noob::logger::log(noob::importance::INFO, noob::concat("[Globals] Found shader ", s, ", with handle ", (search->second).to_string(), "."));
 		results = search->second;
 	}
 	else
 	{
-		ww << "[Globals] Could not find shader " << s << ". Returning default.";
+		noob::logger::log(noob::importance::INFO, noob::concat("[Globals] Could not find shader ", s ,". Returning default."));
 	}
 
-	logger::log(ww.str());
 	return results;
 }
 
@@ -573,3 +504,25 @@ noob::actor_blueprints_handle noob::globals::get_actor_blueprints(const std::str
 
 	return noob::actor_blueprints_handle::make(0);
 }
+
+
+double noob::globals::get_random() noexcept(true)
+{
+	if (current_random == num_pseudo_randoms - 1)
+	{
+		current_random = 0;
+	}
+
+	return pseudo_randoms[current_random];
+
+}
+
+
+// Hack used to set the shape's index-to-self
+noob::shape_handle noob::globals::add_shape(const noob::shape& s) noexcept(true)
+{
+	noob::shape_handle h = shapes.add(s);
+	std::get<1>(shapes.get_ptr_mutable(h))->get_inner_mutable()->setUserIndex(h.index());
+	return h;
+}
+

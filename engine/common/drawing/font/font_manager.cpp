@@ -1,15 +1,19 @@
 /*
  * Copyright 2013 Jeremie Roy. All rights reserved.
- * License: http://www.opensource.org/licenses/BSD-2-Clause
+ * License: https://github.com/bkaradzic/bgfx#license-bsd-2-clause
  */
 
 #define USE_EDTAA3 0
+#include "NoobUtils.hpp"
 
 #include <bx/macros.h>
 
 #if BX_COMPILER_MSVC
 #	define generic GenericFromFreeType // WinRT language extensions see "generic" as a keyword... this is stupid
 #endif // BX_COMPILER_MSVC
+
+
+
 
 BX_PRAGMA_DIAGNOSTIC_PUSH();
 BX_PRAGMA_DIAGNOSTIC_IGNORED_MSVC(4245) // error C4245: '=' : conversion from 'int' to 'FT_UInt', signed/unsigned mismatch
@@ -18,15 +22,18 @@ BX_PRAGMA_DIAGNOSTIC_IGNORED_MSVC(4245) // error C4245: '=' : conversion from 'i
 #endif
 #undef interface
 
+
+
 #include <ft2build.h>
-// #include FT_FREETYPE_H
-#include <ftglyph.h>
+#include FT_FREETYPE_H
+#include <freetype/ftglyph.h>
+
+
 #if BX_COMPILER_MSVC || BX_COMPILER_GCC >= 40300
 #pragma pop_macro("interface")
 #endif
 BX_PRAGMA_DIAGNOSTIC_POP();
 
-// #include "../common.h"
 
 #include <bgfx/bgfx.h>
 #include <math.h>
@@ -35,7 +42,7 @@ BX_PRAGMA_DIAGNOSTIC_POP();
 #	include <edtaa3/edtaa3func.cpp>
 #else
 #	define SDF_IMPLEMENTATION
-#	include <sdf.h>
+#	include <sdf/sdf.h>
 #endif // USE_EDTAA3
 
 #include <wchar.h> // wcslen
@@ -469,7 +476,7 @@ FontManager::FontManager(Atlas* _atlas)
 	init();
 }
 
-FontManager::FontManager(uint32_t _textureSideWidth) 
+FontManager::FontManager(uint16_t _textureSideWidth)
 	: m_ownAtlas(true)
 	, m_atlas(new Atlas(_textureSideWidth) )
 {
@@ -549,8 +556,8 @@ FontHandle FontManager::createFontByPixelSize(TrueTypeHandle _ttfHandle, uint32_
 	CachedFont& font = m_cachedFonts[fontIdx];
 	font.trueTypeFont = ttf;
 	font.fontInfo = ttf->getFontInfo();
-	font.fontInfo.fontType = _fontType;
-	font.fontInfo.pixelSize = _pixelSize;
+	font.fontInfo.fontType  = int16_t(_fontType);
+	font.fontInfo.pixelSize = uint16_t(_pixelSize);
 	font.cachedGlyphs.clear();
 	font.masterFontHandle.idx = bx::HandleAlloc::invalid;
 
@@ -564,15 +571,15 @@ FontHandle FontManager::createScaledFontToPixelSize(FontHandle _baseFontHandle, 
 	CachedFont& baseFont = m_cachedFonts[_baseFontHandle.idx];
 	FontInfo& fontInfo = baseFont.fontInfo;
 
-	FontInfo newFontInfo = fontInfo;
-	newFontInfo.pixelSize = _pixelSize;
-	newFontInfo.scale = (float)_pixelSize / (float) fontInfo.pixelSize;
-	newFontInfo.ascender = (newFontInfo.ascender * newFontInfo.scale);
+	FontInfo newFontInfo  = fontInfo;
+	newFontInfo.pixelSize = uint16_t(_pixelSize);
+	newFontInfo.scale     = (float)_pixelSize / (float) fontInfo.pixelSize;
+	newFontInfo.ascender  = (newFontInfo.ascender * newFontInfo.scale);
 	newFontInfo.descender = (newFontInfo.descender * newFontInfo.scale);
-	newFontInfo.lineGap = (newFontInfo.lineGap * newFontInfo.scale);
-	newFontInfo.maxAdvanceWidth = (newFontInfo.maxAdvanceWidth * newFontInfo.scale);
+	newFontInfo.lineGap   = (newFontInfo.lineGap * newFontInfo.scale);
+	newFontInfo.maxAdvanceWidth    = (newFontInfo.maxAdvanceWidth * newFontInfo.scale);
 	newFontInfo.underlineThickness = (newFontInfo.underlineThickness * newFontInfo.scale);
-	newFontInfo.underlinePosition = (newFontInfo.underlinePosition * newFontInfo.scale);
+	newFontInfo.underlinePosition  = (newFontInfo.underlinePosition * newFontInfo.scale);
 
 	uint16_t fontIdx = m_fontHandles.alloc();
 	BX_CHECK(fontIdx != bx::HandleAlloc::invalid, "Invalid handle used");
@@ -704,12 +711,15 @@ const FontInfo& FontManager::getFontInfo(FontHandle _handle) const
 const GlyphInfo* FontManager::getGlyphInfo(FontHandle _handle, CodePoint _codePoint)
 {
 	const GlyphHashMap& cachedGlyphs = m_cachedFonts[_handle.idx].cachedGlyphs;
+	
 	GlyphHashMap::const_iterator it = cachedGlyphs.find(_codePoint);
 
 	if (it == cachedGlyphs.end() )
 	{
+
 		if (!preloadGlyph(_handle, _codePoint) )
 		{
+		
 			return NULL;
 		}
 
