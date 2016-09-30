@@ -16,7 +16,7 @@ noob::application::~application()
 
 noob::application& noob::application::get()
 {
-	assert(app_pointer && "application not created!");
+	assert(app_pointer);
 	return *app_pointer;
 }
 
@@ -94,7 +94,7 @@ void noob::application::update(double delta)
 
 void noob::application::draw()
 {
-	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 1.0, 2000.0);
+	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0, 2000.0);
 	stage.draw(window_width, window_height, eye_pos, eye_target, eye_up, proj_mat);
 }
 
@@ -196,6 +196,7 @@ void noob::application::key_input(char c)
 {
 
 }
+
 
 void noob::application::remove_shapes()
 {

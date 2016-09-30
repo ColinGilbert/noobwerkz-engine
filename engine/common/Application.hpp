@@ -12,7 +12,6 @@
 #include "Globals.hpp"
 #include "NoobUtils.hpp"
 #include "MathFuncs.hpp"
-#include "Graphics.hpp"
 #include "GUI.hpp"
 #include "BasicMesh.hpp"
 #include "Camera.hpp"

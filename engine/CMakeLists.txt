@@ -899,4 +899,3 @@ if (NOOB_PLATFORM_ANDROID)
 	add_library(Entry SHARED ${app_src})
 	target_link_libraries(Entry log android GLESv2 EGL dl m)
 endif()
-

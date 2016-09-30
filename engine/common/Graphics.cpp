@@ -86,18 +86,7 @@ void noob::graphics::frame(uint32_t width, uint32_t height)
 }
 
 
-noob::graphics::texture noob::graphics::get_texture(const std::string& name)
-{
-	if (global_textures.find(name) == global_textures.end())
-	{
-		bgfx::TextureHandle dummy;
-		dummy.idx = bgfx::invalidHandle;
-		noob::graphics::texture t;
-		t.handle = dummy;
-		return t;
-	}
-	else return global_textures.find(name)->second;
-}
+
 
 
 bgfx::ShaderHandle noob::graphics::load_shader(const std::string& filename)
@@ -129,7 +118,6 @@ bgfx::ShaderHandle noob::graphics::load_shader(const std::string& filename)
 
 	logger::log(noob::importance::INFO, noob::concat("[Graphics] Loading shader at ", shader_path));
 
-	// noob::utils::data.insert(std::make_pair(shader_path, noob::utils::load_file_as_string(shader_path)));
 	const bgfx::Memory* mem = get_bgfx_mem(noob::utils::load_file_as_string(shader_path));
 	bgfx::ShaderHandle s = bgfx::createShader(mem);
 
@@ -150,18 +138,12 @@ noob::graphics::texture noob::graphics::load_texture(const std::string& friendly
 	int width, height, channels;
 	width = height = channels = 0;
 
-
 	std::string texture_file = noob::utils::load_file_as_string(filename);
-
-	// ww << "Loaded size = " << texture_file.size() << " bytes. ";
 
 	bgfx::TextureInfo tex_info;
 	bgfx::TextureHandle tex = bgfx::createTexture(bgfx::copy(&texture_file[0], sizeof(char) * texture_file.size()), flags, 0, &tex_info);
 
 	// bgfx::TextureHandle tex = bgfx::createTexture2D(static_cast<uint16_t>(width), static_cast<uint16_t>(height), static_cast<uint8_t>(0), bgfx::TextureFormat::RGBA32, static_cast<uint32_t>(flags), bgfx::copy(&texture_file[0], sizeof(char) * texture_file.size()));
-
-	// ww << "BGFX texture info: Storage size is " << tex_info.storageSize << " bytes, width of " << tex_info.width << ", height of " << tex_info.height << ", depth of " << tex_info.depth << ". Num mips is " << tex_info.numMips << ". Bpp " << tex_info.bitsPerPixel << ". Cube map? " << tex_info.cubeMap << ".";
-
 	
 	logger::log(noob::importance::INFO, noob::concat("[Graphics] Loading Texture - ", filename, ". Loaded size = ", noob::to_string(texture_file.size()), " bytes. BGFX info: ", noob::to_string(tex_info.storageSize), " bytes, width of ", noob::to_string(tex_info.width), ", height of ", noob::to_string(tex_info.height), "depth of ", noob::to_string(tex_info.depth), ". Num mips ", noob::to_string(tex_info.numMips), ". Bpp ", noob::to_string(tex_info.bitsPerPixel), ", cube map? ", noob::to_string(tex_info.cubeMap)));
 
@@ -263,17 +245,31 @@ bool noob::graphics::add_shader(const std::string& _name, const noob::graphics::
 	}
 	else return false;
 }
+/*
 
-
-noob::graphics::shader noob::graphics::get_shader(const std::string& name)
+noob::graphics::shader noob::graphics::get_shader(const std::string& name) const
 {
 	auto it = noob::graphics::shaders.find(name);
 	if (it != shaders.end()) return it->second;
 	else return noob::graphics::shaders.find("invalid")->second;
 }
+*/
+
+noob::graphics::texture noob::graphics::get_texture(const std::string& name) const
+{
+	if (global_textures.find(name) == global_textures.end())
+	{
+		bgfx::TextureHandle dummy;
+		dummy.idx = bgfx::invalidHandle;
+		noob::graphics::texture t;
+		t.handle = dummy;
+		return t;
+	}
+	else return global_textures.find(name)->second;
+}
 
 
-noob::graphics::uniform noob::graphics::get_uniform(const std::string& name)
+noob::graphics::uniform noob::graphics::get_uniform(const std::string& name) const
 {
 	auto it = noob::graphics::uniforms.find(name);
 	if (it != uniforms.end()) return it->second;
@@ -281,21 +277,9 @@ noob::graphics::uniform noob::graphics::get_uniform(const std::string& name)
 }
 
 
-noob::graphics::sampler noob::graphics::get_sampler(const std::string& name)
+noob::graphics::sampler noob::graphics::get_sampler(const std::string& name) const
 {
 	auto it = noob::graphics::samplers.find(name);
 	if (it != samplers.end()) return it->second;
 	else return noob::graphics::samplers.find("invalid")->second;
-}
-
-
-bool is_valid(const noob::graphics::uniform& _uniform)
-{
-	return (_uniform.handle.idx != bgfx::invalidHandle);
-}
-
-
-bool is_valid(const noob::graphics::sampler& _sampler)
-{
-	return (_sampler.handle.idx != bgfx::invalidHandle);
 }

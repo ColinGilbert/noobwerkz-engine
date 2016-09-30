@@ -44,6 +44,7 @@ void noob::basic_model::init(const noob::basic_mesh& arg)
 			v.normal[2] = norml.v[2];
 			vertices.push_back(v);
 		}
+
 		// NOTE: This doesn't take into account any integer overflow; the programmer is responsible for splitting huge meshes. This is to enforce machine-imposed size limits for 3D models.
 		const uint32_t num_indices = std::min(static_cast<uint32_t>(arg.indices.size()), static_cast<uint32_t>(std::numeric_limits<uint16_t>::max()));
 		for (uint32_t i = 0; i < num_indices; ++i)

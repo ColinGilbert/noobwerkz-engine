@@ -76,7 +76,7 @@ namespace noob
 		{
 			bgfx::TextureHandle handle;
 		};
-		
+
 		struct shader
 		{
 			bgfx::ProgramHandle program;
@@ -104,14 +104,17 @@ namespace noob
 		bool add_shader(const std::string&, const noob::graphics::shader&);
 
 		// ---------------- Getters -----------------
-		noob::graphics::shader get_shader(const std::string&);
-		noob::graphics::texture get_texture(const std::string&);
-		noob::graphics::uniform get_uniform(const std::string&);
-		noob::graphics::sampler get_sampler(const std::string&);
+	//	noob::graphics::shader get_shader(const std::string&) const;
+		noob::graphics::texture get_texture(const std::string&) const;
+		noob::graphics::uniform get_uniform(const std::string&) const;
+		noob::graphics::sampler get_sampler(const std::string&) const;
 
 		// ---------------- Checkers ----------------
-		bool is_valid(const noob::graphics::uniform&);
-		bool is_valid(const noob::graphics::sampler&);
+
+		bool is_valid(const noob::graphics::uniform& _uniform) const noexcept(true) { return (_uniform.handle.idx != bgfx::invalidHandle); }
+		bool is_valid(const noob::graphics::sampler& _sampler) const noexcept(true) { return (_sampler.handle.idx != bgfx::invalidHandle); }
+
+
 
 		// TODO: Implement these
 		// static bool is_valid(const noob::graphics::shader&);
@@ -120,38 +123,35 @@ namespace noob
 		// static bool is_valid(bgfx::TextureHandle);
 
 		// ---------------- Conveniences ------------
-		const bgfx::Memory* get_bgfx_mem(const std::string& payload)
-		{
-			return bgfx::copy(&payload[0], payload.size());
-		}
+		const bgfx::Memory* get_bgfx_mem(const std::string& payload) noexcept(true) { return bgfx::copy(&payload[0], payload.size()); }
 
 		// Uniform getters
-		noob::graphics::uniform get_invalid_uniform() { return invalid_uniform; }
-		noob::graphics::uniform get_colour_0() { return colour_0; } 
-		noob::graphics::uniform get_colour_1() { return colour_1; }
-		noob::graphics::uniform get_colour_2() { return colour_2; }
-		noob::graphics::uniform get_colour_3() { return colour_3; }
-		noob::graphics::uniform get_blend_0() { return blend_0; }
-		noob::graphics::uniform get_blend_1() { return blend_1; }
-		noob::graphics::uniform get_model_scales() { return model_scales; }
-		noob::graphics::uniform get_tex_scales() { return tex_scales; }
-		noob::graphics::uniform get_normal_mat() { return normal_mat; }
-		noob::graphics::uniform get_normal_mat_modelspace() { return normal_mat_modelspace; }
-		noob::graphics::uniform get_eye_pos() { return eye_pos; }
-		noob::graphics::uniform get_eye_pos_normalized() { return eye_pos_normalized; }
-		noob::graphics::uniform get_ambient() { return  ambient; }
-		noob::graphics::uniform get_light_pos_radius() { return light_pos_radius; }
-		noob::graphics::uniform get_light_rgb_falloff() { return light_rgb_falloff; } 
-		noob::graphics::uniform get_specular_shine() { return specular_shine; }
-		noob::graphics::uniform get_diffuse() { return diffuse; }
-		noob::graphics::uniform get_emissive() { return emissive; }
-		noob::graphics::uniform get_fog() { return fog; }
-		noob::graphics::uniform get_rough_albedo_fresnel() { return rough_albedo_fresnel; }
+		noob::graphics::uniform get_invalid_uniform() const noexcept(true) { return invalid_uniform; }
+		noob::graphics::uniform get_colour_0() const noexcept(true) { return colour_0; } 
+		noob::graphics::uniform get_colour_1() const noexcept(true) { return colour_1; }
+		noob::graphics::uniform get_colour_2() const noexcept(true) { return colour_2; }
+		noob::graphics::uniform get_colour_3() const noexcept(true) { return colour_3; }
+		noob::graphics::uniform get_blend_0() const noexcept(true) { return blend_0; }
+		noob::graphics::uniform get_blend_1() const noexcept(true) { return blend_1; }
+		noob::graphics::uniform get_model_scales() const noexcept(true) { return model_scales; }
+		noob::graphics::uniform get_tex_scales() const noexcept(true) { return tex_scales; }
+		noob::graphics::uniform get_normal_mat() const noexcept(true) { return normal_mat; }
+		noob::graphics::uniform get_normal_mat_modelspace() const noexcept(true) { return normal_mat_modelspace; }
+		noob::graphics::uniform get_eye_pos() const noexcept(true) { return eye_pos; }
+		noob::graphics::uniform get_eye_pos_normalized() const noexcept(true) { return eye_pos_normalized; }
+		noob::graphics::uniform get_ambient() const noexcept(true) { return  ambient; }
+		noob::graphics::uniform get_light_pos_radius() const noexcept(true) { return light_pos_radius; }
+		noob::graphics::uniform get_light_rgb_falloff() const noexcept(true) { return light_rgb_falloff; } 
+		noob::graphics::uniform get_specular_shine() const noexcept(true) { return specular_shine; }
+		noob::graphics::uniform get_diffuse() const noexcept(true) { return diffuse; }
+		noob::graphics::uniform get_emissive() const noexcept(true) { return emissive; }
+		noob::graphics::uniform get_fog() const noexcept(true) { return fog; }
+		noob::graphics::uniform get_rough_albedo_fresnel() const noexcept(true)  { return rough_albedo_fresnel; }
 
-		noob::graphics::sampler get_invalid_texture() { return invalid_texture; }
-		noob::graphics::sampler get_texture_0() { return texture_0; }
+		noob::graphics::sampler get_invalid_texture() const noexcept(true) { return invalid_texture; }
+		noob::graphics::sampler get_texture_0() const noexcept(true) { return texture_0; }
 
-		bool instancing_supported() const { return instancing; }
+		bool instancing_supported() const noexcept(true) { return instancing; }
 
 		protected:
 
