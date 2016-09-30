@@ -15,8 +15,8 @@ High-quality tutorials and real tests will come when the implementation is more 
 
 Current versions:
 ```
-Master: 0.5 "StageCraft"
-Dev: 0.6 "AI and More!"
+Master: 0.6 "Cleaning House!"
+Dev: 0.7 "Cooking with fire!"
 ```
 
 Specific features:
@@ -32,6 +32,11 @@ BGFX
 Bullet Physics
 libogg/libvorbis (soon Opus)
 r8brain's excellent resampling routines
+ozz-animation
+GLFW
+Shiny
+Freetype
+Voro++
 ```
 
 To bootstrap:
