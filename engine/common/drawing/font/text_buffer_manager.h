@@ -43,12 +43,12 @@ class text_buffer_manager
 {
 	public:
 
-		/// text_buffer is bound to a fontManager for glyph retrieval
+		/// text_buffer is bound to a font_manager for glyph retrieval
 		/// @remark the ownership of the manager is not taken
-		text_buffer_manager(font_manager* _fontManager);
+		text_buffer_manager(font_manager* _font_manager);
 		~text_buffer_manager();
 
-		text_buf_handle create_text_buffer(uint32_t _type, BufferType::Enum _bufferType);
+		text_buf_handle create_text_buffer(uint32_t _type, BufferType::Enum _buffer_type);
 		void destroy_text_buffer(text_buf_handle _handle);
 		void submit_text_buffer(text_buf_handle _handle, uint8_t _id, int32_t _depth = 0);
 
@@ -80,21 +80,21 @@ class text_buffer_manager
 	private:
 		struct buffer_cache
 		{
-			uint16_t indexBufferHandleIdx;
-			uint16_t vertexBufferHandleIdx;
-			text_buffer* textBuffer;
-			BufferType::Enum bufferType;
+			uint16_t index_buffer_handle_idx;
+			uint16_t vertex_buffer_handle_idx;
+			text_buffer* m_text_buffer;
+			BufferType::Enum buffer_type;
 			uint32_t font_type;
 		};
 
 		buffer_cache* m_text_buffers;
 		bx::HandleAllocT<MAX_TEXT_BUFFER_COUNT> m_text_buf_handles;
-		font_manager* m_fontManager;
-		bgfx::VertexDecl m_vertexDecl;
-		bgfx::UniformHandle u_texColor;
-		bgfx::ProgramHandle m_basicProgram;
-		bgfx::ProgramHandle m_distanceProgram;
-		bgfx::ProgramHandle m_distanceSubpixelProgram;
+		font_manager* m_font_manager;
+		bgfx::VertexDecl m_vertex_decl;
+		bgfx::UniformHandle u_tex_colour;
+		bgfx::ProgramHandle m_basic_program;
+		bgfx::ProgramHandle m_distance_program;
+		bgfx::ProgramHandle m_distance_subpixel_program;
 };
 
 #endif // TEXT_BUFFER_MANAGER_H_HEADER_GUARD

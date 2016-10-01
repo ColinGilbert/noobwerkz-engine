@@ -38,9 +38,9 @@ struct font_info
 	/// This field gives the maximum horizontal cursor advance for all glyphs in the font.
 	float max_advance_width;
 	/// The thickness of the under/hover/strike-trough line in pixels.
-	float underlineThickness;
+	float underline_thickness;
 	/// The position of the underline relatively to the baseline.
-	float underlinePosition;
+	float underline_position;
 
 	/// Scale to apply to glyph data.
 	float scale;
@@ -84,7 +84,7 @@ typedef int32_t unicode_point;
 struct glyph_info
 {
 	/// Index for faster retrieval.
-	int32_t glyphIndex;
+	int32_t glyph_index;
 
 	/// Glyph's width in pixels.
 	float width;
@@ -112,7 +112,7 @@ struct glyph_info
 	float advance_y;
 
 	/// Region index in the atlas storing textures.
-	uint16_t regionIndex;
+	uint16_t region_index;
 };
 
 BGFX_HANDLE(tt_handle);

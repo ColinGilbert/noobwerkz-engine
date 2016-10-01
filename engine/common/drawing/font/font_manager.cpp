@@ -181,8 +181,8 @@ font_info true_type_font::get_font_info()
 	outfont_info.line_gap = (metrics.height - metrics.ascender + metrics.descender) / 64.0f;
 	outfont_info.max_advance_width = metrics.max_advance/ 64.0f;
 
-	outfont_info.underlinePosition = FT_MulFix(m_font->face->underline_position, metrics.y_scale) / 64.0f;
-	outfont_info.underlineThickness = FT_MulFix(m_font->face->underline_thickness, metrics.y_scale) / 64.0f;
+	outfont_info.underline_position = FT_MulFix(m_font->face->underline_position, metrics.y_scale) / 64.0f;
+	outfont_info.underline_thickness = FT_MulFix(m_font->face->underline_thickness, metrics.y_scale) / 64.0f;
 	return outfont_info;
 }
 
@@ -218,10 +218,10 @@ bool true_type_font::bakeGlyphAlpha(unicode_point code_point, glyph_info& _glyph
 {
 	BX_CHECK(m_font != NULL, "true_type_font not initialized");
 
-	_glyphInfo.glyphIndex = FT_Get_Char_Index(m_font->face, code_point);
+	_glyphInfo.glyph_index = FT_Get_Char_Index(m_font->face, code_point);
 
 	FT_GlyphSlot slot = m_font->face->glyph;
-	FT_Error error = FT_Load_Glyph(m_font->face, _glyphInfo.glyphIndex, FT_LOAD_DEFAULT);
+	FT_Error error = FT_Load_Glyph(m_font->face, _glyphInfo.glyph_index, FT_LOAD_DEFAULT);
 	if (error)
 	{
 		return false;
@@ -252,10 +252,10 @@ bool true_type_font::bakeGlyphSubpixel(unicode_point code_point, glyph_info& gly
 {
 	BX_CHECK(m_font != NULL, "true_type_font not initialized");
 
-	glyph_info.glyphIndex = FT_Get_Char_Index(m_font->face, code_point);
+	glyph_info.glyph_index = FT_Get_Char_Index(m_font->face, code_point);
 
 	FT_GlyphSlot slot = m_font->face->glyph;
-	FT_Error error = FT_Load_Glyph(m_font->face, glyph_info.glyphIndex, FT_LOAD_DEFAULT);
+	FT_Error error = FT_Load_Glyph(m_font->face, glyph_info.glyph_index, FT_LOAD_DEFAULT);
 	if (error)
 	{
 		return false;
@@ -382,13 +382,13 @@ bool true_type_font::bakeGlyphDistance(unicode_point code_point, glyph_info& gly
 {
 	BX_CHECK(m_font != NULL, "true_type_font not initialized");
 
-	glyph_info.glyphIndex = FT_Get_Char_Index(m_font->face, code_point);
+	glyph_info.glyph_index = FT_Get_Char_Index(m_font->face, code_point);
 
 	FT_Int32 loadMode = FT_LOAD_DEFAULT | FT_LOAD_NO_HINTING;
 	FT_Render_Mode renderMode = FT_RENDER_MODE_NORMAL;
 
 	FT_GlyphSlot slot = m_font->face->glyph;
-	FT_Error error = FT_Load_Glyph(m_font->face, glyph_info.glyphIndex, loadMode);
+	FT_Error error = FT_Load_Glyph(m_font->face, glyph_info.glyph_index, loadMode);
 	if (error)
 	{
 		return false;
@@ -494,7 +494,7 @@ void font_manager::init()
 	m_blackGlyph.height = W;
 
 	///make sure the black glyph doesn't bleed by using a one pixel inner outline
-	m_blackGlyph.regionIndex = m_atlas->addRegion(W, W, buffer, atlas_region::TYPE_GRAY, 1);
+	m_blackGlyph.region_index = m_atlas->addRegion(W, W, buffer, atlas_region::TYPE_GRAY, 1);
 }
 
 font_manager::~font_manager()
@@ -574,8 +574,8 @@ ft_handle font_manager::create_scaled_font_to_pixel_size(ft_handle base_font_han
 	newfont_info.descender = (newfont_info.descender * newfont_info.scale);
 	newfont_info.line_gap   = (newfont_info.line_gap * newfont_info.scale);
 	newfont_info.max_advance_width    = (newfont_info.max_advance_width * newfont_info.scale);
-	newfont_info.underlineThickness = (newfont_info.underlineThickness * newfont_info.scale);
-	newfont_info.underlinePosition  = (newfont_info.underlinePosition * newfont_info.scale);
+	newfont_info.underline_thickness = (newfont_info.underline_thickness * newfont_info.scale);
+	newfont_info.underline_position  = (newfont_info.underline_position * newfont_info.scale);
 
 	const uint16_t font_idx = m_font_handles.alloc();
 	BX_CHECK(font_idx != bx::HandleAlloc::invalid, "Invalid handle used");
@@ -727,6 +727,6 @@ const glyph_info* font_manager::get_glyph_info(ft_handle font_handle_ft, unicode
 
 bool font_manager::add_bitmap(glyph_info& glyph_info, const uint8_t* data_out)
 {
-	glyph_info.regionIndex = m_atlas->addRegion(static_cast<uint16_t>(ceil(glyph_info.width)), static_cast<uint16_t>(ceil(glyph_info.height)), data_out, atlas_region::TYPE_GRAY);
+	glyph_info.region_index = m_atlas->addRegion(static_cast<uint16_t>(ceil(glyph_info.width)), static_cast<uint16_t>(ceil(glyph_info.height)), data_out, atlas_region::TYPE_GRAY);
 	return true;
 }

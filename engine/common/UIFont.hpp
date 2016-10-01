@@ -12,8 +12,6 @@
 
 namespace noob
 {
-
-
 	// text_buffer_manager depends on font_manager. This class brings them together.
 	class ui_font
 	{
