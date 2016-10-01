@@ -1,7 +1,7 @@
 /*
-* Copyright 2013 Jeremie Roy. All rights reserved.
-* License: https://github.com/bkaradzic/bgfx#license-bsd-2-clause
-*/
+ * Copyright 2013 Jeremie Roy. All rights reserved.
+ * License: https://github.com/bkaradzic/bgfx#license-bsd-2-clause
+ */
 
 #include <bgfx/bgfx.h>
 
@@ -14,57 +14,57 @@
 
 class RectanglePacker
 {
-public:
-	RectanglePacker();
-	RectanglePacker(uint32_t _width, uint32_t _height);
+	public:
+		RectanglePacker();
+		RectanglePacker(uint32_t _width, uint32_t _height);
 
-	/// non constructor initialization
-	void init(uint32_t _width, uint32_t _height);
+		/// non constructor initialization
+		void init(uint32_t _width, uint32_t _height);
 
-	/// find a suitable position for the given rectangle
-	/// @return true if the rectangle can be added, false otherwise
-	bool addRectangle(uint16_t _width, uint16_t _height, uint16_t& _outX, uint16_t& _outY);
+		/// find a suitable position for the given rectangle
+		/// @return true if the rectangle can be added, false otherwise
+		bool addRectangle(uint16_t _width, uint16_t _height, uint16_t& _outX, uint16_t& _outY);
 
-	/// return the used surface in squared unit
-	uint32_t getUsedSurface()
-	{
-		return m_usedSpace;
-	}
-
-	/// return the total available surface in squared unit
-	uint32_t getTotalSurface()
-	{
-		return m_width * m_height;
-	}
-
-	/// return the usage ratio of the available surface [0:1]
-	float getUsageRatio();
-
-	/// reset to initial state
-	void clear();
-
-private:
-	int32_t fit(uint32_t _skylineNodeIndex, uint16_t _width, uint16_t _height);
-
-	/// Merges all skyline nodes that are at the same level.
-	void merge();
-
-	struct Node
-	{
-		Node(int16_t _x, int16_t _y, int16_t _width) : x(_x), y(_y), width(_width)
+		/// return the used surface in squared unit
+		uint32_t getUsedSurface()
 		{
+			return m_usedSpace;
 		}
 
-		int16_t x;     //< The starting x-coordinate (leftmost).
-		int16_t y;     //< The y-coordinate of the skyline level line.
-		int32_t width; //< The line _width. The ending coordinate (inclusive) will be x+width-1.
-	};
+		/// return the total available surface in squared unit
+		uint32_t getTotalSurface()
+		{
+			return m_width * m_height;
+		}
+
+		/// return the usage ratio of the available surface [0:1]
+		float getUsageRatio();
+
+		/// reset to initial state
+		void clear();
+
+	private:
+		int32_t fit(uint32_t _skylineNodeIndex, uint16_t _width, uint16_t _height);
+
+		/// Merges all skyline nodes that are at the same level.
+		void merge();
+
+		struct Node
+		{
+			Node(int16_t _x, int16_t _y, int16_t _width) : x(_x), y(_y), width(_width)
+			{
+			}
+
+			int16_t x;     //< The starting x-coordinate (leftmost).
+			int16_t y;     //< The y-coordinate of the skyline level line.
+			int32_t width; //< The line _width. The ending coordinate (inclusive) will be x+width-1.
+		};
 
 
-	uint32_t m_width;            //< width (in pixels) of the underlying texture
-	uint32_t m_height;           //< height (in pixels) of the underlying texture
-	uint32_t m_usedSpace;        //< Surface used in squared pixel
-	std::vector<Node> m_skyline; //< node of the skyline algorithm
+		uint32_t m_width;            //< width (in pixels) of the underlying texture
+		uint32_t m_height;           //< height (in pixels) of the underlying texture
+		uint32_t m_usedSpace;        //< Surface used in squared pixel
+		std::vector<Node> m_skyline; //< node of the skyline algorithm
 };
 
 RectanglePacker::RectanglePacker() : m_width(0), m_height(0), m_usedSpace(0) {}
@@ -107,7 +107,7 @@ bool RectanglePacker::addRectangle(uint16_t _width, uint16_t _height, uint16_t& 
 		{
 			node = &m_skyline[ii];
 			if ( ( (yy + _height) < best_height)
-			|| ( ( (yy + _height) == best_height) && (node->width < best_width) ) )
+					|| ( ( (yy + _height) == best_height) && (node->width < best_width) ) )
 			{
 				best_height = uint16_t(yy) + _height;
 				best_index = ii;
@@ -258,10 +258,10 @@ atlas::atlas(uint16_t _textureSize, uint16_t _maxRegionsCount) : m_usedLayers(0)
 	memset(m_textureBuffer, 0, _textureSize * _textureSize * 6 * 4);
 
 	m_textureHandle = bgfx::createTextureCube(_textureSize
-		, false
-		, 1
-		, bgfx::TextureFormat::BGRA8
-		);
+			, false
+			, 1
+			, bgfx::TextureFormat::BGRA8
+			);
 }
 
 atlas::atlas(uint16_t _textureSize, const uint8_t* _textureBuffer, uint16_t _regionCount, const uint8_t* _regionBuffer, uint16_t _maxRegionsCount) : m_usedLayers(24), m_usedFaces(6), m_textureSize(_textureSize), m_regionCount(_regionCount), m_maxRegionCount(_regionCount < _maxRegionsCount ? _regionCount : _maxRegionsCount)
@@ -294,25 +294,25 @@ void atlas::init()
 	float texelHalf = m_texelSize/2.0f;
 	switch (bgfx::getRendererType() )
 	{
-	case bgfx::RendererType::Direct3D9:
-	{
-		m_texelOffset[0] = 0.0f;
-		m_texelOffset[1] = 0.0f;
-		break;
-	}
-	case bgfx::RendererType::Direct3D11:
-	case bgfx::RendererType::Direct3D12:
-	{
-		m_texelOffset[0] = texelHalf;
-		m_texelOffset[1] = texelHalf;
-		break;
-	}
-	default:
-	{
-		m_texelOffset[0] = texelHalf;
-		m_texelOffset[1] = -texelHalf;
-		break;
-	}
+		case bgfx::RendererType::Direct3D9:
+			{
+				m_texelOffset[0] = 0.0f;
+				m_texelOffset[1] = 0.0f;
+				break;
+			}
+		case bgfx::RendererType::Direct3D11:
+		case bgfx::RendererType::Direct3D12:
+			{
+				m_texelOffset[0] = texelHalf;
+				m_texelOffset[1] = texelHalf;
+				break;
+			}
+		default:
+			{
+				m_texelOffset[0] = texelHalf;
+				m_texelOffset[1] = -texelHalf;
+				break;
+			}
 	}
 }
 
@@ -330,7 +330,7 @@ uint16_t atlas::addRegion(uint16_t _width, uint16_t _height, const uint8_t* _bit
 	while (idx < m_usedLayers)
 	{
 		if (m_layers[idx].faceRegion.getType() == _type
-		&&  m_layers[idx].packer.addRectangle(_width + 1, _height + 1, xx, yy) )
+				&&  m_layers[idx].packer.addRectangle(_width + 1, _height + 1, xx, yy) )
 		{
 			break;
 		}
@@ -341,7 +341,7 @@ uint16_t atlas::addRegion(uint16_t _width, uint16_t _height, const uint8_t* _bit
 	if (idx >= m_usedLayers)
 	{
 		if ( (idx + _type) > 24
-		|| m_usedFaces >= 6)
+				|| m_usedFaces >= 6)
 		{
 			return UINT16_MAX;
 		}
@@ -457,61 +457,61 @@ void atlas::packUV(const atlas_region& _region, uint8_t* _vertexBuffer, uint32_t
 	_vertexBuffer += _offset;
 	switch (_region.getFaceIndex() )
 	{
-	case 0: // +X
-		x0 = -x0;
-		x1 = -x1;
-		y0 = -y0;
-		y1 = -y1;
-		writeUV(_vertexBuffer, INT16_MAX, y0, x0, ww); _vertexBuffer += _stride;
-		writeUV(_vertexBuffer, INT16_MAX, y1, x0, ww); _vertexBuffer += _stride;
-		writeUV(_vertexBuffer, INT16_MAX, y1, x1, ww); _vertexBuffer += _stride;
-		writeUV(_vertexBuffer, INT16_MAX, y0, x1, ww); _vertexBuffer += _stride;
-		break;
+		case 0: // +X
+			x0 = -x0;
+			x1 = -x1;
+			y0 = -y0;
+			y1 = -y1;
+			writeUV(_vertexBuffer, INT16_MAX, y0, x0, ww); _vertexBuffer += _stride;
+			writeUV(_vertexBuffer, INT16_MAX, y1, x0, ww); _vertexBuffer += _stride;
+			writeUV(_vertexBuffer, INT16_MAX, y1, x1, ww); _vertexBuffer += _stride;
+			writeUV(_vertexBuffer, INT16_MAX, y0, x1, ww); _vertexBuffer += _stride;
+			break;
 
-	case 1: // -X
-		y0 = -y0;
-		y1 = -y1;
-		writeUV(_vertexBuffer, INT16_MIN, y0, x0, ww); _vertexBuffer += _stride;
-		writeUV(_vertexBuffer, INT16_MIN, y1, x0, ww); _vertexBuffer += _stride;
-		writeUV(_vertexBuffer, INT16_MIN, y1, x1, ww); _vertexBuffer += _stride;
-		writeUV(_vertexBuffer, INT16_MIN, y0, x1, ww); _vertexBuffer += _stride;
-		break;
+		case 1: // -X
+			y0 = -y0;
+			y1 = -y1;
+			writeUV(_vertexBuffer, INT16_MIN, y0, x0, ww); _vertexBuffer += _stride;
+			writeUV(_vertexBuffer, INT16_MIN, y1, x0, ww); _vertexBuffer += _stride;
+			writeUV(_vertexBuffer, INT16_MIN, y1, x1, ww); _vertexBuffer += _stride;
+			writeUV(_vertexBuffer, INT16_MIN, y0, x1, ww); _vertexBuffer += _stride;
+			break;
 
-	case 2: // +Y
-		writeUV(_vertexBuffer, x0, INT16_MAX, y0, ww); _vertexBuffer += _stride;
-		writeUV(_vertexBuffer, x0, INT16_MAX, y1, ww); _vertexBuffer += _stride;
-		writeUV(_vertexBuffer, x1, INT16_MAX, y1, ww); _vertexBuffer += _stride;
-		writeUV(_vertexBuffer, x1, INT16_MAX, y0, ww); _vertexBuffer += _stride;
-		break;
+		case 2: // +Y
+			writeUV(_vertexBuffer, x0, INT16_MAX, y0, ww); _vertexBuffer += _stride;
+			writeUV(_vertexBuffer, x0, INT16_MAX, y1, ww); _vertexBuffer += _stride;
+			writeUV(_vertexBuffer, x1, INT16_MAX, y1, ww); _vertexBuffer += _stride;
+			writeUV(_vertexBuffer, x1, INT16_MAX, y0, ww); _vertexBuffer += _stride;
+			break;
 
-	case 3: // -Y
-		y0 = -y0;
-		y1 = -y1;
-		writeUV(_vertexBuffer, x0, INT16_MIN, y0, ww); _vertexBuffer += _stride;
-		writeUV(_vertexBuffer, x0, INT16_MIN, y1, ww); _vertexBuffer += _stride;
-		writeUV(_vertexBuffer, x1, INT16_MIN, y1, ww); _vertexBuffer += _stride;
-		writeUV(_vertexBuffer, x1, INT16_MIN, y0, ww); _vertexBuffer += _stride;
-		break;
+		case 3: // -Y
+			y0 = -y0;
+			y1 = -y1;
+			writeUV(_vertexBuffer, x0, INT16_MIN, y0, ww); _vertexBuffer += _stride;
+			writeUV(_vertexBuffer, x0, INT16_MIN, y1, ww); _vertexBuffer += _stride;
+			writeUV(_vertexBuffer, x1, INT16_MIN, y1, ww); _vertexBuffer += _stride;
+			writeUV(_vertexBuffer, x1, INT16_MIN, y0, ww); _vertexBuffer += _stride;
+			break;
 
-	case 4: // +Z
-		y0 = -y0;
-		y1 = -y1;
-		writeUV(_vertexBuffer, x0, y0, INT16_MAX, ww); _vertexBuffer += _stride;
-		writeUV(_vertexBuffer, x0, y1, INT16_MAX, ww); _vertexBuffer += _stride;
-		writeUV(_vertexBuffer, x1, y1, INT16_MAX, ww); _vertexBuffer += _stride;
-		writeUV(_vertexBuffer, x1, y0, INT16_MAX, ww); _vertexBuffer += _stride;
-		break;
+		case 4: // +Z
+			y0 = -y0;
+			y1 = -y1;
+			writeUV(_vertexBuffer, x0, y0, INT16_MAX, ww); _vertexBuffer += _stride;
+			writeUV(_vertexBuffer, x0, y1, INT16_MAX, ww); _vertexBuffer += _stride;
+			writeUV(_vertexBuffer, x1, y1, INT16_MAX, ww); _vertexBuffer += _stride;
+			writeUV(_vertexBuffer, x1, y0, INT16_MAX, ww); _vertexBuffer += _stride;
+			break;
 
-	case 5: // -Z
-		x0 = -x0;
-		x1 = -x1;
-		y0 = -y0;
-		y1 = -y1;
-		writeUV(_vertexBuffer, x0, y0, INT16_MIN, ww); _vertexBuffer += _stride;
-		writeUV(_vertexBuffer, x0, y1, INT16_MIN, ww); _vertexBuffer += _stride;
-		writeUV(_vertexBuffer, x1, y1, INT16_MIN, ww); _vertexBuffer += _stride;
-		writeUV(_vertexBuffer, x1, y0, INT16_MIN, ww); _vertexBuffer += _stride;
-		break;
+		case 5: // -Z
+			x0 = -x0;
+			x1 = -x1;
+			y0 = -y0;
+			y1 = -y1;
+			writeUV(_vertexBuffer, x0, y0, INT16_MIN, ww); _vertexBuffer += _stride;
+			writeUV(_vertexBuffer, x0, y1, INT16_MIN, ww); _vertexBuffer += _stride;
+			writeUV(_vertexBuffer, x1, y1, INT16_MIN, ww); _vertexBuffer += _stride;
+			writeUV(_vertexBuffer, x1, y0, INT16_MIN, ww); _vertexBuffer += _stride;
+			break;
 	}
 }
 

@@ -37,7 +37,7 @@ void noob::ui_font::draw_text(uint8_t view_id, const std::string& message, float
 	// bgfx::setViewClear(view_id, BGFX_CLEAR_COLOR);// | BGFX_CLEAR_DEPTH | BGFX_CLEAR_STENCIL);
 	bgfx::setViewTransform(view_id, view_matrix, ortho);
 	bgfx::setViewRect(view_id, 0, 0, window_width, window_height);
-	
+
 	buffer->clear_text_buffer(text_to_draw);
 	buffer->set_pen_position(text_to_draw, x, y);
 	buffer->append_text(text_to_draw, font_handle, message.c_str());
@@ -74,26 +74,26 @@ tt_handle noob::ui_font::load_ttf(font_manager* _fm, const std::string& file_pat
 
 
 /*
-void noob::ui_font::draw_text(uint8_t view_id, const std::string& message, float x, float y, uint32_t colour)
-{
+   void noob::ui_font::draw_text(uint8_t view_id, const std::string& message, float x, float y, uint32_t colour)
+   {
 
-	float at[3] = { 0, 0, 0.0f };
-	float eye[3] = { 0, 0, -1.0f };
-	float view_matrix[16];
-	bx::mtxLookAt(view_matrix, eye, at);
-	const float centering = 0.5f;
-	float ortho[16];
-	bx::mtxOrtho(ortho, centering, window_width + centering, window_height + centering, centering, -1.0f, 1.0f);
+   float at[3] = { 0, 0, 0.0f };
+   float eye[3] = { 0, 0, -1.0f };
+   float view_matrix[16];
+   bx::mtxLookAt(view_matrix, eye, at);
+   const float centering = 0.5f;
+   float ortho[16];
+   bx::mtxOrtho(ortho, centering, window_width + centering, window_height + centering, centering, -1.0f, 1.0f);
 
-	bgfx::setViewTransform(view_id, view_matrix, ortho);
-	bgfx::setViewRect(view_id, 0, 0, window_width, window_height);
+   bgfx::setViewTransform(view_id, view_matrix, ortho);
+   bgfx::setViewRect(view_id, 0, 0, window_width, window_height);
 
-	textBufferManager->clear_text_buffer(text_to_draw);
-	textBufferManager->set_pen_position(text_to_draw, x, y);
-	textBufferManager->set_text_colour
-		textBufferManager->append_text(text_to_draw, font_handle, message.c_str());
-	// bgfx::setState(BGFX_STATE_RGB_WRITE |BGFX_STATE_ALPHA_WRITE |BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA));
-	textBufferManager->submit_text_buffer(text_to_draw, view_submit);
-	bgfx::submit(view_id);
+   textBufferManager->clear_text_buffer(text_to_draw);
+   textBufferManager->set_pen_position(text_to_draw, x, y);
+   textBufferManager->set_text_colour
+   textBufferManager->append_text(text_to_draw, font_handle, message.c_str());
+// bgfx::setState(BGFX_STATE_RGB_WRITE |BGFX_STATE_ALPHA_WRITE |BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA));
+textBufferManager->submit_text_buffer(text_to_draw, view_submit);
+bgfx::submit(view_id);
 }
 */

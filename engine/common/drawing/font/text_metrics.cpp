@@ -13,8 +13,8 @@ text_metrics::text_metrics(font_manager* _fontManager)
 	, m_width(0)
 	, m_height(0)
 	, m_x(0)
-	, m_lineHeight(0)
-	, m_lineGap(0)
+	, m_line_height(0)
+	, m_line_gap(0)
 {
 }
 
@@ -22,16 +22,16 @@ void text_metrics::append_text(ft_handle _fontHandle, const char* _string)
 {
 	const font_info& font = m_fontManager->get_font_info(_fontHandle);
 
-	if (font.lineGap > m_lineGap)
+	if (font.line_gap > m_line_gap)
 	{
-		m_lineGap = font.lineGap;
+		m_line_gap = font.line_gap;
 	}
 
-	if ( (font.ascender - font.descender) > m_lineHeight)
+	if ( (font.ascender - font.descender) > m_line_height)
 	{
-		m_height -= m_lineHeight;
-		m_lineHeight = font.ascender - font.descender;
-		m_height += m_lineHeight;
+		m_height -= m_line_height;
+		m_line_height = font.ascender - font.descender;
+		m_height += m_line_height;
 	}
 
 	unicode_point codepoint = 0;
@@ -46,9 +46,9 @@ void text_metrics::append_text(ft_handle _fontHandle, const char* _string)
 			{
 				if (codepoint == L'\n')
 				{
-					m_height += m_lineGap + font.ascender - font.descender;					
-					m_lineGap = font.lineGap;
-					m_lineHeight = font.ascender - font.descender;					
+					m_height += m_line_gap + font.ascender - font.descender;					
+					m_line_gap = font.line_gap;
+					m_line_height = font.ascender - font.descender;					
 					m_x = 0;
 					break;
 				}
@@ -73,16 +73,16 @@ void text_metrics::append_text(ft_handle _fontHandle, const wchar_t* _string)
 {
 	const font_info& font = m_fontManager->get_font_info(_fontHandle);
 
-	if (font.lineGap > m_lineGap) 
+	if (font.line_gap > m_line_gap) 
 	{
-		m_lineGap = font.lineGap;
+		m_line_gap = font.line_gap;
 	}
 
-	if ( (font.ascender - font.descender) > m_lineHeight)
+	if ( (font.ascender - font.descender) > m_line_height)
 	{
-		m_height -= m_lineHeight;
-		m_lineHeight = font.ascender - font.descender;
-		m_height += m_lineHeight;
+		m_height -= m_line_height;
+		m_line_height = font.ascender - font.descender;
+		m_height += m_line_height;
 	}
 
 	for (uint32_t ii = 0, end = (uint32_t)wcslen(_string); ii < end; ++ii)
@@ -93,9 +93,9 @@ void text_metrics::append_text(ft_handle _fontHandle, const wchar_t* _string)
 		{
 			if (codepoint == L'\n')
 			{
-				m_height += m_lineGap + font.ascender - font.descender;
-				m_lineGap = font.lineGap;
-				m_lineHeight = font.ascender - font.descender;
+				m_height += m_line_gap + font.ascender - font.descender;
+				m_line_gap = font.line_gap;
+				m_line_height = font.ascender - font.descender;
 				m_x = 0;
 				break;
 			}
@@ -115,7 +115,7 @@ void text_metrics::append_text(ft_handle _fontHandle, const wchar_t* _string)
 
 text_line_metrics::text_line_metrics(const font_info& _fontInfo)
 {
-	m_lineHeight = _fontInfo.ascender - _fontInfo.descender + _fontInfo.lineGap;
+	m_line_height = _fontInfo.ascender - _fontInfo.descender + _fontInfo.line_gap;
 }
 
 uint32_t text_line_metrics::get_line_count(const char* _string) const
@@ -234,7 +234,7 @@ void text_line_metrics::get_visible_text(const char* _string, float _top, float 
 	unicode_point codepoint = 0;
 	uint32_t state = 0;
 	// y is bottom of a text line
-	float y = m_lineHeight;
+	float y = m_line_height;
 	while (*_string && (y < _top) )
 	{
 		for (; *_string; ++_string)
@@ -243,7 +243,7 @@ void text_line_metrics::get_visible_text(const char* _string, float _top, float 
 			{
 				if(codepoint == L'\n')
 				{
-					y += m_lineHeight;
+					y += m_line_height;
 					++_string;
 					break;
 				}
@@ -255,7 +255,7 @@ void text_line_metrics::get_visible_text(const char* _string, float _top, float 
 	_begin = _string;
 
 	// y is now top of a text line
-	y -= m_lineHeight;
+	y -= m_line_height;
 	while ( (*_string) && (y < _bottom) )
 	{
 		for (; *_string; ++_string)
@@ -264,7 +264,7 @@ void text_line_metrics::get_visible_text(const char* _string, float _top, float 
 			{
 				if(codepoint == L'\n')
 				{
-					y += m_lineHeight;
+					y += m_line_height;
 					++_string;
 					break;
 				}
@@ -279,7 +279,7 @@ void text_line_metrics::get_visible_text(const char* _string, float _top, float 
 void text_line_metrics::get_visible_text(const wchar_t* _string, float _top, float _bottom, const wchar_t*& _begin, const wchar_t*& _end)
 {
 	// y is bottom of a text line
-	float y = m_lineHeight;
+	float y = m_line_height;
 
 	const wchar_t* _textEnd = _string + wcslen(_string);
 
@@ -289,7 +289,7 @@ void text_line_metrics::get_visible_text(const wchar_t* _string, float _top, flo
 		{			
 			if(*_current == L'\n')
 			{
-				y += m_lineHeight;
+				y += m_line_height;
 				++_string;
 				break;
 			}
@@ -298,14 +298,14 @@ void text_line_metrics::get_visible_text(const wchar_t* _string, float _top, flo
 	_begin = _string;
 
 	// y is now top of a text line
-	y -= m_lineHeight;
+	y -= m_line_height;
 	while (y < _bottom )
 	{
 		for (const wchar_t* _current = _string; _current < _textEnd; ++_current)
 		{			
 			if(*_current == L'\n')
 			{
-				y += m_lineHeight;
+				y += m_line_height;
 				++_string;
 				break;
 			}

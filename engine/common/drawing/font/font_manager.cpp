@@ -178,8 +178,8 @@ font_info true_type_font::get_font_info()
 	outfont_info.scale = 1.0f;
 	outfont_info.ascender = metrics.ascender / 64.0f;
 	outfont_info.descender = metrics.descender / 64.0f;
-	outfont_info.lineGap = (metrics.height - metrics.ascender + metrics.descender) / 64.0f;
-	outfont_info.maxAdvanceWidth = metrics.max_advance/ 64.0f;
+	outfont_info.line_gap = (metrics.height - metrics.ascender + metrics.descender) / 64.0f;
+	outfont_info.max_advance_width = metrics.max_advance/ 64.0f;
 
 	outfont_info.underlinePosition = FT_MulFix(m_font->face->underline_position, metrics.y_scale) / 64.0f;
 	outfont_info.underlineThickness = FT_MulFix(m_font->face->underline_thickness, metrics.y_scale) / 64.0f;
@@ -552,7 +552,7 @@ ft_handle font_manager::create_font_by_pixel_size(tt_handle ttf_handle, uint32_t
 	cached_font& font = m_cached_fonts[font_idx];
 	font.trueTypeFont = ttf;
 	font.info = ttf->get_font_info();
-	font.info.fontType  = int16_t(font_type);
+	font.info.font_type  = int16_t(font_type);
 	font.info.pixelSize = uint16_t(pixel_size);
 	font.cached_glyphs.clear();
 	font.master_handle.idx = bx::HandleAlloc::invalid;
@@ -572,8 +572,8 @@ ft_handle font_manager::create_scaled_font_to_pixel_size(ft_handle base_font_han
 	newfont_info.scale     = static_cast<float>(pixel_size) / static_cast<float>(info.pixelSize);
 	newfont_info.ascender  = (newfont_info.ascender * newfont_info.scale);
 	newfont_info.descender = (newfont_info.descender * newfont_info.scale);
-	newfont_info.lineGap   = (newfont_info.lineGap * newfont_info.scale);
-	newfont_info.maxAdvanceWidth    = (newfont_info.maxAdvanceWidth * newfont_info.scale);
+	newfont_info.line_gap   = (newfont_info.line_gap * newfont_info.scale);
+	newfont_info.max_advance_width    = (newfont_info.max_advance_width * newfont_info.scale);
 	newfont_info.underlineThickness = (newfont_info.underlineThickness * newfont_info.scale);
 	newfont_info.underlinePosition  = (newfont_info.underlinePosition * newfont_info.scale);
 
@@ -644,7 +644,7 @@ bool font_manager::preload_glyph(ft_handle font_handle_ft, unicode_point code_po
 	{
 		glyph_info glyphInfo;
 
-		switch (font.info.fontType)
+		switch (font.info.font_type)
 		{
 			case FONT_TYPE_ALPHA:
 				font.trueTypeFont->bakeGlyphAlpha(code_point, glyphInfo, m_buffer);

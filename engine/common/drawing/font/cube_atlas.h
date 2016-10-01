@@ -52,106 +52,106 @@ struct atlas_region
 
 class atlas
 {
-public:
-	/// create an empty dynamic atlas (region can be updated and added)
-	/// @param textureSize an atlas creates a texture cube of 6 faces with size equal to (textureSize*textureSize * sizeof(RGBA))
-	/// @param maxRegionCount maximum number of region allowed in the atlas
-	atlas(uint16_t _textureSize, uint16_t _maxRegionsCount = 4096);
+	public:
+		/// create an empty dynamic atlas (region can be updated and added)
+		/// @param textureSize an atlas creates a texture cube of 6 faces with size equal to (textureSize*textureSize * sizeof(RGBA))
+		/// @param maxRegionCount maximum number of region allowed in the atlas
+		atlas(uint16_t _textureSize, uint16_t _maxRegionsCount = 4096);
 
-	/// initialize a static atlas with serialized data	(region can be updated but not added)
-	/// @param textureSize an atlas creates a texture cube of 6 faces with size equal to (textureSize*textureSize * sizeof(RGBA))
-	/// @param textureBuffer buffer of size 6*textureSize*textureSize*sizeof(uint32_t) (will be copied)
-	/// @param regionCount number of region in the atlas
-	/// @param regionBuffer buffer containing the region (will be copied)
-	/// @param maxRegionCount maximum number of region allowed in the atlas
-	atlas(uint16_t _textureSize, const uint8_t* _textureBuffer, uint16_t _regionCount, const uint8_t* _regionBuffer, uint16_t _maxRegionsCount = 4096);
-	~atlas();
+		/// initialize a static atlas with serialized data	(region can be updated but not added)
+		/// @param textureSize an atlas creates a texture cube of 6 faces with size equal to (textureSize*textureSize * sizeof(RGBA))
+		/// @param textureBuffer buffer of size 6*textureSize*textureSize*sizeof(uint32_t) (will be copied)
+		/// @param regionCount number of region in the atlas
+		/// @param regionBuffer buffer containing the region (will be copied)
+		/// @param maxRegionCount maximum number of region allowed in the atlas
+		atlas(uint16_t _textureSize, const uint8_t* _textureBuffer, uint16_t _regionCount, const uint8_t* _regionBuffer, uint16_t _maxRegionsCount = 4096);
+		~atlas();
 
-	/// add a region to the atlas, and copy the content of mem to the underlying texture
-	uint16_t addRegion(uint16_t _width, uint16_t _height, const uint8_t* _bitmapBuffer, atlas_region::Type _type = atlas_region::TYPE_BGRA8, uint16_t outline = 0);
+		/// add a region to the atlas, and copy the content of mem to the underlying texture
+		uint16_t addRegion(uint16_t _width, uint16_t _height, const uint8_t* _bitmapBuffer, atlas_region::Type _type = atlas_region::TYPE_BGRA8, uint16_t outline = 0);
 
-	/// update a preallocated region
-	void updateRegion(const atlas_region& _region, const uint8_t* _bitmapBuffer);
+		/// update a preallocated region
+		void updateRegion(const atlas_region& _region, const uint8_t* _bitmapBuffer);
 
-	/// Pack the UV coordinates of the four corners of a region to a vertex buffer using the supplied vertex format.
-	/// v0 -- v3
-	/// |     |     encoded in that order:  v0,v1,v2,v3
-	/// v1 -- v2
-	/// @remark the UV are four signed short normalized components.
-	/// @remark the x,y,z components encode cube uv coordinates. The w component encode the color channel if any.
-	/// @param handle handle to the region we are interested in
-	/// @param vertexBuffer address of the first vertex we want to update. Must be valid up to vertexBuffer + offset + 3*stride + 4*sizeof(int16_t), which means the buffer must contains at least 4 vertex includind the first.
-	/// @param offset byte offset to the first uv coordinate of the vertex in the buffer
-	/// @param stride stride between tho UV coordinates, usually size of a Vertex.
-	void packUV(uint16_t _regionHandle, uint8_t* _vertexBuffer, uint32_t _offset, uint32_t _stride) const;
-	void packUV(const atlas_region& _region, uint8_t* _vertexBuffer, uint32_t _offset, uint32_t _stride) const;
+		/// Pack the UV coordinates of the four corners of a region to a vertex buffer using the supplied vertex format.
+		/// v0 -- v3
+		/// |     |     encoded in that order:  v0,v1,v2,v3
+		/// v1 -- v2
+		/// @remark the UV are four signed short normalized components.
+		/// @remark the x,y,z components encode cube uv coordinates. The w component encode the color channel if any.
+		/// @param handle handle to the region we are interested in
+		/// @param vertexBuffer address of the first vertex we want to update. Must be valid up to vertexBuffer + offset + 3*stride + 4*sizeof(int16_t), which means the buffer must contains at least 4 vertex includind the first.
+		/// @param offset byte offset to the first uv coordinate of the vertex in the buffer
+		/// @param stride stride between tho UV coordinates, usually size of a Vertex.
+		void packUV(uint16_t _regionHandle, uint8_t* _vertexBuffer, uint32_t _offset, uint32_t _stride) const;
+		void packUV(const atlas_region& _region, uint8_t* _vertexBuffer, uint32_t _offset, uint32_t _stride) const;
 
-	/// Same as packUV but pack a whole face of the atlas cube, mostly used for debugging and visualizing atlas
-	void packFaceLayerUV(uint32_t _idx, uint8_t* _vertexBuffer, uint32_t _offset, uint32_t _stride) const;
+		/// Same as packUV but pack a whole face of the atlas cube, mostly used for debugging and visualizing atlas
+		void packFaceLayerUV(uint32_t _idx, uint8_t* _vertexBuffer, uint32_t _offset, uint32_t _stride) const;
 
-	/// return the TextureHandle (cube) of the atlas
-	bgfx::TextureHandle getTextureHandle() const
-	{
-		return m_textureHandle;
-	}
+		/// return the TextureHandle (cube) of the atlas
+		bgfx::TextureHandle getTextureHandle() const
+		{
+			return m_textureHandle;
+		}
 
-	//retrieve a region info
-	const atlas_region& getRegion(uint16_t _handle) const
-	{
-		return m_regions[_handle];
-	}
+		//retrieve a region info
+		const atlas_region& getRegion(uint16_t _handle) const
+		{
+			return m_regions[_handle];
+		}
 
-	/// retrieve the size of side of a texture in pixels
-	uint16_t getTextureSize() const
-	{
-		return m_textureSize;
-	}
+		/// retrieve the size of side of a texture in pixels
+		uint16_t getTextureSize() const
+		{
+			return m_textureSize;
+		}
 
-	/// retrieve the usage ratio of the atlas
-	//float getUsageRatio() const { return 0.0f; }
+		/// retrieve the usage ratio of the atlas
+		//float getUsageRatio() const { return 0.0f; }
 
-	/// retrieve the numbers of region in the atlas
-	uint16_t getRegionCount() const
-	{
-		return m_regionCount;
-	}
+		/// retrieve the numbers of region in the atlas
+		uint16_t getRegionCount() const
+		{
+			return m_regionCount;
+		}
 
-	/// retrieve a pointer to the region buffer (in order to serialize it)
-	const atlas_region* getRegionBuffer() const
-	{
-		return m_regions;
-	}
+		/// retrieve a pointer to the region buffer (in order to serialize it)
+		const atlas_region* getRegionBuffer() const
+		{
+			return m_regions;
+		}
 
-	/// retrieve the byte size of the texture
-	uint32_t getTextureBufferSize() const
-	{
-		return 6 * m_textureSize * m_textureSize * 4;
-	}
+		/// retrieve the byte size of the texture
+		uint32_t getTextureBufferSize() const
+		{
+			return 6 * m_textureSize * m_textureSize * 4;
+		}
 
-	/// retrieve the mirrored texture buffer (to serialize it)
-	const uint8_t* getTextureBuffer() const
-	{
-		return m_textureBuffer;
-	}
+		/// retrieve the mirrored texture buffer (to serialize it)
+		const uint8_t* getTextureBuffer() const
+		{
+			return m_textureBuffer;
+		}
 
-private:
-	void init();
+	private:
+		void init();
 
-	struct packed_layer;
-	packed_layer* m_layers;
-	atlas_region* m_regions;
-	uint8_t* m_textureBuffer;
+		struct packed_layer;
+		packed_layer* m_layers;
+		atlas_region* m_regions;
+		uint8_t* m_textureBuffer;
 
-	uint32_t m_usedLayers;
-	uint32_t m_usedFaces;
+		uint32_t m_usedLayers;
+		uint32_t m_usedFaces;
 
-	bgfx::TextureHandle m_textureHandle;
-	uint16_t m_textureSize;
-	float m_texelSize;
-	float m_texelOffset[2];
+		bgfx::TextureHandle m_textureHandle;
+		uint16_t m_textureSize;
+		float m_texelSize;
+		float m_texelOffset[2];
 
-	uint16_t m_regionCount;
-	uint16_t m_maxRegionCount;
+		uint16_t m_regionCount;
+		uint16_t m_maxRegionCount;
 };
 
 #endif // CUBE_ATLAS_H_HEADER_GUARD

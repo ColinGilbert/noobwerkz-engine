@@ -30,8 +30,8 @@ class text_metrics
 		float m_width;
 		float m_height;
 		float m_x;
-		float m_lineHeight;
-		float m_lineGap;
+		float m_line_height;
+		float m_line_gap;
 };
 
 /// Compute text crop area for text using a single font.
@@ -41,7 +41,7 @@ class text_line_metrics
 		text_line_metrics(const font_info& _fontInfo);
 
 		/// Return the height of a line of text using the given font.
-		float get_line_height() const { return m_lineHeight; }
+		float get_line_height() const { return m_line_height; }
 
 		/// Return the number of text line in the given text.
 		uint32_t get_line_count(const char* _string) const;
@@ -62,7 +62,7 @@ class text_line_metrics
 		void get_visible_text(const wchar_t* _string, float _top, float _bottom, const wchar_t*& _begin, const wchar_t*& _end);
 
 	private:
-		float m_lineHeight;
+		float m_line_height;
 };
 
 #endif // TEXT_METRICS_H_HEADER_GUARD
