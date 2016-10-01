@@ -11,7 +11,7 @@
 #include <bx/handlealloc.h>
 #include <bgfx/bgfx.h>
 
-class Atlas;
+class atlas;
 
 #define MAX_OPENED_FILES 64
 #define MAX_OPENED_FONT  64
@@ -123,7 +123,7 @@ class FontManager
 public:
 	/// Create the font manager using an external cube atlas (doesn't take
 	/// ownership of the atlas).
-	FontManager(Atlas* _atlas);
+	FontManager(atlas* _atlas);
 
 	/// Create the font manager and create the texture cube as BGRA8 with
 	/// linear filtering.
@@ -132,7 +132,7 @@ public:
 	~FontManager();
 
 	/// Retrieve the atlas used by the font manager (e.g. to add stuff to it)
-	const Atlas* getAtlas() const
+	const atlas* getatlas() const
 	{
 		return m_atlas;
 	}
@@ -141,46 +141,46 @@ public:
 	/// thus can be freed or reused after this call.
 	///
 	/// @return invalid handle if the loading fail
-	TrueTypeHandle createTtf(const uint8_t* buffer, uint32_t _size);
+	TrueTypeHandle create_ttf(const uint8_t* buffer, uint32_t _size);
 
 	/// Unload a TrueType font (free font memory) but keep loaded glyphs.
-	void destroyTtf(TrueTypeHandle);
+	void destroy_ttf(TrueTypeHandle);
 
 	/// Return a font whose height is a fixed pixel size.
-	FontHandle createFontByPixelSize(TrueTypeHandle, uint32_t typeface_index, uint32_t pixel_size, uint32_t font_type = FONT_TYPE_ALPHA);
+	FontHandle create_font_by_pixel_size(TrueTypeHandle, uint32_t typeface_index, uint32_t pixel_size, uint32_t font_type = FONT_TYPE_ALPHA);
 
 	/// Return a scaled child font whose height is a fixed pixel size.
 	FontHandle createScaledFontToPixelSize(FontHandle, uint32_t pixel_size);
 
 	/// destroy a font (truetype or baked)
-	void destroyFont(FontHandle);
+	void destroy_font(FontHandle);
 
 	/// Preload a set of glyphs from a TrueType file.
 	///
 	/// @return True if every glyph could be preloaded, false otherwise if
 	///   the Font is a baked font, this only do validation on the characters.
-	bool preloadGlyph(FontHandle, const wchar_t* _string);
+	bool preload_glyph(FontHandle, const wchar_t* _string);
 
 	/// Preload a single glyph, return true on success.
-	bool preloadGlyph(FontHandle, CodePoint);
+	bool preload_glyph(FontHandle, CodePoint);
 
 	/// Return the font descriptor of a font.
 	///
 	/// @remark the handle is required to be valid
-	const FontInfo& getFontInfo(FontHandle) const;
+	const FontInfo& get_font_info(FontHandle) const;
 
 	/// Return the rendering informations about the glyph region. Load the
 	/// glyph from a TrueType font if possible
 	///
-	const GlyphInfo* getGlyphInfo(FontHandle, CodePoint);
+	const GlyphInfo* get_glyph_info(FontHandle, CodePoint);
 
-	const GlyphInfo& getBlackGlyph() const
+	const GlyphInfo& get_black_glyph() const
 	{
 		return m_blackGlyph;
 	}
 
 private:
-	struct CachedFont;
+	struct cached_font;
 	struct CachedFile
 	{
 		uint8_t* buffer;
@@ -188,13 +188,13 @@ private:
 	};
 
 	void init();
-	bool addBitmap(GlyphInfo&, const uint8_t*);
+	bool add_bitmap(GlyphInfo&, const uint8_t*);
 
 	bool m_owns_atlas;
-	Atlas* m_atlas;
+	atlas* m_atlas;
 
 	bx::HandleAllocT<MAX_OPENED_FONT> m_font_handles;
-	CachedFont* m_cached_fonts;
+	cached_font* m_cached_fonts;
 
 	bx::HandleAllocT<MAX_OPENED_FILES> m_file_handles;
 	CachedFile* m_cached_files;

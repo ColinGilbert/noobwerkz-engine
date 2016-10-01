@@ -39,17 +39,17 @@ struct TextRectangle
 };
 
 class TextBuffer;
-class TextBufferManager
+class text_buffer_manager
 {
 public:
 
 	/// TextBuffer is bound to a fontManager for glyph retrieval
 	/// @remark the ownership of the manager is not taken
-	TextBufferManager(FontManager* _fontManager);
-	~TextBufferManager();
+	text_buffer_manager(FontManager* _fontManager);
+	~text_buffer_manager();
 
 	TextBufferHandle createTextBuffer(uint32_t _type, BufferType::Enum _bufferType);
-	void destroyTextBuffer(TextBufferHandle _handle);
+	void destroy_text_buffer(TextBufferHandle _handle);
 	void submitTextBuffer(TextBufferHandle _handle, uint8_t _id, int32_t _depth = 0);
 
 	void setStyle(TextBufferHandle _handle, uint32_t _flags = STYLE_NORMAL);
@@ -69,7 +69,7 @@ public:
 	void appendText(TextBufferHandle _handle, FontHandle _fontHandle, const wchar_t* _string, const wchar_t* _end = NULL);
 		
 	/// Append a whole face of the atlas cube, mostly used for debugging and visualizing atlas.
-	void appendAtlasFace(TextBufferHandle _handle, uint16_t _faceIndex);
+	void appendatlasFace(TextBufferHandle _handle, uint16_t _faceIndex);
 
 	/// Clear the text buffer and reset its state (pen/color).
 	void clearTextBuffer(TextBufferHandle _handle);

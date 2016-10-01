@@ -8,7 +8,7 @@
 #include "text_metrics.h"
 #include "utf8.h"
 
-TextMetrics::TextMetrics(FontManager* _fontManager)
+text_metrics::text_metrics(FontManager* _fontManager)
 	: m_fontManager(_fontManager)
 	, m_width(0)
 	, m_height(0)
@@ -18,9 +18,9 @@ TextMetrics::TextMetrics(FontManager* _fontManager)
 {
 }
 
-void TextMetrics::appendText(FontHandle _fontHandle, const char* _string)
+void text_metrics::appendText(FontHandle _fontHandle, const char* _string)
 {
-	const FontInfo& font = m_fontManager->getFontInfo(_fontHandle);
+	const FontInfo& font = m_fontManager->get_font_info(_fontHandle);
 
 	if (font.lineGap > m_lineGap)
 	{
@@ -41,7 +41,7 @@ void TextMetrics::appendText(FontHandle _fontHandle, const char* _string)
 	{
 		if (!utf8_decode(&state, (uint32_t*)&codepoint, *_string) )
 		{
-			const GlyphInfo* glyph = m_fontManager->getGlyphInfo(_fontHandle, codepoint);
+			const GlyphInfo* glyph = m_fontManager->get_glyph_info(_fontHandle, codepoint);
 			if (NULL != glyph)
 			{
 				if (codepoint == L'\n')
@@ -69,9 +69,9 @@ void TextMetrics::appendText(FontHandle _fontHandle, const char* _string)
 	BX_CHECK(state == UTF8_ACCEPT, "The string is not well-formed");
 }
 
-void TextMetrics::appendText(FontHandle _fontHandle, const wchar_t* _string)
+void text_metrics::appendText(FontHandle _fontHandle, const wchar_t* _string)
 {
-	const FontInfo& font = m_fontManager->getFontInfo(_fontHandle);
+	const FontInfo& font = m_fontManager->get_font_info(_fontHandle);
 
 	if (font.lineGap > m_lineGap) 
 	{
@@ -88,7 +88,7 @@ void TextMetrics::appendText(FontHandle _fontHandle, const wchar_t* _string)
 	for (uint32_t ii = 0, end = (uint32_t)wcslen(_string); ii < end; ++ii)
 	{
 		uint32_t codepoint = _string[ii];
-		const GlyphInfo* glyph = m_fontManager->getGlyphInfo(_fontHandle, codepoint);
+		const GlyphInfo* glyph = m_fontManager->get_glyph_info(_fontHandle, codepoint);
 		if (NULL != glyph)
 		{
 			if (codepoint == L'\n')
@@ -118,7 +118,7 @@ TextLineMetrics::TextLineMetrics(const FontInfo& _fontInfo)
 	m_lineHeight = _fontInfo.ascender - _fontInfo.descender + _fontInfo.lineGap;
 }
 
-uint32_t TextLineMetrics::getLineCount(const char* _string) const
+uint32_t TextLineMetrics::get_line_count(const char* _string) const
 {
 	CodePoint codepoint = 0;
 	uint32_t state = 0;
@@ -138,7 +138,7 @@ uint32_t TextLineMetrics::getLineCount(const char* _string) const
 	return lineCount;
 }
 
-uint32_t TextLineMetrics::getLineCount(const wchar_t* _string) const
+uint32_t TextLineMetrics::get_line_count(const wchar_t* _string) const
 {	
 	uint32_t lineCount = 1;
 	for ( ;*_string != L'\0'; ++_string)

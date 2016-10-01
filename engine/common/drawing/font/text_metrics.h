@@ -8,10 +8,10 @@
 
 #include "font_manager.h"
 
-class TextMetrics
+class text_metrics
 {
 	public:
-		TextMetrics(FontManager* _fontManager);
+		text_metrics(FontManager* _fontManager);
 
 		/// Append an ASCII/utf-8 string to the metrics helper.
 		void appendText(FontHandle _fontHandle, const char* _string);
@@ -44,10 +44,10 @@ class TextLineMetrics
 		float getLineHeight() const { return m_lineHeight; }
 
 		/// Return the number of text line in the given text.
-		uint32_t getLineCount(const char* _string) const;
+		uint32_t get_line_count(const char* _string) const;
 
 		/// Return the number of text line in the given text.
-		uint32_t getLineCount(const wchar_t* _string) const;
+		uint32_t get_line_count(const wchar_t* _string) const;
 
 		/// Return the first and last character visible in the [_firstLine, _lastLine] range.
 		void getSubText(const char* _string, uint32_t _firstLine, uint32_t _lastLine, const char*& _begin, const char*& _end);

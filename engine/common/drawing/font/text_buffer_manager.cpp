@@ -77,7 +77,7 @@ class TextBuffer
 
 		/// Append a whole face of the atlas cube, mostly used for debugging
 		/// and visualizing atlas.
-		void appendAtlasFace(uint16_t _faceIndex);
+		void appendatlasFace(uint16_t _faceIndex);
 
 		/// Clear the text buffer and reset its state (pen/color)
 		void clearTextBuffer();
@@ -129,7 +129,7 @@ class TextBuffer
 		}
 
 	private:
-		void appendGlyph(FontHandle _handle, CodePoint _codePoint);
+		void append_glyph(FontHandle _handle, CodePoint _codePoint);
 		void verticalCenterLastLine(float _txtDecalY, float _top, float _bottom);
 
 		static uint32_t toABGR(uint32_t _rgba)
@@ -246,7 +246,7 @@ void TextBuffer::appendText(FontHandle _fontHandle, const char* _string, const c
 	{
 		if (utf8_decode(&state, (uint32_t*)&codepoint, *_string) == UTF8_ACCEPT )
 		{
-			appendGlyph(_fontHandle, codepoint);
+			append_glyph(_fontHandle, codepoint);
 		}
 	}
 
@@ -273,11 +273,11 @@ void TextBuffer::appendText(FontHandle _fontHandle, const wchar_t* _string, cons
 	for (const wchar_t* _current = _string; _current < _end; ++_current)
 	{
 		uint32_t _codePoint = *_current;
-		appendGlyph(_fontHandle, _codePoint);
+		append_glyph(_fontHandle, _codePoint);
 	}
 }
 
-void TextBuffer::appendAtlasFace(uint16_t _faceIndex)
+void TextBuffer::appendatlasFace(uint16_t _faceIndex)
 {
 	if( m_vertexCount/4 >= MAX_BUFFERED_CHARACTERS)
 	{
@@ -286,10 +286,10 @@ void TextBuffer::appendAtlasFace(uint16_t _faceIndex)
 
 	float x0 = m_penX;
 	float y0 = m_penY;
-	float x1 = x0 + (float)m_fontManager->getAtlas()->getTextureSize();
-	float y1 = y0 + (float)m_fontManager->getAtlas()->getTextureSize();
+	float x1 = x0 + (float)m_fontManager->getatlas()->getTextureSize();
+	float y1 = y0 + (float)m_fontManager->getatlas()->getTextureSize();
 
-	m_fontManager->getAtlas()->packFaceLayerUV(_faceIndex
+	m_fontManager->getatlas()->packFaceLayerUV(_faceIndex
 			, (uint8_t*)m_vertexBuffer
 			, sizeof(TextVertex) * m_vertexCount + offsetof(TextVertex, u)
 			, sizeof(TextVertex)
@@ -327,16 +327,16 @@ void TextBuffer::clearTextBuffer()
 	m_rectangle.height = 0;
 }
 
-void TextBuffer::appendGlyph(FontHandle _handle, CodePoint _codePoint)
+void TextBuffer::append_glyph(FontHandle _handle, CodePoint _codePoint)
 {
-	const GlyphInfo* glyph = m_fontManager->getGlyphInfo(_handle, _codePoint);
+	const GlyphInfo* glyph = m_fontManager->get_glyph_info(_handle, _codePoint);
 	BX_WARN(NULL != glyph, "Glyph not found (font handle %d, code point %d)", _handle.idx, _codePoint);
 	if (NULL == glyph)
 	{
 		return;
 	}
 
-	const FontInfo& font = m_fontManager->getFontInfo(_handle);
+	const FontInfo& font = m_fontManager->get_font_info(_handle);
 
 	if( m_vertexCount/4 >= MAX_BUFFERED_CHARACTERS)
 	{
@@ -373,8 +373,8 @@ void TextBuffer::appendGlyph(FontHandle _handle, CodePoint _codePoint)
 	float kerning = 0 * font.scale;
 	m_penX += kerning;
 
-	const GlyphInfo& blackGlyph = m_fontManager->getBlackGlyph();
-	const Atlas* atlas = m_fontManager->getAtlas();
+	const GlyphInfo& blackGlyph = m_fontManager->get_black_glyph();
+	const atlas* atlas = m_fontManager->getatlas();
 
 	if (m_styleFlags & STYLE_BACKGROUND
 			&&  m_backgroundColor & 0xFF000000)
@@ -434,7 +434,7 @@ void TextBuffer::appendGlyph(FontHandle _handle, CodePoint _codePoint)
 		float x1 = ( (float)x0 + (glyph->advance_x) );
 		float y1 = y0 + font.underlineThickness;
 
-		m_fontManager->getAtlas()->packUV(blackGlyph.regionIndex, (uint8_t*)m_vertexBuffer, sizeof(TextVertex) * m_vertexCount + offsetof(TextVertex, u), sizeof(TextVertex));
+		m_fontManager->getatlas()->packUV(blackGlyph.regionIndex, (uint8_t*)m_vertexBuffer, sizeof(TextVertex) * m_vertexCount + offsetof(TextVertex, u), sizeof(TextVertex));
 
 		setVertex(m_vertexCount + 0, x0, y0, m_overlineColor, STYLE_OVERLINE);
 		setVertex(m_vertexCount + 1, x0, y1, m_overlineColor, STYLE_OVERLINE);
@@ -531,7 +531,7 @@ void TextBuffer::verticalCenterLastLine(float _dy, float _top, float _bottom)
 	}
 }
 
-TextBufferManager::TextBufferManager(FontManager* _fontManager) : m_fontManager(_fontManager)
+text_buffer_manager::text_buffer_manager(FontManager* _fontManager) : m_fontManager(_fontManager)
 {
 	m_textBuffers = new BufferCache[MAX_TEXT_BUFFER_COUNT];
 
@@ -588,7 +588,7 @@ TextBufferManager::TextBufferManager(FontManager* _fontManager) : m_fontManager(
 	u_texColor = bgfx::createUniform("u_texColor", bgfx::UniformType::Int1);
 }
 
-TextBufferManager::~TextBufferManager()
+text_buffer_manager::~text_buffer_manager()
 {
 	BX_CHECK(m_textBufferHandles.getNumHandles() == 0, "All the text buffers must be destroyed before destroying the manager");
 	delete [] m_textBuffers;
@@ -600,7 +600,7 @@ TextBufferManager::~TextBufferManager()
 	bgfx::destroyProgram(m_distanceSubpixelProgram);
 }
 
-TextBufferHandle TextBufferManager::createTextBuffer(uint32_t _type, BufferType::Enum _bufferType)
+TextBufferHandle text_buffer_manager::createTextBuffer(uint32_t _type, BufferType::Enum _bufferType)
 {
 	uint16_t textIdx = m_textBufferHandles.alloc();
 	BufferCache& bc = m_textBuffers[textIdx];
@@ -615,7 +615,7 @@ TextBufferHandle TextBufferManager::createTextBuffer(uint32_t _type, BufferType:
 	return ret;
 }
 
-void TextBufferManager::destroyTextBuffer(TextBufferHandle _handle)
+void text_buffer_manager::destroy_text_buffer(TextBufferHandle _handle)
 {
 	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 
@@ -658,7 +658,7 @@ void TextBufferManager::destroyTextBuffer(TextBufferHandle _handle)
 	}
 }
 
-void TextBufferManager::submitTextBuffer(TextBufferHandle _handle, uint8_t _id, int32_t _depth)
+void text_buffer_manager::submitTextBuffer(TextBufferHandle _handle, uint8_t _id, int32_t _depth)
 {
 	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 
@@ -674,7 +674,7 @@ void TextBufferManager::submitTextBuffer(TextBufferHandle _handle, uint8_t _id, 
 		return;
 	}
 
-	bgfx::setTexture(0, u_texColor, m_fontManager->getAtlas()->getTextureHandle() );
+	bgfx::setTexture(0, u_texColor, m_fontManager->getatlas()->getTextureHandle() );
 
 	switch (bc.fontType)
 	{
@@ -785,84 +785,84 @@ void TextBufferManager::submitTextBuffer(TextBufferHandle _handle, uint8_t _id, 
 	bgfx::submit(_id, prog, _depth);
 }
 
-void TextBufferManager::setStyle(TextBufferHandle _handle, uint32_t _flags)
+void text_buffer_manager::setStyle(TextBufferHandle _handle, uint32_t _flags)
 {
 	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	BufferCache& bc = m_textBuffers[_handle.idx];
 	bc.textBuffer->setStyle(_flags);
 }
 
-void TextBufferManager::setTextColor(TextBufferHandle _handle, uint32_t _rgba)
+void text_buffer_manager::setTextColor(TextBufferHandle _handle, uint32_t _rgba)
 {
 	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	BufferCache& bc = m_textBuffers[_handle.idx];
 	bc.textBuffer->setTextColor(_rgba);
 }
 
-void TextBufferManager::setBackgroundColor(TextBufferHandle _handle, uint32_t _rgba)
+void text_buffer_manager::setBackgroundColor(TextBufferHandle _handle, uint32_t _rgba)
 {
 	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	BufferCache& bc = m_textBuffers[_handle.idx];
 	bc.textBuffer->setBackgroundColor(_rgba);
 }
 
-void TextBufferManager::setOverlineColor(TextBufferHandle _handle, uint32_t _rgba)
+void text_buffer_manager::setOverlineColor(TextBufferHandle _handle, uint32_t _rgba)
 {
 	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	BufferCache& bc = m_textBuffers[_handle.idx];
 	bc.textBuffer->setOverlineColor(_rgba);
 }
 
-void TextBufferManager::setUnderlineColor(TextBufferHandle _handle, uint32_t _rgba)
+void text_buffer_manager::setUnderlineColor(TextBufferHandle _handle, uint32_t _rgba)
 {
 	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	BufferCache& bc = m_textBuffers[_handle.idx];
 	bc.textBuffer->setUnderlineColor(_rgba);
 }
 
-void TextBufferManager::setStrikeThroughColor(TextBufferHandle _handle, uint32_t _rgba)
+void text_buffer_manager::setStrikeThroughColor(TextBufferHandle _handle, uint32_t _rgba)
 {
 	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	BufferCache& bc = m_textBuffers[_handle.idx];
 	bc.textBuffer->setStrikeThroughColor(_rgba);
 }
 
-void TextBufferManager::setPenPosition(TextBufferHandle _handle, float _x, float _y)
+void text_buffer_manager::setPenPosition(TextBufferHandle _handle, float _x, float _y)
 {
 	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	BufferCache& bc = m_textBuffers[_handle.idx];
 	bc.textBuffer->setPenPosition(_x, _y);
 }
 
-void TextBufferManager::appendText(TextBufferHandle _handle, FontHandle _fontHandle, const char* _string, const char* _end)
+void text_buffer_manager::appendText(TextBufferHandle _handle, FontHandle _fontHandle, const char* _string, const char* _end)
 {
 	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	BufferCache& bc = m_textBuffers[_handle.idx];
 	bc.textBuffer->appendText(_fontHandle, _string, _end);
 }
 
-void TextBufferManager::appendText(TextBufferHandle _handle, FontHandle _fontHandle, const wchar_t* _string, const wchar_t* _end)
+void text_buffer_manager::appendText(TextBufferHandle _handle, FontHandle _fontHandle, const wchar_t* _string, const wchar_t* _end)
 {
 	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	BufferCache& bc = m_textBuffers[_handle.idx];
 	bc.textBuffer->appendText(_fontHandle, _string, _end);
 }
 
-void TextBufferManager::appendAtlasFace(TextBufferHandle _handle, uint16_t _faceIndex)
+void text_buffer_manager::appendatlasFace(TextBufferHandle _handle, uint16_t _faceIndex)
 {
 	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	BufferCache& bc = m_textBuffers[_handle.idx];
-	bc.textBuffer->appendAtlasFace(_faceIndex);
+	bc.textBuffer->appendatlasFace(_faceIndex);
 }
 
-void TextBufferManager::clearTextBuffer(TextBufferHandle _handle)
+void text_buffer_manager::clearTextBuffer(TextBufferHandle _handle)
 {
 	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	BufferCache& bc = m_textBuffers[_handle.idx];
 	bc.textBuffer->clearTextBuffer();
 }
 
-TextRectangle TextBufferManager::getRectangle(TextBufferHandle _handle) const
+TextRectangle text_buffer_manager::getRectangle(TextBufferHandle _handle) const
 {
 	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	BufferCache& bc = m_textBuffers[_handle.idx];

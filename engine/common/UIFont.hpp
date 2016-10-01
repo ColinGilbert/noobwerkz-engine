@@ -14,7 +14,7 @@ namespace noob
 {
 	
 
-	// TextBufferManager depends on FontManager. This class brings them together.
+	// text_buffer_manager depends on FontManager. This class brings them together.
 	class ui_font
 	{
 		public:
@@ -33,7 +33,7 @@ namespace noob
 			float window_width, window_height;
 			uint32_t font_colour;
 			FontManager* font_manager;
-			TextBufferManager* text_buffer_manager;
+			text_buffer_manager* buffer;
 			TextBufferHandle text_to_draw;
 			TrueTypeHandle ttf_handle;
 			FontHandle font_handle;

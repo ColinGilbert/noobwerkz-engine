@@ -11,16 +11,16 @@ void noob::ui_font::init(const std::string& filename, size_t font_size, float wi
 	window_width = win_width;
 	window_height = win_height;
 	font_manager = new FontManager(1024);
-	text_buffer_manager = new TextBufferManager(font_manager);
+	buffer = new text_buffer_manager(font_manager);
 
 	ttf_handle = load_ttf(font_manager, filename);
-	font_handle = font_manager->createFontByPixelSize(ttf_handle, 0, font_size, FONT_TYPE_ALPHA);
+	font_handle = font_manager->create_font_by_pixel_size(ttf_handle, 0, font_size, FONT_TYPE_ALPHA);
 
-	font_manager->preloadGlyph(font_handle, L"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=_+[]{}!@#$%^&*()`~,<>/?\\|'\";:. \n");
+	font_manager->preload_glyph(font_handle, L"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=_+[]{}!@#$%^&*()`~,<>/?\\|'\";:. \n");
 
-	font_manager->destroyTtf(ttf_handle);
+	font_manager->destroy_ttf(ttf_handle);
 
-	text_to_draw = text_buffer_manager->createTextBuffer(FONT_TYPE_ALPHA, BufferType::Transient);//FONT_TYPE_ALPHA, BufferType::Transient);
+	text_to_draw = buffer->createTextBuffer(FONT_TYPE_ALPHA, BufferType::Transient);//FONT_TYPE_ALPHA, BufferType::Transient);
 }
 
 
@@ -38,18 +38,18 @@ void noob::ui_font::draw_text(uint8_t view_id, const std::string& message, float
 	bgfx::setViewTransform(view_id, view_matrix, ortho);
 	bgfx::setViewRect(view_id, 0, 0, window_width, window_height);
 	
-	text_buffer_manager->clearTextBuffer(text_to_draw);
-	text_buffer_manager->setPenPosition(text_to_draw, x, y);
-	text_buffer_manager->appendText(text_to_draw, font_handle, message.c_str());
+	buffer->clearTextBuffer(text_to_draw);
+	buffer->setPenPosition(text_to_draw, x, y);
+	buffer->appendText(text_to_draw, font_handle, message.c_str());
 	// TextRectangle rect = textBufferManager->getRectangle(text_to_draw);
 	// bgfx::setState(BGFX_STATE_RGB_WRITE |BGFX_STATE_ALPHA_WRITE |BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA));
-	text_buffer_manager->submitTextBuffer(text_to_draw, view_id);
+	buffer->submitTextBuffer(text_to_draw, view_id);
 }
 
 
 void noob::ui_font::set_colour(uint32_t colour) noexcept(true)
 {
-	text_buffer_manager->setTextColor(text_to_draw, colour);
+	buffer->setTextColor(text_to_draw, colour);
 }
 
 
@@ -63,7 +63,7 @@ void noob::ui_font::set_window_dims(float width, float height) noexcept(true)
 TrueTypeHandle noob::ui_font::load_ttf(FontManager* _fm, const std::string& file_path) noexcept(true)
 {
 	std::string mem = noob::utils::load_file_as_string(file_path);
-	TrueTypeHandle handle = _fm->createTtf(reinterpret_cast<const unsigned char*>(mem.c_str()), mem.size());
+	TrueTypeHandle handle = _fm->create_ttf(reinterpret_cast<const unsigned char*>(mem.c_str()), mem.size());
 	return handle;
 	TrueTypeHandle invalid = BGFX_INVALID_HANDLE;
 	return invalid;

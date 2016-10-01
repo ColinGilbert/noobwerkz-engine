@@ -234,26 +234,26 @@ void RectanglePacker::merge()
 	}
 }
 
-struct Atlas::PackedLayer
+struct atlas::packed_layer
 {
 	RectanglePacker packer;
-	AtlasRegion faceRegion;
+	atlas_region faceRegion;
 };
 
-Atlas::Atlas(uint16_t _textureSize, uint16_t _maxRegionsCount) : m_usedLayers(0), m_usedFaces(0), m_textureSize(_textureSize), m_regionCount(0), m_maxRegionCount(_maxRegionsCount)
+atlas::atlas(uint16_t _textureSize, uint16_t _maxRegionsCount) : m_usedLayers(0), m_usedFaces(0), m_textureSize(_textureSize), m_regionCount(0), m_maxRegionCount(_maxRegionsCount)
 {
 	BX_CHECK(_textureSize >= 64 && _textureSize <= 4096, "Invalid _textureSize %d.", _textureSize);
 	BX_CHECK(_maxRegionsCount >= 64 && _maxRegionsCount <= 32000, "Invalid _maxRegionsCount %d.", _maxRegionsCount);
 
 	init();
 
-	m_layers = new PackedLayer[24];
+	m_layers = new packed_layer[24];
 	for (int ii = 0; ii < 24; ++ii)
 	{
 		m_layers[ii].packer.init(_textureSize, _textureSize);
 	}
 
-	m_regions = new AtlasRegion[_maxRegionsCount];
+	m_regions = new atlas_region[_maxRegionsCount];
 	m_textureBuffer = new uint8_t[ _textureSize * _textureSize * 6 * 4 ];
 	memset(m_textureBuffer, 0, _textureSize * _textureSize * 6 * 4);
 
@@ -264,22 +264,22 @@ Atlas::Atlas(uint16_t _textureSize, uint16_t _maxRegionsCount) : m_usedLayers(0)
 		);
 }
 
-Atlas::Atlas(uint16_t _textureSize, const uint8_t* _textureBuffer, uint16_t _regionCount, const uint8_t* _regionBuffer, uint16_t _maxRegionsCount) : m_usedLayers(24), m_usedFaces(6), m_textureSize(_textureSize), m_regionCount(_regionCount), m_maxRegionCount(_regionCount < _maxRegionsCount ? _regionCount : _maxRegionsCount)
+atlas::atlas(uint16_t _textureSize, const uint8_t* _textureBuffer, uint16_t _regionCount, const uint8_t* _regionBuffer, uint16_t _maxRegionsCount) : m_usedLayers(24), m_usedFaces(6), m_textureSize(_textureSize), m_regionCount(_regionCount), m_maxRegionCount(_regionCount < _maxRegionsCount ? _regionCount : _maxRegionsCount)
 {
 	BX_CHECK(_regionCount <= 64 && _maxRegionsCount <= 4096, "_regionCount %d, _maxRegionsCount %d", _regionCount, _maxRegionsCount);
 
 	init();
 
-	m_regions = new AtlasRegion[_regionCount];
+	m_regions = new atlas_region[_regionCount];
 	m_textureBuffer = new uint8_t[getTextureBufferSize()];
 
-	memcpy(m_regions, _regionBuffer, _regionCount * sizeof(AtlasRegion) );
+	memcpy(m_regions, _regionBuffer, _regionCount * sizeof(atlas_region) );
 	memcpy(m_textureBuffer, _textureBuffer, getTextureBufferSize() );
 
 	m_textureHandle = bgfx::createTextureCube(_textureSize, false, 1, bgfx::TextureFormat::BGRA8, BGFX_TEXTURE_NONE, bgfx::makeRef(m_textureBuffer, getTextureBufferSize()));
 }
 
-Atlas::~Atlas()
+atlas::~atlas()
 {
 	bgfx::destroyTexture(m_textureHandle);
 
@@ -288,7 +288,7 @@ Atlas::~Atlas()
 	delete [] m_textureBuffer;
 }
 
-void Atlas::init()
+void atlas::init()
 {
 	m_texelSize = static_cast<float>(std::numeric_limits<uint16_t>::max()) / static_cast<float>(m_textureSize);
 	float texelHalf = m_texelSize/2.0f;
@@ -317,7 +317,7 @@ void Atlas::init()
 }
 
 
-uint16_t Atlas::addRegion(uint16_t _width, uint16_t _height, const uint8_t* _bitmapBuffer, AtlasRegion::Type _type, uint16_t outline)
+uint16_t atlas::addRegion(uint16_t _width, uint16_t _height, const uint8_t* _bitmapBuffer, atlas_region::Type _type, uint16_t outline)
 {
 	if (m_regionCount >= m_maxRegionCount)
 	{
@@ -348,7 +348,7 @@ uint16_t Atlas::addRegion(uint16_t _width, uint16_t _height, const uint8_t* _bit
 
 		for (int ii = 0; ii < _type; ++ii)
 		{
-			AtlasRegion& region = m_layers[idx + ii].faceRegion;
+			atlas_region& region = m_layers[idx + ii].faceRegion;
 			region.x = 0;
 			region.y = 0;
 			region.width = m_textureSize;
@@ -365,7 +365,7 @@ uint16_t Atlas::addRegion(uint16_t _width, uint16_t _height, const uint8_t* _bit
 		}
 	}
 
-	AtlasRegion& region = m_regions[m_regionCount];
+	atlas_region& region = m_regions[m_regionCount];
 	region.x = xx;
 	region.y = yy;
 	region.width = _width;
@@ -382,14 +382,14 @@ uint16_t Atlas::addRegion(uint16_t _width, uint16_t _height, const uint8_t* _bit
 	return m_regionCount++;
 }
 
-void Atlas::updateRegion(const AtlasRegion& _region, const uint8_t* _bitmapBuffer)
+void atlas::updateRegion(const atlas_region& _region, const uint8_t* _bitmapBuffer)
 {
 	uint32_t size = _region.width * _region.height * 4;
 	if (0 < size)
 	{
 		const bgfx::Memory* mem = bgfx::alloc(size);
 		memset(mem->data, 0, mem->size);
-		if (_region.getType() == AtlasRegion::TYPE_BGRA8)
+		if (_region.getType() == atlas_region::TYPE_BGRA8)
 		{
 			const uint8_t* inLineBuffer = _bitmapBuffer;
 			uint8_t* outLineBuffer = m_textureBuffer + _region.getFaceIndex() * (m_textureSize * m_textureSize * 4) + ( ( (_region.y * m_textureSize) + _region.x) * 4);
@@ -426,14 +426,14 @@ void Atlas::updateRegion(const AtlasRegion& _region, const uint8_t* _bitmapBuffe
 	}
 }
 
-void Atlas::packFaceLayerUV(uint32_t _idx, uint8_t* _vertexBuffer, uint32_t _offset, uint32_t _stride) const
+void atlas::packFaceLayerUV(uint32_t _idx, uint8_t* _vertexBuffer, uint32_t _offset, uint32_t _stride) const
 {
 	packUV(m_layers[_idx].faceRegion, _vertexBuffer, _offset, _stride);
 }
 
-void Atlas::packUV(uint16_t _regionHandle, uint8_t* _vertexBuffer, uint32_t _offset, uint32_t _stride) const
+void atlas::packUV(uint16_t _regionHandle, uint8_t* _vertexBuffer, uint32_t _offset, uint32_t _stride) const
 {
-	const AtlasRegion& region = m_regions[_regionHandle];
+	const atlas_region& region = m_regions[_regionHandle];
 	packUV(region, _vertexBuffer, _offset, _stride);
 }
 
@@ -446,7 +446,7 @@ static void writeUV(uint8_t* _vertexBuffer, int16_t _x, int16_t _y, int16_t _z, 
 	xyzw[3] = _w;
 }
 
-void Atlas::packUV(const AtlasRegion& _region, uint8_t* _vertexBuffer, uint32_t _offset, uint32_t _stride) const
+void atlas::packUV(const atlas_region& _region, uint8_t* _vertexBuffer, uint32_t _offset, uint32_t _stride) const
 {
 	int16_t x0 = (int16_t)( ( (float)_region.x * m_texelSize + m_texelOffset[0]) - float(INT16_MAX) );
 	int16_t y0 = (int16_t)( ( (float)_region.y * m_texelSize + m_texelOffset[1]) - float(INT16_MAX) );

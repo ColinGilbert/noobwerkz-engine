@@ -17,7 +17,7 @@
 #include <bx/bx.h>
 #include <bgfx/bgfx.h>
 
-struct AtlasRegion
+struct atlas_region
 {
 	enum Type
 	{
@@ -50,28 +50,28 @@ struct AtlasRegion
 	}
 };
 
-class Atlas
+class atlas
 {
 public:
 	/// create an empty dynamic atlas (region can be updated and added)
 	/// @param textureSize an atlas creates a texture cube of 6 faces with size equal to (textureSize*textureSize * sizeof(RGBA))
 	/// @param maxRegionCount maximum number of region allowed in the atlas
-	Atlas(uint16_t _textureSize, uint16_t _maxRegionsCount = 4096);
+	atlas(uint16_t _textureSize, uint16_t _maxRegionsCount = 4096);
 
 	/// initialize a static atlas with serialized data	(region can be updated but not added)
 	/// @param textureSize an atlas creates a texture cube of 6 faces with size equal to (textureSize*textureSize * sizeof(RGBA))
 	/// @param textureBuffer buffer of size 6*textureSize*textureSize*sizeof(uint32_t) (will be copied)
-	/// @param regionCount number of region in the Atlas
+	/// @param regionCount number of region in the atlas
 	/// @param regionBuffer buffer containing the region (will be copied)
 	/// @param maxRegionCount maximum number of region allowed in the atlas
-	Atlas(uint16_t _textureSize, const uint8_t* _textureBuffer, uint16_t _regionCount, const uint8_t* _regionBuffer, uint16_t _maxRegionsCount = 4096);
-	~Atlas();
+	atlas(uint16_t _textureSize, const uint8_t* _textureBuffer, uint16_t _regionCount, const uint8_t* _regionBuffer, uint16_t _maxRegionsCount = 4096);
+	~atlas();
 
 	/// add a region to the atlas, and copy the content of mem to the underlying texture
-	uint16_t addRegion(uint16_t _width, uint16_t _height, const uint8_t* _bitmapBuffer, AtlasRegion::Type _type = AtlasRegion::TYPE_BGRA8, uint16_t outline = 0);
+	uint16_t addRegion(uint16_t _width, uint16_t _height, const uint8_t* _bitmapBuffer, atlas_region::Type _type = atlas_region::TYPE_BGRA8, uint16_t outline = 0);
 
 	/// update a preallocated region
-	void updateRegion(const AtlasRegion& _region, const uint8_t* _bitmapBuffer);
+	void updateRegion(const atlas_region& _region, const uint8_t* _bitmapBuffer);
 
 	/// Pack the UV coordinates of the four corners of a region to a vertex buffer using the supplied vertex format.
 	/// v0 -- v3
@@ -84,7 +84,7 @@ public:
 	/// @param offset byte offset to the first uv coordinate of the vertex in the buffer
 	/// @param stride stride between tho UV coordinates, usually size of a Vertex.
 	void packUV(uint16_t _regionHandle, uint8_t* _vertexBuffer, uint32_t _offset, uint32_t _stride) const;
-	void packUV(const AtlasRegion& _region, uint8_t* _vertexBuffer, uint32_t _offset, uint32_t _stride) const;
+	void packUV(const atlas_region& _region, uint8_t* _vertexBuffer, uint32_t _offset, uint32_t _stride) const;
 
 	/// Same as packUV but pack a whole face of the atlas cube, mostly used for debugging and visualizing atlas
 	void packFaceLayerUV(uint32_t _idx, uint8_t* _vertexBuffer, uint32_t _offset, uint32_t _stride) const;
@@ -96,7 +96,7 @@ public:
 	}
 
 	//retrieve a region info
-	const AtlasRegion& getRegion(uint16_t _handle) const
+	const atlas_region& getRegion(uint16_t _handle) const
 	{
 		return m_regions[_handle];
 	}
@@ -117,7 +117,7 @@ public:
 	}
 
 	/// retrieve a pointer to the region buffer (in order to serialize it)
-	const AtlasRegion* getRegionBuffer() const
+	const atlas_region* getRegionBuffer() const
 	{
 		return m_regions;
 	}
@@ -137,9 +137,9 @@ public:
 private:
 	void init();
 
-	struct PackedLayer;
-	PackedLayer* m_layers;
-	AtlasRegion* m_regions;
+	struct packed_layer;
+	packed_layer* m_layers;
+	atlas_region* m_regions;
 	uint8_t* m_textureBuffer;
 
 	uint32_t m_usedLayers;
