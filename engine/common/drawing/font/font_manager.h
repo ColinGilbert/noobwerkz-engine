@@ -132,7 +132,7 @@ class font_manager
 		~font_manager();
 
 		/// Retrieve the atlas used by the font manager (e.g. to add stuff to it)
-		const atlas* getatlas() const
+		const atlas* get_atlas() const
 		{
 			return m_atlas;
 		}

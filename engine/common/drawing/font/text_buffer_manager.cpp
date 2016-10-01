@@ -85,25 +85,25 @@ class text_buffer
 		/// Get pointer to the vertex buffer to submit it to the graphic card.
 		const uint8_t* getVertexBuffer()
 		{
-			return (uint8_t*) m_vertexBuffer;
+			return (uint8_t*) m_vertex_buffer;
 		}
 
 		/// Number of vertex in the vertex buffer.
 		uint32_t get_vertex_count() const
 		{
-			return m_vertexCount;
+			return m_vertex_count;
 		}
 
 		/// Size in bytes of a vertex.
 		uint32_t getVertexSize() const
 		{
-			return sizeof(TextVertex);
+			return sizeof(text_vertex);
 		}
 
 		/// get a pointer to the index buffer to submit it to the graphic
 		const uint16_t* getIndexBuffer() const
 		{
-			return m_indexBuffer;
+			return m_index_buffer;
 		}
 
 		/// number of index in the index buffer
@@ -165,28 +165,28 @@ class text_buffer
 		text_rectangle m_rectangle;
 		font_manager* m_font_manager;
 
-		void setVertex(uint32_t _i, float _x, float _y, uint32_t _rgba, uint8_t _style = STYLE_NORMAL)
+		void set_vertex(uint32_t _i, float _x, float _y, uint32_t _rgba, uint8_t _style = STYLE_NORMAL)
 		{
-			m_vertexBuffer[_i].x = _x;
-			m_vertexBuffer[_i].y = _y;
-			m_vertexBuffer[_i].rgba = _rgba;
+			m_vertex_buffer[_i].x = _x;
+			m_vertex_buffer[_i].y = _y;
+			m_vertex_buffer[_i].rgba = _rgba;
 			m_styleBuffer[_i] = _style;
 		}
 
-		struct TextVertex
+		struct text_vertex
 		{
 			float x, y;
 			int16_t u, v, w, t;
 			uint32_t rgba;
 		};
 
-		TextVertex* m_vertexBuffer;
-		uint16_t* m_indexBuffer;
+		text_vertex* m_vertex_buffer;
+		uint16_t* m_index_buffer;
 		uint8_t* m_styleBuffer;
 
 		uint32_t m_indexCount;
 		uint32_t m_lineStartIndex;
-		uint16_t m_vertexCount;
+		uint16_t m_vertex_count;
 };
 
 	text_buffer::text_buffer(font_manager* _font_manager)
@@ -204,12 +204,12 @@ class text_buffer
 	, m_lineDescender(0)
 	, m_line_gap(0)
 	, m_font_manager(_font_manager)
-	, m_vertexBuffer(new TextVertex[MAX_BUFFERED_CHARACTERS * 4])
-	, m_indexBuffer(new uint16_t[MAX_BUFFERED_CHARACTERS * 6])
+	, m_vertex_buffer(new text_vertex[MAX_BUFFERED_CHARACTERS * 4])
+	, m_index_buffer(new uint16_t[MAX_BUFFERED_CHARACTERS * 6])
 	, m_styleBuffer(new uint8_t[MAX_BUFFERED_CHARACTERS * 4])
 	, m_indexCount(0)
 	, m_lineStartIndex(0)
-	  , m_vertexCount(0)
+	  , m_vertex_count(0)
 {
 	m_rectangle.width = 0;
 	m_rectangle.height = 0;
@@ -217,14 +217,14 @@ class text_buffer
 
 text_buffer::~text_buffer()
 {
-	delete [] m_vertexBuffer;
-	delete [] m_indexBuffer;
+	delete [] m_vertex_buffer;
+	delete [] m_index_buffer;
 	delete [] m_styleBuffer;
 }
 
 void text_buffer::append_text(ft_handle _fontHandle, const char* _string, const char* _end)
 {
-	if (m_vertexCount == 0)
+	if (m_vertex_count == 0)
 	{
 		m_originX = m_penX;
 		m_originY = m_penY;
@@ -255,7 +255,7 @@ void text_buffer::append_text(ft_handle _fontHandle, const char* _string, const 
 
 void text_buffer::append_text(ft_handle _fontHandle, const wchar_t* _string, const wchar_t* _end)
 {
-	if (m_vertexCount == 0)
+	if (m_vertex_count == 0)
 	{
 		m_originX = m_penX;
 		m_originY = m_penY;
@@ -279,34 +279,34 @@ void text_buffer::append_text(ft_handle _fontHandle, const wchar_t* _string, con
 
 void text_buffer::append_atlas_face(uint16_t _faceIndex)
 {
-	if( m_vertexCount/4 >= MAX_BUFFERED_CHARACTERS)
+	if( m_vertex_count/4 >= MAX_BUFFERED_CHARACTERS)
 	{
 		return;
 	}
 
 	float x0 = m_penX;
 	float y0 = m_penY;
-	float x1 = x0 + (float)m_font_manager->getatlas()->getTextureSize();
-	float y1 = y0 + (float)m_font_manager->getatlas()->getTextureSize();
+	float x1 = x0 + (float)m_font_manager->get_atlas()->get_texture_size();
+	float y1 = y0 + (float)m_font_manager->get_atlas()->get_texture_size();
 
-	m_font_manager->getatlas()->packFaceLayerUV(_faceIndex
-			, (uint8_t*)m_vertexBuffer
-			, sizeof(TextVertex) * m_vertexCount + offsetof(TextVertex, u)
-			, sizeof(TextVertex)
+	m_font_manager->get_atlas()->pack_face_layer_uv(_faceIndex
+			, (uint8_t*)m_vertex_buffer
+			, sizeof(text_vertex) * m_vertex_count + offsetof(text_vertex, u)
+			, sizeof(text_vertex)
 			);
 
-	setVertex(m_vertexCount + 0, x0, y0, m_backgroundColor);
-	setVertex(m_vertexCount + 1, x0, y1, m_backgroundColor);
-	setVertex(m_vertexCount + 2, x1, y1, m_backgroundColor);
-	setVertex(m_vertexCount + 3, x1, y0, m_backgroundColor);
+	set_vertex(m_vertex_count + 0, x0, y0, m_backgroundColor);
+	set_vertex(m_vertex_count + 1, x0, y1, m_backgroundColor);
+	set_vertex(m_vertex_count + 2, x1, y1, m_backgroundColor);
+	set_vertex(m_vertex_count + 3, x1, y0, m_backgroundColor);
 
-	m_indexBuffer[m_indexCount + 0] = m_vertexCount + 0;
-	m_indexBuffer[m_indexCount + 1] = m_vertexCount + 1;
-	m_indexBuffer[m_indexCount + 2] = m_vertexCount + 2;
-	m_indexBuffer[m_indexCount + 3] = m_vertexCount + 0;
-	m_indexBuffer[m_indexCount + 4] = m_vertexCount + 2;
-	m_indexBuffer[m_indexCount + 5] = m_vertexCount + 3;
-	m_vertexCount += 4;
+	m_index_buffer[m_indexCount + 0] = m_vertex_count + 0;
+	m_index_buffer[m_indexCount + 1] = m_vertex_count + 1;
+	m_index_buffer[m_indexCount + 2] = m_vertex_count + 2;
+	m_index_buffer[m_indexCount + 3] = m_vertex_count + 0;
+	m_index_buffer[m_indexCount + 4] = m_vertex_count + 2;
+	m_index_buffer[m_indexCount + 5] = m_vertex_count + 3;
+	m_vertex_count += 4;
 	m_indexCount += 6;
 }
 
@@ -317,7 +317,7 @@ void text_buffer::clear_text_buffer()
 	m_originX = 0;
 	m_originY = 0;
 
-	m_vertexCount = 0;
+	m_vertex_count = 0;
 	m_indexCount = 0;
 	m_lineStartIndex = 0;
 	m_lineAscender = 0;
@@ -338,7 +338,7 @@ void text_buffer::append_glyph(ft_handle _handle, unicode_point _codePoint)
 
 	const font_info& font = m_font_manager->get_font_info(_handle);
 
-	if( m_vertexCount/4 >= MAX_BUFFERED_CHARACTERS)
+	if( m_vertex_count/4 >= MAX_BUFFERED_CHARACTERS)
 	{
 		return;
 	}
@@ -350,7 +350,7 @@ void text_buffer::append_glyph(ft_handle _handle, unicode_point _codePoint)
 		m_line_gap = font.line_gap;
 		m_lineDescender = font.descender;
 		m_lineAscender = font.ascender;
-		m_lineStartIndex = m_vertexCount;
+		m_lineStartIndex = m_vertex_count;
 		return;
 	}
 
@@ -374,7 +374,7 @@ void text_buffer::append_glyph(ft_handle _handle, unicode_point _codePoint)
 	m_penX += kerning;
 
 	const glyph_info& blackGlyph = m_font_manager->get_black_glyph();
-	const atlas* atlas = m_font_manager->getatlas();
+	const atlas* atlas = m_font_manager->get_atlas();
 
 	if (m_styleFlags & STYLE_BACKGROUND
 			&&  m_backgroundColor & 0xFF000000)
@@ -384,21 +384,21 @@ void text_buffer::append_glyph(ft_handle _handle, unicode_point _codePoint)
 		float x1 = ( (float)x0 + (glyph->advance_x) );
 		float y1 = (m_penY + m_lineAscender - m_lineDescender + m_line_gap);
 
-		atlas->packUV(blackGlyph.region_index, (uint8_t*)m_vertexBuffer, sizeof(TextVertex) * m_vertexCount + offsetof(TextVertex, u), sizeof(TextVertex));
+		atlas->pack_uv(blackGlyph.region_index, (uint8_t*)m_vertex_buffer, sizeof(text_vertex) * m_vertex_count + offsetof(text_vertex, u), sizeof(text_vertex));
 
-		const uint16_t vertexCount = m_vertexCount;
-		setVertex(vertexCount + 0, x0, y0, m_backgroundColor, STYLE_BACKGROUND);
-		setVertex(vertexCount + 1, x0, y1, m_backgroundColor, STYLE_BACKGROUND);
-		setVertex(vertexCount + 2, x1, y1, m_backgroundColor, STYLE_BACKGROUND);
-		setVertex(vertexCount + 3, x1, y0, m_backgroundColor, STYLE_BACKGROUND);
+		const uint16_t vertexCount = m_vertex_count;
+		set_vertex(vertexCount + 0, x0, y0, m_backgroundColor, STYLE_BACKGROUND);
+		set_vertex(vertexCount + 1, x0, y1, m_backgroundColor, STYLE_BACKGROUND);
+		set_vertex(vertexCount + 2, x1, y1, m_backgroundColor, STYLE_BACKGROUND);
+		set_vertex(vertexCount + 3, x1, y0, m_backgroundColor, STYLE_BACKGROUND);
 
-		m_indexBuffer[m_indexCount + 0] = vertexCount + 0;
-		m_indexBuffer[m_indexCount + 1] = vertexCount + 1;
-		m_indexBuffer[m_indexCount + 2] = vertexCount + 2;
-		m_indexBuffer[m_indexCount + 3] = vertexCount + 0;
-		m_indexBuffer[m_indexCount + 4] = vertexCount + 2;
-		m_indexBuffer[m_indexCount + 5] = vertexCount + 3;
-		m_vertexCount += 4;
+		m_index_buffer[m_indexCount + 0] = vertexCount + 0;
+		m_index_buffer[m_indexCount + 1] = vertexCount + 1;
+		m_index_buffer[m_indexCount + 2] = vertexCount + 2;
+		m_index_buffer[m_indexCount + 3] = vertexCount + 0;
+		m_index_buffer[m_indexCount + 4] = vertexCount + 2;
+		m_index_buffer[m_indexCount + 5] = vertexCount + 3;
+		m_vertex_count += 4;
 		m_indexCount += 6;
 	}
 
@@ -410,20 +410,20 @@ void text_buffer::append_glyph(ft_handle _handle, unicode_point _codePoint)
 		float x1 = ( (float)x0 + (glyph->advance_x) );
 		float y1 = y0 + font.underline_thickness;
 
-		atlas->packUV(blackGlyph.region_index, (uint8_t*)m_vertexBuffer, sizeof(TextVertex) * m_vertexCount + offsetof(TextVertex, u), sizeof(TextVertex));
+		atlas->pack_uv(blackGlyph.region_index, (uint8_t*)m_vertex_buffer, sizeof(text_vertex) * m_vertex_count + offsetof(text_vertex, u), sizeof(text_vertex));
 
-		setVertex(m_vertexCount + 0, x0, y0, m_underlineColor, STYLE_UNDERLINE);
-		setVertex(m_vertexCount + 1, x0, y1, m_underlineColor, STYLE_UNDERLINE);
-		setVertex(m_vertexCount + 2, x1, y1, m_underlineColor, STYLE_UNDERLINE);
-		setVertex(m_vertexCount + 3, x1, y0, m_underlineColor, STYLE_UNDERLINE);
+		set_vertex(m_vertex_count + 0, x0, y0, m_underlineColor, STYLE_UNDERLINE);
+		set_vertex(m_vertex_count + 1, x0, y1, m_underlineColor, STYLE_UNDERLINE);
+		set_vertex(m_vertex_count + 2, x1, y1, m_underlineColor, STYLE_UNDERLINE);
+		set_vertex(m_vertex_count + 3, x1, y0, m_underlineColor, STYLE_UNDERLINE);
 
-		m_indexBuffer[m_indexCount + 0] = m_vertexCount + 0;
-		m_indexBuffer[m_indexCount + 1] = m_vertexCount + 1;
-		m_indexBuffer[m_indexCount + 2] = m_vertexCount + 2;
-		m_indexBuffer[m_indexCount + 3] = m_vertexCount + 0;
-		m_indexBuffer[m_indexCount + 4] = m_vertexCount + 2;
-		m_indexBuffer[m_indexCount + 5] = m_vertexCount + 3;
-		m_vertexCount += 4;
+		m_index_buffer[m_indexCount + 0] = m_vertex_count + 0;
+		m_index_buffer[m_indexCount + 1] = m_vertex_count + 1;
+		m_index_buffer[m_indexCount + 2] = m_vertex_count + 2;
+		m_index_buffer[m_indexCount + 3] = m_vertex_count + 0;
+		m_index_buffer[m_indexCount + 4] = m_vertex_count + 2;
+		m_index_buffer[m_indexCount + 5] = m_vertex_count + 3;
+		m_vertex_count += 4;
 		m_indexCount += 6;
 	}
 
@@ -434,20 +434,20 @@ void text_buffer::append_glyph(ft_handle _handle, unicode_point _codePoint)
 		float x1 = ( (float)x0 + (glyph->advance_x) );
 		float y1 = y0 + font.underline_thickness;
 
-		m_font_manager->getatlas()->packUV(blackGlyph.region_index, (uint8_t*)m_vertexBuffer, sizeof(TextVertex) * m_vertexCount + offsetof(TextVertex, u), sizeof(TextVertex));
+		m_font_manager->get_atlas()->pack_uv(blackGlyph.region_index, (uint8_t*)m_vertex_buffer, sizeof(text_vertex) * m_vertex_count + offsetof(text_vertex, u), sizeof(text_vertex));
 
-		setVertex(m_vertexCount + 0, x0, y0, m_overlineColor, STYLE_OVERLINE);
-		setVertex(m_vertexCount + 1, x0, y1, m_overlineColor, STYLE_OVERLINE);
-		setVertex(m_vertexCount + 2, x1, y1, m_overlineColor, STYLE_OVERLINE);
-		setVertex(m_vertexCount + 3, x1, y0, m_overlineColor, STYLE_OVERLINE);
+		set_vertex(m_vertex_count + 0, x0, y0, m_overlineColor, STYLE_OVERLINE);
+		set_vertex(m_vertex_count + 1, x0, y1, m_overlineColor, STYLE_OVERLINE);
+		set_vertex(m_vertex_count + 2, x1, y1, m_overlineColor, STYLE_OVERLINE);
+		set_vertex(m_vertex_count + 3, x1, y0, m_overlineColor, STYLE_OVERLINE);
 
-		m_indexBuffer[m_indexCount + 0] = m_vertexCount + 0;
-		m_indexBuffer[m_indexCount + 1] = m_vertexCount + 1;
-		m_indexBuffer[m_indexCount + 2] = m_vertexCount + 2;
-		m_indexBuffer[m_indexCount + 3] = m_vertexCount + 0;
-		m_indexBuffer[m_indexCount + 4] = m_vertexCount + 2;
-		m_indexBuffer[m_indexCount + 5] = m_vertexCount + 3;
-		m_vertexCount += 4;
+		m_index_buffer[m_indexCount + 0] = m_vertex_count + 0;
+		m_index_buffer[m_indexCount + 1] = m_vertex_count + 1;
+		m_index_buffer[m_indexCount + 2] = m_vertex_count + 2;
+		m_index_buffer[m_indexCount + 3] = m_vertex_count + 0;
+		m_index_buffer[m_indexCount + 4] = m_vertex_count + 2;
+		m_index_buffer[m_indexCount + 5] = m_vertex_count + 3;
+		m_vertex_count += 4;
 		m_indexCount += 6;
 	}
 
@@ -459,20 +459,20 @@ void text_buffer::append_glyph(ft_handle _handle, unicode_point _codePoint)
 		float x1 = ( (float)x0 + (glyph->advance_x) );
 		float y1 = y0 + font.underline_thickness;
 
-		atlas->packUV(blackGlyph.region_index, (uint8_t*)m_vertexBuffer, sizeof(TextVertex) * m_vertexCount + offsetof(TextVertex, u), sizeof(TextVertex));
+		atlas->pack_uv(blackGlyph.region_index, (uint8_t*)m_vertex_buffer, sizeof(text_vertex) * m_vertex_count + offsetof(text_vertex, u), sizeof(text_vertex));
 
-		setVertex(m_vertexCount + 0, x0, y0, m_strikeThroughColor, STYLE_STRIKE_THROUGH);
-		setVertex(m_vertexCount + 1, x0, y1, m_strikeThroughColor, STYLE_STRIKE_THROUGH);
-		setVertex(m_vertexCount + 2, x1, y1, m_strikeThroughColor, STYLE_STRIKE_THROUGH);
-		setVertex(m_vertexCount + 3, x1, y0, m_strikeThroughColor, STYLE_STRIKE_THROUGH);
+		set_vertex(m_vertex_count + 0, x0, y0, m_strikeThroughColor, STYLE_STRIKE_THROUGH);
+		set_vertex(m_vertex_count + 1, x0, y1, m_strikeThroughColor, STYLE_STRIKE_THROUGH);
+		set_vertex(m_vertex_count + 2, x1, y1, m_strikeThroughColor, STYLE_STRIKE_THROUGH);
+		set_vertex(m_vertex_count + 3, x1, y0, m_strikeThroughColor, STYLE_STRIKE_THROUGH);
 
-		m_indexBuffer[m_indexCount + 0] = m_vertexCount + 0;
-		m_indexBuffer[m_indexCount + 1] = m_vertexCount + 1;
-		m_indexBuffer[m_indexCount + 2] = m_vertexCount + 2;
-		m_indexBuffer[m_indexCount + 3] = m_vertexCount + 0;
-		m_indexBuffer[m_indexCount + 4] = m_vertexCount + 2;
-		m_indexBuffer[m_indexCount + 5] = m_vertexCount + 3;
-		m_vertexCount += 4;
+		m_index_buffer[m_indexCount + 0] = m_vertex_count + 0;
+		m_index_buffer[m_indexCount + 1] = m_vertex_count + 1;
+		m_index_buffer[m_indexCount + 2] = m_vertex_count + 2;
+		m_index_buffer[m_indexCount + 3] = m_vertex_count + 0;
+		m_index_buffer[m_indexCount + 4] = m_vertex_count + 2;
+		m_index_buffer[m_indexCount + 5] = m_vertex_count + 3;
+		m_vertex_count += 4;
 		m_indexCount += 6;
 	}
 
@@ -481,20 +481,20 @@ void text_buffer::append_glyph(ft_handle _handle, unicode_point _codePoint)
 	float x1 = (x0 + glyph->width);
 	float y1 = (y0 + glyph->height);
 
-	atlas->packUV(glyph->region_index, (uint8_t*)m_vertexBuffer, sizeof(TextVertex) * m_vertexCount + offsetof(TextVertex, u), sizeof(TextVertex));
+	atlas->pack_uv(glyph->region_index, (uint8_t*)m_vertex_buffer, sizeof(text_vertex) * m_vertex_count + offsetof(text_vertex, u), sizeof(text_vertex));
 
-	setVertex(m_vertexCount + 0, x0, y0, m_textColor);
-	setVertex(m_vertexCount + 1, x0, y1, m_textColor);
-	setVertex(m_vertexCount + 2, x1, y1, m_textColor);
-	setVertex(m_vertexCount + 3, x1, y0, m_textColor);
+	set_vertex(m_vertex_count + 0, x0, y0, m_textColor);
+	set_vertex(m_vertex_count + 1, x0, y1, m_textColor);
+	set_vertex(m_vertex_count + 2, x1, y1, m_textColor);
+	set_vertex(m_vertex_count + 3, x1, y0, m_textColor);
 
-	m_indexBuffer[m_indexCount + 0] = m_vertexCount + 0;
-	m_indexBuffer[m_indexCount + 1] = m_vertexCount + 1;
-	m_indexBuffer[m_indexCount + 2] = m_vertexCount + 2;
-	m_indexBuffer[m_indexCount + 3] = m_vertexCount + 0;
-	m_indexBuffer[m_indexCount + 4] = m_vertexCount + 2;
-	m_indexBuffer[m_indexCount + 5] = m_vertexCount + 3;
-	m_vertexCount += 4;
+	m_index_buffer[m_indexCount + 0] = m_vertex_count + 0;
+	m_index_buffer[m_indexCount + 1] = m_vertex_count + 1;
+	m_index_buffer[m_indexCount + 2] = m_vertex_count + 2;
+	m_index_buffer[m_indexCount + 3] = m_vertex_count + 0;
+	m_index_buffer[m_indexCount + 4] = m_vertex_count + 2;
+	m_index_buffer[m_indexCount + 5] = m_vertex_count + 3;
+	m_vertex_count += 4;
 	m_indexCount += 6;
 
 	m_penX += glyph->advance_x;
@@ -512,21 +512,21 @@ void text_buffer::append_glyph(ft_handle _handle, unicode_point _codePoint)
 
 void text_buffer::vertical_center_last_line(float _dy, float _top, float _bottom)
 {
-	for (uint32_t ii = m_lineStartIndex; ii < m_vertexCount; ii += 4)
+	for (uint32_t ii = m_lineStartIndex; ii < m_vertex_count; ii += 4)
 	{
 		if (m_styleBuffer[ii] == STYLE_BACKGROUND)
 		{
-			m_vertexBuffer[ii + 0].y = _top;
-			m_vertexBuffer[ii + 1].y = _bottom;
-			m_vertexBuffer[ii + 2].y = _bottom;
-			m_vertexBuffer[ii + 3].y = _top;
+			m_vertex_buffer[ii + 0].y = _top;
+			m_vertex_buffer[ii + 1].y = _bottom;
+			m_vertex_buffer[ii + 2].y = _bottom;
+			m_vertex_buffer[ii + 3].y = _top;
 		}
 		else
 		{
-			m_vertexBuffer[ii + 0].y += _dy;
-			m_vertexBuffer[ii + 1].y += _dy;
-			m_vertexBuffer[ii + 2].y += _dy;
-			m_vertexBuffer[ii + 3].y += _dy;
+			m_vertex_buffer[ii + 0].y += _dy;
+			m_vertex_buffer[ii + 1].y += _dy;
+			m_vertex_buffer[ii + 2].y += _dy;
+			m_vertex_buffer[ii + 3].y += _dy;
 		}
 	}
 }
@@ -674,7 +674,7 @@ void text_buffer_manager::submit_text_buffer(text_buf_handle _handle, uint8_t _i
 		return;
 	}
 
-	bgfx::setTexture(0, u_tex_colour, m_font_manager->getatlas()->getTextureHandle() );
+	bgfx::setTexture(0, u_tex_colour, m_font_manager->get_atlas()->get_texture_handle() );
 
 	switch (bc.font_type)
 	{

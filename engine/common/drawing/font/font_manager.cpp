@@ -494,7 +494,7 @@ void font_manager::init()
 	m_blackGlyph.height = W;
 
 	///make sure the black glyph doesn't bleed by using a one pixel inner outline
-	m_blackGlyph.region_index = m_atlas->addRegion(W, W, buffer, atlas_region::TYPE_GRAY, 1);
+	m_blackGlyph.region_index = m_atlas->add_region(W, W, buffer, atlas_region::type::GRAY, 1);
 }
 
 font_manager::~font_manager()
@@ -727,6 +727,6 @@ const glyph_info* font_manager::get_glyph_info(ft_handle font_handle_ft, unicode
 
 bool font_manager::add_bitmap(glyph_info& glyph_info, const uint8_t* data_out)
 {
-	glyph_info.region_index = m_atlas->addRegion(static_cast<uint16_t>(ceil(glyph_info.width)), static_cast<uint16_t>(ceil(glyph_info.height)), data_out, atlas_region::TYPE_GRAY);
+	glyph_info.region_index = m_atlas->add_region(static_cast<uint16_t>(ceil(glyph_info.width)), static_cast<uint16_t>(ceil(glyph_info.height)), data_out, atlas_region::type::GRAY);
 	return true;
 }

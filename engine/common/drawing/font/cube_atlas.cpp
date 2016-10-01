@@ -240,86 +240,86 @@ struct atlas::packed_layer
 	atlas_region faceRegion;
 };
 
-atlas::atlas(uint16_t _textureSize, uint16_t _maxRegionsCount) : m_usedLayers(0), m_usedFaces(0), m_textureSize(_textureSize), m_regionCount(0), m_maxRegionCount(_maxRegionsCount)
+atlas::atlas(uint16_t _texture_size, uint16_t _max_regions_count) : m_used_layers(0), m_used_faces(0), m_texture_size(_texture_size), m_region_count(0), m_max_region_count(_max_regions_count)
 {
-	BX_CHECK(_textureSize >= 64 && _textureSize <= 4096, "Invalid _textureSize %d.", _textureSize);
-	BX_CHECK(_maxRegionsCount >= 64 && _maxRegionsCount <= 32000, "Invalid _maxRegionsCount %d.", _maxRegionsCount);
+	BX_CHECK(_texture_size >= 64 && _texture_size <= 4096, "Invalid _texture_size %d.", _texture_size);
+	BX_CHECK(_max_regions_count >= 64 && _max_regions_count <= 32000, "Invalid _max_regions_count %d.", _max_regions_count);
 
 	init();
 
 	m_layers = new packed_layer[24];
 	for (int ii = 0; ii < 24; ++ii)
 	{
-		m_layers[ii].packer.init(_textureSize, _textureSize);
+		m_layers[ii].packer.init(_texture_size, _texture_size);
 	}
 
-	m_regions = new atlas_region[_maxRegionsCount];
-	m_textureBuffer = new uint8_t[ _textureSize * _textureSize * 6 * 4 ];
-	memset(m_textureBuffer, 0, _textureSize * _textureSize * 6 * 4);
+	m_regions = new atlas_region[_max_regions_count];
+	m_texture_buffer = new uint8_t[ _texture_size * _texture_size * 6 * 4 ];
+	memset(m_texture_buffer, 0, _texture_size * _texture_size * 6 * 4);
 
-	m_textureHandle = bgfx::createTextureCube(_textureSize
+	m_texture_handle = bgfx::createTextureCube(_texture_size
 			, false
 			, 1
 			, bgfx::TextureFormat::BGRA8
 			);
 }
 
-atlas::atlas(uint16_t _textureSize, const uint8_t* _textureBuffer, uint16_t _regionCount, const uint8_t* _regionBuffer, uint16_t _maxRegionsCount) : m_usedLayers(24), m_usedFaces(6), m_textureSize(_textureSize), m_regionCount(_regionCount), m_maxRegionCount(_regionCount < _maxRegionsCount ? _regionCount : _maxRegionsCount)
+atlas::atlas(uint16_t _texture_size, const uint8_t* _texture_buffer, uint16_t _region_count, const uint8_t* _region_buffer, uint16_t _max_regions_count) : m_used_layers(24), m_used_faces(6), m_texture_size(_texture_size), m_region_count(_region_count), m_max_region_count(_region_count < _max_regions_count ? _region_count : _max_regions_count)
 {
-	BX_CHECK(_regionCount <= 64 && _maxRegionsCount <= 4096, "_regionCount %d, _maxRegionsCount %d", _regionCount, _maxRegionsCount);
+	BX_CHECK(_region_count <= 64 && _max_regions_count <= 4096, "_region_count %d, _max_regions_count %d", _region_count, _max_regions_count);
 
 	init();
 
-	m_regions = new atlas_region[_regionCount];
-	m_textureBuffer = new uint8_t[getTextureBufferSize()];
+	m_regions = new atlas_region[_region_count];
+	m_texture_buffer = new uint8_t[get_texture_buffer_size()];
 
-	memcpy(m_regions, _regionBuffer, _regionCount * sizeof(atlas_region) );
-	memcpy(m_textureBuffer, _textureBuffer, getTextureBufferSize() );
+	memcpy(m_regions, _region_buffer, _region_count * sizeof(atlas_region) );
+	memcpy(m_texture_buffer, _texture_buffer, get_texture_buffer_size() );
 
-	m_textureHandle = bgfx::createTextureCube(_textureSize, false, 1, bgfx::TextureFormat::BGRA8, BGFX_TEXTURE_NONE, bgfx::makeRef(m_textureBuffer, getTextureBufferSize()));
+	m_texture_handle = bgfx::createTextureCube(_texture_size, false, 1, bgfx::TextureFormat::BGRA8, BGFX_TEXTURE_NONE, bgfx::makeRef(m_texture_buffer, get_texture_buffer_size()));
 }
 
 atlas::~atlas()
 {
-	bgfx::destroyTexture(m_textureHandle);
+	bgfx::destroyTexture(m_texture_handle);
 
 	delete [] m_layers;
 	delete [] m_regions;
-	delete [] m_textureBuffer;
+	delete [] m_texture_buffer;
 }
 
 void atlas::init()
 {
-	m_texelSize = static_cast<float>(std::numeric_limits<uint16_t>::max()) / static_cast<float>(m_textureSize);
-	float texelHalf = m_texelSize/2.0f;
+	m_texel_size = static_cast<float>(std::numeric_limits<uint16_t>::max()) / static_cast<float>(m_texture_size);
+	float texelHalf = m_texel_size/2.0f;
 	switch (bgfx::getRendererType() )
 	{
 		case bgfx::RendererType::Direct3D9:
 			{
-				m_texelOffset[0] = 0.0f;
-				m_texelOffset[1] = 0.0f;
+				m_texel_offset[0] = 0.0f;
+				m_texel_offset[1] = 0.0f;
 				break;
 			}
 		case bgfx::RendererType::Direct3D11:
 		case bgfx::RendererType::Direct3D12:
 			{
-				m_texelOffset[0] = texelHalf;
-				m_texelOffset[1] = texelHalf;
+				m_texel_offset[0] = texelHalf;
+				m_texel_offset[1] = texelHalf;
 				break;
 			}
 		default:
 			{
-				m_texelOffset[0] = texelHalf;
-				m_texelOffset[1] = -texelHalf;
+				m_texel_offset[0] = texelHalf;
+				m_texel_offset[1] = -texelHalf;
 				break;
 			}
 	}
 }
 
 
-uint16_t atlas::addRegion(uint16_t _width, uint16_t _height, const uint8_t* _bitmapBuffer, atlas_region::Type _type, uint16_t outline)
+uint16_t atlas::add_region(uint16_t _width, uint16_t _height, const uint8_t* _bitmap_buffer, atlas_region::type _type, uint16_t outline)
 {
-	if (m_regionCount >= m_maxRegionCount)
+	if (m_region_count >= m_max_region_count)
 	{
 		return UINT16_MAX;
 	}
@@ -327,9 +327,9 @@ uint16_t atlas::addRegion(uint16_t _width, uint16_t _height, const uint8_t* _bit
 	uint16_t xx = 0;
 	uint16_t yy = 0;
 	uint32_t idx = 0;
-	while (idx < m_usedLayers)
+	while (idx < m_used_layers)
 	{
-		if (m_layers[idx].faceRegion.getType() == _type
+		if (m_layers[idx].faceRegion.get_type() == _type
 				&&  m_layers[idx].packer.addRectangle(_width + 1, _height + 1, xx, yy) )
 		{
 			break;
@@ -338,10 +338,10 @@ uint16_t atlas::addRegion(uint16_t _width, uint16_t _height, const uint8_t* _bit
 		idx++;
 	}
 
-	if (idx >= m_usedLayers)
+	if (idx >= m_used_layers)
 	{
 		if ( (idx + _type) > 24
-				|| m_usedFaces >= 6)
+				|| m_used_faces >= 6)
 		{
 			return UINT16_MAX;
 		}
@@ -351,13 +351,13 @@ uint16_t atlas::addRegion(uint16_t _width, uint16_t _height, const uint8_t* _bit
 			atlas_region& region = m_layers[idx + ii].faceRegion;
 			region.x = 0;
 			region.y = 0;
-			region.width = m_textureSize;
-			region.height = m_textureSize;
-			region.setMask(_type, m_usedFaces, ii);
+			region.width = m_texture_size;
+			region.height = m_texture_size;
+			region.set_mask(_type, m_used_faces, ii);
 		}
 
-		m_usedLayers += _type;
-		m_usedFaces++;
+		m_used_layers += _type;
+		m_used_faces++;
 
 		if (!m_layers[idx].packer.addRectangle(_width + 1, _height + 1, xx, yy) )
 		{
@@ -365,49 +365,49 @@ uint16_t atlas::addRegion(uint16_t _width, uint16_t _height, const uint8_t* _bit
 		}
 	}
 
-	atlas_region& region = m_regions[m_regionCount];
+	atlas_region& region = m_regions[m_region_count];
 	region.x = xx;
 	region.y = yy;
 	region.width = _width;
 	region.height = _height;
 	region.mask = m_layers[idx].faceRegion.mask;
 
-	updateRegion(region, _bitmapBuffer);
+	update_region(region, _bitmap_buffer);
 
 	region.x += outline;
 	region.y += outline;
 	region.width -= (outline * 2);
 	region.height -= (outline * 2);
 
-	return m_regionCount++;
+	return m_region_count++;
 }
 
-void atlas::updateRegion(const atlas_region& _region, const uint8_t* _bitmapBuffer)
+void atlas::update_region(const atlas_region& _region, const uint8_t* _bitmap_buffer)
 {
 	uint32_t size = _region.width * _region.height * 4;
 	if (0 < size)
 	{
 		const bgfx::Memory* mem = bgfx::alloc(size);
 		memset(mem->data, 0, mem->size);
-		if (_region.getType() == atlas_region::TYPE_BGRA8)
+		if (_region.get_type() == atlas_region::type::BGRA8)
 		{
-			const uint8_t* inLineBuffer = _bitmapBuffer;
-			uint8_t* outLineBuffer = m_textureBuffer + _region.getFaceIndex() * (m_textureSize * m_textureSize * 4) + ( ( (_region.y * m_textureSize) + _region.x) * 4);
+			const uint8_t* inLineBuffer = _bitmap_buffer;
+			uint8_t* outLineBuffer = m_texture_buffer + _region.get_face_index() * (m_texture_size * m_texture_size * 4) + ( ( (_region.y * m_texture_size) + _region.x) * 4);
 
 			for (int yy = 0; yy < _region.height; ++yy)
 			{
 				memcpy(outLineBuffer, inLineBuffer, _region.width * 4);
 				inLineBuffer += _region.width * 4;
-				outLineBuffer += m_textureSize * 4;
+				outLineBuffer += m_texture_size * 4;
 			}
 
-			memcpy(mem->data, _bitmapBuffer, mem->size);
+			memcpy(mem->data, _bitmap_buffer, mem->size);
 		}
 		else
 		{
-			uint32_t layer = _region.getComponentIndex();
-			const uint8_t* inLineBuffer = _bitmapBuffer;
-			uint8_t* outLineBuffer = (m_textureBuffer + _region.getFaceIndex() * (m_textureSize * m_textureSize * 4) + ( ( (_region.y * m_textureSize) + _region.x) * 4) );
+			uint32_t layer = _region.get_component_index();
+			const uint8_t* inLineBuffer = _bitmap_buffer;
+			uint8_t* outLineBuffer = (m_texture_buffer + _region.get_face_index() * (m_texture_size * m_texture_size * 4) + ( ( (_region.y * m_texture_size) + _region.x) * 4) );
 
 			for (int yy = 0; yy < _region.height; ++yy)
 			{
@@ -418,88 +418,88 @@ void atlas::updateRegion(const atlas_region& _region, const uint8_t* _bitmapBuff
 
 				memcpy(mem->data + yy * _region.width * 4, outLineBuffer, _region.width * 4);
 				inLineBuffer += _region.width;
-				outLineBuffer += m_textureSize * 4;
+				outLineBuffer += m_texture_size * 4;
 			}
 		}
 
-		bgfx::updateTextureCube(m_textureHandle, 0, (uint8_t)_region.getFaceIndex(), 0, _region.x, _region.y, _region.width, _region.height, mem);
+		bgfx::updateTextureCube(m_texture_handle, 0, (uint8_t)_region.get_face_index(), 0, _region.x, _region.y, _region.width, _region.height, mem);
 	}
 }
 
-void atlas::packFaceLayerUV(uint32_t _idx, uint8_t* _vertexBuffer, uint32_t _offset, uint32_t _stride) const
+void atlas::pack_face_layer_uv(uint32_t _idx, uint8_t* _vertex_buffer, uint32_t _offset, uint32_t _stride) const
 {
-	packUV(m_layers[_idx].faceRegion, _vertexBuffer, _offset, _stride);
+	pack_uv(m_layers[_idx].faceRegion, _vertex_buffer, _offset, _stride);
 }
 
-void atlas::packUV(uint16_t _regionHandle, uint8_t* _vertexBuffer, uint32_t _offset, uint32_t _stride) const
+void atlas::pack_uv(uint16_t _regionHandle, uint8_t* _vertex_buffer, uint32_t _offset, uint32_t _stride) const
 {
 	const atlas_region& region = m_regions[_regionHandle];
-	packUV(region, _vertexBuffer, _offset, _stride);
+	pack_uv(region, _vertex_buffer, _offset, _stride);
 }
 
-static void writeUV(uint8_t* _vertexBuffer, int16_t _x, int16_t _y, int16_t _z, int16_t _w)
+static void write_uv(uint8_t* _vertex_buffer, int16_t _x, int16_t _y, int16_t _z, int16_t _w)
 {
-	uint16_t* xyzw = (uint16_t*)_vertexBuffer;
+	uint16_t* xyzw = (uint16_t*)_vertex_buffer;
 	xyzw[0] = _x;
 	xyzw[1] = _y;
 	xyzw[2] = _z;
 	xyzw[3] = _w;
 }
 
-void atlas::packUV(const atlas_region& _region, uint8_t* _vertexBuffer, uint32_t _offset, uint32_t _stride) const
+void atlas::pack_uv(const atlas_region& _region, uint8_t* _vertex_buffer, uint32_t _offset, uint32_t _stride) const
 {
-	int16_t x0 = (int16_t)( ( (float)_region.x * m_texelSize + m_texelOffset[0]) - float(INT16_MAX) );
-	int16_t y0 = (int16_t)( ( (float)_region.y * m_texelSize + m_texelOffset[1]) - float(INT16_MAX) );
-	int16_t x1 = (int16_t)( ( ( (float)_region.x + _region.width) * m_texelSize + m_texelOffset[0]) - float(INT16_MAX) );
-	int16_t y1 = (int16_t)( ( ( (float)_region.y + _region.height) * m_texelSize + m_texelOffset[1]) - float(INT16_MAX) );
-	int16_t ww = (int16_t)( (float(INT16_MAX) / 4.0f) * (float)_region.getComponentIndex() );
+	int16_t x0 = (int16_t)( ( (float)_region.x * m_texel_size + m_texel_offset[0]) - float(INT16_MAX) );
+	int16_t y0 = (int16_t)( ( (float)_region.y * m_texel_size + m_texel_offset[1]) - float(INT16_MAX) );
+	int16_t x1 = (int16_t)( ( ( (float)_region.x + _region.width) * m_texel_size + m_texel_offset[0]) - float(INT16_MAX) );
+	int16_t y1 = (int16_t)( ( ( (float)_region.y + _region.height) * m_texel_size + m_texel_offset[1]) - float(INT16_MAX) );
+	int16_t ww = (int16_t)( (float(INT16_MAX) / 4.0f) * (float)_region.get_component_index() );
 
-	_vertexBuffer += _offset;
-	switch (_region.getFaceIndex() )
+	_vertex_buffer += _offset;
+	switch (_region.get_face_index() )
 	{
 		case 0: // +X
 			x0 = -x0;
 			x1 = -x1;
 			y0 = -y0;
 			y1 = -y1;
-			writeUV(_vertexBuffer, INT16_MAX, y0, x0, ww); _vertexBuffer += _stride;
-			writeUV(_vertexBuffer, INT16_MAX, y1, x0, ww); _vertexBuffer += _stride;
-			writeUV(_vertexBuffer, INT16_MAX, y1, x1, ww); _vertexBuffer += _stride;
-			writeUV(_vertexBuffer, INT16_MAX, y0, x1, ww); _vertexBuffer += _stride;
+			write_uv(_vertex_buffer, INT16_MAX, y0, x0, ww); _vertex_buffer += _stride;
+			write_uv(_vertex_buffer, INT16_MAX, y1, x0, ww); _vertex_buffer += _stride;
+			write_uv(_vertex_buffer, INT16_MAX, y1, x1, ww); _vertex_buffer += _stride;
+			write_uv(_vertex_buffer, INT16_MAX, y0, x1, ww); _vertex_buffer += _stride;
 			break;
 
 		case 1: // -X
 			y0 = -y0;
 			y1 = -y1;
-			writeUV(_vertexBuffer, INT16_MIN, y0, x0, ww); _vertexBuffer += _stride;
-			writeUV(_vertexBuffer, INT16_MIN, y1, x0, ww); _vertexBuffer += _stride;
-			writeUV(_vertexBuffer, INT16_MIN, y1, x1, ww); _vertexBuffer += _stride;
-			writeUV(_vertexBuffer, INT16_MIN, y0, x1, ww); _vertexBuffer += _stride;
+			write_uv(_vertex_buffer, INT16_MIN, y0, x0, ww); _vertex_buffer += _stride;
+			write_uv(_vertex_buffer, INT16_MIN, y1, x0, ww); _vertex_buffer += _stride;
+			write_uv(_vertex_buffer, INT16_MIN, y1, x1, ww); _vertex_buffer += _stride;
+			write_uv(_vertex_buffer, INT16_MIN, y0, x1, ww); _vertex_buffer += _stride;
 			break;
 
 		case 2: // +Y
-			writeUV(_vertexBuffer, x0, INT16_MAX, y0, ww); _vertexBuffer += _stride;
-			writeUV(_vertexBuffer, x0, INT16_MAX, y1, ww); _vertexBuffer += _stride;
-			writeUV(_vertexBuffer, x1, INT16_MAX, y1, ww); _vertexBuffer += _stride;
-			writeUV(_vertexBuffer, x1, INT16_MAX, y0, ww); _vertexBuffer += _stride;
+			write_uv(_vertex_buffer, x0, INT16_MAX, y0, ww); _vertex_buffer += _stride;
+			write_uv(_vertex_buffer, x0, INT16_MAX, y1, ww); _vertex_buffer += _stride;
+			write_uv(_vertex_buffer, x1, INT16_MAX, y1, ww); _vertex_buffer += _stride;
+			write_uv(_vertex_buffer, x1, INT16_MAX, y0, ww); _vertex_buffer += _stride;
 			break;
 
 		case 3: // -Y
 			y0 = -y0;
 			y1 = -y1;
-			writeUV(_vertexBuffer, x0, INT16_MIN, y0, ww); _vertexBuffer += _stride;
-			writeUV(_vertexBuffer, x0, INT16_MIN, y1, ww); _vertexBuffer += _stride;
-			writeUV(_vertexBuffer, x1, INT16_MIN, y1, ww); _vertexBuffer += _stride;
-			writeUV(_vertexBuffer, x1, INT16_MIN, y0, ww); _vertexBuffer += _stride;
+			write_uv(_vertex_buffer, x0, INT16_MIN, y0, ww); _vertex_buffer += _stride;
+			write_uv(_vertex_buffer, x0, INT16_MIN, y1, ww); _vertex_buffer += _stride;
+			write_uv(_vertex_buffer, x1, INT16_MIN, y1, ww); _vertex_buffer += _stride;
+			write_uv(_vertex_buffer, x1, INT16_MIN, y0, ww); _vertex_buffer += _stride;
 			break;
 
 		case 4: // +Z
 			y0 = -y0;
 			y1 = -y1;
-			writeUV(_vertexBuffer, x0, y0, INT16_MAX, ww); _vertexBuffer += _stride;
-			writeUV(_vertexBuffer, x0, y1, INT16_MAX, ww); _vertexBuffer += _stride;
-			writeUV(_vertexBuffer, x1, y1, INT16_MAX, ww); _vertexBuffer += _stride;
-			writeUV(_vertexBuffer, x1, y0, INT16_MAX, ww); _vertexBuffer += _stride;
+			write_uv(_vertex_buffer, x0, y0, INT16_MAX, ww); _vertex_buffer += _stride;
+			write_uv(_vertex_buffer, x0, y1, INT16_MAX, ww); _vertex_buffer += _stride;
+			write_uv(_vertex_buffer, x1, y1, INT16_MAX, ww); _vertex_buffer += _stride;
+			write_uv(_vertex_buffer, x1, y0, INT16_MAX, ww); _vertex_buffer += _stride;
 			break;
 
 		case 5: // -Z
@@ -507,10 +507,10 @@ void atlas::packUV(const atlas_region& _region, uint8_t* _vertexBuffer, uint32_t
 			x1 = -x1;
 			y0 = -y0;
 			y1 = -y1;
-			writeUV(_vertexBuffer, x0, y0, INT16_MIN, ww); _vertexBuffer += _stride;
-			writeUV(_vertexBuffer, x0, y1, INT16_MIN, ww); _vertexBuffer += _stride;
-			writeUV(_vertexBuffer, x1, y1, INT16_MIN, ww); _vertexBuffer += _stride;
-			writeUV(_vertexBuffer, x1, y0, INT16_MIN, ww); _vertexBuffer += _stride;
+			write_uv(_vertex_buffer, x0, y0, INT16_MIN, ww); _vertex_buffer += _stride;
+			write_uv(_vertex_buffer, x0, y1, INT16_MIN, ww); _vertex_buffer += _stride;
+			write_uv(_vertex_buffer, x1, y1, INT16_MIN, ww); _vertex_buffer += _stride;
+			write_uv(_vertex_buffer, x1, y0, INT16_MIN, ww); _vertex_buffer += _stride;
 			break;
 	}
 }
