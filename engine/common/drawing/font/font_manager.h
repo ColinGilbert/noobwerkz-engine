@@ -22,7 +22,7 @@ class atlas;
 #define FONT_TYPE_DISTANCE          UINT32_C(0x00000400) // L8
 #define FONT_TYPE_DISTANCE_SUBPIXEL UINT32_C(0x00000500) // L8
 
-struct FontInfo
+struct font_info
 {
 	/// The font height in pixel.
 	uint16_t pixelSize;
@@ -78,10 +78,10 @@ struct FontInfo
 //              |------------- advance_x ---------->|
 
 /// Unicode value of a character
-typedef int32_t CodePoint;
+typedef int32_t unicode_point;
 
 /// A structure that describe a glyph.
-struct GlyphInfo
+struct glyph_info
 {
 	/// Index for faster retrieval.
 	int32_t glyphIndex;
@@ -115,21 +115,21 @@ struct GlyphInfo
 	uint16_t regionIndex;
 };
 
-BGFX_HANDLE(TrueTypeHandle);
-BGFX_HANDLE(FontHandle);
+BGFX_HANDLE(tt_handle);
+BGFX_HANDLE(ft_handle);
 
-class FontManager
+class font_manager
 {
 public:
 	/// Create the font manager using an external cube atlas (doesn't take
 	/// ownership of the atlas).
-	FontManager(atlas* _atlas);
+	font_manager(atlas* _atlas);
 
 	/// Create the font manager and create the texture cube as BGRA8 with
 	/// linear filtering.
-	FontManager(uint16_t texture_side_width = 512);
+	font_manager(uint16_t texture_side_width = 512);
 
-	~FontManager();
+	~font_manager();
 
 	/// Retrieve the atlas used by the font manager (e.g. to add stuff to it)
 	const atlas* getatlas() const
@@ -141,54 +141,54 @@ public:
 	/// thus can be freed or reused after this call.
 	///
 	/// @return invalid handle if the loading fail
-	TrueTypeHandle create_ttf(const uint8_t* buffer, uint32_t _size);
+	tt_handle create_ttf(const uint8_t* buffer, uint32_t _size);
 
 	/// Unload a TrueType font (free font memory) but keep loaded glyphs.
-	void destroy_ttf(TrueTypeHandle);
+	void destroy_ttf(tt_handle);
 
 	/// Return a font whose height is a fixed pixel size.
-	FontHandle create_font_by_pixel_size(TrueTypeHandle, uint32_t typeface_index, uint32_t pixel_size, uint32_t font_type = FONT_TYPE_ALPHA);
+	ft_handle create_font_by_pixel_size(tt_handle, uint32_t typeface_index, uint32_t pixel_size, uint32_t font_type = FONT_TYPE_ALPHA);
 
 	/// Return a scaled child font whose height is a fixed pixel size.
-	FontHandle createScaledFontToPixelSize(FontHandle, uint32_t pixel_size);
+	ft_handle create_scaled_font_to_pixel_size(ft_handle, uint32_t pixel_size);
 
 	/// destroy a font (truetype or baked)
-	void destroy_font(FontHandle);
+	void destroy_font(ft_handle);
 
 	/// Preload a set of glyphs from a TrueType file.
 	///
 	/// @return True if every glyph could be preloaded, false otherwise if
 	///   the Font is a baked font, this only do validation on the characters.
-	bool preload_glyph(FontHandle, const wchar_t* _string);
+	bool preload_glyph(ft_handle, const wchar_t* _string);
 
 	/// Preload a single glyph, return true on success.
-	bool preload_glyph(FontHandle, CodePoint);
+	bool preload_glyph(ft_handle, unicode_point);
 
 	/// Return the font descriptor of a font.
 	///
 	/// @remark the handle is required to be valid
-	const FontInfo& get_font_info(FontHandle) const;
+	const font_info& get_font_info(ft_handle) const;
 
 	/// Return the rendering informations about the glyph region. Load the
 	/// glyph from a TrueType font if possible
 	///
-	const GlyphInfo* get_glyph_info(FontHandle, CodePoint);
+	const glyph_info* get_glyph_info(ft_handle, unicode_point);
 
-	const GlyphInfo& get_black_glyph() const
+	const glyph_info& get_black_glyph() const
 	{
 		return m_blackGlyph;
 	}
 
 private:
 	struct cached_font;
-	struct CachedFile
+	struct cached_file
 	{
 		uint8_t* buffer;
 		uint32_t buffer_size;
 	};
 
 	void init();
-	bool add_bitmap(GlyphInfo&, const uint8_t*);
+	bool add_bitmap(glyph_info&, const uint8_t*);
 
 	bool m_owns_atlas;
 	atlas* m_atlas;
@@ -197,9 +197,9 @@ private:
 	cached_font* m_cached_fonts;
 
 	bx::HandleAllocT<MAX_OPENED_FILES> m_file_handles;
-	CachedFile* m_cached_files;
+	cached_file* m_cached_files;
 
-	GlyphInfo m_blackGlyph;
+	glyph_info m_blackGlyph;
 
 	//temporary buffer to raster glyph
 	uint8_t* m_buffer;

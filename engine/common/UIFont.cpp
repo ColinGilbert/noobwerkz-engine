@@ -10,17 +10,17 @@ void noob::ui_font::init(const std::string& filename, size_t font_size, float wi
 {
 	window_width = win_width;
 	window_height = win_height;
-	font_manager = new FontManager(1024);
-	buffer = new text_buffer_manager(font_manager);
+	font = new font_manager(1024);
+	buffer = new text_buffer_manager(font);
 
-	ttf_handle = load_ttf(font_manager, filename);
-	font_handle = font_manager->create_font_by_pixel_size(ttf_handle, 0, font_size, FONT_TYPE_ALPHA);
+	ttf_handle = load_ttf(font, filename);
+	font_handle = font->create_font_by_pixel_size(ttf_handle, 0, font_size, FONT_TYPE_ALPHA);
 
-	font_manager->preload_glyph(font_handle, L"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=_+[]{}!@#$%^&*()`~,<>/?\\|'\";:. \n");
+	font->preload_glyph(font_handle, L"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=_+[]{}!@#$%^&*()`~,<>/?\\|'\";:. \n");
 
-	font_manager->destroy_ttf(ttf_handle);
+	font->destroy_ttf(ttf_handle);
 
-	text_to_draw = buffer->createTextBuffer(FONT_TYPE_ALPHA, BufferType::Transient);//FONT_TYPE_ALPHA, BufferType::Transient);
+	text_to_draw = buffer->create_text_buffer(FONT_TYPE_ALPHA, BufferType::Transient);//FONT_TYPE_ALPHA, BufferType::Transient);
 }
 
 
@@ -38,18 +38,18 @@ void noob::ui_font::draw_text(uint8_t view_id, const std::string& message, float
 	bgfx::setViewTransform(view_id, view_matrix, ortho);
 	bgfx::setViewRect(view_id, 0, 0, window_width, window_height);
 	
-	buffer->clearTextBuffer(text_to_draw);
-	buffer->setPenPosition(text_to_draw, x, y);
-	buffer->appendText(text_to_draw, font_handle, message.c_str());
-	// TextRectangle rect = textBufferManager->getRectangle(text_to_draw);
+	buffer->clear_text_buffer(text_to_draw);
+	buffer->set_pen_position(text_to_draw, x, y);
+	buffer->append_text(text_to_draw, font_handle, message.c_str());
+	// TextRectangle rect = textBufferManager->get_rectangle(text_to_draw);
 	// bgfx::setState(BGFX_STATE_RGB_WRITE |BGFX_STATE_ALPHA_WRITE |BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA));
-	buffer->submitTextBuffer(text_to_draw, view_id);
+	buffer->submit_text_buffer(text_to_draw, view_id);
 }
 
 
 void noob::ui_font::set_colour(uint32_t colour) noexcept(true)
 {
-	buffer->setTextColor(text_to_draw, colour);
+	buffer->set_text_colour(text_to_draw, colour);
 }
 
 
@@ -60,12 +60,12 @@ void noob::ui_font::set_window_dims(float width, float height) noexcept(true)
 }
 
 
-TrueTypeHandle noob::ui_font::load_ttf(FontManager* _fm, const std::string& file_path) noexcept(true)
+tt_handle noob::ui_font::load_ttf(font_manager* _fm, const std::string& file_path) noexcept(true)
 {
 	std::string mem = noob::utils::load_file_as_string(file_path);
-	TrueTypeHandle handle = _fm->create_ttf(reinterpret_cast<const unsigned char*>(mem.c_str()), mem.size());
+	tt_handle handle = _fm->create_ttf(reinterpret_cast<const unsigned char*>(mem.c_str()), mem.size());
 	return handle;
-	TrueTypeHandle invalid = BGFX_INVALID_HANDLE;
+	tt_handle invalid = BGFX_INVALID_HANDLE;
 	return invalid;
 }
 
@@ -88,12 +88,12 @@ void noob::ui_font::draw_text(uint8_t view_id, const std::string& message, float
 	bgfx::setViewTransform(view_id, view_matrix, ortho);
 	bgfx::setViewRect(view_id, 0, 0, window_width, window_height);
 
-	textBufferManager->clearTextBuffer(text_to_draw);
-	textBufferManager->setPenPosition(text_to_draw, x, y);
-	textBufferManager->setTextColor
-		textBufferManager->appendText(text_to_draw, font_handle, message.c_str());
+	textBufferManager->clear_text_buffer(text_to_draw);
+	textBufferManager->set_pen_position(text_to_draw, x, y);
+	textBufferManager->set_text_colour
+		textBufferManager->append_text(text_to_draw, font_handle, message.c_str());
 	// bgfx::setState(BGFX_STATE_RGB_WRITE |BGFX_STATE_ALPHA_WRITE |BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA));
-	textBufferManager->submitTextBuffer(text_to_draw, view_submit);
+	textBufferManager->submit_text_buffer(text_to_draw, view_submit);
 	bgfx::submit(view_id);
 }
 */

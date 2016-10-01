@@ -8,7 +8,7 @@
 #include "text_metrics.h"
 #include "utf8.h"
 
-text_metrics::text_metrics(FontManager* _fontManager)
+text_metrics::text_metrics(font_manager* _fontManager)
 	: m_fontManager(_fontManager)
 	, m_width(0)
 	, m_height(0)
@@ -18,9 +18,9 @@ text_metrics::text_metrics(FontManager* _fontManager)
 {
 }
 
-void text_metrics::appendText(FontHandle _fontHandle, const char* _string)
+void text_metrics::append_text(ft_handle _fontHandle, const char* _string)
 {
-	const FontInfo& font = m_fontManager->get_font_info(_fontHandle);
+	const font_info& font = m_fontManager->get_font_info(_fontHandle);
 
 	if (font.lineGap > m_lineGap)
 	{
@@ -34,14 +34,14 @@ void text_metrics::appendText(FontHandle _fontHandle, const char* _string)
 		m_height += m_lineHeight;
 	}
 
-	CodePoint codepoint = 0;
+	unicode_point codepoint = 0;
 	uint32_t state = 0;
 
 	for (; *_string; ++_string)
 	{
 		if (!utf8_decode(&state, (uint32_t*)&codepoint, *_string) )
 		{
-			const GlyphInfo* glyph = m_fontManager->get_glyph_info(_fontHandle, codepoint);
+			const glyph_info* glyph = m_fontManager->get_glyph_info(_fontHandle, codepoint);
 			if (NULL != glyph)
 			{
 				if (codepoint == L'\n')
@@ -69,9 +69,9 @@ void text_metrics::appendText(FontHandle _fontHandle, const char* _string)
 	BX_CHECK(state == UTF8_ACCEPT, "The string is not well-formed");
 }
 
-void text_metrics::appendText(FontHandle _fontHandle, const wchar_t* _string)
+void text_metrics::append_text(ft_handle _fontHandle, const wchar_t* _string)
 {
-	const FontInfo& font = m_fontManager->get_font_info(_fontHandle);
+	const font_info& font = m_fontManager->get_font_info(_fontHandle);
 
 	if (font.lineGap > m_lineGap) 
 	{
@@ -88,7 +88,7 @@ void text_metrics::appendText(FontHandle _fontHandle, const wchar_t* _string)
 	for (uint32_t ii = 0, end = (uint32_t)wcslen(_string); ii < end; ++ii)
 	{
 		uint32_t codepoint = _string[ii];
-		const GlyphInfo* glyph = m_fontManager->get_glyph_info(_fontHandle, codepoint);
+		const glyph_info* glyph = m_fontManager->get_glyph_info(_fontHandle, codepoint);
 		if (NULL != glyph)
 		{
 			if (codepoint == L'\n')
@@ -113,14 +113,14 @@ void text_metrics::appendText(FontHandle _fontHandle, const wchar_t* _string)
 	}
 }
 
-TextLineMetrics::TextLineMetrics(const FontInfo& _fontInfo)
+text_line_metrics::text_line_metrics(const font_info& _fontInfo)
 {
 	m_lineHeight = _fontInfo.ascender - _fontInfo.descender + _fontInfo.lineGap;
 }
 
-uint32_t TextLineMetrics::get_line_count(const char* _string) const
+uint32_t text_line_metrics::get_line_count(const char* _string) const
 {
-	CodePoint codepoint = 0;
+	unicode_point codepoint = 0;
 	uint32_t state = 0;
 	uint32_t lineCount = 1;
 	for (; *_string; ++_string)
@@ -138,7 +138,7 @@ uint32_t TextLineMetrics::get_line_count(const char* _string) const
 	return lineCount;
 }
 
-uint32_t TextLineMetrics::get_line_count(const wchar_t* _string) const
+uint32_t text_line_metrics::get_line_count(const wchar_t* _string) const
 {	
 	uint32_t lineCount = 1;
 	for ( ;*_string != L'\0'; ++_string)
@@ -152,9 +152,9 @@ uint32_t TextLineMetrics::get_line_count(const wchar_t* _string) const
 }
 
 
-void TextLineMetrics::getSubText(const char* _string, uint32_t _firstLine, uint32_t _lastLine, const char*& _begin, const char*& _end)
+void text_line_metrics::get_subtext(const char* _string, uint32_t _firstLine, uint32_t _lastLine, const char*& _begin, const char*& _end)
 {
-	CodePoint codepoint = 0;
+	unicode_point codepoint = 0;
 	uint32_t state = 0;
 	// y is bottom of a text line
 	uint32_t currentLine = 0;
@@ -197,7 +197,7 @@ void TextLineMetrics::getSubText(const char* _string, uint32_t _firstLine, uint3
 	_end = _string;
 }
 
-void TextLineMetrics::getSubText(const wchar_t* _string, uint32_t _firstLine, uint32_t _lastLine, const wchar_t*& _begin, const wchar_t*& _end)
+void text_line_metrics::get_subtext(const wchar_t* _string, uint32_t _firstLine, uint32_t _lastLine, const wchar_t*& _begin, const wchar_t*& _end)
 {
 	uint32_t currentLine = 0;	
 	while ( (*_string != L'\0') && (currentLine < _firstLine) )
@@ -229,9 +229,9 @@ void TextLineMetrics::getSubText(const wchar_t* _string, uint32_t _firstLine, ui
 	_end = _string;	
 }
 
-void TextLineMetrics::getVisibleText(const char* _string, float _top, float _bottom, const char*& _begin, const char*& _end)
+void text_line_metrics::get_visible_text(const char* _string, float _top, float _bottom, const char*& _begin, const char*& _end)
 {
-	CodePoint codepoint = 0;
+	unicode_point codepoint = 0;
 	uint32_t state = 0;
 	// y is bottom of a text line
 	float y = m_lineHeight;
@@ -276,7 +276,7 @@ void TextLineMetrics::getVisibleText(const char* _string, float _top, float _bot
 	_end = _string;
 }
 
-void TextLineMetrics::getVisibleText(const wchar_t* _string, float _top, float _bottom, const wchar_t*& _begin, const wchar_t*& _end)
+void text_line_metrics::get_visible_text(const wchar_t* _string, float _top, float _bottom, const wchar_t*& _begin, const wchar_t*& _end)
 {
 	// y is bottom of a text line
 	float y = m_lineHeight;

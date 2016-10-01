@@ -14,7 +14,7 @@ namespace noob
 {
 	
 
-	// text_buffer_manager depends on FontManager. This class brings them together.
+	// text_buffer_manager depends on font_manager. This class brings them together.
 	class ui_font
 	{
 		public:
@@ -27,15 +27,15 @@ namespace noob
 			void set_window_dims(float width, float height) noexcept(true);
 
 		protected:
-			TrueTypeHandle load_ttf(FontManager* _fm, const std::string& file_path) noexcept(true); 
+			tt_handle load_ttf(font_manager* _fm, const std::string& file_path) noexcept(true); 
 
 			bool valid;
 			float window_width, window_height;
 			uint32_t font_colour;
-			FontManager* font_manager;
+			font_manager* font;
 			text_buffer_manager* buffer;
-			TextBufferHandle text_to_draw;
-			TrueTypeHandle ttf_handle;
-			FontHandle font_handle;
+			text_buf_handle text_to_draw;
+			tt_handle ttf_handle;
+			ft_handle font_handle;
 	};
 }
