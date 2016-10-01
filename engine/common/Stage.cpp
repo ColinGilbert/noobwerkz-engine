@@ -106,17 +106,18 @@ void noob::stage::update(double dt) noexcept(true)
 	g.profile_run.stage_physics_duration += update_duration;
 }
 
-void noob::stage::draw(float window_width, float window_height, const noob::vec3& eye_pos, const noob::vec3& eye_target, const noob::vec3& eye_up, const noob::mat4& projection_mat) noexcept(true) 
+void noob::stage::draw(float window_width, float window_height, const noob::vec3& eye_pos, const noob::vec3& eye_target, const noob::vec3& eye_up, const noob::mat4& projection_mat) const noexcept(true) 
 {
 	// PROFILE_FUNC();
-	const noob::time start_time = noob::clock::now();
 
 	const noob::mat4 view_mat(noob::look_at(eye_pos, eye_target, eye_up));
 
+	// bgfx::setViewSeq(0, true);
+
 	bgfx::setViewTransform(0, &view_mat.m[0], &projection_mat.m[0]);
 	bgfx::setViewRect(0, 0, 0, window_width, window_height);
-	bgfx::setViewTransform(1, &view_mat.m[0], &projection_mat.m[0]);
-	bgfx::setViewRect(1, 0, 0, window_width, window_height);
+	// bgfx::setViewTransform(1, &view_mat.m[0], &projection_mat.m[0]);
+	// bgfx::setViewRect(1, 0, 0, window_width, window_height);
 
 	noob::graphics& gfx = noob::graphics::get_instance();
 	bgfx::setUniform(gfx.get_ambient().handle, &ambient_light.v[0]);
@@ -237,12 +238,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 		}
 	}
 
-
-
-
-	noob::time end_time = noob::clock::now();
-	draw_duration = end_time - start_time;
-	g.profile_run.stage_draw_duration += draw_duration;
+	// bgfx::setViewSeq(0, false);
 }
 
 
@@ -310,7 +306,6 @@ noob::actor_handle noob::stage::actor(const noob::actor_blueprints_handle bp_h, 
 	noob::stage_item_variant var;
 	var.type = noob::stage_item_type::ACTOR;
 	var.index = a_h.index();
-	//noob::handle<noob::stage_item_variant> var_h = stage_item_variants.add(var);
 
 	add_to_graph(bp.shader, bp.bounds, bp.reflect, var);
 
@@ -334,18 +329,15 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, co
 	sc.reflect = reflect_arg;
 	noob::scenery_handle scenery_h = sceneries.add(sc);
 
-
 	noob::stage_item_variant var;
 	var.type = noob::stage_item_type::SCENERY;
 	var.index = scenery_h.index();
 
 	add_to_graph(shader_arg, shape_arg, reflect_arg, var);
 
-
 	noob::body b = bodies.get(bod_h);
 	b.inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::SCENERY));
 	b.inner->setUserIndex_2(scenery_h.index());
-
 
 	logger::log(noob::importance::INFO, noob::concat("[Stage] Scenery added! Handle ", noob::to_string(scenery_h.index())) );
 

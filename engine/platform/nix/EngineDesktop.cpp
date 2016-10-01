@@ -1,6 +1,7 @@
 #include <atomic>
 
 #include <bgfx/bgfx.h>
+#include <noob/singleton/singleton.hpp>
 
 #include "Graphics.hpp"
 #include "Application.hpp"
@@ -29,7 +30,8 @@ std::atomic<uint32_t> height(720);
 static uint32_t debug = BGFX_DEBUG_TEXT;
 static uint32_t reset = BGFX_RESET_VSYNC;
 
-static noob::application* app;
+noob::application app;
+noob::singleton<noob::application> app_single;
 // static noob::ndof ndof;
 
 void window_close_callback(GLFWwindow* window)
@@ -55,7 +57,7 @@ void framebuffer_size_callback(GLFWwindow* window, int w, int h)
 	//std::stringstream ss;
 	//ss << "[glfw] framebuffer_size_callback " << width << ", " << height;
 	//logger::log(ss.str());
-	app->window_resize(width, height);
+	app.window_resize(width, height);
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -126,14 +128,13 @@ int main(int /*_argc*/, char** /*_argv*/)
 		glfwTerminate();
 		return -1;
 	}
+//	noob::singleton<noob::application> app;
 
-	app = new noob::application();
-
-	if (!app)
-	{
-		noob::logger::log(noob::importance::ERROR, "Could not init application!");
-		return 0;
-	}
+	//if (!app)
+	//{
+	//	noob::logger::log(noob::importance::ERROR, "Could not init application!");
+	//	return 0;
+	// }
 
 
 	glfwSetWindow(window);
@@ -144,7 +145,7 @@ int main(int /*_argc*/, char** /*_argv*/)
 
 	gfx.init(width, height);
 
-	app->init();
+	app.init();
 
 	glfwSetWindowCloseCallback(window, window_close_callback);
 	glfwSetWindowSizeCallback(window, window_size_callback);
@@ -159,7 +160,7 @@ int main(int /*_argc*/, char** /*_argv*/)
 	{
 		// noob::ndof::data info = ndof.get_data();
 		// app->accept_ndof_data(info);
-		app->step();
+		app.step();
 		noob::graphics& gfx = noob::graphics::get_instance();
 		gfx.frame(width, height);
 		glfwPollEvents();
@@ -167,6 +168,5 @@ int main(int /*_argc*/, char** /*_argv*/)
 
 	// Shutdown bgfx.
 	bgfx::shutdown();
-	delete app;
 	return 0;
 }

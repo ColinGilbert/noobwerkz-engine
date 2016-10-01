@@ -2,7 +2,6 @@
 
 #include "Drawable.hpp"
 #include "BasicMesh.hpp"
-// #include "IntrusiveBase.hpp"
 #include "Graphics.hpp"
 
 namespace noob

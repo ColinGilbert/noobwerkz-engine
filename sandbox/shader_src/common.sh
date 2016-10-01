@@ -17,10 +17,8 @@ uniform vec4 colour_1;
 uniform vec4 colour_2;
 uniform vec4 colour_3;
 
-// Texture blending factor
+// Texture blending factor. Positions are only required for the two mid-gradient colours, as the other two are at the ends. Therefore, two can be used in one.
 uniform vec4 blend_0;
-
-// Positions are only required for the two mid-gradient colours, as the other two are at the ends
 uniform vec4 blend_1;
 
 // Scaling factors

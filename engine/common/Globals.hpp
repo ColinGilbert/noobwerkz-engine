@@ -45,7 +45,7 @@
 
 
 
-//        Globals: Currently holds classes requiring data held in common storage.
+// Globals: Currently holds classes requiring data held in common storage.
 // TODO: Implement singleton class template.
 // TODO: Separate into different classes.
 // TODO: Make immutable upon assignment.

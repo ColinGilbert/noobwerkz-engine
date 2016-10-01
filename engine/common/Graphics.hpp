@@ -9,12 +9,12 @@
 
 #include "NoobDefines.hpp"
 #include "NoobUtils.hpp"
+#include "MathFuncs.hpp"
 
 namespace noob
 {
 	class graphics
 	{
-
 		static graphics* ptr_to_instance;
 
 		graphics() noexcept(true) : instancing(false) {}
@@ -34,7 +34,6 @@ namespace noob
 		}
 
 		~graphics() noexcept(true) {}
-
 
 
 		public:
@@ -110,11 +109,8 @@ namespace noob
 		noob::graphics::sampler get_sampler(const std::string&) const;
 
 		// ---------------- Checkers ----------------
-
 		bool is_valid(const noob::graphics::uniform& _uniform) const noexcept(true) { return (_uniform.handle.idx != bgfx::invalidHandle); }
 		bool is_valid(const noob::graphics::sampler& _sampler) const noexcept(true) { return (_sampler.handle.idx != bgfx::invalidHandle); }
-
-
 
 		// TODO: Implement these
 		// static bool is_valid(const noob::graphics::shader&);
@@ -152,6 +148,14 @@ namespace noob
 		noob::graphics::sampler get_texture_0() const noexcept(true) { return texture_0; }
 
 		bool instancing_supported() const noexcept(true) { return instancing; }
+
+	// bgfx::setViewTransform(0, &view_mat.m[0], &projection_mat.m[0]);
+	// bgfx::setViewRect(0, 0, 0, window_width, window_height);
+	// void setViewRect(uint8_t _id, uint16_t _x, uint16_t _y, BackbufferRatio::Enum _ratio);
+	// // 
+		void set_view_transform(uint8_t, const noob::mat4& view, const noob::mat4& proj) noexcept(true) {}
+		void set_view_rect(uint8_t, uint16_t x, uint16_t y) noexcept(true) {}
+		// bgfx::setViewRect(0, 0, 0, window_width, window_height);
 
 		protected:
 

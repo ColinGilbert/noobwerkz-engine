@@ -6,6 +6,7 @@
 #include <bgfx/bgfx.h>
 
 #include <limits.h> // INT_MAX
+#include <limits>
 #include <memory.h> // memset
 #include <vector>
 
@@ -66,20 +67,11 @@ private:
 	std::vector<Node> m_skyline; //< node of the skyline algorithm
 };
 
-RectanglePacker::RectanglePacker()
-	: m_width(0)
-	, m_height(0)
-	, m_usedSpace(0)
-{
-}
+RectanglePacker::RectanglePacker() : m_width(0), m_height(0), m_usedSpace(0) {}
 
-RectanglePacker::RectanglePacker(uint32_t _width, uint32_t _height)
-	: m_width(_width)
-	, m_height(_height)
-	, m_usedSpace(0)
+RectanglePacker::RectanglePacker(uint32_t _width, uint32_t _height) : m_width(_width), m_height(_height), m_usedSpace(0)
 {
-	// We want a one pixel border around the whole atlas to avoid any artefact when
-	// sampling texture
+	// We want a one pixel border around the whole atlas to avoid any artefact when sampling texture
 	m_skyline.push_back(Node(1, 1, uint16_t(_width - 2) ) );
 }
 
@@ -92,8 +84,7 @@ void RectanglePacker::init(uint32_t _width, uint32_t _height)
 	m_usedSpace = 0;
 
 	m_skyline.clear();
-	// We want a one pixel border around the whole atlas to avoid any artifact when
-	// sampling texture
+	// We want a one pixel border around the whole atlas to avoid any artifact when sampling texture
 	m_skyline.push_back(Node(1, 1, uint16_t(_width - 2) ) );
 }
 
@@ -109,7 +100,7 @@ bool RectanglePacker::addRectangle(uint16_t _width, uint16_t _height, uint16_t& 
 	best_height = INT_MAX;
 	best_index = -1;
 	best_width = INT_MAX;
-	for (uint16_t ii = 0, num = uint16_t(m_skyline.size() ); ii < num; ++ii)
+	for (uint16_t ii = 0, num = static_cast<uint16_t>(m_skyline.size()); ii < num; ++ii)
 	{
 		int32_t yy = fit(ii, _width, _height);
 		if (yy >= 0)
@@ -163,6 +154,7 @@ bool RectanglePacker::addRectangle(uint16_t _width, uint16_t _height, uint16_t& 
 
 	merge();
 	m_usedSpace += _width * _height;
+
 	return true;
 }
 
@@ -171,7 +163,7 @@ float RectanglePacker::getUsageRatio()
 	uint32_t total = m_width * m_height;
 	if (total > 0)
 	{
-		return (float)m_usedSpace / (float)total;
+		return static_cast<float>(m_usedSpace) / static_cast<float>(total);
 	}
 
 	return 0.0f;
@@ -182,8 +174,7 @@ void RectanglePacker::clear()
 	m_skyline.clear();
 	m_usedSpace = 0;
 
-	// We want a one pixel border around the whole atlas to avoid any artefact when
-	// sampling texture
+	// We want a one pixel border around the whole atlas to avoid any artefact when sampling texture
 	m_skyline.push_back(Node(1, 1, uint16_t(m_width - 2) ) );
 }
 
@@ -249,12 +240,7 @@ struct Atlas::PackedLayer
 	AtlasRegion faceRegion;
 };
 
-Atlas::Atlas(uint16_t _textureSize, uint16_t _maxRegionsCount)
-	: m_usedLayers(0)
-	, m_usedFaces(0)
-	, m_textureSize(_textureSize)
-	, m_regionCount(0)
-	, m_maxRegionCount(_maxRegionsCount)
+Atlas::Atlas(uint16_t _textureSize, uint16_t _maxRegionsCount) : m_usedLayers(0), m_usedFaces(0), m_textureSize(_textureSize), m_regionCount(0), m_maxRegionCount(_maxRegionsCount)
 {
 	BX_CHECK(_textureSize >= 64 && _textureSize <= 4096, "Invalid _textureSize %d.", _textureSize);
 	BX_CHECK(_maxRegionsCount >= 64 && _maxRegionsCount <= 32000, "Invalid _maxRegionsCount %d.", _maxRegionsCount);
@@ -278,12 +264,7 @@ Atlas::Atlas(uint16_t _textureSize, uint16_t _maxRegionsCount)
 		);
 }
 
-Atlas::Atlas(uint16_t _textureSize, const uint8_t* _textureBuffer, uint16_t _regionCount, const uint8_t* _regionBuffer, uint16_t _maxRegionsCount)
-	: m_usedLayers(24)
-	, m_usedFaces(6)
-	, m_textureSize(_textureSize)
-	, m_regionCount(_regionCount)
-	, m_maxRegionCount(_regionCount < _maxRegionsCount ? _regionCount : _maxRegionsCount)
+Atlas::Atlas(uint16_t _textureSize, const uint8_t* _textureBuffer, uint16_t _regionCount, const uint8_t* _regionBuffer, uint16_t _maxRegionsCount) : m_usedLayers(24), m_usedFaces(6), m_textureSize(_textureSize), m_regionCount(_regionCount), m_maxRegionCount(_regionCount < _maxRegionsCount ? _regionCount : _maxRegionsCount)
 {
 	BX_CHECK(_regionCount <= 64 && _maxRegionsCount <= 4096, "_regionCount %d, _maxRegionsCount %d", _regionCount, _maxRegionsCount);
 
@@ -295,13 +276,7 @@ Atlas::Atlas(uint16_t _textureSize, const uint8_t* _textureBuffer, uint16_t _reg
 	memcpy(m_regions, _regionBuffer, _regionCount * sizeof(AtlasRegion) );
 	memcpy(m_textureBuffer, _textureBuffer, getTextureBufferSize() );
 
-	m_textureHandle = bgfx::createTextureCube(_textureSize
-		, false
-		, 1
-		, bgfx::TextureFormat::BGRA8
-		, BGFX_TEXTURE_NONE
-		, bgfx::makeRef(m_textureBuffer, getTextureBufferSize() )
-		);
+	m_textureHandle = bgfx::createTextureCube(_textureSize, false, 1, bgfx::TextureFormat::BGRA8, BGFX_TEXTURE_NONE, bgfx::makeRef(m_textureBuffer, getTextureBufferSize()));
 }
 
 Atlas::~Atlas()
@@ -315,27 +290,32 @@ Atlas::~Atlas()
 
 void Atlas::init()
 {
-	m_texelSize = float(UINT16_MAX) / float(m_textureSize);
+	m_texelSize = static_cast<float>(std::numeric_limits<uint16_t>::max()) / static_cast<float>(m_textureSize);
 	float texelHalf = m_texelSize/2.0f;
 	switch (bgfx::getRendererType() )
 	{
 	case bgfx::RendererType::Direct3D9:
+	{
 		m_texelOffset[0] = 0.0f;
 		m_texelOffset[1] = 0.0f;
 		break;
-
+	}
 	case bgfx::RendererType::Direct3D11:
 	case bgfx::RendererType::Direct3D12:
+	{
 		m_texelOffset[0] = texelHalf;
 		m_texelOffset[1] = texelHalf;
 		break;
-
+	}
 	default:
+	{
 		m_texelOffset[0] = texelHalf;
 		m_texelOffset[1] = -texelHalf;
 		break;
 	}
+	}
 }
+
 
 uint16_t Atlas::addRegion(uint16_t _width, uint16_t _height, const uint8_t* _bitmapBuffer, AtlasRegion::Type _type, uint16_t outline)
 {

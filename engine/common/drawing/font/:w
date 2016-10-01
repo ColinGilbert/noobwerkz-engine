@@ -384,7 +384,11 @@ void TextBuffer::appendGlyph(FontHandle _handle, CodePoint _codePoint)
 		float x1 = ( (float)x0 + (glyph->advance_x) );
 		float y1 = (m_penY + m_lineAscender - m_lineDescender + m_lineGap);
 
-		atlas->packUV(blackGlyph.regionIndex, (uint8_t*)m_vertexBuffer, sizeof(TextVertex) * m_vertexCount + offsetof(TextVertex, u), sizeof(TextVertex));
+		atlas->packUV(blackGlyph.regionIndex
+				, (uint8_t*)m_vertexBuffer
+				, sizeof(TextVertex) * m_vertexCount + offsetof(TextVertex, u)
+				, sizeof(TextVertex)
+			     );
 
 		const uint16_t vertexCount = m_vertexCount;
 		setVertex(vertexCount + 0, x0, y0, m_backgroundColor, STYLE_BACKGROUND);
@@ -410,7 +414,11 @@ void TextBuffer::appendGlyph(FontHandle _handle, CodePoint _codePoint)
 		float x1 = ( (float)x0 + (glyph->advance_x) );
 		float y1 = y0 + font.underlineThickness;
 
-		atlas->packUV(blackGlyph.regionIndex, (uint8_t*)m_vertexBuffer, sizeof(TextVertex) * m_vertexCount + offsetof(TextVertex, u), sizeof(TextVertex));
+		atlas->packUV(blackGlyph.regionIndex
+				, (uint8_t*)m_vertexBuffer
+				, sizeof(TextVertex) * m_vertexCount + offsetof(TextVertex, u)
+				, sizeof(TextVertex)
+			     );
 
 		setVertex(m_vertexCount + 0, x0, y0, m_underlineColor, STYLE_UNDERLINE);
 		setVertex(m_vertexCount + 1, x0, y1, m_underlineColor, STYLE_UNDERLINE);
@@ -427,14 +435,19 @@ void TextBuffer::appendGlyph(FontHandle _handle, CodePoint _codePoint)
 		m_indexCount += 6;
 	}
 
-	if (m_styleFlags & STYLE_OVERLINE && m_overlineColor & 0xFF000000)
+	if (m_styleFlags & STYLE_OVERLINE
+			&&  m_overlineColor & 0xFF000000)
 	{
 		float x0 = (m_penX - kerning);
 		float y0 = (m_penY);
 		float x1 = ( (float)x0 + (glyph->advance_x) );
 		float y1 = y0 + font.underlineThickness;
 
-		m_fontManager->getAtlas()->packUV(blackGlyph.regionIndex, (uint8_t*)m_vertexBuffer, sizeof(TextVertex) * m_vertexCount + offsetof(TextVertex, u), sizeof(TextVertex));
+		m_fontManager->getAtlas()->packUV(blackGlyph.regionIndex
+				, (uint8_t*)m_vertexBuffer
+				, sizeof(TextVertex) * m_vertexCount + offsetof(TextVertex, u)
+				, sizeof(TextVertex)
+				);
 
 		setVertex(m_vertexCount + 0, x0, y0, m_overlineColor, STYLE_OVERLINE);
 		setVertex(m_vertexCount + 1, x0, y1, m_overlineColor, STYLE_OVERLINE);
@@ -459,7 +472,11 @@ void TextBuffer::appendGlyph(FontHandle _handle, CodePoint _codePoint)
 		float x1 = ( (float)x0 + (glyph->advance_x) );
 		float y1 = y0 + font.underlineThickness;
 
-		atlas->packUV(blackGlyph.regionIndex, (uint8_t*)m_vertexBuffer, sizeof(TextVertex) * m_vertexCount + offsetof(TextVertex, u), sizeof(TextVertex));
+		atlas->packUV(blackGlyph.regionIndex
+				, (uint8_t*)m_vertexBuffer
+				, sizeof(TextVertex) * m_vertexCount + offsetof(TextVertex, u)
+				, sizeof(TextVertex)
+			     );
 
 		setVertex(m_vertexCount + 0, x0, y0, m_strikeThroughColor, STYLE_STRIKE_THROUGH);
 		setVertex(m_vertexCount + 1, x0, y1, m_strikeThroughColor, STYLE_STRIKE_THROUGH);
@@ -481,7 +498,11 @@ void TextBuffer::appendGlyph(FontHandle _handle, CodePoint _codePoint)
 	float x1 = (x0 + glyph->width);
 	float y1 = (y0 + glyph->height);
 
-	atlas->packUV(glyph->regionIndex, (uint8_t*)m_vertexBuffer, sizeof(TextVertex) * m_vertexCount + offsetof(TextVertex, u), sizeof(TextVertex));
+	atlas->packUV(glyph->regionIndex
+			, (uint8_t*)m_vertexBuffer
+			, sizeof(TextVertex) * m_vertexCount + offsetof(TextVertex, u)
+			, sizeof(TextVertex)
+		     );
 
 	setVertex(m_vertexCount + 0, x0, y0, m_textColor);
 	setVertex(m_vertexCount + 1, x0, y1, m_textColor);
@@ -498,7 +519,6 @@ void TextBuffer::appendGlyph(FontHandle _handle, CodePoint _codePoint)
 	m_indexCount += 6;
 
 	m_penX += glyph->advance_x;
-
 	if (m_penX > m_rectangle.width)
 	{
 		m_rectangle.width = m_penX;
@@ -531,7 +551,8 @@ void TextBuffer::verticalCenterLastLine(float _dy, float _top, float _bottom)
 	}
 }
 
-TextBufferManager::TextBufferManager(FontManager* _fontManager) : m_fontManager(_fontManager)
+	TextBufferManager::TextBufferManager(FontManager* _fontManager)
+: m_fontManager(_fontManager)
 {
 	m_textBuffers = new BufferCache[MAX_TEXT_BUFFER_COUNT];
 

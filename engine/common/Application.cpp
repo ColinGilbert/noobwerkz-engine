@@ -1,25 +1,5 @@
 #include "Application.hpp"
 
-noob::application* noob::application::app_pointer = nullptr;
-
-noob::application::application() 
-{
-	app_pointer = this;
-}
-
-
-noob::application::~application()
-{
-	app_pointer = nullptr;
-}
-
-
-noob::application& noob::application::get()
-{
-	assert(app_pointer);
-	return *app_pointer;
-}
-
 
 void noob::application::init()
 {
@@ -29,7 +9,7 @@ void noob::application::init()
 
 	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
 
-//	prefix = std::unique_ptr<std::string>(new std::string("./"));
+	//	prefix = std::unique_ptr<std::string>(new std::string("./"));
 
 
 	// TODO: Uncomment once noob::filesystem is fixed
@@ -66,7 +46,8 @@ void noob::application::init()
 void noob::application::update(double delta)
 {
 	gui.window_dims(window_width, window_height);
-	/*
+
+/*
 	   network.tick();
 
 	   while (network.has_message())
@@ -87,6 +68,7 @@ void noob::application::update(double delta)
 	}
 	}
 	*/
+
 	stage.update(delta);
 	user_update(delta);
 }
@@ -94,8 +76,16 @@ void noob::application::update(double delta)
 
 void noob::application::draw()
 {
+	const noob::time start_time = noob::clock::now();
+	
 	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0, 2000.0);
 	stage.draw(window_width, window_height, eye_pos, eye_target, eye_up, proj_mat);
+
+	noob::time end_time = noob::clock::now();
+	noob::duration draw_duration = end_time - start_time;
+
+	noob::globals& g = noob::globals::get_instance();
+	g.profile_run.stage_draw_duration += draw_duration;
 }
 
 /*

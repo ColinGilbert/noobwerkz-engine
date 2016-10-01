@@ -127,7 +127,7 @@ public:
 
 	/// Create the font manager and create the texture cube as BGRA8 with
 	/// linear filtering.
-	FontManager(uint16_t _textureSideWidth = 512);
+	FontManager(uint16_t texture_side_width = 512);
 
 	~FontManager();
 
@@ -141,38 +141,38 @@ public:
 	/// thus can be freed or reused after this call.
 	///
 	/// @return invalid handle if the loading fail
-	TrueTypeHandle createTtf(const uint8_t* _buffer, uint32_t _size);
+	TrueTypeHandle createTtf(const uint8_t* buffer, uint32_t _size);
 
 	/// Unload a TrueType font (free font memory) but keep loaded glyphs.
-	void destroyTtf(TrueTypeHandle _handle);
+	void destroyTtf(TrueTypeHandle);
 
 	/// Return a font whose height is a fixed pixel size.
-	FontHandle createFontByPixelSize(TrueTypeHandle _handle, uint32_t _typefaceIndex, uint32_t _pixelSize, uint32_t _fontType = FONT_TYPE_ALPHA);
+	FontHandle createFontByPixelSize(TrueTypeHandle, uint32_t typeface_index, uint32_t pixel_size, uint32_t font_type = FONT_TYPE_ALPHA);
 
 	/// Return a scaled child font whose height is a fixed pixel size.
-	FontHandle createScaledFontToPixelSize(FontHandle _baseFontHandle, uint32_t _pixelSize);
+	FontHandle createScaledFontToPixelSize(FontHandle, uint32_t pixel_size);
 
 	/// destroy a font (truetype or baked)
-	void destroyFont(FontHandle _handle);
+	void destroyFont(FontHandle);
 
 	/// Preload a set of glyphs from a TrueType file.
 	///
 	/// @return True if every glyph could be preloaded, false otherwise if
 	///   the Font is a baked font, this only do validation on the characters.
-	bool preloadGlyph(FontHandle _handle, const wchar_t* _string);
+	bool preloadGlyph(FontHandle, const wchar_t* _string);
 
 	/// Preload a single glyph, return true on success.
-	bool preloadGlyph(FontHandle _handle, CodePoint _character);
+	bool preloadGlyph(FontHandle, CodePoint);
 
 	/// Return the font descriptor of a font.
 	///
 	/// @remark the handle is required to be valid
-	const FontInfo& getFontInfo(FontHandle _handle) const;
+	const FontInfo& getFontInfo(FontHandle) const;
 
 	/// Return the rendering informations about the glyph region. Load the
 	/// glyph from a TrueType font if possible
 	///
-	const GlyphInfo* getGlyphInfo(FontHandle _handle, CodePoint _codePoint);
+	const GlyphInfo* getGlyphInfo(FontHandle, CodePoint);
 
 	const GlyphInfo& getBlackGlyph() const
 	{
@@ -184,20 +184,20 @@ private:
 	struct CachedFile
 	{
 		uint8_t* buffer;
-		uint32_t bufferSize;
+		uint32_t buffer_size;
 	};
 
 	void init();
-	bool addBitmap(GlyphInfo& _glyphInfo, const uint8_t* _data);
+	bool addBitmap(GlyphInfo&, const uint8_t*);
 
-	bool m_ownAtlas;
+	bool m_owns_atlas;
 	Atlas* m_atlas;
 
-	bx::HandleAllocT<MAX_OPENED_FONT> m_fontHandles;
-	CachedFont* m_cachedFonts;
+	bx::HandleAllocT<MAX_OPENED_FONT> m_font_handles;
+	CachedFont* m_cached_fonts;
 
-	bx::HandleAllocT<MAX_OPENED_FILES> m_filesHandles;
-	CachedFile* m_cachedFiles;
+	bx::HandleAllocT<MAX_OPENED_FILES> m_file_handles;
+	CachedFile* m_cached_files;
 
 	GlyphInfo m_blackGlyph;
 

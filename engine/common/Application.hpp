@@ -33,11 +33,6 @@ namespace noob
 	class application
 	{
 		public:
-			application();
-			~application();
-			static application& get();
-
-
 			bool eval(const std::string& name, const std::string& string_to_eval, bool reset = false);
 
 			uint32_t get_height() const { return static_cast<uint32_t>(window_height); }
@@ -66,8 +61,6 @@ namespace noob
 			void step();
 
 		protected:
-
-			static application* app_pointer;
 
 			void update(double delta);
 			void draw();
