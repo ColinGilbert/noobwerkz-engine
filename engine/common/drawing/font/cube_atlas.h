@@ -44,9 +44,9 @@ struct atlas_region
 		return (mask >> 8) & 0x0000000F;
 	}
 
-	void set_mask(atlas_region::type _type, uint32_t _faceIndex, uint32_t _componentIndex)
+	void set_mask(atlas_region::type _type, uint32_t _face_index, uint32_t _component_index)
 	{
-		mask = (_componentIndex << 8) + (_faceIndex << 4) + (uint32_t)_type;
+		mask = (_component_index << 8) + (_face_index << 4) + (uint32_t)_type;
 	}
 };
 
