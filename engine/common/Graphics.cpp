@@ -85,10 +85,6 @@ void noob::graphics::frame(uint32_t width, uint32_t height)
 	bgfx::frame();
 }
 
-
-
-
-
 bgfx::ShaderHandle noob::graphics::load_shader(const std::string& filename)
 {
 
@@ -162,7 +158,6 @@ bool noob::graphics::add_sampler(const std::string& _name)
 	{
 		noob::graphics::sampler samp;
 		samp.init(_name);
-
 		noob::graphics::samplers.insert(std::make_pair(_name, samp));
 		return true;
 	}
@@ -178,15 +173,8 @@ noob::graphics::uniform noob::graphics::add_uniform(const std::string& name, bgf
 		noob::graphics::uniform uni;
 		uni.init(name, type, count);
 		noob::graphics::uniforms.insert(std::make_pair(name, uni));
-		//return noob::graphics::uniforms[name];
 	}
 	return noob::graphics::uniforms[name];
-	
-	//else 
-	//{
-	//	noob::graphics::uniform u;
-	//	return u;
-	// }
 }
 
 /*

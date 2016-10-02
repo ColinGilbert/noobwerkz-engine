@@ -11,6 +11,7 @@
 #include "NoobUtils.hpp"
 #include "MathFuncs.hpp"
 
+
 namespace noob
 {
 	class graphics
@@ -35,7 +36,6 @@ namespace noob
 
 		~graphics() noexcept(true) {}
 
-
 		public:
 
 		static graphics& get_instance() noexcept(true)
@@ -45,7 +45,6 @@ namespace noob
 
 			return *ptr_to_instance;
 		}
-
 
 		struct uniform
 		{
