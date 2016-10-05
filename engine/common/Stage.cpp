@@ -112,7 +112,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 
 	const noob::mat4 view_mat(noob::look_at(eye_pos, eye_target, eye_up));
 
-	// bgfx::setViewSeq(0, true);
+	bgfx::setViewSeq(0, true);
 
 	bgfx::setViewTransform(0, &view_mat.m[0], &projection_mat.m[0]);
 	bgfx::setViewRect(0, 0, 0, window_width, window_height);
@@ -238,7 +238,7 @@ void noob::stage::draw(float window_width, float window_height, const noob::vec3
 		}
 	}
 
-	// bgfx::setViewSeq(0, false);
+	bgfx::setViewSeq(0, false);
 }
 
 

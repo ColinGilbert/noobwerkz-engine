@@ -303,8 +303,6 @@ size_t modp_dtoa2(double value, char* str, int prec)
 }
 
 
-// #include "config.h"
-
 /* You can get rid of the include, but adding... */
 /* if on motoral, sun, ibm; uncomment this */
 /* #define WORDS_BIGENDIAN 1 */

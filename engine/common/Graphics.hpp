@@ -7,6 +7,8 @@
 #include <unordered_map>
 #include <bgfx/bgfx.h>
 
+#include <noob/component/component.hpp>
+
 #include "NoobDefines.hpp"
 #include "NoobUtils.hpp"
 #include "MathFuncs.hpp"
@@ -70,6 +72,10 @@ namespace noob
 			bgfx::UniformHandle handle;
 		};
 
+		typedef noob::handle<uint16_t> uniform_handle;
+		typedef noob::handle<uint16_t> texture_handle;
+		typedef noob::handle<uint16_t> program_handle;
+
 		struct texture
 		{
 			bgfx::TextureHandle handle;
@@ -80,6 +86,26 @@ namespace noob
 			bgfx::ProgramHandle program;
 			std::vector<noob::graphics::uniform> uniforms;
 			std::vector<noob::graphics::sampler> samplers;	
+		};
+
+		enum class attrib
+		{
+			POSITION = 0,
+			NORMAL = 1,
+			TANGENT = 2,
+			BITANGENT = 3,
+			COLOUR_0 = 4,
+			COLOUR_1 = 5,
+			BONE_INDICES = 6,
+			BONE_WEIGHT = 7,
+			TEXCOORD_0 = 8,
+			TEXCOORD_1 = 9,
+			TEXCOORD_2 = 10,
+			TEXCOORD_3 = 11,
+			TEXCOORD_4 = 12,
+			TEXCOORD_5 = 13,
+			TEXCOORD_6 = 14,
+			TEXCOORD_7 = 15
 		};
 
 
@@ -119,6 +145,23 @@ namespace noob
 
 		// ---------------- Conveniences ------------
 		const bgfx::Memory* get_bgfx_mem(const std::string& payload) noexcept(true) { return bgfx::copy(&payload[0], payload.size()); }
+		
+		struct memory
+		{
+			uint8_t* data;
+			uint32_t size;
+		};
+
+		const memory get_mem(const std::string& payload) noexcept(true)
+		{
+			const bgfx::Memory* mem = bgfx::copy(&payload[0], payload.size());
+			
+			noob::graphics::memory results;
+			results.data = mem->data;
+			results.size = mem->size;
+			
+			return results;
+		}
 
 		// Uniform getters
 		noob::graphics::uniform get_invalid_uniform() const noexcept(true) { return invalid_uniform; }
@@ -156,6 +199,11 @@ namespace noob
 		void set_view_rect(uint8_t, uint16_t x, uint16_t y) noexcept(true) {}
 		// bgfx::setViewRect(0, 0, 0, window_width, window_height);
 
+
+		void set_uniform(noob::graphics::uniform, const float*);
+
+
+
 		protected:
 
 		bool instancing;
@@ -168,6 +216,8 @@ namespace noob
 		std::unordered_map<std::string, noob::graphics::shader> shaders;
 		std::unordered_map<std::string, noob::graphics::uniform> uniforms;
 		std::unordered_map<std::string, noob::graphics::sampler> samplers;
+		
+		std::vector<noob::graphics::memory> memory_references;
 
 	};
 }

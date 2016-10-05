@@ -35,6 +35,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
+#include <alloca.h>
 #include "lsp.h"
 #include "os.h"
 #include "misc.h"

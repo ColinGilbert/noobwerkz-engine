@@ -1,8 +1,8 @@
 #pragma once
 
 #include <stdio.h>
-#include <android/asset_manager.h>
-
+// #include <android/asset_manager.h>
+#include <android_native_app_glue.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

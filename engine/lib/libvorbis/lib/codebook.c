@@ -19,11 +19,12 @@
 #include <string.h>
 #include <math.h>
 #include <ogg/ogg.h>
+
+#include "os.h"
 #include "vorbis/codec.h"
 #include "codebook.h"
 #include "scales.h"
 #include "misc.h"
-#include "os.h"
 
 /* packs the given codebook into the bitstream **************************/
 

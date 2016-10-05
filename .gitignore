@@ -31,7 +31,9 @@ sandbox/COMPILE_LOG
 **/shaderc
 **/geometryc
 **/texturec
-#sandbox/*.tga
+sandbox/*.tga
+sandbox/output
+sandbox/models/*
 sandbox/models/test.off
 .project
 .cproject

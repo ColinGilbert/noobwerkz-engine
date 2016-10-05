@@ -2,7 +2,7 @@
 
 #include "android_fopen.h"
 #include <errno.h>
-#include <android/asset_manager.h>
+// #include <android/asset_manager.h>
 
 static int android_read(void* cookie, char* buf, int size)
 {
