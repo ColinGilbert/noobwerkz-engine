@@ -40,6 +40,8 @@ namespace noob
 				results.v[0] = direction_blank.v[0];
 				results.v[1] = direction_blank.v[1];
 				results.v[2] = direction_blank.v[2];
+				
+				return results;
 			}
 
 			noob::vec4 rgb_blank, direction_blank;

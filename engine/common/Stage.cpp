@@ -532,7 +532,7 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 	while (reflects_it.has_child())
 	{
 		const noob::node_handle n = reflects_it.get_child();
-		if (node_masks[n.index()] == static_cast<uint64_t>(reflect_arg.index()));
+		if (node_masks[n.index()] == static_cast<uint64_t>(reflect_arg.index()))
 		{
 			reflect_found = true;
 			reflect_node = n;
