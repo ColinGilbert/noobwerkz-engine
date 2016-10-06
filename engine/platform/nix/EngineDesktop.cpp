@@ -128,8 +128,7 @@ int main(int /*_argc*/, char** /*_argv*/)
 		glfwTerminate();
 		return -1;
 	}
-//	noob::singleton<noob::application> app;
-
+	//noob::singleton<noob::application> app;
 	//if (!app)
 	//{
 	//	noob::logger::log(noob::importance::ERROR, "Could not init application!");
