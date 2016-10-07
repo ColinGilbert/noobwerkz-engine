@@ -1,50 +1,26 @@
-#include <atomic>
-
-#include <bgfx/bgfx.h>
-#include <noob/singleton/singleton.hpp>
-
 #include "Graphics.hpp"
 #include "Application.hpp"
 #include "NoobUtils.hpp"
 // #include "NDOF.hpp"
-
-#if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
-#	define GLFW_EXPOSE_NATIVE_X11
-#	define GLFW_EXPOSE_NATIVE_GLX
-#elif BX_PLATFORM_OSX
-#	define GLFW_EXPOSE_NATIVE_COCOA
-#	define GLFW_EXPOSE_NATIVE_NSGL
-#elif BX_PLATFORM_WINDOWS
-#	define GLFW_EXPOSE_NATIVE_WIN32
-#	define GLFW_EXPOSE_NATIVE_WGL
-#endif
-
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <GLFW/glfw3native.h>
-
-#include <bgfx/bgfxplatform.h>
 
 std::atomic<uint32_t> width(1280);
 std::atomic<uint32_t> height(720);
 
-static uint32_t debug = BGFX_DEBUG_TEXT;
-static uint32_t reset = BGFX_RESET_VSYNC;
-
 noob::application app;
-noob::singleton<noob::application> app_single;
 // static noob::ndof ndof;
 
 void window_close_callback(GLFWwindow* window)
 {
-	bgfx::shutdown();
+	//TODO:
+	//noob::graphics& gfx = noob::graphics::get_instance();
+	//gfx.shutdown();
 }
 
 void window_size_callback(GLFWwindow* window, int w, int h)
 {
-	//	width = w;
-	//	height = h;
-	// set_renderer(width, height); // No difference from calling in framebuffer_size_callback()
-	// app->window_resize(width, height);
+	// No difference from calling framebuffer_size_callback()
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int w, int h)
@@ -89,30 +65,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 	// logger::log("GLFW: Key pressed");
 	} */
-
-}
-inline void glfwSetWindow(GLFWwindow* _window)
-{
-	bgfx::PlatformData pd;
-#	if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
-	pd.ndt          = glfwGetX11Display();
-	pd.nwh          = (void*)(uintptr_t)glfwGetGLXWindow(_window);
-	pd.context      = glfwGetGLXContext(_window);
-#	elif BX_PLATFORM_OSX
-	pd.ndt          = NULL;
-	pd.nwh          = glfwGetCocoaWindow(_window);
-	pd.context      = glfwGetNSGLContext(_window);
-#	elif BX_PLATFORM_WINDOWS
-	pd.ndt          = NULL;
-	pd.nwh          = glfwGetWin32Window(_window);
-	pd.context      = NULL;
-#	endif // BX_PLATFORM_WINDOWS
-	pd.backBuffer   = NULL;
-	pd.backBufferDS = NULL;
-	bgfx::setPlatformData(pd);
 }
 
-int main(int /*_argc*/, char** /*_argv*/)
+int main()//int /*_argc*/, char** /*_argv*/)
 {
 	GLFWwindow* window;
 
@@ -123,35 +78,24 @@ int main(int /*_argc*/, char** /*_argv*/)
 	/* Create a windowed mode window and its OpenGL context */
 	window = glfwCreateWindow(width, height, "Engine Desktop", NULL, NULL);
 
+	glfwSetWindowCloseCallback(window, window_close_callback);
+	glfwSetWindowSizeCallback(window, window_size_callback);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetKeyCallback(window, key_callback);
+
 	if (!window)
 	{
 		glfwTerminate();
 		return -1;
 	}
-	//noob::singleton<noob::application> app;
-	//if (!app)
-	//{
-	//	noob::logger::log(noob::importance::ERROR, "Could not init application!");
-	//	return 0;
-	// }
-
-
-	glfwSetWindow(window);
-
-	bgfx::init();
+	
+	glfwMakeContextCurrent(window);
+	gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
+	glfwSwapInterval(1);
 
 	noob::graphics& gfx = noob::graphics::get_instance();
-
 	gfx.init(width, height);
-
 	app.init();
-
-	glfwSetWindowCloseCallback(window, window_close_callback);
-	glfwSetWindowSizeCallback(window, window_size_callback);
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetKeyCallback(window, key_callback);
-	// Note: The ext time seems to have been there for a while and everything was fine. Now (nVidia 361.28
-	//glfwMakeContextCurrent(window);
 
 	// ndof.run();
 
@@ -165,7 +109,8 @@ int main(int /*_argc*/, char** /*_argv*/)
 		glfwPollEvents();
 	}
 
-	// Shutdown bgfx.
-	bgfx::shutdown();
+	// TODO:
+	// gfx.shutdown();
+	
 	return 0;
 }

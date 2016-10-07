@@ -5,7 +5,6 @@
 #include <string>
 #include <memory>
 #include <unordered_map>
-#include <bgfx/bgfx.h>
 
 #include <noob/component/component.hpp>
 

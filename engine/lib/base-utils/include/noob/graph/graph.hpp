@@ -77,16 +77,16 @@ namespace noob
 			{
 				friend class digraph;
 				public:
-/*
-				bool is_valid() const noexcept(true)
-				{
-					return (start_index != std::numeric_limits<uint32_t>::max());
-				}
-*/
+				/*
+				   bool is_valid() const noexcept(true)
+				   {
+				   return (start_index != std::numeric_limits<uint32_t>::max());
+				   }
+				   */
 				bool has_child() const noexcept(true)
 				{
 					// assert(current_index < g.edges.size());
-					
+
 					return (current_index < end_index);
 				}
 
@@ -160,7 +160,7 @@ namespace noob
 					edges.push_back(e);
 
 					noob::digraph::node n = nodes[first.index()];
-					
+
 					const uint32_t num = n.get_num_children() + 1;
 					n.set_num_children(num);
 					nodes[first.index()] = n;
@@ -185,7 +185,7 @@ namespace noob
 			void sort() noexcept(true)
 			{
 				rde::quick_sort(edges.begin(), edges.end(), rde::less<noob::digraph::edge>());
-				
+
 				//TODO: Fix algorithm
 				uint32_t edges_till_current = 0;
 				const uint32_t num_nodes = nodes.size();
@@ -197,43 +197,43 @@ namespace noob
 
 					nodes[i] = n;
 				}
-/*
-				uint32_t current_node, node_child_count;
-				current_node = node_child_count = 0;
-				
-				noob::digraph::node n;
-				n.set_first_edge(0);
-				n.set_num_children(0);
+				/*
+				   uint32_t current_node, node_child_count;
+				   current_node = node_child_count = 0;
 
-				for (uint32_t edge_counter = 0; edge_counter < edges.size(); ++edge_counter)
+				   noob::digraph::node n;
+				   n.set_first_edge(0);
+				   n.set_num_children(0);
+
+				   for (uint32_t edge_counter = 0; edge_counter < edges.size(); ++edge_counter)
+				   {
+				   const noob::digraph::edge e = edges[edge_counter];
+
+				// The begin position stored in the node cannot be bigger than our current position on the edgelist.
+				assert(!(n.get_first_edge() > edge_counter));
+
+				if (n.get_first_edge() == e.get_from().index())
 				{
-					const noob::digraph::edge e = edges[edge_counter];
-					
-					// The begin position stored in the node cannot be bigger than our current position on the edgelist.
-					assert(!(n.get_first_edge() > edge_counter));
-					
-					if (n.get_first_edge() == e.get_from().index())
-					{
-						++node_child_count;
-					}
-					// Once we hit a new node;
-					else 
-					{
-						n.set_num_children(node_child_count);
-						
-						node_child_count = 0;
-						
-						nodes[current_node] = n;
-						
-						++current_node;
-						
-						n = nodes[current_node];
-						n.set_first_edge(edge_counter);
-						n.set_num_children(0);
-					}
+				++node_child_count;
+				}
+				// Once we hit a new node;
+				else 
+				{
+				n.set_num_children(node_child_count);
+
+				node_child_count = 0;
+
+				nodes[current_node] = n;
+
+				++current_node;
+
+				n = nodes[current_node];
+				n.set_first_edge(edge_counter);
+				n.set_num_children(0);
+				}
 
 				}
-*/
+				*/
 				ready = true;
 			}
 
@@ -255,7 +255,7 @@ namespace noob
 			std::string to_string() const noexcept(true)
 			{
 				std::string results = noob::concat("Num nodes = ", noob::to_string(nodes.size()), ", num edges = ", noob::to_string(edges.size()), ". Edges: ");
-				
+
 				for (noob::digraph::edge e : edges)
 				{	
 					results = noob::concat(results, "", noob::to_string(e.get_from().index()), "-", noob::to_string(e.get_to().index()), ", ");
@@ -268,7 +268,7 @@ namespace noob
 			{
 				nodes.reserve(arg);
 			}
-			
+
 			void reserve_edges(uint32_t arg) noexcept(true)
 			{
 				edges.reserve(arg);
@@ -314,7 +314,7 @@ namespace noob
 					{
 						return std::get<1>(noob::pack_64_to_32(val));
 					}
-	
+
 
 
 				protected:

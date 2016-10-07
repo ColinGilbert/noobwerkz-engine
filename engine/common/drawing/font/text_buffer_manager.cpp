@@ -3,9 +3,6 @@
  * License: http://www.opensource.org/licenses/BSD-2-Clause
  */
 
-//#include "../common.sh"
-
-#include <bgfx/bgfx.h>
 #include <stddef.h> // offsetof
 #include <memory.h> // memcpy
 #include <wchar.h>  // wcslen
@@ -13,13 +10,6 @@
 #include "text_buffer_manager.h"
 #include "utf8.h"
 #include "cube_atlas.h"
-
-#include "vs_font_basic.bin.h"
-#include "fs_font_basic.bin.h"
-#include "vs_font_distance_field.bin.h"
-#include "fs_font_distance_field.bin.h"
-#include "vs_font_distance_field_subpixel.bin.h"
-#include "fs_font_distance_field_subpixel.bin.h"
 
 #define MAX_BUFFERED_CHARACTERS (8192 - 5)
 
@@ -240,7 +230,7 @@ void text_buffer::append_text(ft_handle _fontHandle, const char* _string, const 
 	{
 		_end = _string + strlen(_string);
 	}
-	BX_CHECK(_end >= _string);
+	// BX_CHECK(_end >= _string);
 
 	for (; *_string && _string < _end ; ++_string)
 	{
@@ -250,7 +240,7 @@ void text_buffer::append_text(ft_handle _fontHandle, const char* _string, const 
 		}
 	}
 
-	BX_CHECK(state == UTF8_ACCEPT, "The string is not well-formed");
+	// BX_CHECK(state == UTF8_ACCEPT, "The string is not well-formed");
 }
 
 void text_buffer::append_text(ft_handle _fontHandle, const wchar_t* _string, const wchar_t* _end)
@@ -268,7 +258,7 @@ void text_buffer::append_text(ft_handle _fontHandle, const wchar_t* _string, con
 	{
 		_end = _string + wcslen(_string);
 	}
-	BX_CHECK(_end >= _string);
+	// BX_CHECK(_end >= _string);
 
 	for (const wchar_t* _current = _string; _current < _end; ++_current)
 	{
@@ -330,7 +320,9 @@ void text_buffer::clear_text_buffer()
 void text_buffer::append_glyph(ft_handle _handle, unicode_point _codePoint)
 {
 	const glyph_info* glyph = m_font_manager->get_glyph_info(_handle, _codePoint);
-	BX_WARN(NULL != glyph, "Glyph not found (font handle %d, code point %d)", _handle.idx, _codePoint);
+
+	// BX_WARN(NULL != glyph, "Glyph not found (font handle %d, code point %d)", _handle.idx, _codePoint);
+	
 	if (NULL == glyph)
 	{
 		return;
@@ -451,8 +443,7 @@ void text_buffer::append_glyph(ft_handle _handle, unicode_point _codePoint)
 		m_indexCount += 6;
 	}
 
-	if (m_styleFlags & STYLE_STRIKE_THROUGH
-			&&  m_strikeThroughColor & 0xFF000000)
+	if (m_styleFlags & STYLE_STRIKE_THROUGH	&&  m_strikeThroughColor & 0xFF000000)
 	{
 		float x0 = (m_penX - kerning);
 		float y0 = (m_penY + 0.666667f * font.ascender);
@@ -590,7 +581,7 @@ text_buffer_manager::text_buffer_manager(font_manager* _font_manager) : m_font_m
 
 text_buffer_manager::~text_buffer_manager()
 {
-	BX_CHECK(m_text_buf_handles.getNumHandles() == 0, "All the text buffers must be destroyed before destroying the manager");
+	// BX_CHECK(m_text_buf_handles.getNumHandles() == 0, "All the text buffers must be destroyed before destroying the manager");
 	delete [] m_text_buffers;
 
 	bgfx::destroyUniform(u_tex_colour);
@@ -617,7 +608,7 @@ text_buf_handle text_buffer_manager::create_text_buffer(uint32_t _type, BufferTy
 
 void text_buffer_manager::destroy_text_buffer(text_buf_handle _handle)
 {
-	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
+	// BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 
 	buffer_cache& bc = m_text_buffers[_handle.idx];
 	m_text_buf_handles.free(_handle.idx);
@@ -660,7 +651,7 @@ void text_buffer_manager::destroy_text_buffer(text_buf_handle _handle)
 
 void text_buffer_manager::submit_text_buffer(text_buf_handle _handle, uint8_t _id, int32_t _depth)
 {
-	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
+	// BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 
 	buffer_cache& bc = m_text_buffers[_handle.idx];
 
@@ -787,84 +778,84 @@ void text_buffer_manager::submit_text_buffer(text_buf_handle _handle, uint8_t _i
 
 void text_buffer_manager::set_style(text_buf_handle _handle, uint32_t _flags)
 {
-	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
+	// BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	buffer_cache& bc = m_text_buffers[_handle.idx];
 	bc.m_text_buffer->set_style(_flags);
 }
 
 void text_buffer_manager::set_text_colour(text_buf_handle _handle, uint32_t _rgba)
 {
-	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
+	// BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	buffer_cache& bc = m_text_buffers[_handle.idx];
 	bc.m_text_buffer->set_text_colour(_rgba);
 }
 
 void text_buffer_manager::set_background_colour(text_buf_handle _handle, uint32_t _rgba)
 {
-	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
+	// BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	buffer_cache& bc = m_text_buffers[_handle.idx];
 	bc.m_text_buffer->set_background_colour(_rgba);
 }
 
 void text_buffer_manager::set_overline_colour(text_buf_handle _handle, uint32_t _rgba)
 {
-	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
+	// BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	buffer_cache& bc = m_text_buffers[_handle.idx];
 	bc.m_text_buffer->set_overline_colour(_rgba);
 }
 
 void text_buffer_manager::set_underline_colour(text_buf_handle _handle, uint32_t _rgba)
 {
-	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
+	// BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	buffer_cache& bc = m_text_buffers[_handle.idx];
 	bc.m_text_buffer->set_underline_colour(_rgba);
 }
 
 void text_buffer_manager::set_strikethrough_colour(text_buf_handle _handle, uint32_t _rgba)
 {
-	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
+	// BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	buffer_cache& bc = m_text_buffers[_handle.idx];
 	bc.m_text_buffer->set_strikethrough_colour(_rgba);
 }
 
 void text_buffer_manager::set_pen_position(text_buf_handle _handle, float _x, float _y)
 {
-	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
+	// BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	buffer_cache& bc = m_text_buffers[_handle.idx];
 	bc.m_text_buffer->set_pen_position(_x, _y);
 }
 
 void text_buffer_manager::append_text(text_buf_handle _handle, ft_handle _fontHandle, const char* _string, const char* _end)
 {
-	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
+	// BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	buffer_cache& bc = m_text_buffers[_handle.idx];
 	bc.m_text_buffer->append_text(_fontHandle, _string, _end);
 }
 
 void text_buffer_manager::append_text(text_buf_handle _handle, ft_handle _fontHandle, const wchar_t* _string, const wchar_t* _end)
 {
-	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
+	// BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	buffer_cache& bc = m_text_buffers[_handle.idx];
 	bc.m_text_buffer->append_text(_fontHandle, _string, _end);
 }
 
 void text_buffer_manager::append_atlas_face(text_buf_handle _handle, uint16_t _faceIndex)
 {
-	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
+	// BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	buffer_cache& bc = m_text_buffers[_handle.idx];
 	bc.m_text_buffer->append_atlas_face(_faceIndex);
 }
 
 void text_buffer_manager::clear_text_buffer(text_buf_handle _handle)
 {
-	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
+	// BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	buffer_cache& bc = m_text_buffers[_handle.idx];
 	bc.m_text_buffer->clear_text_buffer();
 }
 
 text_rectangle text_buffer_manager::get_rectangle(text_buf_handle _handle) const
 {
-	BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
+	// BX_CHECK(bgfx::isValid(_handle), "Invalid handle used");
 	buffer_cache& bc = m_text_buffers[_handle.idx];
 	return bc.m_text_buffer->get_rectangle();
 }

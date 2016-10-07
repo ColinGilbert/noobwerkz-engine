@@ -1,15 +1,9 @@
-/*
- * Copyright 2013 Jeremie Roy. All rights reserved.
- * License: https://github.com/bkaradzic/bgfx#license-bsd-2-clause
- */
+// Based on code with following license:
+//
+// Copyright 2013 Jeremie Roy. All rights reserved.
+// License: https://github.com/bkaradzic/bgfx#license-bsd-2-clause
 
-#ifndef FONT_MANAGER_H_HEADER_GUARD
-#define FONT_MANAGER_H_HEADER_GUARD
-
-
-
-#include <bx/handlealloc.h>
-#include <bgfx/bgfx.h>
+#pragma once
 
 class atlas;
 
@@ -115,8 +109,8 @@ struct glyph_info
 	uint16_t region_index;
 };
 
-BGFX_HANDLE(tt_handle);
-BGFX_HANDLE(ft_handle);
+typedef noob::handle<uint16_t> tt_handle;
+typedef noob::handle<uint16_t> ft_handle;
 
 class font_manager
 {
@@ -193,10 +187,10 @@ class font_manager
 		bool m_owns_atlas;
 		atlas* m_atlas;
 
-		bx::HandleAllocT<MAX_OPENED_FONT> m_font_handles;
+		std::array<ft_handle, MAX_OPENED_FONT> m_font_handles;
 		cached_font* m_cached_fonts;
 
-		bx::HandleAllocT<MAX_OPENED_FILES> m_file_handles;
+		std::array<tt_handle, MAX_OPENED_FILES> m_file_handles;
 		cached_file* m_cached_files;
 
 		glyph_info m_blackGlyph;
@@ -204,5 +198,3 @@ class font_manager
 		//temporary buffer to raster glyph
 		uint8_t* m_buffer;
 };
-
-#endif // FONT_MANAGER_H_HEADER_GUARD

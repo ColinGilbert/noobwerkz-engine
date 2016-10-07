@@ -1,18 +1,18 @@
+// Contains code under the following:
 /*
  * Copyright 2013 Jeremie Roy. All rights reserved.
  * License: http://www.opensource.org/licenses/BSD-2-Clause
  */
 
-#ifndef TEXT_BUFFER_MANAGER_H_HEADER_GUARD
-#define TEXT_BUFFER_MANAGER_H_HEADER_GUARD
+#pragma once
 
 #include "font_manager.h"
 
-BGFX_HANDLE(text_buf_handle);
+typedef noob::handle<uint16_t> text_buf_handle;
 
 #define MAX_TEXT_BUFFER_COUNT 64
 
-/// type of vertex and index buffer to use with a text_buffer
+// Type of vertex and index buffer to use with a text_buffer
 struct BufferType
 {
 	enum Enum
@@ -23,7 +23,7 @@ struct BufferType
 	};
 };
 
-/// special style effect (can be combined)
+// Special style effect (can be combined)
 enum TextStyleFlags
 {
 	STYLE_NORMAL = 0,
@@ -96,5 +96,3 @@ class text_buffer_manager
 		bgfx::ProgramHandle m_distance_program;
 		bgfx::ProgramHandle m_distance_subpixel_program;
 };
-
-#endif // TEXT_BUFFER_MANAGER_H_HEADER_GUARD

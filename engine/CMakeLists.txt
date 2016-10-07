@@ -238,22 +238,11 @@ list (APPEND base_src
 	lib/base-utils/include/noob/fast_hashtable/fast_hashtable.cpp
 	)
 
-include_directories(lib/bx/include)
-include_directories(lib/bgfx/include)
-include_directories(lib/bgfx/3rdparty/sdf)
-include_directories(lib/bgfx/3rdparty/khronos)
-include_directories(lib/bgfx/3rdparty)
+include_directories(lib/sdf)
+include_directories(lib/edtaa3)
 
-list(APPEND bgfx_src
-	lib/bgfx/src/amalgamated.cpp
-	)
 
 list(APPEND bgfx_utils_src
-	common/drawing/font/font_manager.cpp
-	common/drawing/font/utf8.cpp
-	common/drawing/font/text_metrics.cpp
-	common/drawing/font/text_buffer_manager.cpp
-	common/drawing/font/cube_atlas.cpp
 	)
 
 include_directories(lib/voropp/src)
@@ -887,6 +876,11 @@ list(APPEND common_src
 	common/FileSystem.cpp
 	common/Mixer.cpp
 	common/AudioSample.cpp
+	common/drawing/font/font_manager.cpp
+	common/drawing/font/utf8.cpp
+	common/drawing/font/text_metrics.cpp
+	common/drawing/font/text_buffer_manager.cpp
+	common/drawing/font/cube_atlas.cpp
 	)
 
 list(APPEND user_src
@@ -897,9 +891,12 @@ list(APPEND user_src
 if (NOOB_PLATFORM_LINUX)
 	set(CMAKE_C_FLAGS "-DHAVE_ALLOCA_H ${CMAKE_C_FLAGS}")
 	add_subdirectory(lib/glfw)
-	include_directories(lib/glfw/include)	
+	include_directories(lib/glfw/deps)
+	include_directories(lib/glfw/include)
 	include_directories(platform/nix)
 	list(APPEND main_src platform/nix/EngineDesktop.cpp
+		lib/glfw/deps/glad.c
+
 		platform/desktop/SoundInterface.cpp)
 endif()
 
