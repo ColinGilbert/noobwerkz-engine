@@ -12,9 +12,8 @@ namespace noob
 	class graphics
 	{
 		public:
-
-
 			typedef noob::handle<uint32_t> model_handle;
+			typedef noob::handle<uint32_t> texture_handle;
 
 			struct scaled_model
 			{

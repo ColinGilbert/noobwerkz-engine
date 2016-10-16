@@ -33,10 +33,7 @@ namespace noob
 	class application
 	{
 		public:
-			bool eval(const std::string& name, const std::string& string_to_eval, bool reset = false);
 
-			uint32_t get_height() const { return static_cast<uint32_t>(window_height); }
-			uint32_t get_width() const { return static_cast<uint32_t>(window_width); }
 
 			// Init must always be called.
 			void init(uint32_t width, uint32_t height);
@@ -54,6 +51,13 @@ namespace noob
 			// void set_archive_dir(const std::string & filepath);
 			void window_resize(uint32_t w, uint32_t h);
 			void key_input(char c);
+
+
+			// TODO: Reimplement
+			bool eval(const std::string& name, const std::string& string_to_eval, bool reset = false);
+
+			uint32_t get_height() const { return static_cast<uint32_t>(window_height); }
+			uint32_t get_width() const { return static_cast<uint32_t>(window_width); }
 
 			// void accept_ndof_data(const noob::ndof::data& info);
 
