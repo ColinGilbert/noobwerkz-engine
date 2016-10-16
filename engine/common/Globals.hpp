@@ -24,7 +24,6 @@
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
 #include "MeshUtils.hpp"
-#include "ScaledModel.hpp"
 #include "Shape.hpp"
 #include "Body.hpp"
 #include "SkeletalAnim.hpp"
@@ -122,13 +121,13 @@ namespace noob
 			noob::actor_blueprints_handle get_actor_blueprints(const std::string& name) const noexcept(true);
 
 			// Those are easy to represent as a scaled item, and save a lot on the video card if repeated.
-			scaled_model sphere_model(float r) noexcept(true);
-			scaled_model box_model(float x, float y, float z) noexcept(true);
-			scaled_model cylinder_model(float r, float h) noexcept(true);
-			scaled_model cone_model(float r, float h) noexcept(true);
+			noob::graphics::scaled_model sphere_model(float r) noexcept(true);
+			noob::graphics::scaled_model box_model(float x, float y, float z) noexcept(true);
+			noob::graphics::scaled_model cylinder_model(float r, float h) noexcept(true);
+			noob::graphics::scaled_model cone_model(float r, float h) noexcept(true);
 
-			// scaled_model model_from_mesh(const noob::basic_mesh&) noexcept(true);
-			// scaled_model model_from_shape(const noob::shape_handle) noexcept(true);
+			noob::graphics::scaled_model model_from_mesh(const noob::basic_mesh&) noexcept(true);
+			noob::graphics::scaled_model model_from_shape(const noob::shape_handle) noexcept(true);
 
 			double get_random() noexcept(true);
 
@@ -192,27 +191,27 @@ namespace noob
 */
 			// These represent models in the graphics card buffer
 						
-			noob::scaled_model get_unit_sphere_model() const noexcept(true)
+			noob::graphics::scaled_model get_unit_sphere_model() const noexcept(true)
 			{
 				return unit_sphere_model;
 			}
 			
-			noob::scaled_model get_unit_cube_model() const noexcept(true)
+			noob::graphics::scaled_model get_unit_cube_model() const noexcept(true)
 			{
 				return unit_cube_model;
 			}
 /*			
-			noob::scaled_model get_unit_capsule_model() const noexcept(true)
+			noob::graphics::scaled_model get_unit_capsule_model() const noexcept(true)
 			{
 				return unit_cylinder_model;
 			}
 			
-			noob::scaled_model get_unit_cylinder_model() const noexcept(true)
+			noob::graphics::scaled_model get_unit_cylinder_model() const noexcept(true)
 			{
 				return unit_cylinder_model;
 			}
 
-			noob::scaled_model get_unit_cone_model() const noexcept(true)
+			noob::graphics::scaled_model get_unit_cone_model() const noexcept(true)
 			{
 				return unit_cone_model;
 			}
@@ -255,7 +254,7 @@ namespace noob
 			noob::shape_handle unit_sphere_shape, unit_cube_shape;//, unit_capsule_shape, unit_cylinder_shape, unit_cone_shape;
 
 			// These represent models in the graphics card buffer
-			noob::scaled_model unit_sphere_model, unit_cube_model;//, unit_capsule_model, unit_cylinder_model, unit_cone_model;
+			noob::graphics::scaled_model unit_sphere_model, unit_cube_model;//, unit_capsule_model, unit_cylinder_model, unit_cone_model;
 
 			noob::light_handle default_light;
 			noob::reflectance_handle default_reflectance;

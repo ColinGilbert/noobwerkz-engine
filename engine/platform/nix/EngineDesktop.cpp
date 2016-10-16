@@ -91,7 +91,7 @@ int main()//int /*_argc*/, char** /*_argv*/)
 	gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 	glfwSwapInterval(1);
 
-	app.init();
+	app.init(width, height);
 
 	// ndof.run();
 

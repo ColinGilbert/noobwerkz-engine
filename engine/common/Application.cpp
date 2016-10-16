@@ -1,9 +1,15 @@
 #include "Application.hpp"
 
 
-void noob::application::init()
+void noob::application::init(uint32_t width, uint32_t height)
 {
 	logger::log(noob::importance::INFO, "[Application] Begin init.");
+
+	window_width = width;
+	window_height = height;
+
+	noob::graphics& gfx = noob::graphics::get_instance();
+	gfx.init(width, height);
 
 	started = paused = input_has_started = false;
 

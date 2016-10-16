@@ -12,7 +12,6 @@
 #include "Graphics.hpp"
 #include "MathFuncs.hpp"
 #include "SkeletalAnim.hpp"
-#include "ScaledModel.hpp"
 #include "Body.hpp"
 #include "Joint.hpp"
 #include "Shape.hpp"

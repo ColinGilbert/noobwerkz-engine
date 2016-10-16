@@ -501,7 +501,7 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 	}
 
 	// Now onto model node
-	const noob::scaled_model model_scaled = g.model_from_shape(shape_arg);
+	const noob::graphics::scaled_model model_scaled = g.model_from_shape(shape_arg);
 	bool model_found = false;
 	noob::node_handle model_node;
 	auto models_it = draw_graph.get_visitor(shading_node);

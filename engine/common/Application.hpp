@@ -39,7 +39,7 @@ namespace noob
 			uint32_t get_width() const { return static_cast<uint32_t>(window_width); }
 
 			// Init must always be called.
-			void init();
+			void init(uint32_t width, uint32_t height);
 
 			// Those three allow an app to be controlled better by an external environment (ie: Android/iOS)
 			void pause();
