@@ -7,7 +7,6 @@
 #include "Shape.hpp"
 #include "ComponentDefines.hpp"
 #include "ScaledModel.hpp"
-#include "ShaderVariant.hpp"
 #include "StageTypes.hpp"
 
 namespace noob

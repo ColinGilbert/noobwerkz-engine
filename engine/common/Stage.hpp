@@ -11,12 +11,8 @@
 #include "NoobDefines.hpp"
 #include "Graphics.hpp"
 #include "MathFuncs.hpp"
-#include "BasicRenderer.hpp"
-#include "TriplanarGradientMap.hpp"
 #include "SkeletalAnim.hpp"
-#include "BasicModel.hpp"
 #include "ScaledModel.hpp"
-#include "AnimatedModel.hpp"
 #include "Body.hpp"
 #include "Joint.hpp"
 #include "Shape.hpp"
@@ -97,8 +93,6 @@ namespace noob
 			std::vector<noob::contact_point> get_intersecting(const noob::ghost_handle) const noexcept(true);
 
 
-
-
 			void update_actors() noexcept(true);
 
 			void actor_dither(noob::actor_handle h) noexcept(true);
@@ -128,7 +122,6 @@ namespace noob
 			noob::component<noob::actor> actors;
 			noob::component<noob::scenery> sceneries;
 			noob::component<noob::particle_system> particle_systems;
-			basic_shaders_holder particle_shaders;
 
 			noob::component<noob::stage_item_variant> stage_item_variants;
 

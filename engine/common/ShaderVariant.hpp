@@ -13,7 +13,7 @@ namespace noob
 	struct shader_variant
 	{
 		shader_variant() noexcept(true) : type(shader_type::BASIC), handle(0) {}
-		
+
 		bool operator==(const noob::shader_variant& other) const noexcept(true)
 		{
 			return (type == other.type && handle == other.handle);

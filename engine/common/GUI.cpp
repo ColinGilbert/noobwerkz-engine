@@ -8,7 +8,7 @@
 
 void noob::gui::init(const std::string& prefix, size_t width, size_t height) noexcept(true)
 {
-	_reading = std::unique_ptr<noob::ui_font>(new noob::ui_font());
+/*	_reading = std::unique_ptr<noob::ui_font>(new noob::ui_font());
 	_header = std::unique_ptr<noob::ui_font>(new noob::ui_font());
 	_title = std::unique_ptr<noob::ui_font>(new noob::ui_font());
 	_banner = std::unique_ptr<noob::ui_font>(new noob::ui_font());
@@ -22,20 +22,24 @@ void noob::gui::init(const std::string& prefix, size_t width, size_t height) noe
 	
 	window_width = static_cast<float>(width);
 	window_height = static_cast<float>(height);
+(/
 }
 
 
 void noob::gui::window_dims(size_t width, size_t height) noexcept(true)
 {
+/*
 	_reading->set_window_dims(width, height);
 	_header->set_window_dims(width, height);
 	_title->set_window_dims(width, height);
 	_banner->set_window_dims(width, height);
+*/
 }
 
 
 void noob::gui::text(const std::string& text, float x, float y, noob::gui::font_size size, uint32_t colour) noexcept(true)
 {
+/*
 	switch (size)
 	{
 		case (noob::gui::font_size::READING):
@@ -55,4 +59,5 @@ void noob::gui::text(const std::string& text, float x, float y, noob::gui::font_
 			_banner->draw_text(GUI_TEXT_LAYER, text, x, y);
 			break;
 	};
+*/
 }

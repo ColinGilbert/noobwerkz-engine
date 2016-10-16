@@ -6,10 +6,6 @@ noob::globals* noob::globals::ptr_to_instance;
 
 bool noob::globals::init() noexcept(true) 
 {
-	basic_drawer.init();
-	triplanar_drawer.init();
-
-	// renderer.init();
 	unit_sphere_shape = sphere_shape(0.5);
 	unit_cube_shape = box_shape(0.5, 0.5, 0.5);
 	// unit_cylinder_shape = cylinder_shape(0.5, 1.0);
@@ -32,29 +28,6 @@ bool noob::globals::init() noexcept(true)
 
 	noob::logger::log(noob::importance::INFO, noob::concat("[Globals] unit sphere model handle ", noob::to_string(unit_sphere_model.model_h.index()) ,", unit cube model handle ", noob::to_string(unit_cube_model.model_h.index())));// << ", unit cylinder model handle " << unit_cylinder_model.model_h.index() << ", unit cone model handle " << unit_cone_model.model_h.index();
 
-	//  Init basic default shader
-	noob::basic_renderer::uniform dbg;
-	dbg.colour = noob::vec4(1.0, 1.0, 1.0, 1.0);
-	set_shader(dbg, "debug");
-	// logger::log(noob::importance::INFO, "[Globals] Set debug shader");
-	noob::shader_variant t1 = get_shader("debug");
-	debug_shader = basic_shader_handle::make(t1.handle);
-	// logger::log(noob::importance::INFO, "[Globals] Got debug shader handle");
-	// Init triplanar shader. For fun.
-	noob::triplanar_gradient_map_renderer::uniform triplanar_info;
-
-	triplanar_info.colours[0] = noob::vec4(1.0, 1.0, 1.0, 1.0);
-	triplanar_info.colours[1] = noob::vec4(0.0, 0.0, 0.0, 1.0);
-	triplanar_info.colours[2] = noob::vec4(0.0, 0.0, 0.0, 1.0);
-	triplanar_info.colours[3] = noob::vec4(0.0, 0.0, 0.0, 1.0);
-	triplanar_info.blend = noob::vec4(1.0, 0.0, 0.0, 0.0);
-	triplanar_info.scales = noob::vec4(1.0, 1.0, 1.0, 0.0);
-	triplanar_info.colour_positions = noob::vec4(0.3, 0.6, 0.0, 0.0);
-	set_shader(triplanar_info, "default-triplanar");
-	// logger::log(noob::importance::INFO, "[Globals] Set default triplanar shader.");
-
-	noob::shader_variant t2 = get_shader("default-triplanar");
-	default_triplanar_shader = triplanar_shader_handle::make(t2.handle);
 
 	noob::light l;
 	l.set_colour(noob::vec3(0.0, 1.0, 1.0));
@@ -116,18 +89,18 @@ noob::scaled_model noob::globals::cone_model(float r, float h) noexcept(true)
 	return temp;
 }
 */
-
+/*
 noob::scaled_model noob::globals::model_from_mesh(const noob::basic_mesh& m) noexcept(true) 
 {
 	std::unique_ptr<noob::basic_model> temp = std::make_unique<noob::basic_model>();
 	temp->init(m);
-	noob::model_handle h = basic_models.add(std::move(temp));
+	noob::graphics::model_handle h = basic_models.add(std::move(temp));
 	noob::scaled_model retval;
 	retval.model_h = h;
 	retval.scales = noob::vec3(1.0, 1.0, 1.0);
 	return retval;
 }
-
+*/
 
 noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) noexcept(true) 
 {
@@ -178,7 +151,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 				if (shapes_to_models.is_valid(search))
 				{
 					size_t val = search->value;
-					results.model_h = model_handle::make(val);
+					results.model_h = noob::graphics::model_handle::make(val);
 				}
 				else
 				{
@@ -198,7 +171,7 @@ noob::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) n
 					if (val != std::numeric_limits<size_t>::max())
 					{
 						// We can simply give back the results:
-						results.model_h = model_handle::make(val);
+						results.model_h = noob::graphics::model_handle::make(val);
 					}
 					else
 					{
@@ -356,13 +329,6 @@ noob::shape_handle noob::globals::static_trimesh_shape(const noob::basic_mesh& m
 }
 
 
-noob::animated_model_handle noob::globals::animated_model(const std::string& filename) noexcept(true) 
-{
-	std::unique_ptr<noob::animated_model> temp = std::make_unique<noob::animated_model>();
-	temp->init(filename);
-	return animated_models.add(std::move(temp));
-}
-
 
 noob::skeletal_anim_handle noob::globals::skeleton(const std::string& filename) noexcept(true) 
 {
@@ -430,7 +396,7 @@ noob::reflectance_handle noob::globals::get_reflectance(const std::string& s) co
 	return temp;
 }
 
-
+/*
 void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std::string& name) noexcept(true) 
 {
 	auto search = names_to_shaders.find(rde::string(name.c_str()));
@@ -459,7 +425,7 @@ void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::unif
 		names_to_shaders.insert(rde::make_pair(rde::string(name.c_str()), r));
 	}
 }
-
+*/
 
 noob::shader_variant noob::globals::get_shader(const std::string& s) const noexcept(true) 
 {

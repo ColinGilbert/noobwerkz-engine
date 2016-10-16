@@ -24,11 +24,7 @@
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
 #include "MeshUtils.hpp"
-#include "BasicModel.hpp"
 #include "ScaledModel.hpp"
-#include "AnimatedModel.hpp"
-#include "BasicRenderer.hpp"
-#include "TriplanarGradientMap.hpp"
 #include "Shape.hpp"
 #include "Body.hpp"
 #include "SkeletalAnim.hpp"
@@ -106,14 +102,13 @@ namespace noob
 
 			// Basic model creation. Those don't have bone weights built-in, so its lighter on the video card. Great for non-animated meshes and also scenery.
 			// If the name is the same as an existing model the new one replaces it, and everything should still work because the end-user only sees handles and the engine handles it under-the-hood. :)
-			noob::model_handle basic_model(const noob::basic_mesh&, const std::string& name) noexcept(true);
-
-			noob::animated_model_handle animated_model(const std::string& filename) noexcept(true);
+			// noob::graphics::model_handle basic_model(const noob::basic_mesh&, const std::string& name) noexcept(true);
+			// noob::animated_model_handle animated_model(const std::string& filename) noexcept(true);
 
 			noob::skeletal_anim_handle skeleton(const std::string& filename) noexcept(true);
 
-			void set_shader(const noob::basic_renderer::uniform&, const std::string& name) noexcept(true);
-			void set_shader(const noob::triplanar_gradient_map_renderer::uniform&, const std::string& name) noexcept(true);
+			// void set_shader(const noob::basic_renderer::uniform&, const std::string& name) noexcept(true);
+			// void set_shader(const noob::triplanar_gradient_map_renderer::uniform&, const std::string& name) noexcept(true);
 
 			noob::shader_variant get_shader(const std::string& name) const noexcept(true);
 
@@ -149,21 +144,21 @@ namespace noob
 			noob::profiler_snap profile_run;
 
 
-			basic_models_holder basic_models;
-			animated_models_holder animated_models;
+			// basic_models_holder basic_models;
+			// animated_models_holder animated_models;
 			shapes_holder shapes;
 			skeletal_anims_holder skeletal_anims;
 			lights_holder lights;
 			reflectances_holder reflectances;
-			basic_shaders_holder basic_shaders;
-			triplanar_shaders_holder triplanar_shaders;
+			// basic_shaders_holder basic_shaders;
+			// triplanar_shaders_holder triplanar_shaders;
 			shader_variants_holder shaders_variants;
 			samples_holder samples;
 			actor_blueprints_holder actor_blueprints;
 			strings_holder strings;
 
-			noob::basic_renderer basic_drawer;
-			noob::triplanar_gradient_map_renderer triplanar_drawer;
+			// noob::basic_renderer basic_drawer;
+			// noob::triplanar_gradient_map_renderer triplanar_drawer;
 
 			noob::mixer master_mixer;
 			noob::sound_interface audio_interface;
@@ -221,8 +216,9 @@ namespace noob
 			{
 				return unit_cone_model;
 			}
-*/
-			noob::basic_shader_handle get_debug_shader() const noexcept(true)
+
+
+			 noob::basic_shader_handle get_debug_shader() const noexcept(true)
 			{
 				return debug_shader;
 			}
@@ -231,7 +227,7 @@ namespace noob
 			{
 				return default_triplanar_shader;
 			}
-
+*/
 			noob::light_handle get_default_light() const noexcept(true)
 			{
 				return default_light;
@@ -261,9 +257,6 @@ namespace noob
 			// These represent models in the graphics card buffer
 			noob::scaled_model unit_sphere_model, unit_cube_model;//, unit_capsule_model, unit_cylinder_model, unit_cone_model;
 
-			noob::basic_shader_handle debug_shader;
-			noob::triplanar_shader_handle default_triplanar_shader;
-
 			noob::light_handle default_light;
 			noob::reflectance_handle default_reflectance;
 
@@ -274,7 +267,7 @@ namespace noob
 
 
 			rde::hash_map<rde::string, noob::shape_handle> names_to_shapes;
-			// rde::hash_map<rde::string, noob::model_handle> names_to_basic_models;
+			// rde::hash_map<rde::string, noob::graphics::model_handle> names_to_basic_models;
 			rde::hash_map<rde::string, noob::shader_variant> names_to_shaders;
 			rde::hash_map<rde::string, noob::light_handle> names_to_lights;
 			rde::hash_map<rde::string, noob::reflectance_handle> names_to_reflectances;

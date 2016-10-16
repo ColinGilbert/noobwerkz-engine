@@ -864,23 +864,12 @@ list(APPEND common_src
 	common/Ghost.cpp
 	common/Shape.cpp
 	common/MeshUtils.cpp
-	common/BasicModel.cpp
-	common/AnimatedModel.cpp
 	common/SkeletalAnim.cpp
 	common/Particles.cpp
-	common/UIFont.cpp
 	common/GUI.cpp
-	common/drawing/TriplanarGradientMap.cpp
-	common/drawing/BasicRenderer.cpp
-	# common/NavMesh.cpp
 	common/FileSystem.cpp
 	common/Mixer.cpp
 	common/AudioSample.cpp
-	common/drawing/font/font_manager.cpp
-	common/drawing/font/utf8.cpp
-	common/drawing/font/text_metrics.cpp
-	common/drawing/font/text_buffer_manager.cpp
-	common/drawing/font/cube_atlas.cpp
 	)
 
 list(APPEND user_src

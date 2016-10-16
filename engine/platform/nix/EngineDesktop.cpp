@@ -28,8 +28,6 @@ void framebuffer_size_callback(GLFWwindow* window, int w, int h)
 	width = std::abs(w);
 	height = std::abs(h);
 
-	noob::graphics& gfx = noob::graphics::get_instance();
-	gfx.init(width, height);
 	//std::stringstream ss;
 	//ss << "[glfw] framebuffer_size_callback " << width << ", " << height;
 	//logger::log(ss.str());
@@ -93,8 +91,6 @@ int main()//int /*_argc*/, char** /*_argv*/)
 	gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 	glfwSwapInterval(1);
 
-	noob::graphics& gfx = noob::graphics::get_instance();
-	gfx.init(width, height);
 	app.init();
 
 	// ndof.run();
@@ -104,13 +100,8 @@ int main()//int /*_argc*/, char** /*_argv*/)
 		// noob::ndof::data info = ndof.get_data();
 		// app->accept_ndof_data(info);
 		app.step();
-		noob::graphics& gfx = noob::graphics::get_instance();
-		gfx.frame(width, height);
 		glfwPollEvents();
 	}
 
-	// TODO:
-	// gfx.shutdown();
-	
 	return 0;
 }

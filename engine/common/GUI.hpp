@@ -4,7 +4,6 @@
 #include <memory>
 
 #include "MathFuncs.hpp"
-#include "UIFont.hpp"
 #include "ComponentDefines.hpp"
 
 
@@ -14,7 +13,7 @@ namespace noob
 	struct ui_window
 	{
 		float center_x, center_y, length, height;
-		noob::model_handle model;
+		// noob::graphics::model_handle model;
 		noob::shader_variant shader;
 	};
 
@@ -39,9 +38,9 @@ namespace noob
 		protected:
 			float window_width, window_height;
 
-			std::unique_ptr<noob::ui_font> _banner;
-			std::unique_ptr<noob::ui_font> _title;
-			std::unique_ptr<noob::ui_font> _header;
-			std::unique_ptr<noob::ui_font> _reading;
+		//	std::unique_ptr<noob::ui_font> _banner;
+		//	std::unique_ptr<noob::ui_font> _title;
+		//	std::unique_ptr<noob::ui_font> _header;
+		//	std::unique_ptr<noob::ui_font> _reading;
 	};
 }
