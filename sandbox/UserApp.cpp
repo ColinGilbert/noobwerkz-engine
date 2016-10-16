@@ -25,12 +25,6 @@ bool noob::application::user_init()
 
 	noob::audio_sample* s = g.samples.get(h);
 
-	noob::basic_renderer::uniform u;
-	u.colour = noob::vec4(0.3, 0.0, 0.8, 1.0);
-	
-	g.set_shader(u, "example-shader");
-	noob::shader_variant example_shader = g.get_shader("example-shader");
-	
 	noob::reflectance r;
 	r.set_specular(noob::vec3(0.1, 0.1, 0.1));
 	r.set_diffuse(noob::vec3(0.1, 0.1, 0.1));
@@ -45,7 +39,10 @@ bool noob::application::user_init()
 
 	const float actor_radius = 10.0;
 	noob::shape_handle sh = g.sphere_shape(actor_radius);
-	
+
+	// TODO: Fixup
+	noob::shader_variant example_shader;
+
 	noob::actor_blueprints bp;
 	bp.bounds = sh;
 	bp.shader = example_shader;

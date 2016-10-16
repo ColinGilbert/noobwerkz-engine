@@ -127,8 +127,8 @@ namespace noob
 			scaled_model cylinder_model(float r, float h) noexcept(true);
 			scaled_model cone_model(float r, float h) noexcept(true);
 
-			scaled_model model_from_mesh(const noob::basic_mesh&) noexcept(true);
-			scaled_model model_from_shape(const noob::shape_handle) noexcept(true);
+			// scaled_model model_from_mesh(const noob::basic_mesh&) noexcept(true);
+			// scaled_model model_from_shape(const noob::shape_handle) noexcept(true);
 
 			double get_random() noexcept(true);
 

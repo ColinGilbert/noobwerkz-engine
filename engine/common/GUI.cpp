@@ -22,18 +22,12 @@ void noob::gui::init(const std::string& prefix, size_t width, size_t height) noe
 	
 	window_width = static_cast<float>(width);
 	window_height = static_cast<float>(height);
-(/
+*/
 }
 
 
 void noob::gui::window_dims(size_t width, size_t height) noexcept(true)
 {
-/*
-	_reading->set_window_dims(width, height);
-	_header->set_window_dims(width, height);
-	_title->set_window_dims(width, height);
-	_banner->set_window_dims(width, height);
-*/
 }
 
 
