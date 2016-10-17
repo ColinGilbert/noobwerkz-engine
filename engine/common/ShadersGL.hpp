@@ -1,22 +1,67 @@
 #pragma once
-#include <string>
+
 namespace noob
 {
 	namespace glsl
 	{
 		static const std::string version = "#version 300 es\n";
+
 		static const std::string lowp = "precision lowp float;\n";
 		static const std::string mediump = "precision mediump float;\n";
 		static const std::string highp = "precision highp float;\n";
-		static const std::string vs_position = "layout(location = 0) in vec4 a_position;\n";
-		static const std::string vs_colour = "layout(location = 1) in vec4 a_normal;\n";
-		static const std::string vs_normal = "layout(location = 2) in vec4 a_colour;\n";
-		static const std::string vs_texcoord = "layout(location = 3) in vec4 a_texcoords;\n";
-      		static const std::string vs_matrix = "layout(location = 4) in mat4 a_matrix;\n";
-		static const std::string vs_output = "out vec4 v_color;\n";
-		static const std::string end_func = "\n}\n";
+
+		static std::string vs_position_input(uint32_t layout) noexcept(true)
+		{
+			return noob::concat("layout(location = ", noob::to_string(layout) ,") in vec4 a_position;\n");
+		}
+
+		static std::string vs_colour_input(uint32_t layout) noexcept(true)
+		{
+			return noob::concat("layout(location = ", noob::to_string(layout) ,") in vec4 a_normal;\n");
+		}
+
+		static std::string vs_normal_input(uint32_t layout) noexcept(true)
+		{
+
+			return noob::concat("layout(location = ", noob::to_string(layout) ,") in vec4 a_colour;\n");
+		}
+
+		static std::string vs_texcoord_input(uint32_t layout) noexcept(true)
+		{
+			return noob::concat("layout(location = ", noob::to_string(layout) ,") in vec4 a_texcoords;\n");
+		}
+
+		static std::string vs_indices_input(uint32_t layout) noexcept(true)
+		{
+			return noob::concat("layout(location = ", noob::to_string(layout) ,") in ivec4 a_indices;\n");
+		}
+
+		static std::string vs_matrix_input(uint32_t layout) noexcept(true)
+		{
+			return noob::concat("layout(location = ", noob::to_string(layout) ,") in mat4 a_matrix;\n");
+		}
+
+		static const std::string vs_colour_output = "out vec4 v_color;\n";
+		static const std::string vs_normal_output = "out vec4 v_normal;\n";
+		static const std::string vs_texcoord_output = "out vec4 v_texcoords;\n";
+
+		static const std::string fs_colour_input = "in vec4 v_colour;\n";
+		static const std::string fs_normal_input = "in vec4 v_normal;\n";
+		static const std::string fs_texcoord_input = "in vec4 v_texcoords;\n";
+
+		static const std::string fs_colour_output = "layout(location = 0) out vec4 out_color;\n";
+
+		static const std::string sampler_2d = "uniform sampler2DArray sampler_2d;\n";
+
+
 		static const std::string end_block = "\n};\n";
+
+		static const std::string end_func = "\n}\n";
+
 		static const std::string begin_main = "void main()\n{\n";
+
+
+
 	}
 
 	static std::string fs_instancing_src(
