@@ -13,13 +13,16 @@ namespace noob
 	{
 		public:
 			typedef noob::handle<uint32_t> model_handle;
-			typedef noob::handle<uint32_t> texture_handle;
+			typedef noob::handle<uint32_t> texture_2d_handle;
+			typedef noob::handle<uint32_t> texture_3d_handle;
+			typedef noob::handle<uint32_t> texture_cube_handle;
+			typedef noob::handle<uint32_t> shader_handle;
+			typedef noob::handle<uint32_t> program_handle;
 
 			struct scaled_model
 			{
-				scaled_model() : scales(noob::vec3(1.0, 1.0, 1.0)) {}
+				scaled_model() noexcept(true) : scales(noob::vec3(1.0, 1.0, 1.0)) {}
 				noob::graphics::model_handle model_h;
-				// noob::reflectance_handle reflect_h;
 				noob::vec3 scales;
 			};
 
@@ -27,8 +30,19 @@ namespace noob
 
 			void destroy() noexcept(true);
 
-			noob::graphics::model_handle make_model(const noob::basic_mesh&) noexcept(true);	
+			noob::graphics::model_handle model(const noob::basic_mesh&) noexcept(true);
 
+			enum class tex_compression
+			{
+				NONE, ETC2, PVRTC, ADST
+			};
+
+			noob::graphics::texture_2d_handle texture_2d(const std::string&, noob::graphics::tex_compression, uint32_t width, uint32_t height) noexcept(true);	
+
+			noob::graphics::texture_3d_handle texture_3d(const std::string&, noob::graphics::tex_compression, uint32_t width, uint32_t height) noexcept(true);	
+
+			noob::graphics::texture_cube_handle texture_cube(const std::string&, noob::graphics::tex_compression, uint32_t width, uint32_t height) noexcept(true);	
+			
 			void frame(uint32_t width, uint32_t height) noexcept(true);
 
 			static graphics& get_instance() noexcept(true)

@@ -95,7 +95,7 @@ noob::graphics::scaled_model noob::globals::model_from_mesh(const noob::basic_me
 	
 	noob::graphics::scaled_model results;
 	noob::graphics& gfx = noob::graphics::get_instance();
-	results.model_h = gfx.make_model(m);
+	results.model_h = gfx.model(m);
 	results.scales = noob::vec3(1.0, 1.0, 1.0);
 	return results;
 }

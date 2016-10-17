@@ -10,7 +10,6 @@
 
 noob::graphics* noob::graphics::ptr_to_instance;
 
-
 GLuint load_shader_gl(GLenum type, const std::string& shader_arg)
 {
 	GLuint shader;
@@ -126,23 +125,38 @@ GLuint load_program_gl(const std::string& vert_shader_arg, const std::string fra
 	return program_object;
 }
 
-
 void noob::graphics::init(uint32_t width, uint32_t height) noexcept(true)
 {
+
 }
 
 void noob::graphics::destroy() noexcept(true)
 {
+
 }
 
-noob::graphics::model_handle noob::graphics::make_model(const noob::basic_mesh&) noexcept(true)
+noob::graphics::model_handle noob::graphics::model(const noob::basic_mesh& mesh) noexcept(true)
 {
 	noob::graphics::model_handle results;
 	return results;
 }
 
-void noob::graphics::frame(uint32_t width, uint32_t height) noexcept(true)
+noob::graphics::texture_2d_handle noob::graphics::texture_2d(const std::string& file, noob::graphics::tex_compression compress, uint32_t width, uint32_t height) noexcept(true)
 {
+
 }
 
+noob::graphics::texture_3d_handle noob::graphics::texture_3d(const std::string& file, noob::graphics::tex_compression compress, uint32_t width, uint32_t height) noexcept(true)
+{
 
+}
+
+noob::graphics::texture_cube_handle noob::graphics::texture_cube(const std::string& file, noob::graphics::tex_compression compress, uint32_t width, uint32_t height) noexcept(true)
+{
+
+}
+
+void noob::graphics::frame(uint32_t width, uint32_t height) noexcept(true)
+{
+
+}
