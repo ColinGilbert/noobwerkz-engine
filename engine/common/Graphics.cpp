@@ -155,14 +155,10 @@ noob::graphics::model_handle noob::graphics::model(const noob::basic_mesh& mesh)
 {
 	noob::graphics::model_handle results;
 
-	// GLuint programObject = programObject;
-	// VertexBufferObject Ids
 	std::array<GLuint, 2> vbo_ids;
 
-	// VertexArrayObject Id
 	GLuint vao_id;
 
-	// Generate VBO Ids and load the VBOs with data
 	glGenBuffers(2, &vbo_ids[0]);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_ids[0]);
@@ -170,11 +166,8 @@ noob::graphics::model_handle noob::graphics::model(const noob::basic_mesh& mesh)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_ids[1]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.indices.size() * sizeof(mesh.indices[0]), &mesh.indices[0], GL_STATIC_DRAW);
 
-	// Generate VAO Id
 	glGenVertexArrays(1, &vao_id);
 
-	// Bind the VAO and then setup the vertex
-	// attributes
 	glBindVertexArray(vao_id);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_ids[0]);
@@ -210,19 +203,19 @@ noob::graphics::texture_cube_handle noob::graphics::texture_cube(const std::stri
 
 void noob::graphics::frame(uint32_t width, uint32_t height) noexcept(true)
 {
-	glEnable (GL_DEPTH_TEST); // enable depth-testing
-	glDepthFunc (GL_LESS); // depth-testing interprets a
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
+
 	glViewport(0, 0, width, height);
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	// glUseProgram (programObject);
+	
+	// glUseProgram(programObject);
+	// glBindVertexArray(vao_id );
+	// glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, reinterpret_cast<const void *>(0));
 
-	// Bind the VAO
-	// glBindVertexArray ( userData->vao_id );
-
-	// Draw with the VAO settings
-	// glDrawElements ( GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, ( const void * ) 0 );
-
-	// Return to the default VAO
 	glBindVertexArray(0);
 
 }

@@ -45,6 +45,7 @@ namespace noob
 			
 			void frame(uint32_t width, uint32_t height) noexcept(true);
 
+			// Static getter. Sorry.
 			static graphics& get_instance() noexcept(true)
 			{
 				static graphics the_instance;
@@ -55,6 +56,17 @@ namespace noob
 
 		protected:
 
+			static constexpr uint32_t vert_pos_index = 0;
+			static constexpr uint32_t vert_normal_index = 1;
+			static constexpr uint32_t vert_colour_index = 2;
+			static constexpr uint32_t vert_texture_index = 3;
+			static constexpr uint32_t vert_matrix_index = 4;	
+			
+
+
+
+
+			// Static getter-related stuff. TODO: Test the output that a proper compiler gives on an inherited type or try to templatize this.
 			static graphics* ptr_to_instance;
 
 			graphics() noexcept(true) {}
