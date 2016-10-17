@@ -141,7 +141,7 @@ GLuint load_program_gl(const std::string& vert_shader_arg, const std::string fra
 
 void noob::graphics::init(uint32_t width, uint32_t height) noexcept(true)
 {
-	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+	glClearColor(0.2f, 0.0f, 0.2f, 0.0f);
 	glEnable (GL_DEPTH_TEST); // enable depth-testing
 	glDepthFunc (GL_LESS); // depth-testing interprets a
 }
