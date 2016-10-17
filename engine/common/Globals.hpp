@@ -241,7 +241,7 @@ namespace noob
 			size_t sample_rate;
 
 
-			bool finished_init() const
+			bool finished_init() const noexcept(true)
 			{
 				return init_done;
 			}

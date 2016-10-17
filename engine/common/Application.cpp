@@ -29,7 +29,6 @@ void noob::application::init(uint32_t width, uint32_t height)
 	eye_up = noob::vec3(0.0, 1.0, 0.0);
 
 	noob::globals& g = noob::globals::get_instance();
-
 	bool are_globals_initialized = g.init();
 	assert(are_globals_initialized && "Globals not initialized!");
 	
@@ -87,6 +86,9 @@ void noob::application::draw()
 	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0, 2000.0);
 	stage.draw(window_width, window_height, eye_pos, eye_target, eye_up, proj_mat);
 
+	noob::graphics& gfx = noob::graphics::get_instance();
+	gfx.frame(window_width, window_height);
+
 	noob::time end_time = noob::clock::now();
 	noob::duration draw_duration = end_time - start_time;
 
@@ -127,7 +129,6 @@ void noob::application::step()
 			double d = (1.0 / static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(time_since).count()));
 			update(d);
 		}
-
 		draw();
 
 		noob::time end_time = noob::clock::now();

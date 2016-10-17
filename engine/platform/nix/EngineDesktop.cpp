@@ -28,9 +28,7 @@ void framebuffer_size_callback(GLFWwindow* window, int w, int h)
 	width = std::abs(w);
 	height = std::abs(h);
 
-	//std::stringstream ss;
-	//ss << "[glfw] framebuffer_size_callback " << width << ", " << height;
-	//logger::log(ss.str());
+	noob::logger::log(noob::importance::INFO, noob::concat("[EngineDesktop] Resize to ", noob::to_string(width), ", ", noob::to_string(height)));
 	app.window_resize(width, height);
 }
 
@@ -101,6 +99,7 @@ int main()//int /*_argc*/, char** /*_argv*/)
 		// app->accept_ndof_data(info);
 		app.step();
 		glfwPollEvents();
+		glfwSwapBuffers(window);
 	}
 
 	return 0;
