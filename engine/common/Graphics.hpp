@@ -27,6 +27,11 @@ namespace noob
 			void init(uint32_t width, uint32_t height) noexcept(true);
 
 			void destroy() noexcept(true);
+			
+			enum class attrib_type
+			{
+				HALF_FLOAT, FLOAT, INT16, INT32, UINT16, UINT32
+			};
 
 			class model
 			{
@@ -52,10 +57,6 @@ namespace noob
 			noob::graphics::model_handle model(const noob::basic_mesh&) noexcept(true);
 
 
-			enum class attrib_type
-			{
-				HALF_FLOAT, FLOAT, INT16, INT32, UINT16, UINT32
-			};
 
 			class texture
 			{
@@ -95,7 +96,6 @@ namespace noob
 				noob::graphics::texture::compression_type compression;
 			};
 
-			// I would use this to store indices or
 			noob::graphics::texture reserve_texture_1d(uint32_t width, noob::graphics::attrib_type) noexcept(true);
 
 			noob::graphics::texture reserve_texture_2d_array(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::graphics::attrib_type, noob::graphics::texture::compression_type) noexcept(true);
@@ -107,6 +107,7 @@ namespace noob
 			void frame(uint32_t width, uint32_t height) noexcept(true);
 
 			// Static getter. Sorry.
+			// TODO: Make more maintainable
 			static graphics& get_instance() noexcept(true)
 			{
 				static graphics the_instance;
