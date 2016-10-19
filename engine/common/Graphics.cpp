@@ -186,19 +186,28 @@ noob::graphics::model_handle noob::graphics::model(const noob::basic_mesh& mesh)
 	return noob::graphics::model_handle::make(vao_id);
 }
 
-noob::graphics::texture_2d_handle noob::graphics::texture_2d(const std::string& file, noob::graphics::tex_compression compress, uint32_t width, uint32_t height) noexcept(true)
+noob::graphics::texture noob::graphics::reserve_texture_1d(uint32_t width, noob::graphics::attrib_type attrib) noexcept(true)
 {
-
+	noob::graphics::texture t;
+	return t;
 }
 
-noob::graphics::texture_3d_handle noob::graphics::texture_3d(const std::string& file, noob::graphics::tex_compression compress, uint32_t width, uint32_t height) noexcept(true)
+noob::graphics::texture noob::graphics::reserve_texture_2d_array(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::graphics::attrib_type attrib, noob::graphics::texture::compression_type compress) noexcept(true)
 {
-
+	noob::graphics::texture t;
+	return t;
 }
 
-noob::graphics::texture_cube_handle noob::graphics::texture_cube(const std::string& file, noob::graphics::tex_compression compress, uint32_t width, uint32_t height) noexcept(true)
+noob::graphics::texture noob::graphics::texture_3d(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib_type attrib, noob::graphics::texture::compression_type compress, const std::string&) noexcept(true)
 {
+	noob::graphics::texture t;
+	return t;
+}
 
+noob::graphics::texture noob::graphics::texture_cube(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib_type attrib, noob::graphics::texture::compression_type compress, const std::string&) noexcept(true)
+{
+	noob::graphics::texture t;
+	return t;
 }
 
 void noob::graphics::frame(uint32_t width, uint32_t height) noexcept(true)
@@ -209,9 +218,9 @@ void noob::graphics::frame(uint32_t width, uint32_t height) noexcept(true)
 	glFrontFace(GL_CCW);
 
 	glViewport(0, 0, width, height);
-	
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+
 	// glUseProgram(programObject);
 	// glBindVertexArray(vao_id );
 	// glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, reinterpret_cast<const void *>(0));

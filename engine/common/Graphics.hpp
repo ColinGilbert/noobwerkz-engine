@@ -13,9 +13,7 @@ namespace noob
 	{
 		public:
 			typedef noob::handle<uint32_t> model_handle;
-			typedef noob::handle<uint32_t> texture_2d_handle;
-			typedef noob::handle<uint32_t> texture_3d_handle;
-			typedef noob::handle<uint32_t> texture_cube_handle;
+			typedef noob::handle<uint32_t> texture_handle;
 			typedef noob::handle<uint32_t> shader_handle;
 			typedef noob::handle<uint32_t> program_handle;
 
@@ -30,19 +28,82 @@ namespace noob
 
 			void destroy() noexcept(true);
 
-			noob::graphics::model_handle model(const noob::basic_mesh&) noexcept(true);
-
-			enum class tex_compression
+			class model
 			{
-				NONE, ETC2, PVRTC, ADST
+				friend class graphics;
+
+				public:
+					
+					enum class geom_type
+					{
+						INDEXED_MESH, DYNAMIC_TERRAIN, BILLBOARD, POINT_SPRITE
+					};
+
+					noob::graphics::model_handle get_handle() const noexcept(true)
+					{
+						return handle;
+					}
+
+				protected:
+					noob::graphics::model_handle handle;
+
 			};
 
-			noob::graphics::texture_2d_handle texture_2d(const std::string&, noob::graphics::tex_compression, uint32_t width, uint32_t height) noexcept(true);	
+			noob::graphics::model_handle model(const noob::basic_mesh&) noexcept(true);
 
-			noob::graphics::texture_3d_handle texture_3d(const std::string&, noob::graphics::tex_compression, uint32_t width, uint32_t height) noexcept(true);	
 
-			noob::graphics::texture_cube_handle texture_cube(const std::string&, noob::graphics::tex_compression, uint32_t width, uint32_t height) noexcept(true);	
-			
+			enum class attrib_type
+			{
+				HALF_FLOAT, FLOAT, INT16, INT32, UINT16, UINT32
+			};
+
+			class texture
+			{
+				friend class graphics;
+
+				public:
+
+				enum class storage_type
+				{
+					TEX_1D, TEX_2D_ARRAY, TEX_3D, TEX_CUBE
+				};
+
+				enum class compression_type
+				{
+					NONE, ETC2, PVRTC, ADST
+				};
+
+				noob::graphics::texture_handle get_handle() const noexcept(true)
+				{
+					return handle;
+				}
+
+				noob::graphics::texture::storage_type get_storage_type() const noexcept(true)
+				{
+					return storage;
+				}
+
+				noob::graphics::texture::compression_type get_compression_type() const noexcept(true)
+				{
+					return compression;
+				}
+
+				protected:
+
+				noob::graphics::texture_handle handle;
+				noob::graphics::texture::storage_type storage;
+				noob::graphics::texture::compression_type compression;
+			};
+
+			// I would use this to store indices or
+			noob::graphics::texture reserve_texture_1d(uint32_t width, noob::graphics::attrib_type) noexcept(true);
+
+			noob::graphics::texture reserve_texture_2d_array(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::graphics::attrib_type, noob::graphics::texture::compression_type) noexcept(true);
+
+			noob::graphics::texture texture_3d(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib_type, noob::graphics::texture::compression_type, const std::string&) noexcept(true);	
+
+			noob::graphics::texture texture_cube(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib_type, noob::graphics::texture::compression_type, const std::string&) noexcept(true);	
+
 			void frame(uint32_t width, uint32_t height) noexcept(true);
 
 			// Static getter. Sorry.
@@ -56,14 +117,11 @@ namespace noob
 
 		protected:
 
-			static constexpr uint32_t vert_pos_index = 0;
-			static constexpr uint32_t vert_normal_index = 1;
-			static constexpr uint32_t vert_colour_index = 2;
-			static constexpr uint32_t vert_texture_index = 3;
-			static constexpr uint32_t vert_matrix_index = 4;	
-			
-
-
+			// static constexpr uint32_t vert_pos_index = 0;
+			// static constexpr uint32_t vert_normal_index = 1;
+			// static constexpr uint32_t vert_colour_index = 2;
+			// static constexpr uint32_t vert_texture_index = 3;
+			// static constexpr uint32_t vert_matrix_index = 4;
 
 
 			// Static getter-related stuff. TODO: Test the output that a proper compiler gives on an inherited type or try to templatize this.

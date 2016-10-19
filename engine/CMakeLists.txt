@@ -5,16 +5,20 @@ project(NoobWerkz)
 set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
-set(bgfx_macros "-D__STDC_LIMIT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_CONSTANT_MACROS -DBGFX_CONFIG_MULTITHREADED=0")
+set(NOOB_COMMON_FLAGS "-Werror=return-type -Wshadow -ftrapv -Wdouble-promotion")
+set(NOOB_COMMON_C_FLAGS "-std=c99 -DSTB_IMAGE_STATIC -DFT2_BUILD_LIBRARY")
+set(NOOB_COMMON_CXX_FLAGS "-std=c++14 -fno-exceptions -fno-rtti -DEIGEN_MPL2_ONLY")
+set(NOOB_STRICT_FLAGS " -pedantic -pedantic-errors -ansi -Wextra -Wall -Wextra -Winit-self -Wold-style-cast -Wuninitialized -Wmissing-declarations")
+set(NOOB_STRICT_C_FLAGS "-Wmissing-prototypes -Wstrict-prototypes -Wold-style-definition")
+set(NOOB_STRICT_CXX_FLAGS "-fno-elide-constructors -Woverloaded-virtual -Winit-self ")
 
-if (NOOB_STRICT_FLAGS)
-	set(CMAKE_CXX_FLAGS "-fno-elide-constructors -pedantic-errors -ansi -Wextra -Wall -Winit-self -Wold-style-cast -Woverloaded-virtual -Wuninitialized -Wmissing-declarations -Winit-self -std=c++14 -fno-exceptions -fno-rtti -DEIGEN_MPL2_ONLY ${bgfx_macros} ${CMAKE_CXX_FLAGS}")
-	set(CMAKE_C_FLAGS "-Wall -Wextra -std=99 -pedantic -Wmissing-prototypes -Wstrict-prototypes -Wold-style-definition -DSTB_IMAGE_STATIC -DFT2_BUILD_LIBRARY ${CMAKE_C_FLAGS}")
-endif()
+
+set(CMAKE_C_FLAGS "${NOOB_COMMON_FLAGS} ${NOOB_COMMON_C_FLAGS} ${CMAKE_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "${NOOB_COMMON_FLAGS} ${NOOB_COMMON_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
+
 if(NOT NOOB_STRICT_FLAGS)
-	set (CMAKE_CXX_FLAGS "-std=c++14 -fno-exceptions -fno-rtti -DEIGEN_MPL2_ONLY ${bgfx_macros} ${CMAKE_CXX_FLAGS}")
-	set(CMAKE_C_FLAGS "-std=c99 -DSTB_IMAGE_STATIC -DFT2_BUILD_LIBRARY ${CMAKE_C_FLAGS}")
-
+	set(CMAKE_C_FLAGS "${NOOB_STRICT_FLAGS} ${NOOB_STRICT_C_FLAGS} ${CMAKE_C_FLAGS}")
+	set(CMAKE_CXX_FLAGS "${NOOB_STRICT_FLAGS} ${NOOB_STRICT_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
 endif()
 
 include_directories(lib/freetype/include)
