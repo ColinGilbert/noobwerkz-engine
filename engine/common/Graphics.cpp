@@ -175,7 +175,7 @@ noob::graphics::model_handle noob::graphics::model(noob::graphics::model::geom_t
 	return noob::graphics::model_handle::make(vao_id);
 }
 
-noob::graphics::instanced_model_info noob::graphics::model_instanced(const noob::basic_mesh& mesh, uint32_t num_instances, const std::vector<noob::vec4>& colours_buffer, const std::vector<noob::mat4>& mvp_buffer) noexcept(true)
+noob::graphics::instanced_model_info noob::graphics::model_instanced(const noob::basic_mesh& mesh, const std::vector<noob::vec4>& colours_buffer) noexcept(true)
 {
 	GLuint vao_id = 0;
 
@@ -194,7 +194,13 @@ noob::graphics::instanced_model_info noob::graphics::model_instanced(const noob:
 	const GLuint mvp_vbo = vbo_ids[2];
 	const GLuint indices_vbo = vbo_ids[3];
 
+
+
 	const uint32_t num_verts = mesh.vertices.size();
+	const uint32_t num_instances = std::max(static_cast<uint32_t>(colours_buffer.size()), static_cast<uint32_t>(1));
+
+
+
 
 	////////////////////////////
 	// Setup non-instanced VBOs
@@ -210,7 +216,6 @@ noob::graphics::instanced_model_info noob::graphics::model_instanced(const noob:
 		pos_normals_colours[current_offset] = noob::vec4(mesh.vertices[i].v[0], mesh.vertices[i].v[1], mesh.vertices[i].v[2], 1.0);
 		pos_normals_colours[current_offset + 1] = noob::vec4(mesh.normals[i].v[0], mesh.normals[i].v[1], mesh.normals[i].v[2], 1.0);
 		pos_normals_colours[current_offset + 2] = mesh.colours[i];
-
 	}
 
 	// Upload to pos-normal buffer
@@ -225,13 +230,13 @@ noob::graphics::instanced_model_info noob::graphics::model_instanced(const noob:
 	// Setup instanced VBOs
 	////////////////////////
 
-	// Upload to colours buffer
+	// Upload to instance colour buffer
 	glBindBuffer(GL_ARRAY_BUFFER, colour_multiplier_vbo);
-	glBufferData(GL_ARRAY_BUFFER, colours_buffer.size() * sizeof(colours_buffer[0]), &colours_buffer[0], GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, num_instances * sizeof(colours_buffer[0]), &colours_buffer[0], GL_DYNAMIC_DRAW);
 
 	// Upload to mvp buffer
 	glBindBuffer(GL_ARRAY_BUFFER, mvp_vbo);
-	glBufferData(GL_ARRAY_BUFFER, mvp_buffer.size() * sizeof(mvp_buffer[0]), &mvp_buffer[0], GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, num_instances * sizeof(noob::mat4), nullptr, GL_DYNAMIC_DRAW);
 
 	//////////////////////
 	// Setup attrib specs
@@ -239,20 +244,39 @@ noob::graphics::instanced_model_info noob::graphics::model_instanced(const noob:
 
 	// Positions
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 8, reinterpret_cast<const void *>(0));
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 12, reinterpret_cast<const void *>(0));
 
 	// Normals
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 8, reinterpret_cast<const void *>(4));
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 12, reinterpret_cast<const void *>(4));
 
-	// Colours
+	// Vertex colours
 	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 12, reinterpret_cast<const void *>(8));
+
+	// Per instance colour
+	glEnableVertexAttribArray(3);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<const void *>(0));
 
+	// Per instance MVP
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(0, 16, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<const void *>(0));
 
-	// MVPs
+	glBindVertexArray(0);
 
+	noob::graphics::instanced_model_info results;
 
+	uint32_t old_size = colour_storage.size();
+	results.colour_offset = old_size;
+	colour_storage.resize(old_size + num_instances);
+
+	old_size = mvp_storage.size();
+	results.mvp_offset = old_size;
+	mvp_storage.resize(old_size + num_instances);
+	
+	results.m_model.handle = noob::graphics::model_handle::make(vao_id);
+
+	return results;
 }
 
 

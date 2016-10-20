@@ -99,7 +99,7 @@ namespace noob
 
 				protected:
 
-				uint32_t colours_offset, colours_stride, mvp_offset, mvp_stride;
+				uint32_t colour_offset, mvp_offset;
 			};
 
 			class texture
@@ -145,7 +145,7 @@ namespace noob
 
 			noob::graphics::model_handle model(noob::graphics::model::geom_type geom, const noob::basic_mesh&) noexcept(true);
 
-			noob::graphics::instanced_model_info model_instanced(const noob::basic_mesh&, uint32_t num_instances, const std::vector<noob::vec4>& colours_buffer, const std::vector<noob::mat4>& mvp_buffer) noexcept(true);
+			noob::graphics::instanced_model_info model_instanced(const noob::basic_mesh&, const std::vector<noob::vec4>& colours_buffer) noexcept(true);
 
 			noob::graphics::texture reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::graphics::attrib::unit_type, noob::graphics::texture::compression_type) noexcept(true);
 
@@ -166,16 +166,8 @@ namespace noob
 			}
 
 		protected:
-
-			// static constexpr uint32_t vert_pos_index = 0;
-			// static constexpr uint32_t vert_normal_index = 1;
-			// static constexpr uint32_t vert_colour_index = 2;
-			// static constexpr uint32_t vert_texture_index = 3;
-			// static constexpr uint32_t vert_matrix_index = 4;
-
-
 			// Static getter-related stuff.
-			// TODO: Test the output that a proper compiler gives on an inherited type or try to templatize this.
+			// TODO: Find cleaner way to do this.
 			static graphics* ptr_to_instance;
 
 			graphics() noexcept(true) {}
@@ -196,7 +188,7 @@ namespace noob
 
 			~graphics() noexcept(true) {}
 
-			std::vector<noob::vec4> colours_storage;
+			std::vector<noob::vec4> colour_storage;
 			std::vector<noob::mat4> mvp_storage;
 	};
 }
