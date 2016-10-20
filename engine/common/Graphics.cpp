@@ -186,25 +186,25 @@ noob::graphics::model_handle noob::graphics::model(const noob::basic_mesh& mesh)
 	return noob::graphics::model_handle::make(vao_id);
 }
 
-noob::graphics::texture noob::graphics::reserve_texture_1d(uint32_t width, noob::graphics::attrib_type attrib) noexcept(true)
+noob::graphics::texture noob::graphics::reserve_texture_1d(uint32_t width, noob::graphics::attrib::unit_type unit_arg) noexcept(true)
 {
 	noob::graphics::texture t;
 	return t;
 }
 
-noob::graphics::texture noob::graphics::reserve_texture_2d_array(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::graphics::attrib_type attrib, noob::graphics::texture::compression_type compress) noexcept(true)
+noob::graphics::texture noob::graphics::reserve_texture_2d_array(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::graphics::attrib::unit_type unit_arg, noob::graphics::texture::compression_type compress) noexcept(true)
 {
 	noob::graphics::texture t;
 	return t;
 }
 
-noob::graphics::texture noob::graphics::texture_3d(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib_type attrib, noob::graphics::texture::compression_type compress, const std::string&) noexcept(true)
+noob::graphics::texture noob::graphics::texture_3d(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib::unit_type unit_arg, noob::graphics::texture::compression_type compress, const std::string&) noexcept(true)
 {
 	noob::graphics::texture t;
 	return t;
 }
 
-noob::graphics::texture noob::graphics::texture_cube(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib_type attrib, noob::graphics::texture::compression_type compress, const std::string&) noexcept(true)
+noob::graphics::texture noob::graphics::texture_cube(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib::unit_type unit_arg, noob::graphics::texture::compression_type compress, const std::string&) noexcept(true)
 {
 	noob::graphics::texture t;
 	return t;

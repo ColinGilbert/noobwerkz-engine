@@ -4,22 +4,22 @@ namespace noob
 {
 	namespace glsl
 	{
-		static const std::string version() noexcept(true)
+		static std::string version() noexcept(true)
 		{
 			return "#version 300 es\n";
 		}
 
-		static const std::string lowp() noexcept(true)
+		static std::string lowp() noexcept(true)
 		{
 			return "precision lowp float;\n";
 		}
 
-		static const std::string mediump() noexcept(true)
+		static std::string mediump() noexcept(true)
 		{
 			return "precision mediump float;\n";
 		}
 
-		static const std::string highp() noexcept(true)
+		static std::string highp() noexcept(true)
 		{
 			return "precision highp float;\n";
 		}
@@ -67,13 +67,11 @@ namespace noob
 		static std::string vs_texcoord_output(uint32_t layout) noexcept(true)
 		{
 			return noob::concat("layout(location = ", noob::to_string(layout), ") out vec4 v_texcoords;\n");
-
 		}
 
 		static std::string fs_colour_input(uint32_t layout) noexcept(true)
 		{
 			return noob::concat("layout(location = ", noob::to_string(layout), ") in vec4 v_colour;\n");
-
 		}
 
 		static std::string fs_colour_input(uint32_t layout) noexcept(true)

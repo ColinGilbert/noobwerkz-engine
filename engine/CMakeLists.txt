@@ -5,10 +5,10 @@ project(NoobWerkz)
 set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
-set(NOOB_COMMON_FLAGS "-Werror=return-type -Wshadow -ftrapv -Wdouble-promotion")
-set(NOOB_COMMON_C_FLAGS "-std=c99 -DSTB_IMAGE_STATIC -DFT2_BUILD_LIBRARY")
+set(NOOB_COMMON_FLAGS "-Werror=return-type -ftrapv")
+set(NOOB_COMMON_C_FLAGS "-DSTB_IMAGE_STATIC -DFT2_BUILD_LIBRARY")
 set(NOOB_COMMON_CXX_FLAGS "-std=c++14 -fno-exceptions -fno-rtti -DEIGEN_MPL2_ONLY")
-set(NOOB_STRICT_FLAGS " -pedantic -pedantic-errors -ansi -Wextra -Wall -Wextra -Winit-self -Wold-style-cast -Wuninitialized -Wmissing-declarations")
+set(NOOB_STRICT_FLAGS " -pedantic -Wdouble-promotion -Wshadow -pedantic-errors -Wextra -Wall -Wextra -Winit-self -Wold-style-cast -Wuninitialized -Wmissing-declarations")
 set(NOOB_STRICT_C_FLAGS "-Wmissing-prototypes -Wstrict-prototypes -Wold-style-definition")
 set(NOOB_STRICT_CXX_FLAGS "-fno-elide-constructors -Woverloaded-virtual -Winit-self ")
 
@@ -243,11 +243,7 @@ list (APPEND base_src
 	)
 
 include_directories(lib/sdf)
-include_directories(lib/edtaa3)
-
-
-list(APPEND bgfx_utils_src
-	)
+# include_directories(lib/edtaa3)
 
 include_directories(lib/voropp/src)
 list (APPEND voropp_src
