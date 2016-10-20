@@ -10,17 +10,6 @@
 #include <glad/glad.h>
 
 
-#define VERTEX_POS_SIZE       3 // x, y and z
-#define VERTEX_COLOR_SIZE     4 // r, g, b, and a
-
-#define VERTEX_POS_INDX       0
-#define VERTEX_COLOR_INDX     1
-
-#define VERTEX_STRIDE         ( sizeof(GLfloat) *     \
-		( VERTEX_POS_SIZE +    \
-		  VERTEX_COLOR_SIZE ) )
-
-
 
 noob::graphics* noob::graphics::ptr_to_instance;
 
@@ -151,34 +140,34 @@ void noob::graphics::destroy() noexcept(true)
 
 }
 
-noob::graphics::model_handle noob::graphics::model(const noob::basic_mesh& mesh) noexcept(true)
+noob::graphics::model_handle noob::graphics::model(noob::graphics::model::geom_type geom, const noob::basic_mesh& mesh) noexcept(true)
 {
 	noob::graphics::model_handle results;
+	GLuint vao_id = 0;
 
-	std::array<GLuint, 2> vbo_ids;
-
-	GLuint vao_id;
-
-	glGenBuffers(2, &vbo_ids[0]);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vbo_ids[0]);
-	glBufferData(GL_ARRAY_BUFFER, mesh.vertices.size() * sizeof(mesh.vertices[0]), &mesh.vertices[0], GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_ids[1]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.indices.size() * sizeof(mesh.indices[0]), &mesh.indices[0], GL_STATIC_DRAW);
-
-	glGenVertexArrays(1, &vao_id);
-
-	glBindVertexArray(vao_id);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vbo_ids[0]);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_ids[1]);
-
-	glEnableVertexAttribArray(VERTEX_POS_INDX);
-	glEnableVertexAttribArray(VERTEX_COLOR_INDX);
-
-	glVertexAttribPointer(VERTEX_POS_INDX, VERTEX_POS_SIZE, GL_FLOAT, GL_FALSE, VERTEX_STRIDE, reinterpret_cast<const void *>(0));
-
-	glVertexAttribPointer(VERTEX_COLOR_INDX, VERTEX_COLOR_SIZE, GL_FLOAT, GL_FALSE, VERTEX_STRIDE, reinterpret_cast<const void *>((VERTEX_POS_SIZE * sizeof(GLfloat))));
+	switch (geom)
+	{
+		case(noob::graphics::model::geom_type::INDEXED_MESH):
+			{
+				break;
+			}
+		case(noob::graphics::model::geom_type::DYNAMIC_TERRAIN):
+			{
+				break;
+			}
+		case(noob::graphics::model::geom_type::BILLBOARD):
+			{
+				break;
+			}
+		case(noob::graphics::model::geom_type::POINT_SPRITE):
+			{
+				break;
+			}
+		default:
+			{
+				noob::logger::log(noob::importance::ERROR, "[Graphics] Reached past the valid enum values in switch statement. WTF?!");
+			}
+	}
 
 	// Reset to the default VAO
 	glBindVertexArray(0);
@@ -186,13 +175,88 @@ noob::graphics::model_handle noob::graphics::model(const noob::basic_mesh& mesh)
 	return noob::graphics::model_handle::make(vao_id);
 }
 
-noob::graphics::texture noob::graphics::reserve_texture_1d(uint32_t width, noob::graphics::attrib::unit_type unit_arg) noexcept(true)
+noob::graphics::instanced_model_info noob::graphics::model_instanced(const noob::basic_mesh& mesh, uint32_t num_instances, const std::vector<noob::vec4>& colours_buffer, const std::vector<noob::mat4>& mvp_buffer) noexcept(true)
 {
-	noob::graphics::texture t;
-	return t;
+	GLuint vao_id = 0;
+
+	glGenVertexArrays(1, &vao_id);
+
+	glBindVertexArray(vao_id);
+
+	////////////////////////////////
+	// Create & bind attrib buffers
+	////////////////////////////////
+	std::array<GLuint, 4> vbo_ids;
+	glGenBuffers(4, &vbo_ids[0]);
+
+	const GLuint pos_normals_colours_vbo = vbo_ids[0];
+	const GLuint colour_multiplier_vbo = vbo_ids[1];
+	const GLuint mvp_vbo = vbo_ids[2];
+	const GLuint indices_vbo = vbo_ids[3];
+
+	const uint32_t num_verts = mesh.vertices.size();
+
+	////////////////////////////
+	// Setup non-instanced VBOs
+	////////////////////////////
+	
+	std::vector<noob::vec4> pos_normals_colours;
+	pos_normals_colours.resize(num_verts * 3);
+
+	// Interleave our vertex positions, normals, and colours
+	for(uint32_t i = 0; i < num_verts; ++i)
+	{
+		const uint32_t current_offset = i * 3;
+		pos_normals_colours[current_offset] = noob::vec4(mesh.vertices[i].v[0], mesh.vertices[i].v[1], mesh.vertices[i].v[2], 1.0);
+		pos_normals_colours[current_offset + 1] = noob::vec4(mesh.normals[i].v[0], mesh.normals[i].v[1], mesh.normals[i].v[2], 1.0);
+		pos_normals_colours[current_offset + 2] = mesh.colours[i];
+
+	}
+
+	// Upload to pos-normal buffer
+	glBindBuffer(GL_ARRAY_BUFFER, pos_normals_colours_vbo);
+	glBufferData(GL_ARRAY_BUFFER, pos_normals_colours.size() * sizeof(pos_normals_colours[0]), &pos_normals_colours[0], GL_STATIC_DRAW);
+
+	// Upload to indices buffer
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_vbo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.indices.size() * sizeof(mesh.indices[0]), &mesh.indices[0], GL_STATIC_DRAW);
+
+	////////////////////////
+	// Setup instanced VBOs
+	////////////////////////
+
+	// Upload to colours buffer
+	glBindBuffer(GL_ARRAY_BUFFER, colour_multiplier_vbo);
+	glBufferData(GL_ARRAY_BUFFER, colours_buffer.size() * sizeof(colours_buffer[0]), &colours_buffer[0], GL_DYNAMIC_DRAW);
+
+	// Upload to mvp buffer
+	glBindBuffer(GL_ARRAY_BUFFER, mvp_vbo);
+	glBufferData(GL_ARRAY_BUFFER, mvp_buffer.size() * sizeof(mvp_buffer[0]), &mvp_buffer[0], GL_DYNAMIC_DRAW);
+
+	//////////////////////
+	// Setup attrib specs
+	//////////////////////
+
+	// Positions
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 8, reinterpret_cast<const void *>(0));
+
+	// Normals
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 8, reinterpret_cast<const void *>(4));
+
+	// Colours
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<const void *>(0));
+
+
+	// MVPs
+
+
 }
 
-noob::graphics::texture noob::graphics::reserve_texture_2d_array(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::graphics::attrib::unit_type unit_arg, noob::graphics::texture::compression_type compress) noexcept(true)
+
+noob::graphics::texture noob::graphics::reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::graphics::attrib::unit_type unit_arg, noob::graphics::texture::compression_type compress) noexcept(true)
 {
 	noob::graphics::texture t;
 	return t;

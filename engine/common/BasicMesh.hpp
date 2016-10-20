@@ -43,6 +43,8 @@ namespace noob
 
 		rde::vector<noob::vec3> vertices;
 		rde::vector<noob::vec3> normals;
+		rde::vector<noob::vec4> colours;
+		
 		rde::vector<uint32_t> indices;
 		// std::vector<uint8_t> flags;
 

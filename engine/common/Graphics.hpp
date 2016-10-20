@@ -82,6 +82,26 @@ namespace noob
 				noob::graphics::model::geom_type type;
 			};
 
+			// Represents the client-side info used to control the instances of a given model
+			class instanced_model_info
+			{
+				friend class graphics;
+
+				public:
+
+				noob::graphics::model m_model;
+
+				void set_colour() const noexcept(true);
+				void set_mvp() const noexcept(true);
+
+				void get_colour() const noexcept(true);
+				void get_mvp() const noexcept(true);
+
+				protected:
+
+				uint32_t colours_offset, colours_stride, mvp_offset, mvp_stride;
+			};
+
 			class texture
 			{
 				friend class graphics;
@@ -114,23 +134,20 @@ namespace noob
 				}
 
 				protected:
-
 				noob::graphics::texture_handle handle;
 				noob::graphics::texture::storage_type storage;
 				noob::graphics::texture::compression_type compression;
 			};
 
-
-
 			void init(uint32_t width, uint32_t height) noexcept(true);
 
 			void destroy() noexcept(true);
 
-			noob::graphics::model_handle model(const noob::basic_mesh&) noexcept(true);
+			noob::graphics::model_handle model(noob::graphics::model::geom_type geom, const noob::basic_mesh&) noexcept(true);
 
-			noob::graphics::texture reserve_texture_1d(uint32_t width, noob::graphics::attrib::unit_type) noexcept(true);
+			noob::graphics::instanced_model_info model_instanced(const noob::basic_mesh&, uint32_t num_instances, const std::vector<noob::vec4>& colours_buffer, const std::vector<noob::mat4>& mvp_buffer) noexcept(true);
 
-			noob::graphics::texture reserve_texture_2d_array(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::graphics::attrib::unit_type, noob::graphics::texture::compression_type) noexcept(true);
+			noob::graphics::texture reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::graphics::attrib::unit_type, noob::graphics::texture::compression_type) noexcept(true);
 
 			noob::graphics::texture texture_3d(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib::unit_type, noob::graphics::texture::compression_type, const std::string&) noexcept(true);	
 
@@ -179,5 +196,7 @@ namespace noob
 
 			~graphics() noexcept(true) {}
 
+			std::vector<noob::vec4> colours_storage;
+			std::vector<noob::mat4> mvp_storage;
 	};
 }
