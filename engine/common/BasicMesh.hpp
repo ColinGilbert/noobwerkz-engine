@@ -15,6 +15,7 @@
 #include "MathFuncs.hpp"
 
 
+// TODO: Make a bit more foolproof: IE: Functions to ensure all values get filled or something.
 namespace noob
 {
 	struct basic_mesh 

@@ -64,9 +64,11 @@ namespace noob
 
 				enum class geom_type
 				{
-					INDEXED_MESH, DYNAMIC_TERRAIN, BILLBOARD, POINT_SPRITE
+					INDEXED_MESH, DYNAMIC_TERRAIN, BILLBOARD, POINT_SPRITE, INVALID
 				};
-
+				
+				model() noexcept(true) : type(noob::graphics::model::geom_type::INVALID), interleaved_vbo(0), indices_vbo(0), num_indices(0), num_vertices(0) {}
+				
 				noob::graphics::model_handle get_handle() const noexcept(true)
 				{
 					return handle;
@@ -80,6 +82,7 @@ namespace noob
 				protected:
 				noob::graphics::model_handle handle;
 				noob::graphics::model::geom_type type;
+				uint32_t interleaved_vbo, indices_vbo, num_indices, num_vertices;
 			};
 
 			// Represents the client-side info used to control the instances of a given model
@@ -88,23 +91,25 @@ namespace noob
 				friend class graphics;
 
 				public:
+
+				instanced_model() noexcept(true) : num_instances(0), max_instances(0), colours_vbo(0), matrices_vbo(0) {}
+				
 				struct info
 				{
 					noob::vec4 colour;
-					noob::mat4 mvp;
+					noob::mat4 mvp_mat;
+					noob::mat4 normal_mat;					
 				};
 
 				noob::graphics::model m_model;
 
-				void set_colour(uint32_t i, const noob::vec4&) const noexcept(true);
-				void set_mvp(uint32_t i, const noob::mat4&) const noexcept(true);
-
-				noob::vec4 get_colour(uint32_t i) const noexcept(true);
-				noob::mat4 get_mvp(uint32_t i) const noexcept(true);
+				// void set_colour(uint32_t i, const noob::vec4&) const noexcept(true);
+				// void set_mvp_mat(uint32_t i, const noob::mat4&) const noexcept(true);
+				// void set_normal_mat(uint32_t i, const noob::mat4&) const noexcept(true);
 
 				protected:
 
-				uint32_t num_instances, colour_offset, mvp_offset;
+				uint32_t num_instances, max_instances, colours_vbo, matrices_vbo;
 			};
 
 
@@ -151,13 +156,15 @@ namespace noob
 
 			noob::graphics::model_handle model(noob::graphics::model::geom_type geom, const noob::basic_mesh&) noexcept(true);
 
-			noob::graphics::instanced_model model_instanced(const noob::basic_mesh&, const std::vector<noob::vec4>& colours_buffer) noexcept(true);
+			std::tuple<bool, noob::graphics::instanced_model> model_instanced(const noob::basic_mesh&, const std::vector<noob::graphics::instanced_model::info>&) noexcept(true);
 
 			noob::graphics::texture reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::graphics::attrib::unit_type, noob::graphics::texture::compression_type) noexcept(true);
 
 			noob::graphics::texture texture_3d(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib::unit_type, noob::graphics::texture::compression_type, const std::string&) noexcept(true);	
 
 			noob::graphics::texture texture_cube(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib::unit_type, noob::graphics::texture::compression_type, const std::string&) noexcept(true);	
+
+			void draw(const noob::graphics::instanced_model&) noexcept(true);
 
 			void frame(uint32_t width, uint32_t height) noexcept(true);
 
@@ -198,6 +205,6 @@ namespace noob
 
 			// glDrawElementsInstanced ( GL_TRIANGLES, userData->numIndices, GL_UNSIGNED_INT, ( const void * ) NULL, NUM_INSTANCES );
 			std::vector<noob::vec4> colour_storage;
-			std::vector<noob::mat4> mvp_storage;
+			std::vector<noob::mat4> matrices_storage;
 	};
 }

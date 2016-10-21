@@ -13,6 +13,7 @@ namespace noob
 				"layout(location = 2) in vec4 a_colour;         \n"
 				"layout(location = 3) in vec4 a_colour_mult;    \n"
 				"layout(location = 4) in mat4 a_mvp;            \n"
+				"layout(location = 7) in mat4 a_normal_mat;     \n"
 				"layout(location = 0) out vec4 v_normal;        \n"
 				"layout(location = 1) out vec4 v_colour;        \n"
 				"void main()                                    \n"
