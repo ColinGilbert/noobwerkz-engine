@@ -7,7 +7,7 @@
 #include "ShadersGL.hpp"
 #include "NoobUtils.hpp"
 
-#include <glad/glad.h>
+#include <GLES3/gl3.h>
 
 
 
@@ -175,7 +175,7 @@ noob::graphics::model_handle noob::graphics::model(noob::graphics::model::geom_t
 	return noob::graphics::model_handle::make(vao_id);
 }
 
-noob::graphics::instanced_model_info noob::graphics::model_instanced(const noob::basic_mesh& mesh, const std::vector<noob::vec4>& colours_buffer) noexcept(true)
+noob::graphics::instanced_model noob::graphics::model_instanced(const noob::basic_mesh& mesh, const std::vector<noob::vec4>& colours_buffer) noexcept(true)
 {
 	GLuint vao_id = 0;
 
@@ -194,12 +194,8 @@ noob::graphics::instanced_model_info noob::graphics::model_instanced(const noob:
 	const GLuint mvp_vbo = vbo_ids[2];
 	const GLuint indices_vbo = vbo_ids[3];
 
-
-
 	const uint32_t num_verts = mesh.vertices.size();
 	const uint32_t num_instances = std::max(static_cast<uint32_t>(colours_buffer.size()), static_cast<uint32_t>(1));
-
-
 
 
 	////////////////////////////
@@ -234,7 +230,8 @@ noob::graphics::instanced_model_info noob::graphics::model_instanced(const noob:
 	glBindBuffer(GL_ARRAY_BUFFER, colour_multiplier_vbo);
 	glBufferData(GL_ARRAY_BUFFER, num_instances * sizeof(colours_buffer[0]), &colours_buffer[0], GL_DYNAMIC_DRAW);
 
-	// Upload to mvp buffer
+	// Setup MVP VBO. Keep mapping for use during draw calls.
+	// TODO: Make more robust by adding initial values for mvp matrices.
 	glBindBuffer(GL_ARRAY_BUFFER, mvp_vbo);
 	glBufferData(GL_ARRAY_BUFFER, num_instances * sizeof(noob::mat4), nullptr, GL_DYNAMIC_DRAW);
 
@@ -244,35 +241,52 @@ noob::graphics::instanced_model_info noob::graphics::model_instanced(const noob:
 
 	// Positions
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 12, reinterpret_cast<const void *>(0));
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(0));
 
 	// Normals
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 12, reinterpret_cast<const void *>(4));
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*4));
 
 	// Vertex colours
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 12, reinterpret_cast<const void *>(8));
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*8));
 
 	// Per instance colour
 	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<const void *>(0));
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(0));
+	glVertexAttribDivisor(3, 1);
 
 	// Per instance MVP
 	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(0, 16, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<const void *>(0));
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(0));
+	glVertexAttribDivisor(4, 1);
+
+	glEnableVertexAttribArray(5);
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*4));
+	glVertexAttribDivisor(5, 1);
+
+	glEnableVertexAttribArray(6);
+	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*8));
+	glVertexAttribDivisor(6, 1);
+
+	glEnableVertexAttribArray(7);
+	glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*12));
+	glVertexAttribDivisor(7, 1);
 
 	glBindVertexArray(0);
 
-	noob::graphics::instanced_model_info results;
+	noob::graphics::instanced_model results;
 
-	uint32_t old_size = colour_storage.size();
-	results.colour_offset = old_size;
-	colour_storage.resize(old_size + num_instances);
+	const uint32_t num_colours_old = colour_storage.size();
+	results.colour_offset = num_colours_old;
+	for (noob::vec4 c : colours_buffer)
+	{
+		colour_storage.push_back(c);
+	}
 
-	old_size = mvp_storage.size();
-	results.mvp_offset = old_size;
-	mvp_storage.resize(old_size + num_instances);
+	const uint32_t num_mvp_old = mvp_storage.size();
+	results.mvp_offset = num_mvp_old;
+	mvp_storage.resize(num_mvp_old + num_instances);
 	
 	results.m_model.handle = noob::graphics::model_handle::make(vao_id);
 

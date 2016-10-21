@@ -11,14 +11,14 @@ namespace noob
 				"layout(location = 0) in vec4 a_pos;            \n"
 				"layout(location = 1) in vec4 a_normal;         \n"
 				"layout(location = 2) in vec4 a_colour;         \n"
-				"layout(location = 3) in vec4 a_colour_mult     \n"
+				"layout(location = 3) in vec4 a_colour_mult;    \n"
 				"layout(location = 4) in mat4 a_mvp;            \n"
 				"layout(location = 0) out vec4 v_normal;        \n"
 				"layout(location = 1) out vec4 v_colour;        \n"
 				"void main()                                    \n"
 				"{                                              \n"
 				"   v_normal = a_normal;                        \n"
-				"   v_colour = a_colour;                        \n"
+				"   v_colour = a_colour * a_colour_mult;        \n"
 				"   gl_Position = a_mvp * a_position;           \n"
 				"}                                              \n");
 

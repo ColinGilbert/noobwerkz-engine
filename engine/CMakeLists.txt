@@ -896,8 +896,45 @@ list (APPEND app_src ${assimp_src} ${freetype_src} ${user_src} ${main_src} ${com
 
 # More platform-specific:
 if (NOOB_PLATFORM_LINUX)
-	add_executable(NoobEdit ${app_src})
-	target_link_libraries(NoobEdit LINK_PUBLIC glfw ${GLFW_LIBRARIES} rt dl pthread m soundio.a asound GL ${OPENGL_gl_LIBRARIES})
+	find_package(OpenGL REQUIRED)
+	find_package(X11 REQUIRED)
+	include_directories(lib/Khronos)
+	include_directories(lib/glfw/include)
+	set (CMAKE_C_FLAGS "-D_GLFW_X11 ${CMAKE_C_FLAGS}")
+	list(APPEND glfw_src
+		lib/glfw/src/vulkan.c
+		lib/glfw/src/egl_context.c
+		lib/glfw/src/x11_init.c
+		# lib/glfw/src/wgl_context.c
+		# lib/glfw/src/win32_tls.c
+		lib/glfw/src/glx_context.c
+		lib/glfw/src/x11_monitor.c
+		# lib/glfw/src/wl_monitor.c
+		lib/glfw/src/init.c
+		# lib/glfw/src/win32_joystick.c
+		# lib/glfw/src/win32_init.c
+		lib/glfw/src/window.c
+		# lib/glfw/src/wl_init.c
+		lib/glfw/src/xkb_unicode.c
+		lib/glfw/src/input.c
+		# lib/glfw/src/cocoa_time.c
+		# lib/glfw/src/mir_monitor.c
+		lib/glfw/src/monitor.c
+		lib/glfw/src/x11_window.c
+		# lib/glfw/src/win32_time.c
+		# lib/glfw/src/win32_window.c
+		# lib/glfw/src/mir_window.c
+		lib/glfw/src/linux_joystick.c
+		#lib/glfw/src/win32_monitor.c
+		# lib/glfw/src/wl_window.c
+		lib/glfw/src/context.c
+		lib/glfw/src/posix_time.c
+		lib/glfw/src/posix_tls.c
+		# lib/glfw/src/mir_init.c
+		)
+	add_executable(NoobEdit ${app_src} ${glfw_src})
+
+	target_link_libraries(NoobEdit LINK_PUBLIC rt dl pthread m soundio.a asound GL Xinerama Xcursor Xrandr ${X11_LIBRARIES} ${OPENGL_gl_LIBRARY})
 	# target_link_libraries(NoobEdit LINK_PUBLIC spnav)
 endif()
 

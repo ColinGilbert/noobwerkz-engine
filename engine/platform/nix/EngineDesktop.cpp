@@ -2,7 +2,9 @@
 #include "Application.hpp"
 #include "NoobUtils.hpp"
 // #include "NDOF.hpp"
-#include <glad/glad.h>
+// #include <glad/glad.h>
+
+#include <GLES3/gl3.h>
 #include <GLFW/glfw3.h>
 
 std::atomic<uint32_t> width(1280);
@@ -86,7 +88,7 @@ int main()//int /*_argc*/, char** /*_argv*/)
 	}
 	
 	glfwMakeContextCurrent(window);
-	gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
+	// gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 	glfwSwapInterval(1);
 
 	app.init(width, height);
