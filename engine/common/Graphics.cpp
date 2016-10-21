@@ -185,7 +185,7 @@ std::tuple<bool, noob::graphics::instanced_model> noob::graphics::model_instance
 	{
 		return std::make_tuple(false, result);
 	}
-	
+
 	result.m_model.type = noob::graphics::model::geom_type::INDEXED_MESH;
 
 	result.max_instances = max_instances;
@@ -195,7 +195,7 @@ std::tuple<bool, noob::graphics::instanced_model> noob::graphics::model_instance
 
 	const uint32_t num_indices = mesh.indices.size();
 	result.m_model.num_indices = num_indices;
-	
+
 	GLuint vao_id = 0;
 
 	glGenVertexArrays(1, &vao_id);
@@ -206,7 +206,7 @@ std::tuple<bool, noob::graphics::instanced_model> noob::graphics::model_instance
 	////////////////////////////////
 	// Create & bind attrib buffers
 	////////////////////////////////
-	
+
 	std::array<GLuint, 4> vbo_ids;
 	glGenBuffers(4, &vbo_ids[0]);
 
@@ -244,7 +244,7 @@ std::tuple<bool, noob::graphics::instanced_model> noob::graphics::model_instance
 	////////////////////////
 	// Setup instanced VBOs
 	////////////////////////
-	
+
 	// First, unpack our info(we fused the colour and matrices into one argument to ensure proper data on input)
 	std::vector<noob::vec4> colours_buffer;
 	std::vector<noob::mat4> matrices_buffer;
@@ -323,6 +323,7 @@ std::tuple<bool, noob::graphics::instanced_model> noob::graphics::model_instance
 
 	glBindVertexArray(0);
 
+	instanced_models.push_back(result);
 
 	return std::make_tuple(true, result);
 }
@@ -344,6 +345,11 @@ noob::graphics::texture noob::graphics::texture_cube(uint32_t width, uint32_t he
 {
 	noob::graphics::texture t;
 	return t;
+}
+
+void noob::graphics::draw(const noob::graphics::instanced_model& m, uint32_t num) noexcept(true)
+{
+	glDrawElementsInstanced (GL_TRIANGLES, m.m_model.num_indices,GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.max_instances, num));
 }
 
 void noob::graphics::frame(uint32_t width, uint32_t height) noexcept(true)

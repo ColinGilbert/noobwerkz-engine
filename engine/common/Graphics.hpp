@@ -164,7 +164,7 @@ namespace noob
 
 			noob::graphics::texture texture_cube(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib::unit_type, noob::graphics::texture::compression_type, const std::string&) noexcept(true);	
 
-			void draw(const noob::graphics::instanced_model&) noexcept(true);
+			void draw(const noob::graphics::instanced_model&, uint32_t num) noexcept(true);
 
 			void frame(uint32_t width, uint32_t height) noexcept(true);
 
@@ -201,8 +201,9 @@ namespace noob
 
 			~graphics() noexcept(true) {}
 
-			void draw_instanced(const noob::graphics::instanced_model) const noexcept(true);
+			//void draw_inner(const noob::graphics::instanced_model) const noexcept(true);
 
+			std::vector<noob::graphics::instanced_model> instanced_models;
 			// glDrawElementsInstanced ( GL_TRIANGLES, userData->numIndices, GL_UNSIGNED_INT, ( const void * ) NULL, NUM_INSTANCES );
 			std::vector<noob::vec4> colour_storage;
 			std::vector<noob::mat4> matrices_storage;
