@@ -30,7 +30,7 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.6, 0.6, 0.6, 3.0)), instancing(false), actor_mq_count(0) {}
+			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.6, 0.6, 0.6, 3.0)), actor_mq_count(0) {}
 
 			~stage() noexcept(true);
 
@@ -71,11 +71,8 @@ namespace noob
 			bool show_origin;
 
 			noob::vec4 ambient_light;
-
-			bool instancing;
-
 			// TODO: Make more flexible.
-			std::array<noob::light, MAX_LIGHTS> lights;
+			noob::light directional_light;
 
 		protected:
 
@@ -126,7 +123,6 @@ namespace noob
 
 			rde::vector<noob::actor_event> actor_mq;
 			uint32_t actor_mq_count;
-
 
 			// For drawing
 			// noob::fast_hashtable bodies_to_nodes;

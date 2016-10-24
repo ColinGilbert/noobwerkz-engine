@@ -6,24 +6,49 @@
 
 #include "MathFuncs.hpp"
 #include "BasicMesh.hpp"
+#include "Model.hpp"
+#include "GpuBuffer.hpp"
 
 namespace noob
 {
 	class graphics
 	{
+
+		protected:
+
+			// Static getter-related stuff.
+			// TODO: Find cleaner way to do this.
+			static graphics* ptr_to_instance;
+
+			graphics() noexcept(true) {}
+
+			graphics(const graphics& rhs) noexcept(true)
+			{
+				ptr_to_instance = rhs.ptr_to_instance;
+			}
+
+			graphics& operator=(const graphics& rhs) noexcept(true)
+			{
+				if (this != &rhs)
+				{
+					ptr_to_instance = rhs.ptr_to_instance;
+				}
+				return *this;
+			}
+
+			~graphics() noexcept(true) {}
+
 		public:
-			typedef noob::handle<uint32_t> model_handle;
-			typedef noob::handle<uint32_t> texture_handle;
+			static graphics& get_instance() noexcept(true)
+			{
+				static graphics the_instance;
+				ptr_to_instance = &the_instance;
+
+				return *ptr_to_instance;
+			}
+
 			typedef noob::handle<uint32_t> shader_handle;
 			typedef noob::handle<uint32_t> program_handle;
-
-			// TODO: Remove
-			struct scaled_model
-			{
-				scaled_model() noexcept(true) : scales(noob::vec3(1.0, 1.0, 1.0)) {}
-				noob::graphics::model_handle model_h;
-				noob::vec3 scales;
-			};
 
 			class attrib
 			{
@@ -56,63 +81,6 @@ namespace noob
 				noob::graphics::attrib::packing_type packing;
 			};
 
-			class model
-			{
-				friend class graphics;
-
-				public:
-
-				enum class geom_type
-				{
-					INDEXED_MESH, DYNAMIC_TERRAIN, BILLBOARD, POINT_SPRITE, INVALID
-				};
-				
-				model() noexcept(true) : type(noob::graphics::model::geom_type::INVALID), interleaved_vbo(0), indices_vbo(0), num_indices(0), num_vertices(0) {}
-				
-				noob::graphics::model_handle get_handle() const noexcept(true)
-				{
-					return handle;
-				}
-
-				noob::graphics::model::geom_type get_type() const noexcept(true)
-				{
-					return type;
-				}
-
-				protected:
-				noob::graphics::model_handle handle;
-				noob::graphics::model::geom_type type;
-				uint32_t interleaved_vbo, indices_vbo, num_indices, num_vertices;
-			};
-
-			// Represents the client-side info used to control the instances of a given model
-			class instanced_model
-			{
-				friend class graphics;
-
-				public:
-
-				instanced_model() noexcept(true) : num_instances(0), max_instances(0), colours_vbo(0), matrices_vbo(0) {}
-				
-				struct info
-				{
-					noob::vec4 colour;
-					noob::mat4 mvp_mat;
-					noob::mat4 normal_mat;					
-				};
-
-				noob::graphics::model m_model;
-
-				// void set_colour(uint32_t i, const noob::vec4&) const noexcept(true);
-				// void set_mvp_mat(uint32_t i, const noob::mat4&) const noexcept(true);
-				// void set_normal_mat(uint32_t i, const noob::mat4&) const noexcept(true);
-
-				protected:
-
-				uint32_t num_instances, max_instances, colours_vbo, matrices_vbo;
-			};
-
-
 			class texture
 			{
 				friend class graphics;
@@ -129,11 +97,6 @@ namespace noob
 					NONE, ETC2, PVRTC, ADST
 				};
 
-				noob::graphics::texture_handle get_handle() const noexcept(true)
-				{
-					return handle;
-				}
-
 				noob::graphics::texture::storage_type get_storage_type() const noexcept(true)
 				{
 					return storage;
@@ -145,67 +108,48 @@ namespace noob
 				}
 
 				protected:
-				noob::graphics::texture_handle handle;
+				uint32_t handle;
 				noob::graphics::texture::storage_type storage;
 				noob::graphics::texture::compression_type compression;
 			};
+
+			typedef noob::handle<uint32_t> texture_handle;
 
 			void init(uint32_t width, uint32_t height) noexcept(true);
 
 			void destroy() noexcept(true);
 
-			noob::graphics::model_handle model(noob::graphics::model::geom_type geom, const noob::basic_mesh&) noexcept(true);
+			noob::model_handle model(noob::model::geom_type geom, const noob::basic_mesh&) noexcept(true);
 
-			std::tuple<bool, noob::graphics::instanced_model> model_instanced(const noob::basic_mesh&, const std::vector<noob::graphics::instanced_model::info>&) noexcept(true);
+			noob::model_handle model_instanced(const noob::basic_mesh&, const std::vector<noob::model::info>&) noexcept(true);
 
-			noob::graphics::texture reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::graphics::attrib::unit_type, noob::graphics::texture::compression_type) noexcept(true);
+			noob::graphics::texture_handle reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::graphics::attrib::unit_type, noob::graphics::texture::compression_type) noexcept(true);
 
-			noob::graphics::texture texture_3d(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib::unit_type, noob::graphics::texture::compression_type, const std::string&) noexcept(true);	
+			noob::graphics::texture_handle texture_3d(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib::unit_type, noob::graphics::texture::compression_type, const std::string&) noexcept(true);	
 
-			noob::graphics::texture texture_cube(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib::unit_type, noob::graphics::texture::compression_type, const std::string&) noexcept(true);	
+			noob::graphics::texture_handle texture_cube(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib::unit_type, noob::graphics::texture::compression_type, const std::string&) noexcept(true);	
 
-			void draw(const noob::graphics::instanced_model&, uint32_t num) noexcept(true);
+			void set_view_transform(const noob::mat4& view, const noob::mat4& proj) noexcept(true);
+
+			void draw(const noob::model&, uint32_t num) noexcept(true);
 
 			void frame(uint32_t width, uint32_t height) noexcept(true);
 
-			// Static getter. Sorry.
-			// TODO: Make more maintainable
-			static graphics& get_instance() noexcept(true)
-			{
-				static graphics the_instance;
-				ptr_to_instance = &the_instance;
-
-				return *ptr_to_instance;
-			}
+			std::tuple<bool, noob::gpu_write_buffer> get_buffer(const noob::model& m) noexcept(true);
+			
+			// NOTE: MUST be called as soon as you're finished using the buffer!
+			void unmap_buffer(const noob::model& m) noexcept(true);
 
 		protected:
-			// Static getter-related stuff.
-			// TODO: Find cleaner way to do this.
-			static graphics* ptr_to_instance;
 
-			graphics() noexcept(true) {}
 
-			graphics(const graphics& rhs) noexcept(true)
-			{
-				ptr_to_instance = rhs.ptr_to_instance;
-			}
+			noob::component<noob::model> models;
+			rde::vector<noob::graphics::texture> textures;
 
-			graphics& operator=(const graphics& rhs) noexcept(true)
-			{
-				if (this != &rhs)
-				{
-					ptr_to_instance = rhs.ptr_to_instance;
-				}
-				return *this;
-			}
-
-			~graphics() noexcept(true) {}
-
-			//void draw_inner(const noob::graphics::instanced_model) const noexcept(true);
-
-			std::vector<noob::graphics::instanced_model> instanced_models;
 			// glDrawElementsInstanced ( GL_TRIANGLES, userData->numIndices, GL_UNSIGNED_INT, ( const void * ) NULL, NUM_INSTANCES );
 			std::vector<noob::vec4> colour_storage;
 			std::vector<noob::mat4> matrices_storage;
+
+			noob::mat4 view_mat, proj_mat;
 	};
 }

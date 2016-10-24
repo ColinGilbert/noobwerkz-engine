@@ -29,18 +29,7 @@ void noob::stage::init() noexcept(true)
 	noob::light temp;
 	temp.rgb_falloff = noob::vec4(1.0, 1.0, 1.0, 0.6);
 	temp.pos_radius = noob::vec4(0.0, 450.0, 0.0, 500.0);
-	lights[0] = temp;
-
-
-	for (uint32_t i = 1; i < MAX_LIGHTS; ++i)
-	{
-		noob::light temp;
-		temp.rgb_falloff = noob::vec4(0.0, 0.0, 0.0, 0.0);
-		temp.pos_radius = noob::vec4(0.0, 450.0, 0.0, 500.0);
-		lights[i] = temp;
-	}
-
-
+	directional_light = temp;
 
 	logger::log(noob::importance::INFO, "[Stage] Done init.");
 }
@@ -256,7 +245,7 @@ noob::body_handle noob::stage::body(const noob::body_type b_type, const noob::sh
 	b.init(dynamics_world, b_type, g.shapes.get(shape_h), mass, pos, orient, ccd);	
 
 	body_handle bod_h = bodies.add(b);
-	noob::body* b_ptr = std::get<1>(bodies.get_ptr_mutable(bod_h));
+	// noob::body* b_ptr = std::get<1>(bodies.get_ptr_mutable(bod_h));
 
 	return bod_h;
 }
@@ -470,6 +459,7 @@ void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 
 noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_arg, const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::stage_item_variant variant_arg) noexcept(true)
 {
+/*
 	// First, get our root node.
 	const noob::node_handle root_node = noob::node_handle::make(0);	
 
@@ -501,7 +491,7 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 	}
 
 	// Now onto model node
-	const noob::graphics::scaled_model model_scaled = g.model_from_shape(shape_arg);
+	const std::tuple<noob::graphics::model, noob::vec3> model_scaled = g.model_from_shape(shape_arg);
 	bool model_found = false;
 	noob::node_handle model_node;
 	auto models_it = draw_graph.get_visitor(shading_node);
@@ -509,7 +499,7 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 	{
 		const noob::node_handle n = models_it.get_child();
 
-		if (node_masks[n.index()] == model_scaled.model_h.index())
+		if (node_masks[n.index()] == std::get<0>(model_scaled).index())
 		{
 			model_found = true;
 			model_node = n;
@@ -521,7 +511,7 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 	{
 		model_node = draw_graph.add_node();
 		draw_graph.add_edge(shading_node, model_node);
-		node_masks.push_back(model_scaled.model_h.index());
+		node_masks.push_back(std::get<0>(model_scaled).index());
 		draw_graph.sort();
 		assert(draw_graph.num_nodes() == node_masks.size() && "[Stage] node_masks num must be == draw_graph nodes num");
 	}
@@ -578,4 +568,6 @@ noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_ar
 	}	
 
 	return item_node;
+*/
+return noob::node_handle::make(0);
 }

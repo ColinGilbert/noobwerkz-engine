@@ -140,26 +140,26 @@ void noob::graphics::destroy() noexcept(true)
 
 }
 
-noob::graphics::model_handle noob::graphics::model(noob::graphics::model::geom_type geom, const noob::basic_mesh& mesh) noexcept(true)
+noob::model_handle noob::graphics::model(noob::model::geom_type geom, const noob::basic_mesh& mesh) noexcept(true)
 {
-	noob::graphics::model_handle results;
+	noob::model_handle results;
 	GLuint vao_id = 0;
 
 	switch (geom)
 	{
-		case(noob::graphics::model::geom_type::INDEXED_MESH):
+		case(noob::model::geom_type::INDEXED_MESH):
 			{
 				break;
 			}
-		case(noob::graphics::model::geom_type::DYNAMIC_TERRAIN):
+		case(noob::model::geom_type::DYNAMIC_TERRAIN):
 			{
 				break;
 			}
-		case(noob::graphics::model::geom_type::BILLBOARD):
+		case(noob::model::geom_type::BILLBOARD):
 			{
 				break;
 			}
-		case(noob::graphics::model::geom_type::POINT_SPRITE):
+		case(noob::model::geom_type::POINT_SPRITE):
 			{
 				break;
 			}
@@ -172,36 +172,37 @@ noob::graphics::model_handle noob::graphics::model(noob::graphics::model::geom_t
 	// Reset to the default VAO
 	glBindVertexArray(0);
 
-	return noob::graphics::model_handle::make(vao_id);
+	return noob::model_handle::make(vao_id);
 }
 
-std::tuple<bool, noob::graphics::instanced_model> noob::graphics::model_instanced(const noob::basic_mesh& mesh, const std::vector<noob::graphics::instanced_model::info>& instanced_models_info) noexcept(true)
+noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh, const std::vector<noob::model::info>& models_info) noexcept(true)
 {
-	noob::graphics::instanced_model result;
+	noob::model result;
 
-	const uint32_t max_instances = static_cast<uint32_t>(instanced_models_info.size());
+	const uint32_t max_instances = static_cast<uint32_t>(models_info.size());
 
 	if (max_instances == 0)
 	{
-		return std::make_tuple(false, result);
+		noob::model_handle h;
+		return h;
 	}
 
-	result.m_model.type = noob::graphics::model::geom_type::INDEXED_MESH;
+	result.type = noob::model::geom_type::INDEXED_MESH;
 
 	result.max_instances = max_instances;
 
-	const uint32_t num_verts = mesh.vertices.size();
-	result.m_model.num_vertices = num_verts;
-
 	const uint32_t num_indices = mesh.indices.size();
-	result.m_model.num_indices = num_indices;
+	result.num_indices = num_indices;
+
+	const uint32_t num_verts = mesh.vertices.size();
+	result.num_vertices = num_verts;
 
 	GLuint vao_id = 0;
 
 	glGenVertexArrays(1, &vao_id);
 
 	glBindVertexArray(vao_id);
-	result.m_model.handle = noob::graphics::model_handle::make(vao_id);
+	result.vao = vao_id;
 
 	////////////////////////////////
 	// Create & bind attrib buffers
@@ -234,37 +235,48 @@ std::tuple<bool, noob::graphics::instanced_model> noob::graphics::model_instance
 	// Upload interleaved buffer
 	glBindBuffer(GL_ARRAY_BUFFER, interleaved_vbo);
 	glBufferData(GL_ARRAY_BUFFER, interleaved.size() * sizeof(interleaved[0]), &interleaved[0], GL_STATIC_DRAW);
-	result.m_model.interleaved_vbo = interleaved_vbo;
+	result.interleaved_vbo = interleaved_vbo;
 
 	// Upload to indices buffer
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_vbo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.indices.size() * sizeof(mesh.indices[0]), &mesh.indices[0], GL_STATIC_DRAW);
-	result.m_model.indices_vbo = indices_vbo;
+	result.indices_vbo = indices_vbo;
 
 	////////////////////////
 	// Setup instanced VBOs
 	////////////////////////
-
+	// TODO: Replace this with a single VBO buffer and draws using offsets into it.
 	// First, unpack our info(we fused the colour and matrices into one argument to ensure proper data on input)
-	std::vector<noob::vec4> colours_buffer;
-	std::vector<noob::mat4> matrices_buffer;
-	for (noob::graphics::instanced_model::info m : instanced_models_info)
+	// std::vector<noob::vec4> colours_buffer;
+	// std::vector<noob::mat4> matrices_buffer;
+	std::vector<float> buffer;
+	buffer.reserve(max_instances * noob::model::instance_stride);
+	for (noob::model::info m : models_info)
 	{
-		colours_buffer.push_back(m.colour);
-		matrices_buffer.push_back(m.mvp_mat);
-		matrices_buffer.push_back(m.normal_mat);
+		for (uint32_t i = 0; i < 4; ++i)
+		{
+			buffer.push_back(m.colour[i]);
+		}
+		for (uint32_t i = 0; i < 16; ++i)
+		{
+			buffer.push_back(m.mvp_mat[i]);
+		}
+		for (uint32_t i = 0; i < 16; ++i)
+		{
+			buffer.push_back(m.normal_mat[i]);
+		}
+		
+		// colours_buffer.push_back(m.colour);
+		// matrices_buffer.push_back(m.mvp_mat);
+		// matrices_buffer.push_back(m.normal_mat);
 	}
-	// Upload to instance colour buffer
-	glBindBuffer(GL_ARRAY_BUFFER, colour_multiplier_vbo);
-	glBufferData(GL_ARRAY_BUFFER, max_instances * sizeof(colours_buffer[0]), &colours_buffer[0], GL_DYNAMIC_DRAW);
-	result.colours_vbo = colour_multiplier_vbo;
-
+	
 	// Setup MVP VBO. Keep mapping for use during draw calls.
 	// TODO: Make more robust by adding initial values for mvp matrices.
 
 	glBindBuffer(GL_ARRAY_BUFFER, matrices_vbo);
-	glBufferData(GL_ARRAY_BUFFER, max_instances * sizeof(noob::mat4) * 2, &matrices_buffer[0], GL_DYNAMIC_DRAW);
-	result.matrices_vbo = matrices_vbo;
+	glBufferData(GL_ARRAY_BUFFER, max_instances * noob::model::instance_stride, &buffer[0], GL_DYNAMIC_DRAW);
+	result.instanced_data_vbo = matrices_vbo;
 
 	//////////////////////
 	// Setup attrib specs
@@ -323,33 +335,40 @@ std::tuple<bool, noob::graphics::instanced_model> noob::graphics::model_instance
 
 	glBindVertexArray(0);
 
-	instanced_models.push_back(result);
-
-	return std::make_tuple(true, result);
+	noob::model_handle h = models.add(result);
+	return h;
 }
 
 
-noob::graphics::texture noob::graphics::reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::graphics::attrib::unit_type unit_arg, noob::graphics::texture::compression_type compress) noexcept(true)
+noob::graphics::texture_handle noob::graphics::reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::graphics::attrib::unit_type unit_arg, noob::graphics::texture::compression_type compress) noexcept(true)
 {
-	noob::graphics::texture t;
+	noob::graphics::texture_handle t;
 	return t;
 }
 
-noob::graphics::texture noob::graphics::texture_3d(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib::unit_type unit_arg, noob::graphics::texture::compression_type compress, const std::string&) noexcept(true)
+noob::graphics::texture_handle noob::graphics::texture_3d(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib::unit_type unit_arg, noob::graphics::texture::compression_type compress, const std::string&) noexcept(true)
 {
-	noob::graphics::texture t;
+	noob::graphics::texture_handle t;
 	return t;
 }
 
-noob::graphics::texture noob::graphics::texture_cube(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib::unit_type unit_arg, noob::graphics::texture::compression_type compress, const std::string&) noexcept(true)
+noob::graphics::texture_handle noob::graphics::texture_cube(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib::unit_type unit_arg, noob::graphics::texture::compression_type compress, const std::string&) noexcept(true)
 {
-	noob::graphics::texture t;
+	noob::graphics::texture_handle t;
 	return t;
 }
 
-void noob::graphics::draw(const noob::graphics::instanced_model& m, uint32_t num) noexcept(true)
+void noob::graphics::set_view_transform(const noob::mat4& view, const noob::mat4& proj) noexcept(true)
 {
-	glDrawElementsInstanced (GL_TRIANGLES, m.m_model.num_indices,GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.max_instances, num));
+	view_mat = view;
+	proj_mat = proj;
+}
+
+void noob::graphics::draw(const noob::model& m, uint32_t num) noexcept(true)
+{
+	glBindVertexArray(m.vao);	
+	glDrawElementsInstanced(GL_TRIANGLES, m.num_indices, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.max_instances, num));
+	glBindVertexArray(0);
 }
 
 void noob::graphics::frame(uint32_t width, uint32_t height) noexcept(true)
@@ -369,4 +388,39 @@ void noob::graphics::frame(uint32_t width, uint32_t height) noexcept(true)
 
 	glBindVertexArray(0);
 
+}
+
+std::tuple<bool, noob::gpu_write_buffer> noob::graphics::get_buffer(const noob::model& m) noexcept(true)
+{
+	if (m.type != noob::model::geom_type::INDEXED_MESH)
+	{
+		return std::make_tuple(false, noob::gpu_write_buffer::invalid());
+	}
+
+	glBindVertexArray(m.vao);	
+
+	glBindBuffer(GL_ARRAY_BUFFER, m.instanced_data_vbo);
+
+	const uint32_t stride_in_bytes = sizeof(noob::vec4) + (2 * (sizeof(noob::mat4)));
+	const uint32_t total_size = stride_in_bytes * m.max_instances;
+
+	uint8_t* ptr = reinterpret_cast<uint8_t*>(glMapBufferRange(GL_ARRAY_BUFFER, 0, total_size, GL_MAP_WRITE_BIT));
+
+
+	if (ptr != nullptr)
+	{
+		noob::gpu_write_buffer results(ptr, total_size);
+		return std::make_tuple(true, results);
+	}
+	else
+	{
+		noob::gpu_write_buffer results(nullptr, 0);
+		return std::make_tuple(false, noob::gpu_write_buffer::invalid());	
+	}
+	// glBindVertexArray(0);
+}
+
+void noob::graphics::unmap_buffer(const noob::model& m) noexcept(true)
+{
+	glUnmapBuffer(GL_ARRAY_BUFFER);	
 }

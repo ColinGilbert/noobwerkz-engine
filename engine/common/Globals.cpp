@@ -14,19 +14,21 @@ bool noob::globals::init() noexcept(true)
 	noob::logger::log(noob::importance::INFO, noob::concat("[Globals] unit sphere shape handle ", noob::to_string(unit_sphere_shape.index()) ,", unit cube shape handle ", noob::to_string(unit_cube_shape.index())));
 	// << ", unit cylinder shape handle " << unit_cylinder_shape.index() << ", unit cone shape handle " << unit_cone_shape.index();
 	
-	noob::logger::log(noob::importance::INFO, "[Globals] Making unit sphere model");
-	unit_sphere_model = model_from_mesh(noob::mesh_utils::sphere(0.5, 1));//basic_models.add(std::move(temp));
-	noob::logger::log(noob::importance::INFO, "[Globals] Making unit cube model");
-	unit_cube_model = model_from_mesh(noob::mesh_utils::box(1.0, 1.0, 1.0));
-	
+	noob::graphics& gfx = noob::graphics::get_instance();
 
+	// TODO: Replace:
+	noob::logger::log(noob::importance::INFO, "[Globals] Making unit sphere model");
+	// unit_sphere_model = gfx.model_instanced(noob::mesh_utils::sphere(0.5, 1));
+	noob::logger::log(noob::importance::INFO, "[Globals] Making unit cube model");
+	// unit_cube_model = model_mesh(noob::mesh_utils::box(1.0, 1.0, 1.0));
+	
 	// logger::log(noob::importance::INFO, "[Globals] Making unit cone model");
 	// unit_cone_model = model_from_mesh(noob::mesh_utils::cone(0.5, 1.0, 8));
 	
 	// logger::log(noob::importance::INFO, "[Globals] Making unit cylinder model");
 	// unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(0.5, 1.0, 8));
 
-	noob::logger::log(noob::importance::INFO, noob::concat("[Globals] unit sphere model handle ", noob::to_string(unit_sphere_model.model_h.index()) ,", unit cube model handle ", noob::to_string(unit_cube_model.model_h.index())));// << ", unit cylinder model handle " << unit_cylinder_model.model_h.index() << ", unit cone model handle " << unit_cone_model.model_h.index();
+	noob::logger::log(noob::importance::INFO, noob::concat("[Globals] unit sphere model handle ", noob::to_string(unit_sphere_model.index()) ,", unit cube model handle ", noob::to_string(unit_cube_model.index())));// << ", unit cylinder model handle " << unit_cylinder_model.model_h.index() << ", unit cone model handle " << unit_cone_model.model_h.index();
 
 
 	noob::light l;
@@ -58,55 +60,57 @@ bool noob::globals::init() noexcept(true)
 }
 
 
-noob::graphics::scaled_model noob::globals::sphere_model(float r) noexcept(true) 
+std::tuple<noob::model, noob::vec3> noob::globals::sphere_model(float r) noexcept(true) 
 {
-	noob::graphics::scaled_model temp = unit_sphere_model;
-	temp.scales = noob::vec3(r*2.0, r*2.0, r*2.0);
-	return temp;
+	noob::model temp = unit_sphere_model;
+	noob::vec3 scales(r*2.0, r*2.0, r*2.0);
+	return std::make_tuple(temp, scales);
 }
 
 
-noob::graphics::scaled_model noob::globals::box_model(float x, float y, float z) noexcept(true) 
+std::tuple<noob::model, noob::vec3> noob::globals::box_model(float x, float y, float z) noexcept(true) 
 {
-	noob::graphics::scaled_model temp = unit_cube_model;
-	temp.scales = noob::vec3(x, y, z);
-	return temp;
+	noob::model temp = unit_cube_model;
+	noob::vec3 scales(x, y, z);
+	return std::make_tuple(temp, scales);
 }
 
 /*
-noob::graphics::scaled_model noob::globals::cylinder_model(float r, float h) noexcept(true) 
+std::tuple<noob::model, noob::vec3> noob::globals::cylinder_model(float r, float h) noexcept(true) 
 {
-	noob::graphics::scaled_model temp = unit_cylinder_model;
+	std::tuple<noob::model, bool, noob::vec3> temp = unit_cylinder_model;
 	temp.scales = noob::vec3(r*2.0, h, r*2.0);
 	return temp;
 }
 
 
-noob::graphics::scaled_model noob::globals::cone_model(float r, float h) noexcept(true) 
+std::tuple<noob::model, noob::vec3> noob::globals::cone_model(float r, float h) noexcept(true) 
 {
-	noob::graphics::scaled_model temp = unit_cone_model;
+	std::tuple<noob::model, bool, noob::vec3> temp = unit_cone_model;
 	temp.scales = noob::vec3(r*2.0, h, r*2.0);
 	return temp;
 }
 */
-
-noob::graphics::scaled_model noob::globals::model_from_mesh(const noob::basic_mesh& m) noexcept(true) 
+/*
+std::tuple<noob::model, noob::vec3> noob::globals::model_from_mesh(const noob::basic_mesh& m) noexcept(true) 
 {
 	
-	noob::graphics::scaled_model results;
+	std::tuple<noob::model, bool, noob::vec3> results;
 	noob::graphics& gfx = noob::graphics::get_instance();
 	results.model_h = gfx.model(noob::graphics::model::geom_type::INDEXED_MESH, m);
 	results.scales = noob::vec3(1.0, 1.0, 1.0);
 	return results;
 }
+*/
 
-noob::graphics::scaled_model noob::globals::model_from_shape(const noob::shape_handle h) noexcept(true) 
+/*
+noob::model noob::globals::model_from_shape(const noob::shape_handle h) noexcept(true) 
 {
 	// fmt::MemoryWriter ww;
 	// ww << "[Globals] about to get model from shape " << h.index();
 	// logger::log(noob::importance::INFO, ww.str());
 
-	noob::graphics::scaled_model results;
+	std::tuple<noob::model, bool, noob::vec3> results;
 	noob::shape s = shapes.get(h);
 
 	// logger::log(noob::importance::INFO, "[Globals] got shape pointer");
@@ -129,7 +133,7 @@ noob::graphics::scaled_model noob::globals::model_from_shape(const noob::shape_h
 				results.scales = s.scales;
 				break;
 			}
-			/*
+			
 		case(noob::shape::type::CYLINDER):
 			{
 				results.model_h = unit_cylinder_model.model_h;
@@ -142,7 +146,7 @@ noob::graphics::scaled_model noob::globals::model_from_shape(const noob::shape_h
 				results.scales = s.scales;
 				break;
 			}
-			*/
+			
 		case(noob::shape::type::HULL):
 			{
 				noob::fast_hashtable::cell* search = shapes_to_models.lookup(h.index());
@@ -156,7 +160,7 @@ noob::graphics::scaled_model noob::globals::model_from_shape(const noob::shape_h
 					noob::logger::log(noob::importance::INFO, "[Globals] DATA ERROR: Attempted to get a hull model with an invalid shape handle.");
 				}
 				results.scales = noob::vec3(1.0, 1.0, 1.0);					
-				break; 
+				break; opengles3 book
 			}
 
 		case(noob::shape::type::TRIMESH):
@@ -181,7 +185,7 @@ noob::graphics::scaled_model noob::globals::model_from_shape(const noob::shape_h
 				{
 					noob::shape shp = shapes.get(h);
 					noob::basic_mesh m = shp.get_mesh();
-					noob::graphics::scaled_model temp_scaled_model = model_from_mesh(m);
+					std::tuple<noob::model, bool, noob::vec3> temp_scaled_model = model_from_mesh(m);
 					results.model_h = temp_scaled_model.model_h;
 					please_insert = true;
 				}
@@ -203,7 +207,7 @@ noob::graphics::scaled_model noob::globals::model_from_shape(const noob::shape_h
 	}
 	return results; 
 }
-
+*/
 
 noob::shape_handle noob::globals::sphere_shape(float r) noexcept(true) 
 {
@@ -310,10 +314,11 @@ noob::shape_handle noob::globals::hull_shape(const std::vector<vec3>& points) no
 	noob::shape_handle shape_h = add_shape(temp);
 
 	noob::basic_mesh temp_mesh = noob::mesh_utils::hull(points);
-	noob::graphics::scaled_model temp_scaled_model = model_from_mesh(temp_mesh);
+	// TODO: Replace
+	// noob::model temp_model = model_from_mesh(temp_mesh);
 
-	auto temp_cell = shapes_to_models.insert(shape_h.index());
-	temp_cell->value = temp_scaled_model.model_h.index();
+	// auto temp_cell = shapes_to_models.insert(shape_h.index());
+	// temp_cell->value = temp_model.index();
 
 	return shape_h;
 }
