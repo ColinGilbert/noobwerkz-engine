@@ -175,13 +175,11 @@ noob::model_handle noob::graphics::model(noob::model::geom_type geom, const noob
 	return noob::model_handle::make(vao_id);
 }
 
-noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh, const std::vector<noob::model::info>& models_info) noexcept(true)
+noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh, uint32_t num_instances) noexcept(true)
 {
 	noob::model result;
 
-	const uint32_t max_instances = static_cast<uint32_t>(models_info.size());
-
-	if (max_instances == 0)
+	if (num_instances == 0)
 	{
 		noob::model_handle h;
 		return h;
@@ -189,7 +187,7 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 
 	result.type = noob::model::geom_type::INDEXED_MESH;
 
-	result.max_instances = max_instances;
+	result.num_instances = num_instances;
 
 	const uint32_t num_indices = mesh.indices.size();
 	result.num_indices = num_indices;
@@ -211,8 +209,8 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 	std::array<GLuint, 4> vbo_ids;
 	glGenBuffers(4, &vbo_ids[0]);
 
-	const GLuint interleaved_vbo = vbo_ids[0];
-	const GLuint colour_multiplier_vbo = vbo_ids[1];
+	const GLuint vertices_vbo = vbo_ids[0];
+	const GLuint colours_vbo = vbo_ids[1];
 	const GLuint matrices_vbo = vbo_ids[2];
 	const GLuint indices_vbo = vbo_ids[3];
 
@@ -233,9 +231,9 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 	}
 
 	// Upload interleaved buffer
-	glBindBuffer(GL_ARRAY_BUFFER, interleaved_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);
 	glBufferData(GL_ARRAY_BUFFER, interleaved.size() * sizeof(interleaved[0]), &interleaved[0], GL_STATIC_DRAW);
-	result.interleaved_vbo = interleaved_vbo;
+	result.vertices_vbo = vertices_vbo;
 
 	// Upload to indices buffer
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_vbo);
@@ -245,38 +243,16 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 	////////////////////////
 	// Setup instanced VBOs
 	////////////////////////
-	// TODO: Replace this with a single VBO buffer and draws using offsets into it.
-	// First, unpack our info(we fused the colour and matrices into one argument to ensure proper data on input)
-	// std::vector<noob::vec4> colours_buffer;
-	// std::vector<noob::mat4> matrices_buffer;
-	std::vector<float> buffer;
-	buffer.reserve(max_instances * noob::model::instance_stride);
-	for (noob::model::info m : models_info)
-	{
-		for (uint32_t i = 0; i < 4; ++i)
-		{
-			buffer.push_back(m.colour[i]);
-		}
-		for (uint32_t i = 0; i < 16; ++i)
-		{
-			buffer.push_back(m.mvp_mat[i]);
-		}
-		for (uint32_t i = 0; i < 16; ++i)
-		{
-			buffer.push_back(m.normal_mat[i]);
-		}
-		
-		// colours_buffer.push_back(m.colour);
-		// matrices_buffer.push_back(m.mvp_mat);
-		// matrices_buffer.push_back(m.normal_mat);
-	}
-	
-	// Setup MVP VBO. Keep mapping for use during draw calls.
-	// TODO: Make more robust by adding initial values for mvp matrices.
 
+	// Setup colours VBO:
+	glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
+	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::instanced_colour_stride, nullptr, GL_DYNAMIC_DRAW);
+	result.instanced_colour_vbo = colours_vbo;
+
+	// Setup matrices VBO:
 	glBindBuffer(GL_ARRAY_BUFFER, matrices_vbo);
-	glBufferData(GL_ARRAY_BUFFER, max_instances * noob::model::instance_stride, &buffer[0], GL_DYNAMIC_DRAW);
-	result.instanced_data_vbo = matrices_vbo;
+	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::instanced_matrices_stride, nullptr, GL_DYNAMIC_DRAW);
+	result.instanced_matrices_vbo = matrices_vbo;
 
 	//////////////////////
 	// Setup attrib specs
@@ -367,7 +343,7 @@ void noob::graphics::set_view_transform(const noob::mat4& view, const noob::mat4
 void noob::graphics::draw(const noob::model& m, uint32_t num) noexcept(true)
 {
 	glBindVertexArray(m.vao);	
-	glDrawElementsInstanced(GL_TRIANGLES, m.num_indices, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.max_instances, num));
+	glDrawElementsInstanced(GL_TRIANGLES, m.num_indices, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.num_instances, num));
 	glBindVertexArray(0);
 }
 
@@ -390,7 +366,7 @@ void noob::graphics::frame(uint32_t width, uint32_t height) noexcept(true)
 
 }
 
-std::tuple<bool, noob::gpu_write_buffer> noob::graphics::get_buffer(const noob::model& m) noexcept(true)
+std::tuple<bool, noob::gpu_write_buffer> noob::graphics::map_buffer(const noob::model& m, noob::model::instanced_data_type t) noexcept(true)
 {
 	if (m.type != noob::model::geom_type::INDEXED_MESH)
 	{
@@ -399,13 +375,25 @@ std::tuple<bool, noob::gpu_write_buffer> noob::graphics::get_buffer(const noob::
 
 	glBindVertexArray(m.vao);	
 
-	glBindBuffer(GL_ARRAY_BUFFER, m.instanced_data_vbo);
+	uint32_t stride_in_bytes;
+	switch (t)
+	{
+		case (noob::model::instanced_data_type::COLOUR):
+			{
+				stride_in_bytes = noob::model::instanced_colour_stride;
+				glBindBuffer(GL_ARRAY_BUFFER, m.instanced_colour_vbo);
+				break;
+			}
+		case (noob::model::instanced_data_type::MATRICES):
+			{
+				stride_in_bytes = noob::model::instanced_matrices_stride;
+				glBindBuffer(GL_ARRAY_BUFFER, m.instanced_matrices_vbo);
+				break;
+			}
+	}
 
-	const uint32_t stride_in_bytes = sizeof(noob::vec4) + (2 * (sizeof(noob::mat4)));
-	const uint32_t total_size = stride_in_bytes * m.max_instances;
-
+	const uint32_t total_size = stride_in_bytes * m.num_instances;
 	uint8_t* ptr = reinterpret_cast<uint8_t*>(glMapBufferRange(GL_ARRAY_BUFFER, 0, total_size, GL_MAP_WRITE_BIT));
-
 
 	if (ptr != nullptr)
 	{
@@ -420,7 +408,7 @@ std::tuple<bool, noob::gpu_write_buffer> noob::graphics::get_buffer(const noob::
 	// glBindVertexArray(0);
 }
 
-void noob::graphics::unmap_buffer(const noob::model& m) noexcept(true)
+void noob::graphics::unmap_buffer() noexcept(true)
 {
 	glUnmapBuffer(GL_ARRAY_BUFFER);	
 }

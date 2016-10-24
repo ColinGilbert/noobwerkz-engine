@@ -31,9 +31,9 @@ void noob::application::init(uint32_t width, uint32_t height)
 	noob::globals& g = noob::globals::get_instance();
 	bool are_globals_initialized = g.init();
 	assert(are_globals_initialized && "Globals not initialized!");
-	
+
 	stage.init();
-	
+
 	logger::log(noob::importance::INFO, "[Application] Done basic init.");
 
 	bool b = user_init();
@@ -52,7 +52,7 @@ void noob::application::update(double delta)
 {
 	gui.window_dims(window_width, window_height);
 
-/*
+	/*
 	   network.tick();
 
 	   while (network.has_message())
@@ -82,7 +82,7 @@ void noob::application::update(double delta)
 void noob::application::draw()
 {
 	const noob::time start_time = noob::clock::now();
-	
+
 	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0, 2000.0);
 	stage.draw(window_width, window_height, eye_pos, eye_target, eye_up, proj_mat);
 
@@ -97,20 +97,20 @@ void noob::application::draw()
 }
 
 /*
-void noob::application::accept_ndof_data(const noob::ndof::data& info)
-{
-	if (info.movement == true)
-	{
-		// logger::log(fmt::format("[Sandbox] NDOF data: T({0}, {1}, {2}) R({3}, {4}, {5})", info.translation[0], info.translation[1], info.translation[2], info.rotation[0], info.rotation[1], info.rotation[2]));
-		// float damping = 360.0;
-		// noob::vec3 rotation(info.rotation);
-		// noob::vec3 translation(info.translation);
-		// view_mat = noob::rotate_x_deg(stage.view_mat, -rotation[0]/damping);
-		// view_mat = noob::rotate_y_deg(stage.view_mat, -rotation[1]/damping);
-		// view_mat = noob::rotate_z_deg(stage.view_mat, -rotation[2]/damping);
-		// view_mat = noob::translate(stage.view_mat, noob::vec3(-translation[0]/damping, -translation[1]/damping, -translation[2]/damping));
-		// stage.eye_pos = stage.eye_pos - translation;//translation);
-	}
+   void noob::application::accept_ndof_data(const noob::ndof::data& info)
+   {
+   if (info.movement == true)
+   {
+// logger::log(fmt::format("[Sandbox] NDOF data: T({0}, {1}, {2}) R({3}, {4}, {5})", info.translation[0], info.translation[1], info.translation[2], info.rotation[0], info.rotation[1], info.rotation[2]));
+// float damping = 360.0;
+// noob::vec3 rotation(info.rotation);
+// noob::vec3 translation(info.translation);
+// view_mat = noob::rotate_x_deg(stage.view_mat, -rotation[0]/damping);
+// view_mat = noob::rotate_y_deg(stage.view_mat, -rotation[1]/damping);
+// view_mat = noob::rotate_z_deg(stage.view_mat, -rotation[2]/damping);
+// view_mat = noob::translate(stage.view_mat, noob::vec3(-translation[0]/damping, -translation[1]/damping, -translation[2]/damping));
+// stage.eye_pos = stage.eye_pos - translation;//translation);
+}
 }
 */
 
@@ -153,13 +153,13 @@ void noob::application::resume()
 }
 
 /*
-void noob::application::set_archive_dir(const std::string& filepath)
-{
-	logger::log(noob::importance::INFO, noob::concat("[Application] Setting archive directory {", filepath, "}"));
-	prefix = std::unique_ptr<std::string>(new std::string(filepath));
-	logger::log(noob::importance::INFO, noob::concat("[Application] Archive dir = {",  *prefix, "}"));
-}
-*/
+   void noob::application::set_archive_dir(const std::string& filepath)
+   {
+   logger::log(noob::importance::INFO, noob::concat("[Application] Setting archive directory {", filepath, "}"));
+   prefix = std::unique_ptr<std::string>(new std::string(filepath));
+   logger::log(noob::importance::INFO, noob::concat("[Application] Archive dir = {",  *prefix, "}"));
+   }
+   */
 
 void noob::application::touch(int pointerID, float x, float y, int action)
 {
@@ -169,7 +169,7 @@ void noob::application::touch(int pointerID, float x, float y, int action)
 
 		if (pointerID < 3)
 		{
-		//	finger_positions[pointerID] = noob::vec2(x,y);
+			//	finger_positions[pointerID] = noob::vec2(x,y);
 		}
 	}
 	else input_has_started = true;
@@ -198,13 +198,12 @@ void noob::application::key_input(char c)
 void noob::application::remove_shapes()
 {
 	noob::globals& g = noob::globals::get_instance();
-	for (size_t i = 0; i < g.shapes.items.size(); ++i)
+	const uint32_t shapes_count = g.shapes.count();
+	for (size_t i = 0; i < shapes_count; ++i)
 	{
-		if (g.shapes.items[i].physics_valid)
-		{
-			delete g.shapes.items[i].inner_shape;
-		}
+		g.shapes.get(noob::shape_handle::make(i)).del();
 	}
+	g.shapes.empty();
 }
 
 

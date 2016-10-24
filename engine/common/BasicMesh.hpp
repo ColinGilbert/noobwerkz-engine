@@ -27,11 +27,11 @@ namespace noob
 		// std::string save() const;
 		// void save(const std::string& filename) const;
 
-		#if defined(NOOB_USE_ASSIMP)
+#if defined(NOOB_USE_ASSIMP)
 		bool load_mem_assimp(const std::string&);
 		bool load_file_assimp(const std::string& filename);
 		bool load_assimp(const aiScene* scene);
-		#endif
+#endif
 
 		// TODO: Implement and test:
 		// void transform(const noob::mat4& transform);
@@ -45,7 +45,7 @@ namespace noob
 		rde::vector<noob::vec3> vertices;
 		rde::vector<noob::vec3> normals;
 		rde::vector<noob::vec4> colours;
-		
+
 		rde::vector<uint32_t> indices;
 		// std::vector<uint8_t> flags;
 

@@ -43,7 +43,7 @@ namespace noob
 				return false;
 			}
 		}
-		
+
 		static noob::gpu_write_buffer invalid() noexcept(true)
 		{
 			return noob::gpu_write_buffer(nullptr, 0);

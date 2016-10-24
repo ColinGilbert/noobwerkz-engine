@@ -40,6 +40,8 @@ namespace noob
 
 		noob::basic_mesh get_mesh() const noexcept(true);
 
+		void del() noexcept(true);
+
 		const btCollisionShape* get_inner() const noexcept(true);
 		btCollisionShape* get_inner_mutable() const noexcept(true);	
 

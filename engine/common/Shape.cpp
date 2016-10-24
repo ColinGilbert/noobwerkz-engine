@@ -260,6 +260,15 @@ noob::basic_mesh noob::shape::get_mesh() const noexcept(true)
 }
 
 
+void noob::shape::del() noexcept(true)
+{
+	if (physics_valid)
+	{
+		delete inner_shape;
+	}
+}
+
+
 const btCollisionShape* noob::shape::get_inner() const noexcept(true)
 {
 	return inner_shape;

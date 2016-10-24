@@ -121,7 +121,7 @@ namespace noob
 
 			noob::model_handle model(noob::model::geom_type geom, const noob::basic_mesh&) noexcept(true);
 
-			noob::model_handle model_instanced(const noob::basic_mesh&, const std::vector<noob::model::info>&) noexcept(true);
+			noob::model_handle model_instanced(const noob::basic_mesh&, uint32_t num_instances) noexcept(true);
 
 			noob::graphics::texture_handle reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::graphics::attrib::unit_type, noob::graphics::texture::compression_type) noexcept(true);
 
@@ -135,10 +135,10 @@ namespace noob
 
 			void frame(uint32_t width, uint32_t height) noexcept(true);
 
-			std::tuple<bool, noob::gpu_write_buffer> get_buffer(const noob::model& m) noexcept(true);
-			
+			std::tuple<bool, noob::gpu_write_buffer> map_buffer(const noob::model& m, noob::model::instanced_data_type) noexcept(true);
+
 			// NOTE: MUST be called as soon as you're finished using the buffer!
-			void unmap_buffer(const noob::model& m) noexcept(true);
+			void unmap_buffer() noexcept(true);
 
 		protected:
 
@@ -147,8 +147,8 @@ namespace noob
 			rde::vector<noob::graphics::texture> textures;
 
 			// glDrawElementsInstanced ( GL_TRIANGLES, userData->numIndices, GL_UNSIGNED_INT, ( const void * ) NULL, NUM_INSTANCES );
-			std::vector<noob::vec4> colour_storage;
-			std::vector<noob::mat4> matrices_storage;
+			// std::vector<noob::vec4> colour_storage;
+			// std::vector<noob::mat4> matrices_storage;
 
 			noob::mat4 view_mat, proj_mat;
 	};

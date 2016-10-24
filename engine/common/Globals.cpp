@@ -13,7 +13,7 @@ bool noob::globals::init() noexcept(true)
 
 	noob::logger::log(noob::importance::INFO, noob::concat("[Globals] unit sphere shape handle ", noob::to_string(unit_sphere_shape.index()) ,", unit cube shape handle ", noob::to_string(unit_cube_shape.index())));
 	// << ", unit cylinder shape handle " << unit_cylinder_shape.index() << ", unit cone shape handle " << unit_cone_shape.index();
-	
+
 	noob::graphics& gfx = noob::graphics::get_instance();
 
 	// TODO: Replace:
@@ -21,10 +21,10 @@ bool noob::globals::init() noexcept(true)
 	// unit_sphere_model = gfx.model_instanced(noob::mesh_utils::sphere(0.5, 1));
 	noob::logger::log(noob::importance::INFO, "[Globals] Making unit cube model");
 	// unit_cube_model = model_mesh(noob::mesh_utils::box(1.0, 1.0, 1.0));
-	
+
 	// logger::log(noob::importance::INFO, "[Globals] Making unit cone model");
 	// unit_cone_model = model_from_mesh(noob::mesh_utils::cone(0.5, 1.0, 8));
-	
+
 	// logger::log(noob::importance::INFO, "[Globals] Making unit cylinder model");
 	// unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(0.5, 1.0, 8));
 
@@ -76,136 +76,136 @@ std::tuple<noob::model, noob::vec3> noob::globals::box_model(float x, float y, f
 }
 
 /*
-std::tuple<noob::model, noob::vec3> noob::globals::cylinder_model(float r, float h) noexcept(true) 
-{
-	std::tuple<noob::model, bool, noob::vec3> temp = unit_cylinder_model;
-	temp.scales = noob::vec3(r*2.0, h, r*2.0);
-	return temp;
-}
+   std::tuple<noob::model, noob::vec3> noob::globals::cylinder_model(float r, float h) noexcept(true) 
+   {
+   std::tuple<noob::model, bool, noob::vec3> temp = unit_cylinder_model;
+   temp.scales = noob::vec3(r*2.0, h, r*2.0);
+   return temp;
+   }
 
 
-std::tuple<noob::model, noob::vec3> noob::globals::cone_model(float r, float h) noexcept(true) 
-{
-	std::tuple<noob::model, bool, noob::vec3> temp = unit_cone_model;
-	temp.scales = noob::vec3(r*2.0, h, r*2.0);
-	return temp;
-}
-*/
+   std::tuple<noob::model, noob::vec3> noob::globals::cone_model(float r, float h) noexcept(true) 
+   {
+   std::tuple<noob::model, bool, noob::vec3> temp = unit_cone_model;
+   temp.scales = noob::vec3(r*2.0, h, r*2.0);
+   return temp;
+   }
+   */
 /*
-std::tuple<noob::model, noob::vec3> noob::globals::model_from_mesh(const noob::basic_mesh& m) noexcept(true) 
-{
-	
-	std::tuple<noob::model, bool, noob::vec3> results;
-	noob::graphics& gfx = noob::graphics::get_instance();
-	results.model_h = gfx.model(noob::graphics::model::geom_type::INDEXED_MESH, m);
-	results.scales = noob::vec3(1.0, 1.0, 1.0);
-	return results;
-}
-*/
+   std::tuple<noob::model, noob::vec3> noob::globals::model_from_mesh(const noob::basic_mesh& m) noexcept(true) 
+   {
+
+   std::tuple<noob::model, bool, noob::vec3> results;
+   noob::graphics& gfx = noob::graphics::get_instance();
+   results.model_h = gfx.model(noob::graphics::model::geom_type::INDEXED_MESH, m);
+   results.scales = noob::vec3(1.0, 1.0, 1.0);
+   return results;
+   }
+   */
 
 /*
-noob::model noob::globals::model_from_shape(const noob::shape_handle h) noexcept(true) 
+   noob::model noob::globals::model_from_shape(const noob::shape_handle h) noexcept(true) 
+   {
+// fmt::MemoryWriter ww;
+// ww << "[Globals] about to get model from shape " << h.index();
+// logger::log(noob::importance::INFO, ww.str());
+
+std::tuple<noob::model, bool, noob::vec3> results;
+noob::shape s = shapes.get(h);
+
+// logger::log(noob::importance::INFO, "[Globals] got shape pointer");
+
+bool please_insert = false;
+
+switch(s.shape_type)
 {
-	// fmt::MemoryWriter ww;
-	// ww << "[Globals] about to get model from shape " << h.index();
-	// logger::log(noob::importance::INFO, ww.str());
+// logger::log(noob::importance::INFO, "[Globals] choosing shape type");
 
-	std::tuple<noob::model, bool, noob::vec3> results;
-	noob::shape s = shapes.get(h);
+case(noob::shape::type::SPHERE):
+{
+results.model_h = unit_sphere_model.model_h;
+results.scales = s.scales;
+break;
+}
+case(noob::shape::type::BOX):
+{
+results.model_h = unit_cube_model.model_h;
+results.scales = s.scales;
+break;
+}
 
-	// logger::log(noob::importance::INFO, "[Globals] got shape pointer");
+case(noob::shape::type::CYLINDER):
+{
+results.model_h = unit_cylinder_model.model_h;
+results.scales = s.scales;
+break;
+}
+case(noob::shape::type::CONE):
+{
+results.model_h = unit_cone_model.model_h;
+results.scales = s.scales;
+break;
+}
 
-	bool please_insert = false;
+case(noob::shape::type::HULL):
+{
+noob::fast_hashtable::cell* search = shapes_to_models.lookup(h.index());
+if (shapes_to_models.is_valid(search))
+{
+size_t val = search->value;
+results.model_h = noob::graphics::model_handle::make(val);
+}
+else
+{
+noob::logger::log(noob::importance::INFO, "[Globals] DATA ERROR: Attempted to get a hull model with an invalid shape handle.");
+}
+results.scales = noob::vec3(1.0, 1.0, 1.0);					
+break; opengles3 book
+}
 
-	switch(s.shape_type)
-	{
-		// logger::log(noob::importance::INFO, "[Globals] choosing shape type");
+case(noob::shape::type::TRIMESH):
+{
+static uint32_t trimesh_model_count = 0;
+noob::fast_hashtable::cell* search = shapes_to_models.lookup(h.index());
+if (shapes_to_models.is_valid(search))
+{
+size_t val = search->value;
+if (val != std::numeric_limits<size_t>::max())
+{
+// We can simply give back the results:
+results.model_h = noob::graphics::model_handle::make(val);
+}
+else
+{
+	noob::logger::log(noob::importance::INFO, noob::concat("[Globals] DATA ERROR: Shape handle ", noob::to_string(h.index()), " has invalid model mapping."));
+}
+}	
+// We must first create the model:
+else
+{
+	noob::shape shp = shapes.get(h);
+	noob::basic_mesh m = shp.get_mesh();
+	std::tuple<noob::model, bool, noob::vec3> temp_scaled_model = model_from_mesh(m);
+	results.model_h = temp_scaled_model.model_h;
+	please_insert = true;
+}
 
-		case(noob::shape::type::SPHERE):
-			{
-				results.model_h = unit_sphere_model.model_h;
-				results.scales = s.scales;
-				break;
-			}
-		case(noob::shape::type::BOX):
-			{
-				results.model_h = unit_cube_model.model_h;
-				results.scales = s.scales;
-				break;
-			}
-			
-		case(noob::shape::type::CYLINDER):
-			{
-				results.model_h = unit_cylinder_model.model_h;
-				results.scales = s.scales;
-				break;
-			}
-		case(noob::shape::type::CONE):
-			{
-				results.model_h = unit_cone_model.model_h;
-				results.scales = s.scales;
-				break;
-			}
-			
-		case(noob::shape::type::HULL):
-			{
-				noob::fast_hashtable::cell* search = shapes_to_models.lookup(h.index());
-				if (shapes_to_models.is_valid(search))
-				{
-					size_t val = search->value;
-					results.model_h = noob::graphics::model_handle::make(val);
-				}
-				else
-				{
-					noob::logger::log(noob::importance::INFO, "[Globals] DATA ERROR: Attempted to get a hull model with an invalid shape handle.");
-				}
-				results.scales = noob::vec3(1.0, 1.0, 1.0);					
-				break; opengles3 book
-			}
+results.scales = noob::vec3(1.0, 1.0, 1.0);					
+break;
+}
+default:
+{
+	noob::logger::log(noob::importance::INFO, "[Globals] INVALID ENUM: model_from_shape()");
+}
+}
 
-		case(noob::shape::type::TRIMESH):
-			{
-				static uint32_t trimesh_model_count = 0;
-				noob::fast_hashtable::cell* search = shapes_to_models.lookup(h.index());
-				if (shapes_to_models.is_valid(search))
-				{
-					size_t val = search->value;
-					if (val != std::numeric_limits<size_t>::max())
-					{
-						// We can simply give back the results:
-						results.model_h = noob::graphics::model_handle::make(val);
-					}
-					else
-					{
-						noob::logger::log(noob::importance::INFO, noob::concat("[Globals] DATA ERROR: Shape handle ", noob::to_string(h.index()), " has invalid model mapping."));
-					}
-				}	
-				// We must first create the model:
-				else
-				{
-					noob::shape shp = shapes.get(h);
-					noob::basic_mesh m = shp.get_mesh();
-					std::tuple<noob::model, bool, noob::vec3> temp_scaled_model = model_from_mesh(m);
-					results.model_h = temp_scaled_model.model_h;
-					please_insert = true;
-				}
+if (please_insert)
+{
+	noob::fast_hashtable::cell* search = shapes_to_models.insert(h.index());
+	search->value = results.model_h.index();
 
-				results.scales = noob::vec3(1.0, 1.0, 1.0);					
-				break;
-			}
-		default:
-			{
-				noob::logger::log(noob::importance::INFO, "[Globals] INVALID ENUM: model_from_shape()");
-			}
-	}
-
-	if (please_insert)
-	{
-		noob::fast_hashtable::cell* search = shapes_to_models.insert(h.index());
-		search->value = results.model_h.index();
-
-	}
-	return results; 
+}
+return results; 
 }
 */
 
@@ -244,38 +244,38 @@ noob::shape_handle noob::globals::box_shape(float x, float y, float z) noexcept(
 }
 
 /*
-noob::shape_handle noob::globals::cylinder_shape(float r, float h) noexcept(true) 
+   noob::shape_handle noob::globals::cylinder_shape(float r, float h) noexcept(true) 
+   {
+// auto search = cylinder_shapes.find(std::make_tuple(r, h));
+fmt::MemoryWriter w;
+w << "cyl-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
+auto search = names_to_shapes.find(rde::string(w.c_str()));
+if (search == names_to_shapes.end())
 {
-	// auto search = cylinder_shapes.find(std::make_tuple(r, h));
-	fmt::MemoryWriter w;
-	w << "cyl-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
-	auto search = names_to_shapes.find(rde::string(w.c_str()));
-	if (search == names_to_shapes.end())
-	{
-		noob::shape temp;
-		temp.cylinder(r, h);
+noob::shape temp;
+temp.cylinder(r, h);
 
-		auto results = names_to_shapes.insert(rde::make_pair(rde::string(w.c_str()), add_shape(temp)));
-		return (results.first)->second;
-	}
-	return search->second;
+auto results = names_to_shapes.insert(rde::make_pair(rde::string(w.c_str()), add_shape(temp)));
+return (results.first)->second;
+}
+return search->second;
 }
 
 
 noob::shape_handle noob::globals::cone_shape(float r, float h) noexcept(true) 
 {
-	fmt::MemoryWriter w;
-	w << "cone-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
-	auto search = names_to_shapes.find(rde::string(w.c_str()));
-	if (search == names_to_shapes.end())
-	{
-		noob::shape temp;
-		temp.cone(r, h);
+fmt::MemoryWriter w;
+w << "cone-" << static_cast<uint32_t>(r) << "-" << static_cast<uint32_t>(h);
+auto search = names_to_shapes.find(rde::string(w.c_str()));
+if (search == names_to_shapes.end())
+{
+noob::shape temp;
+temp.cone(r, h);
 
-		auto results = names_to_shapes.insert(rde::make_pair(rde::string(w.c_str()), add_shape(temp)));
-		return (results.first)->second;
-	}
-	return search->second;
+auto results = names_to_shapes.insert(rde::make_pair(rde::string(w.c_str()), add_shape(temp)));
+return (results.first)->second;
+}
+return search->second;
 }
 */
 
@@ -400,35 +400,35 @@ noob::reflectance_handle noob::globals::get_reflectance(const std::string& s) co
 }
 
 /*
-void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std::string& name) noexcept(true) 
-{
-	auto search = names_to_shaders.find(rde::string(name.c_str()));
-	if (search == names_to_shaders.end())
-	{
-		noob::basic_shader_handle h = basic_shaders.add(u);
-		noob::shader_variant r;
-		r.type = noob::shader_type::BASIC;
-		r.handle = h.index();
+   void noob::globals::set_shader(const noob::basic_renderer::uniform& u, const std::string& name) noexcept(true) 
+   {
+   auto search = names_to_shaders.find(rde::string(name.c_str()));
+   if (search == names_to_shaders.end())
+   {
+   noob::basic_shader_handle h = basic_shaders.add(u);
+   noob::shader_variant r;
+   r.type = noob::shader_type::BASIC;
+   r.handle = h.index();
 
-		names_to_shaders.insert(rde::make_pair(rde::string(name.c_str()), r));
-	}
-}
+   names_to_shaders.insert(rde::make_pair(rde::string(name.c_str()), r));
+   }
+   }
 
 
-void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::uniform& u, const std::string& name) noexcept(true) 
-{
-	auto search = names_to_shaders.find(rde::string(name.c_str()));
-	if (search == names_to_shaders.end())
-	{
-		noob::triplanar_shader_handle h = triplanar_shaders.add(u);
-		noob::shader_variant r;
-		r.type = noob::shader_type::TRIPLANAR;
-		r.handle = h.index();
+   void noob::globals::set_shader(const noob::triplanar_gradient_map_renderer::uniform& u, const std::string& name) noexcept(true) 
+   {
+   auto search = names_to_shaders.find(rde::string(name.c_str()));
+   if (search == names_to_shaders.end())
+   {
+   noob::triplanar_shader_handle h = triplanar_shaders.add(u);
+   noob::shader_variant r;
+   r.type = noob::shader_type::TRIPLANAR;
+   r.handle = h.index();
 
-		names_to_shaders.insert(rde::make_pair(rde::string(name.c_str()), r));
-	}
-}
-*/
+   names_to_shaders.insert(rde::make_pair(rde::string(name.c_str()), r));
+   }
+   }
+   */
 
 noob::shader_variant noob::globals::get_shader(const std::string& s) const noexcept(true) 
 {

@@ -7,6 +7,7 @@
 #include <btBulletDynamicsCommon.h>
 #include <noob/fast_hashtable/fast_hashtable.hpp>
 #include <noob/graph/graph.hpp>
+#include <noob/component/component.hpp>
 
 #include "NoobDefines.hpp"
 #include "Graphics.hpp"
@@ -85,7 +86,7 @@ namespace noob
 			void remove_body(noob::body_handle) noexcept(true);
 			void remove_ghost(noob::ghost_handle) noexcept(true);
 			// void remove_joint(noob::joint_handle) noexcept(true);
-			
+
 			std::vector<noob::contact_point> get_intersecting(const noob::ghost_handle) const noexcept(true);
 
 
@@ -100,7 +101,7 @@ namespace noob
 			noob::digraph draw_graph;
 
 			rde::vector<uint64_t> node_masks;
-	
+
 			noob::duration update_duration;
 			noob::duration draw_duration;
 			noob::duration last_navmesh_build_duration;
@@ -130,7 +131,7 @@ namespace noob
 			// noob::fast_hashtable basic_models_to_nodes;
 
 			// noob::directional_light directional_light;
-			
+
 			// noob::navigation nav;
 			// bool nav_changed;
 	};

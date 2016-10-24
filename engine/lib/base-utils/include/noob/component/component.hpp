@@ -65,7 +65,6 @@ namespace noob
 	template <typename T>
 		class component 
 		{
-			friend class application;
 			public:
 
 			T get(noob::handle<T> h) const noexcept(true)
