@@ -119,7 +119,8 @@ namespace noob
 
 			void destroy() noexcept(true);
 
-			noob::model_handle model(noob::model::geom_type geom, const noob::basic_mesh&) noexcept(true);
+			void set_program(noob::graphics::program_handle) noexcept(true);
+			// noob::model_handle model(noob::model::geom_type geom, const noob::basic_mesh&) noexcept(true);
 
 			noob::model_handle model_instanced(const noob::basic_mesh&, uint32_t num_instances) noexcept(true);
 

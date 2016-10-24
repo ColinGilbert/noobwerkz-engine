@@ -1,13 +1,13 @@
-#include <algorithm>
-
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+
 #include "Graphics.hpp"
+
+#include <algorithm>
+#include <GLES3/gl3.h>
 
 #include "ShadersGL.hpp"
 #include "NoobUtils.hpp"
-
-#include <GLES3/gl3.h>
 
 
 
@@ -139,40 +139,47 @@ void noob::graphics::destroy() noexcept(true)
 {
 
 }
+/*
+   noob::model_handle noob::graphics::model(noob::model::geom_type geom, const noob::basic_mesh& mesh) noexcept(true)
+   {
+   noob::model_handle results;
+   GLuint vao_id = 0;
 
-noob::model_handle noob::graphics::model(noob::model::geom_type geom, const noob::basic_mesh& mesh) noexcept(true)
+   switch (geom)
+   {
+   case(noob::model::geom_type::INDEXED_MESH):
+   {
+   break;
+   }
+   case(noob::model::geom_type::DYNAMIC_TERRAIN):
+   {
+   break;
+   }
+   case(noob::model::geom_type::BILLBOARD):
+   {
+   break;
+   }
+   case(noob::model::geom_type::POINT_SPRITE):
+   {
+   break;
+   }
+   default:
+   {
+   noob::logger::log(noob::importance::ERROR, "[Graphics] Reached past the valid enum values in switch statement. WTF?!");
+   }
+   }
+
+// Reset to the default VAO
+glBindVertexArray(0);
+
+return noob::model_handle::make(vao_id);
+}
+*/
+
+
+void noob::graphics::set_program(noob::graphics::program_handle arg) noexcept(true)
 {
-	noob::model_handle results;
-	GLuint vao_id = 0;
-
-	switch (geom)
-	{
-		case(noob::model::geom_type::INDEXED_MESH):
-			{
-				break;
-			}
-		case(noob::model::geom_type::DYNAMIC_TERRAIN):
-			{
-				break;
-			}
-		case(noob::model::geom_type::BILLBOARD):
-			{
-				break;
-			}
-		case(noob::model::geom_type::POINT_SPRITE):
-			{
-				break;
-			}
-		default:
-			{
-				noob::logger::log(noob::importance::ERROR, "[Graphics] Reached past the valid enum values in switch statement. WTF?!");
-			}
-	}
-
-	// Reset to the default VAO
-	glBindVertexArray(0);
-
-	return noob::model_handle::make(vao_id);
+	glUseProgram(arg.index());
 }
 
 noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh, uint32_t num_instances) noexcept(true)
@@ -312,6 +319,7 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 	glBindVertexArray(0);
 
 	noob::model_handle h = models.add(result);
+
 	return h;
 }
 
@@ -358,10 +366,6 @@ void noob::graphics::frame(uint32_t width, uint32_t height) noexcept(true)
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// glUseProgram(programObject);
-	// glBindVertexArray(vao_id );
-	// glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, reinterpret_cast<const void *>(0));
-
 	glBindVertexArray(0);
 
 }
@@ -376,6 +380,7 @@ std::tuple<bool, noob::gpu_write_buffer> noob::graphics::map_buffer(const noob::
 	glBindVertexArray(m.vao);	
 
 	uint32_t stride_in_bytes;
+
 	switch (t)
 	{
 		case (noob::model::instanced_data_type::COLOUR):
@@ -393,6 +398,7 @@ std::tuple<bool, noob::gpu_write_buffer> noob::graphics::map_buffer(const noob::
 	}
 
 	const uint32_t total_size = stride_in_bytes * m.num_instances;
+
 	uint8_t* ptr = reinterpret_cast<uint8_t*>(glMapBufferRange(GL_ARRAY_BUFFER, 0, total_size, GL_MAP_WRITE_BIT));
 
 	if (ptr != nullptr)
@@ -405,7 +411,6 @@ std::tuple<bool, noob::gpu_write_buffer> noob::graphics::map_buffer(const noob::
 		noob::gpu_write_buffer results(nullptr, 0);
 		return std::make_tuple(false, noob::gpu_write_buffer::invalid());	
 	}
-	// glBindVertexArray(0);
 }
 
 void noob::graphics::unmap_buffer() noexcept(true)
