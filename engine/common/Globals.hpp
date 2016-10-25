@@ -34,7 +34,6 @@
 
 #include "Mixer.hpp"
 #include "Actor.hpp"
-#include "ShaderVariant.hpp"
 #include "ProfilingInfo.hpp"
 
 
@@ -106,11 +105,6 @@ namespace noob
 
 		noob::skeletal_anim_handle skeleton(const std::string& filename) noexcept(true);
 
-		// void set_shader(const noob::basic_renderer::uniform&, const std::string& name) noexcept(true);
-		// void set_shader(const noob::triplanar_gradient_map_renderer::uniform&, const std::string& name) noexcept(true);
-
-		noob::shader_variant get_shader(const std::string& name) const noexcept(true);
-
 		noob::light_handle set_light(const noob::light&, const std::string& name) noexcept(true);
 		noob::light_handle get_light(const std::string& name) const noexcept(true);
 
@@ -151,7 +145,7 @@ namespace noob
 		reflectances_holder reflectances;
 		// basic_shaders_holder basic_shaders;
 		// triplanar_shaders_holder triplanar_shaders;
-		shader_variants_holder shaders_variants;
+		// shader_variants_holder shaders_variants;
 		samples_holder samples;
 		actor_blueprints_holder actor_blueprints;
 		strings_holder strings;
@@ -231,12 +225,12 @@ namespace noob
 		{
 			return default_light;
 		}
-
+/*
 		noob::reflectance_handle get_default_reflectance() const noexcept(true)
 		{
 			return default_reflectance;
 		}
-
+*/
 		// sound_interface needs to set it and friend'ing it would allow it access to literally everything. However, once its completely stabilized we may do so again.	
 		size_t sample_rate;
 
@@ -267,7 +261,6 @@ namespace noob
 
 		rde::hash_map<rde::string, noob::shape_handle> names_to_shapes;
 		// rde::hash_map<rde::string, noob::graphics::model_handle> names_to_basic_models;
-		rde::hash_map<rde::string, noob::shader_variant> names_to_shaders;
 		rde::hash_map<rde::string, noob::light_handle> names_to_lights;
 		rde::hash_map<rde::string, noob::reflectance_handle> names_to_reflectances;
 		rde::hash_map<rde::string, noob::actor_blueprints_handle> names_to_actor_blueprints;

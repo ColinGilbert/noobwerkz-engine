@@ -12,7 +12,7 @@ namespace noob
 
 		enum class geom_type
 		{
-			INDEXED_MESH, BILLBOARD, POINT_SPRITE, DYNAMIC_TERRAIN, INVALID
+			INDEXED_MESH, POINT_SPRITE, DYNAMIC_TERRAIN, BILLBOARD, INVALID
 		};
 
 		enum class instanced_data_type

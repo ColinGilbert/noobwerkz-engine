@@ -430,24 +430,6 @@ noob::reflectance_handle noob::globals::get_reflectance(const std::string& s) co
    }
    */
 
-noob::shader_variant noob::globals::get_shader(const std::string& s) const noexcept(true) 
-{
-	noob::shader_variant results;
-	auto search = names_to_shaders.find(rde::string(s.c_str()));
-
-	if (search != names_to_shaders.end())
-	{
-		noob::logger::log(noob::importance::INFO, noob::concat("[Globals] Found shader ", s, ", with handle ", (search->second).to_string(), "."));
-		results = search->second;
-	}
-	else
-	{
-		noob::logger::log(noob::importance::INFO, noob::concat("[Globals] Could not find shader ", s ,". Returning default."));
-	}
-
-	return results;
-}
-
 
 void noob::globals::set_actor_blueprints(const noob::actor_blueprints& bp, const std::string& name) noexcept(true)
 {

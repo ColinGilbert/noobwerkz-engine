@@ -19,7 +19,6 @@
 #include "Actor.hpp"
 #include "Globals.hpp"
 #include "ComponentDefines.hpp"
-#include "ShaderVariant.hpp"
 #include "ContactPoint.hpp"
 #include "StageTypes.hpp"
 #include "Particles.hpp"
@@ -62,7 +61,7 @@ namespace noob
 			// These are the composites that use the bodies, ghosts, and joints.
 			noob::actor_handle actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3&, const noob::versor&);
 
-			noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::shader_variant shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
+			noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg);
 
 			std::vector<noob::contact_point> get_intersecting(const noob::actor_handle) const noexcept(true);
 
@@ -93,7 +92,7 @@ namespace noob
 			void update_actors() noexcept(true);
 
 			void actor_dither(noob::actor_handle h) noexcept(true);
-			noob::node_handle add_to_graph(const noob::shader_variant, const noob::shape_handle, const noob::reflectance_handle, const noob::stage_item_variant) noexcept(true); 
+			noob::node_handle add_to_graph(const noob::stage_item_variant) noexcept(true); 
 
 			// void update_particle_systems() noexcept(true);
 			// void particle_spawn_helper(noob::particle_system*) noexcept(true); 

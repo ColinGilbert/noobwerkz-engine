@@ -14,7 +14,6 @@
 #include "SkeletalAnim.hpp"
 #include "AudioSample.hpp"
 #include "TextLabel.hpp"
-#include "ShaderVariant.hpp"
 
 namespace noob
 {
@@ -24,7 +23,6 @@ namespace noob
 	typedef noob::component<noob::shape> shapes_holder;
 	typedef noob::component<noob::light> lights_holder;
 	typedef noob::component<noob::reflectance> reflectances_holder;
-	typedef noob::component<noob::shader_variant> shader_variants_holder;
 	typedef noob::component<noob::time> times_holder;
 	typedef noob::component<noob::text_label> text_label_holder;
 
@@ -39,7 +37,6 @@ namespace noob
 	typedef handle<noob::shape> shape_handle;
 	typedef handle<noob::light> light_handle;
 	typedef handle<noob::reflectance> reflectance_handle;
-	typedef handle<noob::shader_variant> shader_variant_handle;
 	typedef handle<noob::time> time_handle;
 	typedef handle<noob::text_label> text_label_handle;
 	// typedef handle<noob::vec3> vec3_handle;

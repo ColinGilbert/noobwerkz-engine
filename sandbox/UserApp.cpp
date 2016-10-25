@@ -41,11 +41,8 @@ bool noob::application::user_init()
 	noob::shape_handle sh = g.sphere_shape(actor_radius);
 
 	// TODO: Fixup
-	noob::shader_variant example_shader;
-
 	noob::actor_blueprints bp;
 	bp.bounds = sh;
-	bp.shader = example_shader;
 	bp.reflect = rh;
 	g.set_actor_blueprints(bp, "example-actor-bp");
 	noob::actor_blueprints_handle bph = g.get_actor_blueprints("example-actor-bp");
@@ -66,7 +63,7 @@ bool noob::application::user_init()
 	
 
 
-	noob::scenery_handle scene_h = stage.scenery(g.box_shape(200.0, 10.0, 200.0), example_shader, rh, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
+	noob::scenery_handle scene_h = stage.scenery(g.box_shape(200.0, 10.0, 200.0), rh, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
 	
 
 	eye_pos = noob::vec3(0.0, 200.0, -100.0);

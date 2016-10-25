@@ -14,12 +14,11 @@ namespace noob
 	{
 		uint16_t strength, range, armour, defense, movement_speed, attack_speed, stamina, morale, los;
 		noob::shape_handle bounds;
-		noob::shader_variant shader;
 		noob::reflectance_handle reflect;
 
 		std::string to_string() const noexcept(true)
 		{
-			 return noob::concat("shape ", noob::to_string(bounds.index()), ", shader ", shader.to_string(), ", reflection ", noob::to_string(reflect.index()), ", strength ", noob::to_string(strength), ", range ", noob::to_string(range), ", defense ", noob::to_string(defense), ", move speed ", noob::to_string(movement_speed), ", attack speed ", noob::to_string(attack_speed), ", stamina ", noob::to_string(stamina), ", morale ", noob::to_string(morale), ", LOS ", noob::to_string(los));
+			 return noob::concat("shape ", noob::to_string(bounds.index()), ", reflection ", noob::to_string(reflect.index()), ", strength ", noob::to_string(strength), ", range ", noob::to_string(range), ", defense ", noob::to_string(defense), ", move speed ", noob::to_string(movement_speed), ", attack speed ", noob::to_string(attack_speed), ", stamina ", noob::to_string(stamina), ", morale ", noob::to_string(morale), ", LOS ", noob::to_string(los));
 		}
 	};
 
@@ -56,7 +55,6 @@ namespace noob
 		scenery() noexcept(true) : flag(0) {}
 		static const noob::stage_item_type type = noob::stage_item_type::SCENERY;
 		noob::body_handle body;
-		noob::shader_variant shader;
 		noob::reflectance_handle reflect;
 		uint8_t flag;
 	};

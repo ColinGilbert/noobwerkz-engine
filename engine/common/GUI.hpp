@@ -14,7 +14,6 @@ namespace noob
 	{
 		float center_x, center_y, length, height;
 		// noob::graphics::model_handle model;
-		noob::shader_variant shader;
 	};
 
 	class gui

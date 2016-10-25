@@ -297,7 +297,7 @@ noob::actor_handle noob::stage::actor(const noob::actor_blueprints_handle bp_h, 
 	var.type = noob::stage_item_type::ACTOR;
 	var.index = a_h.index();
 
-	add_to_graph(bp.shader, bp.bounds, bp.reflect, var);
+	add_to_graph(var);
 
 	noob::ghost temp_ghost = ghosts.get(a.ghost);
 	temp_ghost.inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::ACTOR));
@@ -307,7 +307,7 @@ noob::actor_handle noob::stage::actor(const noob::actor_blueprints_handle bp_h, 
 }
 
 
-noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, const noob::shader_variant shader_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg)
+noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg)
 {
 	noob::globals& g = noob::globals::get_instance();
 
@@ -315,7 +315,6 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, co
 
 	noob::scenery sc;
 	sc.body = bod_h;
-	sc.shader = shader_arg;
 	sc.reflect = reflect_arg;
 	noob::scenery_handle scenery_h = sceneries.add(sc);
 
@@ -323,7 +322,7 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, co
 	var.type = noob::stage_item_type::SCENERY;
 	var.index = scenery_h.index();
 
-	add_to_graph(shader_arg, shape_arg, reflect_arg, var);
+	add_to_graph(var);
 
 	noob::body b = bodies.get(bod_h);
 	b.inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::SCENERY));
@@ -457,8 +456,10 @@ void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 	}
 }
 
-noob::node_handle noob::stage::add_to_graph(const noob::shader_variant shader_arg, const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::stage_item_variant variant_arg) noexcept(true)
+noob::node_handle noob::stage::add_to_graph(const noob::stage_item_variant item_arg) noexcept(true)
 {
+
+
 	return noob::node_handle::make(0);
 }
 /*
