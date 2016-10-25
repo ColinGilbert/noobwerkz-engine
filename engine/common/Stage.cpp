@@ -54,10 +54,10 @@ void noob::stage::tear_down() noexcept(true)
 	ghosts.empty();
 
 	actors.empty();
-	actor_mq.clear();
-	actor_mq_count = 0;
+	//actor_mq.clear();
+	// actor_mq_count = 0;
 
-	sceneries.empty();
+	// sceneries.empty();
 
 	delete dynamics_world;
 	delete broadphase;
@@ -66,7 +66,7 @@ void noob::stage::tear_down() noexcept(true)
 	delete collision_configuration;
 
 	draw_graph.clear();
-	node_masks.empty();
+	// node_masks.empty();
 
 	init();
 }
@@ -168,7 +168,7 @@ noob::actor_handle noob::stage::actor(const noob::actor_blueprints_handle bp_h, 
 	var.type = noob::stage_item_type::ACTOR;
 	var.index = a_h.index();
 
-	add_to_graph(var);
+	// add_to_graph(var);
 
 	noob::ghost temp_ghost = ghosts.get(a.ghost);
 	temp_ghost.inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::ACTOR));
@@ -177,7 +177,7 @@ noob::actor_handle noob::stage::actor(const noob::actor_blueprints_handle bp_h, 
 	return a_h;
 }
 
-
+/*
 noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg) noexcept(true)
 {
 	noob::globals& g = noob::globals::get_instance();
@@ -203,7 +203,7 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, co
 
 	return scenery_h;
 }
-
+*/
 
 std::vector<noob::contact_point> noob::stage::get_intersecting(const noob::ghost_handle ghost_h) const noexcept(true) 
 {

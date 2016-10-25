@@ -25,7 +25,6 @@ namespace noob
 	typedef noob::component<noob::actor_blueprints> actor_blueprints_holder;
 	typedef noob::handle<noob::actor_blueprints> actor_blueprints_handle;
 
-
 	struct actor
 	{
 		actor() noexcept(true) : alive(true), stance(noob::actor::stance_type::STAND), activity(noob::actor::activity_type::GUARDING), mentality(noob::actor::mentality_type::ALERT), velocity(noob::vec3(0.0, 0.0, 0.0)), incline(0.0), gravity_coeff(1.0) {}

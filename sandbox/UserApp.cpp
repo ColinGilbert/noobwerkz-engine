@@ -63,7 +63,7 @@ bool noob::application::user_init()
 	
 
 
-	noob::scenery_handle scene_h = stage.scenery(g.box_shape(200.0, 10.0, 200.0), rh, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
+	// noob::scenery_handle scene_h = stage.scenery(g.box_shape(200.0, 10.0, 200.0), rh, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
 	
 
 	eye_pos = noob::vec3(0.0, 200.0, -100.0);

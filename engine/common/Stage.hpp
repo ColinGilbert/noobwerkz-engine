@@ -31,7 +31,7 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.6, 0.6, 0.6, 3.0)), actor_mq_count(0) {}
+			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.6, 0.6, 0.6, 3.0)) {}
 
 			~stage() noexcept(true);
 
@@ -63,7 +63,7 @@ namespace noob
 			noob::actor_handle actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3&, const noob::versor&);
 
 			// Scenery consists of a static object with its properties given in the argument. They get instanced.
-			noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::vec3&, const noob::versor&) noexcept(true);
+			// noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::vec3&, const noob::versor&) noexcept(true);
 
 			std::vector<noob::contact_point> get_intersecting(const noob::actor_handle) const noexcept(true);
 
@@ -111,7 +111,18 @@ namespace noob
 			btCollisionDispatcher* collision_dispatcher;
 			btSequentialImpulseConstraintSolver* solver;
 			btDiscreteDynamicsWorld* dynamics_world;
+	
+			// This is to allow access into the 'items' vector (useful for uploading matrices into buffers.
+			struct model_mapping
+			{
+				noob::model_handle handle;
+				uint32_t offset, num;
+			};
 
+			rde::vector<noob::stage::model_mapping> models_to_items;
+			rde::vector<noob::stage_item_variant> items;
+
+			// These are for holding useful data.
 			noob::bodies_holder bodies;
 			noob::joints_holder joints;
 			noob::ghosts_holder ghosts;
@@ -119,11 +130,12 @@ namespace noob
 			noob::component<noob::actor> actors;
 			noob::component<noob::scenery> sceneries;
 			noob::component<noob::particle_system> particle_systems;
+			
+			// rde::vector<noob::actor_event> actor_mq;
+			// uint32_t actor_mq_count;
 
-			noob::component<noob::stage_item_variant> stage_item_variants;
-
-			rde::vector<noob::actor_event> actor_mq;
-			uint32_t actor_mq_count;
+			// Used to help build up the draw-graph
+			//rde::vector<noob::reflectance_handle> item_reflectances;
 
 			// For drawing
 			// noob::fast_hashtable bodies_to_nodes;

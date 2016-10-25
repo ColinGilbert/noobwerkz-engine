@@ -289,54 +289,39 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(0));
 	glVertexAttribDivisor(3, 1);
 
-	// Per instance specular_shine
+	// Per instance MVP
 	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*4));
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(0));
 	glVertexAttribDivisor(4, 1);
 
-	// Per instance diffuse_albedo
 	glEnableVertexAttribArray(5);
-	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*8));
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*4));
 	glVertexAttribDivisor(5, 1);
 
-	// Per instance emissive_fresnel
 	glEnableVertexAttribArray(6);
-	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*12));
+	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*8));
 	glVertexAttribDivisor(6, 1);
 
-	// Per instance MVP
 	glEnableVertexAttribArray(7);
-	glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(0));
+	glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*12));
 	glVertexAttribDivisor(7, 1);
 
+	// Per-instance normal matrix
 	glEnableVertexAttribArray(8);
-	glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*4));
+	glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*16));
 	glVertexAttribDivisor(8, 1);
 
 	glEnableVertexAttribArray(9);
-	glVertexAttribPointer(9, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*8));
+	glVertexAttribPointer(9, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*20));
 	glVertexAttribDivisor(9, 1);
 
 	glEnableVertexAttribArray(10);
-	glVertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*12));
+	glVertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*24));
 	glVertexAttribDivisor(10, 1);
 
-	// Per-instance normal matrix
 	glEnableVertexAttribArray(11);
-	glVertexAttribPointer(11, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*16));
+	glVertexAttribPointer(11, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*28));
 	glVertexAttribDivisor(11, 1);
-
-	glEnableVertexAttribArray(12);
-	glVertexAttribPointer(12, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*20));
-	glVertexAttribDivisor(12, 1);
-
-	glEnableVertexAttribArray(13);
-	glVertexAttribPointer(13, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*24));
-	glVertexAttribDivisor(13, 1);
-
-	glEnableVertexAttribArray(14);
-	glVertexAttribPointer(14, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*28));
-	glVertexAttribDivisor(14, 1);
 
 	glBindVertexArray(0);
 

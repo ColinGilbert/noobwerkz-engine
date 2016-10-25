@@ -143,9 +143,6 @@ namespace noob
 		skeletal_anims_holder skeletal_anims;
 		lights_holder lights;
 		reflectances_holder reflectances;
-		// basic_shaders_holder basic_shaders;
-		// triplanar_shaders_holder triplanar_shaders;
-		// shader_variants_holder shaders_variants;
 		samples_holder samples;
 		actor_blueprints_holder actor_blueprints;
 		strings_holder strings;

@@ -20,7 +20,7 @@ bool noob::globals::init() noexcept(true)
 	noob::logger::log(noob::importance::INFO, "[Globals] Making unit sphere model");
 	// unit_sphere_model = gfx.model_instanced(noob::mesh_utils::sphere(0.5, 1));
 	noob::logger::log(noob::importance::INFO, "[Globals] Making unit cube model");
-	// unit_cube_model = model_mesh(noob::mesh_utils::box(1.0, 1.0, 1.0));
+	// unit_cube_model = model_from_mesh(noob::mesh_utils::box(1.0, 1.0, 1.0));
 
 	// logger::log(noob::importance::INFO, "[Globals] Making unit cone model");
 	// unit_cone_model = model_from_mesh(noob::mesh_utils::cone(0.5, 1.0, 8));
