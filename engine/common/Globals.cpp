@@ -28,7 +28,7 @@ bool noob::globals::init() noexcept(true)
 	// logger::log(noob::importance::INFO, "[Globals] Making unit cylinder model");
 	// unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(0.5, 1.0, 8));
 
-	noob::logger::log(noob::importance::INFO, noob::concat("[Globals] unit sphere model handle ", noob::to_string(unit_sphere_model.index()) ,", unit cube model handle ", noob::to_string(unit_cube_model.index())));// << ", unit cylinder model handle " << unit_cylinder_model.model_h.index() << ", unit cone model handle " << unit_cone_model.model_h.index();
+	noob::logger::log(noob::importance::INFO, noob::concat("[Globals] unit sphere model handle ", noob::to_string(unit_sphere_model.aggregate_buffer()) ,", unit cube model handle ", noob::to_string(unit_cube_model.aggregate_buffer())));// << ", unit cylinder model handle " << unit_cylinder_model.model_h.index() << ", unit cone model handle " << unit_cone_model.model_h.index();
 
 
 	noob::light l;

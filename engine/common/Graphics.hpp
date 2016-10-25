@@ -8,6 +8,8 @@
 #include "BasicMesh.hpp"
 #include "Model.hpp"
 #include "GpuBuffer.hpp"
+#include "Texture.hpp"
+#include "Attrib.hpp"
 
 namespace noob
 {
@@ -50,68 +52,7 @@ namespace noob
 			typedef noob::handle<uint32_t> shader_handle;
 			typedef noob::handle<uint32_t> program_handle;
 
-			class attrib
-			{
-				friend class graphics;
 
-				public:
-
-				enum class unit_type
-				{
-					HALF_FLOAT, FLOAT, INT16, INT32, UINT16, UINT32
-				};
-
-				enum class packing_type
-				{
-					VEC4, MAT4
-				};
-
-				noob::graphics::attrib::unit_type get_unit_type() const noexcept(true)
-				{
-					return unit;
-				}
-
-				noob::graphics::attrib::packing_type get_packing_type() const noexcept(true)
-				{
-					return packing;
-				}
-
-				protected:
-				noob::graphics::attrib::unit_type unit;
-				noob::graphics::attrib::packing_type packing;
-			};
-
-			class texture
-			{
-				friend class graphics;
-
-				public:
-
-				enum class storage_type
-				{
-					TEX_1D, TEX_2D_ARRAY, TEX_3D, TEX_CUBE
-				};
-
-				enum class compression_type
-				{
-					NONE, ETC2, PVRTC, ADST
-				};
-
-				noob::graphics::texture::storage_type get_storage_type() const noexcept(true)
-				{
-					return storage;
-				}
-
-				noob::graphics::texture::compression_type get_compression_type() const noexcept(true)
-				{
-					return compression;
-				}
-
-				protected:
-				uint32_t handle;
-				noob::graphics::texture::storage_type storage;
-				noob::graphics::texture::compression_type compression;
-			};
 
 			typedef noob::handle<uint32_t> texture_handle;
 
@@ -124,11 +65,11 @@ namespace noob
 
 			noob::model_handle model_instanced(const noob::basic_mesh&, uint32_t num_instances) noexcept(true);
 
-			noob::graphics::texture_handle reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::graphics::attrib::unit_type, noob::graphics::texture::compression_type) noexcept(true);
+			noob::texture_handle reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::attrib::unit_type, noob::texture::compression_type) noexcept(true);
 
-			noob::graphics::texture_handle texture_3d(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib::unit_type, noob::graphics::texture::compression_type, const std::string&) noexcept(true);	
+			noob::texture_handle texture_3d(uint32_t width, uint32_t height, uint32_t mips, noob::attrib::unit_type, noob::texture::compression_type, const std::string&) noexcept(true);	
 
-			noob::graphics::texture_handle texture_cube(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib::unit_type, noob::graphics::texture::compression_type, const std::string&) noexcept(true);	
+			noob::texture_handle texture_cube(uint32_t width, uint32_t height, uint32_t mips, noob::attrib::unit_type, noob::texture::compression_type, const std::string&) noexcept(true);	
 
 			void set_view_transform(const noob::mat4& view, const noob::mat4& proj) noexcept(true);
 
@@ -144,7 +85,7 @@ namespace noob
 		protected:
 
 			noob::component<noob::model> models;
-			rde::vector<noob::graphics::texture> textures;
+			rde::vector<noob::texture> textures;
 
 			// glDrawElementsInstanced ( GL_TRIANGLES, userData->numIndices, GL_UNSIGNED_INT, ( const void * ) NULL, NUM_INSTANCES );
 			// std::vector<noob::vec4> colour_storage;

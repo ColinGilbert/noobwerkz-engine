@@ -1,1 +1,1 @@
-This is where all NoobwerkzEngine-specific code goes.
+All Noobwerkz Engine project code that gets shared across platforms goes here.

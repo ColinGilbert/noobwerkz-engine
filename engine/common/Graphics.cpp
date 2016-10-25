@@ -194,13 +194,13 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 
 	result.type = noob::model::geom_type::INDEXED_MESH;
 
-	result.num_instances = num_instances;
+	result.n_instances = num_instances;
 
 	const uint32_t num_indices = mesh.indices.size();
-	result.num_indices = num_indices;
+	result.n_indices = num_indices;
 
 	const uint32_t num_verts = mesh.vertices.size();
-	result.num_vertices = num_verts;
+	result.n_vertices = num_verts;
 
 	GLuint vao_id = 0;
 
@@ -253,12 +253,12 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 
 	// Setup colours VBO:
 	glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
-	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::instanced_colour_stride, nullptr, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::materials_stride, nullptr, GL_DYNAMIC_DRAW);
 	result.instanced_colour_vbo = colours_vbo;
 
 	// Setup matrices VBO:
 	glBindBuffer(GL_ARRAY_BUFFER, matrices_vbo);
-	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::instanced_matrices_stride, nullptr, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
 	result.instanced_matrices_vbo = matrices_vbo;
 
 	//////////////////////
@@ -324,21 +324,21 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 }
 
 
-noob::graphics::texture_handle noob::graphics::reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::graphics::attrib::unit_type unit_arg, noob::graphics::texture::compression_type compress) noexcept(true)
+noob::texture_handle noob::graphics::reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::attrib::unit_type unit_arg, noob::texture::compression_type compress) noexcept(true)
 {
-	noob::graphics::texture_handle t;
+	noob::texture_handle t;
 	return t;
 }
 
-noob::graphics::texture_handle noob::graphics::texture_3d(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib::unit_type unit_arg, noob::graphics::texture::compression_type compress, const std::string&) noexcept(true)
+noob::texture_handle noob::graphics::texture_3d(uint32_t width, uint32_t height, uint32_t mips, noob::attrib::unit_type unit_arg, noob::texture::compression_type compress, const std::string&) noexcept(true)
 {
-	noob::graphics::texture_handle t;
+	noob::texture_handle t;
 	return t;
 }
 
-noob::graphics::texture_handle noob::graphics::texture_cube(uint32_t width, uint32_t height, uint32_t mips, noob::graphics::attrib::unit_type unit_arg, noob::graphics::texture::compression_type compress, const std::string&) noexcept(true)
+noob::texture_handle noob::graphics::texture_cube(uint32_t width, uint32_t height, uint32_t mips, noob::attrib::unit_type unit_arg, noob::texture::compression_type compress, const std::string&) noexcept(true)
 {
-	noob::graphics::texture_handle t;
+	noob::texture_handle t;
 	return t;
 }
 
@@ -351,7 +351,7 @@ void noob::graphics::set_view_transform(const noob::mat4& view, const noob::mat4
 void noob::graphics::draw(const noob::model& m, uint32_t num) noexcept(true)
 {
 	glBindVertexArray(m.vao);	
-	glDrawElementsInstanced(GL_TRIANGLES, m.num_indices, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.num_instances, num));
+	glDrawElementsInstanced(GL_TRIANGLES, m.n_indices, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.n_instances, num));
 	glBindVertexArray(0);
 }
 
@@ -385,19 +385,19 @@ std::tuple<bool, noob::gpu_write_buffer> noob::graphics::map_buffer(const noob::
 	{
 		case (noob::model::instanced_data_type::COLOUR):
 			{
-				stride_in_bytes = noob::model::instanced_colour_stride;
+				stride_in_bytes = noob::model::materials_stride;
 				glBindBuffer(GL_ARRAY_BUFFER, m.instanced_colour_vbo);
 				break;
 			}
 		case (noob::model::instanced_data_type::MATRICES):
 			{
-				stride_in_bytes = noob::model::instanced_matrices_stride;
+				stride_in_bytes = noob::model::matrices_stride;
 				glBindBuffer(GL_ARRAY_BUFFER, m.instanced_matrices_vbo);
 				break;
 			}
 	}
 
-	const uint32_t total_size = stride_in_bytes * m.num_instances;
+	const uint32_t total_size = stride_in_bytes * m.n_instances;
 
 	uint8_t* ptr = reinterpret_cast<uint8_t*>(glMapBufferRange(GL_ARRAY_BUFFER, 0, total_size, GL_MAP_WRITE_BIT));
 
