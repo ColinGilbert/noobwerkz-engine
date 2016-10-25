@@ -143,7 +143,6 @@ namespace noob
 
 		protected:
 
-
 			noob::component<noob::model> models;
 			rde::vector<noob::graphics::texture> textures;
 

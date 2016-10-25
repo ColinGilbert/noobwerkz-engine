@@ -89,7 +89,6 @@ namespace noob
 
 			std::vector<noob::contact_point> get_intersecting(const noob::ghost_handle) const noexcept(true);
 
-
 			void update_actors() noexcept(true);
 
 			void actor_dither(noob::actor_handle h) noexcept(true);
