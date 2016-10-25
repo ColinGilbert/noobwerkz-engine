@@ -6,7 +6,7 @@
 
 #include "Shape.hpp"
 #include "ComponentDefines.hpp"
-#include "StageTypes.hpp"
+#include "StageItemType.hpp"
 
 namespace noob
 {
@@ -50,17 +50,7 @@ namespace noob
 		float incline, gravity_coeff;
 	};
 
-	struct scenery
-	{
-		scenery() noexcept(true) : flag(0) {}
-		static const noob::stage_item_type type = noob::stage_item_type::SCENERY;
-		noob::body_handle body;
-		noob::reflectance_handle reflect;
-		uint8_t flag;
-	};
-
 	typedef noob::handle<noob::actor> actor_handle;
-	typedef noob::handle<noob::scenery> scenery_handle;
 
 	// Events play a dual role: They can either be commands to an actor, or requests to make an actor interact with the world.
 	// Upon being fired off, events are pushed onto a pre-allocated stack.

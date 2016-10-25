@@ -1,6 +1,6 @@
 #pragma once
 
-#include "StageTypes.hpp"
+#include "StageItemType.hpp"
 #include "StringFuncs.hpp"
 
 namespace noob

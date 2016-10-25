@@ -17,10 +17,11 @@
 #include "Joint.hpp"
 #include "Shape.hpp"
 #include "Actor.hpp"
+#include "StageItemType.hpp"
+#include "Scenery.hpp"
 #include "Globals.hpp"
 #include "ComponentDefines.hpp"
 #include "ContactPoint.hpp"
-#include "StageTypes.hpp"
 #include "Particles.hpp"
 
 
