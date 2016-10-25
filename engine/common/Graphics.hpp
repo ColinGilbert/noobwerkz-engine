@@ -52,8 +52,6 @@ namespace noob
 			typedef noob::handle<uint32_t> shader_handle;
 			typedef noob::handle<uint32_t> program_handle;
 
-
-
 			typedef noob::handle<uint32_t> texture_handle;
 
 			void init(uint32_t width, uint32_t height) noexcept(true);

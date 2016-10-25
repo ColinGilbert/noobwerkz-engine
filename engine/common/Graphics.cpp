@@ -66,6 +66,10 @@ GLuint load_program_gl(const std::string& vert_shader_arg, const std::string fra
 	GLuint program_object;
 	GLint linked;
 
+	// Just to make sure no dirty state gets to ruin our shader compile. :)
+	glBindVertexArray(0);
+
+
 	const char* vert_shader_src = vert_shader_arg.c_str();
 	// Load the vertex/fragment shaders
 	vertex_shader = load_shader_gl(GL_VERTEX_SHADER, vert_shader_arg);
@@ -130,6 +134,9 @@ GLuint load_program_gl(const std::string& vert_shader_arg, const std::string fra
 
 void noob::graphics::init(uint32_t width, uint32_t height) noexcept(true)
 {
+
+	uint32_t temp = load_program_gl(noob::glsl::vs_instancing_src, noob::glsl::fs_instancing_src);
+
 	glClearColor(0.2f, 0.0f, 0.2f, 0.0f);
 	glEnable (GL_DEPTH_TEST); // enable depth-testing
 	glDepthFunc (GL_LESS); // depth-testing interprets a
@@ -277,7 +284,6 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*8));
 
-
 	// Per instance colour
 	glEnableVertexAttribArray(3);
 	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(0));
@@ -298,7 +304,6 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*12));
 	glVertexAttribDivisor(6, 1);
 
-
 	// Per instance MVP
 	glEnableVertexAttribArray(7);
 	glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(0));
@@ -315,7 +320,6 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 	glEnableVertexAttribArray(10);
 	glVertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(sizeof(GLfloat)*12));
 	glVertexAttribDivisor(10, 1);
-
 
 	// Per-instance normal matrix
 	glEnableVertexAttribArray(11);
@@ -340,7 +344,6 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 
 	return h;
 }
-
 
 noob::texture_handle noob::graphics::reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::attrib::unit_type unit_arg, noob::texture::compression_type compress) noexcept(true)
 {
