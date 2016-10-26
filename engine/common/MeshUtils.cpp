@@ -112,6 +112,7 @@ noob::basic_mesh noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
 		results.vertices.push_back(v*radius);
 		noob::vec3 n = noob::normalize(v);
 		results.normals.push_back(n);
+		results.colours.push_back(noob::vec4(1.0, 1.0, 1.0, 1.0));
 	}
 
 	for(uint32_t i : indices)
@@ -277,6 +278,11 @@ noob::basic_mesh noob::mesh_utils::box(float width, float height, float depth)
 
 	// Man, that kinda sucked!
 
+	for (uint32_t i = 0; i < 24; ++i)
+	{
+		results.colours.push_back(noob::vec4(1.0, 1.0, 1.0, 1.0));
+	}
+
 	results.bbox.min = noob::vec3(-x, -y, -z);
 	results.bbox.max = noob::vec3(x, y, z);
 
@@ -414,6 +420,7 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 	for (uint32_t i = 0; i < hull_result.mNumOutputVertices; ++i)
 	{
 		mesh.vertices.push_back(noob::vec3_from_bullet(hull_result.m_OutputVertices[i]));
+		mesh.colours.push_back(noob::vec4(1.0, 1.0, 1.0, 1.0));
 	}
 
 	for (uint32_t i = 0; i < hull_result.mNumIndices; ++i)
@@ -450,6 +457,7 @@ noob::basic_mesh noob::mesh_utils::circle(float radius, uint32_t segments_arg)
 		const Eigen::AngleAxis<float> angle_axis(diff, Eigen::Vector3f::UnitY());
 		const Eigen::Vector3f rotated_point = angle_axis * p;
 		results.vertices.push_back(noob::vec3_from_eigen(rotated_point));
+		results.colours.push_back(noob::vec4(1.0, 1.0, 1.0, 1.0));
 	}
 	
 	uint32_t accum = 1;;

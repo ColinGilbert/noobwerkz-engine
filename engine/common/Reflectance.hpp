@@ -45,6 +45,6 @@ namespace noob
 			emissive_fresnel.v[3] = arg;
 		}
 
-		noob::vec4 colour, specular_shine, diffuse_albedo, emissive_fresnel;
+		noob::vec4 specular_shine, diffuse_albedo, emissive_fresnel;
 	};
 }

@@ -333,6 +333,23 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 	return h;
 }
 
+void noob::graphics::reset_instances(noob::model_handle h, uint32_t num_instances) noexcept(true)
+{
+	noob::model m = models.get(h);
+	m.n_instances = num_instances;
+
+	// Setup colours VBO:
+	glBindBuffer(GL_ARRAY_BUFFER, m.instanced_colour_vbo);
+	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::materials_stride, nullptr, GL_DYNAMIC_DRAW);
+
+	// Setup matrices VBO:
+	glBindBuffer(GL_ARRAY_BUFFER, m.instanced_matrices_vbo);
+	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
+
+	models.set(h, m);
+}
+
+
 noob::texture_handle noob::graphics::reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::attrib::unit_type unit_arg, noob::texture::compression_type compress) noexcept(true)
 {
 	noob::texture_handle t;
@@ -366,16 +383,18 @@ void noob::graphics::draw(const noob::model& m, uint32_t num) noexcept(true)
 
 void noob::graphics::frame(uint32_t width, uint32_t height) noexcept(true)
 {
+	glViewport(0, 0, width, height);
+
+	glBindVertexArray(0);
+
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
-
-	glViewport(0, 0, width, height);
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glBindVertexArray(0);
+
+
 
 }
 

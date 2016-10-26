@@ -60,7 +60,7 @@ namespace noob
 			noob::joint_handle joint(const noob::body_handle a, const noob::vec3& point_on_a, const noob::body_handle b, const noob::vec3& point_on_b) noexcept(true);
 
 			// These are the composites that use the bodies, ghosts, and joints.
-			bool reserve_actors(const noob::actor_blueprints_handle, uint32_t num) noexcept(true);
+			void reserve_actors(const noob::actor_blueprints_handle, uint32_t num) noexcept(true);
 
 			noob::actor_handle actor(noob::actor_blueprints_handle, uint32_t team, const noob::vec3&, const noob::versor&) noexcept(true);
 
@@ -94,8 +94,28 @@ namespace noob
 			std::vector<noob::contact_point> get_intersecting(const noob::ghost_handle) const noexcept(true);
 
 			void update_actors() noexcept(true);
-
 			void actor_dither(noob::actor_handle h) noexcept(true);
+
+			// This is to help quick access into the 'items' vector (used to keep track of ordering on the GPU buffer.)
+			struct model_mapping
+			{
+				noob::model_handle handle;
+				uint32_t offset, num;
+			};
+
+			rde::vector<noob::stage::model_mapping> models_to_items;
+			rde::vector<noob::stage_item_variant> items;
+
+			
+			rde::vector<noob::vec4> team_colours;
+
+			// These are for holding useful data.
+			noob::component<noob::body> bodies;
+			noob::component<noob::joint> joints;
+			noob::component<noob::ghost> ghosts;
+			noob::component<noob::actor> actors;
+			noob::component<noob::scenery> sceneries;
+			noob::component<noob::particle_system> particle_systems;
 
 			noob::duration update_duration;
 			noob::duration draw_duration;
@@ -106,27 +126,8 @@ namespace noob
 			btCollisionDispatcher* collision_dispatcher;
 			btSequentialImpulseConstraintSolver* solver;
 			btDiscreteDynamicsWorld* dynamics_world;
-	
-			// This is to allow access into the 'items' vector (useful for uploading matrices into buffers.
-			struct model_mapping
-			{
-				noob::model_handle handle;
-				uint32_t offset, num;
-			};
 
-			rde::vector<noob::stage::model_mapping> models_to_items;
-			rde::vector<noob::stage_item_variant> items;
 
-			// These are for holding useful data.
-			noob::bodies_holder bodies;
-			noob::joints_holder joints;
-			noob::ghosts_holder ghosts;
-
-			noob::component<noob::actor> actors;
-			noob::component<noob::scenery> sceneries;
-			noob::component<noob::particle_system> particle_systems;
-			
-			rde::vector<noob::vec4> team_colours;
 		
 		};
 }

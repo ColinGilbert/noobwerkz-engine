@@ -63,6 +63,8 @@ namespace noob
 
 			noob::model_handle model_instanced(const noob::basic_mesh&, uint32_t num_instances) noexcept(true);
 
+			void reset_instances(noob::model_handle, uint32_t num_instances) noexcept(true);
+
 			noob::texture_handle reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::attrib::unit_type, noob::texture::compression_type) noexcept(true);
 
 			noob::texture_handle texture_3d(uint32_t width, uint32_t height, uint32_t mips, noob::attrib::unit_type, noob::texture::compression_type, const std::string&) noexcept(true);	
@@ -83,11 +85,7 @@ namespace noob
 		protected:
 
 			noob::component<noob::model> models;
-			rde::vector<noob::texture> textures;
-
-			// glDrawElementsInstanced ( GL_TRIANGLES, userData->numIndices, GL_UNSIGNED_INT, ( const void * ) NULL, NUM_INSTANCES );
-			// std::vector<noob::vec4> colour_storage;
-			// std::vector<noob::mat4> matrices_storage;
+			noob::component<noob::texture> textures;
 
 			noob::mat4 view_mat, proj_mat;
 	};

@@ -34,6 +34,7 @@ void noob::stage::init() noexcept(true)
 	logger::log(noob::importance::INFO, "[Stage] Done init.");
 }
 
+
 void noob::stage::tear_down() noexcept(true) 
 {
 	for (size_t i = 0; i < bodies.count(); ++i)
@@ -54,7 +55,7 @@ void noob::stage::tear_down() noexcept(true)
 	ghosts.empty();
 
 	actors.empty();
-	//actor_mq.clear();
+	// actor_mq.clear();
 	// actor_mq_count = 0;
 
 	// sceneries.empty();
@@ -153,13 +154,14 @@ noob::joint_handle noob::stage::joint(const noob::body_handle a, const noob::vec
 }
 
 
-bool noob::stage::reserve_actors(noob::actor_blueprints_handle bp_h, uint32_t num) 
+void noob::stage::reserve_actors(noob::actor_blueprints_handle bp_h, uint32_t num) noexcept(true)
 {
 	noob::globals& g = noob::globals::get_instance();
 	const noob::actor_blueprints bp = g.actor_blueprints.get(bp_h);
 
+	noob::graphics& gfx = noob::graphics::get_instance();
 
-	return 	false;
+	gfx.reset_instances(bp.model, num);
 }
 
 
@@ -219,17 +221,17 @@ std::vector<noob::contact_point> noob::stage::get_intersecting(const noob::ghost
 
 	btManifoldArray manifold_array;
 
-	btBroadphasePairArray& pairArray = temp_ghost.inner->getOverlappingPairCache()->getOverlappingPairArray();
+	btBroadphasePairArray& pair_array = temp_ghost.inner->getOverlappingPairCache()->getOverlappingPairArray();
 
 	std::vector<noob::contact_point> results;
 
-	size_t num_pairs = pairArray.size();
+	size_t num_pairs = pair_array.size();
 
 	for (size_t i = 0; i < num_pairs; ++i)
 	{
 		manifold_array.clear();
 
-		const btBroadphasePair& pair = pairArray[i];
+		const btBroadphasePair& pair = pair_array[i];
 
 		btBroadphasePair* collision_pair = dynamics_world->getPairCache()->findPair(pair.m_pProxy0, pair.m_pProxy1);
 

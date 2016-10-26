@@ -9,7 +9,7 @@ namespace noob
 	{
 		friend class graphics;
 		public:
-		static constexpr uint32_t materials_stride = sizeof(noob::mat4);
+		static constexpr uint32_t materials_stride = sizeof(noob::vec4);
 		static constexpr uint32_t matrices_stride = sizeof(noob::mat4) * 2;
 
 		enum class geom_type

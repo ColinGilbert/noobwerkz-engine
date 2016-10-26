@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 project(NoobWerkz)
 
-# set(CMAKE_BUILD_TYPE "DEBUG")
-set(CMAKE_BUILD_TYPE "RELEASE")
+set(CMAKE_BUILD_TYPE "DEBUG")
+#set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
 set(NOOB_COMMON_FLAGS "-Werror=return-type -ftrapv")
@@ -20,6 +20,7 @@ if(NOT NOOB_STRICT_FLAGS)
 	set(CMAKE_C_FLAGS "${NOOB_STRICT_FLAGS} ${NOOB_STRICT_C_FLAGS} ${CMAKE_C_FLAGS}")
 	set(CMAKE_CXX_FLAGS "${NOOB_STRICT_FLAGS} ${NOOB_STRICT_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
 endif()
+
 
 include_directories(lib/freetype/include)
 
@@ -82,7 +83,6 @@ list (APPEND freetype_src
 	lib/freetype/src/type42/t42objs.c
 	lib/freetype/src/type42/t42parse.c
 	lib/freetype/src/type42/t42drivr.c
-	lib/freetype/src/lzw/ftzopen.c
 	lib/freetype/src/smooth/ftspic.c
 	lib/freetype/src/smooth/ftsmooth.c
 	lib/freetype/src/smooth/ftgrays.c
@@ -144,13 +144,16 @@ list (APPEND freetype_src
 	lib/freetype/src/base/ftbbox.c
 	lib/freetype/src/base/ftdbgmem.c
 	lib/freetype/src/base/fttrigon.c
-	lib/freetype/src/gzip/inflate.c
-	lib/freetype/src/gzip/adler32.c
-	lib/freetype/src/gzip/infcodes.c
-	lib/freetype/src/gzip/infblock.c
-	lib/freetype/src/gzip/ftgzip.c
-	lib/freetype/src/gzip/inftrees.c
+	#lib/freetype/src/gzip/inflate.c
+	#lib/freetype/src/gzip/adler32.c
+	#lib/freetype/src/gzip/infcodes.c
+	#lib/freetype/src/gzip/infblock.c
+	#lib/freetype/src/gzip/ftgzip.c
+	#lib/freetype/src/gzip/inftrees.c
+	#lib/freetype/src/gzip/infutil.c
+	#lib/freetype/src/gzip/zutil.c
 	lib/freetype/src/lzw/ftlzw.c
+	lib/freetype/src/lzw/ftzopen.c	
 	lib/freetype/src/truetype/ttdriver.c
 	lib/freetype/src/truetype/ttgload.c
 	lib/freetype/src/truetype/ttobjs.c
@@ -205,15 +208,10 @@ list (APPEND freetype_src
 # lib/freetype/src/pcf/pcf.c
 # lib/freetype/src/otvalid/otvalid.c
 # lib/freetype/src/type42/type42.c
-# lib/freetype/src/lzw/ftlzw.c
 # lib/freetype/src/smooth/smooth.c
 # lib/freetype/src/cache/ftcache.c
 # lib/freetype/src/pshinter/pshinter.c
 # lib/freetype/src/type1/type1.c
-# lib/freetype/src/base/ftmac.c
-# lib/freetype/src/base/ftbase.c
-# lib/freetype/src/gzip/infutil.c
-# lib/freetype/src/gzip/zutil.c
 # lib/freetype/src/tools/test_bbox.c
 # lib/freetype/src/tools/ftfuzzer/rasterfuzzer.cc
 # lib/freetype/src/tools/ftfuzzer/runinput.cc
@@ -223,7 +221,6 @@ list (APPEND freetype_src
 # lib/freetype/src/tools/apinames.c
 # lib/freetype/src/tools/test_afm.c
 # lib/freetype/src/tools/ftrandom/ftrandom.c
-# lib/freetype/src/lzw/ftzopen.c
 # lib/freetype/src/truetype/truetype.c
 # lib/freetype/src/cff/cff.c
 # lib/freetype/src/cid/type1cid.c
@@ -892,7 +889,7 @@ endif()
 
 
 # All platforms get these:
-list (APPEND app_src ${assimp_src} ${freetype_src} ${user_src} ${main_src} ${common_src} ${bgfx_src} ${bgfx_utils_src} ${base_src} ${recast_src} ${bullet_src} ${voropp_src} ${ozz_src} ${ogg_src} ${vorbis_src} ${r8_src} ${shiny_src})
+list (APPEND app_src ${assimp_src}  ${freetype_src} ${user_src} ${main_src} ${common_src} ${base_src} ${recast_src} ${bullet_src} ${voropp_src} ${ozz_src} ${ogg_src} ${vorbis_src} ${r8_src} ${shiny_src})
 
 # More platform-specific:
 if (NOOB_PLATFORM_LINUX)
@@ -934,7 +931,7 @@ if (NOOB_PLATFORM_LINUX)
 		)
 	add_executable(NoobEdit ${app_src} ${glfw_src})
 
-	target_link_libraries(NoobEdit LINK_PUBLIC rt dl pthread m soundio.a asound GL Xinerama Xcursor Xrandr ${X11_LIBRARIES} ${OPENGL_gl_LIBRARY})
+	target_link_libraries(NoobEdit LINK_PUBLIC rt z dl pthread m soundio.a asound GL Xinerama Xcursor Xrandr ${X11_LIBRARIES} ${OPENGL_gl_LIBRARY})
 	# target_link_libraries(NoobEdit LINK_PUBLIC spnav)
 endif()
 
