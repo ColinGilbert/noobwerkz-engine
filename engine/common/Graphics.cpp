@@ -140,6 +140,9 @@ void noob::graphics::init(uint32_t width, uint32_t height) noexcept(true)
 	glClearColor(0.2f, 0.0f, 0.2f, 0.0f);
 	glEnable (GL_DEPTH_TEST); // enable depth-testing
 	glDepthFunc (GL_LESS); // depth-testing interprets a
+
+
+	noob::logger::log(noob::importance::INFO, "[Graphics] Done init.");
 }
 
 void noob::graphics::destroy() noexcept(true)

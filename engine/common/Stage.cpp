@@ -21,10 +21,10 @@ void noob::stage::init() noexcept(true)
 
 	// For the ghost object to work correctly, we need to add a callback to our world.
 	dynamics_world->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
-	draw_graph.reserve_nodes(8192);
-	draw_graph.reserve_edges(8192);
-	draw_graph.add_node();
-	node_masks.push_back(0);
+	// draw_graph.reserve_nodes(8192);
+	// draw_graph.reserve_edges(8192);
+	// draw_graph.add_node();
+	// node_masks.push_back(0);
 
 	noob::light temp;
 	temp.rgb_falloff = noob::vec4(1.0, 1.0, 1.0, 0.6);
@@ -65,7 +65,7 @@ void noob::stage::tear_down() noexcept(true)
 	delete collision_dispatcher;
 	delete collision_configuration;
 
-	draw_graph.clear();
+	// draw_graph.clear();
 	// node_masks.empty();
 
 	init();
@@ -153,24 +153,32 @@ noob::joint_handle noob::stage::joint(const noob::body_handle a, const noob::vec
 }
 
 
-noob::actor_handle noob::stage::actor(const noob::actor_blueprints_handle bp_h, uint32_t team, const noob::vec3& pos, const noob::versor& orient) 
+bool noob::stage::reserve_actors(noob::actor_blueprints_handle bp_h, uint32_t num) 
 {
 	noob::globals& g = noob::globals::get_instance();
 	const noob::actor_blueprints bp = g.actor_blueprints.get(bp_h);
 
+
+	return 	false;
+}
+
+
+noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32_t team, const noob::vec3& pos, const noob::versor& orient) noexcept(true)
+{
+	noob::globals& g = noob::globals::get_instance();
 	noob::actor a;
+	a.team = team;
+	noob::actor_blueprints bp = g.actor_blueprints.get(bp_h);
 	a.ghost = ghost(bp.bounds, pos, orient);
 	a.bp_handle = bp_h;
-
 	noob::actor_handle a_h = actors.add(a);
 
 	noob::stage_item_variant var;
 	var.type = noob::stage_item_type::ACTOR;
 	var.index = a_h.index();
 
-	// add_to_graph(var);
-
 	noob::ghost temp_ghost = ghosts.get(a.ghost);
+
 	temp_ghost.inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::ACTOR));
 	temp_ghost.inner->setUserIndex_2(a_h.index());
 
@@ -178,32 +186,32 @@ noob::actor_handle noob::stage::actor(const noob::actor_blueprints_handle bp_h, 
 }
 
 /*
-noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg) noexcept(true)
-{
-	noob::globals& g = noob::globals::get_instance();
+   noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg) noexcept(true)
+   {
+   noob::globals& g = noob::globals::get_instance();
 
-	const noob::body_handle bod_h = body(noob::body_type::STATIC, shape_arg, 0.0, pos_arg, orient_arg, false);
+   const noob::body_handle bod_h = body(noob::body_type::STATIC, shape_arg, 0.0, pos_arg, orient_arg, false);
 
-	noob::scenery sc;
-	sc.body = bod_h;
-	sc.reflect = reflect_arg;
-	noob::scenery_handle scenery_h = sceneries.add(sc);
+   noob::scenery sc;
+   sc.body = bod_h;
+   sc.reflect = reflect_arg;
+   noob::scenery_handle scenery_h = sceneries.add(sc);
 
-	noob::stage_item_variant var;
-	var.type = noob::stage_item_type::SCENERY;
-	var.index = scenery_h.index();
+   noob::stage_item_variant var;
+   var.type = noob::stage_item_type::SCENERY;
+   var.index = scenery_h.index();
 
-	add_to_graph(var);
+   add_to_graph(var);
 
-	noob::body b = bodies.get(bod_h);
-	b.inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::SCENERY));
-	b.inner->setUserIndex_2(scenery_h.index());
+   noob::body b = bodies.get(bod_h);
+   b.inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::SCENERY));
+   b.inner->setUserIndex_2(scenery_h.index());
 
-	logger::log(noob::importance::INFO, noob::concat("[Stage] Scenery added! Handle ", noob::to_string(scenery_h.index())) );
+   logger::log(noob::importance::INFO, noob::concat("[Stage] Scenery added! Handle ", noob::to_string(scenery_h.index())) );
 
-	return scenery_h;
-}
-*/
+   return scenery_h;
+   }
+   */
 
 std::vector<noob::contact_point> noob::stage::get_intersecting(const noob::ghost_handle ghost_h) const noexcept(true) 
 {
@@ -325,32 +333,4 @@ void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 		//	gh.set_position(temp_pos);
 		// }
 	}
-}
-
-noob::node_handle noob::stage::add_to_graph(const noob::stage_item_variant arg) noexcept(true)
-{
-/*
-	enum class stage_item_type : uint32_t
-	{
-		ACTOR = 0, SCENERY = 1, TRIGGER = 2, PARTICLES = 3, LIGHT = 4
-	};
-
-	struct stage_item_variant
-	{
-		stage_item_type type;
-		uint32_t index;
-	};
-*/
-
-	switch(arg.type)
-	{
-		case(noob::stage_item_type::ACTOR):
-		{
-			break;
-		}
-		case(noob::stage_item_type::SCENERY):
-		{
-		}
-	}
-	return noob::node_handle::make(0);
 }

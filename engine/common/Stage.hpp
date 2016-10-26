@@ -60,8 +60,11 @@ namespace noob
 			noob::joint_handle joint(const noob::body_handle a, const noob::vec3& point_on_a, const noob::body_handle b, const noob::vec3& point_on_b) noexcept(true);
 
 			// These are the composites that use the bodies, ghosts, and joints.
-			noob::actor_handle actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3&, const noob::versor&);
+			bool reserve_actors(const noob::actor_blueprints_handle, uint32_t num) noexcept(true);
 
+			noob::actor_handle actor(noob::actor_blueprints_handle, uint32_t team, const noob::vec3&, const noob::versor&) noexcept(true);
+
+			void set_team_colour(uint32_t team_num, const noob::vec4& colour) noexcept(true);
 			// Scenery consists of a static object with its properties given in the argument. They get instanced.
 			// noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::vec3&, const noob::versor&) noexcept(true);
 
@@ -80,7 +83,7 @@ namespace noob
 
 			static constexpr auto dbg_name = "Stage";
 
-			void run_ai() noexcept (true);
+			void run_ai() noexcept(true);
 
 			// rde::slist<rde::vector<noob::vec3>> paths;
 
@@ -93,14 +96,6 @@ namespace noob
 			void update_actors() noexcept(true);
 
 			void actor_dither(noob::actor_handle h) noexcept(true);
-			noob::node_handle add_to_graph(const noob::stage_item_variant) noexcept(true); 
-
-			// void update_particle_systems() noexcept(true);
-			// void particle_spawn_helper(noob::particle_system*) noexcept(true); 
-
-			noob::digraph draw_graph;
-
-			rde::vector<uint64_t> node_masks;
 
 			noob::duration update_duration;
 			noob::duration draw_duration;
@@ -131,20 +126,7 @@ namespace noob
 			noob::component<noob::scenery> sceneries;
 			noob::component<noob::particle_system> particle_systems;
 			
-			// rde::vector<noob::actor_event> actor_mq;
-			// uint32_t actor_mq_count;
-
-			// Used to help build up the draw-graph
-			//rde::vector<noob::reflectance_handle> item_reflectances;
-
-			// For drawing
-			// noob::fast_hashtable bodies_to_nodes;
-			// noob::fast_hashtable ghosts_to_nodes;
-			// noob::fast_hashtable basic_models_to_nodes;
-
-			// noob::directional_light directional_light;
-
-			// noob::navigation nav;
-			// bool nav_changed;
-	};
+			rde::vector<noob::vec4> team_colours;
+		
+		};
 }

@@ -18,7 +18,7 @@ namespace noob
 
 		std::string to_string() const noexcept(true)
 		{
-			 return noob::concat("shape ", noob::to_string(bounds.index()), ", reflection ", noob::to_string(reflect.index()), ", strength ", noob::to_string(strength), ", range ", noob::to_string(range), ", defense ", noob::to_string(defense), ", move speed ", noob::to_string(movement_speed), ", attack speed ", noob::to_string(attack_speed), ", stamina ", noob::to_string(stamina), ", morale ", noob::to_string(morale), ", LOS ", noob::to_string(los));
+			return noob::concat("shape ", noob::to_string(bounds.index()), ", reflection ", noob::to_string(reflect.index()), ", strength ", noob::to_string(strength), ", range ", noob::to_string(range), ", defense ", noob::to_string(defense), ", move speed ", noob::to_string(movement_speed), ", attack speed ", noob::to_string(attack_speed), ", stamina ", noob::to_string(stamina), ", morale ", noob::to_string(morale), ", LOS ", noob::to_string(los));
 		}
 	};
 
@@ -27,8 +27,8 @@ namespace noob
 
 	struct actor
 	{
-		actor() noexcept(true) : alive(true), stance(noob::actor::stance_type::STAND), activity(noob::actor::activity_type::GUARDING), mentality(noob::actor::mentality_type::ALERT), velocity(noob::vec3(0.0, 0.0, 0.0)), incline(0.0), gravity_coeff(1.0) {}
-		
+		actor() noexcept(true) : alive(true), team(0), velocity(noob::vec3(0.0, 0.0, 0.0)), incline(0.0), gravity_coeff(1.0), stance(noob::actor::stance_type::STAND), activity(noob::actor::activity_type::GUARDING), mentality(noob::actor::mentality_type::ALERT) {}
+
 		// These are basic stances upon which all other activities are animated.
 		enum class stance_type : uint16_t { STAND = 0, MOUNT = 1, SIT = 2, KNEEL = 3, PRONE = 4, KO = 5 };
 
@@ -37,16 +37,17 @@ namespace noob
 		enum class mentality_type : uint16_t { ALERT = 0, AGGRESSIVE = 1, DEFENSIVE = 2, PANIC = 3, RELAXED = 4, UNCONSCIOUS = 5 };
 
 		static const noob::stage_item_type type = noob::stage_item_type::ACTOR;
-		
-		bool alive;
 
-		noob::actor::stance_type stance;
-		noob::actor::activity_type activity;
-		noob::actor::mentality_type mentality;
+		bool alive;
+		uint32_t team;
 		noob::actor_blueprints_handle bp_handle;
 		noob::ghost_handle ghost;
 		noob::vec3 velocity, target_pos;
 		float incline, gravity_coeff;
+
+		noob::actor::stance_type stance;
+		noob::actor::activity_type activity;
+		noob::actor::mentality_type mentality;
 	};
 
 	typedef noob::handle<noob::actor> actor_handle;

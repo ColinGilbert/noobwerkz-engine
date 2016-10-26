@@ -53,7 +53,7 @@ bool noob::application::user_init()
 
 	for (uint32_t i = 0; i < num_actors; ++i)
 	{	
-		ah = stage.actor(bph, 0, noob::vec3((actor_radius * 2.0 * i) + actor_offset, actor_height, (actor_radius * 2.0 * i) + actor_offset), noob::versor(0.0, 0.0, 0.0, 1.0));
+		// ah = stage.actor(bph, 0, noob::vec3((actor_radius * 2.0 * i) + actor_offset, actor_height, (actor_radius * 2.0 * i) + actor_offset), noob::versor(0.0, 0.0, 0.0, 1.0));
 	}
 
 

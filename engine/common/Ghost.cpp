@@ -49,3 +49,4 @@ noob::mat4 noob::ghost::get_transform() const noexcept(true)
 {
 	return mat4_from_bullet(inner->getWorldTransform());
 }
+
