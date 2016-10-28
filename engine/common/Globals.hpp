@@ -111,9 +111,6 @@ namespace noob
 		noob::reflectance_handle set_reflectance(const noob::reflectance&, const std::string& name) noexcept(true);
 		noob::reflectance_handle get_reflectance(const std::string& name) const noexcept(true);
 
-		void set_actor_blueprints(const noob::actor_blueprints&, const std::string& name) noexcept(true);
-		noob::actor_blueprints_handle get_actor_blueprints(const std::string& name) const noexcept(true);
-
 		// Those are easy to represent as a scaled item, and save a lot on the video card if repeated.
 		std::tuple<noob::model_handle, noob::vec3> sphere_model(float r) noexcept(true);
 		std::tuple<noob::model_handle, noob::vec3> box_model(float x, float y, float z) noexcept(true);
@@ -144,7 +141,7 @@ namespace noob
 		lights_holder lights;
 		reflectances_holder reflectances;
 		samples_holder samples;
-		actor_blueprints_holder actor_blueprints;
+		// actor_blueprints_holder actor_blueprints;
 		strings_holder strings;
 
 		// noob::basic_renderer basic_drawer;
@@ -260,7 +257,6 @@ namespace noob
 		// rde::hash_map<rde::string, noob::graphics::model_handle> names_to_basic_models;
 		rde::hash_map<rde::string, noob::light_handle> names_to_lights;
 		rde::hash_map<rde::string, noob::reflectance_handle> names_to_reflectances;
-		rde::hash_map<rde::string, noob::actor_blueprints_handle> names_to_actor_blueprints;
 
 		std::atomic<bool> init_done;
 	};

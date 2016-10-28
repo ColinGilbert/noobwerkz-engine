@@ -54,6 +54,7 @@ namespace noob
 				{
 					handle h;
 					h.inner = std::numeric_limits<uint32_t>::max();
+					return h;
 				}
 
 

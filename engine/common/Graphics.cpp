@@ -349,7 +349,6 @@ void noob::graphics::reset_instances(noob::model_handle h, uint32_t num_instance
 	models.set(h, m);
 }
 
-
 noob::texture_handle noob::graphics::reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::attrib::unit_type unit_arg, noob::texture::compression_type compress) noexcept(true)
 {
 	noob::texture_handle t;
@@ -383,9 +382,9 @@ void noob::graphics::draw(const noob::model& m, uint32_t num) noexcept(true)
 
 void noob::graphics::frame(uint32_t width, uint32_t height) noexcept(true)
 {
-	glViewport(0, 0, width, height);
-
 	glBindVertexArray(0);
+
+	glViewport(0, 0, width, height);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
@@ -398,11 +397,13 @@ void noob::graphics::frame(uint32_t width, uint32_t height) noexcept(true)
 
 }
 
-std::tuple<bool, noob::gpu_write_buffer> noob::graphics::map_buffer(const noob::model& m, noob::model::instanced_data_type t) noexcept(true)
+noob::gpu_write_buffer noob::graphics::map_buffer(noob::model_handle h, noob::model::instanced_data_type t) noexcept(true)
 {
+	noob::model m = models.get(h);
+
 	if (m.type != noob::model::geom_type::INDEXED_MESH)
 	{
-		return std::make_tuple(false, noob::gpu_write_buffer::invalid());
+		return noob::gpu_write_buffer::make_invalid();
 	}
 
 	glBindVertexArray(m.vao);	
@@ -431,13 +432,11 @@ std::tuple<bool, noob::gpu_write_buffer> noob::graphics::map_buffer(const noob::
 
 	if (ptr != nullptr)
 	{
-		noob::gpu_write_buffer results(ptr, total_size);
-		return std::make_tuple(true, results);
+		return noob::gpu_write_buffer(ptr, total_size);
 	}
 	else
 	{
-		noob::gpu_write_buffer results(nullptr, 0);
-		return std::make_tuple(false, noob::gpu_write_buffer::invalid());	
+		return noob::gpu_write_buffer::make_invalid();	
 	}
 }
 

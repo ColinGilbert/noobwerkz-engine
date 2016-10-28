@@ -4,7 +4,6 @@ namespace noob
 {
 	namespace glsl
 	{
-
 		static std::string vs_instancing_src(
 				"#version 300 es                                     \n"
 				"precision mediump float;                            \n"

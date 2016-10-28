@@ -15,6 +15,7 @@ namespace noob
 		scenery() noexcept(true) : flag(0) {}
 		static const noob::stage_item_type type = noob::stage_item_type::SCENERY;
 		noob::body_handle body;
+		noob::model_handle model;
 		noob::reflectance_handle reflect;
 		uint8_t flag;
 	};

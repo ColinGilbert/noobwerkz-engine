@@ -15,6 +15,11 @@ namespace noob
 		// TODO:
 		// Templatize!
 
+		bool valid() const noexcept(true)
+		{
+			return size > 0;
+		}
+
 		bool push_back(const noob::vec4& arg) noexcept(true)
 		{
 			if ((current + sizeof(arg)) <= size)
@@ -45,7 +50,7 @@ namespace noob
 			}
 		}
 
-		static noob::gpu_write_buffer invalid() noexcept(true)
+		static noob::gpu_write_buffer make_invalid() noexcept(true)
 		{
 			return noob::gpu_write_buffer(nullptr, 0);
 		}

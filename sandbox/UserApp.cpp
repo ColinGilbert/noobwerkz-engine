@@ -44,8 +44,8 @@ bool noob::application::user_init()
 	noob::actor_blueprints bp;
 	bp.bounds = sh;
 	bp.reflect = rh;
-	g.set_actor_blueprints(bp, "example-actor-bp");
-	noob::actor_blueprints_handle bph = g.get_actor_blueprints("example-actor-bp");
+	// g.set_actor_blueprints(bp, "example-actor-bp");
+	// noob::actor_blueprints_handle bph = g.get_actor_blueprints("example-actor-bp");
 	
 	const uint32_t num_actors = 3000;
 	const float actor_height = 100.0;

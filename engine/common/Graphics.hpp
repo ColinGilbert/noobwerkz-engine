@@ -51,7 +51,6 @@ namespace noob
 
 			typedef noob::handle<uint32_t> shader_handle;
 			typedef noob::handle<uint32_t> program_handle;
-
 			typedef noob::handle<uint32_t> texture_handle;
 
 			void init(uint32_t width, uint32_t height) noexcept(true);
@@ -77,7 +76,7 @@ namespace noob
 
 			void frame(uint32_t width, uint32_t height) noexcept(true);
 
-			std::tuple<bool, noob::gpu_write_buffer> map_buffer(const noob::model& m, noob::model::instanced_data_type) noexcept(true);
+			noob::gpu_write_buffer map_buffer(noob::model_handle, noob::model::instanced_data_type) noexcept(true);
 
 			// NOTE: MUST be called as soon as you're finished using the buffer!
 			void unmap_buffer() noexcept(true);

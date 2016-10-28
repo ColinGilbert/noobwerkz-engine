@@ -40,12 +40,6 @@ bool noob::globals::init() noexcept(true)
 
 	// logger::log(noob::importance::INFO, "[Globals] Got default triplanar shader handle.");
 
-	noob::actor_blueprints bp;
-	set_actor_blueprints(bp, "default");
-
-	strings.add(std::move(std::make_unique<std::string>("default")));
-
-	audio_interface.init();
 
 	noob::random_generator rng;
 
@@ -429,31 +423,6 @@ noob::reflectance_handle noob::globals::get_reflectance(const std::string& s) co
    }
    }
    */
-
-
-void noob::globals::set_actor_blueprints(const noob::actor_blueprints& bp, const std::string& name) noexcept(true)
-{
-	auto search = names_to_actor_blueprints.find(rde::string(name.c_str()));
-	if (search == names_to_actor_blueprints.end())
-	{
-		noob::actor_blueprints_handle h = actor_blueprints.add(bp);
-
-		names_to_actor_blueprints.insert(rde::make_pair(rde::string(name.c_str()), h));
-	}
-}
-
-
-noob::actor_blueprints_handle noob::globals::get_actor_blueprints(const std::string& name) const noexcept(true)
-{
-
-	auto search = names_to_actor_blueprints.find(rde::string(name.c_str()));
-	if (search != names_to_actor_blueprints.end())
-	{
-		return search->second;
-	}
-
-	return noob::actor_blueprints_handle::make(0);
-}
 
 
 double noob::globals::get_random() noexcept(true)

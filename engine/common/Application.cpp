@@ -7,6 +7,9 @@ void noob::application::init(uint32_t width, uint32_t height)
 
 	window_width = width;
 	window_height = height;
+	
+	noob::sound_interface audio_interface;
+	audio_interface.init();
 
 	noob::graphics& gfx = noob::graphics::get_instance();
 	gfx.init(width, height);
@@ -32,7 +35,9 @@ void noob::application::init(uint32_t width, uint32_t height)
 	bool are_globals_initialized = g.init();
 	assert(are_globals_initialized && "Globals not initialized!");
 
-	stage.init();
+	noob::mat4 view_mat = noob::look_at(eye_pos, eye_target, eye_up);
+	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0, 2000.0);
+	stage.init(static_cast<float>(window_width), static_cast<float>(window_height), view_mat, proj_mat);
 
 	logger::log(noob::importance::INFO, "[Application] Done basic init.");
 
@@ -83,8 +88,7 @@ void noob::application::draw()
 {
 	const noob::time start_time = noob::clock::now();
 
-	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0, 2000.0);
-	stage.draw(window_width, window_height, eye_pos, eye_target, eye_up, proj_mat);
+	stage.draw();
 
 	noob::graphics& gfx = noob::graphics::get_instance();
 	gfx.frame(window_width, window_height);

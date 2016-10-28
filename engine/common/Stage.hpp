@@ -23,7 +23,7 @@
 #include "ComponentDefines.hpp"
 #include "ContactPoint.hpp"
 #include "Particles.hpp"
-
+#include "Armature.hpp"
 
 
 namespace noob
@@ -36,7 +36,7 @@ namespace noob
 			~stage() noexcept(true);
 
 			// This one must be called by the application.
-			void init() noexcept(true);
+			void init(float window_width, float window_height, const noob::mat4& view_mat, const noob::mat4& projection_mat) noexcept(true);
 
 			// Brings everything back to scratch.
 			void tear_down() noexcept(true);
@@ -48,7 +48,9 @@ namespace noob
 			// Draw() can also feasibly be called more than once per frame, especially after setting the viewport to a different FOV/LOD. The results can then be treated as a texture and displayed within a game, or on a HUD.
 			void update(double dt) noexcept(true);
 
-			void draw(float window_width, float window_height, const noob::vec3& eye_pos, const noob::vec3& eye_target, const noob::vec3& eye_up, const noob::mat4& projection_mat) const noexcept(true);
+			void draw() const noexcept(true);
+
+			void update_viewport_params(float window_width, float window_height, const noob::mat4& view_mat, const noob::mat4& projection_mat) noexcept(true);
 
 			void build_navmesh() noexcept(true);
 
@@ -58,14 +60,15 @@ namespace noob
 			noob::ghost_handle ghost(const noob::shape_handle, const noob::vec3& pos, const noob::versor& orient) noexcept(true);
 
 			noob::joint_handle joint(const noob::body_handle a, const noob::vec3& point_on_a, const noob::body_handle b, const noob::vec3& point_on_b) noexcept(true);
+			
+			void add_actor_blueprints(const noob::actor_blueprints&, uint32_t num) noexcept(true);
 
-			// These are the composites that use the bodies, ghosts, and joints.
 			void reserve_actors(const noob::actor_blueprints_handle, uint32_t num) noexcept(true);
 
 			noob::actor_handle actor(noob::actor_blueprints_handle, uint32_t team, const noob::vec3&, const noob::versor&) noexcept(true);
 
 			void set_team_colour(uint32_t team_num, const noob::vec4& colour) noexcept(true);
-			// Scenery consists of a static object with its properties given in the argument. They get instanced.
+			
 			// noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::vec3&, const noob::versor&) noexcept(true);
 
 			std::vector<noob::contact_point> get_intersecting(const noob::actor_handle) const noexcept(true);
@@ -94,20 +97,53 @@ namespace noob
 			std::vector<noob::contact_point> get_intersecting(const noob::ghost_handle) const noexcept(true);
 
 			void update_actors() noexcept(true);
-			void actor_dither(noob::actor_handle h) noexcept(true);
 
-			// This is to help quick access into the 'items' vector (used to keep track of ordering on the GPU buffer.)
-			struct model_mapping
+			void actor_dither(noob::actor_handle) noexcept(true);
+	
+			struct drawable_instance
 			{
-				noob::model_handle handle;
-				uint32_t offset, num;
+				// For actor + pose, or any other representation needed
+				uint32_t index1, index2;
 			};
 
-			rde::vector<noob::stage::model_mapping> models_to_items;
-			rde::vector<noob::stage_item_variant> items;
+			struct drawable_info
+			{
+				noob::model_handle handle;
+				uint32_t count;
+				bool needs_colours;
+				std::vector<drawable_instance> instances;
+			};
 
+			struct actor_info
+			{
+				noob::actor_blueprints bp;
+				uint32_t count, max;
+			};
+
+
+
+			typedef noob::handle<drawable_info> drawable_info_handle;
+
+			void upload_colours(drawable_info_handle, const std::vector<std::tuple<uint32_t, noob::vec4>>&) noexcept(true);
+			
+			void upload_matrices(drawable_info_handle) noexcept(true);
+
+			void reserve_models(noob::model_handle h, uint32_t num) noexcept(true);
+
+
+
+
+		
+
+			noob::mat4 view_matrix, projection_matrix;
+			uint32_t viewport_width, viewport_height;
+
+			rde::vector<noob::stage::drawable_info> drawables;
+			rde::vector<noob::stage::actor_info> actor_factories;
 			
 			rde::vector<noob::vec4> team_colours;
+
+			noob::fast_hashtable models_to_instances;
 
 			// These are for holding useful data.
 			noob::component<noob::body> bodies;
@@ -116,6 +152,7 @@ namespace noob
 			noob::component<noob::actor> actors;
 			noob::component<noob::scenery> sceneries;
 			noob::component<noob::particle_system> particle_systems;
+			noob::component_dynamic<noob::armature> armatures;
 
 			noob::duration update_duration;
 			noob::duration draw_duration;
@@ -126,8 +163,5 @@ namespace noob
 			btCollisionDispatcher* collision_dispatcher;
 			btSequentialImpulseConstraintSolver* solver;
 			btDiscreteDynamicsWorld* dynamics_world;
-
-
-		
 		};
 }
