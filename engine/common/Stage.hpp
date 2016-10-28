@@ -61,7 +61,7 @@ namespace noob
 
 			noob::joint_handle joint(const noob::body_handle a, const noob::vec3& point_on_a, const noob::body_handle b, const noob::vec3& point_on_b) noexcept(true);
 			
-			void add_actor_blueprints(const noob::actor_blueprints&, uint32_t num) noexcept(true);
+			noob::actor_blueprints_handle add_actor_blueprints(const noob::actor_blueprints&) noexcept(true);
 
 			void reserve_actors(const noob::actor_blueprints_handle, uint32_t num) noexcept(true);
 

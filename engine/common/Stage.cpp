@@ -160,9 +160,15 @@ noob::joint_handle noob::stage::joint(const noob::body_handle a, const noob::vec
 	return h;
 }
 
-void noob::stage::add_actor_blueprints(const noob::actor_blueprints& bp_arg, uint32_t num) noexcept(true)
+noob::actor_blueprints_handle noob::stage::add_actor_blueprints(const noob::actor_blueprints& arg) noexcept(true)
 {
-
+	noob::stage::actor_info info;
+	info.bp = arg;
+	info.count = 0;
+	info.max = 0;
+	actor_factories.push_back(info);
+	
+	return noob::actor_blueprints_handle::make(actor_factories.size() - 1);
 }
 
 
