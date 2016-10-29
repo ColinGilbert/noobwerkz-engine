@@ -94,8 +94,6 @@ namespace noob
 
 			noob::stage stage;
 
-			noob::random_generator randomz;
-
 			std::string script_name;
 
 			// std::unique_ptr<std::string> prefix;

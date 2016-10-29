@@ -54,7 +54,7 @@ bool noob::application::user_init()
 
 	for (uint32_t i = 0; i < actor_count; ++i)
 	{	
-		ah = stage.actor(bph, 0, noob::vec3(noob::random::get() * stage_xz, noob::random::get() * stage_y, noob::random::get() * stage_xz), noob::normalize(noob::versor(noob::random::get(), noob::random::get(), noob::random::get(), noob::random::get()));
+		ah = stage.actor(bph, 0, noob::vec3(noob::random::get() * stage_xz, noob::random::get() * stage_y, noob::random::get() * stage_xz), noob::normalize(noob::versor(noob::random::get(), noob::random::get(), noob::random::get(), noob::random::get())));
 	}
 
 	// noob::scenery_handle scene_h = stage.scenery(g.box_shape(200.0, 10.0, 200.0), rh, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
