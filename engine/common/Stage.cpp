@@ -11,7 +11,7 @@ noob::stage::~stage() noexcept(true)
 }
 
 
-void noob::stage::init(float window_width, float window_height, const noob::mat4& view_mat, const noob::mat4& projection_mat) noexcept(true) 
+void noob::stage::init(uint32_t window_width, uint32_t window_height, const noob::mat4& view_mat, const noob::mat4& projection_mat) noexcept(true) 
 {
 	update_viewport_params(window_width, window_height, view_mat, projection_mat);
 
@@ -24,10 +24,10 @@ void noob::stage::init(float window_width, float window_height, const noob::mat4
 	// For the ghost object to work correctly, we need to add a callback to our world.
 	dynamics_world->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 
-	noob::light temp;
-	temp.rgb_falloff = noob::vec4(1.0, 1.0, 1.0, 0.6);
-	temp.pos_radius = noob::vec4(0.0, 450.0, 0.0, 500.0);
-	directional_light = temp;
+	main_light.colour = noob::vec4(1.0, 1.0, 1.0, 0.3);
+	main_light.direction = noob::vec4(-0.3333, -1.0, -0.3333, 1.0);
+
+	team_colours.push_back(noob::vec4(1.0, 1.0, 1.0, 1.0));
 
 	logger::log(noob::importance::INFO, "[Stage] Done init.");
 }
@@ -120,7 +120,7 @@ void noob::stage::draw() noexcept(true)
 }
 
 
-void noob::stage::update_viewport_params(float window_width, float window_height, const noob::mat4& view_mat, const noob::mat4& projection_mat) noexcept(true)
+void noob::stage::update_viewport_params(uint32_t window_width, uint32_t window_height, const noob::mat4& view_mat, const noob::mat4& projection_mat) noexcept(true)
 {
 	viewport_width = window_width;
 	viewport_height = viewport_height;

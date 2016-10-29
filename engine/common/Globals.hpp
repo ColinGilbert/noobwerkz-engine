@@ -120,6 +120,9 @@ namespace noob
 		// std::tuple<noob::model, bool, noob::vec3> model_from_mesh(const noob::basic_mesh&) noexcept(true);
 		// std::tuple<noob::graphics::model_instanced model_from_shape(const noob::shape_handle) noexcept(true);
 
+		noob::model_handle model_from_shape(noob::shape_handle, uint32_t) noexcept(true);
+
+
 		double get_random() noexcept(true);
 
 

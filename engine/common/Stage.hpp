@@ -31,12 +31,12 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.6, 0.6, 0.6, 3.0)) {}
+			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.6, 0.6, 0.6, 1.0)) {}
 
 			~stage() noexcept(true);
 
 			// This one must be called by the application.
-			void init(float window_width, float window_height, const noob::mat4& view_mat, const noob::mat4& projection_mat) noexcept(true);
+			void init(uint32_t window_width, uint32_t window_height, const noob::mat4& view_mat, const noob::mat4& projection_mat) noexcept(true);
 
 			// Brings everything back to scratch.
 			void tear_down() noexcept(true);
@@ -50,7 +50,7 @@ namespace noob
 
 			void draw() noexcept(true);
 
-			void update_viewport_params(float window_width, float window_height, const noob::mat4& view_mat, const noob::mat4& projection_mat) noexcept(true);
+			void update_viewport_params(uint32_t window_width, uint32_t window_height, const noob::mat4& view_mat, const noob::mat4& projection_mat) noexcept(true);
 
 			void build_navmesh() noexcept(true);
 
@@ -78,9 +78,9 @@ namespace noob
 
 			bool show_origin;
 
-			noob::vec4 ambient_light;
 			// TODO: Make more flexible.
-			noob::light directional_light;
+			noob::vec4 ambient_light;
+			noob::directional_light main_light;
 
 		protected:
 
@@ -91,7 +91,9 @@ namespace noob
 			// rde::slist<rde::vector<noob::vec3>> paths;
 
 			void remove_body(noob::body_handle) noexcept(true);
+
 			void remove_ghost(noob::ghost_handle) noexcept(true);
+			
 			// void remove_joint(noob::joint_handle) noexcept(true);
 
 			std::vector<noob::contact_point> get_intersecting(const noob::ghost_handle) const noexcept(true);
@@ -120,8 +122,6 @@ namespace noob
 				uint32_t count, max;
 			};
 
-
-
 			typedef noob::handle<drawable_info> drawable_info_handle;
 
 			void upload_colours(drawable_info_handle) const noexcept(true);
@@ -129,11 +129,6 @@ namespace noob
 			void upload_matrices(drawable_info_handle) const noexcept(true);
 
 			void reserve_models(noob::model_handle h, uint32_t num) noexcept(true);
-
-
-
-
-		
 
 			noob::mat4 view_matrix, projection_matrix;
 			uint32_t viewport_width, viewport_height;

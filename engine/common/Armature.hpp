@@ -4,13 +4,14 @@
 #include <noob/graph/graph.hpp>
 #include <noob/component/component.hpp>
 #include <rdestl/hash_map.h>
+
 #include "Model.hpp"
 #include "Shape.hpp"
 #include "MathFuncs.hpp"
 
 namespace noob
 {
-	// This represents a multipart model, with engouh information to set it up for both physics-driven and procedural animation.
+	// This represents a multipart model.
 	struct armature
 	{
 		// noob::digraph hierarchy;

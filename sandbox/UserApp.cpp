@@ -38,35 +38,28 @@ bool noob::application::user_init()
 	g.master_mixer.play_clip(h, 1.0);
 
 	const float actor_radius = 10.0;
-	noob::shape_handle sh = g.sphere_shape(actor_radius);
+	noob::shape_handle shp = g.sphere_shape(actor_radius);
 
+	const uint32_t actor_count = 1000;
+	const float stage_xz =  2000.0;
+	const float stage_y = 200.0;
+	
 	// TODO: Fixup
 	noob::actor_blueprints bp;
-	bp.bounds = sh;
+	bp.bounds = shp;
 	bp.reflect = rh;
-	// g.set_actor_blueprints(bp, "example-actor-bp");
-	// noob::actor_blueprints_handle bph = g.get_actor_blueprints("example-actor-bp");
-	
-	const uint32_t num_actors = 3000;
-	const float actor_height = 100.0;
-	const float actor_offset = 2.15;
+	bp.model = g.model_from_shape(shp, actor_count);
 
-	for (uint32_t i = 0; i < num_actors; ++i)
+	noob::actor_blueprints_handle bph = stage.add_actor_blueprints(bp);
+
+	for (uint32_t i = 0; i < actor_count; ++i)
 	{	
-		// ah = stage.actor(bph, 0, noob::vec3((actor_radius * 2.0 * i) + actor_offset, actor_height, (actor_radius * 2.0 * i) + actor_offset), noob::versor(0.0, 0.0, 0.0, 1.0));
+		ah = stage.actor(bph, 0, noob::vec3(noob::random::get() * stage_xz, noob::random::get() * stage_y, noob::random::get() * stage_xz), noob::normalize(noob::versor(noob::random::get(), noob::random::get(), noob::random::get(), noob::random::get()));
 	}
 
-
-	// noob::triplanar_gradient_map_renderer::uniform uu;
-	// g.set_shader(uu, "example-shader-two");
-	// noob::shader_variant example_shader_two = g.get_shader("example-shader-two");
-	
-
-
 	// noob::scenery_handle scene_h = stage.scenery(g.box_shape(200.0, 10.0, 200.0), rh, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
-	
 
-	eye_pos = noob::vec3(0.0, 200.0, -100.0);
+	eye_pos = noob::vec3(0.0, 250.0, -100.0);
 	eye_target = noob::vec3(0.0, 0.0, 0.0);
 	// keystrokes.push_back(std::make_tuple(noob::keyboard::keys::NUM_5, noob::keyboard::mod_keys::NONE, "switch view (currently does nothing)"));
 	logger::log(noob::importance::INFO, "[Application] Successfully done (C++) user init.");

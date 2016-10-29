@@ -41,11 +41,9 @@ bool noob::globals::init() noexcept(true)
 	// logger::log(noob::importance::INFO, "[Globals] Got default triplanar shader handle.");
 
 
-	noob::random_generator rng;
-
 	for (uint32_t i = 0; i < num_pseudo_randoms; ++i)
 	{
-		pseudo_randoms[i] = rng.get();
+		pseudo_randoms[i] = noob::random::get();
 	}
 
 	noob::logger::log(noob::importance::INFO, "[Globals] Init complete.");
@@ -67,6 +65,29 @@ std::tuple<noob::model_handle, noob::vec3> noob::globals::box_model(float x, flo
 	noob::model_handle temp = unit_cube_model;
 	noob::vec3 scales(x, y, z);
 	return std::make_tuple(temp, scales);
+}
+
+
+noob::model_handle noob::globals::model_from_shape(noob::shape_handle arg, uint32_t num) noexcept(true)
+{
+	noob::shape shp = shapes.get(arg);
+	
+	switch (shp.get_type())
+	{
+		case(noob::shape::type::SPHERE):
+		{
+			return unit_sphere_model;
+		}
+		case (noob::shape::type::BOX):
+		{
+			return unit_cube_model;
+		}
+		default:
+		{
+			noob::graphics& gfx = noob::graphics::get_instance();
+			return gfx.model_instanced(shp.get_mesh(), num);
+		}
+	}
 }
 
 /*
