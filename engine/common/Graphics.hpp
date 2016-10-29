@@ -72,7 +72,7 @@ namespace noob
 
 			void set_view_transform(const noob::mat4& view, const noob::mat4& proj) noexcept(true);
 
-			void draw(const noob::model&, uint32_t num) noexcept(true);
+			void draw(const noob::model_handle, uint32_t num) noexcept(true);
 
 			void frame(uint32_t width, uint32_t height) noexcept(true);
 

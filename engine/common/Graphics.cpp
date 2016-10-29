@@ -373,11 +373,12 @@ void noob::graphics::set_view_transform(const noob::mat4& view, const noob::mat4
 	proj_mat = proj;
 }
 
-void noob::graphics::draw(const noob::model& m, uint32_t num) noexcept(true)
+void noob::graphics::draw(const noob::model_handle handle, uint32_t num) noexcept(true)
 {
+	const noob::model m = models.get(handle);
 	glBindVertexArray(m.vao);	
 	glDrawElementsInstanced(GL_TRIANGLES, m.n_indices, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.n_instances, num));
-	glBindVertexArray(0);
+	// glBindVertexArray(0);
 }
 
 void noob::graphics::frame(uint32_t width, uint32_t height) noexcept(true)

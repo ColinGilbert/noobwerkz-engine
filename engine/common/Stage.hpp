@@ -48,7 +48,7 @@ namespace noob
 			// Draw() can also feasibly be called more than once per frame, especially after setting the viewport to a different FOV/LOD. The results can then be treated as a texture and displayed within a game, or on a HUD.
 			void update(double dt) noexcept(true);
 
-			void draw() const noexcept(true);
+			void draw() noexcept(true);
 
 			void update_viewport_params(float window_width, float window_height, const noob::mat4& view_mat, const noob::mat4& projection_mat) noexcept(true);
 
@@ -102,13 +102,13 @@ namespace noob
 	
 			struct drawable_instance
 			{
-				// For actor + pose, or any other representation needed
-				uint32_t index1, index2;
+				noob::actor_handle actor;
+				uint32_t part, pose;
 			};
 
 			struct drawable_info
 			{
-				noob::model_handle handle;
+				noob::model_handle model;
 				uint32_t count;
 				bool needs_colours;
 				std::vector<drawable_instance> instances;
@@ -124,9 +124,9 @@ namespace noob
 
 			typedef noob::handle<drawable_info> drawable_info_handle;
 
-			void upload_colours(drawable_info_handle, const std::vector<std::tuple<uint32_t, noob::vec4>>&) noexcept(true);
+			void upload_colours(drawable_info_handle) const noexcept(true);
 			
-			void upload_matrices(drawable_info_handle) noexcept(true);
+			void upload_matrices(drawable_info_handle) const noexcept(true);
 
 			void reserve_models(noob::model_handle h, uint32_t num) noexcept(true);
 

@@ -10,6 +10,7 @@ noob::stage::~stage() noexcept(true)
 	delete broadphase;
 }
 
+
 void noob::stage::init(float window_width, float window_height, const noob::mat4& view_mat, const noob::mat4& projection_mat) noexcept(true) 
 {
 	update_viewport_params(window_width, window_height, view_mat, projection_mat);
@@ -94,11 +95,28 @@ void noob::stage::update(double dt) noexcept(true)
 }
 
 
-void noob::stage::draw() const noexcept(true) 
+void noob::stage::draw() noexcept(true) 
 {
 	// PROFILE_FUNC();
 
+	noob::graphics& gfx = noob::graphics::get_instance();
+	const uint32_t drawables_count = noob::stage::drawables.size();
+	for (uint32_t drawables_index = 0; drawables_index < drawables_count; ++drawables_index)
+	{
+		const noob::stage::drawable_info_handle handle = noob::stage::drawable_info_handle::make(drawables_index);
 
+		if (drawables[drawables_index].needs_colours)
+		{
+			upload_colours(handle);
+			drawables[drawables_index].needs_colours = false;
+		}
+
+		upload_matrices(handle);
+
+		const noob::model_handle mod = drawables[drawables_index].model;
+		const uint32_t instance_count = drawables[drawables_index].count;
+		gfx.draw(mod, instance_count);
+	}
 }
 
 
@@ -113,6 +131,7 @@ void noob::stage::update_viewport_params(float window_width, float window_height
 
 void noob::stage::build_navmesh() noexcept(true)
 {
+
 }
 
 
@@ -160,6 +179,7 @@ noob::joint_handle noob::stage::joint(const noob::body_handle a, const noob::vec
 	return h;
 }
 
+
 noob::actor_blueprints_handle noob::stage::add_actor_blueprints(const noob::actor_blueprints& arg) noexcept(true)
 {
 	noob::stage::actor_info info;
@@ -167,7 +187,7 @@ noob::actor_blueprints_handle noob::stage::add_actor_blueprints(const noob::acto
 	info.count = 0;
 	info.max = 0;
 	actor_factories.push_back(info);
-	
+
 	return noob::actor_blueprints_handle::make(actor_factories.size() - 1);
 }
 
@@ -204,7 +224,7 @@ noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32
 			const uint32_t index = results->value;
 			const uint32_t old_count = drawables[index].count;
 			drawables[index].count++;
-			drawables[index].instances[old_count].index1 = a.ghost.index();
+			drawables[index].instances[old_count].actor = a_h;
 
 			// Setting index-to-self info:
 			noob::ghost temp_ghost = ghosts.get(a.ghost);
@@ -213,7 +233,7 @@ noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32
 			temp_ghost.inner->setUserIndex_2(a_h.index());
 
 			actor_factories[bp_h.index()].count++;
-			
+
 			return a_h;
 		}
 		else
@@ -254,6 +274,7 @@ noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32
    return scenery_h;
    }
    */
+
 
 std::vector<noob::contact_point> noob::stage::get_intersecting(const noob::ghost_handle ghost_h) const noexcept(true) 
 {
@@ -378,51 +399,59 @@ void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 }
 
 
-void noob::stage::upload_colours(drawable_info_handle index_arg, const std::vector<std::tuple<uint32_t, noob::vec4>>& colours_arg) noexcept(true)
+void noob::stage::upload_colours(drawable_info_handle arg) const noexcept(true)
 {
-	const noob::stage::drawable_info info = drawables[index_arg.index()];
+	const uint32_t count = drawables[arg.index()].count;
+	
+	const uint32_t theoretical_max = drawables[arg.index()].instances.size();
+	assert(count <= theoretical_max);
+
+	const noob::model_handle model_h = drawables[arg.index()].model;
 
 	noob::graphics& gfx = noob::graphics::get_instance();
 
-	noob::gpu_write_buffer buf = gfx.map_buffer(info.handle, noob::model::instanced_data_type::COLOUR);
+	noob::gpu_write_buffer buf = gfx.map_buffer(model_h, noob::model::instanced_data_type::COLOUR);
 
 	if (buf.valid() == false)
 	{
-		logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced colour buffer for model ", noob::to_string(index_arg.index())));	
+		logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced colour buffer for model ", noob::to_string(arg.index())));	
 		return;
 	}
 
-	for (std::tuple<uint32_t, noob::vec4> c : colours_arg)
+	uint32_t current = 0;
+	while (current < count)
 	{
-		uint32_t current = 0;
+		const noob::actor_handle a_h = drawables[arg.index()].instances[current].actor;
+		const noob::actor a = actors.get(a_h);
+		const noob::vec4 colour = team_colours[a.team];
+		const bool valid = buf.push_back(colour);
 
-		while (current < std::get<0>(c))
+		if (!valid)
 		{
-			bool valid = buf.push_back(std::get<1>(c));
-			++current;
-			if (!valid)
-			{
-				logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu colours buffer for model ", noob::to_string(index_arg.index())));
-				gfx.unmap_buffer();
-
-				return;
-			}
+			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu colours buffer for model ", noob::to_string(arg.index())));
+			gfx.unmap_buffer();			
+			return;
 		}
-	}
-	gfx.unmap_buffer();
 
+		++current;
+	}
+
+	gfx.unmap_buffer();
 }
 
 
-void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
+void noob::stage::upload_matrices(drawable_info_handle arg) const noexcept(true)
 {
-	const noob::stage::drawable_info master_info = drawables[arg.index()];
+	const uint32_t count = drawables[arg.index()].count;
 
-	assert(master_info.count <= master_info.instances.size());
+	const uint32_t theoretical_max = drawables[arg.index()].instances.size();
+	assert(count <= theoretical_max);
+	
+	const noob::model_handle model_h = drawables[arg.index()].model;
 
 	noob::graphics& gfx = noob::graphics::get_instance();
 
-	noob::gpu_write_buffer buf = gfx.map_buffer(master_info.handle, noob::model::instanced_data_type::MATRICES);
+	noob::gpu_write_buffer buf = gfx.map_buffer(model_h, noob::model::instanced_data_type::MATRICES);
 
 	if (buf.valid() == false)
 	{
@@ -430,13 +459,13 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 		return;
 	}
 
-	uint32_t current = 0;
 	const noob::mat4 viewproj_mat = projection_matrix * view_matrix;
-
-	while (current < master_info.count)
+	
+	uint32_t current = 0;
+	while (current < count)
 	{
-		const noob::stage::drawable_instance info = master_info.instances[current];
-		const noob::actor a = actors.get(noob::actor_handle::make(info.index1));
+		const noob::stage::drawable_instance info = drawables[arg.index()].instances[current];
+		const noob::actor a = actors.get(info.actor);
 		const noob::ghost gst = ghosts.get(a.ghost);
 		const noob::mat4 model_mat = gst.get_transform();
 		const noob::mat4 mvp_mat =  viewproj_mat * model_mat;
@@ -466,6 +495,7 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 	gfx.unmap_buffer();
 }
 
+
 void noob::stage::reserve_models(noob::model_handle h, uint32_t num) noexcept(true)
 {
 	noob::fast_hashtable::cell* results = models_to_instances.lookup(h.index());
@@ -476,16 +506,16 @@ void noob::stage::reserve_models(noob::model_handle h, uint32_t num) noexcept(tr
 		results = models_to_instances.insert(h.index());
 
 		noob::stage::drawable_info info;
-		info.handle = h;
+		info.model = h;
 		info.count = 0;
 		info.needs_colours = true;
 		drawables.push_back(info);
 
-		const uint32_t index  = drawables.size() - 1;
+		const uint32_t results_index  = drawables.size() - 1;
 
-		drawables[index].instances.resize(num);
+		drawables[results_index].instances.resize(num);
 
-		results->value = index;
+		results->value = results_index;
 
 		noob::graphics& gfx = noob::graphics::get_instance();
 		gfx.reset_instances(h, num);
