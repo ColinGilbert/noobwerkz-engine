@@ -13,6 +13,32 @@
 
 noob::graphics* noob::graphics::ptr_to_instance;
 
+
+GLenum check_error_gl(const char *file, int line)
+{
+	GLenum error_code;
+	while ((error_code = glGetError()) != GL_NO_ERROR)
+	{
+		std::string error;
+		switch (error_code)
+		{
+			case GL_INVALID_ENUM:                  error = "INVALID_ENUM"; break;
+			case GL_INVALID_VALUE:                 error = "INVALID_VALUE"; break;
+			case GL_INVALID_OPERATION:             error = "INVALID_OPERATION"; break;
+							       // case GL_STACK_OVERFLOW:                error = "STACK_OVERFLOW"; break;
+							       // case GL_STACK_UNDERFLOW:               error = "STACK_UNDERFLOW"; break;
+			case GL_OUT_OF_MEMORY:                 error = "OUT_OF_MEMORY"; break;
+			case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
+		}
+		// std::cout << error << " | " << file << " (" << line << ")" << std::endl;
+		noob::logger::log(noob::importance::ERROR, noob::concat("OpenGL: ", error, file, " (", noob::to_string(line), ")"));
+	}
+	return error_code;
+}
+
+#define check_error_gl() check_error_gl(__FILE__, __LINE__) 
+
+
 GLuint load_shader_gl(GLenum type, const std::string& shader_arg)
 {
 	GLuint shader;
@@ -68,7 +94,6 @@ GLuint load_program_gl(const std::string& vert_shader_arg, const std::string fra
 
 	// Just to make sure no dirty state gets to ruin our shader compile. :)
 	glBindVertexArray(0);
-
 
 	const char* vert_shader_src = vert_shader_arg.c_str();
 	// Load the vertex/fragment shaders
@@ -135,12 +160,11 @@ GLuint load_program_gl(const std::string& vert_shader_arg, const std::string fra
 void noob::graphics::init(uint32_t width, uint32_t height) noexcept(true)
 {
 
-	uint32_t temp = load_program_gl(noob::glsl::vs_instancing_src, noob::glsl::fs_instancing_src);
+	instanced_shader = noob::graphics::program_handle::make(load_program_gl(noob::glsl::vs_instancing_src, noob::glsl::fs_instancing_src));
 
-	glClearColor(0.2f, 0.0f, 0.2f, 0.0f);
-	glEnable (GL_DEPTH_TEST); // enable depth-testing
-	glDepthFunc (GL_LESS); // depth-testing interprets a
 
+
+	frame(width, height);
 
 	noob::logger::log(noob::importance::INFO, "[Graphics] Done init.");
 }
@@ -187,7 +211,7 @@ return noob::model_handle::make(vao_id);
 */
 
 
-void noob::graphics::set_program(noob::graphics::program_handle arg) noexcept(true)
+void noob::graphics::use_program(noob::graphics::program_handle arg) noexcept(true)
 {
 	glUseProgram(arg.index());
 }
@@ -328,6 +352,8 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 
 	glBindVertexArray(0);
 
+	check_error_gl();
+
 	noob::model_handle h = models.add(result);
 
 	return h;
@@ -345,6 +371,8 @@ void noob::graphics::reset_instances(noob::model_handle h, uint32_t num_instance
 	// Setup matrices VBO:
 	glBindBuffer(GL_ARRAY_BUFFER, m.instanced_matrices_vbo);
 	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
+
+	check_error_gl();
 
 	models.set(h, m);
 }
@@ -376,8 +404,10 @@ void noob::graphics::set_view_transform(const noob::mat4& view, const noob::mat4
 void noob::graphics::draw(const noob::model_handle handle, uint32_t num) noexcept(true)
 {
 	const noob::model m = models.get(handle);
-	glBindVertexArray(m.vao);	
+	glBindVertexArray(m.vao);
 	glDrawElementsInstanced(GL_TRIANGLES, m.n_indices, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.n_instances, num));
+
+	check_error_gl();
 	// glBindVertexArray(0);
 }
 
@@ -391,11 +421,10 @@ void noob::graphics::frame(uint32_t width, uint32_t height) noexcept(true)
 	glDepthFunc(GL_LESS);
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
+
+	glClearColor(0.2f, 0.0f, 0.2f, 0.0f);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-
-
 }
 
 noob::gpu_write_buffer noob::graphics::map_buffer(noob::model_handle h, noob::model::instanced_data_type t) noexcept(true)
@@ -417,12 +446,15 @@ noob::gpu_write_buffer noob::graphics::map_buffer(noob::model_handle h, noob::mo
 			{
 				stride_in_bytes = noob::model::materials_stride;
 				glBindBuffer(GL_ARRAY_BUFFER, m.instanced_colour_vbo);
+				check_error_gl();
 				break;
 			}
 		case (noob::model::instanced_data_type::MATRICES):
 			{
 				stride_in_bytes = noob::model::matrices_stride;
 				glBindBuffer(GL_ARRAY_BUFFER, m.instanced_matrices_vbo);
+				check_error_gl();
+
 				break;
 			}
 	}
@@ -430,6 +462,8 @@ noob::gpu_write_buffer noob::graphics::map_buffer(noob::model_handle h, noob::mo
 	const uint32_t total_size = stride_in_bytes * m.n_instances;
 
 	uint8_t* ptr = reinterpret_cast<uint8_t*>(glMapBufferRange(GL_ARRAY_BUFFER, 0, total_size, GL_MAP_WRITE_BIT));
+
+	check_error_gl();
 
 	if (ptr != nullptr)
 	{
@@ -439,9 +473,14 @@ noob::gpu_write_buffer noob::graphics::map_buffer(noob::model_handle h, noob::mo
 	{
 		return noob::gpu_write_buffer::make_invalid();	
 	}
+
+
 }
 
 void noob::graphics::unmap_buffer() noexcept(true)
 {
-	glUnmapBuffer(GL_ARRAY_BUFFER);	
+	glUnmapBuffer(GL_ARRAY_BUFFER);
+
+	check_error_gl();
+
 }

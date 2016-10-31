@@ -72,7 +72,7 @@ noob::model_handle noob::globals::model_from_shape(noob::shape_handle arg, uint3
 {
 	noob::shape shp = shapes.get(arg);
 	
-	switch (shp.get_type())
+	/*switch (shp.get_type())
 	{
 		case(noob::shape::type::SPHERE):
 		{
@@ -84,10 +84,11 @@ noob::model_handle noob::globals::model_from_shape(noob::shape_handle arg, uint3
 		}
 		default:
 		{
-			noob::graphics& gfx = noob::graphics::get_instance();
+	*/		noob::graphics& gfx = noob::graphics::get_instance();
 			return gfx.model_instanced(shp.get_mesh(), num);
+		/*
 		}
-	}
+	}*/
 }
 
 /*

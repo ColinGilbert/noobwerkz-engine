@@ -82,6 +82,8 @@ namespace noob
 			noob::vec4 ambient_light;
 			noob::directional_light main_light;
 
+			std::string print_drawables_info() const noexcept(true);
+
 		protected:
 
 			static constexpr auto dbg_name = "Stage";

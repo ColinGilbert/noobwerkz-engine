@@ -56,8 +56,8 @@ namespace noob
 			// TODO: Reimplement
 			bool eval(const std::string& name, const std::string& string_to_eval, bool reset = false);
 
-			uint32_t get_height() const { return static_cast<uint32_t>(window_height); }
-			uint32_t get_width() const { return static_cast<uint32_t>(window_width); }
+			uint32_t get_height() const { return window_height; }
+			uint32_t get_width() const { return window_width; }
 
 			// void accept_ndof_data(const noob::ndof::data& info);
 

@@ -57,7 +57,7 @@ namespace noob
 
 			void destroy() noexcept(true);
 
-			void set_program(noob::graphics::program_handle) noexcept(true);
+			void use_program(noob::graphics::program_handle) noexcept(true);
 			// noob::model_handle model(noob::model::geom_type geom, const noob::basic_mesh&) noexcept(true);
 
 			noob::model_handle model_instanced(const noob::basic_mesh&, uint32_t num_instances) noexcept(true);
@@ -81,10 +81,15 @@ namespace noob
 			// NOTE: MUST be called as soon as you're finished using the buffer!
 			void unmap_buffer() noexcept(true);
 
+			noob::graphics::program_handle get_default_instanced() const noexcept(true) { return instanced_shader; }
+
 		protected:
 
 			noob::component<noob::model> models;
 			noob::component<noob::texture> textures;
+
+
+			noob::graphics::program_handle instanced_shader;
 
 			noob::mat4 view_mat, proj_mat;
 	};

@@ -17,16 +17,19 @@ namespace noob
 
 		bool valid() const noexcept(true)
 		{
-			return size > 0;
+			return raw_buf != nullptr;
 		}
 
-		bool push_back(const noob::vec4& arg) noexcept(true)
+		bool push_back(const noob::vec4 arg) noexcept(true)
 		{
-			if ((current + sizeof(arg)) <= size)
+			if (current < size)
 			{
-				noob::vec4* ptr = reinterpret_cast<noob::vec4*>(raw_buf[current]);
-				*ptr = arg;
-				current += sizeof(arg);
+				float* ptr = reinterpret_cast<float*>(raw_buf);
+				for (float f : arg.v)
+				{
+					ptr[current] = f;
+					current += sizeof(float);
+				}
 				return true;
 			}
 			else
@@ -35,13 +38,16 @@ namespace noob
 			}
 		}
 
-		bool push_back(const noob::mat4& arg) noexcept(true)
+		bool push_back(const noob::mat4 arg) noexcept(true)
 		{
-			if ((current + sizeof(arg)) <= size)
+			if (current < size)
 			{
-				noob::mat4* ptr = reinterpret_cast<noob::mat4*>(raw_buf[current]);
-				*ptr = arg;
-				current += sizeof(arg);
+				float* ptr = reinterpret_cast<float*>(raw_buf);
+				for (float f : arg.m)
+				{
+					ptr[current] = f;
+					current += sizeof(float);
+				}
 				return true;
 			}
 			else

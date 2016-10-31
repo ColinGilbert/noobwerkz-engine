@@ -31,7 +31,7 @@ namespace noob
 				"layout (location = 0) out vec4 out_colour;     \n"
 				"void main()                                    \n"
 				"{                                              \n"
-				"  out_colour = v_colour;                       \n"
+				"  out_colour = vec4(0.0, 1.0, 1.0, 1.0);       \n"
 				"}                                              \n");
 
 		static std::string vs_texture_2d_src(

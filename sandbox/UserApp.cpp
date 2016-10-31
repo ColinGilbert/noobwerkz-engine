@@ -12,6 +12,16 @@ noob::actor_handle ah;
 
 std::string test_message;
 
+noob::vec3 random_vec3(float x, float y, float z)
+{
+	return noob::vec3(noob::random::get() * x, noob::random::get() * y, noob::random::get() * z);
+}
+
+noob::versor random_versor()
+{
+	return noob::normalize(noob::versor(noob::random::get(), noob::random::get(), noob::random::get(), noob::random::get()));
+}
+
 bool noob::application::user_init()
 {
 	test_message = "Howdy hey!";
@@ -37,12 +47,12 @@ bool noob::application::user_init()
 
 	g.master_mixer.play_clip(h, 1.0);
 
-	const float actor_radius = 10.0;
-	noob::shape_handle shp = g.sphere_shape(actor_radius);
+	const float actor_radius = 20.0;
+	noob::shape_handle shp = g.box_shape(actor_radius, actor_radius, actor_radius);
 
 	const uint32_t actor_count = 1000;
-	const float stage_xz =  2000.0;
-	const float stage_y = 200.0;
+	const float stage_xz =  500.0;
+	const float stage_y = 100.0;
 	
 	// TODO: Fixup
 	noob::actor_blueprints bp;
@@ -51,16 +61,14 @@ bool noob::application::user_init()
 	bp.model = g.model_from_shape(shp, actor_count);
 
 	noob::actor_blueprints_handle bph = stage.add_actor_blueprints(bp);
-
+	
+	stage.reserve_actors(bph, actor_count);
 	for (uint32_t i = 0; i < actor_count; ++i)
 	{	
-		ah = stage.actor(bph, 0, noob::vec3(noob::random::get() * stage_xz, noob::random::get() * stage_y, noob::random::get() * stage_xz), noob::normalize(noob::versor(noob::random::get(), noob::random::get(), noob::random::get(), noob::random::get())));
+		ah = stage.actor(bph, 0, noob::vec3(static_cast<float>(i) + actor_radius + 1.5, 0.0, static_cast<float>(i) + actor_radius + 1.5), noob::versor(0.0, 0.0, 0.0, 1.0));//random_versor());
 	}
-
-	// noob::scenery_handle scene_h = stage.scenery(g.box_shape(200.0, 10.0, 200.0), rh, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
-
-	eye_pos = noob::vec3(0.0, 250.0, -100.0);
-	eye_target = noob::vec3(0.0, 0.0, 0.0);
+		// ah = stage.actor(bph, 0, noob::vec3(0.0, 1.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));//random_versor());
+	
 	// keystrokes.push_back(std::make_tuple(noob::keyboard::keys::NUM_5, noob::keyboard::mod_keys::NONE, "switch view (currently does nothing)"));
 	logger::log(noob::importance::INFO, "[Application] Successfully done (C++) user init.");
 	return true;

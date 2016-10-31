@@ -22,6 +22,7 @@ void noob::stage::init(uint32_t window_width, uint32_t window_height, const noob
 	dynamics_world = new btDiscreteDynamicsWorld(collision_dispatcher, broadphase, solver, collision_configuration);
 	dynamics_world->setGravity(btVector3(0, -10, 0));
 	// For the ghost object to work correctly, we need to add a callback to our world.
+
 	dynamics_world->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 
 	main_light.colour = noob::vec4(1.0, 1.0, 1.0, 0.3);
@@ -82,7 +83,7 @@ void noob::stage::update(double dt) noexcept(true)
 	// nav_changed = false;
 	//}
 
-	dynamics_world->stepSimulation(1.0/60.0, 10);
+	// dynamics_world->stepSimulation(1.0/60.0, 10);
 
 	// update_particle_systems();
 	update_actors();
@@ -100,11 +101,13 @@ void noob::stage::draw() noexcept(true)
 	// PROFILE_FUNC();
 
 	noob::graphics& gfx = noob::graphics::get_instance();
-	const uint32_t drawables_count = noob::stage::drawables.size();
-	for (uint32_t drawables_index = 0; drawables_index < drawables_count; ++drawables_index)
-	{
-		const noob::stage::drawable_info_handle handle = noob::stage::drawable_info_handle::make(drawables_index);
+	gfx.set_view_transform(view_matrix, projection_matrix);
 
+	for (uint32_t drawables_index = 0; drawables_index < drawables.size(); ++drawables_index)
+	{
+
+		const noob::stage::drawable_info_handle handle = noob::stage::drawable_info_handle::make(drawables_index);
+		// const uint32_t drawables_count = noob::stage::drawables.count;
 		if (drawables[drawables_index].needs_colours)
 		{
 			upload_colours(handle);
@@ -113,9 +116,16 @@ void noob::stage::draw() noexcept(true)
 
 		upload_matrices(handle);
 
-		const noob::model_handle mod = drawables[drawables_index].model;
+		// const noob::stage::drawable_info_handle handle = noob::stage::drawable_info_handle::make(drawables_index);
+		const noob::model_handle modl = drawables[drawables_index].model;
 		const uint32_t instance_count = drawables[drawables_index].count;
-		gfx.draw(mod, instance_count);
+
+		// noob::logger::log(noob::importance::INFO, noob::concat("Drawing model ", noob::to_string(modl.index()), " ", noob::to_string(instance_count), " times"));
+
+		noob::graphics::program_handle prog = gfx.get_default_instanced();
+		gfx.use_program(prog);
+
+		gfx.draw(modl, instance_count);
 	}
 }
 
@@ -143,7 +153,6 @@ noob::body_handle noob::stage::body(const noob::body_type b_type, const noob::sh
 	b.init(dynamics_world, b_type, g.shapes.get(shape_h), mass, pos, orient, ccd);	
 
 	body_handle bod_h = bodies.add(b);
-	// noob::body* b_ptr = std::get<1>(bodies.get_ptr_mutable(bod_h));
 
 	return bod_h;
 }
@@ -218,11 +227,15 @@ noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32
 			a.team = team;
 			a.ghost = ghost(info.bp.bounds, pos, orient);
 			a.bp_handle = bp_h;
-			noob::actor_handle a_h = actors.add(a);
+			a.position = pos;
+			a.orientation = orient;
+			const noob::actor_handle a_h = actors.add(a);
 
 			noob::fast_hashtable::cell* results = models_to_instances.lookup(info.bp.model.index());
+
 			const uint32_t index = results->value;
 			const uint32_t old_count = drawables[index].count;
+
 			drawables[index].count++;
 			drawables[index].instances[old_count].actor = a_h;
 
@@ -402,7 +415,7 @@ void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 void noob::stage::upload_colours(drawable_info_handle arg) const noexcept(true)
 {
 	const uint32_t count = drawables[arg.index()].count;
-	
+
 	const uint32_t theoretical_max = drawables[arg.index()].instances.size();
 	assert(count <= theoretical_max);
 
@@ -435,6 +448,8 @@ void noob::stage::upload_colours(drawable_info_handle arg) const noexcept(true)
 
 		++current;
 	}
+	
+	// logger::log(noob::importance::INFO, noob::concat("[Stage] ", noob::to_string(current), " colours uploaded"));
 
 	gfx.unmap_buffer();
 }
@@ -446,7 +461,7 @@ void noob::stage::upload_matrices(drawable_info_handle arg) const noexcept(true)
 
 	const uint32_t theoretical_max = drawables[arg.index()].instances.size();
 	assert(count <= theoretical_max);
-	
+
 	const noob::model_handle model_h = drawables[arg.index()].model;
 
 	noob::graphics& gfx = noob::graphics::get_instance();
@@ -460,14 +475,15 @@ void noob::stage::upload_matrices(drawable_info_handle arg) const noexcept(true)
 	}
 
 	const noob::mat4 viewproj_mat = projection_matrix * view_matrix;
-	
+
 	uint32_t current = 0;
 	while (current < count)
 	{
 		const noob::stage::drawable_instance info = drawables[arg.index()].instances[current];
 		const noob::actor a = actors.get(info.actor);
-		const noob::ghost gst = ghosts.get(a.ghost);
-		const noob::mat4 model_mat = gst.get_transform();
+		// const noob::ghost gst = ghosts.get(a.ghost);
+		// const noob::mat4 model_mat = gst.get_transform();
+		const noob::mat4 model_mat = noob::translate(noob::rotate(noob::identity_mat4(), a.orientation), a.position);
 		const noob::mat4 mvp_mat =  viewproj_mat * model_mat;
 		const noob::mat4 normal_mat = noob::transpose(noob::inverse((model_mat * view_matrix)));
 
@@ -491,6 +507,8 @@ void noob::stage::upload_matrices(drawable_info_handle arg) const noexcept(true)
 
 		++current;
 	}
+	
+	// logger::log(noob::importance::INFO, noob::concat("[Stage] ", noob::to_string(current), "*2 matrices uploaded"));
 
 	gfx.unmap_buffer();
 }
@@ -509,6 +527,7 @@ void noob::stage::reserve_models(noob::model_handle h, uint32_t num) noexcept(tr
 		info.model = h;
 		info.count = 0;
 		info.needs_colours = true;
+
 		drawables.push_back(info);
 
 		const uint32_t results_index  = drawables.size() - 1;
@@ -533,3 +552,10 @@ void noob::stage::reserve_models(noob::model_handle h, uint32_t num) noexcept(tr
 		gfx.reset_instances(h, num);
 	}
 }
+
+/*
+std::string noob::stage::print_drawables_info() const noexcept(true)
+{
+	
+}
+*/
