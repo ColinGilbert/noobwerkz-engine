@@ -17,7 +17,7 @@ namespace noob
 				"layout(location = 1) out vec4 v_normal;             \n"
 				"void main()                                         \n"
 				"{                                                   \n"
-				"   v_colour = a_vertex_colour * a_instance_colour;  \n"
+				"   v_colour = a_vertex_colour; \n"// * a_instance_colour;  \n"
 				"   v_normal = a_normal_mat * a_normal;              \n"				
 				"   gl_Position = a_mvp * a_pos;                     \n"
 				"}                                                   \n");

@@ -48,7 +48,7 @@ bool noob::application::user_init()
 	g.master_mixer.play_clip(h, 1.0);
 
 	const float actor_dims = 1.0;
-	noob::shape_handle shp = g.box_shape(actor_dims, actor_dims, actor_dims);//, actor_radius, actor_radius);
+	noob::shape_handle shp = g.sphere_shape(actor_dims);
 
 	const uint32_t actor_count = 1;
 
