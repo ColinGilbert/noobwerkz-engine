@@ -16,7 +16,7 @@ void noob::application::init(uint32_t width, uint32_t height)
 
 	started = paused = input_has_started = false;
 
-	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
+	finger_positions = { noob::vec2(0.0, 0.0), noob::vec2(0.0, 0.0), noob::vec2(0.0, 0.0), noob::vec2(0.0, 0.0) };
 
 	//	prefix = std::unique_ptr<std::string>(new std::string("./"));
 
@@ -27,19 +27,14 @@ void noob::application::init(uint32_t width, uint32_t height)
 	ui_enabled = true;
 	gui.init("", window_width, window_height);
 
-	eye_pos = noob::vec3(0.0, 10.0, -150.0);
-	eye_target = noob::vec3(0.0, 0.0, 0.0);
-	eye_up = noob::vec3(0.0, 1.0, 0.0);
 
 	noob::globals& g = noob::globals::get_instance();
 	bool are_globals_initialized = g.init();
 	assert(are_globals_initialized && "Globals not initialized!");
 
-	noob::mat4 view_mat = noob::look_at(eye_pos, eye_target, eye_up);
-	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0, 2000.0);
+	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0, 1000.0);
 
-	stage.init(window_width, window_height, view_mat, proj_mat);
-	gfx.set_view_transform(view_mat, proj_mat);
+	stage.init(window_width, window_height, proj_mat);
 	logger::log(noob::importance::INFO, "[Application] Done basic init.");
 
 	bool b = user_init();
@@ -101,23 +96,13 @@ void noob::application::draw()
 	g.profile_run.stage_draw_duration += draw_duration;
 }
 
-/*
-   void noob::application::accept_ndof_data(const noob::ndof::data& info)
-   {
-   if (info.movement == true)
-   {
-// logger::log(fmt::format("[Sandbox] NDOF data: T({0}, {1}, {2}) R({3}, {4}, {5})", info.translation[0], info.translation[1], info.translation[2], info.rotation[0], info.rotation[1], info.rotation[2]));
-// float damping = 360.0;
-// noob::vec3 rotation(info.rotation);
-// noob::vec3 translation(info.translation);
-// view_mat = noob::rotate_x_deg(stage.view_mat, -rotation[0]/damping);
-// view_mat = noob::rotate_y_deg(stage.view_mat, -rotation[1]/damping);
-// view_mat = noob::rotate_z_deg(stage.view_mat, -rotation[2]/damping);
-// view_mat = noob::translate(stage.view_mat, noob::vec3(-translation[0]/damping, -translation[1]/damping, -translation[2]/damping));
-// stage.eye_pos = stage.eye_pos - translation;//translation);
+
+void noob::application::accept_ndof_data(const noob::ndof::data& info) noexcept(true)
+{
+
+   	stage.accept_ndof_data(info);
 }
-}
-*/
+
 
 // TODO: Refactor
 void noob::application::step()
@@ -190,10 +175,10 @@ void noob::application::window_resize(uint32_t w, uint32_t h)
 		window_height = 1;
 	}
 
-	noob::mat4 view_mat = noob::look_at(eye_pos, eye_target, eye_up);
-	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0, 1000.0);
+	// noob::mat4 view_mat = noob::look_at(eye_pos, eye_target, eye_up);
+	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0 , 1000.0);
 
-	stage.update_viewport_params(window_width, window_height, view_mat, proj_mat);
+	stage.update_viewport_params(window_width, window_height, proj_mat);
 
 	
 	logger::log(noob::importance::INFO, noob::concat("[Application] Resize window to (", noob::to_string(window_width), ", ", noob::to_string(window_height), ")"));

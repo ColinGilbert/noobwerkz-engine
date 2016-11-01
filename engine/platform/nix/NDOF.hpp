@@ -1,4 +1,5 @@
 #pragma once
+
 #include "MathFuncs.hpp"
 #include "NoobUtils.hpp"
 
@@ -25,7 +26,7 @@ namespace noob
 				noob::ndof::button_state state;
 			};
 
-			bool init();
+			// bool init();
 			void run();
 			noob::ndof::data get_data();
 			//std::vector<size_t> get_button_presses();

@@ -28,10 +28,10 @@ namespace noob
 				"precision mediump float;                       \n"
 				"layout(location = 0) in vec4 v_colour;         \n"				
 				"layout(location = 1) in vec4 v_normal;         \n"
-				"layout (location = 0) out vec4 out_colour;     \n"
+				"layout(location = 0) out vec4 out_colour;      \n"
 				"void main()                                    \n"
 				"{                                              \n"
-				"  out_colour = vec4(0.0, 1.0, 1.0, 1.0);       \n"
+				"  out_colour = v_colour;                       \n"
 				"}                                              \n");
 
 		static std::string vs_texture_2d_src(

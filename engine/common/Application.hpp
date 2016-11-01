@@ -15,7 +15,7 @@
 #include "GUI.hpp"
 #include "BasicMesh.hpp"
 #include "Camera.hpp"
-//#include "NDOF.hpp"
+#include "NDOF.hpp"
 #include "Stage.hpp"
 #include "Keys.hpp"
 #include "FileSystem.hpp"
@@ -59,7 +59,7 @@ namespace noob
 			uint32_t get_height() const { return window_height; }
 			uint32_t get_width() const { return window_width; }
 
-			// void accept_ndof_data(const noob::ndof::data& info);
+			void accept_ndof_data(const noob::ndof::data& info) noexcept(true);
 
 			// step() is called by the target platform. It calculates the delta-time and drives the app's main logic loop.
 			void step();
@@ -88,7 +88,7 @@ namespace noob
 
 			noob::gui gui;
 
-			noob::vec3 eye_pos, eye_target, eye_up;
+			// noob::vec3 eye_pos, eye_target, eye_up;
 
 			std::vector<noob::vec2> finger_positions;
 

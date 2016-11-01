@@ -47,13 +47,11 @@ bool noob::application::user_init()
 
 	g.master_mixer.play_clip(h, 1.0);
 
-	const float actor_radius = 20.0;
-	noob::shape_handle shp = g.box_shape(actor_radius, actor_radius, actor_radius);
+	const float actor_dims = 1.0;
+	noob::shape_handle shp = g.box_shape(actor_dims, actor_dims, actor_dims);//, actor_radius, actor_radius);
 
-	const uint32_t actor_count = 1000;
-	const float stage_xz =  500.0;
-	const float stage_y = 100.0;
-	
+	const uint32_t actor_count = 1;
+
 	// TODO: Fixup
 	noob::actor_blueprints bp;
 	bp.bounds = shp;
@@ -65,9 +63,9 @@ bool noob::application::user_init()
 	stage.reserve_actors(bph, actor_count);
 	for (uint32_t i = 0; i < actor_count; ++i)
 	{	
-		ah = stage.actor(bph, 0, noob::vec3(static_cast<float>(i) + actor_radius + 1.5, 0.0, static_cast<float>(i) + actor_radius + 1.5), noob::versor(0.0, 0.0, 0.0, 1.0));//random_versor());
+	//	ah = stage.actor(bph, 0,  noob::vec3(static_cast<float>(i)*actor_dims+10.0, 0.0, 1.0)/* static_cast<float>(i*2.5+10.0) + (actor_radius * 4.5)*/, noob::versor(0.0, 0.0, 0.0, 1.0));//random_versor());
 	}
-		// ah = stage.actor(bph, 0, noob::vec3(0.0, 1.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));//random_versor());
+		ah = stage.actor(bph, 0, noob::vec3(0.0, 0.0, 0.0), noob::quat_from_axis_deg(1.0, 0.0, 0.0, 0.0));//random_versor());
 	
 	// keystrokes.push_back(std::make_tuple(noob::keyboard::keys::NUM_5, noob::keyboard::mod_keys::NONE, "switch view (currently does nothing)"));
 	logger::log(noob::importance::INFO, "[Application] Successfully done (C++) user init.");

@@ -1,10 +1,10 @@
 #include "Graphics.hpp"
 #include "Application.hpp"
 #include "NoobUtils.hpp"
-// #include "NDOF.hpp"
+#include "NDOF.hpp"
 // #include <glad/glad.h>
 
-#include <GLES3/gl3.h>
+#define GLFW_INCLUDE_ES3
 #include <GLFW/glfw3.h>
 
 std::atomic<uint32_t> width(1280);
@@ -73,32 +73,42 @@ int main()//int /*_argc*/, char** /*_argv*/)
 	{
 		return -1;
 	}
+
+	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 	/* Create a windowed mode window and its OpenGL context */
 	window = glfwCreateWindow(width, height, "Engine Desktop", NULL, NULL);
+
+
 
 	glfwSetWindowCloseCallback(window, window_close_callback);
 	glfwSetWindowSizeCallback(window, window_size_callback);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetKeyCallback(window, key_callback);
 
+
+
+
 	if (!window)
 	{
 		glfwTerminate();
 		return -1;
 	}
-	
+
 	glfwMakeContextCurrent(window);
 	// gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 	glfwSwapInterval(1);
 
 	app.init(width, height);
-
+	noob::ndof ndof;
+	ndof.run();
 	// ndof.run();
 
 	while (!glfwWindowShouldClose(window))
 	{
-		// noob::ndof::data info = ndof.get_data();
-		// app->accept_ndof_data(info);
+		noob::ndof::data info = ndof.get_data();
+		app.accept_ndof_data(info);
 		app.step();
 		glfwPollEvents();
 		glfwSwapBuffers(window);

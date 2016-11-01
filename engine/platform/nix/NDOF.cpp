@@ -1,5 +1,5 @@
 #include "NDOF.hpp"
-#include "Logger.hpp"
+#include "NoobUtils.hpp"
 #include <thread>
 #include <stdlib.h>
 //#include <signal.h>
@@ -9,14 +9,14 @@
 void sig()
 {
 	spnav_close();
-	noob::logger::log("[NDOF] libsnpav received SIGINT.");
+	noob::logger::log(noob::importance::WARNING, "[NDOF] libsnpav received SIGINT.");
 }
 
 void noob::ndof::run()
 {	
 	if(spnav_open()==-1)
 	{
-		logger::log("failed to connect to the space navigator daemon");
+		logger::log(noob::importance::ERROR, "[NDOF] Failed to connect to the space navigator daemon.");
 		return;
 	}
 
@@ -69,12 +69,12 @@ noob::ndof::data noob::ndof::get_data()
 	{
 		temp.movement = true;
 	}
-	
+
 	temp.translation = noob::vec3(x/ticks, y/ticks, z/ticks);
 	temp.rotation = noob::vec3(rx/ticks, ry/ticks, rz/ticks);
 
 	x = y = z = rx = ry = rz = 0;
 	ticks = 0;
-	
+
 	return temp;
 }

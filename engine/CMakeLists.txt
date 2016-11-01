@@ -848,6 +848,59 @@ if (DEFINED NOOB_USE_SHINY)
 		)
 endif()
 
+list (APPEND glfw_src)
+# Platform-specific:
+if (NOOB_PLATFORM_LINUX)
+	#find_package(X11 REQUIRED)
+	#find_package(OpenGL REQUIRED)
+
+	set(CMAKE_C_FLAGS "-DHAVE_ALLOCA_H ${CMAKE_C_FLAGS}")
+	# -D_GLFW_X11 
+	include_directories(lib/Khronos)
+	add_subdirectory(lib/glfw)
+	include_directories(lib/glfw/include)
+	include_directories(platform/nix)
+	#include_directories(lib/glfw/deps)
+	#list(APPEND glfw_src
+	#	lib/glfw/src/vulkan.c
+	#	lib/glfw/src/egl_context.c
+	#	lib/glfw/src/x11_init.c
+	#	lib/glfw/src/glx_context.c
+	#	lib/glfw/src/x11_monitor.c
+	#	lib/glfw/src/init.c
+	#	lib/glfw/src/window.c
+	#	lib/glfw/src/xkb_unicode.c
+	#	lib/glfw/src/input.c
+	#	lib/glfw/src/monitor.c
+	#	lib/glfw/src/x11_window.c
+	#	lib/glfw/src/linux_joystick.c
+	#	lib/glfw/src/context.c
+	#	lib/glfw/src/posix_time.c
+	#	lib/glfw/src/posix_tls.c
+	#	)	
+
+		# lib/glfw/src/mir_init.c
+		#lib/glfw/src/win32_monitor.c
+		#lib/glfw/src/wl_window.c
+		# lib/glfw/src/win32_time.c
+		# lib/glfw/src/win32_window.c
+		# lib/glfw/src/mir_window.c
+		# lib/glfw/src/cocoa_time.c
+		# lib/glfw/src/mir_monitor.c
+		# lib/glfw/src/wl_init.c
+		# lib/glfw/src/win32_joystick.c
+		# lib/glfw/src/win32_init.c
+		# lib/glfw/src/wl_monitor.c
+		# lib/glfw/src/wgl_context.c
+		# lib/glfw/src/win32_tls.c
+	list(APPEND main_src
+		platform/nix/EngineDesktop.cpp
+		platform/nix/NDOF.cpp
+		#lib/glfw/deps/glad.c
+		platform/desktop/SoundInterface.cpp)
+endif()
+
+
 list(APPEND common_src
 	common/Globals.cpp
 	common/BasicMesh.cpp
@@ -873,67 +926,20 @@ list(APPEND user_src
 	../sandbox/UserApp.cpp
 	)
 
-# Platform-specific:
-if (NOOB_PLATFORM_LINUX)
-	set(CMAKE_C_FLAGS "-DHAVE_ALLOCA_H ${CMAKE_C_FLAGS}")
-	add_subdirectory(lib/glfw)
-	include_directories(lib/glfw/deps)
-	include_directories(lib/glfw/include)
-	include_directories(platform/nix)
-	list(APPEND main_src platform/nix/EngineDesktop.cpp
-		lib/glfw/deps/glad.c
-
-		platform/desktop/SoundInterface.cpp)
-endif()
-
-
 
 # All platforms get these:
-list (APPEND app_src ${assimp_src}  ${freetype_src} ${user_src} ${main_src} ${common_src} ${base_src} ${recast_src} ${bullet_src} ${voropp_src} ${ozz_src} ${ogg_src} ${vorbis_src} ${r8_src} ${shiny_src})
+list (APPEND app_src ${assimp_src} ${freetype_src} ${user_src} ${main_src} ${common_src} ${base_src} ${recast_src} ${bullet_src} ${voropp_src} ${ozz_src} ${ogg_src} ${vorbis_src} ${r8_src} ${shiny_src})
 
 # More platform-specific:
 if (NOOB_PLATFORM_LINUX)
-	find_package(OpenGL REQUIRED)
-	find_package(X11 REQUIRED)
-	include_directories(lib/Khronos)
-	include_directories(lib/glfw/include)
-	set (CMAKE_C_FLAGS "-D_GLFW_X11 ${CMAKE_C_FLAGS}")
-	list(APPEND glfw_src
-		lib/glfw/src/vulkan.c
-		lib/glfw/src/egl_context.c
-		lib/glfw/src/x11_init.c
-		# lib/glfw/src/wgl_context.c
-		# lib/glfw/src/win32_tls.c
-		lib/glfw/src/glx_context.c
-		lib/glfw/src/x11_monitor.c
-		# lib/glfw/src/wl_monitor.c
-		lib/glfw/src/init.c
-		# lib/glfw/src/win32_joystick.c
-		# lib/glfw/src/win32_init.c
-		lib/glfw/src/window.c
-		# lib/glfw/src/wl_init.c
-		lib/glfw/src/xkb_unicode.c
-		lib/glfw/src/input.c
-		# lib/glfw/src/cocoa_time.c
-		# lib/glfw/src/mir_monitor.c
-		lib/glfw/src/monitor.c
-		lib/glfw/src/x11_window.c
-		# lib/glfw/src/win32_time.c
-		# lib/glfw/src/win32_window.c
-		# lib/glfw/src/mir_window.c
-		lib/glfw/src/linux_joystick.c
-		#lib/glfw/src/win32_monitor.c
-		# lib/glfw/src/wl_window.c
-		lib/glfw/src/context.c
-		lib/glfw/src/posix_time.c
-		lib/glfw/src/posix_tls.c
-		# lib/glfw/src/mir_init.c
-		)
+
+
 	add_executable(NoobEdit ${app_src} ${glfw_src})
 
-	target_link_libraries(NoobEdit LINK_PUBLIC rt z dl pthread m soundio.a asound GL Xinerama Xcursor Xrandr ${X11_LIBRARIES} ${OPENGL_gl_LIBRARY})
+	target_link_libraries(NoobEdit LINK_PUBLIC rt z dl pthread m soundio.a asound spnav X11 Xrandr Xcursor Xinerama glfw ${GLFW_LIBRARIES} GL ${OpenGL_gl_LIBRARY})
 	# target_link_libraries(NoobEdit LINK_PUBLIC spnav)
 endif()
+
 
 
 if (NOOB_PLATFORM_ANDROID)

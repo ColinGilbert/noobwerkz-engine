@@ -20,15 +20,14 @@ namespace noob
 			return raw_buf != nullptr;
 		}
 
-		bool push_back(const noob::vec4 arg) noexcept(true)
+		bool push_back(const noob::vec4& arg) noexcept(true)
 		{
-			if (current < size)
+			if (current_pos < size - 4)
 			{
-				float* ptr = reinterpret_cast<float*>(raw_buf);
 				for (float f : arg.v)
 				{
-					ptr[current] = f;
-					current += sizeof(float);
+					raw_buf[current_pos] = f;
+					++current_pos;
 				}
 				return true;
 			}
@@ -38,15 +37,14 @@ namespace noob
 			}
 		}
 
-		bool push_back(const noob::mat4 arg) noexcept(true)
+		bool push_back(const noob::mat4& arg) noexcept(true)
 		{
-			if (current < size)
+			if (current_pos < size - 16)
 			{
-				float* ptr = reinterpret_cast<float*>(raw_buf);
 				for (float f : arg.m)
 				{
-					ptr[current] = f;
-					current += sizeof(float);
+					raw_buf[current_pos] = f;
+					++current_pos;
 				}
 				return true;
 			}
@@ -62,10 +60,10 @@ namespace noob
 		}
 
 		protected:
-		gpu_write_buffer(uint8_t* raw_buf_arg, uint32_t size_arg) : current(0), size(size_arg), raw_buf(raw_buf_arg) {}
+		gpu_write_buffer(float* raw_buf_arg, uint32_t size_arg) : current_pos(0), size(size_arg), raw_buf(raw_buf_arg) {}
 
-		uint32_t current;
+		uint32_t current_pos;
 		const uint32_t size;
-		uint8_t* raw_buf;
+		float* raw_buf;
 	};
 }

@@ -11,10 +11,19 @@ noob::stage::~stage() noexcept(true)
 }
 
 
-void noob::stage::init(uint32_t window_width, uint32_t window_height, const noob::mat4& view_mat, const noob::mat4& projection_mat) noexcept(true) 
+void noob::stage::init(uint32_t window_width, uint32_t window_height, const noob::mat4& projection_mat) noexcept(true) 
 {
-	update_viewport_params(window_width, window_height, view_mat, projection_mat);
+	update_viewport_params(window_width, window_height, projection_mat);
 
+	noob::vec3 eye_pos, eye_target, eye_up;
+	eye_pos = noob::vec3(0.0, 0.0, 10.0);
+	eye_target = noob::vec3(0.0, 0.0, 0.0);
+	eye_up = noob::vec3(0.0, 1.0, 0.0);
+	//const noob::vec3 eye_forward = eye_pos - eye_target;
+	//eye_up = noob::cross(eye_forward, noob::vec3(0.0, 1.0, 0.0));
+	//eye_up = noob::cross(eye_up, eye_forward);
+	view_matrix = noob::look_at(eye_pos, eye_target, eye_up);
+	projection_matrix = projection_mat;
 	broadphase = new btDbvtBroadphase();
 	collision_configuration = new btDefaultCollisionConfiguration();
 	collision_dispatcher = new btCollisionDispatcher(collision_configuration);
@@ -68,7 +77,7 @@ void noob::stage::tear_down() noexcept(true)
 	// draw_graph.clear();
 	// node_masks.empty();
 
-	init(viewport_width, viewport_height, view_matrix, projection_matrix);
+	init(viewport_width, viewport_height, projection_matrix);
 }
 
 
@@ -101,13 +110,12 @@ void noob::stage::draw() noexcept(true)
 	// PROFILE_FUNC();
 
 	noob::graphics& gfx = noob::graphics::get_instance();
-	gfx.set_view_transform(view_matrix, projection_matrix);
+	noob::graphics::program_handle prog = gfx.get_default_instanced();
+	gfx.use_program(prog);
 
 	for (uint32_t drawables_index = 0; drawables_index < drawables.size(); ++drawables_index)
 	{
-
 		const noob::stage::drawable_info_handle handle = noob::stage::drawable_info_handle::make(drawables_index);
-		// const uint32_t drawables_count = noob::stage::drawables.count;
 		if (drawables[drawables_index].needs_colours)
 		{
 			upload_colours(handle);
@@ -116,25 +124,24 @@ void noob::stage::draw() noexcept(true)
 
 		upload_matrices(handle);
 
-		// const noob::stage::drawable_info_handle handle = noob::stage::drawable_info_handle::make(drawables_index);
 		const noob::model_handle modl = drawables[drawables_index].model;
 		const uint32_t instance_count = drawables[drawables_index].count;
 
 		// noob::logger::log(noob::importance::INFO, noob::concat("Drawing model ", noob::to_string(modl.index()), " ", noob::to_string(instance_count), " times"));
 
-		noob::graphics::program_handle prog = gfx.get_default_instanced();
-		gfx.use_program(prog);
-
 		gfx.draw(modl, instance_count);
+
+		// noob::logger::log(noob::importance::INFO,  noob::concat("[Stage] Drawing model ", noob::to_string(modl.index()), " ", noob::to_string(instance_count), " times."));//gfx.draw(modl, instance_count);
+
 	}
 }
 
 
-void noob::stage::update_viewport_params(uint32_t window_width, uint32_t window_height, const noob::mat4& view_mat, const noob::mat4& projection_mat) noexcept(true)
+void noob::stage::update_viewport_params(uint32_t window_width, uint32_t window_height, const noob::mat4& projection_mat) noexcept(true)
 {
 	viewport_width = window_width;
 	viewport_height = viewport_height;
-	view_matrix = view_mat;
+	// view_matrix = view_mat;
 	projection_matrix = projection_mat;
 }
 
@@ -423,35 +430,38 @@ void noob::stage::upload_colours(drawable_info_handle arg) const noexcept(true)
 
 	noob::graphics& gfx = noob::graphics::get_instance();
 
-	noob::gpu_write_buffer buf = gfx.map_buffer(model_h, noob::model::instanced_data_type::COLOUR);
-
-	if (buf.valid() == false)
-	{
-		logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced colour buffer for model ", noob::to_string(arg.index())));	
-		return;
-	}
-
+	// noob::gpu_write_buffer buf = gfx.map_buffer(model_h, noob::model::instanced_data_type::COLOUR, 0, count);
+	/*
+	   if (buf.valid() == false)
+	   {
+	   logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced colour buffer for model ", noob::to_string(arg.index())));	
+	   return;
+	   }
+	   */
+	std::vector<noob::vec4> colours;
 	uint32_t current = 0;
 	while (current < count)
 	{
 		const noob::actor_handle a_h = drawables[arg.index()].instances[current].actor;
 		const noob::actor a = actors.get(a_h);
 		const noob::vec4 colour = team_colours[a.team];
-		const bool valid = buf.push_back(colour);
-
-		if (!valid)
-		{
-			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu colours buffer for model ", noob::to_string(arg.index())));
-			gfx.unmap_buffer();			
-			return;
-		}
-
+		colours.push_back(colour);
+		/*
+		   if (!valid)
+		   {
+		   logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu colours buffer for model ", noob::to_string(arg.index())));
+		   gfx.unmap_buffer();			
+		   return;
+		   }
+		   */
 		++current;
 	}
-	
+
+	gfx.push_colours(model_h, 0, colours);
+
 	// logger::log(noob::importance::INFO, noob::concat("[Stage] ", noob::to_string(current), " colours uploaded"));
 
-	gfx.unmap_buffer();
+	// gfx.unmap_buffer();
 }
 
 
@@ -464,53 +474,66 @@ void noob::stage::upload_matrices(drawable_info_handle arg) const noexcept(true)
 
 	const noob::model_handle model_h = drawables[arg.index()].model;
 
-	noob::graphics& gfx = noob::graphics::get_instance();
 
-	noob::gpu_write_buffer buf = gfx.map_buffer(model_h, noob::model::instanced_data_type::MATRICES);
-
-	if (buf.valid() == false)
-	{
-		logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced matrices buffer for model ", noob::to_string(arg.index())));	
-		return;
-	}
-
+	// noob::gpu_write_buffer buf = gfx.map_buffer(model_h, noob::model::instanced_data_type::MATRICES, 0, count);
+	/*
+	   if (buf.valid() == false)
+	   {
+	   logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced matrices buffer for model ", noob::to_string(arg.index())));	
+	   return;
+	   }
+	   */
 	const noob::mat4 viewproj_mat = projection_matrix * view_matrix;
-
+	std::vector<noob::mat4> matrices;
 	uint32_t current = 0;
 	while (current < count)
 	{
 		const noob::stage::drawable_instance info = drawables[arg.index()].instances[current];
 		const noob::actor a = actors.get(info.actor);
+
 		// const noob::ghost gst = ghosts.get(a.ghost);
 		// const noob::mat4 model_mat = gst.get_transform();
-		const noob::mat4 model_mat = noob::translate(noob::rotate(noob::identity_mat4(), a.orientation), a.position);
-		const noob::mat4 mvp_mat =  viewproj_mat * model_mat;
-		const noob::mat4 normal_mat = noob::transpose(noob::inverse((model_mat * view_matrix)));
 
-		bool valid = buf.push_back(mvp_mat);
+		noob::mat4 xform = noob::identity_mat4();
+		xform = noob::rotate(xform, a.orientation);
+		xform = noob::translate(xform, a.position);
 
-		if (!valid)
-		{
-			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu matrices buffer for model ", noob::to_string(arg.index()), " MVP"));
-			gfx.unmap_buffer();			
-			return;
-		}
+		const noob::mat4 mvp_mat = viewproj_mat * xform;
+		matrices.push_back(mvp_mat);
+		const noob::mat4 normal_mat = noob::transpose(noob::inverse(xform * view_matrix));
+		matrices.push_back(normal_mat);
 
-		valid = buf.push_back(normal_mat);
 
-		if (!valid)
-		{
-			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu matrices buffer for model ", noob::to_string(arg.index()), " normal"));
-			gfx.unmap_buffer();
-			return;
-		}
 
+		/*
+		   bool valid = buf.push_back(mvp_mat);
+
+		   if (!valid)
+		   {
+		   logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu matrices buffer for model ", noob::to_string(arg.index()), " MVP"));
+		   gfx.unmap_buffer();			
+		   return;
+		   }
+
+		   valid = buf.push_back(normal_mat);
+
+		   if (!valid)
+		   {
+		   logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu matrices buffer for model ", noob::to_string(arg.index()), " normal"));
+		   gfx.unmap_buffer();
+		   return;
+		   }
+		   */
 		++current;
 	}
-	
+
+	noob::graphics& gfx = noob::graphics::get_instance();
+
+	gfx.push_matrices(model_h, 0, matrices);
+
 	// logger::log(noob::importance::INFO, noob::concat("[Stage] ", noob::to_string(current), "*2 matrices uploaded"));
 
-	gfx.unmap_buffer();
+	// gfx.unmap_buffer();
 }
 
 
@@ -554,8 +577,23 @@ void noob::stage::reserve_models(noob::model_handle h, uint32_t num) noexcept(tr
 }
 
 /*
-std::string noob::stage::print_drawables_info() const noexcept(true)
+   std::string noob::stage::print_drawables_info() const noexcept(true)
+   {
+
+   }
+   */
+
+
+void noob::stage::accept_ndof_data(const noob::ndof::data& info) noexcept(true)
 {
-	
+	if (info.movement == true)
+	{
+		// logger::log(noob::importance::INFO, noob::concat("[Stage] NDOF data: T(", noob::to_string(info.translation[0]), ", ", noob::to_string(info.translation[1]) ,", ", noob::to_string(info.translation[2]), ") R(", noob::to_string(info.rotation[0]), ", ", noob::to_string(info.rotation[1]), ", ", noob::to_string(info.rotation[2]), ")"));
+		float damping = 360.0;
+		view_matrix = noob::rotate_x_deg(view_matrix, -info.rotation[0] / damping);
+		view_matrix = noob::rotate_y_deg(view_matrix, -info.rotation[1] / damping);
+		view_matrix = noob::rotate_z_deg(view_matrix, -info.rotation[2] / damping);
+		view_matrix = noob::translate(view_matrix, noob::vec3(-info.translation[0] / damping, -info.translation[1] / damping, -info.translation[2] / damping));
+	}
+
 }
-*/

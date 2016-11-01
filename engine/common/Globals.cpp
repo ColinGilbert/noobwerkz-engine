@@ -17,10 +17,10 @@ bool noob::globals::init() noexcept(true)
 	noob::graphics& gfx = noob::graphics::get_instance();
 
 	// TODO: Replace:
-	noob::logger::log(noob::importance::INFO, "[Globals] Making unit sphere model");
-	unit_sphere_model = gfx.model_instanced(noob::mesh_utils::sphere(0.5, 1), 1024);
-	noob::logger::log(noob::importance::INFO, "[Globals] Making unit cube model");
-	unit_cube_model = gfx.model_instanced(noob::mesh_utils::box(1.0, 1.0, 1.0), 1024);
+	// noob::logger::log(noob::importance::INFO, "[Globals] Making unit sphere model");
+	// unit_sphere_model = gfx.model_instanced(noob::mesh_utils::sphere(0.5, 1), 1024);
+	// noob::logger::log(noob::importance::INFO, "[Globals] Making unit cube model");
+	// unit_cube_model = gfx.model_instanced(noob::mesh_utils::box(1.0, 1.0, 1.0), 1024);
 
 	// logger::log(noob::importance::INFO, "[Globals] Making unit cone model");
 	// unit_cone_model = model_from_mesh(noob::mesh_utils::cone(0.5, 1.0, 8));
@@ -28,7 +28,7 @@ bool noob::globals::init() noexcept(true)
 	// logger::log(noob::importance::INFO, "[Globals] Making unit cylinder model");
 	// unit_cylinder_model = model_from_mesh(noob::mesh_utils::cylinder(0.5, 1.0, 8));
 
-	noob::logger::log(noob::importance::INFO, noob::concat("[Globals] unit sphere model handle ", noob::to_string(unit_sphere_model.index()) ,", unit cube model handle ", noob::to_string(unit_cube_model.index())));// << ", unit cylinder model handle " << unit_cylinder_model.model_h.index() << ", unit cone model handle " << unit_cone_model.model_h.index();
+	// noob::logger::log(noob::importance::INFO, noob::concat("[Globals] unit sphere model handle ", noob::to_string(unit_sphere_model.index()) ,", unit cube model handle ", noob::to_string(unit_cube_model.index())));// << ", unit cylinder model handle " << unit_cylinder_model.model_h.index() << ", unit cone model handle " << unit_cone_model.model_h.index();
 
 
 	noob::light l;
@@ -51,7 +51,7 @@ bool noob::globals::init() noexcept(true)
 	return true;
 }
 
-
+/*
 std::tuple<noob::model_handle, noob::vec3> noob::globals::sphere_model(float r) noexcept(true) 
 {
 	noob::model_handle temp = unit_sphere_model;
@@ -66,7 +66,7 @@ std::tuple<noob::model_handle, noob::vec3> noob::globals::box_model(float x, flo
 	noob::vec3 scales(x, y, z);
 	return std::make_tuple(temp, scales);
 }
-
+*/
 
 noob::model_handle noob::globals::model_from_shape(noob::shape_handle arg, uint32_t num) noexcept(true)
 {

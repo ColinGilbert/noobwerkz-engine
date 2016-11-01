@@ -112,8 +112,8 @@ namespace noob
 		noob::reflectance_handle get_reflectance(const std::string& name) const noexcept(true);
 
 		// Those are easy to represent as a scaled item, and save a lot on the video card if repeated.
-		std::tuple<noob::model_handle, noob::vec3> sphere_model(float r) noexcept(true);
-		std::tuple<noob::model_handle, noob::vec3> box_model(float x, float y, float z) noexcept(true);
+		// std::tuple<noob::model_handle, noob::vec3> sphere_model(float r) noexcept(true);
+		// std::tuple<noob::model_handle, noob::vec3> box_model(float x, float y, float z) noexcept(true);
 		// std::tuple<noob::model, noob::vec3> cylinder_model(float r, float h) noexcept(true);
 		// std::tuple<noob::model, noob::vec3> cone_model(float r, float h) noexcept(true);
 
@@ -181,6 +181,7 @@ namespace noob
 		   */
 		// These represent models in the graphics card buffer
 
+/*
 		noob::model_handle get_unit_sphere_model() const noexcept(true)
 		{
 			return unit_sphere_model;
@@ -190,6 +191,7 @@ namespace noob
 		{
 			return unit_cube_model;
 		}
+		*/
 		/*			
 					std::tuple<noob::model, bool, noob::vec3> get_unit_capsule_model() const noexcept(true)
 					{
@@ -244,7 +246,7 @@ namespace noob
 		noob::shape_handle unit_sphere_shape, unit_cube_shape;//, unit_capsule_shape, unit_cylinder_shape, unit_cone_shape;
 
 		// These represent models in the graphics card buffer
-		noob::model_handle unit_sphere_model, unit_cube_model;//, unit_capsule_model, unit_cylinder_model, unit_cone_model;
+		// noob::model_handle unit_sphere_model, unit_cube_model;//, unit_capsule_model, unit_cylinder_model, unit_cone_model;
 
 		noob::light_handle default_light;
 		noob::reflectance_handle default_reflectance;

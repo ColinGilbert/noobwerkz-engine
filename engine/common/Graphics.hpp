@@ -70,18 +70,23 @@ namespace noob
 
 			noob::texture_handle texture_cube(uint32_t width, uint32_t height, uint32_t mips, noob::attrib::unit_type, noob::texture::compression_type, const std::string&) noexcept(true);	
 
-			void set_view_transform(const noob::mat4& view, const noob::mat4& proj) noexcept(true);
+			// void set_view_transform(const noob::mat4& view, const noob::mat4& proj) noexcept(true);
 
 			void draw(const noob::model_handle, uint32_t num) noexcept(true);
 
 			void frame(uint32_t width, uint32_t height) noexcept(true);
 
-			noob::gpu_write_buffer map_buffer(noob::model_handle, noob::model::instanced_data_type) noexcept(true);
+			// noob::gpu_write_buffer map_buffer(noob::model_handle, noob::model::instanced_data_type, uint32_t min, uint32_t max) noexcept(true);
 
 			// NOTE: MUST be called as soon as you're finished using the buffer!
-			void unmap_buffer() noexcept(true);
+			// void unmap_buffer() noexcept(true);
 
 			noob::graphics::program_handle get_default_instanced() const noexcept(true) { return instanced_shader; }
+
+			void push_colours(noob::model_handle, uint32_t offset, const std::vector<noob::vec4>& colours) noexcept(true);
+
+			void push_matrices(noob::model_handle, uint32_t offset, const std::vector<noob::mat4>& mats) noexcept(true);
+
 
 		protected:
 
@@ -91,6 +96,6 @@ namespace noob
 
 			noob::graphics::program_handle instanced_shader;
 
-			noob::mat4 view_mat, proj_mat;
+			// noob::mat4 view_mat, proj_mat;
 	};
 }
