@@ -29,7 +29,7 @@ bool noob::application::user_init()
 	message_collision = std::make_unique<std::string>("");
 	//message_profiling_two.resize(128);
 	noob::audio_sample samp;
-	bool b = samp.load_file("sounds/BlanketedLama.ogg");
+	bool b = samp.load_file(noob::concat(*prefix, "sounds/BlanketedLama.ogg"));
 	noob::globals& g = noob::globals::get_instance();
 	noob::sample_handle h = g.samples.add(std::make_unique<noob::audio_sample>(samp));	
 
@@ -47,7 +47,7 @@ bool noob::application::user_init()
 
 	g.master_mixer.play_clip(h, 1.0);
 
-	const float actor_dims = 1.0;
+	const float actor_dims = 10.0;
 	noob::shape_handle shp = g.sphere_shape(actor_dims);
 
 	const uint32_t actor_count = 1000;
@@ -56,11 +56,11 @@ bool noob::application::user_init()
 	noob::actor_blueprints bp;
 	bp.bounds = shp;
 	bp.reflect = rh;
-	bp.model = g.model_from_shape(shp, actor_count);
+	bp.model = g.model_from_shape(shp, actor_count*8);
 
 	noob::actor_blueprints_handle bph = stage.add_actor_blueprints(bp);
 
-	static constexpr float stage_dim = 1000.0;
+	const float stage_dim = static_cast<float>(actor_count);
 
 	stage.reserve_actors(bph, actor_count * 8);
 

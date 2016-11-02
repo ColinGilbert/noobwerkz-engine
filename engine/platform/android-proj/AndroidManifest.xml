@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-package="net.noobwerkz.engine"
+package="net.noobwerkz.sampleapp"
 android:versionCode="1"
 android:versionName="1.0">
-
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="21" />
-<uses-feature android:glEsVersion="0x00030000" required="true" />
+<uses-feature android:glEsVersion="0x00030000" required="true"/>
 
 <application
 android:label="Noobwerkz"
 android:icon="@drawable/ic_launcher"
-android:hasCode="false"
+android:hasCode="true"
+android:debuggable="true"
 >
-<activity
-android:name="android.app.NativeActivity"
-android:configChanges="orientation|keyboardHidden" >
-
-<meta-data
-android:name="android.app.lib_name"
-android:value="Entry" />
+<activity android:configChanges="orientation|keyboardHidden" android:label="@string/app_name" android:name="net.noobwerkz.sampleapp.MainActivity" android:screenOrientation="landscape" android:theme="@android:style/Theme.Translucent.NoTitleBar">
 
 
 <intent-filter>

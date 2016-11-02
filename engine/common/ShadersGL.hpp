@@ -31,6 +31,7 @@ namespace noob
 				"layout(location = 0) out vec4 out_colour;      \n"
 				"void main()                                    \n"
 				"{                                              \n"
+				// "  gl_FragColor = v_colour;                           \n"
 				"  out_colour = v_colour;                       \n"
 				"}                                              \n");
 

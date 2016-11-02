@@ -3,11 +3,11 @@
 
 noob::stage::~stage() noexcept(true) 
 {
-	delete dynamics_world;
-	delete solver;
-	delete collision_configuration;
-	delete collision_dispatcher;
-	delete broadphase;
+	// delete dynamics_world;
+	// delete solver;
+	// delete collision_configuration;
+	// delete collision_dispatcher;
+	// delete broadphase;
 }
 
 
@@ -16,7 +16,7 @@ void noob::stage::init(uint32_t window_width, uint32_t window_height, const noob
 	update_viewport_params(window_width, window_height, projection_mat);
 
 	noob::vec3 eye_pos, eye_target, eye_up;
-	eye_pos = noob::vec3(0.0, 0.0, -50.0);
+	eye_pos = noob::vec3(0.0, 0.0, -10.0);
 	eye_target = noob::vec3(0.0, 0.0, 0.0);
 	eye_up = noob::vec3(0.0, 1.0, 0.0);
 	//const noob::vec3 eye_forward = eye_pos - eye_target;
@@ -24,15 +24,15 @@ void noob::stage::init(uint32_t window_width, uint32_t window_height, const noob
 	//eye_up = noob::cross(eye_up, eye_forward);
 	view_matrix = noob::look_at(eye_pos, eye_target, eye_up);
 	projection_matrix = projection_mat;
-	broadphase = new btDbvtBroadphase();
-	collision_configuration = new btDefaultCollisionConfiguration();
-	collision_dispatcher = new btCollisionDispatcher(collision_configuration);
-	solver = new btSequentialImpulseConstraintSolver();
-	dynamics_world = new btDiscreteDynamicsWorld(collision_dispatcher, broadphase, solver, collision_configuration);
-	dynamics_world->setGravity(btVector3(0, -10, 0));
-	// For the ghost object to work correctly, we need to add a callback to our world.
+	
+	// broadphase = new btDbvtBroadphase();
+	// collision_configuration = new btDefaultCollisionConfiguration();
+	// collision_dispatcher = new btCollisionDispatcher(collision_configuration);
+	// solver = new btSequentialImpulseConstraintSolver();
+	// dynamics_world = new btDiscreteDynamicsWorld(collision_dispatcher, broadphase, solver, collision_configuration);
+	// dynamics_world->setGravity(btVector3(0, -10, 0));
 
-	dynamics_world->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+	// dynamics_world->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 
 	main_light.colour = noob::vec4(1.0, 1.0, 1.0, 0.3);
 	main_light.direction = noob::vec4(-0.3333, -1.0, -0.3333, 1.0);
@@ -54,7 +54,7 @@ void noob::stage::tear_down() noexcept(true)
 {
 	for (size_t i = 0; i < bodies.count(); ++i)
 	{
-		remove_body(body_handle::make(i));
+		// remove_body(body_handle::make(i));
 	}
 
 	bodies.empty();
@@ -64,7 +64,7 @@ void noob::stage::tear_down() noexcept(true)
 
 	for (size_t i = 0; i < ghosts.count(); ++i)
 	{
-		remove_ghost(ghost_handle::make(i));
+		// remove_ghost(ghost_handle::make(i));
 	}
 
 	ghosts.empty();
@@ -75,11 +75,11 @@ void noob::stage::tear_down() noexcept(true)
 
 	// sceneries.empty();
 
-	delete dynamics_world;
-	delete broadphase;
-	delete solver;
-	delete collision_dispatcher;
-	delete collision_configuration;
+	// delete dynamics_world;
+	// delete broadphase;
+	// delete solver;
+	// delete collision_dispatcher;
+	// delete collision_configuration;
 
 	// draw_graph.clear();
 	// node_masks.empty();
@@ -158,7 +158,7 @@ void noob::stage::build_navmesh() noexcept(true)
 
 }
 
-
+/*
 noob::body_handle noob::stage::body(const noob::body_type b_type, const noob::shape_handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true) 
 {
 	noob::globals& g = noob::globals::get_instance();
@@ -201,7 +201,7 @@ noob::joint_handle noob::stage::joint(const noob::body_handle a, const noob::vec
 
 	return h;
 }
-
+*/
 
 noob::actor_blueprints_handle noob::stage::add_actor_blueprints(const noob::actor_blueprints& arg) noexcept(true)
 {
@@ -239,7 +239,7 @@ noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32
 		{
 			noob::actor a;
 			a.team = team;
-			a.ghost = ghost(info.bp.bounds, pos, orient);
+			// a.ghost = ghost(info.bp.bounds, pos, orient);
 			a.bp_handle = bp_h;
 			a.position = pos;
 			a.orientation = orient;
@@ -254,10 +254,10 @@ noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32
 			drawables[index].instances[old_count].actor = a_h;
 
 			// Setting index-to-self info:
-			noob::ghost temp_ghost = ghosts.get(a.ghost);
+			// noob::ghost temp_ghost = ghosts.get(a.ghost);
 
-			temp_ghost.inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::ACTOR));
-			temp_ghost.inner->setUserIndex_2(a_h.index());
+			// temp_ghost.inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::ACTOR));
+			// temp_ghost.inner->setUserIndex_2(a_h.index());
 
 			actor_factories[bp_h.index()].count++;
 
@@ -305,14 +305,15 @@ noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32
 
 std::vector<noob::contact_point> noob::stage::get_intersecting(const noob::ghost_handle ghost_h) const noexcept(true) 
 {
+/*
 	noob::ghost temp_ghost = ghosts.get(ghost_h);
 
 	btManifoldArray manifold_array;
 
 	btBroadphasePairArray& pair_array = temp_ghost.inner->getOverlappingPairCache()->getOverlappingPairArray();
-
+*/
 	std::vector<noob::contact_point> results;
-
+/*
 	size_t num_pairs = pair_array.size();
 
 	for (size_t i = 0; i < num_pairs; ++i)
@@ -365,7 +366,7 @@ std::vector<noob::contact_point> noob::stage::get_intersecting(const noob::ghost
 			}
 		}
 	}
-
+*/
 	return results;
 }
 
@@ -377,6 +378,7 @@ std::vector<noob::contact_point> noob::stage::get_intersecting(const noob::actor
 }
 
 
+/*
 void noob::stage::remove_body(noob::body_handle h) noexcept(true) 
 {
 	noob::body b = bodies.get(h);
@@ -394,7 +396,7 @@ void noob::stage::remove_ghost(noob::ghost_handle h) noexcept(true)
 	dynamics_world->removeCollisionObject(b.inner);
 	delete b.inner;
 }
-
+*/
 
 void noob::stage::update_actors() noexcept(true)
 {

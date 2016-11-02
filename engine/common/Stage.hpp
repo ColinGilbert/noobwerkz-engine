@@ -4,7 +4,7 @@
 #include <functional>
 
 #include <rdestl/slist.h>
-#include <btBulletDynamicsCommon.h>
+// #include <btBulletDynamicsCommon.h>
 #include <noob/fast_hashtable/fast_hashtable.hpp>
 #include <noob/graph/graph.hpp>
 #include <noob/component/component.hpp>
@@ -56,11 +56,11 @@ namespace noob
 			void build_navmesh() noexcept(true);
 
 			// Creates physics body, sensors, joints. Those get made lots.
-			noob::body_handle body(const noob::body_type, const noob::shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true);
+			// noob::body_handle body(const noob::body_type, const noob::shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true);
 
-			noob::ghost_handle ghost(const noob::shape_handle, const noob::vec3& pos, const noob::versor& orient) noexcept(true);
+			// noob::ghost_handle ghost(const noob::shape_handle, const noob::vec3& pos, const noob::versor& orient) noexcept(true);
 
-			noob::joint_handle joint(const noob::body_handle a, const noob::vec3& point_on_a, const noob::body_handle b, const noob::vec3& point_on_b) noexcept(true);
+			// noob::joint_handle joint(const noob::body_handle a, const noob::vec3& point_on_a, const noob::body_handle b, const noob::vec3& point_on_b) noexcept(true);
 
 			noob::actor_blueprints_handle add_actor_blueprints(const noob::actor_blueprints&) noexcept(true);
 
@@ -97,9 +97,9 @@ namespace noob
 
 			// rde::slist<rde::vector<noob::vec3>> paths;
 
-			void remove_body(noob::body_handle) noexcept(true);
+			// void remove_body(noob::body_handle) noexcept(true);
 
-			void remove_ghost(noob::ghost_handle) noexcept(true);
+			// void remove_ghost(noob::ghost_handle) noexcept(true);
 
 			// void remove_joint(noob::joint_handle) noexcept(true);
 
@@ -160,10 +160,10 @@ namespace noob
 			noob::duration draw_duration;
 			noob::duration last_navmesh_build_duration;
 
-			btBroadphaseInterface* broadphase;
-			btDefaultCollisionConfiguration* collision_configuration;
-			btCollisionDispatcher* collision_dispatcher;
-			btSequentialImpulseConstraintSolver* solver;
-			btDiscreteDynamicsWorld* dynamics_world;
+			// btBroadphaseInterface* broadphase;
+			// btDefaultCollisionConfiguration* collision_configuration;
+			// btCollisionDispatcher* collision_dispatcher;
+			// btSequentialImpulseConstraintSolver* solver;
+			// btDiscreteDynamicsWorld* dynamics_world;
 	};
 }

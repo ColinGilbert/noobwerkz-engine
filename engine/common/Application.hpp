@@ -36,8 +36,10 @@ namespace noob
 
 
 			// Init must always be called.
-			void init(uint32_t width, uint32_t height);
+			void init(uint32_t width, uint32_t height, const std::string filepath);
 
+			void set_archive_dir(const std::string & filepath);
+			
 			// Those three allow an app to be controlled better by an external environment (ie: Android/iOS)
 			void pause();
 			void resume();
@@ -48,7 +50,7 @@ namespace noob
 			// Callbacks
 			void touch(int pointerID, float x, float y, int action);
 			void touch(const touch_instance& t);
-			// void set_archive_dir(const std::string & filepath);
+			
 			void window_resize(uint32_t w, uint32_t h);
 			void key_input(char c);
 
@@ -96,6 +98,6 @@ namespace noob
 
 			std::string script_name;
 
-			// std::unique_ptr<std::string> prefix;
+			std::unique_ptr<std::string> prefix;
 	};
 }

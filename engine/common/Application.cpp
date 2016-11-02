@@ -1,13 +1,13 @@
 #include "Application.hpp"
 
 
-void noob::application::init(uint32_t width, uint32_t height)
+void noob::application::init(uint32_t width, uint32_t height, const std::string filepath)
 {
 	logger::log(noob::importance::INFO, "[Application] Begin init.");
 
 	window_width = width;
 	window_height = height;
-	
+
 	noob::sound_interface audio_interface;
 	audio_interface.init();
 
@@ -18,7 +18,7 @@ void noob::application::init(uint32_t width, uint32_t height)
 
 	finger_positions = { noob::vec2(0.0, 0.0), noob::vec2(0.0, 0.0), noob::vec2(0.0, 0.0), noob::vec2(0.0, 0.0) };
 
-	//	prefix = std::unique_ptr<std::string>(new std::string("./"));
+	prefix = std::make_unique<std::string>(noob::concat(filepath, "/"));//unique_ptr<std::string>(new std::string(filepath));
 
 
 	// TODO: Uncomment once noob::filesystem is fixed
@@ -100,7 +100,7 @@ void noob::application::draw()
 void noob::application::accept_ndof_data(const noob::ndof::data& info) noexcept(true)
 {
 
-   	stage.accept_ndof_data(info);
+	stage.accept_ndof_data(info);
 }
 
 
@@ -116,8 +116,8 @@ void noob::application::step()
 
 		// if (!paused)
 		//{
-			double d = (1.0 / static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(time_since).count()));
-			update(d);
+		double d = (1.0 / static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(time_since).count()));
+		update(d);
 		//}
 		draw();
 
@@ -142,14 +142,12 @@ void noob::application::resume()
 	paused = false;
 }
 
-/*
-   void noob::application::set_archive_dir(const std::string& filepath)
-   {
-   logger::log(noob::importance::INFO, noob::concat("[Application] Setting archive directory {", filepath, "}"));
-   prefix = std::unique_ptr<std::string>(new std::string(filepath));
-   logger::log(noob::importance::INFO, noob::concat("[Application] Archive dir = {",  *prefix, "}"));
-   }
-   */
+void noob::application::set_archive_dir(const std::string& filepath)
+{
+	logger::log(noob::importance::INFO, noob::concat("[Application] Setting archive directory {", filepath, "}"));
+	prefix = std::make_unique<std::string>(noob::concat(filepath, "/"));
+	logger::log(noob::importance::INFO, noob::concat("[Application] Archive dir = {",  *prefix, "}"));
+}
 
 void noob::application::touch(int pointerID, float x, float y, int action)
 {
@@ -180,9 +178,9 @@ void noob::application::window_resize(uint32_t w, uint32_t h)
 
 	stage.update_viewport_params(window_width, window_height, proj_mat);
 
-	
+
 	logger::log(noob::importance::INFO, noob::concat("[Application] Resize window to (", noob::to_string(window_width), ", ", noob::to_string(window_height), ")"));
-	
+
 }
 
 

@@ -17,12 +17,12 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 	_setmode( _fileno( stdin ), _O_BINARY );
 #endif
 
-	logger::log(noob::importance::INFO, "[AudioSample] About to open vorbis file...");
+	logger::log(noob::importance::INFO, noob::concat("[AudioSample] About to open vorbis file ", filename));
 
 	// if (ov_open_callbacks(), &vf, NULL, 0, OV_CALLBACKS_NOCLOSE) < 0)
 	if (ov_fopen(filename.c_str(), &vf) < 0)
 	{
-		logger::log(noob::importance::ERROR, "[AudioSample] Error opening vorbis file!");
+		logger::log(noob::importance::ERROR, noob::concat("[AudioSample] Error opening vorbis file!", filename));
 	}
 
 	vorbis_info* vi = ov_info(&vf,-1);

@@ -944,7 +944,7 @@ if (NOOB_PLATFORM_ANDROID)
 	#include_directories(lib/Khronos)
 	#add_subdirectory(cmake/gles)
 	LINK_DIRECTORIES($ENV{ANDROID_HOME}/ndk-bundle/platforms/android-21/arch-arm/usr/lib)
-	set (CMAKE_C_FLAGS "-DNOOB_PLATFORM_ANDROID -Wall -pedantic -fPIC ${CMAKE_C_FLAGS}")
+	set (CMAKE_C_FLAGS "-DNOOB_PLATFORM_ANDROID -std=c99 -Wall -pedantic -fPIC ${CMAKE_C_FLAGS}")
 	set (CMAKE_CXX_FLAGS "-DNOOB_PLATFORM_ANDROID -Wall -pedantic -fPIC  ${CMAKE_CXX_FLAGS}")
 
 	list (APPEND app_src
