@@ -26,6 +26,7 @@
 #include "Armature.hpp"
 #include "NDOF.hpp"
 
+
 namespace noob
 {
 	class stage
@@ -90,79 +91,79 @@ namespace noob
 
 		protected:
 
-				static constexpr auto dbg_name = "Stage";
+			static constexpr auto dbg_name = "Stage";
 
-				void run_ai() noexcept(true);
+			void run_ai() noexcept(true);
 
-				// rde::slist<rde::vector<noob::vec3>> paths;
+			// rde::slist<rde::vector<noob::vec3>> paths;
 
-				void remove_body(noob::body_handle) noexcept(true);
+			void remove_body(noob::body_handle) noexcept(true);
 
-				void remove_ghost(noob::ghost_handle) noexcept(true);
+			void remove_ghost(noob::ghost_handle) noexcept(true);
 
-				// void remove_joint(noob::joint_handle) noexcept(true);
+			// void remove_joint(noob::joint_handle) noexcept(true);
 
-				std::vector<noob::contact_point> get_intersecting(const noob::ghost_handle) const noexcept(true);
+			std::vector<noob::contact_point> get_intersecting(const noob::ghost_handle) const noexcept(true);
 
-				void update_actors() noexcept(true);
+			void update_actors() noexcept(true);
 
-				void actor_dither(noob::actor_handle) noexcept(true);
+			void actor_dither(noob::actor_handle) noexcept(true);
 
-				struct drawable_instance
-				{
-					noob::actor_handle actor;
-					uint32_t part, pose;
-				};
+			struct drawable_instance
+			{
+				noob::actor_handle actor;
+				uint32_t part, pose;
+			};
 
-				struct drawable_info
-				{
-					noob::model_handle model;
-					uint32_t count;
-					bool needs_colours;
-					std::vector<drawable_instance> instances;
-				};
+			struct drawable_info
+			{
+				noob::model_handle model;
+				uint32_t count;
+				bool needs_colours;
+				std::vector<drawable_instance> instances;
+			};
 
-				struct actor_info
-				{
-					noob::actor_blueprints bp;
-					uint32_t count, max;
-				};
+			struct actor_info
+			{
+				noob::actor_blueprints bp;
+				uint32_t count, max;
+			};
 
-				typedef noob::handle<drawable_info> drawable_info_handle;
+			typedef noob::handle<drawable_info> drawable_info_handle;
 
-				void upload_colours(drawable_info_handle) const noexcept(true);
+			void upload_colours(drawable_info_handle) const noexcept(true);
 
-				void upload_matrices(drawable_info_handle) const noexcept(true);
+			void upload_matrices(drawable_info_handle) const noexcept(true);
 
-				void reserve_models(noob::model_handle h, uint32_t num) noexcept(true);
+			void reserve_models(noob::model_handle h, uint32_t num) noexcept(true);
 
-				noob::mat4 view_matrix, projection_matrix;
-				uint32_t viewport_width, viewport_height;
+			noob::mat4 view_matrix, projection_matrix;
+			uint32_t viewport_width, viewport_height;
 
-				rde::vector<noob::stage::drawable_info> drawables;
-				rde::vector<noob::stage::actor_info> actor_factories;
+			rde::vector<noob::stage::drawable_info> drawables;
+			rde::vector<noob::stage::actor_info> actor_factories;
 
-				rde::vector<noob::vec4> team_colours;
+			rde::vector<noob::vec4> team_colours;
 
-				noob::fast_hashtable models_to_instances;
+			noob::fast_hashtable models_to_instances;
 
-				// These are for holding useful data.
-				noob::component<noob::body> bodies;
-				noob::component<noob::joint> joints;
-				noob::component<noob::ghost> ghosts;
-				noob::component<noob::actor> actors;
-				noob::component<noob::scenery> sceneries;
-				noob::component<noob::particle_system> particle_systems;
-				noob::component_dynamic<noob::armature> armatures;
+			// These are for holding useful data.
+			noob::component<noob::body> bodies;
+			noob::component<noob::joint> joints;
+			noob::component<noob::ghost> ghosts;
+			noob::component<noob::actor> actors;
+			noob::component<noob::scenery> sceneries;
+			noob::component<noob::particle_system> particle_systems;
+			noob::component_dynamic<noob::armature> armatures;
 
-				noob::duration update_duration;
-				noob::duration draw_duration;
-				noob::duration last_navmesh_build_duration;
+			noob::duration update_duration;
+			noob::duration draw_duration;
+			noob::duration last_navmesh_build_duration;
 
-				btBroadphaseInterface* broadphase;
-				btDefaultCollisionConfiguration* collision_configuration;
-				btCollisionDispatcher* collision_dispatcher;
-				btSequentialImpulseConstraintSolver* solver;
-				btDiscreteDynamicsWorld* dynamics_world;
+			btBroadphaseInterface* broadphase;
+			btDefaultCollisionConfiguration* collision_configuration;
+			btCollisionDispatcher* collision_dispatcher;
+			btSequentialImpulseConstraintSolver* solver;
+			btDiscreteDynamicsWorld* dynamics_world;
 	};
 }

@@ -16,7 +16,7 @@ void noob::stage::init(uint32_t window_width, uint32_t window_height, const noob
 	update_viewport_params(window_width, window_height, projection_mat);
 
 	noob::vec3 eye_pos, eye_target, eye_up;
-	eye_pos = noob::vec3(0.0, 0.0, 10.0);
+	eye_pos = noob::vec3(0.0, 0.0, -50.0);
 	eye_target = noob::vec3(0.0, 0.0, 0.0);
 	eye_up = noob::vec3(0.0, 1.0, 0.0);
 	//const noob::vec3 eye_forward = eye_pos - eye_target;
