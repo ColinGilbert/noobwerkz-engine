@@ -38,7 +38,14 @@ void noob::stage::init(uint32_t window_width, uint32_t window_height, const noob
 	main_light.direction = noob::vec4(-0.3333, -1.0, -0.3333, 1.0);
 
 	team_colours.push_back(noob::vec4(1.0, 1.0, 1.0, 1.0));
-
+	team_colours.push_back(noob::vec4(1.0, 0.0, 0.0, 1.0));
+	team_colours.push_back(noob::vec4(0.0, 1.0, 0.0, 1.0));
+	team_colours.push_back(noob::vec4(0.0, 0.0, 1.0, 1.0));
+	team_colours.push_back(noob::vec4(1.0, 1.0, 0.0, 1.0));
+	team_colours.push_back(noob::vec4(0.0, 1.0, 1.0, 1.0));
+	team_colours.push_back(noob::vec4(1.0, 0.0, 1.0, 1.0));
+	team_colours.push_back(noob::vec4(0.0, 0.0, 0.0, 1.0));
+	team_colours.push_back(noob::vec4(0.2, 0.5, 0.2, 1.0));
 	logger::log(noob::importance::INFO, "[Stage] Done init.");
 }
 

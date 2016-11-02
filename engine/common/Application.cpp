@@ -32,7 +32,7 @@ void noob::application::init(uint32_t width, uint32_t height)
 	bool are_globals_initialized = g.init();
 	assert(are_globals_initialized && "Globals not initialized!");
 
-	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0, 1000.0);
+	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0, 2000.0);
 
 	stage.init(window_width, window_height, proj_mat);
 	logger::log(noob::importance::INFO, "[Application] Done basic init.");
@@ -176,7 +176,7 @@ void noob::application::window_resize(uint32_t w, uint32_t h)
 	}
 
 	// noob::mat4 view_mat = noob::look_at(eye_pos, eye_target, eye_up);
-	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0 , 1000.0);
+	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0 , 2000.0);
 
 	stage.update_viewport_params(window_width, window_height, proj_mat);
 

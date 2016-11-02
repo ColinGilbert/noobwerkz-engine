@@ -932,33 +932,27 @@ list (APPEND app_src ${assimp_src} ${freetype_src} ${user_src} ${main_src} ${com
 
 # More platform-specific:
 if (NOOB_PLATFORM_LINUX)
-
-
 	add_executable(NoobEdit ${app_src} ${glfw_src})
 
 	target_link_libraries(NoobEdit LINK_PUBLIC rt z dl pthread m soundio.a asound spnav X11 Xrandr Xcursor Xinerama glfw ${GLFW_LIBRARIES} GL ${OpenGL_gl_LIBRARY})
 	# target_link_libraries(NoobEdit LINK_PUBLIC spnav)
 endif()
 
-
-
 if (NOOB_PLATFORM_ANDROID)
-	include("$ENV{ANDROID_CMAKE_HOME}/android.apk.cmake" REQUIRED)
-	#include_directories("$ENV{ANDROID_HOME}/ndk-bundle/platforms/android-14/arch-arm/usr/include")
-	include_directories($ENV{ANDROID_NDK_HOME}/sources/android/native_app_glue) 
-	include_directories(platform/android/jni)
-
-	set (CMAKE_C_FLAGS "-DNOOB_PLATFORM_ANDROID -include '${CMAKE_SOURCE_DIR}/platform/android/jni/android_fopen.h'  ${CMAKE_C_FLAGS}")
-	set (CMAKE_CXX_FLAGS "-DNOOB_PLATFORM_ANDROID -include '${CMAKE_SOURCE_DIR}/platform/android/jni/android_fopen.h' ${CMAKE_CXX_FLAGS}")
+	#include("$ENV{ANDROID_CMAKE_HOME}/android.apk.cmake" REQUIRED)
+	include_directories("$ENV{ANDROID_HOME}/ndk-bundle/platforms/android-21/arch-arm/usr/include")
+	#include_directories(lib/Khronos)
+	#add_subdirectory(cmake/gles)
+	LINK_DIRECTORIES($ENV{ANDROID_HOME}/ndk-bundle/platforms/android-21/arch-arm/usr/lib)
+	set (CMAKE_C_FLAGS "-DNOOB_PLATFORM_ANDROID -Wall -pedantic -fPIC ${CMAKE_C_FLAGS}")
+	set (CMAKE_CXX_FLAGS "-DNOOB_PLATFORM_ANDROID -Wall -pedantic -fPIC  ${CMAKE_CXX_FLAGS}")
 
 	list (APPEND app_src
-		$ENV{ANDROID_NDK_HOME}/sources/android/native_app_glue/android_native_app_glue.c
 		platform/droid/SoundInterface.cpp
-		platform/android/jni/engine_droid.cpp
-		platform/android/jni/android_fopen.c
+		platform/droid/EngineDroid.cpp
 		)
 
 	add_library(Entry SHARED ${app_src})
-	target_link_libraries(Entry log android GLESv2 EGL dl m)
+	target_link_libraries(Entry dl log android EGL GLESv3)
 	#set_target_properties(Entry PROPERTIES COMPILE_DEFINITIONS "ANDROID")
 endif()

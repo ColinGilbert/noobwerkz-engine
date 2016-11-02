@@ -62,12 +62,48 @@ bool noob::application::user_init()
 
 	static constexpr float stage_dim = 1000.0;
 
-	stage.reserve_actors(bph, actor_count);
+	stage.reserve_actors(bph, actor_count * 8);
+
 	for (uint32_t i = 0; i < actor_count; ++i)
 	{	
 		ah = stage.actor(bph, 0, random_vec3(stage_dim, stage_dim, stage_dim), random_versor());
 	}
 	
+	for (uint32_t i = 0; i < actor_count; ++i)
+	{	
+		ah = stage.actor(bph, 1, random_vec3(stage_dim, stage_dim, -stage_dim), random_versor());
+	}
+
+	for (uint32_t i = 0; i < actor_count; ++i)
+	{	
+		ah = stage.actor(bph, 2, random_vec3(stage_dim, -stage_dim, stage_dim), random_versor());
+	}
+
+	for (uint32_t i = 0; i < actor_count; ++i)
+	{	
+		ah = stage.actor(bph, 3, random_vec3(stage_dim, -stage_dim, -stage_dim), random_versor());
+	}
+
+	for (uint32_t i = 0; i < actor_count; ++i)
+	{	
+		ah = stage.actor(bph, 4, random_vec3(-stage_dim, stage_dim, stage_dim), random_versor());
+	}
+	
+	for (uint32_t i = 0; i < actor_count; ++i)
+	{	
+		ah = stage.actor(bph, 5, random_vec3(-stage_dim, stage_dim, -stage_dim), random_versor());
+	}
+
+	for (uint32_t i = 0; i < actor_count; ++i)
+	{	
+		ah = stage.actor(bph, 6, random_vec3(-stage_dim, -stage_dim, stage_dim), random_versor());
+	}
+
+	for (uint32_t i = 0; i < actor_count; ++i)
+	{	
+		ah = stage.actor(bph, 7, random_vec3(-stage_dim, -stage_dim, -stage_dim), random_versor());
+	}
+
 	// keystrokes.push_back(std::make_tuple(noob::keyboard::keys::NUM_5, noob::keyboard::mod_keys::NONE, "switch view (currently does nothing)"));
 	logger::log(noob::importance::INFO, "[Application] Successfully done (C++) user init.");
 	return true;

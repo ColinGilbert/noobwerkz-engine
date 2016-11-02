@@ -80,15 +80,10 @@ int main()//int /*_argc*/, char** /*_argv*/)
 	/* Create a windowed mode window and its OpenGL context */
 	window = glfwCreateWindow(width, height, "Engine Desktop", NULL, NULL);
 
-
-
 	glfwSetWindowCloseCallback(window, window_close_callback);
 	glfwSetWindowSizeCallback(window, window_size_callback);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetKeyCallback(window, key_callback);
-
-
-
 
 	if (!window)
 	{

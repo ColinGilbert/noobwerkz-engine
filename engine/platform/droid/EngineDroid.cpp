@@ -1,22 +1,13 @@
 #include <string>
 
-// #include <android/log.h>
-#include <android/looper.h>
+//#include <android/looper.h>
 #include <android/window.h>
-#include <android/log.h>
 
 #include <EGL/egl.h>
 #include <GLES3/gl3.h>
 
-#include <bgfx/bgfx.h>
-#include <bgfx/bgfxplatform.h>
-
 #include <jni.h>
 #include <errno.h>
-
-// #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
-// #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "native-activity", __VA_ARGS__))
-
 
 #include "Application.hpp"
 #include "Graphics.hpp"
@@ -24,7 +15,9 @@
 
 uint32_t _width;
 uint32_t _height;
+
 EGLint current_context; 
+
 std::string archive_dir;
 std::unique_ptr<noob::application> app = nullptr;
 
@@ -75,29 +68,18 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 
  	current_context = reinterpret_cast<EGLint>(eglGetCurrentContext());
 
-
-
 	if (current_context != last_context)
 	{
 		if (last_context != 0)
 		{
 			noob::logger::log(noob::importance::INFO, "bgfx::shutdown()");
-			 bgfx::shutdown();
 		}
-
-		bgfx::PlatformData pd = {};
-		pd.context = (void*)(uintptr_t)current_context; // eglGetCurrentContext(); // Pass the EGLContext created by GLSurfaceView.
-		pd.context = eglGetCurrentContext();
-		bgfx::setPlatformData(pd);
 
 		noob::logger::log(noob::importance::INFO, "BGFX platform data set!");
 
-		bgfx::init();
 		noob::graphics& gfx = noob::graphics::get_instance();
 		gfx.init(_width, _height);
-
 		gfx.frame(_width, _height);
-
 		// if (app)
 		// {
 		//	app->init();
@@ -134,7 +116,6 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnTouch(JNIEnv* env, 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnPause(JNIEnv* env, jobject obj)
 {
 	noob::logger::log(noob::importance::INFO, "JNILib.OnPause()");
-	// Pretty much a dead callback as interfering with the app pointer crashes
 }
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResume(JNIEnv* env, jobject obj)
@@ -155,13 +136,12 @@ std::string ConvertJString(JNIEnv* env, jstring str)
 	}
 
 	const jsize len = env->GetStringUTFLength(str);
-	const char* strChars = env->GetStringUTFChars(str,(jboolean*)0);
-
-	std::string Result(strChars, len);
-	env->ReleaseStringUTFChars(str, strChars);
-
-	return Result;
+	const char* str_raw = env->GetStringUTFChars(str,(jboolean*)0);
+	std::string result(str_raw, len);
+	env->ReleaseStringUTFChars(str, str_raw);
+	return result;
 }
+
 /*
    JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_SetupArchiveDir(JNIEnv * env, jobject obj, jstring dir)
    {
@@ -177,6 +157,7 @@ std::string ConvertJString(JNIEnv* env, jstring str)
 
    }
    */
+
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_Log(JNIEnv* env, jobject obj, jstring message)
 {
 	const char* temp = env->GetStringUTFChars(message, NULL);
