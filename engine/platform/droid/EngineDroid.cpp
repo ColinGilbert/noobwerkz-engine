@@ -1,20 +1,13 @@
-#include <string>
-
-//#include <android/looper.h>
-#include <android/window.h>
-
 #include <EGL/egl.h>
 #include <GLES3/gl3.h>
-
 #include <jni.h>
-#include <errno.h>
 
 #include "Application.hpp"
 #include "Graphics.hpp"
 #include "NoobUtils.hpp"
 
-uint32_t _width;
-uint32_t _height;
+uint32_t window_width;
+uint32_t window_height;
 
 EGLint current_context; 
 
@@ -61,42 +54,44 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 {
 	noob::logger::log(noob::importance::INFO, "[C++] JNILib.OnResize()");
 
-	_height = height;
-	_width = width;
+	window_height = height;
+	window_width = width;
 
 	EGLint last_context = current_context;
 
 	current_context = reinterpret_cast<EGLint>(eglGetCurrentContext());
 
-	// noob::graphics& gfx = noob::graphics::get_instance();
-
 	//if (!started)
 	//{
-	//	gfx.init(_width, _height);
-	
-		app->init(_width, _height, archive_dir);
+	//	gfx.init(window_width, window_height);
+
+	// app->init(window_width, window_height, archive_dir);
 
 	//	started = true;
 	// }
 
+
+
 	if (current_context != last_context)
 	{
 		if (last_context == 0)
-		 {
-		app->init(_width, _height, archive_dir);
-			//gfx.init(_width, _height);
-		 }
+		{
+			app->init(window_width, window_height, archive_dir);
+		}
 
-	//	gfx.frame(_width, _height);
-		
-	//	if (app)
-	//	{
-	//		app->init(_width, _height, archive_dir);
-	//	}
+		//	gfx.frame(window_width, window_height);
+
+		//	if (app)
+		//	{
+		//		app->init(window_width, window_height, archive_dir);
+		//	}
 	}
 
+	noob::graphics& gfx = noob::graphics::get_instance();
+	
+	// gfx.init(window_width, window_height);
 
-	app->window_resize(_width, _height);
+	app->window_resize(window_width, window_height);
 }
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnFrame(JNIEnv* env, jobject obj)

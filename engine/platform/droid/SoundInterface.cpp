@@ -1,6 +1,4 @@
 // The Android implementation of the sound interface.
-
-
 #include "SoundInterface.hpp"
 
 

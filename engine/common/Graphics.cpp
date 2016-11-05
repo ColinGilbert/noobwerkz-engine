@@ -163,9 +163,19 @@ void noob::graphics::init(uint32_t width, uint32_t height) noexcept(true)
 
 	instanced_shader = noob::graphics::program_handle::make(load_program_gl(noob::glsl::vs_instancing_src, noob::glsl::fs_instancing_src));
 
+	u_eye_pos = glGetUniformLocation(instanced_shader.index(), "eye_pos");
+
+	check_error_gl();
+
+	u_light_directional = glGetUniformLocation(instanced_shader.index(), "directional_light");
+
+	check_error_gl();
+
 	frame(width, height);
 
 	noob::logger::log(noob::importance::INFO, "[Graphics] Done init.");
+
+	
 }
 
 void noob::graphics::destroy() noexcept(true)
@@ -266,7 +276,7 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 	{
 		const uint32_t current_offset = i * 3;
 		interleaved[current_offset] = noob::vec4(mesh.vertices[i].v[0], mesh.vertices[i].v[1], mesh.vertices[i].v[2], 1.0);
-		interleaved[current_offset + 1] = noob::vec4(mesh.normals[i].v[0], mesh.normals[i].v[1], mesh.normals[i].v[2], 1.0);
+		interleaved[current_offset + 1] = noob::vec4(mesh.normals[i].v[0], mesh.normals[i].v[1], mesh.normals[i].v[2], 0.0);
 		interleaved[current_offset + 2] = mesh.colours[i];
 	}
 
@@ -306,12 +316,12 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::matrices_stride, &matrices[0].m[0], GL_DYNAMIC_DRAW);
 
 
-	// Per instance MVP
+	// Per instance model matrices
 	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4)*2, reinterpret_cast<const void *>(0));
 	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4)*2, reinterpret_cast<const void *>(sizeof(noob::vec4)));
 	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4)*2, reinterpret_cast<const void *>(sizeof(noob::vec4)*2));
 	glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4)*2, reinterpret_cast<const void *>(sizeof(noob::vec4)*3));
-	// Per-instance normal matrix
+	// Per-instance MVP matrices
 	glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4)*2, reinterpret_cast<const void *>(sizeof(noob::vec4)*4));
 	glVertexAttribPointer(9, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4)*2, reinterpret_cast<const void *>(sizeof(noob::vec4)*5));
 	glVertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4)*2, reinterpret_cast<const void *>(sizeof(noob::vec4)*6));
@@ -441,7 +451,8 @@ void noob::graphics::frame(uint32_t width, uint32_t height) noexcept(true)
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
-/*
+
+
 noob::gpu_write_buffer noob::graphics::map_buffer(noob::model_handle h, noob::model::instanced_data_type t, uint32_t min, uint32_t max) noexcept(true)
 {
 	noob::model m = models.get(h);
@@ -491,13 +502,15 @@ noob::gpu_write_buffer noob::graphics::map_buffer(noob::model_handle h, noob::mo
 
 }
 
+
 void noob::graphics::unmap_buffer() noexcept(true)
 {
 	glUnmapBuffer(GL_ARRAY_BUFFER);
 
 	check_error_gl();
 }
-*/
+
+
 void noob::graphics::push_colours(noob::model_handle h, uint32_t offset, const std::vector<noob::vec4>& colours) noexcept(true)
 {
 	noob::model m = models.get(h);
@@ -522,4 +535,20 @@ void noob::graphics::push_matrices(noob::model_handle h, uint32_t offset, const 
 
 	check_error_gl();
 
+}
+
+
+void noob::graphics::eye_pos(const noob::vec3& arg) noexcept(true)
+{
+	glUniform3fv(u_eye_pos, 1, &arg.v[0]);
+
+	check_error_gl();
+}
+
+
+void noob::graphics::light_direction(const noob::vec3& arg) noexcept(true)
+{
+	glUniform3fv(u_light_directional, 1, &arg.v[0]);
+
+	check_error_gl();
 }

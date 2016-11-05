@@ -37,7 +37,7 @@ namespace noob
 			~stage() noexcept(true);
 
 			// This one must be called by the application.
-			void init(uint32_t window_width, uint32_t window_height, const noob::mat4& projection_mat) noexcept(true);
+			void init(uint32_t width, uint32_t height, const noob::mat4& projection_mat) noexcept(true);
 
 			// Brings everything back to scratch.
 			void tear_down() noexcept(true);
@@ -51,7 +51,12 @@ namespace noob
 
 			void draw() noexcept(true);
 
-			void update_viewport_params(uint32_t window_width, uint32_t window_height, const noob::mat4& projection_mat) noexcept(true);
+			void update_viewport_params(uint32_t width, uint32_t height, const noob::mat4& projection_mat) noexcept(true);
+
+			// Call this when your graphics context went dead and is now back (ie: app got sent into background)
+			void rebuild_graphics(uint32_t width, uint32_t height, const noob::mat4& projection_mat) noexcept(true);
+
+			void rebuild_models() noexcept(true);
 
 			void build_navmesh() noexcept(true);
 

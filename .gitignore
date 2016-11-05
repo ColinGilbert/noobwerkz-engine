@@ -9,7 +9,7 @@
 **/obj/*
 **/bin/*
 **/libs/*
-**/jni/libnative-activity.so
+**/jni/*.so
 **/gen/**
 **/assets/**
 **/local.properties

@@ -11,9 +11,9 @@ noob::stage::~stage() noexcept(true)
 }
 
 
-void noob::stage::init(uint32_t window_width, uint32_t window_height, const noob::mat4& projection_mat) noexcept(true) 
+void noob::stage::init(uint32_t width, uint32_t height, const noob::mat4& projection_mat) noexcept(true) 
 {
-	update_viewport_params(window_width, window_height, projection_mat);
+	update_viewport_params(width, height, projection_mat);
 
 	noob::vec3 eye_pos, eye_target, eye_up;
 	eye_pos = noob::vec3(0.0, 0.0, -10.0);
@@ -44,8 +44,9 @@ void noob::stage::init(uint32_t window_width, uint32_t window_height, const noob
 	team_colours.push_back(noob::vec4(1.0, 1.0, 0.0, 1.0));
 	team_colours.push_back(noob::vec4(0.0, 1.0, 1.0, 1.0));
 	team_colours.push_back(noob::vec4(1.0, 0.0, 1.0, 1.0));
-	team_colours.push_back(noob::vec4(0.0, 0.0, 0.0, 1.0));
+	team_colours.push_back(noob::vec4(0.2, 0.2, 0.2, 1.0));
 	team_colours.push_back(noob::vec4(0.2, 0.5, 0.2, 1.0));
+
 	logger::log(noob::importance::INFO, "[Stage] Done init.");
 }
 
@@ -120,6 +121,10 @@ void noob::stage::draw() noexcept(true)
 	noob::graphics::program_handle prog = gfx.get_default_instanced();
 	gfx.use_program(prog);
 
+	gfx.eye_pos(noob::translation_from_mat4(view_matrix));
+	
+	gfx.light_direction(noob::vec3(0.0, 0.0, -1.0));
+
 	for (uint32_t drawables_index = 0; drawables_index < drawables.size(); ++drawables_index)
 	{
 		const noob::stage::drawable_info_handle handle = noob::stage::drawable_info_handle::make(drawables_index);
@@ -144,10 +149,10 @@ void noob::stage::draw() noexcept(true)
 }
 
 
-void noob::stage::update_viewport_params(uint32_t window_width, uint32_t window_height, const noob::mat4& projection_mat) noexcept(true)
+void noob::stage::update_viewport_params(uint32_t width, uint32_t height, const noob::mat4& projection_mat) noexcept(true)
 {
-	viewport_width = window_width;
-	viewport_height = viewport_height;
+	viewport_width = width;
+	viewport_height = height;
 	// view_matrix = view_mat;
 	projection_matrix = projection_mat;
 }
@@ -156,6 +161,14 @@ void noob::stage::update_viewport_params(uint32_t window_width, uint32_t window_
 void noob::stage::build_navmesh() noexcept(true)
 {
 
+}
+
+void noob::stage::rebuild_graphics(uint32_t width, uint32_t height, const noob::mat4& projection_mat) noexcept(true)
+{
+	noob::graphics& gfx = noob::graphics::get_instance();
+	update_viewport_params(width, height, projection_mat);
+
+	
 }
 
 /*
@@ -503,16 +516,18 @@ void noob::stage::upload_matrices(drawable_info_handle arg) const noexcept(true)
 		// const noob::ghost gst = ghosts.get(a.ghost);
 		// const noob::mat4 model_mat = gst.get_transform();
 
-		noob::mat4 xform = noob::identity_mat4();
-		xform = noob::rotate(xform, a.orientation);
-		xform = noob::translate(xform, a.position);
-
-		const noob::mat4 mvp_mat = viewproj_mat * xform;
+		noob::mat4 model_mat = noob::identity_mat4();
+		model_mat = noob::rotate(model_mat, a.orientation);
+		model_mat = noob::translate(model_mat, a.position);
+		
+		matrices.push_back(model_mat);
+		
+		const noob::mat4 mvp_mat = viewproj_mat * model_mat;
+		
 		matrices.push_back(mvp_mat);
-		const noob::mat4 normal_mat = noob::transpose(noob::inverse(xform * view_matrix));
-		matrices.push_back(normal_mat);
-
-
+		
+		//const noob::mat4 normal_mat = noob::transpose(noob::inverse(xform * view_matrix));
+		//matrices.push_back(normal_mat);
 
 		/*
 		   bool valid = buf.push_back(mvp_mat);

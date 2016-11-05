@@ -76,10 +76,10 @@ namespace noob
 
 			void frame(uint32_t width, uint32_t height) noexcept(true);
 
-			// noob::gpu_write_buffer map_buffer(noob::model_handle, noob::model::instanced_data_type, uint32_t min, uint32_t max) noexcept(true);
+			noob::gpu_write_buffer map_buffer(noob::model_handle, noob::model::instanced_data_type, uint32_t min, uint32_t max) noexcept(true);
 
 			// NOTE: MUST be called as soon as you're finished using the buffer!
-			// void unmap_buffer() noexcept(true);
+			void unmap_buffer() noexcept(true);
 
 			noob::graphics::program_handle get_default_instanced() const noexcept(true) { return instanced_shader; }
 
@@ -87,14 +87,17 @@ namespace noob
 
 			void push_matrices(noob::model_handle, uint32_t offset, const std::vector<noob::mat4>& mats) noexcept(true);
 
+			void eye_pos(const noob::vec3&) noexcept(true);
 
+			void light_direction(const noob::vec3&) noexcept(true);
 		protected:
 
 			noob::component<noob::model> models;
 			noob::component<noob::texture> textures;
 
-
 			noob::graphics::program_handle instanced_shader;
+			
+			int32_t u_eye_pos, u_light_directional;
 
 			// noob::mat4 view_mat, proj_mat;
 	};
