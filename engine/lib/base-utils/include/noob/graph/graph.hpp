@@ -166,7 +166,7 @@ namespace noob
 					nodes[first.index()] = n;
 
 					auto search = edge_table.insert(noob::pack_32_to_64(first.index(), second.index()));
-					search->value = std::numeric_limits<uint64_t>::max();
+					search->value = std::numeric_limits<size_t>::max();
 
 					ready = false;
 				}
