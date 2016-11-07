@@ -42,14 +42,15 @@ public class GameView extends GLSurfaceView
 	{
 		super(context);
 
-		setEGLConfigChooser(8, 8, 8, 0, 16, 0);
-		setEGLContextClientVersion(2);
-
+		setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+		setEGLContextClientVersion(3);
+		// setPreserveEGLContextOnPause(true);
 		setRenderer(new Renderer());
 
 		setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 		JNILib.OnInit();
 	}
+
 
 	public void onDestroy()
 	{	
@@ -88,7 +89,6 @@ public class GameView extends GLSurfaceView
 		}
 		});
 
-		super.onPause();
 	}
 
 	@Override

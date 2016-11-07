@@ -3,17 +3,15 @@
 package="net.noobwerkz.sampleapp"
 android:versionCode="1"
 android:versionName="1.0">
-<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="21" />
+<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="23" />
 <uses-feature android:glEsVersion="0x00030000" required="true"/>
 
 <application
 android:label="Noobwerkz"
 android:icon="@drawable/ic_launcher"
 android:hasCode="true"
-android:debuggable="true"
 >
-<activity android:configChanges="orientation|keyboardHidden" android:label="@string/app_name" android:name="net.noobwerkz.sampleapp.MainActivity" android:screenOrientation="landscape" android:theme="@android:style/Theme.Translucent.NoTitleBar">
-
+<activity android:configChanges="orientation|keyboardHidden" android:label="@string/app_name" android:name="net.noobwerkz.sampleapp.MainActivity"  android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" android:launchMode="singleTask">
 
 <intent-filter>
 <action android:name="android.intent.action.MAIN" />

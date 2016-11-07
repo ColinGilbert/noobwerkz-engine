@@ -239,6 +239,11 @@ list (APPEND base_src
 	lib/base-utils/include/noob/fast_hashtable/fast_hashtable.cpp
 	)
 
+include_directories(lib/utf8)
+list (APPEND utf8_src
+	lib/utf8/utf8.cpp
+	)
+
 include_directories(lib/sdf)
 # include_directories(lib/edtaa3)
 
@@ -690,8 +695,6 @@ list (APPEND bullet_src
 include_directories(lib/stb)
 
 include_directories(common)
-include_directories(common/drawing)
-include_directories(common/drawing/font)
 
 include_directories(lib/libogg/include)
 list (APPEND ogg_src
@@ -832,6 +835,7 @@ include_directories(lib/short-alloc)
 include_directories(lib/network-host)
 include_directories(lib/math-funcs)
 
+
 list (APPEND shiny_src )
 
 if (DEFINED NOOB_USE_SHINY)
@@ -920,6 +924,7 @@ list(APPEND common_src
 	common/FileSystem.cpp
 	common/Mixer.cpp
 	common/AudioSample.cpp
+	common/Font.cpp
 	)
 
 list(APPEND user_src
@@ -928,7 +933,7 @@ list(APPEND user_src
 
 
 # All platforms get these:
-list (APPEND app_src ${assimp_src} ${freetype_src} ${user_src} ${main_src} ${common_src} ${base_src} ${recast_src} ${bullet_src} ${voropp_src} ${ozz_src} ${ogg_src} ${vorbis_src} ${r8_src} ${shiny_src})
+list (APPEND app_src ${assimp_src} ${freetype_src} ${utf8_src} ${user_src} ${main_src} ${common_src} ${base_src} ${recast_src} ${bullet_src} ${voropp_src} ${ozz_src} ${ogg_src} ${vorbis_src} ${r8_src} ${shiny_src})
 
 # More platform-specific:
 if (NOOB_PLATFORM_LINUX)

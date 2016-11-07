@@ -74,8 +74,10 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 
 	if (current_context != last_context)
 	{
+		noob::logger::log(noob::importance::INFO, "[EngineDroid] New EGL context created.");
 		if (last_context == 0)
 		{
+			noob::logger::log(noob::importance::INFO, "[EngineDroid] Initializing app.");
 			app->init(window_width, window_height, archive_dir);
 		}
 
@@ -87,10 +89,6 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 		//	}
 	}
 
-	noob::graphics& gfx = noob::graphics::get_instance();
-	
-	// gfx.init(window_width, window_height);
-
 	app->window_resize(window_width, window_height);
 }
 
@@ -100,7 +98,6 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnFrame(JNIEnv* env, 
 	{
 		noob::logger::log(noob::importance::INFO, "[C++] Drawing frame");
 		app->step();
-		//noob::graphics& gfx = noob::graphics::get_instance();
 	}
 }
 

@@ -1,6 +1,7 @@
 package net.noobwerkz.sampleapp;
 
 import net.noobwerkz.sampleapp.GameView;
+import android.view.WindowManager;
 import android.view.Surface;
 import android.os.Bundle;
 import android.app.Activity;
@@ -17,8 +18,11 @@ public class MainActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		mView = new GameView(getApplication());
-		setContentView(mView);
+		// getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
 		copyAssets();
+		
+		setContentView(mView);
 	}
 
 	@Override protected void onPause() 
