@@ -1,13 +1,14 @@
 cmake_minimum_required(VERSION 3.5)
 project(NoobWerkz)
 
-set(CMAKE_BUILD_TYPE "DEBUG")
-#set(CMAKE_BUILD_TYPE "RELEASE")
+#set(CMAKE_BUILD_TYPE "DEBUG")
+set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
 set(NOOB_COMMON_FLAGS "-Werror=return-type -ftrapv")
 set(NOOB_COMMON_C_FLAGS "-DSTB_IMAGE_STATIC -DFT2_BUILD_LIBRARY")
 set(NOOB_COMMON_CXX_FLAGS "-std=c++14 -fno-exceptions -fno-rtti -DEIGEN_MPL2_ONLY")
+
 set(NOOB_STRICT_FLAGS " -pedantic -Wdouble-promotion -Wshadow -pedantic-errors -Wextra -Wall -Wextra -Winit-self -Wold-style-cast -Wuninitialized -Wmissing-declarations")
 set(NOOB_STRICT_C_FLAGS "-Wmissing-prototypes -Wstrict-prototypes -Wold-style-definition")
 set(NOOB_STRICT_CXX_FLAGS "-fno-elide-constructors -Woverloaded-virtual -Winit-self ")
@@ -38,7 +39,6 @@ include(cmake/Shiny.cmake)
 include_directories(lib/glm)
 include_directories(lib/eigen)
 include_directories(lib/sdf)
-# include_directories(lib/edtaa3)
 include_directories(lib/stb)
 include_directories(lib/math-funcs)
 include_directories(common)
@@ -71,8 +71,10 @@ list(APPEND user_src
 
 list (APPEND main_src ${common_src} ${user_src})
 
-
+########################
 # Platforms
+########################
+
 if (NOOB_PLATFORM_LINUX)
 	set(CMAKE_C_FLAGS "-DHAVE_ALLOCA_H ${CMAKE_C_FLAGS}")
 	include_directories(lib/Khronos)
@@ -83,13 +85,11 @@ if (NOOB_PLATFORM_LINUX)
 	list(APPEND main_src
 		platform/nix/EngineDesktop.cpp
 		platform/nix/NDOF.cpp
-		#lib/glfw/deps/glad.c
 		platform/desktop/SoundInterface.cpp)
 
 	add_executable(NoobEdit ${main_src})
 
 	target_link_libraries(NoobEdit LINK_PUBLIC rt z dl pthread m soundio.a asound spnav X11 Xrandr Xcursor Xinerama glfw ${GLFW_LIBRARIES} GL ${OpenGL_gl_LIBRARY})
-	# target_link_libraries(NoobEdit LINK_PUBLIC spnav)
 endif()
 
 if (NOOB_PLATFORM_ANDROID)
@@ -105,5 +105,4 @@ if (NOOB_PLATFORM_ANDROID)
 
 	add_library(Entry SHARED ${main_src})
 	target_link_libraries(Entry dl log android EGL GLESv3)
-	# set_target_properties(Entry PROPERTIES COMPILE_DEFINITIONS "ANDROID")
 endif()
