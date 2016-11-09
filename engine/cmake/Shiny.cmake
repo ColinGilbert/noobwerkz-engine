@@ -1,4 +1,5 @@
 if (DEFINED NOOB_USE_SHINY)
+	
 	SET(CMAKE_CXX_FLAGS "-DSHINY_IS_COMPILED=TRUE  ${CMAKE_CXX_FLAGS}")
 
 	include_directories(lib/Shiny/include)

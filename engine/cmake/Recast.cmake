@@ -1,4 +1,3 @@
-
 if (DEFINED NOOB_USE_RECAST)
 
 	include_directories(lib/recastnavigation/Detour/Include)
@@ -67,7 +66,4 @@ if (DEFINED NOOB_USE_RECAST)
 	# lib/recastnavigation/RecastDemo/Source/TestCase.cpp
 	# lib/recastnavigation/RecastDemo/Source/ValueHistory.cpp
 	# lib/recastnavigation/RecastDemo/Contrib/fastlz/fastlz.c
-
 endif()
-
-

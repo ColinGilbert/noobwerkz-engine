@@ -30,7 +30,6 @@ list(APPEND main_src
 	lib/ozz-animation/src/base/maths/simd_math.cc
 	lib/ozz-animation/src/geometry/runtime/skinning_job.cc
 	)	
-
 #########################
 #
 # Consciously excluded:
@@ -52,5 +51,3 @@ list(APPEND main_src
 # lib/ozz-animation/src/animation/offline/fbx/fbx2skel.cc
 # lib/ozz-animation/src/animation/offline/tools/convert2anim.cc
 # lib/ozz-animation/src/animation/offline/tools/convert2skel.cc
-
-

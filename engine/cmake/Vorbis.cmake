@@ -45,6 +45,3 @@ list (APPEND main_src
 # lib/libvorbis/vq/latticebuild.c
 # lib/libvorbis/vq/vqgen.c
 # lib/libvorbis/vq/bookutil.c
-
-
-
