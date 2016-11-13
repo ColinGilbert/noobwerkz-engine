@@ -142,12 +142,14 @@ void noob::application::resume()
 	paused = false;
 }
 
+
 void noob::application::set_archive_dir(const std::string& filepath)
 {
 	logger::log(noob::importance::INFO, noob::concat("[Application] Setting archive directory {", filepath, "}"));
 	prefix = std::make_unique<std::string>(noob::concat(filepath, "/"));
 	logger::log(noob::importance::INFO, noob::concat("[Application] Archive dir = {",  *prefix, "}"));
 }
+
 
 void noob::application::touch(int pointerID, float x, float y, int action)
 {

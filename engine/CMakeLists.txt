@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 project(NoobWerkz)
 
-#set(CMAKE_BUILD_TYPE "DEBUG")
-set(CMAKE_BUILD_TYPE "RELEASE")
+set(CMAKE_BUILD_TYPE "DEBUG")
+#set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
 set(NOOB_COMMON_FLAGS "-Werror=return-type -ftrapv")
@@ -55,6 +55,7 @@ list(APPEND common_src
 	common/Joint.cpp
 	common/Ghost.cpp
 	common/Shape.cpp
+	common/Physics.cpp
 	common/MeshUtils.cpp
 	common/SkeletalAnim.cpp
 	common/Particles.cpp

@@ -33,8 +33,6 @@ namespace noob
 	class application
 	{
 		public:
-
-
 			// Init must always be called.
 			void init(uint32_t width, uint32_t height, const std::string filepath);
 
@@ -53,7 +51,6 @@ namespace noob
 			
 			void window_resize(uint32_t w, uint32_t h);
 			void key_input(char c);
-
 
 			// TODO: Reimplement
 			bool eval(const std::string& name, const std::string& string_to_eval, bool reset = false);

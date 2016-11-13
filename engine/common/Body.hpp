@@ -74,12 +74,10 @@ namespace noob
 
 		void set_ccd(bool) noexcept(true); 
 
-
 		static uint32_t get_shape_index(const noob::body& b) noexcept(true)
 		{
 			return b.inner->getCollisionShape()->getUserIndex();
 		}
-
 
 		protected:
 		noob::body_type type;
