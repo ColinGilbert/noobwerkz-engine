@@ -88,98 +88,98 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type typ
    {
    }
 
-void noob::body::set_self_controlled(bool b) noexcept(true) 
+   void noob::body::set_self_controlled(bool b) noexcept(true) 
+   {
+   if (b == true)
+   {
+   self_controlled = true;
+// inner->setLinearSleepingThreshold(btScalar(0.8));
+// inner->setAngularSleepingThreshold(btScalar(1.0));
+// inner->setAngularFactor(btVector2(0.0, 0.0));
+// inner->setLinearFactor(btVector3(1.0, 1.0, 1.0));
+}
+else
 {
-	if (b == true)
-	{
-		self_controlled = true;
-		// inner->setLinearSleepingThreshold(btScalar(0.8));
-		// inner->setAngularSleepingThreshold(btScalar(1.0));
-		// inner->setAngularFactor(btVector2(0.0, 0.0));
-		// inner->setLinearFactor(btVector3(1.0, 1.0, 1.0));
-	}
-	else
-	{
-		self_controlled = false;
-	}
+self_controlled = false;
+}
 }
 
 
 void noob::body::update() 
 {
-	if (self_controlled)
-	{
-		btTransform xform;
+if (self_controlled)
+{
+btTransform xform;
 
-		inner->getMotionState()->getWorldTransform(xform);
+inner->getMotionState()->getWorldTransform(xform);
 
-		btVector3 down = -xform.getBasis()[1];
-		btVector3 forward = xform.getBasis()[2];
+btVector3 down = -xform.getBasis()[1];
+btVector3 forward = xform.getBasis()[2];
 
-		down.normalize();
-		forward.normalize();
+down.normalize();
+forward.normalize();
 
-		btVector3 ray_source = xform.getOrigin();
-		btVector3 ray_target = ray_source + btVector3(0.0, -((height * 0.5) + 5.0), 0.0);
+btVector3 ray_source = xform.getOrigin();
+btVector3 ray_target = ray_source + btVector3(0.0, -((height * 0.5) + 5.0), 0.0);
 
-		btCollisionWorld::ClosestRayResultCallback ray_callback(ray_source, ray_target);
+btCollisionWorld::ClosestRayResultCallback ray_callback(ray_source, ray_target);
 
-		dynamics_world->rayTest(ray_source, ray_target, ray_callback);
+dynamics_world->rayTest(ray_source, ray_target, ray_callback);
 
-		if (ray_callback.hasHit())
-		{
-			airborne = false;
-			// if (i == 0) airborne = false;
-			// if (i == 1) obstacled = false;
-			// logger::log("[Character] - ray hit!");
-			ray_lambda = ray_callback.m_closestHitFraction;
-		}
-		else
-		{
-			airborne = true;
-			// logger::log("[Character] - no hit");
-			ray_lambda = 1.0;
-		}
-	}
+if (ray_callback.hasHit())
+{
+airborne = false;
+// if (i == 0) airborne = false;
+// if (i == 1) obstacled = false;
+// logger::log("[Character] - ray hit!");
+ray_lambda = ray_callback.m_closestHitFraction;
+}
+else
+{
+airborne = true;
+// logger::log("[Character] - no hit");
+ray_lambda = 1.0;
+}
+}
 }
 
 
 void noob::body::move(bool forward, bool backward, bool left, bool right, bool jump) noexcept(true) 
 {
-	if (self_controlled)
+if (self_controlled)
+{
+if (on_ground())
+{
+	btTransform xform;
+	inner->getMotionState()->getWorldTransform(xform);
+
+	btVector3 linear_velocity = inner->getLinearVelocity();
+	btScalar speed = inner->getLinearVelocity().length();
+	btVector3 walk_direction = btVector3(0.0, 0.0, 0.0);
+
+	btVector3 forward_dir(walk_speed, 0.0, 0.0);
+
+	if (forward) walk_direction += forward_dir;
+	if (backward) walk_direction -= forward_dir;
+
+	if (jump)
 	{
-		if (on_ground())
+		linear_velocity += btVector3(0.0, 1.5, 0.0);
+	}
+	if (!forward && !backward && !left && !right && !jump && on_ground())
+	{
+		// Dampen when on the ground and not being moved by the player
+		linear_velocity *= btScalar(0.2);
+	}
+	else
+	{
+		if (speed < max_linear_velocity)
 		{
-			btTransform xform;
-			inner->getMotionState()->getWorldTransform(xform);
-
-			btVector3 linear_velocity = inner->getLinearVelocity();
-			btScalar speed = inner->getLinearVelocity().length();
-			btVector3 walk_direction = btVector3(0.0, 0.0, 0.0);
-
-			btVector3 forward_dir(walk_speed, 0.0, 0.0);
-
-			if (forward) walk_direction += forward_dir;
-			if (backward) walk_direction -= forward_dir;
-
-			if (jump)
-			{
-				linear_velocity += btVector3(0.0, 1.5, 0.0);
-			}
-			if (!forward && !backward && !left && !right && !jump && on_ground())
-			{
-				// Dampen when on the ground and not being moved by the player
-				linear_velocity *= btScalar(0.2);
-			}
-			else
-			{
-				if (speed < max_linear_velocity)
-				{
-					linear_velocity = linear_velocity + walk_direction * walk_speed;
-				}
-			}
+			linear_velocity = linear_velocity + walk_direction * walk_speed;
 		}
 	}
+}
+}
 }
 
 
@@ -219,7 +219,6 @@ noob::vec3 noob::body::get_angular_velocity() const noexcept(true)
 }
 
 
-
 noob::mat4 noob::body::get_transform() const noexcept(true) 
 {
 	btTransform xform;
@@ -228,10 +227,39 @@ noob::mat4 noob::body::get_transform() const noexcept(true)
 }
 
 
+noob::body::info noob::body::get_info() const noexcept(true)
+{
+	noob::body::info results;
+
+	float inv_mass = inner->getInvMass();
+	if (inv_mass > 0.0)
+	{
+		results.mass = 1.0 / inv_mass;
+	}
+	else
+	{
+		results.mass = 0.0;
+	}
+	results.type = type;
+	results.friction = inner->getFriction();
+	results.restitution = inner->getRestitution();
+	results.position = vec3_from_bullet(inner->getCenterOfMassPosition());
+	results.linear_velocity = vec3_from_bullet(inner->getLinearVelocity());
+	results.angular_velocity = vec3_from_bullet(inner->getAngularVelocity());
+	results.linear_factor = vec3_from_bullet(inner->getLinearFactor());
+	results.angular_factor = vec3_from_bullet(inner->getAngularFactor());
+	results.orientation = versor_from_bullet(inner->getOrientation());
+	results.ccd = ccd;
+
+	return results;
+}
+
+
 std::string noob::body::get_debug_string() const noexcept(true) 
 {
 	return noob::concat("[Body] position ", noob::to_string(get_position()), ", orientation ", noob::to_string(get_orientation()), ", linear velocity ", noob::to_string(get_linear_velocity()), ", angular velocity ", noob::to_string(get_angular_velocity()));// << ", on ground? " << on_ground() << ", ray lambda  = " << ray_lambda; //<< " ray lambda # 2 = " << ray_lambda[1];
 }
+
 
 void noob::body::set_ccd(bool b) noexcept(true) 
 {
@@ -241,8 +269,18 @@ void noob::body::set_ccd(bool b) noexcept(true)
 		btScalar radius;
 		inner->getCollisionShape()->getBoundingSphere(center, radius);
 		inner->setCcdMotionThreshold(radius);
+		ccd = true;
 	}
 }
 
 
+bool noob::body::get_ccd_enabled() const noexcept(true)
+{
+	return ccd;
+}
 
+
+float noob::body::get_ccd_threshold() const noexcept(true)
+{
+	return inner->getCcdMotionThreshold();
+}

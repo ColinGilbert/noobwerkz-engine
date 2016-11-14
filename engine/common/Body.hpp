@@ -23,28 +23,7 @@ namespace noob
 
 		struct info
 		{
-			void init(btRigidBody* _body, noob::body_type _type, bool _ccd) noexcept(true)
-			{
-				float inv_mass = _body->getInvMass();
-				if (inv_mass > 0.0)
-				{
-					mass = 1.0 / inv_mass;
-				}
-				else
-				{
-					mass = 0.0;
-				}
-				type = _type;
-				friction = _body->getFriction();
-				restitution = _body->getRestitution();
-				position = vec3_from_bullet(_body->getCenterOfMassPosition());
-				linear_velocity = vec3_from_bullet(_body->getLinearVelocity());
-				angular_velocity = vec3_from_bullet(_body->getAngularVelocity());
-				linear_factor = vec3_from_bullet(_body->getLinearFactor());
-				angular_factor = vec3_from_bullet(_body->getAngularFactor());
-				orientation =  versor_from_bullet(_body->getOrientation());
-				ccd = _ccd;
-			}
+
 
 			noob::body_type type;
 			float mass, friction, restitution;
@@ -72,7 +51,11 @@ namespace noob
 
 		std::string get_debug_string() const noexcept(true);
 
+		// At this point in time, we can only set ccd on.
+		// TODO: Find out how to turn it off properly.
 		void set_ccd(bool) noexcept(true); 
+		bool get_ccd_enabled() const noexcept(true); 
+		float get_ccd_threshold() const noexcept(true); 
 
 		static uint32_t get_shape_index(const noob::body& b) noexcept(true)
 		{
