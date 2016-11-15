@@ -8,14 +8,14 @@
 
 namespace noob
 {
-	class stage;
+	class physics;
 	class joint;
 
 	enum class body_type {DYNAMIC = 0, KINEMATIC = 1, STATIC = 2};
 
 	class body 
 	{
-		friend class stage;
+		friend class physics;
 		friend class joint;
 
 		public:	
@@ -55,10 +55,7 @@ namespace noob
 		bool get_ccd_enabled() const noexcept(true); 
 		float get_ccd_threshold() const noexcept(true); 
 
-		static uint32_t get_shape_index(const noob::body& b) noexcept(true)
-		{
-			return b.inner->getCollisionShape()->getUserIndex();
-		}
+		uint32_t get_shape_index() const noexcept(true);
 
 		protected:
 		noob::body_type type;

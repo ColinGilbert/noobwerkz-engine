@@ -153,9 +153,9 @@ namespace noob
 			noob::fast_hashtable models_to_instances;
 
 			// These are for holding useful data.
-			noob::component<noob::body> bodies;
-			noob::component<noob::joint> joints;
-			noob::component<noob::ghost> ghosts;
+			// noob::component<noob::body> bodies;
+			// noob::component<noob::joint> joints;
+			// noob::component<noob::ghost> ghosts;
 			noob::component<noob::actor> actors;
 			noob::component<noob::scenery> sceneries;
 			noob::component<noob::particle_system> particle_systems;
@@ -164,11 +164,5 @@ namespace noob
 			noob::duration update_duration;
 			noob::duration draw_duration;
 			noob::duration last_navmesh_build_duration;
-
-			// btBroadphaseInterface* broadphase;
-			// btDefaultCollisionConfiguration* collision_configuration;
-			// btCollisionDispatcher* collision_dispatcher;
-			// btSequentialImpulseConstraintSolver* solver;
-			// btDiscreteDynamicsWorld* dynamics_world;
 	};
 }

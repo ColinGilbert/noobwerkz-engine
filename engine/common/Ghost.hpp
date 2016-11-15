@@ -9,7 +9,7 @@ namespace noob
 {
 	class ghost
 	{
-		friend class stage;
+		friend class physics;
 
 		public:
 		ghost() noexcept(true) : inner(nullptr) {}

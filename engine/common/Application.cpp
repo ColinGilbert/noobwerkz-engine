@@ -180,9 +180,7 @@ void noob::application::window_resize(uint32_t w, uint32_t h)
 
 	stage.update_viewport_params(window_width, window_height, proj_mat);
 
-
 	logger::log(noob::importance::INFO, noob::concat("[Application] Resize window to (", noob::to_string(window_width), ", ", noob::to_string(window_height), ")"));
-
 }
 
 
@@ -195,11 +193,12 @@ void noob::application::key_input(char c)
 void noob::application::remove_shapes()
 {
 	noob::globals& g = noob::globals::get_instance();
-	const uint32_t shapes_count = g.shapes.count();
-	for (size_t i = 0; i < shapes_count; ++i)
+	
+	for (size_t i = 0; i < g.shapes.count(); ++i)
 	{
 		g.shapes.get(noob::shape_handle::make(i)).clear();
 	}
+	
 	g.shapes.empty();
 }
 

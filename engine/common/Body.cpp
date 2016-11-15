@@ -284,3 +284,9 @@ float noob::body::get_ccd_threshold() const noexcept(true)
 {
 	return inner->getCcdMotionThreshold();
 }
+
+
+uint32_t noob::body::get_shape_index() const noexcept(true)
+{
+	return inner->getCollisionShape()->getUserIndex();
+}

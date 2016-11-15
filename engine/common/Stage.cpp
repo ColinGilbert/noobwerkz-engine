@@ -3,11 +3,7 @@
 
 noob::stage::~stage() noexcept(true) 
 {
-	// delete dynamics_world;
-	// delete solver;
-	// delete collision_configuration;
-	// delete collision_dispatcher;
-	// delete broadphase;
+
 }
 
 
@@ -25,14 +21,7 @@ void noob::stage::init(uint32_t width, uint32_t height, const noob::mat4& projec
 	view_matrix = noob::look_at(eye_pos, eye_target, eye_up);
 	projection_matrix = projection_mat;
 	
-	// broadphase = new btDbvtBroadphase();
-	// collision_configuration = new btDefaultCollisionConfiguration();
-	// collision_dispatcher = new btCollisionDispatcher(collision_configuration);
-	// solver = new btSequentialImpulseConstraintSolver();
-	// dynamics_world = new btDiscreteDynamicsWorld(collision_dispatcher, broadphase, solver, collision_configuration);
-	// dynamics_world->setGravity(btVector3(0, -10, 0));
 
-	// dynamics_world->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 
 	main_light.colour = noob::vec4(1.0, 1.0, 1.0, 0.3);
 	main_light.direction = noob::vec4(-0.3333, -1.0, -0.3333, 1.0);
@@ -53,22 +42,6 @@ void noob::stage::init(uint32_t width, uint32_t height, const noob::mat4& projec
 
 void noob::stage::tear_down() noexcept(true) 
 {
-	for (size_t i = 0; i < bodies.count(); ++i)
-	{
-		// remove_body(body_handle::make(i));
-	}
-
-	bodies.empty();
-
-	// Joints are automatically cleaned up by Bullet once all bodies have been destroyed. I think...
-	joints.empty();
-
-	for (size_t i = 0; i < ghosts.count(); ++i)
-	{
-		// remove_ghost(ghost_handle::make(i));
-	}
-
-	ghosts.empty();
 
 	actors.empty();
 	// actor_mq.clear();
