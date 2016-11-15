@@ -19,16 +19,22 @@ namespace noob
 {
 	class shape 
 	{
-		friend class application;
-		friend class stage;
 		friend class body;
 		friend class ghost;
-		friend class globals;
-		
+
 		public:
 		enum class type { SPHERE, BOX, /* CYLINDER, CONE, */ HULL, TRIMESH };
 
 		shape() noexcept(true) : physics_valid(false), scales(noob::vec3(1.0, 1.0, 1.0)) {}
+
+		// Initializers
+		void sphere(float radius) noexcept(true);
+		void box(float width, float height, float depth) noexcept(true);
+		void cylinder(float radius, float height) noexcept(true);
+		void capsule(float radius, float height) noexcept(true);
+		void cone(float radius, float height) noexcept(true);
+		void hull(const std::vector<noob::vec3>&) noexcept(true);
+		void trimesh(const noob::basic_mesh&) noexcept(true);
 
 		void set_margin(float) noexcept(true);
 		float get_margin() const noexcept(true);
@@ -39,27 +45,19 @@ namespace noob
 
 		noob::basic_mesh get_mesh() const noexcept(true);
 
-		void del() noexcept(true);
+		void clear() noexcept(true);
 
-		const btCollisionShape* get_inner() const noexcept(true);
-		btCollisionShape* get_inner_mutable() const noexcept(true);	
+		void set_self_index(uint32_t) noexcept(true);
+		uint32_t get_self_index() const noexcept(true);
+		// const btCollisionShape* get_inner() const noexcept(true);
+		// btCollisionShape* get_inner_mutable() const noexcept(true);	
 
 		protected:
-		// Initializers. Used by noob::stage
-		void sphere(float radius) noexcept(true);
-		void box(float width, float height, float depth) noexcept(true);
-		void cylinder(float radius, float height) noexcept(true);
-		void capsule(float radius, float height) noexcept(true);
-		void cone(float radius, float height) noexcept(true);
-		void hull(const std::vector<noob::vec3>&) noexcept(true);
-		void trimesh(const noob::basic_mesh&) noexcept(true);
-		
 		// void plane(const noob::vec3& normal, float offset) noexcept(true);
 		
 		noob::shape::type shape_type;
 		bool physics_valid;
 		noob::vec3 scales;
-		// std::array<float, 4> dims; // Hack to allow finding out model dimensions. TODO: Remove soon!
-		btCollisionShape* inner_shape;
+		btCollisionShape* inner;
 	};
 }

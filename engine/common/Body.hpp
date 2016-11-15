@@ -23,8 +23,6 @@ namespace noob
 
 		struct info
 		{
-
-
 			noob::body_type type;
 			float mass, friction, restitution;
 			noob::vec3 position, linear_velocity, angular_velocity, linear_factor, angular_factor;

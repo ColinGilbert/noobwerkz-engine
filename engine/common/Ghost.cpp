@@ -6,7 +6,7 @@ void noob::ghost::init(btCollisionWorld* world, const noob::shape& shape_arg, co
 {
 	inner = new btPairCachingGhostObject();
 	//logger::log("[Ghost] about to add collision object to world");
-	inner->setCollisionShape(shape_arg.inner_shape);
+	inner->setCollisionShape(shape_arg.inner);
 	btTransform trans(btQuaternion(orient_arg.q[0], orient_arg.q[1], orient_arg.q[2], orient_arg.q[3]), btVector3(pos_arg.v[0], pos_arg.v[1], pos_arg.v[2]));
 	//logger::log("[Ghost] about to set world transform");
 	inner->setWorldTransform(trans);

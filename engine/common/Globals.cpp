@@ -463,7 +463,7 @@ double noob::globals::get_random() noexcept(true)
 noob::shape_handle noob::globals::add_shape(const noob::shape& s) noexcept(true)
 {
 	noob::shape_handle h = shapes.add(s);
-	std::get<1>(shapes.get_ptr_mutable(h))->get_inner_mutable()->setUserIndex(h.index());
+	std::get<1>(shapes.get_ptr_mutable(h))->set_self_index(h.index());
 	return h;
 }
 

@@ -42,10 +42,10 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type typ
 
 	if (type == noob::body_type::DYNAMIC)
 	{
-		shape.inner_shape->calculateLocalInertia(_mass, inertia);
+		shape.inner->calculateLocalInertia(_mass, inertia);
 	}
 
-	btRigidBody::btRigidBodyConstructionInfo ci(_mass, motion_state, shape.inner_shape, inertia);
+	btRigidBody::btRigidBodyConstructionInfo ci(_mass, motion_state, shape.inner, inertia);
 	inner = new btRigidBody(ci);
 
 	set_ccd(ccd);
@@ -64,8 +64,8 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type typ
 	start_transform.setOrigin(btVector3(_info.position.v[0], _info.position.v[1], _info.position.v[2]));
 	btVector3 inertia(0, 0, 0);
 	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
-	shape.inner_shape->calculateLocalInertia(_info.mass, inertia);
-	btRigidBody::btRigidBodyConstructionInfo ci(_info.mass, motion_state, shape.inner_shape, inertia);
+	shape.inner->calculateLocalInertia(_info.mass, inertia);
+	btRigidBody::btRigidBodyConstructionInfo ci(_info.mass, motion_state, shape.inner, inertia);
 	inner = new btRigidBody(ci);
 	inner->setFriction(_info.friction);
 	inner->setRestitution(_info.restitution);

@@ -198,7 +198,7 @@ void noob::application::remove_shapes()
 	const uint32_t shapes_count = g.shapes.count();
 	for (size_t i = 0; i < shapes_count; ++i)
 	{
-		g.shapes.get(noob::shape_handle::make(i)).del();
+		g.shapes.get(noob::shape_handle::make(i)).clear();
 	}
 	g.shapes.empty();
 }
