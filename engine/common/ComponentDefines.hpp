@@ -18,9 +18,6 @@
 
 namespace noob
 {
-	typedef noob::component<noob::body> bodies_holder;
-	typedef noob::component<noob::joint> joints_holder;
-	typedef noob::component<noob::ghost> ghosts_holder;
 	typedef noob::component<noob::shape> shapes_holder;
 	typedef noob::component<noob::light> lights_holder;
 	typedef noob::component<noob::reflectance> reflectances_holder;

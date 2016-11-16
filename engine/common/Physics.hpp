@@ -7,16 +7,13 @@
 #include "Ghost.hpp"
 #include "Timing.hpp"
 #include "Joint.hpp"
+#include "ComponentDefines.hpp"
 
 namespace noob
 {
 	class physics
 	{
 		public:
-		typedef noob::handle<noob::shape> shape_handle;
-		typedef noob::handle<noob::body> body_handle;
-		typedef noob::handle<noob::ghost> ghost_handle;
-		
 		~physics() noexcept(true);
 		
 		void init(const noob::vec3& gravity, noob::duration timestep) noexcept(true);
@@ -26,12 +23,12 @@ namespace noob
 		void set_gravity(const noob::vec3&) noexcept(true);
 		noob::vec3 get_gravity() const noexcept(true);
 
-		noob::physics::body_handle add_body(noob::body_type, const noob::physics::shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true);
-		noob::physics::body_handle add_body(noob::body_type, const noob::physics::shape_handle, const noob::body::info&) noexcept(true);		
-		noob::physics::ghost_handle add_ghost(const noob::physics::shape_handle, const noob::vec3&, const noob::versor&) noexcept(true);
+		noob::body_handle add_body(noob::body_type, const noob::shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true);
+		noob::body_handle add_body(noob::body_type, const noob::shape_handle, const noob::body::info&) noexcept(true);		
+		noob::ghost_handle add_ghost(const noob::shape_handle, const noob::vec3&, const noob::versor&) noexcept(true);
 		
-		noob::body& get_body(noob::physics::body_handle) noexcept(true);
-		noob::ghost& get_ghost(noob::physics::ghost_handle) noexcept(true);
+		noob::body& get_body(noob::body_handle) noexcept(true);
+		noob::ghost& get_ghost(noob::ghost_handle) noexcept(true);
 
 		protected:
 		std::vector<noob::body> bodies;
@@ -44,7 +41,7 @@ namespace noob
 		btSequentialImpulseConstraintSolver* solver;
 		btDiscreteDynamicsWorld* dynamics_world;
 
-		void remove_body(noob::physics::body_handle) noexcept(true);
-		void remove_ghost(noob::physics::ghost_handle) noexcept(true);
+		void remove_body(noob::body_handle) noexcept(true);
+		void remove_ghost(noob::ghost_handle) noexcept(true);
 	};
 }
