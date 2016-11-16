@@ -20,14 +20,13 @@ namespace noob
 		~physics() noexcept(true);
 		
 		void init(const noob::vec3& gravity, noob::duration timestep) noexcept(true);
+		void step(noob::duration_fp) noexcept(true);
 		void clear() noexcept(true);
 
 		void set_gravity(const noob::vec3&) noexcept(true);
-		void set_timestep(const noob::duration) noexcept(true);
 		noob::vec3 get_gravity() const noexcept(true);
-		noob::duration get_timestep() const noexcept(true);
 
-		noob::physics::body_handle add_body(noob::body_type, const noob::physics::shape_handle, float mass, const noob::vec3& position, const noob::versor& orientation, bool ccd) noexcept(true);
+		noob::physics::body_handle add_body(noob::body_type, const noob::physics::shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true);
 		noob::physics::body_handle add_body(noob::body_type, const noob::physics::shape_handle, const noob::body::info&) noexcept(true);		
 		noob::physics::ghost_handle add_ghost(const noob::physics::shape_handle, const noob::vec3&, const noob::versor&) noexcept(true);
 		
@@ -35,7 +34,6 @@ namespace noob
 		noob::ghost& get_ghost(noob::physics::ghost_handle) noexcept(true);
 
 		protected:
-	
 		std::vector<noob::body> bodies;
 		std::vector<noob::ghost> ghosts;
 		std::vector<noob::joint> joints;

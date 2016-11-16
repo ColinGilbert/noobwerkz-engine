@@ -14,6 +14,7 @@
 #include "SkeletalAnim.hpp"
 #include "AudioSample.hpp"
 #include "TextLabel.hpp"
+#include "Timing.hpp"
 
 namespace noob
 {

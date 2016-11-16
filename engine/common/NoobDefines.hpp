@@ -4,12 +4,6 @@
 
 namespace noob
 {
-	typedef std::chrono::steady_clock clock;
-	typedef std::chrono::time_point<noob::clock> time;
-	typedef std::chrono::duration<clock::rep, clock::period> duration;
-
-	typedef std::chrono::duration<double, clock::period> duration_fp;
-
 	static const uint8_t DEFAULT_DRAW_LAYER = 0;
 	static const uint8_t UI_TEXT_LAYER = 1;
 
