@@ -1,14 +1,14 @@
 include_directories(lib/bullet/src)
 list (APPEND main_src
 
-	#./lib/bullet/src/Bullet3Common/b3Vector3.cpp
-	#./lib/bullet/src/Bullet3Common/b3AlignedAllocator.cpp
-	#./lib/bullet/src/Bullet3Common/b3Logging.cpp
-	#./lib/bullet/src/Bullet3Dynamics/ConstraintSolver/b3Generic6DofConstraint.cpp
-	#./lib/bullet/src/Bullet3Dynamics/ConstraintSolver/b3TypedConstraint.cpp
-	#./lib/bullet/src/Bullet3Dynamics/ConstraintSolver/b3FixedConstraint.cpp
-	#./lib/bullet/src/Bullet3Dynamics/ConstraintSolver/b3PgsJacobiSolver.cpp
-	#./lib/bullet/src/Bullet3Dynamics/ConstraintSolver/b3Point2PointConstraint.cpp
+#./lib/bullet/src/Bullet3Common/b3Vector3.cpp
+#./lib/bullet/src/Bullet3Common/b3AlignedAllocator.cpp
+#./lib/bullet/src/Bullet3Common/b3Logging.cpp
+#./lib/bullet/src/Bullet3Dynamics/ConstraintSolver/b3Generic6DofConstraint.cpp
+#./lib/bullet/src/Bullet3Dynamics/ConstraintSolver/b3TypedConstraint.cpp
+#./lib/bullet/src/Bullet3Dynamics/ConstraintSolver/b3FixedConstraint.cpp
+#./lib/bullet/src/Bullet3Dynamics/ConstraintSolver/b3PgsJacobiSolver.cpp
+#./lib/bullet/src/Bullet3Dynamics/ConstraintSolver/b3Point2PointConstraint.cpp
 #./lib/bullet/src/Bullet3Dynamics/b3CpuRigidBodyPipeline.cpp
 #./lib/bullet/src/Bullet3Collision/NarrowPhaseCollision/b3ConvexUtility.cpp
 #./lib/bullet/src/Bullet3Collision/NarrowPhaseCollision/b3CpuNarrowPhase.cpp

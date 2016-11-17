@@ -1,3 +1,8 @@
+Nov 16, 2016
+```
+Sanitary interface between Bullet and rest of API is now set in properly. Newest release seems to have fixed the unpredictable crashes, while a bug on Android was solved by removing -ftrapv compiler flags. AKA: Found a numeric bug in Bullet. :) This officially means that we can retain a Bullet compatibility layer as benchmark against our own algorithms. :)
+```
+
 Nov. 12, 2016
 ```
 Had to debug troublesome bug on secondary testing device: Tried switching to C++ EGL and got same problems. Switched back to Java-based and managed to update phone which fixed bug. :P
@@ -26,3 +31,5 @@ Tried to make bgfx work by updating shaders in an effort to not be forced to ref
 Continued to refactor graphics API.
 Switched to Clang and refactored build flags in order to root out bugs. Found some.
 ```
+
+NOTE: The development process stretched far beyond the initial date on this document, as keeping notes is a habit I have decided to re-learn.
