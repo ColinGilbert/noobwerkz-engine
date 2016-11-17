@@ -1,6 +1,5 @@
 #include "Physics.hpp"
-#include "Globals.hpp"
-#include "MathFuncs.hpp"
+
 
 noob::physics::~physics() noexcept(true)
 {
@@ -12,7 +11,7 @@ noob::physics::~physics() noexcept(true)
 }
 
 
-void noob::physics::init(const noob::vec3& gravity, noob::duration timestep) noexcept(true)
+void noob::physics::init() noexcept(true)
 {
 	broadphase = new btDbvtBroadphase();
 	collision_configuration = new btDefaultCollisionConfiguration();
@@ -24,9 +23,9 @@ void noob::physics::init(const noob::vec3& gravity, noob::duration timestep) noe
 }
 
 
-void noob::physics::step(noob::duration_fp arg) noexcept(true)
+void noob::physics::step(float arg) noexcept(true)
 {
-	dynamics_world->stepSimulation(arg.count() / noob::billion);
+	dynamics_world->stepSimulation(arg);
 }
 
 
@@ -48,7 +47,6 @@ void noob::physics::clear() noexcept(true)
 	}
 
 	ghosts.reserve(0);
-
 }
 
 
@@ -109,6 +107,73 @@ noob::body& noob::physics::get_body(noob::body_handle h) noexcept(true)
 noob::ghost& noob::physics::get_ghost(noob::ghost_handle h) noexcept(true)
 {
 	return ghosts[h.index()];
+}
+
+
+std::vector<noob::contact_point> noob::physics::get_intersecting(const noob::ghost_handle ghost_h) const noexcept(true) 
+{
+	noob::ghost temp_ghost = ghosts[ghost_h.index()];
+
+	btManifoldArray manifold_array;
+
+	btBroadphasePairArray& pair_array = temp_ghost.inner->getOverlappingPairCache()->getOverlappingPairArray();
+
+	std::vector<noob::contact_point> results;
+
+	size_t num_pairs = pair_array.size();
+
+	for (size_t i = 0; i < num_pairs; ++i)
+	{
+		manifold_array.clear();
+
+		const btBroadphasePair& pair = pair_array[i];
+
+		btBroadphasePair* collision_pair = dynamics_world->getPairCache()->findPair(pair.m_pProxy0, pair.m_pProxy1);
+
+		if (!collision_pair)
+		{
+			continue;
+		}
+
+		if (collision_pair->m_algorithm)
+		{
+			collision_pair->m_algorithm->getAllContactManifolds(manifold_array);
+		}
+
+		for (size_t j = 0; j < manifold_array.size(); ++j)
+		{
+			btPersistentManifold* manifold = manifold_array[j];
+			const btCollisionObject* bt_obj = manifold->getBody0();
+			// Sanity check
+			const uint32_t index = static_cast<uint32_t>(bt_obj->getUserIndex2());
+			if (index != std::numeric_limits<uint32_t>::max())
+			{
+				// btScalar direction = is_first_body ? btScalar(-1.0) : btScalar(1.0);
+				for (size_t p = 0; p < manifold->getNumContacts(); ++p)
+				{
+					const btManifoldPoint& pt = manifold->getContactPoint(p);
+					if (pt.getDistance() < 0.0f)
+					{
+						noob::contact_point cp;
+
+						cp.item_type = static_cast<noob::stage_item_type>(bt_obj->getUserIndex());
+						cp.index = index;
+						cp.pos_a = vec3_from_bullet(pt.getPositionWorldOnA());
+						cp.pos_b = vec3_from_bullet(pt.getPositionWorldOnB());
+						cp.normal_on_b = vec3_from_bullet(pt.m_normalWorldOnB);
+
+						results.push_back(cp);
+					}
+				}
+			}
+			else
+			{
+				logger::log(noob::importance::ERROR, "[Stage] Invalid objects found during collision");
+			}
+		}
+	}
+
+	return results;
 }
 
 

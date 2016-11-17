@@ -285,6 +285,29 @@ float noob::body::get_ccd_threshold() const noexcept(true)
 	return inner->getCcdMotionThreshold();
 }
 
+void noob::body::set_user_index_1(uint32_t i) noexcept(true)
+{
+	inner->setUserIndex(static_cast<int>(i));
+}
+
+
+void noob::body::set_user_index_2(uint32_t i) noexcept(true)
+{
+	inner->setUserIndex2(static_cast<int>(i));
+}
+
+
+uint32_t noob::body::get_user_index_1() const noexcept(true)
+{
+	return static_cast<uint32_t>(inner->getUserIndex());
+}
+
+
+uint32_t noob::body::get_user_index_2() const noexcept(true)
+{
+	return static_cast<uint32_t>(inner->getUserIndex2());
+}
+
 
 uint32_t noob::body::get_shape_index() const noexcept(true)
 {

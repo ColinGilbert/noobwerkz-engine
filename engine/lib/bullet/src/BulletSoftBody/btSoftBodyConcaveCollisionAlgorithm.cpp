@@ -115,7 +115,7 @@ void btSoftBodyTriangleCallback::processTriangle(btVector3* triangle,int partId,
 		btAssert(tm);
 
 		//copy over user pointers to temporary shape
-		tm->setUserIndex(m_triBody->getCollisionShape()->getUserIndex());
+		tm->setUserPointer(m_triBody->getCollisionShape()->getUserPointer());
 
 		btCollisionObjectWrapper softBody(0,m_softBody->getCollisionShape(),m_softBody,m_softBody->getWorldTransform(),-1,-1);
 		//btCollisionObjectWrapper triBody(0,tm, ob, btTransform::getIdentity());//ob->getWorldTransform());//??
@@ -158,7 +158,7 @@ void btSoftBodyTriangleCallback::processTriangle(btVector3* triangle,int partId,
 		//	tm.setMargin(m_collisionMarginTriangle);
 
 		//copy over user pointers to temporary shape
-		tm->setUserIndex(m_triBody->getCollisionShape()->getUserIndex());
+		tm->setUserPointer(m_triBody->getCollisionShape()->getUserPointer());
 
 		
 		btCollisionObjectWrapper softBody(0,m_softBody->getCollisionShape(),m_softBody,m_softBody->getWorldTransform(),-1,-1);

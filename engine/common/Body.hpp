@@ -55,6 +55,11 @@ namespace noob
 		bool get_ccd_enabled() const noexcept(true); 
 		float get_ccd_threshold() const noexcept(true); 
 
+		void set_user_index_1(uint32_t) noexcept(true);
+		void set_user_index_2(uint32_t) noexcept(true);
+		uint32_t get_user_index_1() const noexcept(true);
+		uint32_t get_user_index_2() const noexcept(true);
+
 		uint32_t get_shape_index() const noexcept(true);
 
 		protected:

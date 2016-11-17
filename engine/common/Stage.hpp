@@ -13,6 +13,7 @@
 #include "Graphics.hpp"
 #include "MathFuncs.hpp"
 #include "SkeletalAnim.hpp"
+#include "Physics.hpp"
 #include "Body.hpp"
 #include "Joint.hpp"
 #include "Shape.hpp"
@@ -21,7 +22,6 @@
 #include "Scenery.hpp"
 #include "Globals.hpp"
 #include "ComponentDefines.hpp"
-#include "ContactPoint.hpp"
 #include "Particles.hpp"
 #include "Armature.hpp"
 #include "NDOF.hpp"
@@ -92,28 +92,9 @@ namespace noob
 
 			void accept_ndof_data(const noob::ndof::data& info) noexcept(true);
 
-
+			noob::physics world;
 
 		protected:
-
-			static constexpr auto dbg_name = "Stage";
-
-			void run_ai() noexcept(true);
-
-			// rde::slist<rde::vector<noob::vec3>> paths;
-
-			// void remove_body(noob::body_handle) noexcept(true);
-
-			// void remove_ghost(noob::ghost_handle) noexcept(true);
-
-			// void remove_joint(noob::joint_handle) noexcept(true);
-
-			std::vector<noob::contact_point> get_intersecting(const noob::ghost_handle) const noexcept(true);
-
-			void update_actors() noexcept(true);
-
-			void actor_dither(noob::actor_handle) noexcept(true);
-
 			struct drawable_instance
 			{
 				noob::actor_handle actor;
@@ -134,13 +115,7 @@ namespace noob
 				uint32_t count, max;
 			};
 
-			typedef noob::handle<drawable_info> drawable_info_handle;
-
-			void upload_colours(drawable_info_handle) const noexcept(true);
-
-			void upload_matrices(drawable_info_handle) const noexcept(true);
-
-			void reserve_models(noob::model_handle h, uint32_t num) noexcept(true);
+			static constexpr auto dbg_name = "Stage";
 
 			noob::mat4 view_matrix, projection_matrix;
 			uint32_t viewport_width, viewport_height;
@@ -152,10 +127,6 @@ namespace noob
 
 			noob::fast_hashtable models_to_instances;
 
-			// These are for holding useful data.
-			// noob::component<noob::body> bodies;
-			// noob::component<noob::joint> joints;
-			// noob::component<noob::ghost> ghosts;
 			noob::component<noob::actor> actors;
 			noob::component<noob::scenery> sceneries;
 			noob::component<noob::particle_system> particle_systems;
@@ -164,5 +135,24 @@ namespace noob
 			noob::duration update_duration;
 			noob::duration draw_duration;
 			noob::duration last_navmesh_build_duration;
+
+
+			void run_ai() noexcept(true);
+
+			// rde::slist<rde::vector<noob::vec3>> paths;
+
+			void update_actors() noexcept(true);
+
+			void actor_dither(noob::actor_handle) noexcept(true);
+
+			typedef noob::handle<drawable_info> drawable_info_handle;
+
+			void upload_colours(drawable_info_handle) const noexcept(true);
+
+			void upload_matrices(drawable_info_handle) noexcept(true);
+
+			void reserve_models(noob::model_handle h, uint32_t num) noexcept(true);
+
+
 	};
 }

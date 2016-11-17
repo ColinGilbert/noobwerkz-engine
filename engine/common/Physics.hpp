@@ -7,6 +7,9 @@
 #include "Ghost.hpp"
 #include "Timing.hpp"
 #include "Joint.hpp"
+#include "ContactPoint.hpp"
+#include "Globals.hpp"
+#include "MathFuncs.hpp"
 #include "ComponentDefines.hpp"
 
 namespace noob
@@ -16,8 +19,8 @@ namespace noob
 		public:
 		~physics() noexcept(true);
 		
-		void init(const noob::vec3& gravity, noob::duration timestep) noexcept(true);
-		void step(noob::duration_fp) noexcept(true);
+		void init() noexcept(true);
+		void step(float) noexcept(true);
 		void clear() noexcept(true);
 
 		void set_gravity(const noob::vec3&) noexcept(true);
@@ -29,6 +32,8 @@ namespace noob
 		
 		noob::body& get_body(noob::body_handle) noexcept(true);
 		noob::ghost& get_ghost(noob::ghost_handle) noexcept(true);
+
+		std::vector<noob::contact_point> get_intersecting(const noob::ghost_handle) const noexcept(true);
 
 		protected:
 		std::vector<noob::body> bodies;
