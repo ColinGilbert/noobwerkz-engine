@@ -22,7 +22,7 @@ namespace noob
 
 		bool push_back(const noob::vec4& arg) noexcept(true)
 		{
-			if (current_pos < size - 4)
+			if (current_pos < size - 3)
 			{
 				for (float f : arg.v)
 				{
@@ -39,7 +39,7 @@ namespace noob
 
 		bool push_back(const noob::mat4& arg) noexcept(true)
 		{
-			if (current_pos < size - 16)
+			if (current_pos < size - 15)
 			{
 				for (float f : arg.m)
 				{

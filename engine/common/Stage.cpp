@@ -20,7 +20,7 @@ void noob::stage::init(uint32_t width, uint32_t height, const noob::mat4& projec
 	//eye_up = noob::cross(eye_up, eye_forward);
 	view_matrix = noob::look_at(eye_pos, eye_target, eye_up);
 	projection_matrix = projection_mat;
-	
+
 	world.init();
 
 	main_light.colour = noob::vec4(1.0, 1.0, 1.0, 0.3);
@@ -73,7 +73,7 @@ void noob::stage::update(double dt) noexcept(true)
 	// nav_changed = false;
 	//}
 
-	
+
 	world.step(1.0/60.0);
 
 	// update_particle_systems();
@@ -96,7 +96,7 @@ void noob::stage::draw() noexcept(true)
 	gfx.use_program(prog);
 
 	gfx.eye_pos(noob::translation_from_mat4(view_matrix));
-	
+
 	gfx.light_direction(noob::vec3(0.0, 0.0, -1.0));
 
 	for (uint32_t drawables_index = 0; drawables_index < drawables.size(); ++drawables_index)
@@ -143,7 +143,7 @@ void noob::stage::rebuild_graphics(uint32_t width, uint32_t height, const noob::
 	noob::graphics& gfx = noob::graphics::get_instance();
 	update_viewport_params(width, height, projection_mat);
 
-	
+
 }
 
 
@@ -296,38 +296,35 @@ void noob::stage::upload_colours(drawable_info_handle arg) const noexcept(true)
 
 	noob::graphics& gfx = noob::graphics::get_instance();
 
-	// noob::gpu_write_buffer buf = gfx.map_buffer(model_h, noob::model::instanced_data_type::COLOUR, 0, count);
-	/*
-	   if (buf.valid() == false)
-	   {
-	   logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced colour buffer for model ", noob::to_string(arg.index())));	
-	   return;
-	   }
-	   */
-	std::vector<noob::vec4> colours;
+	noob::gpu_write_buffer buf = gfx.map_buffer(model_h, noob::model::instanced_data_type::COLOUR, 0, count);
+
+	if (buf.valid() == false)
+	{
+		logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced colour buffer for model ", noob::to_string(arg.index())));	
+		return;
+	}
+
 	uint32_t current = 0;
 	while (current < count)
 	{
 		const noob::actor_handle a_h = drawables[arg.index()].instances[current].actor;
 		const noob::actor a = actors.get(a_h);
 		const noob::vec4 colour = team_colours[a.team];
-		colours.push_back(colour);
-		/*
-		   if (!valid)
-		   {
-		   logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu colours buffer for model ", noob::to_string(arg.index())));
-		   gfx.unmap_buffer();			
-		   return;
-		   }
-		   */
+		bool valid = buf.push_back(colour);
+
+		if (!valid)
+		{
+			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu colours buffer for model ", noob::to_string(arg.index())));
+			gfx.unmap_buffer();			
+			return;
+		}
+
 		++current;
 	}
 
-	gfx.push_colours(model_h, 0, colours);
-
 	// logger::log(noob::importance::INFO, noob::concat("[Stage] ", noob::to_string(current), " colours uploaded"));
 
-	// gfx.unmap_buffer();
+	gfx.unmap_buffer();
 }
 
 
@@ -339,18 +336,17 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 	assert(count <= theoretical_max);
 
 	const noob::model_handle model_h = drawables[arg.index()].model;
+	noob::graphics& gfx = noob::graphics::get_instance();
 
 
-	// noob::gpu_write_buffer buf = gfx.map_buffer(model_h, noob::model::instanced_data_type::MATRICES, 0, count);
-	/*
-	   if (buf.valid() == false)
-	   {
-	   logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced matrices buffer for model ", noob::to_string(arg.index())));	
-	   return;
-	   }
-	   */
+	noob::gpu_write_buffer buf = gfx.map_buffer(model_h, noob::model::instanced_data_type::MATRICES, 0, count);
+	if (buf.valid() == false)
+	{
+		logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced matrices buffer for model ", noob::to_string(arg.index())));	
+		return;
+	}
+
 	const noob::mat4 viewproj_mat = projection_matrix * view_matrix;
-	std::vector<noob::mat4> matrices;
 	uint32_t current = 0;
 	while (current < count)
 	{
@@ -360,48 +356,32 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 		const noob::ghost& gst = world.get_ghost(a.ghost);
 		const noob::mat4 model_mat = gst.get_transform();
 
-		// noob::mat4 model_mat = noob::identity_mat4();
-		// model_mat = noob::rotate(model_mat, a.orientation);
-		// model_mat = noob::translate(model_mat, a.position);
-		
-		matrices.push_back(model_mat);
-		
+		bool valid = buf.push_back(model_mat);
+
+		if (!valid)
+		{
+			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu matrices buffer for model ", noob::to_string(arg.index()), " MVP"));
+			gfx.unmap_buffer();			
+			return;
+		}
+
 		const noob::mat4 mvp_mat = viewproj_mat * model_mat;
-		
-		matrices.push_back(mvp_mat);
-		
-		//const noob::mat4 normal_mat = noob::transpose(noob::inverse(xform * view_matrix));
-		//matrices.push_back(normal_mat);
+		valid = buf.push_back(mvp_mat);
 
-		/*
-		   bool valid = buf.push_back(mvp_mat);
+		if (!valid)
+		{
+			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu matrices buffer for model ", noob::to_string(arg.index()), " normal"));
+			gfx.unmap_buffer();
+			return;
+		}
 
-		   if (!valid)
-		   {
-		   logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu matrices buffer for model ", noob::to_string(arg.index()), " MVP"));
-		   gfx.unmap_buffer();			
-		   return;
-		   }
-
-		   valid = buf.push_back(normal_mat);
-
-		   if (!valid)
-		   {
-		   logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu matrices buffer for model ", noob::to_string(arg.index()), " normal"));
-		   gfx.unmap_buffer();
-		   return;
-		   }
-		   */
 		++current;
 	}
 
-	noob::graphics& gfx = noob::graphics::get_instance();
-
-	gfx.push_matrices(model_h, 0, matrices);
 
 	// logger::log(noob::importance::INFO, noob::concat("[Stage] ", noob::to_string(current), "*2 matrices uploaded"));
 
-	// gfx.unmap_buffer();
+	gfx.unmap_buffer();
 }
 
 

@@ -1,6 +1,8 @@
 Nov 16, 2016
 ```
 Sanitary interface between Bullet and rest of API is now set in properly. Newest release seems to have fixed the unpredictable crashes, while a bug on Android was solved by removing -ftrapv compiler flags. AKA: Found a numeric bug in Bullet. :) This officially means that we can retain a Bullet compatibility layer as benchmark against our own algorithms. :)
+
+After fighting with a confusing (shader-caused, durr) bug, we cut our draw time in half by using glMapBufferRange instead of glBufferSubData.
 ```
 
 Nov. 12, 2016
