@@ -31,8 +31,7 @@ namespace noob
 		uint32_t team, pose;
 		noob::actor_blueprints_handle bp_handle;
 		noob::ghost_handle ghost;
-		noob::vec3 velocity, position, target_pos;
-		noob::versor orientation;
+		noob::vec3 velocity, target_pos;
 		// float incline, gravity_coeff;
 
 		// noob::actor::stance_type stance;

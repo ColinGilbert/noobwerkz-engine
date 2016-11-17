@@ -127,7 +127,6 @@ void noob::stage::update_viewport_params(uint32_t width, uint32_t height, const 
 {
 	viewport_width = width;
 	viewport_height = height;
-	// view_matrix = view_mat;
 	projection_matrix = projection_mat;
 }
 
@@ -185,8 +184,6 @@ noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32
 			a.team = team;
 			a.ghost = world.add_ghost(info.bp.bounds, pos, orient);
 			a.bp_handle = bp_h;
-			a.position = pos;
-			a.orientation = orient;
 			const noob::actor_handle a_h = actors.add(a);
 
 			noob::fast_hashtable::cell* results = models_to_instances.lookup(info.bp.model.index());
@@ -272,15 +269,14 @@ void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 	if (a.alive)
 	{
 		std::vector<noob::contact_point> cps = get_intersecting(ah);
-		//if (cps.size() == 0)
-		//{
-		//	noob::vec3 gravity = vec3_from_bullet(dynamics_world->getGravity()) * a.gravity_coeff;
-		//	noob::ghost gh = ghosts.get(a.ghost);
-		//	noob::vec3 temp_pos = gh.get_position();
-
-		//	temp_pos += gravity;
-		//	gh.set_position(temp_pos);
-		// }
+		if (cps.size() == 0)
+		{
+			noob::vec3 gravity = world.get_gravity();// * a.gravity_coeff;
+			noob::ghost& gst = world.get_ghost(a.ghost);
+			noob::vec3 temp_pos = gst.get_position();
+			temp_pos += gravity;
+			gst.set_position(temp_pos);
+		}
 	}
 }
 
@@ -424,19 +420,11 @@ void noob::stage::reserve_models(noob::model_handle h, uint32_t num) noexcept(tr
 	}
 }
 
-/*
-   std::string noob::stage::print_drawables_info() const noexcept(true)
-   {
-
-   }
-   */
-
 
 void noob::stage::accept_ndof_data(const noob::ndof::data& info) noexcept(true)
 {
 	if (info.movement == true)
 	{
-		// logger::log(noob::importance::INFO, noob::concat("[Stage] NDOF data: T(", noob::to_string(info.translation[0]), ", ", noob::to_string(info.translation[1]) ,", ", noob::to_string(info.translation[2]), ") R(", noob::to_string(info.rotation[0]), ", ", noob::to_string(info.rotation[1]), ", ", noob::to_string(info.rotation[2]), ")"));
 		float damping = 360.0;
 		view_matrix = noob::rotate_x_deg(view_matrix, -info.rotation[0] / damping);
 		view_matrix = noob::rotate_y_deg(view_matrix, -info.rotation[1] / damping);
