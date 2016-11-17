@@ -2,18 +2,17 @@
 
 #include <string>
 
-#include "NoobDefines.hpp"
 #include "Timing.hpp"
 
 namespace noob
 {
 	struct profiler_snap
 	{
-		noob::time::duration total_time;
-		// noob::time::duration app_draw_duration;
-		noob::time::duration stage_ai_duration;
-		noob::time::duration stage_physics_duration;
-		noob::time::duration stage_draw_duration;
+		noob::time_point::duration total_time;
+		// noob::time_point::duration app_draw_duration;
+		noob::time_point::duration stage_ai_duration;
+		noob::time_point::duration stage_physics_duration;
+		noob::time_point::duration stage_draw_duration;
 		
 		std::string to_string() const
 		{

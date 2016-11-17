@@ -1,6 +1,7 @@
 #pragma once
 
-#include "NoobDefines.hpp"
+#include <chrono>
+
 #include "StringFuncs.hpp"
 
 namespace noob
@@ -12,7 +13,7 @@ namespace noob
 	static constexpr uint64_t billion = 1000000000;
 
 	typedef std::chrono::steady_clock clock;
-	typedef std::chrono::time_point<noob::clock> time;
+	typedef std::chrono::time_point<noob::clock> time_point;
 	typedef std::chrono::duration<clock::rep, clock::period> duration;
 	typedef std::chrono::duration<double, clock::period> duration_fp;
 

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "NoobDefines.hpp"
-
 #include <noob/component/component.hpp>
 
 #include "MathFuncs.hpp"
@@ -21,7 +19,6 @@ namespace noob
 	typedef noob::component<noob::shape> shapes_holder;
 	typedef noob::component<noob::light> lights_holder;
 	typedef noob::component<noob::reflectance> reflectances_holder;
-	typedef noob::component<noob::time> times_holder;
 	typedef noob::component<noob::text_label> text_label_holder;
 
 	// TOOD: Make basic_models_holder and animated_models_holder stack-based
@@ -35,7 +32,7 @@ namespace noob
 	typedef handle<noob::shape> shape_handle;
 	typedef handle<noob::light> light_handle;
 	typedef handle<noob::reflectance> reflectance_handle;
-	typedef handle<noob::time> time_handle;
+	typedef handle<noob::time_point> timepoint_handle;
 	typedef handle<noob::text_label> text_label_handle;
 	// typedef handle<noob::vec3> vec3_handle;
 

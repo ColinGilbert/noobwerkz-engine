@@ -9,7 +9,6 @@
 #include <noob/graph/graph.hpp>
 #include <noob/component/component.hpp>
 
-#include "NoobDefines.hpp"
 #include "Graphics.hpp"
 #include "MathFuncs.hpp"
 #include "SkeletalAnim.hpp"
@@ -33,8 +32,6 @@ namespace noob
 	{
 		public:
 			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.6, 0.6, 0.6, 1.0)) {}
-
-			~stage() noexcept(true);
 
 			// This one must be called by the application.
 			void init(uint32_t width, uint32_t height, const noob::mat4& projection_mat) noexcept(true);

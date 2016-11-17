@@ -15,7 +15,7 @@
 
 namespace noob
 {
-	// These are linked to ghosts onstage, and are invalidated on either first contact with anything that isn't another particle, or on running out of time.
+	// These are invalidated upon running out of time.
 	struct particle
 	{
 		particle() noexcept(true) : active(false), lifetime(noob::duration(0)), position(noob::vec3(0.0, 0.0, 0.0)), velocity(noob::vec3(0.0, 0.0, 0.0)), colour(noob::vec4(1.0, 1.0, 1.0, 0.0)) {}
@@ -201,7 +201,7 @@ namespace noob
 
 		noob::vec3 center, emit_direction, emit_direction_variance, wind;
 
-		noob::time last_update_time, current_update_time;
+		noob::time_point last_update_time, current_update_time;
 
 		rde::fixed_array<particle, max_particles> particles;
 

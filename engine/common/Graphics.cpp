@@ -302,18 +302,21 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 	glEnableVertexAttribArray(2);
 
 	// Setup colours VBO:
-	std::vector<noob::vec4> colours(num_instances, noob::vec4(1.0, 1.0, 1.0, 1.0));
+	// std::vector<noob::vec4> colours(num_instances, noob::vec4(1.0, 1.0, 1.0, 1.0));
 	glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
-	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::materials_stride, &colours[0].v[0], GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::materials_stride, nullptr, GL_DYNAMIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::materials_stride, &colours[0].v[0], GL_DYNAMIC_DRAW);
+	
 	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(0));
 	glEnableVertexAttribArray(3);
 	glVertexAttribDivisor(3, 1);
 	result.instanced_colour_vbo = colours_vbo;
 
 	// Setup matrices VBO:
-	std::vector<noob::mat4> matrices(num_instances * 2, noob::identity_mat4());
+	// std::vector<noob::mat4> matrices(num_instances * 2, noob::identity_mat4());
 	glBindBuffer(GL_ARRAY_BUFFER, matrices_vbo);
-	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::matrices_stride, &matrices[0].m[0], GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
+	// glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::matrices_stride, &matrices[0].m[0], GL_DYNAMIC_DRAW);
 
 
 	// Per instance model matrices
@@ -373,7 +376,7 @@ void noob::graphics::reset_instances(noob::model_handle h, uint32_t num_instance
 	models.set(h, m);
 
 	glBindVertexArray(m.vao);
-	
+/*	
 	// Setup colours VBO:
 	std::vector<noob::vec4> colours(num_instances, noob::vec4(1.0, 1.0, 1.0, 1.0));
 	glBindBuffer(GL_ARRAY_BUFFER, m.instanced_colour_vbo);
@@ -383,8 +386,8 @@ void noob::graphics::reset_instances(noob::model_handle h, uint32_t num_instance
 	std::vector<noob::mat4> matrices(num_instances * 2, noob::identity_mat4());
 	glBindBuffer(GL_ARRAY_BUFFER, m.instanced_matrices_vbo);
 	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::matrices_stride, &matrices[0].m[0], GL_DYNAMIC_DRAW);
+*/
 
-/*
 	// Setup colours VBO:
 	glBindBuffer(GL_ARRAY_BUFFER, m.instanced_colour_vbo);
 	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::materials_stride, nullptr, GL_DYNAMIC_DRAW);
@@ -392,7 +395,7 @@ void noob::graphics::reset_instances(noob::model_handle h, uint32_t num_instance
 	// Setup matrices VBO:
 	glBindBuffer(GL_ARRAY_BUFFER, m.instanced_matrices_vbo);
 	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
-*/
+
 	check_error_gl();
 
 	glBindVertexArray(0);

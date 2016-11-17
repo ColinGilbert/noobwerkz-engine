@@ -1,11 +1,6 @@
 #include "Stage.hpp"
 // #include "Shiny.h"
 
-noob::stage::~stage() noexcept(true) 
-{
-
-}
-
 
 void noob::stage::init(uint32_t width, uint32_t height, const noob::mat4& projection_mat) noexcept(true) 
 {
@@ -65,7 +60,7 @@ void noob::stage::tear_down() noexcept(true)
 void noob::stage::update(double dt) noexcept(true) 
 {
 	// PROFILE_FUNC();
-	noob::time start_time = noob::clock::now();
+	noob::time_point start_time = noob::clock::now();
 
 	//if (nav_changed)
 	//{
@@ -78,7 +73,7 @@ void noob::stage::update(double dt) noexcept(true)
 
 	// update_particle_systems();
 	update_actors();
-	noob::time end_time = noob::clock::now();
+	noob::time_point end_time = noob::clock::now();
 
 	update_duration = end_time - start_time;
 

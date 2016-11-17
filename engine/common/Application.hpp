@@ -8,7 +8,6 @@
 
 #include <noob/logger/logger.hpp>
 
-#include "NoobDefines.hpp"
 #include "Globals.hpp"
 #include "NoobUtils.hpp"
 #include "MathFuncs.hpp"
@@ -75,11 +74,11 @@ namespace noob
 			// TODO: Make a method of noob::globals
 			void remove_shapes();
 
-			noob::time last_step;
+			noob::time_point last_step;
 
 			noob::profiler_snap current_timings;
 
-			noob::time last_ui_update;
+			noob::time_point last_ui_update;
 
 			bool paused, started, input_has_started, ui_enabled;
 

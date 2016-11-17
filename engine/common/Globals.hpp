@@ -19,7 +19,6 @@
 // #include <noob/component/component.hpp>
 #include <noob/fast_hashtable/fast_hashtable.hpp>
 
-#include "NoobDefines.hpp"
 #include "Clock.hpp"
 #include "MathFuncs.hpp"
 #include "Graphics.hpp"
