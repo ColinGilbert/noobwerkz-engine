@@ -146,7 +146,3 @@ void noob::sound_interface::tear_down()
 	soundio_device_unref(device);
 	soundio_destroy(soundio);
 }
-
-// void noob::sound_interface::play(const rde::vector<float>& sample)
-//{
-//}

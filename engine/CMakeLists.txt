@@ -101,10 +101,10 @@ if (NOOB_PLATFORM_ANDROID)
 	set (CMAKE_CXX_FLAGS "-DNOOB_PLATFORM_ANDROID ${CMAKE_CXX_FLAGS}")
 
 	list (APPEND main_src
-		platform/droid/SoundInterface.cpp
 		platform/droid/EngineDroid.cpp
+		platform/droid/AudioInterfaceDroid.cpp
 		)
 
 	add_library(Entry SHARED ${main_src})
-	target_link_libraries(Entry dl log android EGL GLESv3)
+	target_link_libraries(Entry dl log android EGL GLESv3 OpenSLES)
 endif()

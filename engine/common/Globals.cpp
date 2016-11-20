@@ -14,8 +14,6 @@ bool noob::globals::init() noexcept(true)
 	noob::logger::log(noob::importance::INFO, noob::concat("[Globals] unit sphere shape handle ", noob::to_string(unit_sphere_shape.index()) ,", unit cube shape handle ", noob::to_string(unit_cube_shape.index())));
 	// << ", unit cylinder shape handle " << unit_cylinder_shape.index() << ", unit cone shape handle " << unit_cone_shape.index();
 
-	noob::graphics& gfx = noob::graphics::get_instance();
-
 	// TODO: Replace:
 	// noob::logger::log(noob::importance::INFO, "[Globals] Making unit sphere model");
 	// unit_sphere_model = gfx.model_instanced(noob::mesh_utils::sphere(0.5, 1), 1024);

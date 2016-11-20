@@ -43,7 +43,7 @@ public class GameView extends GLSurfaceView
 		super(context);
 
 		setEGLConfigChooser(true);
-		setEGLConfigChooser(5, 6, 5, 0, 24, EGL10.EGL_DONT_CARE);
+		setEGLConfigChooser(8, 8, 8, 8, 24, 8);
 		setEGLContextClientVersion(3);
 		// setPreserveEGLContextOnPause(true);
 		setRenderer(new Renderer());
@@ -57,12 +57,12 @@ public class GameView extends GLSurfaceView
 	{	
 		// Send the event to the renderer thread
 		queueEvent( new Runnable() {
-			@Override
-			public void run() 
-		{
-			JNILib.OnShutdown();
-		}
-		});
+				@Override
+				public void run() 
+				{
+				JNILib.OnShutdown();
+				}
+				});
 	}
 
 	public void onResume()
@@ -71,70 +71,70 @@ public class GameView extends GLSurfaceView
 
 		// Send the event to the renderer thread
 		queueEvent( new Runnable() {
-			@Override
-			public void run() 
-		{
-			JNILib.OnResume();
-		}
-		});
+				@Override
+				public void run() 
+				{
+				JNILib.OnResume();
+				}
+				});
 	}
 
 	public void onPause()
 	{
 		// Send the event to the renderer thread
 		queueEvent( new Runnable() {
-			@Override
-			public void run() 
-		{
-			JNILib.OnPause();
-		}
-		});
+				@Override
+				public void run() 
+				{
+				JNILib.OnPause();
+				}
+				});
 
 	}
 
 	@Override
-	public boolean onTouchEvent(MotionEvent event) 
-	{
-		// Implement Runnable for MotionEvent parameter
-		class MotionEventRunnable implements Runnable
+		public boolean onTouchEvent(MotionEvent event) 
 		{
-			private MotionEvent mEvent;
-			public MotionEventRunnable( MotionEvent event ) { mEvent = event; }
-
-			@Override
-			public void run() 
+			// Implement Runnable for MotionEvent parameter
+			class MotionEventRunnable implements Runnable
 			{
-				// Get the number of pointers to iterate
-				int iNumPointers = mEvent.getPointerCount();
-				for ( int i = 0; i < iNumPointers; ++i )
-				{
-					try
+				private MotionEvent mEvent;
+				public MotionEventRunnable( MotionEvent event ) { mEvent = event; }
+
+				@Override
+					public void run() 
 					{
-						// Get the pointer ID and index
-						int iPointerID = mEvent.getPointerId( i );
-						int iPointerIndex = mEvent.findPointerIndex( iPointerID );
+						// Get the number of pointers to iterate
+						int iNumPointers = mEvent.getPointerCount();
+						for ( int i = 0; i < iNumPointers; ++i )
+						{
+							try
+							{
+								// Get the pointer ID and index
+								int iPointerID = mEvent.getPointerId( i );
+								int iPointerIndex = mEvent.findPointerIndex( iPointerID );
 
-						// Get the xy position and action
-						float x = mEvent.getX( iPointerIndex );
-						float y = mEvent.getY( iPointerIndex );
+								// Get the xy position and action
+								float x = mEvent.getX( iPointerIndex );
+								float y = mEvent.getY( iPointerIndex );
 
-						int iAction = mEvent.getActionMasked();
+								int iAction = mEvent.getActionMasked();
 
-						// Send to C++
-						JNILib.OnTouch( iPointerID, x, y, iAction );
+								// Send to C++
+								JNILib.OnTouch( iPointerID, x, y, iAction );
+							}
+							catch(Exception e)
+							{
+								JNILib.Log("(Java) GameView - Caught nasty expression in method onTouchEvent");
+							} // This was necessary, as using too many fingers killed the program.
+						}				
 					}
-					catch(Exception e)
-					{
-						JNILib.Log("(Java) GameView - Caught nasty expression in method onTouchEvent");
-					} // This was necessary, as using too many fingers killed the program.
-				}				
 			}
+
+			// Send the event to the renderer thread
+			queueEvent(new MotionEventRunnable(event));
+
+			return true;
 		}
-
-		// Send the event to the renderer thread
-		queueEvent(new MotionEventRunnable(event));
-
-		return true;
-	}
 }
 

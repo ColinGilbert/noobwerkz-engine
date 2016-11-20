@@ -51,6 +51,8 @@ bool noob::mixer::play_clip(const noob::sample_handle clip, float volume) noexce
 
 void noob::mixer::tick(uint32_t num_frames) noexcept(true)
 {
+	output_buffer.swap();
+	
 	if (dirty)
 	{
 		rde::quick_sort(&now_playing[0], &now_playing[now_playing.size()], rde::less<voice_instance>());
@@ -95,16 +97,18 @@ void noob::mixer::tick(uint32_t num_frames) noexcept(true)
 					if (inf.offset > sample_size - 1)
 					{
 						inf.offset = std::numeric_limits<size_t>::max();
+						now_playing[v].active = false;
+						
 					}
 
 					now_playing[v].queue[q] = inf;
 				}
 			}
-
+/*
 			if (queue_count == 0)
 			{
-				now_playing[v].active = false;
 			}
-		}
+*/
+	}
 	}
 }

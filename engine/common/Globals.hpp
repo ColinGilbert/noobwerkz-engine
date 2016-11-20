@@ -36,7 +36,6 @@
 #include "ProfilingInfo.hpp"
 
 
-
 // Globals: Currently holds classes requiring data held in common storage.
 // TODO: Implement singleton class template.
 // TODO: Separate into different classes.
@@ -123,7 +122,6 @@ namespace noob
 		
 		double get_random() noexcept(true);
 
-
 		size_t get_sample_rate() const noexcept(true)
 		{
 			return sample_rate;
@@ -149,7 +147,7 @@ namespace noob
 		// noob::triplanar_gradient_map_renderer triplanar_drawer;
 
 		noob::mixer master_mixer;
-		noob::sound_interface audio_interface;
+		// noob::sound_interface audio_interface;
 
 
 		// The following are basic, commonly-used objects that we provide as a convenience.

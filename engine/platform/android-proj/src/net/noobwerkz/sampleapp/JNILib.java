@@ -22,8 +22,8 @@ public class JNILib
 	public static native void OnTouch(int iPointerID, float fPosX, float fPosY, int iAction);
 	public static native void SetupArchiveDir(String dir);
 	public static native void Log(String message);
-	// public static native void NativeSetSurface(Surface surface);
-	
+	public static native void CreateBufferQueueAudioPlayer(int sampleRate, int bufSize);
+
 	static
 	{
 		System.loadLibrary("Entry");

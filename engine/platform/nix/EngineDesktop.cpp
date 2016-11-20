@@ -1,6 +1,8 @@
 #include "Graphics.hpp"
 #include "Application.hpp"
 #include "NoobUtils.hpp"
+#include "SoundInterface.hpp"
+
 #include "NDOF.hpp"
 // #include <glad/glad.h>
 
@@ -94,6 +96,9 @@ int main()//int /*_argc*/, char** /*_argv*/)
 	glfwMakeContextCurrent(window);
 	// gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 	glfwSwapInterval(1);
+
+	noob::sound_interface audio_interface;
+	audio_interface.init();
 
 	app.init(width, height, ".");
 	noob::ndof ndof;

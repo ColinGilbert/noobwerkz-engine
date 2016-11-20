@@ -8,8 +8,7 @@ void noob::application::init(uint32_t width, uint32_t height, const std::string 
 	window_width = width;
 	window_height = height;
 
-	noob::sound_interface audio_interface;
-	audio_interface.init();
+
 
 	noob::graphics& gfx = noob::graphics::get_instance();
 	gfx.init(width, height);

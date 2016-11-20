@@ -11,6 +11,7 @@
 
 #include "ComponentDefines.hpp"
 #include "AudioSample.hpp"
+#include "RingBuffer.hpp"
 
 namespace noob
 {
@@ -20,7 +21,7 @@ namespace noob
 
 		public:
 
-		mixer() noexcept(true) : dirty(false), num_playing(0), max_playing(128), output_buffer_size(0) {}
+		mixer() noexcept(true) : dirty(false), num_playing(0), max_playing(8), output_buffer_size(0) {}
 
 		// Returns false for three reasons: First: Invalid handle (ie: sample doesn't exist.) Second: Not enough free voices. Third: Trying to play sample prior to its minimum allowed offset being reached (each sample has a minimum offset to ensurei two clips being played at the same time don't cause horrible-sounding interference.
 		
@@ -30,7 +31,7 @@ namespace noob
 		void tick(uint32_t num_frames) noexcept(true);
 
 
-		rde::vector<double> output_buffer;
+		noob::ringbuffer<double> output_buffer;
 
 
 		protected:
@@ -73,7 +74,6 @@ namespace noob
 				size_t offset;
 				float volume;
 			};
-
 
 			bool active;
 			uint32_t index;
