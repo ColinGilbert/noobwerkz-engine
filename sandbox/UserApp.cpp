@@ -47,10 +47,10 @@ bool noob::application::user_init()
 
 	g.master_mixer.play_clip(h, 1.0);
 
-	const float actor_dims = 10.0;
+	const float actor_dims = 2.0;
 	noob::shape_handle shp = g.sphere_shape(actor_dims);
 
-	const uint32_t actor_count = 1000;
+	const uint32_t actor_count = 200;
 
 	// TODO: Fixup
 	noob::actor_blueprints bp;
