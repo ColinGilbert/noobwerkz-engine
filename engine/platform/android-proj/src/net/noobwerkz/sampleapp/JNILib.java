@@ -23,6 +23,7 @@ public class JNILib
 	public static native void SetupArchiveDir(String dir);
 	public static native void Log(String message);
 	public static native void CreateBufferQueueAudioPlayer(int sampleRate, int bufSize);
+	public static native void DestroyBufferQueueAudioPlayer();
 
 	static
 	{

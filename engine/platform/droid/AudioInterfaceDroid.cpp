@@ -115,7 +115,7 @@ bool opensl_wrapper_init(AndroidAudioCallback cb, int frames_per_buffer_arg, int
 		sr = SL_SAMPLINGRATE_48;
 	}
 
-	SLDataLocator_AndroidSimpleBufferQueue loc_bufq = {SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE, 1};
+	SLDataLocator_AndroidSimpleBufferQueue loc_bufq = {SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE, 2};
 	SLDataFormat_PCM format_pcm =
 	{
 		SL_DATAFORMAT_PCM,
@@ -136,7 +136,7 @@ bool opensl_wrapper_init(AndroidAudioCallback cb, int frames_per_buffer_arg, int
 	// create audio player
 	const SLInterfaceID ids[2] = {SL_IID_BUFFERQUEUE, SL_IID_VOLUME};
 	const SLboolean req[2] = {SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE};
-	result = (*engine_engine_sl)->CreateAudioPlayer(engine_engine_sl, &bq_player_obj_sl, &audioSrc, &audioSnk, 1, ids, req);
+	result = (*engine_engine_sl)->CreateAudioPlayer(engine_engine_sl, &bq_player_obj_sl, &audioSrc, &audioSnk, 2, ids, req);
 	assert(SL_RESULT_SUCCESS == result);
 	result = (*bq_player_obj_sl)->Realize(bq_player_obj_sl, SL_BOOLEAN_FALSE);
 	assert(SL_RESULT_SUCCESS == result);

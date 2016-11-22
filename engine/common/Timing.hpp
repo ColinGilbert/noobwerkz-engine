@@ -37,6 +37,11 @@ namespace noob
 		return noob::duration_fp(static_cast<double>(d.count()) / static_cast<double>(denom));
 	}
 
+	static uint64_t nanos_per_oscillation(uint64_t hz)
+	{
+		return static_cast<double>(noob::billion) / static_cast<double>(hz);
+	}
+
 	static std::string pretty_print_timing(const noob::duration d)
 	{
 		uint64_t time_in_millis = millis(d);

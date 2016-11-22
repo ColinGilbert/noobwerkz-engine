@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 project(NoobWerkz)
 
-#set(CMAKE_BUILD_TYPE "DEBUG")
-set(CMAKE_BUILD_TYPE "RELEASE")
+set(CMAKE_BUILD_TYPE "DEBUG")
+#set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
 # Current Bullet bug: -ftrapv causes crash on Android.

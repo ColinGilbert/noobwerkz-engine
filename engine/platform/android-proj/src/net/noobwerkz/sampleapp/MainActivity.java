@@ -20,6 +20,8 @@ public class MainActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 
+		copyAssets();
+
 		int sampleRate = 0;
 		int bufSize = 0;
 
@@ -36,7 +38,6 @@ public class MainActivity extends Activity
 
 		mView = new GameView(getApplication());
 		// getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		copyAssets();
 
 		setContentView(mView);
 	}

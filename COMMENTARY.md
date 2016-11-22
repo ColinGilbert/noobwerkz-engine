@@ -1,3 +1,8 @@
+Nov 22, 2016
+```
+Been debugging Android Audio a lot. After much grief and head-banging, I have been able to output test audio by explicitly filling a large buffer and offering chunks of it to the callback. Said callback is WAY more painful than I anticipated, but I think that by rendering audio asynchronously we should hopefully do nicely.
+```
+
 Nov 16, 2016
 ```
 Sanitary interface between Bullet and rest of API is now set in properly. Newest release seems to have fixed the unpredictable crashes, while a bug on Android was solved by removing -ftrapv compiler flags. AKA: Found a numeric bug in Bullet. :) This officially means that we can retain a Bullet compatibility layer as benchmark against our own algorithms. :)
