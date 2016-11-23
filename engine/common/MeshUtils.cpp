@@ -416,7 +416,6 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 		logger::log(noob::importance::ERROR, "FAILED TO CREATE CONVEX HULL. WTF?");
 	}
 
-
 	for (uint32_t i = 0; i < hull_result.mNumOutputVertices; ++i)
 	{
 		mesh.vertices.push_back(noob::vec3_from_bullet(hull_result.m_OutputVertices[i]));
