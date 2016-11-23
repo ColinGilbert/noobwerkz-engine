@@ -30,12 +30,24 @@ std::atomic<bool> playing_audio(false);
 noob::ringbuffer<short> buffer_droid;
 std::atomic<size_t> playing_offset;
 
-void empty_buffer()
+void empty_buf()
 {
 	for(size_t i = 0; i < buffer_droid.size(); ++i)
 	{
 		buffer_droid[i] = 0;
 	}
+}
+
+void empty_and_swap_buf()
+{
+	empty_buf();
+	buffer_droid.swap();
+}
+
+void empty_all_bufs()
+{
+	empty_and_swap_buf();
+	empty_and_swap_buf();
 }
 
 extern "C"
@@ -107,9 +119,14 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnFrame(JNIEnv* env, jobject obj)
 {
+	static bool displayed = false;
 	if (app)
 	{
-		noob::logger::log(noob::importance::INFO, "[C++] Drawing frame");
+		if (!displayed)
+		{
+			noob::logger::log(noob::importance::INFO, "[C++] Drawing frame");
+			displayed = true;
+		}
 		app->step();
 	}
 }
@@ -205,23 +222,26 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_CreateBufferQueueAudi
 	noob::globals& g = noob::globals::get_instance();
 	g.sample_rate = std::fabs(sample_rate_arg);
 	const int buf_size = std::fabs(buf_size_arg);
-	noob::logger::log(noob::importance::INFO, noob::concat("[C++] Created buffer queue player with samplerate ", noob::to_string(g.sample_rate), " and buffer size ", noob::to_string(buf_size)));
 
 	// Setup beginning of sounds:
 	playing_offset = 0;
-	const size_t sound_update_hertz = 100;
-	const size_t estimated_nanos_per_update = noob::nanos_per_oscillation(sound_update_hertz);	
-	const size_t chunks_per_sec = noob::idiv_ceil(static_cast<size_t>(g.sample_rate), static_cast<size_t>(buf_size));
-	const size_t samples_per_update_cycle = noob::idiv_ceil(static_cast<size_t>(g.sample_rate), static_cast<size_t>(sound_update_hertz));
-	const size_t chunks_per_update_cycle = noob::idiv_ceil(samples_per_update_cycle, static_cast<size_t>(buf_size));
-	const size_t ringbuf_size = chunks_per_update_cycle * g.sample_rate * 2;
+	const double nanos_per_buffer = static_cast<double>(noob::billion) / static_cast<double>(g.sample_rate);
+	// const size_t buffers_per_update = static_cast<size_t>(static_cast<double>(nanos_per_update);
+	const double buffers_per_sec = static_cast<double>(g.sample_rate) / static_cast<double>(buf_size);
+	
+
+	noob::logger::log(noob::importance::INFO, noob::concat("[C++] Created buffer queue player with samplerate ", noob::to_string(g.sample_rate), " and buffer size ", noob::to_string(buf_size), "(", noob::to_string(buffers_per_sec), " buffers per second)"));
+
+	// const size_t sound_update_hertz = 100;
+	// const size_t nanos_per_update = noob::nanos_per_oscillation(sound_update_hertz);
+	// const size_t samples_per_update_cycle = noob::idiv_ceil(static_cast<size_t>(g.sample_rate), static_cast<size_t>(sound_update_hertz));
+	// const size_t chunks_per_update_cycle = noob::idiv_ceil(samples_per_update_cycle, static_cast<size_t>(buf_size));
+	// const size_t ringbuf_size = chunks_per_update_cycle * g.sample_rate * 2;
 
 	buffer_droid.resize(ringbuf_size);
 
-	empty_buffer();
-	buffer_droid.swap();
-	empty_buffer();
-	buffer_droid.swap();
+	empty_all_bufs();
+
 	opensl_wrapper_init(audio_cb, buf_size, g.sample_rate);
 
 	playing_audio = true;
