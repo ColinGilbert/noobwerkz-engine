@@ -28,11 +28,11 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 	vorbis_info* vi = ov_info(&vf,-1);
 
 	num_channels = vi->channels;
-	rate = vi->rate;
+	sample_rate = vi->rate;
 
 	char **ptr=ov_comment(&vf,-1)->user_comments;
 
-	noob::logger::log(noob::importance::INFO, noob::concat("[AudioSample] Bitstream is ", noob::to_string(num_channels), " channel, ", noob::to_string(rate), "Hz. Decoded lengths: ", noob::to_string(static_cast<int64_t>(ov_pcm_total(&vf,-1))), ". Encoded by: ", ov_comment(&vf,-1)->vendor));//". User comment: "; 
+	noob::logger::log(noob::importance::INFO, noob::concat("[AudioSample] Bitstream is ", noob::to_string(num_channels), " channel, ", noob::to_string(sample_rate), "Hz. Decoded lengths: ", noob::to_string(static_cast<int64_t>(ov_pcm_total(&vf,-1))), ". Encoded by: ", ov_comment(&vf,-1)->vendor));//". User comment: "; 
 	/*
 	   while(*ptr)
 	   {	
@@ -101,8 +101,18 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 
 	if (g.sample_rate != 44100)
 	{
-		size_t num_samples_old = samples.size();
+		resample(g.sample_rate);
 
+	}
+	return true;
+}
+
+
+void noob::audio_sample::resample(uint32_t sample_rate_arg) noexcept(true)
+{
+		size_t num_samples_old = samples.size();
+		uint32_t sample_rate_old = sample_rate;
+		sample_rate = sample_rate_arg;
 		std::vector<double> old_samps;
 
 		for (int16_t s : samples)
@@ -111,26 +121,27 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 			old_samps.push_back(d);
 		}
 
-		r8b::CDSPResampler24 resamp(44100.0, static_cast<double>(g.sample_rate), num_samples_old);
+		r8b::CDSPResampler24 resamp(static_cast<double>(sample_rate_old), static_cast<double>(sample_rate), num_samples_old);
 
-		size_t num_samples_new = (num_samples_old * g.sample_rate) / 44100.0;
+		size_t num_samples_new = static_cast<size_t>(static_cast<double>(num_samples_old * sample_rate) / static_cast<double>(sample_rate_old));
+
+		sample_rate = sample_rate_arg;
 
 		// samples.reserve(num_samples_new);
 		samples.clear();
 
-		size_t ol = num_samples_new;
-		while (ol > 0)
+		uint32_t output_left = num_samples_new;
+		while (output_left > 0)
 		{
-
-			double* opp;
-			size_t write_count;
-
 			double* output;
+			uint32_t write_count;
+
+			// double* output;
 			write_count = resamp.process(&old_samps[0], num_samples_old, output);
 
-			if (write_count > ol)
+			if (write_count > output_left)
 			{
-				write_count = ol;
+				write_count = output_left;
 			}
 
 			for (size_t i = 0; i < write_count; ++i)
@@ -140,16 +151,8 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 				samples.push_back(s);
 			}
 
-			ol -= write_count;
+			output_left -= write_count;
 		}
-		noob::logger::log(noob::importance::INFO, noob::concat("[AudioSample] Resampling from 44100 to ", noob::to_string(g.sample_rate), ". Old number of samples: ", noob::to_string(num_samples_old), ". New number of samples: ", noob::to_string(num_samples_new)));
 
-	}
-	return true;
-}
-
-
-bool noob::audio_sample::load_mem(const std::string& file) noexcept(true)
-{
-	return false;
+		noob::logger::log(noob::importance::INFO, noob::concat("[AudioSample] Resampling from ", noob::to_string(sample_rate_old), " to ", noob::to_string(sample_rate), ". Old number of samples: ", noob::to_string(num_samples_old), ". New number of samples: ", noob::to_string(num_samples_new)));
 }

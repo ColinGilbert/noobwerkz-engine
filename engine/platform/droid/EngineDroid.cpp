@@ -17,38 +17,21 @@ namespace noob
 	}
 }
 
-uint32_t window_width;
-uint32_t window_height;
+uint32_t window_width, window_height;
 
+EGLint current_context;
 
-EGLint current_context; 
+static constexpr uint32_t num_chunks = 4;
 
 std::string archive_dir;
 std::unique_ptr<noob::application> app = nullptr;
-std::atomic<bool> started(false);
-std::atomic<bool> playing_audio(false);
-noob::ringbuffer<short> buffer_droid;
-std::atomic<size_t> playing_offset;
+static std::atomic<bool> started(false);
+static std::atomic<bool> playing_audio(false);
+static std::atomic<bool> more_audio(true);
 
-void empty_buf()
-{
-	for(size_t i = 0; i < buffer_droid.size(); ++i)
-	{
-		buffer_droid[i] = 0;
-	}
-}
+static noob::ringbuffer<short> buffer_droid;
 
-void empty_and_swap_buf()
-{
-	empty_buf();
-	buffer_droid.swap();
-}
 
-void empty_all_bufs()
-{
-	empty_and_swap_buf();
-	empty_and_swap_buf();
-}
 
 extern "C"
 {
@@ -73,8 +56,6 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnInit(JNIEnv* env, j
 	{
 		app = std::unique_ptr<noob::application>(new noob::application());
 	}
-
-
 }
 
 
@@ -186,7 +167,6 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_SetupArchiveDir(JNIEn
 	{
 		app->set_archive_dir(archive_dir);
 	}
-
 }
 
 
@@ -198,22 +178,23 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_Log(JNIEnv* env, jobj
 }
 
 
-int audio_cb(short* buffer, int num_samples)
+int audio_cb(short* buffer, int frames_per_buffer)
 {
-	noob::globals& g = noob::globals::get_instance();
+	short* readbuf = buffer_droid.head();
 
-	size_t counter = 0;
-	for (uint32_t frame = 0; frame < static_cast<uint32_t>(num_samples); ++frame)
+	noob::index_type counter = 0;
+	for (uint32_t frame = 0; frame < frames_per_buffer; ++frame)
 	{
-		short converted = buffer_droid[playing_offset + frame];
-		buffer[counter] = converted;
-		buffer[counter + 1] = converted;
+		const short val = readbuf[frame];
+		buffer[counter] = val;
+		buffer[counter + 1] = val;
 		counter += 2;
 	}
 
-	playing_offset += num_samples;
+	// buffer_droid.swap();
+	more_audio = true;
 
-	return num_samples;
+	return frames_per_buffer;
 }
 
 
@@ -223,51 +204,45 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_CreateBufferQueueAudi
 	g.sample_rate = std::fabs(sample_rate_arg);
 	const int buf_size = std::fabs(buf_size_arg);
 
-	// Setup beginning of sounds:
-	playing_offset = 0;
+	// Setup sound:
 	const double nanos_per_buffer = static_cast<double>(noob::billion) / static_cast<double>(g.sample_rate);
-	// const size_t buffers_per_update = static_cast<size_t>(static_cast<double>(nanos_per_update);
 	const double buffers_per_sec = static_cast<double>(g.sample_rate) / static_cast<double>(buf_size);
-	
 
 	noob::logger::log(noob::importance::INFO, noob::concat("[C++] Created buffer queue player with samplerate ", noob::to_string(g.sample_rate), " and buffer size ", noob::to_string(buf_size), "(", noob::to_string(buffers_per_sec), " buffers per second)"));
 
-	// const size_t sound_update_hertz = 100;
-	// const size_t nanos_per_update = noob::nanos_per_oscillation(sound_update_hertz);
-	// const size_t samples_per_update_cycle = noob::idiv_ceil(static_cast<size_t>(g.sample_rate), static_cast<size_t>(sound_update_hertz));
-	// const size_t chunks_per_update_cycle = noob::idiv_ceil(samples_per_update_cycle, static_cast<size_t>(buf_size));
-	// const size_t ringbuf_size = chunks_per_update_cycle * g.sample_rate * 2;
-
-	buffer_droid.resize(ringbuf_size);
-
-	empty_all_bufs();
+	buffer_droid.resize(buf_size);
+	buffer_droid.fill(0);
+	playing_audio = true;
 
 	opensl_wrapper_init(audio_cb, buf_size, g.sample_rate);
 
-	playing_audio = true;
-
-	std::thread t([]()
+	std::thread t([buf_size]()
 			{
 			auto last_time = noob::clock::now();
-			size_t last_written = 0;
-			
 			while(true)
 			{
-			auto current_time = noob::clock::now();
-			auto elapsed = current_time - last_time;
-
-			// size_t samples_to_render = 
-
-			if (playing_audio)
+			if (more_audio)
 			{
-
+			noob::globals& g = noob::globals::get_instance();
+			g.master_mixer.tick(buf_size);
+			
+			short* writebuf = buffer_droid.tail();
+			for (uint32_t i = 0; i < buf_size; ++i)
+			{
+			double d = g.master_mixer.output_buffer[i];
+			short val = static_cast<int16_t>(d * static_cast<double>(std::numeric_limits<int16_t>::max()));
+			writebuf[i] = val;
 			}
-
+				more_audio = false;
+				buffer_droid.swap();		
+				
+			
 			}
-			});
+				// buffer_droid.swap();
+			}
+			}
+			);
 	t.detach();
-
-
 }
 
 

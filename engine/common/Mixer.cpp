@@ -48,11 +48,8 @@ bool noob::mixer::play_clip(const noob::sample_handle clip, float volume) noexce
 }
 
 
-
 void noob::mixer::tick(uint32_t num_frames) noexcept(true)
 {
-	output_buffer.swap();
-	
 	if (dirty)
 	{
 		rde::quick_sort(&now_playing[0], &now_playing[now_playing.size()], rde::less<voice_instance>());

@@ -23,7 +23,7 @@ namespace noob
 
 		mixer() noexcept(true) : dirty(false), num_playing(0), max_playing(8), output_buffer_size(0) {}
 
-		// Returns false for three reasons: First: Invalid handle (ie: sample doesn't exist.) Second: Not enough free voices. Third: Trying to play sample prior to its minimum allowed offset being reached (each sample has a minimum offset to ensurei two clips being played at the same time don't cause horrible-sounding interference.
+		// Returns false for three reasons: First: Invalid handle (ie: sample doesn't exist.) Second: Not enough free voices. Third: Trying to play sample prior to its minimum allowed offset being reached (each sample has a minimum offset to ensure two clips being played at the same time don't cause interference.
 		
 		bool play_clip(noob::sample_handle, float volume) noexcept(true);
 		bool loop_clip(noob::sample_handle, float volume, uint32_t max) noexcept(true);
@@ -31,7 +31,7 @@ namespace noob
 		void tick(uint32_t num_frames) noexcept(true);
 
 
-		noob::ringbuffer<double> output_buffer;
+		std::vector<double> output_buffer;
 
 
 		protected:

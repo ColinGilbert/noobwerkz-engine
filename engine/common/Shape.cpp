@@ -9,8 +9,6 @@ void noob::shape::sphere(float radius) noexcept(true)
 		inner = new btSphereShape(radius);
 	}
 	scales = noob::vec3(radius*2.0, radius*2.0, radius*2.0);
-	// dims[0] = radius;
-	// inner->setMargin(0.3);
 	physics_valid = true;
 }
 
@@ -21,48 +19,10 @@ void noob::shape::box(float width, float height, float depth) noexcept(true)
 	{
 		shape_type = noob::shape::type::BOX;
 		inner = new btBoxShape(btVector3(width * 0.5, height * 0.5, depth * 0.5));
-
-		// inner = new btBoxShape(btVector3(width, height, depth));
 	}
-	// scales = noob::vec3(width * 0.5, height * 0.5, depth * 0.5);
 	scales = noob::vec3(width, height, depth);
 	physics_valid = true;
 }
-
-/*
-   void noob::shape::cylinder(float radius, float height) noexcept(true) 
-   {
-   if (!physics_valid)
-   {
-   shape_type = noob::shape::type::CYLINDER;
-   inner = new btCylinderShape(btVector3(radius, height/2.0, radius));
-   }
-   scales = noob::vec3(radius*2.0, height, radius*2.0);
-   physics_valid = true;
-   }
-
-   void noob::shape::capsule(float radius, float height) noexcept(true) 
-   {
-   if (!physics_valid)
-   {
-   shape_type = noob::shape::type::CAPSULE;
-   inner = new btCapsuleShape(radius, height);
-   }
-   scales = noob::vec3(radius*2, height, radius*2);
-   physics_valid = true;
-   }
-
-   void noob::shape::cone(float radius, float height) noexcept(true) 
-   {
-   if (!physics_valid)
-   {
-   shape_type = noob::shape::type::CONE;
-   inner = new btConeShape(radius, height);
-   }
-   scales = noob::vec3(radius*2.0, height, radius*2.0);
-   physics_valid = true;
-   }
-   */
 
 void noob::shape::hull(const std::vector<noob::vec3>& points) noexcept(true) 
 {
@@ -71,12 +31,9 @@ void noob::shape::hull(const std::vector<noob::vec3>& points) noexcept(true)
 		shape_type = noob::shape::type::HULL;
 		scales = noob::vec3(1.0, 1.0, 1.0);
 		inner = new btConvexHullShape(&points[0].v[0], points.size());
-		// size_t num_p = static_cast<btConvexHullShape*>(inner)->getNumPoints();
-		// const btVector3* points = static_cast<btConvexHullShape*>(inner)->getPoints(); 
 	}
 	physics_valid = true;
 }
-
 
 void noob::shape::trimesh(const noob::basic_mesh& mesh) noexcept(true) 
 {
@@ -108,18 +65,6 @@ void noob::shape::trimesh(const noob::basic_mesh& mesh) noexcept(true)
 	physics_valid = true;
 }
 
-/*
-   void noob::shape::plane(const noob::vec3& normal, float offset) noexcept(true) 
-   {
-   if (!physics_valid)
-   {
-   shape_type = noob::shape::type::PLANE;
-   inner = new btStaticPlaneShape(btVector3(normal.v[0], normal.v[1], normal.v[2]), offset);
-   }
-   physics_valid = true;
-   }
-   */
-
 void noob::shape::set_margin(float m) noexcept(true) 
 {
 	inner->setMargin(m);
@@ -130,7 +75,6 @@ float noob::shape::get_margin() const noexcept(true)
 {
 	return inner->getMargin();
 }
-
 
 noob::vec3 noob::shape::get_scales() const noexcept(true) 
 {
@@ -259,7 +203,6 @@ noob::basic_mesh noob::shape::get_mesh() const noexcept(true)
 	}
 }
 
-
 void noob::shape::clear() noexcept(true)
 {
 	if (physics_valid)
@@ -270,19 +213,6 @@ void noob::shape::clear() noexcept(true)
 	}
 }
 
-/*
-   const btCollisionShape* noob::shape::get_inner() const noexcept(true)
-   {
-   return inner;
-   }
-
-
-   btCollisionShape* noob::shape::get_inner_mutable() const noexcept(true)
-   {
-   return inner;
-   }
-   */
-
 void noob::shape::set_self_index(uint32_t i) noexcept(true)
 {
 	inner->setUserIndex(i);
@@ -292,4 +222,3 @@ uint32_t noob::shape::get_self_index() const noexcept(true)
 {
 	return inner->getUserIndex();
 }
-

@@ -17,6 +17,11 @@ namespace noob
 	typedef std::chrono::duration<clock::rep, clock::period> duration;
 	typedef std::chrono::duration<double, clock::period> duration_fp;
 
+	static uint64_t seconds(const noob::duration d)
+	{
+		return (std::chrono::duration_cast<std::chrono::seconds>(d)).count();
+	}
+
 	static uint64_t millis(const noob::duration d)
 	{
 		return (std::chrono::duration_cast<std::chrono::milliseconds>(d)).count();
