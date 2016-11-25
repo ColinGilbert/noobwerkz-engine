@@ -23,9 +23,7 @@ EGLint current_context;
 
 std::string archive_dir;
 std::unique_ptr<noob::application> app = nullptr;
-static std::atomic<bool> started(false);
-static std::atomic<bool> playing_audio(false);
-static std::atomic<bool> more_audio(true);
+static std::atomic<bool> started(false), playing_audio(false), more_audio(true);
 static noob::ringbuffer<int16_t> buffer_droid;
 
 extern "C"
@@ -178,6 +176,9 @@ std::atomic<size_t> offset(0);
 
 int audio_cb(int16_t* buffer, int frames_per_buffer)
 {
+	more_audio = true;
+	buffer_droid.swap();
+
 	const int16_t* readbuf = buffer_droid.head();
 
 	noob::index_type counter = 0;
@@ -190,7 +191,6 @@ int audio_cb(int16_t* buffer, int frames_per_buffer)
 	}
 
 	more_audio = true;
-
 	return frames_per_buffer;
 }
 
@@ -222,7 +222,6 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_CreateBufferQueueAudi
 			{
 			if (more_audio)
 			{
-			buffer_droid.swap();
 			noob::globals& g = noob::globals::get_instance();
 			g.master_mixer.tick(buf_size);
 			
