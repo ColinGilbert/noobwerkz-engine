@@ -16,7 +16,7 @@ namespace noob
 			
 			// bool load_mem(const std::string& file) noexcept(true); // TODO: IMPLEMENT
 
-			void resample(uint32_t rate) noexcept(true);
+			void resample(size_t rate) noexcept(true);
 
 			uint32_t num_channels, sample_rate;
 			size_t min_before_next;

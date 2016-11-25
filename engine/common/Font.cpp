@@ -34,3 +34,9 @@ void noob::font::init_glyphs(const std::string& characters, uint32_t font_size) 
 		}
 	}
 }
+
+noob::font::glyph_info noob::font::get_glyph(char arg) noexcept(true)
+{
+	noob::font::glyph_info results;
+	return results;
+}

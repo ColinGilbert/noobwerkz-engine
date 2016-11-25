@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.5)
 project(NoobWerkz)
 
-set(CMAKE_BUILD_TYPE "DEBUG")
-#set(CMAKE_BUILD_TYPE "RELEASE")
+#set(CMAKE_BUILD_TYPE "DEBUG")
+set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
 # Current Bullet bug: -ftrapv causes crash on Android.
 set(NOOB_COMMON_FLAGS "-Werror=return-type")
 set(NOOB_COMMON_C_FLAGS "-DSTB_IMAGE_STATIC -DFT2_BUILD_LIBRARY")
-set(NOOB_COMMON_CXX_FLAGS "-std=c++14 -fno-exceptions -fno-rtti -DEIGEN_MPL2_ONLY -DBT_THREADSAFE=1")
+set(NOOB_COMMON_CXX_FLAGS "-std=c++14 -fno-exceptions -fno-rtti -DEIGEN_MPL2_ONLY")
 
 set(NOOB_STRICT_FLAGS " -pedantic -Wdouble-promotion -Wshadow -pedantic-errors -Wextra -Wall -Wextra -Winit-self -Wold-style-cast -Wuninitialized -Wmissing-declarations")
 set(NOOB_STRICT_C_FLAGS "-Wmissing-prototypes -Wstrict-prototypes -Wold-style-definition")

@@ -1,4 +1,5 @@
 #include "AudioSample.hpp"
+#include <thread>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -101,7 +102,13 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 
 	if (g.sample_rate != 44100)
 	{
-		resample(g.sample_rate);
+		std::thread t([this]()
+		{
+			noob::globals& g = noob::globals::get_instance();
+			resample(g.sample_rate);
+		});
+
+		t.join();
 
 	}
 	return true;
@@ -117,19 +124,17 @@ void noob::audio_sample::resample(size_t sample_rate_arg) noexcept(true)
 
 		for (int16_t s : samples)
 		{
-			float val = static_cast<float>(s) / 32768.0;
+			const double val = static_cast<float>(s) / 32768.0;
 			old_samps.push_back(val);
 		}
 
 		r8b::CDSPResampler24 resamp(sample_rate_old, sample_rate, num_samples_old);
-
-		const size_t num_samples_new = static_cast<size_t>(static_cast<double>(num_samples_old * sample_rate) / static_cast<double>(sample_rate_old));
-
-		// num_samples = num_samples_new;
-		// samples.reserve(num_samples_new);
+		
 		samples.clear();
 
-		size_t output_left = num_samples_new;
+		const size_t num_resampled = static_cast<size_t>(static_cast<double>(num_samples_old) * (static_cast<double>(sample_rate) / static_cast<double>(sample_rate_old)));
+
+		size_t output_left = num_resampled;
 		while (output_left > 0)
 		{
 			double* output;
@@ -152,5 +157,5 @@ void noob::audio_sample::resample(size_t sample_rate_arg) noexcept(true)
 			output_left -= write_count;
 		}
 	
-		noob::logger::log(noob::importance::INFO, noob::concat("[AudioSample] Resampling from ", noob::to_string(sample_rate_old), " to ", noob::to_string(sample_rate), ". Old number of samples: ", noob::to_string(num_samples_old), ". New number of samples: ", noob::to_string(num_samples_new)));
+		noob::logger::log(noob::importance::INFO, noob::concat("[AudioSample] Resampling from ", noob::to_string(sample_rate_old), " to ", noob::to_string(sample_rate), ". Old number of samples: ", noob::to_string(num_samples_old), ". New number of samples: ", noob::to_string(num_resampled)));
 }

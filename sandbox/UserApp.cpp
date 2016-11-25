@@ -24,9 +24,9 @@ noob::versor random_versor()
 
 bool noob::application::user_init()
 {
-	test_message = "Howdy hey!";
 	message_profiling = std::make_unique<std::string>("");
 	message_collision = std::make_unique<std::string>("");
+	noob::logger::log(noob::importance::INFO, "[Application] Begin user init!");
 	//message_profiling_two.resize(128);
 	noob::audio_sample samp;
 	bool b = samp.load_file(noob::concat(*prefix, "sounds/BlanketedLama.ogg"));

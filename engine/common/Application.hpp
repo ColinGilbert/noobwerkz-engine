@@ -5,7 +5,6 @@
 #include <cmath>
 #include <btBulletDynamicsCommon.h>
 
-
 #include <noob/logger/logger.hpp>
 
 #include "Globals.hpp"
@@ -36,7 +35,7 @@ namespace noob
 			void init(uint32_t width, uint32_t height, const std::string filepath);
 
 			void set_archive_dir(const std::string & filepath);
-			
+
 			// Those three allow an app to be controlled better by an external environment (ie: Android/iOS)
 			void pause();
 			void resume();
@@ -47,7 +46,7 @@ namespace noob
 			// Callbacks
 			void touch(int pointerID, float x, float y, int action);
 			void touch(const touch_instance& t);
-			
+
 			void window_resize(uint32_t w, uint32_t h);
 			void key_input(char c);
 

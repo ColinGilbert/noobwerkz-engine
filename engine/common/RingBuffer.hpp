@@ -1,6 +1,5 @@
 #pragma once
 
-#include <atomic>
 #include <vector>
 
 namespace noob
@@ -16,7 +15,7 @@ namespace noob
 				tail_ptr = temp;
 			}
 			
-			T* head() const noexcept(true)
+			const T* head() const noexcept(true)
 			{
 				return head_ptr;
 			}

@@ -15,8 +15,6 @@
 #include <rdestl/rde_string.h>
 #include <rdestl/sort.h>
 #include <rdestl/hash_map.h>
-
-// #include <noob/component/component.hpp>
 #include <noob/fast_hashtable/fast_hashtable.hpp>
 
 #include "Clock.hpp"
@@ -135,7 +133,6 @@ namespace noob
 		
 		size_t sample_rate;
 
-
 		bool finished_init() const noexcept(true)
 		{
 			return init_done;
@@ -147,7 +144,6 @@ namespace noob
 
 		// The following are basic, commonly-used objects that we provide as a convenience.
 		noob::shape_handle unit_sphere_shape, unit_cube_shape;
-
 		noob::light_handle default_light;
 		noob::reflectance_handle default_reflectance;
 

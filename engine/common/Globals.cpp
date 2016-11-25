@@ -36,7 +36,7 @@ bool noob::globals::init() noexcept(true)
 noob::model_handle noob::globals::model_from_shape(noob::shape_handle arg, uint32_t num) noexcept(true)
 {
 	noob::shape shp = shapes.get(arg);
-	
+
 	noob::graphics& gfx = noob::graphics::get_instance();
 	return gfx.model_instanced(shp.get_mesh(), num);
 }

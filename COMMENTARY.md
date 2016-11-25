@@ -1,3 +1,8 @@
+Nov 24, 2016
+```
+Fixed the Android sound troubles that were driving me insane this past week! Turns out it was a subtle multiplication and division order bug that caused lots of grief, but only on ARM, and variably too. Will be looking into better methods of dealing with such horrors. Either way, this thing isn't a problem anymore and we're good to go. Phew...
+```
+
 Nov 22, 2016
 ```
 Been debugging Android Audio a lot. After much grief and head-banging, I have been able to output test audio by explicitly filling a large buffer and offering chunks of it to the callback. Said callback is WAY more painful than I anticipated, but I think that by rendering audio asynchronously we should hopefully do nicely.

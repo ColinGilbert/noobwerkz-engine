@@ -21,17 +21,12 @@ uint32_t window_width, window_height;
 
 EGLint current_context;
 
-static constexpr uint32_t num_chunks = 4;
-
 std::string archive_dir;
 std::unique_ptr<noob::application> app = nullptr;
 static std::atomic<bool> started(false);
 static std::atomic<bool> playing_audio(false);
 static std::atomic<bool> more_audio(true);
-
-static noob::ringbuffer<short> buffer_droid;
-
-
+static noob::ringbuffer<int16_t> buffer_droid;
 
 extern "C"
 {
@@ -178,20 +173,22 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_Log(JNIEnv* env, jobj
 }
 
 
-int audio_cb(short* buffer, int frames_per_buffer)
+noob::audio_sample samp;
+std::atomic<size_t> offset(0);
+
+int audio_cb(int16_t* buffer, int frames_per_buffer)
 {
-	short* readbuf = buffer_droid.head();
+	const int16_t* readbuf = buffer_droid.head();
 
 	noob::index_type counter = 0;
 	for (uint32_t frame = 0; frame < frames_per_buffer; ++frame)
 	{
-		const short val = readbuf[frame];
+		const int16_t val = readbuf[frame];
 		buffer[counter] = val;
 		buffer[counter + 1] = val;
 		counter += 2;
 	}
 
-	// buffer_droid.swap();
 	more_audio = true;
 
 	return frames_per_buffer;
@@ -200,6 +197,8 @@ int audio_cb(short* buffer, int frames_per_buffer)
 
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_CreateBufferQueueAudioPlayer(JNIEnv* env, jobject obj, int sample_rate_arg, int buf_size_arg)
 {
+	noob::logger::log(noob::importance::INFO, noob::concat("[C++] Initializing sound!"));
+
 	noob::globals& g = noob::globals::get_instance();
 	g.sample_rate = std::fabs(sample_rate_arg);
 	const int buf_size = std::fabs(buf_size_arg);
@@ -213,7 +212,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_CreateBufferQueueAudi
 	buffer_droid.resize(buf_size);
 	buffer_droid.fill(0);
 	playing_audio = true;
-
+	
 	opensl_wrapper_init(audio_cb, buf_size, g.sample_rate);
 
 	std::thread t([buf_size]()
@@ -223,6 +222,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_CreateBufferQueueAudi
 			{
 			if (more_audio)
 			{
+			buffer_droid.swap();
 			noob::globals& g = noob::globals::get_instance();
 			g.master_mixer.tick(buf_size);
 			
@@ -234,15 +234,12 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_CreateBufferQueueAudi
 			writebuf[i] = val;
 			}
 				more_audio = false;
-				buffer_droid.swap();		
-				
-			
 			}
-				// buffer_droid.swap();
 			}
 			}
 			);
 	t.detach();
+
 }
 
 

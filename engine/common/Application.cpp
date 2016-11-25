@@ -168,12 +168,12 @@ void noob::application::key_input(char c)
 void noob::application::remove_shapes()
 {
 	noob::globals& g = noob::globals::get_instance();
-	
+
 	for (size_t i = 0; i < g.shapes.count(); ++i)
 	{
 		g.shapes.get(noob::shape_handle::make(i)).clear();
 	}
-	
+
 	g.shapes.empty();
 }
 
