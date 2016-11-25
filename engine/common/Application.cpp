@@ -26,7 +26,6 @@ void noob::application::init(uint32_t width, uint32_t height, const std::string 
 	ui_enabled = true;
 	gui.init("", window_width, window_height);
 
-
 	noob::globals& g = noob::globals::get_instance();
 	bool are_globals_initialized = g.init();
 	assert(are_globals_initialized && "Globals not initialized!");
@@ -52,28 +51,6 @@ void noob::application::update(double delta)
 {
 	gui.window_dims(window_width, window_height);
 
-	/*
-	   network.tick();
-
-	   while (network.has_message())
-	   {
-	   std::string s = network.get_message();
-	   if (s.compare(0, 6, "INIT: ") == 0)
-	   {
-	   stage.tear_down();
-	   eval("init", s.substr(6, std::string::npos), true);
-	   }
-	   else if (s.compare(0, 8, "UPDATE: ") == 0)
-	   {
-	// TODO: Implement
-	}
-	else if (s.compare(0, 5, "CMD: ") == 0)
-	{
-	eval("cmd", s.substr(5, std::string::npos), true);
-	}
-	}
-	*/
-
 	stage.update(delta);
 	user_update(delta);
 }
@@ -98,7 +75,6 @@ void noob::application::draw()
 
 void noob::application::accept_ndof_data(const noob::ndof::data& info) noexcept(true)
 {
-
 	stage.accept_ndof_data(info);
 }
 

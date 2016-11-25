@@ -108,35 +108,33 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 }
 
 
-void noob::audio_sample::resample(uint32_t sample_rate_arg) noexcept(true)
+void noob::audio_sample::resample(size_t sample_rate_arg) noexcept(true)
 {
 		size_t num_samples_old = samples.size();
-		uint32_t sample_rate_old = sample_rate;
+		size_t sample_rate_old = sample_rate;
 		sample_rate = sample_rate_arg;
 		std::vector<double> old_samps;
 
 		for (int16_t s : samples)
 		{
-			double d = static_cast<double>(s) / 32768.0;
-			old_samps.push_back(d);
+			float val = static_cast<float>(s) / 32768.0;
+			old_samps.push_back(val);
 		}
 
-		r8b::CDSPResampler24 resamp(static_cast<double>(sample_rate_old), static_cast<double>(sample_rate), num_samples_old);
+		r8b::CDSPResampler24 resamp(sample_rate_old, sample_rate, num_samples_old);
 
-		size_t num_samples_new = static_cast<size_t>(static_cast<double>(num_samples_old * sample_rate) / static_cast<double>(sample_rate_old));
+		const size_t num_samples_new = static_cast<size_t>(static_cast<double>(num_samples_old * sample_rate) / static_cast<double>(sample_rate_old));
 
-		sample_rate = sample_rate_arg;
-
+		// num_samples = num_samples_new;
 		// samples.reserve(num_samples_new);
 		samples.clear();
 
-		uint32_t output_left = num_samples_new;
+		size_t output_left = num_samples_new;
 		while (output_left > 0)
 		{
 			double* output;
-			uint32_t write_count;
+			uint32_t write_count = 0;
 
-			// double* output;
 			write_count = resamp.process(&old_samps[0], num_samples_old, output);
 
 			if (write_count > output_left)
@@ -146,13 +144,13 @@ void noob::audio_sample::resample(uint32_t sample_rate_arg) noexcept(true)
 
 			for (size_t i = 0; i < write_count; ++i)
 			{
-				double f = output[i] * 32768.0;
-				int16_t s = static_cast<int16_t>(f);
+				const double f = output[i] * 32767.0;
+				const int16_t s = static_cast<int16_t>(f);
 				samples.push_back(s);
 			}
 
 			output_left -= write_count;
 		}
-
+	
 		noob::logger::log(noob::importance::INFO, noob::concat("[AudioSample] Resampling from ", noob::to_string(sample_rate_old), " to ", noob::to_string(sample_rate), ". Old number of samples: ", noob::to_string(num_samples_old), ". New number of samples: ", noob::to_string(num_samples_new)));
 }
