@@ -171,14 +171,8 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_Log(JNIEnv* env, jobj
 }
 
 
-noob::audio_sample samp;
-std::atomic<size_t> offset(0);
-
 int audio_cb(int16_t* buffer, int frames_per_buffer)
 {
-	more_audio = true;
-	buffer_droid.swap();
-
 	const int16_t* readbuf = buffer_droid.head();
 
 	noob::index_type counter = 0;
@@ -189,8 +183,8 @@ int audio_cb(int16_t* buffer, int frames_per_buffer)
 		buffer[counter + 1] = val;
 		counter += 2;
 	}
-
 	more_audio = true;
+
 	return frames_per_buffer;
 }
 
@@ -212,31 +206,33 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_CreateBufferQueueAudi
 	buffer_droid.resize(buf_size);
 	buffer_droid.fill(0);
 	playing_audio = true;
-	
+
 	opensl_wrapper_init(audio_cb, buf_size, g.sample_rate);
+
 
 	std::thread t([buf_size]()
 			{
-			auto last_time = noob::clock::now();
+
 			while(true)
 			{
 			if (more_audio)
 			{
 			noob::globals& g = noob::globals::get_instance();
 			g.master_mixer.tick(buf_size);
-			
-			short* writebuf = buffer_droid.tail();
+
+			int16_t* writebuf = buffer_droid.tail();
 			for (uint32_t i = 0; i < buf_size; ++i)
 			{
-			double d = g.master_mixer.output_buffer[i];
-			short val = static_cast<int16_t>(d * static_cast<double>(std::numeric_limits<int16_t>::max()));
+			const float f = g.master_mixer.output_buffer[i];
+			const short val = static_cast<int16_t>(f * static_cast<float>(std::numeric_limits<int16_t>::max()));
 			writebuf[i] = val;
 			}
-				more_audio = false;
+			buffer_droid.swap();			
+			more_audio = false;
 			}
 			}
-			}
-			);
+			});
+
 	t.detach();
 
 }

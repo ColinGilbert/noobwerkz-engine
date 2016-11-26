@@ -29,7 +29,7 @@ namespace noob
 		
 		void tick(uint32_t num_frames) noexcept(true);
 
-		std::vector<double> output_buffer;
+		std::vector<float> output_buffer;
 
 		protected:
 

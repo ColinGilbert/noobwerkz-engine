@@ -60,7 +60,7 @@ void noob::mixer::tick(uint32_t num_frames) noexcept(true)
 		output_buffer.resize(num_frames);
 	}
 
-	rde::fill_n(&output_buffer[0], output_buffer.size(), 0.0);
+	rde::fill_n(&output_buffer[0], output_buffer.size(), 0.0f);
 
 	noob::globals& g = noob::globals::get_instance();
 
@@ -81,8 +81,8 @@ void noob::mixer::tick(uint32_t num_frames) noexcept(true)
 						const size_t sample_pos = inf.offset + i;
 						if (sample_pos < sample_size)
 						{
-							const double d = static_cast<double>(samp->samples[sample_pos]) * (1.0f/32768.0);
-							output_buffer[i] += (d * inf.volume);
+							const float f = static_cast<float>(samp->samples[sample_pos]) * (1.0f/32768.0);
+							output_buffer[i] += (f * inf.volume);
 						}
 					}
 

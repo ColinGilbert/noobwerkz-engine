@@ -49,9 +49,8 @@ static void bqPlayerCallback(SLAndroidSimpleBufferQueueItf bq, void *context)
 		return;
 	}
 
-	int renderedFrames = audio_callback(buffer[current_buf], frames_per_buffer);
-
 	int size_in_bytes = frames_per_buffer * 2 * sizeof(short);
+
 	//int byteCount = (frames_per_buffer - renderedFrames) * 4;
 	// Zero out the unplayed stuff.
 	//if (byteCount > 0)
@@ -65,9 +64,11 @@ static void bqPlayerCallback(SLAndroidSimpleBufferQueueItf bq, void *context)
 	// which for this code example would indicate a programming error
 	if (result != SL_RESULT_SUCCESS)
 	{
-		noob::logger::log(noob::importance::ERROR, noob::concat("OpenSL ES: Failed to enqueue! ", noob::to_string(renderedFrames), " ", noob::to_string(size_in_bytes)));
+		noob::logger::log(noob::importance::ERROR, noob::concat("OpenSL ES: Failed to enqueue buffah!"));
 	}
 
+
+	int renderedFrames = audio_callback(buffer[current_buf], frames_per_buffer);
 	current_buf ^= 1; // Switch buffer
 }
 
