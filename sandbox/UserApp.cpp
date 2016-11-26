@@ -123,7 +123,7 @@ void noob::application::user_update(double dt)
 	{
 		
 		noob::profiler_snap snap = g.profile_run;
-		message_profiling = std::make_unique<std::string>(noob::concat("NoobWerkz editor - Frame time: ", pretty_print_timing(divide_duration(snap.total_time, profiling_interval)), std::string(", draw time: "), pretty_print_timing(divide_duration(snap.stage_draw_duration, profiling_interval)), ", physics time ", pretty_print_timing(divide_duration(snap.stage_physics_duration, profiling_interval)))); 
+		message_profiling = std::make_unique<std::string>(noob::concat("NoobWerkz editor - Frame time: ", noob::to_string(divide_duration(snap.total_time, profiling_interval)), std::string(", draw time: "), noob::to_string(divide_duration(snap.stage_draw_duration, profiling_interval)), ", physics time ", noob::to_string(divide_duration(snap.stage_physics_duration, profiling_interval)))); 
 		noob::logger::log(noob::importance::INFO, *message_profiling);
 		g.profile_run.total_time = g.profile_run.stage_physics_duration = g.profile_run.stage_draw_duration = time_since_update = noob::duration(0);
 		last_ui_update = nowtime;

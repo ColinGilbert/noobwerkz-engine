@@ -16,7 +16,7 @@ namespace noob
 		
 		std::string to_string() const
 		{
-			return noob::concat("total(",  noob::pretty_print_timing(total_time),  "), ai(", noob::pretty_print_timing(stage_ai_duration), ", physics(", noob::pretty_print_timing(stage_physics_duration), "), nanos(", noob::pretty_print_timing(stage_draw_duration), ")");
+			return noob::concat("total(",  noob::to_string(total_time),  "), ai(", noob::to_string(stage_ai_duration), ", physics(", noob::to_string(stage_physics_duration), "), nanos(", noob::to_string(stage_draw_duration), ")");
 		}
 	};
 }

@@ -47,7 +47,7 @@ namespace noob
 		return static_cast<double>(noob::billion) / static_cast<double>(hz);
 	}
 
-	static std::string pretty_print_timing(const noob::duration d)
+	static std::string to_string(const noob::duration d)
 	{
 		uint64_t time_in_millis = millis(d);
 		if (time_in_millis > 0)
@@ -69,7 +69,7 @@ namespace noob
 	}
 
 
-	static std::string pretty_print_timing(const noob::duration_fp d)
+	static std::string to_string(const noob::duration_fp d)
 	{
 		double time_in_nanos = d.count();
 		double time_in_millis = time_in_nanos / 1000000.0;

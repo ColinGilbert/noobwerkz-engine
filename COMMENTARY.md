@@ -1,3 +1,8 @@
+Nov 25.
+```
+Sound seems to work mostly well enough on Android. We may add a deeper buffer to account for trouble devices and add better error reporting, but the basics are in. Hurray.
+```
+
 Nov 24, 2016
 ```
 Fixed the Android sound troubles that were driving me insane this past week! Turns out it was a subtle multiplication and division order bug that caused lots of grief, but only on ARM, and variably too. Will be looking into better methods of dealing with such horrors. Either way, this thing isn't a problem anymore and we're good to go. Phew...
