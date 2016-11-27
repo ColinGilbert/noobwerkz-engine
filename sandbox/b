@@ -2,7 +2,7 @@
 cd ../engine/build/nix &&
 cmake -DNOOB_PLATFORM_LINUX:bool=true ../.. && #-DNOOB_USE_ASSIMP:bool=true .. &&
 make -j8 && #2> output && 
-cp NoobEdit ../../sandbox/e &&
+cp NoobEdit ../../../sandbox/e &&
 #cp output ../../sandbox &&
-cd ../../sandbox #&&
+cd ../../../sandbox #&&
 #strip ./e

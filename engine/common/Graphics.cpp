@@ -403,7 +403,7 @@ void noob::graphics::reset_instances(noob::model_handle h, uint32_t num_instance
 }
 
 
-noob::texture_handle noob::graphics::reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, noob::attrib::unit_type unit_arg, noob::texture::compression_type compress) noexcept(true)
+noob::texture_handle noob::graphics::reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, noob::attrib::unit_type unit_arg, noob::texture::compression_type compress, bool mips) noexcept(true)
 {
 	noob::texture_handle t;
 	return t;

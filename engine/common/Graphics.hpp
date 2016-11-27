@@ -63,7 +63,7 @@ namespace noob
 			void reset_instances(noob::model_handle, uint32_t num_instances) noexcept(true);
 
 			// Create a 2D array texture.
-			noob::texture_handle reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, noob::attrib::unit_type, noob::texture::compression_type) noexcept(true);
+			noob::texture_handle reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, noob::attrib::unit_type, noob::texture::compression_type, bool mips) noexcept(true);
 
 			bool upload_texture_2d(noob::texture_handle tex, uint32_t slot_num, const std::string& info) noexcept(true);
 
