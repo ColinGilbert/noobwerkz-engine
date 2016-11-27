@@ -37,6 +37,7 @@ include(cmake/Recast.cmake)
 include(cmake/R8.cmake)
 include(cmake/Shiny.cmake)
 
+include_directories(lib/sema)
 include_directories(lib/glm)
 include_directories(lib/eigen)
 include_directories(lib/sdf)

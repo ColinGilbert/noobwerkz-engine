@@ -49,7 +49,9 @@ static void bqPlayerCallback(SLAndroidSimpleBufferQueueItf bq, void *context)
 		return;
 	}
 
-	int size_in_bytes = frames_per_buffer * 2 * sizeof(short);
+	uint32_t size_in_bytes = frames_per_buffer * 2 * sizeof(int16_t);
+
+	int renderedFrames = audio_callback(buffer[current_buf], frames_per_buffer);
 
 	//int byteCount = (frames_per_buffer - renderedFrames) * 4;
 	// Zero out the unplayed stuff.
@@ -68,7 +70,6 @@ static void bqPlayerCallback(SLAndroidSimpleBufferQueueItf bq, void *context)
 	}
 
 
-	int renderedFrames = audio_callback(buffer[current_buf], frames_per_buffer);
 	current_buf ^= 1; // Switch buffer
 }
 
@@ -157,7 +158,7 @@ bool opensl_wrapper_init(AndroidAudioCallback cb, int frames_per_buffer_arg, int
 
 	audio_callback(buffer[current_buf], frames_per_buffer);
 
-	int size_in_bytes = frames_per_buffer * 2 * sizeof(short);
+	int size_in_bytes = frames_per_buffer * 2 * sizeof(int16_t);
 
 	result = (*bq_player_bufferqueue_sl)->Enqueue(bq_player_bufferqueue_sl, buffer[current_buf], size_in_bytes);
 

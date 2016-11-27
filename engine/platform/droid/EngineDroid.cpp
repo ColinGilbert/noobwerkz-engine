@@ -3,11 +3,14 @@
 #include <jni.h>
 
 #include <thread>
+#include <mutex>
+#include <condition_variable>
 
 #include "Application.hpp"
 #include "Graphics.hpp"
 #include "NoobUtils.hpp"
 #include "AudioInterfaceDroid.hpp"
+
 
 namespace noob
 {
@@ -217,6 +220,9 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_CreateBufferQueueAudi
 			{
 			if (more_audio)
 			{
+			
+			const noob::time_point start = noob::clock::now();
+
 			noob::globals& g = noob::globals::get_instance();
 			g.master_mixer.tick(buf_size);
 
@@ -224,12 +230,17 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_CreateBufferQueueAudi
 			for (uint32_t i = 0; i < buf_size; ++i)
 			{
 			const float f = g.master_mixer.output_buffer[i];
-			const short val = static_cast<int16_t>(f * static_cast<float>(std::numeric_limits<int16_t>::max()));
+			const int16_t val = static_cast<int16_t>(f * static_cast<float>(std::numeric_limits<int16_t>::max()));
 			writebuf[i] = val;
 			}
 			buffer_droid.swap();			
-			more_audio = false;
+			const noob::time_point end = noob::clock::now();
+			const noob::duration render_time = end - start;
+			g.profile_run.sound_render_duration += render_time;
+			++(g.profile_run.num_sound_callbacks);
+			more_audio = false;			
 			}
+
 			}
 			});
 

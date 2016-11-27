@@ -51,20 +51,21 @@ namespace noob
 
 			typedef noob::handle<uint32_t> shader_handle;
 			typedef noob::handle<uint32_t> program_handle;
-			typedef noob::handle<uint32_t> texture_handle;
 
 			void init(uint32_t width, uint32_t height) noexcept(true);
 
 			void destroy() noexcept(true);
 
 			void use_program(noob::graphics::program_handle) noexcept(true);
-			// noob::model_handle model(noob::model::geom_type geom, const noob::basic_mesh&) noexcept(true);
 
 			noob::model_handle model_instanced(const noob::basic_mesh&, uint32_t num_instances) noexcept(true);
 
 			void reset_instances(noob::model_handle, uint32_t num_instances) noexcept(true);
 
-			noob::texture_handle reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, uint32_t mips, noob::attrib::unit_type, noob::texture::compression_type) noexcept(true);
+			// Create a 2D array texture.
+			noob::texture_handle reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, noob::attrib::unit_type, noob::texture::compression_type) noexcept(true);
+
+			bool upload_texture_2d(noob::texture_handle tex, uint32_t slot_num, const std::string& info) noexcept(true);
 
 			noob::texture_handle texture_3d(uint32_t width, uint32_t height, uint32_t mips, noob::attrib::unit_type, noob::texture::compression_type, const std::string&) noexcept(true);	
 
@@ -88,6 +89,7 @@ namespace noob
 			void eye_pos(const noob::vec3&) noexcept(true);
 
 			void light_direction(const noob::vec3&) noexcept(true);
+
 		protected:
 
 			noob::component<noob::model> models;

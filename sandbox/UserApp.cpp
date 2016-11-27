@@ -115,17 +115,19 @@ void noob::application::user_update(double dt)
 {
 
 	noob::globals& g = noob::globals::get_instance();
-	noob::time nowtime = noob::clock::now();
-	noob::duration time_since_update = nowtime - last_ui_update;
+	const noob::time nowtime = noob::clock::now();
+	const noob::duration time_since_update = nowtime - last_ui_update;
 	const uint64_t profiling_interval = 3000;
 	const uint64_t collision_display_interval = 500;
 	if (noob::millis(time_since_update) > profiling_interval - 1)
 	{
 		
-		noob::profiler_snap snap = g.profile_run;
-		message_profiling = std::make_unique<std::string>(noob::concat("NoobWerkz editor - Frame time: ", noob::to_string(divide_duration(snap.total_time, profiling_interval)), std::string(", draw time: "), noob::to_string(divide_duration(snap.stage_draw_duration, profiling_interval)), ", physics time ", noob::to_string(divide_duration(snap.stage_physics_duration, profiling_interval)))); 
+		const noob::profiler_snap snap = g.profile_run;
+		message_profiling = std::make_unique<std::string>(noob::concat("NoobWerkz editor - Frame time: ", noob::to_string(divide_duration(snap.total_time, profiling_interval)), std::string(", draw time: "), noob::to_string(divide_duration(snap.stage_draw_duration, profiling_interval)), ", physics time: ", noob::to_string(divide_duration(snap.stage_physics_duration, profiling_interval))));
 		noob::logger::log(noob::importance::INFO, *message_profiling);
-		g.profile_run.total_time = g.profile_run.stage_physics_duration = g.profile_run.stage_draw_duration = time_since_update = noob::duration(0);
+		
+		g.profile_run.total_time = g.profile_run.stage_physics_duration = g.profile_run.stage_draw_duration = g.profile_run.sound_render_duration = noob::duration(0);
+		g.profile_run.num_sound_callbacks = 0;
 		last_ui_update = nowtime;
 	}
 

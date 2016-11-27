@@ -86,20 +86,19 @@ void noob::application::step()
 	if (g.finished_init())
 	{
 		// PROFILER_UPDATE();
-		noob::time start_time = noob::clock::now();
-		noob::duration time_since = last_step - start_time;
+		const noob::time start_time = noob::clock::now();
+		const noob::duration time_since = last_step - start_time;
 
-		// if (!paused)
-		//{
-		double d = (1.0 / static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(time_since).count()));
+		// Engine code
+		const double d = (1.0 / static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(time_since).count()));
 		update(d);
-		//}
 		draw();
 
-		noob::time end_time = noob::clock::now();
+		const noob::time end_time = noob::clock::now();
+		// Update class member
 		last_step = end_time;
-		noob::duration time_taken = end_time - start_time;
-
+		
+		const noob::duration time_taken = end_time - start_time;
 		noob::globals& g = noob::globals::get_instance();
 		g.profile_run.total_time += time_taken;
 	}

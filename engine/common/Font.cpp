@@ -27,7 +27,7 @@ void noob::font::init_glyphs(const std::string& characters, uint32_t font_size) 
 
 	for (char c = 0; c < characters.size(); ++c)
 	{
-		// Load character glyph 
+		// Load character glyph.
 		if (FT_Load_Char(ft_face, c, FT_LOAD_RENDER))
 		{
 			noob::logger::log(noob::importance::ERROR, noob::concat("[Font] Failed to load glyph for ", noob::to_string(c)));
