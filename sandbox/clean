@@ -1,3 +1,5 @@
-cd ../engine &&
-rm -rf android/obj/* android/assets/* android/bin/* android/libs/* android/jni/libnativeactivity.so android/gen/* build/* &&
-cd ../sandbox
+cd ../engine/build/droid &&
+rm -rf ./obj/* ./assets/* ./bin/* ./libs/* ./jni/*.so ./gen/* &&
+cd ../nix &&
+rm -rf * &&
+cd ../../sandbox

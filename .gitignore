@@ -1,6 +1,5 @@
-**/build/*
-**/_builds
-**/_builds/*
+#engine/platform/build/nix/*
+#engine/platform/build/android/*
 **.*.sw*
 *.*.sw*
 **/.git
@@ -21,11 +20,6 @@
 **/logger
 sandbox/*.bin
 sandbox/temp/*
-sandbox/shaders/glsl/*
-sandbox/shaders/gles/*
-sandbox/shaders/dx9/*
-sandbox/shaders/dx11/*
-sandbox/temp/volumetric/*
 sandbox/COMPILE_LOG
 **/e
 **/shaderc
@@ -37,6 +31,4 @@ sandbox/models/*
 sandbox/models/test.off
 .project
 .cproject
-CMakeLists.txt.user
-#build*
 *.*sw*
