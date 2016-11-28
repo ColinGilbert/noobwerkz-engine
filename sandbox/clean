@@ -1,5 +1,5 @@
 cd ../engine/build/droid &&
-rm -rf ./obj/* ./assets/* ./bin/* ./libs/* ./jni/*.so ./gen/* &&
-cd ../nix &&
-rm -rf * &&
+rm -rf ./obj/* ./assets/* ./bin/* ./libs/* ./jni/*.so ./*.so ./CMake* ./Makefile ./cmake_install.cmake ./gen/*  &&
+cd .. &&
+rm -rf ./nix/* &&
 cd ../../sandbox

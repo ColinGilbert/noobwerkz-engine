@@ -1,1 +1,1 @@
-This is where GCC/Clang builds are made (Unix/Linux environments.)
+This folder is for build artifacts on Unix/Linux systems.

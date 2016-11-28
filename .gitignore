@@ -1,5 +1,4 @@
-#engine/platform/build/nix/*
-#engine/platform/build/android/*
+#**/build/*
 **.*.sw*
 *.*.sw*
 **/.git
