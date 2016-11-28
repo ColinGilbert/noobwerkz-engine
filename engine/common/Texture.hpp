@@ -13,7 +13,7 @@ namespace noob
 
 		enum class compression_type
 		{
-			NONE, ETC2, PVRTC, ADST
+			NONE, ETC2, ASTC 
 		};
 
 		enum class format_type
@@ -30,7 +30,7 @@ namespace noob
 		noob::texture::compression_type compression;
 		noob::texture::format_type format;
 		noob::texture::numeric_type numeric;
-		uint32_t handle, width, height, depth;
+		uint32_t handle, max_x, max_y, max_z;
 		uint8_t r_depth, b_depth, g_depth, a_depth;
 		bool mips;
 	};

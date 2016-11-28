@@ -1,4 +1,9 @@
-Nov 25.
+Nov 27, 2016
+```
+Starting to reimplement textures in OpenGL ES and tweaking API for usability. Glad that the sound problems seem to be behind us.
+```
+
+Nov 25, 2016
 ```
 Sound seems to work mostly well enough on Android. We may add a deeper buffer to account for trouble devices and add better error reporting, but the basics are in. Hurray.
 ```

@@ -26,13 +26,6 @@ bool noob::application::user_init()
 	message_profiling = std::make_unique<std::string>("");
 	message_collision = std::make_unique<std::string>("");
 	noob::logger::log(noob::importance::INFO, "[Application] Begin user init!");
-	//message_profiling_two.resize(128);
-	noob::audio_sample samp;
-	bool b = samp.load_file(noob::concat(*prefix, "sounds/BlanketedLama.ogg"));
-	noob::globals& g = noob::globals::get_instance();
-	noob::sample_handle h = g.samples.add(std::make_unique<noob::audio_sample>(samp));	
-
-	noob::audio_sample* s = g.samples.get(h);
 
 	noob::reflectance r;
 	r.set_specular(noob::vec3(0.1, 0.1, 0.1));
@@ -42,12 +35,13 @@ bool noob::application::user_init()
 	r.set_albedo(0.3);
 	r.set_fresnel(0.2);
 
-	noob::reflectance_handle rh = g.reflectances.add(r);
 
-	g.master_mixer.play_clip(h, 1.0);
+	noob::globals& g = noob::globals::get_instance();
+
+	const noob::reflectance_handle rh = g.reflectances.add(r);
 
 	const float actor_dims = 2.0;
-	noob::shape_handle shp = g.sphere_shape(actor_dims);
+	const noob::shape_handle shp = g.sphere_shape(actor_dims);
 
 	const uint32_t actor_count = 200;
 
@@ -116,32 +110,19 @@ void noob::application::user_update(double dt)
 	const noob::time nowtime = noob::clock::now();
 	const noob::duration time_since_update = nowtime - last_ui_update;
 	const uint64_t profiling_interval = 3000;
-	const uint64_t collision_display_interval = 500;
+	
 	if (noob::millis(time_since_update) > profiling_interval - 1)
 	{
 		
 		const noob::profiler_snap snap = g.profile_run;
-		message_profiling = std::make_unique<std::string>(noob::concat("NoobWerkz editor - Frame time: ", noob::to_string(divide_duration(snap.total_time, profiling_interval)), std::string(", draw time: "), noob::to_string(divide_duration(snap.stage_draw_duration, profiling_interval)), ", physics time: ", noob::to_string(divide_duration(snap.stage_physics_duration, profiling_interval))));
+		
+		message_profiling = std::make_unique<std::string>(noob::concat("[User Update] Frame time: ", noob::to_string(divide_duration(snap.total_time, profiling_interval)), std::string(", draw time: "), noob::to_string(divide_duration(snap.stage_draw_duration, profiling_interval)), ", physics time: ", noob::to_string(divide_duration(snap.stage_physics_duration, profiling_interval))));
+		
 		noob::logger::log(noob::importance::INFO, *message_profiling);
 		
 		g.profile_run.total_time = g.profile_run.stage_physics_duration = g.profile_run.stage_draw_duration = g.profile_run.sound_render_duration = noob::duration(0);
 		g.profile_run.num_sound_callbacks = 0;
+		
 		last_ui_update = nowtime;
 	}
-
-
-
-/*
-	if (noob::millis(time_since_update) > collision_display_interval -1)
-	{
-		std::vector<noob::contact_point> cps = stage.get_intersecting(ah);
-
-		std::string s = noob::concat("[UserApp] Actor (", noob::to_string(ah.index()), "), num collisions = ", noob::to_string(cps.size()));
-		
-		message_collision = std::make_unique<std::string>(s);
-	}
-*/
-	// gui.text(*(g.strings.get(noob::string_handle::make(0))), static_cast<float>(window_width - 500), static_cast<float>(window_height - 500), noob::gui::font_size::HEADER);
-	gui.text(*message_profiling, 5.0, 5.0);
-	gui.text(test_message, 50.0, 50.0);
 }
