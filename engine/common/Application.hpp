@@ -1,10 +1,5 @@
 #pragma once
 
-#include <atomic>
-#include <stdint.h>
-#include <cmath>
-#include <btBulletDynamicsCommon.h>
-
 #include <noob/logger/logger.hpp>
 
 #include "Globals.hpp"
@@ -45,13 +40,9 @@ namespace noob
 
 			// Callbacks
 			void touch(int pointerID, float x, float y, int action);
-			void touch(const touch_instance& t);
 
 			void window_resize(uint32_t w, uint32_t h);
 			void key_input(char c);
-
-			// TODO: Reimplement
-			bool eval(const std::string& name, const std::string& string_to_eval, bool reset = false);
 
 			uint32_t get_height() const { return window_height; }
 			uint32_t get_width() const { return window_width; }

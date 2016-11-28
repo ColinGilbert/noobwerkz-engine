@@ -376,17 +376,6 @@ void noob::graphics::reset_instances(noob::model_handle h, uint32_t num_instance
 	models.set(h, m);
 
 	glBindVertexArray(m.vao);
-/*	
-	// Setup colours VBO:
-	std::vector<noob::vec4> colours(num_instances, noob::vec4(1.0, 1.0, 1.0, 1.0));
-	glBindBuffer(GL_ARRAY_BUFFER, m.instanced_colour_vbo);
-	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::materials_stride, &colours[0].v[0], GL_DYNAMIC_DRAW);
-
-	// Setup matrices VBO:
-	std::vector<noob::mat4> matrices(num_instances * 2, noob::identity_mat4());
-	glBindBuffer(GL_ARRAY_BUFFER, m.instanced_matrices_vbo);
-	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::matrices_stride, &matrices[0].m[0], GL_DYNAMIC_DRAW);
-*/
 
 	// Setup colours VBO:
 	glBindBuffer(GL_ARRAY_BUFFER, m.instanced_colour_vbo);
@@ -430,7 +419,7 @@ noob::texture_handle noob::graphics::texture_cube(uint32_t dim, bool mips,  noob
 }
 
 
-void noob::graphics::draw(const noob::model_handle handle, uint32_t num) noexcept(true)
+void noob::graphics::draw(const noob::model_handle handle, uint32_t num) const noexcept(true)
 {
 	const noob::model m = models.get(handle);
 	glBindVertexArray(m.vao);
@@ -442,7 +431,7 @@ void noob::graphics::draw(const noob::model_handle handle, uint32_t num) noexcep
 }
 
 
-void noob::graphics::frame(uint32_t width, uint32_t height) noexcept(true)
+void noob::graphics::frame(uint32_t width, uint32_t height) const noexcept(true)
 {
 	glBindVertexArray(0);
 
@@ -461,7 +450,7 @@ void noob::graphics::frame(uint32_t width, uint32_t height) noexcept(true)
 }
 
 
-noob::gpu_write_buffer noob::graphics::map_buffer(noob::model_handle h, noob::model::instanced_data_type t, uint32_t min, uint32_t max) noexcept(true)
+noob::gpu_write_buffer noob::graphics::map_buffer(noob::model_handle h, noob::model::instanced_data_type t, uint32_t min, uint32_t max) const noexcept(true)
 {
 	noob::model m = models.get(h);
 
@@ -511,7 +500,7 @@ noob::gpu_write_buffer noob::graphics::map_buffer(noob::model_handle h, noob::mo
 }
 
 
-void noob::graphics::unmap_buffer() noexcept(true)
+void noob::graphics::unmap_buffer() const noexcept(true)
 {
 	glUnmapBuffer(GL_ARRAY_BUFFER);
 
@@ -519,7 +508,14 @@ void noob::graphics::unmap_buffer() noexcept(true)
 }
 
 
-void noob::graphics::push_colours(noob::model_handle h, uint32_t offset, const std::vector<noob::vec4>& colours) noexcept(true)
+noob::graphics::program_handle noob::graphics::get_default_instanced() const noexcept(true)
+{
+	return instanced_shader;
+}
+
+
+
+void noob::graphics::push_colours(noob::model_handle h, uint32_t offset, const std::vector<noob::vec4>& colours) const noexcept(true)
 {
 	noob::model m = models.get(h);
 	glBindVertexArray(m.vao);
@@ -533,7 +529,7 @@ void noob::graphics::push_colours(noob::model_handle h, uint32_t offset, const s
 }
 
 
-void noob::graphics::push_matrices(noob::model_handle h, uint32_t offset, const std::vector<noob::mat4>& mats) noexcept(true)
+void noob::graphics::push_matrices(noob::model_handle h, uint32_t offset, const std::vector<noob::mat4>& mats) const noexcept(true)
 {
 	noob::model m = models.get(h);
 	glBindVertexArray(m.vao);
@@ -547,7 +543,7 @@ void noob::graphics::push_matrices(noob::model_handle h, uint32_t offset, const 
 }
 
 
-void noob::graphics::eye_pos(const noob::vec3& arg) noexcept(true)
+void noob::graphics::eye_pos(const noob::vec3& arg) const noexcept(true)
 {
 	glUniform3fv(u_eye_pos, 1, &arg.v[0]);
 
@@ -555,7 +551,7 @@ void noob::graphics::eye_pos(const noob::vec3& arg) noexcept(true)
 }
 
 
-void noob::graphics::light_direction(const noob::vec3& arg) noexcept(true)
+void noob::graphics::light_direction(const noob::vec3& arg) const noexcept(true)
 {
 	glUniform3fv(u_light_directional, 1, &arg.v[0]);
 

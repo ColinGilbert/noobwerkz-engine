@@ -71,24 +71,24 @@ namespace noob
 
 			noob::texture_handle texture_cube(uint32_t dim, bool mips, noob::texture::format_type format_arg, noob::texture::numeric_type numeric_arg, noob::texture::compression_type compress_arg, const std::string& data) noexcept(true);	
 
-			void draw(const noob::model_handle, uint32_t num) noexcept(true);
+			void draw(const noob::model_handle, uint32_t num) const noexcept(true);
 
-			void frame(uint32_t width, uint32_t height) noexcept(true);
+			void frame(uint32_t width, uint32_t height) const noexcept(true);
 
-			noob::gpu_write_buffer map_buffer(noob::model_handle, noob::model::instanced_data_type, uint32_t min, uint32_t max) noexcept(true);
+			noob::gpu_write_buffer map_buffer(noob::model_handle, noob::model::instanced_data_type, uint32_t min, uint32_t max) const noexcept(true);
 
 			// NOTE: MUST be called as soon as you're finished using the buffer!
-			void unmap_buffer() noexcept(true);
+			void unmap_buffer() const noexcept(true);
 
-			noob::graphics::program_handle get_default_instanced() const noexcept(true) { return instanced_shader; }
+			noob::graphics::program_handle get_default_instanced() const noexcept(true);
 
-			void push_colours(noob::model_handle, uint32_t offset, const std::vector<noob::vec4>& colours) noexcept(true);
+			void push_colours(noob::model_handle, uint32_t offset, const std::vector<noob::vec4>& colours) const noexcept(true);
 
-			void push_matrices(noob::model_handle, uint32_t offset, const std::vector<noob::mat4>& mats) noexcept(true);
+			void push_matrices(noob::model_handle, uint32_t offset, const std::vector<noob::mat4>& mats) const noexcept(true);
 
-			void eye_pos(const noob::vec3&) noexcept(true);
+			void eye_pos(const noob::vec3&) const noexcept(true);
 
-			void light_direction(const noob::vec3&) noexcept(true);
+			void light_direction(const noob::vec3&) const noexcept(true);
 
 		protected:
 

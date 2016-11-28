@@ -6,7 +6,6 @@
 // #include "Shiny.h"
 
 // TODO: Insert the callback function here
-std::vector<std::tuple<noob::keyboard::keys, noob::keyboard::mod_keys, std::string>> keystrokes;
 std::unique_ptr<std::string> message_profiling, message_collision;
 noob::actor_handle ah;
 
@@ -104,7 +103,6 @@ bool noob::application::user_init()
 		ah = stage.actor(bph, 7, random_vec3(-stage_dim, -stage_dim, -stage_dim), random_versor());
 	}
 
-	// keystrokes.push_back(std::make_tuple(noob::keyboard::keys::NUM_5, noob::keyboard::mod_keys::NONE, "switch view (currently does nothing)"));
 	logger::log(noob::importance::INFO, "[Application] Successfully done (C++) user init.");
 	return true;
 }
