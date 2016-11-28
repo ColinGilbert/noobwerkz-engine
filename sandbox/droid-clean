@@ -1,5 +1,0 @@
-rm -rf ../engine/platform/android-proj/libs/* &&
-rm -rf ../engine/plaform/android-proj/bin/* &&
-rm -rf ../engine/platform/android-proj/obj/* &&
-rm -rf ../engine/platform/android-proj/assets/* &&
-rm ../engine/platform/android-proj/jni/*.so

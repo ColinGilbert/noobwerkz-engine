@@ -1,7 +1,7 @@
 #mkdir ../engine/platform/android-proj/libs/armeabi-v7a &&
-mkdir -p ../engine/platform/android-proj/assets/fonts &&
-cp -R assets/fonts ../engine/platform/android-proj/assets/fonts &&
+mkdir -p ../engine/platform/android-proj/assets/font &&
+cp -R assets/font ../engine/platform/android-proj/assets/font &&
 mkdir -p ../engine/platform/android-proj/assets/sounds &&
-cp assets/sounds/BlanketedLama.ogg ../engine/platform/android-proj/assets/sounds &&
+cp assets/sound/BlanketedLama.ogg ../engine/platform/android-proj/assets/sound &&
 mkdir -p ../engine/platform/android-proj/assets/textures &&
-cp assets/textures/gradient_map.tga ../engine/platform/android-proj/assets/textures
+cp assets/texture/gradient_map.tga ../engine/platform/android-proj/assets/texture
