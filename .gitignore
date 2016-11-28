@@ -13,7 +13,7 @@ engine/platform/android-proj/assets/*
 **/proguard-project.txt
 **/Untracked.hpp
 **/hlister
-#**/clister
+**/clister
 **/logger
 sandbox/noobengine
 **/.project
