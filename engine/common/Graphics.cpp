@@ -362,7 +362,7 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 
 	noob::model_handle h = models.add(result);
 
-	const noob::bbox bb = mesh.get_bbox();
+	const noob::bbox bb = mesh.bbox;
 	noob::logger::log(noob::importance::INFO, noob::concat("[Graphics] Created model with handle ", noob::to_string(h.index()), " and ", noob::to_string(num_instances), " instances. Verts = ", noob::to_string(mesh.vertices.size()), ", indices = ", noob::to_string(mesh.indices.size()), ". Dims: ", noob::to_string(bb.max - bb.min)));
 
 	return h;
@@ -399,31 +399,31 @@ void noob::graphics::reset_instances(noob::model_handle h, uint32_t num_instance
 	check_error_gl();
 
 	glBindVertexArray(0);
-
 }
 
 
-noob::texture_handle noob::graphics::reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, noob::attrib::unit_type unit_arg, noob::texture::compression_type compress, bool mips) noexcept(true)
+noob::texture_handle noob::graphics::texture_2d(uint32_t width, uint32_t height, bool mips, noob::texture::format_type format_arg, noob::texture::numeric_type numeric_arg, noob::texture::compression_type compress_arg, const std::string& data) noexcept(true)
 {
 	noob::texture_handle t;
 	return t;
 }
 
 
-bool noob::graphics::upload_texture_2d(noob::texture_handle tex, uint32_t slot_num, const std::string& info) noexcept(true)
-{
-	return false;
-}
-
-
-noob::texture_handle noob::graphics::texture_3d(uint32_t width, uint32_t height, uint32_t mips, noob::attrib::unit_type unit_arg, noob::texture::compression_type compress, const std::string&) noexcept(true)
+noob::texture_handle noob::graphics::array_texture(uint32_t width, uint32_t height, bool mips, noob::texture::format_type format_arg, noob::texture::numeric_type numeric_arg, noob::texture::compression_type compress_arg, const std::string& data) noexcept(true)
 {
 	noob::texture_handle t;
 	return t;
 }
 
 
-noob::texture_handle noob::graphics::texture_cube(uint32_t width, uint32_t height, uint32_t mips, noob::attrib::unit_type unit_arg, noob::texture::compression_type compress, const std::string&) noexcept(true)
+noob::texture_handle noob::graphics::texture_3d(uint32_t width, uint32_t height, uint32_t depth, bool mips, noob::texture::format_type format_arg, noob::texture::numeric_type numeric_arg, noob::texture::compression_type compress_arg, const std::string& data) noexcept(true)
+{
+	noob::texture_handle t;
+	return t;
+}
+
+
+noob::texture_handle noob::graphics::texture_cube(uint32_t dim, bool mips,  noob::texture::format_type format_arg, noob::texture::numeric_type numeric_arg, noob::texture::compression_type compress_arg, const std::string& data) noexcept(true)
 {
 	noob::texture_handle t;
 	return t;

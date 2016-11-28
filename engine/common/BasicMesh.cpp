@@ -27,6 +27,23 @@ double noob::basic_mesh::get_volume()
 	return volume;
 }
 
+
+void noob::basic_mesh::calculate_dims() noexcept(true)
+{
+	if (vertices.size() > 0)
+	{
+		bbox.min = bbox.max = vertices[0];
+		for (noob::vec3 v : vertices)
+		{
+			bbox.min[0] = std::min(bbox.min[0], v[0]);
+			bbox.min[1] = std::min(bbox.min[1], v[1]);
+			bbox.min[2] = std::min(bbox.min[2], v[2]);
+			bbox.max[0] = std::max(bbox.max[0], v[0]);
+			bbox.max[1] = std::max(bbox.max[1], v[1]);
+			bbox.max[2] = std::max(bbox.max[2], v[2]);
+		}
+	}
+}
 /*
    void noob::basic_mesh::to_origin()
    {

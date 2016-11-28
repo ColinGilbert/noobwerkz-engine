@@ -123,6 +123,7 @@ noob::basic_mesh noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
 //	results.bbox.min = noob::vec3(-radius, -radius, -radius);
 //	results.bbox.max = noob::vec3(radius, radius, radius);
 
+	results.calculate_dims();
 	return results;
 }
 

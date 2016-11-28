@@ -10,11 +10,12 @@ namespace noob
 	struct audio_sample
 	{
 			// By default, silence.
-			audio_sample() noexcept(true) : num_channels(0), sample_rate(0), min_before_next(0), samples(1, 0) {} 
+			audio_sample() noexcept(true) : num_channels(0), sample_rate(0), min_before_next(0) {} 
 			
 			bool load_file(const std::string& filename) noexcept(true);
 			
-			// bool load_mem(const std::string& file) noexcept(true); // TODO: IMPLEMENT
+			// TODO: IMPLEMENT
+			// bool load_mem(const std::string& file) noexcept(true);
 
 			void resample(size_t rate) noexcept(true);
 

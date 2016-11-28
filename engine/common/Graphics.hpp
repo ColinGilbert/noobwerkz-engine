@@ -62,14 +62,14 @@ namespace noob
 
 			void reset_instances(noob::model_handle, uint32_t num_instances) noexcept(true);
 
-			// Create a 2D array texture.
-			noob::texture_handle reserve_textures_2d(uint32_t width, uint32_t height, uint32_t slots, noob::attrib::unit_type, noob::texture::compression_type, bool mips) noexcept(true);
+			noob::texture_handle texture_2d(uint32_t width, uint32_t height, bool mips, noob::texture::format_type, noob::texture::numeric_type, noob::texture::compression_type, const std::string& data) noexcept(true);	
 
-			bool upload_texture_2d(noob::texture_handle tex, uint32_t slot_num, const std::string& info) noexcept(true);
+			// Create a 2D array texture, making the correct number of slots based on width, height, and amount of data given.
+			noob::texture_handle array_texture(uint32_t width, uint32_t height, bool mips, noob::texture::format_type format_arg, noob::texture::numeric_type numeric_arg, noob::texture::compression_type compress_arg, const std::string& data) noexcept(true);
 
-			noob::texture_handle texture_3d(uint32_t width, uint32_t height, uint32_t mips, noob::attrib::unit_type, noob::texture::compression_type, const std::string&) noexcept(true);	
+			noob::texture_handle texture_3d(uint32_t width, uint32_t height, uint32_t depth, bool mips, noob::texture::format_type format_arg, noob::texture::numeric_type numeric_arg, noob::texture::compression_type compress_arg, const std::string& data) noexcept(true);
 
-			noob::texture_handle texture_cube(uint32_t width, uint32_t height, uint32_t mips, noob::attrib::unit_type, noob::texture::compression_type, const std::string&) noexcept(true);	
+			noob::texture_handle texture_cube(uint32_t dim, bool mips, noob::texture::format_type format_arg, noob::texture::numeric_type numeric_arg, noob::texture::compression_type compress_arg, const std::string& data) noexcept(true);	
 
 			void draw(const noob::model_handle, uint32_t num) noexcept(true);
 

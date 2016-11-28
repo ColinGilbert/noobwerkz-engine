@@ -30,7 +30,7 @@ namespace noob
 		noob::texture::compression_type compression;
 		noob::texture::format_type format;
 		noob::texture::numeric_type numeric;
-		uint32_t handle;
+		uint32_t handle, width, height, depth;
 		uint8_t r_depth, b_depth, g_depth, a_depth;
 		bool mips;
 	};

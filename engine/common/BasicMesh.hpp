@@ -26,6 +26,7 @@ namespace noob
 
 		// std::string save() const;
 		// void save(const std::string& filename) const;
+		void calculate_dims() noexcept(true);
 
 #if defined(NOOB_USE_ASSIMP)
 		bool load_mem_assimp(const std::string&);
@@ -39,8 +40,6 @@ namespace noob
 		// void translate(const noob::vec3&);
 		// void rotate(const noob::versor&);
 		// void scale(const noob::vec3&);
-
-		noob::bbox get_bbox() const { return bbox; }
 
 		rde::vector<noob::vec3> vertices;
 		rde::vector<noob::vec3> normals;
