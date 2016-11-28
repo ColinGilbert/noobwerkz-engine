@@ -8,9 +8,9 @@ engine/platform/android-proj/libs/*
 engine/platform/android-proj/jni/*.so
 engine/platform/android-proj/gen/*
 engine/platform/android-proj/assets/*
-**/local.properties
-**/build.xml
-**/proguard-project.txt
+engine/platform/android-proj/local.properties
+engine/platform/android-proj/build.xml
+engine/platform/android-proj/proguard-project.txt
 **/Untracked.hpp
 **/hlister
 **/clister
