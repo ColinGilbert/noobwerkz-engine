@@ -1,1 +1,1 @@
-This is where Android-related buildfiles are created.
+This folder is for Android build artifacts.
