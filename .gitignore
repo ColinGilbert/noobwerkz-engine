@@ -1,4 +1,4 @@
-#engine/build/*
+engine/build/*
 **/.*.sw*
 **/.git*
 !.gitignore
