@@ -1,7 +1,7 @@
 engine/build/*
 **/.*.sw*
-**/.git*
-!.gitignore
+#**/.git*
+#!.gitignore
 engine/platform/android-proj/obj/*
 engine/platform/android-proj/bin/*
 engine/platform/android-proj/libs/*
