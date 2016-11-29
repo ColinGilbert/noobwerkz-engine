@@ -37,6 +37,8 @@ include(cmake/Recast.cmake)
 include(cmake/R8.cmake)
 include(cmake/Shiny.cmake)
 
+#add_subdirectory(lib/ozz-animation)
+
 include_directories(lib/sema)
 include_directories(lib/glm)
 include_directories(lib/eigen)
@@ -82,6 +84,8 @@ if (NOOB_PLATFORM_LINUX)
 	set(CMAKE_C_FLAGS "-DHAVE_ALLOCA_H ${CMAKE_C_FLAGS}")
 	include_directories(lib/Khronos)
 	add_subdirectory(lib/glfw)
+	add_subdirectory(lib/libsoundio)
+	
 	include_directories(lib/glfw/include)
 	include_directories(platform/nix)
 
