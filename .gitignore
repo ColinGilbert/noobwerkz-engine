@@ -1,6 +1,6 @@
 engine/build/*
 **/.*.sw*
-#**/.git*
+**/.git*
 #!.gitignore
 engine/platform/android-proj/obj/*
 engine/platform/android-proj/bin/*
@@ -14,7 +14,6 @@ engine/platform/android-proj/proguard-project.txt
 **/Untracked.hpp
 **/hlister
 **/clister
-**/logger
 sandbox/runtime/noobengine
 **/.project
 **/.cproject
