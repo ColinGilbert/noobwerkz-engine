@@ -10,6 +10,7 @@
 #include "GpuBuffer.hpp"
 #include "Texture.hpp"
 #include "Attrib.hpp"
+#include "ReturnType.hpp"
 
 namespace noob
 {
@@ -62,14 +63,14 @@ namespace noob
 
 			void reset_instances(noob::model_handle, uint32_t num_instances) noexcept(true);
 
-			noob::texture_handle texture_2d(uint32_t dims, bool mips, bool compressed, noob::texture::channel_type, noob::texture::colour_depth_type, const std::string& data) noexcept(true);	
+			noob::texture_handle texture_2d(uint32_t dims, bool mips, bool compressed, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true);	
 
 			// Create a 2D array texture, making the correct number of slots based on width, height, and amount of data given.
-			noob::texture_handle array_texture(uint32_t dims, bool mips, bool compressed, noob::texture::channel_type, noob::texture::colour_depth_type, const std::string& data) noexcept(true);
+			noob::texture_handle array_texture(uint32_t dims, bool mips, bool compressed, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true);
 
-			noob::texture_handle texture_3d(uint32_t dims, bool mips, noob::texture::channel_type, noob::texture::colour_depth_type numeric_arg, const std::string& data) noexcept(true);
+			noob::texture_handle texture_3d(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true);
 
-			noob::texture_handle texture_cube(uint32_t dims, bool mips, noob::texture::channel_type, noob::texture::colour_depth_type numeric_arg, const std::string& data) noexcept(true);	
+			noob::texture_handle texture_cube(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true);	
 
 			void draw(const noob::model_handle, uint32_t num) const noexcept(true);
 

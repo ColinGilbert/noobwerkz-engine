@@ -19,5 +19,4 @@ if (DEFINED NOOB_USE_ETCLIB)
 		lib/etc2comp/EtcLib/Etc/Etc.cpp
 		lib/etc2comp/EtcLib/Etc/EtcMath.cpp
 		)
-
 endif()

@@ -6,7 +6,7 @@ namespace noob
 	{
 		enum class unit_type
 		{
-			HALF_FLOAT, FLOAT, INT16, INT32, UINT16, UINT32
+			INT8, UINT8, INT16, INT32, UINT16, UINT32, HALF_FLOAT, FLOAT
 		};
 
 		enum class packing_type

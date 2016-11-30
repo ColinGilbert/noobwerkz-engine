@@ -2,48 +2,44 @@
 
 #include <noob/component/component.hpp>
 
+#include "Attrib.hpp"
+
+
 namespace noob
 {
-	class texture
+	enum class texture_storage
 	{
-		public:
+		TEX_1D, TEX_2D, ARRAY_TEX_2D, CUBEMAP, TEX_3D
+	};
 
-		enum class storage_type
-		{
-			TEX_1D, TEX_2D, ARRAY_TEX_2D, CUBEMAP, TEX_3D
-		};
+	enum class texture_channels
+	{
+		R, RG, RGBA
+	};
 
-		enum class channel_type
-		{
-			R, RG, RGBA
-		};
+	class graphics;
 
-		enum class colour_depth_type
-		{
-			INT8, UINT8, INT16, UINT16, INT32, HALF_FLOAT, FLOAT
-		};
+	struct texture
+	{
+		friend class graphics;
+		// Your earnest, friendly massive constructor used to enforce proper object creation. The graphics class gives these opaquely to the enduser.
+		texture(uint32_t DriverHandle, noob::texture_storage Storage, noob::texture_channels Channels, noob::attrib::unit_type BitDepth, uint32_t DimX, uint32_t DimY, uint32_t DimZ, bool Compressed, bool Mips) noexcept(true) :  driver_handle(DriverHandle), storage(Storage), channels(Channels), bit_depth(BitDepth), x(DimX), y(DimY), z(DimZ), compressed(Compressed), mips(Mips) {}
 		
-		noob::texture::storage_type storage() const noexcept(true)
-		{
-			return m_storage;
-		}
+		
+		texture() = delete;
+		texture(const noob::texture& lhs) noexcept(true) = default;
+		texture& operator=(const noob::texture& lhs) noexcept(true) = default;
 
-		noob::texture::channel_type channels() const noexcept(true)
-		{
-			return m_channels;
-		}
+		private:
+		const uint32_t driver_handle;
 
-		noob::texture::colour_depth_type colour_depth() const noexcept(true)
-		{
-			return m_colour_depth;
-		}
-
-		protected:
-		noob::texture::storage_type m_storage;
-		noob::texture::channel_type m_channels;
-		noob::texture::colour_depth_type m_colour_depth;
-		uint32_t handle, m_width, m_height, m_depth;
-		bool m_compressed, m_mips;
+		public:
+		const noob::texture_storage storage;
+		const noob::texture_channels channels;
+		const noob::attrib::unit_type bit_depth;
+		const uint32_t x, y, z;
+		const bool compressed;
+		const bool mips;
 	};
 
 	typedef noob::handle<noob::texture> texture_handle;
