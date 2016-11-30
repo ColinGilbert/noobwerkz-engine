@@ -11,15 +11,6 @@
 #include "NoobUtils.hpp"
 #include "AudioInterfaceDroid.hpp"
 
-
-namespace noob
-{
-	template<typename T> T idiv_ceil(T numerator, T denominator)
-	{
-		return numerator / denominator + (((numerator < 0) ^ (denominator > 0)) && (numerator % denominator));
-	}
-}
-
 uint32_t window_width, window_height;
 
 EGLint current_context;
@@ -174,11 +165,11 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_Log(JNIEnv* env, jobj
 }
 
 
-int audio_cb(int16_t* buffer, int frames_per_buffer)
+uint32_t audio_cb(int16_t* buffer, uint32_t frames_per_buffer)
 {
 	const int16_t* readbuf = buffer_droid.head();
 
-	noob::index_type counter = 0;
+	uint32_t counter = 0;
 	for (uint32_t frame = 0; frame < frames_per_buffer; ++frame)
 	{
 		const int16_t val = readbuf[frame];

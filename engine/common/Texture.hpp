@@ -4,35 +4,46 @@
 
 namespace noob
 {
-	struct texture
+	class texture
 	{
+		public:
+
 		enum class storage_type
 		{
-			TEX_2D, ARRAY_TEX_2D, CUBEMAP, TEX_3D
+			TEX_1D, TEX_2D, ARRAY_TEX_2D, CUBEMAP, TEX_3D
 		};
 
-		enum class compression_type
+		enum class channel_type
 		{
-			NONE, ETC2, ASTC 
+			R, RG, RGBA
 		};
 
-		enum class format_type
+		enum class colour_depth_type
 		{
-			RED, RED_INTEGER, RG, RG_INTEGER, RGB, RGB_INTEGER, RGBA, RGBA_INTEGER, DEPTH_COMPONENT, DEPTH_STENCIL, LUMINANCE_ALPHA, LUMINANCE, ALPHA
+			INT8, UINT8, INT16, UINT16, INT32, HALF_FLOAT, FLOAT
 		};
-
-		enum class numeric_type
+		
+		noob::texture::storage_type storage() const noexcept(true)
 		{
-			UNSIGNED_BYTE, BYTE, UNSIGNED_SHORT, SHORT, UNSIGNED_INT, INT, HALF_FLOAT, FLOAT
-		};
+			return m_storage;
+		}
 
-		noob::texture::storage_type storage;
-		noob::texture::compression_type compression;
-		noob::texture::format_type format;
-		noob::texture::numeric_type numeric;
-		uint32_t handle, max_x, max_y, max_z;
-		uint8_t r_depth, b_depth, g_depth, a_depth;
-		bool mips;
+		noob::texture::channel_type channels() const noexcept(true)
+		{
+			return m_channels;
+		}
+
+		noob::texture::colour_depth_type colour_depth() const noexcept(true)
+		{
+			return m_colour_depth;
+		}
+
+		protected:
+		noob::texture::storage_type m_storage;
+		noob::texture::channel_type m_channels;
+		noob::texture::colour_depth_type m_colour_depth;
+		uint32_t handle, m_width, m_height, m_depth;
+		bool m_compressed, m_mips;
 	};
 
 	typedef noob::handle<noob::texture> texture_handle;

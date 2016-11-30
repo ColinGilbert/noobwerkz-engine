@@ -1,8 +1,23 @@
+/*
+Adapted from code originally found at:
+https://github.com/hrydgard/native/blob/master/android/native-audio-so.cpp
+
+Upstream license:
+Copyright (C) 2012 Henrik Rydgard
+
+This applies to all the code here not covered under other licenses, see README.md.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/ 
+
 // Minimal audio streaming using OpenSL.
 //
 // Loosely based on the Android NDK sample code.
 
-#include <assert.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -14,15 +29,12 @@
 
 #include "NoobUtils.hpp"
 
-// This is kinda ugly, but for simplicity I've left these as globals just like in the sample,
-// as there's not really any use case for this where we have multiple audio devices yet.
-
-// engine interfaces
+// Engine interfaces
 static SLObjectItf engine_sl;
 static SLEngineItf engine_engine_sl;
 static SLObjectItf output_mix_sl;
 
-// buffer queue player interfaces
+// Buffer queue player interfaces
 static SLObjectItf bq_player_obj_sl = nullptr;
 static SLPlayItf bq_player_play_sl = nullptr;
 static SLAndroidSimpleBufferQueueItf bq_player_bufferqueue_sl = nullptr;
@@ -38,9 +50,6 @@ static int sample_rate;
 static AndroidAudioCallback audio_callback;
 
 // This callback handler is called every time a buffer finishes playing.
-// The documentation available is very unclear about how to best manage buffers.
-// I've chosen to this approach: Instantly enqueue a buffer that was rendered to the last time,
-// and then render the next. Hopefully it's okay to spend time in this callback after having enqueued. 
 static void bqPlayerCallback(SLAndroidSimpleBufferQueueItf bq, void *context)
 {
 	if (bq != bq_player_bufferqueue_sl)
@@ -51,7 +60,7 @@ static void bqPlayerCallback(SLAndroidSimpleBufferQueueItf bq, void *context)
 
 	uint32_t size_in_bytes = frames_per_buffer * 2 * sizeof(int16_t);
 
-	int renderedFrames = audio_callback(buffer[current_buf], frames_per_buffer);
+	uint32_t renderedFrames = audio_callback(buffer[current_buf], frames_per_buffer);
 
 	//int byteCount = (frames_per_buffer - renderedFrames) * 4;
 	// Zero out the unplayed stuff.
@@ -74,7 +83,7 @@ static void bqPlayerCallback(SLAndroidSimpleBufferQueueItf bq, void *context)
 }
 
 // create the engine and output mix objects
-bool opensl_wrapper_init(AndroidAudioCallback cb, int frames_per_buffer_arg, int sample_rate_arg)
+bool opensl_wrapper_init(AndroidAudioCallback cb, uint32_t frames_per_buffer_arg, uint32_t sample_rate_arg)
 {
 	audio_callback = cb;
 	frames_per_buffer = frames_per_buffer_arg;
@@ -101,15 +110,15 @@ bool opensl_wrapper_init(AndroidAudioCallback cb, int frames_per_buffer_arg, int
 	SLresult result;
 	// create engine
 	result = slCreateEngine(&engine_sl, 0, nullptr, 0, nullptr, nullptr);
-	assert(SL_RESULT_SUCCESS == result);
+	if (SL_RESULT_SUCCESS != result) return false;
 	result = (*engine_sl)->Realize(engine_sl, SL_BOOLEAN_FALSE);
-	assert(SL_RESULT_SUCCESS == result);
+	if (SL_RESULT_SUCCESS != result) return false;	
 	result = (*engine_sl)->GetInterface(engine_sl, SL_IID_ENGINE, &engine_engine_sl);
-	assert(SL_RESULT_SUCCESS == result);
+	if (SL_RESULT_SUCCESS != result) return false;
 	result = (*engine_engine_sl)->CreateOutputMix(engine_engine_sl, &output_mix_sl, 0, nullptr, nullptr);
-	assert(SL_RESULT_SUCCESS == result);
+	if (SL_RESULT_SUCCESS != result) return false;
 	result = (*output_mix_sl)->Realize(output_mix_sl, SL_BOOLEAN_FALSE);
-	assert(SL_RESULT_SUCCESS == result);
+	if (SL_RESULT_SUCCESS != result) return false;
 
 	SLuint32 sr = SL_SAMPLINGRATE_44_1;
 	if (sample_rate == 48000)
@@ -139,19 +148,20 @@ bool opensl_wrapper_init(AndroidAudioCallback cb, int frames_per_buffer_arg, int
 	const SLInterfaceID ids[2] = {SL_IID_BUFFERQUEUE, SL_IID_VOLUME};
 	const SLboolean req[2] = {SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE};
 	result = (*engine_engine_sl)->CreateAudioPlayer(engine_engine_sl, &bq_player_obj_sl, &audioSrc, &audioSnk, 2, ids, req);
-	assert(SL_RESULT_SUCCESS == result);
+	if (SL_RESULT_SUCCESS != result) return false;	
 	result = (*bq_player_obj_sl)->Realize(bq_player_obj_sl, SL_BOOLEAN_FALSE);
-	assert(SL_RESULT_SUCCESS == result);
+	if (SL_RESULT_SUCCESS != result) return false;	
 	result = (*bq_player_obj_sl)->GetInterface(bq_player_obj_sl, SL_IID_PLAY, &bq_player_play_sl);
-	assert(SL_RESULT_SUCCESS == result);
+	if (SL_RESULT_SUCCESS != result) return false;	
 	result = (*bq_player_obj_sl)->GetInterface(bq_player_obj_sl, SL_IID_BUFFERQUEUE, &bq_player_bufferqueue_sl);
-	assert(SL_RESULT_SUCCESS == result);
+	if (SL_RESULT_SUCCESS != result) return false;	
 	result = (*bq_player_bufferqueue_sl)->RegisterCallback(bq_player_bufferqueue_sl, bqPlayerCallback, nullptr);
-	assert(SL_RESULT_SUCCESS == result);
+	if (SL_RESULT_SUCCESS != result) return false;	
 	result = (*bq_player_obj_sl)->GetInterface(bq_player_obj_sl, SL_IID_VOLUME, &bq_player_volume);
-	assert(SL_RESULT_SUCCESS == result);
+	if (SL_RESULT_SUCCESS != result) return false;	
 	result = (*bq_player_play_sl)->SetPlayState(bq_player_play_sl, SL_PLAYSTATE_PLAYING);
-	assert(SL_RESULT_SUCCESS == result);
+	if (SL_RESULT_SUCCESS != result) return false;
+
 
 	// Render and enqueue a first buffer.
 	current_buf = 0;
@@ -162,10 +172,7 @@ bool opensl_wrapper_init(AndroidAudioCallback cb, int frames_per_buffer_arg, int
 
 	result = (*bq_player_bufferqueue_sl)->Enqueue(bq_player_bufferqueue_sl, buffer[current_buf], size_in_bytes);
 
-	if (SL_RESULT_SUCCESS != result)
-	{
-		return false;
-	}
+	if (SL_RESULT_SUCCESS != result) return false;
 
 	current_buf ^= 1;
 

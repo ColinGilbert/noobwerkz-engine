@@ -391,28 +391,28 @@ void noob::graphics::reset_instances(noob::model_handle h, uint32_t num_instance
 }
 
 
-noob::texture_handle noob::graphics::texture_2d(uint32_t width, uint32_t height, bool mips, noob::texture::format_type format_arg, noob::texture::numeric_type numeric_arg, noob::texture::compression_type compress_arg, const std::string& data) noexcept(true)
+noob::texture_handle noob::graphics::texture_2d(uint32_t dims, bool mips, bool compressed, noob::texture::channel_type format_arg, noob::texture::colour_depth_type numeric_arg, const std::string& data) noexcept(true)
 {
 	noob::texture_handle t;
 	return t;
 }
 
 
-noob::texture_handle noob::graphics::array_texture(uint32_t width, uint32_t height, bool mips, noob::texture::format_type format_arg, noob::texture::numeric_type numeric_arg, noob::texture::compression_type compress_arg, const std::string& data) noexcept(true)
+noob::texture_handle noob::graphics::array_texture(uint32_t dims, bool mips, bool compressed, noob::texture::channel_type format_arg, noob::texture::colour_depth_type numeric_arg, const std::string& data) noexcept(true)
 {
 	noob::texture_handle t;
 	return t;
 }
 
 
-noob::texture_handle noob::graphics::texture_3d(uint32_t width, uint32_t height, uint32_t depth, bool mips, noob::texture::format_type format_arg, noob::texture::numeric_type numeric_arg, noob::texture::compression_type compress_arg, const std::string& data) noexcept(true)
+noob::texture_handle noob::graphics::texture_3d(uint32_t dims, bool mips, noob::texture::channel_type format_arg, noob::texture::colour_depth_type numeric_arg, const std::string& data) noexcept(true)
 {
 	noob::texture_handle t;
 	return t;
 }
 
 
-noob::texture_handle noob::graphics::texture_cube(uint32_t dim, bool mips,  noob::texture::format_type format_arg, noob::texture::numeric_type numeric_arg, noob::texture::compression_type compress_arg, const std::string& data) noexcept(true)
+noob::texture_handle noob::graphics::texture_cube(uint32_t dims, bool mips, noob::texture::channel_type format_arg, noob::texture::colour_depth_type numeric_arg, const std::string& data) noexcept(true)
 {
 	noob::texture_handle t;
 	return t;
