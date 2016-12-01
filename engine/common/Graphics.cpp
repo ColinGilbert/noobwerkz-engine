@@ -12,9 +12,6 @@
 #include "StringFuncs.hpp"
 
 
-noob::graphics* noob::graphics::ptr_to_instance;
-
-
 GLenum check_error_gl(const char *file, int line)
 {
 	GLenum error_code;
@@ -175,7 +172,7 @@ void noob::graphics::init(uint32_t width, uint32_t height) noexcept(true)
 
 	noob::logger::log(noob::importance::INFO, "[Graphics] Done init.");
 
-	
+
 }
 
 void noob::graphics::destroy() noexcept(true)
@@ -306,7 +303,7 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 	glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
 	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::materials_stride, nullptr, GL_DYNAMIC_DRAW);
 	//glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::materials_stride, &colours[0].v[0], GL_DYNAMIC_DRAW);
-	
+
 	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(0));
 	glEnableVertexAttribArray(3);
 	glVertexAttribDivisor(3, 1);
@@ -390,13 +387,13 @@ void noob::graphics::reset_instances(noob::model_handle h, uint32_t num_instance
 	glBindVertexArray(0);
 }
 
-
+/*
 noob::texture_1d_handle noob::graphics::reserve_texture_1d(uint32_t length, bool mips, bool compressed, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg) noexcept(true)
 {
 	noob::texture_1d_handle t;
 	return t;
 }
-
+*/
 
 noob::texture_2d_handle noob::graphics::reserve_texture_2d(uint32_t width, uint32_t height, bool mips, bool compressed, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg) noexcept(true)
 {
@@ -412,19 +409,44 @@ noob::texture_array_2d_handle noob::graphics::reserve_array_texture_2d(uint32_t 
 }
 
 
-noob::texture_3d_handle noob::graphics::reserve_texture_3d(uint32_t width, uint32_t height, uint32_t depth, bool mips, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg) noexcept(true)
+noob::texture_3d_handle noob::graphics::reserve_texture_3d(uint32_t width, uint32_t height, uint32_t depth, bool mips, bool compressed, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg) noexcept(true)
 {
 	noob::texture_3d_handle t;
 	return t;
 }
 
 /*
-noob::texture_handle noob::graphics::texture_cube(uint32_t dims, bool mips, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg, const std::string& data) noexcept(true)
+   noob::texture_handle noob::graphics::texture_cube(uint32_t dims, bool mips, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg, const std::string& data) noexcept(true)
+   {
+   noob::texture_handle t;
+   return t;
+   }
+   */
+
+
+void noob::graphics::texture_data(noob::texture_1d_handle, const std::string&) const noexcept(true)
 {
-	noob::texture_handle t;
-	return t;
+
 }
-*/
+
+
+void noob::graphics::texture_data(noob::texture_2d_handle, const std::string&) const noexcept(true)
+{
+
+}
+
+
+void noob::graphics::texture_data(noob::texture_array_2d_handle, uint32_t index, const std::string&) const noexcept(true)
+{
+
+}
+
+
+void noob::graphics::texture_data(noob::texture_3d_handle, const std::string&) const noexcept(true)
+{
+
+}
+
 
 void noob::graphics::draw(const noob::model_handle handle, uint32_t num) const noexcept(true)
 {
@@ -515,38 +537,9 @@ void noob::graphics::unmap_buffer() const noexcept(true)
 }
 
 
-noob::graphics::program_handle noob::graphics::get_default_instanced() const noexcept(true)
+noob::graphics::program_handle noob::graphics::get_instanced() const noexcept(true)
 {
 	return instanced_shader;
-}
-
-
-
-void noob::graphics::push_colours(noob::model_handle h, uint32_t offset, const std::vector<noob::vec4>& colours) const noexcept(true)
-{
-	noob::model m = models.get(h);
-	glBindVertexArray(m.vao);
-
-	// Setup colours VBO:
-	glBindBuffer(GL_ARRAY_BUFFER, m.instanced_colour_vbo);
-	glBufferSubData(GL_ARRAY_BUFFER, offset, colours.size() * sizeof(noob::vec4), &colours[0].v[0]);
-
-	check_error_gl();
-
-}
-
-
-void noob::graphics::push_matrices(noob::model_handle h, uint32_t offset, const std::vector<noob::mat4>& mats) const noexcept(true)
-{
-	noob::model m = models.get(h);
-	glBindVertexArray(m.vao);
-
-	// Setup matrices VBO:
-	glBindBuffer(GL_ARRAY_BUFFER, m.instanced_matrices_vbo);
-	glBufferSubData(GL_ARRAY_BUFFER, offset, mats.size() * sizeof(noob::mat4), &mats[0].m[0]);
-
-	check_error_gl();
-
 }
 
 

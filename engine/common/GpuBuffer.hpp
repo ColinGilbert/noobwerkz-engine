@@ -12,9 +12,6 @@ namespace noob
 
 		public:
 
-		// TODO:
-		// Templatize!
-
 		bool valid() const noexcept(true)
 		{
 			return raw_buf != nullptr;

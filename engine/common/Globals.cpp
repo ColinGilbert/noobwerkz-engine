@@ -37,7 +37,7 @@ noob::model_handle noob::globals::model_from_shape(noob::shape_handle arg, uint3
 {
 	noob::shape shp = shapes.get(arg);
 
-	noob::graphics& gfx = noob::graphics::get_instance();
+	noob::graphics& gfx = noob::get_graphics();
 	return gfx.model_instanced(shp.get_mesh(), num);
 }
 

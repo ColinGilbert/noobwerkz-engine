@@ -86,8 +86,8 @@ void noob::stage::draw() noexcept(true)
 {
 	// PROFILE_FUNC();
 
-	noob::graphics& gfx = noob::graphics::get_instance();
-	noob::graphics::program_handle prog = gfx.get_default_instanced();
+	noob::graphics& gfx = noob::get_graphics();
+	noob::graphics::program_handle prog = gfx.get_instanced();
 	gfx.use_program(prog);
 
 	gfx.eye_pos(noob::translation_from_mat4(view_matrix));
@@ -112,7 +112,7 @@ void noob::stage::draw() noexcept(true)
 
 		gfx.draw(modl, instance_count);
 
-		// noob::logger::log(noob::importance::INFO,  noob::concat("[Stage] Drawing model ", noob::to_string(modl.index()), " ", noob::to_string(instance_count), " times."));//gfx.draw(modl, instance_count);
+		// noob::logger::log(noob::importance::INFO,  noob::concat("[Stage] Drawing model ", noob::to_string(modl.index()), " ", noob::to_string(instance_count), " times."));
 
 	}
 }
@@ -134,7 +134,7 @@ void noob::stage::build_navmesh() noexcept(true)
 
 void noob::stage::rebuild_graphics(uint32_t width, uint32_t height, const noob::mat4& projection_mat) noexcept(true)
 {
-	noob::graphics& gfx = noob::graphics::get_instance();
+	noob::graphics& gfx = noob::get_graphics();
 	update_viewport_params(width, height, projection_mat);
 
 
@@ -285,7 +285,7 @@ void noob::stage::upload_colours(drawable_info_handle arg) const noexcept(true)
 
 	const noob::model_handle model_h = drawables[arg.index()].model;
 
-	noob::graphics& gfx = noob::graphics::get_instance();
+	noob::graphics& gfx = noob::get_graphics();
 
 	noob::gpu_write_buffer buf = gfx.map_buffer(model_h, noob::model::instanced_data_type::COLOUR, 0, count);
 
@@ -327,7 +327,7 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 	assert(count <= theoretical_max);
 
 	const noob::model_handle model_h = drawables[arg.index()].model;
-	noob::graphics& gfx = noob::graphics::get_instance();
+	noob::graphics& gfx = noob::get_graphics();
 
 
 	noob::gpu_write_buffer buf = gfx.map_buffer(model_h, noob::model::instanced_data_type::MATRICES, 0, count);
@@ -398,7 +398,7 @@ void noob::stage::reserve_models(noob::model_handle h, uint32_t num) noexcept(tr
 
 		results->value = results_index;
 
-		noob::graphics& gfx = noob::graphics::get_instance();
+		noob::graphics& gfx = noob::get_graphics();
 		gfx.reset_instances(h, num);
 	}
 	else
@@ -410,7 +410,7 @@ void noob::stage::reserve_models(noob::model_handle h, uint32_t num) noexcept(tr
 
 		drawables[index].instances.resize(max_new);
 
-		noob::graphics& gfx = noob::graphics::get_instance();
+		noob::graphics& gfx = noob::get_graphics();
 		gfx.reset_instances(h, num);
 	}
 }

@@ -10,7 +10,7 @@ void noob::application::init(uint32_t width, uint32_t height, const std::string 
 
 
 
-	noob::graphics& gfx = noob::graphics::get_instance();
+	noob::graphics& gfx = noob::get_graphics();
 	gfx.init(width, height);
 
 	started = paused = input_has_started = false;
@@ -60,7 +60,7 @@ void noob::application::draw()
 {
 	const noob::time start_time = noob::clock::now();
 
-	noob::graphics& gfx = noob::graphics::get_instance();
+	noob::graphics& gfx = noob::get_graphics();
 	gfx.frame(window_width, window_height);
 
 	stage.draw();
