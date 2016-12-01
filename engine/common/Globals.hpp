@@ -33,7 +33,7 @@
 #include "Actor.hpp"
 #include "ProfilingInfo.hpp"
 
-// TODO: Remove this.
+// TODO: Remove this horror.
 
 namespace noob
 {

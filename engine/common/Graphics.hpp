@@ -63,14 +63,16 @@ namespace noob
 
 			void reset_instances(noob::model_handle, uint32_t num_instances) noexcept(true);
 
-			noob::texture_handle texture_2d(uint32_t dims, bool mips, bool compressed, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true);	
+			noob::texture_1d_handle reserve_texture_1d(uint32_t dims, bool mips, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true);	
 
+			noob::texture_2d_handle reserve_texture_2d(uint32_t dims, bool mips, bool compressed, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg) noexcept(true);
+		
 			// Create a 2D array texture, making the correct number of slots based on width, height, and amount of data given.
-			noob::texture_handle array_texture(uint32_t dims, bool mips, bool compressed, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true);
+			noob::texture_3d_handle reserve_array_texture_2d(uint32_t dims, bool mips, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true);
 
-			noob::texture_handle texture_3d(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true);
+			noob::texture_3d_handle reserve_texture_3d(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type) noexcept(true);
 
-			noob::texture_handle texture_cube(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true);	
+			// noob::texture_handle reserve_texture_cube(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true);	
 
 			void draw(const noob::model_handle, uint32_t num) const noexcept(true);
 
@@ -94,10 +96,12 @@ namespace noob
 		protected:
 
 			noob::component<noob::model> models;
-			noob::component<noob::texture> textures;
+			std::vector<noob::texture_1d> textures_1d;
+			std::vector<noob::texture_2d> textures_2d;
+			std::vector<noob::texture_3d> textures_3d;
 
 			noob::graphics::program_handle instanced_shader;
-			
+
 			int32_t u_eye_pos, u_light_directional;
 
 			// noob::mat4 view_mat, proj_mat;

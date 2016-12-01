@@ -391,33 +391,40 @@ void noob::graphics::reset_instances(noob::model_handle h, uint32_t num_instance
 }
 
 
-noob::texture_handle noob::graphics::texture_2d(uint32_t dims, bool mips, bool compressed, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg, const std::string& data) noexcept(true)
+noob::texture_1d_handle noob::graphics::reserve_texture_1d(uint32_t dims, bool mips, bool compressed, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg) noexcept(true)
 {
-	noob::texture_handle t;
+	noob::texture_1d_handle t;
 	return t;
 }
 
 
-noob::texture_handle noob::graphics::array_texture(uint32_t dims, bool mips, bool compressed, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg, const std::string& data) noexcept(true)
+noob::texture_2d_handle noob::graphics::reserve_texture_2d(uint32_t dims, bool mips, bool compressed, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg) noexcept(true)
 {
-	noob::texture_handle t;
+	noob::texture_2d_handle t;
 	return t;
 }
 
 
-noob::texture_handle noob::graphics::texture_3d(uint32_t dims, bool mips, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg, const std::string& data) noexcept(true)
+noob::texture_3d_handle noob::graphics::reserve_array_texture_2d(uint32_t dims, bool mips, bool compressed, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg) noexcept(true)
 {
-	noob::texture_handle t;
+	noob::texture_3d_handle t;
 	return t;
 }
 
 
+noob::texture_3d_handle noob::graphics::reserve_texture_3d(uint32_t dims, bool mips, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg) noexcept(true)
+{
+	noob::texture_3d_handle t;
+	return t;
+}
+
+/*
 noob::texture_handle noob::graphics::texture_cube(uint32_t dims, bool mips, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg, const std::string& data) noexcept(true)
 {
 	noob::texture_handle t;
 	return t;
 }
-
+*/
 
 void noob::graphics::draw(const noob::model_handle handle, uint32_t num) const noexcept(true)
 {

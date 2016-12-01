@@ -14,33 +14,77 @@ namespace noob
 
 	enum class texture_channels
 	{
-		R, RG, RGBA
+		R, RG, RBG, RGBA
+	};
+
+	struct texture_info
+	{
+		noob::texture_channels channels;
+		noob::attrib::unit_type bit_depth;
+		bool compressed;
+		bool mips;
 	};
 
 	class graphics;
 
-	struct texture
+	struct texture_1d
 	{
 		friend class graphics;
-		// Your earnest, friendly massive constructor used to enforce proper object creation. The graphics class gives these opaquely to the enduser.
-		texture(uint32_t DriverHandle, noob::texture_storage Storage, noob::texture_channels Channels, noob::attrib::unit_type BitDepth, uint32_t DimX, uint32_t DimY, uint32_t DimZ, bool Compressed, bool Mips) noexcept(true) :  driver_handle(DriverHandle), storage(Storage), channels(Channels), bit_depth(BitDepth), x(DimX), y(DimY), z(DimZ), compressed(Compressed), mips(Mips) {}
-		
-		
-		texture() = delete;
-		texture(const noob::texture& lhs) noexcept(true) = default;
-		texture& operator=(const noob::texture& lhs) noexcept(true) = default;
-
 		private:
 		const uint32_t driver_handle;
 
+		texture_1d(uint32_t DriverHandle, noob::texture_info TexInfo, uint32_t Length) noexcept(true) :  driver_handle(DriverHandle), info(TexInfo), length(Length) {}
+		texture_1d() = delete;
+
 		public:
-		const noob::texture_storage storage;
-		const noob::texture_channels channels;
-		const noob::attrib::unit_type bit_depth;
-		const uint32_t x, y, z;
-		const bool compressed;
-		const bool mips;
+		texture_1d(const noob::texture_1d& lhs) noexcept(true) = default;
+		texture_1d& operator=(const noob::texture_1d& lhs) noexcept(true) = default;
+
+		const texture_info info;
+		const uint32_t length;
 	};
 
-	typedef noob::handle<noob::texture> texture_handle;
+	typedef noob::handle<noob::texture_1d> texture_1d_handle;
+
+	struct texture_2d
+	{
+		friend class graphics;
+		private:
+		const uint32_t driver_handle;
+
+		texture_2d(uint32_t DriverHandle, noob::texture_info TexInfo, uint32_t Length, uint32_t Width) noexcept(true) :  driver_handle(DriverHandle), info(TexInfo), length(Length), width(Width) {}
+
+		public:		
+		texture_2d() = delete;
+		texture_2d(const noob::texture_2d& lhs) noexcept(true) = default;
+		texture_2d& operator=(const noob::texture_2d& lhs) noexcept(true) = default;
+
+		const texture_info info;
+		const uint32_t length, width;
+	};
+
+	typedef noob::handle<noob::texture_2d> texture_2d_handle;
+
+	struct texture_3d
+	{
+		friend class graphics;
+		public:
+		enum class treated_as { ARRAY_TEX_2D, TEX_3D };
+		private:
+		const uint32_t driver_handle;
+
+		texture_3d(uint32_t DriverHandle, noob::texture_info TexInfo, noob::texture_3d::treated_as Treatment, uint32_t Length, uint32_t Width, uint32_t Depth, bool Compressed, bool Mips) noexcept(true) :  driver_handle(DriverHandle), info(TexInfo), treatment(Treatment), length(Length), width(Width), depth(Depth) {}
+
+		public:		
+		texture_3d() = delete;
+		texture_3d(const noob::texture_3d& lhs) noexcept(true) = default;
+		texture_3d& operator=(const noob::texture_3d& lhs) noexcept(true) = default;
+
+		const noob::texture_info info;
+		const noob::texture_3d::treated_as treatment;
+		const uint32_t length, width, depth;
+	};
+
+	typedef noob::handle<noob::texture_3d> texture_3d_handle;
+
 }
