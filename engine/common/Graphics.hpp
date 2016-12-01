@@ -98,6 +98,7 @@ namespace noob
 			noob::component<noob::model> models;
 			std::vector<noob::texture_1d> textures_1d;
 			std::vector<noob::texture_2d> textures_2d;
+			std::vector<noob::texture_array_2d> textures_array_2d;			
 			std::vector<noob::texture_3d> textures_3d;
 
 			noob::graphics::program_handle instanced_shader;
