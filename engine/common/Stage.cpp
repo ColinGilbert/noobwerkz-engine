@@ -77,7 +77,7 @@ void noob::stage::update(double dt) noexcept(true)
 
 	update_duration = end_time - start_time;
 
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 	g.profile_run.stage_physics_duration += update_duration;
 }
 
@@ -213,7 +213,7 @@ noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32
 /*
    noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg) noexcept(true)
    {
-   noob::globals& g = noob::globals::get_instance();
+   noob::globals& g = noob::get_globals();
 
    const noob::body_handle bod_h = body(noob::body_type::STATIC, shape_arg, 0.0, pos_arg, orient_arg, false);
 

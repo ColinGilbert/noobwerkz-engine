@@ -64,7 +64,7 @@ noob::vec3 noob::physics::get_gravity() const noexcept(true)
 
 noob::body_handle noob::physics::add_body(noob::body_type b_type, const noob::shape_handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true)
 {
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 
 	noob::body b;
 	b.init(dynamics_world, b_type, g.shapes.get(shape_h), mass, pos, orient, ccd);	
@@ -76,7 +76,7 @@ noob::body_handle noob::physics::add_body(noob::body_type b_type, const noob::sh
 
 noob::body_handle noob::physics::add_body(noob::body_type type_arg, const noob::shape_handle shape_h, const noob::body::info& info_arg) noexcept(true)
 {
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 
 	noob::body b;
 	b.init(dynamics_world, type_arg, g.shapes.get(shape_h), info_arg);
@@ -88,7 +88,7 @@ noob::body_handle noob::physics::add_body(noob::body_type type_arg, const noob::
 
 noob::ghost_handle noob::physics::add_ghost(const noob::shape_handle shape_h, const noob::vec3& pos, const noob::versor& orient) noexcept(true)
 {
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 
 	noob::ghost temp;
 	temp.init(dynamics_world, g.shapes.get(shape_h), pos, orient);

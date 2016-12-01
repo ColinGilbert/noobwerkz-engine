@@ -19,7 +19,7 @@ static void write_callback(struct SoundIoOutStream *outstream, int frame_count_m
 	int frames_left = frame_count_max;
 	int err;
 	
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 
 	while (frames_left > 0)
 	{
@@ -120,7 +120,7 @@ void noob::sound_interface::init()
 		return;
 	}
 
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 	g.sample_rate = outstream->sample_rate;
 
 	noob::logger::log(noob::importance::INFO, noob::concat("[SoundInterface] Sound init success! Sample rate: ", noob::to_string(outstream->sample_rate), ". Bytes per frame: ", noob::to_string(outstream->bytes_per_frame), ". Bytes per sample: ", noob::to_string(outstream->bytes_per_sample)));

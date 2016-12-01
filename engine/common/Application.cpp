@@ -26,7 +26,7 @@ void noob::application::init(uint32_t width, uint32_t height, const std::string 
 	ui_enabled = true;
 	gui.init("", window_width, window_height);
 
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 	bool are_globals_initialized = g.init();
 	assert(are_globals_initialized && "Globals not initialized!");
 
@@ -68,7 +68,7 @@ void noob::application::draw()
 	const noob::time end_time = noob::clock::now();
 	const noob::duration draw_duration = end_time - start_time;
 
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 	g.profile_run.stage_draw_duration += draw_duration;
 }
 
@@ -82,7 +82,7 @@ void noob::application::accept_ndof_data(const noob::ndof::data& info) noexcept(
 // TODO: Refactor
 void noob::application::step()
 {
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 	if (g.finished_init())
 	{
 		// PROFILER_UPDATE();
@@ -99,7 +99,7 @@ void noob::application::step()
 		last_step = end_time;
 		
 		const noob::duration time_taken = end_time - start_time;
-		noob::globals& g = noob::globals::get_instance();
+		noob::globals& g = noob::get_globals();
 		g.profile_run.total_time += time_taken;
 	}
 }
@@ -166,7 +166,7 @@ void noob::application::key_input(char c)
 
 void noob::application::remove_shapes()
 {
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 
 	for (size_t i = 0; i < g.shapes.count(); ++i)
 	{

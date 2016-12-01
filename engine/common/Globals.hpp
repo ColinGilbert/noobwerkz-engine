@@ -40,35 +40,7 @@ namespace noob
 	class globals
 	{
 		friend class sound_interface;
-
-		protected:
-		static globals* ptr_to_instance;
-
-		globals() noexcept(true) : sample_rate(44100), init_done(false) {}
-
-		globals(const globals& rhs) noexcept(true)
-		{
-			ptr_to_instance = rhs.ptr_to_instance;
-		}
-
-		globals& operator=(const globals& rhs) noexcept(true)
-		{
-			if (this != &rhs)
-			{
-				ptr_to_instance = rhs.ptr_to_instance;
-			}
-			return *this;
-		}
-
-		~globals() noexcept(true) {}
 		public:
-		static globals& get_instance() noexcept(true)
-		{
-			static globals the_instance;
-			ptr_to_instance = &the_instance;
-
-			return *ptr_to_instance;
-		}
 
 		static constexpr uint32_t num_pseudo_randoms = 256;
 
@@ -158,4 +130,7 @@ namespace noob
 
 		std::atomic<bool> init_done;
 	};
+
+	static noob::singleton<noob::globals> globals_instance;
+	static noob::globals& get_globals() { return globals_instance.get(); }
 }

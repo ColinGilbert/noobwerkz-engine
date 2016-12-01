@@ -5,7 +5,7 @@
 
 bool noob::mixer::play_clip(const noob::sample_handle clip, float volume) noexcept(true)
 {
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 	noob::audio_sample* samp = g.samples.get(clip);
 	size_t min_before_next = samp->min_before_next;
 
@@ -62,7 +62,7 @@ void noob::mixer::tick(uint32_t num_frames) noexcept(true)
 
 	rde::fill_n(&output_buffer[0], output_buffer.size(), 0.0f);
 
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 
 	const size_t num_voices = voices.size();
 	for (size_t v = 0; v < num_voices; ++v)

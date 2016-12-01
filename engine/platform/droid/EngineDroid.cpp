@@ -187,7 +187,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_CreateBufferQueueAudi
 {
 	noob::logger::log(noob::importance::INFO, noob::concat("[C++] Initializing sound!"));
 
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 	g.sample_rate = std::fabs(sample_rate_arg);
 	const int buf_size = std::fabs(buf_size_arg);
 
@@ -214,7 +214,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_CreateBufferQueueAudi
 			
 			const noob::time_point start = noob::clock::now();
 
-			noob::globals& g = noob::globals::get_instance();
+			noob::globals& g = noob::get_globals();
 			g.master_mixer.tick(buf_size);
 
 			int16_t* writebuf = buffer_droid.tail();

@@ -36,7 +36,7 @@ bool noob::application::user_init()
 	r.set_fresnel(0.2);
 
 
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 
 	const noob::reflectance_handle rh = g.reflectances.add(r);
 
@@ -106,7 +106,7 @@ bool noob::application::user_init()
 void noob::application::user_update(double dt)
 {
 
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 	const noob::time nowtime = noob::clock::now();
 	const noob::duration time_since_update = nowtime - last_ui_update;
 	const uint64_t profiling_interval = 3000;

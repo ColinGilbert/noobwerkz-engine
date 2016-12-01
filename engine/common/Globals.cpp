@@ -2,8 +2,6 @@
 #include "MeshUtils.hpp"
 #include "RandomGenerator.hpp"
 
-noob::globals* noob::globals::ptr_to_instance;
-
 bool noob::globals::init() noexcept(true) 
 {
 	unit_sphere_shape = sphere_shape(0.5);

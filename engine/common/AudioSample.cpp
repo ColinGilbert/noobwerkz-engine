@@ -98,13 +98,13 @@ bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 
 	noob::logger::log(noob::importance::INFO, noob::concat("[AudioSample] Sample buffer size ", noob::to_string(samples.size()), ". Samples read: ", noob::to_string(static_cast<int64_t>(accum)), "."));
 
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 
 	if (g.sample_rate != 44100)
 	{
 		std::thread t([this]()
 		{
-			noob::globals& g = noob::globals::get_instance();
+			noob::globals& g = noob::get_globals();
 			resample(g.sample_rate);
 		});
 

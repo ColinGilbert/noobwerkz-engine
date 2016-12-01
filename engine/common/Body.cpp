@@ -51,7 +51,7 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type typ
 	set_ccd(ccd);
 
 	dynamics_world->addRigidBody(inner);
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 	physics_valid = true;	
 }
 
