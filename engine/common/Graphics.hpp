@@ -78,7 +78,7 @@ namespace noob
 
 			noob::graphics::program_handle instanced_shader;
 
-			int32_t u_eye_pos, u_light_directional;
+			uint32_t u_eye_pos, u_light_directional;
 	};
 
 	static noob::singleton<noob::graphics> gfx_instance;
