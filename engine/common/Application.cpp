@@ -8,8 +8,6 @@ void noob::application::init(uint32_t width, uint32_t height, const std::string 
 	window_width = width;
 	window_height = height;
 
-
-
 	noob::graphics& gfx = noob::get_graphics();
 	gfx.init(width, height);
 
@@ -19,15 +17,11 @@ void noob::application::init(uint32_t width, uint32_t height, const std::string 
 
 	prefix = std::make_unique<std::string>(noob::concat(filepath, "/"));//unique_ptr<std::string>(new std::string(filepath));
 
-
-	// TODO: Uncomment once noob::filesystem is fixed
-	// noob::filesystem::init(*prefix);
-
 	ui_enabled = true;
 	gui.init("", window_width, window_height);
 
 	noob::globals& g = noob::get_globals();
-	bool are_globals_initialized = g.init();
+	const bool are_globals_initialized = g.init();
 	assert(are_globals_initialized && "Globals not initialized!");
 
 	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0, 2000.0);
@@ -41,9 +35,6 @@ void noob::application::init(uint32_t width, uint32_t height, const std::string 
 	{
 		logger::log(noob::importance::WARNING, "[Application] User C++ init failed!");
 	}
-
-	//	network.init(3);
-	//	network.connect("localhost", 4242);
 }
 
 
