@@ -1,7 +1,7 @@
 #include "Application.hpp"
 
 
-void noob::application::init(uint32_t width, uint32_t height, const std::string filepath)
+void noob::application::init(uint32_t width, uint32_t height, const std::string& filepath)
 {
 	logger::log(noob::importance::INFO, "[Application] Begin init.");
 
@@ -15,7 +15,7 @@ void noob::application::init(uint32_t width, uint32_t height, const std::string 
 
 	finger_positions = { noob::vec2(0.0, 0.0), noob::vec2(0.0, 0.0), noob::vec2(0.0, 0.0), noob::vec2(0.0, 0.0) };
 
-	prefix = std::make_unique<std::string>(noob::concat(filepath, "/"));//unique_ptr<std::string>(new std::string(filepath));
+	prefix = std::make_unique<std::string>(filepath);//unique_ptr<std::string>(new std::string(filepath));
 
 	ui_enabled = true;
 	gui.init("", window_width, window_height);
@@ -27,7 +27,7 @@ void noob::application::init(uint32_t width, uint32_t height, const std::string 
 	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0, 2000.0);
 
 	stage.init(window_width, window_height, proj_mat);
-	logger::log(noob::importance::INFO, "[Application] Done basic init.");
+	logger::log(noob::importance::INFO, noob::concat("[Application] Done basic init. Filepath = ", filepath));
 
 	bool b = user_init();
 
@@ -108,14 +108,6 @@ void noob::application::resume()
 }
 
 
-void noob::application::set_archive_dir(const std::string& filepath)
-{
-	logger::log(noob::importance::INFO, noob::concat("[Application] Setting archive directory {", filepath, "}"));
-	prefix = std::make_unique<std::string>(noob::concat(filepath, "/"));
-	logger::log(noob::importance::INFO, noob::concat("[Application] Archive dir = {",  *prefix, "}"));
-}
-
-
 void noob::application::touch(int pointerID, float x, float y, int action)
 {
 	if (input_has_started == true)
@@ -124,7 +116,7 @@ void noob::application::touch(int pointerID, float x, float y, int action)
 
 		if (pointerID < 3)
 		{
-			//	finger_positions[pointerID] = noob::vec2(x,y);
+			// finger_positions[pointerID] = noob::vec2(x,y);
 		}
 	}
 	else input_has_started = true;

@@ -149,11 +149,6 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_SetupArchiveDir(JNIEn
 	archive_dir = std::string(temp);
 
 	noob::logger::log(noob::importance::INFO, noob::concat("JNILib.SetupArchiveDir(", archive_dir, ")"));
-
-	if (app)
-	{
-		app->set_archive_dir(archive_dir);
-	}
 }
 
 

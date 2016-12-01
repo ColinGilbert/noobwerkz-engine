@@ -27,9 +27,7 @@ namespace noob
 	{
 		public:
 			// Init must always be called.
-			void init(uint32_t width, uint32_t height, const std::string filepath);
-
-			void set_archive_dir(const std::string & filepath);
+			void init(uint32_t width, uint32_t height, const std::string& filepath);
 
 			// Those three allow an app to be controlled better by an external environment (ie: Android/iOS)
 			void pause();
