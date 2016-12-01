@@ -63,14 +63,14 @@ namespace noob
 
 			void reset_instances(noob::model_handle, uint32_t num_instances) noexcept(true);
 
-			noob::texture_1d_handle reserve_texture_1d(uint32_t dims, bool mips, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true);	
+			noob::texture_1d_handle reserve_texture_1d(uint32_t length, bool mips, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true);	
 
-			noob::texture_2d_handle reserve_texture_2d(uint32_t dims, bool mips, bool compressed, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg) noexcept(true);
+			noob::texture_2d_handle reserve_texture_2d(uint32_t width, uint32_t height, bool mips, bool compressed, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg) noexcept(true);
 		
 			// Create a 2D array texture, making the correct number of slots based on width, height, and amount of data given.
-			noob::texture_3d_handle reserve_array_texture_2d(uint32_t dims, bool mips, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true);
+			noob::texture_array_2d_handle reserve_array_texture_2d(uint32_t width, uint32_t height, uint32_t indices, bool mips, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true);
 
-			noob::texture_3d_handle reserve_texture_3d(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type) noexcept(true);
+			noob::texture_3d_handle reserve_texture_3d(uint32_t width, uint32_t height, uint32_t depth, bool mips, noob::texture_channels, noob::attrib::unit_type) noexcept(true);
 
 			// noob::texture_handle reserve_texture_cube(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true);	
 
