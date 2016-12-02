@@ -141,22 +141,20 @@ noob::basic_mesh noob::mesh_utils::box(float width, float height, float depth)
 
 	noob::basic_mesh results;
 	
-	const int num_faces = cell.number_of_faces();
-
 	std::vector<double> verts;
 	cell.vertices(verts);
 
 	std::vector<double> face_normals;
 	cell.normals(face_normals);
 
-	std::vector<int> face_vert_indices;
-	cell.face_vertices(face_vert_indices);
-
 	std::vector<int> face_orders; 
 	cell.face_orders(face_orders);
 
-	// TODO: Continue here.
-	for (int i = 0; i < num_faces; ++i)
+	std::vector<int> face_vert_indices;
+	cell.face_vertices(face_vert_indices);
+
+	// Using the number of values in face_order to tell us how many faces we have.
+	for (uint32_t i = 0; i < face_orders.size(); ++i)
 	{
 		
 	}

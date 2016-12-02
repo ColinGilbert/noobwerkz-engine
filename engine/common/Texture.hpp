@@ -10,14 +10,36 @@
 
 namespace noob
 {
+/*
 	enum class texture_storage
 	{
 		TEX_1D, TEX_2D, ARRAY_TEX_2D, CUBEMAP, TEX_3D
 	};
+*/
+//uint32_t tex_base_level = 0;
 
+enum class tex_compare_mode { COMPARE_REF_TO_TEXTURE, NONE };
+
+enum class tex_compare_func { LEQUAL, GEQUAL, LESS, GREATER, EQUAL, NOTEQUAL, ALWAYS, NEVER };
+
+enum class tex_min_filter { NEAREST, LINEAR, NEAREST_MIPMAP_NEAREST, LINEAR_MIPMAP_NEAREST, NEAREST_MIPMAP_LINEAR, LINEAR_MIPMAP_LINEAR };
+
+//int32_t texture_min_lod = -1000;
+
+//int32_t texture_max_lod = 1000;
+
+// Passed in arrays of four
+enum class tex_swizzle {RED, GREEN, BLUE, ALPHA, ZERO, ONE};
+
+// Pass an array of three of these
+enum class tex_wrap_mode { CLAMP_TO_EDGE, MIRRORED_REPEAT, REPEAT };
 	enum class texture_channels
 	{
 		R, RG, RBG, RGBA
+	};
+
+	enum class param
+	{
 	};
 
 	struct texture_info
