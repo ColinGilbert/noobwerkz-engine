@@ -423,12 +423,12 @@ noob::texture_3d_handle noob::graphics::reserve_texture_3d(uint32_t width, uint3
    }
    */
 
-
+/*
 void noob::graphics::texture_data(noob::texture_1d_handle, const std::string&) const noexcept(true)
 {
 
 }
-
+*/
 
 void noob::graphics::texture_data(noob::texture_2d_handle, const std::string&) const noexcept(true)
 {

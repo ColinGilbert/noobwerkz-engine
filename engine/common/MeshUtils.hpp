@@ -3,7 +3,6 @@
 #include "BasicMesh.hpp"
 #include "MathFuncs.hpp"
 
-#include "voro++.hh"
 
 namespace noob
 {

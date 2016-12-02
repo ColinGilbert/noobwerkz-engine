@@ -259,6 +259,7 @@ void noob::stage::update_actors() noexcept(true)
 
 void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 {
+/*
 	noob::actor a = actors.get(ah);
 
 	if (a.alive)
@@ -273,6 +274,7 @@ void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 			gst.set_position(temp_pos);
 		}
 	}
+*/
 }
 
 

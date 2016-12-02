@@ -7,6 +7,7 @@
 #include <LinearMath/btConvexHull.h>
 
 #include "NoobUtils.hpp"
+#include "voro++.hh"
 
 // icosphere code https://github.com/MicBosi/VisualizationLibrary
 // LICENSE:
@@ -109,7 +110,7 @@ noob::basic_mesh noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
 	for (uint32_t i = 0; i < verts.size(); ++i)
 	{
 		const noob::vec3 v = verts[i];
-		results.vertices.push_back(v*radius);
+		results.vertices.push_back(v * radius);
 		noob::vec3 n = noob::normalize(v);
 		results.normals.push_back(n);
 		results.colours.push_back(noob::vec4(1.0, 1.0, 1.0, 1.0));
@@ -130,159 +131,36 @@ noob::basic_mesh noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
 
 noob::basic_mesh noob::mesh_utils::box(float width, float height, float depth)
 {
-	/*
-	   1--------0 
-	   |\       |\
-	   | 5------|-4
-	   2--------3 |
-	   \|       \| 
-	   6------- 7 
-	   */
 
-	const float x = width * 0.5;
-	const float y = height * 0.5;
-	const float z = depth * 0.5;
+	const double x = width * 0.5;
+	const double y = height * 0.5;
+	const double z = depth * 0.5;
 
-
-	noob::vec3 a0(+x,+y,+z);
-	noob::vec3 a1(-x,+y,+z);
-	noob::vec3 a2(-x,-y,+z);
-	noob::vec3 a3(+x,-y,+z);
-	noob::vec3 a4(+x,+y,-z);
-	noob::vec3 a5(-x,+y,-z);
-	noob::vec3 a6(-x,-y,-z);
-	noob::vec3 a7(+x,-y,-z);
-
+	voro::voronoicell cell;
+	cell.init(-x, x, -y, y, -z, z);
 
 	noob::basic_mesh results;
-	/*results.vertices = {
-		a1, a2, a3, a3, a0, a1,
-		a2, a6, a7, a7, a3, a2,
-		a6, a5, a4, a4, a7, a6,
-		a5, a1, a0, a0, a4, a5,
-		a0, a3, a7, a7, a4, a0,
-		a5, a6, a2, a2, a1, a5
-	};
-*/
-	results.vertices.resize(6*4);
-	results.normals.resize(6*4);
-	results.indices.resize(6*6);
+	
+	const int num_faces = cell.number_of_faces();
 
+	std::vector<double> verts;
+	cell.vertices(verts);
 
-	// Build the top
+	std::vector<double> face_normals;
+	cell.normals(face_normals);
 
-	results.vertices[0] = a0;
-	results.vertices[1] = a1;
-	results.vertices[2] = a4;
-	results.vertices[3] = a5;
+	std::vector<int> face_vert_indices;
+	cell.face_vertices(face_vert_indices);
 
+	std::vector<int> face_orders; 
+	cell.face_orders(face_orders);
 
-	results.normals[0] = results.normals[1] = results.normals[2] = results.normals[3] = noob::vec3(0.0, 1.0, 0.0);
-
-	results.indices[0] = 0;
-	results.indices[1] = 3;
-	results.indices[2] = 2;
-
-	results.indices[3] = 0;
-	results.indices[4] = 1;
-	results.indices[5] = 3;
-
-
-	// Build the back
-
-	results.vertices[4] = a0;
-	results.vertices[5] = a1;
-	results.vertices[6] = a2;
-	results.vertices[7] = a3;
-
-	results.normals[4] = results.normals[5] = results.normals[6] = results.normals[7] = noob::vec3(0.0, 0.0, -1.0);
-
-	results.indices[6] = 4;
-	results.indices[7] = 6;
-	results.indices[8] = 7;
-
-	results.indices[9] = 4;
-	results.indices[10] = 5;
-	results.indices[11] = 6;
-
-
-	// Build the left side (proper left of programmer)
-
-	results.vertices[8] = a1;
-	results.vertices[9] = a2;
-	results.vertices[10] = a5;
-	results.vertices[11] = a6;
-
-	results.normals[8] = results.normals[9] = results.normals[10] = results.normals[11] = noob::vec3(-1.0, 0.0, 0.0);
-
-	results.indices[12] = 8;
-	results.indices[13] = 9;
-	results.indices[14] = 10;
-
-	results.indices[15] = 10;
-	results.indices[16] = 9;
-	results.indices[17] = 11;
-
-
-	// Build the bottom
-
-	results.vertices[12] = a2;
-	results.vertices[13] = a3;
-	results.vertices[14] = a6;
-	results.vertices[15] = a7;
-
-	results.normals[12] = results.normals[13] = results.normals[14] = results.normals[15] = noob::vec3(0.0, -1.0, 0.0);
-
-	results.indices[18] = 12;
-	results.indices[19] = 14;
-	results.indices[20] = 13;
-
-	results.indices[21] = 13;
-	results.indices[22] = 14;
-	results.indices[23] = 15;
-
-
-	// Build the right side (proper right of programmer)
-
-	results.vertices[16] = a0;
-	results.vertices[17] = a3;
-	results.vertices[18] = a4;
-	results.vertices[19] = a7;
-
-	results.normals[16] = results.normals[17] = results.normals[18] = results.normals[19] = noob::vec3(1.0, 0.0, 0.0);
-
-	results.indices[24] = 16;
-	results.indices[25] = 18;
-	results.indices[26] = 17;
-
-	results.indices[27] = 17;
-	results.indices[28] = 18;
-	results.indices[29] = 19;
-
-
-	// Now, finally build the front.
-
-	results.vertices[20] = a4;
-	results.vertices[21] = a5;
-	results.vertices[22] = a6;
-	results.vertices[23] = a7;
-
-	results.normals[20] = results.normals[21] = results.normals[22] = results.normals[21] = noob::vec3(0.0, 0.0, 1.0);
-
-	results.indices[30] = 23;
-	results.indices[31] = 22;
-	results.indices[32] = 20;
-
-	results.indices[33] = 20;
-	results.indices[34] = 21;
-	results.indices[35] = 22;
-
-	// Man, that kinda sucked!
-
-	for (uint32_t i = 0; i < 24; ++i)
+	// TODO: Continue here.
+	for (int i = 0; i < num_faces; ++i)
 	{
-		results.colours.push_back(noob::vec4(1.0, 1.0, 1.0, 1.0));
+		
 	}
+
 
 	results.bbox.min = noob::vec3(-x, -y, -z);
 	results.bbox.max = noob::vec3(x, y, z);

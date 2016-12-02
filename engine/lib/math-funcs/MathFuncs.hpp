@@ -28,12 +28,34 @@
 
 namespace noob
 {
-	typedef vec2_type<float> vec2;
-	typedef vec3_type<float> vec3;
-	typedef vec4_type<float> vec4;
-	typedef versor_type<float> versor;
-	typedef mat3_type<float> mat3;
-	typedef mat4_type<float> mat4;
+	typedef vec2_type<float> vec2f;
+	typedef vec3_type<float> vec3f;
+	typedef vec4_type<float> vec4f;
+	typedef versor_type<float> versorf;
+	typedef mat3_type<float> mat3f;
+	typedef mat4_type<float> mat4f;
+
+	typedef vec2f vec2;
+	typedef vec3f vec3;
+	typedef vec4f vec4;
+	typedef versorf versor;
+	typedef mat3f mat3;
+	typedef mat4f mat4;
+
+	typedef vec2_type<double> vec2d;
+	typedef vec3_type<double> vec3d;
+	typedef vec4_type<double> vec4d;
+	typedef versor_type<double> versord;
+	typedef mat3_type<double> mat3d;
+	typedef mat4_type<double> mat4d;
+
+	typedef vec2_type<uint32_t> vec2ui;
+	typedef vec3_type<uint32_t> vec3ui;
+	typedef vec4_type<uint32_t> vec4ui;
+	typedef versor_type<uint32_t> versorui;
+	typedef mat3_type<uint32_t> mat3ui;
+	typedef mat4_type<uint32_t> mat4ui;
+
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// UTILITY TYPES:
@@ -102,7 +124,6 @@ namespace noob
 		else return true;
 	}
 
-
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// CONVERSION UTILITY FUNCTIONS:
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -143,7 +164,7 @@ namespace noob
 		return v;
 	}
 
-	// Whatever the hell you gotta do to compile, man...
+	// Whatever the hell you gotta do to compile sometimes, man...
 	static vec3 vec3_from_eigen_block(const Eigen::Block<const Eigen::Matrix<float, 4, 1>, 3, 1, false> n) noexcept(true)
 	{
 		noob::vec3 v;
@@ -179,6 +200,7 @@ namespace noob
 		arg.getOpenGLMatrix(&t.m[0]);
 		return t;
 	}
+
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// VECTOR FUNCTIONS:
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -201,7 +223,6 @@ namespace noob
 	{
 		return v.v[0] * v.v[0] + v.v[1] * v.v[1] + v.v[2] * v.v[2];
 	}
-
 
 	static float length(const vec3& v) noexcept(true)
 	{
@@ -269,10 +290,10 @@ namespace noob
 	static versor quat_from_axis_rad(float radians, float x, float y, float z) noexcept(true)
 	{
 		versor result;
-		result.q[0] = cos (radians / 2.0);
-		result.q[1] = sin (radians / 2.0) * x;
-		result.q[2] = sin (radians / 2.0) * y;
-		result.q[3] = sin (radians / 2.0) * z;
+		result.q[0] = cos(radians / 2.0);
+		result.q[1] = sin(radians / 2.0) * x;
+		result.q[2] = sin(radians / 2.0) * y;
+		result.q[3] = sin(radians / 2.0) * z;
 		return result;
 	}
 
@@ -280,7 +301,6 @@ namespace noob
 	{
 		return quat_from_axis_rad (NOOB_ONE_DEG_IN_RAD * degrees, x, y, z);
 	}
-
 
 	static versor normalize(const versor& q) noexcept(true)
 	{
@@ -476,13 +496,11 @@ namespace noob
 	}
 
 
-	/* returns a 16-element array that is the inverse of a 16-element array (4x4
-	   matrix). see http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm */
+	// returns a 16-element array that is the inverse of a 16-element array (4x4 matrix). see http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm
 	static mat4 inverse(const mat4& mm) noexcept(true)
 	{
 		float det = determinant (mm);
-		/* there is no inverse if determinant is zero (not likely unless scale is
-		   broken) */
+		// there is no inverse if determinant is zero (not likely unless scale is broken)
 		if (compare_floats(0.0, det))
 		{
 			// logger::log("WARNING. matrix has no determinant. can not invert");
@@ -589,7 +607,6 @@ namespace noob
 	// AFFINE MATRIX FUNCTIONS:
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// TODO: Find out if rotating a matrix by a quaternion can be done by converting the quat to a matrix and then multiplying the two.
 
 	static mat4 translate(const mat4& m, const vec3& v) noexcept(true)
 	{
@@ -684,7 +701,6 @@ namespace noob
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// CAMERA FUNCTIONS:
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 	// Returns a view matrix using the opengl lookAt style. COLUMN ORDER:
 	static mat4 look_at(const vec3& cam_pos, vec3 targ_pos, const vec3& up) noexcept(true)

@@ -11,7 +11,7 @@ namespace noob
 
 		enum class packing_type
 		{
-			VEC4, MAT4
+			SCALAR, VEC2, VEC3, VEC4, MAT3, MAT4
 		};
 
 		noob::attrib::unit_type unit;

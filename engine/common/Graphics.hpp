@@ -55,17 +55,16 @@ namespace noob
 
 			void frame(uint32_t width, uint32_t height) const noexcept(true);
 
-			// TODO: These are VBO buffer mapping/unmapping methods. Ensure we know that by renaming.
+			// These are VBO buffer mapping/unmapping methods
 			noob::gpu_write_buffer map_buffer(noob::model_handle, noob::model::instanced_data_type, uint32_t min, uint32_t max) const noexcept(true);
 
-			// NOTE: MUST be called as soon as you're finished using a buffer!
+			// NOTE: MUST be called as soon as you're finished using a mapped buffer!
 			void unmap_buffer() const noexcept(true);
 
 			noob::graphics::program_handle get_instanced() const noexcept(true);
 			
 			// TODO: Replace with more generic uniform setting method(s)
 			void eye_pos(const noob::vec3&) const noexcept(true);
-			
 			void light_direction(const noob::vec3&) const noexcept(true);
 
 		protected:

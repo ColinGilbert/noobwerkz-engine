@@ -1,3 +1,9 @@
+Dec 2, 2016
+```
+Graphics API now makes sense. Now porting texture GLAPI.
+Got rid of singleton code bloating globals and graphics classes by replacing it with templates. :)
+```
+
 Nov 27, 2016
 ```
 Starting to reimplement textures in OpenGL ES and tweaking API for usability. Glad that the sound problems seem to be behind us.
@@ -10,7 +16,7 @@ Sound seems to work mostly well enough on Android. We may add a deeper buffer to
 
 Nov 24, 2016
 ```
-Fixed the Android sound troubles that were driving me insane this past week! Turns out it was a subtle multiplication and division order bug that caused lots of grief, but only on ARM, and variably too. Will be looking into better methods of dealing with such horrors. Either way, this thing isn't a problem anymore and we're good to go. Phew...
+Fixed the Android sound troubles that were driving me insane this past week! Turns out it was a subtle multiplication and division order bug that caused lots of grief, but only once in a while on certain ARM chipsets. Will be looking into better methods of dealing with such horrors. Either way, this thing isn't a problem anymore and we're good to go. Phew...
 ```
 
 Nov 22, 2016

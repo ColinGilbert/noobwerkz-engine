@@ -51,6 +51,7 @@ list(APPEND common_src
 	common/Globals.cpp
 	common/BasicMesh.cpp
 	common/Graphics.cpp
+	common/Materials.cpp	
 	common/Application.cpp
 	common/NoobUtils.cpp
 	common/Camera.cpp
@@ -59,6 +60,7 @@ list(APPEND common_src
 	common/Joint.cpp
 	common/Ghost.cpp
 	common/Shape.cpp
+	common/Shapes.cpp	
 	common/Physics.cpp
 	common/MeshUtils.cpp
 	common/SkeletalAnim.cpp
@@ -67,6 +69,7 @@ list(APPEND common_src
 	common/FileSystem.cpp
 	common/Mixer.cpp
 	common/AudioSample.cpp
+	common/Sounds.cpp	
 	common/Font.cpp
 	)
 
