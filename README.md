@@ -42,9 +42,9 @@ Currently testing our bootstrap scripts :)
 
 Structure:
 ```
-The current setup uses a platform-specific starter program to launch the main application.
+Uses a platform-specific starter program to launch the main application.
 
-There are many libraries - mostly utility libraries - in the engine/lib directory.
+There are libraries - mostly utility libraries - in the engine/lib directory.
 
 Most engine code is written in engine/common directory, with user-defined functionality consisting of a few methods declared in Application.hpp and defined by the user in sandbox/UserApp.cpp. I know it's not correct, but in the current context it allows the user to use low-level information and manipulate the event system directly. It WILL be changed soon so don't expect to use this interface for long (the design is constantly and methodically being reworked for both correctness and lowest burden on the programmer.)
 

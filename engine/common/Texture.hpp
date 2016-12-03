@@ -24,7 +24,7 @@ namespace noob
 
 	enum class tex_min_filter { NEAREST, LINEAR, NEAREST_MIPMAP_NEAREST, LINEAR_MIPMAP_NEAREST, NEAREST_MIPMAP_LINEAR, LINEAR_MIPMAP_LINEAR };
 
-	enum class tex_mag_filter { GL_NEAREST, GL_LINEAR };
+	enum class tex_mag_filter { NEAREST, LINEAR };
 
 	// int32_t texture_min_lod = -1000;
 
@@ -70,7 +70,7 @@ namespace noob
 		texture_1d(const noob::texture_1d& lhs) noexcept(true) = default;
 		texture_1d& operator=(const noob::texture_1d& lhs) noexcept(true) = default;
 
-		const texture_info info;
+		const noob::texture_info info;
 		const uint32_t length;
 	};
 
@@ -90,7 +90,7 @@ namespace noob
 		texture_2d(const noob::texture_2d& lhs) noexcept(true) = default;
 		texture_2d& operator=(const noob::texture_2d& lhs) noexcept(true) = default;
 
-		const texture_info info;
+		const noob::texture_info info;
 		const uint32_t width, height;
 	};
 
