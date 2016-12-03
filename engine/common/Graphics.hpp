@@ -15,6 +15,8 @@
 
 namespace noob
 {
+
+  
 	class graphics
 	{
 		public:
@@ -31,24 +33,26 @@ namespace noob
 			void use_program(noob::graphics::program_handle) noexcept(true);
 
 			// Model reservers...
+			// TODO: Implement more model types.
 			noob::model_handle model_instanced(const noob::basic_mesh&, uint32_t num_instances) noexcept(true);
-			// model_skeletal, etc...
 
 			void reset_instances(noob::model_handle, uint32_t num_instances) noexcept(true);
 
 			// Texture storage reservers
 			// TODO: Implement (not GLES3-native) it seems
-			// noob::texture_1d_handle reserve_texture_1d(uint32_t length, bool mips, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true);	
-			noob::texture_2d_handle reserve_texture_2d(uint32_t width, uint32_t height, bool mips, bool compressed, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg) noexcept(true);
-			noob::texture_array_2d_handle reserve_array_texture_2d(uint32_t width, uint32_t height, uint32_t indices, bool mips, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true);
-			noob::texture_3d_handle reserve_texture_3d(uint32_t width, uint32_t height, uint32_t depth, bool mips, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true);
-			// noob::texture_handle reserve_texture_cube(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true);	
+			// noob::texture_1d_handle reserve_texture_1d(uint32_t length, bool mips, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true);
+			noob::texture_2d_handle reserve_texture_2d(uint32_t width, uint32_t height, const noob::texture_info) noexcept(true);
+			noob::texture_array_2d_handle reserve_array_texture_2d(uint32_t width, uint32_t height, uint32_t indices, const noob::texture_info) noexcept(true);
+			noob::texture_3d_handle reserve_texture_3d(uint32_t width, uint32_t height, uint32_t depth, const noob::texture_info) noexcept(true);
+			// TODO: Soon.
+			// noob::texture_handle reserve_texture_cube(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true);
 
 			// Texture data uploaders
-			void texture_data(noob::texture_1d_handle, const std::string&) const noexcept(true);	
+			// TODO: Implement (not GLES3-native) it seems. See above block as well
+			// void texture_data(noob::texture_1d_handle, const std::string&) const noexcept(true);	
 			void texture_data(noob::texture_2d_handle, const std::string&) const noexcept(true);
 			void texture_data(noob::texture_array_2d_handle, uint32_t index, const std::string&) const noexcept(true);
-			void texture_data(noob::texture_3d_handle, const std::string&) const noexcept(true);				
+			void texture_data(noob::texture_3d_handle, const std::string&) const noexcept(true);
 
 			// Texture parameter setters, made typesafe. :)
 			void texture_base_level(uint32_t arg = 0) const noexcept(true);
@@ -59,6 +63,11 @@ namespace noob
 			void texture_max_lod(int32_t arg = 1000) const noexcept(true);
 			void texture_swizzle(const std::array<noob::tex_swizzle, 4 >) const noexcept(true);
 			void texture_wrap_mode(const std::array<noob::tex_wrap_mode, 3>) const noexcept(true);
+			
+			// Texture packing and unpacking alignments.
+			// Fun fact: The GLES3 spec gives all the other pixel packing/unpacking attributes an initial value of 0 and a range of 0, so they aren't even exposed here (yet)
+			void texture_pack_alignment(uint32_t) const noexcept(true);
+			void texture_unpack_alignment(uint32_t) const noexcept(true);
 
 			// Call this to draw a given model.
 			void draw(const noob::model_handle, uint32_t num) const noexcept(true);

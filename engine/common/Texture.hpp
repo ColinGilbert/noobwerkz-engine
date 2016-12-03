@@ -10,44 +10,48 @@
 
 namespace noob
 {
-/*
-	enum class texture_storage
-	{
-		TEX_1D, TEX_2D, ARRAY_TEX_2D, CUBEMAP, TEX_3D
-	};
-*/
-//uint32_t tex_base_level = 0;
+	/*
+	   enum class texture_storage
+	   {
+	   TEX_1D, TEX_2D, ARRAY_TEX_2D, CUBEMAP, TEX_3D
+	   };
+	   */
+	//uint32_t tex_base_level = 0;
 
-enum class tex_compare_mode { COMPARE_REF_TO_TEXTURE, NONE };
+	enum class tex_compare_mode { COMPARE_REF_TO_TEXTURE, NONE };
 
-enum class tex_compare_func { LEQUAL, GEQUAL, LESS, GREATER, EQUAL, NOTEQUAL, ALWAYS, NEVER };
+	enum class tex_compare_func { LEQUAL, GEQUAL, LESS, GREATER, EQUAL, NOTEQUAL, ALWAYS, NEVER };
 
-enum class tex_min_filter { NEAREST, LINEAR, NEAREST_MIPMAP_NEAREST, LINEAR_MIPMAP_NEAREST, NEAREST_MIPMAP_LINEAR, LINEAR_MIPMAP_LINEAR };
+	enum class tex_min_filter { NEAREST, LINEAR, NEAREST_MIPMAP_NEAREST, LINEAR_MIPMAP_NEAREST, NEAREST_MIPMAP_LINEAR, LINEAR_MIPMAP_LINEAR };
 
-//int32_t texture_min_lod = -1000;
+	enum class tex_mag_filter { GL_NEAREST, GL_LINEAR };
 
-//int32_t texture_max_lod = 1000;
+	// int32_t texture_min_lod = -1000;
 
-// Passed in arrays of four
-enum class tex_swizzle {RED, GREEN, BLUE, ALPHA, ZERO, ONE};
+	// int32_t texture_max_lod = 1000;
 
-// Pass an array of three of these
-enum class tex_wrap_mode { CLAMP_TO_EDGE, MIRRORED_REPEAT, REPEAT };
+	// Passed in arrays of four
+	enum class tex_swizzle {RED, GREEN, BLUE, ALPHA, ZERO, ONE};
+
+	// Pass an array of three of these
+	enum class tex_wrap_mode { CLAMP_TO_EDGE, MIRRORED_REPEAT, REPEAT };
+
 	enum class texture_channels
 	{
-		R, RG, RBG, RGBA
+		R, RG, RGB, RGBA, DEPTH, DEPTH_STENCIL
 	};
 
-	enum class param
+	enum class scalar_type
 	{
+		UINT, INT, FLOAT
 	};
 
 	struct texture_info
 	{
 		noob::texture_channels channels;
-		noob::attrib::unit_type bit_depth;
-		bool compressed;
-		bool mips;
+		std::array<noob::scalar_type, 4> channel_scalars;		
+		std::array<uint8_t, 4> channel_bits;
+		bool compressed, mips, s_normalized;
 	};
 
 	class graphics;
@@ -59,7 +63,7 @@ enum class tex_wrap_mode { CLAMP_TO_EDGE, MIRRORED_REPEAT, REPEAT };
 		private:
 		const uint32_t driver_handle;
 
-		texture_1d(uint32_t DriverHandle, noob::texture_info TexInfo, uint32_t Length) noexcept(true) :  driver_handle(DriverHandle), info(TexInfo), length(Length) {}
+		texture_1d(uint32_t DriverHandle, noob::texture_info TexInfo, uint32_t Length) noexcept(true) : driver_handle(DriverHandle), info(TexInfo), length(Length) {}
 		texture_1d() = delete;
 
 		public:
@@ -95,7 +99,7 @@ enum class tex_wrap_mode { CLAMP_TO_EDGE, MIRRORED_REPEAT, REPEAT };
 	struct texture_array_2d
 	{
 		friend class graphics;
-		
+
 		public:
 
 		private:
@@ -118,7 +122,7 @@ enum class tex_wrap_mode { CLAMP_TO_EDGE, MIRRORED_REPEAT, REPEAT };
 	struct texture_3d
 	{
 		friend class graphics;
-		
+
 		public:
 		private:
 		const uint32_t driver_handle;

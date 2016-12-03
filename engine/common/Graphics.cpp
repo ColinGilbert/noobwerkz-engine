@@ -23,12 +23,12 @@ GLenum check_error_gl(const char *file, int line)
 			case GL_INVALID_ENUM:                  error = "INVALID_ENUM"; break;
 			case GL_INVALID_VALUE:                 error = "INVALID_VALUE"; break;
 			case GL_INVALID_OPERATION:             error = "INVALID_OPERATION"; break;
+							       // TODO: Find out if these are still part of the modern GL
 							       // case GL_STACK_OVERFLOW:                error = "STACK_OVERFLOW"; break;
 							       // case GL_STACK_UNDERFLOW:               error = "STACK_UNDERFLOW"; break;
 			case GL_OUT_OF_MEMORY:                 error = "OUT_OF_MEMORY"; break;
 			case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
 		}
-		// std::cout << error << " | " << file << " (" << line << ")" << std::endl;
 		noob::logger::log(noob::importance::ERROR, noob::concat("OpenGL: ", error, file, " (", noob::to_string(line), ")"));
 	}
 	return error_code;
@@ -155,6 +155,115 @@ GLuint load_program_gl(const std::string& vert_shader_arg, const std::string fra
 	return program_object;
 }
 
+GLenum tex_internal_format(const noob::texture_info TexInfo)
+{
+	/*	struct texture_info
+		{
+		noob::texture_channels channels;
+		std::array<noob::scalar_type, 4> channel_scalars;
+		std::array<uint8_t, 4> channel_bits;
+		bool compressed, mips, s_normalized;
+		}; */
+
+
+
+	if (!TexInfo.compressed)
+	{
+		switch (TexInfo.channels)
+		{
+			case (noob::texture_channels::R):
+				{
+					/*		GL_R8,
+							GL_R8_SNORM,
+							GL_R16F,
+							GL_R32F,
+							GL_R8UI,
+							GL_R8I,
+							GL_R16UI,
+							GL_R16I,
+							GL_R32UI,
+							GL_R32I, */
+				}
+			case (noob::texture_channels::RG):
+				{
+					/*	GL_RG8,
+						GL_RG8_SNORM,
+						GL_RG16F,
+						GL_RG32F,
+						GL_RG8UI,
+						GL_RG8I,
+						GL_RG16UI,
+						GL_RG16I,
+						GL_RG32UI,
+						GL_RG32I, */
+
+				}
+			case (noob::texture_channels::RGB):
+				{
+					/*	GL_RGB8,
+						GL_SRGB8,
+						GL_RGB565,
+						GL_RGB8_SNORM,
+						GL_R11F_G11F_B10F,
+						GL_RGB9_E5,
+						GL_RGB16F,
+						GL_RGB32F,
+						GL_RGB8UI,
+						GL_RGB8I,
+						GL_RGB16UI,
+						GL_RGB16I,
+						GL_RGB32UI,
+						GL_RGB32I, */
+
+				}
+			case (noob::texture_channels::RGBA):
+				{
+					/*	GL_RGBA8,
+						GL_SRGB8_ALPHA8,
+						GL_RGBA8_SNORM,
+						GL_RGB5_A1,
+						GL_RGBA4,
+						GL_RGB10_A2,
+						GL_RGBA16F,
+						GL_RGBA32F,
+						GL_RGBA8UI,
+						GL_RGBA8I,
+						GL_RGB10_A2UI,
+						GL_RGBA16UI,
+						GL_RGBA16I,
+						GL_RGBA32I,
+						GL_RGBA32UI, */
+				}
+
+		};
+
+	}
+	else // We are using compression
+	{
+		/*
+		   GL_COMPRESSED_R11_EAC,
+		   GL_COMPRESSED_SIGNED_R11_EAC,
+		   GL_COMPRESSED_RG11_EAC,
+		   GL_COMPRESSED_SIGNED_RG11_EAC,
+		   GL_COMPRESSED_RGB8_ETC2,
+		   GL_COMPRESSED_SRGB8_ETC2,
+		   GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2,
+		   GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2,
+		   GL_COMPRESSED_RGBA8_ETC2_EAC,
+		   GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC
+		   */
+	}
+
+	return 0;
+}
+
+/*
+   GL_DEPTH_COMPONENT16 	GL_DEPTH_COMPONENT 	GL_UNSIGNED_SHORT, GL_UNSIGNED_INT 	16 	 
+   GL_DEPTH_COMPONENT24 	GL_DEPTH_COMPONENT 	GL_UNSIGNED_INT 			24 	 
+   GL_DEPTH_COMPONENT32F 	GL_DEPTH_COMPONENT 	GL_FLOAT 				f32 	 
+   GL_DEPTH24_STENCIL8 	GL_DEPTH_STENCIL 	GL_UNSIGNED_INT_24_8 			24 	8
+   GL_DEPTH32F_STENCIL8	GL_DEPTH_STENCIL	GL_FLOAT_32_UNSIGNED_INT_24_8_REV 	f32 	8
+   */
 void noob::graphics::init(uint32_t width, uint32_t height) noexcept(true)
 {
 
@@ -387,48 +496,37 @@ void noob::graphics::reset_instances(noob::model_handle h, uint32_t num_instance
 	glBindVertexArray(0);
 }
 
-/*
-noob::texture_1d_handle noob::graphics::reserve_texture_1d(uint32_t length, bool mips, bool compressed, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg) noexcept(true)
+noob::texture_2d_handle noob::graphics::reserve_texture_2d(uint32_t width, uint32_t height, const noob::texture_info) noexcept(true)
 {
-	noob::texture_1d_handle t;
-	return t;
-}
-*/
+	// Prevent leftover from previous calls from harming this.
+	glBindVertexArray(0);
 
-noob::texture_2d_handle noob::graphics::reserve_texture_2d(uint32_t width, uint32_t height, bool mips, bool compressed, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg) noexcept(true)
-{
+	GLuint texture_id;
+
+	glGenTextures(1, &texture_id);
+
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+
+
 	noob::texture_2d_handle t;
 	return t;
 }
 
 
-noob::texture_array_2d_handle noob::graphics::reserve_array_texture_2d(uint32_t width, uint32_t height, uint32_t indices, bool mips, bool compressed, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg) noexcept(true)
+noob::texture_array_2d_handle noob::graphics::reserve_array_texture_2d(uint32_t width, uint32_t height, uint32_t indices, const noob::texture_info) noexcept(true)
 {
 	noob::texture_array_2d_handle t;
 	return t;
 }
 
 
-noob::texture_3d_handle noob::graphics::reserve_texture_3d(uint32_t width, uint32_t height, uint32_t depth, bool mips, bool compressed, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg) noexcept(true)
+noob::texture_3d_handle noob::graphics::reserve_texture_3d(uint32_t width, uint32_t height, uint32_t depth, const noob::texture_info) noexcept(true)
 {
 	noob::texture_3d_handle t;
 	return t;
 }
 
-/*
-   noob::texture_handle noob::graphics::texture_cube(uint32_t dims, bool mips, noob::texture_channels channels_arg, noob::attrib::unit_type depth_arg, const std::string& data) noexcept(true)
-   {
-   noob::texture_handle t;
-   return t;
-   }
-   */
 
-/*
-void noob::graphics::texture_data(noob::texture_1d_handle, const std::string&) const noexcept(true)
-{
-
-}
-*/
 
 void noob::graphics::texture_data(noob::texture_2d_handle, const std::string&) const noexcept(true)
 {
@@ -446,6 +544,70 @@ void noob::graphics::texture_data(noob::texture_3d_handle, const std::string&) c
 {
 
 }
+
+
+// Texture parameter setters, made typesafe. :)
+void noob::graphics::texture_base_level(uint32_t arg) const noexcept(true)
+{
+
+}
+
+
+void noob::graphics::texture_compare_mode(noob::tex_compare_mode) const noexcept(true)
+{
+
+}
+
+
+void noob::graphics::texture_compare_func(noob::tex_compare_func) const noexcept(true)
+{
+
+}
+
+
+void noob::graphics::texture_min_filter(noob::tex_min_filter) const noexcept(true)
+{
+
+}
+
+
+void noob::graphics::texture_min_lod(int32_t arg) const noexcept(true)
+{
+
+}
+
+
+void noob::graphics::texture_max_lod(int32_t arg) const noexcept(true)
+{
+
+}
+
+
+void noob::graphics::texture_swizzle(const std::array<noob::tex_swizzle, 4 >) const noexcept(true)
+{
+
+}
+
+
+void noob::graphics::texture_wrap_mode(const std::array<noob::tex_wrap_mode, 3>) const noexcept(true)
+{
+
+}
+
+
+void noob::graphics::texture_pack_alignment(uint32_t) const noexcept(true)
+{
+	// GL_PACK_ALIGNMENT 	integer 	4 	1, 2, 4, or 8
+
+}
+
+
+void noob::graphics::texture_unpack_alignment(uint32_t) const noexcept(true)
+{
+	// GL_UNPACK_ALIGNMENT 	integer 	4 	1, 2, 4, or 8 
+
+}
+
 
 
 void noob::graphics::draw(const noob::model_handle handle, uint32_t num) const noexcept(true)
