@@ -72,13 +72,14 @@ return noob::model_handle::make(vao_id);
 void noob::graphics::use_program(noob::graphics::program_handle arg) noexcept(true)
 {
 	glUseProgram(arg.index());
+	check_error_gl();
 }
 
-noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh, uint32_t num_instances) noexcept(true)
+noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& Mesh, uint32_t NumInstances) noexcept(true)
 {
 	noob::model result;
 
-	if (num_instances == 0)
+	if (NumInstances == 0)
 	{
 		noob::model_handle h;
 		return h;
@@ -86,12 +87,12 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 
 	result.type = noob::model::geom_type::INDEXED_MESH;
 
-	result.n_instances = num_instances;
+	result.n_instances = NumInstances;
 
-	const uint32_t num_indices = mesh.indices.size();
+	const uint32_t num_indices = Mesh.indices.size();
 	result.n_indices = num_indices;
 
-	const uint32_t num_verts = mesh.vertices.size();
+	const uint32_t num_verts = Mesh.vertices.size();
 	result.n_vertices = num_verts;
 
 	GLuint vao_id = 0;
@@ -124,9 +125,9 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 	for(uint32_t i = 0; i < num_verts; i++)
 	{
 		const uint32_t current_offset = i * 3;
-		interleaved[current_offset] = noob::vec4(mesh.vertices[i].v[0], mesh.vertices[i].v[1], mesh.vertices[i].v[2], 1.0);
-		interleaved[current_offset + 1] = noob::vec4(mesh.normals[i].v[0], mesh.normals[i].v[1], mesh.normals[i].v[2], 0.0);
-		interleaved[current_offset + 2] = mesh.colours[i];
+		interleaved[current_offset] = noob::vec4(Mesh.vertices[i].v[0], Mesh.vertices[i].v[1], Mesh.vertices[i].v[2], 1.0);
+		interleaved[current_offset + 1] = noob::vec4(Mesh.normals[i].v[0], Mesh.normals[i].v[1], Mesh.normals[i].v[2], 0.0);
+		interleaved[current_offset + 2] = Mesh.colours[i];
 	}
 
 	// Upload interleaved buffer
@@ -151,10 +152,10 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 	glEnableVertexAttribArray(2);
 
 	// Setup colours VBO:
-	// std::vector<noob::vec4> colours(num_instances, noob::vec4(1.0, 1.0, 1.0, 1.0));
+	// std::vector<noob::vec4> colours(NumInstances, noob::vec4(1.0, 1.0, 1.0, 1.0));
 	glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
-	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::materials_stride, nullptr, GL_DYNAMIC_DRAW);
-	//glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::materials_stride, &colours[0].v[0], GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::materials_stride, nullptr, GL_DYNAMIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::materials_stride, &colours[0].v[0], GL_DYNAMIC_DRAW);
 
 	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(0));
 	glEnableVertexAttribArray(3);
@@ -162,10 +163,10 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 	result.instanced_colour_vbo = colours_vbo;
 
 	// Setup matrices VBO:
-	// std::vector<noob::mat4> matrices(num_instances * 2, noob::identity_mat4());
+	// std::vector<noob::mat4> matrices(NumInstances * 2, noob::identity_mat4());
 	glBindBuffer(GL_ARRAY_BUFFER, matrices_vbo);
-	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
-	// glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::matrices_stride, &matrices[0].m[0], GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
+	// glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::matrices_stride, &matrices[0].m[0], GL_DYNAMIC_DRAW);
 
 
 	// Per instance model matrices
@@ -201,7 +202,7 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 
 	// Upload to indices buffer
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_vbo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.indices.size() * sizeof(uint32_t), &mesh.indices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, Mesh.indices.size() * sizeof(uint32_t), &Mesh.indices[0], GL_STATIC_DRAW);
 	result.indices_vbo = indices_vbo;
 
 
@@ -211,8 +212,8 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 
 	noob::model_handle h = models.add(result);
 
-	const noob::bbox bb = mesh.bbox;
-	noob::logger::log(noob::importance::INFO, noob::concat("[Graphics] Created model with handle ", noob::to_string(h.index()), " and ", noob::to_string(num_instances), " instances. Verts = ", noob::to_string(mesh.vertices.size()), ", indices = ", noob::to_string(mesh.indices.size()), ". Dims: ", noob::to_string(bb.max - bb.min)));
+	const noob::bbox bb = Mesh.bbox;
+	noob::logger::log(noob::importance::INFO, noob::concat("[Graphics] Created model with handle ", noob::to_string(h.index()), " and ", noob::to_string(NumInstances), " instances. Verts = ", noob::to_string(Mesh.vertices.size()), ", indices = ", noob::to_string(Mesh.indices.size()), ". Dims: ", noob::to_string(bb.max - bb.min)));
 
 	return h;
 }
@@ -316,7 +317,7 @@ noob::texture_3d_handle noob::graphics::reserve_texture_3d(uint32_t Width, uint3
 		}
 
 		// TODO: Add check for devices that don't support compressed 3D texture storage. For now, we'll find out the exciting way.
-		
+
 		glTexStorage3D(GL_TEXTURE_3D, mips, fmt.value, Width, Height, Depth);
 
 		check_error_gl();
@@ -336,17 +337,23 @@ noob::texture_3d_handle noob::graphics::reserve_texture_3d(uint32_t Width, uint3
 void noob::graphics::texture_data(noob::texture_2d_handle Handle, uint32_t Mip, const std::string& Data) const noexcept(true)
 {
 
+	check_error_gl();
+
 }
 
 
 void noob::graphics::texture_data(noob::texture_array_2d_handle Handle, uint32_t Index, uint32_t Mip, const std::string& Data) const noexcept(true)
 {
 
+	check_error_gl();
+
 }
 
 
 void noob::graphics::texture_data(noob::texture_3d_handle Handle, uint32_t Mip, const std::string& Data) const noexcept(true)
 {
+
+	check_error_gl();
 
 }
 
@@ -355,11 +362,15 @@ void noob::graphics::texture_data(noob::texture_3d_handle Handle, uint32_t Mip, 
 void noob::graphics::texture_base_level(uint32_t Mip) const noexcept(true)
 {
 
+	check_error_gl();
+
 }
 
 
 void noob::graphics::texture_compare_mode(noob::tex_compare_mode CompareMode) const noexcept(true)
 {
+
+	check_error_gl();
 
 }
 
@@ -367,35 +378,42 @@ void noob::graphics::texture_compare_mode(noob::tex_compare_mode CompareMode) co
 void noob::graphics::texture_compare_func(noob::tex_compare_func CompareFunc) const noexcept(true)
 {
 
+	check_error_gl();
+
 }
 
 
 void noob::graphics::texture_min_filter(noob::tex_min_filter MinFilter) const noexcept(true)
 {
+	check_error_gl();
 
 }
 
 
 void noob::graphics::texture_min_lod(int32_t MinLod) const noexcept(true)
 {
+	check_error_gl();
 
 }
 
 
 void noob::graphics::texture_max_lod(int32_t MaxLod) const noexcept(true)
 {
+	check_error_gl();
 
 }
 
 
 void noob::graphics::texture_swizzle(const std::array<noob::tex_swizzle, 4> Swizzles) const noexcept(true)
 {
+	check_error_gl();
 
 }
 
 
 void noob::graphics::texture_wrap_mode(const std::array<noob::tex_wrap_mode, 3> WrapModes) const noexcept(true)
 {
+	check_error_gl();
 
 }
 
@@ -403,6 +421,7 @@ void noob::graphics::texture_wrap_mode(const std::array<noob::tex_wrap_mode, 3> 
 void noob::graphics::texture_pack_alignment(uint32_t) const noexcept(true)
 {
 	// GL_PACK_ALIGNMENT 	integer 	4 	1, 2, 4, or 8
+	check_error_gl();
 
 }
 
@@ -410,7 +429,7 @@ void noob::graphics::texture_pack_alignment(uint32_t) const noexcept(true)
 void noob::graphics::texture_unpack_alignment(uint32_t) const noexcept(true)
 {
 	// GL_UNPACK_ALIGNMENT 	integer 	4 	1, 2, 4, or 8 
-
+	check_error_gl();
 }
 
 
