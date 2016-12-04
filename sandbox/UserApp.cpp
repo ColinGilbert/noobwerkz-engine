@@ -41,7 +41,7 @@ bool noob::application::user_init()
 	const noob::reflectance_handle rh = g.reflectances.add(r);
 
 	const float actor_dims = 2.0;
-	const noob::shape_handle shp = g.box_shape(actor_dims, actor_dims, actor_dims);
+	const noob::shape_handle shp = g.sphere_shape(actor_dims); // g.box_shape(actor_dims, actor_dims, actor_dims);
 
 	const uint32_t actor_count = 200;
 

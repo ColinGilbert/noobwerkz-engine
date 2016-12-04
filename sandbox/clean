@@ -3,4 +3,5 @@ rm -rf ./obj/* ./assets/* ./bin/* ./libs/* ./jni/*.so ./*.so ./CMake* ./Makefile
 cd ../nix &&
 rm -rf ./CMakeCache.txt  ./CMakeFiles  ./cmake_install.cmake  ./lib  ./Makefile  ./NoobEdit &&
 cd .. &&
-cd ../../sandbox
+cd ../../sandbox/runtime &&
+rm noobengine

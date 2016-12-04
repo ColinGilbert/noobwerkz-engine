@@ -4,269 +4,13 @@
 #include "Graphics.hpp"
 
 #include <algorithm>
-
-#include <GLES3/gl3.h>
-
+#include "GraphicsGLInternal.hpp"
 #include "ShadersGL.hpp"
 #include "NoobUtils.hpp"
 #include "StringFuncs.hpp"
 
-
-GLenum check_error_gl(const char *file, int line)
-{
-	GLenum error_code;
-	while ((error_code = glGetError()) != GL_NO_ERROR)
-	{
-		std::string error;
-		switch (error_code)
-		{
-			case GL_INVALID_ENUM:                  error = "INVALID_ENUM"; break;
-			case GL_INVALID_VALUE:                 error = "INVALID_VALUE"; break;
-			case GL_INVALID_OPERATION:             error = "INVALID_OPERATION"; break;
-							       // TODO: Find out if these are still part of the modern GL
-							       // case GL_STACK_OVERFLOW:                error = "STACK_OVERFLOW"; break;
-							       // case GL_STACK_UNDERFLOW:               error = "STACK_UNDERFLOW"; break;
-			case GL_OUT_OF_MEMORY:                 error = "OUT_OF_MEMORY"; break;
-			case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
-		}
-		noob::logger::log(noob::importance::ERROR, noob::concat("OpenGL: ", error, file, " (", noob::to_string(line), ")"));
-	}
-	return error_code;
-}
-
-#define check_error_gl() check_error_gl(__FILE__, __LINE__) 
-
-
-GLuint load_shader_gl(GLenum type, const std::string& shader_arg)
-{
-	GLuint shader;
-	GLint compiled;
-
-	// Create the shader object
-	shader = glCreateShader(type);
-
-	if (shader == 0)
-	{
-		return 0;
-	}
-
-	const char* shader_src = shader_arg.c_str();
-	// Load the shader source
-	glShaderSource(shader, 1, &shader_src, NULL);
-
-	// Compile the shader
-	glCompileShader(shader);
-
-	// Check the compile status
-	glGetShaderiv (shader, GL_COMPILE_STATUS, &compiled);
-
-	if (!compiled)
-	{
-		GLint info_len = 0;
-
-		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &info_len);
-
-		if (info_len > 1)
-		{
-			std::string info_log;
-			info_log.resize(info_len);
-
-			glGetShaderInfoLog(shader, info_len, NULL, &info_log[0]);
-
-			noob::logger::log(noob::importance::ERROR, noob::concat("[Graphics] Error compiling shader: ", info_log));
-		}
-
-		glDeleteShader(shader);
-		return 0;
-	}
-
-	return shader;
-}
-
-GLuint load_program_gl(const std::string& vert_shader_arg, const std::string frag_shader_arg)
-{
-	GLuint vertex_shader;
-	GLuint fragment_shader;
-	GLuint program_object;
-	GLint linked;
-
-	// Just to make sure no dirty state gets to ruin our shader compile. :)
-	glBindVertexArray(0);
-
-	const char* vert_shader_src = vert_shader_arg.c_str();
-	// Load the vertex/fragment shaders
-	vertex_shader = load_shader_gl(GL_VERTEX_SHADER, vert_shader_arg);
-
-	if (vertex_shader == 0)
-	{
-		return 0;
-	}
-
-	const char* frag_shader_src  = frag_shader_arg.c_str();
-	fragment_shader = load_shader_gl(GL_FRAGMENT_SHADER, frag_shader_arg);
-
-	if (fragment_shader == 0)
-	{
-		glDeleteShader(vertex_shader);
-		return 0;
-	}
-
-	// Create the program object
-	program_object = glCreateProgram();
-
-	if (program_object == 0)
-	{
-		return 0;
-	}
-
-	glAttachShader(program_object, vertex_shader);
-	glAttachShader(program_object, fragment_shader);
-
-	// Link the program
-	glLinkProgram(program_object);
-
-	// Check the link status
-	glGetProgramiv(program_object, GL_LINK_STATUS, &linked);
-
-	if (!linked)
-	{
-		GLint info_len = 0;
-
-		glGetProgramiv(program_object, GL_INFO_LOG_LENGTH, &info_len);
-
-		if (info_len > 1)
-		{
-			std::string info_log;
-			info_log.resize(info_len);
-
-			glGetProgramInfoLog(program_object, info_len, NULL, &info_log[0]);
-			noob::logger::log(noob::importance::ERROR, noob::concat("[Graphics] Error linking program:", info_log));
-
-		}
-
-		glDeleteProgram(program_object);
-		return 0;
-	}
-
-	// Free up no longer needed shader resources
-	glDeleteShader(vertex_shader);
-	glDeleteShader(fragment_shader);
-
-	return program_object;
-}
-
-GLenum tex_internal_format(const noob::texture_info TexInfo)
-{
-	/*	struct texture_info
-		{
-		noob::texture_channels channels;
-		std::array<noob::scalar_type, 4> channel_scalars;
-		std::array<uint8_t, 4> channel_bits;
-		bool compressed, mips, s_normalized;
-		}; */
-
-
-
-	if (!TexInfo.compressed)
-	{
-		switch (TexInfo.channels)
-		{
-			case (noob::texture_channels::R):
-				{
-					/*		GL_R8,
-							GL_R8_SNORM,
-							GL_R16F,
-							GL_R32F,
-							GL_R8UI,
-							GL_R8I,
-							GL_R16UI,
-							GL_R16I,
-							GL_R32UI,
-							GL_R32I, */
-				}
-			case (noob::texture_channels::RG):
-				{
-					/*	GL_RG8,
-						GL_RG8_SNORM,
-						GL_RG16F,
-						GL_RG32F,
-						GL_RG8UI,
-						GL_RG8I,
-						GL_RG16UI,
-						GL_RG16I,
-						GL_RG32UI,
-						GL_RG32I, */
-
-				}
-			case (noob::texture_channels::RGB):
-				{
-					/*	GL_RGB8,
-						GL_SRGB8,
-						GL_RGB565,
-						GL_RGB8_SNORM,
-						GL_R11F_G11F_B10F,
-						GL_RGB9_E5,
-						GL_RGB16F,
-						GL_RGB32F,
-						GL_RGB8UI,
-						GL_RGB8I,
-						GL_RGB16UI,
-						GL_RGB16I,
-						GL_RGB32UI,
-						GL_RGB32I, */
-
-				}
-			case (noob::texture_channels::RGBA):
-				{
-					/*	GL_RGBA8,
-						GL_SRGB8_ALPHA8,
-						GL_RGBA8_SNORM,
-						GL_RGB5_A1,
-						GL_RGBA4,
-						GL_RGB10_A2,
-						GL_RGBA16F,
-						GL_RGBA32F,
-						GL_RGBA8UI,
-						GL_RGBA8I,
-						GL_RGB10_A2UI,
-						GL_RGBA16UI,
-						GL_RGBA16I,
-						GL_RGBA32I,
-						GL_RGBA32UI, */
-				}
-
-		};
-
-	}
-	else // We are using compression
-	{
-		/*
-		   GL_COMPRESSED_R11_EAC,
-		   GL_COMPRESSED_SIGNED_R11_EAC,
-		   GL_COMPRESSED_RG11_EAC,
-		   GL_COMPRESSED_SIGNED_RG11_EAC,
-		   GL_COMPRESSED_RGB8_ETC2,
-		   GL_COMPRESSED_SRGB8_ETC2,
-		   GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2,
-		   GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2,
-		   GL_COMPRESSED_RGBA8_ETC2_EAC,
-		   GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC
-		   */
-	}
-
-	return 0;
-}
-
-/*
-   GL_DEPTH_COMPONENT16 	GL_DEPTH_COMPONENT 	GL_UNSIGNED_SHORT, GL_UNSIGNED_INT 	16 	 
-   GL_DEPTH_COMPONENT24 	GL_DEPTH_COMPONENT 	GL_UNSIGNED_INT 			24 	 
-   GL_DEPTH_COMPONENT32F 	GL_DEPTH_COMPONENT 	GL_FLOAT 				f32 	 
-   GL_DEPTH24_STENCIL8 	GL_DEPTH_STENCIL 	GL_UNSIGNED_INT_24_8 			24 	8
-   GL_DEPTH32F_STENCIL8	GL_DEPTH_STENCIL	GL_FLOAT_32_UNSIGNED_INT_24_8_REV 	f32 	8
-   */
 void noob::graphics::init(uint32_t width, uint32_t height) noexcept(true)
 {
-
 	instanced_shader = noob::graphics::program_handle::make(load_program_gl(noob::glsl::vs_instancing_src, noob::glsl::fs_instancing_src));
 
 	u_eye_pos = glGetUniformLocation(instanced_shader.index(), "eye_pos");
@@ -280,9 +24,8 @@ void noob::graphics::init(uint32_t width, uint32_t height) noexcept(true)
 	frame(width, height);
 
 	noob::logger::log(noob::importance::INFO, "[Graphics] Done init.");
-
-
 }
+
 
 void noob::graphics::destroy() noexcept(true)
 {
@@ -496,100 +239,160 @@ void noob::graphics::reset_instances(noob::model_handle h, uint32_t num_instance
 	glBindVertexArray(0);
 }
 
-noob::texture_2d_handle noob::graphics::reserve_texture_2d(uint32_t width, uint32_t height, const noob::texture_info) noexcept(true)
+noob::texture_2d_handle noob::graphics::reserve_texture_2d(uint32_t Width, uint32_t Height, const noob::texture_info TexInfo) noexcept(true)
 {
-	// Prevent leftover from previous calls from harming this.
-	glBindVertexArray(0);
+	const noob::return_type<GLenum> fmt = get_internal_format(TexInfo);
 
-	GLuint texture_id;
+	if (fmt.valid)
+	{
+		const GLuint texture_id = prep_texture();
+		glBindTexture(GL_TEXTURE_2D, texture_id);
 
-	glGenTextures(1, &texture_id);
+		uint32_t mips = 1;
+		if (TexInfo.mips)
+		{
+			mips = noob::get_num_mips(Width, Height);
+		}
 
-	glBindTexture(GL_TEXTURE_2D, texture_id);
+		glTexStorage2D(GL_TEXTURE_2D, mips, fmt.value, Width, Height);
 
+		check_error_gl();
 
-	noob::texture_2d_handle t;
-	return t;
+		noob::texture_2d t(texture_id, TexInfo, Width, Height);
+
+		textures_2d.push_back(t);
+
+		return noob::texture_2d_handle::make(textures_2d.size() - 1);
+	}
+	// If we haven't returned our texture by now, we can assume the format test failed. Boo.
+	return noob::texture_2d_handle::make_invalid();
 }
 
 
-noob::texture_array_2d_handle noob::graphics::reserve_array_texture_2d(uint32_t width, uint32_t height, uint32_t indices, const noob::texture_info) noexcept(true)
+noob::texture_array_2d_handle noob::graphics::reserve_texture_array_2d(uint32_t Width, uint32_t Height, uint32_t Indices, const noob::texture_info TexInfo) noexcept(true)
 {
-	noob::texture_array_2d_handle t;
-	return t;
+	const noob::return_type<GLenum> fmt = get_internal_format(TexInfo);
+
+	if (fmt.valid)
+	{
+		const GLuint texture_id = prep_texture();
+		glBindTexture(GL_TEXTURE_2D, texture_id);
+
+		uint32_t mips = 1;
+		if (TexInfo.mips)
+		{
+			mips = noob::get_num_mips(Width, Height);
+		}
+
+		glTexStorage3D(GL_TEXTURE_2D_ARRAY, mips, fmt.value, Width, Height, Indices);
+
+		check_error_gl();
+
+		noob::texture_array_2d t(texture_id, TexInfo, Width, Height, Indices);
+
+		texture_arrays_2d.push_back(t);
+
+		return noob::texture_array_2d_handle::make(texture_arrays_2d.size() - 1);
+	}
+	return noob::texture_array_2d_handle::make_invalid();
 }
 
 
-noob::texture_3d_handle noob::graphics::reserve_texture_3d(uint32_t width, uint32_t height, uint32_t depth, const noob::texture_info) noexcept(true)
+noob::texture_3d_handle noob::graphics::reserve_texture_3d(uint32_t Width, uint32_t Height, uint32_t Depth, const noob::texture_info TexInfo) noexcept(true)
 {
-	noob::texture_3d_handle t;
-	return t;
+	const noob::return_type<GLenum> fmt = get_internal_format(TexInfo);
+
+	if (fmt.valid)
+	{
+		const GLuint texture_id = prep_texture();
+		glBindTexture(GL_TEXTURE_2D, texture_id);
+
+		uint32_t mips = 1;
+		if (TexInfo.mips)
+		{
+			mips = noob::get_num_mips(Width, Height, Depth);
+		}
+
+		// TODO: Add check for devices that don't support compressed 3D texture storage. For now, we'll find out the exciting way.
+		
+		glTexStorage3D(GL_TEXTURE_3D, mips, fmt.value, Width, Height, Depth);
+
+		check_error_gl();
+
+		noob::texture_3d t(texture_id, TexInfo, Width, Height, Depth);
+
+		textures_3d.push_back(t);
+
+		return noob::texture_3d_handle::make(textures_3d.size() - 1);
+	}
+
+	return noob::texture_3d_handle::make_invalid();
 }
 
 
 
-void noob::graphics::texture_data(noob::texture_2d_handle, const std::string&) const noexcept(true)
+void noob::graphics::texture_data(noob::texture_2d_handle Handle, const std::string& Data) const noexcept(true)
 {
 
 }
 
 
-void noob::graphics::texture_data(noob::texture_array_2d_handle, uint32_t index, const std::string&) const noexcept(true)
+void noob::graphics::texture_data(noob::texture_array_2d_handle Handle, uint32_t Index, const std::string& Data) const noexcept(true)
 {
 
 }
 
 
-void noob::graphics::texture_data(noob::texture_3d_handle, const std::string&) const noexcept(true)
+void noob::graphics::texture_data(noob::texture_3d_handle Handle, const std::string& Data) const noexcept(true)
 {
 
 }
 
 
 // Texture parameter setters, made typesafe. :)
-void noob::graphics::texture_base_level(uint32_t arg) const noexcept(true)
+void noob::graphics::texture_base_level(uint32_t BaseLevel) const noexcept(true)
 {
 
 }
 
 
-void noob::graphics::texture_compare_mode(noob::tex_compare_mode) const noexcept(true)
+void noob::graphics::texture_compare_mode(noob::tex_compare_mode CompareMode) const noexcept(true)
 {
 
 }
 
 
-void noob::graphics::texture_compare_func(noob::tex_compare_func) const noexcept(true)
+void noob::graphics::texture_compare_func(noob::tex_compare_func CompareFunc) const noexcept(true)
 {
 
 }
 
 
-void noob::graphics::texture_min_filter(noob::tex_min_filter) const noexcept(true)
+void noob::graphics::texture_min_filter(noob::tex_min_filter MinFilter) const noexcept(true)
 {
 
 }
 
 
-void noob::graphics::texture_min_lod(int32_t arg) const noexcept(true)
+void noob::graphics::texture_min_lod(int32_t MinLod) const noexcept(true)
 {
 
 }
 
 
-void noob::graphics::texture_max_lod(int32_t arg) const noexcept(true)
+void noob::graphics::texture_max_lod(int32_t MaxLod) const noexcept(true)
 {
 
 }
 
 
-void noob::graphics::texture_swizzle(const std::array<noob::tex_swizzle, 4 >) const noexcept(true)
+void noob::graphics::texture_swizzle(const std::array<noob::tex_swizzle, 4> Swizzles) const noexcept(true)
 {
 
 }
 
 
-void noob::graphics::texture_wrap_mode(const std::array<noob::tex_wrap_mode, 3>) const noexcept(true)
+void noob::graphics::texture_wrap_mode(const std::array<noob::tex_wrap_mode, 3> WrapModes) const noexcept(true)
 {
 
 }
@@ -615,7 +418,7 @@ void noob::graphics::draw(const noob::model_handle handle, uint32_t num) const n
 	const noob::model m = models.get(handle);
 	glBindVertexArray(m.vao);
 
-	glDrawElementsInstanced(GL_TRIANGLES, m.n_indices, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), m.n_instances); //std::min(m.n_instances, num));
+	glDrawElementsInstanced(GL_TRIANGLES, m.n_indices, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.n_instances, num));
 
 	check_error_gl();
 	glBindVertexArray(0);

@@ -12,18 +12,15 @@
 #include "Texture.hpp"
 #include "Attrib.hpp"
 #include "ReturnType.hpp"
+#include "Shader.hpp"
 
 namespace noob
 {
-
-  
 	class graphics
 	{
 		public:
-
-			// TODO: Write proper objects instead of using uint32_t's
-			typedef noob::handle<uint32_t> shader_handle;
-			typedef noob::handle<uint32_t> program_handle;
+			typedef noob::handle<noob::shader> shader_handle;
+			typedef noob::handle<noob::linked_shader> program_handle;
 
 			// Call before using.
 			void init(uint32_t width, uint32_t height) noexcept(true);
@@ -39,10 +36,10 @@ namespace noob
 			void reset_instances(noob::model_handle, uint32_t num_instances) noexcept(true);
 
 			// Texture storage reservers
-			// TODO: Implement (not GLES3-native) it seems
-			// noob::texture_1d_handle reserve_texture_1d(uint32_t length, bool mips, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true);
+			// TODO: Implement (not GLES3-native) it seems...
+			// noob::texture_1d_handle reserve_texture_1d(uint32_t length, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true);
 			noob::texture_2d_handle reserve_texture_2d(uint32_t width, uint32_t height, const noob::texture_info) noexcept(true);
-			noob::texture_array_2d_handle reserve_array_texture_2d(uint32_t width, uint32_t height, uint32_t indices, const noob::texture_info) noexcept(true);
+			noob::texture_array_2d_handle reserve_texture_array_2d(uint32_t width, uint32_t height, uint32_t indices, const noob::texture_info) noexcept(true);
 			noob::texture_3d_handle reserve_texture_3d(uint32_t width, uint32_t height, uint32_t depth, const noob::texture_info) noexcept(true);
 			// TODO: Soon.
 			// noob::texture_handle reserve_texture_cube(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true);
@@ -70,7 +67,7 @@ namespace noob
 			void texture_unpack_alignment(uint32_t) const noexcept(true);
 
 			// Call this to draw a given model.
-			void draw(const noob::model_handle, uint32_t num) const noexcept(true);
+			void draw(const noob::model_handle, uint32_t) const noexcept(true);
 
 			void frame(uint32_t width, uint32_t height) const noexcept(true);
 
@@ -91,7 +88,7 @@ namespace noob
 			noob::component<noob::model> models;
 			std::vector<noob::texture_1d> textures_1d;
 			std::vector<noob::texture_2d> textures_2d;
-			std::vector<noob::texture_array_2d> textures_array_2d;			
+			std::vector<noob::texture_array_2d> texture_arrays_2d;			
 			std::vector<noob::texture_3d> textures_3d;
 
 			noob::graphics::program_handle instanced_shader;

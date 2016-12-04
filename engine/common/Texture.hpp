@@ -10,14 +10,6 @@
 
 namespace noob
 {
-	/*
-	   enum class texture_storage
-	   {
-	   TEX_1D, TEX_2D, ARRAY_TEX_2D, CUBEMAP, TEX_3D
-	   };
-	   */
-	//uint32_t tex_base_level = 0;
-
 	enum class tex_compare_mode { COMPARE_REF_TO_TEXTURE, NONE };
 
 	enum class tex_compare_func { LEQUAL, GEQUAL, LESS, GREATER, EQUAL, NOTEQUAL, ALWAYS, NEVER };
@@ -25,10 +17,6 @@ namespace noob
 	enum class tex_min_filter { NEAREST, LINEAR, NEAREST_MIPMAP_NEAREST, LINEAR_MIPMAP_NEAREST, NEAREST_MIPMAP_LINEAR, LINEAR_MIPMAP_LINEAR };
 
 	enum class tex_mag_filter { NEAREST, LINEAR };
-
-	// int32_t texture_min_lod = -1000;
-
-	// int32_t texture_max_lod = 1000;
 
 	// Passed in arrays of four
 	enum class tex_swizzle {RED, GREEN, BLUE, ALPHA, ZERO, ONE};
@@ -41,32 +29,57 @@ namespace noob
 		R, RG, RGB, RGBA, DEPTH, DEPTH_STENCIL
 	};
 
+	// TODO: Move out into math classes.
 	enum class scalar_type
 	{
 		UINT, INT, FLOAT
 	};
 
+	// TODO: Move out into math classes.
+	static uint32_t next_pow2(uint32_t arg)
+	{
+		int64_t val = arg;
+		val--;
+		val |= val >> 1;
+		val |= val >> 2;
+		val |= val >> 4;
+		val |= val >> 8;
+		val |= val >> 16;
+		val |= val >> 32;
+		val++;
+		return static_cast<uint32_t>(val);
+	}
+
+	// TODO: Move out into math classes.
+	static uint32_t get_num_mips(uint32_t Width, uint32_t Height)
+	{
+		return std::floor(std::log2(std::max(Width, Height))) + 1;
+	}
+
+	static uint32_t get_num_mips(uint32_t Width, uint32_t Height, uint32_t Depth)
+	{
+		return std::floor(std::log2(std::max(std::max(Width, Height), Depth))) + 1;
+	}
+
+
+
 	struct texture_info
 	{
 		noob::texture_channels channels;
+		bool compressed, mips, srgb, sign_normalized;
 		std::array<noob::scalar_type, 4> channel_scalars;		
-		std::array<uint8_t, 4> channel_bits;
-		bool compressed, mips, s_normalized;
+		std::array<uint8_t, 4> channel_bits;		
 	};
 
 	class graphics;
 
 	struct texture_1d
 	{
-		friend class graphics;
-
-		private:
 		const uint32_t driver_handle;
 
 		texture_1d(uint32_t DriverHandle, noob::texture_info TexInfo, uint32_t Length) noexcept(true) : driver_handle(DriverHandle), info(TexInfo), length(Length) {}
 		texture_1d() = delete;
 
-		public:
 		texture_1d(const noob::texture_1d& lhs) noexcept(true) = default;
 		texture_1d& operator=(const noob::texture_1d& lhs) noexcept(true) = default;
 
@@ -78,14 +91,10 @@ namespace noob
 
 	struct texture_2d
 	{
-		friend class graphics;
-
-		private:
 		const uint32_t driver_handle;
 
 		texture_2d(uint32_t DriverHandle, noob::texture_info TexInfo, uint32_t Width, uint32_t Height) noexcept(true) :  driver_handle(DriverHandle), info(TexInfo), width(Width), height(Height) {}
 
-		public:		
 		texture_2d() = delete;
 		texture_2d(const noob::texture_2d& lhs) noexcept(true) = default;
 		texture_2d& operator=(const noob::texture_2d& lhs) noexcept(true) = default;
@@ -98,16 +107,10 @@ namespace noob
 
 	struct texture_array_2d
 	{
-		friend class graphics;
-
-		public:
-
-		private:
 		const uint32_t driver_handle;
 
 		texture_array_2d(uint32_t DriverHandle, noob::texture_info TexInfo, uint32_t Width, uint32_t Height, uint32_t Indices) noexcept(true) :  driver_handle(DriverHandle), info(TexInfo), width(Width), height(Height), indices(Indices) {}
 
-		public:		
 		texture_array_2d() = delete;
 		texture_array_2d(const noob::texture_array_2d& lhs) noexcept(true) = default;
 		texture_array_2d& operator=(const noob::texture_array_2d& lhs) noexcept(true) = default;
@@ -121,15 +124,10 @@ namespace noob
 
 	struct texture_3d
 	{
-		friend class graphics;
-
-		public:
-		private:
 		const uint32_t driver_handle;
 
 		texture_3d(uint32_t DriverHandle, noob::texture_info TexInfo, uint32_t Width, uint32_t Height, uint32_t Depth) noexcept(true) :  driver_handle(DriverHandle), info(TexInfo), width(Width), height(Height), depth(Depth) {}
 
-		public:		
 		texture_3d() = delete;
 		texture_3d(const noob::texture_3d& lhs) noexcept(true) = default;
 		texture_3d& operator=(const noob::texture_3d& lhs) noexcept(true) = default;
