@@ -218,21 +218,21 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& mesh,
 }
 
 
-void noob::graphics::reset_instances(noob::model_handle h, uint32_t num_instances) noexcept(true)
+void noob::graphics::reset_instances(noob::model_handle Handle, uint32_t NumInstances) noexcept(true)
 {
-	noob::model m = models.get(h);
-	m.n_instances = num_instances;
-	models.set(h, m);
+	noob::model m = models.get(Handle);
+	m.n_instances = NumInstances;
+	models.set(Handle, m);
 
 	glBindVertexArray(m.vao);
 
 	// Setup colours VBO:
 	glBindBuffer(GL_ARRAY_BUFFER, m.instanced_colour_vbo);
-	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::materials_stride, nullptr, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::materials_stride, nullptr, GL_DYNAMIC_DRAW);
 
 	// Setup matrices VBO:
 	glBindBuffer(GL_ARRAY_BUFFER, m.instanced_matrices_vbo);
-	glBufferData(GL_ARRAY_BUFFER, num_instances * noob::model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
 
 	check_error_gl();
 
@@ -264,6 +264,7 @@ noob::texture_2d_handle noob::graphics::reserve_texture_2d(uint32_t Width, uint3
 
 		return noob::texture_2d_handle::make(textures_2d.size() - 1);
 	}
+
 	// If we haven't returned our texture by now, we can assume the format test failed. Boo.
 	return noob::texture_2d_handle::make_invalid();
 }
@@ -294,6 +295,7 @@ noob::texture_array_2d_handle noob::graphics::reserve_texture_array_2d(uint32_t 
 
 		return noob::texture_array_2d_handle::make(texture_arrays_2d.size() - 1);
 	}
+
 	return noob::texture_array_2d_handle::make_invalid();
 }
 
@@ -331,26 +333,26 @@ noob::texture_3d_handle noob::graphics::reserve_texture_3d(uint32_t Width, uint3
 
 
 
-void noob::graphics::texture_data(noob::texture_2d_handle Handle, const std::string& Data) const noexcept(true)
+void noob::graphics::texture_data(noob::texture_2d_handle Handle, uint32_t Mip, const std::string& Data) const noexcept(true)
 {
 
 }
 
 
-void noob::graphics::texture_data(noob::texture_array_2d_handle Handle, uint32_t Index, const std::string& Data) const noexcept(true)
+void noob::graphics::texture_data(noob::texture_array_2d_handle Handle, uint32_t Index, uint32_t Mip, const std::string& Data) const noexcept(true)
 {
 
 }
 
 
-void noob::graphics::texture_data(noob::texture_3d_handle Handle, const std::string& Data) const noexcept(true)
+void noob::graphics::texture_data(noob::texture_3d_handle Handle, uint32_t Mip, const std::string& Data) const noexcept(true)
 {
 
 }
 
 
 // Texture parameter setters, made typesafe. :)
-void noob::graphics::texture_base_level(uint32_t BaseLevel) const noexcept(true)
+void noob::graphics::texture_base_level(uint32_t Mip) const noexcept(true)
 {
 
 }

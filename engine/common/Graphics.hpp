@@ -23,7 +23,7 @@ namespace noob
 			typedef noob::handle<noob::linked_shader> program_handle;
 
 			// Call before using.
-			void init(uint32_t width, uint32_t height) noexcept(true);
+			void init(uint32_t Width, uint32_t Height) noexcept(true);
 			// Call before killing.
 			void destroy() noexcept(true);
 
@@ -31,33 +31,33 @@ namespace noob
 
 			// Model reservers...
 			// TODO: Implement more model types.
-			noob::model_handle model_instanced(const noob::basic_mesh&, uint32_t num_instances) noexcept(true);
+			noob::model_handle model_instanced(const noob::basic_mesh&, uint32_t) noexcept(true);
 
-			void reset_instances(noob::model_handle, uint32_t num_instances) noexcept(true);
+			void reset_instances(noob::model_handle, uint32_t) noexcept(true);
 
 			// Texture storage reservers
 			// TODO: Implement (not GLES3-native) it seems...
 			// noob::texture_1d_handle reserve_texture_1d(uint32_t length, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true);
-			noob::texture_2d_handle reserve_texture_2d(uint32_t width, uint32_t height, const noob::texture_info) noexcept(true);
-			noob::texture_array_2d_handle reserve_texture_array_2d(uint32_t width, uint32_t height, uint32_t indices, const noob::texture_info) noexcept(true);
-			noob::texture_3d_handle reserve_texture_3d(uint32_t width, uint32_t height, uint32_t depth, const noob::texture_info) noexcept(true);
+			noob::texture_2d_handle reserve_texture_2d(uint32_t Width, uint32_t Height, const noob::texture_info) noexcept(true);
+			noob::texture_array_2d_handle reserve_texture_array_2d(uint32_t Width, uint32_t Height, uint32_t Indices, const noob::texture_info) noexcept(true);
+			noob::texture_3d_handle reserve_texture_3d(uint32_t Width, uint32_t Height, uint32_t Depth, const noob::texture_info) noexcept(true);
 			// TODO: Soon.
 			// noob::texture_handle reserve_texture_cube(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true);
 
 			// Texture data uploaders
 			// TODO: Implement (not GLES3-native) it seems. See above block as well
 			// void texture_data(noob::texture_1d_handle, const std::string&) const noexcept(true);	
-			void texture_data(noob::texture_2d_handle, const std::string&) const noexcept(true);
-			void texture_data(noob::texture_array_2d_handle, uint32_t index, const std::string&) const noexcept(true);
-			void texture_data(noob::texture_3d_handle, const std::string&) const noexcept(true);
+			void texture_data(noob::texture_2d_handle, uint32_t Mip, const std::string&) const noexcept(true);
+			void texture_data(noob::texture_array_2d_handle, uint32_t Index, uint32_t Mip, const std::string&) const noexcept(true);
+			void texture_data(noob::texture_3d_handle, uint32_t Mip, const std::string&) const noexcept(true);
 
 			// Texture parameter setters, made typesafe. :)
-			void texture_base_level(uint32_t arg = 0) const noexcept(true);
+			void texture_base_level(uint32_t Mip = 0) const noexcept(true);
 			void texture_compare_mode(noob::tex_compare_mode) const noexcept(true);
 			void texture_compare_func(noob::tex_compare_func) const noexcept(true);
 			void texture_min_filter(noob::tex_min_filter) const noexcept(true);
-			void texture_min_lod(int32_t arg = -1000) const noexcept(true);
-			void texture_max_lod(int32_t arg = 1000) const noexcept(true);
+			void texture_min_lod(int32_t Mip = -1000) const noexcept(true);
+			void texture_max_lod(int32_t Mip = 1000) const noexcept(true);
 			void texture_swizzle(const std::array<noob::tex_swizzle, 4 >) const noexcept(true);
 			void texture_wrap_mode(const std::array<noob::tex_wrap_mode, 3>) const noexcept(true);
 			
