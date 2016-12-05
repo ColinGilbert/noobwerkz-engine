@@ -452,23 +452,23 @@ void noob::graphics::texture_unpack_alignment(uint32_t) const noexcept(true)
 
 
 
-void noob::graphics::draw(const noob::model_handle handle, uint32_t num) const noexcept(true)
+void noob::graphics::draw(const noob::model_handle Handle, uint32_t Num) const noexcept(true)
 {
-	const noob::model m = models.get(handle);
+	const noob::model m = models.get(Handle);
 	glBindVertexArray(m.vao);
 
-	glDrawElementsInstanced(GL_TRIANGLES, m.n_indices, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.n_instances, num));
+	glDrawElementsInstanced(GL_TRIANGLES, m.n_indices, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.n_instances, Num));
 
 	check_error_gl();
 	glBindVertexArray(0);
 }
 
 
-void noob::graphics::frame(uint32_t width, uint32_t height) const noexcept(true)
+void noob::graphics::frame(uint32_t Width, uint32_t Height) const noexcept(true)
 {
 	glBindVertexArray(0);
 
-	glViewport(0, 0, width, height);
+	glViewport(0, 0, Width, Height);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
@@ -483,7 +483,7 @@ void noob::graphics::frame(uint32_t width, uint32_t height) const noexcept(true)
 }
 
 
-noob::gpu_write_buffer noob::graphics::map_buffer(noob::model_handle h, noob::model::instanced_data_type t, uint32_t min, uint32_t max) const noexcept(true)
+noob::gpu_write_buffer noob::graphics::map_buffer(noob::model_handle h, noob::model::instanced_data_type DataType, uint32_t Min, uint32_t Max) const noexcept(true)
 {
 	noob::model m = models.get(h);
 
@@ -496,7 +496,7 @@ noob::gpu_write_buffer noob::graphics::map_buffer(noob::model_handle h, noob::mo
 
 	uint32_t stride_in_bytes;
 
-	switch (t)
+	switch (DataType)
 	{
 		case (noob::model::instanced_data_type::COLOUR):
 			{
@@ -516,7 +516,7 @@ noob::gpu_write_buffer noob::graphics::map_buffer(noob::model_handle h, noob::mo
 
 	const uint32_t total_size = stride_in_bytes * m.n_instances;
 
-	float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, min, max, GL_MAP_WRITE_BIT));
+	float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, Min, Max, GL_MAP_WRITE_BIT));
 
 	check_error_gl();
 
