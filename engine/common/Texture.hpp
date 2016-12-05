@@ -7,6 +7,7 @@
 
 #include "Attrib.hpp"
 
+#include <math.h>
 
 namespace noob
 {
@@ -48,12 +49,12 @@ namespace noob
 	// TODO: Move out into math classes.
 	static uint32_t get_num_mips(uint32_t Width, uint32_t Height)
 	{
-		return std::floor(std::log2(std::max(Width, Height))) + 1;
+		return static_cast<uint32_t>(floor(log2(static_cast<double>(std::max(Width, Height))))) + 1;
 	}
 
 	static uint32_t get_num_mips(uint32_t Width, uint32_t Height, uint32_t Depth)
 	{
-		return std::floor(std::log2(std::max(std::max(Width, Height), Depth))) + 1;
+		return static_cast<uint32_t>(floor(log2(static_cast<double>(std::max(std::max(Width, Height), Depth))))) + 1;
 	}
 
 // Per-channel:

@@ -579,12 +579,12 @@ void noob::graphics::texture_unpack_alignment(uint32_t Arg) const noexcept(true)
 
 
 
-void noob::graphics::draw(const noob::model_handle Handle, uint32_t Num) const noexcept(true)
+void noob::graphics::draw(const noob::model_handle Handle, uint32_t NumInstances) const noexcept(true)
 {
 	const noob::model m = models.get(Handle);
 	glBindVertexArray(m.vao);
 
-	glDrawElementsInstanced(GL_TRIANGLES, m.n_indices, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.n_instances, Num));
+	glDrawElementsInstanced(GL_TRIANGLES, m.n_indices, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.n_instances, NumInstances));
 
 	check_error_gl();
 	glBindVertexArray(0);

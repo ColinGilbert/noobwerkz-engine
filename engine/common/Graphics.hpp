@@ -54,6 +54,7 @@ namespace noob
 			void texture_data(noob::texture_3d_handle, uint32_t Mip, const std::array<uint32_t, 3> Offset, const std::array<uint32_t, 3> Dims, const std::string& Data) const noexcept(true);
 
 			// Texture parameter setters, made typesafe, at the cost of more overloads. Ah well, tradeoffs...
+			// Params for 2d textures
 			void texture_base_level(noob::texture_2d_handle, uint32_t Mip = 0) const noexcept(true);
 			void texture_compare_mode(noob::texture_2d_handle, noob::tex_compare_mode) const noexcept(true);
 			void texture_compare_func(noob::texture_2d_handle, noob::tex_compare_func) const noexcept(true);
@@ -63,7 +64,7 @@ namespace noob
 			void texture_swizzle(noob::texture_2d_handle, const std::array<noob::tex_swizzle, 4 >) const noexcept(true);
 			void texture_wrap_mode(noob::texture_2d_handle, const std::array<noob::tex_wrap_mode, 3>) const noexcept(true);
 
-
+			// Params for 2d array textures
 			void texture_base_level(noob::texture_array_2d_handle, uint32_t Mip = 0) const noexcept(true);
 			void texture_compare_mode(noob::texture_array_2d_handle, noob::tex_compare_mode) const noexcept(true);
 			void texture_compare_func(noob::texture_array_2d_handle, noob::tex_compare_func) const noexcept(true);
@@ -73,6 +74,7 @@ namespace noob
 			void texture_swizzle(noob::texture_array_2d_handle, const std::array<noob::tex_swizzle, 4 >) const noexcept(true);
 			void texture_wrap_mode(noob::texture_array_2d_handle, const std::array<noob::tex_wrap_mode, 3>) const noexcept(true);
 
+			// Params for 3d textures
 			void texture_base_level(noob::texture_3d_handle, uint32_t Mip = 0) const noexcept(true);
 			void texture_compare_mode(noob::texture_3d_handle, noob::tex_compare_mode) const noexcept(true);
 			void texture_compare_func(noob::texture_3d_handle, noob::tex_compare_func) const noexcept(true);
@@ -88,8 +90,8 @@ namespace noob
 			void texture_unpack_alignment(uint32_t) const noexcept(true);
 
 			// Call this to draw a given model.
-			void draw(const noob::model_handle, uint32_t) const noexcept(true);
-
+			void draw(const noob::model_handle, uint32_t NumInstances) const noexcept(true);
+			// Call this every frame...
 			void frame(uint32_t width, uint32_t height) const noexcept(true);
 
 			// These are VBO buffer mapping/unmapping methods
