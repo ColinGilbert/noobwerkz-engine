@@ -384,70 +384,197 @@ void noob::graphics::texture_data(noob::texture_3d_handle Handle, uint32_t Mip, 
 	check_error_gl();
 }
 
+// GL_TEXTURE_BASE_LEVEL, GL_TEXTURE_COMPARE_FUNC, GL_TEXTURE_COMPARE_MODE, GL_TEXTURE_MIN_FILTER, GL_TEXTURE_MAG_FILTER, GL_TEXTURE_MIN_LOD, GL_TEXTURE_MAX_LOD, GL_TEXTURE_MAX_LEVEL, GL_TEXTURE_SWIZZLE_R, GL_TEXTURE_SWIZZLE_G, GL_TEXTURE_SWIZZLE_B, GL_TEXTURE_SWIZZLE_A, GL_TEXTURE_WRAP_S, GL_TEXTURE_WRAP_T, GL_TEXTURE_WRAP_R
 
 // Texture parameter setters, made typesafe. :)
-void noob::graphics::texture_base_level(uint32_t Mip) const noexcept(true)
+void noob::graphics::texture_base_level(noob::texture_2d_handle, uint32_t Mip) const noexcept(true)
 {
 
 	check_error_gl();
 }
 
 
-void noob::graphics::texture_compare_mode(noob::tex_compare_mode CompareMode) const noexcept(true)
+void noob::graphics::texture_compare_mode(noob::texture_2d_handle, noob::tex_compare_mode CompareMode) const noexcept(true)
 {
 
 	check_error_gl();
 }
 
 
-void noob::graphics::texture_compare_func(noob::tex_compare_func CompareFunc) const noexcept(true)
+void noob::graphics::texture_compare_func(noob::texture_2d_handle, noob::tex_compare_func CompareFunc) const noexcept(true)
 {
 
 	check_error_gl();
 }
 
 
-void noob::graphics::texture_min_filter(noob::tex_min_filter MinFilter) const noexcept(true)
+void noob::graphics::texture_min_filter(noob::texture_2d_handle, noob::tex_min_filter MinFilter) const noexcept(true)
 {
 	check_error_gl();
 }
 
 
-void noob::graphics::texture_min_lod(int32_t MinLod) const noexcept(true)
+void noob::graphics::texture_min_lod(noob::texture_2d_handle, int32_t MinLod) const noexcept(true)
 {
 	check_error_gl();
 }
 
 
-void noob::graphics::texture_max_lod(int32_t MaxLod) const noexcept(true)
+void noob::graphics::texture_max_lod(noob::texture_2d_handle, int32_t MaxLod) const noexcept(true)
 {
 	check_error_gl();
 }
 
 
-void noob::graphics::texture_swizzle(const std::array<noob::tex_swizzle, 4> Swizzles) const noexcept(true)
+void noob::graphics::texture_swizzle(noob::texture_2d_handle, const std::array<noob::tex_swizzle, 4> Swizzles) const noexcept(true)
 {
 	check_error_gl();
 }
 
 
-void noob::graphics::texture_wrap_mode(const std::array<noob::tex_wrap_mode, 3> WrapModes) const noexcept(true)
+void noob::graphics::texture_wrap_mode(noob::texture_2d_handle, const std::array<noob::tex_wrap_mode, 3> WrapModes) const noexcept(true)
 {
 	check_error_gl();
 }
 
 
-void noob::graphics::texture_pack_alignment(uint32_t) const noexcept(true)
+void noob::graphics::texture_base_level(noob::texture_array_2d_handle, uint32_t Mip) const noexcept(true)
+{
+
+	check_error_gl();
+}
+
+
+void noob::graphics::texture_compare_mode(noob::texture_array_2d_handle, noob::tex_compare_mode CompareMode) const noexcept(true)
+{
+
+	check_error_gl();
+}
+
+
+void noob::graphics::texture_compare_func(noob::texture_array_2d_handle, noob::tex_compare_func CompareFunc) const noexcept(true)
+{
+
+	check_error_gl();
+}
+
+
+void noob::graphics::texture_min_filter(noob::texture_array_2d_handle, noob::tex_min_filter MinFilter) const noexcept(true)
+{
+	check_error_gl();
+}
+
+
+void noob::graphics::texture_min_lod(noob::texture_array_2d_handle, int32_t MinLod) const noexcept(true)
+{
+	check_error_gl();
+}
+
+
+void noob::graphics::texture_max_lod(noob::texture_array_2d_handle, int32_t MaxLod) const noexcept(true)
+{
+	check_error_gl();
+}
+
+
+void noob::graphics::texture_swizzle(noob::texture_array_2d_handle, const std::array<noob::tex_swizzle, 4> Swizzles) const noexcept(true)
+{
+	check_error_gl();
+}
+
+
+void noob::graphics::texture_wrap_mode(noob::texture_array_2d_handle, const std::array<noob::tex_wrap_mode, 3> WrapModes) const noexcept(true)
+{
+	check_error_gl();
+}
+
+
+void noob::graphics::texture_base_level(noob::texture_3d_handle, uint32_t Mip) const noexcept(true)
+{
+
+	check_error_gl();
+}
+
+
+void noob::graphics::texture_compare_mode(noob::texture_3d_handle, noob::tex_compare_mode CompareMode) const noexcept(true)
+{
+
+	check_error_gl();
+}
+
+
+void noob::graphics::texture_compare_func(noob::texture_3d_handle, noob::tex_compare_func CompareFunc) const noexcept(true)
+{
+
+	check_error_gl();
+}
+
+
+void noob::graphics::texture_min_filter(noob::texture_3d_handle, noob::tex_min_filter MinFilter) const noexcept(true)
+{
+	check_error_gl();
+}
+
+
+void noob::graphics::texture_min_lod(noob::texture_3d_handle, int32_t MinLod) const noexcept(true)
+{
+	check_error_gl();
+}
+
+
+void noob::graphics::texture_max_lod(noob::texture_3d_handle, int32_t MaxLod) const noexcept(true)
+{
+	check_error_gl();
+}
+
+
+void noob::graphics::texture_swizzle(noob::texture_3d_handle, const std::array<noob::tex_swizzle, 4> Swizzles) const noexcept(true)
+{
+	check_error_gl();
+}
+
+
+void noob::graphics::texture_wrap_mode(noob::texture_3d_handle, const std::array<noob::tex_wrap_mode, 3> WrapModes) const noexcept(true)
+{
+	check_error_gl();
+}
+
+
+void noob::graphics::texture_pack_alignment(uint32_t Arg) const noexcept(true)
 {
 	// GL_PACK_ALIGNMENT 	integer 	4 	1, 2, 4, or 8
-	check_error_gl();
+	switch (Arg)
+	{
+		case (1):
+		case (2):
+		case (4):
+		case (8):
+		{
+			glPixelStorei(GL_PACK_ALIGNMENT, Arg);
+			check_error_gl();
+			break;
+
+		}
+	};
 }
 
 
-void noob::graphics::texture_unpack_alignment(uint32_t) const noexcept(true)
+void noob::graphics::texture_unpack_alignment(uint32_t Arg) const noexcept(true)
 {
 	// GL_UNPACK_ALIGNMENT 	integer 	4 	1, 2, 4, or 8 
-	check_error_gl();
+	switch (Arg)
+	{
+		case (1):
+		case (2):
+		case (4):
+		case (8):
+		{
+			glPixelStorei(GL_UNPACK_ALIGNMENT, Arg); 
+			check_error_gl();			
+			break;
+
+		}
+	};
 }
 
 
@@ -528,8 +655,6 @@ noob::gpu_write_buffer noob::graphics::map_buffer(noob::model_handle h, noob::mo
 	{
 		return noob::gpu_write_buffer::make_invalid();	
 	}
-
-
 }
 
 
