@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GLES3/gl3.h>
+
 #include "NoobUtils.hpp"
 
 
@@ -28,6 +29,217 @@ GLenum check_error_gl(const char *file, int line)
 
 #define check_error_gl() check_error_gl(__FILE__, __LINE__) 
 
+/*
+   GL_COMPRESSED_R11_EAC,
+   GL_COMPRESSED_SIGNED_R11_EAC,
+   GL_COMPRESSED_RG11_EAC,
+   GL_COMPRESSED_SIGNED_RG11_EAC,
+   GL_COMPRESSED_RGB8_ETC2,
+   GL_COMPRESSED_SRGB8_ETC2,
+   GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2,
+   GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2,
+   GL_COMPRESSED_RGBA8_ETC2_EAC, or
+   GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC
+   */
+
+
+GLenum get_gl_storage_format(const noob::pixel_format Pixels)
+{
+	//	R8, RG8, RGB8, SRGB8, RGBA8, SRGBA8, RGB8_COMPRESSED, SRGB8_COMPRESSED, RGB8_A1_COMPRESSED, SRGB8_A1_COMPRESSED, RGBA8_COMPRESSED, SRGBA8_COMPRESSED
+	GLenum results;
+
+	switch(Pixels)
+	{
+		case(noob::pixel_format::R8):
+			{
+				results = GL_R8;
+			}
+		case(noob::pixel_format::RG8):
+			{
+				results = GL_RG8;
+			}
+		case(noob::pixel_format::RGB8):
+			{
+				results = GL_RGB8;				
+			}
+		case(noob::pixel_format::SRGB8):
+			{
+				results = GL_SRGB8;		
+			}
+		case(noob::pixel_format::RGBA8):
+			{
+				results = GL_RGBA8;		
+			}
+		case(noob::pixel_format::SRGBA8):
+			{
+				results = GL_SRGB8_ALPHA8;		
+			}
+		case(noob::pixel_format::RGB8_COMPRESSED):
+			{
+				results = GL_COMPRESSED_RGB8_ETC2;		
+			}
+		case(noob::pixel_format::SRGB8_COMPRESSED):
+			{
+				results = GL_COMPRESSED_SRGB8_ETC2;		
+			}
+		case(noob::pixel_format::RGB8_A1_COMPRESSED):
+			{
+				results = GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2;		
+			}
+		case(noob::pixel_format::SRGB8_A1_COMPRESSED):
+			{
+				results = GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2;		
+			}
+		case(noob::pixel_format::RGBA8_COMPRESSED):
+			{
+				results = GL_COMPRESSED_RGBA8_ETC2_EAC;		
+			}
+		case(noob::pixel_format::SRGBA8_COMPRESSED):
+			{		
+				results = GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC;
+			}
+	}
+
+	return results;
+}
+
+// This one gives you the "format" and "type" arguments for glTexSubImage2D and glTexSubImage3D
+// Visit: https://www.khronos.org/opengles/sdk/docs/man3/html/glTexSubImage2D.xhtml and https://www.khronos.org/opengles/sdk/docs/man3/html/glTexSubImage3D.xhtml
+// As you can see, OpenGL doesn't just allow you to use the same storage format as the argument to the functions, as that would be far too straightforward. Instead, we must write otherwise pointless functions such as these to make our dreams into reality.
+std::tuple<GLenum, GLenum> deduce_pixel_format_and_type(noob::pixel_format Pixels)
+{
+	GLenum results_a, results_b;
+	// GL_RED, GL_RED_INTEGER, GL_RG, GL_RG_INTEGER, GL_RGB, GL_RGB_INTEGER, GL_RGBA, GL_RGBA_INTEGER, GL_DEPTH_COMPONENT, GL_DEPTH_STENCIL
+	// GL_UNSIGNED_BYTE, GL_BYTE, GL_UNSIGNED_SHORT, GL_SHORT, GL_UNSIGNED_INT, GL_INT, GL_HALF_FLOAT, GL_FLOAT
+	results_b = GL_UNSIGNED_BYTE;
+	switch(Pixels)
+	{
+		case(noob::pixel_format::R8):
+			{
+				results_a =  GL_RED;//, GL_RED_INTEGER, GL_RG, GL_RG_INTEGER, GL_RGB, GL_RGB_INTEGER, GL_RGBA, GL_RGBA_INTEGER, GL_DEPTH_COMPONENT;
+				// results_b = GL_UNSIGNED_BYTE;
+				break;
+			}
+		case(noob::pixel_format::RG8):
+			{
+				results_a = GL_RG;
+				break;				
+			}
+		case(noob::pixel_format::RGB8):
+			{
+				results_a = GL_RGB;
+				break;				
+			}
+		case(noob::pixel_format::SRGB8):
+			{
+				results_a = GL_RGB;		
+				break;			
+			}
+		case(noob::pixel_format::RGBA8):
+			{
+				results_a = GL_RGBA;		
+				break;
+			}
+		case(noob::pixel_format::SRGBA8):
+			{
+				results_a = GL_RGBA;		
+				break;
+			}
+		case(noob::pixel_format::RGB8_COMPRESSED):
+			{
+				results_a = GL_COMPRESSED_RGB8_ETC2;		
+				break;
+			}
+		case(noob::pixel_format::SRGB8_COMPRESSED):
+			{
+				results_a = GL_COMPRESSED_SRGB8_ETC2;		
+				break;
+			}
+		case(noob::pixel_format::RGB8_A1_COMPRESSED):
+			{
+				results_a = GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2;		
+				break;
+			}
+		case(noob::pixel_format::SRGB8_A1_COMPRESSED):
+			{
+				results_a = GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2;		
+				break;
+			}
+		case(noob::pixel_format::RGBA8_COMPRESSED):
+			{
+				results_a = GL_COMPRESSED_RGBA8_ETC2_EAC;		
+				break;
+			}
+		case(noob::pixel_format::SRGBA8_COMPRESSED):
+			{		
+				results_a = GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC;
+				break;
+			}
+	}
+
+	return std::make_tuple(results_a, results_b);
+
+}
+
+
+bool is_compressed(noob::pixel_format Pixels)
+{
+	bool results;
+	// GL_RED, GL_RED_INTEGER, GL_RG, GL_RG_INTEGER, GL_RGB, GL_RGB_INTEGER, GL_RGBA, GL_RGBA_INTEGER, GL_DEPTH_COMPONENT, GL_DEPTH_STENCIL
+	// GL_UNSIGNED_BYTE, GL_BYTE, GL_UNSIGNED_SHORT, GL_SHORT, GL_UNSIGNED_INT, GL_INT, GL_HALF_FLOAT, GL_FLOAT
+	switch(Pixels)
+	{
+		case(noob::pixel_format::RGB8_COMPRESSED):
+			{
+				results = true;
+				break;
+			}
+		case(noob::pixel_format::SRGB8_COMPRESSED):
+			{
+				results = true;
+				break;
+			}
+		case(noob::pixel_format::RGB8_A1_COMPRESSED):
+			{
+				results = true;
+				break;
+			}
+		case(noob::pixel_format::SRGB8_A1_COMPRESSED):
+			{
+				results = true;
+				break;
+			}
+		case(noob::pixel_format::RGBA8_COMPRESSED):
+			{
+				results = true;
+				break;
+			}
+		case(noob::pixel_format::SRGBA8_COMPRESSED):
+			{		
+				results = true;
+				break;
+			}
+		default:
+			{
+				results = false;
+				break;
+			}
+	}
+
+	return results;
+}
+
+
+// rgb8a1 == same size
+uint32_t get_compressed_size_rgb8(uint32_t Width, uint32_t Height)
+{
+	return std::ceil(Width / 4) * std::ceil(Height / 4) * 8;
+}
+
+uint32_t get_compressed_size_rgba8(uint32_t Width, uint32_t Height)
+{
+	return std::ceil(Width / 4) * std::ceil(Height / 4) * 16;
+}
 
 GLuint load_shader_gl(GLenum type, const std::string& shader_arg)
 {
@@ -147,540 +359,14 @@ GLuint load_program_gl(const std::string& vert_shader_arg, const std::string fra
 	return program_object;
 }
 
-// TODO: Use sets to do better than this.
-noob::return_type<GLenum> get_internal_format(const noob::texture_info TexInfo)
-{
-	if (!TexInfo.compressed)
-	{
-		switch (TexInfo.channels)
-		{
-			case (noob::texture_channels::R):
-				{
-					switch (TexInfo.channel_scalars[0])
-					{
-						case(noob::scalar_type::UINT):
-							{
-								switch(TexInfo.channel_bits[0])
-								{
-									case(8):
-										{
-											return noob::return_type<GLenum>(true, GL_R8);
-										}
-									case(16):
-										{
-											return noob::return_type<GLenum>(true, GL_R16UI);
-										}
-									case(32):
-										{
-											return noob::return_type<GLenum>(true, GL_R32UI);
-										}
-									default:
-										{
-											return noob::return_type<GLenum>(false, 0);
-										}
-								};
-								break; // Likely unnecessary
-							}
-						case(noob::scalar_type::INT):
-							{
-								if (TexInfo.sign_normalized)
-								{
-									return noob::return_type<GLenum>(true, GL_R8_SNORM);
-								}
+// Per-channel:
+// GL_UNSIGNED_BYTE, GL_BYTE, GL_UNSIGNED_SHORT, GL_SHORT, GL_UNSIGNED_INT, GL_INT, GL_HALF_FLOAT, GL_FLOAT
+// Per-pixel:
+// GL_UNSIGNED_SHORT_5_6_5, GL_UNSIGNED_SHORT_4_4_4_4, GL_UNSIGNED_SHORT_5_5_5_1, GL_UNSIGNED_INT_2_10_10_10_REV, GL_UNSIGNED_INT_10F_11F_11F_REV, GL_UNSIGNED_INT_5_9_9_9_REV, GL_UNSIGNED_INT_24_8, and GL_FLOAT_32_UNSIGNED_INT_24_8_REV.
+// Per-pixel, compressed:
+// GL_COMPRESSED_RGB8_ETC2, GL_COMPRESSED_SRGB8_ETC2, GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2, GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2, GL_COMPRESSED_RGBA8_ETC2_EAC, GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC
 
-								switch(TexInfo.channel_bits[0])
-								{
-									case(8):
-										{
-											return noob::return_type<GLenum>(true, GL_R8I);
-										}
-									case(16):
-										{
-											return noob::return_type<GLenum>(true, GL_R16I);
-										}
-									case(32):
-										{
-											return noob::return_type<GLenum>(true, GL_R32I);
-										}
-									default:
-										{
-											return noob::return_type<GLenum>(false, 0);
-										}
-								};
-								break; // Likely unnecessary
-							}
 
-						case(noob::scalar_type::FLOAT):
-							{
-								switch(TexInfo.channel_bits[0])
-								{
-									case(16):
-										{
-											return noob::return_type<GLenum>(true, GL_R16F);
-										}
-									case(32):
-										{
-											return noob::return_type<GLenum>(true, GL_R32F);
-										}
-									default:
-										{
-											return noob::return_type<GLenum>(false, 0);
-										}
-								};
-								break; // Likely unnecessary
-							}
-						default:
-							{
-								return noob::return_type<GLenum>(false, 0);
-							}
-					};
-					break; // Likely unnecessary
-				} // End of R
-			case (noob::texture_channels::RG):
-				{
-					if (TexInfo.sign_normalized)
-					{
-						return noob::return_type<GLenum>(true, GL_RG8_SNORM);
-
-					}
-
-					switch (TexInfo.channel_scalars[0])
-					{
-						case(noob::scalar_type::UINT):
-							{
-								switch(TexInfo.channel_bits[0])
-								{
-									case(8):
-										{
-											return noob::return_type<GLenum>(true, GL_RG8);
-										}
-									case(16):
-										{
-											return noob::return_type<GLenum>(true, GL_RG16UI);
-										}
-									case(32):
-										{
-											return noob::return_type<GLenum>(true, GL_RG32UI);
-										}
-									default:
-										{
-											return noob::return_type<GLenum>(false, 0);
-										}
-								};
-								break; // Likely unnecessary
-							}
-						case(noob::scalar_type::INT):
-							{
-								if (TexInfo.sign_normalized)
-								{
-									return noob::return_type<GLenum>(true, GL_R8_SNORM);
-								}
-
-								switch(TexInfo.channel_bits[0])
-								{
-									case(8):
-										{
-											return noob::return_type<GLenum>(true, GL_RG8I);
-										}
-									case(16):
-										{
-											return noob::return_type<GLenum>(true, GL_RG16I);
-										}
-									case(32):
-										{
-											return noob::return_type<GLenum>(true, GL_RG32I);
-										}
-									default:
-										{
-											return noob::return_type<GLenum>(false, 0);
-										}
-								};
-								break; // Likely unnecessary
-							}
-
-						case(noob::scalar_type::FLOAT):
-							{
-								switch(TexInfo.channel_bits[0])
-								{
-									case(16):
-										{
-											return noob::return_type<GLenum>(true, GL_RG16F);
-										}
-									case(32):
-										{
-											return noob::return_type<GLenum>(true, GL_RG32F);
-										}
-									default:
-										{
-											return noob::return_type<GLenum>(false, 0);
-										}
-								};
-								break; // Likely unnecessary
-							}
-						default:
-							{
-								return noob::return_type<GLenum>(false, 0);
-							}
-					};
-					break;
-				} // End of RG
-			case (noob::texture_channels::RGB):
-				{
-					if (TexInfo.sign_normalized)
-					{
-						return noob::return_type<GLenum>(true, GL_RGB8_SNORM);
-
-					}
-					if (TexInfo.srgb)
-					{	
-						return noob::return_type<GLenum>(true, GL_SRGB8);
-					}
-
-					switch (TexInfo.channel_scalars[0])
-					{
-						case(noob::scalar_type::UINT):
-							{
-								switch(TexInfo.channel_bits[0])
-								{
-									case(5):
-										{
-											return noob::return_type<GLenum>(true, GL_RGB565);
-										}
-									case(8):
-										{
-											return noob::return_type<GLenum>(true, GL_RGB8);
-										}
-									case(9):
-										{
-											return noob::return_type<GLenum>(true, GL_RGB9_E5);
-										}
-									case(16):
-										{
-											return noob::return_type<GLenum>(true, GL_RGB16UI);
-										}
-									case(32):
-										{
-											return noob::return_type<GLenum>(true, GL_RGB32UI);
-										}
-									default:
-										{
-											return noob::return_type<GLenum>(false, 0);
-										}
-								};
-								break; // Likely unnecessary
-							}
-						case(noob::scalar_type::INT):
-							{
-								if (TexInfo.sign_normalized)
-								{
-									return noob::return_type<GLenum>(true, GL_R8_SNORM);
-								}
-
-								switch(TexInfo.channel_bits[0])
-								{
-									case(8):
-										{
-											return noob::return_type<GLenum>(true, GL_RGB8I);
-										}
-									case(16):
-										{
-											return noob::return_type<GLenum>(true, GL_RGB16I);
-										}
-									case(32):
-										{
-											return noob::return_type<GLenum>(true, GL_RGB32I);
-										}
-									default:
-										{
-											return noob::return_type<GLenum>(false, 0);
-										}
-								};
-								break; // Likely unnecessary
-							}
-						case(noob::scalar_type::FLOAT):
-							{
-								switch(TexInfo.channel_bits[0])
-								{
-									case(11):
-										{
-											return noob::return_type<GLenum>(true, GL_R11F_G11F_B10F);
-										}
-									case(16):
-										{
-											return noob::return_type<GLenum>(true, GL_RGB16F);
-										}
-									case(32):
-										{
-											return noob::return_type<GLenum>(true, GL_RGB32F);
-										}
-									default:
-										{
-											return noob::return_type<GLenum>(false, 0);
-										}
-								};
-								break; // Likely unnecessary
-							}
-						default:
-							{
-								return noob::return_type<GLenum>(false, 0);
-							}
-					};
-					break; // Likely unnecessary
-				} // End of RGB
-			case (noob::texture_channels::RGBA):
-				{
-					if (TexInfo.sign_normalized)
-					{
-						return noob::return_type<GLenum>(true, GL_RGBA8_SNORM);
-					}
-					if (TexInfo.srgb)
-					{
-						return noob::return_type<GLenum>(true, GL_SRGB8_ALPHA8);
-					}
-
-					switch (TexInfo.channel_scalars[0])
-					{
-						case(noob::scalar_type::UINT):
-							{
-								switch(TexInfo.channel_bits[0])
-								{
-									case(4):
-										{
-											return noob::return_type<GLenum>(true, GL_RGBA4);
-										}
-									case(5):
-										{
-											return noob::return_type<GLenum>(true, GL_RGB5_A1);
-										}
-									case(8):
-										{
-											return noob::return_type<GLenum>(true, GL_RGBA8);
-										}
-									case(10):
-										{
-											return noob::return_type<GLenum>(true, GL_RGB10_A2);
-										}
-									case(16):
-										{
-											return noob::return_type<GLenum>(true, GL_RGBA16UI);
-										}
-									case(32):
-										{
-											return noob::return_type<GLenum>(true, GL_RGBA32UI);
-										}
-									default:
-										{
-											return noob::return_type<GLenum>(false, 0);
-										}
-								};
-								break; // Likely unnecessary
-							}
-						case(noob::scalar_type::INT):
-							{
-								if (TexInfo.sign_normalized)
-								{
-									return noob::return_type<GLenum>(true, GL_R8_SNORM);
-								}
-
-								switch(TexInfo.channel_bits[0])
-								{
-									case(8):
-										{
-											return noob::return_type<GLenum>(true, GL_RGBA8I);
-										}
-									case(16):
-										{
-											return noob::return_type<GLenum>(true, GL_RGBA16I);
-										}
-									case(32):
-										{
-											return noob::return_type<GLenum>(true, GL_RGBA32I);
-										}
-									default:
-										{
-											return noob::return_type<GLenum>(false, 0);
-										}
-								};
-								break; // Likely unnecessary
-							}
-
-						case(noob::scalar_type::FLOAT):
-							{
-								switch(TexInfo.channel_bits[0])
-								{
-									case(16):
-										{
-											return noob::return_type<GLenum>(true, GL_RGBA16F);
-										}
-									case(32):
-										{
-											return noob::return_type<GLenum>(true, GL_RGBA32F);
-										}
-									default:
-										{
-											return noob::return_type<GLenum>(false, 0);
-										}
-								};
-								break; // Likely unnecessary
-							}
-						default:
-							{
-								return noob::return_type<GLenum>(false, 0);
-							}
-					};
-					break; // Likely unnecessary
-				} // End of RGBA
-			case (noob::texture_channels::DEPTH):
-				{
-					switch (TexInfo.channel_scalars[0])
-					{
-						case(noob::scalar_type::UINT):
-							{
-								switch(TexInfo.channel_bits[0])
-								{
-									case(16):
-										{
-											return noob::return_type<GLenum>(true, GL_DEPTH_COMPONENT16);
-										}
-									case(24):
-										{
-											return noob::return_type<GLenum>(true, GL_DEPTH_COMPONENT24);
-										}
-									default:
-										{
-											return noob::return_type<GLenum>(false, 0);
-										}
-								};
-								break; // Likely unnecessary
-							}
-
-						case(noob::scalar_type::FLOAT):
-							{
-								return noob::return_type<GLenum>(true, GL_DEPTH_COMPONENT32F);
-							}
-						default:
-							{
-								return noob::return_type<GLenum>(false, 0);
-							}
-					};
-					break;
-				} // End of DEPTH
-			case (noob::texture_channels::DEPTH_STENCIL):
-				{
-					switch (TexInfo.channel_scalars[0])
-					{
-						case(noob::scalar_type::UINT):
-							{
-								return noob::return_type<GLenum>(true, GL_DEPTH24_STENCIL8);
-							}
-						case(noob::scalar_type::FLOAT):
-							{
-								return noob::return_type<GLenum>(true, GL_DEPTH32F_STENCIL8);
-							}
-						default:
-							{
-								return noob::return_type<GLenum>(false, 0);
-							}
-					};
-					break;
-				} // End of DEPTH_STENCIL
-			default:
-				{
-					return noob::return_type<GLenum>(false, 0);
-				}
-		};
-	}
-	else // We are using compression
-	{
-		switch (TexInfo.channels)
-		{
-			case (noob::texture_channels::R):
-				{
-					switch (TexInfo.channel_scalars[0])
-					{
-						case(noob::scalar_type::UINT):
-							{
-								return noob::return_type<GLenum>(true, GL_COMPRESSED_R11_EAC);
-							}
-						case(noob::scalar_type::INT):
-							{
-								return noob::return_type<GLenum>(true, GL_COMPRESSED_SIGNED_R11_EAC);
-							}
-						default:
-							{
-								return noob::return_type<GLenum>(false, 0);
-							}
-					};
-					break;
-				} // End of R
-			case (noob::texture_channels::RG):
-				{
-					switch (TexInfo.channel_scalars[0])
-					{
-						case(noob::scalar_type::UINT):
-							{
-								return noob::return_type<GLenum>(true, GL_COMPRESSED_RG11_EAC);
-
-							}
-						case(noob::scalar_type::INT):
-							{
-								return noob::return_type<GLenum>(true, GL_COMPRESSED_SIGNED_RG11_EAC);
-							}
-						default:
-							{
-								return noob::return_type<GLenum>(false, 0);
-							}
-					};
-					break;
-				} // End of RG
-			case (noob::texture_channels::RGB):
-				{
-					if (TexInfo.srgb)
-					{	
-						return noob::return_type<GLenum>(true, GL_COMPRESSED_SRGB8_ETC2);
-					}
-					else
-					{
-						return noob::return_type<GLenum>(true, GL_COMPRESSED_RGB8_ETC2);
-					}
-					break;
-				} // End of RGB
-			case (noob::texture_channels::RGBA):
-				{
-					if (TexInfo.channel_bits[3] == 1)
-					{
-						if (TexInfo.srgb)
-						{
-							return noob::return_type<GLenum>(true, GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2);
-						}
-						else
-						{
-							return noob::return_type<GLenum>(true, GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2);
-						}
-					}
-					else
-					{
-						if (TexInfo.srgb)
-						{
-							return noob::return_type<GLenum>(true, GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC);
-						}
-						else
-						{
-							return noob::return_type<GLenum>(true, GL_COMPRESSED_RGBA8_ETC2_EAC);
-						}
-					}
-					break;			
-				} // End of RGBA
-			default:
-				{
-					return noob::return_type<GLenum>(false, 0);
-				}
-		};
-	}
-
-	// Just in case...
-	return noob::return_type<GLenum>(false, 0);
-}
 
 GLuint prep_texture()
 {

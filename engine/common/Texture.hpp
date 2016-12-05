@@ -24,29 +24,24 @@ namespace noob
 	// Pass an array of three of these
 	enum class tex_wrap_mode { CLAMP_TO_EDGE, MIRRORED_REPEAT, REPEAT };
 
-	enum class texture_channels
+	enum class pixel_format
 	{
-		R, RG, RGB, RGBA, DEPTH, DEPTH_STENCIL
+		R8, RG8, RGB8, SRGB8, RGBA8, SRGBA8, RGB8_COMPRESSED, SRGB8_COMPRESSED, RGB8_A1_COMPRESSED, SRGB8_A1_COMPRESSED, RGBA8_COMPRESSED, SRGBA8_COMPRESSED
 	};
 
 	// TODO: Move out into math classes.
-	enum class scalar_type
-	{
-		UINT, INT, FLOAT
-	};
-
-	// TODO: Move out into math classes.
+	// TODO: Test
 	static uint32_t next_pow2(uint32_t arg)
 	{
 		int64_t val = arg;
-		val--;
+		--val;
 		val |= val >> 1;
 		val |= val >> 2;
 		val |= val >> 4;
 		val |= val >> 8;
 		val |= val >> 16;
 		val |= val >> 32;
-		val++;
+		++val;
 		return static_cast<uint32_t>(val);
 	}
 
@@ -61,14 +56,17 @@ namespace noob
 		return std::floor(std::log2(std::max(std::max(Width, Height), Depth))) + 1;
 	}
 
-
+// Per-channel:
+// GL_UNSIGNED_BYTE, GL_BYTE, GL_UNSIGNED_SHORT, GL_SHORT, GL_UNSIGNED_INT, GL_INT, GL_HALF_FLOAT, GL_FLOAT
+// Per-pixel:
+// GL_UNSIGNED_SHORT_5_6_5, GL_UNSIGNED_SHORT_4_4_4_4, GL_UNSIGNED_SHORT_5_5_5_1, GL_UNSIGNED_INT_2_10_10_10_REV, GL_UNSIGNED_INT_10F_11F_11F_REV, GL_UNSIGNED_INT_5_9_9_9_REV, GL_UNSIGNED_INT_24_8, and GL_FLOAT_32_UNSIGNED_INT_24_8_REV.
+// Per-pixel, compressed:
+// GL_COMPRESSED_RGB8_ETC2, GL_COMPRESSED_SRGB8_ETC2, GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2, GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2, GL_COMPRESSED_RGBA8_ETC2_EAC, GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC
 
 	struct texture_info
 	{
-		noob::texture_channels channels;
-		bool compressed, mips, srgb, sign_normalized;
-		std::array<noob::scalar_type, 4> channel_scalars;		
-		std::array<uint8_t, 4> channel_bits;		
+		bool mips; //, sign_normalized; // TODO: Later(?)
+		noob::pixel_format pixels;
 	};
 
 	class graphics;

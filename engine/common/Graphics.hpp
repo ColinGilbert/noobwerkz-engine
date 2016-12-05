@@ -43,13 +43,17 @@ namespace noob
 			noob::texture_3d_handle reserve_texture_3d(uint32_t Width, uint32_t Height, uint32_t Depth, const noob::texture_info) noexcept(true);
 			// TODO: Soon.
 			// noob::texture_handle reserve_texture_cube(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true);
+			
+			void bind_texture(noob::texture_2d_handle) const noexcept(true);
+			void bind_texture(noob::texture_array_2d_handle) const noexcept(true);
+			void bind_texture(noob::texture_3d_handle) const noexcept(true);
 
 			// Texture data uploaders
 			// TODO: Implement (not GLES3-native) it seems. See above block as well
 			// void texture_data(noob::texture_1d_handle, const std::string&) const noexcept(true);	
-			void texture_data(noob::texture_2d_handle, uint32_t Mip, const std::string&) const noexcept(true);
-			void texture_data(noob::texture_array_2d_handle, uint32_t Index, uint32_t Mip, const std::string&) const noexcept(true);
-			void texture_data(noob::texture_3d_handle, uint32_t Mip, const std::string&) const noexcept(true);
+			void texture_data(noob::texture_2d_handle, uint32_t Mip, const std::array<uint32_t, 2> Offset, const std::array<uint32_t, 2> Dims, const std::string& Data) const noexcept(true);
+			void texture_data(noob::texture_array_2d_handle, uint32_t Mip, uint32_t Index, const std::array<uint32_t, 2> Offset, const std::array<uint32_t, 2> Dims, const std::string& Data) const noexcept(true);
+			void texture_data(noob::texture_3d_handle, uint32_t Mip, const std::array<uint32_t, 3> Offset, const std::array<uint32_t, 3> Dims, const std::string& Data) const noexcept(true);
 
 			// Texture parameter setters, made typesafe. :)
 			void texture_base_level(uint32_t Mip = 0) const noexcept(true);

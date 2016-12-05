@@ -240,121 +240,148 @@ void noob::graphics::reset_instances(noob::model_handle Handle, uint32_t NumInst
 	glBindVertexArray(0);
 }
 
+
 noob::texture_2d_handle noob::graphics::reserve_texture_2d(uint32_t Width, uint32_t Height, const noob::texture_info TexInfo) noexcept(true)
 {
-	const noob::return_type<GLenum> fmt = get_internal_format(TexInfo);
+	const GLenum fmt = get_gl_storage_format(TexInfo.pixels);
 
-	if (fmt.valid)
+	const GLuint texture_id = prep_texture();
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+
+	uint32_t mips = 1;
+	if (TexInfo.mips)
 	{
-		const GLuint texture_id = prep_texture();
-		glBindTexture(GL_TEXTURE_2D, texture_id);
-
-		uint32_t mips = 1;
-		if (TexInfo.mips)
-		{
-			mips = noob::get_num_mips(Width, Height);
-		}
-
-		glTexStorage2D(GL_TEXTURE_2D, mips, fmt.value, Width, Height);
-
-		check_error_gl();
-
-		noob::texture_2d t(texture_id, TexInfo, Width, Height);
-
-		textures_2d.push_back(t);
-
-		return noob::texture_2d_handle::make(textures_2d.size() - 1);
+		mips = noob::get_num_mips(Width, Height);
 	}
 
-	// If we haven't returned our texture by now, we can assume the format test failed. Boo.
-	return noob::texture_2d_handle::make_invalid();
+	glTexStorage2D(GL_TEXTURE_2D, mips, fmt, Width, Height);
+
+	check_error_gl();
+
+	noob::texture_2d t(texture_id, TexInfo, Width, Height);
+
+	textures_2d.push_back(t);
+
+	return noob::texture_2d_handle::make(textures_2d.size() - 1);
 }
 
 
 noob::texture_array_2d_handle noob::graphics::reserve_texture_array_2d(uint32_t Width, uint32_t Height, uint32_t Indices, const noob::texture_info TexInfo) noexcept(true)
 {
-	const noob::return_type<GLenum> fmt = get_internal_format(TexInfo);
+	const GLenum fmt = get_gl_storage_format(TexInfo.pixels);
 
-	if (fmt.valid)
+	const GLuint texture_id = prep_texture();
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+
+	uint32_t mips = 1;
+	if (TexInfo.mips)
 	{
-		const GLuint texture_id = prep_texture();
-		glBindTexture(GL_TEXTURE_2D, texture_id);
-
-		uint32_t mips = 1;
-		if (TexInfo.mips)
-		{
-			mips = noob::get_num_mips(Width, Height);
-		}
-
-		glTexStorage3D(GL_TEXTURE_2D_ARRAY, mips, fmt.value, Width, Height, Indices);
-
-		check_error_gl();
-
-		noob::texture_array_2d t(texture_id, TexInfo, Width, Height, Indices);
-
-		texture_arrays_2d.push_back(t);
-
-		return noob::texture_array_2d_handle::make(texture_arrays_2d.size() - 1);
+		mips = noob::get_num_mips(Width, Height);
 	}
 
-	return noob::texture_array_2d_handle::make_invalid();
+	glTexStorage3D(GL_TEXTURE_2D_ARRAY, mips, fmt, Width, Height, Indices);
+
+	check_error_gl();
+
+	noob::texture_array_2d t(texture_id, TexInfo, Width, Height, Indices);
+
+	texture_arrays_2d.push_back(t);
+
+	return noob::texture_array_2d_handle::make(texture_arrays_2d.size() - 1);
 }
 
 
 noob::texture_3d_handle noob::graphics::reserve_texture_3d(uint32_t Width, uint32_t Height, uint32_t Depth, const noob::texture_info TexInfo) noexcept(true)
 {
-	const noob::return_type<GLenum> fmt = get_internal_format(TexInfo);
+	const GLenum fmt = get_gl_storage_format(TexInfo.pixels);
 
-	if (fmt.valid)
+	const GLuint texture_id = prep_texture();
+
+	uint32_t mips = 1;
+	if (TexInfo.mips)
 	{
-		const GLuint texture_id = prep_texture();
-		glBindTexture(GL_TEXTURE_2D, texture_id);
-
-		uint32_t mips = 1;
-		if (TexInfo.mips)
-		{
-			mips = noob::get_num_mips(Width, Height, Depth);
-		}
-
-		// TODO: Add check for devices that don't support compressed 3D texture storage. For now, we'll find out the exciting way.
-
-		glTexStorage3D(GL_TEXTURE_3D, mips, fmt.value, Width, Height, Depth);
-
-		check_error_gl();
-
-		noob::texture_3d t(texture_id, TexInfo, Width, Height, Depth);
-
-		textures_3d.push_back(t);
-
-		return noob::texture_3d_handle::make(textures_3d.size() - 1);
+		mips = noob::get_num_mips(Width, Height, Depth);
 	}
 
-	return noob::texture_3d_handle::make_invalid();
-}
+	// TODO: Add check for devices that don't support compressed 3D texture storage. For now, we'll find out the exciting way.
 
-
-
-void noob::graphics::texture_data(noob::texture_2d_handle Handle, uint32_t Mip, const std::string& Data) const noexcept(true)
-{
+	glTexStorage3D(GL_TEXTURE_3D, mips, fmt, Width, Height, Depth);
 
 	check_error_gl();
 
+	noob::texture_3d t(texture_id, TexInfo, Width, Height, Depth);
+
+	textures_3d.push_back(t);
+
+	return noob::texture_3d_handle::make(textures_3d.size() - 1);
 }
 
 
-void noob::graphics::texture_data(noob::texture_array_2d_handle Handle, uint32_t Index, uint32_t Mip, const std::string& Data) const noexcept(true)
+void noob::graphics::bind_texture(noob::texture_2d_handle Handle) const noexcept(true)
 {
-
+	glBindTexture(GL_TEXTURE_2D, textures_2d[Handle.index()].driver_handle);
 	check_error_gl();
-
 }
 
 
-void noob::graphics::texture_data(noob::texture_3d_handle Handle, uint32_t Mip, const std::string& Data) const noexcept(true)
+void noob::graphics::bind_texture(noob::texture_array_2d_handle Handle) const noexcept(true)
+{
+	glBindTexture(GL_TEXTURE_2D_ARRAY, texture_arrays_2d[Handle.index()].driver_handle);
+	check_error_gl();
+}
+
+
+void noob::graphics::bind_texture(noob::texture_3d_handle Handle) const noexcept(true)
+{
+	glBindTexture(GL_TEXTURE_3D, textures_3d[Handle.index()].driver_handle);
+	check_error_gl();
+}
+
+
+void noob::graphics::texture_data(noob::texture_2d_handle Handle, uint32_t Mip, const std::array<uint32_t, 2> Offset, const std::array<uint32_t, 2> Dims, const std::string& Data) const noexcept(true)
+{
+	if (Handle.index() < textures_2d.size())
+	{
+		const noob::texture_2d tex = textures_2d[Handle.index()];
+
+		if (Mip < tex.info.mips)
+		{
+			if (is_compressed(tex.info.pixels))
+			{
+				const GLenum fmt = get_gl_storage_format(tex.info.pixels);
+				uint32_t data_size;
+				if (tex.info.pixels == noob::pixel_format::RGBA8_COMPRESSED || tex.info.pixels == noob::pixel_format::SRGBA8_COMPRESSED)
+				{
+					data_size = get_compressed_size_rgba8(tex.width, tex.height);
+				}
+				else
+				{
+					data_size = get_compressed_size_rgb8(tex.width, tex.height);
+				}
+				glCompressedTexSubImage2D(GL_TEXTURE_2D, Mip, Offset[0], Offset[1], Dims[0], Dims[1], fmt, data_size, reinterpret_cast<const GLvoid*>(&Data[0]));	
+			}
+			else
+			{
+				const std::tuple<GLenum, GLenum> fmt = deduce_pixel_format_and_type(tex.info.pixels);
+				glTexSubImage2D(GL_TEXTURE_2D, Mip, Offset[0], Offset[1], Dims[0], Dims[1], std::get<0>(fmt), std::get<1>(fmt), reinterpret_cast<const GLvoid*>(&Data[0]));	
+			}
+			check_error_gl();
+		}
+	}
+}
+
+
+void noob::graphics::texture_data(noob::texture_array_2d_handle Handle, uint32_t Mip, uint32_t Index, const std::array<uint32_t, 2> Offset, const std::array<uint32_t, 2> Dims, const std::string& Data) const noexcept(true)
 {
 
 	check_error_gl();
+}
 
+
+void noob::graphics::texture_data(noob::texture_3d_handle Handle, uint32_t Mip, const std::array<uint32_t, 3> Offset, const std::array<uint32_t, 3> Dims, const std::string& Data) const noexcept(true)
+{
+
+	check_error_gl();
 }
 
 
@@ -363,7 +390,6 @@ void noob::graphics::texture_base_level(uint32_t Mip) const noexcept(true)
 {
 
 	check_error_gl();
-
 }
 
 
@@ -371,7 +397,6 @@ void noob::graphics::texture_compare_mode(noob::tex_compare_mode CompareMode) co
 {
 
 	check_error_gl();
-
 }
 
 
@@ -379,42 +404,36 @@ void noob::graphics::texture_compare_func(noob::tex_compare_func CompareFunc) co
 {
 
 	check_error_gl();
-
 }
 
 
 void noob::graphics::texture_min_filter(noob::tex_min_filter MinFilter) const noexcept(true)
 {
 	check_error_gl();
-
 }
 
 
 void noob::graphics::texture_min_lod(int32_t MinLod) const noexcept(true)
 {
 	check_error_gl();
-
 }
 
 
 void noob::graphics::texture_max_lod(int32_t MaxLod) const noexcept(true)
 {
 	check_error_gl();
-
 }
 
 
 void noob::graphics::texture_swizzle(const std::array<noob::tex_swizzle, 4> Swizzles) const noexcept(true)
 {
 	check_error_gl();
-
 }
 
 
 void noob::graphics::texture_wrap_mode(const std::array<noob::tex_wrap_mode, 3> WrapModes) const noexcept(true)
 {
 	check_error_gl();
-
 }
 
 
@@ -422,7 +441,6 @@ void noob::graphics::texture_pack_alignment(uint32_t) const noexcept(true)
 {
 	// GL_PACK_ALIGNMENT 	integer 	4 	1, 2, 4, or 8
 	check_error_gl();
-
 }
 
 
