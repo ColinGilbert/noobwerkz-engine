@@ -1,4 +1,3 @@
-
 #include "MeshUtils.hpp"
 
 #include <algorithm>

@@ -16,9 +16,9 @@
 #include <rdestl/sort.h>
 #include <rdestl/hash_map.h>
 #include <noob/fast_hashtable/fast_hashtable.hpp>
+#include <noob/math/math_funcs.hpp>
 
 #include "Clock.hpp"
-#include "MathFuncs.hpp"
 #include "Graphics.hpp"
 #include "MeshUtils.hpp"
 #include "Shape.hpp"

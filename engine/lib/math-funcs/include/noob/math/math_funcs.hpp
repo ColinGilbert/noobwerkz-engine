@@ -17,14 +17,14 @@
 #define NOOB_TWO_PI (2.0 * NOOB_PI)
 #define NOOB_EPSILON 0.0001
 
-#include "Vec2.hpp"
-#include "Vec3.hpp"
-#include "Vec3.hpp"
-#include "Vec4.hpp"
-#include "Versor.hpp"
-#include "Mat3.hpp"
-#include "Mat4.hpp"
-#include "Plane.hpp"
+#include "vec2.hpp"
+#include "vec3.hpp"
+#include "vec3.hpp"
+#include "vec4.hpp"
+#include "versor.hpp"
+#include "mat3.hpp"
+#include "mat4.hpp"
+#include "plane.hpp"
 
 namespace noob
 {

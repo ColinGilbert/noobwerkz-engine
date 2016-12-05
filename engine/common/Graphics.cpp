@@ -386,7 +386,6 @@ void noob::graphics::texture_data(noob::texture_3d_handle Handle, uint32_t Mip, 
 
 // GL_TEXTURE_BASE_LEVEL, GL_TEXTURE_COMPARE_FUNC, GL_TEXTURE_COMPARE_MODE, GL_TEXTURE_MIN_FILTER, GL_TEXTURE_MAG_FILTER, GL_TEXTURE_MIN_LOD, GL_TEXTURE_MAX_LOD, GL_TEXTURE_MAX_LEVEL, GL_TEXTURE_SWIZZLE_R, GL_TEXTURE_SWIZZLE_G, GL_TEXTURE_SWIZZLE_B, GL_TEXTURE_SWIZZLE_A, GL_TEXTURE_WRAP_S, GL_TEXTURE_WRAP_T, GL_TEXTURE_WRAP_R
 
-// Texture parameter setters, made typesafe. :)
 void noob::graphics::texture_base_level(noob::texture_2d_handle, uint32_t Mip) const noexcept(true)
 {
 
@@ -607,6 +606,8 @@ void noob::graphics::frame(uint32_t Width, uint32_t Height) const noexcept(true)
 	glClearColor(0.2f, 0.0f, 0.2f, 0.0f);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	check_error_gl();
 }
 
 

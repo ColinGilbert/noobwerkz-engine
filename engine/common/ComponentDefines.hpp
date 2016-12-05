@@ -1,8 +1,8 @@
 #pragma once
 
 #include <noob/component/component.hpp>
+#include <noob/math/math_funcs.hpp>
 
-#include "MathFuncs.hpp"
 #include "Body.hpp"
 #include "Ghost.hpp"
 #include "Shape.hpp"

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Eigen/Geometry>
-#include "Vec3.hpp"
+#include "vec3.hpp"
 
 namespace noob
 {

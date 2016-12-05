@@ -44,7 +44,7 @@ include_directories(lib/glm)
 include_directories(lib/eigen)
 include_directories(lib/sdf)
 include_directories(lib/stb)
-include_directories(lib/math-funcs)
+include_directories(lib/math-funcs/include)
 include_directories(common)
 
 list(APPEND common_src

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <noob/component/component.hpp>
+#include <noob/math/math_funcs.hpp>
 
 #include "Shape.hpp"
 #include "Body.hpp"
@@ -9,7 +10,6 @@
 #include "Joint.hpp"
 #include "ContactPoint.hpp"
 #include "Globals.hpp"
-#include "MathFuncs.hpp"
 #include "ComponentDefines.hpp"
 
 namespace noob

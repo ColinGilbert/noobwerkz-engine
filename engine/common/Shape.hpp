@@ -6,13 +6,15 @@
 #include <vector>
 #include <memory>
 
+#include <noob/math/math_funcs.hpp>
+
 #include <rdestl/fixed_array.h>
+
 #include <btBulletDynamicsCommon.h>
 
 #include "NoobUtils.hpp"
 #include "BasicMesh.hpp"
 #include "MeshUtils.hpp"
-#include "MathFuncs.hpp"
 
 
 namespace noob

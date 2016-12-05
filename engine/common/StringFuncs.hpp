@@ -1,7 +1,7 @@
 #pragma once
 
 #include <noob/strings/strings.hpp>
-#include "MathFuncs.hpp"
+#include <noob/math/math_funcs.hpp>
 
 namespace noob
 {

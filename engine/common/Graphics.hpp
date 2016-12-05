@@ -4,8 +4,8 @@
 
 #include <noob/component/component.hpp>
 #include <noob/singleton/singleton.hpp>
+#include <noob/math/math_funcs.hpp>
 
-#include "MathFuncs.hpp"
 #include "BasicMesh.hpp"
 #include "Model.hpp"
 #include "GpuBuffer.hpp"

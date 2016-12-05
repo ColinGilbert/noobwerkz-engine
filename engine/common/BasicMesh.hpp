@@ -2,6 +2,7 @@
 #pragma once
 
 #include <rdestl/vector.h>
+#include <noob/math/math_funcs.hpp>
 
 #if defined(NOOB_USE_ASSIMP)
 #include <assimp/quaternion.h>
@@ -12,7 +13,6 @@
 #include <assimp/types.h>
 #endif
 
-#include "MathFuncs.hpp"
 
 
 // TODO: Make a bit more foolproof: IE: Functions to ensure all values get filled or something.

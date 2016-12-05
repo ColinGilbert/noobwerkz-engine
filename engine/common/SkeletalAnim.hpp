@@ -5,6 +5,8 @@
 #include <unordered_map>
 #include <math.h>
 
+#include <noob/math/math_funcs.hpp>
+
 #include <ozz/animation/offline/raw_skeleton.h>
 #include <ozz/animation/offline/raw_animation.h>
 #include <ozz/animation/runtime/skeleton.h>
@@ -21,7 +23,6 @@
 #include <ozz/animation/offline/animation_optimizer.h>
 #include <ozz/base/memory/allocator.h>
 
-#include "MathFuncs.hpp"
 #include "Graphics.hpp"
 
 

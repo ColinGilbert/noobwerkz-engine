@@ -2,7 +2,7 @@
 
 #include <array>
 
-#include "Vec3.hpp"
+#include "vec3.hpp"
 
 namespace noob
 {

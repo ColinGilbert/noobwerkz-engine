@@ -8,9 +8,9 @@
 #include <noob/fast_hashtable/fast_hashtable.hpp>
 #include <noob/graph/graph.hpp>
 #include <noob/component/component.hpp>
+#include <noob/math/math_funcs.hpp>
 
 #include "Graphics.hpp"
-#include "MathFuncs.hpp"
 #include "SkeletalAnim.hpp"
 #include "Physics.hpp"
 #include "Body.hpp"

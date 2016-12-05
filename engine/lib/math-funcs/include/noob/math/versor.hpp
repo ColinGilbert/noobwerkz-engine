@@ -2,7 +2,7 @@
 
 #include <array>
 
-#include "Vec4.hpp"
+#include "vec4.hpp"
 
 namespace noob
 {

@@ -1,7 +1,8 @@
 #pragma once
 
+#include <noob/math/math_funcs.hpp>
+
 #include "BasicMesh.hpp"
-#include "MathFuncs.hpp"
 
 
 namespace noob

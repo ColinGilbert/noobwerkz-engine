@@ -1,8 +1,9 @@
 #pragma once
 
+#include <noob/math/math_funcs.hpp>
+
 #include <btBulletDynamicsCommon.h>
 
-#include "MathFuncs.hpp"
 #include "Shape.hpp"
 
 

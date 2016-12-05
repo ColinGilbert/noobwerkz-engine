@@ -6,9 +6,9 @@
 #pragma once
 
 #include <rdestl/fixed_array.h>
+#include <noob/math/math_funcs.hpp>
 
 #include "ComponentDefines.hpp"
-#include "MathFuncs.hpp"
 #include "Timing.hpp"
 //#include "RandomGenerator.hpp"
 

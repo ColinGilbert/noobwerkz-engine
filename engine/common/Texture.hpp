@@ -3,11 +3,11 @@
 
 #pragma once
 
+#include <math.h>
+
 #include <noob/component/component.hpp>
 
 #include "Attrib.hpp"
-
-#include <math.h>
 
 namespace noob
 {

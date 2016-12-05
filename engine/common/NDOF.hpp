@@ -1,6 +1,7 @@
 #pragma once
 
-#include "MathFuncs.hpp"
+#include <noob/math/math_funcs.hpp>
+
 #include "NoobUtils.hpp"
 
 namespace noob

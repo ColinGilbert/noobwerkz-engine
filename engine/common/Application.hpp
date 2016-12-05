@@ -1,10 +1,10 @@
 #pragma once
 
 #include <noob/logger/logger.hpp>
+#include <noob/math/math_funcs.hpp>
 
 #include "Globals.hpp"
 #include "NoobUtils.hpp"
-#include "MathFuncs.hpp"
 #include "GUI.hpp"
 #include "BasicMesh.hpp"
 #include "Camera.hpp"

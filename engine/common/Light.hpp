@@ -1,6 +1,7 @@
 #pragma once
 
-#include "MathFuncs.hpp"
+
+#include <noob/math/math_funcs.hpp>
 
 // Note: Wanted to seal off the internals of noob::light but couldn't due to causing stupid recursive headers with the rest of the source (most notably the renderer classes.)
 

@@ -2,7 +2,7 @@
 
 #include <random>
 
-#include "MathFuncs.hpp"
+#include <noob/math/math_funcs.hpp>
 
 namespace noob
 {
