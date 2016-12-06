@@ -14,48 +14,64 @@ void log_texload(uint32_t Width, uint32_t Height, uint32_t Channels)
 	noob::logger::log(noob::importance::INFO, noob::concat("[Loading texture from memory] Got texture data! Width = ", noob::to_string(Width), ", height = ", noob::to_string(Height), ", channels = ", noob::to_string(Channels)));
 }
 
-noob::loaded_texture_data_2d noob::load_texture_mem(const std::string& Data) noexcept(true)
+noob::texture_loader_2d::~texture_loader_2d() noexcept(true)
 {
-	int width, height, channels;
-	unsigned char* buffer = stbi_load_from_memory(reinterpret_cast<const unsigned char*>(Data.c_str()), Data.size(), &width, &height, &channels, 0);
-	// rgb is now three bytes per pixel, width*height size. Or NULL if load failed. Do something with it...
+	if(valid)
+	{
+		stbi_image_free(buffer);
+	}
+}
+
+void noob::texture_loader_2d::from_mem(const std::string& Data, bool Compressed) noexcept(true)
+{
+	int height, width, chans;
+	height = width = chans = 0;
+	compressed = Compressed;
+	buffer = stbi_load_from_memory(reinterpret_cast<const unsigned char*>(Data.c_str()), Data.size(), &height, &width, &chans, 0);
+	dims[0] = static_cast<uint32_t>(width);
+	dims[1] = static_cast<uint32_t>(height);
+	channels = static_cast<uint32_t>(chans);
 	if (buffer != nullptr)
 	{
-		if (channels > 0 && width > 0 && height > 0)
+		valid = true;
+		if (dims[0] > 0 && dims[1] > 0 && channels > 0)
 		{
 			switch (channels)
 			{
 				case (1):
 					{
-						log_texload(width, height, channels);
-						return noob::loaded_texture_data_2d(true, false, width, height, noob::pixel_format::R8);
+						pixels = noob::pixel_format::R8;
+						log_texload(dims[0], dims[1], channels);
 					}
 				case (2):
 					{
-						log_texload(width, height, channels);
-						return noob::loaded_texture_data_2d(true, false, width, height, noob::pixel_format::RG8);
+						pixels = noob::pixel_format::RG8;
+						log_texload(dims[0], dims[1], channels);
 					}
 
 				case (3):
 					{
-						log_texload(width, height, channels);
-						return noob::loaded_texture_data_2d(true, false, width, height, noob::pixel_format::RGB8);
+						pixels = noob::pixel_format::RGB8;
+						log_texload(dims[0], dims[1], channels);
 					}
 
 				case (4):
 					{
-						log_texload(width, height, channels);
-						return noob::loaded_texture_data_2d(true, false, width, height, noob::pixel_format::RGBA8);
+						pixels = noob::pixel_format::RGBA8;
+						log_texload(dims[0], dims[1], channels);
 					}
 				default:
 					{
+						pixels = noob::pixel_format::INVALID;
 						break;
 					}
 			};
 
 		}
-		noob::logger::log(noob::importance::WARNING, noob::concat("[Loading texture from memory] Could not successfully load texture due to format issues. Width = ", noob::to_string(width), ", height = ", noob::to_string(height), ", channels = ", noob::to_string(channels)));
-		stbi_image_free(buffer);
+		else
+		{
+			noob::logger::log(noob::importance::WARNING, noob::concat("[Loading texture from memory] Could not successfully load texture due to format issues. Width = ", noob::to_string(dims[0]), ", height = ", noob::to_string(dims[1]), ", channels = ", noob::to_string(channels)));
+		}
 	}
 	else // if buffer == nullptr
 	{
@@ -64,5 +80,6 @@ noob::loaded_texture_data_2d noob::load_texture_mem(const std::string& Data) noe
 	}
 
 	// Base case.
-	return noob::loaded_texture_data_2d(false, false, 0, 0, noob::pixel_format::INVALID);
+	valid = false;
 }
+

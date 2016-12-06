@@ -26,7 +26,7 @@ namespace noob
 			typedef noob::handle<noob::linked_shader> program_handle;
 
 			// Call before using.
-			void init(uint32_t Width, uint32_t Height) noexcept(true);
+			void init(const std::array<uint32_t, 2> Dims) noexcept(true);
 			// Call before killing.
 			void destroy() noexcept(true);
 
@@ -40,9 +40,9 @@ namespace noob
 
 			// Texture storage reservers
 			// noob::texture_1d_handle reserve_texture_1d(uint32_t length, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true);
-			noob::texture_2d_handle reserve_texture_2d(uint32_t Width, uint32_t Height, const noob::texture_info) noexcept(true);
-			noob::texture_array_2d_handle reserve_texture_array_2d(uint32_t Width, uint32_t Height, uint32_t Indices, const noob::texture_info) noexcept(true);
-			noob::texture_3d_handle reserve_texture_3d(uint32_t Width, uint32_t Height, uint32_t Depth, const noob::texture_info) noexcept(true);
+			noob::texture_2d_handle reserve_texture_2d(const std::array<uint32_t, 2> Dims, const noob::texture_info) noexcept(true);
+			noob::texture_array_2d_handle reserve_texture_array_2d(const std::array<uint32_t, 2> Dims, uint32_t Indices, const noob::texture_info) noexcept(true);
+			noob::texture_3d_handle reserve_texture_3d(const std::array<uint32_t, 3> Dims, const noob::texture_info) noexcept(true);
 			// TODO: Soon.
 			// noob::texture_handle reserve_texture_cube(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true);
 			
@@ -52,9 +52,9 @@ namespace noob
 
 			// Texture data uploaders
 			// void texture_data(noob::texture_1d_handle, const std::string&) const noexcept(true);	
-			void texture_data(noob::texture_2d_handle, uint32_t Mip, const std::array<uint32_t, 2> Offset, const std::array<uint32_t, 2> Dims, const std::string& Data) const noexcept(true);
-			void texture_data(noob::texture_array_2d_handle, uint32_t Mip, uint32_t Index, const std::array<uint32_t, 2> Offset, const std::array<uint32_t, 2> Dims, const std::string& Data) const noexcept(true);
-			void texture_data(noob::texture_3d_handle, uint32_t Mip, const std::array<uint32_t, 3> Offset, const std::array<uint32_t, 3> Dims, const std::string& Data) const noexcept(true);
+			void texture_data(noob::texture_2d_handle, uint32_t Mip, const std::array<uint32_t, 2> Offsets, const std::array<uint32_t, 2> Dims, const std::string& Data) const noexcept(true);
+			void texture_data(noob::texture_array_2d_handle, uint32_t Mip, uint32_t Index, const std::array<uint32_t, 2> Offsets, const std::array<uint32_t, 2> Dims, const std::string& Data) const noexcept(true);
+			void texture_data(noob::texture_3d_handle, uint32_t Mip, const std::array<uint32_t, 3> Offsets, const std::array<uint32_t, 3> Dims, const std::string& Data) const noexcept(true);
 
 			// Texture parameter setters, made typesafe, at the cost of more overloads. Ah well, tradeoffs...
 			// Params for 2d textures
@@ -92,10 +92,15 @@ namespace noob
 			void texture_pack_alignment(uint32_t) const noexcept(true);
 			void texture_unpack_alignment(uint32_t) const noexcept(true);
 
+			// Note: These have no effect on corpressed textures, which have to be mipped offline as a preprocessing step.
+			void generate_mips(noob::texture_2d_handle) const noexcept(true);
+			void generate_mips(noob::texture_array_2d_handle) const noexcept(true);
+			void generate_mips(noob::texture_3d_handle) const noexcept(true);
+
 			// Call this to draw a given model.
 			void draw(const noob::model_handle, uint32_t NumInstances) const noexcept(true);
 			// Call this every frame...
-			void frame(uint32_t width, uint32_t height) const noexcept(true);
+			void frame(const std::array<uint32_t, 2>) const noexcept(true);
 
 			// These are VBO buffer mapping/unmapping methods
 			noob::gpu_write_buffer map_buffer(noob::model_handle, noob::model::instanced_data_type, uint32_t min, uint32_t max) const noexcept(true);

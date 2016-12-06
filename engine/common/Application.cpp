@@ -9,7 +9,7 @@ void noob::application::init(uint32_t width, uint32_t height, const std::string&
 	window_height = height;
 
 	noob::graphics& gfx = noob::get_graphics();
-	gfx.init(width, height);
+	gfx.init(std::array<uint32_t, 2>({width, height}));
 
 	started = paused = input_has_started = false;
 
@@ -52,7 +52,7 @@ void noob::application::draw()
 	const noob::time start_time = noob::clock::now();
 
 	noob::graphics& gfx = noob::get_graphics();
-	gfx.frame(window_width, window_height);
+	gfx.frame(std::array<uint32_t, 2>({window_width, window_height}));
 
 	stage.draw();
 

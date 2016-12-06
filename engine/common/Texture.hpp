@@ -50,22 +50,15 @@ namespace noob
 	}
 
 	// TODO: Move out into math classes.
-	static uint32_t get_num_mips(uint32_t Width, uint32_t Height)
+	static uint32_t get_num_mips(const std::array<uint32_t, 2> Dims)
 	{
-		return static_cast<uint32_t>(floor(log2(static_cast<double>(std::max(Width, Height))))) + 1;
+		return static_cast<uint32_t>(floor(log2(static_cast<double>(std::max(Dims[0], Dims[1]))))) + 1;
 	}
 
-	static uint32_t get_num_mips(uint32_t Width, uint32_t Height, uint32_t Depth)
+	static uint32_t get_num_mips(const std::array<uint32_t, 3> Dims)
 	{
-		return static_cast<uint32_t>(floor(log2(static_cast<double>(std::max(std::max(Width, Height), Depth))))) + 1;
+		return static_cast<uint32_t>(floor(log2(static_cast<double>(std::max(std::max(Dims[0], Dims[1]), Dims[2]))))) + 1;
 	}
-
-// Per-channel:
-// GL_UNSIGNED_BYTE, GL_BYTE, GL_UNSIGNED_SHORT, GL_SHORT, GL_UNSIGNED_INT, GL_INT, GL_HALF_FLOAT, GL_FLOAT
-// Per-pixel:
-// GL_UNSIGNED_SHORT_5_6_5, GL_UNSIGNED_SHORT_4_4_4_4, GL_UNSIGNED_SHORT_5_5_5_1, GL_UNSIGNED_INT_2_10_10_10_REV, GL_UNSIGNED_INT_10F_11F_11F_REV, GL_UNSIGNED_INT_5_9_9_9_REV, GL_UNSIGNED_INT_24_8, and GL_FLOAT_32_UNSIGNED_INT_24_8_REV.
-// Per-pixel, compressed:
-// GL_COMPRESSED_RGB8_ETC2, GL_COMPRESSED_SRGB8_ETC2, GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2, GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2, GL_COMPRESSED_RGBA8_ETC2_EAC, GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC
 
 	struct texture_info
 	{
@@ -73,6 +66,7 @@ namespace noob
 		noob::pixel_format pixels;
 	};
 
+	// Forward-declare
 	class graphics;
 
 	struct texture_1d
@@ -90,6 +84,7 @@ namespace noob
 
 	typedef noob::handle<noob::texture_1d> texture_1d_handle;
 
+
 	struct texture_2d
 	{
 		texture_2d() = delete;
@@ -105,6 +100,7 @@ namespace noob
 
 	typedef noob::handle<noob::texture_2d> texture_2d_handle;
 
+
 	struct texture_array_2d
 	{
 		texture_array_2d() = delete;
@@ -119,7 +115,7 @@ namespace noob
 	};
 
 	typedef noob::handle<noob::texture_array_2d> texture_array_2d_handle;
-
+	
 
 	struct texture_3d
 	{

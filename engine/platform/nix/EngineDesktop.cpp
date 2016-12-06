@@ -78,7 +78,7 @@ int main()//int /*_argc*/, char** /*_argv*/)
 
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	/* Create a windowed mode window and its OpenGL context */
 	window = glfwCreateWindow(width, height, "Engine Desktop", NULL, NULL);
 

@@ -39,8 +39,18 @@ bool noob::application::user_init()
 
 	const std::string tex_src = noob::load_file_as_string(noob::concat(*prefix, "texture/gradient_map.tga"));
 
-	const noob::loaded_texture_data_2d tex_data = noob::load_texture_mem(tex_src);
+	noob::texture_loader_2d tex_data;
 
+	noob::texture_2d_handle tex_h = noob::texture_2d_handle::make_invalid();
+/*
+	if (tex_data.valid)
+	{
+		noob::texture_info inf;
+		inf.pixels = tex_data.pixels;
+		inf.mips = false;
+		tex_h = gfx.reserve_texture_2d(tex_data.dims, inf);
+	}
+*/
 	const noob::reflectance_handle rh = g.reflectances.add(r);
 
 	const float actor_dims = 2.0;

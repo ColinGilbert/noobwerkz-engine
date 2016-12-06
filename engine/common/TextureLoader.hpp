@@ -1,3 +1,4 @@
+// This class helps you load a texture from file or memory. It handles the unpleasantness of parsing the files yourself. :)
 #pragma once
 
 // std
@@ -9,19 +10,17 @@
 
 namespace noob
 {
-	struct loaded_texture_data_2d
+	class texture_loader_2d
 	{
-		loaded_texture_data_2d() = delete;
-		loaded_texture_data_2d(bool Valid, bool Compressed, uint32_t Width, uint32_t Height, noob::pixel_format Pixels) noexcept(true) : valid(Valid), compressed(Compressed), height(Height), width(Width), pixels(Pixels) {}
-		
-		loaded_texture_data_2d(const noob::loaded_texture_data_2d&) noexcept(true) = default;
-		loaded_texture_data_2d& operator=(const noob::loaded_texture_data_2d&) noexcept(true) = default;
-		
-		const bool valid, compressed;
-		const uint32_t width, height;
-		const noob::pixel_format pixels;
+	public:
+		~texture_loader_2d() noexcept(true);
+		void from_mem(const std::string& Data , bool Compressed) noexcept(true);
+		void from_fs(const std::string& Data, bool Compressed) noexcept(true);
+	protected:	
+		bool valid, compressed;
+		std::array<uint32_t, 2> dims;
+		noob::pixel_format pixels;
+		unsigned char* buffer;
+		uint32_t channels;
 	};
-
-	noob::loaded_texture_data_2d load_texture_mem(const std::string&) noexcept(true);
-	noob::loaded_texture_data_2d load_texture_fs(const std::string&) noexcept(true);
 }
