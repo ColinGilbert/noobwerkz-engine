@@ -3,10 +3,13 @@
 
 #pragma once
 
+// std
 #include <math.h>
 
+// External libs
 #include <noob/component/component.hpp>
 
+// Project-local headers
 #include "Attrib.hpp"
 
 namespace noob
@@ -27,7 +30,7 @@ namespace noob
 
 	enum class pixel_format
 	{
-		R8, RG8, RGB8, SRGB8, RGBA8, SRGBA8, RGB8_COMPRESSED, SRGB8_COMPRESSED, RGB8_A1_COMPRESSED, SRGB8_A1_COMPRESSED, RGBA8_COMPRESSED, SRGBA8_COMPRESSED
+		R8, RG8, RGB8, SRGB8, RGBA8, SRGBA8, RGB8_COMPRESSED, SRGB8_COMPRESSED, RGB8_A1_COMPRESSED, SRGB8_A1_COMPRESSED, RGBA8_COMPRESSED, SRGBA8_COMPRESSED, INVALID
 	};
 
 	// TODO: Move out into math classes.
@@ -74,14 +77,13 @@ namespace noob
 
 	struct texture_1d
 	{
-		const uint32_t driver_handle;
-
-		texture_1d(uint32_t DriverHandle, noob::texture_info TexInfo, uint32_t Length) noexcept(true) : driver_handle(DriverHandle), info(TexInfo), length(Length) {}
 		texture_1d() = delete;
+		texture_1d(uint32_t DriverHandle, noob::texture_info TexInfo, uint32_t Length) noexcept(true) : driver_handle(DriverHandle), info(TexInfo), length(Length) {}
 
 		texture_1d(const noob::texture_1d& lhs) noexcept(true) = default;
 		texture_1d& operator=(const noob::texture_1d& lhs) noexcept(true) = default;
 
+		const uint32_t driver_handle;
 		const noob::texture_info info;
 		const uint32_t length;
 	};
@@ -90,14 +92,13 @@ namespace noob
 
 	struct texture_2d
 	{
-		const uint32_t driver_handle;
-
+		texture_2d() = delete;
 		texture_2d(uint32_t DriverHandle, noob::texture_info TexInfo, uint32_t Width, uint32_t Height) noexcept(true) :  driver_handle(DriverHandle), info(TexInfo), width(Width), height(Height) {}
 
-		texture_2d() = delete;
 		texture_2d(const noob::texture_2d& lhs) noexcept(true) = default;
 		texture_2d& operator=(const noob::texture_2d& lhs) noexcept(true) = default;
 
+		const uint32_t driver_handle;
 		const noob::texture_info info;
 		const uint32_t width, height;
 	};
@@ -106,14 +107,13 @@ namespace noob
 
 	struct texture_array_2d
 	{
-		const uint32_t driver_handle;
-
+		texture_array_2d() = delete;
 		texture_array_2d(uint32_t DriverHandle, noob::texture_info TexInfo, uint32_t Width, uint32_t Height, uint32_t Indices) noexcept(true) :  driver_handle(DriverHandle), info(TexInfo), width(Width), height(Height), indices(Indices) {}
 
-		texture_array_2d() = delete;
 		texture_array_2d(const noob::texture_array_2d& lhs) noexcept(true) = default;
 		texture_array_2d& operator=(const noob::texture_array_2d& lhs) noexcept(true) = default;
 
+		const uint32_t driver_handle;
 		const noob::texture_info info;
 		const uint32_t width, height, indices;
 	};
@@ -123,18 +123,16 @@ namespace noob
 
 	struct texture_3d
 	{
-		const uint32_t driver_handle;
-
+		texture_3d() = delete;
 		texture_3d(uint32_t DriverHandle, noob::texture_info TexInfo, uint32_t Width, uint32_t Height, uint32_t Depth) noexcept(true) :  driver_handle(DriverHandle), info(TexInfo), width(Width), height(Height), depth(Depth) {}
 
-		texture_3d() = delete;
 		texture_3d(const noob::texture_3d& lhs) noexcept(true) = default;
 		texture_3d& operator=(const noob::texture_3d& lhs) noexcept(true) = default;
 
+		const uint32_t driver_handle;
 		const noob::texture_info info;
 		const uint32_t width, height, depth;
 	};
 
 	typedef noob::handle<noob::texture_3d> texture_3d_handle;
-
 }

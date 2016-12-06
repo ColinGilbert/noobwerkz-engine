@@ -1,7 +1,10 @@
+// Header file we're implementing
 #include "Mixer.hpp"
 
+// Project headers
 #include "Globals.hpp"
 #include "NoobUtils.hpp"
+
 
 bool noob::mixer::play_clip(const noob::sample_handle clip, float volume) noexcept(true)
 {
@@ -40,7 +43,7 @@ bool noob::mixer::play_clip(const noob::sample_handle clip, float volume) noexce
 
 				return true;
 			}
-			// logger::log(noob::importance::INFO, "[Mixer] Sound found in soundbank, but unable to enque as its queue is already full. Try again later.");
+			// logger::log(noob::importance::INFO, "[Mixer] Sound found in soundbank, but unable to enqueue as its queue is already full. Try again later.");
 		}
 	}
 

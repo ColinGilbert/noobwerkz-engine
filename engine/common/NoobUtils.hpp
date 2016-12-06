@@ -9,11 +9,11 @@
 // With any luck, this class should become obsolete.
 namespace noob
 {
-	struct utils
+	static std::string load_file_as_string(const std::string& filename)
 	{
-		static std::string load_file_as_string(const std::string& filename);
-	};
-
+		std::ifstream input(filename);
+		return std::string(std::istreambuf_iterator<char>(input), std::istreambuf_iterator<char>());
+	}
 
 
 #if NOOB_PLATFORM_ANDROID
@@ -36,7 +36,6 @@ namespace noob
 		{
 
 			std::string msg = noob::concat(noob::to_string(imp), ": ", s);
-			//__android_log_print(ANDROID_LOG_DEBUG,"NOOB", msg.c_str());
 			std::cout << msg << "\n";
 		}
 	};

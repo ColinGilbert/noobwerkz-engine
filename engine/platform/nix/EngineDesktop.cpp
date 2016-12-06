@@ -100,10 +100,10 @@ int main()//int /*_argc*/, char** /*_argv*/)
 	noob::sound_interface audio_interface;
 	audio_interface.init();
 
-	app.init(width, height, ".");
+	app.init(width, height, "./assets/");
+	
 	noob::ndof ndof;
 	ndof.run();
-	// ndof.run();
 
 	while (!glfwWindowShouldClose(window))
 	{

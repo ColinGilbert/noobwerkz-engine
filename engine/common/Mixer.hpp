@@ -1,14 +1,17 @@
 #pragma once
-
+ 
+ // std
 #include <cstdint>
 #include <vector>
 #include <limits>
 
+// External libs
 #include <rdestl/algorithm.h>
 #include <rdestl/basic_string.h>
 #include <rdestl/fixed_array.h>
 #include <rdestl/hash_map.h>
 
+// Project headers
 #include "ComponentDefines.hpp"
 #include "AudioSample.hpp"
 #include "RingBuffer.hpp"

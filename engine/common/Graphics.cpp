@@ -1,9 +1,12 @@
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
+// Header files we're implementing
 #include "Graphics.hpp"
 
+// std
 #include <algorithm>
+
+
+
+// Project-local
 #include "GraphicsGLInternal.hpp"
 #include "ShadersGL.hpp"
 #include "NoobUtils.hpp"
@@ -374,12 +377,23 @@ void noob::graphics::texture_data(noob::texture_2d_handle Handle, uint32_t Mip, 
 void noob::graphics::texture_data(noob::texture_array_2d_handle Handle, uint32_t Mip, uint32_t Index, const std::array<uint32_t, 2> Offset, const std::array<uint32_t, 2> Dims, const std::string& Data) const noexcept(true)
 {
 
+
+	// void glCompressedTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const GLvoid * data);
+
+	// void glTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const GLvoid * data);
+
 	check_error_gl();
+
+
+
 }
 
 
 void noob::graphics::texture_data(noob::texture_3d_handle Handle, uint32_t Mip, const std::array<uint32_t, 3> Offset, const std::array<uint32_t, 3> Dims, const std::string& Data) const noexcept(true)
 {
+	// void glCompressedTexSubImage3D( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const GLvoid * data);
+
+	// void glTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const GLvoid * data);
 
 	check_error_gl();
 }

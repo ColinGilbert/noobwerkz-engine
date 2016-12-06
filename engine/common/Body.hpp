@@ -1,9 +1,10 @@
 #pragma once
 
+// External libs
 #include <noob/math/math_funcs.hpp>
-
 #include <btBulletDynamicsCommon.h>
 
+// Project-local
 #include "Shape.hpp"
 
 

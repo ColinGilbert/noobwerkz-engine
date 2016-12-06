@@ -53,7 +53,6 @@ list(APPEND common_src
 	common/Graphics.cpp
 	common/Materials.cpp	
 	common/Application.cpp
-	common/NoobUtils.cpp
 	common/Camera.cpp
 	common/Stage.cpp
 	common/Body.cpp
@@ -71,6 +70,7 @@ list(APPEND common_src
 	common/AudioSample.cpp
 	common/Sounds.cpp	
 	common/Font.cpp
+	common/TextureLoader.cpp
 	)
 
 list(APPEND user_src

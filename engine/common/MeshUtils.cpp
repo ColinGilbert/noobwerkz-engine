@@ -1,12 +1,16 @@
+// Header file we're implementing
 #include "MeshUtils.hpp"
 
+// std
 #include <algorithm>
 
+// External libs
 #include <Eigen/Geometry> 
 #include <LinearMath/btConvexHull.h>
+#include <voro++.hh>
 
+// Project-local
 #include "NoobUtils.hpp"
-#include "voro++.hh"
 
 // icosphere code https://github.com/MicBosi/VisualizationLibrary
 // LICENSE:

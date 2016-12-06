@@ -1,11 +1,14 @@
 #pragma once
 
+// std
 #include <string>
 
+// External libs
 #include <noob/component/component.hpp>
 #include <noob/singleton/singleton.hpp>
 #include <noob/math/math_funcs.hpp>
 
+// Project-local
 #include "BasicMesh.hpp"
 #include "Model.hpp"
 #include "GpuBuffer.hpp"

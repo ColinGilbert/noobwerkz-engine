@@ -2,10 +2,8 @@
 #include <cmath>
 #include <random>
 #include "ContactPoint.hpp"
+#include "TextureLoader.hpp"
 
-// #include "Shiny.h"
-
-// TODO: Insert the callback function here
 std::unique_ptr<std::string> message_profiling, message_collision;
 noob::actor_handle ah;
 
@@ -37,6 +35,11 @@ bool noob::application::user_init()
 
 
 	noob::globals& g = noob::get_globals();
+	noob::graphics& gfx = noob::get_graphics();
+
+	const std::string tex_src = noob::load_file_as_string(noob::concat(*prefix, "texture/gradient_map.tga"));
+
+	const noob::loaded_texture_data_2d tex_data = noob::load_texture_mem(tex_src);
 
 	const noob::reflectance_handle rh = g.reflectances.add(r);
 

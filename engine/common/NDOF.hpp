@@ -1,3 +1,4 @@
+// Used to represent input from SpaceMouse NDOF, which was dead-simple to use along with libspnav (linked-in separately
 #pragma once
 
 #include <noob/math/math_funcs.hpp>

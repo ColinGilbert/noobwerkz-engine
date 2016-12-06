@@ -1,15 +1,17 @@
+// Header file we're implementing
 #include "AudioSample.hpp"
 
-
+// std
 #include <thread>
-
 #include <stdlib.h>
 #include <stdio.h>
 
+// External libs
 #include <vorbis/codec.h>
 #include <vorbis/vorbisfile.h>
 #include <CDSPResampler.h>
 
+// Project files
 #include "Globals.hpp"
 #include "NoobUtils.hpp"
 
