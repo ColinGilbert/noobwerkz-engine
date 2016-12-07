@@ -13,7 +13,6 @@ namespace noob
 	{
 		public:
 			static noob::basic_mesh sphere(float radius, uint32_t details);
-			// TODO: DEBUG!
 			static noob::basic_mesh box(float width, float height, float depth);
 			// static noob::basic_mesh cone(float radius, float height, uint32_t segments);
 			// static noob::basic_mesh cylinder(float radius, float height, uint32_t segments);
