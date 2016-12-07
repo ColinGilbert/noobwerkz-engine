@@ -341,7 +341,7 @@ void noob::graphics::bind_texture(noob::texture_3d_handle Handle) const noexcept
 }
 
 
-void noob::graphics::texture_data(noob::texture_2d_handle Handle, uint32_t Mip, const std::array<uint32_t, 2> Offsets, const std::array<uint32_t, 2> Dims, const std::string& Data) const noexcept(true)
+void noob::graphics::texture_data(noob::texture_2d_handle Handle, uint32_t Mip, const std::array<uint32_t, 2> Offsets, const std::array<uint32_t, 2> Dims, const uint8_t* DataPtr) const noexcept(true)
 {
 	if (Handle.index() < textures_2d.size())
 	{
@@ -361,12 +361,12 @@ void noob::graphics::texture_data(noob::texture_2d_handle Handle, uint32_t Mip, 
 				{
 					data_size = get_compressed_size_rgb8(tex.width, tex.height);
 				}
-				glCompressedTexSubImage2D(GL_TEXTURE_2D, Mip, Offsets[0], Offsets[1], Dims[0], Dims[1], fmt, data_size, reinterpret_cast<const GLvoid*>(&Data[0]));	
+				glCompressedTexSubImage2D(GL_TEXTURE_2D, Mip, Offsets[0], Offsets[1], Dims[0], Dims[1], fmt, data_size, reinterpret_cast<const GLvoid*>(DataPtr));	
 			}
 			else
 			{
 				const std::tuple<GLenum, GLenum> fmt = deduce_pixel_format_and_type(tex.info.pixels);
-				glTexSubImage2D(GL_TEXTURE_2D, Mip, Offsets[0], Offsets[1], Dims[0], Dims[1], std::get<0>(fmt), std::get<1>(fmt), reinterpret_cast<const GLvoid*>(&Data[0]));	
+				glTexSubImage2D(GL_TEXTURE_2D, Mip, Offsets[0], Offsets[1], Dims[0], Dims[1], std::get<0>(fmt), std::get<1>(fmt), reinterpret_cast<const GLvoid*>(DataPtr));	
 			}
 			check_error_gl();
 		}
@@ -374,7 +374,7 @@ void noob::graphics::texture_data(noob::texture_2d_handle Handle, uint32_t Mip, 
 }
 
 
-void noob::graphics::texture_data(noob::texture_array_2d_handle Handle, uint32_t Mip, uint32_t Index, const std::array<uint32_t, 2> Offset, const std::array<uint32_t, 2> Dims, const std::string& Data) const noexcept(true)
+void noob::graphics::texture_data(noob::texture_array_2d_handle Handle, uint32_t Mip, uint32_t Index, const std::array<uint32_t, 2> Offset, const std::array<uint32_t, 2> Dims, const uint8_t* DataPtr) const noexcept(true)
 {
 	// void glCompressedTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const GLvoid * data);
 
@@ -384,7 +384,7 @@ void noob::graphics::texture_data(noob::texture_array_2d_handle Handle, uint32_t
 }
 
 
-void noob::graphics::texture_data(noob::texture_3d_handle Handle, uint32_t Mip, const std::array<uint32_t, 3> Offset, const std::array<uint32_t, 3> Dims, const std::string& Data) const noexcept(true)
+void noob::graphics::texture_data(noob::texture_3d_handle Handle, uint32_t Mip, const std::array<uint32_t, 3> Offset, const std::array<uint32_t, 3> Dims, const uint8_t* DataPtr) const noexcept(true)
 {
 	// void glCompressedTexSubImage3D( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const GLvoid * data);
 
@@ -393,164 +393,341 @@ void noob::graphics::texture_data(noob::texture_3d_handle Handle, uint32_t Mip, 
 	check_error_gl();
 }
 
-// GL_TEXTURE_BASE_LEVEL, GL_TEXTURE_COMPARE_FUNC, GL_TEXTURE_COMPARE_MODE, GL_TEXTURE_MIN_FILTER, GL_TEXTURE_MAG_FILTER, GL_TEXTURE_MIN_LOD, GL_TEXTURE_MAX_LOD, GL_TEXTURE_MAX_LEVEL, GL_TEXTURE_SWIZZLE_R, GL_TEXTURE_SWIZZLE_G, GL_TEXTURE_SWIZZLE_B, GL_TEXTURE_SWIZZLE_A, GL_TEXTURE_WRAP_S, GL_TEXTURE_WRAP_T, GL_TEXTURE_WRAP_R
-
-
-// 2D TEXTURES
-void noob::graphics::texture_base_level(noob::texture_2d_handle, uint32_t Mip) const noexcept(true)
+void noob::graphics::texture_base_level(uint32_t Mip) const noexcept(true)
 {
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, Mip);
+	check_error_gl();
+}
+
+
+void noob::graphics::texture_compare_mode(noob::tex_compare_mode CompareMode) const noexcept(true)
+{
+	GLint param;
+	switch (CompareMode)
+	{
+		case(noob::tex_compare_mode::COMPARE_REF_TO_TEXTURE):
+			{
+				param = GL_COMPARE_REF_TO_TEXTURE;
+				break;
+			}
+		case(noob::tex_compare_mode::NONE):
+			{
+				param = GL_NONE;
+				break;
+			}
+	};
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, param);
 
 	check_error_gl();
 }
 
 
-void noob::graphics::texture_compare_mode(noob::texture_2d_handle, noob::tex_compare_mode CompareMode) const noexcept(true)
+void noob::graphics::texture_compare_func(noob::tex_compare_func CompareFunc) const noexcept(true)
 {
+	GLenum param;
+	switch(CompareFunc)
+	{
+		case(noob::tex_compare_func::LEQUAL):
+			{
+				param = GL_LEQUAL;
+				break;
+			}
+		case(noob::tex_compare_func::GEQUAL):
+			{
+				param = GL_GEQUAL;
+				break;
+			}
+		case(noob::tex_compare_func::LESS):
+			{
+				param = GL_LESS;
+				break;
+			}
+		case(noob::tex_compare_func::GREATER):
+			{
+				param = GL_GREATER;
+				break;
+			}
+		case(noob::tex_compare_func::EQUAL):
+			{
+				param = GL_EQUAL;
+				break;
+			}
+		case(noob::tex_compare_func::NOTEQUAL):
+			{
+				param = GL_NOTEQUAL;
+				break;
+			}
+		case(noob::tex_compare_func::ALWAYS):
+			{
+				param = GL_ALWAYS;
+				break;
+			}
+		case(noob::tex_compare_func::NEVER):
+			{
+				param = GL_NEVER;
+				break;
+			}
+	};
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, param);
+
+	check_error_gl();
+}
+
+void noob::graphics::texture_min_filter(noob::tex_min_filter MinFilter) const noexcept(true)
+{
+	GLenum param;
+	switch(MinFilter)
+	{
+		case(noob::tex_min_filter::NEAREST):
+			{
+				param = GL_NEAREST;
+				break;
+			}
+		case(noob::tex_min_filter::LINEAR):
+			{
+				param = GL_LINEAR;
+				break;
+			}
+		case(noob::tex_min_filter::NEAREST_MIPMAP_NEAREST):
+			{
+				param = GL_NEAREST_MIPMAP_NEAREST;
+				break;
+			}
+		case(noob::tex_min_filter::LINEAR_MIPMAP_NEAREST):
+			{
+				param = GL_LINEAR_MIPMAP_NEAREST;
+				break;
+			}
+		case(noob::tex_min_filter::NEAREST_MIPMAP_LINEAR):
+			{
+				param = GL_NEAREST_MIPMAP_LINEAR;
+				break;
+			}
+		case(noob::tex_min_filter::LINEAR_MIPMAP_LINEAR):
+			{
+				param = GL_LINEAR_MIPMAP_LINEAR;
+				break;
+			}
+	};
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, param);
 
 	check_error_gl();
 }
 
 
-void noob::graphics::texture_compare_func(noob::texture_2d_handle, noob::tex_compare_func CompareFunc) const noexcept(true)
+void noob::graphics::texture_mag_filter(noob::tex_mag_filter MagFilter) const noexcept(true)
 {
+	GLenum param;
+	switch(MagFilter)
+	{
+		case(noob::tex_mag_filter::NEAREST):
+			{
+				param = GL_NEAREST;
+				break;
+			}
+		case(noob::tex_mag_filter::LINEAR):
+			{
+				param = GL_LINEAR;
+				break;
+			}
+	};
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, param);
 
 	check_error_gl();
 }
 
 
-void noob::graphics::texture_min_filter(noob::texture_2d_handle, noob::tex_min_filter MinFilter) const noexcept(true)
+
+void noob::graphics::texture_min_lod(int32_t MinLod) const noexcept(true)
 {
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_LOD, MinLod);
+	check_error_gl();
+}
+
+void noob::graphics::texture_max_lod(int32_t MaxLod) const noexcept(true)
+{
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LOD, MaxLod);
 	check_error_gl();
 }
 
 
-void noob::graphics::texture_min_lod(noob::texture_2d_handle, int32_t MinLod) const noexcept(true)
+
+void noob::graphics::texture_swizzle(const std::array<noob::tex_swizzle, 2> Swizzles) const noexcept(true)
 {
-	check_error_gl();
-}
-
-
-void noob::graphics::texture_max_lod(noob::texture_2d_handle, int32_t MaxLod) const noexcept(true)
-{
-	check_error_gl();
-}
-
-
-void noob::graphics::texture_swizzle(noob::texture_2d_handle, const std::array<noob::tex_swizzle, 4> Swizzles) const noexcept(true)
-{
-	check_error_gl();
-}
-
-
-void noob::graphics::texture_wrap_mode(noob::texture_2d_handle, const std::array<noob::tex_wrap_mode, 3> WrapModes) const noexcept(true)
-{
-	check_error_gl();
-}
-
-// 2D TEXTURE ARRAYS
-void noob::graphics::texture_base_level(noob::texture_array_2d_handle, uint32_t Mip) const noexcept(true)
-{
-
-	check_error_gl();
-}
-
-
-void noob::graphics::texture_compare_mode(noob::texture_array_2d_handle, noob::tex_compare_mode CompareMode) const noexcept(true)
-{
-
-	check_error_gl();
-}
-
-
-void noob::graphics::texture_compare_func(noob::texture_array_2d_handle, noob::tex_compare_func CompareFunc) const noexcept(true)
-{
+	for (uint32_t i = 0; i < 4; ++i)
+	{
+		GLenum pname, param;	
+		switch (i)
+		{
+			case (0):
+				{
+					pname = GL_TEXTURE_SWIZZLE_R;
+					param = get_swizzle(Swizzles[i]);
+					glTexParameteri(GL_TEXTURE_2D, pname, param);
+					break;
+				}
+			case (1):
+				{
+					pname = GL_TEXTURE_SWIZZLE_G;
+					param = get_swizzle(Swizzles[i]);
+					glTexParameteri(GL_TEXTURE_2D, pname, param);
+					break;
+				}
+		};
+	}
 
 	check_error_gl();
 }
 
 
-void noob::graphics::texture_min_filter(noob::texture_array_2d_handle, noob::tex_min_filter MinFilter) const noexcept(true)
+void noob::graphics::texture_swizzle(const std::array<noob::tex_swizzle, 3> Swizzles) const noexcept(true)
 {
-	check_error_gl();
-}
-
-
-void noob::graphics::texture_min_lod(noob::texture_array_2d_handle, int32_t MinLod) const noexcept(true)
-{
-	check_error_gl();
-}
-
-
-void noob::graphics::texture_max_lod(noob::texture_array_2d_handle, int32_t MaxLod) const noexcept(true)
-{
-	check_error_gl();
-}
-
-
-void noob::graphics::texture_swizzle(noob::texture_array_2d_handle, const std::array<noob::tex_swizzle, 4> Swizzles) const noexcept(true)
-{
-	check_error_gl();
-}
-
-
-void noob::graphics::texture_wrap_mode(noob::texture_array_2d_handle, const std::array<noob::tex_wrap_mode, 3> WrapModes) const noexcept(true)
-{
-	check_error_gl();
-}
-
-
-void noob::graphics::texture_base_level(noob::texture_3d_handle, uint32_t Mip) const noexcept(true)
-{
-
-	check_error_gl();
-}
-
-// 3D TEXTURES
-void noob::graphics::texture_compare_mode(noob::texture_3d_handle, noob::tex_compare_mode CompareMode) const noexcept(true)
-{
+	for (uint32_t i = 0; i < 4; ++i)
+	{
+		GLenum pname, param;	
+		switch (i)
+		{
+			case (0):
+				{
+					pname = GL_TEXTURE_SWIZZLE_R;
+					param = get_swizzle(Swizzles[i]);
+					glTexParameteri(GL_TEXTURE_2D, pname, param);
+					break;
+				}
+			case (1):
+				{
+					pname = GL_TEXTURE_SWIZZLE_G;
+					param = get_swizzle(Swizzles[i]);
+					glTexParameteri(GL_TEXTURE_2D, pname, param);
+					break;
+				}
+			case (2):
+				{
+					pname = GL_TEXTURE_SWIZZLE_B;
+					param = get_swizzle(Swizzles[i]);
+					glTexParameteri(GL_TEXTURE_2D, pname, param);
+					break;
+				}
+		};
+	}
 
 	check_error_gl();
 }
 
 
-void noob::graphics::texture_compare_func(noob::texture_3d_handle, noob::tex_compare_func CompareFunc) const noexcept(true)
+void noob::graphics::texture_swizzle(const std::array<noob::tex_swizzle, 4> Swizzles) const noexcept(true)
 {
+	for (uint32_t i = 0; i < 4; ++i)
+	{
+		GLenum pname, param;	
+		switch (i)
+		{
+			case (0):
+				{
+					pname = GL_TEXTURE_SWIZZLE_R;
+					param = get_swizzle(Swizzles[i]);
+					glTexParameteri(GL_TEXTURE_2D, pname, param);
+					break;
+				}
+			case (1):
+				{
+					pname = GL_TEXTURE_SWIZZLE_G;
+					param = get_swizzle(Swizzles[i]);
+					glTexParameteri(GL_TEXTURE_2D, pname, param);
+					break;
+				}
+			case (2):
+				{
+					pname = GL_TEXTURE_SWIZZLE_B;
+					param = get_swizzle(Swizzles[i]);
+					glTexParameteri(GL_TEXTURE_2D, pname, param);
+					break;
+				}
+			case (3):
+				{
+					pname = GL_TEXTURE_SWIZZLE_A;
+					param = get_swizzle(Swizzles[i]);
+					glTexParameteri(GL_TEXTURE_2D, pname, param);
+					break;
+				}
+		};
+	}
 
 	check_error_gl();
 }
 
 
-void noob::graphics::texture_min_filter(noob::texture_3d_handle, noob::tex_min_filter MinFilter) const noexcept(true)
+void noob::graphics::texture_wrap_mode(const std::array<noob::tex_wrap_mode, 2> WrapModes) const noexcept(true)
 {
+	for (uint32_t i = 0; i < 2; ++i)
+	{
+		GLenum pname, param;	
+		switch (i)
+		{
+			case (0):
+				{
+					pname = GL_TEXTURE_WRAP_S;
+					param = get_wrapping(WrapModes[i]);
+					glTexParameteri(GL_TEXTURE_2D, pname, param);
+					break;
+				}
+			case (1):
+				{
+					pname = GL_TEXTURE_WRAP_T;
+					param = get_wrapping(WrapModes[i]);
+					glTexParameteri(GL_TEXTURE_2D, pname, param);
+					break;
+				}
+		};
+	}
+
 	check_error_gl();
 }
 
 
-void noob::graphics::texture_min_lod(noob::texture_3d_handle, int32_t MinLod) const noexcept(true)
+void noob::graphics::texture_wrap_mode(const std::array<noob::tex_wrap_mode, 3> WrapModes) const noexcept(true)
 {
+	for (uint32_t i = 0; i < 3; ++i)
+	{
+		GLenum pname, param;	
+		switch (i)
+		{
+			case (0):
+				{
+					pname = GL_TEXTURE_WRAP_S;
+					param = get_wrapping(WrapModes[i]);
+					glTexParameteri(GL_TEXTURE_3D, pname, param);
+					break;
+				}
+			case (1):
+				{
+					pname = GL_TEXTURE_WRAP_T;
+					param = get_wrapping(WrapModes[i]);
+					glTexParameteri(GL_TEXTURE_3D, pname, param);
+					break;
+				}
+			case (2):
+				{
+					pname = GL_TEXTURE_WRAP_R;
+					param = get_wrapping(WrapModes[i]);
+					glTexParameteri(GL_TEXTURE_3D, pname, param);
+					break;
+				}
+
+		};
+	}
+
+
 	check_error_gl();
 }
 
-
-void noob::graphics::texture_max_lod(noob::texture_3d_handle, int32_t MaxLod) const noexcept(true)
-{
-	check_error_gl();
-}
-
-
-void noob::graphics::texture_swizzle(noob::texture_3d_handle, const std::array<noob::tex_swizzle, 4> Swizzles) const noexcept(true)
-{
-	check_error_gl();
-}
-
-
-void noob::graphics::texture_wrap_mode(noob::texture_3d_handle, const std::array<noob::tex_wrap_mode, 3> WrapModes) const noexcept(true)
-{
-	check_error_gl();
-}
 
 // File-local function that helps reduce repeated code.
-bool texture_packing_valid(uint32_t Arg) noexcept(true)
+static bool texture_packing_valid(uint32_t Arg) noexcept(true)
 {
 	// GL_PACK_ALIGNMENT 	integer 	4 	1, 2, 4, or 8
 	switch (Arg)
@@ -569,7 +746,6 @@ bool texture_packing_valid(uint32_t Arg) noexcept(true)
 
 }
 
-
 void noob::graphics::texture_pack_alignment(uint32_t Arg) const noexcept(true)
 {
 	if (texture_packing_valid(Arg))
@@ -586,6 +762,26 @@ void noob::graphics::texture_unpack_alignment(uint32_t Arg) const noexcept(true)
 		glPixelStorei(GL_UNPACK_ALIGNMENT, Arg); 
 	}
 }
+
+
+void noob::graphics::generate_mips(noob::texture_2d_handle) const noexcept(true)
+{
+	glGenerateMipmap(GL_TEXTURE_2D);
+}
+
+
+void noob::graphics::generate_mips(noob::texture_array_2d_handle) const noexcept(true)
+{
+	glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
+}
+
+
+void noob::graphics::generate_mips(noob::texture_3d_handle) const noexcept(true)
+{
+	glGenerateMipmap(GL_TEXTURE_3D);
+}
+
+
 void noob::graphics::draw(const noob::model_handle Handle, uint32_t NumInstances) const noexcept(true)
 {
 	const noob::model m = models.get(Handle);

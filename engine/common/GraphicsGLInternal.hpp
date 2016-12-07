@@ -241,6 +241,71 @@ uint32_t get_compressed_size_rgba8(uint32_t Width, uint32_t Height)
 	return std::ceil(Width / 4) * std::ceil(Height / 4) * 16;
 }
 
+GLenum get_wrapping(noob::tex_wrap_mode WrapMode)
+{
+	GLenum results;
+	switch (WrapMode)
+	{
+		case(noob::tex_wrap_mode::CLAMP_TO_EDGE):
+		{
+			results = GL_CLAMP_TO_EDGE;
+			break;
+		}
+		case(noob::tex_wrap_mode::MIRRORED_REPEAT):
+		{
+			results = GL_MIRRORED_REPEAT;
+			break;
+		}
+		case(noob::tex_wrap_mode::REPEAT):
+		{
+			results = GL_REPEAT;
+			break;
+		}
+	};
+
+	return results;
+}
+
+GLenum get_swizzle(noob::tex_swizzle Swizzle)
+{
+	GLenum results;
+	switch (Swizzle)
+	{
+		case(noob::tex_swizzle::RED):
+		{
+			results = GL_RED;
+			break;
+		}
+		case(noob::tex_swizzle::GREEN):
+		{
+			results = GL_GREEN;
+			break;
+		}
+		case(noob::tex_swizzle::BLUE):
+		{
+			results = GL_BLUE;
+			break;
+		}
+		case(noob::tex_swizzle::ALPHA):
+		{
+			results = GL_ALPHA;
+			break;
+		}
+		case(noob::tex_swizzle::ZERO):
+		{
+			results = GL_ZERO;
+			break;
+		}
+		case(noob::tex_swizzle::ONE):
+		{
+			results = GL_ONE;
+			break;
+		}
+	};
+
+	return results;
+}
+
 GLuint load_shader_gl(GLenum type, const std::string& shader_arg)
 {
 	GLuint shader;

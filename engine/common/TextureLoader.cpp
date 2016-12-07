@@ -66,6 +66,7 @@ void noob::texture_loader_2d::from_mem(const std::string& Data, bool Compressed)
 					}
 			};
 
+			buf_size = channels * height * width;
 		}
 		else
 		{
@@ -108,4 +109,9 @@ unsigned char* noob::texture_loader_2d::buffer() const noexcept(true)
 {
 	return internal_buffer;
 }
+
+uint32_t noob::texture_loader_2d::buffer_size() const noexcept(true)
+{
+	return buf_size;
+};
 

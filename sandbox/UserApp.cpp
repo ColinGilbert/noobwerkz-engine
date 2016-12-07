@@ -41,20 +41,21 @@ bool noob::application::user_init()
 
 	noob::texture_loader_2d tex_data;
 	tex_data.from_mem(tex_src, false);
-	noob::texture_2d_handle tex_h = noob::texture_2d_handle::make_invalid();
-/*
-	if (tex_data.valid)
-	{
-		noob::texture_info inf;
-		inf.pixels = tex_data.pixels;
-		inf.mips = false;
-		tex_h = gfx.reserve_texture_2d(tex_data.dims, inf);
-	}
-*/
+	
+	noob::texture_info tex_info;
+	tex_info.mips = true;
+	tex_info.pixels = tex_data.format();
+	
+	noob::texture_2d_handle tex_h = gfx.reserve_texture_2d(tex_data.dimensions(), tex_info);
+	gfx.texture_data(tex_h, 1, std::array<uint32_t, 2>({0, 0}), tex_data.dimensions(), tex_data.buffer());
+	gfx.generate_mips(tex_h);
+
 	const noob::reflectance_handle rh = g.reflectances.add(r);
 
 	const float actor_dims = 2.0;
-	const noob::shape_handle shp = g.sphere_shape(actor_dims); // g.box_shape(actor_dims, actor_dims, actor_dims);
+	// const noob::shape_handle shp = g.sphere_shape(actor_dims);
+	
+	const noob::shape_handle shp = g.box_shape(actor_dims, actor_dims, actor_dims);
 
 	const uint32_t actor_count = 200;
 

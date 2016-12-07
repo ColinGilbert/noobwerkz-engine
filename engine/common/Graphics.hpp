@@ -16,6 +16,7 @@
 #include "Attrib.hpp"
 #include "ReturnType.hpp"
 #include "Shader.hpp"
+#include "TextureLoader.hpp"
 
 namespace noob
 {
@@ -39,60 +40,43 @@ namespace noob
 			void reset_instances(noob::model_handle, uint32_t) noexcept(true);
 
 			// Texture storage reservers
-			// noob::texture_1d_handle reserve_texture_1d(uint32_t length, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true);
+			// noob::texture_1d_handle reserve_texture_1d(uint32_t length, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true); // TODO
 			noob::texture_2d_handle reserve_texture_2d(const std::array<uint32_t, 2> Dims, const noob::texture_info) noexcept(true);
 			noob::texture_array_2d_handle reserve_texture_array_2d(const std::array<uint32_t, 2> Dims, uint32_t Indices, const noob::texture_info) noexcept(true);
 			noob::texture_3d_handle reserve_texture_3d(const std::array<uint32_t, 3> Dims, const noob::texture_info) noexcept(true);
-			// TODO: Soon.
-			// noob::texture_handle reserve_texture_cube(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true);
+			// noob::texture_handle reserve_texture_cube(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true); // TODO
 			
 			void bind_texture(noob::texture_2d_handle) const noexcept(true);
 			void bind_texture(noob::texture_array_2d_handle) const noexcept(true);
 			void bind_texture(noob::texture_3d_handle) const noexcept(true);
 
 			// Texture data uploaders
-			// void texture_data(noob::texture_1d_handle, const std::string&) const noexcept(true);	
-			void texture_data(noob::texture_2d_handle, uint32_t Mip, const std::array<uint32_t, 2> Offsets, const std::array<uint32_t, 2> Dims, const std::string& Data) const noexcept(true);
-			void texture_data(noob::texture_array_2d_handle, uint32_t Mip, uint32_t Index, const std::array<uint32_t, 2> Offsets, const std::array<uint32_t, 2> Dims, const std::string& Data) const noexcept(true);
-			void texture_data(noob::texture_3d_handle, uint32_t Mip, const std::array<uint32_t, 3> Offsets, const std::array<uint32_t, 3> Dims, const std::string& Data) const noexcept(true);
+			// void texture_data(noob::texture_1d_handle, const std::string&) const noexcept(true);	// TODO
+			void texture_data(noob::texture_2d_handle, uint32_t Mip, const std::array<uint32_t, 2> Offsets, const std::array<uint32_t, 2> Dims, const uint8_t* DataPtr) const noexcept(true);
+			void texture_data(noob::texture_array_2d_handle, uint32_t Mip, uint32_t Index, const std::array<uint32_t, 2> Offsets, const std::array<uint32_t, 2> Dims, const uint8_t* DataPtr) const noexcept(true);
+			void texture_data(noob::texture_3d_handle, uint32_t Mip, const std::array<uint32_t, 3> Offsets, const std::array<uint32_t, 3> Dims, const uint8_t* DataPtr) const noexcept(true);
 
 			// Texture parameter setters, made typesafe, at the cost of more overloads. Ah well, tradeoffs...
 			// Params for 2d textures
-			void texture_base_level(noob::texture_2d_handle, uint32_t Mip = 0) const noexcept(true);
-			void texture_compare_mode(noob::texture_2d_handle, noob::tex_compare_mode) const noexcept(true);
-			void texture_compare_func(noob::texture_2d_handle, noob::tex_compare_func) const noexcept(true);
-			void texture_min_filter(noob::texture_2d_handle, noob::tex_min_filter) const noexcept(true);
-			void texture_min_lod(noob::texture_2d_handle, int32_t Mip = -1000) const noexcept(true);
-			void texture_max_lod(noob::texture_2d_handle, int32_t Mip = 1000) const noexcept(true);
-			void texture_swizzle(noob::texture_2d_handle, const std::array<noob::tex_swizzle, 4 >) const noexcept(true);
-			void texture_wrap_mode(noob::texture_2d_handle, const std::array<noob::tex_wrap_mode, 3>) const noexcept(true);
-
-			// Params for 2d array textures
-			void texture_base_level(noob::texture_array_2d_handle, uint32_t Mip = 0) const noexcept(true);
-			void texture_compare_mode(noob::texture_array_2d_handle, noob::tex_compare_mode) const noexcept(true);
-			void texture_compare_func(noob::texture_array_2d_handle, noob::tex_compare_func) const noexcept(true);
-			void texture_min_filter(noob::texture_array_2d_handle, noob::tex_min_filter) const noexcept(true);
-			void texture_min_lod(noob::texture_array_2d_handle, int32_t Mip = -1000) const noexcept(true);
-			void texture_max_lod(noob::texture_array_2d_handle, int32_t Mip = 1000) const noexcept(true);
-			void texture_swizzle(noob::texture_array_2d_handle, const std::array<noob::tex_swizzle, 4 >) const noexcept(true);
-			void texture_wrap_mode(noob::texture_array_2d_handle, const std::array<noob::tex_wrap_mode, 3>) const noexcept(true);
-
-			// Params for 3d textures
-			void texture_base_level(noob::texture_3d_handle, uint32_t Mip = 0) const noexcept(true);
-			void texture_compare_mode(noob::texture_3d_handle, noob::tex_compare_mode) const noexcept(true);
-			void texture_compare_func(noob::texture_3d_handle, noob::tex_compare_func) const noexcept(true);
-			void texture_min_filter(noob::texture_3d_handle, noob::tex_min_filter) const noexcept(true);
-			void texture_min_lod(noob::texture_3d_handle, int32_t Mip = -1000) const noexcept(true);
-			void texture_max_lod(noob::texture_3d_handle, int32_t Mip = 1000) const noexcept(true);
-			void texture_swizzle(noob::texture_3d_handle, const std::array<noob::tex_swizzle, 4 >) const noexcept(true);
-			void texture_wrap_mode(noob::texture_3d_handle, const std::array<noob::tex_wrap_mode, 3>) const noexcept(true);
+			void texture_base_level(uint32_t Mip = 0) const noexcept(true);
+			void texture_compare_mode(noob::tex_compare_mode) const noexcept(true);
+			void texture_compare_func(noob::tex_compare_func) const noexcept(true);
+			void texture_min_filter(noob::tex_min_filter) const noexcept(true);
+			void texture_mag_filter(noob::tex_mag_filter) const noexcept(true);
+			void texture_min_lod(int32_t Mip = -1000) const noexcept(true);
+			void texture_max_lod(int32_t Mip = 1000) const noexcept(true);
+			void texture_swizzle(const std::array<noob::tex_swizzle, 2>) const noexcept(true);
+			void texture_swizzle(const std::array<noob::tex_swizzle, 3>) const noexcept(true);			
+			void texture_swizzle(const std::array<noob::tex_swizzle, 4>) const noexcept(true);
+			void texture_wrap_mode(const std::array<noob::tex_wrap_mode, 2>) const noexcept(true);			
+			void texture_wrap_mode(const std::array<noob::tex_wrap_mode, 3>) const noexcept(true);
 
 			// Texture packing and unpacking alignments.
-			// Fun fact: The GLES3 spec gives all the other pixel packing/unpacking attributes an initial value of 0 and a range of 0, so they aren't even exposed here (yet.)
+			// Fun fact: The GLES3 spec gives all the other pixel packing/unpacking attributes an initial value of 0 and a range of 0, so they aren't even exposed here. How simple!
 			void texture_pack_alignment(uint32_t) const noexcept(true);
 			void texture_unpack_alignment(uint32_t) const noexcept(true);
 
-			// Note: These have no effect on corpressed textures, which have to be mipped offline as a preprocessing step.
+			// Note: These have no effect on compressed textures, which have to be mipped offline as a preprocessing step.
 			void generate_mips(noob::texture_2d_handle) const noexcept(true);
 			void generate_mips(noob::texture_array_2d_handle) const noexcept(true);
 			void generate_mips(noob::texture_3d_handle) const noexcept(true);

@@ -15,7 +15,7 @@
 // icosphere code https://github.com/MicBosi/VisualizationLibrary
 // LICENSE:
 /*
-Visualization Library
+   Visualization Library
 http://visualizationlibrary.org 
 
 Copyright (c) 2005-2011, Michele Bosi
@@ -124,132 +124,299 @@ noob::basic_mesh noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
 		results.indices.push_back(i);
 	}
 
-//	results.bbox.min = noob::vec3(-radius, -radius, -radius);
-//	results.bbox.max = noob::vec3(radius, radius, radius);
+	//	results.bbox.min = noob::vec3(-radius, -radius, -radius);
+	//	results.bbox.max = noob::vec3(radius, radius, radius);
 
 	results.calculate_dims();
 	return results;
 }
 
+// Box code adapted from https://github.com/danginsburg/opengles3-book/blob/master/Common/Source/esShapes.c
+// I recommend anyone serious about OpenGLES get a copy of Dan Ginsburg's excellent book!
+// 
+// Book:      OpenGL(R) ES 3.0 Programming Guide, 2nd Edition
+// Authors:   Dan Ginsburg, Budirijanto Purnomo, Dave Shreiner, Aaftab Munshi
+// ISBN-10:   0-321-93388-5
+// ISBN-13:   978-0-321-93388-1
+// Publisher: Addison-Wesley Professional
+// URLs:      http://www.opengles-book.com
+//            http://my.safaribooksonline.com/book/animation-and-3d/9780133440133
+//
+// License below:
+
+
+// The MIT License (MIT)
+//
+// Copyright (c) 2013 Dan Ginsburg, Budirijanto Purnomo
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
 
 noob::basic_mesh noob::mesh_utils::box(float width, float height, float depth)
 {
-
-	const double x = width * 0.5;
-	const double y = height * 0.5;
-	const double z = depth * 0.5;
-
-	voro::voronoicell cell;
-	cell.init(-x, x, -y, y, -z, z);
+	const uint32_t num_vertices = 24;
+	const uint32_t num_indices = 36;
 
 	noob::basic_mesh results;
-	
-	std::vector<double> verts;
-	cell.vertices(verts);
 
-	std::vector<double> face_normals;
-	cell.normals(face_normals);
-
-	std::vector<int> face_orders; 
-	cell.face_orders(face_orders);
-
-	std::vector<int> face_vert_indices;
-	cell.face_vertices(face_vert_indices);
-
-	// Using the number of values in face_order to tell us how many faces we have.
-	for (uint32_t i = 0; i < face_orders.size(); ++i)
+	const float cube_verts[] =
 	{
-		
+		-0.5f * width, -0.5f * height, -0.5f * depth,
+		-0.5f * width, -0.5f * height,  0.5f * depth,
+		0.5f * width, -0.5f * height,  0.5f * depth,
+		0.5f * width, -0.5f * height, -0.5f * depth,
+		-0.5f * width,  0.5f * height, -0.5f * depth,
+		-0.5f * width,  0.5f * height,  0.5f * depth,
+		0.5f * width,  0.5f * height,  0.5f * depth,
+		0.5f * width,  0.5f * height, -0.5f * depth,
+		-0.5f * width, -0.5f * height, -0.5f * depth,
+		-0.5f * width,  0.5f * height, -0.5f * depth,
+		0.5f * width,  0.5f * height, -0.5f * depth,
+		0.5f * width, -0.5f * height, -0.5f * depth,
+		-0.5f * width, -0.5f * height, 0.5f * depth,
+		-0.5f * width,  0.5f * height, 0.5f * depth,
+		0.5f * width,  0.5f * height, 0.5f * depth,
+		0.5f * width, -0.5f * height, 0.5f * depth,
+		-0.5f * width, -0.5f * height, -0.5f * depth,
+		-0.5f * width, -0.5f * height,  0.5f * depth,
+		-0.5f * width,  0.5f * height,  0.5f * depth,
+		-0.5f * width,  0.5f * height, -0.5f * depth,
+		0.5f * width, -0.5f * height, -0.5f * depth,
+		0.5f * width, -0.5f * height,  0.5f * depth,
+		0.5f * width,  0.5f * height,  0.5f * depth,
+		0.5f * width,  0.5f * height, -0.5f * depth,
+	};
+
+	 const float cube_normals[] =
+	{
+		0.0f, -1.0f, 0.0f,
+		0.0f, -1.0f, 0.0f,
+		0.0f, -1.0f, 0.0f,
+		0.0f, -1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, -1.0f,
+		0.0f, 0.0f, -1.0f,
+		0.0f, 0.0f, -1.0f,
+		0.0f, 0.0f, -1.0f,
+		0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f,
+		-1.0f, 0.0f, 0.0f,
+		-1.0f, 0.0f, 0.0f,
+		-1.0f, 0.0f, 0.0f,
+		-1.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+	};
+
+	for (uint32_t i = 0; i < num_vertices * 3; i += 3)
+	{
+		results.vertices.push_back(noob::vec3(cube_verts[i], cube_verts[i + 1], cube_verts[i + 2]));
+		results.normals.push_back(noob::vec3(cube_normals[i], cube_normals[i + 1], cube_normals[i + 2]));
+		results.colours.push_back(noob::vec4(1.0, 1.0, 1.0, 1.0));
 	}
 
+	 const float cube_tex[] =
+	{
+		0.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 1.0f,
+		1.0f, 0.0f,
+		1.0f, 0.0f,
+		1.0f, 1.0f,
+		0.0f, 1.0f,
+		0.0f, 0.0f,
+		0.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 1.0f,
+		1.0f, 0.0f,
+		0.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 1.0f,
+		1.0f, 0.0f,
+		0.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 1.0f,
+		1.0f, 0.0f,
+		0.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 1.0f,
+		1.0f, 0.0f,
+	};
 
-	results.bbox.min = noob::vec3(-x, -y, -z);
-	results.bbox.max = noob::vec3(x, y, z);
+	for (uint32_t i = 0; i < num_vertices * 2; i += 2)
+	{
+		results.texcoords.push_back(noob::vec4(cube_tex[i], cube_tex[i+1], 0.0, 0.0));
+	}
+
+	results.has_texcoords = true;
+
+	 const uint32_t cube_indices[] =
+	{
+		0, 2, 1,
+		0, 3, 2,
+		4, 5, 6,
+		4, 6, 7,
+		8, 9, 10,
+		8, 10, 11,
+		12, 15, 14,
+		12, 14, 13,
+		16, 17, 18,
+		16, 18, 19,
+		20, 23, 22,
+		20, 22, 21
+	};
+
+
+	for (uint32_t i = 0; i < num_indices; ++i)
+	{
+		results.indices.push_back(cube_indices[i]);
+	}
 
 	return results;
-
 }
 
 /*
-noob::basic_mesh noob::mesh_utils::cone(float radius, float height, uint32_t segments_arg)
+   noob::basic_mesh noob::mesh_utils::voro(float width, float height, float depth)
+   {
+   const double x = width * 0.5;
+   const double y = height * 0.5;
+   const double z = depth * 0.5;
+
+   voro::voronoicell cell;
+   cell.init(-x, x, -y, y, -z, z);
+
+   noob::basic_mesh results;
+
+   std::vector<double> verts;
+   cell.vertices(verts);
+
+   std::vector<double> face_normals;
+   cell.normals(face_normals);
+
+   std::vector<int> face_orders; 
+   cell.face_orders(face_orders);
+
+   std::vector<int> face_vert_indices;
+   cell.face_vertices(face_vert_indices);
+
+// Using the number of values in face_order to tell us how many faces we have.
+for (uint32_t i = 0; i < face_orders.size(); ++i)
 {
-	const float half_height = height * 0.5;
-	const uint32_t segments = std::max(segments_arg, static_cast<uint32_t>(3));
-	
-	noob::basic_mesh top = noob::mesh_utils::circle(radius, segments);
-	noob::basic_mesh bottom = noob::mesh_utils::circle(radius, segments);
-	
-	const uint32_t num_verts = top.vertices.size();
-	const uint32_t num_indices = top.indices.size();
 
-	{
-	fmt::MemoryWriter ww;
-	ww << "[MeshUtils] Cone mesh circles verts = " << num_verts << ", indices = " << num_indices;
-	logger::log(ww.str());
-	}
-	// Position our vertices
-	
-	top.vertices[0] = noob::vec3(0.0, half_height, 0.0);
-	bottom.vertices[0] = noob::vec3(0.0, -half_height, 0.0);
-	
-	for (uint32_t i = 1; i < num_verts; ++i)
-	{
-		noob::vec3 temp(top.vertices[i]);
-		temp[1] = -half_height;
-		top.vertices[i] = temp;
-		bottom.vertices[i] = temp;
-	}
-	
-	// Now, we split the triangles on the top mesh, in order to be able to give each vertex its normal
+}
 
-	noob::basic_mesh results;
 
-	const uint32_t num_split_verts = num_verts * 3;
-	
-	results.vertices.resize(num_split_verts + num_verts);
-	results.normals.resize(num_split_verts + num_verts);
-	results.indices.resize(num_indices * 2);
+results.bbox.min = noob::vec3(-x, -y, -z);
+results.bbox.max = noob::vec3(x, y, z);
 
-	const noob::vec3 top_origin = top.vertices[0];	
-	
-	for (uint32_t i = 0; i < num_verts; i += 2)
-	{
-		results.vertices[i * 3] = top_origin;
-		results.vertices[(i * 3) + 1] = top.vertices[i];
-		results.vertices[(i * 3) + 2] = top.vertices[i + 1];
-	}
-	
-	// Now, calculate the normals: TODO:
-	for (uint32_t i = 0; i < num_verts; i += 2)
-	{
-		const noob::vec3 first = top.vertices[i] - top_origin;
-		const noob::vec3 second = top.vertices[i+1] - top_origin;
-		const noob::vec3 n = noob::normalize(noob::cross(first, second));
-		
-		results.normals[i * 3] = n;
-		results.normals[(i * 3) + 1] = n;
-		results.normals[(i * 3) + 2] = n;
-	}
-	
-	// Now, add our bottom to the results
-	const uint32_t total_verts = results.vertices.size();
-	for (uint32_t i = num_split_verts; i < total_verts; ++i)
-	{
-		results.vertices[i] = bottom.vertices[i - num_split_verts];
-		results.normals[i] = noob::vec3(0.0, -1.0, 0.0);
-	}
-	const uint32_t total_indices = results.indices.size();
-	for (uint32_t i = num_indices; i < total_indices; ++i)
-	{
-		results.indices[i] = bottom.indices[i-num_indices];
-	}
-	
-	// std::fill(bottom.normals.begin(), bottom.normals.end(), noob::vec3(0.0, -1.0, 0.0));
+return results;
 
-	results.bbox.min = noob::vec3(-radius, -half_height, -radius);
-	results.bbox.max = noob::vec3(radius, half_height, radius);
+}
+*/
 
-	return results;	
+/*
+   noob::basic_mesh noob::mesh_utils::cone(float radius, float height, uint32_t segments_arg)
+   {
+   const float half_height = height * 0.5;
+   const uint32_t segments = std::max(segments_arg, static_cast<uint32_t>(3));
+
+   noob::basic_mesh top = noob::mesh_utils::circle(radius, segments);
+   noob::basic_mesh bottom = noob::mesh_utils::circle(radius, segments);
+
+   const uint32_t num_verts = top.vertices.size();
+   const uint32_t num_indices = top.indices.size();
+
+   {
+   fmt::MemoryWriter ww;
+   ww << "[MeshUtils] Cone mesh circles verts = " << num_verts << ", indices = " << num_indices;
+   logger::log(ww.str());
+   }
+// Position our vertices
+
+top.vertices[0] = noob::vec3(0.0, half_height, 0.0);
+bottom.vertices[0] = noob::vec3(0.0, -half_height, 0.0);
+
+for (uint32_t i = 1; i < num_verts; ++i)
+{
+noob::vec3 temp(top.vertices[i]);
+temp[1] = -half_height;
+top.vertices[i] = temp;
+bottom.vertices[i] = temp;
+}
+
+// Now, we split the triangles on the top mesh, in order to be able to give each vertex its normal
+
+noob::basic_mesh results;
+
+const uint32_t num_split_verts = num_verts * 3;
+
+results.vertices.resize(num_split_verts + num_verts);
+results.normals.resize(num_split_verts + num_verts);
+results.indices.resize(num_indices * 2);
+
+const noob::vec3 top_origin = top.vertices[0];	
+
+for (uint32_t i = 0; i < num_verts; i += 2)
+{
+results.vertices[i * 3] = top_origin;
+results.vertices[(i * 3) + 1] = top.vertices[i];
+results.vertices[(i * 3) + 2] = top.vertices[i + 1];
+}
+
+// Now, calculate the normals: TODO:
+for (uint32_t i = 0; i < num_verts; i += 2)
+{
+const noob::vec3 first = top.vertices[i] - top_origin;
+const noob::vec3 second = top.vertices[i+1] - top_origin;
+const noob::vec3 n = noob::normalize(noob::cross(first, second));
+
+results.normals[i * 3] = n;
+results.normals[(i * 3) + 1] = n;
+results.normals[(i * 3) + 2] = n;
+}
+
+// Now, add our bottom to the results
+const uint32_t total_verts = results.vertices.size();
+for (uint32_t i = num_split_verts; i < total_verts; ++i)
+{
+results.vertices[i] = bottom.vertices[i - num_split_verts];
+results.normals[i] = noob::vec3(0.0, -1.0, 0.0);
+}
+const uint32_t total_indices = results.indices.size();
+for (uint32_t i = num_indices; i < total_indices; ++i)
+{
+results.indices[i] = bottom.indices[i-num_indices];
+}
+
+// std::fill(bottom.normals.begin(), bottom.normals.end(), noob::vec3(0.0, -1.0, 0.0));
+
+results.bbox.min = noob::vec3(-radius, -half_height, -radius);
+results.bbox.max = noob::vec3(radius, half_height, radius);
+
+return results;	
 }
 
 
@@ -264,16 +431,16 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 {
 	// TODO: Optimize this	
 	std::vector<btVector3> bt_points;
-	
+
 	noob::basic_mesh mesh;
-	
+
 	noob::bbox accum;
 	for (noob::vec3 p : points)
 	{
 		accum.min[0] = std::min(accum.min[0], p[0]);
 		accum.min[1] = std::min(accum.min[1], p[1]);
 		accum.min[2] = std::min(accum.min[2], p[2]);
-		
+
 		accum.max[0] = std::max(accum.max[0], p[0]);
 		accum.max[1] = std::max(accum.max[1], p[1]);
 		accum.max[2] = std::max(accum.max[2], p[2]);
@@ -290,7 +457,7 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 	HullResult hull_result;
 
 	HullError error_msg = hull_lib.CreateConvexHull(hull_desc, hull_result);
-	
+
 	if (error_msg == HullError::QE_FAIL) 
 	{
 		logger::log(noob::importance::ERROR, "FAILED TO CREATE CONVEX HULL. WTF?");
@@ -307,7 +474,7 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 		mesh.indices.push_back(static_cast<uint16_t>(hull_result.m_Indices[i]));
 	}
 
-	
+
 
 	return mesh;
 }
@@ -326,7 +493,7 @@ noob::basic_mesh noob::mesh_utils::circle(float radius, uint32_t segments_arg)
 	// results.indices.reserve(num_indices);
 
 	std::fill(results.normals.begin(), results.normals.end(), noob::vec3(0.0, 1.0, 0.0));
-	
+
 	// Our origin :)
 	results.vertices[0] = noob::vec3(0.0, 0.0, 0.0);
 
@@ -338,7 +505,7 @@ noob::basic_mesh noob::mesh_utils::circle(float radius, uint32_t segments_arg)
 		results.vertices.push_back(noob::vec3_from_eigen(rotated_point));
 		results.colours.push_back(noob::vec4(1.0, 1.0, 1.0, 1.0));
 	}
-	
+
 	uint32_t accum = 1;;
 	for (uint32_t i = 0; i < num_indices; i += 3)
 	{
@@ -347,7 +514,7 @@ noob::basic_mesh noob::mesh_utils::circle(float radius, uint32_t segments_arg)
 		++accum;
 		results.indices.push_back(accum);
 	}
-	
+
 	results.bbox.min = noob::vec3(-radius, 0.0, -radius);
 	results.bbox.max = noob::vec3(radius, 0.0 , radius);
 
