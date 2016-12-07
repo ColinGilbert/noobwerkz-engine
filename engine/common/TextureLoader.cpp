@@ -16,24 +16,23 @@ void log_texload(uint32_t Width, uint32_t Height, uint32_t Channels)
 
 noob::texture_loader_2d::~texture_loader_2d() noexcept(true)
 {
-	if(valid)
+	if(is_valid)
 	{
-		stbi_image_free(buffer);
+		stbi_image_free(internal_buffer);
 	}
 }
 
 void noob::texture_loader_2d::from_mem(const std::string& Data, bool Compressed) noexcept(true)
 {
-	int height, width, chans;
-	height = width = chans = 0;
-	compressed = Compressed;
-	buffer = stbi_load_from_memory(reinterpret_cast<const unsigned char*>(Data.c_str()), Data.size(), &height, &width, &chans, 0);
+	int height, width, channels;
+	height = width = channels = 0;
+	is_compressed = Compressed;
+	internal_buffer = stbi_load_from_memory(reinterpret_cast<const unsigned char*>(Data.c_str()), Data.size(), &height, &width, &channels, 0);
 	dims[0] = static_cast<uint32_t>(width);
 	dims[1] = static_cast<uint32_t>(height);
-	channels = static_cast<uint32_t>(chans);
-	if (buffer != nullptr)
+	if (internal_buffer != nullptr)
 	{
-		valid = true;
+		is_valid = true;
 		if (dims[0] > 0 && dims[1] > 0 && channels > 0)
 		{
 			switch (channels)
@@ -78,8 +77,35 @@ void noob::texture_loader_2d::from_mem(const std::string& Data, bool Compressed)
 		noob::logger::log(noob::importance::WARNING, noob::concat("[Loading texture from memory] Could not even load texture data!"));
 
 	}
+}
 
-	// Base case.
-	valid = false;
+
+bool noob::texture_loader_2d::valid() const noexcept(true)
+{
+	return is_valid;
+}
+
+
+bool noob::texture_loader_2d::compressed() const noexcept(true)
+{
+	return is_compressed;
+}
+
+
+std::array<uint32_t, 2> noob::texture_loader_2d::dimensions() const noexcept(true)
+{
+	return dims;
+}
+
+
+noob::pixel_format noob::texture_loader_2d::format() const noexcept(true)
+{
+	return pixels;
+}
+
+
+unsigned char* noob::texture_loader_2d::buffer() const noexcept(true)
+{
+	return internal_buffer;
 }
 

@@ -40,7 +40,7 @@ bool noob::application::user_init()
 	const std::string tex_src = noob::load_file_as_string(noob::concat(*prefix, "texture/gradient_map.tga"));
 
 	noob::texture_loader_2d tex_data;
-
+	tex_data.from_mem(tex_src, false);
 	noob::texture_2d_handle tex_h = noob::texture_2d_handle::make_invalid();
 /*
 	if (tex_data.valid)
