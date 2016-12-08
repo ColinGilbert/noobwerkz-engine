@@ -295,6 +295,9 @@ noob::basic_mesh noob::mesh_utils::box(float width, float height, float depth)
 		results.indices.push_back(cube_indices[i]);
 	}
 
+	results.bbox.min = noob::vec3(-0.5f * width, -0.5f * height, -0.5f * depth);
+	results.bbox.max = noob::vec3(0.5f * width, 0.5f * height, 0.5 * depth);
+
 	return results;
 }
 
