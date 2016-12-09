@@ -13,14 +13,28 @@ GLenum check_error_gl(const char *file, int line)
 		std::string error;
 		switch (error_code)
 		{
-			case GL_INVALID_ENUM:                  error = "INVALID_ENUM"; break;
-			case GL_INVALID_VALUE:                 error = "INVALID_VALUE"; break;
-			case GL_INVALID_OPERATION:             error = "INVALID_OPERATION"; break;
-							       // TODO: Find out if these are still part of the modern GL
-							       // case GL_STACK_OVERFLOW:                error = "STACK_OVERFLOW"; break;
-							       // case GL_STACK_UNDERFLOW:               error = "STACK_UNDERFLOW"; break;
-			case GL_OUT_OF_MEMORY:                 error = "OUT_OF_MEMORY"; break;
-			case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
+			case GL_INVALID_ENUM:
+				error = "INVALID_ENUM";
+				break;
+			case GL_INVALID_VALUE:              
+				error = "INVALID_VALUE"; 
+				break;
+			case GL_INVALID_OPERATION:            
+				error = "INVALID_OPERATION";
+				break;
+				// TODO: Find out if these are still part of the modern GL
+				// case GL_STACK_OVERFLOW:               
+				// error = "STACK_OVERFLOW";
+				// break;
+				// case GL_STACK_UNDERFLOW:
+				// error = "STACK_UNDERFLOW";
+				// break;
+			case GL_OUT_OF_MEMORY:
+				error = "OUT_OF_MEMORY"; 
+				break;
+			case GL_INVALID_FRAMEBUFFER_OPERATION: 
+				error = "INVALID_FRAMEBUFFER_OPERATION";
+				break;
 		}
 		noob::logger::log(noob::importance::ERROR, noob::concat("OpenGL: ", error, file, " (", noob::to_string(line), ")"));
 	}
@@ -29,23 +43,45 @@ GLenum check_error_gl(const char *file, int line)
 
 #define check_error_gl() check_error_gl(__FILE__, __LINE__) 
 
-/*
-   GL_COMPRESSED_R11_EAC,
-   GL_COMPRESSED_SIGNED_R11_EAC,
-   GL_COMPRESSED_RG11_EAC,
-   GL_COMPRESSED_SIGNED_RG11_EAC,
-   GL_COMPRESSED_RGB8_ETC2,
-   GL_COMPRESSED_SRGB8_ETC2,
-   GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2,
-   GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2,
-   GL_COMPRESSED_RGBA8_ETC2_EAC, or
-   GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC
-   */
+///////////////////////////////////////////////
+// Various useful formats supported by GLES3:
+///////////////////////////////////////////////
+
+// Uncompressed formats, per-channel:
+// GL_UNSIGNED_BYTE
+// GL_BYTE
+// GL_UNSIGNED_SHORT
+// GL_SHORT
+// GL_UNSIGNED_INT
+// GL_INT
+// GL_HALF_FLOAT
+// GL_FLOAT
+
+// Uncompressed formats, per-pixel:
+// GL_UNSIGNED_SHORT_5_6_5
+// GL_UNSIGNED_SHORT_4_4_4_4
+// GL_UNSIGNED_SHORT_5_5_5_1
+// GL_UNSIGNED_INT_2_10_10_10_REV
+// GL_UNSIGNED_INT_10F_11F_11F_REV
+// GL_UNSIGNED_INT_5_9_9_9_REV
+// GL_UNSIGNED_INT_24_8
+// GL_FLOAT_32_UNSIGNED_INT_24_8_REV.
+
+// Compressed formats (per pixel):
+// GL_COMPRESSED_R11_EAC,
+// GL_COMPRESSED_SIGNED_R11_EAC,
+// GL_COMPRESSED_RG11_EAC,
+// GL_COMPRESSED_SIGNED_RG11_EAC,
+// GL_COMPRESSED_RGB8_ETC2,
+// GL_COMPRESSED_SRGB8_ETC2,
+// GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2,
+// GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2,
+// GL_COMPRESSED_RGBA8_ETC2_EAC, or
+// GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC
 
 
 GLenum get_gl_storage_format(const noob::pixel_format Pixels)
 {
-	//	R8, RG8, RGB8, SRGB8, RGBA8, SRGBA8, RGB8_COMPRESSED, SRGB8_COMPRESSED, RGB8_A1_COMPRESSED, SRGB8_A1_COMPRESSED, RGBA8_COMPRESSED, SRGBA8_COMPRESSED
 	GLenum results;
 
 	switch(Pixels)
@@ -103,21 +139,21 @@ GLenum get_gl_storage_format(const noob::pixel_format Pixels)
 	return results;
 }
 
+
 // This one gives you the "format" and "type" arguments for glTexSubImage2D and glTexSubImage3D
 // Visit: https://www.khronos.org/opengles/sdk/docs/man3/html/glTexSubImage2D.xhtml and https://www.khronos.org/opengles/sdk/docs/man3/html/glTexSubImage3D.xhtml
-// As you can see, OpenGL doesn't just allow you to use the same storage format as the argument to the functions, as that would be far too straightforward. Instead, we must write otherwise pointless functions such as these to make our dreams into reality.
+// Uou see, OpenGL doesn't simply allow you to use the buffer's storage format as the argument to the the functions that are used to fill the buffer, as that would be far too straightforward.
+// Instead, we must write otherwise pointless functions such as these to make our dreams into reality. Here is me rooting for Vulkan,
 std::tuple<GLenum, GLenum> deduce_pixel_format_and_type(noob::pixel_format Pixels)
 {
-	GLenum results_a, results_b;
-	// GL_RED, GL_RED_INTEGER, GL_RG, GL_RG_INTEGER, GL_RGB, GL_RGB_INTEGER, GL_RGBA, GL_RGBA_INTEGER, GL_DEPTH_COMPONENT, GL_DEPTH_STENCIL
-	// GL_UNSIGNED_BYTE, GL_BYTE, GL_UNSIGNED_SHORT, GL_SHORT, GL_UNSIGNED_INT, GL_INT, GL_HALF_FLOAT, GL_FLOAT
-	results_b = GL_UNSIGNED_BYTE;
+	GLenum results_a;
+	// Our engine only allows this datatype by default.
+	const GLenum results_b = GL_UNSIGNED_BYTE;
 	switch(Pixels)
 	{
 		case(noob::pixel_format::R8):
 			{
-				results_a =  GL_RED;//, GL_RED_INTEGER, GL_RG, GL_RG_INTEGER, GL_RGB, GL_RGB_INTEGER, GL_RGBA, GL_RGBA_INTEGER, GL_DEPTH_COMPONENT;
-				// results_b = GL_UNSIGNED_BYTE;
+				results_a =  GL_RED;
 				break;
 			}
 		case(noob::pixel_format::RG8):
@@ -190,40 +226,16 @@ bool is_compressed(noob::pixel_format Pixels)
 	switch(Pixels)
 	{
 		case(noob::pixel_format::RGB8_COMPRESSED):
-			{
-				results = true;
-				break;
-			}
 		case(noob::pixel_format::SRGB8_COMPRESSED):
-			{
-				results = true;
-				break;
-			}
 		case(noob::pixel_format::RGB8_A1_COMPRESSED):
-			{
-				results = true;
-				break;
-			}
 		case(noob::pixel_format::SRGB8_A1_COMPRESSED):
-			{
-				results = true;
-				break;
-			}
 		case(noob::pixel_format::RGBA8_COMPRESSED):
-			{
-				results = true;
-				break;
-			}
 		case(noob::pixel_format::SRGBA8_COMPRESSED):
-			{		
 				results = true;
 				break;
-			}
 		default:
-			{
 				results = false;
 				break;
-			}
 	}
 
 	return results;
@@ -247,20 +259,20 @@ GLenum get_wrapping(noob::tex_wrap_mode WrapMode)
 	switch (WrapMode)
 	{
 		case(noob::tex_wrap_mode::CLAMP_TO_EDGE):
-		{
-			results = GL_CLAMP_TO_EDGE;
-			break;
-		}
+			{
+				results = GL_CLAMP_TO_EDGE;
+				break;
+			}
 		case(noob::tex_wrap_mode::MIRRORED_REPEAT):
-		{
-			results = GL_MIRRORED_REPEAT;
-			break;
-		}
+			{
+				results = GL_MIRRORED_REPEAT;
+				break;
+			}
 		case(noob::tex_wrap_mode::REPEAT):
-		{
-			results = GL_REPEAT;
-			break;
-		}
+			{
+				results = GL_REPEAT;
+				break;
+			}
 	};
 
 	return results;
@@ -272,35 +284,35 @@ GLenum get_swizzle(noob::tex_swizzle Swizzle)
 	switch (Swizzle)
 	{
 		case(noob::tex_swizzle::RED):
-		{
-			results = GL_RED;
-			break;
-		}
+			{
+				results = GL_RED;
+				break;
+			}
 		case(noob::tex_swizzle::GREEN):
-		{
-			results = GL_GREEN;
-			break;
-		}
+			{
+				results = GL_GREEN;
+				break;
+			}
 		case(noob::tex_swizzle::BLUE):
-		{
-			results = GL_BLUE;
-			break;
-		}
+			{
+				results = GL_BLUE;
+				break;
+			}
 		case(noob::tex_swizzle::ALPHA):
-		{
-			results = GL_ALPHA;
-			break;
-		}
+			{
+				results = GL_ALPHA;
+				break;
+			}
 		case(noob::tex_swizzle::ZERO):
-		{
-			results = GL_ZERO;
-			break;
-		}
+			{
+				results = GL_ZERO;
+				break;
+			}
 		case(noob::tex_swizzle::ONE):
-		{
-			results = GL_ONE;
-			break;
-		}
+			{
+				results = GL_ONE;
+				break;
+			}
 	};
 
 	return results;
@@ -423,13 +435,6 @@ GLuint load_program_gl(const std::string& vert_shader_arg, const std::string fra
 
 	return program_object;
 }
-
-// Per-channel:
-// GL_UNSIGNED_BYTE, GL_BYTE, GL_UNSIGNED_SHORT, GL_SHORT, GL_UNSIGNED_INT, GL_INT, GL_HALF_FLOAT, GL_FLOAT
-// Per-pixel:
-// GL_UNSIGNED_SHORT_5_6_5, GL_UNSIGNED_SHORT_4_4_4_4, GL_UNSIGNED_SHORT_5_5_5_1, GL_UNSIGNED_INT_2_10_10_10_REV, GL_UNSIGNED_INT_10F_11F_11F_REV, GL_UNSIGNED_INT_5_9_9_9_REV, GL_UNSIGNED_INT_24_8, and GL_FLOAT_32_UNSIGNED_INT_24_8_REV.
-// Per-pixel, compressed:
-// GL_COMPRESSED_RGB8_ETC2, GL_COMPRESSED_SRGB8_ETC2, GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2, GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2, GL_COMPRESSED_RGBA8_ETC2_EAC, GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC
 
 
 

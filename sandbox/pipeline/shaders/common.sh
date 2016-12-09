@@ -8,8 +8,8 @@
 #define MAX_LIGHTS 6
 const float MAX_LIGHTS_F = 6.0;
 
-#define PI 3.14159265
-
+// #define PI 3.14159265
+#define PI 3.141592653589793
 
 // Individual colours associated with the gradient 0.0-1.0.
 uniform vec4 colour_0;

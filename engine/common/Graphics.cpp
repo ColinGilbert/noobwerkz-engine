@@ -208,7 +208,6 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& Mesh,
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, Mesh.indices.size() * sizeof(uint32_t), &Mesh.indices[0], GL_STATIC_DRAW);
 	result.indices_vbo = indices_vbo;
 
-
 	glBindVertexArray(0);
 
 	check_error_gl();
