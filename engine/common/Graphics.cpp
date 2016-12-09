@@ -24,6 +24,27 @@ void noob::graphics::init(const std::array<uint32_t, 2> Dims) noexcept(true)
 
 	check_error_gl();
 
+	noob::logger::log(noob::importance::INFO, "Loading terrain shader!");
+	
+	terrain_shader = noob::graphics::program_handle::make(load_program_gl(noob::glsl::fs_terrain_src, noob::glsl::fs_terrain_src));
+
+	check_error_gl();
+
+	// uint32_t u_eye_pos_triplanar, u_light_directional_triplanar, u_texture_0, u_colour_0, u_colour_1, u_colour_2, u_colour_3, u_blend_0, u_blend_1, u_tex_scales;
+
+
+	u_texture_0 = glGetUniformLocation(terrain_shader.index(), "texture_0");
+	u_colour_0 = glGetUniformLocation(terrain_shader.index(), "colour_0");
+	u_colour_1 = glGetUniformLocation(terrain_shader.index(), "colour_1");
+	u_colour_2 = glGetUniformLocation(terrain_shader.index(), "colour_2");
+	u_colour_3 = glGetUniformLocation(terrain_shader.index(), "colour_3");
+	u_blend_0 = glGetUniformLocation(terrain_shader.index(), "blend_0");
+	u_blend_1 = glGetUniformLocation(terrain_shader.index(), "blend_1");
+	u_tex_scales = glGetUniformLocation(terrain_shader.index(), "tex_scales");
+	u_eye_pos_terrain = glGetUniformLocation(terrain_shader.index(), "eye_pos");
+	u_light_directional_terrain = glGetUniformLocation(terrain_shader.index(), "directional_light");
+	check_error_gl();
+
 	frame(Dims);
 
 	noob::logger::log(noob::importance::INFO, "[Graphics] Done init.");
@@ -78,6 +99,8 @@ void noob::graphics::use_program(noob::graphics::program_handle arg) noexcept(tr
 	check_error_gl();
 }
 
+
+
 noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& Mesh, uint32_t NumInstances) noexcept(true)
 {
 	noob::model result;
@@ -99,9 +122,7 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& Mesh,
 	result.n_vertices = num_verts;
 
 	GLuint vao_id = 0;
-
 	glGenVertexArrays(1, &vao_id);
-
 	glBindVertexArray(vao_id);
 	result.vao = vao_id;
 
@@ -125,7 +146,7 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& Mesh,
 	interleaved.resize(num_verts * 3);
 
 	// Interleave our vertex positions, normals, and colours
-	for(uint32_t i = 0; i < num_verts; i++)
+	for(uint32_t i = 0; i < num_verts; ++i)
 	{
 		const uint32_t current_offset = i * 3;
 		interleaved[current_offset] = noob::vec4(Mesh.vertices[i].v[0], Mesh.vertices[i].v[1], Mesh.vertices[i].v[2], 1.0);
@@ -137,7 +158,6 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& Mesh,
 	glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);
 	glBufferData(GL_ARRAY_BUFFER, interleaved.size() * sizeof(noob::vec4), &interleaved[0], GL_STATIC_DRAW);
 	result.vertices_vbo = vertices_vbo;
-
 
 	//////////////////////
 	// Setup attrib specs
@@ -163,14 +183,13 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& Mesh,
 	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(0));
 	glEnableVertexAttribArray(3);
 	glVertexAttribDivisor(3, 1);
-	result.instanced_colour_vbo = colours_vbo;
+	result.instanced_colours_vbo = colours_vbo;
 
 	// Setup matrices VBO:
 	// std::vector<noob::mat4> matrices(NumInstances * 2, noob::identity_mat4());
 	glBindBuffer(GL_ARRAY_BUFFER, matrices_vbo);
 	glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
 	// glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::matrices_stride, &matrices[0].m[0], GL_DYNAMIC_DRAW);
-
 
 	// Per instance model matrices
 	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4)*2, reinterpret_cast<const void *>(0));
@@ -212,34 +231,105 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& Mesh,
 
 	check_error_gl();
 
-	noob::model_handle h = models.add(result);
+	result.valid = true;
+	models.push_back(result);
 
 	const noob::bbox bb = Mesh.bbox;
-	noob::logger::log(noob::importance::INFO, noob::concat("[Graphics] Created model with handle ", noob::to_string(h.index()), " and ", noob::to_string(NumInstances), " instances. Verts = ", noob::to_string(Mesh.vertices.size()), ", indices = ", noob::to_string(Mesh.indices.size()), ". Dims: ", noob::to_string(bb.max - bb.min)));
 
-	return h;
+
+	const noob::model_handle results = noob::model_handle::make(models.size() - 1);
+
+	noob::logger::log(noob::importance::INFO, noob::concat("[Graphics] Created instanced model with handle ", noob::to_string(results.index()), " and ", noob::to_string(NumInstances), " instances. Verts = ", noob::to_string(Mesh.vertices.size()), ", indices = ", noob::to_string(Mesh.indices.size()), ". Dims: ", noob::to_string(bb.max - bb.min)));
+
+	return results;
+}
+
+
+noob::model_handle noob::graphics::terrain(const noob::basic_mesh& Mesh, uint32_t MaxVerts) noexcept(true)
+{
+	noob::model results;
+
+	results.type = noob::model::geom_type::TERRAIN;
+	results.n_vertices = Mesh.vertices.size();
+	results.n_instances = 1;
+	// results.vao = ?;
+	// results.vertices_vbo = ?;
+	glGenVertexArrays(1, &results.vao);
+	glBindVertexArray(results.vao);
+	
+	/////////////////////////////////////////////////
+	// Setup non-instanced, interleaved attribs VBO:
+	/////////////////////////////////////////////////
+
+	std::vector<noob::vec4> interleaved;
+	interleaved.resize(results.n_vertices * 3);
+
+	// Interleave our vertex positions, normals, and colours
+	for(uint32_t i = 0; i < results.n_vertices; ++i)
+	{
+		const uint32_t current_offset = i * 3;
+		interleaved[current_offset] = noob::vec4(Mesh.vertices[i].v[0], Mesh.vertices[i].v[1], Mesh.vertices[i].v[2], 1.0);
+		interleaved[current_offset + 1] = noob::vec4(Mesh.normals[i].v[0], Mesh.normals[i].v[1], Mesh.normals[i].v[2], 0.0);
+		interleaved[current_offset + 2] = Mesh.colours[i];
+	}
+
+	glGenBuffers(1, &results.vertices_vbo);
+
+	// Upload interleaved buffer
+	glBindBuffer(GL_ARRAY_BUFFER, results.vertices_vbo);
+	glBufferData(GL_ARRAY_BUFFER, interleaved.size() * sizeof(noob::vec4), &interleaved[0], GL_DYNAMIC_DRAW);
+
+	check_error_gl();
+
+	models.push_back(results);
+
+	return noob::model_handle::make(models.size() - 1);
+}
+
+
+void  noob::graphics::terrain_uniforms(const noob::terrain_shading Shading) noexcept(true)
+{
+	/*
+	   struct terrain_shading
+	   {
+	// The sum of the pixel's separate RGB values (basically converted into greyscale) is used to pick a colour along a greyscale gradient. These weights allow the end-user to change the nature of the final texture.
+	noob::vec3 texture_weights;
+	// By default, the colour gradient is set at 0.0 = colour_1, 0.25 = colour_2, 0.75 = colour_3, 1.0 colour_4 and the resulting colour is interpolated along.	
+	std::array<noob::vec4, 4> colours;
+
+	noob::vec2 colour_offsets;
+	// This allows the programmer to diversify the output even further!
+	noob::vec3 texture_scales;
+	};
+	*/
+
+
 }
 
 
 void noob::graphics::reset_instances(noob::model_handle Handle, uint32_t NumInstances) noexcept(true)
 {
-	noob::model m = models.get(Handle);
-	m.n_instances = NumInstances;
-	models.set(Handle, m);
+	if( models[Handle.index()].type == noob::model::geom_type::INDEXED_MESH)
+	{
 
-	glBindVertexArray(m.vao);
+		noob::model m = models[Handle.index()];
+		m.n_instances = NumInstances;
+		models[Handle.index()] = m;
 
-	// Setup colours VBO:
-	glBindBuffer(GL_ARRAY_BUFFER, m.instanced_colour_vbo);
-	glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::materials_stride, nullptr, GL_DYNAMIC_DRAW);
+		glBindVertexArray(m.vao);
 
-	// Setup matrices VBO:
-	glBindBuffer(GL_ARRAY_BUFFER, m.instanced_matrices_vbo);
-	glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
+		// Setup colours VBO:
+		glBindBuffer(GL_ARRAY_BUFFER, m.instanced_colours_vbo);
+		glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::materials_stride, nullptr, GL_DYNAMIC_DRAW);
 
-	check_error_gl();
+		// Setup matrices VBO:
+		glBindBuffer(GL_ARRAY_BUFFER, m.instanced_matrices_vbo);
+		glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
 
-	glBindVertexArray(0);
+		check_error_gl();
+
+		glBindVertexArray(0);
+	}
 }
 
 
@@ -783,7 +873,7 @@ void noob::graphics::generate_mips(noob::texture_3d_handle) const noexcept(true)
 
 void noob::graphics::draw(const noob::model_handle Handle, uint32_t NumInstances) const noexcept(true)
 {
-	const noob::model m = models.get(Handle);
+	const noob::model m = models[Handle.index()];
 	glBindVertexArray(m.vao);
 
 	glDrawElementsInstanced(GL_TRIANGLES, m.n_indices, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.n_instances, NumInstances));
@@ -816,7 +906,7 @@ void noob::graphics::frame(const std::array<uint32_t, 2> Dims) const noexcept(tr
 
 noob::gpu_write_buffer noob::graphics::map_buffer(noob::model_handle h, noob::model::instanced_data_type DataType, uint32_t Min, uint32_t Max) const noexcept(true)
 {
-	noob::model m = models.get(h);
+	noob::model m = models[h.index()];
 
 	if (m.type != noob::model::geom_type::INDEXED_MESH)
 	{
@@ -832,7 +922,7 @@ noob::gpu_write_buffer noob::graphics::map_buffer(noob::model_handle h, noob::mo
 		case (noob::model::instanced_data_type::COLOUR):
 			{
 				stride_in_bytes = noob::model::materials_stride;
-				glBindBuffer(GL_ARRAY_BUFFER, m.instanced_colour_vbo);
+				glBindBuffer(GL_ARRAY_BUFFER, m.instanced_colours_vbo);
 				check_error_gl();
 				break;
 			}

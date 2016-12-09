@@ -214,7 +214,6 @@ std::tuple<GLenum, GLenum> deduce_pixel_format_and_type(noob::pixel_format Pixel
 	}
 
 	return std::make_tuple(results_a, results_b);
-
 }
 
 
@@ -248,10 +247,12 @@ uint32_t get_compressed_size_rgb8(uint32_t Width, uint32_t Height)
 	return std::ceil(Width / 4) * std::ceil(Height / 4) * 8;
 }
 
+
 uint32_t get_compressed_size_rgba8(uint32_t Width, uint32_t Height)
 {
 	return std::ceil(Width / 4) * std::ceil(Height / 4) * 16;
 }
+
 
 GLenum get_wrapping(noob::tex_wrap_mode WrapMode)
 {
@@ -277,6 +278,7 @@ GLenum get_wrapping(noob::tex_wrap_mode WrapMode)
 
 	return results;
 }
+
 
 GLenum get_swizzle(noob::tex_swizzle Swizzle)
 {
@@ -317,6 +319,7 @@ GLenum get_swizzle(noob::tex_swizzle Swizzle)
 
 	return results;
 }
+
 
 GLuint load_shader_gl(GLenum type, const std::string& shader_arg)
 {
@@ -363,6 +366,7 @@ GLuint load_shader_gl(GLenum type, const std::string& shader_arg)
 
 	return shader;
 }
+
 
 GLuint load_program_gl(const std::string& vert_shader_arg, const std::string frag_shader_arg)
 {
@@ -435,7 +439,6 @@ GLuint load_program_gl(const std::string& vert_shader_arg, const std::string fra
 
 	return program_object;
 }
-
 
 
 GLuint prep_texture()

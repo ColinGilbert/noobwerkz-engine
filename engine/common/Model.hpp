@@ -12,9 +12,11 @@ namespace noob
 		static constexpr uint32_t materials_stride = sizeof(noob::vec4);
 		static constexpr uint32_t matrices_stride = sizeof(noob::mat4) * 2;
 
+		model() noexcept(true) : valid(false), type(noob::model::geom_type::INVALID), n_vertices(0), n_indices(0), n_instances(0), vao(0), vertices_vbo(0), indices_vbo(0), instanced_colours_vbo(0), instanced_matrices_vbo(0) {}
+
 		enum class geom_type
 		{
-			INDEXED_MESH, DYNAMIC_TERRAIN, POINT_SPRITE, BILLBOARD, INVALID
+			INDEXED_MESH, TERRAIN, POINT_SPRITE, BILLBOARD, INVALID
 		};
 
 		enum class instanced_data_type
@@ -49,12 +51,13 @@ namespace noob
 
 		uint32_t materials_buffer() const noexcept(true)
 		{
-			return instanced_colour_vbo;
+			return instanced_colours_vbo;
 		}
 
 		protected:
+		bool valid;
 		noob::model::geom_type type;
-		uint32_t n_instances, n_indices, n_vertices, vao, instanced_matrices_vbo, instanced_colour_vbo, vertices_vbo, indices_vbo;
+		uint32_t  n_vertices, n_indices, n_instances, vao, vertices_vbo, indices_vbo, instanced_matrices_vbo, instanced_colours_vbo;
 	};
 
 	typedef noob::handle<noob::model> model_handle;

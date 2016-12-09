@@ -45,12 +45,11 @@ namespace noob
 		rde::vector<noob::vec3> normals;
 		rde::vector<noob::vec4> texcoords;
 		rde::vector<noob::vec4> colours;
-
 		rde::vector<uint32_t> indices;
 		// std::vector<uint8_t> flags;
 
 		noob::bbox bbox;
-		bool volume_calculated, has_texcoords;
+		bool volume_calculated;
 		double volume;
 	};
 }

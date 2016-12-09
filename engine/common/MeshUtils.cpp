@@ -271,8 +271,6 @@ noob::basic_mesh noob::mesh_utils::box(float width, float height, float depth)
 		results.texcoords.push_back(noob::vec4(cube_tex[i], cube_tex[i+1], 0.0, 0.0));
 	}
 
-	results.has_texcoords = true;
-
 	 const uint32_t cube_indices[] =
 	{
 		0, 2, 1,

@@ -4,8 +4,6 @@ namespace noob
 {
 	namespace glsl
 	{
-
-
 		////////////////////////////////////////////////////////////
 		// Extremely useful for getting rid of shader conditionals
 		////////////////////////////////////////////////////////////
@@ -44,10 +42,10 @@ namespace noob
 				"{						\n"
 				"	return min(a + b, 1.0);			\n"
 				"}						\n"
-				"vec4 xor(vec4 a, vec4 b)			\n"
-				"{						\n"
-				"	return (a + b) % 2.0;			\n"
-				"}						\n"
+				//"vec4 xor(vec4 a, vec4 b)			\n"
+				//"{						\n"
+				//"	return (a + b) % 2.0;			\n"
+				//"}						\n"
 				"vec4 not(vec4 a)				\n"
 				"{						\n"
 				"  return 1.0 - a;				\n"
@@ -93,18 +91,18 @@ namespace noob
 		static const std::string vs_instancing_src = noob::concat(shader_prefix, std::string(
 					"layout(location = 0) in vec4 a_pos;				\n"
 					"layout(location = 1) in vec4 a_normal;				\n"
-					"layout(location = 2) in vec4 a_vertex_colour;			\n"
+					"layout(location = 2) in vec4 a_vert_colour;			\n"
 					"layout(location = 3) in vec4 a_instance_colour;		\n"
 					"layout(location = 4) in mat4 a_model_mat;			\n"
 					"layout(location = 8) in mat4 a_mvp_mat;			\n"
 					"layout(location = 0) out vec4 v_world_pos;			\n"
 					"layout(location = 1) out vec4 v_world_normal;			\n"
-					"layout(location = 2) out vec4 v_vertex_colour;			\n"				
+					"layout(location = 2) out vec4 v_vert_colour;			\n"				
 					"void main()							\n"
 					"{								\n"
 					"	v_world_pos = a_model_mat * a_pos;			\n"
 					"	v_world_normal = a_model_mat * a_normal;		\n"				
-					"	v_vertex_colour = a_vertex_colour * a_instance_colour;	\n"
+					"	v_vert_colour = a_vert_colour * a_instance_colour;	\n"
 					"	gl_Position = a_mvp_mat * a_pos;			\n"
 					"}								\n"));
 
@@ -112,7 +110,7 @@ namespace noob
 		static const std::string vs_terrain_src = noob::concat(shader_prefix, std::string(
 					"layout(location = 0) in vec4 a_pos;				\n"
 					"layout(location = 1) in vec4 a_normal;				\n"
-					"layout(location = 2) in vec4 a_vertex_colour;			\n"
+					"layout(location = 2) in vec4 a_vert_colour;			\n"
 					"layout(location = 0) out vec4 v_local_pos;			\n"
 					"layout(location = 1) out vec4 v_local_normal;			\n"
 					"layout(location = 2) out vec4 v_world_pos;			\n"
@@ -126,7 +124,7 @@ namespace noob
 					"	v_local_normal = a_normal;				\n"				
 					"	v_world_pos = a_model_mat * a_pos;			\n"
 					"	v_world_normal = a_model_mat * a_normal;		\n"				
-					"	v_vert_colour = a_vertex_colour * a_instance_colour;	\n"
+					"	v_vert_colour = a_vert_colour * a_instance_colour;	\n"
 					"	gl_Position = a_mvp_mat * a_pos;			\n"
 					"}								\n"));
 
@@ -164,12 +162,13 @@ namespace noob
 					"	out_colour = vec4(clamp(light * v_vert_colour.xyz, 0.0, 1.0), 1.0);						\n"
 					"}															\n"));
 
-		static const std::string fs_terrain_src = noob::concat(shader_prefix, lambert_diffuse, blinn_phong_specular, std::string(
+		static const std::string fs_terrain_src = noob::concat(shader_prefix, lambert_diffuse, blinn_phong_specular, shader_conditionals, std::string(
 					"layout(location = 0) in vec4 v_local_pos;														\n"
 					"layout(location = 1) in vec4 v_local_normal;														\n"
 					"layout(location = 2) in vec4 v_world_pos;														\n"
 					"layout(location = 3) in vec4 v_world_normal;														\n"
 					"layout(location = 4) in vec4 v_vert_colour;														\n"
+					"layout(location = 0) out vec4 out_colour;														\n"					
 					"uniform sampler2D texture_0;                        													\n"
 					"uniform vec4 colour_0;																	\n"
 					"uniform vec4 colour_1;																	\n"
@@ -182,18 +181,16 @@ namespace noob
 					"uniform vec3 directional_light;															\n"
 					"void main()																		\n"
 					"{																			\n"
-					"	// vec3 position = normalize(v_position);													\n"
-					"	vec3 position = mul(v_position, model_scales.xyz);												\n"
-					"	vec3 normal_blend = normalize(max(abs(v_normal), 0.0001));											\n"
+					"	vec3 normal_blend = normalize(max(abs(v_local_normal.xyz), 0.0001));										\n"
 					"	float b = normal_blend.x + normal_blend.y + normal_blend.z;											\n"
 					"	normal_blend /= b;																\n"
-					"	// Test RGB-only. Uncomment for great wisdom!													\n"
-					"	// vec4 xaxis = vec4(1.0, 0.0, 0.0, 1.0);													\n"
-					"	// vec4 yaxis = vec4(0.0, 1.0, 0.0, 1.0);													\n"
-					"	// vec4 zaxis = vec4(0.0, 0.0, 1.0, 1.0);													\n"
-					"	vec4 xaxis = vec4(texture2D(texture_0, position.yz * tex_scales.x).rgb, 1.0);									\n"
-					"	vec4 yaxis = vec4(texture2D(texture_0, position.xz * tex_scales.y).rgb, 1.0);									\n"
-					"	vec4 zaxis = vec4(texture2D(texture_0, position.xy * tex_scales.z).rgb, 1.0);									\n"
+					// "RGB-only. Try it out for great wisdom!
+					// "vec4 xaxis = vec4(1.0, 0.0, 0.0, 1.0);													\n"
+					// "vec4 yaxis = vec4(0.0, 1.0, 0.0, 1.0);													\n"
+					// "vec4 zaxis = vec4(0.0, 0.0, 1.0, 1.0);													\n"
+					"	vec4 xaxis = vec4(texture(texture_0, v_local_pos.yz * tex_scales.x).rgb, 1.0);									\n"
+					"	vec4 yaxis = vec4(texture(texture_0, v_local_pos.xz * tex_scales.y).rgb, 1.0);									\n"
+					"	vec4 zaxis = vec4(texture(texture_0, v_local_pos.xy * tex_scales.z).rgb, 1.0);									\n"
 					"	vec4 tex = xaxis * normal_blend.x + yaxis * normal_blend.y + zaxis * normal_blend.z;								\n"
 					"	float tex_r = blend_0.x * tex.r;														\n"
 					"	float tex_g = blend_0.y * tex.g;														\n"
@@ -209,7 +206,7 @@ namespace noob
 					"	float specular = blinn_phong_specular(directional_light.xyz, view_direction, v_world_normal.xyz, 10.0);						\n"
 					"	float light = 0.1 + diffuse + specular;														\n"
 					"	vec3 total_colour = tex_final.xyz * light;													\n"
-					"	gl_FragColor = vec4(clamp(total_colour, 0.0, 1.0), 1.0);											\n"
+					"	out_colour = vec4(clamp(total_colour, 0.0, 1.0), 1.0);												\n"
 					"}																			\n"));
 
 		/*
