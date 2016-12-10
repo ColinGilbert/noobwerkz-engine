@@ -110,6 +110,12 @@ void noob::stage::draw() noexcept(true)
 		gfx.draw_instanced(modl_h, instance_count);
 	}
 
+	if (terrain_changed)
+	{
+		upload_terrain();
+		terrain_changed = false;
+	}
+
 
 	gfx.draw_terrain(num_terrain_verts);
 }
@@ -133,8 +139,6 @@ void noob::stage::rebuild_graphics(uint32_t width, uint32_t height, const noob::
 {
 	noob::graphics& gfx = noob::get_graphics();
 	update_viewport_params(width, height, projection_mat);
-
-
 }
 
 
@@ -212,11 +216,10 @@ noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32
 }
 
 
-noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg) noexcept(true)
+noob::scenery_handle noob::stage::scenery(const noob::shape_handle Shape, const noob::vec3& Pos, const noob::versor& Orient) noexcept(true)
 {
-	noob::globals& g = noob::get_globals();
-
-	const noob::body_handle bod_h = world.add_body(noob::body_type::STATIC, shape_arg, 0.0, pos_arg, orient_arg, false);
+	const noob::globals& g = noob::get_globals();
+	const noob::body_handle bod_h = world.add_body(noob::body_type::STATIC, Shape, 0.0, Pos, Orient, false);
 
 	noob::scenery sc;
 	sc.body = bod_h;
@@ -228,6 +231,8 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, co
 	b.set_user_index_2(scenery_h.index());
 
 	logger::log(noob::importance::INFO, noob::concat("[Stage] Scenery added! Handle ", noob::to_string(scenery_h.index())) );
+
+	terrain_changed = true;
 
 	return scenery_h;
 }
@@ -323,8 +328,6 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 
 	const noob::model_handle model_h = drawables[arg.index()].model;
 	noob::graphics& gfx = noob::get_graphics();
-
-
 	noob::gpu_write_buffer buf = gfx.map_instanced_data_buffer(model_h, noob::model::instanced_data_type::MATRICES, 0, count);
 	if (buf.valid() == false)
 	{
@@ -364,7 +367,6 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 		++current;
 	}
 
-
 	// logger::log(noob::importance::INFO, noob::concat("[Stage] ", noob::to_string(current), "*2 matrices uploaded"));
 
 	gfx.unmap_buffer();
@@ -373,23 +375,26 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 
 void noob::stage::upload_terrain() noexcept(true)
 {
-	// First, calculate the number of vertices in total.
-	uint32_t total_verts = 0;	
+	std::vector<noob::vec4> tmp_verts;
 	for (uint32_t i = 0; i < sceneries.count(); ++i)
 	{
 		const noob::scenery sc = sceneries.get(noob::scenery_handle::make(i));
 		const noob::body& bod = world.get_body(sc.body);
-		const noob::mat4 model_mat = bod.get_transform();
-
-		// TODO: Add accumulating code
-
+		// const noob::mat4 model_mat = bod.get_transform();
+		noob::globals& g = noob::get_globals();
+		const noob::shape tmp_shp = g.shapes.get(noob::shape_handle::make(bod.get_shape_index()));
+		const noob::basic_mesh tmp_msh = tmp_shp.get_mesh();
+		// Add up triangles independently
+		for (uint32_t i = 0; i < tmp_msh.indices.size(); ++i)
+		{
+			tmp_verts.push_back(noob::vec4(tmp_msh.vertices[i], 0.0));
+			tmp_verts.push_back(noob::vec4(tmp_msh.normals[i], 0));
+			tmp_verts.push_back(tmp_msh.colours[i]);
+		}
 	}
 
-	num_terrain_verts = total_verts;
-
 	noob::graphics& gfx = noob::get_graphics();
-
-	noob::gpu_write_buffer buf = gfx.map_terrain_buffer(0, total_verts);
+	noob::gpu_write_buffer buf = gfx.map_terrain_buffer(0, tmp_verts.size());
 
 	if (!buf.valid())
 	{
@@ -397,16 +402,10 @@ void noob::stage::upload_terrain() noexcept(true)
 		return;
 	}
 
-	// Now, push out all the vertices we've been repressing...
-	for (uint32_t i = 0; i < sceneries.count(); ++i)
+	for (uint32_t i = 0; i < tmp_verts.size(); ++i)
 	{
-		const noob::scenery sc = sceneries.get(noob::scenery_handle::make(i));
-		const noob::body& bod = world.get_body(sc.body);
-		const noob::mat4 model_mat = bod.get_transform();
-
-		// TODO: Add the code that gets the vertices and showes them into our buffer
+		buf.push_back(tmp_verts[i]);
 	}
-	
 
 	gfx.unmap_buffer();
 }
@@ -421,7 +420,6 @@ void noob::stage::upload_terrain() noexcept(true)
 
 void noob::stage::reserve_models(noob::model_handle Handle, uint32_t Num) noexcept(true)
 {
-
 	noob::fast_hashtable::cell* results = models_to_instances.lookup(Handle.index());
 
 	// If we haven't gotten a model with that handle yet...

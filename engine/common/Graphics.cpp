@@ -41,12 +41,14 @@ void noob::graphics::init(const std::array<uint32_t, 2> Dims) noexcept(true)
 	u_eye_pos_terrain = glGetUniformLocation(terrain_shader.index(), "eye_pos");
 	u_light_directional_terrain = glGetUniformLocation(terrain_shader.index(), "directional_light");
 	check_error_gl();
-	
+
 	// Init terrain
 	glGenVertexArrays(1, &terrain_model.vao);
 	glGenBuffers(1, &terrain_model.vertices_vbo);
 	resize_terrain(4096);
 	check_error_gl();
+
+	terrain_initialized = true;
 
 	frame(Dims);
 
@@ -281,25 +283,32 @@ void noob::graphics::resize_instanced_data_buffers(noob::model_handle Handle, ui
 
 void noob::graphics::resize_terrain(uint32_t MaxVerts) noexcept(true)
 {
+	max_terrain_verts = MaxVerts;
+
 	glBindVertexArray(terrain_model.vao);
-	
-	if (!terrain_initialized) // TODO: Remove
-	{	
-		glGenBuffers(1, &terrain_model.vertices_vbo);
-	}
-	
+
+	//	if (!terrain_initialized) // TODO: Remove
+	//	{	
+	//		glGenBuffers(1, &terrain_model.vertices_vbo);
+	//	}
+
 	glBindBuffer(GL_ARRAY_BUFFER, terrain_model.vertices_vbo);
 	glBufferData(GL_ARRAY_BUFFER, max_terrain_verts * noob::model::terrain_stride, nullptr, GL_DYNAMIC_DRAW);
-	
+
 	glBindVertexArray(0);
 
 	check_error_gl();
 
-	max_terrain_verts = MaxVerts;
 }
 
 
-void  noob::graphics::set_terrain_uniforms(const noob::terrain_shading Shading) noexcept(true)
+uint32_t noob::graphics::get_max_terrain_verts() const noexcept(true)
+{
+	return max_terrain_verts;
+}
+
+
+void noob::graphics::set_terrain_uniforms(const noob::terrain_shading Shading) noexcept(true)
 {
 	glUniform4fv(u_colour_0, 1, &Shading.colours[0][0]);
 	glUniform4fv(u_colour_1, 1, &Shading.colours[1][0]);
@@ -377,26 +386,29 @@ noob::gpu_write_buffer noob::graphics::map_instanced_data_buffer(noob::model_han
 }
 
 
-noob::gpu_write_buffer noob::graphics::map_terrain_buffer(uint32_t MinVert, uint32_t MaxVert) const noexcept(true)
+noob::gpu_write_buffer noob::graphics::map_terrain_buffer(uint32_t Min, uint32_t Max) const noexcept(true)
 {
-	if (MaxVert < max_terrain_verts)
+	if(terrain_initialized)
 	{
-	glBindBuffer(GL_ARRAY_BUFFER, terrain_model.vertices_vbo);
-	check_error_gl();
+		if (Max < max_terrain_verts)
+		{
+			// glBindVertexArray(terrain_model.vao);
+			glBindBuffer(GL_ARRAY_BUFFER, terrain_model.vertices_vbo);
+			check_error_gl();
 
-	float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, MinVert, MaxVert, GL_MAP_WRITE_BIT));
-	check_error_gl();
+			const uint32_t total_size = noob::model::terrain_stride * (Max - Min);
 
-	const uint32_t stride_in_bytes = noob::model::terrain_stride;
-	const uint32_t total_size = stride_in_bytes * (MaxVert - MinVert);
+			float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, Min, Max, GL_MAP_WRITE_BIT));
+			check_error_gl();
 
-	if (ptr != nullptr)
-	{
-		return noob::gpu_write_buffer(ptr, total_size / sizeof(float));
+			if (ptr != nullptr)
+			{
+				return noob::gpu_write_buffer(ptr, total_size / sizeof(float));
+			}
+		}
 	}
-	}
-		return noob::gpu_write_buffer::make_invalid();	
-	
+	return noob::gpu_write_buffer::make_invalid();	
+
 }
 
 

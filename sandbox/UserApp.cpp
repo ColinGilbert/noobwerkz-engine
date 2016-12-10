@@ -50,20 +50,24 @@ bool noob::application::user_init()
 	gfx.texture_data(tex_h, 1, std::array<uint32_t, 2>({0, 0}), tex_data.dimensions(), tex_data.buffer());
 	gfx.generate_mips(tex_h);
 
+	const noob::shape_handle scenery_shp = g.box_shape(100.0, 20.0, 100.0);
+	const noob::scenery_handle sc_h = stage.scenery(scenery_shp, noob::vec3(0.0, 0.0, 0.0), versor_from_axis_rad(0.0, 0.0, 1.0, 0.0)); // 0 rad rotation, facing up
+
+
 	const noob::reflectance_handle rh = g.reflectances.add(r);
 
 	const float actor_dims = 2.0;
 	// const noob::shape_handle shp = g.sphere_shape(actor_dims);
 	
-	const noob::shape_handle shp = g.box_shape(actor_dims, actor_dims, actor_dims);
+	const noob::shape_handle actor_shp = g.box_shape(actor_dims, actor_dims, actor_dims);
 
 	const uint32_t actor_count = 200;
 
 	// TODO: Fixup
 	noob::actor_blueprints bp;
-	bp.bounds = shp;
+	bp.bounds = actor_shp;
 	bp.reflect = rh;
-	bp.model = g.model_from_shape(shp, actor_count*8);
+	bp.model = g.model_from_shape(actor_shp, actor_count*8);
 
 	noob::actor_blueprints_handle bph = stage.add_actor_blueprints(bp);
 

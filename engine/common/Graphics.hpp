@@ -48,8 +48,9 @@ namespace noob
 			// Currently implemented as a triplanar-shaded, single-buffer model.
 			// Due to the flexibility of the shaders used, it is easy to support peeling visible faces off objects and sending them to video buffer to keep drawcalls down to one.
 			// It should run smoothly using compressed textures because although texture reads are done three times, those values get reused to recreate all needed maps.
-			void set_num_terrain_verts(uint32_t NumVerts) noexcept(true);
 			void resize_terrain(uint32_t MaxVerts) noexcept(true);
+			uint32_t get_max_terrain_verts() const noexcept(true);
+			
 			void set_terrain_uniforms(const noob::terrain_shading) noexcept(true);
 			// void draw_terrain() const noexcept(true);
 
@@ -60,7 +61,7 @@ namespace noob
 			// These are VBO buffer mapping/unmapping methods
 			// TODO: Split into several functions
 			noob::gpu_write_buffer map_instanced_data_buffer(noob::model_handle, noob::model::instanced_data_type, uint32_t Min, uint32_t Max) const noexcept(true);
-			noob::gpu_write_buffer map_terrain_buffer(uint32_t MinVert, uint32_t MaxVert) const noexcept(true); // uint32_t Min, uint32_t Max) const noexcept(true);			
+			noob::gpu_write_buffer map_terrain_buffer(uint32_t Min, uint32_t Max) const noexcept(true); // uint32_t Min, uint32_t Max) const noexcept(true);			
 			// NOTE: MUST be called as soon as you're finished using a mapped buffer!
 			void unmap_buffer() const noexcept(true);
 
@@ -125,7 +126,6 @@ namespace noob
 			uint32_t u_eye_pos_terrain, u_light_directional_terrain, u_texture_0, u_colour_0, u_colour_1, u_colour_2, u_colour_3, u_blend_0, u_blend_1, u_tex_scales, u_model_scales;
 		
 			noob::vec3 eye_pos, light_direction;
-			bool initialized = false;
 			bool terrain_initialized = false;
 			
 			uint32_t max_terrain_verts = 0;

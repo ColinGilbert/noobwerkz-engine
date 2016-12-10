@@ -25,7 +25,6 @@
 #include "Armature.hpp"
 #include "NDOF.hpp"
 
-
 namespace noob
 {
 	class stage
@@ -64,8 +63,8 @@ namespace noob
 			noob::actor_handle actor(noob::actor_blueprints_handle, uint32_t team, const noob::vec3&, const noob::versor&) noexcept(true);
 
 			void set_team_colour(uint32_t team_num, const noob::vec4& colour) noexcept(true);
-
-			noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::vec3&, const noob::versor&) noexcept(true);
+			
+			noob::scenery_handle scenery(const noob::shape_handle, const noob::vec3&, const noob::versor&) noexcept(true); // Add checkers and such
 
 			std::vector<noob::contact_point> get_intersecting(const noob::actor_handle) const noexcept(true);
 
@@ -103,16 +102,20 @@ namespace noob
 
 			static constexpr auto dbg_name = "Stage";
 
-			noob::physics world;
+			bool terrain_changed = false;
 
+			noob::physics world;
+			
 			noob::mat4 view_matrix, projection_matrix;
 			uint32_t viewport_width, viewport_height;
 			uint32_t num_terrain_verts = 0;
 
 			rde::vector<noob::stage::drawable_info> drawables;
 			rde::vector<noob::stage::actor_info> actor_factories;
-
 			rde::vector<noob::vec4> team_colours;
+
+			// Voronoi cells are preferred over convex hulls generated from a set of points for data representation, as we can be certain that the voronoi cell is unambiguous.
+			// rde::vector<noob::vorocell> voros;
 
 			noob::fast_hashtable models_to_instances;
 
@@ -132,11 +135,9 @@ namespace noob
 			void update_actors() noexcept(true);
 
 			void actor_dither(noob::actor_handle) noexcept(true);
-
 			typedef noob::handle<drawable_info> drawable_info_handle;
-
+			
 			void upload_colours(drawable_info_handle) const noexcept(true);
-
 			void upload_matrices(drawable_info_handle) noexcept(true);
 			
 			// This method checks to see if there have been any models of this type reserved prior to reserving them and reserves + allocates if not. If anything *is* reserved, it'll still only allocate if Num > originally allocated.
