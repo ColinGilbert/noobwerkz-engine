@@ -28,20 +28,41 @@ namespace noob
 
 			// Call before using.
 			void init(const std::array<uint32_t, 2> Dims) noexcept(true);
+
+			// Call this every frame...
+			void frame(const std::array<uint32_t, 2>) const noexcept(true);
+
 			// Call before killing.
 			void destroy() noexcept(true);
 
 			void use_program(noob::graphics::program_handle) noexcept(true);
 
+			// Call this to draw a given model.
+			void draw_instanced(const noob::model_handle, uint32_t NumInstances) const noexcept(true);
+			void draw_terrain() const noexcept(true);
+
 			// Currently, instanced models only support the basic vertex colours. This is to change quite soon.
 			noob::model_handle model_instanced(const noob::basic_mesh&, uint32_t) noexcept(true);
-			void reset_instances(noob::model_handle, uint32_t) noexcept(true);
-			
+			void resize_instanced_data_buffers(noob::model_handle, uint32_t) noexcept(true);
+	
 			// Currently implemented as a triplanar-shaded, single-buffer model.
 			// Due to the flexibility of the shaders used, it is easy to support peeling visible faces off objects and sending them to video buffer to keep drawcalls down to one.
 			// It should run smoothly using compressed textures because although texture reads are done three times, those values get reused to recreate all needed maps.
-			noob::model_handle terrain(const noob::basic_mesh& Mesh, uint32_t MaxVerts) noexcept(true);
-			void terrain_uniforms(const noob::terrain_shading) noexcept(true);
+			void set_num_terrain_verts(uint32_t NumVerts) noexcept(true);
+			void reserve_terrain_verts(uint32_t MaxVerts) noexcept(true);
+			void set_terrain_uniforms(const noob::terrain_shading) noexcept(true);
+			// void draw_terrain() const noexcept(true);
+
+			// TODO: Replace with more generic uniform setting method(s)
+			void set_eye_pos(const noob::vec3&) const noexcept(true);
+			void set_light_direction(const noob::vec3&) const noexcept(true);
+
+			// These are VBO buffer mapping/unmapping methods
+			// TODO: Split into several functions
+			noob::gpu_write_buffer map_instanced_data_buffer(noob::model_handle, noob::model::instanced_data_type, uint32_t Min, uint32_t Max) const noexcept(true);
+			noob::gpu_write_buffer map_terrain_buffer() const noexcept(true); // uint32_t Min, uint32_t Max) const noexcept(true);			
+			// NOTE: MUST be called as soon as you're finished using a mapped buffer!
+			void unmap_buffer() const noexcept(true);
 
 			// Texture storage reservers
 			// noob::texture_1d_handle reserve_texture_1d(uint32_t length, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true); // TODO
@@ -85,28 +106,12 @@ namespace noob
 			void generate_mips(noob::texture_array_2d_handle) const noexcept(true);
 			void generate_mips(noob::texture_3d_handle) const noexcept(true);
 
-			// Call this to draw a given model.
-			void draw(const noob::model_handle, uint32_t NumInstances) const noexcept(true);
-			// Call this every frame...
-			void frame(const std::array<uint32_t, 2>) const noexcept(true);
-
-			// These are VBO buffer mapping/unmapping methods
-			noob::gpu_write_buffer map_buffer(noob::model_handle, noob::model::instanced_data_type, uint32_t min, uint32_t max) const noexcept(true);
-
-			// NOTE: MUST be called as soon as you're finished using a mapped buffer!
-			void unmap_buffer() const noexcept(true);
-
-			noob::graphics::program_handle get_instanced() const noexcept(true);
-
-			// TODO: Find better way to set these.
-
-			// TODO: Replace with more generic uniform setting method(s)
-			void eye_pos(const noob::vec3&) const noexcept(true);
-			void light_direction(const noob::vec3&) const noexcept(true);
+			noob::graphics::program_handle get_instanced_shader() const noexcept(true);
 
 		protected:
-
 			std::vector<noob::model> models;
+			noob::model terrain_model;
+			
 			std::vector<noob::texture_1d> textures_1d;
 			std::vector<noob::texture_2d> textures_2d;
 			std::vector<noob::texture_array_2d> texture_arrays_2d;			
@@ -118,6 +123,13 @@ namespace noob
 			// These will soon be replaced by proper UBO's and made typesafe. The only reason they're here is to serve as a stable, well-understood prior case example.
 			uint32_t u_eye_pos, u_light_directional;
 			uint32_t u_eye_pos_terrain, u_light_directional_terrain, u_texture_0, u_colour_0, u_colour_1, u_colour_2, u_colour_3, u_blend_0, u_blend_1, u_tex_scales, u_model_scales;
+		
+			noob::vec3 eye_pos, light_direction;
+			bool initialized = false;
+			bool terrain_initialized = false;
+			
+			uint32_t terrain_verts = 0;
+			uint32_t max_terrain_verts;
 	};
 
 	static noob::singleton<noob::graphics> gfx_instance;

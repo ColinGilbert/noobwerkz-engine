@@ -49,6 +49,11 @@ namespace noob
 				return m[x];
 			}
 
+			const T& operator[](uint32_t x) const noexcept(true)
+			{
+				return m[x];
+			}
+
 			vec4_type<T> operator*(const vec4_type<T>& rhs) const noexcept(true)
 			{
 				// 0x + 4y + 8z + 12w

@@ -78,7 +78,14 @@ namespace noob
 			{
 				return q[x];
 			}
-			
+		
+			const T& operator[](uint32_t x) const noexcept(true)
+			{
+				return q[x];
+			}
+
+
+
 			std::array<T,4> q;
 		};
 }

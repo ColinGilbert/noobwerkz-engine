@@ -20,6 +20,11 @@ namespace noob
 				return v[x];
 			}
 
+			const T& operator[](uint32_t x) const noexcept(true)
+			{
+				return v[x];
+			}
+
 			std::array<T, 2> v;
 		};
 }

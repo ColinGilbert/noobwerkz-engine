@@ -11,6 +11,7 @@ namespace noob
 		public:
 		static constexpr uint32_t materials_stride = sizeof(noob::vec4);
 		static constexpr uint32_t matrices_stride = sizeof(noob::mat4) * 2;
+		static constexpr uint32_t terrain_stride = sizeof(noob::vec4) * 3;
 
 		model() noexcept(true) : valid(false), type(noob::model::geom_type::INVALID), n_vertices(0), n_indices(0), n_instances(0), vao(0), vertices_vbo(0), indices_vbo(0), instanced_colours_vbo(0), instanced_matrices_vbo(0) {}
 

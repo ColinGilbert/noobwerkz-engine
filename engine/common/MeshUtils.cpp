@@ -475,8 +475,6 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 		mesh.indices.push_back(static_cast<uint16_t>(hull_result.m_Indices[i]));
 	}
 
-
-
 	return mesh;
 }
 

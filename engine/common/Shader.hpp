@@ -20,7 +20,7 @@ namespace noob
 		// By default, the colour gradient is set at 0.0 = colour_1, 0.25 = colour_2, 0.75 = colour_3, 1.0 colour_4 and the resulting colour is interpolated along.	
 		std::array<noob::vec4, 4> colours;
 		// These offsets provide a way for the programmer to bring tweak the position of colour_2 and colour_3 and down the gradient. TODO: Remove
-		// noob::vec2 colour_offsets;
+		noob::vec2 colour_offsets;
 		// This allows the programmer to diversify the output even further!
 		noob::vec3 texture_scales;
 	};

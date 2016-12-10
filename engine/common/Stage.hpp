@@ -31,7 +31,7 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.6, 0.6, 0.6, 1.0)) {}
+			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.6, 0.6, 0.6, 1.0)), terrain_uploaded(false) {}
 
 			// This one must be called by the application.
 			void init(uint32_t width, uint32_t height, const noob::mat4& projection_mat) noexcept(true);
@@ -65,7 +65,7 @@ namespace noob
 
 			void set_team_colour(uint32_t team_num, const noob::vec4& colour) noexcept(true);
 
-			// noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::vec3&, const noob::versor&) noexcept(true);
+			noob::scenery_handle scenery(const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::vec3&, const noob::versor&) noexcept(true);
 
 			std::vector<noob::contact_point> get_intersecting(const noob::actor_handle) const noexcept(true);
 
@@ -90,7 +90,7 @@ namespace noob
 			struct drawable_info
 			{
 				noob::model_handle model;
-				uint32_t count;
+				uint32_t count = 0;
 				bool needs_colours;
 				std::vector<drawable_instance> instances;
 			};
@@ -124,7 +124,7 @@ namespace noob
 			noob::duration draw_duration;
 			noob::duration last_navmesh_build_duration;
 
-
+			bool terrain_uploaded;
 			void run_ai() noexcept(true);
 
 			// rde::slist<rde::vector<noob::vec3>> paths;
@@ -138,9 +138,11 @@ namespace noob
 			void upload_colours(drawable_info_handle) const noexcept(true);
 
 			void upload_matrices(drawable_info_handle) noexcept(true);
+			
+			// This method checks to see if there have been any models of this type reserved prior to reserving them and reserves + allocates if not. If anything *is* reserved, it'll still only allocate if Num > originally allocated.
+			void reserve_models(noob::model_handle h, uint32_t Num) noexcept(true);
 
-			void reserve_models(noob::model_handle h, uint32_t num) noexcept(true);
-
+			void upload_terrain() noexcept(true);
 
 	};
 }

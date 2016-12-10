@@ -25,13 +25,10 @@ void noob::graphics::init(const std::array<uint32_t, 2> Dims) noexcept(true)
 	check_error_gl();
 
 	noob::logger::log(noob::importance::INFO, "Loading terrain shader!");
-	
+
 	terrain_shader = noob::graphics::program_handle::make(load_program_gl(noob::glsl::fs_terrain_src, noob::glsl::fs_terrain_src));
 
 	check_error_gl();
-
-	// uint32_t u_eye_pos_triplanar, u_light_directional_triplanar, u_texture_0, u_colour_0, u_colour_1, u_colour_2, u_colour_3, u_blend_0, u_blend_1, u_tex_scales;
-
 
 	u_texture_0 = glGetUniformLocation(terrain_shader.index(), "texture_0");
 	u_colour_0 = glGetUniformLocation(terrain_shader.index(), "colour_0");
@@ -45,9 +42,32 @@ void noob::graphics::init(const std::array<uint32_t, 2> Dims) noexcept(true)
 	u_light_directional_terrain = glGetUniformLocation(terrain_shader.index(), "directional_light");
 	check_error_gl();
 
+	reserve_terrain_verts(4096);
+
 	frame(Dims);
 
 	noob::logger::log(noob::importance::INFO, "[Graphics] Done init.");
+}
+
+
+void noob::graphics::frame(const std::array<uint32_t, 2> Dims) const noexcept(true)
+{
+	glBindVertexArray(0);
+
+	glViewport(0, 0, Dims[0], Dims[1]);
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
+
+	glClearColor(0.2f, 0.0f, 0.2f, 0.0f);
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	check_error_gl();
 }
 
 
@@ -55,50 +75,35 @@ void noob::graphics::destroy() noexcept(true)
 {
 
 }
-/*
-   noob::model_handle noob::graphics::model(noob::model::geom_type geom, const noob::basic_mesh& mesh) noexcept(true)
-   {
-   noob::model_handle results;
-   GLuint vao_id = 0;
-
-   switch (geom)
-   {
-   case(noob::model::geom_type::INDEXED_MESH):
-   {
-   break;
-   }
-   case(noob::model::geom_type::DYNAMIC_TERRAIN):
-   {
-   break;
-   }
-   case(noob::model::geom_type::BILLBOARD):
-   {
-   break;
-   }
-   case(noob::model::geom_type::POINT_SPRITE):
-   {
-   break;
-   }
-   default:
-   {
-   noob::logger::log(noob::importance::ERROR, "[Graphics] Reached past the valid enum values in switch statement. WTF?!");
-   }
-   }
-
-// Reset to the default VAO
-glBindVertexArray(0);
-
-return noob::model_handle::make(vao_id);
-}
-*/
 
 
-void noob::graphics::use_program(noob::graphics::program_handle arg) noexcept(true)
+void noob::graphics::use_program(noob::graphics::program_handle Arg) noexcept(true)
 {
-	glUseProgram(arg.index());
+	glUseProgram(Arg.index());
 	check_error_gl();
 }
 
+
+void noob::graphics::draw_instanced(const noob::model_handle Handle, uint32_t NumInstances) const noexcept(true)
+{
+	const noob::model m = models[Handle.index()];
+
+	if (m.type == noob::model::geom_type::INDEXED_MESH)
+	{
+		glBindVertexArray(m.vao);
+		glDrawElementsInstanced(GL_TRIANGLES, m.n_indices, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.n_instances, NumInstances));
+		check_error_gl();
+		glBindVertexArray(0);		
+	}
+}
+
+void noob::graphics::draw_terrain() const noexcept(true)
+{
+	glBindVertexArray(terrain_model.vao);
+	glDrawArrays(GL_TRIANGLES, 0, terrain_verts);
+	check_error_gl();
+	glBindVertexArray(0);
+}
 
 
 noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& Mesh, uint32_t NumInstances) noexcept(true)
@@ -245,69 +250,7 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& Mesh,
 }
 
 
-noob::model_handle noob::graphics::terrain(const noob::basic_mesh& Mesh, uint32_t MaxVerts) noexcept(true)
-{
-	noob::model results;
-
-	results.type = noob::model::geom_type::TERRAIN;
-	results.n_vertices = Mesh.vertices.size();
-	results.n_instances = 1;
-	// results.vao = ?;
-	// results.vertices_vbo = ?;
-	glGenVertexArrays(1, &results.vao);
-	glBindVertexArray(results.vao);
-	
-	/////////////////////////////////////////////////
-	// Setup non-instanced, interleaved attribs VBO:
-	/////////////////////////////////////////////////
-
-	std::vector<noob::vec4> interleaved;
-	interleaved.resize(results.n_vertices * 3);
-
-	// Interleave our vertex positions, normals, and colours
-	for(uint32_t i = 0; i < results.n_vertices; ++i)
-	{
-		const uint32_t current_offset = i * 3;
-		interleaved[current_offset] = noob::vec4(Mesh.vertices[i].v[0], Mesh.vertices[i].v[1], Mesh.vertices[i].v[2], 1.0);
-		interleaved[current_offset + 1] = noob::vec4(Mesh.normals[i].v[0], Mesh.normals[i].v[1], Mesh.normals[i].v[2], 0.0);
-		interleaved[current_offset + 2] = Mesh.colours[i];
-	}
-
-	glGenBuffers(1, &results.vertices_vbo);
-
-	// Upload interleaved buffer
-	glBindBuffer(GL_ARRAY_BUFFER, results.vertices_vbo);
-	glBufferData(GL_ARRAY_BUFFER, interleaved.size() * sizeof(noob::vec4), &interleaved[0], GL_DYNAMIC_DRAW);
-
-	check_error_gl();
-
-	models.push_back(results);
-
-	return noob::model_handle::make(models.size() - 1);
-}
-
-
-void  noob::graphics::terrain_uniforms(const noob::terrain_shading Shading) noexcept(true)
-{
-	/*
-	   struct terrain_shading
-	   {
-	// The sum of the pixel's separate RGB values (basically converted into greyscale) is used to pick a colour along a greyscale gradient. These weights allow the end-user to change the nature of the final texture.
-	noob::vec3 texture_weights;
-	// By default, the colour gradient is set at 0.0 = colour_1, 0.25 = colour_2, 0.75 = colour_3, 1.0 colour_4 and the resulting colour is interpolated along.	
-	std::array<noob::vec4, 4> colours;
-
-	noob::vec2 colour_offsets;
-	// This allows the programmer to diversify the output even further!
-	noob::vec3 texture_scales;
-	};
-	*/
-
-
-}
-
-
-void noob::graphics::reset_instances(noob::model_handle Handle, uint32_t NumInstances) noexcept(true)
+void noob::graphics::resize_instanced_data_buffers(noob::model_handle Handle, uint32_t NumInstances) noexcept(true)
 {
 	if( models[Handle.index()].type == noob::model::geom_type::INDEXED_MESH)
 	{
@@ -330,6 +273,150 @@ void noob::graphics::reset_instances(noob::model_handle Handle, uint32_t NumInst
 
 		glBindVertexArray(0);
 	}
+}
+
+
+void noob::graphics::set_num_terrain_verts(uint32_t Num) noexcept(true)
+{
+	if (Num < max_terrain_verts)
+	{
+		terrain_verts = Num;
+	}
+	else
+	{
+		reserve_terrain_verts(Num);
+		terrain_verts = Num;
+	}
+}
+
+
+void noob::graphics::reserve_terrain_verts(uint32_t MaxVerts) noexcept(true)
+{
+	max_terrain_verts = MaxVerts;
+	if (!terrain_initialized)
+	{	
+		glGenVertexArrays(1, &terrain_model.vao);
+	}
+
+	glBindVertexArray(terrain_model.vao);
+	
+	if (!terrain_initialized)
+	{	
+		glGenBuffers(1, &terrain_model.vertices_vbo);
+	}
+	
+	glBindBuffer(GL_ARRAY_BUFFER, terrain_model.vertices_vbo);
+	glBufferData(GL_ARRAY_BUFFER, max_terrain_verts * noob::model::terrain_stride, nullptr, GL_DYNAMIC_DRAW);
+
+	check_error_gl();
+}
+
+
+void  noob::graphics::set_terrain_uniforms(const noob::terrain_shading Shading) noexcept(true)
+{
+	glUniform4fv(u_colour_0, 1, &Shading.colours[0][0]);
+	glUniform4fv(u_colour_1, 1, &Shading.colours[1][0]);
+	glUniform4fv(u_colour_2, 1, &Shading.colours[2][0]);
+	glUniform4fv(u_colour_3, 1, &Shading.colours[3][0]);
+	glUniform3fv(u_blend_0, 1, &Shading.texture_weights[0]);
+	glUniform2fv(u_blend_1, 1, &Shading.colour_offsets[0]);
+	glUniform3fv(u_tex_scales, 1, &Shading.texture_scales[0]);
+}
+
+
+void noob::graphics::set_eye_pos(const noob::vec3& Arg) const noexcept(true)
+{
+	glUniform3fv(u_eye_pos, 1, &Arg.v[0]);
+	// glUniform3fv(u_eye_pos_terrain, 1, &Arg.v[0]);
+
+	check_error_gl();
+}
+
+
+void noob::graphics::set_light_direction(const noob::vec3& Arg) const noexcept(true)
+{
+	glUniform3fv(u_light_directional, 1, &Arg.v[0]);
+	// glUniform3fv(u_light_directional_terrain, 1, &Arg.v[0]);
+
+	check_error_gl();
+}
+
+
+noob::gpu_write_buffer noob::graphics::map_instanced_data_buffer(noob::model_handle Handle, noob::model::instanced_data_type DataType, uint32_t Min, uint32_t Max) const noexcept(true)
+{
+	const noob::model m = models[Handle.index()];
+	uint32_t stride_in_bytes;
+
+	if (m.type == noob::model::geom_type::INDEXED_MESH)
+	{
+		// glBindVertexArray(m.vao);	
+		switch (DataType)
+		{
+			case (noob::model::instanced_data_type::COLOUR):
+				{
+					stride_in_bytes = noob::model::materials_stride;
+					glBindBuffer(GL_ARRAY_BUFFER, m.instanced_colours_vbo);
+					check_error_gl();
+					break;
+				}
+			case (noob::model::instanced_data_type::MATRICES):
+				{
+					stride_in_bytes = noob::model::matrices_stride;
+					glBindBuffer(GL_ARRAY_BUFFER, m.instanced_matrices_vbo);
+					check_error_gl();
+					break;
+				}
+		}
+	}
+	else
+	{
+		return noob::gpu_write_buffer::make_invalid();	
+	}
+
+	const uint32_t total_size = stride_in_bytes * m.n_instances;
+
+	float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, Min, Max, GL_MAP_WRITE_BIT));
+
+	check_error_gl();
+
+	if (ptr != nullptr)
+	{
+		return noob::gpu_write_buffer(ptr, total_size / sizeof(float));
+	}
+	else
+	{
+		return noob::gpu_write_buffer::make_invalid();	
+	}
+}
+
+
+noob::gpu_write_buffer noob::graphics::map_terrain_buffer() const noexcept(true)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, terrain_model.vertices_vbo);
+	check_error_gl();
+
+	float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, 0, max_terrain_verts, GL_MAP_WRITE_BIT));
+	check_error_gl();
+
+	const uint32_t stride_in_bytes = noob::model::terrain_stride;
+	const uint32_t total_size = stride_in_bytes * terrain_verts;
+
+	if (ptr != nullptr)
+	{
+		return noob::gpu_write_buffer(ptr, total_size / sizeof(float));
+	}
+	else
+	{
+		return noob::gpu_write_buffer::make_invalid();	
+	}
+}
+
+
+void noob::graphics::unmap_buffer() const noexcept(true)
+{
+	glUnmapBuffer(GL_ARRAY_BUFFER);
+
+	check_error_gl();
 }
 
 
@@ -871,112 +958,7 @@ void noob::graphics::generate_mips(noob::texture_3d_handle) const noexcept(true)
 }
 
 
-void noob::graphics::draw(const noob::model_handle Handle, uint32_t NumInstances) const noexcept(true)
-{
-	const noob::model m = models[Handle.index()];
-	glBindVertexArray(m.vao);
-
-	glDrawElementsInstanced(GL_TRIANGLES, m.n_indices, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.n_instances, NumInstances));
-
-	check_error_gl();
-	glBindVertexArray(0);
-}
-
-
-void noob::graphics::frame(const std::array<uint32_t, 2> Dims) const noexcept(true)
-{
-	glBindVertexArray(0);
-
-	glViewport(0, 0, Dims[0], Dims[1]);
-
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
-
-	glClearColor(0.2f, 0.0f, 0.2f, 0.0f);
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	check_error_gl();
-}
-
-
-noob::gpu_write_buffer noob::graphics::map_buffer(noob::model_handle h, noob::model::instanced_data_type DataType, uint32_t Min, uint32_t Max) const noexcept(true)
-{
-	noob::model m = models[h.index()];
-
-	if (m.type != noob::model::geom_type::INDEXED_MESH)
-	{
-		return noob::gpu_write_buffer::make_invalid();
-	}
-
-	// glBindVertexArray(m.vao);	
-
-	uint32_t stride_in_bytes;
-
-	switch (DataType)
-	{
-		case (noob::model::instanced_data_type::COLOUR):
-			{
-				stride_in_bytes = noob::model::materials_stride;
-				glBindBuffer(GL_ARRAY_BUFFER, m.instanced_colours_vbo);
-				check_error_gl();
-				break;
-			}
-		case (noob::model::instanced_data_type::MATRICES):
-			{
-				stride_in_bytes = noob::model::matrices_stride;
-				glBindBuffer(GL_ARRAY_BUFFER, m.instanced_matrices_vbo);
-				check_error_gl();
-				break;
-			}
-	}
-
-	const uint32_t total_size = stride_in_bytes * m.n_instances;
-
-	float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, Min, Max, GL_MAP_WRITE_BIT));
-
-	check_error_gl();
-
-	if (ptr != nullptr)
-	{
-		return noob::gpu_write_buffer(ptr, total_size / sizeof(float));
-	}
-	else
-	{
-		return noob::gpu_write_buffer::make_invalid();	
-	}
-}
-
-
-void noob::graphics::unmap_buffer() const noexcept(true)
-{
-	glUnmapBuffer(GL_ARRAY_BUFFER);
-
-	check_error_gl();
-}
-
-
-noob::graphics::program_handle noob::graphics::get_instanced() const noexcept(true)
+noob::graphics::program_handle noob::graphics::get_instanced_shader() const noexcept(true)
 {
 	return instanced_shader;
-}
-
-
-void noob::graphics::eye_pos(const noob::vec3& arg) const noexcept(true)
-{
-	glUniform3fv(u_eye_pos, 1, &arg.v[0]);
-
-	check_error_gl();
-}
-
-
-void noob::graphics::light_direction(const noob::vec3& arg) const noexcept(true)
-{
-	glUniform3fv(u_light_directional, 1, &arg.v[0]);
-
-	check_error_gl();
 }

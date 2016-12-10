@@ -37,7 +37,6 @@ void noob::stage::init(uint32_t width, uint32_t height, const noob::mat4& projec
 
 void noob::stage::tear_down() noexcept(true) 
 {
-
 	actors.empty();
 	// actor_mq.clear();
 	// actor_mq_count = 0;
@@ -87,12 +86,12 @@ void noob::stage::draw() noexcept(true)
 	// PROFILE_FUNC();
 
 	noob::graphics& gfx = noob::get_graphics();
-	noob::graphics::program_handle prog = gfx.get_instanced();
+	noob::graphics::program_handle prog = gfx.get_instanced_shader();
 	gfx.use_program(prog);
 
-	gfx.eye_pos(noob::translation_from_mat4(view_matrix));
+	gfx.set_eye_pos(noob::translation_from_mat4(view_matrix));
 
-	gfx.light_direction(noob::vec3(0.0, 0.0, -1.0));
+	gfx.set_light_direction(noob::normalize(noob::vec3(0.5, -1.0, 0.33)));
 
 	for (uint32_t drawables_index = 0; drawables_index < drawables.size(); ++drawables_index)
 	{
@@ -105,16 +104,14 @@ void noob::stage::draw() noexcept(true)
 
 		upload_matrices(handle);
 
-		const noob::model_handle modl = drawables[drawables_index].model;
+		const noob::model_handle modl_h = drawables[drawables_index].model;
 		const uint32_t instance_count = drawables[drawables_index].count;
 
-		// noob::logger::log(noob::importance::INFO, noob::concat("Drawing model ", noob::to_string(modl.index()), " ", noob::to_string(instance_count), " times"));
-
-		gfx.draw(modl, instance_count);
-
-		// noob::logger::log(noob::importance::INFO,  noob::concat("[Stage] Drawing model ", noob::to_string(modl.index()), " ", noob::to_string(instance_count), " times."));
-
+		gfx.draw_instanced(modl_h, instance_count);
 	}
+
+
+	gfx.draw_terrain();
 }
 
 
@@ -175,10 +172,14 @@ noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32
 
 		if (info.count < info.max)
 		{
+
+			const noob::ghost_handle ghost_h = world.add_ghost(info.bp.bounds, pos, orient);
+
 			noob::actor a;
 			a.team = team;
-			a.ghost = world.add_ghost(info.bp.bounds, pos, orient);
+			a.ghost = ghost_h;
 			a.bp_handle = bp_h;
+
 			const noob::actor_handle a_h = actors.add(a);
 
 			noob::fast_hashtable::cell* results = models_to_instances.lookup(info.bp.model.index());
@@ -190,7 +191,7 @@ noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32
 			drawables[index].instances[old_count].actor = a_h;
 
 			// Setting index-to-self info:
-			noob::ghost& temp_ghost = world.get_ghost(a.ghost);
+			noob::ghost& temp_ghost = world.get_ghost(ghost_h);
 
 			temp_ghost.set_user_index_1(static_cast<uint32_t>(noob::stage_item_type::ACTOR));
 			temp_ghost.set_user_index_2(a_h.index());
@@ -210,35 +211,26 @@ noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32
 	}
 }
 
-/*
-   noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg) noexcept(true)
-   {
-   noob::globals& g = noob::get_globals();
 
-   const noob::body_handle bod_h = body(noob::body_type::STATIC, shape_arg, 0.0, pos_arg, orient_arg, false);
+noob::scenery_handle noob::stage::scenery(const noob::shape_handle shape_arg, const noob::reflectance_handle reflect_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg) noexcept(true)
+{
+	noob::globals& g = noob::get_globals();
 
-   noob::scenery sc;
-   sc.body = bod_h;
-   sc.reflect = reflect_arg;
-   noob::scenery_handle scenery_h = sceneries.add(sc);
+	const noob::body_handle bod_h = world.add_body(noob::body_type::STATIC, shape_arg, 0.0, pos_arg, orient_arg, false);
 
-   noob::stage_item_variant var;
-   var.type = noob::stage_item_type::SCENERY;
-   var.index = scenery_h.index();
+	noob::scenery sc;
+	sc.body = bod_h;
 
-   add_to_graph(var);
+	const noob::scenery_handle scenery_h = sceneries.add(sc);
 
-   noob::body b = bodies.get(bod_h);
-   b.inner->setUserIndex_1(static_cast<uint32_t>(noob::stage_item_type::SCENERY));
-   b.inner->setUserIndex_2(scenery_h.index());
+	noob::body b = world.get_body(bod_h);
+	b.set_user_index_1(static_cast<uint32_t>(noob::stage_item_type::SCENERY));
+	b.set_user_index_2(scenery_h.index());
 
-   logger::log(noob::importance::INFO, noob::concat("[Stage] Scenery added! Handle ", noob::to_string(scenery_h.index())) );
+	logger::log(noob::importance::INFO, noob::concat("[Stage] Scenery added! Handle ", noob::to_string(scenery_h.index())) );
 
-   return scenery_h;
-   }
-   */
-
-
+	return scenery_h;
+}
 
 
 std::vector<noob::contact_point> noob::stage::get_intersecting(const noob::actor_handle ah) const noexcept(true)
@@ -246,6 +238,7 @@ std::vector<noob::contact_point> noob::stage::get_intersecting(const noob::actor
 	noob::actor a = actors.get(ah);
 	return world.get_intersecting(a.ghost);
 }
+
 
 void noob::stage::update_actors() noexcept(true)
 {
@@ -259,22 +252,22 @@ void noob::stage::update_actors() noexcept(true)
 
 void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 {
-/*
-	noob::actor a = actors.get(ah);
+	/*
+	   noob::actor a = actors.get(ah);
 
-	if (a.alive)
-	{
-		std::vector<noob::contact_point> cps = get_intersecting(ah);
-		if (cps.size() == 0)
-		{
-			noob::vec3 gravity = world.get_gravity();// * a.gravity_coeff;
-			noob::ghost& gst = world.get_ghost(a.ghost);
-			noob::vec3 temp_pos = gst.get_position();
-			temp_pos += gravity;
-			gst.set_position(temp_pos);
-		}
-	}
-*/
+	   if (a.alive)
+	   {
+	   std::vector<noob::contact_point> cps = get_intersecting(ah);
+	   if (cps.size() == 0)
+	   {
+	   noob::vec3 gravity = world.get_gravity();// * a.gravity_coeff;
+	   noob::ghost& gst = world.get_ghost(a.ghost);
+	   noob::vec3 temp_pos = gst.get_position();
+	   temp_pos += gravity;
+	   gst.set_position(temp_pos);
+	   }
+	   }
+	   */
 }
 
 
@@ -289,7 +282,7 @@ void noob::stage::upload_colours(drawable_info_handle arg) const noexcept(true)
 
 	noob::graphics& gfx = noob::get_graphics();
 
-	noob::gpu_write_buffer buf = gfx.map_buffer(model_h, noob::model::instanced_data_type::COLOUR, 0, count);
+	noob::gpu_write_buffer buf = gfx.map_instanced_data_buffer(model_h, noob::model::instanced_data_type::COLOUR, 0, count);
 
 	if (buf.valid() == false)
 	{
@@ -332,7 +325,7 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 	noob::graphics& gfx = noob::get_graphics();
 
 
-	noob::gpu_write_buffer buf = gfx.map_buffer(model_h, noob::model::instanced_data_type::MATRICES, 0, count);
+	noob::gpu_write_buffer buf = gfx.map_instanced_data_buffer(model_h, noob::model::instanced_data_type::MATRICES, 0, count);
 	if (buf.valid() == false)
 	{
 		logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced matrices buffer for model ", noob::to_string(arg.index())));	
@@ -378,17 +371,72 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 }
 
 
-void noob::stage::reserve_models(noob::model_handle h, uint32_t num) noexcept(true)
+void noob::stage::upload_terrain() noexcept(true)
 {
-	noob::fast_hashtable::cell* results = models_to_instances.lookup(h.index());
+
+	noob::graphics& gfx = noob::get_graphics();
+
+	const noob::gpu_write_buffer buf = gfx.map_terrain_buffer();//0, uint32_t Max)
+
+	if (buf.valid() == false)
+	{
+		logger::log(noob::importance::ERROR, "[Stage] Could not map instanced matrices buffer for terrain");	
+		return;
+	}
+
+	uint32_t num_vertices = 0;
+
+	for (uint32_t i = 0; i < sceneries.count(); ++i)
+	{
+		const noob::scenery sc = sceneries.get(noob::scenery_handle::make(i));
+		const noob::body& bod = world.get_body(sc.body);
+		const noob::mat4 model_mat = bod.get_transform();
+		// for()
+		// {
+		//	bool valid = buf.push_back(model_mat);
+		// }
+
+	}
+
+	// 
+	/*
+	   noob::vec3 
+	   bool valid = buf.push_back(model_mat);
+
+	   if (!valid)
+	   {
+	   logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu matrices buffer for model ", noob::to_string(arg.index()), " MVP"));
+	   gfx.unmap_buffer();			
+	   return;
+	   }
+
+	   ++current;
+	   }
+	   */
+
+gfx.unmap_buffer();
+}
+
+
+// logger::log(noob::importance::INFO, noob::concat("[Stage] ", noob::to_string(current), "*2 matrices uploaded"));
+
+
+
+
+
+
+void noob::stage::reserve_models(noob::model_handle Handle, uint32_t Num) noexcept(true)
+{
+
+	noob::fast_hashtable::cell* results = models_to_instances.lookup(Handle.index());
 
 	// If we haven't gotten a model with that handle yet...
 	if (!models_to_instances.is_valid(results))
 	{
-		results = models_to_instances.insert(h.index());
+		results = models_to_instances.insert(Handle.index());
 
 		noob::stage::drawable_info info;
-		info.model = h;
+		info.model = Handle;
 		info.count = 0;
 		info.needs_colours = true;
 
@@ -396,24 +444,24 @@ void noob::stage::reserve_models(noob::model_handle h, uint32_t num) noexcept(tr
 
 		const uint32_t results_index  = drawables.size() - 1;
 
-		drawables[results_index].instances.resize(num);
+		drawables[results_index].instances.resize(Num);
 
 		results->value = results_index;
 
 		noob::graphics& gfx = noob::get_graphics();
-		gfx.reset_instances(h, num);
+		gfx.resize_instanced_data_buffers(Handle, Num);
 	}
 	else
 	{
 		// To prevent repeated pointer dereferences
 		const uint32_t index = results->value;
 		const uint32_t old_max = drawables[index].instances.size();
-		const uint32_t max_new = old_max + num;
+		const uint32_t max_new = std::max(old_max, Num);
 
 		drawables[index].instances.resize(max_new);
 
 		noob::graphics& gfx = noob::get_graphics();
-		gfx.reset_instances(h, num);
+		gfx.resize_instanced_data_buffers(Handle, Num);
 	}
 }
 

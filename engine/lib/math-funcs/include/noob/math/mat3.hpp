@@ -32,6 +32,12 @@ namespace noob
 				return m[x];
 			}
 
+			const T& operator[](uint32_t x) const noexcept(true)
+			{
+				return m[x];
+			}
+
+
 			std::array<T, 9> m;
 		};
 }
