@@ -39,7 +39,7 @@ namespace noob
 
 			// Call this to draw a given model.
 			void draw_instanced(const noob::model_handle, uint32_t NumInstances) const noexcept(true);
-			void draw_terrain() const noexcept(true);
+			void draw_terrain(uint32_t Verts) const noexcept(true);
 
 			// Currently, instanced models only support the basic vertex colours. This is to change quite soon.
 			noob::model_handle model_instanced(const noob::basic_mesh&, uint32_t) noexcept(true);
@@ -49,7 +49,7 @@ namespace noob
 			// Due to the flexibility of the shaders used, it is easy to support peeling visible faces off objects and sending them to video buffer to keep drawcalls down to one.
 			// It should run smoothly using compressed textures because although texture reads are done three times, those values get reused to recreate all needed maps.
 			void set_num_terrain_verts(uint32_t NumVerts) noexcept(true);
-			void reserve_terrain_verts(uint32_t MaxVerts) noexcept(true);
+			void resize_terrain(uint32_t MaxVerts) noexcept(true);
 			void set_terrain_uniforms(const noob::terrain_shading) noexcept(true);
 			// void draw_terrain() const noexcept(true);
 
@@ -60,7 +60,7 @@ namespace noob
 			// These are VBO buffer mapping/unmapping methods
 			// TODO: Split into several functions
 			noob::gpu_write_buffer map_instanced_data_buffer(noob::model_handle, noob::model::instanced_data_type, uint32_t Min, uint32_t Max) const noexcept(true);
-			noob::gpu_write_buffer map_terrain_buffer() const noexcept(true); // uint32_t Min, uint32_t Max) const noexcept(true);			
+			noob::gpu_write_buffer map_terrain_buffer(uint32_t MinVert, uint32_t MaxVert) const noexcept(true); // uint32_t Min, uint32_t Max) const noexcept(true);			
 			// NOTE: MUST be called as soon as you're finished using a mapped buffer!
 			void unmap_buffer() const noexcept(true);
 
@@ -128,8 +128,7 @@ namespace noob
 			bool initialized = false;
 			bool terrain_initialized = false;
 			
-			uint32_t terrain_verts = 0;
-			uint32_t max_terrain_verts;
+			uint32_t max_terrain_verts = 0;
 	};
 
 	static noob::singleton<noob::graphics> gfx_instance;

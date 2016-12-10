@@ -31,7 +31,7 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.6, 0.6, 0.6, 1.0)), terrain_uploaded(false) {}
+			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.6, 0.6, 0.6, 1.0)) {}
 
 			// This one must be called by the application.
 			void init(uint32_t width, uint32_t height, const noob::mat4& projection_mat) noexcept(true);
@@ -107,6 +107,7 @@ namespace noob
 
 			noob::mat4 view_matrix, projection_matrix;
 			uint32_t viewport_width, viewport_height;
+			uint32_t num_terrain_verts = 0;
 
 			rde::vector<noob::stage::drawable_info> drawables;
 			rde::vector<noob::stage::actor_info> actor_factories;
@@ -124,7 +125,6 @@ namespace noob
 			noob::duration draw_duration;
 			noob::duration last_navmesh_build_duration;
 
-			bool terrain_uploaded;
 			void run_ai() noexcept(true);
 
 			// rde::slist<rde::vector<noob::vec3>> paths;

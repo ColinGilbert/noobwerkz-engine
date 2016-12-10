@@ -1,3 +1,8 @@
+Dec 9th, 2016
+```
+Done with GL textures. Also been working on (and now almost done) bringing over the terrain shader to GLSL.
+```
+
 Dec 2, 2016
 ```
 Graphics API now makes sense. Now porting texture GLAPI.

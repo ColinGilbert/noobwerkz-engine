@@ -111,7 +111,7 @@ void noob::stage::draw() noexcept(true)
 	}
 
 
-	gfx.draw_terrain();
+	gfx.draw_terrain(num_terrain_verts);
 }
 
 
@@ -373,48 +373,42 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 
 void noob::stage::upload_terrain() noexcept(true)
 {
-
-	noob::graphics& gfx = noob::get_graphics();
-
-	const noob::gpu_write_buffer buf = gfx.map_terrain_buffer();//0, uint32_t Max)
-
-	if (buf.valid() == false)
-	{
-		logger::log(noob::importance::ERROR, "[Stage] Could not map instanced matrices buffer for terrain");	
-		return;
-	}
-
-	uint32_t num_vertices = 0;
-
+	// First, calculate the number of vertices in total.
+	uint32_t total_verts = 0;	
 	for (uint32_t i = 0; i < sceneries.count(); ++i)
 	{
 		const noob::scenery sc = sceneries.get(noob::scenery_handle::make(i));
 		const noob::body& bod = world.get_body(sc.body);
 		const noob::mat4 model_mat = bod.get_transform();
-		// for()
-		// {
-		//	bool valid = buf.push_back(model_mat);
-		// }
+
+		// TODO: Add accumulating code
 
 	}
 
-	// 
-	/*
-	   noob::vec3 
-	   bool valid = buf.push_back(model_mat);
+	num_terrain_verts = total_verts;
 
-	   if (!valid)
-	   {
-	   logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu matrices buffer for model ", noob::to_string(arg.index()), " MVP"));
-	   gfx.unmap_buffer();			
-	   return;
-	   }
+	noob::graphics& gfx = noob::get_graphics();
 
-	   ++current;
-	   }
-	   */
+	noob::gpu_write_buffer buf = gfx.map_terrain_buffer(0, total_verts);
 
-gfx.unmap_buffer();
+	if (!buf.valid())
+	{
+		logger::log(noob::importance::ERROR, "[Stage] Could not map instanced matrices buffer for terrain");	
+		return;
+	}
+
+	// Now, push out all the vertices we've been repressing...
+	for (uint32_t i = 0; i < sceneries.count(); ++i)
+	{
+		const noob::scenery sc = sceneries.get(noob::scenery_handle::make(i));
+		const noob::body& bod = world.get_body(sc.body);
+		const noob::mat4 model_mat = bod.get_transform();
+
+		// TODO: Add the code that gets the vertices and showes them into our buffer
+	}
+	
+
+	gfx.unmap_buffer();
 }
 
 

@@ -41,8 +41,12 @@ void noob::graphics::init(const std::array<uint32_t, 2> Dims) noexcept(true)
 	u_eye_pos_terrain = glGetUniformLocation(terrain_shader.index(), "eye_pos");
 	u_light_directional_terrain = glGetUniformLocation(terrain_shader.index(), "directional_light");
 	check_error_gl();
-
-	reserve_terrain_verts(4096);
+	
+	// Init terrain
+	glGenVertexArrays(1, &terrain_model.vao);
+	glGenBuffers(1, &terrain_model.vertices_vbo);
+	resize_terrain(4096);
+	check_error_gl();
 
 	frame(Dims);
 
@@ -97,10 +101,10 @@ void noob::graphics::draw_instanced(const noob::model_handle Handle, uint32_t Nu
 	}
 }
 
-void noob::graphics::draw_terrain() const noexcept(true)
+void noob::graphics::draw_terrain(uint32_t Verts) const noexcept(true)
 {
 	glBindVertexArray(terrain_model.vao);
-	glDrawArrays(GL_TRIANGLES, 0, terrain_verts);
+	glDrawArrays(GL_TRIANGLES, 0, Verts);
 	check_error_gl();
 	glBindVertexArray(0);
 }
@@ -241,7 +245,6 @@ noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& Mesh,
 
 	const noob::bbox bb = Mesh.bbox;
 
-
 	const noob::model_handle results = noob::model_handle::make(models.size() - 1);
 
 	noob::logger::log(noob::importance::INFO, noob::concat("[Graphics] Created instanced model with handle ", noob::to_string(results.index()), " and ", noob::to_string(NumInstances), " instances. Verts = ", noob::to_string(Mesh.vertices.size()), ", indices = ", noob::to_string(Mesh.indices.size()), ". Dims: ", noob::to_string(bb.max - bb.min)));
@@ -276,39 +279,23 @@ void noob::graphics::resize_instanced_data_buffers(noob::model_handle Handle, ui
 }
 
 
-void noob::graphics::set_num_terrain_verts(uint32_t Num) noexcept(true)
+void noob::graphics::resize_terrain(uint32_t MaxVerts) noexcept(true)
 {
-	if (Num < max_terrain_verts)
-	{
-		terrain_verts = Num;
-	}
-	else
-	{
-		reserve_terrain_verts(Num);
-		terrain_verts = Num;
-	}
-}
-
-
-void noob::graphics::reserve_terrain_verts(uint32_t MaxVerts) noexcept(true)
-{
-	max_terrain_verts = MaxVerts;
-	if (!terrain_initialized)
-	{	
-		glGenVertexArrays(1, &terrain_model.vao);
-	}
-
 	glBindVertexArray(terrain_model.vao);
 	
-	if (!terrain_initialized)
+	if (!terrain_initialized) // TODO: Remove
 	{	
 		glGenBuffers(1, &terrain_model.vertices_vbo);
 	}
 	
 	glBindBuffer(GL_ARRAY_BUFFER, terrain_model.vertices_vbo);
 	glBufferData(GL_ARRAY_BUFFER, max_terrain_verts * noob::model::terrain_stride, nullptr, GL_DYNAMIC_DRAW);
+	
+	glBindVertexArray(0);
 
 	check_error_gl();
+
+	max_terrain_verts = MaxVerts;
 }
 
 
@@ -390,25 +377,26 @@ noob::gpu_write_buffer noob::graphics::map_instanced_data_buffer(noob::model_han
 }
 
 
-noob::gpu_write_buffer noob::graphics::map_terrain_buffer() const noexcept(true)
+noob::gpu_write_buffer noob::graphics::map_terrain_buffer(uint32_t MinVert, uint32_t MaxVert) const noexcept(true)
 {
+	if (MaxVert < max_terrain_verts)
+	{
 	glBindBuffer(GL_ARRAY_BUFFER, terrain_model.vertices_vbo);
 	check_error_gl();
 
-	float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, 0, max_terrain_verts, GL_MAP_WRITE_BIT));
+	float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, MinVert, MaxVert, GL_MAP_WRITE_BIT));
 	check_error_gl();
 
 	const uint32_t stride_in_bytes = noob::model::terrain_stride;
-	const uint32_t total_size = stride_in_bytes * terrain_verts;
+	const uint32_t total_size = stride_in_bytes * (MaxVert - MinVert);
 
 	if (ptr != nullptr)
 	{
 		return noob::gpu_write_buffer(ptr, total_size / sizeof(float));
 	}
-	else
-	{
-		return noob::gpu_write_buffer::make_invalid();	
 	}
+		return noob::gpu_write_buffer::make_invalid();	
+	
 }
 
 
@@ -717,19 +705,18 @@ void noob::graphics::texture_mag_filter(noob::tex_mag_filter MagFilter) const no
 }
 
 
-
 void noob::graphics::texture_min_lod(int32_t MinLod) const noexcept(true)
 {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_LOD, MinLod);
 	check_error_gl();
 }
 
+
 void noob::graphics::texture_max_lod(int32_t MaxLod) const noexcept(true)
 {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LOD, MaxLod);
 	check_error_gl();
 }
-
 
 
 void noob::graphics::texture_swizzle(const std::array<noob::tex_swizzle, 2> Swizzles) const noexcept(true)
