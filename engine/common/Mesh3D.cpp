@@ -1,8 +1,8 @@
-#include "BasicMesh.hpp"
+#include "Mesh3D.hpp"
 
 #include <Eigen/Geometry>
 
-double noob::basic_mesh::get_volume()
+double noob::mesh_3d::get_volume()
 {
 	if (!volume_calculated)
 	{
@@ -28,7 +28,7 @@ double noob::basic_mesh::get_volume()
 }
 
 
-void noob::basic_mesh::calculate_dims() noexcept(true)
+void noob::mesh_3d::calculate_dims() noexcept(true)
 {
 	if (vertices.size() > 0)
 	{
@@ -45,7 +45,7 @@ void noob::basic_mesh::calculate_dims() noexcept(true)
 	}
 }
 /*
-   void noob::basic_mesh::to_origin()
+   void noob::mesh_3d::to_origin()
    {
    noob::vec3 dims = bbox.get_dims();
    for (size_t i = 0; i < vertices.size(); ++i)
@@ -54,7 +54,7 @@ void noob::basic_mesh::calculate_dims() noexcept(true)
    }
    }
 
-   std::string noob::basic_mesh::save() const
+   std::string noob::mesh_3d::save() const
    {
    fmt::MemoryWriter w;
    w << "OFF" << "\n" << vertices.size() << " " << indices.size() / 3 << " " << 0 <<  "\n";
@@ -70,26 +70,26 @@ void noob::basic_mesh::calculate_dims() noexcept(true)
    return w.str();
    }
 
-   void noob::basic_mesh::save(const std::string& filename) const
+   void noob::mesh_3d::save(const std::string& filename) const
    {
 
    }
    */
 #if defined(NOOB_USE_ASSIMP)
-bool noob::basic_mesh::load_mem_assimp(const std::string& file)
+bool noob::mesh_3d::load_mem_assimp(const std::string& file)
 {
 	const aiScene* scene = aiImportFileFromMemory(file.c_str(), file.size(), aiProcessPreset_TargetRealtime_Fast, "");
 	return load_assimp(scene);
 }
 
 
-bool noob::basic_mesh::load_file_assimp(const std::string& filename)
+bool noob::mesh_3d::load_file_assimp(const std::string& filename)
 {
 	const aiScene* scene = aiImportFile(filename.c_str(), aiProcessPreset_TargetRealtime_Fast);
 	return load_assimp(scene);
 }
 
-bool noob::basic_mesh::load_assimp(const aiScene* scene)
+bool noob::mesh_3d::load_assimp(const aiScene* scene)
 {
 	logger::log(noob::importance::INFO, "[BasicMesh] Load Asssimp");
 	// logger::log(noob::importance::INFO, "[mesh] load() - begin");

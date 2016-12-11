@@ -9,7 +9,7 @@
 #include <noob/math/math_funcs.hpp>
 
 // Project-local
-#include "BasicMesh.hpp"
+#include "Mesh3D.hpp"
 #include "Model.hpp"
 #include "GpuBuffer.hpp"
 #include "Texture.hpp"
@@ -43,7 +43,7 @@ namespace noob
 			
 			// Currently, instanced models only support the basic vertex colours. This may change.
 			void draw_instanced(const noob::model_handle, uint32_t NumInstances) const noexcept(true);
-			noob::model_handle model_instanced(const noob::basic_mesh&, uint32_t) noexcept(true);
+			noob::model_handle model_instanced(const noob::mesh_3d&, uint32_t) noexcept(true);
 			void resize_instanced_data_buffers(noob::model_handle, uint32_t) noexcept(true);
 			void upload_instanced_uniforms() const noexcept(true);
 	

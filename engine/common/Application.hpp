@@ -6,7 +6,6 @@
 #include "Globals.hpp"
 #include "NoobUtils.hpp"
 #include "GUI.hpp"
-#include "BasicMesh.hpp"
 #include "Camera.hpp"
 #include "NDOF.hpp"
 #include "Stage.hpp"

@@ -49,7 +49,7 @@ include_directories(common)
 
 list(APPEND common_src
 	common/Globals.cpp
-	common/BasicMesh.cpp
+	common/Mesh3D.cpp
 	common/Graphics.cpp
 	common/Materials.cpp	
 	common/Application.cpp

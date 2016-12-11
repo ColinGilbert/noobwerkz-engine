@@ -80,7 +80,7 @@ noob::shape_handle noob::globals::hull_shape(const std::vector<vec3>& points) no
 	temp.hull(points);
 	noob::shape_handle shape_h = add_shape(temp);
 
-	noob::basic_mesh temp_mesh = noob::mesh_utils::hull(points);
+	noob::mesh_3d temp_mesh = noob::mesh_utils::hull(points);
 	// TODO: Replace
 	// noob::model temp_model = model_from_mesh(temp_mesh);
 
@@ -91,7 +91,7 @@ noob::shape_handle noob::globals::hull_shape(const std::vector<vec3>& points) no
 }
 
 
-noob::shape_handle noob::globals::static_trimesh_shape(const noob::basic_mesh& m) noexcept(true) 
+noob::shape_handle noob::globals::static_trimesh_shape(const noob::mesh_3d& m) noexcept(true) 
 {
 	noob::shape temp;
 	temp.trimesh(m);

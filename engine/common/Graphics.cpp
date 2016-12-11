@@ -158,7 +158,7 @@ void noob::graphics::draw_terrain(uint32_t Verts) const noexcept(true)
 }
 
 
-noob::model_handle noob::graphics::model_instanced(const noob::basic_mesh& Mesh, uint32_t NumInstances) noexcept(true)
+noob::model_handle noob::graphics::model_instanced(const noob::mesh_3d& Mesh, uint32_t NumInstances) noexcept(true)
 {
 	noob::model result;
 

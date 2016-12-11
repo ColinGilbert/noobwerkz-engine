@@ -18,9 +18,9 @@
 // TODO: Make a bit more foolproof: IE: Functions to ensure all values get filled or something.
 namespace noob
 {
-	struct basic_mesh 
+	struct mesh_3d
 	{
-		basic_mesh() noexcept(true) : volume_calculated(false), volume(0.0) {}
+		mesh_3d() noexcept(true) : volume_calculated(false), volume(0.0) {}
 
 		double get_volume();
 

@@ -42,7 +42,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-noob::basic_mesh noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
+noob::mesh_3d noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
 {
 	const float X = 0.525731112119133606;
 	const float Z = 0.850650808352039932;
@@ -104,7 +104,7 @@ noob::basic_mesh noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
 		indices = indices2;
 	}
 
-	noob::basic_mesh results;
+	noob::mesh_3d results;
 
 	// results.vertices.reserve(verts.size());
 	// results.normals.reserve(verts.size());
@@ -168,12 +168,12 @@ noob::basic_mesh noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
 // THE SOFTWARE.
 
 
-noob::basic_mesh noob::mesh_utils::box(float width, float height, float depth)
+noob::mesh_3d noob::mesh_utils::box(float width, float height, float depth)
 {
 	const uint32_t num_vertices = 24;
 	const uint32_t num_indices = 36;
 
-	noob::basic_mesh results;
+	noob::mesh_3d results;
 
 	const float cube_verts[] =
 	{
@@ -300,7 +300,7 @@ noob::basic_mesh noob::mesh_utils::box(float width, float height, float depth)
 }
 
 /*
-   noob::basic_mesh noob::mesh_utils::voro(float width, float height, float depth)
+   noob::mesh_3d noob::mesh_utils::voro(float width, float height, float depth)
    {
    const double x = width * 0.5;
    const double y = height * 0.5;
@@ -309,7 +309,7 @@ noob::basic_mesh noob::mesh_utils::box(float width, float height, float depth)
    voro::voronoicell cell;
    cell.init(-x, x, -y, y, -z, z);
 
-   noob::basic_mesh results;
+   noob::mesh_3d results;
 
    std::vector<double> verts;
    cell.vertices(verts);
@@ -339,13 +339,13 @@ return results;
 */
 
 /*
-   noob::basic_mesh noob::mesh_utils::cone(float radius, float height, uint32_t segments_arg)
+   noob::mesh_3d noob::mesh_utils::cone(float radius, float height, uint32_t segments_arg)
    {
    const float half_height = height * 0.5;
    const uint32_t segments = std::max(segments_arg, static_cast<uint32_t>(3));
 
-   noob::basic_mesh top = noob::mesh_utils::circle(radius, segments);
-   noob::basic_mesh bottom = noob::mesh_utils::circle(radius, segments);
+   noob::mesh_3d top = noob::mesh_utils::circle(radius, segments);
+   noob::mesh_3d bottom = noob::mesh_utils::circle(radius, segments);
 
    const uint32_t num_verts = top.vertices.size();
    const uint32_t num_indices = top.indices.size();
@@ -370,7 +370,7 @@ bottom.vertices[i] = temp;
 
 // Now, we split the triangles on the top mesh, in order to be able to give each vertex its normal
 
-noob::basic_mesh results;
+noob::mesh_3d results;
 
 const uint32_t num_split_verts = num_verts * 3;
 
@@ -421,19 +421,19 @@ return results;
 }
 
 
-noob::basic_mesh noob::mesh_utils::cylinder(float radius, float height, uint32_t segments)
+noob::mesh_3d noob::mesh_utils::cylinder(float radius, float height, uint32_t segments)
 {
 	// TODO: Implement!
 	return noob::mesh_utils::cone(radius, height, segments);
 }
 */
 
-noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
+noob::mesh_3d noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 {
 	// TODO: Optimize this	
 	std::vector<btVector3> bt_points;
 
-	noob::basic_mesh mesh;
+	noob::mesh_3d mesh;
 
 	noob::bbox accum;
 	for (noob::vec3 p : points)
@@ -479,13 +479,13 @@ noob::basic_mesh noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 }
 
 
-noob::basic_mesh noob::mesh_utils::circle(float radius, uint32_t segments_arg)
+noob::mesh_3d noob::mesh_utils::circle(float radius, uint32_t segments_arg)
 {
 	const uint32_t segments = std::max(segments_arg, static_cast<uint32_t>(3));
 	const float increment_amount = NOOB_TWO_PI / segments;
 	const Eigen::Vector3f p(radius, 0.0, radius);
 
-	noob::basic_mesh results;
+	noob::mesh_3d results;
 	results.vertices.reserve(segments + 1);
 	results.normals.reserve(segments + 1);
 	const uint32_t num_indices = segments * 3;

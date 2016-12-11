@@ -35,7 +35,7 @@ void noob::shape::hull(const std::vector<noob::vec3>& points) noexcept(true)
 	physics_valid = true;
 }
 
-void noob::shape::trimesh(const noob::basic_mesh& mesh) noexcept(true) 
+void noob::shape::trimesh(const noob::mesh_3d& mesh) noexcept(true) 
 {
 	if (!physics_valid)
 	{
@@ -87,7 +87,7 @@ noob::shape::type noob::shape::get_type() const noexcept(true)
 }
 
 
-noob::basic_mesh noob::shape::get_mesh() const noexcept(true)
+noob::mesh_3d noob::shape::get_mesh() const noexcept(true)
 {
 	switch (shape_type)
 	{
@@ -158,7 +158,7 @@ noob::basic_mesh noob::shape::get_mesh() const noexcept(true)
 
 				}
 
-				noob::basic_mesh m;
+				noob::mesh_3d m;
 
 				rde::fixed_array<btVector3, 3> triangle_verts;
 

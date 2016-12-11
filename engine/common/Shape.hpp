@@ -13,7 +13,7 @@
 #include <btBulletDynamicsCommon.h>
 
 #include "NoobUtils.hpp"
-#include "BasicMesh.hpp"
+#include "Mesh3D.hpp"
 #include "MeshUtils.hpp"
 
 
@@ -36,7 +36,7 @@ namespace noob
 		void capsule(float radius, float height) noexcept(true);
 		void cone(float radius, float height) noexcept(true);
 		void hull(const std::vector<noob::vec3>&) noexcept(true);
-		void trimesh(const noob::basic_mesh&) noexcept(true);
+		void trimesh(const noob::mesh_3d&) noexcept(true);
 
 		void set_margin(float) noexcept(true);
 		float get_margin() const noexcept(true);
@@ -45,7 +45,7 @@ namespace noob
 
 		noob::vec3 get_scales() const noexcept(true);
 
-		noob::basic_mesh get_mesh() const noexcept(true);
+		noob::mesh_3d get_mesh() const noexcept(true);
 
 		void clear() noexcept(true);
 

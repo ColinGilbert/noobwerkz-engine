@@ -8,7 +8,6 @@
 #include "Shape.hpp"
 #include "Light.hpp"
 #include "Reflectance.hpp"
-#include "BasicMesh.hpp"
 #include "SkeletalAnim.hpp"
 #include "AudioSample.hpp"
 #include "TextLabel.hpp"

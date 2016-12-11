@@ -392,7 +392,7 @@ void noob::stage::upload_terrain() noexcept(true)
 			const noob::mat4 model_mat = bod.get_transform();
 			noob::globals& g = noob::get_globals();
 			const noob::shape tmp_shp = g.shapes.get(noob::shape_handle::make(bod.get_shape_index()));
-			const noob::basic_mesh tmp_msh = tmp_shp.get_mesh();
+			const noob::mesh_3d tmp_msh = tmp_shp.get_mesh();
 			// Add up triangles independently
 			for (uint32_t i = 0; i < tmp_msh.indices.size(); ++i)
 			{
