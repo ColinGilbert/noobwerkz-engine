@@ -65,7 +65,7 @@ list(APPEND common_src
 	common/SkeletalAnim.cpp
 	common/Particles.cpp
 	common/GUI.cpp
-	common/FileSystem.cpp
+	common/BinPacker.cpp
 	common/Mixer.cpp
 	common/AudioSample.cpp
 	common/Sounds.cpp	
