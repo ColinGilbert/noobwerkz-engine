@@ -443,7 +443,7 @@ GLuint load_program_gl(const std::string& vert_shader_arg, const std::string fra
 GLuint prep_texture()
 {
 	// Prevent leftover from previous calls from harming this.
-	glBindVertexArray(0);
+//	glBindVertexArray(0);
 
 	GLuint texture_id;
 

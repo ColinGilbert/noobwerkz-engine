@@ -518,7 +518,7 @@ noob::texture_3d_handle noob::graphics::reserve_texture_3d(const std::array<uint
 	const GLuint texture_id = prep_texture();
 	glBindTexture(GL_TEXTURE_3D, texture_id);
 
-	uint32_t mips;
+	uint32_t mips = 1;
 	if (TexInfo.mips)
 	{
 		mips = noob::get_num_mips(Dims);
@@ -563,9 +563,6 @@ void noob::graphics::texture_data(noob::texture_2d_handle Handle, uint32_t Mip, 
 {
 	if (Handle.index() < textures_2d.size())
 	{
-		// bind_texture(Handle);
-		// glBindTexture(GL_TEXTURE_2D, textures_2d[Handle.index()].driver_handle);
-
 		const noob::texture_2d tex = textures_2d[Handle.index()];
 
 		if (is_compressed(tex.info.pixels))
