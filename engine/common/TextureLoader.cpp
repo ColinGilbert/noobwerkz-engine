@@ -14,13 +14,6 @@ void log_texload(uint32_t Width, uint32_t Height, uint32_t Channels)
 	noob::logger::log(noob::importance::INFO, noob::concat("[Loading texture from memory] Got texture data! Width = ", noob::to_string(Width), ", height = ", noob::to_string(Height), ", channels = ", noob::to_string(Channels)));
 }
 
-noob::texture_loader_2d::~texture_loader_2d() noexcept(true)
-{
-	if(is_valid)
-	{
-		stbi_image_free(internal_buffer);
-	}
-}
 
 void noob::texture_loader_2d::from_mem(const std::string& Data, bool Compressed) noexcept(true)
 {
@@ -70,6 +63,7 @@ void noob::texture_loader_2d::from_mem(const std::string& Data, bool Compressed)
 			};
 
 			buf_size = channels_found * height * width;
+			is_valid = true;
 		}
 		else
 		{
@@ -96,6 +90,12 @@ bool noob::texture_loader_2d::compressed() const noexcept(true)
 }
 
 
+bool noob::texture_loader_2d::mips() const noexcept(true)
+{
+	return is_mipped;
+}
+
+
 std::array<uint32_t, 2> noob::texture_loader_2d::dimensions() const noexcept(true)
 {
 	return dims;
@@ -113,8 +113,19 @@ unsigned char* noob::texture_loader_2d::buffer() const noexcept(true)
 	return internal_buffer;
 }
 
+
 uint32_t noob::texture_loader_2d::buffer_size() const noexcept(true)
 {
 	return buf_size;
 };
 
+
+void noob::texture_loader_2d::free() noexcept(true)
+{
+	if(is_valid)
+	{
+		stbi_image_free(internal_buffer);
+		buf_size = 0;
+		is_valid = false;
+	}
+}

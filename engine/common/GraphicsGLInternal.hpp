@@ -22,13 +22,6 @@ GLenum check_error_gl(const char *file, int line)
 			case GL_INVALID_OPERATION:            
 				error = "INVALID_OPERATION";
 				break;
-				// TODO: Find out if these are still part of the modern GL
-				// case GL_STACK_OVERFLOW:               
-				// error = "STACK_OVERFLOW";
-				// break;
-				// case GL_STACK_UNDERFLOW:
-				// error = "STACK_UNDERFLOW";
-				// break;
 			case GL_OUT_OF_MEMORY:
 				error = "OUT_OF_MEMORY"; 
 				break;
@@ -144,83 +137,47 @@ GLenum get_gl_storage_format(const noob::pixel_format Pixels)
 // Visit: https://www.khronos.org/opengles/sdk/docs/man3/html/glTexSubImage2D.xhtml and https://www.khronos.org/opengles/sdk/docs/man3/html/glTexSubImage3D.xhtml
 // Uou see, OpenGL doesn't simply allow you to use the buffer's storage format as the argument to the the functions that are used to fill the buffer, as that would be far too straightforward.
 // Instead, we must write otherwise pointless functions such as these to make our dreams into reality. Here is me rooting for Vulkan,
-std::tuple<GLenum, GLenum> deduce_pixel_format_and_type(noob::pixel_format Pixels)
+GLenum get_pixel_format_unsized(noob::pixel_format Pixels)
 {
-	GLenum results_a;
+	GLenum results;
 
 	switch(Pixels)
 	{
 		case(noob::pixel_format::R8):
 			{
-				results_a =  GL_RED;
+				results =  GL_RED;
 				break;
 			}
 		case(noob::pixel_format::RG8):
 			{
-				results_a = GL_RG;
+				results = GL_RG;
 				break;				
 			}
 		case(noob::pixel_format::RGB8):
 		case(noob::pixel_format::SRGB8):
 			{
-				results_a = GL_RGB;		
+				results = GL_RGB;		
 				break;			
 			}
 		case(noob::pixel_format::RGBA8):
 		case(noob::pixel_format::SRGBA8):
 			{
-				results_a = GL_RGBA;		
+				results = GL_RGBA;		
 				break;
 			}
-			/*
-		case(noob::pixel_format::RGB8_COMPRESSED):
-			{
-				results_a = GL_COMPRESSED_RGB8_ETC2;		
-				break;
-			}
-		case(noob::pixel_format::SRGB8_COMPRESSED):
-			{
-				results_a = GL_COMPRESSED_SRGB8_ETC2;		
-				break;
-			}
-		case(noob::pixel_format::RGB8_A1_COMPRESSED):
-			{
-				results_a = GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2;		
-				break;
-			}
-		case(noob::pixel_format::SRGB8_A1_COMPRESSED):
-			{
-				results_a = GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2;		
-				break;
-			}
-		case(noob::pixel_format::RGBA8_COMPRESSED):
-			{
-				results_a = GL_COMPRESSED_RGBA8_ETC2_EAC;		
-				break;
-			}
-		case(noob::pixel_format::SRGBA8_COMPRESSED):
-			{		
-				results_a = GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC;
-				break;
-			} */
 		default:
 			{
 				noob::logger::log(noob::importance::WARNING, "Invalid value hit while deducing pixel format!");
 				break;
 			}
 	}
-	// Our engine only allows this datatype by default.
-	const GLenum results_b = GL_UNSIGNED_BYTE;
-
-	return std::make_tuple(results_a, results_b);
+	return results;
 }
 
 
 bool is_compressed(noob::pixel_format Pixels)
 {
 	bool results;
-	// GL_RED, GL_RED_INTEGER, GL_RG, GL_RG_INTEGER, GL_RGB, GL_RGB_INTEGER, GL_RGBA, GL_RGBA_INTEGER, GL_DEPTH_COMPONENT, GL_DEPTH_STENCIL
-	// GL_UNSIGNED_BYTE, GL_BYTE, GL_UNSIGNED_SHORT, GL_SHORT, GL_UNSIGNED_INT, GL_INT, GL_HALF_FLOAT, GL_FLOAT
 	switch(Pixels)
 	{
 		case(noob::pixel_format::RGB8_COMPRESSED):
@@ -274,7 +231,6 @@ GLenum get_wrapping(noob::tex_wrap_mode WrapMode)
 				break;
 			}
 	};
-
 	return results;
 }
 
@@ -315,7 +271,6 @@ GLenum get_swizzle(noob::tex_swizzle Swizzle)
 				break;
 			}
 	};
-
 	return results;
 }
 
@@ -341,7 +296,7 @@ GLuint load_shader_gl(GLenum type, const std::string& shader_arg)
 	glCompileShader(shader);
 
 	// Check the compile status
-	glGetShaderiv (shader, GL_COMPILE_STATUS, &compiled);
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
 
 	if (!compiled)
 	{
@@ -443,7 +398,7 @@ GLuint load_program_gl(const std::string& vert_shader_arg, const std::string fra
 GLuint prep_texture()
 {
 	// Prevent leftover from previous calls from harming this.
-//	glBindVertexArray(0);
+	glBindVertexArray(0);
 
 	GLuint texture_id;
 

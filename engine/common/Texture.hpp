@@ -62,6 +62,8 @@ namespace noob
 
 	struct texture_info
 	{
+		texture_info() noexcept(true) = default;
+		texture_info(bool Mips, noob::pixel_format Pixels) noexcept(true) : mips(Mips), pixels(Pixels) {}
 		bool mips; //, sign_normalized; // TODO: Later(?)
 		noob::pixel_format pixels;
 	};

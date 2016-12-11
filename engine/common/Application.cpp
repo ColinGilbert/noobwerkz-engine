@@ -22,6 +22,8 @@ void noob::application::init(uint32_t width, uint32_t height, const std::string&
 	noob::graphics& gfx = noob::get_graphics();
 	gfx.init(std::array<uint32_t, 2>({width, height}), tex_data);
 
+	tex_data.free();
+
 	started = paused = input_has_started = false;
 
 	finger_positions = { noob::vec2(0.0, 0.0), noob::vec2(0.0, 0.0), noob::vec2(0.0, 0.0), noob::vec2(0.0, 0.0) };
