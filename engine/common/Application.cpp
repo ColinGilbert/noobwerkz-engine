@@ -8,14 +8,24 @@ void noob::application::init(uint32_t width, uint32_t height, const std::string&
 	window_width = width;
 	window_height = height;
 
+	prefix = std::make_unique<std::string>(filepath);
+
+	const std::string tex_src = noob::load_file_as_string(noob::concat(*prefix, "/texture/gradient_map.tga"));
+
+	noob::texture_loader_2d tex_data;
+	tex_data.from_mem(tex_src, false);
+	
+	noob::texture_info tex_info;
+	tex_info.mips = 0;
+	tex_info.pixels = tex_data.format();
+	
 	noob::graphics& gfx = noob::get_graphics();
-	gfx.init(std::array<uint32_t, 2>({width, height}));
+	gfx.init(std::array<uint32_t, 2>({width, height}), tex_data);
 
 	started = paused = input_has_started = false;
 
 	finger_positions = { noob::vec2(0.0, 0.0), noob::vec2(0.0, 0.0), noob::vec2(0.0, 0.0), noob::vec2(0.0, 0.0) };
 
-	prefix = std::make_unique<std::string>(filepath);//unique_ptr<std::string>(new std::string(filepath));
 
 	ui_enabled = true;
 	gui.init("", window_width, window_height);

@@ -72,12 +72,12 @@ namespace noob
 	struct texture_1d
 	{
 		texture_1d() = delete;
-		texture_1d(uint32_t DriverHandle, noob::texture_info TexInfo, uint32_t Length) noexcept(true) : driver_handle(DriverHandle), info(TexInfo), length(Length) {}
+		texture_1d(uint32_t DriverHandle, noob::texture_info TexInfo, uint32_t Length) noexcept(true) :  driver_handle(DriverHandle), info(TexInfo), length(Length) {}
 
 		texture_1d(const noob::texture_1d& lhs) noexcept(true) = default;
 		texture_1d& operator=(const noob::texture_1d& lhs) noexcept(true) = default;
 
-		const uint32_t driver_handle;
+		uint32_t driver_handle;
 		const noob::texture_info info;
 		const uint32_t length;
 	};
@@ -88,7 +88,7 @@ namespace noob
 	struct texture_2d
 	{
 		texture_2d() = delete;
-		texture_2d(uint32_t DriverHandle, noob::texture_info TexInfo, uint32_t Width, uint32_t Height) noexcept(true) :  driver_handle(DriverHandle), info(TexInfo), width(Width), height(Height) {}
+		texture_2d(uint32_t DriverHandle, noob::texture_info TexInfo, uint32_t Width, uint32_t Height) noexcept(true) : driver_handle(DriverHandle), info(TexInfo), width(Width), height(Height) {}
 
 		texture_2d(const noob::texture_2d& lhs) noexcept(true) = default;
 		texture_2d& operator=(const noob::texture_2d& lhs) noexcept(true) = default;
@@ -115,7 +115,7 @@ namespace noob
 	};
 
 	typedef noob::handle<noob::texture_array_2d> texture_array_2d_handle;
-	
+
 
 	struct texture_3d
 	{
@@ -131,4 +131,61 @@ namespace noob
 	};
 
 	typedef noob::handle<noob::texture_3d> texture_3d_handle;
+
+	static std::string to_string(noob::pixel_format Format)
+	{
+		switch (Format)
+		{
+			case(noob::pixel_format::R8):
+				{
+					return "R8";
+				}
+			case(noob::pixel_format::RG8):
+				{
+					return "RG8";
+				}
+			case(noob::pixel_format::RGB8):
+				{
+					return "RGG8";
+				}
+			case(noob::pixel_format::SRGB8):
+				{
+					return "SRGB8";
+				}
+			case(noob::pixel_format::RGBA8):
+				{
+					return "RGBA8";
+				}
+			case(noob::pixel_format::SRGBA8):
+				{
+					return "SRGBA8";
+				}
+			case(noob::pixel_format::RGB8_COMPRESSED):
+				{
+					return "RGG8_COMPRESSED";
+				}
+			case(noob::pixel_format::SRGB8_COMPRESSED):
+				{
+					return "SRGG8_COMPRESSED";
+				}
+			case(noob::pixel_format::RGB8_A1_COMPRESSED):
+				{
+					return "RGB8_A1_COMPRESSED";
+				}
+			case(noob::pixel_format::SRGB8_A1_COMPRESSED):
+				{
+					return "SRGB8_A1_COMPRESSED";
+				}
+			case(noob::pixel_format::RGBA8_COMPRESSED):
+				{
+					return "RGBA8_COMPRESSED";
+				}
+			case(noob::pixel_format::INVALID):
+				{
+					return "INVALID";
+				}
+		};
+
+		return "INVALID";
+	}
 }

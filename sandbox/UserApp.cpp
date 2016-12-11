@@ -33,29 +33,13 @@ bool noob::application::user_init()
 	r.set_albedo(0.3);
 	r.set_fresnel(0.2);
 
-
 	noob::globals& g = noob::get_globals();
-	noob::graphics& gfx = noob::get_graphics();
 
-	const std::string tex_src = noob::load_file_as_string(noob::concat(*prefix, "texture/gradient_map.tga"));
-
-	noob::texture_loader_2d tex_data;
-	tex_data.from_mem(tex_src, false);
-	
-	noob::texture_info tex_info;
-	tex_info.mips = true;
-	tex_info.pixels = tex_data.format();
-	
-	noob::texture_2d_handle tex_h = gfx.reserve_texture_2d(tex_data.dimensions(), tex_info);
-	gfx.texture_data(tex_h, 1, std::array<uint32_t, 2>({0, 0}), tex_data.dimensions(), tex_data.buffer());
-	gfx.generate_mips(tex_h);
-
-	const noob::shape_handle scenery_shp = g.box_shape(100.0, 20.0, 100.0);
-	const noob::scenery_handle sc_h = stage.scenery(scenery_shp, noob::vec3(0.0, 0.0, 0.0), versor_from_axis_rad(0.0, 0.0, 1.0, 0.0)); // 0 rad rotation, facing up
-
-
+	const noob::shape_handle scenery_shp = g.sphere_shape(10.0);// g.box_shape(50.0, 20.0, 50.0);
+	const noob::scenery_handle sc_h = stage.scenery(scenery_shp, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));//versor_from_axis_rad(0.0, 0.0, 0.0, 1.0)); // 0 rad rotation, facing up
 	const noob::reflectance_handle rh = g.reflectances.add(r);
 
+/*
 	const float actor_dims = 2.0;
 	// const noob::shape_handle shp = g.sphere_shape(actor_dims);
 	
@@ -114,7 +98,7 @@ bool noob::application::user_init()
 	{	
 		ah = stage.actor(bph, 7, random_vec3(-stage_dim, -stage_dim, -stage_dim), random_versor());
 	}
-
+*/
 	logger::log(noob::importance::INFO, "[Application] Successfully done (C++) user init.");
 	return true;
 }

@@ -36,7 +36,7 @@ GLenum check_error_gl(const char *file, int line)
 				error = "INVALID_FRAMEBUFFER_OPERATION";
 				break;
 		}
-		noob::logger::log(noob::importance::ERROR, noob::concat("OpenGL: ", error, file, " (", noob::to_string(line), ")"));
+		noob::logger::log(noob::importance::ERROR, noob::concat("OpenGL: ", error, " ", file, " (", noob::to_string(line), ")"));
 	}
 	return error_code;
 }
@@ -147,8 +147,7 @@ GLenum get_gl_storage_format(const noob::pixel_format Pixels)
 std::tuple<GLenum, GLenum> deduce_pixel_format_and_type(noob::pixel_format Pixels)
 {
 	GLenum results_a;
-	// Our engine only allows this datatype by default.
-	const GLenum results_b = GL_UNSIGNED_BYTE;
+
 	switch(Pixels)
 	{
 		case(noob::pixel_format::R8):
@@ -162,25 +161,18 @@ std::tuple<GLenum, GLenum> deduce_pixel_format_and_type(noob::pixel_format Pixel
 				break;				
 			}
 		case(noob::pixel_format::RGB8):
-			{
-				results_a = GL_RGB;
-				break;				
-			}
 		case(noob::pixel_format::SRGB8):
 			{
 				results_a = GL_RGB;		
 				break;			
 			}
 		case(noob::pixel_format::RGBA8):
-			{
-				results_a = GL_RGBA;		
-				break;
-			}
 		case(noob::pixel_format::SRGBA8):
 			{
 				results_a = GL_RGBA;		
 				break;
 			}
+			/*
 		case(noob::pixel_format::RGB8_COMPRESSED):
 			{
 				results_a = GL_COMPRESSED_RGB8_ETC2;		
@@ -210,8 +202,15 @@ std::tuple<GLenum, GLenum> deduce_pixel_format_and_type(noob::pixel_format Pixel
 			{		
 				results_a = GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC;
 				break;
+			} */
+		default:
+			{
+				noob::logger::log(noob::importance::WARNING, "Invalid value hit while deducing pixel format!");
+				break;
 			}
 	}
+	// Our engine only allows this datatype by default.
+	const GLenum results_b = GL_UNSIGNED_BYTE;
 
 	return std::make_tuple(results_a, results_b);
 }
@@ -230,11 +229,11 @@ bool is_compressed(noob::pixel_format Pixels)
 		case(noob::pixel_format::SRGB8_A1_COMPRESSED):
 		case(noob::pixel_format::RGBA8_COMPRESSED):
 		case(noob::pixel_format::SRGBA8_COMPRESSED):
-				results = true;
-				break;
+			results = true;
+			break;
 		default:
-				results = false;
-				break;
+			results = false;
+			break;
 	}
 
 	return results;

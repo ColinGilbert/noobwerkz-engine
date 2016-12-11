@@ -24,40 +24,43 @@ noob::texture_loader_2d::~texture_loader_2d() noexcept(true)
 
 void noob::texture_loader_2d::from_mem(const std::string& Data, bool Compressed) noexcept(true)
 {
-	int height, width, channels;
-	height = width = channels = 0;
+	int height, width, channels_found;
+	height = width = channels_found = 0;
 	is_compressed = Compressed;
-	internal_buffer = stbi_load_from_memory(reinterpret_cast<const unsigned char*>(Data.c_str()), Data.size(), &height, &width, &channels, 0);
+	internal_buffer = stbi_load_from_memory(reinterpret_cast<const unsigned char*>(Data.c_str()), Data.size(), &height, &width, &channels_found, 0);
 	dims[0] = static_cast<uint32_t>(width);
 	dims[1] = static_cast<uint32_t>(height);
 	if (internal_buffer != nullptr)
 	{
 		is_valid = true;
-		if (dims[0] > 0 && dims[1] > 0 && channels > 0)
+		if (channels_found > 0)
 		{
-			switch (channels)
+			switch (channels_found)
 			{
 				case (1):
 					{
 						pixels = noob::pixel_format::R8;
-						log_texload(dims[0], dims[1], channels);
+						log_texload(dims[0], dims[1], channels_found);
+						break;
 					}
 				case (2):
 					{
 						pixels = noob::pixel_format::RG8;
-						log_texload(dims[0], dims[1], channels);
+						log_texload(dims[0], dims[1], channels_found);
+						break;
 					}
 
 				case (3):
 					{
 						pixels = noob::pixel_format::RGB8;
-						log_texload(dims[0], dims[1], channels);
+						log_texload(dims[0], dims[1], channels_found);
+						break;
 					}
-
 				case (4):
 					{
 						pixels = noob::pixel_format::RGBA8;
-						log_texload(dims[0], dims[1], channels);
+						log_texload(dims[0], dims[1], channels_found);
+						break;
 					}
 				default:
 					{
@@ -66,16 +69,16 @@ void noob::texture_loader_2d::from_mem(const std::string& Data, bool Compressed)
 					}
 			};
 
-			buf_size = channels * height * width;
+			buf_size = channels_found * height * width;
 		}
 		else
 		{
-			noob::logger::log(noob::importance::WARNING, noob::concat("[Loading texture from memory] Could not successfully load texture due to format issues. Width = ", noob::to_string(dims[0]), ", height = ", noob::to_string(dims[1]), ", channels = ", noob::to_string(channels)));
+			noob::logger::log(noob::importance::WARNING, noob::concat("[Loading texture from memory] Failed to load texture due to format issues. Width = ", noob::to_string(dims[0]), ", height = ", noob::to_string(dims[1]), ", channels = ", noob::to_string(channels_found)));
 		}
 	}
 	else // if buffer == nullptr
 	{
-		noob::logger::log(noob::importance::WARNING, noob::concat("[Loading texture from memory] Could not even load texture data!"));
+		noob::logger::log(noob::importance::WARNING, noob::concat("[Loading texture from memory] Failed to even load texture data!"));
 
 	}
 }

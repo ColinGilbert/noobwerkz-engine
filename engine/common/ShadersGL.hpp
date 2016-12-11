@@ -116,16 +116,16 @@ namespace noob
 					"layout(location = 2) out vec4 v_world_pos;			\n"
 					"layout(location = 3) out vec4 v_world_normal;			\n"
 					"layout(location = 4) out vec4 v_vert_colour;			\n"
-					"uniform mat4 model_mat;					\n"				
-					"uniform mat4 mvp_mat;						\n"				
+					// "uniform mat4 model_mat;					\n"				
+					"uniform mat4 mvp;						\n"				
 					"void main()							\n"
 					"{								\n"
 					"	v_local_pos = a_pos;					\n"
 					"	v_local_normal = a_normal;				\n"				
-					"	v_world_pos = a_model_mat * a_pos;			\n"
-					"	v_world_normal = a_model_mat * a_normal;		\n"				
-					"	v_vert_colour = a_vert_colour * a_instance_colour;	\n"
-					"	gl_Position = a_mvp_mat * a_pos;			\n"
+					"	v_world_pos = a_pos;					\n"
+					"	v_world_normal = a_normal;				\n"				
+					"	v_vert_colour = a_vert_colour;				\n"
+					"	gl_Position = mvp * a_pos;				\n"
 					"}								\n"));
 
 		//////////////////////////
@@ -208,7 +208,6 @@ namespace noob
 					"	vec3 total_colour = tex_final.xyz * light;													\n"
 					"	out_colour = vec4(clamp(total_colour, 0.0, 1.0), 1.0);												\n"
 					"}																			\n"));
-
 		/*
 
 		   static std::string get_light(

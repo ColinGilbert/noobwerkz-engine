@@ -65,8 +65,10 @@ public class MainActivity extends Activity
 		AssetManager assetManager = getAssets();
 		String toPath = getExternalFilesDir(new String()).getPath();
 		JNILib.SetupArchiveDir(toPath);
-		copyAssetFolder(assetManager, "sounds", toPath + "/sounds");
+		copyAssetFolder(assetManager, "sound", toPath + "/sound");
 		copyAssetFolder(assetManager, "font", toPath + "/font");
+		copyAssetFolder(assetManager, "texture", toPath + "/texture");
+		
 	}
 
 	private static boolean copyAssetFolder(AssetManager assetManager, String fromAssetPath, String toPath)

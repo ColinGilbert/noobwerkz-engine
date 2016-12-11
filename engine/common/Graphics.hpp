@@ -27,7 +27,7 @@ namespace noob
 			typedef noob::handle<noob::linked_shader> program_handle;
 
 			// Call before using.
-			void init(const std::array<uint32_t, 2> Dims) noexcept(true);
+			void init(const std::array<uint32_t, 2> Dims, const noob::texture_loader_2d&) noexcept(true);
 
 			// Call this every frame...
 			void frame(const std::array<uint32_t, 2>) const noexcept(true);
@@ -35,28 +35,27 @@ namespace noob
 			// Call before killing.
 			void destroy() noexcept(true);
 
-			void use_program(noob::graphics::program_handle) noexcept(true);
+			void set_light_direction(const noob::vec3&) noexcept(true);
 
-			// Call this to draw a given model.
+			void use_program(noob::graphics::program_handle) const noexcept(true);
+			void set_view_mat(const noob::mat4) noexcept(true);
+			void set_projection_mat(const noob::mat4) noexcept(true);
+			
+			// Currently, instanced models only support the basic vertex colours. This may change.
 			void draw_instanced(const noob::model_handle, uint32_t NumInstances) const noexcept(true);
-			void draw_terrain(uint32_t Verts) const noexcept(true);
-
-			// Currently, instanced models only support the basic vertex colours. This is to change quite soon.
 			noob::model_handle model_instanced(const noob::basic_mesh&, uint32_t) noexcept(true);
 			void resize_instanced_data_buffers(noob::model_handle, uint32_t) noexcept(true);
+			void upload_instanced_uniforms() const noexcept(true);
 	
 			// Currently implemented as a triplanar-shaded, single-buffer model.
 			// Due to the flexibility of the shaders used, it is easy to support peeling visible faces off objects and sending them to video buffer to keep drawcalls down to one.
 			// It should run smoothly using compressed textures because although texture reads are done three times, those values get reused to recreate all needed maps.
+			void draw_terrain(uint32_t Verts) const noexcept(true);			
 			void resize_terrain(uint32_t MaxVerts) noexcept(true);
 			uint32_t get_max_terrain_verts() const noexcept(true);
-			
 			void set_terrain_uniforms(const noob::terrain_shading) noexcept(true);
-			// void draw_terrain() const noexcept(true);
+			void upload_terrain_uniforms() const noexcept(true);
 
-			// TODO: Replace with more generic uniform setting method(s)
-			void set_eye_pos(const noob::vec3&) const noexcept(true);
-			void set_light_direction(const noob::vec3&) const noexcept(true);
 
 			// These are VBO buffer mapping/unmapping methods
 			// TODO: Split into several functions
@@ -71,10 +70,6 @@ namespace noob
 			noob::texture_array_2d_handle reserve_texture_array_2d(const std::array<uint32_t, 2> Dims, uint32_t Indices, const noob::texture_info) noexcept(true);
 			noob::texture_3d_handle reserve_texture_3d(const std::array<uint32_t, 3> Dims, const noob::texture_info) noexcept(true);
 			// noob::texture_handle reserve_texture_cube(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true); // TODO
-			
-			void bind_texture(noob::texture_2d_handle) const noexcept(true);
-			void bind_texture(noob::texture_array_2d_handle) const noexcept(true);
-			void bind_texture(noob::texture_3d_handle) const noexcept(true);
 
 			// Texture data uploaders
 			// void texture_data(noob::texture_1d_handle, const std::string&) const noexcept(true);	// TODO
@@ -123,12 +118,19 @@ namespace noob
 			
 			// These will soon be replaced by proper UBO's and made typesafe. The only reason they're here is to serve as a stable, well-understood prior case example.
 			uint32_t u_eye_pos, u_light_directional;
-			uint32_t u_eye_pos_terrain, u_light_directional_terrain, u_texture_0, u_colour_0, u_colour_1, u_colour_2, u_colour_3, u_blend_0, u_blend_1, u_tex_scales, u_model_scales;
-		
+			uint32_t u_mvp_terrain, u_eye_pos_terrain, u_light_directional_terrain, u_texture_0, u_colour_0, u_colour_1, u_colour_2, u_colour_3, u_blend_0, u_blend_1, u_tex_scales, u_model_scales;
+	
+			noob::mat4 view_mat, proj_mat;	
 			noob::vec3 eye_pos, light_direction;
-			bool terrain_initialized = false;
-			
+			noob::terrain_shading terrain_unis;
+			noob::texture_2d_handle terrain_tex;
+
 			uint32_t max_terrain_verts = 0;
+
+			void bind_texture(noob::texture_2d_handle) const noexcept(true);
+			void bind_texture(noob::texture_array_2d_handle) const noexcept(true);
+			void bind_texture(noob::texture_3d_handle) const noexcept(true);
+
 	};
 
 	static noob::singleton<noob::graphics> gfx_instance;

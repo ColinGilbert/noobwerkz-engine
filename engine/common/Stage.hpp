@@ -103,6 +103,7 @@ namespace noob
 			static constexpr auto dbg_name = "Stage";
 
 			bool terrain_changed = false;
+			bool terrain_started = false;
 
 			noob::physics world;
 			

@@ -4,6 +4,8 @@
 // std
 #include <algorithm>
 
+
+
 // Project-local
 #include "GraphicsGLInternal.hpp"
 #include "ShadersGL.hpp"
@@ -29,10 +31,10 @@ void noob::graphics::init(const std::array<uint32_t, 2> Dims, const noob::textur
 
 	terrain_unis.texture_weights = noob::vec3(0.0, 1.0, 0.0);
 	terrain_unis.colours[0] = noob::vec4(0.0, 0.0, 0.0, 1.0);
-	terrain_unis.colours[1] = noob::vec4(0.2, 0.2, 0.0, 1.0);
+	terrain_unis.colours[1] = noob::vec4(0.0, 0.0, 0.0, 1.0);
 	terrain_unis.colours[2] = noob::vec4(0.5, 0.5, 0.5, 1.0);
 	terrain_unis.colours[3] = noob::vec4(1.0, 1.0, 1.0, 1.0);	
-	terrain_unis.colour_offsets = noob::vec2(0.25, 0.8);
+	terrain_unis.colour_offsets = noob::vec2(0.25, 0.5);
 	terrain_unis.texture_scales = noob::vec3(1.0, 1.0, 1.0);
 
 	u_mvp_terrain = glGetUniformLocation(terrain_shader.index(), "mvp");
@@ -49,18 +51,20 @@ void noob::graphics::init(const std::array<uint32_t, 2> Dims, const noob::textur
 	check_error_gl();
 
 	noob::texture_info texinfo;
-	texinfo.mips = false;
+	texinfo.mips = 1;//noob::get_num_mips(TexLoader.dimensions());
 	texinfo.pixels = TexLoader.format();
 	terrain_tex = reserve_texture_2d(TexLoader.dimensions(), texinfo);
+	bind_texture(terrain_tex);	
 	check_error_gl();
-	//texture_wrap_mode(std::array<noob::tex_wrap_mode, 2>({tex_wrap_mode::REPEAT, tex_wrap_mode::REPEAT}));
-	//texture_mag_filter(noob::tex_mag_filter::NEAREST);
-	//texture_min_filter(noob::tex_min_filter::NEAREST);
-	check_error_gl();
+	texture_min_lod(0);
+
 	texture_data(terrain_tex, 0, std::array<uint32_t, 2>({0, 0}), TexLoader.dimensions(), TexLoader.buffer());
 	check_error_gl();
-
-	// glGenerateMipmap(GL_TEXTURE_2D);
+	// generate_mips(terrain_tex);
+	texture_wrap_mode(std::array<noob::tex_wrap_mode, 2>({tex_wrap_mode::REPEAT, tex_wrap_mode::REPEAT }));
+	//texture_compare_mode(noob::tex_compare_mode);
+	texture_mag_filter(noob::tex_mag_filter::NEAREST);
+	texture_min_filter(noob::tex_min_filter::NEAREST);
 
 	glGenVertexArrays(1, &terrain_model.vao);
 	glBindVertexArray(terrain_model.vao);
@@ -151,7 +155,6 @@ void noob::graphics::draw_terrain(uint32_t Verts) const noexcept(true)
 {
 	glBindVertexArray(terrain_model.vao);
 	use_program(terrain_shader);
-	glActiveTexture(GL_TEXTURE0);
 	check_error_gl();
 	bind_texture(terrain_tex);
 	upload_terrain_uniforms();
@@ -351,6 +354,12 @@ uint32_t noob::graphics::get_max_terrain_verts() const noexcept(true)
 }
 
 
+void set_terrain_texture(const noob::texture_loader_2d& Loader) noexcept(true)
+{
+
+}
+
+
 void noob::graphics::set_terrain_uniforms(const noob::terrain_shading Shading) noexcept(true)
 {
 	terrain_unis = Shading;
@@ -465,11 +474,12 @@ void noob::graphics::unmap_buffer() const noexcept(true)
 noob::texture_2d_handle noob::graphics::reserve_texture_2d(const std::array<uint32_t, 2> Dims, const noob::texture_info TexInfo) noexcept(true)
 {
 	const GLenum fmt = get_gl_storage_format(TexInfo.pixels);
+
 	const GLuint texture_id = prep_texture();
 	glBindTexture(GL_TEXTURE_2D, texture_id);
 
 	uint32_t mips = 1;
-	if (TexInfo.mips)
+	if (TexInfo.mips > 1)
 	{
 		mips = noob::get_num_mips(Dims);
 	}
@@ -482,8 +492,6 @@ noob::texture_2d_handle noob::graphics::reserve_texture_2d(const std::array<uint
 
 	textures_2d.push_back(t);
 
-	noob::logger::log(noob::importance::INFO, noob::concat("[Graphics] Created 2D texture of size ", noob::to_string(Dims[0]), ",", noob::to_string(Dims[1]), " with format ", noob::to_string(TexInfo.pixels)));
-
 	return noob::texture_2d_handle::make(textures_2d.size() - 1);
 }
 
@@ -491,11 +499,12 @@ noob::texture_2d_handle noob::graphics::reserve_texture_2d(const std::array<uint
 noob::texture_array_2d_handle noob::graphics::reserve_texture_array_2d(const std::array<uint32_t, 2> Dims, uint32_t Indices, const noob::texture_info TexInfo) noexcept(true)
 {
 	const GLenum fmt = get_gl_storage_format(TexInfo.pixels);
+
 	const GLuint texture_id = prep_texture();
-	glBindTexture(GL_TEXTURE_2D_ARRAY, texture_id);
+	glBindTexture(GL_TEXTURE_2D, texture_id);
 
 	uint32_t mips = 1;
-	if (TexInfo.mips)
+	if (TexInfo.mips > 1)
 	{
 		mips = noob::get_num_mips(Dims);
 	}
@@ -515,11 +524,11 @@ noob::texture_array_2d_handle noob::graphics::reserve_texture_array_2d(const std
 noob::texture_3d_handle noob::graphics::reserve_texture_3d(const std::array<uint32_t, 3> Dims, const noob::texture_info TexInfo) noexcept(true)
 {
 	const GLenum fmt = get_gl_storage_format(TexInfo.pixels);
-	const GLuint texture_id = prep_texture();
-	glBindTexture(GL_TEXTURE_3D, texture_id);
 
-	uint32_t mips;
-	if (TexInfo.mips)
+	const GLuint texture_id = prep_texture();
+
+	uint32_t mips = 0;
+	if (TexInfo.mips > 1)
 	{
 		mips = noob::get_num_mips(Dims);
 	}
@@ -540,6 +549,7 @@ noob::texture_3d_handle noob::graphics::reserve_texture_3d(const std::array<uint
 
 void noob::graphics::bind_texture(noob::texture_2d_handle Handle) const noexcept(true)
 {
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textures_2d[Handle.index()].driver_handle);
 	check_error_gl();
 }
@@ -561,11 +571,9 @@ void noob::graphics::bind_texture(noob::texture_3d_handle Handle) const noexcept
 
 void noob::graphics::texture_data(noob::texture_2d_handle Handle, uint32_t Mip, const std::array<uint32_t, 2> Offsets, const std::array<uint32_t, 2> Dims, const uint8_t* DataPtr) const noexcept(true)
 {
+
 	if (Handle.index() < textures_2d.size())
 	{
-		// bind_texture(Handle);
-		// glBindTexture(GL_TEXTURE_2D, textures_2d[Handle.index()].driver_handle);
-
 		const noob::texture_2d tex = textures_2d[Handle.index()];
 
 		if (is_compressed(tex.info.pixels))
@@ -585,8 +593,6 @@ void noob::graphics::texture_data(noob::texture_2d_handle Handle, uint32_t Mip, 
 		}
 		else
 		{
-
-
 			const std::tuple<GLenum, GLenum> fmt = deduce_pixel_format_and_type(tex.info.pixels);
 			glTexSubImage2D(GL_TEXTURE_2D, Mip, Offsets[0], Offsets[1], Dims[0], Dims[1], std::get<0>(fmt), std::get<1>(fmt), reinterpret_cast<const GLvoid*>(DataPtr));	
 			check_error_gl();

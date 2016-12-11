@@ -7,14 +7,18 @@ void noob::stage::init(uint32_t width, uint32_t height, const noob::mat4& projec
 	update_viewport_params(width, height, projection_mat);
 
 	noob::vec3 eye_pos, eye_target, eye_up;
-	eye_pos = noob::vec3(0.0, 10.0, 0.0);
-	eye_target = noob::vec3(0.0, 10.0, 100.0);
+	eye_pos = noob::vec3(0.0, 0.0, -40.0);
+	eye_target = noob::vec3(0.0, 0.0, 10.0);
 	eye_up = noob::vec3(0.0, 1.0, 0.0);
 	//const noob::vec3 eye_forward = eye_pos - eye_target;
 	//eye_up = noob::cross(eye_forward, noob::vec3(0.0, 1.0, 0.0));
 	//eye_up = noob::cross(eye_up, eye_forward);
 	view_matrix = noob::look_at(eye_pos, eye_target, eye_up);
 	projection_matrix = projection_mat;
+
+	noob::graphics& gfx = noob::get_graphics();
+	gfx.set_view_mat(view_matrix);// = noob::get_graphics();
+	gfx.set_projection_mat(projection_matrix);
 
 	world.init();
 
@@ -89,8 +93,9 @@ void noob::stage::draw() noexcept(true)
 	noob::graphics::program_handle prog = gfx.get_instanced_shader();
 	gfx.use_program(prog);
 
-	gfx.set_eye_pos(noob::translation_from_mat4(view_matrix));
-
+	gfx.set_view_mat(view_matrix);
+	gfx.set_projection_mat(projection_matrix);
+	
 	gfx.set_light_direction(noob::normalize(noob::vec3(0.5, -1.0, 0.33)));
 
 	for (uint32_t drawables_index = 0; drawables_index < drawables.size(); ++drawables_index)
@@ -110,14 +115,16 @@ void noob::stage::draw() noexcept(true)
 		gfx.draw_instanced(modl_h, instance_count);
 	}
 
-	if (terrain_changed)
+	if (terrain_started)
 	{
-		upload_terrain();
-		terrain_changed = false;
+		
+		if (terrain_changed)
+		{
+			upload_terrain();
+			terrain_changed = false;
+		}
+		gfx.draw_terrain(num_terrain_verts);
 	}
-
-
-	gfx.draw_terrain(num_terrain_verts);
 }
 
 
@@ -232,7 +239,7 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle Shape, const 
 
 	logger::log(noob::importance::INFO, noob::concat("[Stage] Scenery added! Handle ", noob::to_string(scenery_h.index())) );
 
-	terrain_changed = true;
+	terrain_changed = terrain_started = true;
 
 	return scenery_h;
 }
@@ -375,43 +382,49 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 
 void noob::stage::upload_terrain() noexcept(true)
 {
-	std::vector<noob::vec4> tmp_verts;
-	for (uint32_t i = 0; i < sceneries.count(); ++i)
+	if (terrain_started)
 	{
-		const noob::scenery sc = sceneries.get(noob::scenery_handle::make(i));
-		const noob::body& bod = world.get_body(sc.body);
-		// const noob::mat4 model_mat = bod.get_transform();
-		noob::globals& g = noob::get_globals();
-		const noob::shape tmp_shp = g.shapes.get(noob::shape_handle::make(bod.get_shape_index()));
-		const noob::basic_mesh tmp_msh = tmp_shp.get_mesh();
-		// Add up triangles independently
-		for (uint32_t i = 0; i < tmp_msh.indices.size(); ++i)
+		std::vector<noob::vec4> tmp_verts;
+		for (uint32_t i = 0; i < sceneries.count(); ++i)
 		{
-			tmp_verts.push_back(noob::vec4(tmp_msh.vertices[i], 0.0));
-			tmp_verts.push_back(noob::vec4(tmp_msh.normals[i], 0));
-			tmp_verts.push_back(tmp_msh.colours[i]);
+			const noob::scenery sc = sceneries.get(noob::scenery_handle::make(i));
+			const noob::body& bod = world.get_body(sc.body);
+			const noob::mat4 model_mat = bod.get_transform();
+			noob::globals& g = noob::get_globals();
+			const noob::shape tmp_shp = g.shapes.get(noob::shape_handle::make(bod.get_shape_index()));
+			const noob::basic_mesh tmp_msh = tmp_shp.get_mesh();
+			// Add up triangles independently
+			for (uint32_t i = 0; i < tmp_msh.indices.size(); ++i)
+			{
+				tmp_verts.push_back(model_mat * noob::vec4(tmp_msh.vertices[i], 1.0));
+				tmp_verts.push_back(noob::vec4(tmp_msh.normals[i], 0.0));
+				tmp_verts.push_back(tmp_msh.colours[i]);
+			}
 		}
+
+		num_terrain_verts = tmp_verts.size() / 3;
+
+		noob::graphics& gfx = noob::get_graphics();
+		noob::gpu_write_buffer buf = gfx.map_terrain_buffer(0, tmp_verts.size());
+
+		if (!buf.valid())
+		{
+			logger::log(noob::importance::ERROR, "[Stage] Could not map instanced matrices buffer for terrain");
+			gfx.unmap_buffer();		
+			return;
+		}
+
+		for (uint32_t i = 0; i < tmp_verts.size(); ++i)
+		{
+			buf.push_back(tmp_verts[i]);
+		}
+		logger::log(noob::importance::INFO, noob::concat("[Stage] ", noob::to_string(num_terrain_verts), " terrain vertices uploaded"));
+
+		gfx.unmap_buffer();
 	}
-
-	noob::graphics& gfx = noob::get_graphics();
-	noob::gpu_write_buffer buf = gfx.map_terrain_buffer(0, tmp_verts.size());
-
-	if (!buf.valid())
-	{
-		logger::log(noob::importance::ERROR, "[Stage] Could not map instanced matrices buffer for terrain");	
-		return;
-	}
-
-	for (uint32_t i = 0; i < tmp_verts.size(); ++i)
-	{
-		buf.push_back(tmp_verts[i]);
-	}
-
-	gfx.unmap_buffer();
 }
 
 
-// logger::log(noob::importance::INFO, noob::concat("[Stage] ", noob::to_string(current), "*2 matrices uploaded"));
 
 
 
