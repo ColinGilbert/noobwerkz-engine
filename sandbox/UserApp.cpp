@@ -1,8 +1,6 @@
 #include "Application.hpp"
-#include <cmath>
-#include <random>
-#include "ContactPoint.hpp"
-#include "TextureLoader.hpp"
+
+
 
 std::unique_ptr<std::string> message_profiling, message_collision;
 noob::actor_handle ah;
