@@ -47,4 +47,6 @@ namespace noob
 
 		noob::vec4f specular_shine, diffuse_albedo, emissive_fresnel;
 	};
+
+	typedef noob::handle<noob::reflectance> reflectance_handle;
 }

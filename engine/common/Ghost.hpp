@@ -1,7 +1,10 @@
 #pragma once
 
+
+// External libs
 #include <btBulletDynamicsCommon.h>
-#include "BulletCollision/CollisionDispatch/btGhostObject.h"
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
+#include <noob/component/component.hpp>
 
 #include "Shape.hpp"
 
@@ -33,4 +36,6 @@ namespace noob
 		protected:
 		btPairCachingGhostObject* inner;
 	};
+
+	typedef noob::handle<noob::ghost> ghost_handle;
 }

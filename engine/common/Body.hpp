@@ -3,7 +3,7 @@
 // External libs
 #include <noob/math/math_funcs.hpp>
 #include <btBulletDynamicsCommon.h>
-
+#include <noob/component/component.hpp>
 // Project-local
 #include "Shape.hpp"
 
@@ -71,4 +71,6 @@ namespace noob
 		bool physics_valid, ccd;
 		btRigidBody* inner;
 	};
+
+	typedef noob::handle<noob::body> body_handle;
 }

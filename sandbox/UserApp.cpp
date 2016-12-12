@@ -115,7 +115,6 @@ void noob::application::user_update(double dt)
 	
 	if (noob::millis(time_since_update) > profiling_interval - 1)
 	{
-		
 		const noob::profiler_snap snap = g.profile_run;
 		
 		message_profiling = std::make_unique<std::string>(noob::concat("[User Update] Frame time: ", noob::to_string(divide_duration(snap.total_time, profiling_interval)), std::string(", draw time: "), noob::to_string(divide_duration(snap.stage_draw_duration, profiling_interval)), ", physics time: ", noob::to_string(divide_duration(snap.stage_physics_duration, profiling_interval))));

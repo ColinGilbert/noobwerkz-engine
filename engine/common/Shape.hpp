@@ -7,9 +7,8 @@
 #include <memory>
 
 #include <noob/math/math_funcs.hpp>
-
+#include <noob/component/component.hpp>
 #include <rdestl/fixed_array.h>
-
 #include <btBulletDynamicsCommon.h>
 
 #include "NoobUtils.hpp"
@@ -62,4 +61,6 @@ namespace noob
 		noob::vec3f scales;
 		btCollisionShape* inner;
 	};
+
+	typedef noob::handle<noob::shape> shape_handle;
 }

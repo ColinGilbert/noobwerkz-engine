@@ -1,8 +1,12 @@
 #pragma once
 
+// External libs
+#include <noob/component/component.hpp>
+#include <btBulletDynamicsCommon.h>
+
+// Internal project-related files
 #include "Body.hpp"
 #include "Shape.hpp"
-#include <btBulletDynamicsCommon.h>
 
 namespace noob
 {
@@ -97,4 +101,6 @@ namespace noob
 			// getAppliedImpulse is an estimated total applied impulse. More...
 
 	};
+
+	typedef noob::handle<noob::joint> joint_handle;
 }

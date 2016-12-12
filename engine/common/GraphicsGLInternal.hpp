@@ -291,18 +291,22 @@ GLuint load_shader_gl(GLenum type, const std::string& shader_arg)
 	const char* shader_src = shader_arg.c_str();
 	// Load the shader source
 	glShaderSource(shader, 1, &shader_src, NULL);
+	check_error_gl();
 
 	// Compile the shader
 	glCompileShader(shader);
+	check_error_gl();
 
 	// Check the compile status
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+	check_error_gl();
 
 	if (!compiled)
 	{
 		GLint info_len = 0;
 
 		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &info_len);
+		check_error_gl();
 
 		if (info_len > 1)
 		{
@@ -310,11 +314,14 @@ GLuint load_shader_gl(GLenum type, const std::string& shader_arg)
 			info_log.resize(info_len);
 
 			glGetShaderInfoLog(shader, info_len, NULL, &info_log[0]);
+			check_error_gl();
 
 			noob::logger::log(noob::importance::ERROR, noob::concat("[Graphics] Error compiling shader: ", info_log));
 		}
 
 		glDeleteShader(shader);
+		check_error_gl();
+
 		return 0;
 	}
 
@@ -335,6 +342,7 @@ GLuint load_program_gl(const std::string& vert_shader_arg, const std::string fra
 	const char* vert_shader_src = vert_shader_arg.c_str();
 	// Load the vertex/fragment shaders
 	vertex_shader = load_shader_gl(GL_VERTEX_SHADER, vert_shader_arg);
+	check_error_gl();
 
 	if (vertex_shader == 0)
 	{
@@ -343,6 +351,7 @@ GLuint load_program_gl(const std::string& vert_shader_arg, const std::string fra
 
 	const char* frag_shader_src  = frag_shader_arg.c_str();
 	fragment_shader = load_shader_gl(GL_FRAGMENT_SHADER, frag_shader_arg);
+	check_error_gl();
 
 	if (fragment_shader == 0)
 	{
@@ -352,6 +361,7 @@ GLuint load_program_gl(const std::string& vert_shader_arg, const std::string fra
 
 	// Create the program object
 	program_object = glCreateProgram();
+	check_error_gl();
 
 	if (program_object == 0)
 	{
@@ -359,19 +369,25 @@ GLuint load_program_gl(const std::string& vert_shader_arg, const std::string fra
 	}
 
 	glAttachShader(program_object, vertex_shader);
+	check_error_gl();
+
 	glAttachShader(program_object, fragment_shader);
+	check_error_gl();
 
 	// Link the program
 	glLinkProgram(program_object);
+	check_error_gl();
 
 	// Check the link status
 	glGetProgramiv(program_object, GL_LINK_STATUS, &linked);
+	check_error_gl();
 
 	if (!linked)
 	{
 		GLint info_len = 0;
 
 		glGetProgramiv(program_object, GL_INFO_LOG_LENGTH, &info_len);
+		check_error_gl();
 
 		if (info_len > 1)
 		{
@@ -379,6 +395,8 @@ GLuint load_program_gl(const std::string& vert_shader_arg, const std::string fra
 			info_log.resize(info_len);
 
 			glGetProgramInfoLog(program_object, info_len, NULL, &info_log[0]);
+			check_error_gl();
+
 			noob::logger::log(noob::importance::ERROR, noob::concat("[Graphics] Error linking program:", info_log));
 
 		}
@@ -389,7 +407,9 @@ GLuint load_program_gl(const std::string& vert_shader_arg, const std::string fra
 
 	// Free up no longer needed shader resources
 	glDeleteShader(vertex_shader);
+	check_error_gl();
 	glDeleteShader(fragment_shader);
+	check_error_gl();
 
 	return program_object;
 }

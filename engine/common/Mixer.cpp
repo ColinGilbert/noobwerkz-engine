@@ -6,7 +6,7 @@
 #include "NoobUtils.hpp"
 
 
-bool noob::mixer::play_clip(const noob::sample_handle clip, float volume) noexcept(true)
+bool noob::mixer::play_clip(const noob::audio_sample_handle clip, float volume) noexcept(true)
 {
 	noob::globals& g = noob::get_globals();
 	noob::audio_sample* samp = g.samples.get(clip);
@@ -72,7 +72,7 @@ void noob::mixer::tick(uint32_t num_frames) noexcept(true)
 	{
 		if (voices[v].active)
 		{
-			const noob::audio_sample* samp = g.samples.get(noob::sample_handle::make(voices[v].index));
+			const noob::audio_sample* samp = g.samples.get(noob::audio_sample_handle::make(voices[v].index));
 			const size_t sample_size = samp->samples.size();
 			for(size_t q = 0; q < 4; ++q)
 			{

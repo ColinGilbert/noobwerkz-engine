@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+#include <noob/component/component.hpp>
+
 #include "NoobDefines.hpp"
 
 namespace noob
@@ -23,4 +25,6 @@ namespace noob
 		size_t min_before_next;
 		std::vector<int16_t> samples;
 	};
+
+	typedef noob::handle<noob::audio_sample> audio_sample_handle;
 }

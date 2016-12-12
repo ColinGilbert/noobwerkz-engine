@@ -68,4 +68,7 @@ namespace noob
 
 		noob::vec4f rgb_falloff, pos_radius;
 	};
+
+	typedef noob::handle<noob::light> light_handle;
+
 }

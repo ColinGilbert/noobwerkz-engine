@@ -10,6 +10,7 @@
 #include <rdestl/basic_string.h>
 #include <rdestl/fixed_array.h>
 #include <rdestl/hash_map.h>
+#include <noob/component/component.hpp>
 
 // Project headers
 #include "ComponentDefines.hpp"
@@ -28,7 +29,7 @@ namespace noob
 		// First: Invalid handle (ie: sample doesn't exist.)
 		// Second: Not enough free voices.
 		// Third: Trying to play sample prior to its minimum allowed offset being reached (each sample has a minimum offset to ensure two clips being played at the same time don't cause interference.
-		bool play_clip(noob::sample_handle, float volume) noexcept(true);
+		bool play_clip(noob::audio_sample_handle, float volume) noexcept(true);
 		
 		void tick(uint32_t num_frames) noexcept(true);
 

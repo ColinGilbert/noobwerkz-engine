@@ -1,3 +1,5 @@
+// A bunch of convenience typedefs.
+
 #pragma once
 
 #include <noob/component/component.hpp>
@@ -25,16 +27,7 @@ namespace noob
 	typedef noob::component_dynamic<noob::audio_sample> samples_holder;
 	typedef noob::component_dynamic<std::string> strings_holder;
 
-	typedef handle<noob::body> body_handle;
-	typedef handle<noob::joint> joint_handle;
-	typedef handle<noob::ghost> ghost_handle;	
-	typedef handle<noob::shape> shape_handle;
-	typedef handle<noob::light> light_handle;
-	typedef handle<noob::reflectance> reflectance_handle;
-	typedef handle<noob::time_point> timepoint_handle;
-	typedef handle<noob::text_label> text_label_handle;
+	// typedef handle<noob::time_point> timepoint_handle;
+	// typedef handle<noob::text_label> text_label_handle;
 
-	typedef handle<noob::skeletal_anim> skeletal_anim_handle;
-	typedef handle<noob::audio_sample> sample_handle;
-	typedef handle<std::string> string_handle;
 }

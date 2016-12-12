@@ -109,4 +109,6 @@ namespace noob
 			ozz::Range<ozz::math::Float4x4> model_matrices;
 			ozz::memory::Allocator* allocator;
 	};
+
+	typedef noob::handle<noob::skeletal_anim> skeletal_anim_handle;
 }
