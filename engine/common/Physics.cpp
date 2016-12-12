@@ -18,7 +18,7 @@ void noob::physics::init() noexcept(true)
 	collision_dispatcher = new btCollisionDispatcher(collision_configuration);
 	solver = new btSequentialImpulseConstraintSolver();
 	dynamics_world = new btDiscreteDynamicsWorld(collision_dispatcher, broadphase, solver, collision_configuration);
-	set_gravity(noob::vec3(0.0, -10.0, 0.0));
+	set_gravity(noob::vec3f(0.0, -10.0, 0.0));
 	dynamics_world->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 }
 
@@ -50,19 +50,19 @@ void noob::physics::clear() noexcept(true)
 }
 
 
-void noob::physics::set_gravity(const noob::vec3& arg) noexcept(true)
+void noob::physics::set_gravity(const noob::vec3f& arg) noexcept(true)
 {
 	dynamics_world->setGravity(btVector3(arg[0], arg[1], arg[2]));
 }
 
 
-noob::vec3 noob::physics::get_gravity() const noexcept(true)
+noob::vec3f noob::physics::get_gravity() const noexcept(true)
 {
-	return noob::vec3_from_bullet(dynamics_world->getGravity());
+	return noob::vec3f_from_bullet(dynamics_world->getGravity());
 }
 
 
-noob::body_handle noob::physics::add_body(noob::body_type b_type, const noob::shape_handle shape_h, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true)
+noob::body_handle noob::physics::add_body(noob::body_type b_type, const noob::shape_handle shape_h, float mass, const noob::vec3f& pos, const noob::versorf& orient, bool ccd) noexcept(true)
 {
 	noob::globals& g = noob::get_globals();
 
@@ -86,7 +86,7 @@ noob::body_handle noob::physics::add_body(noob::body_type type_arg, const noob::
 }
 
 
-noob::ghost_handle noob::physics::add_ghost(const noob::shape_handle shape_h, const noob::vec3& pos, const noob::versor& orient) noexcept(true)
+noob::ghost_handle noob::physics::add_ghost(const noob::shape_handle shape_h, const noob::vec3f& pos, const noob::versorf& orient) noexcept(true)
 {
 	noob::globals& g = noob::get_globals();
 
@@ -158,9 +158,9 @@ std::vector<noob::contact_point> noob::physics::get_intersecting(const noob::gho
 
 						cp.item_type = static_cast<noob::stage_item_type>(bt_obj->getUserIndex());
 						cp.index = index;
-						cp.pos_a = vec3_from_bullet(pt.getPositionWorldOnA());
-						cp.pos_b = vec3_from_bullet(pt.getPositionWorldOnB());
-						cp.normal_on_b = vec3_from_bullet(pt.m_normalWorldOnB);
+						cp.pos_a = vec3f_from_bullet(pt.getPositionWorldOnA());
+						cp.pos_b = vec3f_from_bullet(pt.getPositionWorldOnB());
+						cp.normal_on_b = vec3f_from_bullet(pt.m_normalWorldOnB);
 
 						results.push_back(cp);
 					}

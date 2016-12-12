@@ -9,14 +9,14 @@ noob::actor_handle ah;
 
 std::string test_message;
 
-noob::vec3 random_vec3(float x, float y, float z)
+noob::vec3f random_vec3(float x, float y, float z)
 {
-	return noob::vec3(noob::random::get() * x, noob::random::get() * y, noob::random::get() * z);
+	return noob::vec3f(noob::random::get() * x, noob::random::get() * y, noob::random::get() * z);
 }
 
-noob::versor random_versor()
+noob::versorf random_versor()
 {
-	return noob::normalize(noob::versor(noob::random::get(), noob::random::get(), noob::random::get(), noob::random::get()));
+	return noob::normalize(noob::versorf(noob::random::get(), noob::random::get(), noob::random::get(), noob::random::get()));
 }
 
 bool noob::application::user_init()
@@ -26,9 +26,9 @@ bool noob::application::user_init()
 	noob::logger::log(noob::importance::INFO, "[Application] Begin user init!");
 
 	noob::reflectance r;
-	r.set_specular(noob::vec3(0.1, 0.1, 0.1));
-	r.set_diffuse(noob::vec3(0.1, 0.1, 0.1));
-	r.set_emissive(noob::vec3(0.0, 0.0, 0.0));
+	r.set_specular(noob::vec3f(0.1, 0.1, 0.1));
+	r.set_diffuse(noob::vec3f(0.1, 0.1, 0.1));
+	r.set_emissive(noob::vec3f(0.0, 0.0, 0.0));
 	r.set_shine(8.0);
 	r.set_albedo(0.3);
 	r.set_fresnel(0.2);
@@ -36,7 +36,7 @@ bool noob::application::user_init()
 	noob::globals& g = noob::get_globals();
 
 	const noob::shape_handle scenery_shp = g.sphere_shape(10.0);// g.box_shape(50.0, 20.0, 50.0);
-	const noob::scenery_handle sc_h = stage.scenery(scenery_shp, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));//versor_from_axis_rad(0.0, 0.0, 0.0, 1.0)); // 0 rad rotation, facing up
+	const noob::scenery_handle sc_h = stage.scenery(scenery_shp, noob::vec3f(0.0, 0.0, 0.0), noob::versorf(0.0, 0.0, 0.0, 1.0));//versor_from_axis_rad(0.0, 0.0, 0.0, 1.0)); // 0 rad rotation, facing up
 	const noob::reflectance_handle rh = g.reflectances.add(r);
 
 /*

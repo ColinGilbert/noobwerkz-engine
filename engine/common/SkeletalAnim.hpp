@@ -50,8 +50,8 @@ namespace noob
 			// std::weak_ptr<noob::skeletal_anim::sampler> get_sampler(const std::string& anim_name) const;
 			// Gets bone matrices in model space
 			
-			std::vector<noob::mat4> get_matrices() const;
-			/// std::array<noob::vec3,4> get_skeleton_bounds() const;
+			std::vector<noob::mat4f> get_matrices() const;
+			/// std::array<noob::vec3f,4> get_skeleton_bounds() const;
 
 		protected:
 			

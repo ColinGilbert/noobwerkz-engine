@@ -2,7 +2,7 @@
 
 #include "Globals.hpp"
 
-void noob::ghost::init(btCollisionWorld* world, const noob::shape& shape_arg, const noob::vec3& pos_arg, const noob::versor& orient_arg) noexcept(true) 
+void noob::ghost::init(btCollisionWorld* world, const noob::shape& shape_arg, const noob::vec3f& pos_arg, const noob::versorf& orient_arg) noexcept(true) 
 {
 	inner = new btPairCachingGhostObject();
 	//logger::log("[Ghost] about to add collision object to world");
@@ -17,37 +17,37 @@ void noob::ghost::init(btCollisionWorld* world, const noob::shape& shape_arg, co
 }
 
 
-void noob::ghost::set_position(const noob::vec3& pos) noexcept(true) 
+void noob::ghost::set_position(const noob::vec3f& pos) noexcept(true) 
 {
 	btTransform xform(inner->getWorldTransform());
 	inner->setWorldTransform(btTransform(xform.getRotation(), btVector3(pos.v[0], pos.v[1], pos.v[2])));
 }
 
 
-void noob::ghost::set_orientation(const noob::versor& orient) noexcept(true) 
+void noob::ghost::set_orientation(const noob::versorf& orient) noexcept(true) 
 {
 	btTransform xform(inner->getWorldTransform());
 	inner->setWorldTransform(btTransform(btQuaternion(orient.q[0], orient.q[1], orient.q[2], orient.q[3]), xform.getOrigin()));
 }
 
 
-noob::vec3 noob::ghost::get_position() const noexcept(true) 
+noob::vec3f noob::ghost::get_position() const noexcept(true) 
 {
 	btTransform xform(inner->getWorldTransform());
-	return noob::vec3_from_bullet(xform.getOrigin());
+	return noob::vec3f_from_bullet(xform.getOrigin());
 }
 
 
-noob::versor noob::ghost::get_orientation() const noexcept(true) 
+noob::versorf noob::ghost::get_orientation() const noexcept(true) 
 {
 	btTransform xform(inner->getWorldTransform());
-	return noob::versor_from_bullet(xform.getRotation());
+	return noob::versorf_from_bullet(xform.getRotation());
 }
 
 
-noob::mat4 noob::ghost::get_transform() const noexcept(true) 
+noob::mat4f noob::ghost::get_transform() const noexcept(true) 
 {
-	return mat4_from_bullet(inner->getWorldTransform());
+	return mat4f_from_bullet(inner->getWorldTransform());
 }
 
 void noob::ghost::set_user_index_1(uint32_t i) noexcept(true)

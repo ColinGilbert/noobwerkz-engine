@@ -23,12 +23,12 @@ namespace noob
 		void step(float) noexcept(true);
 		void clear() noexcept(true);
 
-		void set_gravity(const noob::vec3&) noexcept(true);
-		noob::vec3 get_gravity() const noexcept(true);
+		void set_gravity(const noob::vec3f&) noexcept(true);
+		noob::vec3f get_gravity() const noexcept(true);
 
-		noob::body_handle add_body(noob::body_type, const noob::shape_handle, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true);
+		noob::body_handle add_body(noob::body_type, const noob::shape_handle, float mass, const noob::vec3f& pos, const noob::versorf& orient, bool ccd) noexcept(true);
 		noob::body_handle add_body(noob::body_type, const noob::shape_handle, const noob::body::info&) noexcept(true);		
-		noob::ghost_handle add_ghost(const noob::shape_handle, const noob::vec3&, const noob::versor&) noexcept(true);
+		noob::ghost_handle add_ghost(const noob::shape_handle, const noob::vec3f&, const noob::versorf&) noexcept(true);
 		
 		noob::body& get_body(noob::body_handle) noexcept(true);
 		noob::ghost& get_ghost(noob::ghost_handle) noexcept(true);

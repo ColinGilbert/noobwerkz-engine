@@ -15,7 +15,7 @@ namespace noob
 
 	struct actor
 	{
-		actor() noexcept(true) : alive(true), team(0), pose(0), velocity(noob::vec3(0.0, 0.0, 0.0)) /*, target_pos(noob::vec3(0.0, 0.0, 0.0)), incline(0.0), gravity_coeff(1.0) */ {}
+		actor() noexcept(true) : alive(true), team(0), pose(0), velocity(noob::vec3f(0.0, 0.0, 0.0)) /*, target_pos(noob::vec3f(0.0, 0.0, 0.0)), incline(0.0), gravity_coeff(1.0) */ {}
 
 		// These are basic stances upon which all other activities are animated.
 		// 
@@ -31,7 +31,7 @@ namespace noob
 		uint32_t team, pose;
 		noob::actor_blueprints_handle bp_handle;
 		noob::ghost_handle ghost;
-		noob::vec3 velocity, target_pos;
+		noob::vec3f velocity, target_pos;
 		// float incline, gravity_coeff;
 
 		// noob::actor::stance_type stance;

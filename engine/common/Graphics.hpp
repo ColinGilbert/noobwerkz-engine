@@ -35,11 +35,11 @@ namespace noob
 			// Call before killing.
 			void destroy() noexcept(true);
 
-			void set_light_direction(const noob::vec3&) noexcept(true);
+			void set_light_direction(const noob::vec3f&) noexcept(true);
 
 			void use_program(noob::graphics::program_handle) const noexcept(true);
-			void set_view_mat(const noob::mat4) noexcept(true);
-			void set_projection_mat(const noob::mat4) noexcept(true);
+			void set_view_mat(const noob::mat4f) noexcept(true);
+			void set_projection_mat(const noob::mat4f) noexcept(true);
 			
 			// Currently, instanced models only support the basic vertex colours. This may change.
 			void draw_instanced(const noob::model_handle, uint32_t NumInstances) const noexcept(true);
@@ -119,8 +119,8 @@ namespace noob
 			uint32_t u_eye_pos, u_light_directional;
 			uint32_t u_mvp_terrain, u_eye_pos_terrain, u_light_directional_terrain, u_texture_0, u_colour_0, u_colour_1, u_colour_2, u_colour_3, u_blend_0, u_blend_1, u_tex_scales, u_model_scales;
 	
-			noob::mat4 view_mat, proj_mat;	
-			noob::vec3 eye_pos, light_direction;
+			noob::mat4f view_mat, proj_mat;	
+			noob::vec3f eye_pos, light_direction;
 			noob::terrain_shading terrain_unis;
 			noob::texture_2d_handle terrain_tex;
 

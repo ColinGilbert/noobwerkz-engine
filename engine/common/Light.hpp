@@ -9,17 +9,17 @@ namespace noob
 {
 	struct directional_light
 	{
-			noob::vec4 colour, direction;
+			noob::vec4f colour, direction;
 	};
 
 	struct light 
 	{
-		light() noexcept(true) : rgb_falloff(noob::vec4(1.0, 1.0, 1.0, 1.0)), pos_radius(noob::vec4(0.0, 200.0, 0.0, 300.0))  {}
+		light() noexcept(true) : rgb_falloff(noob::vec4f(1.0, 1.0, 1.0, 1.0)), pos_radius(noob::vec4f(0.0, 200.0, 0.0, 300.0))  {}
 
-		void set_position(const noob::vec3& arg) noexcept(true)
+		void set_position(const noob::vec3f& arg) noexcept(true)
 		{
 			float r = pos_radius.v[3];
-			pos_radius = noob::vec4(arg, r);
+			pos_radius = noob::vec4f(arg, r);
 		}
 
 		void set_falloff(float r) noexcept(true)
@@ -27,10 +27,10 @@ namespace noob
 			rgb_falloff.v[3] = r;
 		}
 
-		void set_colour(const noob::vec3& arg) noexcept(true)
+		void set_colour(const noob::vec3f& arg) noexcept(true)
 		{
 			float temp = rgb_falloff.v[3];
-			rgb_falloff = noob::vec4(arg, temp);
+			rgb_falloff = noob::vec4f(arg, temp);
 		}
 
 		void set_radius(float r) noexcept(true)
@@ -38,9 +38,9 @@ namespace noob
 			pos_radius.v[3] = r;
 		}
 
-		noob::vec3 get_position() const noexcept(true)
+		noob::vec3f get_position() const noexcept(true)
 		{
-			noob::vec3 pos;
+			noob::vec3f pos;
 			pos.v[0] = pos_radius.v[0];
 			pos.v[1] = pos_radius.v[1];
 			pos.v[2] = pos_radius.v[2];
@@ -52,9 +52,9 @@ namespace noob
 			return rgb_falloff.v[3];
 		}
 
-		noob::vec3 get_colour() const noexcept(true)
+		noob::vec3f get_colour() const noexcept(true)
 		{
-			noob::vec3 retval;
+			noob::vec3f retval;
 			retval.v[0] = rgb_falloff.v[0];
 			retval.v[1] = rgb_falloff.v[1];
 			retval.v[2] = rgb_falloff.v[2];
@@ -66,6 +66,6 @@ namespace noob
 			return pos_radius.v[3];
 		}
 
-		noob::vec4 rgb_falloff, pos_radius;
+		noob::vec4f rgb_falloff, pos_radius;
 	};
 }

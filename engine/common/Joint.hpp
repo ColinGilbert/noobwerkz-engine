@@ -9,23 +9,23 @@ namespace noob
 	class joint
 	{
 		public:
-			void init(btDynamicsWorld* const w, const noob::body& a, const noob::body& b, const noob::mat4& local_a, const noob::mat4& local_b) noexcept(true);
+			void init(btDynamicsWorld* const w, const noob::body& a, const noob::body& b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true);
 
-			void set_frames(const noob::mat4& local_a, const noob::mat4& local_b) noexcept(true);
+			void set_frames(const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true);
 
 
 			void set_enabled(uint8_t, bool) noexcept(true);
 			void set_stiffness(uint8_t, float) noexcept(true);
 			void set_damping(uint8_t, float) noexcept(true);
-			void set_limits(uint8_t, const noob::vec2&) noexcept(true);
+			void set_limits(uint8_t, const noob::vec2f&) noexcept(true);
 		
 			bool is_enabled(uint8_t) const noexcept(true);
 			// TODO: Patch Bullet? Maybe good reason?
 			// float get_stiffness(uint8_t) const noexcept(true);
 			// float get_damping(uint8_t) const noexcept(true);
-			// noob::vec2 get_limits(uint8_t) const noexcept(true);
+			// noob::vec2f get_limits(uint8_t) const noexcept(true);
 			
-			noob::vec3 get_axis(uint8_t) const noexcept(true);
+			noob::vec3f get_axis(uint8_t) const noexcept(true);
 			float get_angle(uint8_t) const noexcept(true);
 
 		protected:

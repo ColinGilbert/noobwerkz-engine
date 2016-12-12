@@ -2,16 +2,16 @@
 // #include "Shiny.h"
 
 
-void noob::stage::init(uint32_t width, uint32_t height, const noob::mat4& projection_mat) noexcept(true) 
+void noob::stage::init(uint32_t width, uint32_t height, const noob::mat4f& projection_mat) noexcept(true) 
 {
 	update_viewport_params(width, height, projection_mat);
 
-	noob::vec3 eye_pos, eye_target, eye_up;
-	eye_pos = noob::vec3(0.0, 0.0, -40.0);
-	eye_target = noob::vec3(0.0, 0.0, 10.0);
-	eye_up = noob::vec3(0.0, 1.0, 0.0);
-	//const noob::vec3 eye_forward = eye_pos - eye_target;
-	//eye_up = noob::cross(eye_forward, noob::vec3(0.0, 1.0, 0.0));
+	noob::vec3f eye_pos, eye_target, eye_up;
+	eye_pos = noob::vec3f(0.0, 0.0, -40.0);
+	eye_target = noob::vec3f(0.0, 0.0, 10.0);
+	eye_up = noob::vec3f(0.0, 1.0, 0.0);
+	//const noob::vec3f eye_forward = eye_pos - eye_target;
+	//eye_up = noob::cross(eye_forward, noob::vec3f(0.0, 1.0, 0.0));
 	//eye_up = noob::cross(eye_up, eye_forward);
 	view_matrix = noob::look_at(eye_pos, eye_target, eye_up);
 	projection_matrix = projection_mat;
@@ -22,18 +22,18 @@ void noob::stage::init(uint32_t width, uint32_t height, const noob::mat4& projec
 
 	world.init();
 
-	main_light.colour = noob::vec4(1.0, 1.0, 1.0, 0.3);
-	main_light.direction = noob::vec4(-0.3333, -1.0, -0.3333, 1.0);
+	main_light.colour = noob::vec4f(1.0, 1.0, 1.0, 0.3);
+	main_light.direction = noob::vec4f(-0.3333, -1.0, -0.3333, 1.0);
 
-	team_colours.push_back(noob::vec4(1.0, 1.0, 1.0, 1.0));
-	team_colours.push_back(noob::vec4(1.0, 0.0, 0.0, 1.0));
-	team_colours.push_back(noob::vec4(0.0, 1.0, 0.0, 1.0));
-	team_colours.push_back(noob::vec4(0.0, 0.0, 1.0, 1.0));
-	team_colours.push_back(noob::vec4(1.0, 1.0, 0.0, 1.0));
-	team_colours.push_back(noob::vec4(0.0, 1.0, 1.0, 1.0));
-	team_colours.push_back(noob::vec4(1.0, 0.0, 1.0, 1.0));
-	team_colours.push_back(noob::vec4(0.2, 0.2, 0.2, 1.0));
-	team_colours.push_back(noob::vec4(0.2, 0.5, 0.2, 1.0));
+	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
+	team_colours.push_back(noob::vec4f(1.0, 0.0, 0.0, 1.0));
+	team_colours.push_back(noob::vec4f(0.0, 1.0, 0.0, 1.0));
+	team_colours.push_back(noob::vec4f(0.0, 0.0, 1.0, 1.0));
+	team_colours.push_back(noob::vec4f(1.0, 1.0, 0.0, 1.0));
+	team_colours.push_back(noob::vec4f(0.0, 1.0, 1.0, 1.0));
+	team_colours.push_back(noob::vec4f(1.0, 0.0, 1.0, 1.0));
+	team_colours.push_back(noob::vec4f(0.2, 0.2, 0.2, 1.0));
+	team_colours.push_back(noob::vec4f(0.2, 0.5, 0.2, 1.0));
 
 	logger::log(noob::importance::INFO, "[Stage] Done init.");
 }
@@ -96,7 +96,7 @@ void noob::stage::draw() noexcept(true)
 	gfx.set_view_mat(view_matrix);
 	gfx.set_projection_mat(projection_matrix);
 	
-	gfx.set_light_direction(noob::normalize(noob::vec3(0.5, -1.0, 0.33)));
+	gfx.set_light_direction(noob::normalize(noob::vec3f(0.5, -1.0, 0.33)));
 
 	for (uint32_t drawables_index = 0; drawables_index < drawables.size(); ++drawables_index)
 	{
@@ -128,7 +128,7 @@ void noob::stage::draw() noexcept(true)
 }
 
 
-void noob::stage::update_viewport_params(uint32_t width, uint32_t height, const noob::mat4& projection_mat) noexcept(true)
+void noob::stage::update_viewport_params(uint32_t width, uint32_t height, const noob::mat4f& projection_mat) noexcept(true)
 {
 	viewport_width = width;
 	viewport_height = height;
@@ -142,7 +142,7 @@ void noob::stage::build_navmesh() noexcept(true)
 }
 
 
-void noob::stage::rebuild_graphics(uint32_t width, uint32_t height, const noob::mat4& projection_mat) noexcept(true)
+void noob::stage::rebuild_graphics(uint32_t width, uint32_t height, const noob::mat4f& projection_mat) noexcept(true)
 {
 	noob::graphics& gfx = noob::get_graphics();
 	update_viewport_params(width, height, projection_mat);
@@ -175,7 +175,7 @@ void noob::stage::reserve_actors(noob::actor_blueprints_handle bp_h, uint32_t nu
 }
 
 
-noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32_t team, const noob::vec3& pos, const noob::versor& orient) noexcept(true)
+noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32_t team, const noob::vec3f& pos, const noob::versorf& orient) noexcept(true)
 {
 	if (actor_factories.size() > bp_h.index())
 	{
@@ -223,7 +223,7 @@ noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32
 }
 
 
-noob::scenery_handle noob::stage::scenery(const noob::shape_handle Shape, const noob::vec3& Pos, const noob::versor& Orient) noexcept(true)
+noob::scenery_handle noob::stage::scenery(const noob::shape_handle Shape, const noob::vec3f& Pos, const noob::versorf& Orient) noexcept(true)
 {
 	const noob::globals& g = noob::get_globals();
 	const noob::body_handle bod_h = world.add_body(noob::body_type::STATIC, Shape, 0.0, Pos, Orient, false);
@@ -272,9 +272,9 @@ void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 	   std::vector<noob::contact_point> cps = get_intersecting(ah);
 	   if (cps.size() == 0)
 	   {
-	   noob::vec3 gravity = world.get_gravity();// * a.gravity_coeff;
+	   noob::vec3f gravity = world.get_gravity();// * a.gravity_coeff;
 	   noob::ghost& gst = world.get_ghost(a.ghost);
-	   noob::vec3 temp_pos = gst.get_position();
+	   noob::vec3f temp_pos = gst.get_position();
 	   temp_pos += gravity;
 	   gst.set_position(temp_pos);
 	   }
@@ -307,7 +307,7 @@ void noob::stage::upload_colours(drawable_info_handle arg) const noexcept(true)
 	{
 		const noob::actor_handle a_h = drawables[arg.index()].instances[current].actor;
 		const noob::actor a = actors.get(a_h);
-		const noob::vec4 colour = team_colours[a.team];
+		const noob::vec4f colour = team_colours[a.team];
 		bool valid = buf.push_back(colour);
 
 		if (!valid)
@@ -342,7 +342,7 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 		return;
 	}
 
-	const noob::mat4 viewproj_mat = projection_matrix * view_matrix;
+	const noob::mat4f viewproj_mat = projection_matrix * view_matrix;
 	uint32_t current = 0;
 	while (current < count)
 	{
@@ -350,7 +350,7 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 		const noob::actor a = actors.get(info.actor);
 
 		const noob::ghost& gst = world.get_ghost(a.ghost);
-		const noob::mat4 model_mat = gst.get_transform();
+		const noob::mat4f model_mat = gst.get_transform();
 
 		bool valid = buf.push_back(model_mat);
 
@@ -361,7 +361,7 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 			return;
 		}
 
-		const noob::mat4 mvp_mat = viewproj_mat * model_mat;
+		const noob::mat4f mvp_mat = viewproj_mat * model_mat;
 		valid = buf.push_back(mvp_mat);
 
 		if (!valid)
@@ -384,20 +384,20 @@ void noob::stage::upload_terrain() noexcept(true)
 {
 	if (terrain_started)
 	{
-		std::vector<noob::vec4> tmp_verts;
+		std::vector<noob::vec4f> tmp_verts;
 		for (uint32_t i = 0; i < sceneries.count(); ++i)
 		{
 			const noob::scenery sc = sceneries.get(noob::scenery_handle::make(i));
 			const noob::body& bod = world.get_body(sc.body);
-			const noob::mat4 model_mat = bod.get_transform();
+			const noob::mat4f model_mat = bod.get_transform();
 			noob::globals& g = noob::get_globals();
 			const noob::shape tmp_shp = g.shapes.get(noob::shape_handle::make(bod.get_shape_index()));
 			const noob::mesh_3d tmp_msh = tmp_shp.get_mesh();
 			// Add up triangles independently
 			for (uint32_t i = 0; i < tmp_msh.indices.size(); ++i)
 			{
-				tmp_verts.push_back(model_mat * noob::vec4(tmp_msh.vertices[i], 1.0));
-				tmp_verts.push_back(noob::vec4(tmp_msh.normals[i], 0.0));
+				tmp_verts.push_back(model_mat * noob::vec4f(tmp_msh.vertices[i], 1.0));
+				tmp_verts.push_back(noob::vec4f(tmp_msh.normals[i], 0.0));
 				tmp_verts.push_back(tmp_msh.colours[i]);
 			}
 		}
@@ -479,7 +479,7 @@ void noob::stage::accept_ndof_data(const noob::ndof::data& info) noexcept(true)
 		view_matrix = noob::rotate_x_deg(view_matrix, -info.rotation[0] / damping);
 		view_matrix = noob::rotate_y_deg(view_matrix, -info.rotation[1] / damping);
 		view_matrix = noob::rotate_z_deg(view_matrix, -info.rotation[2] / damping);
-		view_matrix = noob::translate(view_matrix, noob::vec3(-info.translation[0] / damping, -info.translation[1] / damping, -info.translation[2] / damping));
+		view_matrix = noob::translate(view_matrix, noob::vec3f(-info.translation[0] / damping, -info.translation[1] / damping, -info.translation[2] / damping));
 	}
 
 }

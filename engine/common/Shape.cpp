@@ -8,7 +8,7 @@ void noob::shape::sphere(float radius) noexcept(true)
 		shape_type = noob::shape::type::SPHERE;
 		inner = new btSphereShape(radius);
 	}
-	scales = noob::vec3(radius*2.0, radius*2.0, radius*2.0);
+	scales = noob::vec3f(radius*2.0, radius*2.0, radius*2.0);
 	physics_valid = true;
 }
 
@@ -20,16 +20,16 @@ void noob::shape::box(float width, float height, float depth) noexcept(true)
 		shape_type = noob::shape::type::BOX;
 		inner = new btBoxShape(btVector3(width * 0.5, height * 0.5, depth * 0.5));
 	}
-	scales = noob::vec3(width, height, depth);
+	scales = noob::vec3f(width, height, depth);
 	physics_valid = true;
 }
 
-void noob::shape::hull(const std::vector<noob::vec3>& points) noexcept(true) 
+void noob::shape::hull(const std::vector<noob::vec3f>& points) noexcept(true) 
 {
 	if (!physics_valid)
 	{
 		shape_type = noob::shape::type::HULL;
-		scales = noob::vec3(1.0, 1.0, 1.0);
+		scales = noob::vec3f(1.0, 1.0, 1.0);
 		inner = new btConvexHullShape(&points[0].v[0], points.size());
 	}
 	physics_valid = true;
@@ -60,7 +60,7 @@ void noob::shape::trimesh(const noob::mesh_3d& mesh) noexcept(true)
 		}        
 		inner = new btBvhTriangleMeshShape(phyz_mesh, true);
 		// set_margin(2.5);
-		scales = noob::vec3(1.0, 1.0, 1.0);
+		scales = noob::vec3f(1.0, 1.0, 1.0);
 	}
 	physics_valid = true;
 }
@@ -76,7 +76,7 @@ float noob::shape::get_margin() const noexcept(true)
 	return inner->getMargin();
 }
 
-noob::vec3 noob::shape::get_scales() const noexcept(true) 
+noob::vec3f noob::shape::get_scales() const noexcept(true) 
 {
 	return scales;
 }
@@ -114,10 +114,10 @@ noob::mesh_3d noob::shape::get_mesh() const noexcept(true)
 				const btVector3* btpoints = static_cast<btConvexHullShape*>(inner)->getUnscaledPoints();
 				uint32_t num_points = static_cast<btConvexHullShape*>(inner)->getNumPoints();
 				//std::vector<std::reference_wrapper<btVector3>> cv;
-				std::vector<noob::vec3> points;
+				std::vector<noob::vec3f> points;
 				for (uint32_t i = 0; i < num_points; ++i)
 				{
-					points.push_back(noob::vec3_from_bullet(*(btpoints+(i*sizeof(btVector3))))); // Man that was ugly...
+					points.push_back(noob::vec3f_from_bullet(*(btpoints+(i*sizeof(btVector3))))); // Man that was ugly...
 				}
 				return noob::mesh_utils::hull(points);
 			}
@@ -183,11 +183,11 @@ noob::mesh_3d noob::shape::get_mesh() const noexcept(true)
 					}
 
 					m.indices.push_back(m.vertices.size());
-					m.vertices.push_back(vec3_from_bullet(triangle_verts[0]));
+					m.vertices.push_back(vec3f_from_bullet(triangle_verts[0]));
 					m.indices.push_back(m.vertices.size());
-					m.vertices.push_back(vec3_from_bullet(triangle_verts[1]));
+					m.vertices.push_back(vec3f_from_bullet(triangle_verts[1]));
 					m.indices.push_back(m.vertices.size());
-					m.vertices.push_back(vec3_from_bullet(triangle_verts[2]));
+					m.vertices.push_back(vec3f_from_bullet(triangle_verts[2]));
 				}
 
 				striding_mesh->unLockReadOnlyVertexBase(0);
@@ -208,7 +208,7 @@ void noob::shape::clear() noexcept(true)
 	if (physics_valid)
 	{
 		delete inner;
-		scales = noob::vec3(1.0, 1.0, 1.0);
+		scales = noob::vec3f(1.0, 1.0, 1.0);
 		physics_valid = false;
 	}
 }

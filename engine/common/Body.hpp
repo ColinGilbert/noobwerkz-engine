@@ -27,25 +27,25 @@ namespace noob
 		{
 			noob::body_type type;
 			float mass, friction, restitution;
-			noob::vec3 position, linear_velocity, angular_velocity, linear_factor, angular_factor;
-			noob::versor orientation;
+			noob::vec3f position, linear_velocity, angular_velocity, linear_factor, angular_factor;
+			noob::versorf orientation;
 			bool ccd;
 		};
 
-		void init(btDynamicsWorld* const, noob::body_type, const noob::shape&, float mass, const noob::vec3& position, const noob::versor& orientation, bool ccd) noexcept(true);
+		void init(btDynamicsWorld* const, noob::body_type, const noob::shape&, float mass, const noob::vec3f& position, const noob::versorf& orientation, bool ccd) noexcept(true);
 		void init(btDynamicsWorld* const, noob::body_type, const noob::shape&, const noob::body::info&) noexcept(true);
 
 		// void set_type(noob::body_type) noexcept(true);
 
-		void set_position(const noob::vec3&) noexcept(true);
-		void set_orientation(const noob::versor&) noexcept(true);
+		void set_position(const noob::vec3f&) noexcept(true);
+		void set_orientation(const noob::versorf&) noexcept(true);
 
-		noob::vec3 get_position() const noexcept(true);
-		noob::versor get_orientation() const noexcept(true);
+		noob::vec3f get_position() const noexcept(true);
+		noob::versorf get_orientation() const noexcept(true);
 
-		noob::mat4 get_transform() const noexcept(true);
-		noob::vec3 get_linear_velocity() const noexcept(true);
-		noob::vec3 get_angular_velocity() const noexcept(true);
+		noob::mat4f get_transform() const noexcept(true);
+		noob::vec3f get_linear_velocity() const noexcept(true);
+		noob::vec3f get_angular_velocity() const noexcept(true);
 
 		noob::body::info get_info() const noexcept(true);
 

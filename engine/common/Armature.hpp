@@ -18,7 +18,7 @@ namespace noob
 		// noob::digraph hierarchy;
 		std::vector<noob::shape_handle> shapes;
 		std::vector<noob::model_handle> models;
-		std::vector<noob::vec4> base_colours;
+		std::vector<noob::vec4f> base_colours;
 		// This last vector represents the models that get a custom colour based on team affiliation.
 		std::vector<bool> team_colours;
 		// rde::hash_map<std::string. uint32_t> part_names;

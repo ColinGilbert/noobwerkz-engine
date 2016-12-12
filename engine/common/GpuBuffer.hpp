@@ -18,7 +18,7 @@ namespace noob
 			return raw_buf != nullptr;
 		}
 
-		bool push_back(const noob::vec4& arg) noexcept(true)
+		bool push_back(const noob::vec4f& arg) noexcept(true)
 		{
 			if (current_pos < size - 3)
 			{
@@ -35,7 +35,7 @@ namespace noob
 			}
 		}
 
-		bool push_back(const noob::mat4& arg) noexcept(true)
+		bool push_back(const noob::mat4f& arg) noexcept(true)
 		{
 			if (current_pos < size - 15)
 			{

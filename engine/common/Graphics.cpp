@@ -27,13 +27,13 @@ void noob::graphics::init(const std::array<uint32_t, 2> Dims, const noob::textur
 	// Init terrain
 	max_terrain_verts = 4096;
 
-	terrain_unis.texture_weights = noob::vec3(0.3, 0.3, 0.4);
-	terrain_unis.colours[0] = noob::vec4(0.0, 0.5, 0.4, 1.0);
-	terrain_unis.colours[1] = noob::vec4(0.1, 0.5, 0.5, 1.0);
-	terrain_unis.colours[2] = noob::vec4(0.5, 0.5, 0.5, 1.0);
-	terrain_unis.colours[3] = noob::vec4(1.0, 1.0, 1.0, 1.0);	
-	terrain_unis.colour_offsets = noob::vec2(0.6, 0.8);
-	terrain_unis.texture_scales = noob::vec3(0.5, 0.5, 0.5);
+	terrain_unis.texture_weights = noob::vec3f(0.3, 0.3, 0.4);
+	terrain_unis.colours[0] = noob::vec4f(0.0, 0.5, 0.4, 1.0);
+	terrain_unis.colours[1] = noob::vec4f(0.1, 0.5, 0.5, 1.0);
+	terrain_unis.colours[2] = noob::vec4f(0.5, 0.5, 0.5, 1.0);
+	terrain_unis.colours[3] = noob::vec4f(1.0, 1.0, 1.0, 1.0);	
+	terrain_unis.colour_offsets = noob::vec2f(0.6, 0.8);
+	terrain_unis.texture_scales = noob::vec3f(0.5, 0.5, 0.5);
 
 	u_mvp_terrain = glGetUniformLocation(terrain_shader.index(), "mvp");
 	u_texture_0 = glGetUniformLocation(terrain_shader.index(), "texture_0");
@@ -65,8 +65,8 @@ void noob::graphics::init(const std::array<uint32_t, 2> Dims, const noob::textur
 	glBindBuffer(GL_ARRAY_BUFFER, terrain_model.vertices_vbo);
 	glBufferData(GL_ARRAY_BUFFER, max_terrain_verts * noob::model::terrain_stride, nullptr, GL_DYNAMIC_DRAW);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, noob::model::terrain_stride, reinterpret_cast<const void *>(0));
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, noob::model::terrain_stride, reinterpret_cast<const void *>(sizeof(noob::vec4)));
-	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, noob::model::terrain_stride, reinterpret_cast<const void *>(sizeof(noob::vec4)*2));
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, noob::model::terrain_stride, reinterpret_cast<const void *>(sizeof(noob::vec4f)));
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, noob::model::terrain_stride, reinterpret_cast<const void *>(sizeof(noob::vec4f)*2));
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
@@ -109,14 +109,14 @@ void noob::graphics::use_program(noob::graphics::program_handle Arg) const noexc
 }
 
 
-void noob::graphics::set_view_mat(const noob::mat4 ViewMat) noexcept(true)
+void noob::graphics::set_view_mat(const noob::mat4f ViewMat) noexcept(true)
 {
 	eye_pos = noob::translation_from_mat4(ViewMat);
 	view_mat = ViewMat;
 }
 
 
-void noob::graphics::set_projection_mat(const noob::mat4 ProjMat) noexcept(true)
+void noob::graphics::set_projection_mat(const noob::mat4f ProjMat) noexcept(true)
 {
 	proj_mat = ProjMat;
 }
@@ -199,21 +199,21 @@ noob::model_handle noob::graphics::model_instanced(const noob::mesh_3d& Mesh, ui
 	// Setup non-instanced, interleaved attribs VBO:
 	/////////////////////////////////////////////////
 
-	std::vector<noob::vec4> interleaved;
+	std::vector<noob::vec4f> interleaved;
 	interleaved.resize(num_verts * 3);
 
 	// Interleave our vertex positions, normals, and colours
 	for(uint32_t i = 0; i < num_verts; ++i)
 	{
 		const uint32_t current_offset = i * 3;
-		interleaved[current_offset] = noob::vec4(Mesh.vertices[i].v[0], Mesh.vertices[i].v[1], Mesh.vertices[i].v[2], 1.0);
-		interleaved[current_offset + 1] = noob::vec4(Mesh.normals[i].v[0], Mesh.normals[i].v[1], Mesh.normals[i].v[2], 0.0);
+		interleaved[current_offset] = noob::vec4f(Mesh.vertices[i].v[0], Mesh.vertices[i].v[1], Mesh.vertices[i].v[2], 1.0);
+		interleaved[current_offset + 1] = noob::vec4f(Mesh.normals[i].v[0], Mesh.normals[i].v[1], Mesh.normals[i].v[2], 0.0);
 		interleaved[current_offset + 2] = Mesh.colours[i];
 	}
 
 	// Upload interleaved buffer
 	glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);
-	glBufferData(GL_ARRAY_BUFFER, interleaved.size() * sizeof(noob::vec4), &interleaved[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, interleaved.size() * sizeof(noob::vec4f), &interleaved[0], GL_STATIC_DRAW);
 	result.vertices_vbo = vertices_vbo;
 
 	//////////////////////
@@ -221,43 +221,43 @@ noob::model_handle noob::graphics::model_instanced(const noob::mesh_3d& Mesh, ui
 	//////////////////////
 
 	// Positions
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4)*3, reinterpret_cast<const void *>(0));
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4f)*3, reinterpret_cast<const void *>(0));
 	// Normals
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4)*3, reinterpret_cast<const void *>(sizeof(noob::vec4)));
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4f)*3, reinterpret_cast<const void *>(sizeof(noob::vec4f)));
 	// Vertex colours
-	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4)*3, reinterpret_cast<const void *>(sizeof(noob::vec4)*2));
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4f)*3, reinterpret_cast<const void *>(sizeof(noob::vec4f)*2));
 
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
 
 	// Setup colours VBO:
-	// std::vector<noob::vec4> colours(NumInstances, noob::vec4(1.0, 1.0, 1.0, 1.0));
+	// std::vector<noob::vec4f> colours(NumInstances, noob::vec4f(1.0, 1.0, 1.0, 1.0));
 	glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
 	glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::materials_stride, nullptr, GL_DYNAMIC_DRAW);
 	//glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::materials_stride, &colours[0].v[0], GL_DYNAMIC_DRAW);
 
-	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4), reinterpret_cast<const void *>(0));
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4f), reinterpret_cast<const void *>(0));
 	glEnableVertexAttribArray(3);
 	glVertexAttribDivisor(3, 1);
 	result.instanced_colours_vbo = colours_vbo;
 
 	// Setup matrices VBO:
-	// std::vector<noob::mat4> matrices(NumInstances * 2, noob::identity_mat4());
+	// std::vector<noob::mat4f> matrices(NumInstances * 2, noob::identity_mat4());
 	glBindBuffer(GL_ARRAY_BUFFER, matrices_vbo);
 	glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
 	// glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::matrices_stride, &matrices[0].m[0], GL_DYNAMIC_DRAW);
 
 	// Per instance model matrices
-	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4)*2, reinterpret_cast<const void *>(0));
-	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4)*2, reinterpret_cast<const void *>(sizeof(noob::vec4)));
-	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4)*2, reinterpret_cast<const void *>(sizeof(noob::vec4)*2));
-	glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4)*2, reinterpret_cast<const void *>(sizeof(noob::vec4)*3));
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(0));
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)));
+	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*2));
+	glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*3));
 	// Per-instance MVP matrices
-	glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4)*2, reinterpret_cast<const void *>(sizeof(noob::vec4)*4));
-	glVertexAttribPointer(9, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4)*2, reinterpret_cast<const void *>(sizeof(noob::vec4)*5));
-	glVertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4)*2, reinterpret_cast<const void *>(sizeof(noob::vec4)*6));
-	glVertexAttribPointer(11, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4)*2, reinterpret_cast<const void *>(sizeof(noob::vec4)*7));
+	glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*4));
+	glVertexAttribPointer(9, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*5));
+	glVertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*6));
+	glVertexAttribPointer(11, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*7));
 
 	glEnableVertexAttribArray(4);
 	glEnableVertexAttribArray(5);
@@ -291,7 +291,7 @@ noob::model_handle noob::graphics::model_instanced(const noob::mesh_3d& Mesh, ui
 	result.valid = true;
 	models.push_back(result);
 
-	const noob::bbox bb = Mesh.bbox;
+	const noob::bbox_type<float> bb = Mesh.bbox;
 
 	const noob::model_handle results = noob::model_handle::make(models.size() - 1);
 
@@ -356,7 +356,7 @@ void noob::graphics::set_terrain_uniforms(const noob::terrain_shading Shading) n
 
 void noob::graphics::upload_terrain_uniforms() const noexcept(true)
 {
-	const noob::mat4 mvp = proj_mat * view_mat;
+	const noob::mat4f mvp = proj_mat * view_mat;
 	glUniform1i(u_texture_0, 0);
 	glUniformMatrix4fv(u_mvp_terrain, 1, false, &mvp[0]);
 	glUniform4fv(u_colour_0, 1, &terrain_unis.colours[0][0]);
@@ -371,7 +371,7 @@ void noob::graphics::upload_terrain_uniforms() const noexcept(true)
 }
 
 
-void noob::graphics::set_light_direction(const noob::vec3& Arg) noexcept(true)
+void noob::graphics::set_light_direction(const noob::vec3f& Arg) noexcept(true)
 {
 	light_direction = noob::normalize(Arg);
 }

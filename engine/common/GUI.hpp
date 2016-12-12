@@ -32,7 +32,7 @@ namespace noob
 			void text(const std::string& text, float x, float y, noob::gui::font_size size = noob::gui::font_size::READING, uint32_t colour = 0xFFFF00FF) noexcept(true);
 
 			bool crosshairs_enabled;
-			noob::vec4 crosshairs_colour;
+			noob::vec4f crosshairs_colour;
 		
 		protected:
 			float window_width, window_height;

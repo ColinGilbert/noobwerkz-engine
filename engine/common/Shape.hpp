@@ -27,7 +27,7 @@ namespace noob
 		public:
 		enum class type { SPHERE, BOX, /* CYLINDER, CONE, */ HULL, TRIMESH };
 
-		shape() noexcept(true) : physics_valid(false), scales(noob::vec3(1.0, 1.0, 1.0)) {}
+		shape() noexcept(true) : physics_valid(false), scales(noob::vec3f(1.0, 1.0, 1.0)) {}
 
 		// Initializers
 		void sphere(float radius) noexcept(true);
@@ -35,7 +35,7 @@ namespace noob
 		void cylinder(float radius, float height) noexcept(true);
 		void capsule(float radius, float height) noexcept(true);
 		void cone(float radius, float height) noexcept(true);
-		void hull(const std::vector<noob::vec3>&) noexcept(true);
+		void hull(const std::vector<noob::vec3f>&) noexcept(true);
 		void trimesh(const noob::mesh_3d&) noexcept(true);
 
 		void set_margin(float) noexcept(true);
@@ -43,7 +43,7 @@ namespace noob
 
 		noob::shape::type get_type() const noexcept(true);
 
-		noob::vec3 get_scales() const noexcept(true);
+		noob::vec3f get_scales() const noexcept(true);
 
 		noob::mesh_3d get_mesh() const noexcept(true);
 
@@ -55,11 +55,11 @@ namespace noob
 		// btCollisionShape* get_inner_mutable() const noexcept(true);	
 
 		protected:
-		// void plane(const noob::vec3& normal, float offset) noexcept(true);
+		// void plane(const noob::vec3f& normal, float offset) noexcept(true);
 		
 		noob::shape::type shape_type;
 		bool physics_valid;
-		noob::vec3 scales;
+		noob::vec3f scales;
 		btCollisionShape* inner;
 	};
 }

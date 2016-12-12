@@ -35,20 +35,20 @@ namespace noob
 #endif
 
 		// TODO: Implement and test:
-		// void transform(const noob::mat4& transform);
+		// void transform(const noob::mat4f& transform);
 		// void to_origin();
-		// void translate(const noob::vec3&);
-		// void rotate(const noob::versor&);
-		// void scale(const noob::vec3&);
+		// void translate(const noob::vec3f&);
+		// void rotate(const noob::versorf&);
+		// void scale(const noob::vec3f&);
 
-		rde::vector<noob::vec3> vertices;
-		rde::vector<noob::vec3> normals;
-		rde::vector<noob::vec4> texcoords;
-		rde::vector<noob::vec4> colours;
+		rde::vector<noob::vec3f> vertices;
+		rde::vector<noob::vec3f> normals;
+		rde::vector<noob::vec4f> texcoords;
+		rde::vector<noob::vec4f> colours;
 		rde::vector<uint32_t> indices;
 		// std::vector<uint8_t> flags;
 
-		noob::bbox bbox;
+		noob::bbox_type<float> bbox;
 		bool volume_calculated;
 		double volume;
 	};

@@ -33,7 +33,6 @@ namespace noob
 	typedef handle<noob::reflectance> reflectance_handle;
 	typedef handle<noob::time_point> timepoint_handle;
 	typedef handle<noob::text_label> text_label_handle;
-	// typedef handle<noob::vec3> vec3_handle;
 
 	typedef handle<noob::skeletal_anim> skeletal_anim_handle;
 	typedef handle<noob::audio_sample> sample_handle;

@@ -16,7 +16,7 @@ namespace noob
 			static noob::mesh_3d box(float width, float height, float depth);
 			// static noob::mesh_3d cone(float radius, float height, uint32_t segments);
 			// static noob::mesh_3d cylinder(float radius, float height, uint32_t segments);
-			static noob::mesh_3d hull(const std::vector<noob::vec3>& points);
+			static noob::mesh_3d hull(const std::vector<noob::vec3f>& points);
 			// TODO: Test
 			static noob::mesh_3d circle(float radius, uint32_t segments);
 	};

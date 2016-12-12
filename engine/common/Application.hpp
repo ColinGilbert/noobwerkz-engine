@@ -72,9 +72,9 @@ namespace noob
 
 			noob::gui gui;
 
-			// noob::vec3 eye_pos, eye_target, eye_up;
+			// noob::vec3f eye_pos, eye_target, eye_up;
 
-			std::vector<noob::vec2> finger_positions;
+			std::vector<noob::vec2f> finger_positions;
 
 			noob::stage stage;
 

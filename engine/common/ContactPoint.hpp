@@ -9,7 +9,7 @@ namespace noob
 	{
 		noob::stage_item_type item_type;
 		uint32_t index;
-		noob::vec3 pos_a, pos_b, normal_on_b;
+		noob::vec3f pos_a, pos_b, normal_on_b;
 
 		std::string to_string() const noexcept(true)
 		{

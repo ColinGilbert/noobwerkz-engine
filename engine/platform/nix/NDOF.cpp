@@ -70,8 +70,8 @@ noob::ndof::data noob::ndof::get_data()
 		temp.movement = true;
 	}
 
-	temp.translation = noob::vec3(x/ticks, y/ticks, z/ticks);
-	temp.rotation = noob::vec3(rx/ticks, ry/ticks, rz/ticks);
+	temp.translation = noob::vec3f(x/ticks, y/ticks, z/ticks);
+	temp.rotation = noob::vec3f(rx/ticks, ry/ticks, rz/ticks);
 
 	x = y = z = rx = ry = rz = 0;
 	ticks = 0;

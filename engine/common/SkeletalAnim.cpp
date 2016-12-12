@@ -179,15 +179,15 @@ std::string noob::skeletal_anim::get_current_anim() const
 }
 
 
-std::vector<noob::mat4> noob::skeletal_anim::get_matrices() const
+std::vector<noob::mat4f> noob::skeletal_anim::get_matrices() const
 {
-	std::vector<noob::mat4> mats;
+	std::vector<noob::mat4f> mats;
 	mats.reserve(skeleton.num_joints());
 	
 	size_t num_mats = model_matrices.Size();
 	for (size_t i = 0; i < num_mats; ++i)
 	{
-		noob::mat4 m;
+		noob::mat4f m;
 		ozz::math::Float4x4 ozz_mat = model_matrices[i];
 		for (size_t c = 0; c < 4; ++c)
 		{
@@ -200,7 +200,7 @@ std::vector<noob::mat4> noob::skeletal_anim::get_matrices() const
 
 
 /*
-void noob::skeletal_anim::get_matrices(std::vector<noob::mat4> mats) const
+void noob::skeletal_anim::get_matrices(std::vector<noob::mat4f> mats) const
 {
 	mats.clear();
 	mats.reserve(skeleton.num_joints());
@@ -208,7 +208,7 @@ void noob::skeletal_anim::get_matrices(std::vector<noob::mat4> mats) const
 	size_t num_mats = model_matrices.Size();
 	for (size_t i = 0; i < num_mats; ++i)
 	{
-		noob::mat4 m;
+		noob::mat4f m;
 		ozz::math::Float4x4 ozz_mat = model_matrices[i];
 		for (size_t c = 0; c < 4; ++c)
 		{
@@ -221,7 +221,7 @@ void noob::skeletal_anim::get_matrices(std::vector<noob::mat4> mats) const
 
 
 /*
-std::array<noob::vec3, 4> noob::skeletal_anim::get_skeleton_bounds() const
+std::array<noob::vec3f, 4> noob::skeletal_anim::get_skeleton_bounds() const
 {
 
 }

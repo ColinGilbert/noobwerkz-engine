@@ -12,7 +12,7 @@ bool noob::globals::init() noexcept(true)
 	// << ", unit cylinder shape handle " << unit_cylinder_shape.index() << ", unit cone shape handle " << unit_cone_shape.index();
 
 	noob::light l;
-	l.set_colour(noob::vec3(0.0, 1.0, 1.0));
+	l.set_colour(noob::vec3f(0.0, 1.0, 1.0));
 	default_light = set_light(l, "default");
 
 	noob::reflectance r;
@@ -74,7 +74,7 @@ noob::shape_handle noob::globals::box_shape(float x, float y, float z) noexcept(
 	return search->second;
 }
 
-noob::shape_handle noob::globals::hull_shape(const std::vector<vec3>& points) noexcept(true) 
+noob::shape_handle noob::globals::hull_shape(const std::vector<noob::vec3f>& points) noexcept(true) 
 {
 	noob::shape temp;
 	temp.hull(points);

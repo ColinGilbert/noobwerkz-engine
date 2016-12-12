@@ -13,8 +13,8 @@ namespace noob
 			struct data
 			{
 				bool movement;
-				noob::vec3 translation;
-				noob::vec3 rotation;
+				noob::vec3f translation;
+				noob::vec3f rotation;
 			};
 
 			enum button_state

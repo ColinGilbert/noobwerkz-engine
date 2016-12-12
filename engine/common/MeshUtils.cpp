@@ -46,19 +46,19 @@ noob::mesh_3d noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
 {
 	const float X = 0.525731112119133606;
 	const float Z = 0.850650808352039932;
-	std::vector<noob::vec3> verts;
-	verts.push_back(noob::vec3(-X, 0.0, Z));
-	verts.push_back(noob::vec3(X, 0.0, Z));
-	verts.push_back(noob::vec3(-X, 0.0, -Z));
-	verts.push_back(noob::vec3(X, 0.0, -Z));
-	verts.push_back(noob::vec3(0.0, Z, X));
-	verts.push_back(noob::vec3(0.0, Z, -X));
-	verts.push_back(noob::vec3(0.0, -Z, X));
-	verts.push_back(noob::vec3(0.0, -Z, -X));
-	verts.push_back(noob::vec3(Z, X, 0.0));
-	verts.push_back(noob::vec3(-Z, X, 0.0));
-	verts.push_back(noob::vec3(Z, -X, 0.0));
-	verts.push_back(noob::vec3(-Z, -X, 0.0));
+	std::vector<noob::vec3f> verts;
+	verts.push_back(noob::vec3f(-X, 0.0, Z));
+	verts.push_back(noob::vec3f(X, 0.0, Z));
+	verts.push_back(noob::vec3f(-X, 0.0, -Z));
+	verts.push_back(noob::vec3f(X, 0.0, -Z));
+	verts.push_back(noob::vec3f(0.0, Z, X));
+	verts.push_back(noob::vec3f(0.0, Z, -X));
+	verts.push_back(noob::vec3f(0.0, -Z, X));
+	verts.push_back(noob::vec3f(0.0, -Z, -X));
+	verts.push_back(noob::vec3f(Z, X, 0.0));
+	verts.push_back(noob::vec3f(-Z, X, 0.0));
+	verts.push_back(noob::vec3f(Z, -X, 0.0));
+	verts.push_back(noob::vec3f(-Z, -X, 0.0));
 
 	uint32_t idxs[] = {
 		1,4,0, 4,9,0, 4,5,9, 8,5,4, 1,8,4, 
@@ -79,7 +79,7 @@ noob::mesh_3d noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
 	for(int i=0; i < detail; ++i)
 	{
 		std::vector<uint32_t> indices2;
-		std::vector<noob::vec3> verts2;
+		std::vector<noob::vec3f> verts2;
 		for(uint32_t j = 0, idx = 0; j < indices.size(); j += 3)
 		{
 			indices2.push_back(idx++); indices2.push_back(idx++); indices2.push_back(idx++);
@@ -87,13 +87,13 @@ noob::mesh_3d noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
 			indices2.push_back(idx++); indices2.push_back(idx++); indices2.push_back(idx++);
 			indices2.push_back(idx++); indices2.push_back(idx++); indices2.push_back(idx++);
 
-			vec3 v1 = verts[ indices[j+0] ]; v1 = noob::normalize(v1);
-			vec3 v2 = verts[ indices[j+1] ]; v2 = noob::normalize(v2);
-			vec3 v3 = verts[ indices[j+2] ]; v3 = noob::normalize(v3);
+			noob::vec3f v1 = verts[ indices[j+0] ]; v1 = noob::normalize(v1);
+			noob::vec3f v2 = verts[ indices[j+1] ]; v2 = noob::normalize(v2);
+			noob::vec3f v3 = verts[ indices[j+2] ]; v3 = noob::normalize(v3);
 
-			vec3 a = (v1 + v2) * 0.5f; a = noob::normalize(a);
-			vec3 b = (v2 + v3) * 0.5f; b = noob::normalize(b);
-			vec3 c = (v3 + v1) * 0.5f; c = noob::normalize(c);
+			noob::vec3f a = (v1 + v2) * 0.5f; a = noob::normalize(a);
+			noob::vec3f b = (v2 + v3) * 0.5f; b = noob::normalize(b);
+			noob::vec3f c = (v3 + v1) * 0.5f; c = noob::normalize(c);
 
 			verts2.push_back(v1); verts2.push_back(a); verts2.push_back(c);
 			verts2.push_back(a); verts2.push_back(v2); verts2.push_back(b);
@@ -112,11 +112,11 @@ noob::mesh_3d noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
 
 	for (uint32_t i = 0; i < verts.size(); ++i)
 	{
-		const noob::vec3 v = verts[i];
+		const noob::vec3f v = verts[i];
 		results.vertices.push_back(v * radius);
-		noob::vec3 n = noob::normalize(v);
+		const noob::vec3f n = noob::normalize(v);
 		results.normals.push_back(n);
-		results.colours.push_back(noob::vec4(1.0, 1.0, 1.0, 1.0));
+		results.colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
 	}
 
 	for(uint32_t i : indices)
@@ -124,8 +124,8 @@ noob::mesh_3d noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
 		results.indices.push_back(i);
 	}
 
-	//	results.bbox.min = noob::vec3(-radius, -radius, -radius);
-	//	results.bbox.max = noob::vec3(radius, radius, radius);
+	//	results.bbox.min = noob::vec3f(-radius, -radius, -radius);
+	//	results.bbox.max = noob::vec3f(radius, radius, radius);
 
 	results.calculate_dims();
 	return results;
@@ -233,9 +233,9 @@ noob::mesh_3d noob::mesh_utils::box(float width, float height, float depth)
 
 	for (uint32_t i = 0; i < num_vertices * 3; i += 3)
 	{
-		results.vertices.push_back(noob::vec3(cube_verts[i], cube_verts[i + 1], cube_verts[i + 2]));
-		results.normals.push_back(noob::vec3(cube_normals[i], cube_normals[i + 1], cube_normals[i + 2]));
-		results.colours.push_back(noob::vec4(1.0, 1.0, 1.0, 1.0));
+		results.vertices.push_back(noob::vec3f(cube_verts[i], cube_verts[i + 1], cube_verts[i + 2]));
+		results.normals.push_back(noob::vec3f(cube_normals[i], cube_normals[i + 1], cube_normals[i + 2]));
+		results.colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
 	}
 
 	 const float cube_tex[] =
@@ -268,7 +268,7 @@ noob::mesh_3d noob::mesh_utils::box(float width, float height, float depth)
 
 	for (uint32_t i = 0; i < num_vertices * 2; i += 2)
 	{
-		results.texcoords.push_back(noob::vec4(cube_tex[i], cube_tex[i+1], 0.0, 0.0));
+		results.texcoords.push_back(noob::vec4f(cube_tex[i], cube_tex[i+1], 0.0, 0.0));
 	}
 
 	 const uint32_t cube_indices[] =
@@ -293,8 +293,8 @@ noob::mesh_3d noob::mesh_utils::box(float width, float height, float depth)
 		results.indices.push_back(cube_indices[i]);
 	}
 
-	results.bbox.min = noob::vec3(-0.5f * width, -0.5f * height, -0.5f * depth);
-	results.bbox.max = noob::vec3(0.5f * width, 0.5f * height, 0.5 * depth);
+	results.bbox.min = noob::vec3f(-0.5f * width, -0.5f * height, -0.5f * depth);
+	results.bbox.max = noob::vec3f(0.5f * width, 0.5f * height, 0.5 * depth);
 
 	return results;
 }
@@ -330,8 +330,8 @@ for (uint32_t i = 0; i < face_orders.size(); ++i)
 }
 
 
-results.bbox.min = noob::vec3(-x, -y, -z);
-results.bbox.max = noob::vec3(x, y, z);
+results.bbox.min = noob::vec3f(-x, -y, -z);
+results.bbox.max = noob::vec3f(x, y, z);
 
 return results;
 
@@ -357,12 +357,12 @@ return results;
    }
 // Position our vertices
 
-top.vertices[0] = noob::vec3(0.0, half_height, 0.0);
-bottom.vertices[0] = noob::vec3(0.0, -half_height, 0.0);
+top.vertices[0] = noob::vec3f(0.0, half_height, 0.0);
+bottom.vertices[0] = noob::vec3f(0.0, -half_height, 0.0);
 
 for (uint32_t i = 1; i < num_verts; ++i)
 {
-noob::vec3 temp(top.vertices[i]);
+noob::vec3f temp(top.vertices[i]);
 temp[1] = -half_height;
 top.vertices[i] = temp;
 bottom.vertices[i] = temp;
@@ -378,7 +378,7 @@ results.vertices.resize(num_split_verts + num_verts);
 results.normals.resize(num_split_verts + num_verts);
 results.indices.resize(num_indices * 2);
 
-const noob::vec3 top_origin = top.vertices[0];	
+const noob::vec3f top_origin = top.vertices[0];	
 
 for (uint32_t i = 0; i < num_verts; i += 2)
 {
@@ -390,9 +390,9 @@ results.vertices[(i * 3) + 2] = top.vertices[i + 1];
 // Now, calculate the normals: TODO:
 for (uint32_t i = 0; i < num_verts; i += 2)
 {
-const noob::vec3 first = top.vertices[i] - top_origin;
-const noob::vec3 second = top.vertices[i+1] - top_origin;
-const noob::vec3 n = noob::normalize(noob::cross(first, second));
+const noob::vec3f first = top.vertices[i] - top_origin;
+const noob::vec3f second = top.vertices[i+1] - top_origin;
+const noob::vec3f n = noob::normalize(noob::cross(first, second));
 
 results.normals[i * 3] = n;
 results.normals[(i * 3) + 1] = n;
@@ -404,7 +404,7 @@ const uint32_t total_verts = results.vertices.size();
 for (uint32_t i = num_split_verts; i < total_verts; ++i)
 {
 results.vertices[i] = bottom.vertices[i - num_split_verts];
-results.normals[i] = noob::vec3(0.0, -1.0, 0.0);
+results.normals[i] = noob::vec3f(0.0, -1.0, 0.0);
 }
 const uint32_t total_indices = results.indices.size();
 for (uint32_t i = num_indices; i < total_indices; ++i)
@@ -412,10 +412,10 @@ for (uint32_t i = num_indices; i < total_indices; ++i)
 results.indices[i] = bottom.indices[i-num_indices];
 }
 
-// std::fill(bottom.normals.begin(), bottom.normals.end(), noob::vec3(0.0, -1.0, 0.0));
+// std::fill(bottom.normals.begin(), bottom.normals.end(), noob::vec3f(0.0, -1.0, 0.0));
 
-results.bbox.min = noob::vec3(-radius, -half_height, -radius);
-results.bbox.max = noob::vec3(radius, half_height, radius);
+results.bbox.min = noob::vec3f(-radius, -half_height, -radius);
+results.bbox.max = noob::vec3f(radius, half_height, radius);
 
 return results;	
 }
@@ -428,15 +428,15 @@ noob::mesh_3d noob::mesh_utils::cylinder(float radius, float height, uint32_t se
 }
 */
 
-noob::mesh_3d noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
+noob::mesh_3d noob::mesh_utils::hull(const std::vector<noob::vec3f>& points)
 {
 	// TODO: Optimize this	
 	std::vector<btVector3> bt_points;
 
 	noob::mesh_3d mesh;
 
-	noob::bbox accum;
-	for (noob::vec3 p : points)
+	noob::bbox_type<float> accum;
+	for (noob::vec3f p : points)
 	{
 		accum.min[0] = std::min(accum.min[0], p[0]);
 		accum.min[1] = std::min(accum.min[1], p[1]);
@@ -450,7 +450,7 @@ noob::mesh_3d noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 		bt_points.push_back(btVector3(p[0], p[1], p[2]));
 	}
 
-	mesh.bbox = accum;//.max - accum.min;//noob::vec3();//accum.max + accum.min
+	mesh.bbox = accum;//.max - accum.min;//noob::vec3f();//accum.max + accum.min
 
 	HullDesc hull_desc(QF_DEFAULT, points.size(), &bt_points[0]);
 
@@ -466,8 +466,8 @@ noob::mesh_3d noob::mesh_utils::hull(const std::vector<noob::vec3>& points)
 
 	for (uint32_t i = 0; i < hull_result.mNumOutputVertices; ++i)
 	{
-		mesh.vertices.push_back(noob::vec3_from_bullet(hull_result.m_OutputVertices[i]));
-		mesh.colours.push_back(noob::vec4(1.0, 1.0, 1.0, 1.0));
+		mesh.vertices.push_back(noob::vec3f_from_bullet(hull_result.m_OutputVertices[i]));
+		mesh.colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
 	}
 
 	for (uint32_t i = 0; i < hull_result.mNumIndices; ++i)
@@ -491,18 +491,18 @@ noob::mesh_3d noob::mesh_utils::circle(float radius, uint32_t segments_arg)
 	const uint32_t num_indices = segments * 3;
 	// results.indices.reserve(num_indices);
 
-	std::fill(results.normals.begin(), results.normals.end(), noob::vec3(0.0, 1.0, 0.0));
+	std::fill(results.normals.begin(), results.normals.end(), noob::vec3f(0.0, 1.0, 0.0));
 
 	// Our origin :)
-	results.vertices[0] = noob::vec3(0.0, 0.0, 0.0);
+	results.vertices[0] = noob::vec3f(0.0, 0.0, 0.0);
 
 	for (uint32_t seg = 1; seg < segments; ++seg)
 	{
 		const float diff = increment_amount * static_cast<float>(seg);
 		const Eigen::AngleAxis<float> angle_axis(diff, Eigen::Vector3f::UnitY());
 		const Eigen::Vector3f rotated_point = angle_axis * p;
-		results.vertices.push_back(noob::vec3_from_eigen(rotated_point));
-		results.colours.push_back(noob::vec4(1.0, 1.0, 1.0, 1.0));
+		results.vertices.push_back(noob::vec3f_from_eigen(rotated_point));
+		results.colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
 	}
 
 	uint32_t accum = 1;;
@@ -514,8 +514,8 @@ noob::mesh_3d noob::mesh_utils::circle(float radius, uint32_t segments_arg)
 		results.indices.push_back(accum);
 	}
 
-	results.bbox.min = noob::vec3(-radius, 0.0, -radius);
-	results.bbox.max = noob::vec3(radius, 0.0 , radius);
+	results.bbox.min = noob::vec3f(-radius, 0.0, -radius);
+	results.bbox.max = noob::vec3f(radius, 0.0 , radius);
 
 	return results;
 }

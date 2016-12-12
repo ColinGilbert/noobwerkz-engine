@@ -34,22 +34,6 @@ namespace noob
 	};
 
 	// TODO: Move out into math classes.
-	// TODO: Test
-	static uint32_t next_pow2(uint32_t arg)
-	{
-		int64_t val = arg;
-		--val;
-		val |= val >> 1;
-		val |= val >> 2;
-		val |= val >> 4;
-		val |= val >> 8;
-		val |= val >> 16;
-		val |= val >> 32;
-		++val;
-		return static_cast<uint32_t>(val);
-	}
-
-	// TODO: Move out into math classes.
 	static uint32_t get_num_mips(const std::array<uint32_t, 2> Dims)
 	{
 		return static_cast<uint32_t>(floor(log2(static_cast<double>(std::max(Dims[0], Dims[1]))))) + 1;

@@ -13,9 +13,9 @@ double noob::mesh_3d::get_volume()
 		double accum = 0.0;
 		for (uint32_t i = 0; i < indices.size(); i += 3)
 		{
-			noob::vec3 first = vertices[i];
-			noob::vec3 second = vertices[i+1];
-			noob::vec3 third = vertices[i+2];
+			noob::vec3f first = vertices[i];
+			noob::vec3f second = vertices[i+1];
+			noob::vec3f third = vertices[i+2];
 
 			accum += ((static_cast<double>(first.v[0]) * static_cast<double>(second.v[1]) * static_cast<double>(third.v[2])) + (static_cast<double>(first.v[1]) * static_cast<double>(second.v[2]) * static_cast<double>(third.v[0])) + (static_cast<double>(first.v[2]) * static_cast<double>(second.v[0]) * static_cast<double>(third.v[1])) - (static_cast<double>(first.v[0]) * static_cast<double>(second.v[2]) * static_cast<double>(third.v[1])) - (static_cast<double>(first.v[1]) * static_cast<double>(second.v[0]) * static_cast<double>(third.v[2])) - (static_cast<double>(first.v[2]) * static_cast<double>(second.v[1]) * static_cast<double>(third.v[0]))) / 6.0;
 
@@ -33,7 +33,7 @@ void noob::mesh_3d::calculate_dims() noexcept(true)
 	if (vertices.size() > 0)
 	{
 		bbox.min = bbox.max = vertices[0];
-		for (noob::vec3 v : vertices)
+		for (noob::vec3f v : vertices)
 		{
 			bbox.min[0] = std::min(bbox.min[0], v[0]);
 			bbox.min[1] = std::min(bbox.min[1], v[1]);
@@ -47,7 +47,7 @@ void noob::mesh_3d::calculate_dims() noexcept(true)
 /*
    void noob::mesh_3d::to_origin()
    {
-   noob::vec3 dims = bbox.get_dims();
+   noob::vec3f dims = bbox.get_dims();
    for (size_t i = 0; i < vertices.size(); ++i)
    {
    vertices[i] = (vertices[i] + dims);
@@ -113,12 +113,12 @@ bool noob::mesh_3d::load_assimp(const aiScene* scene)
 
 	double accum_x, accum_y, accum_z;
 	accum_x = accum_y = accum_z = 0.0f;
-	bbox.min = bbox.max = noob::vec3(0.0, 0.0, 0.0);	
+	bbox.min = bbox.max = noob::vec3f(0.0, 0.0, 0.0);	
 
 	for (size_t n = 0; n < num_verts; ++n)
 	{
 		aiVector3D pt = mesh_data->mVertices[n];
-		noob::vec3 v;
+		noob::vec3f v;
 		v.v[0] = pt[0];
 		v.v[1] = pt[1];
 		v.v[2] = pt[2];
@@ -128,7 +128,7 @@ bool noob::mesh_3d::load_assimp(const aiScene* scene)
 		if (has_normals)
 		{
 			aiVector3D normal = mesh_data->mNormals[n];
-			noob::vec3 n(normal[0], normal[1], normal[2]);
+			noob::vec3f n(normal[0], normal[1], normal[2]);
 			normals.push_back(n);
 		}
 

@@ -14,14 +14,14 @@ namespace noob
 		public:
 		ghost() noexcept(true) : inner(nullptr) {}
 
-		void init(btCollisionWorld* world, const noob::shape&, const noob::vec3&, const noob::versor&) noexcept(true);
+		void init(btCollisionWorld* world, const noob::shape&, const noob::vec3f&, const noob::versorf&) noexcept(true);
 
-		void set_position(const noob::vec3&) noexcept(true);
-		void set_orientation(const noob::versor&) noexcept(true);
+		void set_position(const noob::vec3f&) noexcept(true);
+		void set_orientation(const noob::versorf&) noexcept(true);
 
-		noob::vec3 get_position() const noexcept(true);
-		noob::versor get_orientation() const noexcept(true);
-		noob::mat4 get_transform() const noexcept(true);
+		noob::vec3f get_position() const noexcept(true);
+		noob::versorf get_orientation() const noexcept(true);
+		noob::mat4f get_transform() const noexcept(true);
 
 		void set_user_index_1(uint32_t) noexcept(true);
 		void set_user_index_2(uint32_t) noexcept(true);

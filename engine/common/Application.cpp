@@ -26,7 +26,7 @@ void noob::application::init(uint32_t width, uint32_t height, const std::string&
 
 	started = paused = input_has_started = false;
 
-	finger_positions = { noob::vec2(0.0, 0.0), noob::vec2(0.0, 0.0), noob::vec2(0.0, 0.0), noob::vec2(0.0, 0.0) };
+	finger_positions = { noob::vec2f(0.0, 0.0), noob::vec2f(0.0, 0.0), noob::vec2f(0.0, 0.0), noob::vec2f(0.0, 0.0) };
 
 
 	ui_enabled = true;
@@ -36,7 +36,7 @@ void noob::application::init(uint32_t width, uint32_t height, const std::string&
 	const bool are_globals_initialized = g.init();
 	assert(are_globals_initialized && "Globals not initialized!");
 
-	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0, 2000.0);
+	noob::mat4f proj_mat = noob::perspective<float>(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0, 2000.0);
 
 	stage.init(window_width, window_height, proj_mat);
 	logger::log(noob::importance::INFO, noob::concat("[Application] Done basic init. Filepath = ", filepath));
@@ -128,7 +128,7 @@ void noob::application::touch(int pointerID, float x, float y, int action)
 
 		if (pointerID < 3)
 		{
-			// finger_positions[pointerID] = noob::vec2(x,y);
+			// finger_positions[pointerID] = noob::vec2f(x,y);
 		}
 	}
 	else input_has_started = true;
@@ -144,8 +144,8 @@ void noob::application::window_resize(uint32_t w, uint32_t h)
 		window_height = 1;
 	}
 
-	// noob::mat4 view_mat = noob::look_at(eye_pos, eye_target, eye_up);
-	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0 , 2000.0);
+	// noob::mat4f view_mat = noob::look_at(eye_pos, eye_target, eye_up);
+	noob::mat4f proj_mat = noob::perspective<float>(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0 , 2000.0);
 
 	stage.update_viewport_params(window_width, window_height, proj_mat);
 

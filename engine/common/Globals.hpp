@@ -52,7 +52,7 @@ namespace noob
 
 		noob::shape_handle box_shape(float x, float y, float z) noexcept(true);
 
-		noob::shape_handle hull_shape(const std::vector<noob::vec3>&) noexcept(true);
+		noob::shape_handle hull_shape(const std::vector<noob::vec3f>&) noexcept(true);
 
 		noob::shape_handle static_trimesh_shape(const noob::mesh_3d&) noexcept(true);
 

@@ -30,10 +30,10 @@ namespace noob
 	class stage
 	{
 		public:
-			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4(0.6, 0.6, 0.6, 1.0)) {}
+			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4f(0.6, 0.6, 0.6, 1.0)) {}
 
 			// This one must be called by the application.
-			void init(uint32_t width, uint32_t height, const noob::mat4& projection_mat) noexcept(true);
+			void init(uint32_t width, uint32_t height, const noob::mat4f& projection_mat) noexcept(true);
 
 			// Brings everything back to scratch.
 			void tear_down() noexcept(true);
@@ -47,10 +47,10 @@ namespace noob
 
 			void draw() noexcept(true);
 
-			void update_viewport_params(uint32_t width, uint32_t height, const noob::mat4& projection_mat) noexcept(true);
+			void update_viewport_params(uint32_t width, uint32_t height, const noob::mat4f& projection_mat) noexcept(true);
 
 			// Call this when your graphics context went dead and is now back (ie: app got sent into background)
-			void rebuild_graphics(uint32_t width, uint32_t height, const noob::mat4& projection_mat) noexcept(true);
+			void rebuild_graphics(uint32_t width, uint32_t height, const noob::mat4f& projection_mat) noexcept(true);
 
 			void rebuild_models() noexcept(true);
 
@@ -60,18 +60,18 @@ namespace noob
 
 			void reserve_actors(const noob::actor_blueprints_handle, uint32_t num) noexcept(true);
 
-			noob::actor_handle actor(noob::actor_blueprints_handle, uint32_t team, const noob::vec3&, const noob::versor&) noexcept(true);
+			noob::actor_handle actor(noob::actor_blueprints_handle, uint32_t team, const noob::vec3f&, const noob::versorf&) noexcept(true);
 
-			void set_team_colour(uint32_t team_num, const noob::vec4& colour) noexcept(true);
+			void set_team_colour(uint32_t team_num, const noob::vec4f& colour) noexcept(true);
 			
-			noob::scenery_handle scenery(const noob::shape_handle, const noob::vec3&, const noob::versor&) noexcept(true); // Add checkers and such
+			noob::scenery_handle scenery(const noob::shape_handle, const noob::vec3f&, const noob::versorf&) noexcept(true); // Add checkers and such
 
 			std::vector<noob::contact_point> get_intersecting(const noob::actor_handle) const noexcept(true);
 
 			bool show_origin;
 
 			// TODO: Make more flexible.
-			noob::vec4 ambient_light;
+			noob::vec4f ambient_light;
 			noob::directional_light main_light;
 
 			std::string print_drawables_info() const noexcept(true);
@@ -107,13 +107,13 @@ namespace noob
 
 			noob::physics world;
 			
-			noob::mat4 view_matrix, projection_matrix;
+			noob::mat4f view_matrix, projection_matrix;
 			uint32_t viewport_width, viewport_height;
 			uint32_t num_terrain_verts = 0;
 
 			rde::vector<noob::stage::drawable_info> drawables;
 			rde::vector<noob::stage::actor_info> actor_factories;
-			rde::vector<noob::vec4> team_colours;
+			rde::vector<noob::vec4f> team_colours;
 
 			// Voronoi cells are preferred over convex hulls generated from a set of points for data representation, as we can be certain that the voronoi cell is unambiguous.
 			// rde::vector<noob::vorocell> voros;
@@ -131,7 +131,7 @@ namespace noob
 
 			void run_ai() noexcept(true);
 
-			// rde::slist<rde::vector<noob::vec3>> paths;
+			// rde::slist<rde::vector<noob::vec3f>> paths;
 
 			void update_actors() noexcept(true);
 

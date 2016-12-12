@@ -1,9 +1,9 @@
 #include "Body.hpp"
 
 #include "Globals.hpp"
+#include "StringFuncs.hpp"
 
-
-void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type type_arg, const noob::shape& shape, float mass, const noob::vec3& pos, const noob::versor& orient, bool ccd) noexcept(true) 
+void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type type_arg, const noob::shape& shape, float mass, const noob::vec3f& pos, const noob::versorf& orient, bool ccd) noexcept(true) 
 {
 	btTransform start_transform;
 
@@ -79,39 +79,39 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type typ
 }
 
 
-noob::vec3 noob::body::get_position() const noexcept(true) 
+noob::vec3f noob::body::get_position() const noexcept(true) 
 {
 	btTransform xform;
 	inner->getMotionState()->getWorldTransform(xform);
-	return vec3_from_bullet(xform.getOrigin());
+	return vec3f_from_bullet(xform.getOrigin());
 }
 
 
-noob::versor noob::body::get_orientation() const noexcept(true) 
+noob::versorf noob::body::get_orientation() const noexcept(true) 
 {
 	btTransform xform;
 	inner->getMotionState()->getWorldTransform(xform);
-	return versor_from_bullet(xform.getRotation());
+	return versorf_from_bullet(xform.getRotation());
 }
 
 
-noob::vec3 noob::body::get_linear_velocity() const noexcept(true) 
+noob::vec3f noob::body::get_linear_velocity() const noexcept(true) 
 {
-	return vec3_from_bullet(inner->getLinearVelocity());
+	return vec3f_from_bullet(inner->getLinearVelocity());
 }
 
 
-noob::vec3 noob::body::get_angular_velocity() const noexcept(true) 
+noob::vec3f noob::body::get_angular_velocity() const noexcept(true) 
 {
-	return vec3_from_bullet(inner->getAngularVelocity());
+	return vec3f_from_bullet(inner->getAngularVelocity());
 }
 
 
-noob::mat4 noob::body::get_transform() const noexcept(true) 
+noob::mat4f noob::body::get_transform() const noexcept(true) 
 {
 	btTransform xform;
 	inner->getMotionState()->getWorldTransform(xform);
-	return mat4_from_bullet(xform);
+	return mat4f_from_bullet(xform);
 }
 
 
@@ -131,12 +131,12 @@ noob::body::info noob::body::get_info() const noexcept(true)
 	results.type = type;
 	results.friction = inner->getFriction();
 	results.restitution = inner->getRestitution();
-	results.position = vec3_from_bullet(inner->getCenterOfMassPosition());
-	results.linear_velocity = vec3_from_bullet(inner->getLinearVelocity());
-	results.angular_velocity = vec3_from_bullet(inner->getAngularVelocity());
-	results.linear_factor = vec3_from_bullet(inner->getLinearFactor());
-	results.angular_factor = vec3_from_bullet(inner->getAngularFactor());
-	results.orientation = versor_from_bullet(inner->getOrientation());
+	results.position = vec3f_from_bullet(inner->getCenterOfMassPosition());
+	results.linear_velocity = vec3f_from_bullet(inner->getLinearVelocity());
+	results.angular_velocity = vec3f_from_bullet(inner->getAngularVelocity());
+	results.linear_factor = vec3f_from_bullet(inner->getLinearFactor());
+	results.angular_factor = vec3f_from_bullet(inner->getAngularFactor());
+	results.orientation = versorf_from_bullet(inner->getOrientation());
 	results.ccd = ccd;
 
 	return results;
