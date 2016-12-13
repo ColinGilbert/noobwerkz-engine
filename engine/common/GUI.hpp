@@ -24,18 +24,18 @@ namespace noob
 				BANNER, TITLE, HEADER, READING
 			};
 
-			void init(const std::string& prefix, size_t width, size_t height) noexcept(true);
-			void window_dims(size_t width, size_t height) noexcept(true);
+			void init(const std::string& prefix, const noob::vec2ui Dims) noexcept(true);
+			void set_dims(const noob::vec2ui Dims) noexcept(true);
 			// TODO: Implement
 			// noob::vec2 dims(const std::string& text); 
 			void text(const noob::text_label lbl) noexcept(true);
-			void text(const std::string& text, float x, float y, noob::gui::font_size size = noob::gui::font_size::READING, uint32_t colour = 0xFFFF00FF) noexcept(true);
+			void text(const std::string& text, const noob::vec2f Pos, noob::gui::font_size size = noob::gui::font_size::READING, uint32_t colour = 0xFFFF00FF) noexcept(true);
 
 			bool crosshairs_enabled;
 			noob::vec4f crosshairs_colour;
 		
 		protected:
-			float window_width, window_height;
+			noob::vec2ui max;
 
 		//	std::unique_ptr<noob::ui_font> _banner;
 		//	std::unique_ptr<noob::ui_font> _title;

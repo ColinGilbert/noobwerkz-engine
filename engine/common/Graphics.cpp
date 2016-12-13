@@ -10,7 +10,7 @@
 #include "NoobUtils.hpp"
 #include "StringFuncs.hpp"
 
-void noob::graphics::init(const std::array<uint32_t, 2> Dims, const noob::texture_loader_2d& TexLoader) noexcept(true)
+void noob::graphics::init(const noob::vec2ui Dims, const noob::texture_loader_2d& TexLoader) noexcept(true)
 {
 	instanced_shader = noob::graphics::program_handle::make(load_program_gl(noob::glsl::vs_instancing_src, noob::glsl::fs_instancing_src));
 	check_error_gl();
@@ -80,7 +80,7 @@ void noob::graphics::init(const std::array<uint32_t, 2> Dims, const noob::textur
 }
 
 
-void noob::graphics::frame(const std::array<uint32_t, 2> Dims) const noexcept(true)
+void noob::graphics::frame(const noob::vec2ui Dims) const noexcept(true)
 {
 	glBindVertexArray(0);
 	glViewport(0, 0, Dims[0], Dims[1]);
@@ -472,7 +472,7 @@ noob::texture_2d_handle noob::graphics::texture_2d(const noob::texture_loader_2d
 
 	glBindTexture(GL_TEXTURE_2D, texture_id);
 
-	const std::array<uint32_t, 2> dims = TextureLoader.dimensions();
+	const noob::vec2ui dims = TextureLoader.dimensions();
 
 	uint32_t mips = 1;
 	if (TextureLoader.mips() || GenMips)
@@ -523,7 +523,7 @@ noob::texture_2d_handle noob::graphics::texture_2d(const noob::texture_loader_2d
 }
 
 
-noob::texture_array_2d_handle noob::graphics::texture_array_2d(const std::array<uint32_t, 2> Dims, uint32_t Indices, const noob::texture_info TexInfo) noexcept(true)
+noob::texture_array_2d_handle noob::graphics::texture_array_2d(const noob::vec2ui Dims, uint32_t Indices, const noob::texture_info TexInfo) noexcept(true)
 {
 	const GLenum fmt = get_gl_storage_format(TexInfo.pixels);
 	const GLuint texture_id = prep_texture();
@@ -547,7 +547,7 @@ noob::texture_array_2d_handle noob::graphics::texture_array_2d(const std::array<
 }
 
 
-noob::texture_3d_handle noob::graphics::texture_3d(const std::array<uint32_t, 3> Dims, const noob::texture_info TexInfo) noexcept(true)
+noob::texture_3d_handle noob::graphics::texture_3d(const noob::vec3ui Dims, const noob::texture_info TexInfo) noexcept(true)
 {
 	const GLenum fmt = get_gl_storage_format(TexInfo.pixels);
 	const GLuint texture_id = prep_texture();
@@ -594,7 +594,7 @@ void noob::graphics::bind_texture(noob::texture_3d_handle Handle) const noexcept
 }
 
 /*
-   void noob::graphics::texture_data(noob::texture_2d_handle Handle, uint32_t Mip, const std::array<uint32_t, 2> Offsets, const std::array<uint32_t, 2> Dims, const uint8_t* DataPtr) const noexcept(true)
+   void noob::graphics::texture_data(noob::texture_2d_handle Handle, uint32_t Mip, const noob::vec2ui Offsets, const noob::vec2ui Dims, const uint8_t* DataPtr) const noexcept(true)
    {
    if (Handle.index() < textures_2d.size())
    {
@@ -602,7 +602,7 @@ void noob::graphics::bind_texture(noob::texture_3d_handle Handle) const noexcept
    }
    */
 
-void noob::graphics::texture_data(noob::texture_array_2d_handle Handle, uint32_t Mip, uint32_t Index, const std::array<uint32_t, 2> Offset, const std::array<uint32_t, 2> Dims, const uint8_t* DataPtr) const noexcept(true)
+void noob::graphics::texture_data(noob::texture_array_2d_handle Handle, uint32_t Mip, uint32_t Index, const noob::vec2ui Offset, const noob::vec2ui Dims, const uint8_t* DataPtr) const noexcept(true)
 {
 	// void glCompressedTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const GLvoid * data);
 

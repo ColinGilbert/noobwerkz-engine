@@ -33,7 +33,7 @@ namespace noob
 			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4f(0.6, 0.6, 0.6, 1.0)) {}
 
 			// This one must be called by the application.
-			void init(uint32_t width, uint32_t height, const noob::mat4f& projection_mat) noexcept(true);
+			void init(const noob::vec2ui Dims, const noob::mat4f& projection_mat) noexcept(true);
 
 			// Brings everything back to scratch.
 			void tear_down() noexcept(true);
@@ -47,10 +47,10 @@ namespace noob
 
 			void draw() noexcept(true);
 
-			void update_viewport_params(uint32_t width, uint32_t height, const noob::mat4f& projection_mat) noexcept(true);
+			void update_viewport_params(const noob::vec2ui Dims, const noob::mat4f& projection_mat) noexcept(true);
 
 			// Call this when your graphics context went dead and is now back (ie: app got sent into background)
-			void rebuild_graphics(uint32_t width, uint32_t height, const noob::mat4f& projection_mat) noexcept(true);
+			void rebuild_graphics(const noob::vec2ui Dims, const noob::mat4f& projection_mat) noexcept(true);
 
 			void rebuild_models() noexcept(true);
 
@@ -108,7 +108,7 @@ namespace noob
 			noob::physics world;
 			
 			noob::mat4f view_matrix, projection_matrix;
-			uint32_t viewport_width, viewport_height;
+			noob::vec2ui viewport_dims;
 			uint32_t num_terrain_verts = 0;
 
 			rde::vector<noob::stage::drawable_info> drawables;

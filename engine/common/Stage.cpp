@@ -2,9 +2,9 @@
 // #include "Shiny.h"
 
 
-void noob::stage::init(uint32_t width, uint32_t height, const noob::mat4f& projection_mat) noexcept(true) 
+void noob::stage::init(const noob::vec2ui Dims, const noob::mat4f& projection_mat) noexcept(true) 
 {
-	update_viewport_params(width, height, projection_mat);
+	update_viewport_params(Dims, projection_mat);
 
 	noob::vec3f eye_pos, eye_target, eye_up;
 	eye_pos = noob::vec3f(0.0, 0.0, -40.0);
@@ -17,8 +17,8 @@ void noob::stage::init(uint32_t width, uint32_t height, const noob::mat4f& proje
 	projection_matrix = projection_mat;
 
 	noob::graphics& gfx = noob::get_graphics();
-	gfx.set_view_mat(view_matrix);// = noob::get_graphics();
-	gfx.set_projection_mat(projection_matrix);
+	// gfx.set_view_mat(view_matrix);
+	// gfx.set_projection_mat(projection_matrix);
 
 	world.init();
 
@@ -56,7 +56,7 @@ void noob::stage::tear_down() noexcept(true)
 	// draw_graph.clear();
 	// node_masks.empty();
 
-	init(viewport_width, viewport_height, projection_matrix);
+	init(viewport_dims, projection_matrix);
 }
 
 
@@ -128,10 +128,9 @@ void noob::stage::draw() noexcept(true)
 }
 
 
-void noob::stage::update_viewport_params(uint32_t width, uint32_t height, const noob::mat4f& projection_mat) noexcept(true)
+void noob::stage::update_viewport_params(const noob::vec2ui Dims, const noob::mat4f& projection_mat) noexcept(true)
 {
-	viewport_width = width;
-	viewport_height = height;
+	viewport_dims = Dims;
 	projection_matrix = projection_mat;
 }
 
@@ -142,10 +141,10 @@ void noob::stage::build_navmesh() noexcept(true)
 }
 
 
-void noob::stage::rebuild_graphics(uint32_t width, uint32_t height, const noob::mat4f& projection_mat) noexcept(true)
+void noob::stage::rebuild_graphics(const noob::vec2ui Dims, const noob::mat4f& projection_mat) noexcept(true)
 {
 	noob::graphics& gfx = noob::get_graphics();
-	update_viewport_params(width, height, projection_mat);
+	update_viewport_params(Dims, projection_mat);
 }
 
 

@@ -1,14 +1,14 @@
 #include "Application.hpp"
 
 
-void noob::application::init(uint32_t width, uint32_t height, const std::string& filepath)
+void noob::application::init(const noob::vec2ui Dims, const noob::vec2d Dpi, const std::string& FilePath)
 {
 	logger::log(noob::importance::INFO, "[Application] Begin init.");
 
-	window_width = width;
-	window_height = height;
+	window_dims = Dims;
+	dpi = Dpi;
 
-	prefix = std::make_unique<std::string>(filepath);
+	prefix = std::make_unique<std::string>(FilePath);
 
 	const std::string tex_src = noob::load_file_as_string(noob::concat(*prefix, "/texture/gradient_map.tga"));
 
@@ -20,7 +20,7 @@ void noob::application::init(uint32_t width, uint32_t height, const std::string&
 	tex_info.pixels = tex_data.format();
 	
 	noob::graphics& gfx = noob::get_graphics();
-	gfx.init(std::array<uint32_t, 2>({width, height}), tex_data);
+	gfx.init(window_dims, tex_data);
 
 	tex_data.free();
 
@@ -29,16 +29,16 @@ void noob::application::init(uint32_t width, uint32_t height, const std::string&
 	finger_positions = { noob::vec2f(0.0, 0.0), noob::vec2f(0.0, 0.0), noob::vec2f(0.0, 0.0), noob::vec2f(0.0, 0.0) };
 
 	ui_enabled = true;
-	gui.init("", window_width, window_height);
+	gui.init("", window_dims);
 
 	noob::globals& g = noob::get_globals();
 	const bool are_globals_initialized = g.init();
 	assert(are_globals_initialized && "Globals not initialized!");
 
-	noob::mat4f proj_mat = noob::perspective<float>(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0, 2000.0);
+	noob::mat4f proj_mat = noob::perspective<float>(60.0f, static_cast<float>(window_dims[0]) / static_cast<float>(window_dims[1]), 1.0, 2000.0);
 
-	stage.init(window_width, window_height, proj_mat);
-	logger::log(noob::importance::INFO, noob::concat("[Application] Done basic init. Filepath = ", filepath));
+	stage.init(window_dims, proj_mat);
+	logger::log(noob::importance::INFO, noob::concat("[Application] Done basic init. Filepath = ", FilePath, ". Window dims: ", noob::to_string(window_dims), ". DPI: ", noob::to_string(dpi)));
 
 	bool b = user_init();
 
@@ -51,7 +51,7 @@ void noob::application::init(uint32_t width, uint32_t height, const std::string&
 
 void noob::application::update(double delta)
 {
-	gui.window_dims(window_width, window_height);
+	gui.set_dims(window_dims);
 
 	stage.update(delta);
 	user_update(delta);
@@ -63,7 +63,7 @@ void noob::application::draw()
 	const noob::time start_time = noob::clock::now();
 
 	noob::graphics& gfx = noob::get_graphics();
-	gfx.frame(std::array<uint32_t, 2>({window_width, window_height}));
+	gfx.frame(window_dims);
 
 	stage.draw();
 
@@ -135,18 +135,22 @@ void noob::application::touch(int pointerID, float x, float y, int action)
 
 void noob::application::window_resize(uint32_t w, uint32_t h)
 {
-	window_width = w;
-	window_height = h;
-	if (window_height == 0) 
+	window_dims = noob::vec2ui(w, h);
+
+	if (w == 0) 
 	{
-		window_height = 1;
+		window_dims[0] = 1;
+	}
+	if (h == 0)
+	{
+		window_dims[1] = 1;
 	}
 
-	noob::mat4f proj_mat = noob::perspective<float>(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0 , 2000.0);
+	noob::mat4f proj_mat = noob::perspective<float>(60.0f, static_cast<float>(window_dims[0]) / static_cast<float>(window_dims[1]), 1.0, 2000.0);
 
-	stage.update_viewport_params(window_width, window_height, proj_mat);
+	stage.update_viewport_params(window_dims, proj_mat);
 
-	logger::log(noob::importance::INFO, noob::concat("[Application] Resize window to (", noob::to_string(window_width), ", ", noob::to_string(window_height), ")"));
+	logger::log(noob::importance::INFO, noob::concat("[Application] Resize window to (", noob::to_string(window_dims), ")"));
 }
 
 
@@ -167,7 +171,6 @@ void noob::application::remove_shapes()
 
 	g.shapes.empty();
 }
-
 
 /*
    std::string noob::application::get_profiler_text()

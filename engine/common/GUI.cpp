@@ -6,7 +6,7 @@
 #define GUI_TEXT_LAYER 4
 
 
-void noob::gui::init(const std::string& prefix, size_t width, size_t height) noexcept(true)
+void noob::gui::init(const std::string& prefix, const noob::vec2ui Dims) noexcept(true)
 {
 /*	_reading = std::unique_ptr<noob::ui_font>(new noob::ui_font());
 	_header = std::unique_ptr<noob::ui_font>(new noob::ui_font());
@@ -26,12 +26,12 @@ void noob::gui::init(const std::string& prefix, size_t width, size_t height) noe
 }
 
 
-void noob::gui::window_dims(size_t width, size_t height) noexcept(true)
+void noob::gui::set_dims(const noob::vec2ui Dims) noexcept(true)
 {
 }
 
 
-void noob::gui::text(const std::string& text, float x, float y, noob::gui::font_size size, uint32_t colour) noexcept(true)
+void noob::gui::text(const std::string& text, const noob::vec2f Pos, noob::gui::font_size size, uint32_t colour) noexcept(true)
 {
 /*
 	switch (size)

@@ -27,10 +27,10 @@ namespace noob
 			typedef noob::handle<noob::linked_shader> program_handle;
 
 			// Call before using.
-			void init(const std::array<uint32_t, 2> Dims, const noob::texture_loader_2d&) noexcept(true);
+			void init(const noob::vec2ui Dims, const noob::texture_loader_2d&) noexcept(true);
 
 			// Call this every frame...
-			void frame(const std::array<uint32_t, 2>) const noexcept(true);
+			void frame(const noob::vec2ui) const noexcept(true);
 
 			// Call before killing.
 			void destroy() noexcept(true);
@@ -66,14 +66,14 @@ namespace noob
 			// Texture storage reservers
 			// noob::texture_1d_handle reserve_texture_1d(uint32_t length, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true); // TODO
 			noob::texture_2d_handle texture_2d(const noob::texture_loader_2d&, bool GenMips) noexcept(true);
-			noob::texture_array_2d_handle texture_array_2d(const std::array<uint32_t, 2> Dims, uint32_t Indices, const noob::texture_info) noexcept(true);
-			noob::texture_3d_handle texture_3d(const std::array<uint32_t, 3> Dims, const noob::texture_info) noexcept(true);
+			noob::texture_array_2d_handle texture_array_2d(const noob::vec2ui Dims, uint32_t Indices, const noob::texture_info) noexcept(true);
+			noob::texture_3d_handle texture_3d(const noob::vec3ui Dims, const noob::texture_info) noexcept(true);
 			// noob::texture_handle reserve_texture_cube(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true); // TODO
 
 			// Texture data uploaders
 			// void texture_data(noob::texture_1d_handle, const std::string&) const noexcept(true);	// TODO
-			void texture_data(noob::texture_2d_handle, uint32_t Mip, const std::array<uint32_t, 2> Offsets, const std::array<uint32_t, 2> Dims, const uint8_t* DataPtr) const noexcept(true);
-			void texture_data(noob::texture_array_2d_handle, uint32_t Mip, uint32_t Index, const std::array<uint32_t, 2> Offsets, const std::array<uint32_t, 2> Dims, const uint8_t* DataPtr) const noexcept(true);
+			void texture_data(noob::texture_2d_handle, uint32_t Mip, const noob::vec2ui Offsets, const noob::vec2ui Dims, const uint8_t* DataPtr) const noexcept(true);
+			void texture_data(noob::texture_array_2d_handle, uint32_t Mip, uint32_t Index, const noob::vec2ui Offsets, const noob::vec2ui Dims, const uint8_t* DataPtr) const noexcept(true);
 			void texture_data(noob::texture_3d_handle, uint32_t Mip, const std::array<uint32_t, 3> Offsets, const std::array<uint32_t, 3> Dims, const uint8_t* DataPtr) const noexcept(true);
 
 			// Texture parameter setters, made typesafe, at the cost of more overloads. Ah well, tradeoffs...

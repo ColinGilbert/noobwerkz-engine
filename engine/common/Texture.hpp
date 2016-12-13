@@ -34,12 +34,12 @@ namespace noob
 	};
 
 	// TODO: Move out into math classes.
-	static uint32_t get_num_mips(const std::array<uint32_t, 2> Dims)
+	static uint32_t get_num_mips(const noob::vec2ui Dims)
 	{
 		return static_cast<uint32_t>(floor(log2(static_cast<double>(std::max(Dims[0], Dims[1]))))) + 1;
 	}
 
-	static uint32_t get_num_mips(const std::array<uint32_t, 3> Dims)
+	static uint32_t get_num_mips(const noob::vec3ui Dims)
 	{
 		return static_cast<uint32_t>(floor(log2(static_cast<double>(std::max(std::max(Dims[0], Dims[1]), Dims[2]))))) + 1;
 	}

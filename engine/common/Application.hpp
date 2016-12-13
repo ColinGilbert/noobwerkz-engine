@@ -25,7 +25,7 @@ namespace noob
 	{
 		public:
 			// Init must always be called.
-			void init(uint32_t width, uint32_t height, const std::string& filepath);
+			void init(const noob::vec2ui Dims, const noob::vec2d Dpi, const std::string& FilePath);
 
 			// Those three allow an app to be controlled better by an external environment (ie: Android/iOS)
 			void pause();
@@ -39,9 +39,8 @@ namespace noob
 
 			void window_resize(uint32_t w, uint32_t h);
 			void key_input(char c);
-
-			uint32_t get_height() const { return window_height; }
-			uint32_t get_width() const { return window_width; }
+			uint32_t get_height() const { return window_dims[0]; }
+			uint32_t get_width() const { return window_dims[1]; }
 
 			void accept_ndof_data(const noob::ndof::data& info) noexcept(true);
 
@@ -68,8 +67,8 @@ namespace noob
 
 			bool paused, started, input_has_started, ui_enabled;
 
-			uint32_t window_width, window_height;
-
+			noob::vec2ui window_dims;
+			noob::vec2d dpi;
 			noob::gui gui;
 
 			// noob::vec3f eye_pos, eye_target, eye_up;

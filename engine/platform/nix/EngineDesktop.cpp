@@ -93,6 +93,15 @@ int main()//int /*_argc*/, char** /*_argv*/)
 		return -1;
 	}
 
+	GLFWmonitor* primary_monitor = glfwGetPrimaryMonitor();
+	int width_mm, height_mm;
+	glfwGetMonitorPhysicalSize(primary_monitor, &width_mm, &height_mm);
+
+	const GLFWvidmode* mode = glfwGetVideoMode(primary_monitor);
+
+	const double dpi_x = mode->width / (width_mm / 25.4);
+	const double dpi_y = mode->height / (height_mm / 25.4);
+	
 	glfwMakeContextCurrent(window);
 	// gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 	glfwSwapInterval(1);
@@ -100,7 +109,7 @@ int main()//int /*_argc*/, char** /*_argv*/)
 	noob::sound_interface audio_interface;
 	audio_interface.init();
 
-	app.init(width, height, "./assets/");
+	app.init(noob::vec2ui(width, height), noob::vec2d(dpi_x, dpi_y), "./assets/");
 	
 	noob::ndof ndof;
 	ndof.run();
