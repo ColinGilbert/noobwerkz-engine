@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.res.AssetManager;
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.os.Environment;
 import android.util.Log;
 import java.io.*;
@@ -19,6 +20,11 @@ public class MainActivity extends Activity
 	@Override protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
+
+		DisplayMetrics metrics = new DisplayMetrics();
+ 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+		JNILib.SetDPI(metrics.xdpi, metrics.ydpi);
 
 		copyAssets();
 

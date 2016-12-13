@@ -1,17 +1,19 @@
-#include <EGL/egl.h>
-#include <GLES3/gl3.h>
-#include <jni.h>
-
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+
+#include <noob/math/math_funcs.hpp>
+#include <EGL/egl.h>
+#include <GLES3/gl3.h>
+#include <jni.h>
 
 #include "Application.hpp"
 #include "Graphics.hpp"
 #include "NoobUtils.hpp"
 #include "AudioInterfaceDroid.hpp"
 
-uint32_t window_width, window_height;
+noob::vec2ui window_dims;
+noob::vec2d dpi;
 
 EGLint current_context;
 
@@ -19,6 +21,7 @@ std::string archive_dir;
 std::unique_ptr<noob::application> app = nullptr;
 static std::atomic<bool> started(false), playing_audio(false), more_audio(true);
 static noob::ringbuffer<int16_t> buffer_droid;
+
 
 extern "C"
 {
@@ -32,6 +35,8 @@ extern "C"
 	JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_SetupArchiveDir(JNIEnv* env, jobject obj, jstring dir);
 	JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_Log(JNIEnv* env, jobject obj, jstring message);
 	JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_CreateBufferQueueAudioPlayer(JNIEnv* env, jobject obj, int sampleRate, int bufSize);
+	JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_DestroyBufferQueueAudioPlayer(JNIEnv* env, jobject obj);
+	JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_SetDPI(JNIEnv* env, jobject obj, float DpiX, float DpiY);
 };
 
 
@@ -64,8 +69,7 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 {
 	noob::logger::log(noob::importance::INFO, "[C++] JNILib.OnResize()");
 
-	window_height = height;
-	window_width = width;
+	window_dims = noob::vec2ui(height, width);
 
 	EGLint last_context = current_context;
 
@@ -77,11 +81,11 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_OnResize(JNIEnv* env,
 		if (last_context == 0)
 		{
 			noob::logger::log(noob::importance::INFO, "[EngineDroid] Initializing app.");
-			app->init(window_width, window_height, archive_dir);
+			app->init(window_dims, dpi, archive_dir);
 		}
 	}
 
-	app->window_resize(window_width, window_height);
+	app->window_resize(window_dims);
 }
 
 
@@ -238,4 +242,11 @@ JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_CreateBufferQueueAudi
 JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_DestroyBufferQueueAudioPlayer(JNIEnv* env, jobject obj)
 {
 	opensl_wrapper_shutdown();
+}
+
+
+
+JNIEXPORT void JNICALL Java_net_noobwerkz_sampleapp_JNILib_SetDPI(JNIEnv* env, jobject obj, float DpiX, float DpiY)
+{
+	dpi = noob::vec2d(DpiX, DpiY);
 }

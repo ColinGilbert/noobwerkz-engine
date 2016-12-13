@@ -24,6 +24,8 @@ public class JNILib
 	public static native void Log(String message);
 	public static native void CreateBufferQueueAudioPlayer(int sampleRate, int bufSize);
 	public static native void DestroyBufferQueueAudioPlayer();
+	public static native void SetDPI(float x, float y);
+	
 
 	static
 	{

@@ -11,7 +11,7 @@ android:label="Noobwerkz"
 android:icon="@drawable/ic_launcher"
 android:hasCode="true"
 >
-<activity android:configChanges="orientation|keyboardHidden" android:label="@string/app_name" android:name="net.noobwerkz.sampleapp.MainActivity"  android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" android:launchMode="singleTask">
+<activity android:configChanges="orientation|keyboardHidden" android:screenOrientation="portrait" android:label="@string/app_name" android:name="net.noobwerkz.sampleapp.MainActivity"  android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" android:launchMode="singleTask">
 
 <intent-filter>
 <action android:name="android.intent.action.MAIN" />

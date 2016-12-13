@@ -133,15 +133,15 @@ void noob::application::touch(int pointerID, float x, float y, int action)
 }
 
 
-void noob::application::window_resize(uint32_t w, uint32_t h)
+void noob::application::window_resize(const noob::vec2ui Dims)
 {
-	window_dims = noob::vec2ui(w, h);
+	window_dims = Dims;
 
-	if (w == 0) 
+	if (window_dims[0] == 0) 
 	{
 		window_dims[0] = 1;
 	}
-	if (h == 0)
+	if (window_dims[1] == 0)
 	{
 		window_dims[1] = 1;
 	}

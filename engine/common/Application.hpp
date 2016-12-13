@@ -37,7 +37,7 @@ namespace noob
 			// Callbacks
 			void touch(int pointerID, float x, float y, int action);
 
-			void window_resize(uint32_t w, uint32_t h);
+			void window_resize(const noob::vec2ui);
 			void key_input(char c);
 			uint32_t get_height() const { return window_dims[0]; }
 			uint32_t get_width() const { return window_dims[1]; }
