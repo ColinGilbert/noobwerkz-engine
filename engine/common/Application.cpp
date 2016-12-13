@@ -28,7 +28,6 @@ void noob::application::init(uint32_t width, uint32_t height, const std::string&
 
 	finger_positions = { noob::vec2f(0.0, 0.0), noob::vec2f(0.0, 0.0), noob::vec2f(0.0, 0.0), noob::vec2f(0.0, 0.0) };
 
-
 	ui_enabled = true;
 	gui.init("", window_width, window_height);
 
@@ -82,7 +81,6 @@ void noob::application::accept_ndof_data(const noob::ndof::data& info) noexcept(
 }
 
 
-// TODO: Refactor
 void noob::application::step()
 {
 	noob::globals& g = noob::get_globals();
@@ -144,7 +142,6 @@ void noob::application::window_resize(uint32_t w, uint32_t h)
 		window_height = 1;
 	}
 
-	// noob::mat4f view_mat = noob::look_at(eye_pos, eye_target, eye_up);
 	noob::mat4f proj_mat = noob::perspective<float>(60.0f, static_cast<float>(window_width) / static_cast<float>(window_height), 1.0 , 2000.0);
 
 	stage.update_viewport_params(window_width, window_height, proj_mat);

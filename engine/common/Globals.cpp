@@ -99,7 +99,6 @@ noob::shape_handle noob::globals::static_trimesh_shape(const noob::mesh_3d& m) n
 }
 
 
-
 noob::skeletal_anim_handle noob::globals::skeleton(const std::string& filename) noexcept(true) 
 {
 	std::unique_ptr<noob::skeletal_anim> temp = std::make_unique<noob::skeletal_anim>();

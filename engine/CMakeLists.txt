@@ -36,6 +36,7 @@ include(cmake/Vorbis.cmake)
 include(cmake/Recast.cmake)
 include(cmake/R8.cmake)
 include(cmake/Shiny.cmake)
+include(cmake/TextureAtlas.cmake)
 
 #add_subdirectory(lib/ozz-animation)
 
