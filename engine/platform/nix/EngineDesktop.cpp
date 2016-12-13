@@ -9,8 +9,7 @@
 #define GLFW_INCLUDE_ES3
 #include <GLFW/glfw3.h>
 
-std::atomic<uint32_t> width(1280);
-std::atomic<uint32_t> height(720);
+noob::vec2ui dims;
 
 noob::application app;
 // static noob::ndof ndof;
@@ -29,11 +28,11 @@ void window_size_callback(GLFWwindow* window, int w, int h)
 
 void framebuffer_size_callback(GLFWwindow* window, int w, int h)
 {
-	width = std::abs(w);
-	height = std::abs(h);
+	dims[0] = std::abs(w);
+	dims[1] = std::abs(h);
 
-	noob::logger::log(noob::importance::INFO, noob::concat("[EngineDesktop] Resize to ", noob::to_string(width), ", ", noob::to_string(height)));
-	app.window_resize(noob::vec2ui(width, height));
+	noob::logger::log(noob::importance::INFO, noob::concat("[EngineDesktop] Resize to ", noob::to_string(dims)));
+	app.window_resize(dims);
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -80,7 +79,7 @@ int main()//int /*_argc*/, char** /*_argv*/)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(width, height, "Engine Desktop", NULL, NULL);
+	window = glfwCreateWindow(dims[0], dims[1], "Engine Desktop", NULL, NULL);
 
 	glfwSetWindowCloseCallback(window, window_close_callback);
 	glfwSetWindowSizeCallback(window, window_size_callback);
@@ -109,7 +108,7 @@ int main()//int /*_argc*/, char** /*_argv*/)
 	noob::sound_interface audio_interface;
 	audio_interface.init();
 
-	app.init(noob::vec2ui(width, height), noob::vec2d(dpi_x, dpi_y), "./assets/");
+	app.init(dims, noob::vec2d(dpi_x, dpi_y), "./assets/");
 	
 	noob::ndof ndof;
 	ndof.run();
