@@ -40,13 +40,13 @@ namespace noob
 			void use_program(noob::graphics::program_handle) const noexcept(true);
 			void set_view_mat(const noob::mat4f) noexcept(true);
 			void set_projection_mat(const noob::mat4f) noexcept(true);
-			
+
 			// Currently, instanced models only support the basic vertex colours. This may change.
 			void draw_instanced(const noob::model_handle, uint32_t NumInstances) const noexcept(true);
 			noob::model_handle model_instanced(const noob::mesh_3d&, uint32_t) noexcept(true);
 			void resize_instanced_data_buffers(noob::model_handle, uint32_t) noexcept(true);
 			void upload_instanced_uniforms() const noexcept(true);
-	
+
 			// Currently implemented as a triplanar-shaded, single-buffer model.
 			// Due to the flexibility of the shaders used, it is easy to support peeling visible faces off objects and sending them to video buffer to keep drawcalls down to one.
 			// It should run smoothly using compressed textures because although texture reads are done three times, those values get reused to recreate all needed maps.
@@ -106,7 +106,7 @@ namespace noob
 		protected:
 			std::vector<noob::model> models;
 			noob::model terrain_model;
-			
+
 			std::vector<noob::texture_1d> textures_1d;
 			std::vector<noob::texture_2d> textures_2d;
 			std::vector<noob::texture_array_2d> texture_arrays_2d;			
@@ -114,11 +114,11 @@ namespace noob
 
 			noob::graphics::program_handle instanced_shader;
 			noob::graphics::program_handle terrain_shader;
-			
+
 			// These will soon be replaced by proper UBO's and made typesafe. The only reason they're here is to serve as a stable, well-understood prior case example.
 			uint32_t u_eye_pos, u_light_directional;
 			uint32_t u_mvp_terrain, u_eye_pos_terrain, u_light_directional_terrain, u_texture_0, u_colour_0, u_colour_1, u_colour_2, u_colour_3, u_blend_0, u_blend_1, u_tex_scales, u_model_scales;
-	
+
 			noob::mat4f view_mat, proj_mat;	
 			noob::vec3f eye_pos, light_direction;
 			noob::terrain_shading terrain_unis;

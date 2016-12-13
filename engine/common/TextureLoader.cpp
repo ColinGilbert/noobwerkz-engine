@@ -80,7 +80,7 @@ void noob::texture_loader_2d::from_mem(const std::string& Data, bool Compressed)
 
 void from_mem_raw(const uint8_t* Buffer, const noob::vec2ui Dims, bool Mipped, noob::pixel_format PixelFormat) noexcept(true)
 {
-	
+
 }
 
 

@@ -33,7 +33,7 @@ void framebuffer_size_callback(GLFWwindow* window, int w, int h)
 	height = std::abs(h);
 
 	noob::logger::log(noob::importance::INFO, noob::concat("[EngineDesktop] Resize to ", noob::to_string(width), ", ", noob::to_string(height)));
-	app.window_resize(width, height);
+	app.window_resize(noob::vec2ui(width, height));
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)

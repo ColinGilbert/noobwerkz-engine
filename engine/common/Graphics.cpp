@@ -480,7 +480,7 @@ noob::texture_2d_handle noob::graphics::texture_2d(const noob::texture_loader_2d
 		mips = noob::get_num_mips(dims);
 	}
 
-//	glTexStorage2D(GL_TEXTURE_2D, mips, sized_fmt, dims[0], dims[1]);
+	//	glTexStorage2D(GL_TEXTURE_2D, mips, sized_fmt, dims[0], dims[1]);
 
 	check_error_gl();
 
@@ -496,9 +496,9 @@ noob::texture_2d_handle noob::graphics::texture_2d(const noob::texture_loader_2d
 			data_size = get_compressed_size_rgb8(dims[0], dims[1]);
 		}
 		// glCompressedTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, dims[0], dims[1], sized_fmt, data_size, reinterpret_cast<const GLvoid*>(TextureLoader.buffer()));
-	
+
 		// glCompressedTexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid * data);
-	
+
 		check_error_gl();		
 	}
 	else

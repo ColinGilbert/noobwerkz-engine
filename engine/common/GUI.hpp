@@ -33,13 +33,13 @@ namespace noob
 
 			bool crosshairs_enabled;
 			noob::vec4f crosshairs_colour;
-		
+
 		protected:
 			noob::vec2ui max;
 
-		//	std::unique_ptr<noob::ui_font> _banner;
-		//	std::unique_ptr<noob::ui_font> _title;
-		//	std::unique_ptr<noob::ui_font> _header;
-		//	std::unique_ptr<noob::ui_font> _reading;
+			//	std::unique_ptr<noob::ui_font> _banner;
+			//	std::unique_ptr<noob::ui_font> _title;
+			//	std::unique_ptr<noob::ui_font> _header;
+			//	std::unique_ptr<noob::ui_font> _reading;
 	};
 }

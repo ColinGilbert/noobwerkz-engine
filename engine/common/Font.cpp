@@ -45,7 +45,7 @@ bool noob::font::init_glyphs(const std::string& Characters, uint16_t FontSize) n
 		}
 		const uint32_t min_dim = 64;
 		const uint32_t max_dim = 2048; // TODO: Set to implementation-specific max value.
-		
+
 		for (uint32_t dim = min_dim; dim < max_dim; dim *= 2)
 		{
 			atlas = ftgl::texture_atlas_new(dim, dim, 1);
@@ -76,7 +76,7 @@ bool noob::font::init_glyphs(const std::string& Characters, uint16_t FontSize) n
 bool noob::font::init_glyphs_helper(const std::string& Characters, const noob::vec2ui AtlasDims) noexcept(true)
 {
 	stored_glyphs.clear();
-	
+
 	for (char c = 0; c < Characters.size(); ++c)
 	{
 		// Load character glyph, skipping ones that fail.
@@ -93,7 +93,7 @@ bool noob::font::init_glyphs_helper(const std::string& Characters, const noob::v
 				texture_atlas_set_region(atlas, reg.x, reg.y, reg.width, reg.height, slot->bitmap.buffer, 1);
 				stored_glyphs.push_back(noob::font::glyph(slot->metrics, noob::vec2ui(reg.width, reg.height), noob::vec2ui(reg.x, reg.y), noob::vec2ui(AtlasDims[0], AtlasDims[1])));
 				// TODO: Add hashtable insert code for character lookups.
-				
+
 			}
 			else
 			{

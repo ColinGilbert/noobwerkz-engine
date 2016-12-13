@@ -53,12 +53,12 @@ namespace noob
 					{
 						return mapped_pos;
 					}
-					
+
 				protected:
-				// The FT_Glyph_Metrics struct saves information in pixel-space.
-				FT_Glyph_Metrics metrics;
-				// The following are in texture-space (0. 1)
-				noob::vec2f mapped_dims, mapped_pos; // Positions are topleft corner (x,y)
+					// The FT_Glyph_Metrics struct saves information in pixel-space.
+					FT_Glyph_Metrics metrics;
+					// The following are in texture-space (0. 1)
+					noob::vec2f mapped_dims, mapped_pos; // Positions are topleft corner (x,y)
 			};
 
 			void init_library(const std::string& Mem, const noob::vec2d Dpi) noexcept(true);
@@ -72,8 +72,8 @@ namespace noob
 			bool has_vertical = false;
 
 			// Font size in 1/64 point units
-   			uint16_t font_size, pixel_size;//, ascender, descender, line_gap, max_advance_width, max_advance_height;
-			
+			uint16_t font_size, pixel_size;//, ascender, descender, line_gap, max_advance_width, max_advance_height;
+
 			noob::texture_2d_handle tex;
 			noob::vec2d dpi;
 			std::vector<noob::font::glyph> stored_glyphs;
@@ -84,6 +84,6 @@ namespace noob
 			ftgl::texture_atlas_t* atlas;
 
 			bool init_glyphs_helper(const std::string& Characters, const noob::vec2ui AtlasDims) noexcept(true);
-			
+
 	};
 }
