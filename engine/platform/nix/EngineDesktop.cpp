@@ -9,8 +9,8 @@
 #define GLFW_INCLUDE_ES3
 #include <GLFW/glfw3.h>
 
-std::atomic<uint32_t> width(1280);
-std::atomic<uint32_t> height(720);
+uint32_t width = 1280;
+uint32_t height = 720;
 
 noob::application app;
 // static noob::ndof ndof;

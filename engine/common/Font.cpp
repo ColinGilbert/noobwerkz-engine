@@ -1,8 +1,5 @@
 #include "Font.hpp"
 
-// #include <SkylineBinPack.h>
-
-
 void noob::font::init_library(const std::string& Mem, const noob::vec2d Dpi) noexcept(true)
 {
 	dpi = Dpi;

@@ -78,9 +78,11 @@ void noob::texture_loader_2d::from_mem(const std::string& Data, bool Compressed)
 }
 
 
-void from_mem_raw(const uint8_t* Buffer, const noob::vec2ui Dims, bool Mipped, noob::pixel_format PixelFormat) noexcept(true)
+void from_mem_raw(const noob::vec2ui Dims, bool Mipped, noob::pixel_format PixelFormat, const uint8_t* Buffer) noexcept(true)
 {
-
+	if (Dims[0] < 1 || Dims[1] < 1) return;
+	const uint32_t num_mips = noob::get_num_mips(Dims);
+	
 }
 
 
@@ -114,7 +116,7 @@ noob::pixel_format noob::texture_loader_2d::format() const noexcept(true)
 }
 
 
-unsigned char* noob::texture_loader_2d::buffer() const noexcept(true)
+uint8_t* noob::texture_loader_2d::buffer() const noexcept(true)
 {
 	return internal_buffer;
 }

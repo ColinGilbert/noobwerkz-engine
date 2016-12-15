@@ -18,16 +18,18 @@ namespace noob
 		public:
 			texture_loader_2d() noexcept(true) : is_valid(false), is_compressed(false), dims({0,0}), pixels(noob::pixel_format::INVALID), internal_buffer(nullptr), buf_size(0), is_mipped(false) {}
 
+			// These use stb_image
 			void from_mem(const std::string& Data, bool Compressed) noexcept(true);
 			void from_fs(const std::string& Data, bool Compressed) noexcept(true);
-			void from_mem_raw(const uint8_t* Buffer, const noob::vec2ui Dims, bool Mipped, noob::pixel_format PixelFormat) noexcept(true);
+			// This one is for when you need to make a texture manually.
+			void from_mem_raw(const noob::vec2ui Dims, bool Mipped, noob::pixel_format PixelFormat, const uint8_t* Buffer) noexcept(true);
 
 			bool valid() const noexcept(true);
 			bool compressed() const noexcept(true);
 			bool mips() const noexcept(true);		
 			noob::vec2ui dimensions() const noexcept(true);
 			noob::pixel_format format() const noexcept(true);
-			unsigned char* buffer() const noexcept(true);
+			uint8_t* buffer() const noexcept(true);
 			uint32_t buffer_size() const noexcept(true);
 			void free() noexcept(true);
 

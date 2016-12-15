@@ -523,6 +523,7 @@ noob::texture_2d_handle noob::graphics::texture_2d(const noob::texture_loader_2d
 }
 
 
+
 noob::texture_array_2d_handle noob::graphics::texture_array_2d(const noob::vec2ui Dims, uint32_t Indices, const noob::texture_info TexInfo) noexcept(true)
 {
 	const GLenum fmt = get_gl_storage_format(TexInfo.pixels);

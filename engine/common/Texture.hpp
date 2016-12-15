@@ -11,6 +11,7 @@
 
 // Project-local headers
 #include "Attrib.hpp"
+#include "NoobUtils.hpp"
 
 namespace noob
 {
@@ -174,4 +175,49 @@ namespace noob
 
 		return "INVALID";
 	}
+
+	static uint32_t get_num_channels(noob::pixel_format Format)
+	{
+		uint32_t results = 0;
+		switch (Format)
+		{
+			case(noob::pixel_format::R8):
+				{
+					results = 1;
+					break;
+				}
+			case(noob::pixel_format::RG8):
+				{
+					results = 2;
+					break;
+				}
+			case(noob::pixel_format::RGB8):
+			case(noob::pixel_format::SRGB8):
+			case(noob::pixel_format::RGB8_COMPRESSED):
+			case(noob::pixel_format::SRGB8_COMPRESSED):
+				{
+					results = 3;
+					break;
+				}
+			case(noob::pixel_format::RGBA8):
+			case(noob::pixel_format::SRGBA8):
+			case(noob::pixel_format::RGB8_A1_COMPRESSED):
+			case(noob::pixel_format::SRGB8_A1_COMPRESSED):
+			case(noob::pixel_format::RGBA8_COMPRESSED):
+			case(noob::pixel_format::SRGBA8_COMPRESSED):
+				{
+					results = 4;
+					break;
+				}
+			default:
+				{
+					noob::logger::log(noob::importance::ERROR, noob::concat("[Texture utilities] Getting number of channels failed! Invalid enum value given: ", noob::to_string(Format)));
+					break;
+				}
+		}
+		return results;
+	}
+
+
+
 }

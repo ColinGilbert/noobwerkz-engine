@@ -1,12 +1,16 @@
 #pragma once
 
+// std
 #include <string>
 #include <vector>
 
-
+// External libs
 #include <texture-atlas.h>
 #include <vec234.h>
 #include <noob/math/math_funcs.hpp>
+#include <noob/fast_hashtable/fast_hashtable.hpp>
+
+// Freetype-specific
 #include <ft2build.h>
 #include FT_FREETYPE_H  
 
