@@ -1,0 +1,53 @@
+include_directories(lib/harfbuzz/src)
+include_directories(lib/harfbuzz/src/hb-ucdn)
+
+
+list (APPEND main_src
+	#./lib/harfbuzz/src/hb-coretext.cc
+	#./lib/harfbuzz/src/hb-glib.cc
+	./lib/harfbuzz/src/hb-ft.cc
+	./lib/harfbuzz/src/hb-ot-shape-complex-indic-table.cc
+	./lib/harfbuzz/src/hb-warning.cc
+	./lib/harfbuzz/src/hb-ucdn/ucdn.c
+	#./lib/harfbuzz/src/hb-ucdn.cc	
+	./lib/harfbuzz/src/hb-common.cc
+	./lib/harfbuzz/src/hb-blob.cc
+	./lib/harfbuzz/src/hb-ot-shape-complex-arabic.cc
+	./lib/harfbuzz/src/hb-ot-shape-complex-myanmar.cc
+	#./lib/harfbuzz/src/hb-uniscribe.cc
+	#./lib/harfbuzz/src/test.cc
+	./lib/harfbuzz/src/hb-ot-shape-complex-indic.cc
+	./lib/harfbuzz/src/hb-font.cc
+	./lib/harfbuzz/src/hb-ot-shape-complex-use-table.cc
+	./lib/harfbuzz/src/hb-ot-shape-complex-hebrew.cc
+	#./lib/harfbuzz/src/test-buffer-serialize.cc
+	./lib/harfbuzz/src/hb-ot-map.cc
+	#./lib/harfbuzz/src/hb-icu.cc
+	./lib/harfbuzz/src/hb-ucdn.cc
+	./lib/harfbuzz/src/hb-ot-shape.cc
+	#./lib/harfbuzz/src/test-would-substitute.cc
+	./lib/harfbuzz/src/hb-ot-tag.cc
+	./lib/harfbuzz/src/hb-set.cc
+	./lib/harfbuzz/src/hb-ot-layout.cc
+	#./lib/harfbuzz/src/main.cc
+	./lib/harfbuzz/src/hb-shaper.cc
+	./lib/harfbuzz/src/hb-ot-shape-complex-thai.cc
+	./lib/harfbuzz/src/hb-ot-font.cc
+	#./lib/harfbuzz/src/hb-gobject-structs.cc
+	./lib/harfbuzz/src/hb-face.cc
+	#./lib/harfbuzz/src/hb-directwrite.cc
+	./lib/harfbuzz/src/hb-buffer-serialize.cc
+	./lib/harfbuzz/src/hb-ot-shape-complex-default.cc
+	./lib/harfbuzz/src/hb-ot-shape-fallback.cc
+	./lib/harfbuzz/src/hb-ot-shape-complex-hangul.cc
+	#./lib/harfbuzz/src/hb-graphite2.cc
+	./lib/harfbuzz/src/hb-ot-shape-complex-tibetan.cc
+	./lib/harfbuzz/src/hb-ot-shape-complex-use.cc
+	#./lib/harfbuzz/src/test-size-params.cc
+	./lib/harfbuzz/src/hb-shape-plan.cc
+	./lib/harfbuzz/src/hb-shape.cc
+	./lib/harfbuzz/src/hb-fallback-shape.cc
+	./lib/harfbuzz/src/hb-unicode.cc
+	./lib/harfbuzz/src/hb-buffer.cc
+	./lib/harfbuzz/src/hb-ot-shape-normalize.cc
+	)
