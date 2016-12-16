@@ -16,6 +16,7 @@ noob::font::~font() noexcept(true)
 	}
 }
 
+
 bool noob::font::init_library(const std::string& Mem, const noob::vec2d Dpi) noexcept(true)
 {
 	dpi = Dpi;
@@ -82,22 +83,18 @@ bool noob::font::init_glyphs(const std::string& Characters, uint16_t FontSize) n
 
 		const uint32_t min_dim = 64;
 		const uint32_t max_dim = 2048; // TODO: Set to implementation-specific max value.
-
+		
+		// Preserve squareness.
 		for (uint32_t dim = min_dim; dim < max_dim + 1; dim *= 2)
 		{
 			if (init_glyphs_helper(codepoints, noob::vec2ui(dim, dim)))
 			{
-				// TODO: Texture buffer upload code here:
+				noob::logger::log(noob::importance::INFO, noob::concat("[Font] Creating texture atlas of size ", noob::to_string(dim), "*", noob::to_string(dim), " for ", noob::to_string(codepoints.size()), " codepoints."));
 				noob::graphics& gfx = noob::get_graphics();
 				noob::texture_loader_2d texloader;
 				texloader.from_mem_raw(noob::vec2ui(dim, dim), false, noob::pixel_format::R8, atlas->data, dim*dim);
 				tex = gfx.texture_2d(texloader, false);
-				noob::logger::log(noob::importance::INFO, "[Font] Loading texture!");
 				return true;
-			}
-			else
-			{
-				noob::logger::log(noob::importance::INFO, noob::concat("[Font] Tried (and failed) to load an atlas of ", noob::to_string(dim), "*", noob::to_string(dim), "."));
 			}
 		}
 	}
@@ -106,6 +103,18 @@ bool noob::font::init_glyphs(const std::string& Characters, uint16_t FontSize) n
 		noob::logger::log(noob::importance::ERROR, "[Font] Tried initializing glyphs with invalid freetype state. Didn't continue.");
 	}
 	return false;
+}
+
+
+bool noob::font::has_glyph(uint32_t CodePoint) noexcept(true)
+{
+	const noob::fast_hashtable::cell* test = codepoints_to_glyphs.lookup(CodePoint);
+	if (codepoints_to_glyphs.is_valid(test))
+	{
+		return true;
+	}
+
+	return false;//noob::return_type<noob::font::glyph>();
 }
 
 
@@ -131,9 +140,16 @@ bool noob::font::init_glyphs_helper(const std::vector<uint32_t>& CodePoints, con
 			{
 				FT_GlyphSlot slot = ft_face->glyph;
 				FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
-				noob::logger::log(noob::importance::INFO, noob::concat("[Font] Trying to get atlas region of size ", noob::to_string(slot->bitmap.width), "*", noob::to_string(slot->bitmap.rows), " for codepoint ", noob::to_string(cp)));
+
+				if (slot->bitmap.width == 0 || slot->bitmap.rows == 0)
+				{
+					noob::logger::log(noob::importance::WARNING, noob::concat("[Font] Got glyph with area zero! Codepoint = ", noob::to_string(cp), ", width/height = ", noob::to_string(slot->bitmap.width), "/", noob::to_string(slot->bitmap.rows) ));
+					break;
+				}
+
 				const ftgl::ivec4 reg = ftgl::texture_atlas_get_region(atlas, slot->bitmap.width, slot->bitmap.rows);
-				if (reg.height > 0) // If the atlas hasn't run out of space
+				
+				if (reg.height > 0) // If our atlas hasn't run out of space
 				{
 					texture_atlas_set_region(atlas, reg.x, reg.y, reg.width, reg.height, slot->bitmap.buffer, 1);
 					stored_glyphs.push_back(noob::font::glyph(noob::vec2ui(reg.width, reg.height), noob::vec2ui(reg.x, reg.y), noob::vec2ui(AtlasDims[0], AtlasDims[1])));

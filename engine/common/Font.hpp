@@ -10,9 +10,11 @@
 #include <noob/math/math_funcs.hpp>
 #include <noob/fast_hashtable/fast_hashtable.hpp>
 
+#include <hb.h>
+#include <hb-ft.h>
 // Freetype-specific
-#include <ft2build.h>
-#include FT_FREETYPE_H  
+//#include <ft2build.h>
+//#include FT_FREETYPE_H  
 
 
 #include "Texture.hpp"
@@ -77,7 +79,7 @@ namespace noob
 			bool init_library(const std::string& Mem, const noob::vec2d Dpi) noexcept(true);
 			// A point is a size the corresponds to 1/72 of an inch.
 			bool init_glyphs(const std::string& Characters, uint16_t SizeInPoints) noexcept(true);
-			noob::return_type<noob::font::glyph> get_glyph(char) noexcept(true);
+			bool has_glyph(uint32_t CodePoint) noexcept(true);
 
 		protected:
 			bool ft_library_valid = false;

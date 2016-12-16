@@ -39,7 +39,7 @@ noob::fast_hashtable::~fast_hashtable()
 //----------------------------------------------
 //  noob::fast_hashtable::lookup
 //----------------------------------------------
-noob::fast_hashtable::cell* noob::fast_hashtable::lookup(size_t key)
+noob::fast_hashtable::cell* noob::fast_hashtable::lookup(size_t key) 
 {
 	if (key)
 	{
