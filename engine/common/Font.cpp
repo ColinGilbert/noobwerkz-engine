@@ -106,9 +106,9 @@ bool noob::font::init_glyphs(const std::string& Characters, uint16_t FontSize) n
 }
 
 
-bool noob::font::has_glyph(uint32_t CodePoint) noexcept(true)
+bool noob::font::has_glyph(uint32_t CodePoint) const noexcept(true)
 {
-	const noob::fast_hashtable::cell* test = codepoints_to_glyphs.lookup(CodePoint);
+	const noob::fast_hashtable::cell* const test = codepoints_to_glyphs.lookup_immutable(CodePoint);
 	if (codepoints_to_glyphs.is_valid(test))
 	{
 		return true;
