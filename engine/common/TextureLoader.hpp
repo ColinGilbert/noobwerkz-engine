@@ -21,8 +21,10 @@ namespace noob
 			// These use stb_image
 			void from_mem(const std::string& Data, bool Compressed) noexcept(true);
 			void from_fs(const std::string& Data, bool Compressed) noexcept(true);
+			
 			// This one is for when you need to make a texture manually.
-			void from_mem_raw(const noob::vec2ui Dims, bool Mipped, noob::pixel_format PixelFormat, const uint8_t* Buffer) noexcept(true);
+			// NOTE: The buffer is the programmer's responsibility and must stay in scope until the texture is done loading.
+			void from_mem_raw(const noob::vec2ui Dims, bool Mipped, noob::pixel_format PixelFormat, const uint8_t* BufferHead, uint32_t BufferSize) noexcept(true);
 
 			bool valid() const noexcept(true);
 			bool compressed() const noexcept(true);

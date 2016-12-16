@@ -78,11 +78,23 @@ void noob::texture_loader_2d::from_mem(const std::string& Data, bool Compressed)
 }
 
 
-void from_mem_raw(const noob::vec2ui Dims, bool Mipped, noob::pixel_format PixelFormat, const uint8_t* Buffer) noexcept(true)
+void noob::texture_loader_2d::from_mem_raw(const noob::vec2ui Dims, bool Mipped, noob::pixel_format PixelFormat, const uint8_t* BufferHead, uint32_t BufferSize) noexcept(true)
 {
-	if (Dims[0] < 1 || Dims[1] < 1) return;
-	const uint32_t num_mips = noob::get_num_mips(Dims);
-	
+	// TODO: Replace with proper measurements. These are just *very* limited heuristics.
+	if (Dims[0] < 1 || Dims[1] < 1 || BufferSize == 0) 
+	{
+		is_valid = false;
+		buf_size = 0;
+		internal_buffer = nullptr;
+		return;
+	}
+	is_valid = true;
+	is_mipped = Mipped;
+	is_compressed = noob::is_compressed(PixelFormat);
+	dims = Dims;
+	pixels = PixelFormat;
+	internal_buffer = const_cast<uint8_t*>(BufferHead);
+	buf_size = BufferSize;
 }
 
 

@@ -219,5 +219,37 @@ namespace noob
 	}
 
 
+	static bool is_compressed(noob::pixel_format Pixels)
+	{
+		bool results;
+		switch(Pixels)
+		{
+			case(noob::pixel_format::RGB8_COMPRESSED):
+			case(noob::pixel_format::SRGB8_COMPRESSED):
+			case(noob::pixel_format::RGB8_A1_COMPRESSED):
+			case(noob::pixel_format::SRGB8_A1_COMPRESSED):
+			case(noob::pixel_format::RGBA8_COMPRESSED):
+			case(noob::pixel_format::SRGBA8_COMPRESSED):
+				results = true;
+				break;
+			default:
+				results = false;
+				break;
+		}
+
+		return results;
+	}
+
+	// rgb8a1 == same size
+	static uint32_t get_compressed_size_rgb8(uint32_t Width, uint32_t Height)
+	{
+		return std::ceil(Width / 4) * std::ceil(Height / 4) * 8;
+	}
+
+
+	static uint32_t get_compressed_size_rgba8(uint32_t Width, uint32_t Height)
+	{
+		return std::ceil(Width / 4) * std::ceil(Height / 4) * 16;
+	}
 
 }

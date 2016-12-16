@@ -1,9 +1,11 @@
 #include "Application.hpp"
-
+#include "Font.hpp"
 
 
 std::unique_ptr<std::string> message_profiling, message_collision;
 noob::actor_handle ah;
+
+noob::font example_font;
 
 std::string test_message;
 
@@ -36,6 +38,18 @@ bool noob::application::user_init()
 	const noob::shape_handle scenery_shp = g.sphere_shape(10.0);// g.box_shape(50.0, 20.0, 50.0);
 	const noob::scenery_handle sc_h = stage.scenery(scenery_shp, noob::vec3f(0.0, 0.0, 0.0), noob::versorf(0.0, 0.0, 0.0, 1.0));//versor_from_axis_rad(0.0, 0.0, 0.0, 1.0)); // 0 rad rotation, facing up
 	const noob::reflectance_handle rh = g.reflectances.add(r);
+	bool font_good = example_font.init_library(noob::load_file_as_string(noob::concat(*prefix, "font/OpenDyslexic-Regular.ttf")), dpi);
+	bool glyphs_good = example_font.init_glyphs("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-=_+`~[]{}|;:<>,./?'", 36);	
+
+	if (!font_good)
+	{
+		noob::logger::log(noob::importance::ERROR, "[UserApp] Font not loaded.");
+	}
+	if (!glyphs_good)
+	{
+		noob::logger::log(noob::importance::ERROR, "[UserApp] Glyphs not loaded.");
+
+	}
 
 /*
 	const float actor_dims = 2.0;
