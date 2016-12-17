@@ -1,7 +1,7 @@
 /*
  * This source file is part of the bstring string library.  This code was
- * written by Paul Hsieh in 2002-2006, and is covered by the BSD open source 
- * license. Refer to the accompanying documentation for details on usage and 
+ * written by Paul Hsieh in 2002-2015, and is covered by the BSD open source
+ * license. Refer to the accompanying documentation for details on usage and
  * license.
  */
 
@@ -26,7 +26,7 @@ size_t i;
 		if (0 > bcatblk (b, buf, elsize)) break;
 		buf = (const void *) (elsize + (const char *) buf);
 	}
-	return (int) i;	
+	return (int) i;
 }
 
 int test0 (void) {
@@ -349,7 +349,7 @@ int c;
 }
 
 int test13 (void) {
-struct tagbstring t0 = bsStatic ("Random String");
+struct tagbstring t0 = bsStatic ("Random String, long enough to cause to reallocing");
 struct vfgetc vctx;
 bstring b;
 int ret = 0;
@@ -368,7 +368,7 @@ int i;
 		h = b->data;
 		bSecureDestroy (b);
 
-		/* WARNING! Technically unsound code follows: */
+		/* WARNING! Technically undefined code follows (h has been freed): */
 		ret += (0 == memcmp (h, t0.data, t0.slen));
 
 		if (ret) break;
@@ -376,6 +376,23 @@ int i;
 
 	printf ("\t# failures: %d\n", ret);
 
+	return ret;
+}
+
+int test14_aux(bstring b, const char* chkVal) {
+int ret = 0;
+	ret += 0 != bSGMLEncode (b);
+	ret += 1 != biseqcstr (b, chkVal);
+	return ret;
+}
+
+int test14 (void) {
+bstring b;
+int ret = 0;
+
+	printf ("TEST: bSGMLEncode.\n");
+	ret += test14_aux (b = bfromStatic ("<\"Hello, you, me, & world\">"), "&lt;&quot;Hello, you, me, &amp; world&quot;&gt;");
+	printf ("\t# failures: %d\n", ret);
 	return ret;
 }
 
@@ -398,6 +415,7 @@ int ret = 0;
 	ret += test11 ();
 	ret += test12 ();
 	ret += test13 ();
+	ret += test14 ();
 
 	printf ("# test failures: %d\n", ret);
 

@@ -9,13 +9,6 @@
 // With any luck, this class should become obsolete.
 namespace noob
 {
-	static std::string load_file_as_string(const std::string& filename)
-	{
-		std::ifstream input(filename);
-		return std::string(std::istreambuf_iterator<char>(input), std::istreambuf_iterator<char>());
-	}
-
-
 #if NOOB_PLATFORM_ANDROID
 #include <android/log.h>
 
@@ -42,4 +35,12 @@ namespace noob
 
 #endif
 	typedef logger_impl<log_funct> logger;
+
+
+	static std::string load_file_as_string(const std::string& Filename)
+	{
+		noob::logger::log(noob::importance::INFO, noob::concat("[Utils] Attempting to load file: ", Filename));
+		std::ifstream input(Filename);
+		return std::string(std::istreambuf_iterator<char>(input), std::istreambuf_iterator<char>());
+	}
 }

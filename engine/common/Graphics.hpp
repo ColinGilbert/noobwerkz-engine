@@ -57,9 +57,11 @@ namespace noob
 			void upload_terrain_uniforms() const noexcept(true);
 
 			// These are VBO buffer mapping/unmapping methods
-			// TODO: Split into several functions
+			// TODO: Refactor into more generic functions
 			noob::gpu_write_buffer map_instanced_data_buffer(noob::model_handle, noob::model::instanced_data_type, uint32_t Min, uint32_t Max) const noexcept(true);
-			noob::gpu_write_buffer map_terrain_buffer(uint32_t Min, uint32_t Max) const noexcept(true); // uint32_t Min, uint32_t Max) const noexcept(true);			
+			noob::gpu_write_buffer map_terrain_buffer(uint32_t Min, uint32_t Max) const noexcept(true);
+			noob::gpu_write_buffer map_text_buffer(uint32_t Index, uint32_t Min, uint32_t Max) const noexcept(true);
+			
 			// NOTE: MUST be called as soon as you're finished using a mapped buffer!
 			void unmap_buffer() const noexcept(true);
 
@@ -105,6 +107,10 @@ namespace noob
 
 		protected:
 			std::vector<noob::model> models;
+			std::vector<noob::model> text_buffers;
+
+			// std::vector<noob::tex_buffer> text_buffers; // Indexed via font_handle, for the most part.
+			
 			noob::model terrain_model;
 
 			std::vector<noob::texture_1d> textures_1d;

@@ -451,6 +451,31 @@ noob::gpu_write_buffer noob::graphics::map_terrain_buffer(uint32_t Min, uint32_t
 }
 
 
+noob::gpu_write_buffer noob::graphics::map_text_buffer(uint32_t Idx, uint32_t Min, uint32_t Max) const noexcept(true)
+{
+/*	
+	if (Max < max_text_verts)
+	{
+		// glBindVertexArray(terrain_model.vao);
+		glBindBuffer(GL_ARRAY_BUFFER, terrain_model.vertices_vbo);
+		check_error_gl();
+
+		const uint32_t total_size = noob::model::text_stride * (Max - Min);
+
+		float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, Min, Max, GL_MAP_WRITE_BIT));
+		check_error_gl();
+
+		if (ptr != nullptr)
+		{
+			return noob::gpu_write_buffer(ptr, total_size / sizeof(float));
+		}
+	}
+*/	
+	
+	return noob::gpu_write_buffer::make_invalid();	
+}
+
+
 void noob::graphics::unmap_buffer() const noexcept(true)
 {
 	glUnmapBuffer(GL_ARRAY_BUFFER);

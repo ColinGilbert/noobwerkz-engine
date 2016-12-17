@@ -479,7 +479,6 @@ Other problems not addressed:
    implement such things at this low a level is that it is typically more
    efficient to use locks in higher level primitives. There is also no
    platform independent way to implement locks or mutexes.
-4. Unicode/widecharacter support.
 
 Note that except for spotty support of wide characters, the default C
 standard library does not address any of these problems either.
@@ -487,9 +486,33 @@ standard library does not address any of these problems either.
 Configurable compilation options
 --------------------------------
 
-All configuration options are meant solely for the purpose of compiler
-compatibility.  Configuration options are not meant to change the semantics
-or capabilities of the library, except where it is unavoidable.
+The Better String Library is not an application, it is a library.  To compile
+it, you need to compile bstrlib.c to an object file that is linked to your
+application.  A Makefile might contain entries such as the following to
+accomplish this:
+
+BSTRDIR = $(CDIR)/bstrlib
+INCLUDES = -I$(BSTRDIR)
+BSTROBJS = $(ODIR)/bstrlib.o
+DEFINES =
+CFLAGS = -O3 -Wall -pedantic -ansi -s $(DEFINES)
+
+application: $(ODIR)/main.o $(BSTROBJS)
+	echo Linking: $@
+	$(CC) $< $(BSTROBJS) -o $@
+
+$(ODIR)/%.o : $(BSTRDIR)/%.c
+	echo Compiling: $<
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+$(ODIR)/%.o : %.c
+	echo Compiling: $<
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+You can configure bstrlib using with the standard macro defines passed to
+the compiler.  All configuration options are meant solely for the purpose of
+compiler compatibility.  Configuration options are not meant to change the
+semantics or capabilities of the library, except where it is unavoidable.
 
 Since some C++ compilers don't include the Standard Template Library and some
 have the options of disabling exception handling, a number of macros can be
@@ -570,27 +593,64 @@ Note that these macros must be defined consistently throughout all modules
 that use bstrings or CBStrings including bstrlib.c, bstraux.c and
 bstrwrap.cpp.
 
+Version
+-------
+
+Current release: v1.0.0
+
+The version format v[Major].[Minor].[Update] is used to facilitate
+developers with backward compatibility in the core developer branch of the
+Better String Library.  This is also reflected in the macro symbols
+BSTR_VER_MAJOR, BSTR_VER_MINOR and BSTR_VER_UPDATE in the bstrlib.h file.
+Differences in the Major version imply that there has been a change in the
+API, and that a recompile and usage source changes may be necessary.
+Differences in Minor version imply that there has been an expansion of the
+API, that backward compatibility should be preserved and that at most a
+recompile is necessary (unless there is a namespace collision).  Differences
+in Update imply that no API change has occurred.
+
+Although ordered, there is no implication of lexical sequencing.  In
+particular, the Update number will not reset to 0 as the Major and Minor
+version numbers increment.
+
+So simple bug fixes will usually be reflected in a change in the Update
+number.  If new functions are available, the Minor value will increment.
+If any function changes its parameters, or if a function is removed, the
+Major value will increment.
+
+
 ===============================================================================
 
 Files
 -----
 
+Core C files (required for C and C++):
 bstrlib.c       - C implementaion of bstring functions.
 bstrlib.h       - C header file for bstring functions.
-bstraux.c       - C example that implements trivial additional functions.
-bstraux.h       - C header for bstraux.c
-bstest.c        - C unit/regression test for bstrlib.c
 
+Core C++ files (required for C++):
 bstrwrap.cpp    - C++ implementation of CBString.
 bstrwrap.h      - C++ header file for CBString.
-test.cpp        - C++ unit/regression test for bstrwrap.cpp
 
+Base Unicode support:
+utf8util.c      - C implemention of generic utf8 parsing functions.
+utf8util.h      - C head file for generic utf8 parsing functions.
+buniutil.c      - C implemention utf8 bstring packing and unpacking functions.
+buniutil.h      - C header file for utf8 bstring functions.
+
+Extra utility functions:
+bstraux.c       - C example that implements trivial additional functions.
+bstraux.h       - C header for bstraux.c
+
+Miscellaneous:
+bstest.c        - C unit/regression test for bstrlib.c
+test.cpp        - C++ unit/regression test for bstrwrap.cpp
 bsafe.c         - C runtime stubs to abort usage of unsafe C functions.
 bsafe.h         - C header file for bsafe.c functions.
 
-C projects need only include bstrlib.h and compile/link bstrlib.c to use the
-bstring library.  C++ projects need to additionally include bstrwrap.h and
-compile/link bstrwrap.cpp.  For both, there may be a need to make choices
+C modules need only include bstrlib.h and compile/link bstrlib.c to use the
+basic bstring library.  C++ projects need to additionally include bstrwrap.h
+and compile/link bstrwrap.cpp.  For both, there may be a need to make choices
 about feature configuration as described in the "Configurable compilation
 options" in the section above.
 
@@ -628,7 +688,9 @@ The functions
 
     Create a bstring which contains the contents of the '\0' terminated
     char * buffer str.  The memory buffer backing the bstring is at least
-    mlen characters in length.  If an error occurs NULL is returned.
+    mlen characters in length.  The buffer is also at least size required
+    to hold the string with the '\0' terminator.  If an error occurs NULL
+    is returned.
 
     So for example:
 
@@ -639,6 +701,27 @@ The functions
     least 64 characters long otherwise do nothing.  And we know this is well
     defined so long as b was successfully created, since it will have been
     allocated with at least 64 characters.
+
+    ..........................................................................
+
+    extern bstring bfromcstrrangealloc (int minl, int maxl, const char* str);
+
+    Create a bstring which contains the contents of the '\0' terminated
+    char * buffer str.  The memory buffer backing the string is at least
+    minl characters in length, but an attempt is made to allocate up to
+    maxl characters.  The buffer is also at least size required to hold
+    the string with the '\0' terminator.  If an error occurs NULL is
+    returned.
+
+    So for example:
+
+    bstring b = bfromcstrrangealloc (0, 128, "Hello.");
+    if (b) b->data[5] = '!';
+
+    The idea is that this will set the 6th character of b to '!' if it was
+    allocated otherwise do nothing.  And we know this is well defined so
+    long as b was successfully created, since it will have been allocated
+    with at least 7 (strlen("Hello.")) characters.
 
     ..........................................................................
 
@@ -796,6 +879,17 @@ The functions
 
     ..........................................................................
 
+    extern int biseqcaselessblk (const_bstring b, const void * blk, int len);
+
+    Compare content of b and the array of bytes in blk for length len for
+    equality without differentiating between character case.  If the content
+    differs other than in case, 0 is returned, if, ignoring case, the content
+    is the same, 1 is returned, if there is an error, -1 is returned.  If the
+    length of the strings are different, this function is O(1).  '\0'
+    termination characters are not treated in any special way.
+
+    ..........................................................................
+
     extern int bisstemeqcaselessblk (const_bstring b0, const void * blk, int len);
 
     Compare beginning of bstring b0 with a block of memory of length len
@@ -803,6 +897,16 @@ The functions
     differs from the memory block other than in case (or if b0 is too short),
     0 is returned, if the bstrings are the same, 1 is returned, if there is an
     error, -1 is returned.
+
+    ..........................................................................
+
+    int biseqblk (const_bstring b, const void * blk, int len)
+
+    Compare the string b with the character block blk of length len.  If the
+    content differs, 0 is returned, if the content is the same, 1 is returned,
+    if there is an error, -1 is returned.  If the length of the strings are
+    different, this function is O(1).  '\0' characters are not treated in
+    any special way.
 
     ..........................................................................
 
@@ -1050,6 +1154,16 @@ The functions
 
     ..........................................................................
 
+    int binsertblk (bstring b, int pos, const void * blk, int len,
+                    unsigned char fill)
+
+    Inserts the block of characters at blk with length len into b at position
+    pos.  If the position pos is past the end of b, then the character "fill"
+    is appended as necessary to make up the gap between the end of b1 and pos.
+    Unlike bsetstr, binsert does not allow b2 to be NULL.
+
+    ..........................................................................
+
     extern int binsertch (bstring s1, int pos, int len, unsigned char fill);
 
     Inserts the character fill repeatedly into s1 at position pos for a
@@ -1236,7 +1350,7 @@ The functions
     of this function, and performance varies wildly depending on the
     assumptions made.  For a complete list of bstring data type it is
     recommended that the C++ public std::vector<CBString> be used, since its
-    semantics are usage are more standard.
+    semantics and usage are more standard.
 
     ..........................................................................
 
@@ -1302,6 +1416,15 @@ The functions
     should result in a copy of b, if s->slen is 1.  If there is an error NULL
     is returned, otherwise a bstring with the correct result is returned.
     See bstrListCreate() above for structure of struct bstrList.
+
+    ..........................................................................
+
+    bstring bjoinblk (const struct bstrList * bl, void * blk, int len);
+
+    Join the entries of a bstrList into one bstring by sequentially
+    concatenating them with the content from blk for length len in between.
+    If there is an error NULL is returned, otherwise a bstring with the
+    correct result is returned.
 
     ..........................................................................
 
@@ -1918,6 +2041,88 @@ The macros
 
     ..........................................................................
 
+    bstring bfromStatic("...");
+
+    Allocate a bstring with the contents of a string literal.  Returns
+    NULL if an error has occurred (ran out of memory).  The string literal
+    parameter is enforced as literal at compile time.
+
+    ..........................................................................
+
+    int bcatStatic (bstring b, "...");
+
+    Append a string literal to bstring b.  Returns 0 if successful, or
+    BSTR_ERR if some error has occurred.  The string literal parameter is
+    enforced as literal at compile time.
+
+    ..........................................................................
+
+    int binsertStatic (bstring s1, int pos, " ... ", char fill);
+
+    Inserts the string literal into s1 at position pos.  If the position pos
+    is past the end of s1, then the character "fill" is appended as necessary
+    to make up the gap between the end of s1 and pos.  The value BSTR_OK is
+    returned if the operation is successful, otherwise BSTR_ERR is returned.
+
+    ..........................................................................
+
+    int bassignStatic (bstring b, " ... ");
+
+    Assign the contents of a string literal to the bstring b.  The string
+    literal parameter is enforced as literal at compile time.
+
+    ..........................................................................
+
+    int biseqStatic (const_bstring b, " ... ");
+
+    Compare the string b with the string literal.  If the content differs, 0
+    is returned, if the content is the same, 1 is returned, if there is an
+    error, -1 is returned.  If the length of the strings are different, this
+    function is O(1).  '\0' characters are not treated in any special way.
+
+    ..........................................................................
+
+    int biseqcaselessStatic (const_bstring b, " ... ");
+
+    Compare content of b and the string literal for equality without
+    differentiating between character case.  If the content differs other
+    than in case, 0 is returned, if, ignoring case, the content is the same,
+    1 is returned, if there is an error, -1 is returned.  If the length of
+    the strings are different, this function is O(1).  '\0' characters are
+    not treated in any special way.
+
+    ..........................................................................
+
+    int bisstemeqStatic (bstring b, " ... ");
+
+    Compare beginning of bstring b with a string literal for equality.  If
+    the beginning of b differs from the memory block (or if b is too short),
+    0 is returned, if the bstrings are the same, 1 is returned, if there is
+    an error, -1 is returned.  The string literal parameter is enforced as
+    literal at compile time.
+
+    ..........................................................................
+
+    int bisstemeqcaselessStatic (bstring b, " ... ");
+
+    Compare beginning of bstring b with a string literal without
+    differentiating between case for equality.  If the beginning of b differs
+    from the memory block other than in case (or if b is too short), 0 is
+    returned, if the bstrings are the same, 1 is returned, if there is an
+    error, -1 is returned.  The string literal parameter is enforced as
+    literal at compile time.
+
+    ..........................................................................
+
+    bstring bjoinStatic (const struct bstrList * bl, " ... ");
+
+    Join the entries of a bstrList into one bstring by sequentially
+    concatenating them with the string literal in between.  If there is an
+    error NULL is returned, otherwise a bstring with the correct result is
+    returned.  See bstrListCreate() above for structure of struct bstrList.
+
+    ..........................................................................
+
     void bvformata (int& ret, bstring b, const char * format, lastarg);
 
     Append the bstring b with printf like formatting with the format control
@@ -1974,6 +2179,120 @@ The macros
     int biswriteprotected (struct tagbstring& t);
 
     Returns 1 if the bstring is write protected, otherwise 0 is returned.
+
+===============================================================================
+
+Unicode functions
+-----------------
+
+    The two modules utf8util.c and buniutil.c implement basic functions for
+    parsing and collecting Unicode data in the UTF8 format.  Unicode is
+    described by a sequence of "code points" which are values between 0 and
+    1114111 inclusive mapped to symbol content corresponding to nearly all
+    the standardized scripts of the world.
+
+    The semantics of Unicode code points is varied and complicated.  The
+    base support of the better string library does not attempt to perform
+    any interpretation of these code points.  The better string library
+    solely provides support for iterating through unicode code points,
+    appending and extracting code points to and from bstrings, and parsing
+    UTF8 and UTF16 from raw data.
+
+    The types cpUcs4 and cpUcs2 respectively are defined as 4 byte and 2 byte
+    encoding formats corresponding to UCS4 and UCS2 respectively.  To test
+    if a raw code point is valid, the macro isLegalUnicodeCodePoint() has
+    been defined.  The utf8 iterator is defined by struct utf8Iterator.  To
+    test if the iterator has more code points to walk through the macro
+    utf8IteratorNoMore() has been defined.
+
+    To use these functions compile and link utf8util.c and buniutil.c
+
+    ..........................................................................
+
+    extern void utf8IteratorInit (struct utf8Iterator* iter,
+                                  unsigned char* data, int slen);
+
+    Initialize a unicode utf8 iterator to traverse an array of utf8 encoded
+    code points pointed to by data, with length slen from the start.  The
+    iterator iter is only valid for as long as the array it is pointed to
+    is valid and not modified.
+
+    ..........................................................................
+
+    extern void utf8IteratorUninit (struct utf8Iterator* iter);
+
+    Invalidate utf8 iterator.  After calling this the iterator iter, should
+    yield false when passed to the utf8IteratorNoMore() macro.
+
+    ..........................................................................
+
+    extern cpUcs4 utf8IteratorGetNextCodePoint (struct utf8Iterator* iter,
+                                                cpUcs4 errCh);
+
+    Parse code point the iterator is pointing at and advance the iterator to
+    the next code point.  If the iterator was pointing at a valid code point
+    the code point is returned, otherwise, errCh will be returned.
+
+    ..........................................................................
+
+    extern cpUcs4 utf8IteratorGetCurrCodePoint (struct utf8Iterator* iter,
+                                                cpUcs4 errCh);
+
+    Parse code point the iterator is pointing at.  If the iterator was
+    pointing at a valid code point the code point is returned, otherwise,
+    errCh will be returned.
+
+    ..........................................................................
+
+    extern int utf8ScanBackwardsForCodePoint (unsigned char* msg, int len,
+                                              int pos, cpUcs4* out);
+
+    From the position "pos" in the array msg of length len, search for the
+    last position before or at pos where from which a valid Unicode code
+    point can be parsed.  If such an offset is found it is returned otherwise
+    a negative value is returned.  The code point parsed is put into *out if
+    it is not NULL.
+
+    ..........................................................................
+
+    extern int buIsUTF8Content (const_bstring bu);
+
+    Scan a bstring and determine if it is made entirely of unicode code
+    valid points.  If it is, 1 is returned, otherwise 0 is returned.
+
+    ..........................................................................
+
+    extern int buAppendBlkUcs4 (bstring b, const cpUcs4* bu, int len,
+                                cpUcs4 errCh);
+
+    Append the code points passed in the UCS4 format (raw numbers) in the
+    array bu of length len.  Any unparsable characters are replaced by errCh.
+    If errCh is not a valid Unicode code point, then parsing errors will cause
+    BSTR_ERR to be returned.
+
+    ..........................................................................
+
+    extern int buGetBlkUTF16 (cpUcs2* ucs2, int len, cpUcs4 errCh,
+                              const_bstring bu, int pos);
+
+    Convert a string of UTF8 codepoints (bu), skipping the first pos, into a
+    sequence of UTF16 encoded code points.  Returns the number of UCS2 16-bit
+    words written to the output.  No more than len words are written to the
+    target array ucs2.  If any code point in bu is unparsable, it will be
+    translated to errCh.
+
+    ..........................................................................
+
+    extern int buAppendBlkUTF16 (bstring bu, const cpUcs2* utf16, int len,
+                                 cpUcs2* bom, cpUcs4 errCh);
+
+    Append an array of UCS2 code points (utf16) to UTF8 codepoints (bu).  Any
+    invalid code point is replaced by errCh.  If errCh is itself not a
+    valid code point, then this translation will halt upon the first error
+    and return BSTR_ERR.  Otherwise BSTR_OK is returned.  If a byte order mark
+    has been previously read, it may be passed in as bom, otherwise if *bom is
+    set to 0, it will be filled in with the BOM as read from the first
+    character if it is a BOM.
 
 ===============================================================================
 
@@ -3138,6 +3457,31 @@ time rather than run time.  Non-resizability is also interesting, however,
 it seems marginal (i.e., to want a string that cannot be resized, yet can be
 modified and yet where a fixed sized buffer is undesirable.)
 
+Libsrt
+------
+
+This is a length based string library based on a slightly different strategy.
+The string contents are appended to the end of the header directly so strings
+only require a single allocation.  However, whenever a reallocation occurs,
+the header is replicated and the base pointer for the string is changed.
+That means references to the string are only valid so long as they are not
+resized after any such reference is cached.  The internal structure maintains
+a lot some state used to accelerate unicode manipulation.  This state is
+dynamically updated according to usage (so, like Bstrlib, it supports both
+a binary mode and a Unicode mode basically all the time).  But this makes
+sustainable usage of the library essentially opaque.  This also creates a
+bottleneck for whatever extensions to the library one desires (write all
+extensions on top of the base library, put in a request to the author, or
+dedicate an expert to learn the internals of the library).
+
+SDS
+---
+
+Sds uses a strategy very similar to Libsrt.  However, it uses some dynamic
+headers to decrease the overhead for very small strings.  This requires an
+extra switch statement for access to each string attribute.  The source code
+appears to use gcc/clang extensions, and thus it is not portable.
+
 ===============================================================================
 
 Examples
@@ -3194,8 +3538,10 @@ John Kortink
 Manuel Woelker
 Marcel van Kervinck
 Michael Hsieh
+Mike Steinert
 Richard A. Smith
 Simon Ekstrom
 Wayne Scott
+Zed A. Shaw
 
 ===============================================================================

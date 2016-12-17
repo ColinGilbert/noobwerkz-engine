@@ -6,7 +6,7 @@ set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
 # Current Bullet bug: -ftrapv causes crash on Android.
-set(NOOB_COMMON_FLAGS "-Werror=return-type -DHAVE_UCDN -DHAVE_OT -DHB_NO_MT")
+set(NOOB_COMMON_FLAGS "-Werror=return-type -DHAVE_UCDN -DHAVE_OT -DHB_NO_MT -DBSTRLIB_DOESNT_THROW_EXCEPTIONS")
 
 set(NOOB_COMMON_C_FLAGS "-DSTB_IMAGE_STATIC -DFT2_BUILD_LIBRARY")
 set(NOOB_COMMON_CXX_FLAGS "-std=c++14 -fno-exceptions -fno-rtti -DEIGEN_MPL2_ONLY")
