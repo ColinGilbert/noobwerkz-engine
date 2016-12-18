@@ -1,3 +1,8 @@
+Dec. 18th, 2016
+```
+Been reading up a lot on Harfbuzz and Unicode last week. I've almost finished implementing text-shaping with Harfbuzz, along with an incidental refactoring of the graphics API.
+```
+
 Dec 11th, 2016
 ```
 Yesterday, the terrain shader finally worked. Today, I templated all the math functions. That part of a bit painful but now we're far better off.

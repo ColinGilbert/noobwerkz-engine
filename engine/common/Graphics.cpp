@@ -8,7 +8,6 @@
 #include <GLES3/gl3.h>
 
 // Project-local
-#include "GraphicsGLInternal.hpp"
 #include "ShadersGL.hpp"
 #include "NoobUtils.hpp"
 #include "StringFuncs.hpp"

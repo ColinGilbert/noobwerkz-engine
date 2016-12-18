@@ -1,4 +1,4 @@
-Copyright 2015, Colin Gilbert
+Copyright 2015 - 2016, Colin Gilbert
 
 Apache License
 
