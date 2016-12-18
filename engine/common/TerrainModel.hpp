@@ -1,16 +1,14 @@
-#pragma once
+// Terrain is dynamically generated from scenery and uploaded whenever needed. Our 
 
-#include <noob/component/component.hpp>
+#pragma once
 
 #include "Model.hpp"
 
 namespace noob
 {
-	struct terrain_model
+	struct terrain_model : public model_buffered
 	{
 		static constexpr uint32_t stride = sizeof(noob::vec4f) * 3;
-		noob::model_basic base;
+		uint32_t n_vertices;
 	};
-
-	typedef noob::handle<noob::terrain_model> terrain_model_handle;
 }

@@ -90,7 +90,7 @@ namespace noob
 
 		protected:
 			
-			noob::model_handle model;
+			noob::billboard_buffer_handle model;
 			noob::texture_2d_handle tex;
 
 			noob::vec2d dpi;

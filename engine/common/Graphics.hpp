@@ -17,6 +17,12 @@
 #include "ReturnType.hpp"
 #include "Shader.hpp"
 #include "TextureLoader.hpp"
+#include "Model.hpp"
+#include "InstancedModel.hpp"
+#include "TerrainModel.hpp"
+#include "BillboardModel.hpp"
+
+
 
 namespace noob
 {
@@ -42,9 +48,13 @@ namespace noob
 			void set_projection_mat(const noob::mat4f) noexcept(true);
 
 			// Currently, instanced models only support the basic vertex colours. This may change.
-			void draw_instanced(const noob::model_handle, uint32_t NumInstances) const noexcept(true);
-			noob::model_handle model_instanced(const noob::mesh_3d&, uint32_t) noexcept(true);
-			void resize_instanced_data_buffers(noob::model_handle, uint32_t) noexcept(true);
+			void draw(const noob::instanced_model_handle Handle, uint32_t NumInstances) const noexcept(true);
+			noob::instanced_model_handle instanced_model(const noob::mesh_3d& Mesh, uint32_t NumNnstances) noexcept(true);
+			noob::billboard_buffer_handle billboards(uint32_t NumBillboards) noexcept(true);
+
+			void resize_buffers(noob::instanced_model_handle Handle, uint32_t NumInstances) noexcept(true);
+			void resize_buffers(noob::billboard_buffer_handle Handle, uint32_t NumInstances) noexcept(true);
+			
 			void upload_instanced_uniforms() const noexcept(true);
 
 			// Currently implemented as a triplanar-shaded, single-buffer model.
@@ -53,19 +63,21 @@ namespace noob
 			void draw_terrain(uint32_t Verts) const noexcept(true);			
 			void resize_terrain(uint32_t MaxVerts) noexcept(true);
 			uint32_t get_max_terrain_verts() const noexcept(true);
-			void set_terrain_uniforms(const noob::terrain_shading) noexcept(true);
+			void set_terrain_uniforms(const noob::terrain_shading Shading) noexcept(true);
 			void upload_terrain_uniforms() const noexcept(true);
 
 			// These are VBO buffer mapping/unmapping methods
-			// TODO: Refactor into more generic functions
-			noob::gpu_write_buffer map_instanced_data_buffer(noob::model_handle, noob::model::instanced_data_type, uint32_t Min, uint32_t Max) const noexcept(true);
+			// There are two matrices per instance: Model and MVP.
+			noob::gpu_write_buffer map_matrices_buffer(noob::instanced_model_handle Handle, uint32_t Min, uint32_t Max) const noexcept(true);
+			noob::gpu_write_buffer map_colours_buffer(noob::instanced_model_handle Handle, uint32_t Min, uint32_t Max) const noexcept(true);
+			// Terrain vertices each have three vec4f's as attributes: Position (x,y,z,1), normal (x,y,z,0), and colour - with (1,1,1,1) as default.
 			noob::gpu_write_buffer map_terrain_buffer(uint32_t Min, uint32_t Max) const noexcept(true);
-			noob::gpu_write_buffer map_text_buffer(uint32_t Index, uint32_t Min, uint32_t Max) const noexcept(true);
+			// Billboards are buffered as tringle pairs with each vertex using a vec4f (x,y,u,v)
+			noob::gpu_write_buffer map_billboards(noob::billboard_buffer_handle Handle, uint32_t Min, uint32_t Max) const noexcept(true);
 			
 			// NOTE: MUST be called as soon as you're finished using a mapped buffer!
 			void unmap_buffer() const noexcept(true);
 
-			// Texture storage reservers
 			// noob::texture_1d_handle reserve_texture_1d(uint32_t length, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true); // TODO
 			noob::texture_2d_handle texture_2d(const noob::texture_loader_2d&, bool GenMips) noexcept(true);
 			noob::texture_array_2d_handle texture_array_2d(const noob::vec2ui Dims, uint32_t Indices, const noob::texture_info) noexcept(true);
@@ -104,14 +116,11 @@ namespace noob
 			void generate_mips(noob::texture_3d_handle) const noexcept(true);
 
 			noob::graphics::program_handle get_instanced_shader() const noexcept(true);
+			noob::graphics::program_handle get_billboard_shader() const noexcept(true);
 
 		protected:
-			std::vector<noob::model> models;
-			std::vector<noob::model> text_buffers;
-
-			// std::vector<noob::tex_buffer> text_buffers; // Indexed via font_handle, for the most part.
-			
-			noob::model terrain_model;
+			std::vector<noob::instanced_model> instanced_models;
+			noob::terrain_model terrain;
 
 			std::vector<noob::texture_1d> textures_1d;
 			std::vector<noob::texture_2d> textures_2d;
@@ -120,6 +129,7 @@ namespace noob
 
 			noob::graphics::program_handle instanced_shader;
 			noob::graphics::program_handle terrain_shader;
+			noob::graphics::program_handle billboard_shader;
 
 			// These will soon be replaced by proper UBO's and made typesafe. The only reason they're here is to serve as a stable, well-understood prior case example.
 			uint32_t u_eye_pos, u_light_directional;

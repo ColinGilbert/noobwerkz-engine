@@ -1,3 +1,5 @@
+// Instanced models are each given a colour and and model+MVP matrices via VBO's.
+
 #pragma once
 
 #include <noob/component/component.hpp>
@@ -6,14 +8,15 @@
 
 namespace noob
 {
-	struct instanced_model
+	struct instanced_model : public model_indexed
 	{
-		static constexpr uint32_t materials_stride = sizeof(noob::vec4f);
+		static constexpr uint32_t colours_stride = sizeof(noob::vec4f);
 		static constexpr uint32_t matrices_stride = sizeof(noob::mat4f) * 2;
 
-		noob::model_indexed base;
-		uint32_t colours_vbo, matrics_vbo;
+		uint32_t colours_vbo = 0;
+		uint32_t matrices_vbo = 0;
+		uint32_t n_instances = 0;
 	};
 
-	typedef noob::handle<noob::instanced_model> instanced_model_handle;
+	typedef noob::handle<instanced_model> instanced_model_handle;
 }

@@ -4,11 +4,414 @@
 // std
 #include <algorithm>
 
+// External
+#include <GLES3/gl3.h>
+
 // Project-local
 #include "GraphicsGLInternal.hpp"
 #include "ShadersGL.hpp"
 #include "NoobUtils.hpp"
 #include "StringFuncs.hpp"
+
+//////////////////////////////////////////////////////////////
+// Error-checking helper + macro. Good for troubleshooting.
+/////////////////////////////////////////////////////////////
+
+static GLenum check_error_gl(const char *file, int line)
+{
+	GLenum error_code;
+	while ((error_code = glGetError()) != GL_NO_ERROR)
+	{
+		std::string error;
+		switch (error_code)
+		{
+			case GL_INVALID_ENUM:
+				error = "INVALID_ENUM";
+				break;
+			case GL_INVALID_VALUE:              
+				error = "INVALID_VALUE"; 
+				break;
+			case GL_INVALID_OPERATION:            
+				error = "INVALID_OPERATION";
+				break;
+			case GL_OUT_OF_MEMORY:
+				error = "OUT_OF_MEMORY"; 
+				break;
+			case GL_INVALID_FRAMEBUFFER_OPERATION: 
+				error = "INVALID_FRAMEBUFFER_OPERATION";
+				break;
+		}
+		noob::logger::log(noob::importance::ERROR, noob::concat("OpenGL: ", error, " ", file, " (", noob::to_string(line), ")"));
+	}
+	return error_code;
+}
+
+
+#define check_error_gl() check_error_gl(__FILE__, __LINE__) 
+
+///////////////////////////////////////////////////////////
+// This is where we place several other helper functions
+///////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////
+// Various useful formats supported by GLES3:
+///////////////////////////////////////////////
+
+// Uncompressed formats, per-channel:
+// GL_UNSIGNED_BYTE
+// GL_BYTE
+// GL_UNSIGNED_SHORT
+// GL_SHORT
+// GL_UNSIGNED_INT
+// GL_INT
+// GL_HALF_FLOAT
+// GL_FLOAT
+
+// Uncompressed formats, per-pixel:
+// GL_UNSIGNED_SHORT_5_6_5
+// GL_UNSIGNED_SHORT_4_4_4_4
+// GL_UNSIGNED_SHORT_5_5_5_1
+// GL_UNSIGNED_INT_2_10_10_10_REV
+// GL_UNSIGNED_INT_10F_11F_11F_REV
+// GL_UNSIGNED_INT_5_9_9_9_REV
+// GL_UNSIGNED_INT_24_8
+// GL_FLOAT_32_UNSIGNED_INT_24_8_REV.
+
+// Compressed formats (per pixel):
+// GL_COMPRESSED_R11_EAC,
+// GL_COMPRESSED_SIGNED_R11_EAC,
+// GL_COMPRESSED_RG11_EAC,
+// GL_COMPRESSED_SIGNED_RG11_EAC,
+// GL_COMPRESSED_RGB8_ETC2,
+// GL_COMPRESSED_SRGB8_ETC2,
+// GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2,
+// GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2,
+// GL_COMPRESSED_RGBA8_ETC2_EAC, or
+// GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC
+
+
+static GLenum get_gl_storage_format(const noob::pixel_format Pixels)
+{
+	GLenum results;
+
+	switch(Pixels)
+	{
+		case(noob::pixel_format::R8):
+			{
+				results = GL_R8;
+			}
+		case(noob::pixel_format::RG8):
+			{
+				results = GL_RG8;
+			}
+		case(noob::pixel_format::RGB8):
+			{
+				results = GL_RGB8;				
+			}
+		case(noob::pixel_format::SRGB8):
+			{
+				results = GL_SRGB8;		
+			}
+		case(noob::pixel_format::RGBA8):
+			{
+				results = GL_RGBA8;		
+			}
+		case(noob::pixel_format::SRGBA8):
+			{
+				results = GL_SRGB8_ALPHA8;		
+			}
+		case(noob::pixel_format::RGB8_COMPRESSED):
+			{
+				results = GL_COMPRESSED_RGB8_ETC2;		
+			}
+		case(noob::pixel_format::SRGB8_COMPRESSED):
+			{
+				results = GL_COMPRESSED_SRGB8_ETC2;		
+			}
+		case(noob::pixel_format::RGB8_A1_COMPRESSED):
+			{
+				results = GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2;		
+			}
+		case(noob::pixel_format::SRGB8_A1_COMPRESSED):
+			{
+				results = GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2;		
+			}
+		case(noob::pixel_format::RGBA8_COMPRESSED):
+			{
+				results = GL_COMPRESSED_RGBA8_ETC2_EAC;		
+			}
+		case(noob::pixel_format::SRGBA8_COMPRESSED):
+			{		
+				results = GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC;
+			}
+	}
+
+	return results;
+}
+
+
+// This one gives you the "format" and "type" arguments for glTexSubImage2D and glTexSubImage3D
+// Visit: https://www.khronos.org/opengles/sdk/docs/man3/html/glTexSubImage2D.xhtml and https://www.khronos.org/opengles/sdk/docs/man3/html/glTexSubImage3D.xhtml
+// Uou see, OpenGL doesn't simply allow you to use the buffer's storage format as the argument to the the functions that are used to fill the buffer, as that would be far too straightforward.
+// Instead, we must write otherwise pointless functions such as these to make our dreams into reality. Here is me rooting for Vulkan,
+static GLenum get_pixel_format_unsized(noob::pixel_format Pixels)
+{
+	GLenum results;
+
+	switch(Pixels)
+	{
+		case(noob::pixel_format::R8):
+			{
+				results =  GL_RED;
+				break;
+			}
+		case(noob::pixel_format::RG8):
+			{
+				results = GL_RG;
+				break;				
+			}
+		case(noob::pixel_format::RGB8):
+		case(noob::pixel_format::SRGB8):
+			{
+				results = GL_RGB;		
+				break;			
+			}
+		case(noob::pixel_format::RGBA8):
+		case(noob::pixel_format::SRGBA8):
+			{
+				results = GL_RGBA;		
+				break;
+			}
+		default:
+			{
+				noob::logger::log(noob::importance::WARNING, "Invalid value hit while deducing unsized pixel format!");
+				break;
+			}
+	}
+	return results;
+}
+
+
+static GLenum get_wrapping(noob::tex_wrap_mode WrapMode)
+{
+	GLenum results;
+	switch (WrapMode)
+	{
+		case(noob::tex_wrap_mode::CLAMP_TO_EDGE):
+			{
+				results = GL_CLAMP_TO_EDGE;
+				break;
+			}
+		case(noob::tex_wrap_mode::MIRRORED_REPEAT):
+			{
+				results = GL_MIRRORED_REPEAT;
+				break;
+			}
+		case(noob::tex_wrap_mode::REPEAT):
+			{
+				results = GL_REPEAT;
+				break;
+			}
+	};
+	return results;
+}
+
+
+static GLenum get_swizzle(noob::tex_swizzle Swizzle)
+{
+	GLenum results;
+	switch (Swizzle)
+	{
+		case(noob::tex_swizzle::RED):
+			{
+				results = GL_RED;
+				break;
+			}
+		case(noob::tex_swizzle::GREEN):
+			{
+				results = GL_GREEN;
+				break;
+			}
+		case(noob::tex_swizzle::BLUE):
+			{
+				results = GL_BLUE;
+				break;
+			}
+		case(noob::tex_swizzle::ALPHA):
+			{
+				results = GL_ALPHA;
+				break;
+			}
+		case(noob::tex_swizzle::ZERO):
+			{
+				results = GL_ZERO;
+				break;
+			}
+		case(noob::tex_swizzle::ONE):
+			{
+				results = GL_ONE;
+				break;
+			}
+	};
+	return results;
+}
+
+
+static GLuint load_shader_gl(GLenum type, const std::string& shader_arg)
+{
+	GLuint shader;
+	GLint compiled;
+
+	// Create the shader object
+	shader = glCreateShader(type);
+
+	if (shader == 0)
+	{
+		return 0;
+	}
+
+	const char* shader_src = shader_arg.c_str();
+	// Load the shader source
+	glShaderSource(shader, 1, &shader_src, NULL);
+	check_error_gl();
+
+	// Compile the shader
+	glCompileShader(shader);
+	check_error_gl();
+
+	// Check the compile status
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+	check_error_gl();
+
+	if (!compiled)
+	{
+		GLint info_len = 0;
+
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &info_len);
+		check_error_gl();
+
+		if (info_len > 1)
+		{
+			std::string info_log;
+			info_log.resize(info_len);
+
+			glGetShaderInfoLog(shader, info_len, NULL, &info_log[0]);
+			check_error_gl();
+
+			noob::logger::log(noob::importance::ERROR, noob::concat("[Graphics] Error compiling shader: ", info_log));
+		}
+
+		glDeleteShader(shader);
+		check_error_gl();
+
+		return 0;
+	}
+
+	return shader;
+}
+
+
+static GLuint load_program_gl(const std::string& vert_shader_arg, const std::string frag_shader_arg)
+{
+	GLuint vertex_shader;
+	GLuint fragment_shader;
+	GLuint program_object;
+	GLint linked;
+
+	// Just to make sure no dirty state gets to ruin our shader compile. :)
+	glBindVertexArray(0);
+
+	const char* vert_shader_src = vert_shader_arg.c_str();
+	// Load the vertex/fragment shaders
+	vertex_shader = load_shader_gl(GL_VERTEX_SHADER, vert_shader_arg);
+	check_error_gl();
+
+	if (vertex_shader == 0)
+	{
+		return 0;
+	}
+
+	const char* frag_shader_src  = frag_shader_arg.c_str();
+	fragment_shader = load_shader_gl(GL_FRAGMENT_SHADER, frag_shader_arg);
+	check_error_gl();
+
+	if (fragment_shader == 0)
+	{
+		glDeleteShader(vertex_shader);
+		return 0;
+	}
+
+	// Create the program object
+	program_object = glCreateProgram();
+	check_error_gl();
+
+	if (program_object == 0)
+	{
+		return 0;
+	}
+
+	glAttachShader(program_object, vertex_shader);
+	check_error_gl();
+
+	glAttachShader(program_object, fragment_shader);
+	check_error_gl();
+
+	// Link the program
+	glLinkProgram(program_object);
+	check_error_gl();
+
+	// Check the link status
+	glGetProgramiv(program_object, GL_LINK_STATUS, &linked);
+	check_error_gl();
+
+	if (!linked)
+	{
+		GLint info_len = 0;
+
+		glGetProgramiv(program_object, GL_INFO_LOG_LENGTH, &info_len);
+		check_error_gl();
+
+		if (info_len > 1)
+		{
+			std::string info_log;
+			info_log.resize(info_len);
+
+			glGetProgramInfoLog(program_object, info_len, NULL, &info_log[0]);
+			check_error_gl();
+
+			noob::logger::log(noob::importance::ERROR, noob::concat("[Graphics] Error linking program:", info_log));
+
+		}
+
+		glDeleteProgram(program_object);
+		return 0;
+	}
+
+	// Free up no longer needed shader resources
+	glDeleteShader(vertex_shader);
+	check_error_gl();
+	glDeleteShader(fragment_shader);
+	check_error_gl();
+
+	return program_object;
+}
+
+// This allows us to return a texture_id that can be made const by the programmer.
+static GLuint prep_texture()
+{
+	GLuint texture_id;
+
+	glGenTextures(1, &texture_id);
+
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+	
+	return texture_id;
+}
+/////////////////////////////////////////////////////////////////////////
+// Finally, this is where the implementation of the interface begins.
+/////////////////////////////////////////////////////////////////////////
+
 
 void noob::graphics::init(const noob::vec2ui Dims, const noob::texture_loader_2d& TexLoader) noexcept(true)
 {
@@ -58,15 +461,16 @@ void noob::graphics::init(const noob::vec2ui Dims, const noob::texture_loader_2d
 	check_error_gl();
 
 	glGenerateMipmap(GL_TEXTURE_2D);
+	check_error_gl();
 
-	glGenVertexArrays(1, &terrain_model.vao);
-	glBindVertexArray(terrain_model.vao);
-	glGenBuffers(1, &terrain_model.vertices_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, terrain_model.vertices_vbo);
-	glBufferData(GL_ARRAY_BUFFER, max_terrain_verts * noob::model::terrain_stride, nullptr, GL_DYNAMIC_DRAW);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, noob::model::terrain_stride, reinterpret_cast<const void *>(0));
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, noob::model::terrain_stride, reinterpret_cast<const void *>(sizeof(noob::vec4f)));
-	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, noob::model::terrain_stride, reinterpret_cast<const void *>(sizeof(noob::vec4f)*2));
+	glGenVertexArrays(1, &terrain.vao);
+	glBindVertexArray(terrain.vao);
+	glGenBuffers(1, &terrain.vertices_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, terrain.vertices_vbo);
+	glBufferData(GL_ARRAY_BUFFER, max_terrain_verts * noob::terrain_model::stride, nullptr, GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, noob::terrain_model::stride, reinterpret_cast<const void *>(0));
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, noob::terrain_model::stride, reinterpret_cast<const void *>(sizeof(noob::vec4f)));
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, noob::terrain_model::stride, reinterpret_cast<const void *>(sizeof(noob::vec4f)*2));
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
@@ -130,23 +534,20 @@ void noob::graphics::upload_instanced_uniforms() const noexcept(true)
 }
 
 
-void noob::graphics::draw_instanced(const noob::model_handle Handle, uint32_t NumInstances) const noexcept(true)
+void noob::graphics::draw(const noob::instanced_model_handle Handle, uint32_t NumInstances) const noexcept(true)
 {
-	const noob::model m = models[Handle.index()];
+	const noob::instanced_model m = instanced_models[Handle.index()];
 
-	if (m.type == noob::model::geom_type::INDEXED_MESH)
-	{
-		glBindVertexArray(m.vao);
-		glDrawElementsInstanced(GL_TRIANGLES, m.n_indices, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.n_instances, NumInstances));
-		check_error_gl();
-		glBindVertexArray(0);		
-	}
+	glBindVertexArray(m.vao);
+	glDrawElementsInstanced(GL_TRIANGLES, m.n_indices, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.n_instances, NumInstances));
+	check_error_gl();
+	glBindVertexArray(0);		
 }
 
 
 void noob::graphics::draw_terrain(uint32_t Verts) const noexcept(true)
 {
-	glBindVertexArray(terrain_model.vao);
+	glBindVertexArray(terrain.vao);
 	use_program(terrain_shader);
 	glActiveTexture(GL_TEXTURE0);
 	check_error_gl();
@@ -158,30 +559,27 @@ void noob::graphics::draw_terrain(uint32_t Verts) const noexcept(true)
 }
 
 
-noob::model_handle noob::graphics::model_instanced(const noob::mesh_3d& Mesh, uint32_t NumInstances) noexcept(true)
+noob::instanced_model_handle noob::graphics::instanced_model(const noob::mesh_3d& Mesh, uint32_t NumInstances) noexcept(true)
 {
-	noob::model result;
+	noob::instanced_model model;
 
 	if (NumInstances == 0)
 	{
-		noob::model_handle h;
-		return h;
+		return noob::instanced_model_handle::make_invalid();
 	}
 
-	result.type = noob::model::geom_type::INDEXED_MESH;
-
-	result.n_instances = NumInstances;
+	model.n_instances = NumInstances;
 
 	const uint32_t num_indices = Mesh.indices.size();
-	result.n_indices = num_indices;
+	model.n_indices = num_indices;
 
 	const uint32_t num_verts = Mesh.vertices.size();
-	result.n_vertices = num_verts;
+	model.n_vertices = num_verts;
 
 	GLuint vao_id = 0;
 	glGenVertexArrays(1, &vao_id);
 	glBindVertexArray(vao_id);
-	result.vao = vao_id;
+	model.vao = vao_id;
 
 	////////////////////////////////
 	// Create & bind attrib buffers
@@ -214,7 +612,7 @@ noob::model_handle noob::graphics::model_instanced(const noob::mesh_3d& Mesh, ui
 	// Upload interleaved buffer
 	glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);
 	glBufferData(GL_ARRAY_BUFFER, interleaved.size() * sizeof(noob::vec4f), &interleaved[0], GL_STATIC_DRAW);
-	result.vertices_vbo = vertices_vbo;
+	model.vertices_vbo = vertices_vbo;
 
 	//////////////////////
 	// Setup attrib specs
@@ -234,18 +632,18 @@ noob::model_handle noob::graphics::model_instanced(const noob::mesh_3d& Mesh, ui
 	// Setup colours VBO:
 	// std::vector<noob::vec4f> colours(NumInstances, noob::vec4f(1.0, 1.0, 1.0, 1.0));
 	glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
-	glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::materials_stride, nullptr, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::instanced_model::colours_stride, nullptr, GL_DYNAMIC_DRAW);
 	//glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::materials_stride, &colours[0].v[0], GL_DYNAMIC_DRAW);
 
 	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4f), reinterpret_cast<const void *>(0));
 	glEnableVertexAttribArray(3);
 	glVertexAttribDivisor(3, 1);
-	result.instanced_colours_vbo = colours_vbo;
+	model.colours_vbo = colours_vbo;
 
 	// Setup matrices VBO:
 	// std::vector<noob::mat4f> matrices(NumInstances * 2, noob::identity_mat4());
 	glBindBuffer(GL_ARRAY_BUFFER, matrices_vbo);
-	glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::instanced_model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
 	// glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::matrices_stride, &matrices[0].m[0], GL_DYNAMIC_DRAW);
 
 	// Per instance model matrices
@@ -277,23 +675,22 @@ noob::model_handle noob::graphics::model_instanced(const noob::mesh_3d& Mesh, ui
 	glVertexAttribDivisor(10, 1);
 	glVertexAttribDivisor(11, 1);
 
-	result.instanced_matrices_vbo = matrices_vbo;
+	model.matrices_vbo = matrices_vbo;
 
 	// Upload to indices buffer
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_vbo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, Mesh.indices.size() * sizeof(uint32_t), &Mesh.indices[0], GL_STATIC_DRAW);
-	result.indices_vbo = indices_vbo;
+	model.indices_vbo = indices_vbo;
 
 	glBindVertexArray(0);
 
 	check_error_gl();
 
-	result.valid = true;
-	models.push_back(result);
+	instanced_models.push_back(model);
 
 	const noob::bbox_type<float> bb = Mesh.bbox;
 
-	const noob::model_handle results = noob::model_handle::make(models.size() - 1);
+	const noob::instanced_model_handle results = noob::instanced_model_handle::make(instanced_models.size() - 1);
 
 	noob::logger::log(noob::importance::INFO, noob::concat("[Graphics] Created instanced model with handle ", noob::to_string(results.index()), " and ", noob::to_string(NumInstances), " instances. Verts = ", noob::to_string(Mesh.vertices.size()), ", indices = ", noob::to_string(Mesh.indices.size()), ". Dims: ", noob::to_string(bb.max - bb.min)));
 
@@ -301,23 +698,24 @@ noob::model_handle noob::graphics::model_instanced(const noob::mesh_3d& Mesh, ui
 }
 
 
-void noob::graphics::resize_instanced_data_buffers(noob::model_handle Handle, uint32_t NumInstances) noexcept(true)
+void noob::graphics::resize_buffers(noob::instanced_model_handle Handle, uint32_t NumInstances) noexcept(true)
 {
-	if( models[Handle.index()].type == noob::model::geom_type::INDEXED_MESH)
+	if (Handle.index() < instanced_models.size())
 	{
-		noob::model m = models[Handle.index()];
+		noob::instanced_model m = instanced_models[Handle.index()];
+
 		m.n_instances = NumInstances;
-		models[Handle.index()] = m;
+		instanced_models[Handle.index()] = m;
 
 		glBindVertexArray(m.vao);
 
 		// Setup colours VBO:
-		glBindBuffer(GL_ARRAY_BUFFER, m.instanced_colours_vbo);
-		glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::materials_stride, nullptr, GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, m.colours_vbo);
+		glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::instanced_model::colours_stride, nullptr, GL_DYNAMIC_DRAW);
 
 		// Setup matrices VBO:
-		glBindBuffer(GL_ARRAY_BUFFER, m.instanced_matrices_vbo);
-		glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, m.matrices_vbo);
+		glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::instanced_model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
 
 		check_error_gl();
 
@@ -330,15 +728,12 @@ void noob::graphics::resize_terrain(uint32_t MaxVerts) noexcept(true)
 {
 	max_terrain_verts = MaxVerts;
 
-	glBindVertexArray(terrain_model.vao);
-
-	glBindBuffer(GL_ARRAY_BUFFER, terrain_model.vertices_vbo);
-	glBufferData(GL_ARRAY_BUFFER, max_terrain_verts * noob::model::terrain_stride, nullptr, GL_DYNAMIC_DRAW);
-
-	glBindVertexArray(0);
-
+	glBindVertexArray(terrain.vao);
+	glBindBuffer(GL_ARRAY_BUFFER, terrain.vertices_vbo);
+	glBufferData(GL_ARRAY_BUFFER, max_terrain_verts * noob::terrain_model::stride, nullptr, GL_DYNAMIC_DRAW);
 	check_error_gl();
 
+	glBindVertexArray(0);
 }
 
 
@@ -351,7 +746,6 @@ uint32_t noob::graphics::get_max_terrain_verts() const noexcept(true)
 void noob::graphics::set_terrain_uniforms(const noob::terrain_shading Shading) noexcept(true)
 {
 	terrain_unis = Shading;
-
 }
 
 void noob::graphics::upload_terrain_uniforms() const noexcept(true)
@@ -377,66 +771,63 @@ void noob::graphics::set_light_direction(const noob::vec3f& Arg) noexcept(true)
 }
 
 
-noob::gpu_write_buffer noob::graphics::map_instanced_data_buffer(noob::model_handle Handle, noob::model::instanced_data_type DataType, uint32_t Min, uint32_t Max) const noexcept(true)
+noob::gpu_write_buffer noob::graphics::map_matrices_buffer(noob::instanced_model_handle Handle, uint32_t Min, uint32_t Max) const noexcept(true)
 {
-	const noob::model m = models[Handle.index()];
-	uint32_t stride_in_bytes;
-
-	if (m.type == noob::model::geom_type::INDEXED_MESH)
+	if (Handle.index() < instanced_models.size())
 	{
-		// glBindVertexArray(m.vao);	
-		switch (DataType)
+		const noob::instanced_model m = instanced_models[Handle.index()];
+		const uint32_t stride_in_bytes = noob::instanced_model::matrices_stride;
+		glBindBuffer(GL_ARRAY_BUFFER, m.matrices_vbo);
+		check_error_gl();
+
+		const uint32_t total_size = stride_in_bytes * m.n_instances;
+		float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, Min, Max, GL_MAP_WRITE_BIT));
+		check_error_gl();
+
+		if (ptr != nullptr)
 		{
-			case (noob::model::instanced_data_type::COLOUR):
-				{
-					stride_in_bytes = noob::model::materials_stride;
-					glBindBuffer(GL_ARRAY_BUFFER, m.instanced_colours_vbo);
-					check_error_gl();
-					break;
-				}
-			case (noob::model::instanced_data_type::MATRICES):
-				{
-					stride_in_bytes = noob::model::matrices_stride;
-					glBindBuffer(GL_ARRAY_BUFFER, m.instanced_matrices_vbo);
-					check_error_gl();
-					break;
-				}
+			return noob::gpu_write_buffer(ptr, total_size / sizeof(float));
 		}
 	}
-	else
-	{
-		return noob::gpu_write_buffer::make_invalid();	
-	}
-
-	const uint32_t total_size = stride_in_bytes * m.n_instances;
-
-	float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, Min, Max, GL_MAP_WRITE_BIT));
-
-	check_error_gl();
-
-	if (ptr != nullptr)
-	{
-		return noob::gpu_write_buffer(ptr, total_size / sizeof(float));
-	}
-	else
-	{
-		return noob::gpu_write_buffer::make_invalid();	
-	}
+	return noob::gpu_write_buffer::make_invalid();	
 }
+
+
+noob::gpu_write_buffer noob::graphics::map_colours_buffer(noob::instanced_model_handle Handle, uint32_t Min, uint32_t Max) const noexcept(true)
+{
+	if (Handle.index() < instanced_models.size())
+	{
+		const noob::instanced_model m = instanced_models[Handle.index()];
+		const uint32_t stride_in_bytes = noob::instanced_model::colours_stride;
+		glBindBuffer(GL_ARRAY_BUFFER, m.colours_vbo);
+		check_error_gl();
+
+		const uint32_t total_size = stride_in_bytes * m.n_instances;
+		float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, Min, Max, GL_MAP_WRITE_BIT));
+		check_error_gl();
+
+		if (ptr != nullptr)
+		{
+			return noob::gpu_write_buffer(ptr, total_size / sizeof(float));
+		}
+	}
+
+	return noob::gpu_write_buffer::make_invalid();	
+}
+
+
+
 
 
 noob::gpu_write_buffer noob::graphics::map_terrain_buffer(uint32_t Min, uint32_t Max) const noexcept(true)
 {
-	// if(terrain_initialized)
-	//{
-	if (Max < max_terrain_verts)
+	if (Min < Max && Max < max_terrain_verts)
 	{
 		// glBindVertexArray(terrain_model.vao);
-		glBindBuffer(GL_ARRAY_BUFFER, terrain_model.vertices_vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, terrain.vertices_vbo);
 		check_error_gl();
 
-		const uint32_t total_size = noob::model::terrain_stride * (Max - Min);
-
+		const uint32_t total_size = noob::terrain_model::stride * (Max - Min);
 		float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, Min, Max, GL_MAP_WRITE_BIT));
 		check_error_gl();
 
@@ -445,33 +836,36 @@ noob::gpu_write_buffer noob::graphics::map_terrain_buffer(uint32_t Min, uint32_t
 			return noob::gpu_write_buffer(ptr, total_size / sizeof(float));
 		}
 	}
-	// }
-	return noob::gpu_write_buffer::make_invalid();	
+	else
+	{
+		noob::logger::log(noob::importance::WARNING, "[Graphics] Tried to use invalid value for mapping terrain buffer.");
+	}
 
+	return noob::gpu_write_buffer::make_invalid();	
 }
 
 
-noob::gpu_write_buffer noob::graphics::map_text_buffer(uint32_t Idx, uint32_t Min, uint32_t Max) const noexcept(true)
+noob::gpu_write_buffer noob::graphics::map_billboards(noob::billboard_buffer_handle Handle, uint32_t Min, uint32_t Max) const noexcept(true)
 {
-/*	
-	if (Max < max_text_verts)
-	{
-		// glBindVertexArray(terrain_model.vao);
-		glBindBuffer(GL_ARRAY_BUFFER, terrain_model.vertices_vbo);
-		check_error_gl();
-
-		const uint32_t total_size = noob::model::text_stride * (Max - Min);
-
-		float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, Min, Max, GL_MAP_WRITE_BIT));
-		check_error_gl();
-
-		if (ptr != nullptr)
+	/*	
+		if (Max < max_text_verts)
 		{
-			return noob::gpu_write_buffer(ptr, total_size / sizeof(float));
-		}
+	// glBindVertexArray(terrain_model.vao);
+	glBindBuffer(GL_ARRAY_BUFFER, terrain_model.vertices_vbo);
+	check_error_gl();
+
+	const uint32_t total_size = noob::model::text_stride * (Max - Min);
+
+	float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, Min, Max, GL_MAP_WRITE_BIT));
+	check_error_gl();
+
+	if (ptr != nullptr)
+	{
+	return noob::gpu_write_buffer(ptr, total_size / sizeof(float));
 	}
-*/	
-	
+	}
+	*/	
+
 	return noob::gpu_write_buffer::make_invalid();	
 }
 
@@ -488,14 +882,9 @@ noob::texture_2d_handle noob::graphics::texture_2d(const noob::texture_loader_2d
 {
 	const GLenum sized_fmt = get_gl_storage_format(TextureLoader.format());
 
-	// Prevent leftover from previous calls from harming this.
 	glBindVertexArray(0);
 
-	GLuint texture_id;
-
-	glGenTextures(1, &texture_id);
-
-	glBindTexture(GL_TEXTURE_2D, texture_id);
+	const GLuint texture_id = prep_texture();
 
 	const noob::vec2ui dims = TextureLoader.dimensions();
 
@@ -548,10 +937,12 @@ noob::texture_2d_handle noob::graphics::texture_2d(const noob::texture_loader_2d
 }
 
 
-
 noob::texture_array_2d_handle noob::graphics::texture_array_2d(const noob::vec2ui Dims, uint32_t Indices, const noob::texture_info TexInfo) noexcept(true)
 {
 	const GLenum fmt = get_gl_storage_format(TexInfo.pixels);
+
+	glBindVertexArray(0);
+
 	const GLuint texture_id = prep_texture();
 	glBindTexture(GL_TEXTURE_2D_ARRAY, texture_id);
 
@@ -576,6 +967,9 @@ noob::texture_array_2d_handle noob::graphics::texture_array_2d(const noob::vec2u
 noob::texture_3d_handle noob::graphics::texture_3d(const noob::vec3ui Dims, const noob::texture_info TexInfo) noexcept(true)
 {
 	const GLenum fmt = get_gl_storage_format(TexInfo.pixels);
+
+	glBindVertexArray(0);
+
 	const GLuint texture_id = prep_texture();
 	glBindTexture(GL_TEXTURE_3D, texture_id);
 
@@ -728,6 +1122,7 @@ void noob::graphics::texture_compare_func(noob::tex_compare_func CompareFunc) co
 
 	check_error_gl();
 }
+
 
 void noob::graphics::texture_min_filter(noob::tex_min_filter MinFilter) const noexcept(true)
 {
@@ -1040,3 +1435,4 @@ noob::graphics::program_handle noob::graphics::get_instanced_shader() const noex
 {
 	return instanced_shader;
 }
+
