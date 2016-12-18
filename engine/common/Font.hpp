@@ -71,8 +71,6 @@ namespace noob
 				protected:			
 				hb_language_t language;
 				hb_script_t script;
-				noob::model_handle model;
-				
 			};
 
 

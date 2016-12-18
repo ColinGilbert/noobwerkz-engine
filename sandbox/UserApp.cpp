@@ -51,7 +51,6 @@ bool noob::application::user_init()
 
 	}
 
-/*
 	const float actor_dims = 2.0;
 	// const noob::shape_handle shp = g.sphere_shape(actor_dims);
 	
@@ -110,7 +109,7 @@ bool noob::application::user_init()
 	{	
 		ah = stage.actor(bph, 7, random_vec3(-stage_dim, -stage_dim, -stage_dim), random_versor());
 	}
-*/
+	
 	logger::log(noob::importance::INFO, "[Application] Successfully done (C++) user init.");
 	return true;
 }

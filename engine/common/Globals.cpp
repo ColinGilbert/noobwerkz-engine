@@ -31,12 +31,12 @@ bool noob::globals::init() noexcept(true)
 	return true;
 }
 
-noob::model_handle noob::globals::model_from_shape(noob::shape_handle arg, uint32_t num) noexcept(true)
+noob::instanced_model_handle noob::globals::model_from_shape(noob::shape_handle arg, uint32_t num) noexcept(true)
 {
 	noob::shape shp = shapes.get(arg);
 
 	noob::graphics& gfx = noob::get_graphics();
-	return gfx.model_instanced(shp.get_mesh(), num);
+	return gfx.instanced_model(shp.get_mesh(), num);
 }
 
 

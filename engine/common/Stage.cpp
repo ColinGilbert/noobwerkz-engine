@@ -109,10 +109,10 @@ void noob::stage::draw() noexcept(true)
 
 		upload_matrices(handle);
 
-		const noob::model_handle modl_h = drawables[drawables_index].model;
+		const noob::instanced_model_handle modl_h = drawables[drawables_index].model;
 		const uint32_t instance_count = drawables[drawables_index].count;
 
-		gfx.draw_instanced(modl_h, instance_count);
+		gfx.draw(modl_h, instance_count);
 	}
 
 	if (terrain_started)
@@ -289,11 +289,11 @@ void noob::stage::upload_colours(drawable_info_handle arg) const noexcept(true)
 	const uint32_t theoretical_max = drawables[arg.index()].instances.size();
 	assert(count <= theoretical_max);
 
-	const noob::model_handle model_h = drawables[arg.index()].model;
+	const noob::instanced_model_handle model_h = drawables[arg.index()].model;
 
 	noob::graphics& gfx = noob::get_graphics();
 
-	noob::gpu_write_buffer buf = gfx.map_instanced_data_buffer(model_h, noob::model::instanced_data_type::COLOUR, 0, count);
+	noob::gpu_write_buffer buf = gfx.map_colours_buffer(model_h, 0, count);
 
 	if (buf.valid() == false)
 	{
@@ -332,9 +332,9 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 	const uint32_t theoretical_max = drawables[arg.index()].instances.size();
 	assert(count <= theoretical_max);
 
-	const noob::model_handle model_h = drawables[arg.index()].model;
+	const noob::instanced_model_handle model_h = drawables[arg.index()].model;
 	noob::graphics& gfx = noob::get_graphics();
-	noob::gpu_write_buffer buf = gfx.map_instanced_data_buffer(model_h, noob::model::instanced_data_type::MATRICES, 0, count);
+	noob::gpu_write_buffer buf = gfx.map_matrices_buffer(model_h, 0, count);
 	if (buf.valid() == false)
 	{
 		logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced matrices buffer for model ", noob::to_string(arg.index())));	
@@ -430,7 +430,7 @@ void noob::stage::upload_terrain() noexcept(true)
 
 
 
-void noob::stage::reserve_models(noob::model_handle Handle, uint32_t Num) noexcept(true)
+void noob::stage::reserve_models(noob::instanced_model_handle Handle, uint32_t Num) noexcept(true)
 {
 	noob::fast_hashtable::cell* results = models_to_instances.lookup(Handle.index());
 
@@ -453,7 +453,7 @@ void noob::stage::reserve_models(noob::model_handle Handle, uint32_t Num) noexce
 		results->value = results_index;
 
 		noob::graphics& gfx = noob::get_graphics();
-		gfx.resize_instanced_data_buffers(Handle, Num);
+		gfx.resize_buffers(Handle, Num);
 	}
 	else
 	{
@@ -465,7 +465,7 @@ void noob::stage::reserve_models(noob::model_handle Handle, uint32_t Num) noexce
 		drawables[index].instances.resize(max_new);
 
 		noob::graphics& gfx = noob::get_graphics();
-		gfx.resize_instanced_data_buffers(Handle, Num);
+		gfx.resize_buffers(Handle, Num);
 	}
 }
 

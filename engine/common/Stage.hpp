@@ -91,7 +91,7 @@ namespace noob
 
 			struct drawable_info
 			{
-				noob::model_handle model;
+				noob::instanced_model_handle model;
 				uint32_t count = 0;
 				bool needs_colours;
 				std::vector<drawable_instance> instances;
@@ -145,7 +145,7 @@ namespace noob
 			void upload_matrices(drawable_info_handle) noexcept(true);
 			
 			// This method checks to see if there have been any models of this type reserved prior to reserving them and reserves + allocates if not. If anything *is* reserved, it'll still only allocate if Num > originally allocated.
-			void reserve_models(noob::model_handle h, uint32_t Num) noexcept(true);
+			void reserve_models(noob::instanced_model_handle h, uint32_t Num) noexcept(true);
 
 			void upload_terrain() noexcept(true);
 
