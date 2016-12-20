@@ -239,13 +239,11 @@ void noob::fast_hashtable::repopulate(size_t desiredSize)
 void noob::fast_hashtable::del(size_t key)
 {
 
-	{
 		cell* value = lookup(key);
 		if (value)
 		{
 			del(value);
 		}
-	}
 }
 
 

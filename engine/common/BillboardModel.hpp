@@ -12,6 +12,17 @@ namespace noob
 		static constexpr uint32_t stride = sizeof(noob::vec2f) * 2;
 	};
 
+	struct billboard_vertex
+	{
+		noob::vec2f pos;
+		noob::vec2f uv;
+	};
+
+	struct billboard_vertex_colour : public billboard_vertex
+	{
+		noob::vec4f colour;
+	};
+
 	typedef noob::handle<noob::billboard_buffer> billboard_buffer_handle;
 
 }

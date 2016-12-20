@@ -22,6 +22,9 @@
 #include "NoobUtils.hpp"
 #include "ReturnType.hpp"
 #include "Graphics.hpp"
+#include "StringFuncs.hpp"
+#include "BillboardModel.hpp"
+
 
 namespace noob
 {
@@ -32,28 +35,35 @@ namespace noob
 			{
 				glyph() = delete;
 				// This constructor is an ugly one, I'll admit. It is, however, a manner of ensuring that only the right dimensions ever get placed inside it. The conversion is explicitly made via double-precision division in order to minimize bit-error.
-				glyph(const noob::vec2ui GlyphDims, const noob::vec2ui AtlasPos, const noob::vec2ui AtlasDims) noexcept(true) :
+				glyph(const noob::vec2ui GlyphDims, const noob::vec2ui Bearings, const noob::vec2ui AtlasPos, const noob::vec2ui AtlasDims) noexcept(true) :
 					dims(GlyphDims),
-					mapped_dims(noob::vec2f(static_cast<float>(noob::div_dp(GlyphDims[0], AtlasDims[0])), static_cast<float>(noob::div_dp(GlyphDims[1], AtlasDims[1])))),
-					mapped_pos(noob::vec2f(static_cast<float>(noob::div_dp(AtlasPos[0], AtlasDims[0])), static_cast<float>(noob::div_dp(AtlasPos[1], AtlasDims[1]))))
+					bearings(Bearings),
+					mapped_dims(noob::vec2f(noob::div_fp(GlyphDims[0], AtlasDims[0]), noob::div_fp(GlyphDims[1], AtlasDims[1]))),
+					mapped_pos(noob::vec2f(noob::div_fp(AtlasPos[0], AtlasDims[0]), noob::div_fp(AtlasPos[1], AtlasDims[1])))
 				{}
 				glyph(const noob::font::glyph&) noexcept(true) = default;
 				~glyph() noexcept(true) = default;
 				
 				glyph& operator=(const noob::font::glyph&) noexcept(true) = default;
 
-				const noob::vec2ui dims;
+				const noob::vec2ui dims, bearings;
 				// The following are in texture-space (0. 1)
-				const noob::vec2f mapped_dims, mapped_pos; // Positions are topleft corner (x,y)
+				const noob::vec2f mapped_dims, mapped_pos;
 			};
+			
+			
+			static std::string to_string(const noob::font::glyph& Arg)
+			{
+				return noob::concat("dims = ", noob::to_string(Arg.dims), ", bearings = ", noob::to_string(Arg.bearings), ", mapped dims = ", noob::to_string(Arg.mapped_dims), ", mapped positions = ", noob::to_string(Arg.mapped_pos));
+			}
 
 
 			struct shaped_glyph : public glyph
 			{
 				shaped_glyph() = delete;
 				// This constructor is an ugly one, I'll admit. It is, however, a manner of ensuring that only the right dimensions ever get placed inside it. The conversion is explicitly made via double-precision division in order to minimize bit-error.
-				shaped_glyph(const noob::vec2ui GlyphDims, const noob::vec2ui AtlasPos, const noob::vec2ui AtlasDims) noexcept(true) :
-					 glyph(GlyphDims, AtlasPos, AtlasDims)
+				shaped_glyph(const noob::vec2ui GlyphDims, const noob::vec2ui Bearings, const noob::vec2ui AtlasPos, const noob::vec2ui AtlasDims) noexcept(true) :
+					 glyph(GlyphDims, Bearings, AtlasPos, AtlasDims)
 				{}
 				~shaped_glyph() noexcept(true) = default;
 				shaped_glyph(const noob::font::shaped_glyph&) noexcept(true) = default;
@@ -62,6 +72,12 @@ namespace noob
 
 					
 
+			};
+
+			struct shaped_text
+			{
+				noob::vec2f dims = noob::vec2f(0.0, 0.0);
+				std::vector<std::array<noob::billboard_vertex, 6>> quads;
 			};
 
 			enum class feature { KERNING, LIGATURE, CONTEXTUAL_LIGATURE };
@@ -98,23 +114,20 @@ namespace noob
 
 
 			~font() noexcept(true);
-
-			bool init_library(const std::string& Mem, const noob::vec2d Dpi) noexcept(true);
 			// A point is a size the corresponds to 1/72 of an inch.
-			bool init_glyphs(const std::string& Characters, uint16_t SizeInPoints) noexcept(true);
+			bool init_library(const std::string& Mem, const noob::vec2d Dpi, const std::string& Characters, uint16_t SizeInPoints) noexcept(true);
 
 			bool has_glyph(uint32_t CodePoint) const noexcept(true);
 
 			void add_feature(noob::font::feature Feature, bool Enable) noexcept(true);
 
-			bool shape_text(const noob::font::text& Text) noexcept(true);
+			noob::return_type<noob::font::shaped_text> shape_text(const noob::font::text& Text) noexcept(true);
 
 		protected:
 			
 			noob::texture_2d_handle tex;
 			noob::billboard_buffer_handle model;
 			noob::vec2d dpi;
-
 
 			// Note: Font size is in 1/64 point units
 			uint16_t font_size, pixel_size;
@@ -141,7 +154,8 @@ namespace noob
 			// Validity flags
 			bool ft_face_valid = false;
 			bool atlas_valid = false;
-			
+
+			bool init_glyphs(const std::string& Characters, uint16_t SizeInPoints) noexcept(true);
 			bool init_glyphs_helper(const std::vector<uint32_t>& CodePoints, const noob::vec2ui AtlasDims) noexcept(true);
 
 	};

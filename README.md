@@ -30,9 +30,16 @@ Bullet Physics
 libogg/libvorbis (soon Opus)
 r8brain's excellent resampling routines
 ozz-animation
-GLFW (on desktop)
-Freetype
+GLFW and libsoundio (on desktop)
+Freetype and Harfbuzz (Font rasterizing and glyph shaping, respectively.)
 Voro++
+```
+
+Also has support (enabled at compile-time) for:
+```
+Assimp
+Shiny Profiler
+3D Mouses via libspnav
 ```
 
 To bootstrap:

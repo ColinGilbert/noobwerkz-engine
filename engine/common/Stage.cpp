@@ -355,7 +355,7 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 
 		if (!valid)
 		{
-			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu matrices buffer for model ", noob::to_string(arg.index()), " MVP"));
+			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu matrices buffer for model ", noob::to_string(arg.index()), " MVP."));
 			gfx.unmap_buffer();			
 			return;
 		}
@@ -365,7 +365,7 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 
 		if (!valid)
 		{
-			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu matrices buffer for model ", noob::to_string(arg.index()), " normal"));
+			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu matrices buffer for model ", noob::to_string(arg.index()), " normal."));
 			gfx.unmap_buffer();
 			return;
 		}
@@ -408,7 +408,7 @@ void noob::stage::upload_terrain() noexcept(true)
 
 		if (!buf.valid())
 		{
-			logger::log(noob::importance::ERROR, "[Stage] Could not map instanced matrices buffer for terrain");
+			logger::log(noob::importance::ERROR, "[Stage] Could not map instanced matrices buffer for terrain.");
 			gfx.unmap_buffer();		
 			return;
 		}
@@ -417,7 +417,7 @@ void noob::stage::upload_terrain() noexcept(true)
 		{
 			buf.push_back(tmp_verts[i]);
 		}
-		logger::log(noob::importance::INFO, noob::concat("[Stage] ", noob::to_string(num_terrain_verts), " terrain vertices uploaded"));
+		logger::log(noob::importance::INFO, noob::concat("[Stage] ", noob::to_string(num_terrain_verts), " terrain vertices uploaded."));
 
 		gfx.unmap_buffer();
 	}

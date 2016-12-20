@@ -8,11 +8,18 @@
 namespace noob
 {
 	template <typename T>
-	struct return_type
-	{
-		return_type(bool Valid, T Value) noexcept(true) : valid(Valid), value(Value) {}
+		struct return_type
+		{
+			return_type(bool Valid, T Value) noexcept(true) : valid(Valid), value(Value) {}
 
-		const bool valid;
-		T value;
-	};
+			static noob::return_type<T> make_invalid()
+			{
+				T t;
+				return noob::return_type<T>(false, t);
+			}
+			const bool valid;
+			T value;
+		};
+
+
 }

@@ -112,13 +112,37 @@ namespace noob
 		else return true;
 	}
 
-
-	// ENSURING DOUBLE-POINT PRECISION
+	// Making sure we don't have to use static_cast repeatedly:
 	template <typename First, typename Second> 
-		double div_dp(First first, Second second)
+		static double div_fp(First first, Second second)
+		{
+			return static_cast<float>(first) / static_cast<float>(second);
+		}
+
+
+	// Ensuring double-point precision:
+	template <typename First, typename Second> 
+		static double div_dp(First first, Second second)
 		{
 			return static_cast<double>(first) / static_cast<double>(second);
 		}
+
+	//////////////////////////////////////////
+	// CURRENT LOCATION FOR MIN/MAX FUNCTIONS
+	//////////////////////////////////////////
+	template <typename T>
+		static vec2_type<T> min(const noob::vec2_type<T> A, const noob::vec2_type<T> B)
+		{
+			return noob::vec2_type<T>(std::min(A[0], B[0]), std::min(A[1], B[1]));
+		}
+
+	template <typename T>
+		static vec2_type<T> max(const noob::vec2_type<T> A, const noob::vec2_type<T> B)
+		{
+			return noob::vec2_type<T>(std::max(A[0], B[0]), std::max(A[1], B[1]));
+		}
+
+
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

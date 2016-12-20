@@ -187,7 +187,7 @@ noob::font::~font() noexcept(true)
 }
 
 
-bool noob::font::init_library(const std::string& Mem, const noob::vec2d Dpi) noexcept(true)
+bool noob::font::init_library(const std::string& Mem, const noob::vec2d Dpi, const std::string& Characters, uint16_t FontSize) noexcept(true)
 {
 	dpi = Dpi;
 
@@ -199,12 +199,23 @@ bool noob::font::init_library(const std::string& Mem, const noob::vec2d Dpi) noe
 		return false;
 	}
 
+	ft_face_valid = true;
+
+	const bool glyphs_good = init_glyphs(Characters, FontSize);
+
+	if (!glyphs_good) 
+	{
+		noob::logger::log(noob::importance::ERROR, "[Font] Could not init glyphs!");
+		ft_face_valid = false;
+		return false;
+	}
+
+
 	hb_font = hb_ft_font_create(ft_face, nullptr);
 	hb_buf = hb_buffer_create();
 
 	assert(hb_buffer_allocation_successful(buffer));
 
-	ft_face_valid = true;
 
 	return true;
 }
@@ -303,8 +314,10 @@ void noob::font::add_feature(noob::font::feature Feature, bool Enable) noexcept(
 }
 
 
-bool noob::font::shape_text(const noob::font::text& Text) noexcept(true)
+noob::return_type<noob::font::shaped_text> noob::font::shape_text(const noob::font::text& Text) noexcept(true)
 {
+	noob::font::shaped_text results;
+
 	if (is_valid_utf8(Text.data))
 	{
 		hb_buffer_reset(hb_buf);
@@ -315,19 +328,23 @@ bool noob::font::shape_text(const noob::font::text& Text) noexcept(true)
 
 		uint32_t code_point;
 		uint32_t state = 0;
+		uint32_t counter = 0;
+		std::vector<uint32_t> codepoints;
 		for (auto c : Text.data)
 		{
 			if(!utf8_decode_hoehrmann(&state, &code_point, c))
 			{
 				if (!has_glyph(code_point))
 				{
-					noob::logger::log(noob::importance::WARNING, noob::concat("[Font] Could not shape text containing invalid codepoint ", noob::to_string(code_point)));
-					return false;
+					noob::logger::log(noob::importance::WARNING, noob::concat("[Font] Could not apply shaping to text with invalid codepoint ", noob::to_string(code_point), " at position ", noob::to_string(counter)));
+					return noob::return_type<noob::font::shaped_text>::make_invalid();
 				}
+				codepoints.push_back(code_point);
 			}
+			++counter;
 		}
 
-		hb_buffer_add_utf8(hb_buf, Text.data.c_str(), Text.data.size(), 0, Text.data.size());
+		hb_buffer_add_codepoints(hb_buf, &codepoints[0], codepoints.size(), 0, codepoints.size());
 
 		// Harfbuzz shaping
 		hb_shape(hb_font, hb_buf, features.empty() ? nullptr : &features[0], features.size());
@@ -335,14 +352,76 @@ bool noob::font::shape_text(const noob::font::text& Text) noexcept(true)
 		unsigned int glyph_count;
 		hb_glyph_info_t* glyph_infos = hb_buffer_get_glyph_infos(hb_buf, &glyph_count);
 		hb_glyph_position_t* glyph_positions = hb_buffer_get_glyph_positions(hb_buf, &glyph_count);
+
+		// Debug text output.
+		
+		noob::vec2f pen_pos = noob::vec2f(0.0, 0.0);
+		noob::vec2f lower_bounds = noob::vec2f(0.0, 0.0);		
+		noob::vec2f upper_bounds = noob::vec2f(0.0, 0.0);
+		// noob::vec2f bounds = noob::vec2f(0.0, 0.0);
+		std::string dbg_txt = "[Font] Got shaped text. Info: ";
+		
+		
+		for (unsigned int i = 0; i < glyph_count; ++i)
+		{
+			const hb_glyph_info_t info_hb = glyph_infos[i];
+			const hb_glyph_position_t pos_hb = glyph_positions[i];
+			
+			const uint32_t cp = codepoints[i];
+
+			const noob::fast_hashtable::cell* const glyph_cell = codepoints_to_glyphs.lookup_immutable(cp);
+
+			if (codepoints_to_glyphs.is_valid(glyph_cell))
+			{
+				const noob::font::glyph base_glyph = stored_glyphs[glyph_cell->value];
+
+				const noob::vec2f advances = noob::vec2f(noob::div_fp(pos_hb.x_advance, 64), noob::div_fp(pos_hb.y_advance, 64));
+				const noob::vec2f offsets = noob::vec2f(noob::div_fp(pos_hb.x_offset, 64), noob::div_fp(pos_hb.y_offset, 64));
+
+				const noob::vec2f uv_0 = base_glyph.mapped_pos;
+				const noob::vec2f uv_1 = base_glyph.mapped_pos + base_glyph.mapped_dims;
+
+				const vec2f pos_0 = noob::vec2f(pen_pos[0] + offsets[0] + base_glyph.bearings[0], std::floor(pen_pos[1] + offsets[1] + base_glyph.bearings[1]));
+				const vec2f pos_1 = noob::vec2f(pos_0[0] + base_glyph.dims[0], std::floor(pos_0[1] + base_glyph.dims[1]));
+				
+				lower_bounds = noob::min(noob::min(pos_0, pos_1), lower_bounds);
+				upper_bounds = noob::max(noob::max(pos_0, pos_1), upper_bounds);
+
+				results.dims = upper_bounds - lower_bounds;
+
+				pen_pos += advances;
+
+				const noob::billboard_vertex vert_0 = { pos_0, uv_0 };
+				const noob::billboard_vertex vert_1 = { noob::vec2f(pos_0[0], pos_1[1]), noob::vec2f(uv_0[0], uv_1[1]) };
+				const noob::billboard_vertex vert_2 = { pos_1, uv_1 };
+				const noob::billboard_vertex vert_3 = { noob::vec2f(pos_1[0], pos_0[1]), noob::vec2f(uv_1[0], uv_0[1]) };
+
+				const std::array<noob::billboard_vertex, 6> quad_verts = { vert_0, vert_1, vert_2, vert_0, vert_2, vert_3 };
+				
+				results.quads.push_back(quad_verts);
+
+				const noob::vec2f quad_dims = noob::max(pos_0, pos_1) - noob::min(pos_0, pos_1);
+				
+				dbg_txt = noob::concat(dbg_txt, " Codepoint (HB/UTF8) ", noob::to_string(info_hb.codepoint), "/", noob::to_string(cp) ,", dims (", noob::to_string(base_glyph.dims), "), advance (", noob::to_string(advances), "), offset (", noob::to_string(offsets), "), quad dimensions (", noob::to_string(quad_dims), ".");
+				
+
+			}
+			else
+			{
+				noob::logger::log(noob::importance::WARNING, noob::concat("[Font] Looked up invalid codepoint while outputting shaped text. Codepoint = ", noob::to_string(info_hb.codepoint)));
+			}
+		}
+
+		noob::logger::log(noob::importance::INFO, noob::concat(dbg_txt, ", lower bounds = ", noob::to_string(lower_bounds), ", upper bounds = ", noob::to_string(upper_bounds), "."));
 	}
 	else
 	{
 		noob::logger::log(noob::importance::WARNING, "[Font] Could not shape invalid UTF8");
-		return false;
+		
+		return noob::return_type<noob::font::shaped_text>::make_invalid();
 	}
 
-	return true;
+	return noob::return_type<noob::font::shaped_text>(true, results);
 }
 
 
@@ -379,7 +458,7 @@ bool noob::font::init_glyphs_helper(const std::vector<uint32_t>& CodePoints, con
 				if (reg.height > 0) // If our atlas hasn't run out of space
 				{
 					texture_atlas_set_region(atlas, reg.x, reg.y, reg.width, reg.height, slot->bitmap.buffer, 1);
-					stored_glyphs.push_back(noob::font::glyph(noob::vec2ui(reg.width, reg.height), noob::vec2ui(reg.x, reg.y), noob::vec2ui(AtlasDims[0], AtlasDims[1])));
+					stored_glyphs.push_back(noob::font::glyph(noob::vec2ui(reg.width, reg.height), noob::vec2ui(slot->bitmap_left, slot->bitmap_top), noob::vec2ui(reg.x, reg.y), noob::vec2ui(AtlasDims[0], AtlasDims[1])));
 					noob::fast_hashtable::cell* incell = codepoints_to_glyphs.insert(cp);
 					incell->value = stored_glyphs.size() - 1;
 				}
