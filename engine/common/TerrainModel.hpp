@@ -9,6 +9,5 @@ namespace noob
 	struct terrain_model : public model_buffered
 	{
 		static constexpr uint32_t stride = sizeof(noob::vec4f) * 3;
-		uint32_t n_vertices;
 	};
 }

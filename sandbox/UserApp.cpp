@@ -1,6 +1,5 @@
 #include "Application.hpp"
 #include "Font.hpp"
-#include "ReturnType.hpp"
 
 std::unique_ptr<std::string> message_profiling, message_collision;
 noob::actor_handle ah;
@@ -38,16 +37,6 @@ bool noob::application::user_init()
 	const noob::shape_handle scenery_shp = g.sphere_shape(10.0);// g.box_shape(50.0, 20.0, 50.0);
 	const noob::scenery_handle sc_h = stage.scenery(scenery_shp, noob::vec3f(0.0, 0.0, 0.0), noob::versorf(0.0, 0.0, 0.0, 1.0));//versor_from_axis_rad(0.0, 0.0, 0.0, 1.0)); // 0 rad rotation, facing up
 	const noob::reflectance_handle rh = g.reflectances.add(r);
-	bool font_good = example_font.init_library(noob::load_file_as_string(noob::concat(*prefix, "font/OpenDyslexic-Regular.ttf")), dpi, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-=_+`~[]{}|;:<>,./?'\"", 36);
-
-	if (!font_good)
-	{
-		noob::logger::log(noob::importance::ERROR, "[UserApp] Font not loaded.");
-	}
-	noob::font::text t;
-	t.data = "Noobwerkz!";
-
-	noob::return_type<noob::font::shaped_text> shaped = example_font.shape_text(t);
 
 	const float actor_dims = 2.0;
 	// const noob::shape_handle shp = g.sphere_shape(actor_dims);
@@ -116,7 +105,9 @@ bool noob::application::user_init()
 
 void noob::application::user_update(double dt)
 {
-
+	
+	app_gui.text("Paulmas!", noob::vec2f(0.0, 0.0), noob::gui::font_size::READING, noob::vec4f(1.0, 1.0, 0.0, 1.0));
+	
 	noob::globals& g = noob::get_globals();
 	const noob::time nowtime = noob::clock::now();
 	const noob::duration time_since_update = nowtime - last_ui_update;

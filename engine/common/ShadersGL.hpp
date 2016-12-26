@@ -128,6 +128,20 @@ namespace noob
 					"	gl_Position = mvp * a_pos;				\n"
 					"}								\n"));
 
+	static const std::string vs_billboard_src = noob::concat(shader_prefix, std::string(
+					"layout(location = 0) in vec4 a_pos_uv;				\n"
+					"layout(location = 1) in vec4 a_colour;				\n"
+					"layout(location = 0) out vec2 v_uv;				\n"
+					"layout(location = 1) out vec4 v_colour;			\n"
+					"void main()							\n"
+					"{								\n"
+					"	v_uv = vec2(a_pos_uv[2], a_pos_uv[3]);			\n"
+					"	v_colour = a_colour;					\n"				
+					"	gl_Position = vec4(a_pos_uv[0], a_pos_uv[1], 0.0, 1.0);	\n"
+					"}								\n"));
+
+
+
 		//////////////////////////
 		// Fragment shaders
 		//////////////////////////
@@ -208,7 +222,21 @@ namespace noob
 					"	vec3 total_colour = tex_final.xyz * light;													\n"
 					"	out_colour = vec4(clamp(total_colour, 0.0, 1.0), 1.0);												\n"
 					"}																			\n"));
-		/*
+
+
+
+		static const std::string fs_text_src = noob::concat(shader_prefix, std::string(
+					"layout(location = 0) in vec2 v_uv;						\n"
+					"layout(location = 1) in vec4 v_colour;						\n"
+					"layout(location = 0) out vec4 out_colour;					\n"
+					"uniform sampler2D texture_0;                  					\n"
+					"void main()									\n"
+					"{										\n"
+					"	float f = texture(texture_0, v_uv).x;					\n"
+					"	out_colour = vec4(v_colour.rgb, v_colour.a * f);			\n"
+					"}										\n"));
+
+/*
 
 		   static std::string get_light(
 		   "vec3 get_light(vec3 world_pos, vec3 world_normal, vec3 eye_pos, vec3 light_pos, vec3 light_rgb)			\n"

@@ -112,7 +112,7 @@ void noob::stage::draw() noexcept(true)
 		const noob::instanced_model_handle modl_h = drawables[drawables_index].model;
 		const uint32_t instance_count = drawables[drawables_index].count;
 
-		gfx.draw(modl_h, instance_count);
+		gfx.draw_instanced(modl_h, instance_count);
 	}
 
 	if (terrain_started)

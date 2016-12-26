@@ -31,12 +31,13 @@ bool noob::globals::init() noexcept(true)
 	return true;
 }
 
+
 noob::instanced_model_handle noob::globals::model_from_shape(noob::shape_handle arg, uint32_t num) noexcept(true)
 {
 	noob::shape shp = shapes.get(arg);
 
 	noob::graphics& gfx = noob::get_graphics();
-	return gfx.instanced_model(shp.get_mesh(), num);
+	return gfx.add_instanced_models(shp.get_mesh(), num);
 }
 
 
@@ -73,6 +74,7 @@ noob::shape_handle noob::globals::box_shape(float x, float y, float z) noexcept(
 	}
 	return search->second;
 }
+
 
 noob::shape_handle noob::globals::hull_shape(const std::vector<noob::vec3f>& points) noexcept(true) 
 {

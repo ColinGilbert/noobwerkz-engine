@@ -9,17 +9,13 @@ namespace noob
 	// In this engine, billboards are textured 2D items that get shown in screen-space and drawn en-masse.
 	struct billboard_buffer : public model_buffered
 	{
-		static constexpr uint32_t stride = sizeof(noob::vec2f) * 2;
+		static constexpr uint32_t stride = sizeof(vec4f) * 2;
 	};
 
 	struct billboard_vertex
 	{
 		noob::vec2f pos;
 		noob::vec2f uv;
-	};
-
-	struct billboard_vertex_colour : public billboard_vertex
-	{
 		noob::vec4f colour;
 	};
 

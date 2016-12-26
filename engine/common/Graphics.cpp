@@ -403,10 +403,30 @@ static GLuint prep_texture()
 
 	glGenTextures(1, &texture_id);
 
-	glBindTexture(GL_TEXTURE_2D, texture_id);
-	
 	return texture_id;
 }
+
+
+// File-local function that helps reduce repeated code.
+static bool texture_packing_valid(uint32_t Arg) noexcept(true)
+{
+	// GL_PACK_ALIGNMENT 	integer 	4 	1, 2, 4, or 8
+	switch (Arg)
+	{
+		case (1):
+		case (2):
+		case (4):
+		case (8):
+			{
+				return true;
+
+			}
+	};
+
+	return false;
+
+}
+
 /////////////////////////////////////////////////////////////////////////
 // Finally, this is where the implementation of the interface begins.
 /////////////////////////////////////////////////////////////////////////
@@ -475,6 +495,15 @@ void noob::graphics::init(const noob::vec2ui Dims, const noob::texture_loader_2d
 	glEnableVertexAttribArray(2);
 	check_error_gl();
 
+
+	// Init text
+
+	text_shader = noob::graphics::program_handle::make(load_program_gl(noob::glsl::vs_billboard_src, noob::glsl::fs_text_src));
+	u_text_texture_0 = glGetUniformLocation(text_shader.index(), "texture_0");
+	check_error_gl();
+
+
+
 	glBindVertexArray(0);
 
 	// Do an initial frame and log
@@ -492,8 +521,10 @@ void noob::graphics::frame(const noob::vec2ui Dims) const noexcept(true)
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
-	glClearColor(0.2f, 0.0f, 0.2f, 0.0f);
+	glClearColor(0.2f, 0.0f, 0.2f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  
 
 	check_error_gl();
 }
@@ -533,7 +564,7 @@ void noob::graphics::upload_instanced_uniforms() const noexcept(true)
 }
 
 
-void noob::graphics::draw(const noob::instanced_model_handle Handle, uint32_t NumInstances) const noexcept(true)
+void noob::graphics::draw_instanced(const noob::instanced_model_handle Handle, uint32_t NumInstances) const noexcept(true)
 {
 	const noob::instanced_model m = instanced_models[Handle.index()];
 
@@ -542,6 +573,41 @@ void noob::graphics::draw(const noob::instanced_model_handle Handle, uint32_t Nu
 	check_error_gl();
 	glBindVertexArray(0);		
 }
+
+
+
+void noob::graphics::draw_text(const noob::billboard_buffer_handle Handle, noob::texture_2d_handle Tex, uint32_t NumBillboards) const noexcept(true)
+{
+	const noob::billboard_buffer bb = billboards[Handle.index()];
+
+	use_program(text_shader);
+	glActiveTexture(GL_TEXTURE0);
+	glUniform1i(u_text_texture_0, 0);
+
+	glBindVertexArray(bb.vao);
+
+	bind_texture(Tex);
+
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_NEVER);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	check_error_gl();
+
+	glDrawArrays(GL_TRIANGLES, 0, NumBillboards * 6);
+	check_error_gl();
+
+	// glDisable(GL_BLEND);
+	// glEnable(GL_CULL_FACE);
+	// glEnable(GL_DEPTH_TEST);
+
+	glBindVertexArray(0);		
+}
+
+
+
 
 
 void noob::graphics::draw_terrain(uint32_t Verts) const noexcept(true)
@@ -558,16 +624,15 @@ void noob::graphics::draw_terrain(uint32_t Verts) const noexcept(true)
 }
 
 
-noob::instanced_model_handle noob::graphics::instanced_model(const noob::mesh_3d& Mesh, uint32_t NumInstances) noexcept(true)
+noob::instanced_model_handle noob::graphics::add_instanced_models(const noob::mesh_3d& Mesh, uint32_t MaxInstances) noexcept(true)
 {
-	noob::instanced_model model;
-
-	if (NumInstances == 0)
+	if (MaxInstances == 0)
 	{
 		return noob::instanced_model_handle::make_invalid();
 	}
+	noob::instanced_model model;
 
-	model.n_instances = NumInstances;
+	model.n_instances = MaxInstances;
 
 	const uint32_t num_indices = Mesh.indices.size();
 	model.n_indices = num_indices;
@@ -629,10 +694,10 @@ noob::instanced_model_handle noob::graphics::instanced_model(const noob::mesh_3d
 	glEnableVertexAttribArray(2);
 
 	// Setup colours VBO:
-	// std::vector<noob::vec4f> colours(NumInstances, noob::vec4f(1.0, 1.0, 1.0, 1.0));
+	// std::vector<noob::vec4f> colours(MaxInstances, noob::vec4f(1.0, 1.0, 1.0, 1.0));
 	glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
-	glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::instanced_model::colours_stride, nullptr, GL_DYNAMIC_DRAW);
-	//glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::materials_stride, &colours[0].v[0], GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, MaxInstances * noob::instanced_model::colours_stride, nullptr, GL_DYNAMIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, MaxInstances * noob::model::materials_stride, &colours[0].v[0], GL_DYNAMIC_DRAW);
 
 	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(noob::vec4f), reinterpret_cast<const void *>(0));
 	glEnableVertexAttribArray(3);
@@ -640,10 +705,10 @@ noob::instanced_model_handle noob::graphics::instanced_model(const noob::mesh_3d
 	model.colours_vbo = colours_vbo;
 
 	// Setup matrices VBO:
-	// std::vector<noob::mat4f> matrices(NumInstances * 2, noob::identity_mat4());
+	// std::vector<noob::mat4f> matrices(MaxInstances * 2, noob::identity_mat4());
 	glBindBuffer(GL_ARRAY_BUFFER, matrices_vbo);
-	glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::instanced_model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
-	// glBufferData(GL_ARRAY_BUFFER, NumInstances * noob::model::matrices_stride, &matrices[0].m[0], GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, MaxInstances * noob::instanced_model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
+	// glBufferData(GL_ARRAY_BUFFER, MaxInstances * noob::model::matrices_stride, &matrices[0].m[0], GL_DYNAMIC_DRAW);
 
 	// Per instance model matrices
 	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(0));
@@ -691,9 +756,53 @@ noob::instanced_model_handle noob::graphics::instanced_model(const noob::mesh_3d
 
 	const noob::instanced_model_handle results = noob::instanced_model_handle::make(instanced_models.size() - 1);
 
-	noob::logger::log(noob::importance::INFO, noob::concat("[Graphics] Created instanced model with handle ", noob::to_string(results.index()), " and ", noob::to_string(NumInstances), " instances. Verts = ", noob::to_string(Mesh.vertices.size()), ", indices = ", noob::to_string(Mesh.indices.size()), ". Dims: ", noob::to_string(bb.max - bb.min)));
+	noob::logger::log(noob::importance::INFO, noob::concat("[Graphics] Created instanced model with handle ", noob::to_string(results.index()), " and ", noob::to_string(MaxInstances), " instances. Verts = ", noob::to_string(Mesh.vertices.size()), ", indices = ", noob::to_string(Mesh.indices.size()), ". Dims: ", noob::to_string(bb.max - bb.min)));
 
 	return results;
+}
+
+
+// TODO
+noob::billboard_buffer_handle noob::graphics::add_billboards(uint32_t MaxBillboards) noexcept(true)
+{
+	if (MaxBillboards == 0)
+	{
+		return noob::billboard_buffer_handle::make_invalid();
+	}
+
+	glBindVertexArray(0);
+
+	noob::billboard_buffer results;
+
+	results.max = MaxBillboards;
+
+	glGenVertexArrays(1, &results.vao);
+	glBindVertexArray(results.vao);
+
+	glGenBuffers(1, &results.vertices_vbo);
+
+	glBindBuffer(GL_ARRAY_BUFFER, results.vertices_vbo);
+
+	glBufferData(GL_ARRAY_BUFFER, MaxBillboards * noob::billboard_buffer::stride, nullptr, GL_DYNAMIC_DRAW);
+
+
+	//////////////////////
+	// Setup attrib specs
+	//////////////////////
+
+	// Positions + texcoords
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, noob::billboard_buffer::stride, reinterpret_cast<const void *>(0));
+	// Colours
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, noob::billboard_buffer::stride, reinterpret_cast<const void *>(sizeof(noob::vec4f)));
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+
+	check_error_gl();
+
+	billboards.push_back(results);
+
+	return noob::billboard_buffer_handle::make(billboards.size() - 1);
 }
 
 
@@ -719,6 +828,27 @@ void noob::graphics::resize_buffers(noob::instanced_model_handle Handle, uint32_
 		check_error_gl();
 
 		glBindVertexArray(0);
+	}
+}
+
+
+void noob::graphics::resize_buffers(noob::billboard_buffer_handle Handle, uint32_t MaxBillboards) noexcept(true)
+{
+	if (Handle.index() < billboards.size())
+	{
+		noob::billboard_buffer bb = billboards[Handle.index()];
+		if (bb.max < MaxBillboards)
+		{
+			bb.max = MaxBillboards;
+			billboards[Handle.index()] = bb;
+
+			glBindVertexArray(bb.vao);
+			glBindBuffer(GL_ARRAY_BUFFER, bb.vertices_vbo);
+			glBufferData(GL_ARRAY_BUFFER, bb.max * noob::billboard_buffer::stride, nullptr, GL_DYNAMIC_DRAW);
+			check_error_gl();
+
+			glBindVertexArray(0);
+		}
 	}
 }
 
@@ -815,9 +945,6 @@ noob::gpu_write_buffer noob::graphics::map_colours_buffer(noob::instanced_model_
 }
 
 
-
-
-
 noob::gpu_write_buffer noob::graphics::map_terrain_buffer(uint32_t Min, uint32_t Max) const noexcept(true)
 {
 	if (Min < Max && Max < max_terrain_verts)
@@ -844,26 +971,35 @@ noob::gpu_write_buffer noob::graphics::map_terrain_buffer(uint32_t Min, uint32_t
 }
 
 
+// TODO
 noob::gpu_write_buffer noob::graphics::map_billboards(noob::billboard_buffer_handle Handle, uint32_t Min, uint32_t Max) const noexcept(true)
 {
-	/*	
-		if (Max < max_text_verts)
-		{
-	// glBindVertexArray(terrain_model.vao);
-	glBindBuffer(GL_ARRAY_BUFFER, terrain_model.vertices_vbo);
-	check_error_gl();
-
-	const uint32_t total_size = noob::model::text_stride * (Max - Min);
-
-	float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, Min, Max, GL_MAP_WRITE_BIT));
-	check_error_gl();
-
-	if (ptr != nullptr)
+	if (Handle.index() < billboards.size())
 	{
-	return noob::gpu_write_buffer(ptr, total_size / sizeof(float));
+		const noob::billboard_buffer buf = billboards[Handle.index()];
+
+		if (Min < Max && Max < buf.max)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, buf.vertices_vbo);
+			check_error_gl();
+
+			const uint32_t total_size = noob::billboard_buffer::stride * (Max - Min);
+			float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, Min, Max, GL_MAP_WRITE_BIT));
+			check_error_gl();
+
+			if (ptr != nullptr)
+			{
+				return noob::gpu_write_buffer(ptr, total_size / sizeof(float));
+			}
+		}
+		else
+		{
+			noob::logger::log(noob::importance::WARNING, "[Graphics] Tried to use invalid value for mapping terrain buffer.");
+		}
+
+		return noob::gpu_write_buffer::make_invalid();	
+
 	}
-	}
-	*/	
 
 	return noob::gpu_write_buffer::make_invalid();	
 }
@@ -884,6 +1020,8 @@ noob::texture_2d_handle noob::graphics::texture_2d(const noob::texture_loader_2d
 	glBindVertexArray(0);
 
 	const GLuint texture_id = prep_texture();
+
+	glBindTexture(GL_TEXTURE_2D, texture_id);
 
 	const noob::vec2ui dims = TextureLoader.dimensions();
 
@@ -1031,7 +1169,7 @@ void noob::graphics::texture_data(noob::texture_array_2d_handle Handle, uint32_t
 }
 
 
-void noob::graphics::texture_data(noob::texture_3d_handle Handle, uint32_t Mip, const std::array<uint32_t, 3> Offset, const std::array<uint32_t, 3> Dims, const uint8_t* DataPtr) const noexcept(true)
+void noob::graphics::texture_data(noob::texture_3d_handle Handle, uint32_t Mip, const noob::vec3ui Offsets, const noob::vec3ui Dims, const uint8_t* DataPtr) const noexcept(true)
 {
 	// void glCompressedTexSubImage3D( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const GLvoid * data);
 
@@ -1372,26 +1510,6 @@ void noob::graphics::texture_wrap_mode(const std::array<noob::tex_wrap_mode, 3> 
 	check_error_gl();
 }
 
-
-// File-local function that helps reduce repeated code.
-static bool texture_packing_valid(uint32_t Arg) noexcept(true)
-{
-	// GL_PACK_ALIGNMENT 	integer 	4 	1, 2, 4, or 8
-	switch (Arg)
-	{
-		case (1):
-		case (2):
-		case (4):
-		case (8):
-			{
-				return true;
-
-			}
-	};
-
-	return false;
-
-}
 
 
 void noob::graphics::texture_pack_alignment(uint32_t Arg) const noexcept(true)

@@ -10,6 +10,7 @@ void noob::application::init(const noob::vec2ui Dims, const noob::vec2d Dpi, con
 
 	prefix = std::make_unique<std::string>(FilePath);
 
+
 	const std::string tex_src = noob::load_file_as_string(noob::concat(*prefix, "/texture/gradient_map.tga"));
 
 	noob::texture_loader_2d tex_data;
@@ -20,16 +21,25 @@ void noob::application::init(const noob::vec2ui Dims, const noob::vec2d Dpi, con
 	tex_info.pixels = tex_data.format();
 	
 	noob::graphics& gfx = noob::get_graphics();
+
+	// TODO: Improve graphics init.
 	gfx.init(window_dims, tex_data);
 
 	tex_data.free();
+
+
+	bool gui_works = app_gui.init(*prefix, window_dims, dpi);
+
+	if (!gui_works)
+	{
+		noob::logger::log(noob::importance::ERROR, "[Application] GUI failed to init!");
+	}
+
 
 	started = paused = input_has_started = false;
 
 	finger_positions = { noob::vec2f(0.0, 0.0), noob::vec2f(0.0, 0.0), noob::vec2f(0.0, 0.0), noob::vec2f(0.0, 0.0) };
 
-	ui_enabled = true;
-	gui.init("", window_dims);
 
 	noob::globals& g = noob::get_globals();
 	const bool are_globals_initialized = g.init();
@@ -39,6 +49,7 @@ void noob::application::init(const noob::vec2ui Dims, const noob::vec2d Dpi, con
 
 	stage.init(window_dims, proj_mat);
 	logger::log(noob::importance::INFO, noob::concat("[Application] Done basic init. Filepath = ", FilePath, ". Window dims: ", noob::to_string(window_dims), ". DPI: ", noob::to_string(dpi)));
+
 
 	bool b = user_init();
 
@@ -51,7 +62,7 @@ void noob::application::init(const noob::vec2ui Dims, const noob::vec2d Dpi, con
 
 void noob::application::update(double delta)
 {
-	gui.set_dims(window_dims);
+	app_gui.set_dims(window_dims);
 
 	stage.update(delta);
 	user_update(delta);
@@ -66,6 +77,8 @@ void noob::application::draw()
 	gfx.frame(window_dims);
 
 	stage.draw();
+
+	app_gui.draw();
 
 	const noob::time end_time = noob::clock::now();
 	const noob::duration draw_duration = end_time - start_time;

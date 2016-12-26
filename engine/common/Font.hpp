@@ -13,14 +13,11 @@
 
 #include <hb.h>
 #include <hb-ft.h>
-// Freetype-specific
-//#include <ft2build.h>
-//#include FT_FREETYPE_H  
-
+#include FT_GLYPH_H
 
 #include "Texture.hpp"
 #include "NoobUtils.hpp"
-#include "ReturnType.hpp"
+#include "Results.hpp"
 #include "Graphics.hpp"
 #include "StringFuncs.hpp"
 #include "BillboardModel.hpp"
@@ -57,7 +54,7 @@ namespace noob
 				return noob::concat("dims = ", noob::to_string(Arg.dims), ", bearings = ", noob::to_string(Arg.bearings), ", mapped dims = ", noob::to_string(Arg.mapped_dims), ", mapped positions = ", noob::to_string(Arg.mapped_pos));
 			}
 
-
+/*
 			struct shaped_glyph : public glyph
 			{
 				shaped_glyph() = delete;
@@ -73,7 +70,7 @@ namespace noob
 					
 
 			};
-
+*/
 			struct shaped_text
 			{
 				noob::vec2f dims = noob::vec2f(0.0, 0.0);
@@ -121,19 +118,22 @@ namespace noob
 
 			void add_feature(noob::font::feature Feature, bool Enable) noexcept(true);
 
-			noob::return_type<noob::font::shaped_text> shape_text(const noob::font::text& Text) noexcept(true);
+			noob::results<noob::font::shaped_text> shape_text(const noob::font::text& Text) noexcept(true);
 
+			noob::texture_2d_handle get_texture() const noexcept(true) { return tex; }
+
+//			noob::billboard_buffer_handle get_billboard
 		protected:
 			
 			noob::texture_2d_handle tex;
-			noob::billboard_buffer_handle model;
+		//	;
 			noob::vec2d dpi;
 
 			// Note: Font size is in 1/64 point units
 			uint16_t font_size, pixel_size;
 			
 			// Output container
-			std::vector<noob::font::shaped_glyph> output_glyphs;
+			// std::vector<noob::font::shaped_glyph> output_glyphs;
 			
 			// Containers used to check presence of glyphs
 			noob::fast_hashtable codepoints_to_glyphs;
@@ -141,10 +141,12 @@ namespace noob
 			
 			// Texture atlas
 			ftgl::texture_atlas_t* atlas;
-			
+			//noob::vec2ui Atlas
 			// FreeType
 			FT_Library ft_lib;
 			FT_Face ft_face;
+			
+			noob::vec2f max_adv = noob::vec2f(0.0, 0.0);
 			
 			// Harfbuzz-related
 			hb_font_t* hb_font = nullptr;

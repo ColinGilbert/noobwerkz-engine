@@ -69,7 +69,7 @@ namespace noob
 
 			noob::vec2ui window_dims;
 			noob::vec2d dpi;
-			noob::gui gui;
+			noob::gui app_gui;
 
 			// noob::vec3f eye_pos, eye_target, eye_up;
 

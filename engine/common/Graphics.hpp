@@ -14,7 +14,6 @@
 #include "GpuBuffer.hpp"
 #include "Texture.hpp"
 #include "Attrib.hpp"
-#include "ReturnType.hpp"
 #include "Shader.hpp"
 #include "TextureLoader.hpp"
 #include "Model.hpp"
@@ -48,12 +47,14 @@ namespace noob
 			void set_projection_mat(const noob::mat4f) noexcept(true);
 
 			// Currently, instanced models only support the basic vertex colours. This may change.
-			void draw(const noob::instanced_model_handle Handle, uint32_t NumInstances) const noexcept(true);
-			noob::instanced_model_handle instanced_model(const noob::mesh_3d& Mesh, uint32_t NumNnstances) noexcept(true);
-			noob::billboard_buffer_handle billboards(uint32_t NumBillboards) noexcept(true);
+			void draw_instanced(const noob::instanced_model_handle Handle, uint32_t MaxInstances) const noexcept(true);
+			void draw_text(const noob::billboard_buffer_handle, noob::texture_2d_handle Tex, uint32_t MaxBillboards) const noexcept(true);
+			
+			noob::instanced_model_handle add_instanced_models(const noob::mesh_3d& Mesh, uint32_t NumNnstances) noexcept(true);
+			noob::billboard_buffer_handle add_billboards(uint32_t MaxBillboards) noexcept(true);
 
-			void resize_buffers(noob::instanced_model_handle Handle, uint32_t NumInstances) noexcept(true);
-			void resize_buffers(noob::billboard_buffer_handle Handle, uint32_t NumInstances) noexcept(true);
+			void resize_buffers(noob::instanced_model_handle Handle, uint32_t MaxInstances) noexcept(true);
+			void resize_buffers(noob::billboard_buffer_handle Handle, uint32_t MaxBillboards) noexcept(true);
 			
 			void upload_instanced_uniforms() const noexcept(true);
 
@@ -88,7 +89,7 @@ namespace noob
 			// void texture_data(noob::texture_1d_handle, const std::string&) const noexcept(true);	// TODO
 			void texture_data(noob::texture_2d_handle, uint32_t Mip, const noob::vec2ui Offsets, const noob::vec2ui Dims, const uint8_t* DataPtr) const noexcept(true);
 			void texture_data(noob::texture_array_2d_handle, uint32_t Mip, uint32_t Index, const noob::vec2ui Offsets, const noob::vec2ui Dims, const uint8_t* DataPtr) const noexcept(true);
-			void texture_data(noob::texture_3d_handle, uint32_t Mip, const std::array<uint32_t, 3> Offsets, const std::array<uint32_t, 3> Dims, const uint8_t* DataPtr) const noexcept(true);
+			void texture_data(noob::texture_3d_handle, uint32_t Mip, const noob::vec3ui Offsets, const noob::vec3ui Dims, const uint8_t* DataPtr) const noexcept(true);
 
 			// Texture parameter setters, made typesafe, at the cost of more overloads. Ah well, tradeoffs...
 			// Params for 2d textures
@@ -120,6 +121,8 @@ namespace noob
 
 		protected:
 			std::vector<noob::instanced_model> instanced_models;
+			std::vector<noob::billboard_buffer> billboards;
+			
 			noob::terrain_model terrain;
 
 			std::vector<noob::texture_1d> textures_1d;
@@ -129,11 +132,12 @@ namespace noob
 
 			noob::graphics::program_handle instanced_shader;
 			noob::graphics::program_handle terrain_shader;
-			noob::graphics::program_handle billboard_shader;
+			noob::graphics::program_handle text_shader;
 
 			// These will soon be replaced by proper UBO's and made typesafe. The only reason they're here is to serve as a stable, well-understood prior case example.
 			uint32_t u_eye_pos, u_light_directional;
 			uint32_t u_mvp_terrain, u_eye_pos_terrain, u_light_directional_terrain, u_texture_0, u_colour_0, u_colour_1, u_colour_2, u_colour_3, u_blend_0, u_blend_1, u_tex_scales, u_model_scales;
+			uint32_t u_text_texture_0;
 
 			noob::mat4f view_mat, proj_mat;	
 			noob::vec3f eye_pos, light_direction;
