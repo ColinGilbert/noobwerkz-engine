@@ -559,7 +559,7 @@ bool noob::font::init_glyphs_helper(const std::vector<uint32_t>& CodePoints, con
 
 				if (reg.height > 0) // If our atlas hasn't run out of space
 				{
-					ftgl::texture_atlas_set_region(atlas, reg.x, reg.y, reg.width, reg.height, slot->bitmap.buffer, 0);
+					ftgl::texture_atlas_set_region(atlas, reg.x, reg.y, reg.width, reg.height, slot->bitmap.buffer, slot->bitmap.pitch);
 					// C'tor signature: glyph(const noob::vec2ui GlyphDims, const noob::vec2ui Bearings, const noob::vec2ui AtlasPos, const noob::vec2ui AtlasDims) noexcept(true) :
 					// TODO: Replace with non-c'tored version? Current version enforces good use.
 					stored_glyphs.push_back(noob::font::glyph(noob::vec2ui(reg.width, reg.height), noob::vec2ui(slot->bitmap_left, slot->bitmap_top), noob::vec2ui(reg.x, reg.y), AtlasDims));
