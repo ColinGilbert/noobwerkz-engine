@@ -543,7 +543,8 @@ void noob::graphics::frame(const noob::vec2ui Dims) const noexcept(true)
 	glClearColor(0.2f, 0.0f, 0.2f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
+
 
 	check_error_gl();
 }
@@ -607,7 +608,16 @@ void noob::graphics::draw_text(const noob::billboard_buffer_handle Handle, noob:
 
 	bind_texture(Tex);
 
-	glDisable(GL_CULL_FACE);
+	texture_min_filter(noob::tex_min_filter::LINEAR);
+	texture_mag_filter(noob::tex_mag_filter::LINEAR);
+
+	std::array<noob::tex_wrap_mode, 2> modes;
+	modes[0] = modes[1] = noob::tex_wrap_mode::CLAMP_TO_EDGE;
+
+	texture_wrap_mode(modes);
+
+
+	// glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
 	//glDepthFunc(GL_NEVER);
 
@@ -620,7 +630,7 @@ void noob::graphics::draw_text(const noob::billboard_buffer_handle Handle, noob:
 
 	// glDisable(GL_BLEND);
 	// glEnable(GL_CULL_FACE);
-	// glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 
 	glBindVertexArray(0);		
 }
@@ -636,6 +646,12 @@ void noob::graphics::draw_terrain(uint32_t Verts) const noexcept(true)
 	glActiveTexture(GL_TEXTURE0);
 	check_error_gl();
 	bind_texture(terrain_tex);
+
+	texture_wrap_mode(std::array<noob::tex_wrap_mode, 2>({tex_wrap_mode::REPEAT, tex_wrap_mode::REPEAT}));
+	texture_mag_filter(noob::tex_mag_filter::NEAREST);
+	texture_min_filter(noob::tex_min_filter::NEAREST);
+
+
 	upload_terrain_uniforms();
 	glDrawArrays(GL_TRIANGLES, 0, Verts);
 	check_error_gl();

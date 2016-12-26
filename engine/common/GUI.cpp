@@ -109,8 +109,8 @@ void noob::gui::debug_draw_atlas() const noexcept(true)
 noob::vec2f noob::gui::screenspace_pos(const noob::vec2f Pos) const noexcept(true)
 {
 	noob::vec2f position = Pos - noob::vec2f(dims[0] / 2.0, dims[1] / 2.0);
-	position[0] = position[0] / (dims[0] / 2.0);
-	position[1] = position[1] / (dims[1] / 2.0);
+	position[0] = position[0] / (static_cast<float>(dims[0]) / 2.0);
+	position[1] = position[1] / (static_cast<float>(dims[1]) / 2.0);
 	return position;
 }
 

@@ -289,9 +289,6 @@ bool noob::font::init_glyphs(const std::string& Characters, uint16_t FontSize) n
 				noob::texture_loader_2d texloader;
 				texloader.from_mem_raw(noob::vec2ui(dim, dim), false, noob::pixel_format::R8, atlas->data, dim*dim);
 
-				gfx.texture_unpack_alignment(4);
-
-
 /*
 				// DEBUGGING
 				std::string atlas_dbg; // = "\n";
@@ -314,24 +311,15 @@ bool noob::font::init_glyphs(const std::string& Characters, uint16_t FontSize) n
 				dbg_file.open ("atlasdebug.txt");
 				dbg_file << atlas_dbg;
 				dbg_file.close();
-*/
 
 				// noob::logger::log(noob::importance::INFO, atlas_dbg);
 
-				// gfx.texture_min_filter(noob::tex_min_filter::LINEAR);
-				// gfx.texture_mag_filter(noob::tex_mag_filter::LINEAR);
-
-				// std::array<noob::tex_wrap_mode, 2> modes;
-				// modes[0] = modes[1] = noob::tex_wrap_mode::CLAMP_TO_EDGE;
-
-				// gfx.texture_wrap_mode(modes);
+*/
 
 				tex = gfx.texture_2d(texloader, false, true);
 
 				// gfx.texture_unpack_alignment(4);
-				// modes[0] = modes[1] = noob::tex_wrap_mode::REPEAT;
-				// gfx.texture_wrap_mode(modes);
-				// gfx.texture_min_filter(noob::tex_min_filter::LINEAR_MIPMAP_NEAREST);
+
 
 				return true;
 			}
@@ -443,7 +431,7 @@ noob::results<noob::font::shaped_text> noob::font::shape_text(const noob::font::
 				const noob::vec2f offsets = noob::vec2f(noob::div_fp(pos_hb.x_offset, 64), noob::div_fp(pos_hb.y_offset, 64));
 
 				const noob::vec2f uv_0 = base_glyph.mapped_pos;
-				const noob::vec2f uv_1 = base_glyph.mapped_pos + base_glyph.mapped_dims;
+ 				const noob::vec2f uv_1 = base_glyph.mapped_pos + base_glyph.mapped_dims;
 
 				const vec2f pos_0 = noob::vec2f(pen_pos[0] + offsets[0] + base_glyph.bearings[0], std::floor(pen_pos[1] + offsets[1] + base_glyph.bearings[1]));
 				const vec2f pos_1 = noob::vec2f(pos_0[0] + base_glyph.dims[0], std::floor(pos_0[1] + base_glyph.dims[1]));
@@ -460,7 +448,7 @@ noob::results<noob::font::shaped_text> noob::font::shape_text(const noob::font::
 				const noob::billboard_vertex vert_2 = { pos_1, uv_1, colour };
 				const noob::billboard_vertex vert_3 = { noob::vec2f(pos_1[0], pos_0[1]), noob::vec2f(uv_1[0], uv_0[1]), colour };
 
-				const std::array<noob::billboard_vertex, 6> quad_verts = { vert_0, vert_1, vert_2, vert_0, vert_2, vert_3 };
+				const std::array<noob::billboard_vertex, 6> quad_verts = { vert_0, vert_2, vert_1, vert_0, vert_3, vert_2 };
 
 				results.quads.push_back(quad_verts);
 
