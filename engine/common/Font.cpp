@@ -1,5 +1,8 @@
 #include "Font.hpp"
 
+#include <iostream>
+#include <fstream>
+
 /////////////////////////////////////////////////////////
 // Static helpers we wished to keep out of public sight
 /////////////////////////////////////////////////////////
@@ -281,10 +284,39 @@ bool noob::font::init_glyphs(const std::string& Characters, uint16_t FontSize) n
 				noob::logger::log(noob::importance::INFO, noob::concat("[Font] Creating texture atlas of size ", noob::to_string(dim), "*", noob::to_string(dim), " for ", noob::to_string(codepoints.size()), " codepoints."));
 				noob::graphics& gfx = noob::get_graphics();
 				gfx.texture_unpack_alignment(1);
+				// gfx.texture_pack_alignment(1);
 
 				noob::texture_loader_2d texloader;
 				texloader.from_mem_raw(noob::vec2ui(dim, dim), false, noob::pixel_format::R8, atlas->data, dim*dim);
 
+				gfx.texture_unpack_alignment(4);
+
+
+/*
+				// DEBUGGING
+				std::string atlas_dbg; // = "\n";
+
+				for(int iy = 0; iy < atlas->height; ++iy)
+				{
+					for(int ix = 0; ix < atlas->width; ++ix)
+					{
+						int c = (int)atlas->data[iy * atlas->width + ix];
+						std::string temp;
+						if (c == 255) temp = "#";
+						else temp = "`";
+						atlas_dbg = noob::concat(atlas_dbg, temp);
+					}
+					atlas_dbg = noob::concat(atlas_dbg, "\n");
+				}
+				// atlas_dbg = noob::concat(atlas_dbg, "\n");
+
+				std::ofstream dbg_file;
+				dbg_file.open ("atlasdebug.txt");
+				dbg_file << atlas_dbg;
+				dbg_file.close();
+*/
+
+				// noob::logger::log(noob::importance::INFO, atlas_dbg);
 
 				// gfx.texture_min_filter(noob::tex_min_filter::LINEAR);
 				// gfx.texture_mag_filter(noob::tex_mag_filter::LINEAR);
@@ -294,7 +326,7 @@ bool noob::font::init_glyphs(const std::string& Characters, uint16_t FontSize) n
 
 				// gfx.texture_wrap_mode(modes);
 
-				tex = gfx.texture_2d(texloader, false);
+				tex = gfx.texture_2d(texloader, false, true);
 
 				// gfx.texture_unpack_alignment(4);
 				// modes[0] = modes[1] = noob::tex_wrap_mode::REPEAT;
@@ -482,22 +514,22 @@ bool noob::font::init_glyphs_helper(const std::vector<uint32_t>& CodePoints, con
 			{
 				FT_GlyphSlot slot = ft_face->glyph;
 				// FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
-/*				FT_Glyph glyph_local;
-				if (FT_Get_Glyph(slot, &glyph_local))
-				{
-					noob::logger::log(noob::importance::ERROR, "[Font] could not get glyph for slot");
-					continue;
-				}
+				/*				FT_Glyph glyph_local;
+								if (FT_Get_Glyph(slot, &glyph_local))
+								{
+								noob::logger::log(noob::importance::ERROR, "[Font] could not get glyph for slot");
+								continue;
+								}
 
-				if (FT_Glyph_To_Bitmap(&glyph_local, FT_RENDER_MODE_NORMAL, 0, 1))
-				{
-					noob::logger::log(noob::importance::ERROR, "[Font] could not convert glyph to bitmap.");
-					continue;
+								if (FT_Glyph_To_Bitmap(&glyph_local, FT_RENDER_MODE_NORMAL, 0, 1))
+								{
+								noob::logger::log(noob::importance::ERROR, "[Font] could not convert glyph to bitmap.");
+								continue;
 
-				}
+								}
 
-				FT_Done_Glyph(glyph_local);
-*/
+								FT_Done_Glyph(glyph_local);
+								*/
 
 				if (slot->bitmap.width == 0 || slot->bitmap.rows == 0)
 				{
@@ -505,29 +537,29 @@ bool noob::font::init_glyphs_helper(const std::vector<uint32_t>& CodePoints, con
 					continue;
 				}
 				// DEBUGGING
-		
-				std::string glyph_dbg = "\n";
+				/*		
+						std::string glyph_dbg = "\n";
 
-				for(int iy = 0; iy < slot->bitmap.rows; ++iy)
-				{
-					for(int ix = 0; ix < slot->bitmap.width; ++ix) {
+						for(int iy = 0; iy < slot->bitmap.rows; ++iy)
+						{
+						for(int ix = 0; ix < slot->bitmap.width; ++ix) {
 						int c = (int) slot->bitmap.buffer[iy * slot->bitmap.width + ix];
 						std::string temp;
 						if (c == 255) temp = "#";
 						else temp = "`";
 						glyph_dbg = noob::concat(glyph_dbg, temp);
-					}
-					glyph_dbg = noob::concat(glyph_dbg, "\n");
-				}
-				glyph_dbg = noob::concat(glyph_dbg, "\n");
-				noob::logger::log(noob::importance::INFO, glyph_dbg);
-
+						}
+						glyph_dbg = noob::concat(glyph_dbg, "\n");
+						}
+						glyph_dbg = noob::concat(glyph_dbg, "\n");
+						noob::logger::log(noob::importance::INFO, glyph_dbg);
+						*/
 
 				const ftgl::ivec4 reg = ftgl::texture_atlas_get_region(atlas, slot->bitmap.width, slot->bitmap.rows);
 
 				if (reg.height > 0) // If our atlas hasn't run out of space
 				{
-					texture_atlas_set_region(atlas, reg.x, reg.y, reg.width, reg.height, slot->bitmap.buffer, atlas->depth);
+					ftgl::texture_atlas_set_region(atlas, reg.x, reg.y, reg.width, reg.height, slot->bitmap.buffer, 0);
 					// C'tor signature: glyph(const noob::vec2ui GlyphDims, const noob::vec2ui Bearings, const noob::vec2ui AtlasPos, const noob::vec2ui AtlasDims) noexcept(true) :
 					// TODO: Replace with non-c'tored version? Current version enforces good use.
 					stored_glyphs.push_back(noob::font::glyph(noob::vec2ui(reg.width, reg.height), noob::vec2ui(slot->bitmap_left, slot->bitmap_top), noob::vec2ui(reg.x, reg.y), AtlasDims));

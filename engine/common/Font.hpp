@@ -126,7 +126,6 @@ namespace noob
 		protected:
 			
 			noob::texture_2d_handle tex;
-		//	;
 			noob::vec2d dpi;
 
 			// Note: Font size is in 1/64 point units

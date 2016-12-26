@@ -90,7 +90,7 @@ static GLenum check_error_gl(const char *file, int line)
 // GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC
 
 
-static GLenum get_gl_storage_format(const noob::pixel_format Pixels)
+static GLenum get_pixel_format_sized(const noob::pixel_format Pixels)
 {
 	GLenum results;
 
@@ -99,50 +99,69 @@ static GLenum get_gl_storage_format(const noob::pixel_format Pixels)
 		case(noob::pixel_format::R8):
 			{
 				results = GL_R8;
+				break;
 			}
 		case(noob::pixel_format::RG8):
 			{
 				results = GL_RG8;
+				break;				
 			}
 		case(noob::pixel_format::RGB8):
 			{
-				results = GL_RGB8;				
+				results = GL_RGB8;
+				break;				
 			}
 		case(noob::pixel_format::SRGB8):
 			{
-				results = GL_SRGB8;		
+				results = GL_SRGB8;
+				break;				
 			}
 		case(noob::pixel_format::RGBA8):
 			{
-				results = GL_RGBA8;		
+				results = GL_RGBA8;
+				break;
 			}
 		case(noob::pixel_format::SRGBA8):
 			{
 				results = GL_SRGB8_ALPHA8;		
+				break;
+
 			}
 		case(noob::pixel_format::RGB8_COMPRESSED):
 			{
 				results = GL_COMPRESSED_RGB8_ETC2;		
+				break;
+
 			}
 		case(noob::pixel_format::SRGB8_COMPRESSED):
 			{
 				results = GL_COMPRESSED_SRGB8_ETC2;		
+				break;
+
 			}
 		case(noob::pixel_format::RGB8_A1_COMPRESSED):
 			{
-				results = GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2;		
+				results = GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2;	
+				break;
+
 			}
 		case(noob::pixel_format::SRGB8_A1_COMPRESSED):
 			{
-				results = GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2;		
+				results = GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2;
+				break;
+
 			}
 		case(noob::pixel_format::RGBA8_COMPRESSED):
 			{
-				results = GL_COMPRESSED_RGBA8_ETC2_EAC;		
+				results = GL_COMPRESSED_RGBA8_ETC2_EAC;
+				break;
+
 			}
 		case(noob::pixel_format::SRGBA8_COMPRESSED):
 			{		
 				results = GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC;
+				break;
+
 			}
 	}
 
@@ -471,7 +490,7 @@ void noob::graphics::init(const noob::vec2ui Dims, const noob::texture_loader_2d
 	check_error_gl();
 
 	noob::texture_info texinfo;
-	terrain_tex = texture_2d(TexLoader, true);
+	terrain_tex = texture_2d(TexLoader, true, false);
 	check_error_gl();
 
 	texture_wrap_mode(std::array<noob::tex_wrap_mode, 2>({tex_wrap_mode::REPEAT, tex_wrap_mode::REPEAT}));
@@ -1013,10 +1032,8 @@ void noob::graphics::unmap_buffer() const noexcept(true)
 }
 
 
-noob::texture_2d_handle noob::graphics::texture_2d(const noob::texture_loader_2d& TextureLoader, bool GenMips) noexcept(true)
+noob::texture_2d_handle noob::graphics::texture_2d(const noob::texture_loader_2d& TextureLoader, bool GenMips, bool Immutable) noexcept(true)
 {
-	const GLenum sized_fmt = get_gl_storage_format(TextureLoader.format());
-
 	glBindVertexArray(0);
 
 	const GLuint texture_id = prep_texture();
@@ -1031,9 +1048,11 @@ noob::texture_2d_handle noob::graphics::texture_2d(const noob::texture_loader_2d
 		mips = noob::get_num_mips(dims);
 	}
 
-	//	glTexStorage2D(GL_TEXTURE_2D, mips, sized_fmt, dims[0], dims[1]);
-
-	check_error_gl();
+	if (Immutable)
+	{
+		glTexStorage2D(GL_TEXTURE_2D, mips, get_pixel_format_sized(TextureLoader.format()), dims[0], dims[1]);
+		check_error_gl();	
+	}
 
 	if (TextureLoader.compressed())
 	{
@@ -1046,24 +1065,31 @@ noob::texture_2d_handle noob::graphics::texture_2d(const noob::texture_loader_2d
 		{
 			data_size = get_compressed_size_rgb8(dims[0], dims[1]);
 		}
-		// glCompressedTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, dims[0], dims[1], sized_fmt, data_size, reinterpret_cast<const GLvoid*>(TextureLoader.buffer()));
 
-		// glCompressedTexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid * data);
-
-		check_error_gl();		
+		if (Immutable)
+		{
+			glCompressedTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, dims[0], dims[1], get_pixel_format_sized(TextureLoader.format()), data_size, reinterpret_cast<const GLvoid*>(TextureLoader.buffer()));
+			check_error_gl();		
+		}
 	}
 	else
 	{
-		const GLenum unsized_fmt = get_pixel_format_unsized(TextureLoader.format());
-		// glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, dims[0], dims[1], fmt, GL_UNSIGNED_BYTE, reinterpret_cast<const GLvoid*>(TextureLoader.buffer()));	
-
-		glTexImage2D(GL_TEXTURE_2D, 0, unsized_fmt, dims[0], dims[1], 0, unsized_fmt, GL_UNSIGNED_BYTE, reinterpret_cast<const GLvoid*>(TextureLoader.buffer()));
-		check_error_gl();
+		if (Immutable)
+		{
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, dims[0], dims[1], get_pixel_format_unsized(TextureLoader.format()), GL_UNSIGNED_BYTE, reinterpret_cast<const GLvoid*>(TextureLoader.buffer()));
+			check_error_gl();					
+		}
+		else
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, get_pixel_format_unsized(TextureLoader.format()), dims[0], dims[1], 0, get_pixel_format_unsized(TextureLoader.format()), GL_UNSIGNED_BYTE, reinterpret_cast<const GLvoid*>(TextureLoader.buffer()));
+			check_error_gl();			
+		}
 	}
 
 	if (GenMips)
 	{
 		glGenerateMipmap(GL_TEXTURE_2D);
+		check_error_gl();		
 	}
 
 	noob::texture_2d t(texture_id, noob::texture_info(mips > 1, TextureLoader.format()), dims[0], dims[1]);
@@ -1076,7 +1102,7 @@ noob::texture_2d_handle noob::graphics::texture_2d(const noob::texture_loader_2d
 
 noob::texture_array_2d_handle noob::graphics::texture_array_2d(const noob::vec2ui Dims, uint32_t Indices, const noob::texture_info TexInfo) noexcept(true)
 {
-	const GLenum fmt = get_gl_storage_format(TexInfo.pixels);
+	const GLenum fmt = get_pixel_format_sized(TexInfo.pixels);
 
 	glBindVertexArray(0);
 
@@ -1103,7 +1129,7 @@ noob::texture_array_2d_handle noob::graphics::texture_array_2d(const noob::vec2u
 
 noob::texture_3d_handle noob::graphics::texture_3d(const noob::vec3ui Dims, const noob::texture_info TexInfo) noexcept(true)
 {
-	const GLenum fmt = get_gl_storage_format(TexInfo.pixels);
+	const GLenum fmt = get_pixel_format_sized(TexInfo.pixels);
 
 	glBindVertexArray(0);
 

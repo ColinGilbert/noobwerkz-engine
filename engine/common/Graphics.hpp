@@ -80,7 +80,7 @@ namespace noob
 			void unmap_buffer() const noexcept(true);
 
 			// noob::texture_1d_handle reserve_texture_1d(uint32_t length, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true); // TODO
-			noob::texture_2d_handle texture_2d(const noob::texture_loader_2d&, bool GenMips) noexcept(true);
+			noob::texture_2d_handle texture_2d(const noob::texture_loader_2d&, bool GenMips, bool Immutable) noexcept(true);
 			noob::texture_array_2d_handle texture_array_2d(const noob::vec2ui Dims, uint32_t Indices, const noob::texture_info) noexcept(true);
 			noob::texture_3d_handle texture_3d(const noob::vec3ui Dims, const noob::texture_info) noexcept(true);
 			// noob::texture_handle reserve_texture_cube(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true); // TODO
