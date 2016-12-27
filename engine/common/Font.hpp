@@ -54,23 +54,6 @@ namespace noob
 				return noob::concat("dims = ", noob::to_string(Arg.dims), ", bearings = ", noob::to_string(Arg.bearings), ", mapped dims = ", noob::to_string(Arg.mapped_dims), ", mapped positions = ", noob::to_string(Arg.mapped_pos));
 			}
 
-/*
-			struct shaped_glyph : public glyph
-			{
-				shaped_glyph() = delete;
-				// This constructor is an ugly one, I'll admit. It is, however, a manner of ensuring that only the right dimensions ever get placed inside it. The conversion is explicitly made via double-precision division in order to minimize bit-error.
-				shaped_glyph(const noob::vec2ui GlyphDims, const noob::vec2ui Bearings, const noob::vec2ui AtlasPos, const noob::vec2ui AtlasDims) noexcept(true) :
-					 glyph(GlyphDims, Bearings, AtlasPos, AtlasDims)
-				{}
-				~shaped_glyph() noexcept(true) = default;
-				shaped_glyph(const noob::font::shaped_glyph&) noexcept(true) = default;
-
-				shaped_glyph& operator=(const noob::font::shaped_glyph&) noexcept(true) = default;
-
-					
-
-			};
-*/
 			struct shaped_text
 			{
 				noob::vec2f dims = noob::vec2f(0.0, 0.0);
@@ -156,7 +139,7 @@ namespace noob
 			bool ft_face_valid = false;
 			bool atlas_valid = false;
 
-			bool init_glyphs(const std::string& Characters, uint16_t SizeInPoints) noexcept(true);
+			bool init_glyphs(const std::string& Characters) noexcept(true);
 			bool init_glyphs_helper(const std::vector<uint32_t>& CodePoints, const noob::vec2ui AtlasDims) noexcept(true);
 
 	};

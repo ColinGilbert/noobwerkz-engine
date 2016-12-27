@@ -96,6 +96,17 @@ static hb_direction_t direction_to_hb(noob::font::direction Dir)
 	return results;
 }
 
+static int force_ucs2_charmap(FT_Face ftf)
+{
+    for(int i = 0; i < ftf->num_charmaps; i++)
+    {
+        if ((  (ftf->charmaps[i]->platform_id == 0) && (ftf->charmaps[i]->encoding_id == 3)) || ((ftf->charmaps[i]->platform_id == 3) && (ftf->charmaps[i]->encoding_id == 1)))
+	{
+                return FT_Set_Charmap(ftf, ftf->charmaps[i]);
+        }
+    }
+    return -1;
+}
 
 //////////////////////////////////////////////////////////////
 // This is where the implementation of the public API begins:
@@ -193,6 +204,7 @@ noob::font::~font() noexcept(true)
 bool noob::font::init_library(const std::string& Mem, const noob::vec2d Dpi, const std::string& Characters, uint16_t FontSize) noexcept(true)
 {
 	dpi = Dpi;
+	font_size = FontSize;
 
 	FT_Init_FreeType(&ft_lib);
 
@@ -202,7 +214,7 @@ bool noob::font::init_library(const std::string& Mem, const noob::vec2d Dpi, con
 		return false;
 	}
 
-	max_adv = noob::vec2f(static_cast<float>(ft_face->max_advance_width), static_cast<float>(ft_face->max_advance_height));
+	max_adv = noob::vec2f(static_cast<float>(ft_face->max_advance_width) / 64, static_cast<float>(ft_face->max_advance_height) / 64);
 
 	if (FT_Select_Charmap(ft_face, FT_ENCODING_UNICODE))
 	{
@@ -210,11 +222,17 @@ bool noob::font::init_library(const std::string& Mem, const noob::vec2d Dpi, con
 		return false;
 	}
 
-	FT_Set_Char_Size(ft_face, FontSize * 64, 0, Dpi[0], Dpi[1]);
+/*
+	if (force_ucs2_charmap(ft_face) != 0)
+	{
+		noob::logger::log(noob::importance::WARNING, "[Font] Couldn't set UCS2 charmap!");
+	}
+*/
+	FT_Set_Char_Size(ft_face, 0,  FontSize * 64, Dpi[0], Dpi[1]);
 
 	ft_face_valid = true;
 
-	const bool glyphs_good = init_glyphs(Characters, FontSize);
+	const bool glyphs_good = init_glyphs(Characters);
 
 	if (!glyphs_good) 
 	{
@@ -234,7 +252,7 @@ bool noob::font::init_library(const std::string& Mem, const noob::vec2d Dpi, con
 }
 
 
-bool noob::font::init_glyphs(const std::string& Characters, uint16_t FontSize) noexcept(true)
+bool noob::font::init_glyphs(const std::string& Characters) noexcept(true)
 {
 	if(ft_face_valid)
 	{
@@ -264,15 +282,6 @@ bool noob::font::init_glyphs(const std::string& Characters, uint16_t FontSize) n
 			}
 		}
 
-		// FT_GlyphSlot slot = ft_face->glyph;
-		if (FT_Set_Char_Size(ft_face,  FontSize * 64, FontSize * 64, static_cast<uint32_t>(dpi[0]), static_cast<uint32_t>(dpi[1])))
-		{
-			noob::logger::log(noob::importance::ERROR, noob::concat("[Font] Failed to set font size!"));
-			return false;
-		}
-
-		font_size = FontSize;
-
 		const uint32_t min_dim = 64;
 		const uint32_t max_dim = 2048; // TODO: Set to implementation-specific max value.
 
@@ -284,7 +293,6 @@ bool noob::font::init_glyphs(const std::string& Characters, uint16_t FontSize) n
 				noob::logger::log(noob::importance::INFO, noob::concat("[Font] Creating texture atlas of size ", noob::to_string(dim), "*", noob::to_string(dim), " for ", noob::to_string(codepoints.size()), " codepoints."));
 				noob::graphics& gfx = noob::get_graphics();
 				gfx.texture_unpack_alignment(1);
-				// gfx.texture_pack_alignment(1);
 
 				noob::texture_loader_2d texloader;
 				texloader.from_mem_raw(noob::vec2ui(dim, dim), false, noob::pixel_format::R8, atlas->data, dim*dim);
@@ -383,7 +391,7 @@ noob::results<noob::font::shaped_text> noob::font::shape_text(const noob::font::
 		{
 			if(!utf8_decode_hoehrmann(&state, &code_point, c))
 			{
-				if (!has_glyph(code_point))
+				if (!has_glyph(code_point) && code_point != 32)
 				{
 					noob::logger::log(noob::importance::WARNING, noob::concat("[Font] Could not apply shaping to text with invalid codepoint ", noob::to_string(code_point), " at position ", noob::to_string(counter)));
 					return noob::results<noob::font::shaped_text>::make_invalid();
@@ -394,7 +402,7 @@ noob::results<noob::font::shaped_text> noob::font::shape_text(const noob::font::
 		}
 
 		hb_buffer_add_codepoints(hb_buf, &codepoints[0], codepoints.size(), 0, codepoints.size());
-
+		// hb_buffer_guess_segment_properties(hb_buf);
 		// Harfbuzz shaping
 		hb_shape(hb_font, hb_buf, features.empty() ? nullptr : &features[0], features.size());
 
@@ -419,30 +427,34 @@ noob::results<noob::font::shaped_text> noob::font::shape_text(const noob::font::
 			const uint32_t cp = codepoints[i];
 
 			const noob::fast_hashtable::cell* const glyph_cell = codepoints_to_glyphs.lookup_immutable(cp);
-			if (cp == 32)
-			{
-				pen_pos += max_adv;
-			}
-			else if (codepoints_to_glyphs.is_valid(glyph_cell))
+			// if (cp == 32)
+			// {
+			//	pen_pos += noob::vec2f(max_adv[0], 0.0);
+			// }
+			// else
+			if (codepoints_to_glyphs.is_valid(glyph_cell))
 			{
 				const noob::font::glyph base_glyph = stored_glyphs[glyph_cell->value];
 
 				const noob::vec2f advances = noob::vec2f(noob::div_fp(pos_hb.x_advance, 64), noob::div_fp(pos_hb.y_advance, 64));
 				const noob::vec2f offsets = noob::vec2f(noob::div_fp(pos_hb.x_offset, 64), noob::div_fp(pos_hb.y_offset, 64));
 
-				const noob::vec2f uv_0 = base_glyph.mapped_pos;
- 				const noob::vec2f uv_1 = base_glyph.mapped_pos + base_glyph.mapped_dims;
+				const noob::vec2f first_texcoord = noob::min(base_glyph.mapped_pos, base_glyph.mapped_pos + base_glyph.mapped_dims);
+				const noob::vec2f second_texcoord = noob::max(base_glyph.mapped_pos, base_glyph.mapped_pos + base_glyph.mapped_dims);
 
-				const vec2f pos_0 = noob::vec2f(pen_pos[0] + offsets[0] + base_glyph.bearings[0], std::floor(pen_pos[1] + offsets[1] + base_glyph.bearings[1]));
-				const vec2f pos_1 = noob::vec2f(pos_0[0] + base_glyph.dims[0], std::floor(pos_0[1] + base_glyph.dims[1]));
+				const noob::vec2f uv_0 = noob::vec2f(first_texcoord[0], second_texcoord[1]);
+ 				const noob::vec2f uv_1 = noob::vec2f(second_texcoord[0], first_texcoord[1]);
+
+				const vec2f pos_0 = noob::vec2f(pen_pos[0] + offsets[0] + base_glyph.bearings[0], pen_pos[1] + offsets[1] + base_glyph.bearings[1]);
+				const vec2f pos_1 = pos_0 + noob::vec2f(base_glyph.dims[0], base_glyph.dims[1]);//noob::vec2f(pos_0[0] + base_glyph.dims[0], pos_0[1] + base_glyph.dims[1]);
 
 				lower_bounds = noob::min(noob::min(pos_0, pos_1), lower_bounds);
 				upper_bounds = noob::max(noob::max(pos_0, pos_1), upper_bounds);
 
 				pen_pos += advances;
 
-				const noob::vec4f colour = noob::vec4f(1.0, 1.0, 1.0, 1.0);
-
+				const noob::vec4f colour = noob::vec4f(1.0, 1.0, 1.0, 1.0); // Default colour
+				// const noob::vec4f colour_dbg(0.0, 0.0, 0.0, 1.0);
 				const noob::billboard_vertex vert_0 = { pos_0, uv_0, colour };
 				const noob::billboard_vertex vert_1 = { noob::vec2f(pos_0[0], pos_1[1]), noob::vec2f(uv_0[0], uv_1[1]), colour };
 				const noob::billboard_vertex vert_2 = { pos_1, uv_1, colour };
@@ -549,8 +561,12 @@ bool noob::font::init_glyphs_helper(const std::vector<uint32_t>& CodePoints, con
 				{
 					ftgl::texture_atlas_set_region(atlas, reg.x, reg.y, reg.width, reg.height, slot->bitmap.buffer, slot->bitmap.pitch);
 					// C'tor signature: glyph(const noob::vec2ui GlyphDims, const noob::vec2ui Bearings, const noob::vec2ui AtlasPos, const noob::vec2ui AtlasDims) noexcept(true) :
-					// TODO: Replace with non-c'tored version? Current version enforces good use.
-					stored_glyphs.push_back(noob::font::glyph(noob::vec2ui(reg.width, reg.height), noob::vec2ui(slot->bitmap_left, slot->bitmap_top), noob::vec2ui(reg.x, reg.y), AtlasDims));
+					
+					// TODO: Add bearing code for vertical text types
+
+					const noob::vec2ui bearings = noob::vec2ui(noob::div_fp(slot->metrics.horiBearingX, 64), noob::div_fp(slot->metrics.horiBearingY, 64));
+
+					stored_glyphs.push_back(noob::font::glyph(noob::vec2ui(slot->bitmap.width, slot->bitmap.rows), bearings /* noob::vec2ui(slot->bitmap_left, slot->bitmap_top)*/, noob::vec2ui(reg.x, reg.y), AtlasDims));
 					noob::fast_hashtable::cell* incell = codepoints_to_glyphs.insert(cp);
 					incell->value = stored_glyphs.size() - 1;
 				}

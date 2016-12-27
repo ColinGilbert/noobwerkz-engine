@@ -14,10 +14,14 @@ bool noob::gui::init(const std::string& Prefix, const noob::vec2ui Dims, const n
 
 	billbuf = gfx.add_billboards(max_text_verts);
 
-	if (!gui_font.init_library(noob::load_file_as_string(noob::concat(Prefix, "font/OpenDyslexic-Regular.ttf")), Dpi, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-=_+`~[]{}|;:<>,./?'\"", 36))
+	if (!gui_font.init_library(noob::load_file_as_string(noob::concat(Prefix, /*"font/DroidSansMono.ttf"*/ "font/Asimov.otf" /*"opendyslexic-3-regular.ttf"*/)), Dpi, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-=_+`~[]{}|;:<>,./?'\"", 36))
 	{
 		return false;
 	}
+
+	// gui_font.add_feature(noob::font::feature::KERNING, true);
+	// gui_font.add_feature(noob::font::feature::LIGATURE, false);
+	// gui_font.add_feature(noob::font::feature::CONTEXTUAL_LIGATURE, false);
 
 	return true;
 }
@@ -40,12 +44,12 @@ void noob::gui::text(const std::string& Text, const noob::vec2f Pos, noob::gui::
 	{
 		for (std::array<noob::billboard_vertex, 6> qq : shaped.value.quads)
 		{
+			uint32_t dbg_counter = 0;
 			for (noob::billboard_vertex vv : qq)
 			{
 				noob::billboard_vertex temp(vv);
 				temp.pos = screenspace_pos(Pos + vv.pos);
 				temp.colour = Colour;
-				// temp.uv = vv.uv;
 				drawlist.push_back(temp);
 			}
 

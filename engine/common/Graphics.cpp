@@ -616,10 +616,7 @@ void noob::graphics::draw_text(const noob::billboard_buffer_handle Handle, noob:
 
 	texture_wrap_mode(modes);
 
-
-	// glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
-	//glDepthFunc(GL_NEVER);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -628,8 +625,6 @@ void noob::graphics::draw_text(const noob::billboard_buffer_handle Handle, noob:
 	glDrawArrays(GL_TRIANGLES, 0, NumBillboards * 6);
 	check_error_gl();
 
-	// glDisable(GL_BLEND);
-	// glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 
 	glBindVertexArray(0);		

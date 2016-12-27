@@ -106,7 +106,7 @@ bool noob::application::user_init()
 void noob::application::user_update(double dt)
 {
 	
-	app_gui.text("Paulmas!", noob::vec2f(0.0, 0.0), noob::gui::font_size::READING, noob::vec4f(1.0, 1.0, 0.0, 1.0));
+	app_gui.text("Paulmas!", noob::vec2f(100.0, 100.0), noob::gui::font_size::READING, noob::vec4f(1.0, 1.0, 0.0, 1.0));
 	
 	noob::globals& g = noob::get_globals();
 	const noob::time nowtime = noob::clock::now();
