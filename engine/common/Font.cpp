@@ -313,18 +313,21 @@ bool noob::font::init_glyphs_helper(const std::vector<uint32_t>& CodePoints, con
 						noob::logger::log(noob::importance::INFO, glyph_dbg);
 						*/
 
-				const ftgl::ivec4 reg = ftgl::texture_atlas_get_region(atlas, slot->bitmap.width, slot->bitmap.rows);
+				const ftgl::ivec4 reg = ftgl::texture_atlas_get_region(atlas, slot->bitmap.width+2, slot->bitmap.rows+2); // One-bit padding for all sides
 
 				if (reg.height > 0) // If our atlas hasn't run out of space
 				{
-					ftgl::texture_atlas_set_region(atlas, reg.x, reg.y, reg.width, reg.height, slot->bitmap.buffer, slot->bitmap.pitch);
 					// glyph(const noob::vec2f GlyphDims, const noob::vec2f Advances, const noob::vec2f Bearings, const noob::vec2f Offsets, const noob::vec2ui AtlasPos, const noob::vec2ui AtlasDims)
 					
 					const auto dims = noob::vec2f(slot->bitmap.width, slot->bitmap.rows);
 					const auto advances = noob::vec2f(slot->advance.x, slot->advance.y) / 64.0;
-					const auto bearings = noob::vec2f(slot->metrics.horiBearingX, slot->metrics.horiBearingY) / 64;
+					const auto bearings = noob::vec2f(slot->metrics.horiBearingX, slot->metrics.horiBearingY) / 64.0;
 					//const auto offsets = noob::vec2f(slot->bitmap_left, slot->bitmap_top);
-					const auto atlas_pos = noob::vec2ui(reg.x, reg.y);
+					const auto atlas_pos = noob::vec2ui(reg.x+1, reg.y+1);
+
+					ftgl::texture_atlas_set_region(atlas, atlas_pos[0], atlas_pos[1], slot->bitmap.width, slot->bitmap.rows, slot->bitmap.buffer, slot->bitmap.pitch);
+
+
 
 					stored_glyphs.push_back(noob::font::glyph(dims, advances, bearings, atlas_pos, AtlasDims));
 					
