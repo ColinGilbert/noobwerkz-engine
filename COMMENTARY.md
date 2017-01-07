@@ -1,3 +1,8 @@
+Dec. 30, 2016
+```
+Harfbuzz caused trouble. Went back to Freetype. Aside from kerning and atlas padding, we're good.
+```
+
 Dec. 18th, 2016
 ```
 Been reading up a lot on Harfbuzz, ICU, and Unicode last week. In fact, it's been far too much reading about all that... I've almost finished implementing text-shaping with Harfbuzz, along with an attendant refactoring of the graphics API. ICU will be for later, since it's huge and rather difficult to embed.

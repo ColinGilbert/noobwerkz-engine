@@ -14,7 +14,7 @@ bool noob::gui::init(const std::string& Prefix, const noob::vec2ui Dims, const n
 
 	billbuf = gfx.add_billboards(max_text_verts);
 
-	if (!gui_font.init_library(noob::load_file_as_string(noob::concat(Prefix, /*"font/DroidSansMono.ttf"*/ "font/Asimov.otf" /*"opendyslexic-3-regular.ttf"*/)), Dpi, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-=_+`~[]{}|;:<>,./?'\"", 36))
+	if (!gui_font.init_library(noob::load_file_as_string(noob::concat(Prefix, /*"font/DroidSansMono.ttf" "font/Asimov.otf" */ "font/opendyslexic-3-regular.ttf")), Dpi, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-=_+`~[]{}|;:<>,./?'\"", 24))
 	{
 		return false;
 	}
@@ -35,10 +35,7 @@ void noob::gui::set_dims(const noob::vec2ui Dims) noexcept(true)
 
 void noob::gui::text(const std::string& Text, const noob::vec2f Pos, noob::gui::font_size Size, const noob::vec4f Colour) noexcept(true)
 {
-	noob::font::text t;
-	t.data = Text;
-
-	auto shaped = gui_font.shape_text(t);
+	auto shaped = gui_font.shape_text(Text);
 
 	if (shaped.valid)
 	{
