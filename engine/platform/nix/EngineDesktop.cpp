@@ -2,7 +2,7 @@
 #include "Application.hpp"
 #include "NoobUtils.hpp"
 #include "SoundInterface.hpp"
-
+#include "KeyInfo.hpp"
 #include "NDOF.hpp"
 // #include <glad/glad.h>
 

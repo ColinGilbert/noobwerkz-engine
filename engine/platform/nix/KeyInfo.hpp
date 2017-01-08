@@ -15,7 +15,6 @@ namespace noob
 		noob::keyboard::keys key;
 	};
 
-	// enum class keys { A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, _1, _2, _3, _4, _5, _6, _7, _8, _9, _0, APOSTROPHE, MINUS, EQUAL, SPACE, BACKSPACE, PERIOD, COMMA, SLASH, TAB, RETURN, UP, DOWN, LEFT, RIGHT, NUM_1, NUM_2, NUM_3, NUM_4, NUM_5, NUM_6, NUM_7, NUM_8, NUM_9, NUM_0, NUM_DIV, NUM_MULT, NUM_MINUS, NUM_PLUS, NUM_ENTER, PAGEUP, PAGEDOWN, ESC, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, INSERT, DELETE, HOME, END, ALT, CTRL, SHIFT, INVALID };
 
 	std::tuple<noob::keyboard::keys, std::string> get_key(int k)
 	{
@@ -124,67 +123,67 @@ namespace noob
 			case(GLFW_KEY_WORLD_2):
 				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_WORLD_2");
 			case(GLFW_KEY_ESCAPE):
-				return std::make_tuple(noob::keyboard::keys::ESCAPE, "GLFW_KEY_ESCAPE");
+				return std::make_tuple(noob::keyboard::keys::ESC, "GLFW_KEY_ESCAPE");
 			case(GLFW_KEY_ENTER): 
-				return std::make_tuple(noob::keyboard::keys::ENTER, "GLFW_KEY_ENTER");
+				return std::make_tuple(noob::keyboard::keys::RETURN, "GLFW_KEY_ENTER");
 			case(GLFW_KEY_TAB):
 				return std::make_tuple(noob::keyboard::keys::TAB, "GLFW_KEY_TAB");
 			case(GLFW_KEY_BACKSPACE):
 				return std::make_tuple(noob::keyboard::keys::BACKSPACE, "GLFW_KEY_BACKSPACE");
 			case(GLFW_KEY_INSERT):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_INSERT");
+				return std::make_tuple(noob::keyboard::keys::INSERT, "GLFW_KEY_INSERT");
 			case(GLFW_KEY_DELETE):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_DELETE");
+				return std::make_tuple(noob::keyboard::keys::DELETE, "GLFW_KEY_DELETE");
 			case(GLFW_KEY_RIGHT):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_RIGHT");
+				return std::make_tuple(noob::keyboard::keys::RIGHT, "GLFW_KEY_RIGHT");
 			case(GLFW_KEY_LEFT):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_LEFT");
+				return std::make_tuple(noob::keyboard::keys::LEFT, "GLFW_KEY_LEFT");
 			case(GLFW_KEY_DOWN):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_DOWN");
+				return std::make_tuple(noob::keyboard::keys::DOWN, "GLFW_KEY_DOWN");
 			case(GLFW_KEY_UP):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_UP");
+				return std::make_tuple(noob::keyboard::keys::UP, "GLFW_KEY_UP");
 			case(GLFW_KEY_PAGE_UP): 
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_PAGE_UP");
+				return std::make_tuple(noob::keyboard::keys::PAGE_UP, "GLFW_KEY_PAGE_UP");
 			case(GLFW_KEY_PAGE_DOWN): 
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_PAGE_DOWN");
+				return std::make_tuple(noob::keyboard::keys::PAGE_DOWN, "GLFW_KEY_PAGE_DOWN");
 			case(GLFW_KEY_HOME):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_HOME");
+				return std::make_tuple(noob::keyboard::keys::HOME, "GLFW_KEY_HOME");
 			case(GLFW_KEY_END):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_END");
+				return std::make_tuple(noob::keyboard::keys::END, "GLFW_KEY_END");
 			case(GLFW_KEY_CAPS_LOCK):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_CAPS_LOCK");
+				return std::make_tuple(noob::keyboard::keys::CAPS_LOCK, "GLFW_KEY_CAPS_LOCK");
 			case(GLFW_KEY_SCROLL_LOCK):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_SCROLL_LOCK");
+				return std::make_tuple(noob::keyboard::keys::SCROLL_LOCK, "GLFW_KEY_SCROLL_LOCK");
 			case(GLFW_KEY_NUM_LOCK):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_NUM_LOCK");
+				return std::make_tuple(noob::keyboard::keys::NUM_LOCK, "GLFW_KEY_NUM_LOCK");
 			case(GLFW_KEY_PRINT_SCREEN):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_PRINT_SCREEN");
+				return std::make_tuple(noob::keyboard::keys::PRINT_SCREEN, "GLFW_KEY_PRINT_SCREEN");
 			case(GLFW_KEY_PAUSE):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_PAUSE");
+				return std::make_tuple(noob::keyboard::keys::PAUSE, "GLFW_KEY_PAUSE");
 			case(GLFW_KEY_F1):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_F1");
+				return std::make_tuple(noob::keyboard::keys::F1, "GLFW_KEY_F1");
 			case(GLFW_KEY_F2):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_F2");
+				return std::make_tuple(noob::keyboard::keys::F2, "GLFW_KEY_F2");
 			case(GLFW_KEY_F3):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_F3");
+				return std::make_tuple(noob::keyboard::keys::F3, "GLFW_KEY_F3");
 			case(GLFW_KEY_F4):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_F4");
+				return std::make_tuple(noob::keyboard::keys::F4, "GLFW_KEY_F4");
 			case(GLFW_KEY_F5):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_F5");
+				return std::make_tuple(noob::keyboard::keys::F5, "GLFW_KEY_F5");
 			case(GLFW_KEY_F6):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_F6");
+				return std::make_tuple(noob::keyboard::keys::F6, "GLFW_KEY_F6");
 			case(GLFW_KEY_F7): 
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_F7");
+				return std::make_tuple(noob::keyboard::keys::F7, "GLFW_KEY_F7");
 			case(GLFW_KEY_F8): 
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_F8");
+				return std::make_tuple(noob::keyboard::keys::F8, "GLFW_KEY_F8");
 			case(GLFW_KEY_F9):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_F9");
+				return std::make_tuple(noob::keyboard::keys::F9, "GLFW_KEY_F9");
 			case(GLFW_KEY_F10): 
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_F10");
+				return std::make_tuple(noob::keyboard::keys::F10, "GLFW_KEY_F10");
 			case(GLFW_KEY_F11):   
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_F11");
+				return std::make_tuple(noob::keyboard::keys::F11, "GLFW_KEY_F11");
 			case(GLFW_KEY_F12):  
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_F12");
+				return std::make_tuple(noob::keyboard::keys::F12, "GLFW_KEY_F12");
 			case(GLFW_KEY_F13): 
 				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_F13");
 			case(GLFW_KEY_F14):  
@@ -212,57 +211,59 @@ namespace noob
 			case(GLFW_KEY_F25):  
 				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_F25");
 			case(GLFW_KEY_KP_0): 
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_KP_0");
+				return std::make_tuple(noob::keyboard::keys::NUM_0, "GLFW_KEY_KP_0");
 			case(GLFW_KEY_KP_1): 
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_KP_1");
+				return std::make_tuple(noob::keyboard::keys::NUM_1, "GLFW_KEY_KP_1");
 			case(GLFW_KEY_KP_2):  
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_KP_2");
+				return std::make_tuple(noob::keyboard::keys::NUM_2, "GLFW_KEY_KP_2");
 			case(GLFW_KEY_KP_3):  
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_KP_3");
+				return std::make_tuple(noob::keyboard::keys::NUM_3, "GLFW_KEY_KP_3");
 			case(GLFW_KEY_KP_4): 
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_KP_4");
+				return std::make_tuple(noob::keyboard::keys::NUM_4, "GLFW_KEY_KP_4");
 			case(GLFW_KEY_KP_5):   
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_KP_5");
+				return std::make_tuple(noob::keyboard::keys::NUM_5, "GLFW_KEY_KP_5");
 			case(GLFW_KEY_KP_6):  
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_KP_6");
+				return std::make_tuple(noob::keyboard::keys::NUM_6, "GLFW_KEY_KP_6");
 			case(GLFW_KEY_KP_7): 
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_KP_7");
+				return std::make_tuple(noob::keyboard::keys::NUM_7, "GLFW_KEY_KP_7");
 			case(GLFW_KEY_KP_8):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_KP_8");
+				return std::make_tuple(noob::keyboard::keys::NUM_8, "GLFW_KEY_KP_8");
 			case(GLFW_KEY_KP_9):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_KP_9");
+				return std::make_tuple(noob::keyboard::keys::NUM_9, "GLFW_KEY_KP_9");
 			case(GLFW_KEY_KP_DECIMAL):  
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_KP_DECIMAL");
+				return std::make_tuple(noob::keyboard::keys::NUM_DOT, "GLFW_KEY_KP_DECIMAL");
 			case(GLFW_KEY_KP_DIVIDE):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_KP_DIVIDE");
+				return std::make_tuple(noob::keyboard::keys::NUM_DIV, "GLFW_KEY_KP_DIVIDE");
 			case(GLFW_KEY_KP_MULTIPLY):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_KP_MULTIPLY");
+				return std::make_tuple(noob::keyboard::keys::NUM_MULT, "GLFW_KEY_KP_MULTIPLY");
 			case(GLFW_KEY_KP_SUBTRACT):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_KP_SUBTRACT");
+				return std::make_tuple(noob::keyboard::keys::NUM_MINUS, "GLFW_KEY_KP_SUBTRACT");
 			case(GLFW_KEY_KP_ADD):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_KP_ADD");
+				return std::make_tuple(noob::keyboard::keys::NUM_PLUS, "GLFW_KEY_KP_ADD");
 			case(GLFW_KEY_KP_ENTER):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_KP_ENTER");
+				return std::make_tuple(noob::keyboard::keys::NUM_ENTER, "GLFW_KEY_KP_ENTER");
 			case(GLFW_KEY_KP_EQUAL):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_KP_EQUAL");
+				return std::make_tuple(noob::keyboard::keys::NUM_EQUALS, "GLFW_KEY_KP_EQUAL");
 			case(GLFW_KEY_LEFT_SHIFT):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_LEFT_SHIFT");
+				return std::make_tuple(noob::keyboard::keys::SHIFT, "GLFW_KEY_LEFT_SHIFT");
 			case(GLFW_KEY_LEFT_CONTROL):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_LEFT_CONTROL");
+				return std::make_tuple(noob::keyboard::keys::CTRL, "GLFW_KEY_LEFT_CONTROL");
 			case(GLFW_KEY_LEFT_ALT):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_LEFT_ALT");
+				return std::make_tuple(noob::keyboard::keys::ALT, "GLFW_KEY_LEFT_ALT");
 			case(GLFW_KEY_LEFT_SUPER):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_LEFT_SUPER");
+				return std::make_tuple(noob::keyboard::keys::SUPER, "GLFW_KEY_LEFT_SUPER");
 			case(GLFW_KEY_RIGHT_SHIFT):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_RIGHT_SHIFT");
+				return std::make_tuple(noob::keyboard::keys::SHIFT, "GLFW_KEY_RIGHT_SHIFT");
 			case(GLFW_KEY_RIGHT_CONTROL):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_RIGHT_CONTROL");
+				return std::make_tuple(noob::keyboard::keys::CTRL, "GLFW_KEY_RIGHT_CONTROL");
 			case(GLFW_KEY_RIGHT_ALT):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_RIGHT_ALT");
+				return std::make_tuple(noob::keyboard::keys::ALT, "GLFW_KEY_RIGHT_ALT");
 			case(GLFW_KEY_RIGHT_SUPER):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_RIGHT_SUPER");
+				return std::make_tuple(noob::keyboard::keys::SUPER, "GLFW_KEY_RIGHT_SUPER");
 			case(GLFW_KEY_MENU):
-				return std::make_tuple(noob::keyboard::keys::INVALID, "GLFW_KEY_MENU");
+				return std::make_tuple(noob::keyboard::keys::MENU, "GLFW_KEY_MENU");
+			default:
+				return std::make_tuple(noob::keyboard::keys::INVALID, "INVALID");
 		};
 	}
 }
