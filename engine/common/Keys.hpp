@@ -4,7 +4,7 @@ namespace noob
 {
 	struct keyboard
 	{
-		enum class keys { A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, _1, _2, _3, _4, _5, _6, _7, _8, _9, _0, MINUS, EQUAL, BACKSPACE, PERIOD, COMMA, SLASH, TAB, RETURN, UP, DOWN, LEFT, RIGHT, NUM_1, NUM_2, NUM_3, NUM_4, NUM_5, NUM_6, NUM_7, NUM_8, NUM_9, NUM_0, NUM_DIV, NUM_MULT, NUM_MINUS, NUM_PLUS, NUM_ENTER, PAGEUP, PAGEDOWN, ESC, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, INSERT, DELETE, HOME, END, ALT, CTRL, SHIFT };
+		enum class keys { A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, BACKTICK, _1, _2, _3, _4, _5, _6, _7, _8, _9, _0, MINUS, EQUAL, SPACE, BACKSPACE, PERIOD, COMMA, SLASH, TAB, SEMICOLON, APOSTROPHE, LEFT_BRACKET, RIGHT_BRACKET, BACKSLASH, RETURN, UP, DOWN, LEFT, RIGHT, NUM_1, NUM_2, NUM_3, NUM_4, NUM_5, NUM_6, NUM_7, NUM_8, NUM_9, NUM_0, NUM_DIV, NUM_MULT, NUM_MINUS, NUM_PLUS, NUM_ENTER, PAGEUP, PAGEDOWN, ESC, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, INSERT, DELETE, HOME, END, ALT, CTRL, SHIFT, INVALID };
 
 		static std::string to_string(noob::keyboard::keys k)
 		{
@@ -62,6 +62,8 @@ namespace noob
 					return "Y";
 				case (noob::keyboard::keys::Z):
 					return "Z";
+				case (noob::keyboard::keys::BACKTICK):
+					return "`";
 				case (noob::keyboard::keys::_1):
 					return "1";
 				case (noob::keyboard::keys::_2):
@@ -86,6 +88,8 @@ namespace noob
 					return "-";
 				case (noob::keyboard::keys::EQUAL):
 					return "=";
+				case(noob::keyboard::keys::SPACE):
+					return "SPACE";
 				case (noob::keyboard::keys::BACKSPACE):
 					return "BACKSPACE";
 				case (noob::keyboard::keys::PERIOD):
@@ -94,6 +98,16 @@ namespace noob
 					return ",";
 				case (noob::keyboard::keys::SLASH):
 					return "/";
+				case (noob::keyboard::keys::SEMICOLON):
+					return ";";
+				case (noob::keyboard::keys::APOSTROPHE):
+					return "'";
+				case (noob::keyboard::keys::LEFT_BRACKET):
+					return "[";
+				case (noob::keyboard::keys::RIGHT_BRACKET):
+					return "]";
+				case (noob::keyboard::keys::BACKSLASH):
+					return "\\";
 				case (noob::keyboard::keys::TAB):
 					return "TAB";
 				case (noob::keyboard::keys::RETURN):
@@ -180,6 +194,8 @@ namespace noob
 					return "CTRL";
 				case (noob::keyboard::keys::SHIFT):
 					return "SHIFT";
+				case (noob::keyboard::keys::INVALID):
+					return "INVALID";					
 				default:
 					return "UNKNOWN KEY";
 			}
