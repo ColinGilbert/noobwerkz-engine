@@ -29,25 +29,14 @@ list(APPEND main_src
 	lib/ozz-animation/src/base/maths/math_archive.cc
 	lib/ozz-animation/src/base/maths/simd_math.cc
 	lib/ozz-animation/src/geometry/runtime/skinning_job.cc
-	)	
-#########################
-#
-# Consciously excluded:
-#
-#########################
-#
-# lib/ozz-animation/src/animation/offline/collada/dae2skel.cc
-# lib/ozz-animation/src/animation/offline/collada/collada_transform.cc
-# lib/ozz-animation/src/animation/offline/collada/collada_base.cc
-# lib/ozz-animation/src/animation/offline/collada/collada_skeleton.cc
-# lib/ozz-animation/src/animation/offline/collada/dae2anim.cc
-# lib/ozz-animation/src/animation/offline/collada/collada_animation.cc
-# lib/ozz-animation/src/animation/offline/collada/collada.cc
-# lib/ozz-animation/src/animation/offline/fbx/fbx_base.cc
-# lib/ozz-animation/src/animation/offline/fbx/fbx2anim.cc
-# lib/ozz-animation/src/animation/offline/fbx/fbx.cc
-# lib/ozz-animation/src/animation/offline/fbx/fbx_skeleton.cc
-# lib/ozz-animation/src/animation/offline/fbx/fbx_animation.cc
-# lib/ozz-animation/src/animation/offline/fbx/fbx2skel.cc
-# lib/ozz-animation/src/animation/offline/tools/convert2anim.cc
-# lib/ozz-animation/src/animation/offline/tools/convert2skel.cc
+	)
+
+#lib/ozz-animation/src/animation/offline/fbx/fbx_base.cc
+#lib/ozz-animation/src/animation/offline/fbx/fbx2anim.cc
+#lib/ozz-animation/src/animation/offline/fbx/fbx.cc
+#lib/ozz-animation/src/animation/offline/fbx/fbx_skeleton.cc
+#lib/ozz-animation/src/animation/offline/fbx/fbx_animation.cc
+#lib/ozz-animation/src/animation/offline/fbx/fbx2skel.cc
+#lib/ozz-animation/src/animation/offline/tools/convert2anim.cc
+#lib/ozz-animation/src/animation/offline/tools/convert2skel.cc
+

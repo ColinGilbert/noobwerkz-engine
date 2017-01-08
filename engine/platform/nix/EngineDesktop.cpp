@@ -40,7 +40,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
 	if (action == GLFW_REPEAT || action == GLFW_PRESS)
 	{
+		auto info = noob::get_key(key);
 
+		noob::logger::log(noob::importance::INFO, noob::concat("[EngineDesktop] Key pressed: ", std::get<1>(info), ", scancode ", noob::to_string(scancode), ", action ", noob::to_string(action), ", mods ", noob::to_string(mods)));
 	}
 }
 

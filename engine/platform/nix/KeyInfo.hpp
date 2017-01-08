@@ -9,14 +9,7 @@
 
 namespace noob
 {
-	struct key_info
-	{
-		std::string str;
-		noob::keyboard::keys key;
-	};
-
-
-	std::tuple<noob::keyboard::keys, std::string> get_key(int k)
+	static std::tuple<noob::keyboard::keys, std::string> get_key(int k)
 	{
 		switch(k)
 		{
