@@ -9,19 +9,24 @@
 
 #include "InstancedModel.hpp"
 #include "Shape.hpp"
+#include "Joint.hpp"
 
 namespace noob
 {
 	// This represents a multipart model.
-	struct armature
+	class armature
 	{
-		// noob::digraph hierarchy;
-		std::vector<noob::shape_handle> shapes;
-		std::vector<noob::instanced_model_handle> models;
-		std::vector<noob::vec4f> base_colours;
-		// This last vector represents the models that get a custom colour based on team affiliation.
-		std::vector<bool> team_colours;
-		// rde::hash_map<std::string. uint32_t> part_names;
+		public:
+			
+			
+
+		protected:
+
+			noob::digraph hierarchy; // The nodes' numbers index into the vector structures below.
+			rde::vector<noob::body_handle> bodies;
+			rde::vector<noob::joint_handle> joints;
+			rde::vector<noob::vec4f> colours;
+			rde::vector<bool> team_colours; // Refers the to the limbs to get coloured on a per-team basis.
 	};
 
 	typedef noob::handle<noob::armature> armature_handle;

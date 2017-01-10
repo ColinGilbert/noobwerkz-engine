@@ -124,6 +124,11 @@ namespace noob
 				return nodes.size();
 			}
 
+			uint32_t num_edges() const noexcept(true)
+			{
+				return edges.size();
+			}
+
 			uint32_t num_children(const noob::node_handle n) const noexcept(true)
 			{
 				return nodes[n.index()].get_num_children();
@@ -314,7 +319,6 @@ namespace noob
 					{
 						return std::get<1>(noob::pack_64_to_32(val));
 					}
-
 
 
 				protected:

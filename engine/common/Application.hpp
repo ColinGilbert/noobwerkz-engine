@@ -32,8 +32,6 @@ namespace noob
 			void resume();
 			void gc();
 
-			typedef std::tuple<const std::array<int, 2>&, const std::array<float,2>&> touch_instance;
-
 			// Callbacks
 			void touch(int pointerID, float x, float y, int action);
 

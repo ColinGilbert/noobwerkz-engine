@@ -1,3 +1,9 @@
+Jan. 9, 2016
+```
+Merge to master. Been starting on the editor tools themselves.
+```
+
+
 Dec. 30, 2016
 ```
 Harfbuzz caused trouble. Went back to Freetype. Aside from kerning and atlas padding, we're good.

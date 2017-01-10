@@ -37,7 +37,7 @@ namespace noob
 			// Loads a runtime skeleton. Possibly convert to raw skeleton
 			void init(const std::string& filename);
 			// Loads a raw animation. You then create runtime animations via optimize()
-			bool load_animation(const std::string& filename, const std::string& anim_name);
+			bool load_animation_file(const std::string& filename, const std::string& anim_name);
 			// If name = "" all animations get processed. If all the tolerances == 0.0 it doesn't run an optimization pre-pass prior to creating runtime animations. 
 			void optimize(float translation_tolerance = 0.0, float rotation_tolerance = 0.0, float scale_tolerance = 0.0, const std::string& name = "");
 

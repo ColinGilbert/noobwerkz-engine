@@ -1,10 +1,11 @@
 CHANGELOG:
 
-Dev: 0.7 "Oh Dear... Droids!"
+Master: 0.7 "Oh Dear... Droids!"
 ```
 Android port! Setting up the sound was even crummier than expected, but now it works!
 Replaced BGFX entirely.
 Graphics and physics are now opaque interfaces returnng handles and the occasional buffer (to be used responsibly.) Sound API to follow.
+More major cleanups
 ```
 
 Version 0.6 AKA: "Cleaning House!"

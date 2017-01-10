@@ -3,7 +3,7 @@ Hi,
 
 I am developing a solid, fast, easy-to-use cross-platform game and multimedia engine, with a strong emphasis on targeting modern mobile platforms (GLES 3+).
 
-This toolkit is made specifically to reduce wasted programmer time (*cough cough* aside from the time it took to design and build this software *cough cough*.) Much of it consists of integrating external libraries, most of which are in C++ and using their useful features along with an efficient component system to create an efficient single-developer pipeline. It currently runs on Linux and Android. Apple mobile devices, Windows, and OSX support coming quite soon. Legalese is quite liberal (Apache 2.0.)
+This toolkit is made specifically to reduce wasted programmer time (*cough cough* aside from the time it took to design and build this software *cough cough*.) Much of it consists of integrating external libraries, most of which are in C++ and using their useful features along with an efficient component system to create an efficient single-developer pipeline. It currently runs on Linux and Android. Apple mobile devices, Windows, and OSX support coming sometime soon. Legalese is quite liberal (Apache 2.0.)
 
 Still WIP. Not yet recommended for day-to-day use. Please feel free to bookmark this repo and come by later because this is a living project.
 
@@ -11,10 +11,11 @@ If you want to know more about this engine, visit the dev branch; I try keep the
 
 High-quality tutorials and real unit/integration tests will come when the implementation is more or less mature.
 
+
 Current versions:
 ```
-Master: 0.6 "Cleaning House!"
-Dev: 0.7 "Oh Dear... Droids!"
+Master: 0.7 "Oh Dear... Droids!"
+Dev: ??
 ```
 
 Specific features:
@@ -27,11 +28,11 @@ Everything created from convex shapes.
 Currently brings in (among others):
 ```
 Bullet Physics
-libogg/libvorbis (soon Opus)
+libogg/libvorbis
 r8brain's excellent resampling routines
 ozz-animation
 GLFW and libsoundio (on desktop)
-Freetype and Harfbuzz (Font rasterizing and glyph shaping, respectively.)
+Freetype
 Voro++
 ```
 

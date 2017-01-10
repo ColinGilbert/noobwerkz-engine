@@ -14,7 +14,7 @@ namespace noob
 			
 			void init(float move_speed, float heading_speed, const noob::vec3f& pos);
 			void update(double delta, const noob::camera::cam_movement& movement);
-			noob::mat4f get_view_matrix() { return view_mat; }
+			noob::mat4f get_view_matrix() const { return view_mat; }
 			float cam_speed, cam_heading_speed;
 		
 		protected:
