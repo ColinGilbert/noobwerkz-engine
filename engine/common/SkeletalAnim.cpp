@@ -19,7 +19,7 @@ void noob::skeletal_anim::init(const std::string& filename)
 	ozz::io::File file(filename.c_str(), "rb");
 	if (!file.opened())
 	{
-		logger::log(noob::importance::ERROR, noob::concat("[AnimatedModel] - load_skeleton(", filename, ") fail. Cannot open file."));
+		logger::log(noob::importance::ERROR, noob::concat("[AnimatedModel] Load_skeleton(", filename, ") fail. Cannot open file."));
 		valid = false;
 		return;
 	}
@@ -27,7 +27,7 @@ void noob::skeletal_anim::init(const std::string& filename)
 	ozz::io::IArchive archive(&file);
 	if (!archive.TestTag<ozz::animation::Skeleton>())
 	{
-		logger::log(noob::importance::ERROR, noob::concat("[AnimatedModel] - load_skeleton(", filename , ") fail. Archive corrupt."));
+		logger::log(noob::importance::ERROR, noob::concat("[AnimatedModel] Load_skeleton(", filename , ") fail. Archive corrupt."));
 		valid = false;
 		return;
 	}
@@ -35,13 +35,13 @@ void noob::skeletal_anim::init(const std::string& filename)
 	archive >> skeleton;
 	model_matrices = allocator->AllocateRange<ozz::math::Float4x4>(skeleton.num_joints());
 	
-	logger::log(noob::importance::INFO, noob::concat("[AnimatedModel] - load_skeleton(", filename, ") success!"));
+	logger::log(noob::importance::INFO, noob::concat("[AnimatedModel] Load_skeleton(", filename, ") success!"));
 	
 	valid = true;
 }
 
 
-bool noob::skeletal_anim::load_animation(const std::string& filename, const std::string& anim_name)
+bool noob::skeletal_anim::load_animation_file(const std::string& filename, const std::string& anim_name)
 {
 	ozz::animation::offline::RawAnimation _animation;
 	ozz::io::File file(filename.c_str(), "rb");
@@ -68,6 +68,7 @@ bool noob::skeletal_anim::load_animation(const std::string& filename, const std:
 void noob::skeletal_anim::optimize(float translation_tolerance, float rotation_tolerance, float scale_tolerance, const std::string& name)
 {
 	bool optimize = !(translation_tolerance == 0.0 && rotation_tolerance == 0.0 && scale_tolerance == 0.0);
+
 	ozz::animation::offline::AnimationBuilder builder;
 	ozz::animation::offline::AnimationOptimizer optimizer;
 	optimizer.translation_tolerance = translation_tolerance;
@@ -179,15 +180,15 @@ std::string noob::skeletal_anim::get_current_anim() const
 }
 
 
-std::vector<noob::mat4> noob::skeletal_anim::get_matrices() const
+std::vector<noob::mat4f> noob::skeletal_anim::get_matrices() const
 {
-	std::vector<noob::mat4> mats;
+	std::vector<noob::mat4f> mats;
 	mats.reserve(skeleton.num_joints());
 	
 	size_t num_mats = model_matrices.Size();
 	for (size_t i = 0; i < num_mats; ++i)
 	{
-		noob::mat4 m;
+		noob::mat4f m;
 		ozz::math::Float4x4 ozz_mat = model_matrices[i];
 		for (size_t c = 0; c < 4; ++c)
 		{
@@ -200,7 +201,7 @@ std::vector<noob::mat4> noob::skeletal_anim::get_matrices() const
 
 
 /*
-void noob::skeletal_anim::get_matrices(std::vector<noob::mat4> mats) const
+void noob::skeletal_anim::get_matrices(std::vector<noob::mat4f> mats) const
 {
 	mats.clear();
 	mats.reserve(skeleton.num_joints());
@@ -208,7 +209,7 @@ void noob::skeletal_anim::get_matrices(std::vector<noob::mat4> mats) const
 	size_t num_mats = model_matrices.Size();
 	for (size_t i = 0; i < num_mats; ++i)
 	{
-		noob::mat4 m;
+		noob::mat4f m;
 		ozz::math::Float4x4 ozz_mat = model_matrices[i];
 		for (size_t c = 0; c < 4; ++c)
 		{
@@ -221,7 +222,7 @@ void noob::skeletal_anim::get_matrices(std::vector<noob::mat4> mats) const
 
 
 /*
-std::array<noob::vec3, 4> noob::skeletal_anim::get_skeleton_bounds() const
+std::array<noob::vec3f, 4> noob::skeletal_anim::get_skeleton_bounds() const
 {
 
 }

@@ -1,26 +1,29 @@
+// Header file we're implementing
 #include "Mixer.hpp"
 
+// Project headers
 #include "Globals.hpp"
 #include "NoobUtils.hpp"
 
-bool noob::mixer::play_clip(const noob::sample_handle clip, float volume) noexcept(true)
+
+bool noob::mixer::play_clip(const noob::audio_sample_handle clip, float volume) noexcept(true)
 {
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 	noob::audio_sample* samp = g.samples.get(clip);
 	size_t min_before_next = samp->min_before_next;
 
-	voice_instance to_search;
+	voice to_search;
 	to_search.index = clip.index();
 	to_search.active = true;
-	// rde::vector<voice_instance>::iterator it = rde::upper_bound(&now_playing[0], &now_playing[now_playing.size()-1], to_search, rde::less<voice_instance>());
+	// rde::vector<voice>::iterator it = rde::upper_bound(&voices[0], &voices[voices.size()-1], to_search, rde::less<voice>());
 
-	auto it = std::find(now_playing.begin(), now_playing.end(), to_search);
+	auto it = std::find(voices.begin(), voices.end(), to_search);
 
-	if (it == now_playing.end())
+	if (it == voices.end())
 	{
 		(to_search.queue[0]).offset = 0;
 		(to_search.queue[0]).volume = volume;
-		now_playing.push_back(to_search);
+		voices.push_back(to_search);
 		dirty = true;
 
 		logger::log(noob::importance::INFO, "[Mixer] Adding new sound to mixer's soundbank.");
@@ -40,7 +43,7 @@ bool noob::mixer::play_clip(const noob::sample_handle clip, float volume) noexce
 
 				return true;
 			}
-			// logger::log(noob::importance::INFO, "[Mixer] Sound found in soundbank, but unable to enque as its queue is already full. Try again later.");
+			// logger::log(noob::importance::INFO, "[Mixer] Sound found in soundbank, but unable to enqueue as its queue is already full. Try again later.");
 		}
 	}
 
@@ -48,12 +51,11 @@ bool noob::mixer::play_clip(const noob::sample_handle clip, float volume) noexce
 }
 
 
-
 void noob::mixer::tick(uint32_t num_frames) noexcept(true)
 {
 	if (dirty)
 	{
-		rde::quick_sort(&now_playing[0], &now_playing[now_playing.size()], rde::less<voice_instance>());
+		rde::quick_sort(&voices[0], &voices[voices.size()], rde::less<voice>());
 	}
 
 	if (output_buffer.size() < num_frames)
@@ -61,33 +63,29 @@ void noob::mixer::tick(uint32_t num_frames) noexcept(true)
 		output_buffer.resize(num_frames);
 	}
 
-	rde::fill_n(&output_buffer[0], output_buffer.size(), 0.0);
+	rde::fill_n(&output_buffer[0], output_buffer.size(), 0.0f);
 
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 
-	uint32_t num_voices = now_playing.size();
-	for (uint32_t v = 0; v < num_voices; ++v)
+	const size_t num_voices = voices.size();
+	for (size_t v = 0; v < num_voices; ++v)
 	{
-		if (now_playing[v].active)
+		if (voices[v].active)
 		{
-			noob::audio_sample* samp = g.samples.get(noob::sample_handle::make(now_playing[v].index));
-			size_t sample_size = samp->samples.size();
-			
-			uint32_t queue_count = 0;
-			
-			for(uint32_t q = 0; q < 4; ++q)
+			const noob::audio_sample* samp = g.samples.get(noob::audio_sample_handle::make(voices[v].index));
+			const size_t sample_size = samp->samples.size();
+			for(size_t q = 0; q < 4; ++q)
 			{
-				noob::mixer::voice_instance::playback_info inf = now_playing[v].queue[q];
+				noob::mixer::voice::instance inf = voices[v].queue[q];
 				if (inf.offset != std::numeric_limits<size_t>::max())
 				{
-					++queue_count;
-					for (uint32_t i = 0; i < num_frames; ++i)
+					for (size_t i = 0; i < num_frames; ++i)
 					{
-						size_t sample_pos = inf.offset + i;
+						const size_t sample_pos = inf.offset + i;
 						if (sample_pos < sample_size)
 						{
-							double d = static_cast<double>(samp->samples[sample_pos]) * (1.0f/32768.0);
-							output_buffer[i] += (d * inf.volume);
+							const float f = static_cast<float>(samp->samples[sample_pos]) * (1.0f/32768.0);
+							output_buffer[i] += (f * inf.volume);
 						}
 					}
 
@@ -95,16 +93,43 @@ void noob::mixer::tick(uint32_t num_frames) noexcept(true)
 					if (inf.offset > sample_size - 1)
 					{
 						inf.offset = std::numeric_limits<size_t>::max();
+						voices[v].active = false;
+
 					}
 
-					now_playing[v].queue[q] = inf;
+					voices[v].queue[q] = inf;
 				}
-			}
-
-			if (queue_count == 0)
-			{
-				now_playing[v].active = false;
 			}
 		}
 	}
 }
+
+
+bool noob::mixer::voice::operator<(const noob::mixer::voice& rhs) const noexcept(true)
+{
+	if (index < rhs.index) return true;
+	return false; 
+}
+
+
+bool noob::mixer::voice::operator==(const noob::mixer::voice& rhs) const noexcept(true)
+{	
+	if (index == rhs.index) return true;
+	return false;
+}
+
+
+bool noob::mixer::voice::instance::operator<(const noob::mixer::voice::instance& rhs) const noexcept(true)
+{
+	if (offset < rhs.offset) return true;
+	return false; 
+}
+
+
+bool noob::mixer::voice::instance::operator==(const noob::mixer::voice::instance& rhs) const noexcept(true)
+{	
+	if (offset == rhs.offset) return true;
+	return false;
+}
+
+

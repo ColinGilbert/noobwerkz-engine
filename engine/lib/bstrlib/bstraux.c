@@ -1,7 +1,8 @@
+
 /*
  * This source file is part of the bstring string library.  This code was
- * written by Paul Hsieh in 2002-2008, and is covered by the BSD open source 
- * license and the GPL. Refer to the accompanying documentation for details 
+ * written by Paul Hsieh in 2002-2015, and is covered by the BSD open source
+ * license and the GPL. Refer to the accompanying documentation for details
  * on usage and license.
  */
 
@@ -9,9 +10,13 @@
  * bstraux.c
  *
  * This file is not necessarily part of the core bstring library itself, but
- * is just an auxilliary module which includes miscellaneous or trivial 
+ * is just an auxilliary module which includes miscellaneous or trivial
  * functions.
  */
+
+#if defined (_MSC_VER)
+# define _CRT_SECURE_NO_WARNINGS
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,6 +25,10 @@
 #include <ctype.h>
 #include "bstrlib.h"
 #include "bstraux.h"
+
+#ifndef UNUSED
+#define UNUSED(x) (void)(x)
+#endif
 
 /*  bstring bTail (bstring b, int n)
  *
@@ -193,10 +202,10 @@ int i, l, c;
 }
 
 static size_t readNothing (void *buff, size_t elsize, size_t nelem, void *parm) {
-	buff = buff;
-	elsize = elsize;
-	nelem = nelem;
-	parm = parm;
+	UNUSED(buff);
+	UNUSED(elsize);
+	UNUSED(nelem);
+	UNUSED(parm);
 	return 0; /* Immediately indicate EOF. */
 }
 
@@ -596,10 +605,10 @@ bstring b;
 	b = bfromcstralloc (256, "");
 	if (NULL == b || 0 > bsread (b, d, INT_MAX)) {
 		bdestroy (b);
-		bsclose (d);
-		bsclose (s);
-		return NULL;
+		b = NULL;
 	}
+	bsclose (d);
+	bsclose (s);
 	return b;
 }
 
@@ -834,6 +843,24 @@ int obl;
 	return out;
 }
 
+/*  int bSGMLEncode (bstring b)
+ *
+ *  Change the string into a version that is quotable in SGML (HTML, XML).
+ */
+int bSGMLEncode (bstring b) {
+static struct tagbstring fr[4][2] = {
+	{ bsStatic("&"), bsStatic("&amp;") },
+	{ bsStatic("\""), bsStatic("&quot;") },
+	{ bsStatic("<"), bsStatic("&lt;") },
+	{ bsStatic(">"), bsStatic("&gt;") } };
+int i;
+	for (i = 0; i < 4; i++) {
+		int ret = bfindreplace (b, &fr[i][0], &fr[i][1], 0);
+		if (0 > ret) return ret;
+	}
+	return 0;
+}
+
 /*  bstring bStrfTime (const char * fmt, const struct tm * timeptr)
  *
  *  Takes a format string that is compatible with strftime and a struct tm
@@ -946,24 +973,26 @@ bstring b, t;
 	if ((c = UCHAR_MAX + 1) == termchar) c++;
 
 	for (i=0; ; i++) {
-		if (termchar == c || (maxlen > 0 && i >= maxlen)) c = EOF;
-		else c = vgetchar (vgcCtx);
-
+		if (termchar == c || (maxlen > 0 && i >= maxlen)) break;
+		c = vgetchar (vgcCtx);
 		if (EOF == c) break;
 
 		if (i+1 >= b->mlen) {
 
-			/* Double size, but deal with unusual case of numeric
-			   overflows */
+			/* Double size, and deal with numeric overflows */
 
-			if ((m = b->mlen << 1)   <= b->mlen &&
-			    (m = b->mlen + 1024) <= b->mlen &&
-			    (m = b->mlen + 16)   <= b->mlen &&
-			    (m = b->mlen + 1)    <= b->mlen) t = NULL;
-			else t = bfromcstralloc (m, "");
+			if (b->mlen <= INT_MAX / 2) m = b->mlen << 1;
+			else if (b->mlen <= INT_MAX - 1024) m = b->mlen + 1024;
+			else if (b->mlen <= INT_MAX - 16) m = b->mlen + 16;
+			else if (b->mlen <= INT_MAX - 1) m = b->mlen + 1;
+			else {
+				bSecureDestroy (b); /* Cleanse partial buffer */
+				return NULL;
+			}
 
+			t = bfromcstrrangealloc (b->mlen + 1, m, "");
 			if (t) memcpy (t->data, b->data, i);
-			bSecureDestroy (b); /* Cleanse previous buffer */
+			bSecureDestroy (b);     /* Cleanse previous buffer */
 			b = t;
 			if (!b) return b;
 		}
@@ -1130,4 +1159,3 @@ void * parm;
 	free (ws);
 	return parm;
 }
-

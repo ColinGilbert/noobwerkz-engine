@@ -54,6 +54,7 @@ namespace noob
 				{
 					handle h;
 					h.inner = std::numeric_limits<uint32_t>::max();
+					return h;
 				}
 
 
@@ -65,7 +66,6 @@ namespace noob
 	template <typename T>
 		class component 
 		{
-			friend class application;
 			public:
 
 			T get(noob::handle<T> h) const noexcept(true)

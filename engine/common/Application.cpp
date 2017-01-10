@@ -1,55 +1,55 @@
 #include "Application.hpp"
 
-noob::application* noob::application::app_pointer = nullptr;
 
-noob::application::application() 
-{
-	app_pointer = this;
-}
-
-
-noob::application::~application()
-{
-	app_pointer = nullptr;
-}
-
-
-noob::application& noob::application::get()
-{
-	assert(app_pointer && "application not created!");
-	return *app_pointer;
-}
-
-
-void noob::application::init()
+void noob::application::init(const noob::vec2ui Dims, const noob::vec2d Dpi, const std::string& FilePath)
 {
 	logger::log(noob::importance::INFO, "[Application] Begin init.");
 
+	window_dims = Dims;
+	dpi = Dpi;
+
+	prefix = std::make_unique<std::string>(FilePath);
+
+
+	const std::string tex_src = noob::load_file_as_string(noob::concat(*prefix, "/texture/gradient_map.tga"));
+
+	noob::texture_loader_2d tex_data;
+	tex_data.from_mem(tex_src, false);
+	
+	noob::texture_info tex_info;
+	tex_info.mips = 0;
+	tex_info.pixels = tex_data.format();
+	
+	noob::graphics& gfx = noob::get_graphics();
+
+	// TODO: Improve graphics init.
+	gfx.init(window_dims, tex_data);
+
+	tex_data.free();
+
+
+	bool gui_works = app_gui.init(*prefix, window_dims, dpi);
+
+	if (!gui_works)
+	{
+		noob::logger::log(noob::importance::ERROR, "[Application] GUI failed to init!");
+	}
+
+
 	started = paused = input_has_started = false;
 
-	finger_positions = { noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f), noob::vec2(0.0f,0.0f) };
-
-//	prefix = std::unique_ptr<std::string>(new std::string("./"));
+	finger_positions = { noob::vec2f(0.0, 0.0), noob::vec2f(0.0, 0.0), noob::vec2f(0.0, 0.0), noob::vec2f(0.0, 0.0) };
 
 
-	// TODO: Uncomment once noob::filesystem is fixed
-	// noob::filesystem::init(*prefix);
-
-	ui_enabled = true;
-	gui.init("", window_width, window_height);
-
-	eye_pos = noob::vec3(0.0, 300.0, -100.0);
-	eye_target = noob::vec3(0.0, 0.0, 0.0);
-	eye_up = noob::vec3(0.0, 1.0, 0.0);
-
-	noob::globals& g = noob::globals::get_instance();
-
-	bool are_globals_initialized = g.init();
+	noob::globals& g = noob::get_globals();
+	const bool are_globals_initialized = g.init();
 	assert(are_globals_initialized && "Globals not initialized!");
-	
-	stage.init();
-	
-	logger::log(noob::importance::INFO, "[Application] Done basic init.");
+
+	noob::mat4f proj_mat = noob::perspective<float>(60.0f, static_cast<float>(window_dims[0]) / static_cast<float>(window_dims[1]), 1.0, 2000.0);
+
+	stage.init(window_dims, proj_mat);
+	logger::log(noob::importance::INFO, noob::concat("[Application] Done basic init. Filepath = ", FilePath, ". Window dims: ", noob::to_string(window_dims), ". DPI: ", noob::to_string(dpi)));
+
 
 	bool b = user_init();
 
@@ -57,36 +57,13 @@ void noob::application::init()
 	{
 		logger::log(noob::importance::WARNING, "[Application] User C++ init failed!");
 	}
-
-	//	network.init(3);
-	//	network.connect("localhost", 4242);
 }
 
 
 void noob::application::update(double delta)
 {
-	gui.window_dims(window_width, window_height);
-	/*
-	   network.tick();
+	app_gui.set_dims(window_dims);
 
-	   while (network.has_message())
-	   {
-	   std::string s = network.get_message();
-	   if (s.compare(0, 6, "INIT: ") == 0)
-	   {
-	   stage.tear_down();
-	   eval("init", s.substr(6, std::string::npos), true);
-	   }
-	   else if (s.compare(0, 8, "UPDATE: ") == 0)
-	   {
-	// TODO: Implement
-	}
-	else if (s.compare(0, 5, "CMD: ") == 0)
-	{
-	eval("cmd", s.substr(5, std::string::npos), true);
-	}
-	}
-	*/
 	stage.update(delta);
 	user_update(delta);
 }
@@ -94,51 +71,49 @@ void noob::application::update(double delta)
 
 void noob::application::draw()
 {
-	noob::mat4 proj_mat = noob::perspective(60.0f, static_cast<float>(window_width)/static_cast<float>(window_height), 1.0, 2000.0);
-	stage.draw(window_width, window_height, eye_pos, eye_target, eye_up, proj_mat);
+	const noob::time start_time = noob::clock::now();
+
+	noob::graphics& gfx = noob::get_graphics();
+	gfx.frame(window_dims);
+
+	stage.draw();
+
+	app_gui.draw();
+
+	const noob::time end_time = noob::clock::now();
+	const noob::duration draw_duration = end_time - start_time;
+
+	noob::globals& g = noob::get_globals();
+	g.profile_run.stage_draw_duration += draw_duration;
 }
 
-/*
-void noob::application::accept_ndof_data(const noob::ndof::data& info)
+
+void noob::application::accept_ndof_data(const noob::ndof::data& info) noexcept(true)
 {
-	if (info.movement == true)
-	{
-		// logger::log(fmt::format("[Sandbox] NDOF data: T({0}, {1}, {2}) R({3}, {4}, {5})", info.translation[0], info.translation[1], info.translation[2], info.rotation[0], info.rotation[1], info.rotation[2]));
-		// float damping = 360.0;
-		// noob::vec3 rotation(info.rotation);
-		// noob::vec3 translation(info.translation);
-		// view_mat = noob::rotate_x_deg(stage.view_mat, -rotation[0]/damping);
-		// view_mat = noob::rotate_y_deg(stage.view_mat, -rotation[1]/damping);
-		// view_mat = noob::rotate_z_deg(stage.view_mat, -rotation[2]/damping);
-		// view_mat = noob::translate(stage.view_mat, noob::vec3(-translation[0]/damping, -translation[1]/damping, -translation[2]/damping));
-		// stage.eye_pos = stage.eye_pos - translation;//translation);
-	}
+	stage.accept_ndof_data(info);
 }
-*/
 
-// TODO: Refactor
+
 void noob::application::step()
 {
-	noob::globals& g = noob::globals::get_instance();
+	noob::globals& g = noob::get_globals();
 	if (g.finished_init())
 	{
 		// PROFILER_UPDATE();
-		noob::time start_time = noob::clock::now();
-		noob::duration time_since = last_step - start_time;
+		const noob::time start_time = noob::clock::now();
+		const noob::duration time_since = last_step - start_time;
 
-		if (!paused)
-		{
-			double d = (1.0 / static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(time_since).count()));
-			update(d);
-		}
-
+		// Engine code
+		const double d = (1.0 / static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(time_since).count()));
+		update(d);
 		draw();
 
-		noob::time end_time = noob::clock::now();
+		const noob::time end_time = noob::clock::now();
+		// Update class member
 		last_step = end_time;
-		noob::duration time_taken = end_time - start_time;
-
-		noob::globals& g = noob::globals::get_instance();
+		
+		const noob::duration time_taken = end_time - start_time;
+		noob::globals& g = noob::get_globals();
 		g.profile_run.total_time += time_taken;
 	}
 }
@@ -155,14 +130,6 @@ void noob::application::resume()
 	paused = false;
 }
 
-/*
-void noob::application::set_archive_dir(const std::string& filepath)
-{
-	logger::log(noob::importance::INFO, noob::concat("[Application] Setting archive directory {", filepath, "}"));
-	prefix = std::unique_ptr<std::string>(new std::string(filepath));
-	logger::log(noob::importance::INFO, noob::concat("[Application] Archive dir = {",  *prefix, "}"));
-}
-*/
 
 void noob::application::touch(int pointerID, float x, float y, int action)
 {
@@ -172,23 +139,31 @@ void noob::application::touch(int pointerID, float x, float y, int action)
 
 		if (pointerID < 3)
 		{
-		//	finger_positions[pointerID] = noob::vec2(x,y);
+			// finger_positions[pointerID] = noob::vec2f(x,y);
 		}
 	}
 	else input_has_started = true;
 }
 
 
-void noob::application::window_resize(uint32_t w, uint32_t h)
+void noob::application::window_resize(const noob::vec2ui Dims)
 {
-	window_width = w;
-	window_height = h;
-	if (window_height == 0) 
+	window_dims = Dims;
+
+	if (window_dims[0] == 0) 
 	{
-		window_height = 1;
+		window_dims[0] = 1;
+	}
+	if (window_dims[1] == 0)
+	{
+		window_dims[1] = 1;
 	}
 
-	logger::log(noob::importance::INFO, noob::concat("[Application] Resize window to (", noob::to_string(window_width), ", ", noob::to_string(window_height), ")"));
+	noob::mat4f proj_mat = noob::perspective<float>(60.0f, static_cast<float>(window_dims[0]) / static_cast<float>(window_dims[1]), 1.0, 2000.0);
+
+	stage.update_viewport_params(window_dims, proj_mat);
+
+	logger::log(noob::importance::INFO, noob::concat("[Application] Resize window to (", noob::to_string(window_dims), ")"));
 }
 
 
@@ -197,18 +172,18 @@ void noob::application::key_input(char c)
 
 }
 
+
 void noob::application::remove_shapes()
 {
-	noob::globals& g = noob::globals::get_instance();
-	for (size_t i = 0; i < g.shapes.items.size(); ++i)
-	{
-		if (g.shapes.items[i].physics_valid)
-		{
-			delete g.shapes.items[i].inner_shape;
-		}
-	}
-}
+	noob::globals& g = noob::get_globals();
 
+	for (size_t i = 0; i < g.shapes.count(); ++i)
+	{
+		g.shapes.get(noob::shape_handle::make(i)).clear();
+	}
+
+	g.shapes.empty();
+}
 
 /*
    std::string noob::application::get_profiler_text()

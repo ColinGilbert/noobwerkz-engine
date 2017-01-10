@@ -1,29 +1,33 @@
 //
 // This source file is part of the bstring string library.  This code was
-// written by Paul Hsieh in 2002-2006, and is covered by the BSD open source 
-// license. Refer to the accompanying documentation for details on usage and 
+// written by Paul Hsieh in 2002-2015, and is covered by the BSD open source
+// license. Refer to the accompanying documentation for details on usage and
 // license.
 //
 
-// 
+//
 // test.cpp
 //
 // This file is the C++ unit test for Bstrlib
 //
+
+#if defined (_MSC_VER)
+# define _CRT_SECURE_NO_WARNINGS
+#endif
 
 #include <stdio.h>
 #include <stdarg.h>
 #include "bstrlib.h"
 #include "bstrwrap.h"
 
-// Exceptions must be turned on in the compiler to successfully run 
+// Exceptions must be turned on in the compiler to successfully run
 // this test.  The compiler must also support STL.
 
 #define dumpOutQty (32)
 static bstring dumpOut[dumpOutQty];
 static unsigned int rot = 0;
 
-char * dumpBstring (const bstring b) {
+const char * dumpBstring (const bstring b) {
 	rot = (rot + 1) % (unsigned) dumpOutQty;
 	if (dumpOut[rot] == NULL) {
 		dumpOut[rot] = bfromcstr ("");
@@ -61,7 +65,7 @@ char * dumpBstring (const bstring b) {
 			}
 		}
 	}
-	return (char *) dumpOut[rot]->data;
+	return (const char *) dumpOut[rot]->data;
 }
 
 int test0 (void) {
@@ -1347,6 +1351,8 @@ int ret = 0;
 	return ret;
 }
 
+#if !defined(BSTRLIB_CANNOT_USE_STL)
+
 int test28 (void) {
 int ret = 0;
 
@@ -1456,6 +1462,8 @@ int ret = 0;
 	return ret;
 }
 
+#endif
+
 int test29 (void) {
 int ret = 0;
 
@@ -1559,6 +1567,116 @@ int ret = 0;
 	return ret;
 }
 
+/*  int bMultiConcatNeedNULLAsLastArgument (bstring dst, ...)
+ *
+ *  Concatenate a sequence of exactly n char * arguments to dst.
+ */
+int bMultiConcatNeedNULLAsLastArgument (bstring dst, ...) {
+va_list arglist;
+int ret = 0;
+	va_start (arglist, dst);
+	do {
+		bstring parm = va_arg (arglist, bstring);
+		if (NULL == parm) break;
+		if (NULL == parm->data || parm->slen > parm->mlen ||
+		    parm->mlen < 0 || parm->slen < 0) {
+			ret = BSTR_ERR;
+			break;
+		}
+		ret = bconcat (dst, parm);
+	} while (0 <= ret);
+	va_end (arglist);
+	return ret;
+}
+
+/*  int bMultiCatCstrNeedNULLAsLastArgument (bstring dst, ...)
+ *
+ *  Concatenate a sequence of exactly n char * arguments to dst.
+ */
+int bMultiCatCstrNeedNULLAsLastArgument (bstring dst, ...) {
+va_list arglist;
+int ret = 0;
+	va_start (arglist, dst);
+	do {
+		char* parm = va_arg (arglist, char *);
+		if (NULL == parm) break;
+		ret = bcatcstr (dst, parm);
+	} while (0 <= ret);
+	va_end (arglist);
+	return ret;
+}
+
+/*
+ * The following macros are only available on more recent compilers that
+ * support variable length macro arguments and __VA_ARGS__.  These can also
+ * be dangerous because there is no compiler time type checking on the 
+ * arguments.
+ */
+
+
+#define bMultiConcat(dst,...)  bMultiConcatNeedNULLAsLastArgument((dst),##__VA_ARGS__,NULL)
+#define bMultiCatCstr(dst,...) bMultiCatCstrNeedNULLAsLastArgument((dst),##__VA_ARGS__,NULL)
+
+#define bGlue3_aux(a,b,c) a ## b ## c
+#define bGlue3(a,b,c)     bGlue3_aux(a,b,c)
+
+#if defined(_MSC_VER)
+#define _bDeclTbstrIdx(t,n,...) \
+	static unsigned char bGlue3(_btmpuc_,t,n)[] = {__VA_ARGS__, '\0'}; \
+	struct tagbstring t = { -32, sizeof(bGlue3(_btmpuc_,t,n))-1, bGlue3(_btmpuc_,t,n)}
+#define bDeclTbstr(t,...) _bDeclTbstrIdx(t,__COUNTER__,__VA_ARGS__)
+#else
+#define bDeclTbstr(t,...) \
+	static unsigned char bGlue3(_btmpuc_,t,__LINE__)[] = {__VA_ARGS__, '\0'}; \
+	struct tagbstring t = { -__LINE__, sizeof(bGlue3(_btmpuc_,t,__LINE__))-1, bGlue3(_btmpuc_,t,__LINE__)}
+#endif
+
+static int test32(void) {
+bstring b1 = bfromStatic ("a");
+bstring b2 = bfromStatic ("e");
+bstring b3 = bfromStatic ("i");
+bstring b4 = bfromStatic ("");
+int ret = 0;
+
+	printf ("TEST: bMultiCatCstr, bMultiConcat\n");
+
+	bMultiCatCstr(b1, "b", "c", "d");
+	bMultiCatCstr(b2, "f", "g", "h");
+	bMultiCatCstr(b3, "j", "k", "l");
+	bMultiConcat(b4, b1, b2, b3);
+
+	ret += 1 != biseqStatic (b1, "abcd");
+	ret += 1 != biseqStatic (b2, "efgh");
+	ret += 1 != biseqStatic (b3, "ijkl");
+	ret += 1 != biseqStatic (b4, "abcdefghijkl");
+
+	bdestroy (b1);
+	bdestroy (b2);
+	bdestroy (b3);
+	bdestroy (b4);
+
+	printf ("\t# failures: %d\n", ret);
+	return ret;
+}
+
+static int test33(void) {
+	bDeclTbstr (t1, 'H','e','l','l','o');
+	bDeclTbstr (t2, 32,'w','o','r','l','d');
+	bstring b = bfromStatic("[");
+	int ret;
+
+	printf ("TEST: bDeclTbstr\n");
+
+	bconcat (b, &t1);
+	bconcat (b, &t2);
+	bcatStatic (b, "]");
+	ret = 1 != biseqStatic (b, "[Hello world]");
+	bdestroy (b);
+
+	printf ("\t# failures: %d\n", ret);
+	return ret;
+}
+
 int main () {
 int ret = 0;
 
@@ -1592,10 +1710,14 @@ int ret = 0;
 	ret += test25 ();
 	ret += test26 ();
 	ret += test27 ();
+#if !defined(BSTRLIB_CANNOT_USE_STL)
 	ret += test28 ();
+#endif
 	ret += test29 ();
 	ret += test30 ();
 	ret += test31 ();
+	ret += test32 ();
+	ret += test33 ();
 
 	printf ("# test failures: %d\n", ret);
 

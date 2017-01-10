@@ -1,0 +1,5 @@
+cd ../engine/build/nix &&
+cmake -DNOOB_PLATFORM_LINUX:bool=true ../.. && #-DNOOB_USE_ASSIMP:bool=true .. &&
+make -j8 &&
+cp NoobEdit ../../../sandbox/runtime/noobengine &&
+cd ../../../sandbox

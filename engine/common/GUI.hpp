@@ -1,12 +1,14 @@
 #pragma once
 
-
 #include <memory>
+#include <vector>
 
-#include "MathFuncs.hpp"
-#include "UIFont.hpp"
+
+#include <noob/math/math_funcs.hpp>
+
+
 #include "ComponentDefines.hpp"
-
+#include "Font.hpp"
 
 namespace noob
 {
@@ -14,8 +16,7 @@ namespace noob
 	struct ui_window
 	{
 		float center_x, center_y, length, height;
-		noob::model_handle model;
-		noob::shader_variant shader;
+		// noob::graphics::model_handle model;
 	};
 
 	class gui
@@ -26,22 +27,35 @@ namespace noob
 				BANNER, TITLE, HEADER, READING
 			};
 
-			void init(const std::string& prefix, size_t width, size_t height) noexcept(true);
-			void window_dims(size_t width, size_t height) noexcept(true);
+			bool init(const std::string& Prefix, const noob::vec2ui Dims, const noob::vec2d Dpi) noexcept(true);
+			void set_dims(const noob::vec2ui Dims) noexcept(true);
 			// TODO: Implement
 			// noob::vec2 dims(const std::string& text); 
+
+			// TODO: More advanced text drawing and layout-aware functions
 			void text(const noob::text_label lbl) noexcept(true);
-			void text(const std::string& text, float x, float y, noob::gui::font_size size = noob::gui::font_size::READING, uint32_t colour = 0xFFFF00FF) noexcept(true);
+			void text(const std::string& Text, const noob::vec2f Pos, noob::gui::font_size Size, const noob::vec4f Colour) noexcept(true);
+
+			void draw() noexcept(true);
+			
+			// Overrides everything else in the drawlist and gives us the whole texture atlas. centered onscreen.
+			void debug_draw_atlas() const noexcept(true);
 
 			bool crosshairs_enabled;
-			noob::vec4 crosshairs_colour;
-		
-		protected:
-			float window_width, window_height;
+			noob::vec4f crosshairs_colour;
 
-			std::unique_ptr<noob::ui_font> _banner;
-			std::unique_ptr<noob::ui_font> _title;
-			std::unique_ptr<noob::ui_font> _header;
-			std::unique_ptr<noob::ui_font> _reading;
+		protected:
+		
+			noob::vec2ui dims;
+			noob::font gui_font;
+			uint32_t max_text_verts = 2048;
+			
+			noob::billboard_buffer_handle billbuf;
+			uint32_t num_quads = 0;
+
+			std::vector<noob::billboard_vertex> drawlist;
+
+
+			noob::vec2f screenspace_pos(const noob::vec2f Pos) const noexcept(true);
 	};
 }

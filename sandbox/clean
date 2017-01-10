@@ -1,3 +1,7 @@
-cd ../engine &&
-rm -rf android/obj/* android/assets/* android/bin/* android/libs/* android/jni/libnativeactivity.so android/gen/* build/* &&
-cd ../sandbox
+cd ../engine/platform/android-proj &&
+rm -rf ./obj/* ./assets/* ./bin/* ./libs/* ./jni/*.so ./*.so ./CMake* ./Makefile ./cmake_install.cmake ./gen/*  &&
+cd ../../build/nix &&
+rm -rf ./CMakeCache.txt  ./CMakeFiles  ./cmake_install.cmake  ./lib  ./Makefile  ./NoobEdit &&
+cd .. &&
+cd ../../sandbox/runtime &&
+rm noobengine

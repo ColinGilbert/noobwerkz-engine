@@ -28,13 +28,14 @@ ATTRIBUTE_ALIGNED16(class) btCollisionShape
 {
 protected:
 	int m_shapeType;
-	unsigned int m_userIndex;
+	void* m_userPointer;
+	int m_userIndex;
 
 public:
 
 	BT_DECLARE_ALIGNED_ALLOCATOR();
 
-	btCollisionShape() : m_shapeType (INVALID_SHAPE_PROXYTYPE), m_userIndex(0)
+	btCollisionShape() : m_shapeType (INVALID_SHAPE_PROXYTYPE), m_userPointer(0), m_userIndex(-1)
 	{
 	}
 
@@ -121,15 +122,25 @@ public:
 
 	
 	///optional user data pointer
-	void	setUserIndex(unsigned int index)
+	void	setUserPointer(void*  userPtr)
+	{
+		m_userPointer = userPtr;
+	}
+
+	void*	getUserPointer() const
+	{
+		return m_userPointer;
+	}
+	void setUserIndex(int index)
 	{
 		m_userIndex = index;
 	}
 
-	unsigned int	getUserIndex() const
+	int getUserIndex() const
 	{
 		return m_userIndex;
 	}
+
 
 	virtual	int	calculateSerializeBufferSize() const;
 

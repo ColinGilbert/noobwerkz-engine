@@ -1,0 +1,13 @@
+#mkdir ../engine/platform/android-proj/libs/armeabi-v7a &&
+touch ../engine/platform/android-proj/assets/font &&
+rm -rf ../engine/platform/android-proj/assets/font &&
+mkdir -p ../engine/platform/android-proj/assets/font &&
+cp -R runtime/assets/font/* ../engine/platform/android-proj/assets/font &&
+touch ../engine/platform/android-proj/assets/sound &&
+rm -rf ../engine/platform/android-proj/assets/sound &&
+mkdir -p ../engine/platform/android-proj/assets/sound &&
+cp -R runtime/assets/sound/* ../engine/platform/android-proj/assets/texture &&
+touch ../engine/platform/android-proj/assets/texture &&
+rm -rf ../engine/platform/android-proj/assets/texture &&
+mkdir -p ../engine/platform/android-proj/assets/texture &&
+cp runtime/assets/texture/*.tga ../engine/platform/android-proj/assets/texture

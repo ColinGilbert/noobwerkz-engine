@@ -1,80 +1,102 @@
 #include "Application.hpp"
-#include <cmath>
-#include <random>
-#include "ContactPoint.hpp"
+#include "Font.hpp"
 
-// #include "Shiny.h"
-
-// TODO: Insert the callback function here
-std::vector<std::tuple<noob::keyboard::keys, noob::keyboard::mod_keys, std::string>> keystrokes;
 std::unique_ptr<std::string> message_profiling, message_collision;
 noob::actor_handle ah;
 
+noob::font example_font;
+
 std::string test_message;
+
+noob::vec3f random_vec3(float x, float y, float z)
+{
+	return noob::vec3f(noob::random::get() * x, noob::random::get() * y, noob::random::get() * z);
+}
+
+noob::versorf random_versor()
+{
+	return noob::normalize(noob::versorf(noob::random::get(), noob::random::get(), noob::random::get(), noob::random::get()));
+}
 
 bool noob::application::user_init()
 {
-	test_message = "Howdy hey!";
 	message_profiling = std::make_unique<std::string>("");
 	message_collision = std::make_unique<std::string>("");
-	//message_profiling_two.resize(128);
-	noob::audio_sample samp;
-	bool b = samp.load_file("sounds/BlanketedLama.ogg");
-	noob::globals& g = noob::globals::get_instance();
-	noob::sample_handle h = g.samples.add(std::make_unique<noob::audio_sample>(samp));	
+	noob::logger::log(noob::importance::INFO, "[Application] Begin user init!");
 
-	noob::audio_sample* s = g.samples.get(h);
-
-	noob::basic_renderer::uniform u;
-	u.colour = noob::vec4(0.3, 0.0, 0.8, 1.0);
-	
-	g.set_shader(u, "example-shader");
-	noob::shader_variant example_shader = g.get_shader("example-shader");
-	
 	noob::reflectance r;
-	r.set_specular(noob::vec3(0.1, 0.1, 0.1));
-	r.set_diffuse(noob::vec3(0.1, 0.1, 0.1));
-	r.set_emissive(noob::vec3(0.0, 0.0, 0.0));
+	r.set_specular(noob::vec3f(0.1, 0.1, 0.1));
+	r.set_diffuse(noob::vec3f(0.1, 0.1, 0.1));
+	r.set_emissive(noob::vec3f(0.0, 0.0, 0.0));
 	r.set_shine(8.0);
 	r.set_albedo(0.3);
 	r.set_fresnel(0.2);
 
-	noob::reflectance_handle rh = g.reflectances.add(r);
+	noob::globals& g = noob::get_globals();
 
-	g.master_mixer.play_clip(h, 1.0);
+	const noob::shape_handle scenery_shp = g.sphere_shape(10.0);// g.box_shape(50.0, 20.0, 50.0);
+	const noob::scenery_handle sc_h = stage.scenery(scenery_shp, noob::vec3f(0.0, 0.0, 0.0), noob::versorf(0.0, 0.0, 0.0, 1.0));//versor_from_axis_rad(0.0, 0.0, 0.0, 1.0)); // 0 rad rotation, facing up
+	const noob::reflectance_handle rh = g.reflectances.add(r);
 
-	const float actor_radius = 10.0;
-	noob::shape_handle sh = g.sphere_shape(actor_radius);
+	const float actor_dims = 2.0;
+	// const noob::shape_handle shp = g.sphere_shape(actor_dims);
 	
+	const noob::shape_handle actor_shp = g.box_shape(actor_dims, actor_dims, actor_dims);
+
+	const uint32_t actor_count = 200;
+
+	// TODO: Fixup
 	noob::actor_blueprints bp;
-	bp.bounds = sh;
-	bp.shader = example_shader;
+	bp.bounds = actor_shp;
 	bp.reflect = rh;
-	g.set_actor_blueprints(bp, "example-actor-bp");
-	noob::actor_blueprints_handle bph = g.get_actor_blueprints("example-actor-bp");
-	
-	const uint32_t num_actors = 3000;
-	const float actor_height = 100.0;
-	const float actor_offset = 2.15;
+	bp.model = g.model_from_shape(actor_shp, actor_count*8);
 
-	for (uint32_t i = 0; i < num_actors; ++i)
+	noob::actor_blueprints_handle bph = stage.add_actor_blueprints(bp);
+
+	const float stage_dim = static_cast<float>(actor_count);
+
+	stage.reserve_actors(bph, actor_count * 8);
+
+	for (uint32_t i = 0; i < actor_count; ++i)
 	{	
-		ah = stage.actor(bph, 0, noob::vec3((actor_radius * 2.0 * i) + actor_offset, actor_height, (actor_radius * 2.0 * i) + actor_offset), noob::versor(0.0, 0.0, 0.0, 1.0));
+		ah = stage.actor(bph, 0, random_vec3(stage_dim, stage_dim, stage_dim), random_versor());
+	}
+	
+	for (uint32_t i = 0; i < actor_count; ++i)
+	{	
+		ah = stage.actor(bph, 1, random_vec3(stage_dim, stage_dim, -stage_dim), random_versor());
 	}
 
+	for (uint32_t i = 0; i < actor_count; ++i)
+	{	
+		ah = stage.actor(bph, 2, random_vec3(stage_dim, -stage_dim, stage_dim), random_versor());
+	}
 
-	// noob::triplanar_gradient_map_renderer::uniform uu;
-	// g.set_shader(uu, "example-shader-two");
-	// noob::shader_variant example_shader_two = g.get_shader("example-shader-two");
+	for (uint32_t i = 0; i < actor_count; ++i)
+	{	
+		ah = stage.actor(bph, 3, random_vec3(stage_dim, -stage_dim, -stage_dim), random_versor());
+	}
+
+	for (uint32_t i = 0; i < actor_count; ++i)
+	{	
+		ah = stage.actor(bph, 4, random_vec3(-stage_dim, stage_dim, stage_dim), random_versor());
+	}
 	
+	for (uint32_t i = 0; i < actor_count; ++i)
+	{	
+		ah = stage.actor(bph, 5, random_vec3(-stage_dim, stage_dim, -stage_dim), random_versor());
+	}
 
+	for (uint32_t i = 0; i < actor_count; ++i)
+	{	
+		ah = stage.actor(bph, 6, random_vec3(-stage_dim, -stage_dim, stage_dim), random_versor());
+	}
 
-	noob::scenery_handle scene_h = stage.scenery(g.box_shape(200.0, 10.0, 200.0), example_shader, rh, noob::vec3(0.0, 0.0, 0.0), noob::versor(0.0, 0.0, 0.0, 1.0));
+	for (uint32_t i = 0; i < actor_count; ++i)
+	{	
+		ah = stage.actor(bph, 7, random_vec3(-stage_dim, -stage_dim, -stage_dim), random_versor());
+	}
 	
-
-	eye_pos = noob::vec3(0.0, 200.0, -100.0);
-	eye_target = noob::vec3(0.0, 0.0, 0.0);
-	// keystrokes.push_back(std::make_tuple(noob::keyboard::keys::NUM_5, noob::keyboard::mod_keys::NONE, "switch view (currently does nothing)"));
 	logger::log(noob::importance::INFO, "[Application] Successfully done (C++) user init.");
 	return true;
 }
@@ -83,35 +105,25 @@ bool noob::application::user_init()
 
 void noob::application::user_update(double dt)
 {
-
-	noob::globals& g = noob::globals::get_instance();
-	noob::time nowtime = noob::clock::now();
-	noob::duration time_since_update = nowtime - last_ui_update;
+	
+	app_gui.text("Happy happy fun fun!!!!", noob::vec2f(100.0, 100.0), noob::gui::font_size::READING, noob::vec4f(1.0, 1.0, 0.0, 1.0));
+	
+	noob::globals& g = noob::get_globals();
+	const noob::time nowtime = noob::clock::now();
+	const noob::duration time_since_update = nowtime - last_ui_update;
 	const uint64_t profiling_interval = 3000;
-	const uint64_t collision_display_interval = 500;
+	
 	if (noob::millis(time_since_update) > profiling_interval - 1)
 	{
+		const noob::profiler_snap snap = g.profile_run;
 		
-		noob::profiler_snap snap = g.profile_run;
-		message_profiling = std::make_unique<std::string>(noob::concat("NoobWerkz editor - Frame time: ", pretty_print_timing(divide_duration(snap.total_time, profiling_interval)), std::string(", draw time: "), pretty_print_timing(divide_duration(snap.stage_draw_duration, profiling_interval)), ", physics time ", pretty_print_timing(divide_duration(snap.stage_physics_duration, profiling_interval)))); 
+		message_profiling = std::make_unique<std::string>(noob::concat("[User Update] Frame time: ", noob::to_string(divide_duration(snap.total_time, profiling_interval)), std::string(", draw time: "), noob::to_string(divide_duration(snap.stage_draw_duration, profiling_interval)), ", physics time: ", noob::to_string(divide_duration(snap.stage_physics_duration, profiling_interval))));
+		
 		noob::logger::log(noob::importance::INFO, *message_profiling);
-		g.profile_run.total_time = g.profile_run.stage_physics_duration = g.profile_run.stage_draw_duration = time_since_update = noob::duration(0);
+		
+		g.profile_run.total_time = g.profile_run.stage_physics_duration = g.profile_run.stage_draw_duration = g.profile_run.sound_render_duration = noob::duration(0);
+		g.profile_run.num_sound_callbacks = 0;
+		
 		last_ui_update = nowtime;
 	}
-
-
-
-/*
-	if (noob::millis(time_since_update) > collision_display_interval -1)
-	{
-		std::vector<noob::contact_point> cps = stage.get_intersecting(ah);
-
-		std::string s = noob::concat("[UserApp] Actor (", noob::to_string(ah.index()), "), num collisions = ", noob::to_string(cps.size()));
-		
-		message_collision = std::make_unique<std::string>(s);
-	}
-*/
-	// gui.text(*(g.strings.get(noob::string_handle::make(0))), static_cast<float>(window_width - 500), static_cast<float>(window_height - 500), noob::gui::font_size::HEADER);
-	gui.text(*message_profiling, 5.0, 5.0);
-	gui.text(test_message, 50.0, 50.0);
 }

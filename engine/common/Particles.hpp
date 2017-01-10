@@ -6,23 +6,23 @@
 #pragma once
 
 #include <rdestl/fixed_array.h>
+#include <noob/math/math_funcs.hpp>
 
 #include "ComponentDefines.hpp"
-#include "MathFuncs.hpp"
 #include "Timing.hpp"
 //#include "RandomGenerator.hpp"
 
 
 namespace noob
 {
-	// These are linked to ghosts onstage, and are invalidated on either first contact with anything that isn't another particle, or on running out of time.
+	// These are invalidated upon running out of time.
 	struct particle
 	{
-		particle() noexcept(true) : active(false), lifetime(noob::duration(0)), position(noob::vec3(0.0, 0.0, 0.0)), velocity(noob::vec3(0.0, 0.0, 0.0)), colour(noob::vec4(1.0, 1.0, 1.0, 0.0)) {}
+		particle() noexcept(true) : active(false), lifetime(noob::duration(0)), position(noob::vec3f(0.0, 0.0, 0.0)), velocity(noob::vec3f(0.0, 0.0, 0.0)), colour(noob::vec4f(1.0, 1.0, 1.0, 0.0)) {}
 		bool active;
 		noob::duration lifetime;
-		noob::vec3 position, velocity;
-		noob::vec4 colour;
+		noob::vec3f position, velocity;
+		noob::vec4f colour;
 	};
 
 	class particle_system
@@ -30,7 +30,7 @@ namespace noob
 		friend class stage;
 		public:
 
-		particle_system() noexcept(true) : active(false), first_free(0), emits_per_second(10), lifespan(5000000000), nanos_accum(0), damping(0.995), gravity_multiplier(0.05), emit_force(10.0), center(noob::vec3(0.0, 0.0, 0.0)), emit_direction(noob::vec3(0.0, 1.0, 0.0)), emit_direction_variance(noob::vec3(0.2, 0.2, 0.2)), wind(noob::vec3(0.2, 0.0, -0.3)) {}
+		particle_system() noexcept(true) : active(false), first_free(0), emits_per_second(10), lifespan(5000000000), nanos_accum(0), damping(0.995), gravity_multiplier(0.05), emit_force(10.0), center(noob::vec3f(0.0, 0.0, 0.0)), emit_direction(noob::vec3f(0.0, 1.0, 0.0)), emit_direction_variance(noob::vec3f(0.2, 0.2, 0.2)), wind(noob::vec3f(0.2, 0.0, -0.3)) {}
 
 		static constexpr uint32_t max_particles = 64;
 		static constexpr uint32_t max_colours = 4;
@@ -43,15 +43,15 @@ namespace noob
 
 			float damping, gravity_multiplier, emit_force;
 
-			noob::vec3 center, emit_direction, emit_direction_variance, wind;
+			noob::vec3f center, emit_direction, emit_direction_variance, wind;
 
 			noob::reflectance_handle reflect;
 
 			noob::shape_handle shape;
 
-			rde::fixed_array<noob::vec4, noob::particle_system::max_colours> colours;
+			rde::fixed_array<noob::vec4f, noob::particle_system::max_colours> colours;
 
-			void set_colour(uint32_t i, const noob::vec4& c)
+			void set_colour(uint32_t i, const noob::vec4f& c)
 			{
 				if (i < noob::particle_system::max_colours)
 				{
@@ -63,7 +63,7 @@ namespace noob
 				}
 			}
 
-			noob::vec4 get_colour(uint32_t i) const
+			noob::vec4f get_colour(uint32_t i) const
 			{
 				if (i < noob::particle_system::max_colours)
 				{
@@ -135,7 +135,7 @@ namespace noob
 		}
 
 		// Could have been a get_colour(particle p), but it gets called lots and fewer arguments is better...
-		noob::vec4 get_colour_from_particle_life(const noob::duration d) const noexcept(true)
+		noob::vec4f get_colour_from_particle_life(const noob::duration d) const noexcept(true)
 		{
 			/*			for (uint32_t i = 1; i < noob::particle_system::max_colours; ++i)
 						{
@@ -146,14 +146,14 @@ namespace noob
 						const float next_colour_gradient = i * next_colour_transition;
 						const float distance_from_previous = lifetime - previous_colour_gradient;
 						const float distance_to_next = next_colour_gradient - distance_from_previous;
-						const noob::vec4 prev = colours[i - 1];
-						const noob::vec4 next = colours[i];
-						const noob::vec4 component_prev = prev * distance_to_next;
-						const noob::vec4 component_next = next * distance_from_previous;
-						noob::vec4 final_blend = component_prev;
+						const noob::vec4f prev = colours[i - 1];
+						const noob::vec4f next = colours[i];
+						const noob::vec4f component_prev = prev * distance_to_next;
+						const noob::vec4f component_next = next * distance_from_previous;
+						noob::vec4f final_blend = component_prev;
 						final_blend += component_next;
 						return final_blend;
-			//return (noob::vec4(prev[0] * distance_to_next, prev[1] * distance_to_next, prev[2] * distance_to_next, prev[3] * distance_to_next) + noob::vec4(next[0] * distance_from_previous, next[1] * distance_from_previous, next[2] * distance_from_previous, next[3] * distance_from_previous));
+			//return (noob::vec4f(prev[0] * distance_to_next, prev[1] * distance_to_next, prev[2] * distance_to_next, prev[3] * distance_to_next) + noob::vec4f(next[0] * distance_from_previous, next[1] * distance_from_previous, next[2] * distance_from_previous, next[3] * distance_from_previous));
 			}
 			}
 			*/
@@ -162,10 +162,10 @@ namespace noob
 
 			logger::log(noob::importance::CRITICAL, "[ParticleSystem: get_colour_from_particle_life - Reached post-loop state!");
 
-			return noob::vec4(1.0, 0.3, 1.0, 1.0);//colours[noob::particle_system::max_colours - 1 ];
+			return noob::vec4f(1.0, 0.3, 1.0, 1.0);//colours[noob::particle_system::max_colours - 1 ];
 		}		
 
-		void set_colour(uint32_t i, const noob::vec4& c) noexcept(true)
+		void set_colour(uint32_t i, const noob::vec4f& c) noexcept(true)
 		{
 			if (i < max_colours)
 			{
@@ -177,7 +177,7 @@ namespace noob
 			}
 		}
 
-		noob::vec4 get_colour(uint32_t i) const noexcept(true)
+		noob::vec4f get_colour(uint32_t i) const noexcept(true)
 		{
 			if (i < max_colours)
 			{
@@ -199,13 +199,13 @@ namespace noob
 
 		float damping, gravity_multiplier, emit_force, one_colour_in_lifetime;
 
-		noob::vec3 center, emit_direction, emit_direction_variance, wind;
+		noob::vec3f center, emit_direction, emit_direction_variance, wind;
 
-		noob::time last_update_time, current_update_time;
+		noob::time_point last_update_time, current_update_time;
 
 		rde::fixed_array<particle, max_particles> particles;
 
-		rde::fixed_array<noob::vec4, max_colours> colours;
+		rde::fixed_array<noob::vec4f, max_colours> colours;
 
 		noob::shape_handle shape;
 

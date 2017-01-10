@@ -1,0 +1,6 @@
+#cp ../engine/platform/build/libnative-activity.so ../engine/platform/android-proj/libs/armeabi-v7a &&
+cp ../engine/build/droid/libEntry.so ../engine/platform/android-proj/jni &&
+cd ../engine/platform/android-proj &&
+$ANDROID_NDK_HOME/ndk-build -j8 &&
+ant debug &&
+adb install -r bin/NativeActivity-debug.apk

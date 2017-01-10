@@ -1,7 +1,0 @@
-#mkdir ../engine/platform/android/libs/armeabi-v7a &&
-cp -R font ../engine/platform/android/assets &&
-mkdir -p ../engine/platform/android/assets/shaders/gles &&
-mkdir -p ../engine/platform/android/assets/sounds &&
-cp sounds/BlanketedLama.ogg ../engine/platform/android/assets/sounds &&
-cp -R shaders/gles/* ../engine/platform/android/assets/shaders/gles &&
-cp gradient_map.tga ../engine/platform/android/assets

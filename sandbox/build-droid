@@ -1,0 +1,2 @@
+cd ../engine/build/droid &&
+cmake -DNOOB_PLATFORM_ANDROID:BOOL=true -DANDROID_ABI="armeabi-v7a with NEON" -DANDROID_FORCE_ARM_BUILD=ON -DANDROID_STL=gnustl_static -DCMAKE_TOOLCHAIN_FILE=~/devel/android-cmake/android.toolchain.cmake --build ../.. && make -j8

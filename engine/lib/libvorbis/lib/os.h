@@ -56,6 +56,11 @@
 void *_alloca(size_t size);
 #  define alloca _alloca
 #endif
+/*
+#if defined(__GNUC__)
+#define alloca(x) _builtinalloca(x)
+#endif
+*/
 
 #ifndef FAST_HYPOT
 #  define FAST_HYPOT hypot

@@ -50,7 +50,7 @@ long _float32_pack(float val){
     sign=0x80000000;
     val= -val;
   }
-  exp= floor(log(val)/log(2.f)+.001); //+epsilon
+  exp= floor(log(val)/log(2.f)+.001); /* +epsilon */
   mant=rint(ldexp(val,(VQ_FMAN-1)-exp));
   exp=(exp+VQ_FEXP_BIAS)<<VQ_FMAN;
 
@@ -284,8 +284,8 @@ int vorbis_book_init_encode(codebook *c,const static_codebook *s){
   c->entries=s->entries;
   c->used_entries=s->entries;
   c->dim=s->dim;
-  c->codelist=_make_words(s->lengthlist,s->entries,0);
-  //c->valuelist=_book_unquantize(s,s->entries,NULL);
+  c->codelist=_make_words(s->lengthlist,s->entries,0); 
+  /* c->valuelist=_book_unquantize(s,s->entries,NULL); */
   c->quantvals=_book_maptype1_quantvals(s);
   c->minval=(int)rint(_float32_unpack(s->q_min));
   c->delta=(int)rint(_float32_unpack(s->q_delta));

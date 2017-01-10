@@ -1,170 +1,157 @@
 #pragma once
 
-#include <tuple>
-#include <vector>
+// std
 #include <string>
-#include <memory>
-#include <unordered_map>
-#include <bgfx/bgfx.h>
 
-#include "NoobDefines.hpp"
-#include "NoobUtils.hpp"
+// External libs
+#include <noob/component/component.hpp>
+#include <noob/singleton/singleton.hpp>
+#include <noob/math/math_funcs.hpp>
+
+// Project-local
+#include "Mesh3D.hpp"
+#include "Model.hpp"
+#include "GpuBuffer.hpp"
+#include "Texture.hpp"
+#include "Attrib.hpp"
+#include "Shader.hpp"
+#include "TextureLoader.hpp"
+#include "Model.hpp"
+#include "InstancedModel.hpp"
+#include "TerrainModel.hpp"
+#include "BillboardModel.hpp"
+
+
 
 namespace noob
 {
 	class graphics
 	{
-
-		static graphics* ptr_to_instance;
-
-		graphics() noexcept(true) : instancing(false) {}
-
-		graphics(const graphics& rhs) noexcept(true)
-		{
-			ptr_to_instance = rhs.ptr_to_instance;
-		}
-
-		graphics& operator=(const graphics& rhs) noexcept(true)
-		{
-			if (this != &rhs)
-			{
-				ptr_to_instance = rhs.ptr_to_instance;
-			}
-			return *this;
-		}
-
-		~graphics() noexcept(true) {}
-
-
-
 		public:
+			typedef noob::handle<noob::shader> shader_handle;
+			typedef noob::handle<noob::linked_shader> program_handle;
 
-		static graphics& get_instance() noexcept(true)
-		{
-			static graphics the_instance;
-			ptr_to_instance = &the_instance;
+			// Call before using.
+			void init(const noob::vec2ui Dims, const noob::texture_loader_2d&) noexcept(true);
 
-			return *ptr_to_instance;
-		}
+			// Call this every frame...
+			void frame(const noob::vec2ui) const noexcept(true);
 
+			// Call before killing.
+			void destroy() noexcept(true);
 
-		struct uniform
-		{
-			void init(const std::string& name, bgfx::UniformType::Enum _type, uint16_t _count = 1)
-			{
-				handle = bgfx::createUniform(name.c_str(), type, _count);
-				type = _type;
-				count = _count;
-			}
+			void set_light_direction(const noob::vec3f&) noexcept(true);
 
-			bgfx::UniformHandle handle;
-			bgfx::UniformType::Enum type;
-			uint16_t count;
-		};
+			void use_program(noob::graphics::program_handle) const noexcept(true);
+			void set_view_mat(const noob::mat4f) noexcept(true);
+			void set_projection_mat(const noob::mat4f) noexcept(true);
 
-		struct sampler
-		{
-			void init(const std::string& name)
-			{
-				handle = bgfx::createUniform(name.c_str(), bgfx::UniformType::Int1);
-			}
+			// Currently, instanced models only support the basic vertex colours. This may change.
+			void draw_instanced(const noob::instanced_model_handle Handle, uint32_t MaxInstances) const noexcept(true);
+			void draw_text(const noob::billboard_buffer_handle, noob::texture_2d_handle Tex, uint32_t MaxBillboards) const noexcept(true);
+			
+			noob::instanced_model_handle add_instanced_models(const noob::mesh_3d& Mesh, uint32_t NumNnstances) noexcept(true);
+			noob::billboard_buffer_handle add_billboards(uint32_t MaxBillboards) noexcept(true);
 
-			bgfx::UniformHandle handle;
-		};
+			void resize_buffers(noob::instanced_model_handle Handle, uint32_t MaxInstances) noexcept(true);
+			void resize_buffers(noob::billboard_buffer_handle Handle, uint32_t MaxBillboards) noexcept(true);
+			
+			void upload_instanced_uniforms() const noexcept(true);
 
-		struct texture
-		{
-			bgfx::TextureHandle handle;
-		};
-		
-		struct shader
-		{
-			bgfx::ProgramHandle program;
-			std::vector<noob::graphics::uniform> uniforms;
-			std::vector<noob::graphics::sampler> samplers;	
-		};
+			// Currently implemented as a triplanar-shaded, single-buffer model.
+			// Due to the flexibility of the shaders used, it is easy to support peeling visible faces off objects and sending them to video buffer to keep drawcalls down to one.
+			// It should run smoothly using compressed textures because although texture reads are done three times, those values get reused to recreate all needed maps.
+			void draw_terrain(uint32_t Verts) const noexcept(true);			
+			void resize_terrain(uint32_t MaxVerts) noexcept(true);
+			uint32_t get_max_terrain_verts() const noexcept(true);
+			void set_terrain_uniforms(const noob::terrain_shading Shading) noexcept(true);
+			void upload_terrain_uniforms() const noexcept(true);
 
+			// These are VBO buffer mapping/unmapping methods
+			// There are two matrices per instance: Model and MVP.
+			noob::gpu_write_buffer map_matrices_buffer(noob::instanced_model_handle Handle, uint32_t Min, uint32_t Max) const noexcept(true);
+			noob::gpu_write_buffer map_colours_buffer(noob::instanced_model_handle Handle, uint32_t Min, uint32_t Max) const noexcept(true);
+			// Terrain vertices each have three vec4f's as attributes: Position (x,y,z,1), normal (x,y,z,0), and colour - with (1,1,1,1) as default.
+			noob::gpu_write_buffer map_terrain_buffer(uint32_t Min, uint32_t Max) const noexcept(true);
+			// Billboards are buffered as tringle pairs with each vertex using a vec4f (x,y,u,v)
+			noob::gpu_write_buffer map_billboards(noob::billboard_buffer_handle Handle, uint32_t Min, uint32_t Max) const noexcept(true);
+			
+			// NOTE: MUST be called as soon as you're finished using a mapped buffer!
+			void unmap_buffer() const noexcept(true);
 
-		void init(uint32_t width, uint32_t height);
-		void destroy();
-		void frame(uint32_t width, uint32_t height);
+			// noob::texture_1d_handle reserve_texture_1d(uint32_t length, bool compressed, noob::texture_channels, noob::attrib::unit_type) noexcept(true); // TODO
+			noob::texture_2d_handle texture_2d(const noob::texture_loader_2d&, bool GenMips, bool Immutable) noexcept(true);
+			noob::texture_array_2d_handle texture_array_2d(const noob::vec2ui Dims, uint32_t Indices, const noob::texture_info) noexcept(true);
+			noob::texture_3d_handle texture_3d(const noob::vec3ui Dims, const noob::texture_info) noexcept(true);
+			// noob::texture_handle reserve_texture_cube(uint32_t dims, bool mips, noob::texture_channels, noob::attrib::unit_type, const std::string& data) noexcept(true); // TODO
 
-		// ---------------- Asset loaders (builds from files and returns handles) -----------------
-		bgfx::ShaderHandle load_shader(const std::string& filename);
-		bgfx::ProgramHandle load_program(const std::string& vs_filename, const std::string& fs_filename);
+			// Texture data uploaders
+			// void texture_data(noob::texture_1d_handle, const std::string&) const noexcept(true);	// TODO
+			void texture_data(noob::texture_2d_handle, uint32_t Mip, const noob::vec2ui Offsets, const noob::vec2ui Dims, const uint8_t* DataPtr) const noexcept(true);
+			void texture_data(noob::texture_array_2d_handle, uint32_t Mip, uint32_t Index, const noob::vec2ui Offsets, const noob::vec2ui Dims, const uint8_t* DataPtr) const noexcept(true);
+			void texture_data(noob::texture_3d_handle, uint32_t Mip, const noob::vec3ui Offsets, const noob::vec3ui Dims, const uint8_t* DataPtr) const noexcept(true);
 
-		// TODO: Implement this 
-		// static bgfx::ProgramHandle compile_and_load_program(const std::string& vs_source_filename, const std::string& fs_source_filename, const std::string& varyings_filename);
+			// Texture parameter setters, made typesafe, at the cost of more overloads. Ah well, tradeoffs...
+			// Params for 2d textures
+			void texture_base_level(uint32_t Mip = 0) const noexcept(true);
+			void texture_compare_mode(noob::tex_compare_mode) const noexcept(true);
+			void texture_compare_func(noob::tex_compare_func) const noexcept(true);
+			void texture_min_filter(noob::tex_min_filter) const noexcept(true);
+			void texture_mag_filter(noob::tex_mag_filter) const noexcept(true);
+			void texture_min_lod(int32_t Mip = -1000) const noexcept(true);
+			void texture_max_lod(int32_t Mip = 1000) const noexcept(true);
+			void texture_swizzle(const std::array<noob::tex_swizzle, 2>) const noexcept(true);
+			void texture_swizzle(const std::array<noob::tex_swizzle, 3>) const noexcept(true);			
+			void texture_swizzle(const std::array<noob::tex_swizzle, 4>) const noexcept(true);
+			void texture_wrap_mode(const std::array<noob::tex_wrap_mode, 2>) const noexcept(true);			
+			void texture_wrap_mode(const std::array<noob::tex_wrap_mode, 3>) const noexcept(true);
 
-		noob::graphics::texture load_texture(const std::string& friendly_name, const std::string& filename, uint32_t flags);
+			// Texture packing and unpacking alignments.
+			// Fun fact: The GLES3 spec gives all the other pixel packing/unpacking attributes an initial value of 0 and a range of 0, so they aren't even exposed here. How simple!
+			void texture_pack_alignment(uint32_t) const noexcept(true);
+			void texture_unpack_alignment(uint32_t) const noexcept(true);
 
-		// ---------------- Asset creators (make assets available from getters) ----------------
-		bool add_sampler(const std::string&);
-		noob::graphics::uniform add_uniform(const std::string& name, bgfx::UniformType::Enum type, uint16_t count);
-		bool add_shader(const std::string&, const noob::graphics::shader&);
+			// Note: These have no effect on compressed textures, which have to be mipped offline as a preprocessing step.
+			void generate_mips(noob::texture_2d_handle) const noexcept(true);
+			void generate_mips(noob::texture_array_2d_handle) const noexcept(true);
+			void generate_mips(noob::texture_3d_handle) const noexcept(true);
 
-		// ---------------- Getters -----------------
-		noob::graphics::shader get_shader(const std::string&);
-		noob::graphics::texture get_texture(const std::string&);
-		noob::graphics::uniform get_uniform(const std::string&);
-		noob::graphics::sampler get_sampler(const std::string&);
-
-		// ---------------- Checkers ----------------
-		bool is_valid(const noob::graphics::uniform&);
-		bool is_valid(const noob::graphics::sampler&);
-
-		// TODO: Implement these
-		// static bool is_valid(const noob::graphics::shader&);
-		// static bool is_valid(bgfx::ProgramHandle);
-		// static bool is_valid(bgfx::ShaderHandle);
-		// static bool is_valid(bgfx::TextureHandle);
-
-		// ---------------- Conveniences ------------
-		const bgfx::Memory* get_bgfx_mem(const std::string& payload)
-		{
-			return bgfx::copy(&payload[0], payload.size());
-		}
-
-		// Uniform getters
-		noob::graphics::uniform get_invalid_uniform() { return invalid_uniform; }
-		noob::graphics::uniform get_colour_0() { return colour_0; } 
-		noob::graphics::uniform get_colour_1() { return colour_1; }
-		noob::graphics::uniform get_colour_2() { return colour_2; }
-		noob::graphics::uniform get_colour_3() { return colour_3; }
-		noob::graphics::uniform get_blend_0() { return blend_0; }
-		noob::graphics::uniform get_blend_1() { return blend_1; }
-		noob::graphics::uniform get_model_scales() { return model_scales; }
-		noob::graphics::uniform get_tex_scales() { return tex_scales; }
-		noob::graphics::uniform get_normal_mat() { return normal_mat; }
-		noob::graphics::uniform get_normal_mat_modelspace() { return normal_mat_modelspace; }
-		noob::graphics::uniform get_eye_pos() { return eye_pos; }
-		noob::graphics::uniform get_eye_pos_normalized() { return eye_pos_normalized; }
-		noob::graphics::uniform get_ambient() { return  ambient; }
-		noob::graphics::uniform get_light_pos_radius() { return light_pos_radius; }
-		noob::graphics::uniform get_light_rgb_falloff() { return light_rgb_falloff; } 
-		noob::graphics::uniform get_specular_shine() { return specular_shine; }
-		noob::graphics::uniform get_diffuse() { return diffuse; }
-		noob::graphics::uniform get_emissive() { return emissive; }
-		noob::graphics::uniform get_fog() { return fog; }
-		noob::graphics::uniform get_rough_albedo_fresnel() { return rough_albedo_fresnel; }
-
-		noob::graphics::sampler get_invalid_texture() { return invalid_texture; }
-		noob::graphics::sampler get_texture_0() { return texture_0; }
-
-		bool instancing_supported() const { return instancing; }
+			noob::graphics::program_handle get_instanced_shader() const noexcept(true);
+			noob::graphics::program_handle get_billboard_shader() const noexcept(true);
 
 		protected:
+			std::vector<noob::instanced_model> instanced_models;
+			std::vector<noob::billboard_buffer> billboards;
+			
+			noob::terrain_model terrain;
 
-		bool instancing;
-		// Uniforms
-		noob::graphics::uniform invalid_uniform, colour_0, colour_1, colour_2, colour_3, blend_0, blend_1, model_scales, tex_scales, normal_mat, normal_mat_modelspace, eye_pos, eye_pos_normalized, ambient, light_pos_radius, light_rgb_falloff, specular_shine, diffuse, emissive, fog, rough_albedo_fresnel;
-		noob::graphics::sampler invalid_texture, texture_0;
+			std::vector<noob::texture_1d> textures_1d;
+			std::vector<noob::texture_2d> textures_2d;
+			std::vector<noob::texture_array_2d> texture_arrays_2d;			
+			std::vector<noob::texture_3d> textures_3d;
 
-		// ---------------- Mappings --------------------
-		std::unordered_map<std::string, noob::graphics::texture> global_textures;
-		std::unordered_map<std::string, noob::graphics::shader> shaders;
-		std::unordered_map<std::string, noob::graphics::uniform> uniforms;
-		std::unordered_map<std::string, noob::graphics::sampler> samplers;
+			noob::graphics::program_handle instanced_shader;
+			noob::graphics::program_handle terrain_shader;
+			noob::graphics::program_handle text_shader;
+
+			// These will soon be replaced by proper UBO's and made typesafe. The only reason they're here is to serve as a stable, well-understood prior case example.
+			uint32_t u_eye_pos, u_light_directional;
+			uint32_t u_mvp_terrain, u_eye_pos_terrain, u_light_directional_terrain, u_texture_0, u_colour_0, u_colour_1, u_colour_2, u_colour_3, u_blend_0, u_blend_1, u_tex_scales, u_model_scales;
+			uint32_t u_text_texture_0;
+
+			noob::mat4f view_mat, proj_mat;	
+			noob::vec3f eye_pos, light_direction;
+			noob::terrain_shading terrain_unis;
+			noob::texture_2d_handle terrain_tex;
+
+			uint32_t max_terrain_verts = 0;
+
+			void bind_texture(noob::texture_2d_handle) const noexcept(true);
+			void bind_texture(noob::texture_array_2d_handle) const noexcept(true);
+			void bind_texture(noob::texture_3d_handle) const noexcept(true);
 
 	};
+
+	static noob::singleton<noob::graphics> gfx_instance;
+	static noob::graphics& get_graphics() { return gfx_instance.get(); }
 }

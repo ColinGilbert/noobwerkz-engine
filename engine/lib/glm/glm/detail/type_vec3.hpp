@@ -29,7 +29,7 @@ namespace glm
 #		if GLM_HAS_ALIGNED_TYPE
 #			if GLM_COMPILER & GLM_COMPILER_GCC
 #				pragma GCC diagnostic push
-#				pragma GCC diagnostic ignored "-pedantic"
+#				pragma GCC diagnostic ignored "-Wpedantic"
 #			endif
 #			if GLM_COMPILER & GLM_COMPILER_CLANG
 #				pragma clang diagnostic push
@@ -76,7 +76,7 @@ namespace glm
 
 		/// Return the count of components of the vector
 		typedef length_t length_type;
-		GLM_FUNC_DECL GLM_CONSTEXPR length_type length() const;
+		GLM_FUNC_DECL static length_type length(){return 3;}
 
 		GLM_FUNC_DECL T & operator[](length_type i);
 		GLM_FUNC_DECL T const & operator[](length_type i) const;

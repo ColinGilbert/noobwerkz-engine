@@ -39,7 +39,18 @@ noob::fast_hashtable::~fast_hashtable()
 //----------------------------------------------
 //  noob::fast_hashtable::lookup
 //----------------------------------------------
-noob::fast_hashtable::cell* noob::fast_hashtable::lookup(size_t key)
+noob::fast_hashtable::cell* noob::fast_hashtable::lookup(size_t key) 
+{
+
+	return const_cast<noob::fast_hashtable::cell*>(lookup_immutable(key));
+};
+
+
+
+//----------------------------------------------
+//  noob::fast_hashtable::lookup
+//----------------------------------------------
+const noob::fast_hashtable::cell* const noob::fast_hashtable::lookup_immutable(size_t key) const
 {
 	if (key)
 	{
@@ -49,7 +60,7 @@ noob::fast_hashtable::cell* noob::fast_hashtable::lookup(size_t key)
 			if (cell->key == key)
 				return cell;
 			if (!cell->key)
-				return NULL;
+				return nullptr;
 		}
 	}
 	else
@@ -57,9 +68,10 @@ noob::fast_hashtable::cell* noob::fast_hashtable::lookup(size_t key)
 		// Check zero cell
 		if (zero_used)
 			return &cell_zero;
-		return NULL;
+		return nullptr;
 	}
 };
+
 
 //----------------------------------------------
 //  noob::fast_hashtable::insert
@@ -109,9 +121,9 @@ noob::fast_hashtable::cell* noob::fast_hashtable::insert(size_t key)
 }
 
 
-bool noob::fast_hashtable::is_valid(const cell* c)
+bool noob::fast_hashtable::is_valid(const cell* const c) const
 {
-	if (c != NULL)
+	if (c != nullptr)
 	{
 		return true;
 	}
@@ -227,13 +239,11 @@ void noob::fast_hashtable::repopulate(size_t desiredSize)
 void noob::fast_hashtable::del(size_t key)
 {
 
-	{
 		cell* value = lookup(key);
 		if (value)
 		{
 			del(value);
 		}
-	}
 }
 
 
@@ -269,5 +279,5 @@ noob::fast_hashtable::cell* noob::fast_hashtable::iterator::next()
 	}
 
 	// Finished
-	return current = NULL;
+	return current = nullptr;
 }

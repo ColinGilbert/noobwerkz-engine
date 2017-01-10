@@ -1,15 +1,26 @@
 #pragma once
 
-#include "NoobDefines.hpp"
+#include <chrono>
+
 #include "StringFuncs.hpp"
 
 namespace noob
 {
-	static const uint64_t thousand = 1000;
+	static constexpr uint64_t thousand = 1000;
 
-	static const uint64_t million = 1000000;
+	static constexpr uint64_t million = 1000000;
 
-	static const uint64_t billion = 1000000000;
+	static constexpr uint64_t billion = 1000000000;
+
+	typedef std::chrono::steady_clock clock;
+	typedef std::chrono::time_point<noob::clock> time_point;
+	typedef std::chrono::duration<clock::rep, clock::period> duration;
+	typedef std::chrono::duration<double, clock::period> duration_fp;
+
+	static uint64_t seconds(const noob::duration d)
+	{
+		return (std::chrono::duration_cast<std::chrono::seconds>(d)).count();
+	}
 
 	static uint64_t millis(const noob::duration d)
 	{
@@ -31,7 +42,12 @@ namespace noob
 		return noob::duration_fp(static_cast<double>(d.count()) / static_cast<double>(denom));
 	}
 
-	static std::string pretty_print_timing(const noob::duration d)
+	static uint64_t nanos_per_oscillation(uint64_t hz)
+	{
+		return static_cast<double>(noob::billion) / static_cast<double>(hz);
+	}
+
+	static std::string to_string(const noob::duration d)
 	{
 		uint64_t time_in_millis = millis(d);
 		if (time_in_millis > 0)
@@ -53,7 +69,7 @@ namespace noob
 	}
 
 
-	static std::string pretty_print_timing(const noob::duration_fp d)
+	static std::string to_string(const noob::duration_fp d)
 	{
 		double time_in_nanos = d.count();
 		double time_in_millis = time_in_nanos / 1000000.0;

@@ -43,7 +43,7 @@ namespace glm
 #		if GLM_HAS_ALIGNED_TYPE
 #			if GLM_COMPILER & GLM_COMPILER_GCC
 #				pragma GCC diagnostic push
-#				pragma GCC diagnostic ignored "-pedantic"
+#				pragma GCC diagnostic ignored "-Wpedantic"
 #			endif
 #			if GLM_COMPILER & GLM_COMPILER_CLANG
 #				pragma clang diagnostic push
@@ -71,7 +71,7 @@ namespace glm
 
 		typedef length_t length_type;
 		/// Return the count of components of a quaternion
-		GLM_FUNC_DECL GLM_CONSTEXPR length_type length() const;
+		GLM_FUNC_DECL static length_type length(){return 4;}
 
 		GLM_FUNC_DECL T & operator[](length_type i);
 		GLM_FUNC_DECL T const & operator[](length_type i) const;

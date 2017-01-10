@@ -1,11 +1,18 @@
 CHANGELOG:
 
-Version 0.6 AKA: "Cleaning House!" (WIP)
+Master: 0.7 "Oh Dear... Droids!"
+```
+Android port! Setting up the sound was even crummier than expected, but now it works!
+Replaced BGFX entirely.
+Graphics and physics are now opaque interfaces returnng handles and the occasional buffer (to be used responsibly.) Sound API to follow.
+More major cleanups
+```
+
+Version 0.6 AKA: "Cleaning House!"
 ```
 Additions:
 Profiling
-Actor movement (WIP.)
-Particle system (WIP.)
+Stub actor control loop.
 
 
 Bugfixes/Cleanups:
@@ -13,7 +20,7 @@ NO MORE RTTI/EXCEPTIONS! JUST LIKE A REAL GAME ENGINE!
 Templatize math types.
 Protect constant globals and graphics members.
 Removed many unused libraries from libs folder.
-Removed AngelScript, OpenMesh, PolyVox, fmtlib and Assimp from codebase.
+Removed AngelScript, OpenMesh, PolyVox, fmtlib and Assimp from codebase (Assimp is now build-time optional as an editor tool.)
 Remove lemon-graph and replace with homegrown.
 
 Overall, the executable size is trimmed to a little under half of what it used to be.

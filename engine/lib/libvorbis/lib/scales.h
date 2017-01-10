@@ -21,10 +21,8 @@
 #include <math.h>
 #include "os.h"
 
-#ifdef _MSC_VER
-/* MS Visual Studio doesn't have C99 inline keyword. */
+/* Required for c89 compat */
 #define inline __inline
-#endif
 
 /* 20log10(x) */
 #define VORBIS_IEEE_FLOAT32 1

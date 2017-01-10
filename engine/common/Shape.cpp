@@ -6,11 +6,9 @@ void noob::shape::sphere(float radius) noexcept(true)
 	if (!physics_valid)
 	{
 		shape_type = noob::shape::type::SPHERE;
-		inner_shape = new btSphereShape(radius);
+		inner = new btSphereShape(radius);
 	}
-	scales = noob::vec3(radius*2.0, radius*2.0, radius*2.0);
-	// dims[0] = radius;
-	// inner_shape->setMargin(0.3);
+	scales = noob::vec3f(radius*2.0, radius*2.0, radius*2.0);
 	physics_valid = true;
 }
 
@@ -20,65 +18,24 @@ void noob::shape::box(float width, float height, float depth) noexcept(true)
 	if (!physics_valid)
 	{
 		shape_type = noob::shape::type::BOX;
-		inner_shape = new btBoxShape(btVector3(width * 0.5, height * 0.5, depth * 0.5));
-
-		// inner_shape = new btBoxShape(btVector3(width, height, depth));
+		inner = new btBoxShape(btVector3(width * 0.5, height * 0.5, depth * 0.5));
 	}
-	// scales = noob::vec3(width * 0.5, height * 0.5, depth * 0.5);
-	scales = noob::vec3(width, height, depth);
+	scales = noob::vec3f(width, height, depth);
 	physics_valid = true;
 }
 
-/*
-   void noob::shape::cylinder(float radius, float height) noexcept(true) 
-   {
-   if (!physics_valid)
-   {
-   shape_type = noob::shape::type::CYLINDER;
-   inner_shape = new btCylinderShape(btVector3(radius, height/2.0, radius));
-   }
-   scales = noob::vec3(radius*2.0, height, radius*2.0);
-   physics_valid = true;
-   }
-
-   void noob::shape::capsule(float radius, float height) noexcept(true) 
-   {
-   if (!physics_valid)
-   {
-   shape_type = noob::shape::type::CAPSULE;
-   inner_shape = new btCapsuleShape(radius, height);
-   }
-   scales = noob::vec3(radius*2, height, radius*2);
-   physics_valid = true;
-   }
-
-   void noob::shape::cone(float radius, float height) noexcept(true) 
-   {
-   if (!physics_valid)
-   {
-   shape_type = noob::shape::type::CONE;
-   inner_shape = new btConeShape(radius, height);
-   }
-   scales = noob::vec3(radius*2.0, height, radius*2.0);
-   physics_valid = true;
-   }
-   */
-
-void noob::shape::hull(const std::vector<noob::vec3>& points) noexcept(true) 
+void noob::shape::hull(const std::vector<noob::vec3f>& points) noexcept(true) 
 {
 	if (!physics_valid)
 	{
 		shape_type = noob::shape::type::HULL;
-		scales = noob::vec3(1.0, 1.0, 1.0);
-		inner_shape = new btConvexHullShape(&points[0].v[0], points.size());
-		// size_t num_p = static_cast<btConvexHullShape*>(inner_shape)->getNumPoints();
-		// const btVector3* points = static_cast<btConvexHullShape*>(inner_shape)->getPoints(); 
+		scales = noob::vec3f(1.0, 1.0, 1.0);
+		inner = new btConvexHullShape(&points[0].v[0], points.size());
 	}
 	physics_valid = true;
 }
 
-
-void noob::shape::trimesh(const noob::basic_mesh& mesh) noexcept(true) 
+void noob::shape::trimesh(const noob::mesh_3d& mesh) noexcept(true) 
 {
 	if (!physics_valid)
 	{
@@ -101,38 +58,25 @@ void noob::shape::trimesh(const noob::basic_mesh& mesh) noexcept(true)
 
 			phyz_mesh->addTriangle(bv1, bv2, bv3);
 		}        
-		inner_shape = new btBvhTriangleMeshShape(phyz_mesh, true);
+		inner = new btBvhTriangleMeshShape(phyz_mesh, true);
 		// set_margin(2.5);
-		scales = noob::vec3(1.0, 1.0, 1.0);
+		scales = noob::vec3f(1.0, 1.0, 1.0);
 	}
 	physics_valid = true;
 }
 
-/*
-   void noob::shape::plane(const noob::vec3& normal, float offset) noexcept(true) 
-   {
-   if (!physics_valid)
-   {
-   shape_type = noob::shape::type::PLANE;
-   inner_shape = new btStaticPlaneShape(btVector3(normal.v[0], normal.v[1], normal.v[2]), offset);
-   }
-   physics_valid = true;
-   }
-   */
-
 void noob::shape::set_margin(float m) noexcept(true) 
 {
-	inner_shape->setMargin(m);
+	inner->setMargin(m);
 }
 
 
 float noob::shape::get_margin() const noexcept(true) 
 {
-	return inner_shape->getMargin();
+	return inner->getMargin();
 }
 
-
-noob::vec3 noob::shape::get_scales() const noexcept(true) 
+noob::vec3f noob::shape::get_scales() const noexcept(true) 
 {
 	return scales;
 }
@@ -143,7 +87,7 @@ noob::shape::type noob::shape::get_type() const noexcept(true)
 }
 
 
-noob::basic_mesh noob::shape::get_mesh() const noexcept(true)
+noob::mesh_3d noob::shape::get_mesh() const noexcept(true)
 {
 	switch (shape_type)
 	{
@@ -167,19 +111,19 @@ noob::basic_mesh noob::shape::get_mesh() const noexcept(true)
 			   */
 		case (noob::shape::type::HULL):
 			{
-				const btVector3* btpoints = static_cast<btConvexHullShape*>(inner_shape)->getUnscaledPoints();
-				uint32_t num_points = static_cast<btConvexHullShape*>(inner_shape)->getNumPoints();
+				const btVector3* btpoints = static_cast<btConvexHullShape*>(inner)->getUnscaledPoints();
+				uint32_t num_points = static_cast<btConvexHullShape*>(inner)->getNumPoints();
 				//std::vector<std::reference_wrapper<btVector3>> cv;
-				std::vector<noob::vec3> points;
+				std::vector<noob::vec3f> points;
 				for (uint32_t i = 0; i < num_points; ++i)
 				{
-					points.push_back(noob::vec3_from_bullet(*(btpoints+(i*sizeof(btVector3))))); // Man that was ugly...
+					points.push_back(noob::vec3f_from_bullet(*(btpoints+(i*sizeof(btVector3))))); // Man that was ugly...
 				}
 				return noob::mesh_utils::hull(points);
 			}
 		case (noob::shape::type::TRIMESH):
 			{
-				const btBvhTriangleMeshShape* shape_ptr = static_cast<btBvhTriangleMeshShape*>(inner_shape);
+				const btBvhTriangleMeshShape* shape_ptr = static_cast<btBvhTriangleMeshShape*>(inner);
 				btVector3 scaling = shape_ptr->getLocalScaling();
 				const btStridingMeshInterface* striding_mesh = shape_ptr->getMeshInterface();
 				PHY_ScalarType scalar_type, index_type;
@@ -214,7 +158,7 @@ noob::basic_mesh noob::shape::get_mesh() const noexcept(true)
 
 				}
 
-				noob::basic_mesh m;
+				noob::mesh_3d m;
 
 				rde::fixed_array<btVector3, 3> triangle_verts;
 
@@ -239,11 +183,11 @@ noob::basic_mesh noob::shape::get_mesh() const noexcept(true)
 					}
 
 					m.indices.push_back(m.vertices.size());
-					m.vertices.push_back(vec3_from_bullet(triangle_verts[0]));
+					m.vertices.push_back(vec3f_from_bullet(triangle_verts[0]));
 					m.indices.push_back(m.vertices.size());
-					m.vertices.push_back(vec3_from_bullet(triangle_verts[1]));
+					m.vertices.push_back(vec3f_from_bullet(triangle_verts[1]));
 					m.indices.push_back(m.vertices.size());
-					m.vertices.push_back(vec3_from_bullet(triangle_verts[2]));
+					m.vertices.push_back(vec3f_from_bullet(triangle_verts[2]));
 				}
 
 				striding_mesh->unLockReadOnlyVertexBase(0);
@@ -259,14 +203,22 @@ noob::basic_mesh noob::shape::get_mesh() const noexcept(true)
 	}
 }
 
-
-const btCollisionShape* noob::shape::get_inner() const noexcept(true)
+void noob::shape::clear() noexcept(true)
 {
-	return inner_shape;
+	if (physics_valid)
+	{
+		delete inner;
+		scales = noob::vec3f(1.0, 1.0, 1.0);
+		physics_valid = false;
+	}
 }
 
-
-btCollisionShape* noob::shape::get_inner_mutable() const noexcept(true)
+void noob::shape::set_self_index(uint32_t i) noexcept(true)
 {
-	return inner_shape;
+	inner->setUserIndex(i);
+}
+
+uint32_t noob::shape::get_self_index() const noexcept(true)
+{
+	return inner->getUserIndex();
 }

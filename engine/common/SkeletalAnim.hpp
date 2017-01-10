@@ -5,6 +5,8 @@
 #include <unordered_map>
 #include <math.h>
 
+#include <noob/math/math_funcs.hpp>
+
 #include <ozz/animation/offline/raw_skeleton.h>
 #include <ozz/animation/offline/raw_animation.h>
 #include <ozz/animation/runtime/skeleton.h>
@@ -21,7 +23,6 @@
 #include <ozz/animation/offline/animation_optimizer.h>
 #include <ozz/base/memory/allocator.h>
 
-#include "MathFuncs.hpp"
 #include "Graphics.hpp"
 
 
@@ -36,7 +37,7 @@ namespace noob
 			// Loads a runtime skeleton. Possibly convert to raw skeleton
 			void init(const std::string& filename);
 			// Loads a raw animation. You then create runtime animations via optimize()
-			bool load_animation(const std::string& filename, const std::string& anim_name);
+			bool load_animation_file(const std::string& filename, const std::string& anim_name);
 			// If name = "" all animations get processed. If all the tolerances == 0.0 it doesn't run an optimization pre-pass prior to creating runtime animations. 
 			void optimize(float translation_tolerance = 0.0, float rotation_tolerance = 0.0, float scale_tolerance = 0.0, const std::string& name = "");
 
@@ -49,8 +50,8 @@ namespace noob
 			// std::weak_ptr<noob::skeletal_anim::sampler> get_sampler(const std::string& anim_name) const;
 			// Gets bone matrices in model space
 			
-			std::vector<noob::mat4> get_matrices() const;
-			/// std::array<noob::vec3,4> get_skeleton_bounds() const;
+			std::vector<noob::mat4f> get_matrices() const;
+			/// std::array<noob::vec3f,4> get_skeleton_bounds() const;
 
 		protected:
 			
@@ -108,4 +109,6 @@ namespace noob
 			ozz::Range<ozz::math::Float4x4> model_matrices;
 			ozz::memory::Allocator* allocator;
 	};
+
+	typedef noob::handle<noob::skeletal_anim> skeletal_anim_handle;
 }

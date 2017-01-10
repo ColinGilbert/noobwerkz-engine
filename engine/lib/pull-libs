@@ -1,0 +1,8 @@
+git clone https://www.github.com/GuillaumeBlanc/ozz-animation &&
+cd ozz-animation &&
+rm -rf .git* &&
+cd .. &&
+git clone https://github.com/nothings/stb &&
+cd stb &&
+rm -rf .git*
+cd ..
