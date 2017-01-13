@@ -50,6 +50,7 @@ void noob::application::init(const noob::vec2ui Dims, const noob::vec2d Dpi, con
 	stage.init(window_dims, proj_mat);
 	logger::log(noob::importance::INFO, noob::concat("[Application] Done basic init. Filepath = ", FilePath, ". Window dims: ", noob::to_string(window_dims), ". DPI: ", noob::to_string(dpi)));
 
+	db.init_file(noob::concat(*prefix, "NoobStorage.sqlite"));
 
 	bool b = user_init();
 

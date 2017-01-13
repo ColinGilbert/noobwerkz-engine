@@ -1,6 +1,6 @@
 // This represents a conceptual geometric shape, using the physics engine under-the-hood.
-// Limitation: btCollisionShape* inner_shape pointer must be delete'd by the application.
-// Reason: The destructor used to do the above, but that unfortunately led to deletion of the btCollisionShape*  every time it went out of scope in a local block. This led to all sorts of fun.
+// Limitation: btCollisionShape* inner_shape pointer must be manually cleared.
+// Reason: The destructor used to do the above, but that unfortunately led to deletion of the btCollisionShape* every time it went out of scope in a local block. This led to all sorts of fun.
 #pragma once
 
 #include <vector>
@@ -26,7 +26,7 @@ namespace noob
 		public:
 		enum class type { SPHERE, BOX, /* CYLINDER, CONE, */ HULL, TRIMESH };
 
-		shape() noexcept(true) : physics_valid(false), scales(noob::vec3f(1.0, 1.0, 1.0)) {}
+		shape() noexcept(true) : physics_valid(false) {} //, scales(noob::vec3f(1.0, 1.0, 1.0)) {}
 
 		// Initializers
 		void sphere(float radius) noexcept(true);

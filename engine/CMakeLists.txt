@@ -39,7 +39,7 @@ include(cmake/R8.cmake)
 include(cmake/Shiny.cmake)
 include(cmake/TextureAtlas.cmake)
 include(cmake/Harfbuzz.cmake)
-
+include(cmake/Sqlite.cmake)
 
 #add_subdirectory(lib/ozz-animation)
 
@@ -74,6 +74,7 @@ list(APPEND common_src
 	common/Sounds.cpp	
 	common/Font.cpp
 	common/TextureLoader.cpp
+	common/Database.cpp
 	)
 
 list(APPEND user_src

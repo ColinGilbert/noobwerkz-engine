@@ -74,7 +74,7 @@ noob::body_handle noob::physics::add_body(noob::body_type b_type, const noob::sh
 }
 
 
-noob::body_handle noob::physics::add_body(noob::body_type type_arg, const noob::shape_handle shape_h, const noob::body::info& info_arg) noexcept(true)
+noob::body_handle noob::physics::add_body(noob::body_type type_arg, const noob::shape_handle shape_h, const noob::body_info& info_arg) noexcept(true)
 {
 	noob::globals& g = noob::get_globals();
 

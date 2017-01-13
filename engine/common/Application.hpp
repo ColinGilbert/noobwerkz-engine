@@ -13,6 +13,7 @@
 #include "Body.hpp"
 #include "RandomGenerator.hpp"
 #include "ProfilingInfo.hpp"
+#include "Database.hpp"
 
 #if defined(NOOB_USE_SHINY)
 #include "Shiny.h"
@@ -74,6 +75,7 @@ namespace noob
 			std::vector<noob::vec2f> finger_positions;
 
 			noob::stage stage;
+			noob::database db;
 
 			std::string script_name;
 
