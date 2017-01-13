@@ -45,15 +45,15 @@ bool noob::database::init_file(const std::string& FileName) noexcept(true)
 	//	The second for the actual vertex information (position, colour, uv, and whatnot...)
 	//	The third for the vertex indices of each mesh, using a foreign key to identify which mesh each index belongs to.
 	//	Ordering is enforced on all tables (though this may change to only enforcing on the mesh3d_verts_indices table
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mesh3d_index(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mesh3d(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mesh3d_verts_info(id INTEGER PRIMARY KEY AUTOINCREMENT, pos INTEGER REFERENCES vec3d, colour INTEGER REFERENCES vec4d, uv INTEGER REFERENCES vec2d)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mesh3d_verts(id INTEGER PRIMARY KEY AUTOINCREMENT, pos INTEGER REFERENCES vec3d, colour INTEGER REFERENCES vec4d, uv INTEGER REFERENCES vec2d)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mesh3d_verts_indices(id INTEGER PRIMARY KEY AUTOINCREMENT, vert INTEGER REFERENCES mesh3d_verts_info, belongs_to INTEGER REFERENCES mesh3d_index)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mesh3d_indices(id INTEGER PRIMARY KEY AUTOINCREMENT, vert INTEGER REFERENCES mesh3d_verts, belongs_to INTEGER REFERENCES mesh3d)"))
 	{
 		return false;
 	}
@@ -100,7 +100,7 @@ bool noob::database::init_file(const std::string& FileName) noexcept(true)
 	///////////////////////////////////
 	// PREPARED STATEMENTS
 	///////////////////////////////////
-	
+
 	if (!prepare_statement("INSERT INTO vec2d(x, y) VALUES (?, ?)", noob::database::statement::vec2d_add))
 	{
 		return false;
@@ -133,19 +133,33 @@ bool noob::database::init_file(const std::string& FileName) noexcept(true)
 	{
 		return false;	
 	}
-	if(!prepare_statement("", noob::database::statement::mesh3d_add_vert))
+	
+	// Triangle meshes are rather "fun": They potentially share info among each other while often needing names to make any sense of their use. We use three tables:
+	// 	The first for naming and a mesh and offering a primary key to identify it.
+	//	The second for the actual vertex information (position, colour, uv, and whatnot...)
+	//	The third for the vertex indices of each mesh, using a foreign key to identify which mesh each index belongs to.
+	//	Ordering is enforced on all tables (though this may change to only enforcing on the mesh3d_verts_indices table
+	// "CREATE TABLE IF NOT EXISTS mesh3d(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)"
+	// "CREATE TABLE IF NOT EXISTS mesh3d_verts(id INTEGER PRIMARY KEY AUTOINCREMENT, pos INTEGER REFERENCES vec3d, colour INTEGER REFERENCES vec4d, uv INTEGER REFERENCES vec2d)"
+	// "CREATE TABLE IF NOT EXISTS mesh3d_indices(id INTEGER PRIMARY KEY AUTOINCREMENT, vert INTEGER REFERENCES mesh3d_verts_info, belongs_to INTEGER REFERENCES mesh3d_index)"
+	// "CREATE TABLE IF NOT EXISTS body(id INTEGER PRIMARY KEY, pos REFERENCES vec3d, orient REFERENCES vec4d, type UNSIGNED INT8, mass REAL, friction REAL, restitution REAL, linear_vel REAL, angular_vel REAL, linear_factor REAL, angular_factor REAL, ccd BOOLEAN, name TEXT)"))
+	if(!prepare_statement("INSERT INTO mesh3d(name) VALUES (?)", noob::database::statement::mesh3d_add))
 	{
 		return false;	
 	}
-	if(!prepare_statement("", noob::database::statement::mesh3d_get_vert))
+	if(!prepare_statement("INSERT INTO mesh3d_verts(pos, colour, uv) VALUES (?, ?, ?)", noob::database::statement::mesh3d_add_vert))
 	{
 		return false;	
 	}
-	if(!prepare_statement("", noob::database::statement::mesh3d_add_index))
+	if(!prepare_statement("SELECT pos, colour, uv  FROM mesh3d_verts JOIN mesh3d_indices ON mesh3d_verts.id = mesh3d_indices.vert", noob::database::statement::mesh3d_get_vert_by_index))
 	{
 		return false;	
 	}
-	if(!prepare_statement("", noob::database::statement::mesh3d_get_indices))
+	if(!prepare_statement("INSERT INTO mesh3d_indices(vert, belongs_to) VALUES (?, ?)", noob::database::statement::mesh3d_add_vert_index))
+	{
+		return false;	
+	}
+	if(!prepare_statement("", noob::database::statement::mesh3d_get_mesh_indices))
 	{
 		return false;	
 	}
