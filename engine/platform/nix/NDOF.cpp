@@ -1,10 +1,12 @@
 #include "NDOF.hpp"
-#include "NoobUtils.hpp"
+
 #include <thread>
 #include <stdlib.h>
 //#include <signal.h>
 #include <csignal>
 #include <spnav.h>
+
+#include "Logger.hpp"
 
 void sig()
 {

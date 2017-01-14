@@ -1,6 +1,6 @@
 #include "SkeletalAnim.hpp"
 
-#include "NoobUtils.hpp"
+#include "Logger.hpp"
 
 
 noob::skeletal_anim::~skeletal_anim()

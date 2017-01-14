@@ -9,7 +9,7 @@ namespace noob
 	template <typename T>
 		struct versor_type
 		{
-			versor_type() noexcept(true) {}
+			versor_type() noexcept(true) = default;
 
 			versor_type(T x, T y, T z, T w) noexcept(true)
 			{

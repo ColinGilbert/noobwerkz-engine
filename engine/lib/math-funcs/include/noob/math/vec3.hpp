@@ -9,7 +9,7 @@ namespace noob
 	template <typename T>
 		struct vec3_type
 		{
-			vec3_type() noexcept(true) {}
+			vec3_type() noexcept(true) = default;
 
 			vec3_type(T x, T y, T z) noexcept(true)
 			{

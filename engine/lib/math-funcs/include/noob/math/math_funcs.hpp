@@ -50,11 +50,52 @@ namespace noob
 	typedef mat3_type<uint32_t> mat3ui;
 	typedef mat4_type<uint32_t> mat4ui;
 
+	/////////////////////////
+	// CONVERSION FUNCTIONS:
+	/////////////////////////
+	//TODO: Replace with expression templates...
+	template<typename From, typename To>
+	static noob::vec2_type<To> convert(const noob::vec2_type<From> Vec)
+	{
+		return noob::vec2_type<To>(static_cast<To>(Vec[0]), static_cast<To>(Vec[1]));
+	}
+
+	template<typename From, typename To>
+	static noob::vec3_type<To> convert(const noob::vec3_type<From> Vec)
+	{
+		return noob::vec3_type<To>(static_cast<To>(Vec[0]), static_cast<To>(Vec[1]), static_cast<To>(Vec[2]));
+	}
+
+	template<typename From, typename To>
+	static noob::vec4_type<To> convert(const noob::vec4_type<From> Vec)
+	{
+		return noob::vec4_type<To>(static_cast<To>(Vec[0]), static_cast<To>(Vec[1]), static_cast<To>(Vec[2]), static_cast<To>(Vec[3]));
+	}
+
+	template<typename From, typename To>
+	static noob::versor_type<To> convert(const noob::versor_type<From> Versor)
+	{
+		return noob::versor_type<To>(static_cast<To>(Versor[0]), static_cast<To>(Versor[1]), static_cast<To>(Versor[2]), static_cast<To>(Versor[3]));
+	}
 
 
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template<typename From, typename To>
+	static noob::mat3_type<To> convert(const noob::mat3_type<From> Mat)
+	{
+		return noob::mat3_type<To>(static_cast<To>(Mat[0]), static_cast<To>(Mat[1]), static_cast<To>(Mat[2]), static_cast<To>(Mat[3]), static_cast<To>(Mat[4]), static_cast<To>(Mat[5]), static_cast<To>(Mat[6]), static_cast<To>(Mat[7]), static_cast<To>(Mat[8]));
+	}
+
+	// Comment: Yuck. Yuck. YUCK!
+	template<typename From, typename To>
+	static noob::mat4_type<To> convert(const noob::mat4_type<From> Mat)
+	{
+		return noob::mat4_type<To>(static_cast<To>(Mat[0]), static_cast<To>(Mat[1]), static_cast<To>(Mat[2]), static_cast<To>(Mat[3]), static_cast<To>(Mat[4]), static_cast<To>(Mat[5]), static_cast<To>(Mat[6]), static_cast<To>(Mat[7]), static_cast<To>(Mat[8]), static_cast<To>(Mat[9]), static_cast<To>(Mat[10]), static_cast<To>(Mat[11]), static_cast<To>(Mat[12]), static_cast<To>(Mat[13]), static_cast<To>(Mat[14]), static_cast<To>(Mat[15]));
+	}
+
+
+	///////////////////
 	// UTILITY TYPES:
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////
 
 	enum class binary_op
 	{
@@ -84,12 +125,12 @@ namespace noob
 		return val;
 	}
 
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////
 	// ONE-FLOAT FUNCTIONS:
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////
 	// TODO: Test
 
-	template <typename T> int sign(T val) noexcept(true)
+	template <typename T> static int sign(T val) noexcept(true)
 	{
 		return (T(0) < val) - (val < T(0));
 	}
@@ -101,9 +142,9 @@ namespace noob
 		else return true;
 	}
 
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////
 	// TWO-FLOAT FUNCTIONS(S):
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////
 
 	static bool compare_floats(float a, float b) noexcept(true)
 	{

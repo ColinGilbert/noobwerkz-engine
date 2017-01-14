@@ -9,7 +9,7 @@
 
 // Project-local
 #include "ShadersGL.hpp"
-#include "NoobUtils.hpp"
+#include "Logger.hpp"
 #include "StringFuncs.hpp"
 
 //////////////////////////////////////////////////////////////

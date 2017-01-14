@@ -4,7 +4,7 @@
 #include <noob/fast_hashtable/fast_hashtable.hpp>
 
 
-#include "NoobUtils.hpp"
+#include "Logger.hpp"
 
 bool noob::database::init_file(const std::string& FileName) noexcept(true)
 {
@@ -26,13 +26,14 @@ void close() noexcept(true)
 }
 
 
-uint32_t noob::database::vec2f_add(const noob::vec2f) const noexcept(true)
+uint32_t noob::database::vec2f_add(const noob::vec2f Vec) const noexcept(true)
 {
+	const noob::vec2d temp = noob::convert<float, double>(Vec);
 	return 0;
 }
 
 
-noob::results<noob::vec2f> noob::database::vec2f_get(uint32_t) const noexcept(true)
+noob::results<noob::vec2f> noob::database::vec2f_get(uint32_t Idx) const noexcept(true)
 {
 	return noob::results<noob::vec2f>::make_invalid();
 }
@@ -44,13 +45,15 @@ noob::results<noob::vec2f> noob::database::vec2f_get(const std::string& Name) co
 }
 
 
-uint32_t noob::database::vec3f_add(const noob::vec3f, const std::string& Name) const noexcept(true)
+uint32_t noob::database::vec3f_add(const noob::vec3f Vec, const std::string& Name) const noexcept(true)
 {
+	const noob::vec3d temp = noob::convert<float, double>(Vec);
+
 	return 0;
 }
 
 
-noob::results<noob::vec3f> noob::database::vec3f_get(uint32_t) const noexcept(true)
+noob::results<noob::vec3f> noob::database::vec3f_get(uint32_t Idx) const noexcept(true)
 {
 	return noob::results<noob::vec3f>::make_invalid();
 }
@@ -62,13 +65,15 @@ noob::results<noob::vec3f> noob::database::vec3f_get(const std::string& Name) co
 }
 
 
-uint32_t noob::database::vec4f_add(const noob::vec4f, const std::string& Name) const noexcept(true)
+uint32_t noob::database::vec4f_add(const noob::vec4f Vec, const std::string& Name) const noexcept(true)
 {
+	const noob::vec4d temp = noob::convert<float, double>(Vec);
+
 	return 0;
 }
 
 
-noob::results<noob::vec4f> noob::database::vec4f_get(uint32_t) const noexcept(true)
+noob::results<noob::vec4f> noob::database::vec4f_get(uint32_t Idx) const noexcept(true)
 {
 	return noob::results<noob::vec4f>::make_invalid();
 }
@@ -80,13 +85,15 @@ noob::results<noob::vec4f> noob::database::vec4f_get(const std::string& Name) co
 }
 
 
-uint32_t noob::database::mat4f_add(const noob::mat4f, const std::string& Name) const noexcept(true)
+uint32_t noob::database::mat4f_add(const noob::mat4f Mat, const std::string& Name) const noexcept(true)
 {
+	const noob::mat4d temp = noob::convert<float, double>(Mat);
+
 	return 0;
 }
 
 
-noob::results<noob::mat4f> noob::database::mat4f_get(uint32_t) const noexcept(true)
+noob::results<noob::mat4f> noob::database::mat4f_get(uint32_t Idx) const noexcept(true)
 {
 	return noob::results<noob::mat4f>::make_invalid();
 }
@@ -98,13 +105,13 @@ noob::results<noob::mat4f> noob::database::mat4f_get(const std::string& Name) co
 }
 
 
-uint32_t noob::database::mesh3d_add(const noob::mesh_3d&, const std::string& Name) const noexcept(true)
+uint32_t noob::database::mesh3d_add(const noob::mesh_3d& Mesh, const std::string& Name) const noexcept(true)
 {
 	return 0;
 }
 
 
-noob::results<noob::mesh_3d> noob::database::mesh3d_get(uint32_t) const noexcept(true)
+noob::results<noob::mesh_3d> noob::database::mesh3d_get(uint32_t Idx) const noexcept(true)
 {
 	return noob::results<noob::mesh_3d>::make_invalid();
 }
@@ -116,13 +123,13 @@ noob::results<noob::mesh_3d> noob::database::mesh3d_get(const std::string& Name)
 }
 
 
-uint32_t noob::database::body_add(const noob::body&, const std::string& Name) const noexcept(true)
+uint32_t noob::database::body_add(const noob::body& Body, const std::string& Name) const noexcept(true)
 {
 	return 0;
 }
 
 
-noob::results<noob::body_info> noob::database::body_get(uint32_t) const noexcept(true)
+noob::results<noob::body_info> noob::database::body_get(uint32_t Idx) const noexcept(true)
 {
 	return noob::results<noob::body_info>::make_invalid();
 }
@@ -134,13 +141,13 @@ noob::results<noob::body_info> noob::database::body_get(const std::string& Name)
 }
 
 
-uint32_t noob::database::shape_add(const noob::shape&, const std::string& Name) const noexcept(true)
+uint32_t noob::database::shape_add(const noob::shape& Shape, const std::string& Name) const noexcept(true)
 {
 	return 0;
 }
 
 
-noob::results<noob::shape> noob::database::shape_get(uint32_t) const noexcept(true)
+noob::results<noob::shape> noob::database::shape_get(uint32_t Idx) const noexcept(true)
 {
 	return noob::results<noob::shape>::make_invalid();
 }
@@ -405,6 +412,22 @@ bool noob::database::prepare_statement(const std::string& Sql, noob::database::s
 	}
 	prepped_statements[static_cast<uint32_t>(Index)] = stmt;
 	return true;
+}
+
+
+void noob::database::clear_bindings(noob::database::statement Statement) const noexcept(true)
+{
+	sqlite3_clear_bindings(prepped_statements[static_cast<uint32_t>(Statement)]);
+}
+
+
+void noob::database::reset_stmt(noob::database::statement Statement, bool ClearBindings) const noexcept(true)
+{
+	sqlite3_reset(prepped_statements[static_cast<uint32_t>(Statement)]);
+	if (ClearBindings)
+	{
+		clear_bindings(Statement);
+	}
 }
 
 

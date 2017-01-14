@@ -24,32 +24,32 @@ namespace noob
 
 			void close() noexcept(true);
 
-			uint32_t vec2f_add(const noob::vec2f) const noexcept(true);
-			noob::results<noob::vec2f> vec2f_get(uint32_t) const noexcept(true);
+			uint32_t vec2f_add(const noob::vec2f Vec) const noexcept(true);
+			noob::results<noob::vec2f> vec2f_get(uint32_t Idx) const noexcept(true);
 			noob::results<noob::vec2f> vec2f_get(const std::string& Name) const noexcept(true);
 
-			uint32_t vec3f_add(const noob::vec3f, const std::string& Name) const noexcept(true);
-			noob::results<noob::vec3f> vec3f_get(uint32_t) const noexcept(true);
+			uint32_t vec3f_add(const noob::vec3f Vec, const std::string& Name) const noexcept(true);
+			noob::results<noob::vec3f> vec3f_get(uint32_t Idx) const noexcept(true);
 			noob::results<noob::vec3f> vec3f_get(const std::string& Name) const noexcept(true);
 
-			uint32_t vec4f_add(const noob::vec4f, const std::string& Name) const noexcept(true);
-			noob::results<noob::vec4f> vec4f_get(uint32_t) const noexcept(true);
+			uint32_t vec4f_add(const noob::vec4f Vec, const std::string& Name) const noexcept(true);
+			noob::results<noob::vec4f> vec4f_get(uint32_t Idx) const noexcept(true);
 			noob::results<noob::vec4f> vec4f_get(const std::string& Name) const noexcept(true);
 
-			uint32_t mat4f_add(const noob::mat4f, const std::string& Name) const noexcept(true);
-			noob::results<noob::mat4f> mat4f_get(uint32_t) const noexcept(true);
+			uint32_t mat4f_add(const noob::mat4f Mat, const std::string& Name) const noexcept(true);
+			noob::results<noob::mat4f> mat4f_get(uint32_t Idx) const noexcept(true);
 			noob::results<noob::mat4f> mat4f_get(const std::string& Name) const noexcept(true);
 			
-			uint32_t mesh3d_add(const noob::mesh_3d&, const std::string& Name) const noexcept(true);
-			noob::results<noob::mesh_3d> mesh3d_get(uint32_t) const noexcept(true);
+			uint32_t mesh3d_add(const noob::mesh_3d& Mesh, const std::string& Name) const noexcept(true);
+			noob::results<noob::mesh_3d> mesh3d_get(uint32_t Idx) const noexcept(true);
 			noob::results<noob::mesh_3d> mesh3d_get(const std::string& Name) const noexcept(true);
 
-			uint32_t body_add(const noob::body&, const std::string& Name) const noexcept(true);
-			noob::results<noob::body_info> body_get(uint32_t) const noexcept(true);
+			uint32_t body_add(const noob::body& Body, const std::string& Name) const noexcept(true);
+			noob::results<noob::body_info> body_get(uint32_t Idx) const noexcept(true);
 			noob::results<noob::body_info> body_get(const std::string& Name) const noexcept(true);
 
-			uint32_t shape_add(const noob::shape&, const std::string& Name) const noexcept(true);
-			noob::results<noob::shape> shape_get(uint32_t) const noexcept(true);
+			uint32_t shape_add(const noob::shape& Shape, const std::string& Name) const noexcept(true);
+			noob::results<noob::shape> shape_get(uint32_t Idx) const noexcept(true);
 			noob::results<noob::shape> shape_get(const std::string& Name) const noexcept(true);
 
 
@@ -63,6 +63,8 @@ namespace noob
 			bool init() noexcept(true);
 			bool exec_single_step(const std::string& Sql) noexcept(true);
 			bool prepare_statement(const std::string& Sql, noob::database::statement Index) noexcept(true);
+			void clear_bindings(noob::database::statement) const noexcept(true);
+			void reset_stmt(noob::database::statement, bool ClearBindings) const noexcept(true);
 			void log_error(const std::string& Sql, const std::string& Msg) const noexcept(true);
 
 			sqlite3* db;

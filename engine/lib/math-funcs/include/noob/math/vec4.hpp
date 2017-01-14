@@ -9,7 +9,8 @@ namespace noob
 	template <typename T>
 		struct vec4_type
 		{
-			vec4_type() noexcept(true) {}
+			vec4_type() noexcept(true)  = default;
+			vec4_type(const vec4_type<T>& rhs) noexcept(true)  = default;
 
 			vec4_type(T x, T y, T z, T w) noexcept(true)
 			{

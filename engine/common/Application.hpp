@@ -4,7 +4,8 @@
 #include <noob/math/math_funcs.hpp>
 
 #include "Globals.hpp"
-#include "NoobUtils.hpp"
+#include "Logger.hpp"
+#include "LoadFileAsString.hpp"
 #include "GUI.hpp"
 #include "Camera.hpp"
 #include "NDOF.hpp"

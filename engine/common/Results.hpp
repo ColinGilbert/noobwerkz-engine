@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <utility>
+
 namespace noob
 {
 	template <typename T>
@@ -30,6 +32,4 @@ namespace noob
 			const bool valid;
 			T value;
 		};
-
-
 }

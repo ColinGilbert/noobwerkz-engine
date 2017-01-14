@@ -14,7 +14,7 @@ namespace noob
 	template <typename T>
 		struct mat4_type
 		{
-			mat4_type() noexcept(true) {}
+			mat4_type() noexcept(true) = default;
 
 			mat4_type(T a, T b, T c, T d, T e, T f, T g, T h, T i, T j, T k, T l, T mm, T n, T o, T p) noexcept(true)
 			{

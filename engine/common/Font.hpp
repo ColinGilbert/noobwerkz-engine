@@ -15,7 +15,7 @@
 #include FT_FREETYPE_H
 
 #include "Texture.hpp"
-#include "NoobUtils.hpp"
+#include "Logger.hpp"
 #include "Results.hpp"
 #include "Graphics.hpp"
 #include "StringFuncs.hpp"
