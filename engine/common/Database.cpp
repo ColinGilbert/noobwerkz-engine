@@ -8,10 +8,6 @@
 
 bool noob::database::init_file(const std::string& FileName) noexcept(true)
 {
-	///////////////////////////////////
-	// OPEN DATABASE
-	///////////////////////////////////
-
 	int rc = sqlite3_open(FileName.c_str(), &db);
 
 	if (rc)
@@ -20,23 +16,161 @@ bool noob::database::init_file(const std::string& FileName) noexcept(true)
 		return false;
 	}
 
+	return init();
+}
+
+
+void close() noexcept(true)
+{
+
+}
+
+
+uint32_t noob::database::vec2f_add(const noob::vec2f) const noexcept(true)
+{
+	return 0;
+}
+
+
+noob::results<noob::vec2f> noob::database::vec2f_get(uint32_t) const noexcept(true)
+{
+	return noob::results<noob::vec2f>::make_invalid();
+}
+
+
+noob::results<noob::vec2f> noob::database::vec2f_get(const std::string& Name) const noexcept(true)
+{
+	return noob::results<noob::vec2f>::make_invalid();
+}
+
+
+uint32_t noob::database::vec3f_add(const noob::vec3f, const std::string& Name) const noexcept(true)
+{
+	return 0;
+}
+
+
+noob::results<noob::vec3f> noob::database::vec3f_get(uint32_t) const noexcept(true)
+{
+	return noob::results<noob::vec3f>::make_invalid();
+}
+
+
+noob::results<noob::vec3f> noob::database::vec3f_get(const std::string& Name) const noexcept(true)
+{
+	return noob::results<noob::vec3f>::make_invalid();
+}
+
+
+uint32_t noob::database::vec4f_add(const noob::vec4f, const std::string& Name) const noexcept(true)
+{
+	return 0;
+}
+
+
+noob::results<noob::vec4f> noob::database::vec4f_get(uint32_t) const noexcept(true)
+{
+	return noob::results<noob::vec4f>::make_invalid();
+}
+
+
+noob::results<noob::vec4f> noob::database::vec4f_get(const std::string& Name) const noexcept(true)
+{
+	return noob::results<noob::vec4f>::make_invalid();
+}
+
+
+uint32_t noob::database::mat4f_add(const noob::mat4f, const std::string& Name) const noexcept(true)
+{
+	return 0;
+}
+
+
+noob::results<noob::mat4f> noob::database::mat4f_get(uint32_t) const noexcept(true)
+{
+	return noob::results<noob::mat4f>::make_invalid();
+}
+
+
+noob::results<noob::mat4f> noob::database::mat4f_get(const std::string& Name) const noexcept(true)
+{
+	return noob::results<noob::mat4f>::make_invalid();
+}
+
+
+uint32_t noob::database::mesh3d_add(const noob::mesh_3d&, const std::string& Name) const noexcept(true)
+{
+	return 0;
+}
+
+
+noob::results<noob::mesh_3d> noob::database::mesh3d_get(uint32_t) const noexcept(true)
+{
+	return noob::results<noob::mesh_3d>::make_invalid();
+}
+
+
+noob::results<noob::mesh_3d> noob::database::mesh3d_get(const std::string& Name) const noexcept(true)
+{
+	return noob::results<noob::mesh_3d>::make_invalid();
+}
+
+
+uint32_t noob::database::body_add(const noob::body&, const std::string& Name) const noexcept(true)
+{
+	return 0;
+}
+
+
+noob::results<noob::body_info> noob::database::body_get(uint32_t) const noexcept(true)
+{
+	return noob::results<noob::body_info>::make_invalid();
+}
+
+
+noob::results<noob::body_info> noob::database::body_get(const std::string& Name) const noexcept(true)
+{
+	return noob::results<noob::body_info>::make_invalid();
+}
+
+
+uint32_t noob::database::shape_add(const noob::shape&, const std::string& Name) const noexcept(true)
+{
+	return 0;
+}
+
+
+noob::results<noob::shape> noob::database::shape_get(uint32_t) const noexcept(true)
+{
+	return noob::results<noob::shape>::make_invalid();
+}
+
+
+noob::results<noob::shape> noob::database::shape_get(const std::string& Name) const noexcept(true)
+{
+	return noob::results<noob::shape>::make_invalid();
+}
+
+
+bool noob::database::init() noexcept(true)
+{
 	///////////////////////////////////
 	// BUILD OUR SCHEMA
 	///////////////////////////////////
 
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec2d(id INTEGER PRIMARY KEY, x REAL, y REAL)")) 
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec2d(id INTEGER PRIMARY KEY, x REAL, y REAL, name TEXT)")) 
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec3d(id INTEGER PRIMARY KEY, x REAL, y REAL, z REAL)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec3d(id INTEGER PRIMARY KEY, x REAL, y REAL, z REAL, name TEXT)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec4d(id INTEGER PRIMARY KEY, x REAL, y REAL, z REAL, w REAL)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec4d(id INTEGER PRIMARY KEY, x REAL, y REAL, z REAL, w REAL, name TEXT)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mat4d(id INTEGER PRIMARY KEY, first INTEGER REFERENCES vec4d, second INTEGER REFERENCES vec4d, third INTEGER REFERENCES vec4d, fourth INTEGER REFERENCES vec4d)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mat4d(id INTEGER PRIMARY KEY, a REAL, b REAL, c REAL, d REAL, e REAL, f REAL, g REAL, h REAL, i REAL, j REAL, k REAL, l REAL, m REAL, n REAL, o REAL, p REAL, name TEXT)"))
 	{
 		return false;
 	}
@@ -64,7 +198,7 @@ bool noob::database::init_file(const std::string& FileName) noexcept(true)
 	// In order to be able to polymorphically store shapes, we use a a level of indirection and rely on client code to find the correct shape based on the same enum values as used in noob::shape::type.
 	// We may one day soon define multiple columns of foreign keys to the various item types and enforce a constraint that all but one must be NULL.
 	// However, we'd also need to treat each case differently anyhow in application code, so for simple serialization it might just be better to do things via client-code.
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_generic(id INTEGER PRIMARY KEY, type UNSIGNED INT8, foreign_id INTEGER)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_generic(id INTEGER PRIMARY KEY, type UNSIGNED INT8, foreign_id INTEGER, name TEXT)"))
 	{
 		return false;
 	}
@@ -84,7 +218,7 @@ bool noob::database::init_file(const std::string& FileName) noexcept(true)
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_hull(id INTEGER PRIMARY KEY, name TEXT)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_hull(id INTEGER PRIMARY KEY)"))
 	{
 		return false;
 	}
@@ -101,7 +235,7 @@ bool noob::database::init_file(const std::string& FileName) noexcept(true)
 	// PREPARED STATEMENTS
 	///////////////////////////////////
 
-	if (!prepare_statement("INSERT INTO vec2d(x, y) VALUES (?, ?)", noob::database::statement::vec2d_add))
+	if (!prepare_statement("INSERT INTO vec2d(x, y, name) VALUES (?, ?, ?)", noob::database::statement::vec2d_add))
 	{
 		return false;
 	}
@@ -109,7 +243,7 @@ bool noob::database::init_file(const std::string& FileName) noexcept(true)
 	{
 		return false;
 	}
-	if (!prepare_statement("INSERT INTO vec3d(x, y, z) VALUES (?, ?, ?)", noob::database::statement::vec3d_add))
+	if (!prepare_statement("INSERT INTO vec3d(x, y, z, name) VALUES (?, ?, ?, ?)", noob::database::statement::vec3d_add))
 	{
 		return false;
 	}
@@ -117,7 +251,7 @@ bool noob::database::init_file(const std::string& FileName) noexcept(true)
 	{
 		return false;
 	}
-	if (!prepare_statement("INSERT INTO vec4d(x, y, z, w) VALUES (?, ?, ?, ?)", noob::database::statement::vec4d_add))
+	if (!prepare_statement("INSERT INTO vec4d(x, y, z, w, name) VALUES (?, ?, ?, ?, ?)", noob::database::statement::vec4d_add))
 	{
 		return false;
 	}
@@ -125,15 +259,15 @@ bool noob::database::init_file(const std::string& FileName) noexcept(true)
 	{
 		return false;
 	}
-	if(!prepare_statement("INSERT INTO mat4d(first, second, third, fourth) VALUES (?, ?, ?, ?)", noob::database::statement::mat4d_add))
+	if(!prepare_statement("INSERT INTO mat4d(a, b, c, d, e, f, g, h, i, j, k, l, n, m, o, p, name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", noob::database::statement::mat4d_add))
 	{
 		return false;
 	}
-	if(!prepare_statement("SELECT first, second, third, fourth FROM mat4d WHERE id = ?", noob::database::statement::mat4d_get))
+	if(!prepare_statement("SELECT a, b, c, d, e, f, g, h, i, j, k, l, n, m, o, p FROM mat4d WHERE id = ?", noob::database::statement::mat4d_get))
 	{
 		return false;	
 	}
-	
+
 	// Triangle meshes are rather "fun": They potentially share info among each other while often needing names to make any sense of their use. We use three tables:
 	// 	The first for naming and a mesh and offering a primary key to identify it.
 	//	The second for the actual vertex information (position, colour, uv, and whatnot...)
@@ -150,7 +284,7 @@ bool noob::database::init_file(const std::string& FileName) noexcept(true)
 	{
 		return false;	
 	}
-	if(!prepare_statement("SELECT pos, colour, uv  FROM mesh3d_verts JOIN mesh3d_indices ON mesh3d_verts.id = mesh3d_indices.vert", noob::database::statement::mesh3d_get_vert_by_index))
+	if(!prepare_statement("SELECT pos, colour, uv FROM mesh3d_verts JOIN mesh3d_indices ON mesh3d_verts.id = mesh3d_indices.vert", noob::database::statement::mesh3d_get_vert_by_index))
 	{
 		return false;	
 	}
@@ -218,11 +352,11 @@ bool noob::database::init_file(const std::string& FileName) noexcept(true)
 	}
 	// "CREATE TABLE IF NOT EXISTS phyz_shapes_hulls(id INTEGER PRIMARY KEY, name TEXT)"
 	// "CREATE TABLE IF NOT EXISTS phyz_shapes_hull_points(pos INTEGER REFERENCES vec3d, belongs_to INTEGER REFERENCES phyz_shapes_hull_index)"
-	if(!prepare_statement("INSERT INTO phyz_shapes_hull(name) VALUES (?)", noob::database::statement::phyz_hull_add))
+	if(!prepare_statement("INSERT INTO phyz_shapes_hull DEFAULT VALUES", noob::database::statement::phyz_hull_add))
 	{
 		return false;	
 	}
-	if(!prepare_statement("SELECT id FROM phyz_shapes_hull WHERE phyz_shapes_hull.name = ?", noob::database::statement::phyz_hull_get))
+	if(!prepare_statement("SELECT id FROM phyz_shapes_hull WHERE phyz_shapes_hull.id = ?", noob::database::statement::phyz_hull_get))
 	{
 		return false;	
 	}	
