@@ -1,6 +1,7 @@
 engine/build/*
 **/.*.sw*
 **/.git*
+**/*.sqlite
 #!.gitignore
 engine/platform/android-proj/obj/*
 engine/platform/android-proj/bin/*

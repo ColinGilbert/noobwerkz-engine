@@ -21,7 +21,7 @@ namespace noob
 
 			enum class statement : uint32_t
 			{
-				vec2d_add = 0, vec2d_get = 1, vec3d_add = 2, vec3d_get = 3, vec4d_add = 4, vec4d_get = 5, mat4d_add = 6, mat4d_get = 7, mesh3d_add = 8, mesh3d_add_vert = 9, mesh3d_get_vert_by_index = 10, mesh3d_add_vert_index = 11, mesh3d_get_mesh_indices = 12, phyz_body_add = 13, phyz_body_get = 14, phyz_shape_add_generic = 15, phyz_shape_get_generic = 16, phyz_sphere_add = 17, phyz_sphere_get = 18, phyz_box_add = 19, phyz_box_get = 20, phyz_cone_add = 21, phyz_cone_get = 22, phyz_cylinder_add = 23, phyz_cylinder_get = 24, phyz_hull_add_point = 25, phyz_hull_get_points = 26, phyz_mesh_add = 27, phyz_mesh_get_by_key = 28, phyz_mesh_get_by_name = 29
+				vec2d_add = 0, vec2d_get = 1, vec3d_add = 2, vec3d_get = 3, vec4d_add = 4, vec4d_get = 5, mat4d_add = 6, mat4d_get = 7, mesh3d_add = 8, mesh3d_add_vert = 9, mesh3d_get_vert_by_index = 10, mesh3d_add_vert_index = 11, mesh3d_get_mesh_indices = 12, phyz_body_add = 13, phyz_body_get = 14, phyz_shape_add_generic = 15, phyz_shape_get_generic = 16, phyz_sphere_add = 17, phyz_sphere_get = 18, phyz_box_add = 19, phyz_box_get = 20, phyz_cone_add = 21, phyz_cone_get = 22, phyz_cylinder_add = 23, phyz_cylinder_get = 24, phyz_hull_add = 25, phyz_hull_get = 26, phyz_hull_add_point = 27, phyz_hull_get_points = 28, phyz_mesh_add = 29, phyz_mesh_get = 30
 			};
 
 			bool exec_single_step(const std::string& Sql) noexcept(true);
