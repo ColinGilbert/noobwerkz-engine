@@ -57,6 +57,7 @@ uint32_t noob::database::vec2fp_add(const noob::vec2d Vec) const noexcept(true)
 	}
 
 	const int64_t rowid = sqlite3_last_insert_rowid(db);
+
 	reset_stmt(noob::database::statement::vec2d_add);
 	clear_bindings(noob::database::statement::vec2d_add);
 
@@ -75,6 +76,9 @@ noob::results<noob::vec2d> noob::database::vec2fp_get(uint32_t Idx) const noexce
 	}
 
 	const noob::vec2d result(sqlite3_column_double(get_stmt(noob::database::statement::vec2d_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::vec2d_get), 1));
+
+	reset_stmt(noob::database::statement::mat4d_add);
+	clear_bindings(noob::database::statement::mat4d_add);
 
 	return noob::results<noob::vec2d>::make_valid(result);
 }
@@ -95,6 +99,7 @@ uint32_t noob::database::vec3fp_add(const noob::vec3d Vec) const noexcept(true)
 	}
 
 	const int64_t rowid = sqlite3_last_insert_rowid(db);
+
 	reset_stmt(noob::database::statement::vec3d_add);
 	clear_bindings(noob::database::statement::vec3d_add);
 
@@ -113,6 +118,9 @@ noob::results<noob::vec3d> noob::database::vec3fp_get(uint32_t Idx) const noexce
 	}
 
 	const noob::vec3d result(sqlite3_column_double(get_stmt(noob::database::statement::vec3d_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::vec3d_get), 1), sqlite3_column_double(get_stmt(noob::database::statement::vec3d_get), 2));
+
+	reset_stmt(noob::database::statement::mat4d_add);
+	clear_bindings(noob::database::statement::mat4d_add);
 
 	return noob::results<noob::vec3d>::make_valid(result);
 }
@@ -134,6 +142,7 @@ uint32_t noob::database::vec4fp_add(const noob::vec4d Vec) const noexcept(true)
 	}
 
 	const int64_t rowid = sqlite3_last_insert_rowid(db);
+
 	reset_stmt(noob::database::statement::vec4d_add);
 	clear_bindings(noob::database::statement::vec4d_add);
 
@@ -152,6 +161,9 @@ noob::results<noob::vec4d> noob::database::vec4fp_get(uint32_t Idx) const noexce
 	}
 
 	const noob::vec4d result(sqlite3_column_double(get_stmt(noob::database::statement::vec4d_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::vec4d_get), 1), sqlite3_column_double(get_stmt(noob::database::statement::vec4d_get), 2), sqlite3_column_double(get_stmt(noob::database::statement::vec4d_get), 3));
+
+	reset_stmt(noob::database::statement::mat4d_add);
+	clear_bindings(noob::database::statement::mat4d_add);
 
 	return noob::results<noob::vec4d>::make_valid(result);
 }
@@ -175,6 +187,7 @@ uint32_t noob::database::mat4fp_add(const noob::mat4d Mat) const noexcept(true)
 	}
 
 	const int64_t rowid = sqlite3_last_insert_rowid(db);
+
 	reset_stmt(noob::database::statement::mat4d_add);
 	clear_bindings(noob::database::statement::mat4d_add);
 
@@ -194,6 +207,9 @@ noob::results<noob::mat4d> noob::database::mat4fp_get(uint32_t Idx) const noexce
 
 	// Ewww...
 	const noob::mat4d result(sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 1), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 2), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 3), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 4), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 5), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 6), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 7), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 8), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 9), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 10), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 11), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 12), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 13), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 14), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 15));
+
+	reset_stmt(noob::database::statement::mat4d_add);
+	clear_bindings(noob::database::statement::mat4d_add);
 
 	return noob::results<noob::mat4d>::make_valid(result);
 }
