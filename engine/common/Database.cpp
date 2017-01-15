@@ -16,92 +16,186 @@ bool noob::database::init_file(const std::string& FileName) noexcept(true)
 		return false;
 	}
 
+	noob::logger::log(noob::importance::INFO, noob::concat("[Database] Opening SQLite database. Filename: ", FileName));
+
 	return init();
 }
 
 
-void close() noexcept(true)
+bool noob::database::close() noexcept(true)
 {
+	for(uint32_t i = 0; i < stmt_count; ++i)
+	{
+		if (sqlite3_finalize(prepped_statements[i]) != SQLITE_OK)
+		{
+			noob::logger::log(noob::importance::ERROR, noob::concat("[Database] Could not finalize prepared statement at index ", noob::to_string(i)));
+		}
+	}
+	if (sqlite3_close(db) != SQLITE_OK)
+	{
+		noob::logger::log(noob::importance::ERROR, "[Database] Error closing connection!");
+		return false;
+	}
 
+	noob::logger::log(noob::importance::INFO, "[Database] Database closed.");
+
+	return true;
 }
 
 
-uint32_t noob::database::vec2f_add(const noob::vec2f Vec) const noexcept(true)
+uint32_t noob::database::vec2fp_add(const noob::vec2d Vec) const noexcept(true)
 {
-	const noob::vec2d temp = noob::convert<float, double>(Vec);
-	return 0;
+	int rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec2d_add), 1, Vec[0]);
+	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec2d_add), 2, Vec[1]);
+
+	rc = sqlite3_step(get_stmt(noob::database::statement::vec2d_add));
+
+	if (rc != SQLITE_DONE)
+	{
+		noob::logger::log(noob::importance::ERROR, noob::concat("[Database] Error while inserting vec2d: ", sqlite3_errmsg(db)));
+		return 0;
+	}
+
+	const int64_t rowid = sqlite3_last_insert_rowid(db);
+	reset_stmt(noob::database::statement::vec2d_add);
+	clear_bindings(noob::database::statement::vec2d_add);
+
+	return static_cast<uint32_t>(std::fabs(rowid));
 }
 
 
-noob::results<noob::vec2f> noob::database::vec2f_get(uint32_t Idx) const noexcept(true)
+noob::results<noob::vec2d> noob::database::vec2fp_get(uint32_t Idx) const noexcept(true)
 {
-	return noob::results<noob::vec2f>::make_invalid();
+	int rc = sqlite3_bind_int64(get_stmt(noob::database::statement::vec2d_get), 1, Idx);
+	rc = sqlite3_step(get_stmt(noob::database::statement::vec2d_get));
+
+	if (rc != SQLITE_DONE)
+	{
+		return noob::results<noob::vec2d>::make_invalid();
+	}
+
+	const noob::vec2d result(sqlite3_column_double(get_stmt(noob::database::statement::vec2d_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::vec2d_get), 1));
+
+	return noob::results<noob::vec2d>::make_valid(result);
 }
 
 
-noob::results<noob::vec2f> noob::database::vec2f_get(const std::string& Name) const noexcept(true)
+uint32_t noob::database::vec3fp_add(const noob::vec3d Vec) const noexcept(true)
 {
-	return noob::results<noob::vec2f>::make_invalid();
+	int rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec3d_add), 1, Vec[0]);
+	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec3d_add), 2, Vec[1]);
+	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec3d_add), 3, Vec[2]);
+
+	rc = sqlite3_step(get_stmt(noob::database::statement::vec3d_add));
+
+	if (rc != SQLITE_DONE)
+	{
+		noob::logger::log(noob::importance::ERROR, noob::concat("[Database] Error while inserting vec3d: ", sqlite3_errmsg(db)));
+		return 0;
+	}
+
+	const int64_t rowid = sqlite3_last_insert_rowid(db);
+	reset_stmt(noob::database::statement::vec3d_add);
+	clear_bindings(noob::database::statement::vec3d_add);
+
+	return static_cast<uint32_t>(std::fabs(rowid));
 }
 
 
-uint32_t noob::database::vec3f_add(const noob::vec3f Vec, const std::string& Name) const noexcept(true)
+noob::results<noob::vec3d> noob::database::vec3fp_get(uint32_t Idx) const noexcept(true)
 {
-	const noob::vec3d temp = noob::convert<float, double>(Vec);
+	int rc = sqlite3_bind_int64(get_stmt(noob::database::statement::vec3d_get), 1, Idx);
+	rc = sqlite3_step(get_stmt(noob::database::statement::vec3d_get));
 
-	return 0;
+	if (rc != SQLITE_DONE)
+	{
+		return noob::results<noob::vec3d>::make_invalid();
+	}
+
+	const noob::vec3d result(sqlite3_column_double(get_stmt(noob::database::statement::vec3d_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::vec3d_get), 1), sqlite3_column_double(get_stmt(noob::database::statement::vec3d_get), 2));
+
+	return noob::results<noob::vec3d>::make_valid(result);
 }
 
 
-noob::results<noob::vec3f> noob::database::vec3f_get(uint32_t Idx) const noexcept(true)
+uint32_t noob::database::vec4fp_add(const noob::vec4d Vec) const noexcept(true)
 {
-	return noob::results<noob::vec3f>::make_invalid();
+	int rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec4d_add), 1, Vec[0]);
+	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec4d_add), 2, Vec[1]);
+	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec4d_add), 3, Vec[2]);
+	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec4d_add), 4, Vec[3]);
+
+	rc = sqlite3_step(get_stmt(noob::database::statement::vec4d_add));
+
+	if (rc != SQLITE_DONE)
+	{
+		noob::logger::log(noob::importance::ERROR, noob::concat("[Database] Error while inserting vec4d: ", sqlite3_errmsg(db)));
+		return 0;
+	}
+
+	const int64_t rowid = sqlite3_last_insert_rowid(db);
+	reset_stmt(noob::database::statement::vec4d_add);
+	clear_bindings(noob::database::statement::vec4d_add);
+
+	return static_cast<uint32_t>(std::fabs(rowid));
 }
 
 
-noob::results<noob::vec3f> noob::database::vec3f_get(const std::string& Name) const noexcept(true)
+noob::results<noob::vec4d> noob::database::vec4fp_get(uint32_t Idx) const noexcept(true)
 {
-	return noob::results<noob::vec3f>::make_invalid();
+	int rc = sqlite3_bind_int64(get_stmt(noob::database::statement::vec4d_get), 1, Idx);
+	rc = sqlite3_step(get_stmt(noob::database::statement::vec4d_get));
+
+	if (rc != SQLITE_DONE)
+	{
+		return noob::results<noob::vec4d>::make_invalid();
+	}
+
+	const noob::vec4d result(sqlite3_column_double(get_stmt(noob::database::statement::vec4d_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::vec4d_get), 1), sqlite3_column_double(get_stmt(noob::database::statement::vec4d_get), 2), sqlite3_column_double(get_stmt(noob::database::statement::vec4d_get), 3));
+
+	return noob::results<noob::vec4d>::make_valid(result);
 }
 
 
-uint32_t noob::database::vec4f_add(const noob::vec4f Vec, const std::string& Name) const noexcept(true)
+uint32_t noob::database::mat4fp_add(const noob::mat4d Mat) const noexcept(true)
 {
-	const noob::vec4d temp = noob::convert<float, double>(Vec);
+	int rc;
 
-	return 0;
+	for(uint32_t i = 0; i < 16; ++i)
+	{
+		rc = sqlite3_bind_double(get_stmt(noob::database::statement::mat4d_add), i+1, Mat[i]);
+	}
+
+	rc = sqlite3_step(get_stmt(noob::database::statement::mat4d_add));
+
+	if (rc != SQLITE_DONE)
+	{
+		noob::logger::log(noob::importance::ERROR, noob::concat("[Database] Error while inserting mat4d: ", sqlite3_errmsg(db)));
+		return 0;
+	}
+
+	const int64_t rowid = sqlite3_last_insert_rowid(db);
+	reset_stmt(noob::database::statement::mat4d_add);
+	clear_bindings(noob::database::statement::mat4d_add);
+
+	return static_cast<uint32_t>(std::fabs(rowid));
 }
 
 
-noob::results<noob::vec4f> noob::database::vec4f_get(uint32_t Idx) const noexcept(true)
+noob::results<noob::mat4d> noob::database::mat4fp_get(uint32_t Idx) const noexcept(true)
 {
-	return noob::results<noob::vec4f>::make_invalid();
-}
+	int rc = sqlite3_bind_int64(get_stmt(noob::database::statement::mat4d_get), 1, Idx);
+	rc = sqlite3_step(get_stmt(noob::database::statement::mat4d_get));
 
+	if (rc != SQLITE_DONE)
+	{
+		return noob::results<noob::mat4d>::make_invalid();
+	}
 
-noob::results<noob::vec4f> noob::database::vec4f_get(const std::string& Name) const noexcept(true)
-{
-	return noob::results<noob::vec4f>::make_invalid();
-}
+	// Ewww...
+	const noob::mat4d result(sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 1), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 2), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 3), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 4), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 5), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 6), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 7), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 8), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 9), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 10), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 11), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 12), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 13), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 14), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 15));
 
-
-uint32_t noob::database::mat4f_add(const noob::mat4f Mat, const std::string& Name) const noexcept(true)
-{
-	const noob::mat4d temp = noob::convert<float, double>(Mat);
-
-	return 0;
-}
-
-
-noob::results<noob::mat4f> noob::database::mat4f_get(uint32_t Idx) const noexcept(true)
-{
-	return noob::results<noob::mat4f>::make_invalid();
-}
-
-
-noob::results<noob::mat4f> noob::database::mat4f_get(const std::string& Name) const noexcept(true)
-{
-	return noob::results<noob::mat4f>::make_invalid();
+	return noob::results<noob::mat4d>::make_valid(result);
 }
 
 
@@ -165,19 +259,19 @@ bool noob::database::init() noexcept(true)
 	// BUILD OUR SCHEMA
 	///////////////////////////////////
 
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec2d(id INTEGER PRIMARY KEY, x REAL, y REAL, name TEXT)")) 
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec2d(id INTEGER PRIMARY KEY AUTOINCREMENT, x REAL, y REAL)")) 
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec3d(id INTEGER PRIMARY KEY, x REAL, y REAL, z REAL, name TEXT)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec3d(id INTEGER PRIMARY KEY AUTOINCREMENT, x REAL, y REAL, z REAL)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec4d(id INTEGER PRIMARY KEY, x REAL, y REAL, z REAL, w REAL, name TEXT)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec4d(id INTEGER PRIMARY KEY AUTOINCREMENT, x REAL, y REAL, z REAL, w REAL)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mat4d(id INTEGER PRIMARY KEY, a REAL, b REAL, c REAL, d REAL, e REAL, f REAL, g REAL, h REAL, i REAL, j REAL, k REAL, l REAL, m REAL, n REAL, o REAL, p REAL, name TEXT)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mat4d(id INTEGER PRIMARY KEY AUTOINCREMENT, a REAL, b REAL, c REAL, d REAL, e REAL, f REAL, g REAL, h REAL, i REAL, j REAL, k REAL, l REAL, m REAL, n REAL, o REAL, p REAL)"))
 	{
 		return false;
 	}
@@ -198,34 +292,34 @@ bool noob::database::init() noexcept(true)
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_bodies(id INTEGER PRIMARY KEY, pos REFERENCES vec3d, orient REFERENCES vec4d, type UNSIGNED INT8, mass REAL, friction REAL, restitution REAL, linear_vel REAL, angular_vel REAL, linear_factor REAL, angular_factor REAL, ccd BOOLEAN, name TEXT)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_bodies(id INTEGER PRIMARY KEY AUTOINCREMENT, pos REFERENCES vec3d, orient REFERENCES vec4d, type UNSIGNED INT8, mass REAL, friction REAL, restitution REAL, linear_vel REAL, angular_vel REAL, linear_factor REAL, angular_factor REAL, ccd BOOLEAN, name TEXT)"))
 	{
 		return false;
 	}
 	// In order to be able to polymorphically store shapes, we use a a level of indirection and rely on client code to find the correct shape based on the same enum values as used in noob::shape::type.
 	// We may one day soon define multiple columns of foreign keys to the various item types and enforce a constraint that all but one must be NULL.
 	// However, we'd also need to treat each case differently anyhow in application code, so for simple serialization it might just be better to do things via client-code.
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_generic(id INTEGER PRIMARY KEY, type UNSIGNED INT8, foreign_id INTEGER, name TEXT)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_generic(id INTEGER PRIMARY KEY AUTOINCREMENT, type UNSIGNED INT8, foreign_id INTEGER, name TEXT)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_sphere(id INTEGER PRIMARY KEY, radius REAL)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_sphere(id INTEGER PRIMARY KEY AUTOINCREMENT, radius REAL)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_box(id INTEGER PRIMARY KEY, half_width REAL, half_height REAL, half_depth REAL)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_box(id INTEGER PRIMARY KEY AUTOINCREMENT, half_width REAL, half_height REAL, half_depth REAL)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_cone(id INTEGER PRIMARY KEY, radius REAL, height REAL)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_cone(id INTEGER PRIMARY KEY AUTOINCREMENT, radius REAL, height REAL)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_cylinder(id INTEGER PRIMARY KEY, radius REAL, height REAL)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_cylinder(id INTEGER PRIMARY KEY AUTOINCREMENT, radius REAL, height REAL)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_hull(id INTEGER PRIMARY KEY)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_hull(id INTEGER PRIMARY KEY AUTOINCREMENT)"))
 	{
 		return false;
 	}
@@ -233,7 +327,7 @@ bool noob::database::init() noexcept(true)
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_trimesh(id INTEGER PRIMARY KEY, mesh_id INTEGER REFERENCES mesh3d)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_trimesh(id INTEGER PRIMARY KEY AUTOINCREMENT, mesh_id INTEGER REFERENCES mesh3d)"))
 	{
 		return false;
 	}
@@ -242,7 +336,7 @@ bool noob::database::init() noexcept(true)
 	// PREPARED STATEMENTS
 	///////////////////////////////////
 
-	if (!prepare_statement("INSERT INTO vec2d(x, y, name) VALUES (?, ?, ?)", noob::database::statement::vec2d_add))
+	if (!prepare_statement("INSERT INTO vec2d(x, y) VALUES (?, ?)", noob::database::statement::vec2d_add))
 	{
 		return false;
 	}
@@ -250,15 +344,15 @@ bool noob::database::init() noexcept(true)
 	{
 		return false;
 	}
-	if (!prepare_statement("INSERT INTO vec3d(x, y, z, name) VALUES (?, ?, ?, ?)", noob::database::statement::vec3d_add))
+	if (!prepare_statement("INSERT INTO vec3d(x, y, z) VALUES (?, ?, ?)", noob::database::statement::vec3d_add))
 	{
 		return false;
 	}
-	if(!prepare_statement("SELECT x, y, z FROM vec3d WHERE id = ?", noob::database::statement::vec3d_add))
+	if(!prepare_statement("SELECT x, y, z FROM vec3d WHERE id = ?", noob::database::statement::vec3d_get))
 	{
 		return false;
 	}
-	if (!prepare_statement("INSERT INTO vec4d(x, y, z, w, name) VALUES (?, ?, ?, ?, ?)", noob::database::statement::vec4d_add))
+	if (!prepare_statement("INSERT INTO vec4d(x, y, z, w) VALUES (?, ?, ?, ?)", noob::database::statement::vec4d_add))
 	{
 		return false;
 	}
@@ -266,7 +360,7 @@ bool noob::database::init() noexcept(true)
 	{
 		return false;
 	}
-	if(!prepare_statement("INSERT INTO mat4d(a, b, c, d, e, f, g, h, i, j, k, l, n, m, o, p, name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", noob::database::statement::mat4d_add))
+	if(!prepare_statement("INSERT INTO mat4d(a, b, c, d, e, f, g, h, i, j, k, l, n, m, o, p) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", noob::database::statement::mat4d_add))
 	{
 		return false;
 	}
@@ -385,6 +479,7 @@ bool noob::database::init() noexcept(true)
 		return false;	
 	}
 
+	noob::logger::log(noob::importance::INFO, noob::concat("[Database] SQLite database open successful."));
 
 	return true;
 }
@@ -402,7 +497,7 @@ bool noob::database::exec_single_step(const std::string& Sql) noexcept(true)
 }
 
 
-bool noob::database::prepare_statement(const std::string& Sql, noob::database::statement Index) noexcept(true)
+bool noob::database::prepare_statement(const std::string& Sql, noob::database::statement Stmt) noexcept(true)
 {
 	sqlite3_stmt* stmt;
 	if (sqlite3_prepare_v2(db, Sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK)
@@ -410,24 +505,21 @@ bool noob::database::prepare_statement(const std::string& Sql, noob::database::s
 		log_error(Sql, sqlite3_errmsg(db));
 		return false;
 	}
-	prepped_statements[static_cast<uint32_t>(Index)] = stmt;
+	++stmt_count;
+	prepped_statements[static_cast<uint32_t>(Stmt)] = stmt;
 	return true;
 }
 
 
 void noob::database::clear_bindings(noob::database::statement Statement) const noexcept(true)
 {
-	sqlite3_clear_bindings(prepped_statements[static_cast<uint32_t>(Statement)]);
+	sqlite3_clear_bindings(get_stmt(Statement));
 }
 
 
-void noob::database::reset_stmt(noob::database::statement Statement, bool ClearBindings) const noexcept(true)
+void noob::database::reset_stmt(noob::database::statement Statement) const noexcept(true)
 {
-	sqlite3_reset(prepped_statements[static_cast<uint32_t>(Statement)]);
-	if (ClearBindings)
-	{
-		clear_bindings(Statement);
-	}
+	sqlite3_reset(get_stmt(Statement));
 }
 
 
@@ -435,3 +527,9 @@ void noob::database::log_error(const std::string& Sql, const std::string& Msg) c
 {
 	noob::logger::log(noob::importance::ERROR, noob::concat("[Database] Statement \"", Sql, "\" failed with error \"", Msg, "\""));
 }
+
+sqlite3_stmt* noob::database::get_stmt(noob::database::statement Stmt) const noexcept(true)
+{
+	return prepped_statements[static_cast<uint32_t>(Stmt)];
+}
+

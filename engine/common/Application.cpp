@@ -10,7 +10,6 @@ void noob::application::init(const noob::vec2ui Dims, const noob::vec2d Dpi, con
 
 	prefix = std::make_unique<std::string>(FilePath);
 
-
 	const std::string tex_src = noob::load_file_as_string(noob::concat(*prefix, "/texture/gradient_map.tga"));
 
 	noob::texture_loader_2d tex_data;
@@ -27,37 +26,36 @@ void noob::application::init(const noob::vec2ui Dims, const noob::vec2d Dpi, con
 
 	tex_data.free();
 
-
-	bool gui_works = app_gui.init(*prefix, window_dims, dpi);
-
-	if (!gui_works)
+	if (app_gui.init(*prefix, window_dims, dpi))
 	{
 		noob::logger::log(noob::importance::ERROR, "[Application] GUI failed to init!");
 	}
-
 
 	started = paused = input_has_started = false;
 
 	finger_positions = { noob::vec2f(0.0, 0.0), noob::vec2f(0.0, 0.0), noob::vec2f(0.0, 0.0), noob::vec2f(0.0, 0.0) };
 
-
 	noob::globals& g = noob::get_globals();
-	const bool are_globals_initialized = g.init();
-	assert(are_globals_initialized && "Globals not initialized!");
+
+	if (!g.init())
+	{
+		noob::logger::log(noob::importance::ERROR, "[Application] Failed to init globals!");
+	}
 
 	noob::mat4f proj_mat = noob::perspective<float>(60.0f, static_cast<float>(window_dims[0]) / static_cast<float>(window_dims[1]), 1.0, 2000.0);
 
 	stage.init(window_dims, proj_mat);
-	logger::log(noob::importance::INFO, noob::concat("[Application] Done basic init. Filepath = ", FilePath, ". Window dims: ", noob::to_string(window_dims), ". DPI: ", noob::to_string(dpi)));
 
 	db.init_file(noob::concat(*prefix, "NoobStorage.sqlite"));
 
-	bool b = user_init();
+	logger::log(noob::importance::INFO, noob::concat("[Application] Done basic init. Filepath = ", FilePath, " - Window dims: ", noob::to_string(window_dims), " - DPI: ", noob::to_string(dpi)));
 
-	if (!b) 
+	if (user_init())
 	{
 		logger::log(noob::importance::WARNING, "[Application] User C++ init failed!");
 	}
+
+	
 }
 
 

@@ -22,23 +22,19 @@ namespace noob
 		public:
 			bool init_file(const std::string& FileName) noexcept(true);
 
-			void close() noexcept(true);
+			bool close() noexcept(true);
 
-			uint32_t vec2f_add(const noob::vec2f Vec) const noexcept(true);
-			noob::results<noob::vec2f> vec2f_get(uint32_t Idx) const noexcept(true);
-			noob::results<noob::vec2f> vec2f_get(const std::string& Name) const noexcept(true);
+			uint32_t vec2fp_add(const noob::vec2d Vec) const noexcept(true);
+			noob::results<noob::vec2d> vec2fp_get(uint32_t Idx) const noexcept(true);
 
-			uint32_t vec3f_add(const noob::vec3f Vec, const std::string& Name) const noexcept(true);
-			noob::results<noob::vec3f> vec3f_get(uint32_t Idx) const noexcept(true);
-			noob::results<noob::vec3f> vec3f_get(const std::string& Name) const noexcept(true);
+			uint32_t vec3fp_add(const noob::vec3d Vec) const noexcept(true);
+			noob::results<noob::vec3d> vec3fp_get(uint32_t Idx) const noexcept(true);
 
-			uint32_t vec4f_add(const noob::vec4f Vec, const std::string& Name) const noexcept(true);
-			noob::results<noob::vec4f> vec4f_get(uint32_t Idx) const noexcept(true);
-			noob::results<noob::vec4f> vec4f_get(const std::string& Name) const noexcept(true);
+			uint32_t vec4fp_add(const noob::vec4d Vec) const noexcept(true);
+			noob::results<noob::vec4d> vec4fp_get(uint32_t Idx) const noexcept(true);
 
-			uint32_t mat4f_add(const noob::mat4f Mat, const std::string& Name) const noexcept(true);
-			noob::results<noob::mat4f> mat4f_get(uint32_t Idx) const noexcept(true);
-			noob::results<noob::mat4f> mat4f_get(const std::string& Name) const noexcept(true);
+			uint32_t mat4fp_add(const noob::mat4d Mat) const noexcept(true);
+			noob::results<noob::mat4d> mat4fp_get(uint32_t Idx) const noexcept(true);
 			
 			uint32_t mesh3d_add(const noob::mesh_3d& Mesh, const std::string& Name) const noexcept(true);
 			noob::results<noob::mesh_3d> mesh3d_get(uint32_t Idx) const noexcept(true);
@@ -64,11 +60,13 @@ namespace noob
 			bool exec_single_step(const std::string& Sql) noexcept(true);
 			bool prepare_statement(const std::string& Sql, noob::database::statement Index) noexcept(true);
 			void clear_bindings(noob::database::statement) const noexcept(true);
-			void reset_stmt(noob::database::statement, bool ClearBindings) const noexcept(true);
+			void reset_stmt(noob::database::statement) const noexcept(true);
 			void log_error(const std::string& Sql, const std::string& Msg) const noexcept(true);
+			sqlite3_stmt* get_stmt(noob::database::statement) const noexcept(true);
 
 			sqlite3* db;
 			std::array<sqlite3_stmt*, 32> prepped_statements;
+			uint32_t stmt_count = 0; // This holds the number of prepared statements in the above array that have been properly set up. Should initialization fail, we can then free all prepared statements up to the counter's value before returning false.
 
 		
 
