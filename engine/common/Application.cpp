@@ -26,7 +26,7 @@ void noob::application::init(const noob::vec2ui Dims, const noob::vec2d Dpi, con
 
 	tex_data.free();
 
-	if (app_gui.init(*prefix, window_dims, dpi))
+	if (!app_gui.init(*prefix, window_dims, dpi))
 	{
 		noob::logger::log(noob::importance::ERROR, "[Application] GUI failed to init!");
 	}
@@ -46,16 +46,17 @@ void noob::application::init(const noob::vec2ui Dims, const noob::vec2d Dpi, con
 
 	stage.init(window_dims, proj_mat);
 
-	db.init_file(noob::concat(*prefix, "NoobStorage.sqlite"));
+	if (!db.init_file(noob::concat(*prefix, "NoobStorage.sqlite")))
+	{
+		noob::logger::log(noob::importance::ERROR, "[Application] Failed to init DB!");
+	}
 
 	logger::log(noob::importance::INFO, noob::concat("[Application] Done basic init. Filepath = ", FilePath, " - Window dims: ", noob::to_string(window_dims), " - DPI: ", noob::to_string(dpi)));
 
-	if (user_init())
+	if (!user_init())
 	{
 		logger::log(noob::importance::WARNING, "[Application] User C++ init failed!");
 	}
-
-	
 }
 
 

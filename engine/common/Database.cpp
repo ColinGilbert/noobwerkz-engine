@@ -6,6 +6,7 @@
 
 #include "Logger.hpp"
 
+
 bool noob::database::init_file(const std::string& FileName) noexcept(true)
 {
 	int rc = sqlite3_open(FileName.c_str(), &db);
@@ -215,9 +216,29 @@ noob::results<noob::mat4d> noob::database::mat4fp_get(uint32_t Idx) const noexce
 }
 
 
-uint32_t noob::database::mesh3d_add(const noob::mesh_3d& Mesh, const std::string& Name) const noexcept(true)
+noob::results<uint32_t> noob::database::mesh3d_add(const noob::mesh_3d& Mesh, const std::string& Name) const noexcept(true)
 {
-	return 0;
+	if (Name.empty())
+	{
+		return noob::results<uint32_t>::make_invalid();
+	}
+	// if mesh3d exists by name
+	int rc = sqlite3_bind_text(get_stmt(noob::database::statement::mesh3d_add), 1, Name.c_str(), Name.size(), nullptr);
+	rc = sqlite3_step(get_stmt(noob::database::statement::mesh3d_add));
+	
+	if (rc != SQLITE_DONE)
+	{
+		noob::logger::log(noob::importance::ERROR, noob::concat("[Database] Error while inserting mesh3d: ", sqlite3_errmsg(db)));
+		return noob::results<uint32_t>::make_invalid();
+	}
+
+	const int64_t rowid = sqlite3_last_insert_rowid(db);
+
+	reset_stmt(noob::database::statement::mesh3d_add);
+	clear_bindings(noob::database::statement::mesh3d_add);
+
+	return noob::results<uint32_t>::make_valid(std::fabs(rowid));
+
 }
 
 
@@ -229,11 +250,12 @@ noob::results<noob::mesh_3d> noob::database::mesh3d_get(uint32_t Idx) const noex
 
 noob::results<noob::mesh_3d> noob::database::mesh3d_get(const std::string& Name) const noexcept(true)
 {
+	// if mesh3d exists by name
 	return noob::results<noob::mesh_3d>::make_invalid();
 }
 
 
-uint32_t noob::database::body_add(const noob::body& Body, const std::string& Name) const noexcept(true)
+uint32_t noob::database::body_add(const noob::body_info& Body, const std::string& Name) const noexcept(true)
 {
 	return 0;
 }
@@ -245,25 +267,22 @@ noob::results<noob::body_info> noob::database::body_get(uint32_t Idx) const noex
 }
 
 
-noob::results<noob::body_info> noob::database::body_get(const std::string& Name) const noexcept(true)
+std::vector<noob::body_info> noob::database::body_get(const std::string& Name) const noexcept(true)
 {
-	return noob::results<noob::body_info>::make_invalid();
+	// If bodies exists by name? Or just 0 results?
+
+	std::vector<noob::body_info> results;
+	return results;
 }
 
 
-uint32_t noob::database::shape_add(const noob::shape& Shape, const std::string& Name) const noexcept(true)
+uint32_t noob::database::shape_add(const noob::shape& Shape) const noexcept(true)
 {
 	return 0;
 }
 
 
 noob::results<noob::shape> noob::database::shape_get(uint32_t Idx) const noexcept(true)
-{
-	return noob::results<noob::shape>::make_invalid();
-}
-
-
-noob::results<noob::shape> noob::database::shape_get(const std::string& Name) const noexcept(true)
 {
 	return noob::results<noob::shape>::make_invalid();
 }
@@ -296,7 +315,7 @@ bool noob::database::init() noexcept(true)
 	//	The second for the actual vertex information (position, colour, uv, and whatnot...)
 	//	The third for the vertex indices of each mesh, using a foreign key to identify which mesh each index belongs to.
 	//	Ordering is enforced on all tables (though this may change to only enforcing on the mesh3d_verts_indices table
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mesh3d(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mesh3d(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE)"))
 	{
 		return false;
 	}
@@ -384,37 +403,35 @@ bool noob::database::init() noexcept(true)
 	{
 		return false;	
 	}
-
-	// Triangle meshes are rather "fun": They potentially share info among each other while often needing names to make any sense of their use. We use three tables:
-	// 	The first for naming and a mesh and offering a primary key to identify it.
-	//	The second for the actual vertex information (position, colour, uv, and whatnot...)
-	//	The third for the vertex indices of each mesh, using a foreign key to identify which mesh each index belongs to.
-	//	Ordering is enforced on all tables (though this may change to only enforcing on the mesh3d_verts_indices table
-	// "CREATE TABLE IF NOT EXISTS mesh3d(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)"
-	// "CREATE TABLE IF NOT EXISTS mesh3d_verts(id INTEGER PRIMARY KEY AUTOINCREMENT, pos INTEGER REFERENCES vec3d, colour INTEGER REFERENCES vec4d, uv INTEGER REFERENCES vec2d)"
-	// "CREATE TABLE IF NOT EXISTS mesh3d_indices(id INTEGER PRIMARY KEY AUTOINCREMENT, vert INTEGER REFERENCES mesh3d_verts_info, belongs_to INTEGER REFERENCES mesh3d_index)"
+	if(!prepare_statement("SELECT EXISTS(SELECT 1 FROM mesh3d WHERE name = ?)", noob::database::statement::mesh3d_exists))
+	{
+		return false;	
+	}
 	if(!prepare_statement("INSERT INTO mesh3d(name) VALUES (?)", noob::database::statement::mesh3d_add))
 	{
 		return false;	
 	}
-	if(!prepare_statement("INSERT INTO mesh3d_verts(pos, colour, uv) VALUES (?, ?, ?)", noob::database::statement::mesh3d_add_vert))
+	if(!prepare_statement("INSERT INTO mesh3d_verts(pos, colour, uv) VALUES (?, ?, ?)", noob::database::statement::mesh3d_verts_add))
 	{
 		return false;	
 	}
-	if(!prepare_statement("SELECT pos, colour, uv FROM mesh3d_verts JOIN mesh3d_indices ON mesh3d_verts.id = mesh3d_indices.vert", noob::database::statement::mesh3d_get_vert_by_index))
+	if(!prepare_statement("SELECT pos, colour, uv FROM mesh3d_verts JOIN mesh3d_indices ON mesh3d_verts.id = mesh3d_indices.vert WHERE mesh3d_indices.belongs_to = ?", noob::database::statement::mesh3d_verts_get))
 	{
 		return false;	
 	}
-	if(!prepare_statement("INSERT INTO mesh3d_indices(vert, belongs_to) VALUES (?, ?)", noob::database::statement::mesh3d_add_vert_index))
+	if(!prepare_statement("INSERT INTO mesh3d_indices(vert, belongs_to) VALUES (?, ?)", noob::database::statement::mesh3d_indices_add))
 	{
 		return false;	
 	}
-	if(!prepare_statement("SELECT vert FROM mesh3d_indices WHERE mesh3d_indices.belongs_to = ?", noob::database::statement::mesh3d_get_mesh_indices))
+	if(!prepare_statement("SELECT vert FROM mesh3d_indices WHERE mesh3d_indices.belongs_to = ?", noob::database::statement::mesh3d_indices_get))
 	{
 		return false;	
 	}
-	// "CREATE TABLE IF NOT EXISTS body(id INTEGER PRIMARY KEY, pos REFERENCES vec3d, orient REFERENCES vec4d, type UNSIGNED INT8, mass REAL, friction REAL, restitution REAL, linear_vel REAL, angular_vel REAL, linear_factor REAL, angular_factor REAL, ccd BOOLEAN, name TEXT)"))
 	if(!prepare_statement("INSERT INTO phyz_bodies(pos, orient, type, mass, restitution, linear_vel, angular_vel, linear_factor, angular_factor, ccd, name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", noob::database::statement::phyz_body_add))
+	{
+		return false;	
+	}
+	if(!prepare_statement("SELECT EXISTS(SELECT 1 FROM phyz_bodies WHERE name = ?)", noob::database::statement::phyz_body_exists_by_name))
 	{
 		return false;	
 	}
@@ -422,75 +439,67 @@ bool noob::database::init() noexcept(true)
 	{
 		return false;	
 	}
-	// "CREATE TABLE IF NOT EXISTS phyz_shapes_generic(id INTEGER PRIMARY KEY, type UNSIGNED INT8, foreign_id INTEGER)"
-	if(!prepare_statement("INSERT INTO phyz_shapes_generic(type, foreign_id) VALUES (?, ?)", noob::database::statement::phyz_shape_add_generic))
+	if(!prepare_statement("INSERT INTO phyz_shapes_generic(type, foreign_id) VALUES (?, ?)", noob::database::statement::phyz_shape_lut_add))
 	{
 		return false;	
 	}
-	if(!prepare_statement("SELECT type, foreign_id FROM phyz_shapes_generic WHERE phyz_shapes_generic.id = ?", noob::database::statement::phyz_shape_get_generic))
+	if(!prepare_statement("SELECT type, foreign_id FROM phyz_shapes_generic WHERE id = ?", noob::database::statement::phyz_shape_lut_get))
 	{
 		return false;	
 	}
-	// "CREATE TABLE IF NOT EXISTS phyz_shapes_sphere(id INTEGER PRIMARY KEY, radius REAL)"	
 	if(!prepare_statement("INSERT INTO phyz_shapes_sphere(radius) VALUES (?)", noob::database::statement::phyz_sphere_add))
 	{
 		return false;	
-	}
+	} 
 	if(!prepare_statement("SELECT radius FROM phyz_shapes_sphere WHERE phyz_shapes_sphere.id = ?", noob::database::statement::phyz_sphere_get))
 	{
 		return false;	
 	}
-	// "CREATE TABLE IF NOT EXISTS phyz_shapes_box(id INTEGER PRIMARY KEY, half_width REAL, half_height REAL, half_depth REAL)"	
 	if(!prepare_statement("INSERT INTO phyz_shapes_box(half_width, half_height, half_depth) VALUES (?, ?, ?)", noob::database::statement::phyz_box_add))
 	{
 		return false;	
 	}
-	if(!prepare_statement("SELECT half_width, half_height, half_depth FROM phyz_shapes_box WHERE phyz_shapes_box.id = ?", noob::database::statement::phyz_box_get))
+	if(!prepare_statement("SELECT half_width, half_height, half_depth FROM phyz_shapes_box WHERE id = ?", noob::database::statement::phyz_box_get))
 	{
 		return false;	
 	}
-	// "CREATE TABLE IF NOT EXISTS phyz_shapes_cone(id INTEGER PRIMARY KEY, radius REAL, height REAL)"
 	if(!prepare_statement("INSERT INTO phyz_shapes_cone(radius, height) VALUES (?, ?)", noob::database::statement::phyz_cone_add))
 	{
 		return false;	
 	}
-	if(!prepare_statement("SELECT radius, height FROM phyz_shapes_cone WHERE phyz_shapes_cone.id = ?", noob::database::statement::phyz_cone_get))
+	if(!prepare_statement("SELECT radius, height FROM phyz_shapes_cone WHERE id = ?", noob::database::statement::phyz_cone_get))
 	{
 		return false;	
 	}
-	// "CREATE TABLE IF NOT EXISTS phyz_shapes_cylinder(id INTEGER PRIMARY KEY, radius REAL, height REAL)"
 	if(!prepare_statement("INSERT INTO phyz_shapes_cylinder(radius, height) VALUES (?, ?)", noob::database::statement::phyz_cylinder_add))
 	{
 		return false;	
 	}
-	if(!prepare_statement("SELECT radius, height FROM phyz_shapes_cylinder WHERE phyz_shapes_cylinder.id = ?", noob::database::statement::phyz_cylinder_get))
+	if(!prepare_statement("SELECT radius, height FROM phyz_shapes_cylinder WHERE id = ?", noob::database::statement::phyz_cylinder_get))
 	{
 		return false;	
 	}
-	// "CREATE TABLE IF NOT EXISTS phyz_shapes_hulls(id INTEGER PRIMARY KEY, name TEXT)"
-	// "CREATE TABLE IF NOT EXISTS phyz_shapes_hull_points(pos INTEGER REFERENCES vec3d, belongs_to INTEGER REFERENCES phyz_shapes_hull_index)"
 	if(!prepare_statement("INSERT INTO phyz_shapes_hull DEFAULT VALUES", noob::database::statement::phyz_hull_add))
 	{
 		return false;	
 	}
-	if(!prepare_statement("SELECT id FROM phyz_shapes_hull WHERE phyz_shapes_hull.id = ?", noob::database::statement::phyz_hull_get))
-	{
-		return false;	
-	}	
-	if(!prepare_statement("INSERT INTO phyz_shapes_hull_points(pos, belongs_to) VALUES (?, ?)", noob::database::statement::phyz_hull_add_point))
+	if(!prepare_statement("INSERT INTO phyz_shapes_hull_points(pos, belongs_to) VALUES (?, ?)", noob::database::statement::phyz_hull_points_add))
 	{
 		return false;	
 	}
-	if(!prepare_statement("SELECT x, y, z FROM vec3d JOIN phyz_shapes_hull_points ON phyz_shapes_hull_points.pos = vec3d.id WHERE phyz_shapes_hull_points.belongs_to = ?", noob::database::statement::phyz_hull_get_points))
+	if(!prepare_statement("SELECT x, y, z FROM vec3d JOIN phyz_shapes_hull_points ON phyz_shapes_hull_points.pos = vec3d.id WHERE phyz_shapes_hull_points.belongs_to = ?", noob::database::statement::phyz_hull_points_get))
 	{
 		return false;	
 	}
-	// "CREATE TABLE IF NOT EXISTS phyz_shapes_trimesh(id INTEGER PRIMARY KEY, mesh_id INTEGER REFERENCES mesh3d)"	
-	if(!prepare_statement("INSERT INTO phyz_shapes_trimesh(mesh_id) VALUES (?)", noob::database::statement::phyz_mesh_add))
+/*	if(!prepare_statement("SELECT EXISTS(SELECT 1 FROM phyz_shapes_trimesh JOIN mesh3d ON phyz_shapes_trimesh.mesh_id = ?)", noob::database::statement::phyz_mesh_exists_by_mesh3d_id))
 	{
 		return false;	
 	}
-	if(!prepare_statement("SELECT mesh_id FROM phyz_shapes_trimesh WHERE phyz_shapes_trimesh.id = ?", noob::database::statement::phyz_mesh_get))
+*/	if(!prepare_statement("INSERT INTO phyz_shapes_trimesh(mesh_id) VALUES (?)", noob::database::statement::phyz_mesh_add))
+	{
+		return false;	
+	}
+	if(!prepare_statement("SELECT mesh_id FROM phyz_shapes_trimesh WHERE phyz_shapes_trimesh.id = ?", noob::database::statement::phyz_mesh_get_mesh))
 	{
 		return false;	
 	}
@@ -543,6 +552,7 @@ void noob::database::log_error(const std::string& Sql, const std::string& Msg) c
 {
 	noob::logger::log(noob::importance::ERROR, noob::concat("[Database] Statement \"", Sql, "\" failed with error \"", Msg, "\""));
 }
+
 
 sqlite3_stmt* noob::database::get_stmt(noob::database::statement Stmt) const noexcept(true)
 {

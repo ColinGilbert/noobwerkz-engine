@@ -26,7 +26,7 @@ namespace noob
 		public:
 		enum class type { SPHERE, BOX, /* CYLINDER, CONE, */ HULL, TRIMESH };
 
-		shape() noexcept(true) : physics_valid(false) {} //, scales(noob::vec3f(1.0, 1.0, 1.0)) {}
+		shape() noexcept(true) = default;//: physics_valid(false) {} //, scales(noob::vec3f(1.0, 1.0, 1.0)) {}
 
 		// Initializers
 		void sphere(float radius) noexcept(true);
@@ -57,7 +57,7 @@ namespace noob
 		// void plane(const noob::vec3f& normal, float offset) noexcept(true);
 		
 		noob::shape::type shape_type;
-		bool physics_valid;
+		bool physics_valid = false;
 		noob::vec3f scales;
 		btCollisionShape* inner;
 	};
