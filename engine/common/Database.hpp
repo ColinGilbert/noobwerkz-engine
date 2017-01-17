@@ -52,10 +52,10 @@ namespace noob
 			// TODO: Replace with some kind of metaprogramming.
 			enum class statement : uint32_t
 			{
-				vec2d_add = 0, vec2d_get = 1, vec3d_add = 2, vec3d_get = 3, vec4d_add = 4, vec4d_get = 5, mat4d_add = 6, mat4d_get = 7, mesh3d_exists = 8, mesh3d_get = 9, mesh3d_add = 10, mesh3d_verts_add = 11, mesh3d_verts_get = 12, mesh3d_indices_add = 13, mesh3d_indices_get= 14, phyz_body_exists_by_name = 15, phyz_body_add = 16, phyz_body_get = 17, phyz_shape_lut_add = 18, phyz_shape_lut_get = 19, phyz_sphere_add = 20, phyz_sphere_get = 21, phyz_box_add = 22, phyz_box_get = 23, phyz_cone_add = 24, phyz_cone_get = 25, phyz_cylinder_add = 26, phyz_cylinder_get = 27, phyz_hull_add = 28, phyz_hull_points_add = 29, phyz_hull_points_get = 30, phyz_mesh_add = 31, phyz_mesh_get_points = 32, phyz_mesh_get_mesh = 33
+				vec2fp_add = 0, vec2fp_get = 1, vec3fp_add = 2, vec3fp_get = 3, vec4fp_add = 4, vec4fp_get = 5, mat4fp_add = 6, mat4fp_get = 7, mesh3d_exists = 8, mesh3d_add = 10, mesh3d_verts_add = 11, mesh3d_verts_get = 12, mesh3d_indices_add = 13, mesh3d_indices_get = 14, phyz_body_exists_by_name = 15, phyz_body_add = 16, phyz_body_get = 17, phyz_shape_lut_add = 18, phyz_shape_lut_get = 19, phyz_sphere_add = 20, phyz_sphere_get = 21, phyz_box_add = 22, phyz_box_get = 23, phyz_cone_add = 24, phyz_cone_get = 25, phyz_cylinder_add = 26, phyz_cylinder_get = 27, phyz_hull_add = 28, phyz_hull_points_add = 29, phyz_hull_points_get = 30, phyz_mesh_add = 31, phyz_mesh_get_points = 32, phyz_mesh_get_mesh = 33
 
 			};
-// TODO: Implement mesh3d_exists, phyz_body_exists, phyz_mesh_exists
+
 			bool init() noexcept(true);
 			bool exec_single_step(const std::string& Sql) noexcept(true);
 			bool prepare_statement(const std::string& Sql, noob::database::statement Index) noexcept(true);

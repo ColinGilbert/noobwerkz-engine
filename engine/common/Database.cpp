@@ -46,10 +46,10 @@ bool noob::database::close() noexcept(true)
 
 uint32_t noob::database::vec2fp_add(const noob::vec2d Vec) const noexcept(true)
 {
-	int rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec2d_add), 1, Vec[0]);
-	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec2d_add), 2, Vec[1]);
+	int rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec2fp_add), 1, Vec[0]);
+	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec2fp_add), 2, Vec[1]);
 
-	rc = sqlite3_step(get_stmt(noob::database::statement::vec2d_add));
+	rc = sqlite3_step(get_stmt(noob::database::statement::vec2fp_add));
 
 	if (rc != SQLITE_DONE)
 	{
@@ -59,8 +59,8 @@ uint32_t noob::database::vec2fp_add(const noob::vec2d Vec) const noexcept(true)
 
 	const int64_t rowid = sqlite3_last_insert_rowid(db);
 
-	reset_stmt(noob::database::statement::vec2d_add);
-	clear_bindings(noob::database::statement::vec2d_add);
+	reset_stmt(noob::database::statement::vec2fp_add);
+	clear_bindings(noob::database::statement::vec2fp_add);
 
 	return static_cast<uint32_t>(std::fabs(rowid));
 }
@@ -68,18 +68,18 @@ uint32_t noob::database::vec2fp_add(const noob::vec2d Vec) const noexcept(true)
 
 noob::results<noob::vec2d> noob::database::vec2fp_get(uint32_t Idx) const noexcept(true)
 {
-	int rc = sqlite3_bind_int64(get_stmt(noob::database::statement::vec2d_get), 1, Idx);
-	rc = sqlite3_step(get_stmt(noob::database::statement::vec2d_get));
+	int rc = sqlite3_bind_int64(get_stmt(noob::database::statement::vec2fp_get), 1, Idx);
+	rc = sqlite3_step(get_stmt(noob::database::statement::vec2fp_get));
 
 	if (rc != SQLITE_DONE)
 	{
 		return noob::results<noob::vec2d>::make_invalid();
 	}
 
-	const noob::vec2d result(sqlite3_column_double(get_stmt(noob::database::statement::vec2d_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::vec2d_get), 1));
+	const noob::vec2d result(sqlite3_column_double(get_stmt(noob::database::statement::vec2fp_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::vec2fp_get), 1));
 
-	reset_stmt(noob::database::statement::mat4d_add);
-	clear_bindings(noob::database::statement::mat4d_add);
+	reset_stmt(noob::database::statement::mat4fp_add);
+	clear_bindings(noob::database::statement::mat4fp_add);
 
 	return noob::results<noob::vec2d>::make_valid(result);
 }
@@ -87,11 +87,11 @@ noob::results<noob::vec2d> noob::database::vec2fp_get(uint32_t Idx) const noexce
 
 uint32_t noob::database::vec3fp_add(const noob::vec3d Vec) const noexcept(true)
 {
-	int rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec3d_add), 1, Vec[0]);
-	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec3d_add), 2, Vec[1]);
-	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec3d_add), 3, Vec[2]);
+	int rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec3fp_add), 1, Vec[0]);
+	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec3fp_add), 2, Vec[1]);
+	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec3fp_add), 3, Vec[2]);
 
-	rc = sqlite3_step(get_stmt(noob::database::statement::vec3d_add));
+	rc = sqlite3_step(get_stmt(noob::database::statement::vec3fp_add));
 
 	if (rc != SQLITE_DONE)
 	{
@@ -101,8 +101,8 @@ uint32_t noob::database::vec3fp_add(const noob::vec3d Vec) const noexcept(true)
 
 	const int64_t rowid = sqlite3_last_insert_rowid(db);
 
-	reset_stmt(noob::database::statement::vec3d_add);
-	clear_bindings(noob::database::statement::vec3d_add);
+	reset_stmt(noob::database::statement::vec3fp_add);
+	clear_bindings(noob::database::statement::vec3fp_add);
 
 	return static_cast<uint32_t>(std::fabs(rowid));
 }
@@ -110,18 +110,18 @@ uint32_t noob::database::vec3fp_add(const noob::vec3d Vec) const noexcept(true)
 
 noob::results<noob::vec3d> noob::database::vec3fp_get(uint32_t Idx) const noexcept(true)
 {
-	int rc = sqlite3_bind_int64(get_stmt(noob::database::statement::vec3d_get), 1, Idx);
-	rc = sqlite3_step(get_stmt(noob::database::statement::vec3d_get));
+	int rc = sqlite3_bind_int64(get_stmt(noob::database::statement::vec3fp_get), 1, Idx);
+	rc = sqlite3_step(get_stmt(noob::database::statement::vec3fp_get));
 
 	if (rc != SQLITE_DONE)
 	{
 		return noob::results<noob::vec3d>::make_invalid();
 	}
 
-	const noob::vec3d result(sqlite3_column_double(get_stmt(noob::database::statement::vec3d_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::vec3d_get), 1), sqlite3_column_double(get_stmt(noob::database::statement::vec3d_get), 2));
+	const noob::vec3d result(sqlite3_column_double(get_stmt(noob::database::statement::vec3fp_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::vec3fp_get), 1), sqlite3_column_double(get_stmt(noob::database::statement::vec3fp_get), 2));
 
-	reset_stmt(noob::database::statement::mat4d_add);
-	clear_bindings(noob::database::statement::mat4d_add);
+	reset_stmt(noob::database::statement::mat4fp_add);
+	clear_bindings(noob::database::statement::mat4fp_add);
 
 	return noob::results<noob::vec3d>::make_valid(result);
 }
@@ -129,12 +129,12 @@ noob::results<noob::vec3d> noob::database::vec3fp_get(uint32_t Idx) const noexce
 
 uint32_t noob::database::vec4fp_add(const noob::vec4d Vec) const noexcept(true)
 {
-	int rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec4d_add), 1, Vec[0]);
-	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec4d_add), 2, Vec[1]);
-	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec4d_add), 3, Vec[2]);
-	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec4d_add), 4, Vec[3]);
+	int rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec4fp_add), 1, Vec[0]);
+	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec4fp_add), 2, Vec[1]);
+	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec4fp_add), 3, Vec[2]);
+	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec4fp_add), 4, Vec[3]);
 
-	rc = sqlite3_step(get_stmt(noob::database::statement::vec4d_add));
+	rc = sqlite3_step(get_stmt(noob::database::statement::vec4fp_add));
 
 	if (rc != SQLITE_DONE)
 	{
@@ -144,8 +144,8 @@ uint32_t noob::database::vec4fp_add(const noob::vec4d Vec) const noexcept(true)
 
 	const int64_t rowid = sqlite3_last_insert_rowid(db);
 
-	reset_stmt(noob::database::statement::vec4d_add);
-	clear_bindings(noob::database::statement::vec4d_add);
+	reset_stmt(noob::database::statement::vec4fp_add);
+	clear_bindings(noob::database::statement::vec4fp_add);
 
 	return static_cast<uint32_t>(std::fabs(rowid));
 }
@@ -153,18 +153,18 @@ uint32_t noob::database::vec4fp_add(const noob::vec4d Vec) const noexcept(true)
 
 noob::results<noob::vec4d> noob::database::vec4fp_get(uint32_t Idx) const noexcept(true)
 {
-	int rc = sqlite3_bind_int64(get_stmt(noob::database::statement::vec4d_get), 1, Idx);
-	rc = sqlite3_step(get_stmt(noob::database::statement::vec4d_get));
+	int rc = sqlite3_bind_int64(get_stmt(noob::database::statement::vec4fp_get), 1, Idx);
+	rc = sqlite3_step(get_stmt(noob::database::statement::vec4fp_get));
 
 	if (rc != SQLITE_DONE)
 	{
 		return noob::results<noob::vec4d>::make_invalid();
 	}
 
-	const noob::vec4d result(sqlite3_column_double(get_stmt(noob::database::statement::vec4d_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::vec4d_get), 1), sqlite3_column_double(get_stmt(noob::database::statement::vec4d_get), 2), sqlite3_column_double(get_stmt(noob::database::statement::vec4d_get), 3));
+	const noob::vec4d result(sqlite3_column_double(get_stmt(noob::database::statement::vec4fp_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::vec4fp_get), 1), sqlite3_column_double(get_stmt(noob::database::statement::vec4fp_get), 2), sqlite3_column_double(get_stmt(noob::database::statement::vec4fp_get), 3));
 
-	reset_stmt(noob::database::statement::mat4d_add);
-	clear_bindings(noob::database::statement::mat4d_add);
+	reset_stmt(noob::database::statement::mat4fp_add);
+	clear_bindings(noob::database::statement::mat4fp_add);
 
 	return noob::results<noob::vec4d>::make_valid(result);
 }
@@ -176,10 +176,10 @@ uint32_t noob::database::mat4fp_add(const noob::mat4d Mat) const noexcept(true)
 
 	for(uint32_t i = 0; i < 16; ++i)
 	{
-		rc = sqlite3_bind_double(get_stmt(noob::database::statement::mat4d_add), i+1, Mat[i]);
+		rc = sqlite3_bind_double(get_stmt(noob::database::statement::mat4fp_add), i+1, Mat[i]);
 	}
 
-	rc = sqlite3_step(get_stmt(noob::database::statement::mat4d_add));
+	rc = sqlite3_step(get_stmt(noob::database::statement::mat4fp_add));
 
 	if (rc != SQLITE_DONE)
 	{
@@ -189,8 +189,8 @@ uint32_t noob::database::mat4fp_add(const noob::mat4d Mat) const noexcept(true)
 
 	const int64_t rowid = sqlite3_last_insert_rowid(db);
 
-	reset_stmt(noob::database::statement::mat4d_add);
-	clear_bindings(noob::database::statement::mat4d_add);
+	reset_stmt(noob::database::statement::mat4fp_add);
+	clear_bindings(noob::database::statement::mat4fp_add);
 
 	return static_cast<uint32_t>(std::fabs(rowid));
 }
@@ -198,8 +198,8 @@ uint32_t noob::database::mat4fp_add(const noob::mat4d Mat) const noexcept(true)
 
 noob::results<noob::mat4d> noob::database::mat4fp_get(uint32_t Idx) const noexcept(true)
 {
-	int rc = sqlite3_bind_int64(get_stmt(noob::database::statement::mat4d_get), 1, Idx);
-	rc = sqlite3_step(get_stmt(noob::database::statement::mat4d_get));
+	int rc = sqlite3_bind_int64(get_stmt(noob::database::statement::mat4fp_get), 1, Idx);
+	rc = sqlite3_step(get_stmt(noob::database::statement::mat4fp_get));
 
 	if (rc != SQLITE_DONE)
 	{
@@ -207,43 +207,104 @@ noob::results<noob::mat4d> noob::database::mat4fp_get(uint32_t Idx) const noexce
 	}
 
 	// Ewww...
-	const noob::mat4d result(sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 1), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 2), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 3), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 4), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 5), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 6), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 7), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 8), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 9), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 10), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 11), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 12), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 13), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 14), sqlite3_column_double(get_stmt(noob::database::statement::mat4d_get), 15));
+	const noob::mat4d result(sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 1), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 2), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 3), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 4), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 5), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 6), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 7), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 8), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 9), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 10), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 11), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 12), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 13), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 14), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 15));
 
-	reset_stmt(noob::database::statement::mat4d_add);
-	clear_bindings(noob::database::statement::mat4d_add);
+	reset_stmt(noob::database::statement::mat4fp_add);
+	clear_bindings(noob::database::statement::mat4fp_add);
 
 	return noob::results<noob::mat4d>::make_valid(result);
 }
 
-
+//mesh3d_exists mesh3d_add, mesh3d_verts_add, mesh3d_verts_get, mesh3d_indices_add, mesh3d_indices_get,
 noob::results<uint32_t> noob::database::mesh3d_add(const noob::mesh_3d& Mesh, const std::string& Name) const noexcept(true)
 {
+	// First, check the name to see if it already exists or not
+	int rc;
+
 	if (Name.empty())
 	{
-		return noob::results<uint32_t>::make_invalid();
+		rc = sqlite3_bind_null(get_stmt(noob::database::statement::mesh3d_add), 1);
 	}
-	// if mesh3d exists by name
-	int rc = sqlite3_bind_text(get_stmt(noob::database::statement::mesh3d_add), 1, Name.c_str(), Name.size(), nullptr);
+	else
+	{
+		rc = sqlite3_bind_text(get_stmt(noob::database::statement::mesh3d_add), 1, Name.c_str(), Name.size(), nullptr);
+	}
+
 	rc = sqlite3_step(get_stmt(noob::database::statement::mesh3d_add));
-	
+
 	if (rc != SQLITE_DONE)
 	{
 		noob::logger::log(noob::importance::ERROR, noob::concat("[Database] Error while inserting mesh3d: ", sqlite3_errmsg(db)));
 		return noob::results<uint32_t>::make_invalid();
 	}
 
-	const int64_t rowid = sqlite3_last_insert_rowid(db);
+	const int64_t rowid_named_mesh = sqlite3_last_insert_rowid(db);
 
 	reset_stmt(noob::database::statement::mesh3d_add);
 	clear_bindings(noob::database::statement::mesh3d_add);
 
-	return noob::results<uint32_t>::make_valid(std::fabs(rowid));
+	// Local-to-database vert index mappings.
+	std::vector<int64_t> indices_mapping;
 
+	// First, put in the verts...
+	for (uint32_t i = 0; i < Mesh.vertices.size(); ++i)
+	{
+		const uint32_t pos_idx = vec3fp_add(noob::convert<float, double>(Mesh.vertices[i].position));
+		const uint32_t normal_idx = vec3fp_add(noob::convert<float, double>(Mesh.vertices[i].normal));
+		const uint32_t texcoords_idx = vec3fp_add(noob::convert<float, double>(Mesh.vertices[i].texcoords));
+		const uint32_t colour_idx = vec4fp_add(noob::convert<float, double>(Mesh.vertices[i].colour));
+
+		rc = sqlite3_bind_int64(get_stmt(noob::database::statement::mesh3d_verts_add), 1, pos_idx);
+		rc = sqlite3_bind_int64(get_stmt(noob::database::statement::mesh3d_verts_add), 2, normal_idx);
+		rc = sqlite3_bind_int64(get_stmt(noob::database::statement::mesh3d_verts_add), 3, texcoords_idx);
+		rc = sqlite3_bind_int64(get_stmt(noob::database::statement::mesh3d_verts_add), 4, colour_idx);
+
+		rc = sqlite3_step(get_stmt(noob::database::statement::mesh3d_verts_add));
+
+		if (rc != SQLITE_DONE)
+		{
+			noob::logger::log(noob::importance::ERROR, noob::concat("[Database] Error while inserting mesh3d vertex: ", sqlite3_errmsg(db)));
+			return noob::results<uint32_t>::make_invalid();
+		}
+
+		const int64_t rowid = sqlite3_last_insert_rowid(db);
+
+		indices_mapping.push_back(rowid);
+
+		reset_stmt(noob::database::statement::mesh3d_verts_add);
+	}
+
+	clear_bindings(noob::database::statement::mesh3d_verts_add);
+
+	// Now, put in the indices.
+
+	for (uint32_t i : Mesh.indices)
+	{
+		rc = sqlite3_bind_int64(get_stmt(noob::database::statement::mesh3d_indices_add), 1, indices_mapping[i]);
+		rc = sqlite3_step(get_stmt(noob::database::statement::mesh3d_indices_add));
+
+		if (rc != SQLITE_DONE)
+		{
+			noob::logger::log(noob::importance::ERROR, noob::concat("[Database] Error while inserting mesh3d index: ", sqlite3_errmsg(db)));
+			return noob::results<uint32_t>::make_invalid();
+		}
+
+		reset_stmt(noob::database::statement::mesh3d_indices_add);
+	}
+
+	clear_bindings(noob::database::statement::mesh3d_indices_add);
+
+
+	return noob::results<uint32_t>::make_valid(std::fabs(rowid_named_mesh));
 }
 
 
 noob::results<noob::mesh_3d> noob::database::mesh3d_get(uint32_t Idx) const noexcept(true)
 {
+	// mesh3d_verts_get, mesh3d_indices_get
+	
+	
+
 	return noob::results<noob::mesh_3d>::make_invalid();
 }
 
@@ -294,19 +355,19 @@ bool noob::database::init() noexcept(true)
 	// BUILD OUR SCHEMA
 	///////////////////////////////////
 
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec2d(id INTEGER PRIMARY KEY AUTOINCREMENT, x REAL, y REAL)")) 
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec2fp(id INTEGER PRIMARY KEY AUTOINCREMENT, x REAL, y REAL)")) 
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec3d(id INTEGER PRIMARY KEY AUTOINCREMENT, x REAL, y REAL, z REAL)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec3fp(id INTEGER PRIMARY KEY AUTOINCREMENT, x REAL, y REAL, z REAL)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec4d(id INTEGER PRIMARY KEY AUTOINCREMENT, x REAL, y REAL, z REAL, w REAL)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec4fp(id INTEGER PRIMARY KEY AUTOINCREMENT, x REAL, y REAL, z REAL, w REAL)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mat4d(id INTEGER PRIMARY KEY AUTOINCREMENT, a REAL, b REAL, c REAL, d REAL, e REAL, f REAL, g REAL, h REAL, i REAL, j REAL, k REAL, l REAL, m REAL, n REAL, o REAL, p REAL)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mat4fp(id INTEGER PRIMARY KEY AUTOINCREMENT, a REAL, b REAL, c REAL, d REAL, e REAL, f REAL, g REAL, h REAL, i REAL, j REAL, k REAL, l REAL, m REAL, n REAL, o REAL, p REAL)"))
 	{
 		return false;
 	}
@@ -315,11 +376,11 @@ bool noob::database::init() noexcept(true)
 	//	The second for the actual vertex information (position, colour, uv, and whatnot...)
 	//	The third for the vertex indices of each mesh, using a foreign key to identify which mesh each index belongs to.
 	//	Ordering is enforced on all tables (though this may change to only enforcing on the mesh3d_verts_indices table
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mesh3d(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mesh3d(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mesh3d_verts(id INTEGER PRIMARY KEY AUTOINCREMENT, pos INTEGER REFERENCES vec3d, colour INTEGER REFERENCES vec4d, uv INTEGER REFERENCES vec2d)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mesh3d_verts(id INTEGER PRIMARY KEY AUTOINCREMENT, pos INTEGER REFERENCES vec3fp, normal INTEGER REFERENCES vec3fp, uv INTEGER REFERENCES vec3fp, colour INTEGER REFERENCES vec4fp)"))
 	{
 		return false;
 	}
@@ -327,7 +388,7 @@ bool noob::database::init() noexcept(true)
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_bodies(id INTEGER PRIMARY KEY AUTOINCREMENT, pos REFERENCES vec3d, orient REFERENCES vec4d, type UNSIGNED INT8, mass REAL, friction REAL, restitution REAL, linear_vel REAL, angular_vel REAL, linear_factor REAL, angular_factor REAL, ccd BOOLEAN, name TEXT)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_bodies(id INTEGER PRIMARY KEY AUTOINCREMENT, pos REFERENCES vec3fp, orient REFERENCES vec4fp, type UNSIGNED INT8, mass REAL, friction REAL, restitution REAL, linear_vel REAL, angular_vel REAL, linear_factor REAL, angular_factor REAL, ccd BOOLEAN, name TEXT)"))
 	{
 		return false;
 	}
@@ -358,7 +419,7 @@ bool noob::database::init() noexcept(true)
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_hull_points(pos INTEGER REFERENCES vec3d, belongs_to INTEGER REFERENCES phyz_shapes_hull)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_hull_points(pos INTEGER REFERENCES vec3fp, belongs_to INTEGER REFERENCES phyz_shapes_hull)"))
 	{
 		return false;
 	}
@@ -371,35 +432,35 @@ bool noob::database::init() noexcept(true)
 	// PREPARED STATEMENTS
 	///////////////////////////////////
 
-	if (!prepare_statement("INSERT INTO vec2d(x, y) VALUES (?, ?)", noob::database::statement::vec2d_add))
+	if (!prepare_statement("INSERT INTO vec2fp(x, y) VALUES (?, ?)", noob::database::statement::vec2fp_add))
 	{
 		return false;
 	}
-	if (!prepare_statement("SELECT x, y FROM vec2d WHERE id = ?", noob::database::statement::vec2d_get))
+	if (!prepare_statement("SELECT x, y FROM vec2fp WHERE id = ?", noob::database::statement::vec2fp_get))
 	{
 		return false;
 	}
-	if (!prepare_statement("INSERT INTO vec3d(x, y, z) VALUES (?, ?, ?)", noob::database::statement::vec3d_add))
+	if (!prepare_statement("INSERT INTO vec3fp(x, y, z) VALUES (?, ?, ?)", noob::database::statement::vec3fp_add))
 	{
 		return false;
 	}
-	if(!prepare_statement("SELECT x, y, z FROM vec3d WHERE id = ?", noob::database::statement::vec3d_get))
+	if(!prepare_statement("SELECT x, y, z FROM vec3fp WHERE id = ?", noob::database::statement::vec3fp_get))
 	{
 		return false;
 	}
-	if (!prepare_statement("INSERT INTO vec4d(x, y, z, w) VALUES (?, ?, ?, ?)", noob::database::statement::vec4d_add))
+	if (!prepare_statement("INSERT INTO vec4fp(x, y, z, w) VALUES (?, ?, ?, ?)", noob::database::statement::vec4fp_add))
 	{
 		return false;
 	}
-	if (!prepare_statement("SELECT x, y, z, w FROM vec4d WHERE id = ?", noob::database::statement::vec4d_get))
+	if (!prepare_statement("SELECT x, y, z, w FROM vec4fp WHERE id = ?", noob::database::statement::vec4fp_get))
 	{
 		return false;
 	}
-	if(!prepare_statement("INSERT INTO mat4d(a, b, c, d, e, f, g, h, i, j, k, l, n, m, o, p) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", noob::database::statement::mat4d_add))
+	if(!prepare_statement("INSERT INTO mat4fp(a, b, c, d, e, f, g, h, i, j, k, l, n, m, o, p) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", noob::database::statement::mat4fp_add))
 	{
 		return false;
 	}
-	if(!prepare_statement("SELECT a, b, c, d, e, f, g, h, i, j, k, l, n, m, o, p FROM mat4d WHERE id = ?", noob::database::statement::mat4d_get))
+	if(!prepare_statement("SELECT a, b, c, d, e, f, g, h, i, j, k, l, n, m, o, p FROM mat4fp WHERE id = ?", noob::database::statement::mat4fp_get))
 	{
 		return false;	
 	}
@@ -487,15 +548,16 @@ bool noob::database::init() noexcept(true)
 	{
 		return false;	
 	}
-	if(!prepare_statement("SELECT x, y, z FROM vec3d JOIN phyz_shapes_hull_points ON phyz_shapes_hull_points.pos = vec3d.id WHERE phyz_shapes_hull_points.belongs_to = ?", noob::database::statement::phyz_hull_points_get))
+	if(!prepare_statement("SELECT x, y, z FROM vec3fp JOIN phyz_shapes_hull_points ON phyz_shapes_hull_points.pos = vec3fp.id WHERE phyz_shapes_hull_points.belongs_to = ?", noob::database::statement::phyz_hull_points_get))
 	{
 		return false;	
 	}
-/*	if(!prepare_statement("SELECT EXISTS(SELECT 1 FROM phyz_shapes_trimesh JOIN mesh3d ON phyz_shapes_trimesh.mesh_id = ?)", noob::database::statement::phyz_mesh_exists_by_mesh3d_id))
-	{
+	/*	if(!prepare_statement("SELECT EXISTS(SELECT 1 FROM phyz_shapes_trimesh JOIN mesh3d ON phyz_shapes_trimesh.mesh_id = ?)", noob::database::statement::phyz_mesh_exists_by_mesh3d_id))
+		{
 		return false;	
-	}
-*/	if(!prepare_statement("INSERT INTO phyz_shapes_trimesh(mesh_id) VALUES (?)", noob::database::statement::phyz_mesh_add))
+		}
+		*/
+	if(!prepare_statement("INSERT INTO phyz_shapes_trimesh(mesh_id) VALUES (?)", noob::database::statement::phyz_mesh_add))
 	{
 		return false;	
 	}

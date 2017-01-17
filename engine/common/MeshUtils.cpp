@@ -46,7 +46,9 @@ noob::mesh_3d noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
 {
 	const float X = 0.525731112119133606;
 	const float Z = 0.850650808352039932;
+
 	std::vector<noob::vec3f> verts;
+	
 	verts.push_back(noob::vec3f(-X, 0.0, Z));
 	verts.push_back(noob::vec3f(X, 0.0, Z));
 	verts.push_back(noob::vec3f(-X, 0.0, -Z));
@@ -112,11 +114,13 @@ noob::mesh_3d noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
 
 	for (uint32_t i = 0; i < verts.size(); ++i)
 	{
-		const noob::vec3f v = verts[i];
-		results.vertices.push_back(v * radius);
-		const noob::vec3f n = noob::normalize(v);
-		results.normals.push_back(n);
-		results.colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
+		noob::mesh_3d::vert vv;
+		vv.position = verts[i] * radius;
+		vv.normal = noob::normalize(verts[i]);
+		vv.colour = noob::vec4f(1.0, 1.0, 1.0, 1.0);
+
+		results.vertices.push_back(vv);
+
 	}
 
 	for(uint32_t i : indices)
@@ -233,9 +237,13 @@ noob::mesh_3d noob::mesh_utils::box(float width, float height, float depth)
 
 	for (uint32_t i = 0; i < num_vertices * 3; i += 3)
 	{
-		results.vertices.push_back(noob::vec3f(cube_verts[i], cube_verts[i + 1], cube_verts[i + 2]));
-		results.normals.push_back(noob::vec3f(cube_normals[i], cube_normals[i + 1], cube_normals[i + 2]));
-		results.colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
+		noob::mesh_3d::vert vv;
+
+		vv.position = noob::vec3f(cube_verts[i], cube_verts[i + 1], cube_verts[i + 2]);
+		vv.normal = noob::vec3f(cube_normals[i], cube_normals[i + 1], cube_normals[i + 2]);
+		vv.colour = noob::vec4f(1.0, 1.0, 1.0, 1.0);
+
+		results.vertices.push_back(vv);
 	}
 
 	 const float cube_tex[] =
@@ -268,10 +276,10 @@ noob::mesh_3d noob::mesh_utils::box(float width, float height, float depth)
 
 	for (uint32_t i = 0; i < num_vertices * 2; i += 2)
 	{
-		results.texcoords.push_back(noob::vec4f(cube_tex[i], cube_tex[i+1], 0.0, 0.0));
+		results.vertices[i/2].texcoords = noob::vec3f(cube_tex[i], cube_tex[i+1], 0);
 	}
 
-	 const uint32_t cube_indices[] =
+	const uint32_t cube_indices[] =
 	{
 		0, 2, 1,
 		0, 3, 2,
@@ -466,8 +474,10 @@ noob::mesh_3d noob::mesh_utils::hull(const std::vector<noob::vec3f>& points)
 
 	for (uint32_t i = 0; i < hull_result.mNumOutputVertices; ++i)
 	{
-		mesh.vertices.push_back(noob::vec3f_from_bullet(hull_result.m_OutputVertices[i]));
-		mesh.colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
+		noob::mesh_3d::vert vv;
+		vv.position = noob::vec3f_from_bullet(hull_result.m_OutputVertices[i]);
+		vv.colour = noob::vec4f(1.0, 1.0, 1.0, 1.0);
+		mesh.vertices.push_back(vv);
 	}
 
 	for (uint32_t i = 0; i < hull_result.mNumIndices; ++i)
@@ -487,22 +497,27 @@ noob::mesh_3d noob::mesh_utils::circle(float radius, uint32_t segments_arg)
 
 	noob::mesh_3d results;
 	results.vertices.reserve(segments + 1);
-	results.normals.reserve(segments + 1);
+	// results.normals.reserve(segments + 1);
 	const uint32_t num_indices = segments * 3;
 	// results.indices.reserve(num_indices);
 
-	std::fill(results.normals.begin(), results.normals.end(), noob::vec3f(0.0, 1.0, 0.0));
+	// std::fill(results.normals.begin(), results.normals.end(), noob::vec3f(0.0, 1.0, 0.0));
 
-	// Our origin :)
-	results.vertices[0] = noob::vec3f(0.0, 0.0, 0.0);
+	noob::mesh_3d::vert vv;
+
+	vv.normal = noob::vec3f(0.0, 1.0, 0.0);
+	vv.position = noob::vec3f(0.0, 0.0, 0.0);
+	vv.colour = noob::vec4f(1.0, 1.0, 1.0, 1.0);
+
+	results.vertices.push_back(vv);
 
 	for (uint32_t seg = 1; seg < segments; ++seg)
 	{
 		const float diff = increment_amount * static_cast<float>(seg);
 		const Eigen::AngleAxis<float> angle_axis(diff, Eigen::Vector3f::UnitY());
 		const Eigen::Vector3f rotated_point = angle_axis * p;
-		results.vertices.push_back(noob::vec3f_from_eigen(rotated_point));
-		results.colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
+		vv.position = noob::vec3f_from_eigen(rotated_point);
+		results.vertices.push_back(vv);
 	}
 
 	uint32_t accum = 1;;

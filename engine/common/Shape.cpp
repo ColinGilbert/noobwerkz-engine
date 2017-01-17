@@ -44,17 +44,18 @@ void noob::shape::trimesh(const noob::mesh_3d& mesh) noexcept(true)
 
 		for (size_t i = 0; i < mesh.indices.size(); i = i + 3)
 		{
-			uint16_t index_1 = static_cast<uint16_t>(mesh.indices[i]);
-			uint16_t index_2 = static_cast<uint16_t>(mesh.indices[i+1]);
-			uint16_t index_3 = static_cast<uint16_t>(mesh.indices[i+2]);
+			// TODO: Refactor
+			const uint16_t index_1 = static_cast<uint16_t>(mesh.indices[i]);
+			const uint16_t index_2 = static_cast<uint16_t>(mesh.indices[i+1]);
+			const uint16_t index_3 = static_cast<uint16_t>(mesh.indices[i+2]);
 
-			std::array<float, 3> v1 = mesh.vertices[index_1].v;
-			std::array<float, 3> v2 = mesh.vertices[index_2].v;
-			std::array<float, 3> v3 = mesh.vertices[index_3].v;
+			const std::array<float, 3> v1 = mesh.vertices[index_1].position.v;
+			const std::array<float, 3> v2 = mesh.vertices[index_2].position.v;
+			const std::array<float, 3> v3 = mesh.vertices[index_3].position.v;
 
-			btVector3 bv1 = btVector3(v1[0], v1[1], v1[2]);
-			btVector3 bv2 = btVector3(v2[0], v2[1], v2[2]);
-			btVector3 bv3 = btVector3(v3[0], v3[1], v3[2]);
+			const btVector3 bv1 = btVector3(v1[0], v1[1], v1[2]);
+			const btVector3 bv2 = btVector3(v2[0], v2[1], v2[2]);
+			const btVector3 bv3 = btVector3(v3[0], v3[1], v3[2]);
 
 			phyz_mesh->addTriangle(bv1, bv2, bv3);
 		}        
@@ -86,7 +87,6 @@ noob::shape::type noob::shape::get_type() const noexcept(true)
 	return shape_type;
 }
 
-
 noob::mesh_3d noob::shape::get_mesh() const noexcept(true)
 {
 	switch (shape_type)
@@ -99,16 +99,6 @@ noob::mesh_3d noob::shape::get_mesh() const noexcept(true)
 			{
 				return noob::mesh_utils::box(scales[0], scales[1], scales[2]);
 			}
-			/*
-			   case (noob::shape::type::CYLINDER):
-			   {
-			   return noob::mesh_utils::cylinder(scales[0] * 0.5, scales[1], 8);
-			   }
-			   case (noob::shape::type::CONE):
-			   {
-			   return noob::mesh_utils::cone(scales[0] * 0.5, scales[1], 8);
-			   }
-			   */
 		case (noob::shape::type::HULL):
 			{
 				const btVector3* btpoints = static_cast<btConvexHullShape*>(inner)->getUnscaledPoints();
@@ -182,12 +172,23 @@ noob::mesh_3d noob::shape::get_mesh() const noexcept(true)
 						}
 					}
 
+					noob::mesh_3d::vert vv;					
+
 					m.indices.push_back(m.vertices.size());
-					m.vertices.push_back(vec3f_from_bullet(triangle_verts[0]));
+					
+					vv.normal = noob::cross(noob::vec3f_from_bullet(triangle_verts[1] - triangle_verts[0]), vec3f_from_bullet(triangle_verts[2] - triangle_verts[0]));
+					vv.position = vec3f_from_bullet(triangle_verts[0]);
+					vv.colour = noob::vec4f(1.0, 1.0, 1.0, 1.0);
+					m.vertices.push_back(vv);
+
 					m.indices.push_back(m.vertices.size());
-					m.vertices.push_back(vec3f_from_bullet(triangle_verts[1]));
+					
+					vv.position = vec3f_from_bullet(triangle_verts[1]);
+					m.vertices.push_back(vv);
+					
 					m.indices.push_back(m.vertices.size());
-					m.vertices.push_back(vec3f_from_bullet(triangle_verts[2]));
+					vv.position = vec3f_from_bullet(triangle_verts[2]);
+					m.vertices.push_back(vv);					
 				}
 
 				striding_mesh->unLockReadOnlyVertexBase(0);
@@ -202,7 +203,6 @@ noob::mesh_3d noob::shape::get_mesh() const noexcept(true)
 			}
 	}
 }
-
 void noob::shape::clear() noexcept(true)
 {
 	if (physics_valid)

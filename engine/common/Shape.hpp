@@ -31,10 +31,12 @@ namespace noob
 		// Initializers
 		void sphere(float radius) noexcept(true);
 		void box(float width, float height, float depth) noexcept(true);
-		void cylinder(float radius, float height) noexcept(true);
-		void capsule(float radius, float height) noexcept(true);
-		void cone(float radius, float height) noexcept(true);
+		void cylinder(float radius, float height) noexcept(true); // TODO: Fix
+		void capsule(float radius, float height) noexcept(true); // TODO: Fix
+		void cone(float radius, float height) noexcept(true); // TODO: Fix
 		void hull(const std::vector<noob::vec3f>&) noexcept(true);
+		 // Known limitation: The mesh indices MUST be fewer than uint16_t max or else UB...
+		 // TODO: Fix!
 		void trimesh(const noob::mesh_3d&) noexcept(true);
 
 		void set_margin(float) noexcept(true);

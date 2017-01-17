@@ -13,9 +13,9 @@ double noob::mesh_3d::get_volume()
 		double accum = 0.0;
 		for (uint32_t i = 0; i < indices.size(); i += 3)
 		{
-			noob::vec3f first = vertices[i];
-			noob::vec3f second = vertices[i+1];
-			noob::vec3f third = vertices[i+2];
+			const noob::vec3f first = vertices[i].position;
+			const noob::vec3f second = vertices[i+1].position;
+			const noob::vec3f third = vertices[i+2].position;
 
 			accum += ((static_cast<double>(first.v[0]) * static_cast<double>(second.v[1]) * static_cast<double>(third.v[2])) + (static_cast<double>(first.v[1]) * static_cast<double>(second.v[2]) * static_cast<double>(third.v[0])) + (static_cast<double>(first.v[2]) * static_cast<double>(second.v[0]) * static_cast<double>(third.v[1])) - (static_cast<double>(first.v[0]) * static_cast<double>(second.v[2]) * static_cast<double>(third.v[1])) - (static_cast<double>(first.v[1]) * static_cast<double>(second.v[0]) * static_cast<double>(third.v[2])) - (static_cast<double>(first.v[2]) * static_cast<double>(second.v[1]) * static_cast<double>(third.v[0]))) / 6.0;
 
@@ -32,15 +32,15 @@ void noob::mesh_3d::calculate_dims() noexcept(true)
 {
 	if (vertices.size() > 0)
 	{
-		bbox.min = bbox.max = vertices[0];
-		for (noob::vec3f v : vertices)
+		bbox.min = bbox.max = vertices[0].position;
+		for (noob::mesh_3d::vert v : vertices)
 		{
-			bbox.min[0] = std::min(bbox.min[0], v[0]);
-			bbox.min[1] = std::min(bbox.min[1], v[1]);
-			bbox.min[2] = std::min(bbox.min[2], v[2]);
-			bbox.max[0] = std::max(bbox.max[0], v[0]);
-			bbox.max[1] = std::max(bbox.max[1], v[1]);
-			bbox.max[2] = std::max(bbox.max[2], v[2]);
+			bbox.min[0] = std::min(bbox.min[0], v.position[0]);
+			bbox.min[1] = std::min(bbox.min[1], v.position[1]);
+			bbox.min[2] = std::min(bbox.min[2], v.position[2]);
+			bbox.max[0] = std::max(bbox.max[0], v.position[0]);
+			bbox.max[1] = std::max(bbox.max[1], v.position[1]);
+			bbox.max[2] = std::max(bbox.max[2], v.position[2]);
 		}
 	}
 }
@@ -75,6 +75,7 @@ void noob::mesh_3d::calculate_dims() noexcept(true)
 
    }
    */
+
 #if defined(NOOB_USE_ASSIMP)
 bool noob::mesh_3d::load_mem_assimp(const std::string& file)
 {
@@ -101,7 +102,6 @@ bool noob::mesh_3d::load_assimp(const aiScene* scene)
 
 	vertices.clear();
 	indices.clear();
-	normals.clear();
 
 	const aiMesh* mesh_data = scene->mMeshes[0];
 
@@ -118,20 +118,18 @@ bool noob::mesh_3d::load_assimp(const aiScene* scene)
 	for (size_t n = 0; n < num_verts; ++n)
 	{
 		aiVector3D pt = mesh_data->mVertices[n];
-		noob::vec3f v;
-		v.v[0] = pt[0];
-		v.v[1] = pt[1];
-		v.v[2] = pt[2];
-		vertices.push_back(v);
 
+		noob::vec3f pos(pt[0], pt[1], pt[2]);
+
+		noob::vec3f normal(0.0, 1.0, 0.0);
 
 		if (has_normals)
 		{
-			aiVector3D normal = mesh_data->mNormals[n];
-			noob::vec3f n(normal[0], normal[1], normal[2]);
-			normals.push_back(n);
+			aiVector3D nrml = mesh_data->mNormals[n];
+			normal = noob::vec3(nrml[0], nrml[1], nrml[2]);
 		}
 
+		// TODO: Check for UVW, vert colours, and bones info.
 
 		update_bbox(bbox, v);
 	}
