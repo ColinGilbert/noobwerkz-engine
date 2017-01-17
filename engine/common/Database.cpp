@@ -46,10 +46,10 @@ bool noob::database::close() noexcept(true)
 
 uint32_t noob::database::vec2fp_add(const noob::vec2d Vec) const noexcept(true)
 {
-	int rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec2fp_add), 1, Vec[0]);
-	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec2fp_add), 2, Vec[1]);
+	int rc = bind_double(noob::database::statement::vec2fp_add, 1, Vec[0]);
+	rc = bind_double(noob::database::statement::vec2fp_add, 2, Vec[1]);
 
-	rc = sqlite3_step(get_stmt(noob::database::statement::vec2fp_add));
+	rc = step(noob::database::statement::vec2fp_add);
 
 	if (rc != SQLITE_DONE)
 	{
@@ -68,18 +68,18 @@ uint32_t noob::database::vec2fp_add(const noob::vec2d Vec) const noexcept(true)
 
 noob::results<noob::vec2d> noob::database::vec2fp_get(uint32_t Idx) const noexcept(true)
 {
-	int rc = sqlite3_bind_int64(get_stmt(noob::database::statement::vec2fp_get), 1, Idx);
-	rc = sqlite3_step(get_stmt(noob::database::statement::vec2fp_get));
+	int rc = bind_int64(noob::database::statement::vec2fp_get, 1, Idx);
+	rc = step(noob::database::statement::vec2fp_get);
 
 	if (rc != SQLITE_DONE)
 	{
 		return noob::results<noob::vec2d>::make_invalid();
 	}
 
-	const noob::vec2d result(sqlite3_column_double(get_stmt(noob::database::statement::vec2fp_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::vec2fp_get), 1));
+	const noob::vec2d result(column_double(noob::database::statement::vec2fp_get, 0), column_double(noob::database::statement::vec2fp_get, 1));
 
-	reset_stmt(noob::database::statement::mat4fp_add);
-	clear_bindings(noob::database::statement::mat4fp_add);
+	reset_stmt(noob::database::statement::vec2fp_get);
+	clear_bindings(noob::database::statement::vec2fp_get);
 
 	return noob::results<noob::vec2d>::make_valid(result);
 }
@@ -87,11 +87,11 @@ noob::results<noob::vec2d> noob::database::vec2fp_get(uint32_t Idx) const noexce
 
 uint32_t noob::database::vec3fp_add(const noob::vec3d Vec) const noexcept(true)
 {
-	int rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec3fp_add), 1, Vec[0]);
-	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec3fp_add), 2, Vec[1]);
-	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec3fp_add), 3, Vec[2]);
+	int rc = bind_double(noob::database::statement::vec3fp_add, 1, Vec[0]);
+	rc = bind_double(noob::database::statement::vec3fp_add, 2, Vec[1]);
+	rc = bind_double(noob::database::statement::vec3fp_add, 3, Vec[2]);
 
-	rc = sqlite3_step(get_stmt(noob::database::statement::vec3fp_add));
+	rc = step(noob::database::statement::vec3fp_add);
 
 	if (rc != SQLITE_DONE)
 	{
@@ -110,18 +110,18 @@ uint32_t noob::database::vec3fp_add(const noob::vec3d Vec) const noexcept(true)
 
 noob::results<noob::vec3d> noob::database::vec3fp_get(uint32_t Idx) const noexcept(true)
 {
-	int rc = sqlite3_bind_int64(get_stmt(noob::database::statement::vec3fp_get), 1, Idx);
-	rc = sqlite3_step(get_stmt(noob::database::statement::vec3fp_get));
+	int rc = bind_int64(noob::database::statement::vec3fp_get, 1, Idx);
+	rc = step(noob::database::statement::vec3fp_get);
 
 	if (rc != SQLITE_DONE)
 	{
 		return noob::results<noob::vec3d>::make_invalid();
 	}
 
-	const noob::vec3d result(sqlite3_column_double(get_stmt(noob::database::statement::vec3fp_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::vec3fp_get), 1), sqlite3_column_double(get_stmt(noob::database::statement::vec3fp_get), 2));
+	const noob::vec3d result(column_double(noob::database::statement::vec3fp_get, 0), column_double(noob::database::statement::vec3fp_get, 1), column_double(noob::database::statement::vec3fp_get, 2));
 
-	reset_stmt(noob::database::statement::mat4fp_add);
-	clear_bindings(noob::database::statement::mat4fp_add);
+	reset_stmt(noob::database::statement::vec3fp_get);
+	clear_bindings(noob::database::statement::vec3fp_get);
 
 	return noob::results<noob::vec3d>::make_valid(result);
 }
@@ -129,12 +129,12 @@ noob::results<noob::vec3d> noob::database::vec3fp_get(uint32_t Idx) const noexce
 
 uint32_t noob::database::vec4fp_add(const noob::vec4d Vec) const noexcept(true)
 {
-	int rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec4fp_add), 1, Vec[0]);
-	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec4fp_add), 2, Vec[1]);
-	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec4fp_add), 3, Vec[2]);
-	rc = sqlite3_bind_double(get_stmt(noob::database::statement::vec4fp_add), 4, Vec[3]);
+	int rc = bind_double(noob::database::statement::vec4fp_add, 1, Vec[0]);
+	rc = bind_double(noob::database::statement::vec4fp_add, 2, Vec[1]);
+	rc = bind_double(noob::database::statement::vec4fp_add, 3, Vec[2]);
+	rc = bind_double(noob::database::statement::vec4fp_add, 4, Vec[3]);
 
-	rc = sqlite3_step(get_stmt(noob::database::statement::vec4fp_add));
+	rc = step(noob::database::statement::vec4fp_add);
 
 	if (rc != SQLITE_DONE)
 	{
@@ -153,18 +153,18 @@ uint32_t noob::database::vec4fp_add(const noob::vec4d Vec) const noexcept(true)
 
 noob::results<noob::vec4d> noob::database::vec4fp_get(uint32_t Idx) const noexcept(true)
 {
-	int rc = sqlite3_bind_int64(get_stmt(noob::database::statement::vec4fp_get), 1, Idx);
-	rc = sqlite3_step(get_stmt(noob::database::statement::vec4fp_get));
+	int rc = bind_int64(noob::database::statement::vec4fp_get, 1, Idx);
+	rc = step(noob::database::statement::vec4fp_get);
 
 	if (rc != SQLITE_DONE)
 	{
 		return noob::results<noob::vec4d>::make_invalid();
 	}
 
-	const noob::vec4d result(sqlite3_column_double(get_stmt(noob::database::statement::vec4fp_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::vec4fp_get), 1), sqlite3_column_double(get_stmt(noob::database::statement::vec4fp_get), 2), sqlite3_column_double(get_stmt(noob::database::statement::vec4fp_get), 3));
+	const noob::vec4d result(column_double(noob::database::statement::vec4fp_get, 0), column_double(noob::database::statement::vec4fp_get, 1), column_double(noob::database::statement::vec4fp_get, 2), column_double(noob::database::statement::vec4fp_get, 3));
 
-	reset_stmt(noob::database::statement::mat4fp_add);
-	clear_bindings(noob::database::statement::mat4fp_add);
+	reset_stmt(noob::database::statement::vec4fp_get);
+	clear_bindings(noob::database::statement::vec4fp_get);
 
 	return noob::results<noob::vec4d>::make_valid(result);
 }
@@ -176,10 +176,10 @@ uint32_t noob::database::mat4fp_add(const noob::mat4d Mat) const noexcept(true)
 
 	for(uint32_t i = 0; i < 16; ++i)
 	{
-		rc = sqlite3_bind_double(get_stmt(noob::database::statement::mat4fp_add), i+1, Mat[i]);
+		rc = bind_double(noob::database::statement::mat4fp_add, i+1, Mat[i]);
 	}
 
-	rc = sqlite3_step(get_stmt(noob::database::statement::mat4fp_add));
+	rc = step(noob::database::statement::mat4fp_add);
 
 	if (rc != SQLITE_DONE)
 	{
@@ -198,8 +198,8 @@ uint32_t noob::database::mat4fp_add(const noob::mat4d Mat) const noexcept(true)
 
 noob::results<noob::mat4d> noob::database::mat4fp_get(uint32_t Idx) const noexcept(true)
 {
-	int rc = sqlite3_bind_int64(get_stmt(noob::database::statement::mat4fp_get), 1, Idx);
-	rc = sqlite3_step(get_stmt(noob::database::statement::mat4fp_get));
+	int rc = bind_int64(noob::database::statement::mat4fp_get, 1, Idx);
+	rc = step(noob::database::statement::mat4fp_get);
 
 	if (rc != SQLITE_DONE)
 	{
@@ -207,10 +207,26 @@ noob::results<noob::mat4d> noob::database::mat4fp_get(uint32_t Idx) const noexce
 	}
 
 	// Ewww...
-	const noob::mat4d result(sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 0), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 1), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 2), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 3), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 4), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 5), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 6), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 7), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 8), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 9), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 10), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 11), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 12), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 13), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 14), sqlite3_column_double(get_stmt(noob::database::statement::mat4fp_get), 15));
+	const noob::mat4d result( 
+			column_double(noob::database::statement::mat4fp_get, 0),
+			column_double(noob::database::statement::mat4fp_get, 1),
+			column_double(noob::database::statement::mat4fp_get, 2),
+			column_double(noob::database::statement::mat4fp_get, 3),
+			column_double(noob::database::statement::mat4fp_get, 4),
+			column_double(noob::database::statement::mat4fp_get, 5),
+			column_double(noob::database::statement::mat4fp_get, 6),
+			column_double(noob::database::statement::mat4fp_get, 7),
+			column_double(noob::database::statement::mat4fp_get, 8),
+			column_double(noob::database::statement::mat4fp_get, 9),
+			column_double(noob::database::statement::mat4fp_get, 10),
+			column_double(noob::database::statement::mat4fp_get, 11),
+			column_double(noob::database::statement::mat4fp_get, 12),
+			column_double(noob::database::statement::mat4fp_get, 13),
+			column_double(noob::database::statement::mat4fp_get, 14),
+			column_double(noob::database::statement::mat4fp_get, 15) );
 
-	reset_stmt(noob::database::statement::mat4fp_add);
-	clear_bindings(noob::database::statement::mat4fp_add);
+	reset_stmt(noob::database::statement::mat4fp_get);
+	clear_bindings(noob::database::statement::mat4fp_get);
 
 	return noob::results<noob::mat4d>::make_valid(result);
 }
@@ -223,14 +239,14 @@ noob::results<uint32_t> noob::database::mesh3d_add(const noob::mesh_3d& Mesh, co
 
 	if (Name.empty())
 	{
-		rc = sqlite3_bind_null(get_stmt(noob::database::statement::mesh3d_add), 1);
+		rc = bind_null(noob::database::statement::mesh3d_add, 1);
 	}
 	else
 	{
-		rc = sqlite3_bind_text(get_stmt(noob::database::statement::mesh3d_add), 1, Name.c_str(), Name.size(), nullptr);
+		rc = bind_text(noob::database::statement::mesh3d_add, 1, Name);
 	}
 
-	rc = sqlite3_step(get_stmt(noob::database::statement::mesh3d_add));
+	rc = step(noob::database::statement::mesh3d_add);
 
 	if (rc != SQLITE_DONE)
 	{
@@ -254,12 +270,12 @@ noob::results<uint32_t> noob::database::mesh3d_add(const noob::mesh_3d& Mesh, co
 		const uint32_t texcoords_idx = vec3fp_add(noob::convert<float, double>(Mesh.vertices[i].texcoords));
 		const uint32_t colour_idx = vec4fp_add(noob::convert<float, double>(Mesh.vertices[i].colour));
 
-		rc = sqlite3_bind_int64(get_stmt(noob::database::statement::mesh3d_verts_add), 1, pos_idx);
-		rc = sqlite3_bind_int64(get_stmt(noob::database::statement::mesh3d_verts_add), 2, normal_idx);
-		rc = sqlite3_bind_int64(get_stmt(noob::database::statement::mesh3d_verts_add), 3, texcoords_idx);
-		rc = sqlite3_bind_int64(get_stmt(noob::database::statement::mesh3d_verts_add), 4, colour_idx);
+		rc = bind_int64(noob::database::statement::mesh3d_verts_add, 1, pos_idx);
+		rc = bind_int64(noob::database::statement::mesh3d_verts_add, 2, normal_idx);
+		rc = bind_int64(noob::database::statement::mesh3d_verts_add, 3, texcoords_idx);
+		rc = bind_int64(noob::database::statement::mesh3d_verts_add, 4, colour_idx);
 
-		rc = sqlite3_step(get_stmt(noob::database::statement::mesh3d_verts_add));
+		rc = step(noob::database::statement::mesh3d_verts_add);
 
 		if (rc != SQLITE_DONE)
 		{
@@ -280,8 +296,8 @@ noob::results<uint32_t> noob::database::mesh3d_add(const noob::mesh_3d& Mesh, co
 
 	for (uint32_t i : Mesh.indices)
 	{
-		rc = sqlite3_bind_int64(get_stmt(noob::database::statement::mesh3d_indices_add), 1, indices_mapping[i]);
-		rc = sqlite3_step(get_stmt(noob::database::statement::mesh3d_indices_add));
+		rc = bind_int64(noob::database::statement::mesh3d_indices_add, 1, indices_mapping[i]);
+		rc = step(noob::database::statement::mesh3d_indices_add);
 
 		if (rc != SQLITE_DONE)
 		{
@@ -301,11 +317,90 @@ noob::results<uint32_t> noob::database::mesh3d_add(const noob::mesh_3d& Mesh, co
 
 noob::results<noob::mesh_3d> noob::database::mesh3d_get(uint32_t Idx) const noexcept(true)
 {
-	// mesh3d_verts_get, mesh3d_indices_get
+	bool running = true;
+	noob::mesh_3d results_holder;
+	noob::fast_hashtable indices_mapping;
+
+	//////////////////////////////
+	// First, get the vertices
+	//////////////////////////////
+	int rc = bind_int64(noob::database::statement::mesh3d_verts_get, 1, Idx);
 	
+	while(running)
+	{
+		rc = step(noob::database::statement::mesh3d_verts_get);
+
+		const std::string msg = noob::concat("Getting mesh vert ", noob::to_string(results_holder.vertices.size()), " - ");
+
+		if (rc == SQLITE_DONE)
+		{
+			running = false;
+		}
+		else if (rc != SQLITE_ROW)
+		{
+			log_error(noob::concat(msg, "Invalid row"));
+			running = false;
+		}
+		else
+		{
+			const noob::results<noob::vec3d> pos = vec3fp_get(column_int64(noob::database::statement::mesh3d_verts_get, 1));
+			if (!pos.valid)
+			{
+				log_error(noob::concat(msg, "Invalid position"));
+				return noob::results<noob::mesh_3d>::make_invalid();
+			}
+
+			const noob::results<noob::vec3d> normal = vec3fp_get(column_int64(noob::database::statement::mesh3d_verts_get, 2));
+			if (!normal.valid)
+			{
+				log_error(noob::concat(msg, "Invalid normal"));			
+				return noob::results<noob::mesh_3d>::make_invalid();
+			}
+
+			const noob::results<noob::vec3d> uvw = vec3fp_get(column_int64(noob::database::statement::mesh3d_verts_get, 3));
+			if (!uvw.valid)
+			{
+				log_error(noob::concat(msg, "Invalid uvw"));						
+				return noob::results<noob::mesh_3d>::make_invalid();
+			}
+
+			const noob::results<noob::vec4d> colour = vec4fp_get(column_int64(noob::database::statement::mesh3d_verts_get, 4));
+			if (!colour.valid)
+			{
+				log_error(noob::concat(msg, "Invalid colour"));				
+				return noob::results<noob::mesh_3d>::make_invalid();
+			}
+
+			noob::mesh_3d::vert vv;
+
+			vv.position = noob::convert<double, float>(pos.value);
+			vv.normal = noob::convert<double, float>(normal.value);
+			vv.texcoords = noob::convert<double, float>(uvw.value);
+			vv.colour = noob::convert<double, float>(colour.value);
+
+			results_holder.vertices.push_back(vv);
+
+			const int64_t last_rowid = sqlite3_last_insert_rowid(db);
+
+			auto c = indices_mapping.insert(last_rowid);
+			c->value = results_holder.vertices.size() - 1;
+
+			reset_stmt(noob::database::statement::mesh3d_verts_get);
+		}
+
+	}
+
+	clear_bindings(noob::database::statement::mesh3d_verts_get);
+
+	///////////////////////////
+	// Now, get the indices
+	///////////////////////////
+
+	rc = bind_int64(noob::database::statement::mesh3d_indices_get, 1, Idx);
+
 	
 
-	return noob::results<noob::mesh_3d>::make_invalid();
+	return noob::results<noob::mesh_3d>::make_valid(results_holder);
 }
 
 
@@ -616,8 +711,61 @@ void noob::database::log_error(const std::string& Sql, const std::string& Msg) c
 }
 
 
+int noob::database::step(noob::database::statement Statement) const noexcept(true)
+{
+	return sqlite3_step(get_stmt(Statement));
+}
+
+
 sqlite3_stmt* noob::database::get_stmt(noob::database::statement Stmt) const noexcept(true)
 {
 	return prepped_statements[static_cast<uint32_t>(Stmt)];
 }
 
+
+int64_t noob::database::column_int64(noob::database::statement Statement, uint32_t Pos) const noexcept(true)
+{
+	return sqlite3_column_int64(get_stmt(Statement), Pos);
+}
+
+
+double noob::database::column_double(noob::database::statement Statement, uint32_t Pos) const noexcept(true)
+{
+	return sqlite3_column_double(get_stmt(Statement), Pos);
+}
+
+
+std::string noob::database::column_text(noob::database::statement Statement, uint32_t Pos) const noexcept(true)
+{
+	return std::string(reinterpret_cast<const char*>(sqlite3_column_text(get_stmt(Statement), Pos)));
+}
+
+
+int noob::database::bind_int64(noob::database::statement Statement, uint32_t Pos, int64_t Arg) const noexcept(true)
+{
+	return sqlite3_bind_int64(get_stmt(Statement), Pos, Arg);
+}
+
+
+int noob::database::bind_double(noob::database::statement Statement, uint32_t Pos, double Arg) const noexcept(true)
+{
+	return sqlite3_bind_double(get_stmt(Statement), Pos, Arg);
+}
+
+
+int noob::database::bind_text(noob::database::statement Statement, uint32_t Pos, const std::string& Arg) const noexcept(true)
+{
+	return sqlite3_bind_text(get_stmt(Statement), Pos, Arg.c_str(), Arg.size(), nullptr);
+}
+
+
+int noob::database::bind_null(noob::database::statement Statement, uint32_t Pos) const noexcept(true)
+{
+	return sqlite3_bind_null(get_stmt(Statement), Pos);
+}
+
+
+void noob::database::log_error(const std::string& Message) const noexcept(true)
+{
+	noob::logger::log(noob::importance::ERROR, noob::concat("[Database] Error. User: ", Message, " DB: ", sqlite3_errmsg(db)));
+}

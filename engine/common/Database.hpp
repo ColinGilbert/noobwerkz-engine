@@ -52,8 +52,39 @@ namespace noob
 			// TODO: Replace with some kind of metaprogramming.
 			enum class statement : uint32_t
 			{
-				vec2fp_add = 0, vec2fp_get = 1, vec3fp_add = 2, vec3fp_get = 3, vec4fp_add = 4, vec4fp_get = 5, mat4fp_add = 6, mat4fp_get = 7, mesh3d_exists = 8, mesh3d_add = 10, mesh3d_verts_add = 11, mesh3d_verts_get = 12, mesh3d_indices_add = 13, mesh3d_indices_get = 14, phyz_body_exists_by_name = 15, phyz_body_add = 16, phyz_body_get = 17, phyz_shape_lut_add = 18, phyz_shape_lut_get = 19, phyz_sphere_add = 20, phyz_sphere_get = 21, phyz_box_add = 22, phyz_box_get = 23, phyz_cone_add = 24, phyz_cone_get = 25, phyz_cylinder_add = 26, phyz_cylinder_get = 27, phyz_hull_add = 28, phyz_hull_points_add = 29, phyz_hull_points_get = 30, phyz_mesh_add = 31, phyz_mesh_get_points = 32, phyz_mesh_get_mesh = 33
-
+				vec2fp_add = 0,
+				vec2fp_get = 1,
+				vec3fp_add = 2,
+				vec3fp_get = 3,
+				vec4fp_add = 4,
+				vec4fp_get = 5,
+				mat4fp_add = 6,
+				mat4fp_get = 7,
+				mesh3d_exists = 8,
+				mesh3d_add = 9,
+				mesh3d_verts_add = 10,
+				mesh3d_verts_get = 11,
+				mesh3d_indices_add = 12,
+				mesh3d_indices_get = 13, 
+				phyz_body_exists_by_name = 14, 
+				phyz_body_add = 15,
+				phyz_body_get = 16, 
+				phyz_shape_lut_add = 17, 
+				phyz_shape_lut_get = 18, 
+				phyz_sphere_add = 19, 
+				phyz_sphere_get = 20, 
+				phyz_box_add = 21, 
+				phyz_box_get = 22, 
+				phyz_cone_add = 23, 
+				phyz_cone_get = 24, 
+				phyz_cylinder_add = 25, 
+				phyz_cylinder_get = 26, 
+				phyz_hull_add = 27, 
+				phyz_hull_points_add = 28, 
+				phyz_hull_points_get = 29, 
+				phyz_mesh_add = 30, 
+				phyz_mesh_get_points = 31, 
+				phyz_mesh_get_mesh = 32
 			};
 
 			bool init() noexcept(true);
@@ -62,9 +93,16 @@ namespace noob
 			void clear_bindings(noob::database::statement) const noexcept(true);
 			void reset_stmt(noob::database::statement) const noexcept(true);
 			void log_error(const std::string& Sql, const std::string& Msg) const noexcept(true);
+			int step(noob::database::statement) const noexcept(true);			
+			int bind_int64(noob::database::statement, uint32_t Pos, int64_t Arg) const noexcept(true);
+			int bind_double(noob::database::statement, uint32_t Pos, double Arg) const noexcept(true);
+			int bind_text(noob::database::statement, uint32_t Pos, const std::string& Arg) const noexcept(true);
+			int bind_null(noob::database::statement, uint32_t Pos) const noexcept(true);
+			int64_t column_int64(noob::database::statement, uint32_t Pos) const noexcept(true);
+			double column_double(noob::database::statement, uint32_t Pos) const noexcept(true);
+			std::string column_text(noob::database::statement, uint32_t Pos) const noexcept(true);
 			sqlite3_stmt* get_stmt(noob::database::statement) const noexcept(true);
-
-
+			void log_error(const std::string&) const noexcept(true);
 
 			sqlite3* db;
 			std::array<sqlite3_stmt*, 64> prepped_statements;
