@@ -60,13 +60,13 @@ namespace noob
 				vec4fp_get = 5,
 				mat4fp_add = 6,
 				mat4fp_get = 7,
-				mesh3d_exists = 8,
-				mesh3d_add = 9,
+				mesh3d_add = 8,
+				mesh3d_get_id = 9,
 				mesh3d_verts_add = 10,
 				mesh3d_verts_get = 11,
 				mesh3d_indices_add = 12,
-				mesh3d_indices_get = 13, 
-				phyz_body_exists_by_name = 14, 
+				mesh3d_indices_get = 13,
+				phyz_body_get_by_name = 14, 
 				phyz_body_add = 15,
 				phyz_body_get = 16, 
 				phyz_shape_lut_add = 17, 
@@ -92,7 +92,10 @@ namespace noob
 			bool prepare_statement(const std::string& Sql, noob::database::statement Index) noexcept(true);
 			void clear_bindings(noob::database::statement) const noexcept(true);
 			void reset_stmt(noob::database::statement) const noexcept(true);
-			void log_error(const std::string& Sql, const std::string& Msg) const noexcept(true);
+			void log_sql_error(const std::string& Msg) const noexcept(true);						
+			void log_sql_error(const std::string& Sql, const std::string& Msg) const noexcept(true);
+			void log_class_error(const std::string&) const noexcept(true);
+			void log_warning(const std::string&) const noexcept(true);			
 			int step(noob::database::statement) const noexcept(true);			
 			int bind_int64(noob::database::statement, uint32_t Pos, int64_t Arg) const noexcept(true);
 			int bind_double(noob::database::statement, uint32_t Pos, double Arg) const noexcept(true);
@@ -102,7 +105,6 @@ namespace noob
 			double column_double(noob::database::statement, uint32_t Pos) const noexcept(true);
 			std::string column_text(noob::database::statement, uint32_t Pos) const noexcept(true);
 			sqlite3_stmt* get_stmt(noob::database::statement) const noexcept(true);
-			void log_error(const std::string&) const noexcept(true);
 
 			sqlite3* db;
 			std::array<sqlite3_stmt*, 64> prepped_statements;

@@ -231,7 +231,7 @@ noob::results<noob::mat4d> noob::database::mat4fp_get(uint32_t Idx) const noexce
 	return noob::results<noob::mat4d>::make_valid(result);
 }
 
-//mesh3d_exists mesh3d_add, mesh3d_verts_add, mesh3d_verts_get, mesh3d_indices_add, mesh3d_indices_get,
+//mesh3d_get_id mesh3d_add, mesh3d_verts_add, mesh3d_verts_get, mesh3d_indices_add, mesh3d_indices_get,
 noob::results<uint32_t> noob::database::mesh3d_add(const noob::mesh_3d& Mesh, const std::string& Name) const noexcept(true)
 {
 	// First, check the name to see if it already exists or not
@@ -338,7 +338,7 @@ noob::results<noob::mesh_3d> noob::database::mesh3d_get(uint32_t Idx) const noex
 		}
 		else if (rc != SQLITE_ROW)
 		{
-			log_error(noob::concat(msg, "Invalid row"));
+			log_class_error(noob::concat(msg, "Invalid row :("));
 			running = false;
 		}
 		else
@@ -346,28 +346,28 @@ noob::results<noob::mesh_3d> noob::database::mesh3d_get(uint32_t Idx) const noex
 			const noob::results<noob::vec3d> pos = vec3fp_get(column_int64(noob::database::statement::mesh3d_verts_get, 1));
 			if (!pos.valid)
 			{
-				log_error(noob::concat(msg, "Invalid position"));
+				log_class_error(noob::concat(msg, "Invalid position"));
 				return noob::results<noob::mesh_3d>::make_invalid();
 			}
 
 			const noob::results<noob::vec3d> normal = vec3fp_get(column_int64(noob::database::statement::mesh3d_verts_get, 2));
 			if (!normal.valid)
 			{
-				log_error(noob::concat(msg, "Invalid normal"));			
+				log_class_error(noob::concat(msg, "Invalid normal"));			
 				return noob::results<noob::mesh_3d>::make_invalid();
 			}
 
 			const noob::results<noob::vec3d> uvw = vec3fp_get(column_int64(noob::database::statement::mesh3d_verts_get, 3));
 			if (!uvw.valid)
 			{
-				log_error(noob::concat(msg, "Invalid uvw"));						
+				log_class_error(noob::concat(msg, "Invalid uvw"));						
 				return noob::results<noob::mesh_3d>::make_invalid();
 			}
 
 			const noob::results<noob::vec4d> colour = vec4fp_get(column_int64(noob::database::statement::mesh3d_verts_get, 4));
 			if (!colour.valid)
 			{
-				log_error(noob::concat(msg, "Invalid colour"));				
+				log_class_error(noob::concat(msg, "Invalid colour"));				
 				return noob::results<noob::mesh_3d>::make_invalid();
 			}
 
@@ -398,7 +398,46 @@ noob::results<noob::mesh_3d> noob::database::mesh3d_get(uint32_t Idx) const noex
 
 	rc = bind_int64(noob::database::statement::mesh3d_indices_get, 1, Idx);
 
+	running = true;
+	while(running)
+	{
+		rc = step(noob::database::statement::mesh3d_indices_get);
+
+		const std::string msg = noob::concat("Getting mesh index ", noob::to_string(results_holder.indices.size()), " - ");
+
+		if (rc == SQLITE_DONE)
+		{
+			running = false;
+		}
+		else if (rc != SQLITE_ROW)
+		{
+			log_class_error(noob::concat(msg, "Invalid row"));
+			running = false;
+		}
+		else
+		{
+			const uint32_t index_from_db = static_cast<uint32_t>(column_int64(noob::database::statement::mesh3d_indices_get, 1));
+			const auto c = indices_mapping.lookup(index_from_db);
+			
+			if (!indices_mapping.is_valid(c))
+			{
+				log_class_error(noob::concat(msg, "Invalid vert index"));
+				return noob::results<noob::mesh_3d>::make_invalid();
+			}
+
+			const uint32_t index = static_cast<uint32_t>(c->value);
+			results_holder.indices.push_back(index);
+
+			reset_stmt(noob::database::statement::mesh3d_indices_get);
+		}
+	}
+
+	clear_bindings(noob::database::statement::mesh3d_indices_get);
 	
+	if (results_holder.indices.size() == 0 || results_holder.vertices.size() == 0)
+	{
+		return noob::results<noob::mesh_3d>::make_invalid();
+	}
 
 	return noob::results<noob::mesh_3d>::make_valid(results_holder);
 }
@@ -407,6 +446,22 @@ noob::results<noob::mesh_3d> noob::database::mesh3d_get(uint32_t Idx) const noex
 noob::results<noob::mesh_3d> noob::database::mesh3d_get(const std::string& Name) const noexcept(true)
 {
 	// if mesh3d exists by name
+	int rc = bind_text(noob::database::statement::mesh3d_get_id, 1, Name);
+
+	int64_t results = 0;
+	uint32_t counter = 0;
+
+	while ((rc = step(noob::database::statement::mesh3d_get_id)) == SQLITE_OK)
+	{
+		results = column_int64(noob::database::statement::mesh3d_get_id, 1);
+		++counter;
+	}
+
+	if (counter > 0)
+	{
+		return mesh3d_get(static_cast<uint32_t>(results));
+	}
+
 	return noob::results<noob::mesh_3d>::make_invalid();
 }
 
@@ -559,7 +614,7 @@ bool noob::database::init() noexcept(true)
 	{
 		return false;	
 	}
-	if(!prepare_statement("SELECT EXISTS(SELECT 1 FROM mesh3d WHERE name = ?)", noob::database::statement::mesh3d_exists))
+	if(!prepare_statement("SELECT id FROM mesh3d WHERE mesh3d.name = ?", noob::database::statement::mesh3d_get_id))
 	{
 		return false;	
 	}
@@ -587,7 +642,7 @@ bool noob::database::init() noexcept(true)
 	{
 		return false;	
 	}
-	if(!prepare_statement("SELECT EXISTS(SELECT 1 FROM phyz_bodies WHERE name = ?)", noob::database::statement::phyz_body_exists_by_name))
+	if(!prepare_statement("SELECT pos, orient, type, mass, restitution, linear_vel, angular_vel, linear_factor, angular_factor, ccd FROM phyz_bodies WHERE phyz_bodies.name = ?", noob::database::statement::phyz_body_get_by_name))
 	{
 		return false;	
 	}
@@ -672,7 +727,7 @@ bool noob::database::exec_single_step(const std::string& Sql) noexcept(true)
 	char* err_msg = 0;
 	if (sqlite3_exec(db, Sql.c_str(), nullptr, nullptr, &err_msg) != SQLITE_OK)
 	{
-		log_error(Sql, err_msg);
+		log_sql_error(Sql, err_msg);
 		return false;
 	}
 	return true;
@@ -684,7 +739,7 @@ bool noob::database::prepare_statement(const std::string& Sql, noob::database::s
 	sqlite3_stmt* stmt;
 	if (sqlite3_prepare_v2(db, Sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK)
 	{
-		log_error(Sql, sqlite3_errmsg(db));
+		log_sql_error(Sql, sqlite3_errmsg(db));
 		return false;
 	}
 	++stmt_count;
@@ -705,9 +760,21 @@ void noob::database::reset_stmt(noob::database::statement Statement) const noexc
 }
 
 
-void noob::database::log_error(const std::string& Sql, const std::string& Msg) const noexcept(true)
+void noob::database::log_sql_error(const std::string& Sql, const std::string& Msg) const noexcept(true)
 {
 	noob::logger::log(noob::importance::ERROR, noob::concat("[Database] Statement \"", Sql, "\" failed with error \"", Msg, "\""));
+}
+
+
+void noob::database::log_class_error(const std::string& Msg) const noexcept(true)
+{
+	noob::logger::log(noob::importance::ERROR, noob::concat("[Database] ", Msg));
+}
+
+
+void noob::database::log_warning(const std::string& Msg) const noexcept(true)
+{
+	noob::logger::log(noob::importance::WARNING, noob::concat("[Database] ", Msg));
 }
 
 
@@ -765,7 +832,7 @@ int noob::database::bind_null(noob::database::statement Statement, uint32_t Pos)
 }
 
 
-void noob::database::log_error(const std::string& Message) const noexcept(true)
+void noob::database::log_sql_error(const std::string& Message) const noexcept(true)
 {
 	noob::logger::log(noob::importance::ERROR, noob::concat("[Database] Error. User: ", Message, " DB: ", sqlite3_errmsg(db)));
 }
