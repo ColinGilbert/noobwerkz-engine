@@ -1,32 +1,37 @@
-noob::mesh_3d noob::assimp::load_mem(const std::string& file)
+noob::results<noob::mesh_3d> noob::assimp::load_mem(const std::string& file)
 {
 	const aiScene* scene = aiImportFileFromMemory(file.c_str(), file.size(), aiProcessPreset_TargetRealtime_Fast, "");
 	return load_assimp(scene);
 }
 
 
-noob::mesh_3d noob::assimp::load_file(const std::string& filename)
+noob::results<noob::mesh_3d> noob::assimp::load_file(const std::string& filename)
 {
 	const aiScene* scene = aiImportFile(filename.c_str(), aiProcessPreset_TargetRealtime_Fast);
 	return load_assimp(scene);
 }
 
 
-noob::mesh_3d noob::assimp::load(const aiScene* scene)
+noob::results<noob::mesh_3d> noob::assimp::load(const aiScene* scene)
 {
 	logger::log(noob::importance::INFO, "[BasicMesh] Load Asssimp");
 	// logger::log(noob::importance::INFO, "[mesh] load() - begin");
 	if (!scene)
 	{
 		logger::log(noob::importance::INFO, "[BasicMesh] (Assimp) cannot open!");
-		return false;
+		return noob::results<noob::mesh_3d>::make_invalid();
 	}
-
 
 	const aiMesh* mesh_data = scene->mMeshes[0];
 
 	const size_t num_verts = mesh_data->mNumVertices;
 	const size_t num_faces = mesh_data->mNumFaces;
+	
+	if (num_verts == 0 || num_faces == 0)
+	{
+		return noob::results<noob::mesh_3d>::make_invalid();
+	}
+
 	const auto num_indices = mesh_data->mNumFaces / 3;
 
 	const bool has_normals = mesh_data->HasNormals();
@@ -46,7 +51,8 @@ noob::mesh_3d noob::assimp::load(const aiScene* scene)
 		m.bbox.min = noob::min(m.bbox.min, pos);
 		m.bbox.max = noob::max(m.bbox.max, pos);
 
-		const noob::vec3f normal(0.0, 1.0, 0.0);
+		// TODO: Add proper normal-fixing code
+		noob::vec3f normal = noob::vec3f(0.0, 1.0, 0.0);
 
 		if (has_normals)
 		{
@@ -67,12 +73,6 @@ noob::mesh_3d noob::assimp::load(const aiScene* scene)
 		m.vertices.push_back(vv);
 	}
 	
-	// TODO: Replace with results<noob::mesh_3d>
-	if (num_verts == 0)
-	{
-		num_verts = 1;
-	}
-
 	for (size_t n = 0; n < num_faces; ++n)
 	{
 		const struct aiFace* face = &mesh_data->mFaces[n];
