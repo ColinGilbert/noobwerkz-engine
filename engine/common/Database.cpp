@@ -20,6 +20,9 @@ bool noob::database::init_file(const std::string& FileName) noexcept(true)
 
 bool noob::database::close() noexcept(true)
 {
+	mapping_db_to_shapes.clear();
+	mapping_shapes_to_db.clear();
+
 	for(uint32_t i = 0; i < stmt_count; ++i)
 	{
 		if (sqlite3_finalize(prepped_statements[i]) != SQLITE_OK)
@@ -27,6 +30,7 @@ bool noob::database::close() noexcept(true)
 			noob::logger::log(noob::importance::ERROR, noob::concat("[Database] Could not finalize prepared statement at index ", noob::to_string(i)));
 		}
 	}
+
 	if (sqlite3_close(db) != SQLITE_OK)
 	{
 		noob::logger::log(noob::importance::ERROR, "[Database] Error closing connection!");
@@ -320,7 +324,7 @@ noob::results<noob::mesh_3d> noob::database::mesh3d_get(uint32_t Idx) const noex
 	// First, get the vertices
 	//////////////////////////////
 	int rc = bind_int64(noob::database::statement::mesh3d_verts_get, 1, Idx);
-	
+
 	while(running)
 	{
 		rc = step(noob::database::statement::mesh3d_verts_get);
@@ -413,7 +417,7 @@ noob::results<noob::mesh_3d> noob::database::mesh3d_get(uint32_t Idx) const noex
 		{
 			const uint32_t index_from_db = static_cast<uint32_t>(column_int64(noob::database::statement::mesh3d_indices_get, 1));
 			const auto c = indices_mapping.lookup(index_from_db);
-			
+
 			if (!indices_mapping.is_valid(c))
 			{
 				log_class_error(noob::concat(msg, "Invalid vert index"));
@@ -428,7 +432,7 @@ noob::results<noob::mesh_3d> noob::database::mesh3d_get(uint32_t Idx) const noex
 	}
 
 	clear_bindings(noob::database::statement::mesh3d_indices_get);
-	
+
 	if (results_holder.indices.size() == 0 || results_holder.vertices.size() == 0)
 	{
 		return noob::results<noob::mesh_3d>::make_invalid();
@@ -461,34 +465,6 @@ noob::results<noob::mesh_3d> noob::database::mesh3d_get(const std::string& Name)
 }
 
 
-/*
-	struct body_info
-	{
-		noob::body_type type;
-		noob::shape_handle shape;
-		noob::versorf orientation;
-		noob::vec3f position, linear_velocity, angular_velocity, linear_factor, angular_factor;
-		float mass, friction, restitution;				
-		bool ccd;
-	};
-	"CREATE TABLE IF NOT EXISTS phyz_bodies(id INTEGER PRIMARY KEY AUTOINCREMENT,
-	1 type INTEGER NOT NULL,
-	2 shape INTEGER NOT NULL REFERENCES phyz_shapes_generic,
-	3 orient INTEGER NOT NULL REFERENCES vec4fp,
-	4 pos INTEGER NOT NULL REFERENCES vec3fp, 
-	5 linear_vel INTEGER NOT NULL REFERENCES vec3fp,
-	6 angular_vel INTEGER NOT NULL REFERENCES vec3fp,
-	7 linear_factor INTEGER NOT NULL REFERENCES vec3fp,
-	8 angular_factor INTEGER NOT NULL REFERENCES vec3fp,
-	9 mass REAL NOT NULL,
-	10 friction REAL NOT NULL,
-	11 restitution REAL NOT NULL,
-	12 ccd BOOLEAN NOT NULL,
-	13 stage INTEGER NOT NULL,
-	14 generation INTEGER NOT NULL,
-	15 name TEXT)"
- */
-
 uint32_t noob::database::body_add(const noob::body_info& Body, const std::string& Name, uint32_t Stage, uint32_t Generation) noexcept(true)
 {
 	const uint32_t orient_idx = vec4fp_add(noob::convert<float, double>(noob::vec4f(Body.orientation.q)));
@@ -499,14 +475,18 @@ uint32_t noob::database::body_add(const noob::body_info& Body, const std::string
 	const uint32_t angular_factor_idx = vec3fp_add(noob::convert<float, double>(Body.angular_factor));
 
 	auto cell_shp_to_db = mapping_shapes_to_db.lookup(Body.shape.index());
-	
+
 	if (!mapping_shapes_to_db.is_valid(cell_shp_to_db))
 	{
+		cell_shp_to_db = mapping_shapes_to_db.insert(Body.shape.index());
 		cell_shp_to_db->value = shape_add(Body.shape);
 	}
 
 	const uint32_t shape_idx = cell_shp_to_db->value;
-	
+
+	auto cell_db_to_shp = mapping_db_to_shapes.insert(shape_idx);
+	cell_db_to_shp->value = Body.shape.index();
+
 	int rc = bind_int64(noob::database::statement::phyz_body_add, 1, static_cast<int64_t>(Body.type));
 	rc = bind_int64(noob::database::statement::phyz_body_add, 2, static_cast<int64_t>(shape_idx));
 	rc = bind_int64(noob::database::statement::phyz_body_add, 3, static_cast<int64_t>(orient_idx));
@@ -521,7 +501,7 @@ uint32_t noob::database::body_add(const noob::body_info& Body, const std::string
 	rc = bind_int64(noob::database::statement::phyz_body_add, 12, static_cast<int64_t>(Body.ccd));
 	rc = bind_int64(noob::database::statement::phyz_body_add, 13, static_cast<int64_t>(Stage));
 	rc = bind_int64(noob::database::statement::phyz_body_add, 14, static_cast<int64_t>(Generation));
-	
+
 	if (Name.empty())
 	{
 		rc = bind_null(noob::database::statement::phyz_body_add, 15);
@@ -533,7 +513,7 @@ uint32_t noob::database::body_add(const noob::body_info& Body, const std::string
 	}
 
 	rc = step(noob::database::statement::phyz_body_add);
-	
+
 	const int64_t rowid = sqlite3_last_insert_rowid(db);
 
 	reset_stmt(noob::database::statement::phyz_body_add);
@@ -542,10 +522,80 @@ uint32_t noob::database::body_add(const noob::body_info& Body, const std::string
 	return static_cast<uint32_t>(std::fabs(rowid));
 }
 
+/*
+   struct body_info
+   {
+   noob::body_type type;
+   noob::shape_handle shape;
+   noob::versorf orientation;
+   noob::vec3f position, linear_velocity, angular_velocity, linear_factor, angular_factor;
+   float mass, friction, restitution;
+   bool ccd;
+   };
+
+   "CREATE TABLE IF NOT EXISTS phyz_bodies( id INTEGER PRIMARY KEY AUTOINCREMENT,
+   1 type INTEGER NOT NULL,
+   2 shape INTEGER NOT NULL REFERENCES phyz_shapes_generic,
+   3 orient INTEGER NOT NULL REFERENCES vec4fp,
+   4 pos INTEGER NOT NULL REFERENCES vec3fp, 
+   5 linear_vel INTEGER NOT NULL REFERENCES vec3fp,
+   6 angular_vel INTEGER NOT NULL REFERENCES vec3fp,
+   7 linear_factor INTEGER NOT NULL REFERENCES vec3fp,
+   8 angular_factor INTEGER NOT NULL REFERENCES vec3fp,
+   9 mass REAL NOT NULL,
+   10 friction REAL NOT NULL,
+   11 restitution REAL NOT NULL,
+   12 ccd BOOLEAN NOT NULL,
+   13 stage INTEGER NOT NULL,
+   14 generation INTEGER NOT NULL,
+   15 name TEXT)"
+   */
+
 
 noob::results<noob::body_info> noob::database::body_get(uint32_t Idx, uint32_t Stage, uint32_t Generation) const noexcept(true)
 {
-	return noob::results<noob::body_info>::make_invalid();
+	uint32_t counter = 0;
+	int rc = bind_int64(noob::database::statement::phyz_body_get, 1, Idx);
+	rc = bind_int64(noob::database::statement::phyz_body_get, 2, Stage);
+	rc = bind_int64(noob::database::statement::phyz_body_get, 3, Generation);
+
+	noob::body_info info;
+	rc = step(noob::database::statement::phyz_body_get);
+
+	if (rc == SQLITE_OK)
+	{
+		// TODO: Verify data that comes out
+		info.type = static_cast<noob::body_type>(static_cast<uint8_t>(column_int64(noob::database::statement::phyz_body_get, 1)));
+		info.shape = noob::shape_handle::make(static_cast<uint32_t>(column_int64(noob::database::statement::phyz_body_get, 2)));
+		const int64_t orient_idx  = column_int64(noob::database::statement::phyz_body_get, 3);
+		const int64_t pos_idx = column_int64(noob::database::statement::phyz_body_get, 4);
+		const int64_t linear_vel_idx = column_int64(noob::database::statement::phyz_body_get, 5);
+		const int64_t angular_vel_idx = column_int64(noob::database::statement::phyz_body_get, 6);
+		const int64_t linear_factor_idx = column_int64(noob::database::statement::phyz_body_get, 7);
+		const int64_t angular_factor_idx = column_int64(noob::database::statement::phyz_body_get, 8);
+
+		info.mass = static_cast<float>(column_double(noob::database::statement::phyz_body_get, 9));
+		info.friction = static_cast<float>(column_double(noob::database::statement::phyz_body_get, 10));
+		info.restitution = static_cast<float>(column_double(noob::database::statement::phyz_body_get, 11));
+		info.ccd = static_cast<bool>(column_int64(noob::database::statement::phyz_body_get, 12));
+		
+		reset_stmt(noob::database::statement::phyz_body_get);
+		clear_bindings(noob::database::statement::phyz_body_get);
+		
+		info.orientation = noob::versorf(noob::convert<double, float>(vec4fp_get(static_cast<uint32_t>(orient_idx)).value).v);
+		info.position = noob::convert<double, float>(vec3fp_get(static_cast<uint32_t>(pos_idx)).value);
+		info.linear_velocity = noob::convert<double, float>(vec3fp_get(static_cast<uint32_t>(linear_vel_idx)).value);
+		info.angular_velocity = noob::convert<double, float>(vec3fp_get(static_cast<uint32_t>(angular_vel_idx)).value);
+		info.linear_factor = noob::convert<double, float>(vec3fp_get(static_cast<uint32_t>(linear_factor_idx)).value);
+		info.angular_factor = noob::convert<double, float>(vec3fp_get(static_cast<uint32_t>(angular_factor_idx)).value);
+
+	}
+	else
+	{
+		return noob::results<noob::body_info>::make_invalid();	
+	}
+
+	return noob::results<noob::body_info>::make_valid(info);
 }
 
 
@@ -559,9 +609,9 @@ std::vector<noob::body_info> noob::database::body_get(const std::string& Name, u
 
 uint32_t noob::database::shape_add(const noob::shape_handle Shape) noexcept(true)
 {
-	noob::globals& g = noob::get_globals();//shape_from_handle(Shape);
+	noob::globals& g = noob::get_globals();
 
-	noob::shape s = g.shape_from_handle(Shape);
+	const noob::shape s = g.shape_from_handle(Shape);
 
 	return 0;
 }

@@ -1,6 +1,6 @@
 Jan 17, 2017
 ```
-Been working with SQLite. A lot. The database schema (round 1) is more or less complete and all that remains to implement is going to be the bodies and shapes: We're 7/8 of the way before writing test-cases. Along the way, I decided to re-implement the mesh data structure in order to have it not crash so spuriously - In fact it will very soon be a proper class with an interface wrapped around it and we'll be better off that way.
+Been working with SQLite. A lot. The database schema (round 1) is more or less complete and all that remains to implement is going to be body retrieval and the shapes: We're 7/8 of the way before writing test-cases. Along the way, I decided to re-implement the mesh data structure in order to have it not crash so spuriously - In fact it will very soon be a proper class with an interface wrapped around it and we'll be better off that way.
 ```
 
 Jan. 9, 2017
