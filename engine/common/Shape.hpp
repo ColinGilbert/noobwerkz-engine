@@ -60,7 +60,7 @@ namespace noob
 		
 		noob::shape::type shape_type;
 		bool physics_valid = false;
-		noob::vec3f scales;
+		noob::vec3f scales = noob::vec3f(1.0, 1.0, 1.0);
 		btCollisionShape* inner;
 	};
 

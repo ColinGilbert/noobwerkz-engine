@@ -83,4 +83,4 @@ noob::results<noob::mesh_3d> noob::assimp::load(const aiScene* scene)
 
 	aiReleaseImport(scene);
 
-}	return m;
+}	return noob::results::make_valid(m);

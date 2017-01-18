@@ -20,7 +20,6 @@
 #include <assimp/types.h>
 #endif
 
-
 #define NOOB_PI 3.1415926535
 #define NOOB_TAU 2.0 * NOOB_PI
 #define NOOB_ONE_DEG_IN_RAD (2.0 * NOOB_PI) / 360.0 // 0.017444444
@@ -97,6 +96,7 @@ namespace noob
 	}
 
 	// Comment: Yuck. Yuck. YUCK!
+	// Followup: This kind of code happens to be why people actually *want* to look up horrible, miserable things such as C++ template metaprogramming
 	template<typename From, typename To>
 	static noob::mat4_type<To> convert(const noob::mat4_type<From> Mat)
 	{

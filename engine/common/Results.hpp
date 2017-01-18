@@ -14,7 +14,7 @@ namespace noob
 	template <typename T>
 		struct results
 		{
-			results() noexcept(true) = default;
+			//results() noexcept(true) = default;
 			results(bool Valid, T Value) noexcept(true) : valid(Valid), value(Value) {};
 
 			static noob::results<T> make_valid(T Value) noexcept(true)
@@ -27,7 +27,6 @@ namespace noob
 				T t;
 				return noob::results<T>(false, t);
 			}
-
 
 			const bool valid;
 			T value;

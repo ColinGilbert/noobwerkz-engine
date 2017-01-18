@@ -7,6 +7,8 @@
 #include <array>
 
 #include <noob/math/math_funcs.hpp>
+#include <noob/fast_hashtable/fast_hashtable.hpp>
+
 
 #include "sqlite3.h"
 
@@ -38,14 +40,14 @@ namespace noob
 			noob::results<noob::mat4d> mat4fp_get(uint32_t Idx) const noexcept(true);
 			
 			noob::results<uint32_t> mesh3d_add(const noob::mesh_3d& Mesh, const std::string& Name) const noexcept(true);
-			noob::results<noob::mesh_3d> mesh3d_get(const uint32_t Idx) const noexcept(true);
+			noob::results<noob::mesh_3d> mesh3d_get(uint32_t Idx) const noexcept(true);
 			noob::results<noob::mesh_3d> mesh3d_get(const std::string& Name) const noexcept(true);
 
-			uint32_t body_add(const noob::body_info& Body, const std::string& Name, uint32_t Stage, uint32_t Generation) const noexcept(true);
+			uint32_t body_add(const noob::body_info& Body, const std::string& Name, uint32_t Stage, uint32_t Generation) noexcept(true);
 			noob::results<noob::body_info> body_get(uint32_t Idx, uint32_t Stage, uint32_t Generation) const noexcept(true);
 			std::vector<noob::body_info> body_get(const std::string& Name, uint32_t Stage, uint32_t Generation) const noexcept(true);
 
-			uint32_t shape_add(const noob::shape& Shape) const noexcept(true);
+			uint32_t shape_add(const noob::shape_handle) noexcept(true);
 			noob::results<noob::shape> shape_get(uint32_t Idx) const noexcept(true);
 
 
@@ -111,7 +113,8 @@ namespace noob
 			std::array<sqlite3_stmt*, 64> prepped_statements;
 			uint32_t stmt_count = 0; // This holds the number of prepared statements in the above array that have been properly set up. Should initialization fail, we can then free all prepared statements up to the counter's value before returning false.
 
-		
+			noob::fast_hashtable mapping_db_to_shapes;			
+			noob::fast_hashtable mapping_shapes_to_db;
 
 	};
 

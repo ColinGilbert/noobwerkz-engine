@@ -1,11 +1,6 @@
 #include "Database.hpp"
-
-
-#include <noob/fast_hashtable/fast_hashtable.hpp>
-
-
 #include "Logger.hpp"
-
+#include "Globals.hpp"
 
 bool noob::database::init_file(const std::string& FileName) noexcept(true)
 {
@@ -466,10 +461,85 @@ noob::results<noob::mesh_3d> noob::database::mesh3d_get(const std::string& Name)
 }
 
 
-uint32_t noob::database::body_add(const noob::body_info& Body, const std::string& Name, uint32_t Stage, uint32_t Generation) const noexcept(true)
+/*
+	struct body_info
+	{
+		noob::body_type type;
+		noob::shape_handle shape;
+		noob::versorf orientation;
+		noob::vec3f position, linear_velocity, angular_velocity, linear_factor, angular_factor;
+		float mass, friction, restitution;				
+		bool ccd;
+	};
+	"CREATE TABLE IF NOT EXISTS phyz_bodies(id INTEGER PRIMARY KEY AUTOINCREMENT,
+	1 type INTEGER NOT NULL,
+	2 shape INTEGER NOT NULL REFERENCES phyz_shapes_generic,
+	3 orient INTEGER NOT NULL REFERENCES vec4fp,
+	4 pos INTEGER NOT NULL REFERENCES vec3fp, 
+	5 linear_vel INTEGER NOT NULL REFERENCES vec3fp,
+	6 angular_vel INTEGER NOT NULL REFERENCES vec3fp,
+	7 linear_factor INTEGER NOT NULL REFERENCES vec3fp,
+	8 angular_factor INTEGER NOT NULL REFERENCES vec3fp,
+	9 mass REAL NOT NULL,
+	10 friction REAL NOT NULL,
+	11 restitution REAL NOT NULL,
+	12 ccd BOOLEAN NOT NULL,
+	13 stage INTEGER NOT NULL,
+	14 generation INTEGER NOT NULL,
+	15 name TEXT)"
+ */
+
+uint32_t noob::database::body_add(const noob::body_info& Body, const std::string& Name, uint32_t Stage, uint32_t Generation) noexcept(true)
 {
+	const uint32_t orient_idx = vec4fp_add(noob::convert<float, double>(noob::vec4f(Body.orientation.q)));
+	const uint32_t pos_idx = vec3fp_add(noob::convert<float, double>(Body.position));
+	const uint32_t linear_vel_idx = vec3fp_add(noob::convert<float, double>(Body.linear_velocity));
+	const uint32_t angular_vel_idx = vec3fp_add(noob::convert<float, double>(Body.angular_velocity));
+	const uint32_t linear_factor_idx = vec3fp_add(noob::convert<float, double>(Body.linear_factor));
+	const uint32_t angular_factor_idx = vec3fp_add(noob::convert<float, double>(Body.angular_factor));
+
+	auto cell_shp_to_db = mapping_shapes_to_db.lookup(Body.shape.index());
 	
-	return 0;
+	if (!mapping_shapes_to_db.is_valid(cell_shp_to_db))
+	{
+		cell_shp_to_db->value = shape_add(Body.shape);
+	}
+
+	const uint32_t shape_idx = cell_shp_to_db->value;
+	
+	int rc = bind_int64(noob::database::statement::phyz_body_add, 1, static_cast<int64_t>(Body.type));
+	rc = bind_int64(noob::database::statement::phyz_body_add, 2, static_cast<int64_t>(shape_idx));
+	rc = bind_int64(noob::database::statement::phyz_body_add, 3, static_cast<int64_t>(orient_idx));
+	rc = bind_int64(noob::database::statement::phyz_body_add, 4, static_cast<int64_t>(pos_idx));
+	rc = bind_int64(noob::database::statement::phyz_body_add, 5, static_cast<int64_t>(linear_vel_idx));
+	rc = bind_int64(noob::database::statement::phyz_body_add, 6, static_cast<int64_t>(angular_vel_idx));
+	rc = bind_int64(noob::database::statement::phyz_body_add, 7, static_cast<int64_t>(linear_factor_idx));
+	rc = bind_int64(noob::database::statement::phyz_body_add, 8, static_cast<int64_t>(angular_factor_idx));	
+	rc = bind_double(noob::database::statement::phyz_body_add, 9, static_cast<double>(Body.mass));
+	rc = bind_double(noob::database::statement::phyz_body_add, 10, static_cast<double>(Body.friction));
+	rc = bind_double(noob::database::statement::phyz_body_add, 11, static_cast<double>(Body.restitution));
+	rc = bind_int64(noob::database::statement::phyz_body_add, 12, static_cast<int64_t>(Body.ccd));
+	rc = bind_int64(noob::database::statement::phyz_body_add, 13, static_cast<int64_t>(Stage));
+	rc = bind_int64(noob::database::statement::phyz_body_add, 14, static_cast<int64_t>(Generation));
+	
+	if (Name.empty())
+	{
+		rc = bind_null(noob::database::statement::phyz_body_add, 15);
+
+	}
+	else
+	{
+		rc = bind_text(noob::database::statement::phyz_body_add, 15, Name);
+	}
+
+	rc = step(noob::database::statement::phyz_body_add);
+	
+	const int64_t rowid = sqlite3_last_insert_rowid(db);
+
+	reset_stmt(noob::database::statement::phyz_body_add);
+	clear_bindings(noob::database::statement::phyz_body_add);
+
+	return static_cast<uint32_t>(std::fabs(rowid));
 }
 
 
@@ -487,8 +557,12 @@ std::vector<noob::body_info> noob::database::body_get(const std::string& Name, u
 }
 
 
-uint32_t noob::database::shape_add(const noob::shape& Shape) const noexcept(true)
+uint32_t noob::database::shape_add(const noob::shape_handle Shape) noexcept(true)
 {
+	noob::globals& g = noob::get_globals();//shape_from_handle(Shape);
+
+	noob::shape s = g.shape_from_handle(Shape);
+
 	return 0;
 }
 
@@ -538,7 +612,7 @@ bool noob::database::init() noexcept(true)
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_bodies(id INTEGER PRIMARY KEY AUTOINCREMENT, pos INTEGER NOT NULL REFERENCES vec3fp, orient NOT NULL REFERENCES vec4fp, type INTEGER NOT NULL, mass REAL NOT NULL, friction REAL NOT NULL, restitution REAL NOT NULL, linear_vel REAL NOT NULL, angular_vel REAL NOT NULL, linear_factor REAL NOT NULL, angular_factor REAL NOT NULL, ccd BOOLEAN NOT NULL, stage INTEGER NOT NULL, generation INTEGER NOT NULL, name TEXT)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_bodies(id INTEGER PRIMARY KEY AUTOINCREMENT, type INTEGER NOT NULL, shape INTEGER NOT NULL REFERENCES phyz_shapes_generic, orient INTEGER NOT NULL REFERENCES vec4fp, pos INTEGER NOT NULL REFERENCES vec3fp, linear_vel INTEGER NOT NULL REFERENCES vec3fp, angular_vel INTEGER NOT NULL REFERENCES vec3fp, linear_factor INTEGER NOT NULL REFERENCES vec3fp, angular_factor INTEGER NOT NULL REFERENCES vec3fp, mass REAL NOT NULL, friction REAL NOT NULL, restitution REAL NOT NULL, ccd BOOLEAN NOT NULL, stage INTEGER NOT NULL, generation INTEGER NOT NULL, name TEXT)"))
 	{
 		return false;
 	}
