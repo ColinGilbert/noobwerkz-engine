@@ -203,6 +203,8 @@ noob::mesh_3d noob::shape::get_mesh() const noexcept(true)
 			}
 	}
 }
+
+
 void noob::shape::clear() noexcept(true)
 {
 	if (physics_valid)
@@ -213,10 +215,12 @@ void noob::shape::clear() noexcept(true)
 	}
 }
 
+
 void noob::shape::set_self_index(uint32_t i) noexcept(true)
 {
 	inner->setUserIndex(i);
 }
+
 
 uint32_t noob::shape::get_self_index() const noexcept(true)
 {

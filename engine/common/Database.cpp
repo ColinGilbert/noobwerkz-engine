@@ -466,23 +466,23 @@ noob::results<noob::mesh_3d> noob::database::mesh3d_get(const std::string& Name)
 }
 
 
-uint32_t noob::database::body_add(const noob::body_info& Body, const std::string& Name) const noexcept(true)
+uint32_t noob::database::body_add(const noob::body_info& Body, const std::string& Name, uint32_t Generation) const noexcept(true)
 {
+	
 	return 0;
 }
 
 
-noob::results<noob::body_info> noob::database::body_get(uint32_t Idx) const noexcept(true)
+noob::results<noob::body_info> noob::database::body_get(uint32_t Idx, uint32_t Generation) const noexcept(true)
 {
 	return noob::results<noob::body_info>::make_invalid();
 }
 
 
-std::vector<noob::body_info> noob::database::body_get(const std::string& Name) const noexcept(true)
+std::vector<noob::body_info> noob::database::body_get(const std::string& Name, uint32_t Generation) const noexcept(true)
 {
-	// If bodies exists by name? Or just 0 results?
-
 	std::vector<noob::body_info> results;
+
 	return results;
 }
 
@@ -569,11 +569,11 @@ bool noob::database::init() noexcept(true)
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_hull_points(pos INTEGER REFERENCES vec3fp, belongs_to INTEGER REFERENCES phyz_shapes_hull)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_hull_points(pos INTEGER REFERENCES vec3fp, belongs_to INTEGER NOT NULL REFERENCES phyz_shapes_hull)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_trimesh(id INTEGER PRIMARY KEY AUTOINCREMENT, mesh_id INTEGER REFERENCES mesh3d)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_trimesh(id INTEGER PRIMARY KEY AUTOINCREMENT, mesh_id INTEGER NOT NULL UNIQUE REFERENCES mesh3d)"))
 	{
 		return false;
 	}

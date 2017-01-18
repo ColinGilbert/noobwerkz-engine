@@ -9,6 +9,7 @@
 #include <noob/math/math_funcs.hpp>
 
 #include "sqlite3.h"
+
 #include "Results.hpp"
 #include "BodyInfo.hpp"
 #include "Mesh3D.hpp"
@@ -40,9 +41,9 @@ namespace noob
 			noob::results<noob::mesh_3d> mesh3d_get(const uint32_t Idx) const noexcept(true);
 			noob::results<noob::mesh_3d> mesh3d_get(const std::string& Name) const noexcept(true);
 
-			uint32_t body_add(const noob::body_info& Body, const std::string& Name) const noexcept(true);
-			noob::results<noob::body_info> body_get(uint32_t Idx) const noexcept(true);
-			std::vector<noob::body_info> body_get(const std::string& Name) const noexcept(true);
+			uint32_t body_add(const noob::body_info& Body, const std::string& Name, uint32_t Generation) const noexcept(true);
+			noob::results<noob::body_info> body_get(uint32_t Idx, uint32_t Generation) const noexcept(true);
+			std::vector<noob::body_info> body_get(const std::string& Name, uint32_t Generation) const noexcept(true);
 
 			uint32_t shape_add(const noob::shape& Shape) const noexcept(true);
 			noob::results<noob::shape> shape_get(uint32_t Idx) const noexcept(true);
