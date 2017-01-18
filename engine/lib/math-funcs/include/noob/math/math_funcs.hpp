@@ -1,4 +1,5 @@
-// TODO: Convert to Eigen and test
+// TODO: Add adaptor types and explore expression templates for overall maintainability.
+
 #pragma once
 
 #include <array>
@@ -9,6 +10,16 @@
 #include <glm/gtc/quaternion.hpp>
 #include <btBulletDynamicsCommon.h>
 #include <Eigen/Geometry>
+
+#if defined NOOB_USE_ASSIMP
+#include <assimp/quaternion.h>
+#include <assimp/anim.h>
+#include <assimp/cimport.h>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+#include <assimp/types.h>
+#endif
+
 
 #define NOOB_PI 3.1415926535
 #define NOOB_TAU 2.0 * NOOB_PI
@@ -397,11 +408,11 @@ namespace noob
 
 			if (cos_half_theta < 0.0f)
 			{
-				for (int i = 0; i < 4; i++)
+				for (int i = 0; i < 4; ++i)
 				{
 					temp_q.q[i] *= -1.0f;
 				}
-				cos_half_theta = dot (temp_q, r);
+				cos_half_theta = dot(temp_q, r);
 			}
 			// if qa=qb or qa=-qb then theta = 0 and we can return qa
 			if (fabs(cos_half_theta) >= 1.0f)

@@ -5,15 +5,6 @@
 #include <noob/math/math_funcs.hpp>
 #include <noob/component/component.hpp>
 
-#if defined(NOOB_USE_ASSIMP)
-#include <assimp/quaternion.h>
-#include <assimp/anim.h>
-#include <assimp/cimport.h>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-#include <assimp/types.h>
-#endif
-
 namespace noob
 {
 	class mesh_3d
@@ -39,13 +30,6 @@ namespace noob
 			// void translate(const noob::vec3f&);
 			// void rotate(const noob::versorf&);
 			// void scale(const noob::vec3f&);
-
-// TODO: Clean those out into a separate file:
-#if defined(NOOB_USE_ASSIMP)
-			bool load_mem_assimp(const std::string&);
-			bool load_file_assimp(const std::string& filename);
-			bool load_assimp(const aiScene* scene);
-#endif
 
 			rde::vector<noob::mesh_3d::vert> vertices;
 			// TODO: Increase type-safety by replacing with triangles.
