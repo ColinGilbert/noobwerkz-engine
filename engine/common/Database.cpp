@@ -466,20 +466,20 @@ noob::results<noob::mesh_3d> noob::database::mesh3d_get(const std::string& Name)
 }
 
 
-uint32_t noob::database::body_add(const noob::body_info& Body, const std::string& Name, uint32_t Generation) const noexcept(true)
+uint32_t noob::database::body_add(const noob::body_info& Body, const std::string& Name, uint32_t Stage, uint32_t Generation) const noexcept(true)
 {
 	
 	return 0;
 }
 
 
-noob::results<noob::body_info> noob::database::body_get(uint32_t Idx, uint32_t Generation) const noexcept(true)
+noob::results<noob::body_info> noob::database::body_get(uint32_t Idx, uint32_t Stage, uint32_t Generation) const noexcept(true)
 {
 	return noob::results<noob::body_info>::make_invalid();
 }
 
 
-std::vector<noob::body_info> noob::database::body_get(const std::string& Name, uint32_t Generation) const noexcept(true)
+std::vector<noob::body_info> noob::database::body_get(const std::string& Name, uint32_t Stage, uint32_t Generation) const noexcept(true)
 {
 	std::vector<noob::body_info> results;
 
@@ -505,19 +505,19 @@ bool noob::database::init() noexcept(true)
 	// BUILD OUR SCHEMA
 	///////////////////////////////////
 
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec2fp(id INTEGER PRIMARY KEY AUTOINCREMENT, x REAL, y REAL)")) 
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec2fp(id INTEGER PRIMARY KEY AUTOINCREMENT, x REAL NOT NULL, y REAL NOT NULL)")) 
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec3fp(id INTEGER PRIMARY KEY AUTOINCREMENT, x REAL, y REAL, z REAL)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec3fp(id INTEGER PRIMARY KEY AUTOINCREMENT, x REAL NOT NULL, y REAL NOT NULL, z REAL NOT NULL)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec4fp(id INTEGER PRIMARY KEY AUTOINCREMENT, x REAL, y REAL, z REAL, w REAL)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS vec4fp(id INTEGER PRIMARY KEY AUTOINCREMENT, x REAL NOT NULL, y REAL NOT NULL, z REAL NOT NULL, w REAL NOT NULL)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mat4fp(id INTEGER PRIMARY KEY AUTOINCREMENT, a REAL, b REAL, c REAL, d REAL, e REAL, f REAL, g REAL, h REAL, i REAL, j REAL, k REAL, l REAL, m REAL, n REAL, o REAL, p REAL)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mat4fp(id INTEGER PRIMARY KEY AUTOINCREMENT, a REAL NOT NULL, b REAL NOT NULL, c REAL NOT NULL, d REAL NOT NULL, e REAL NOT NULL, f REAL NOT NULL, g REAL NOT NULL, h REAL NOT NULL, i REAL NOT NULL, j REAL NOT NULL, k REAL NOT NULL, l REAL NOT NULL, m REAL NOT NULL, n REAL NOT NULL, o REAL NOT NULL, p REAL NOT NULL)"))
 	{
 		return false;
 	}
@@ -530,38 +530,38 @@ bool noob::database::init() noexcept(true)
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mesh3d_verts(id INTEGER PRIMARY KEY AUTOINCREMENT, pos INTEGER REFERENCES vec3fp, normal INTEGER REFERENCES vec3fp, uv INTEGER REFERENCES vec3fp, colour INTEGER REFERENCES vec4fp)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mesh3d_verts(id INTEGER PRIMARY KEY AUTOINCREMENT, pos INTEGER NOT NULL REFERENCES vec3fp, normal INTEGER NOT NULL REFERENCES vec3fp, uv INTEGER NOT NULL REFERENCES vec3fp, colour INTEGER NOT NULL REFERENCES vec4fp)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mesh3d_indices(id INTEGER PRIMARY KEY AUTOINCREMENT, vert INTEGER REFERENCES mesh3d_verts, belongs_to INTEGER REFERENCES mesh3d)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS mesh3d_indices(id INTEGER PRIMARY KEY AUTOINCREMENT, vert INTEGER NOT NULL REFERENCES mesh3d_verts, belongs_to INTEGER NOT NULL REFERENCES mesh3d)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_bodies(id INTEGER PRIMARY KEY AUTOINCREMENT, pos REFERENCES vec3fp, orient REFERENCES vec4fp, type UNSIGNED INT8, mass REAL, friction REAL, restitution REAL, linear_vel REAL, angular_vel REAL, linear_factor REAL, angular_factor REAL, ccd BOOLEAN, name TEXT)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_bodies(id INTEGER PRIMARY KEY AUTOINCREMENT, pos INTEGER NOT NULL REFERENCES vec3fp, orient NOT NULL REFERENCES vec4fp, type INTEGER NOT NULL, mass REAL NOT NULL, friction REAL NOT NULL, restitution REAL NOT NULL, linear_vel REAL NOT NULL, angular_vel REAL NOT NULL, linear_factor REAL NOT NULL, angular_factor REAL NOT NULL, ccd BOOLEAN NOT NULL, stage INTEGER NOT NULL, generation INTEGER NOT NULL, name TEXT)"))
 	{
 		return false;
 	}
 	// In order to be able to polymorphically store shapes, we use a a level of indirection and rely on client code to find the correct shape based on the same enum values as used in noob::shape::type.
 	// We may one day soon define multiple columns of foreign keys to the various item types and enforce a constraint that all but one must be NULL.
 	// However, we'd also need to treat each case differently anyhow in application code, so for simple serialization it might just be better to do things via client-code.
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_generic(id INTEGER PRIMARY KEY AUTOINCREMENT, type UNSIGNED INT8, foreign_id INTEGER, name TEXT)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_generic(id INTEGER PRIMARY KEY AUTOINCREMENT, type INTEGER NOT NULL, foreign_id INTEGER NOT NULL, name TEXT)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_sphere(id INTEGER PRIMARY KEY AUTOINCREMENT, radius REAL)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_sphere(id INTEGER PRIMARY KEY AUTOINCREMENT, radius REAL NOT NULL)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_box(id INTEGER PRIMARY KEY AUTOINCREMENT, half_width REAL, half_height REAL, half_depth REAL)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_box(id INTEGER PRIMARY KEY AUTOINCREMENT, half_width REAL NOT NULL, half_height REAL NOT NULL, half_depth REAL NOT NULL)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_cone(id INTEGER PRIMARY KEY AUTOINCREMENT, radius REAL, height REAL)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_cone(id INTEGER PRIMARY KEY AUTOINCREMENT, radius REAL NOT NULL, height REAL NOT NULL)"))
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_cylinder(id INTEGER PRIMARY KEY AUTOINCREMENT, radius REAL, height REAL)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_cylinder(id INTEGER PRIMARY KEY AUTOINCREMENT, radius REAL NOT NULL, height REAL NOT NULL)"))
 	{
 		return false;
 	}
@@ -569,7 +569,7 @@ bool noob::database::init() noexcept(true)
 	{
 		return false;
 	}
-	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_hull_points(pos INTEGER REFERENCES vec3fp, belongs_to INTEGER NOT NULL REFERENCES phyz_shapes_hull)"))
+	if (!exec_single_step("CREATE TABLE IF NOT EXISTS phyz_shapes_hull_points(pos INTEGER NOT NULL REFERENCES vec3fp, belongs_to INTEGER NOT NULL REFERENCES phyz_shapes_hull)"))
 	{
 		return false;
 	}
@@ -638,15 +638,15 @@ bool noob::database::init() noexcept(true)
 	{
 		return false;	
 	}
-	if(!prepare_statement("INSERT INTO phyz_bodies(pos, orient, type, mass, restitution, linear_vel, angular_vel, linear_factor, angular_factor, ccd, name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", noob::database::statement::phyz_body_add))
+	if(!prepare_statement("INSERT INTO phyz_bodies(pos, orient, type, mass, restitution, linear_vel, angular_vel, linear_factor, angular_factor, ccd, name, stage, generation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", noob::database::statement::phyz_body_add))
 	{
 		return false;	
 	}
-	if(!prepare_statement("SELECT pos, orient, type, mass, restitution, linear_vel, angular_vel, linear_factor, angular_factor, ccd FROM phyz_bodies WHERE phyz_bodies.name = ?", noob::database::statement::phyz_body_get_by_name))
+	if(!prepare_statement("SELECT pos, orient, type, mass, restitution, linear_vel, angular_vel, linear_factor, angular_factor, ccd FROM phyz_bodies WHERE phyz_bodies.name = ? AND phyz_bodies.stage = ? AND phyz_bodies.generation = ?", noob::database::statement::phyz_body_get_by_name))
 	{
 		return false;	
 	}
-	if(!prepare_statement("SELECT pos, orient, type, mass, restitution, linear_vel, angular_vel, linear_factor, angular_factor, ccd FROM phyz_bodies WHERE phyz_bodies.id = ?", noob::database::statement::phyz_body_get))
+	if(!prepare_statement("SELECT pos, orient, type, mass, restitution, linear_vel, angular_vel, linear_factor, angular_factor, ccd FROM phyz_bodies WHERE phyz_bodies.id = ? AND phyz_bodies.stage = ? AND phyz_bodies.generation = ?", noob::database::statement::phyz_body_get))
 	{
 		return false;	
 	}
