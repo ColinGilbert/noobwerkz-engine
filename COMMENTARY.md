@@ -1,8 +1,13 @@
-Jan. 9, 2016
+Jan 17, 2017
+```
+Been working in SQLite a lot. The database schema is more or less complete and all that needs implementing is going to be the bodies and shapes. Overall, we're 7/8 of the way before writing test-cases. Along the way, I decided to re-implement the mesh data structure in order to have it not crash. It will soon be a proper class with an interface wrapped around it.```
+```
+
+
+Jan. 9, 2017
 ```
 Merge to master. Been starting on the editor tools themselves.
 ```
-
 
 Dec. 30, 2016
 ```

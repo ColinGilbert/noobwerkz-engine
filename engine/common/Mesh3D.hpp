@@ -28,17 +28,10 @@ namespace noob
 				noob::vec4f colour; //Needed?
 			};
 
-			double get_volume();
+			float get_volume();
 
-			// std::string save() const;
-			// void save(const std::string& filename) const;
 			void calculate_dims() noexcept(true);
 
-#if defined(NOOB_USE_ASSIMP)
-			bool load_mem_assimp(const std::string&);
-			bool load_file_assimp(const std::string& filename);
-			bool load_assimp(const aiScene* scene);
-#endif
 
 			// TODO: Implement and test:
 			// void transform(const noob::mat4f& transform);
@@ -47,8 +40,15 @@ namespace noob
 			// void rotate(const noob::versorf&);
 			// void scale(const noob::vec3f&);
 
-			rde::vector<noob::mesh_3d::vert> vertices;
+// TODO: Clean those out into a separate file:
+#if defined(NOOB_USE_ASSIMP)
+			bool load_mem_assimp(const std::string&);
+			bool load_file_assimp(const std::string& filename);
+			bool load_assimp(const aiScene* scene);
+#endif
 
+			rde::vector<noob::mesh_3d::vert> vertices;
+			// TODO: Increase type-safety by replacing with triangles.
 			rde::vector<uint32_t> indices;
 			// std::vector<uint8_t> flags;
 
