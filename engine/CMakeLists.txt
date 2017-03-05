@@ -91,7 +91,9 @@ list (APPEND main_src ${common_src} ${user_src})
 if (NOOB_PLATFORM_LINUX)
 	set(CMAKE_C_FLAGS "-DHAVE_ALLOCA_H ${CMAKE_C_FLAGS}")
 	include_directories(lib/Khronos)
+	
 	add_subdirectory(lib/glfw)
+	include_directories(lib/libsoundio)
 	add_subdirectory(lib/libsoundio)
 	
 	include_directories(lib/glfw/include)
@@ -104,7 +106,7 @@ if (NOOB_PLATFORM_LINUX)
 
 	add_executable(NoobEdit ${main_src})
 
-	target_link_libraries(NoobEdit LINK_PUBLIC rt z dl pthread m soundio.a asound spnav X11 Xrandr Xcursor Xinerama glfw ${GLFW_LIBRARIES} GL ${OpenGL_gl_LIBRARY})
+	target_link_libraries(NoobEdit LINK_PUBLIC rt z dl pthread m libsoundio_static asound X11 Xrandr Xcursor Xinerama glfw ${GLFW_LIBRARIES} GL ${OpenGL_gl_LIBRARY})
 endif()
 
 if (NOOB_PLATFORM_ANDROID)
