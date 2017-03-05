@@ -7,7 +7,7 @@
 #include "stb_image.h"
 
 // Project headers
-#include "NoobUtils.hpp"
+#include "Logger.hpp"
 
 void log_texload(uint32_t Width, uint32_t Height, uint32_t Channels)
 {

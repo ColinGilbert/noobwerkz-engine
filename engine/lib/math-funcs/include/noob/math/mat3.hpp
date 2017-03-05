@@ -11,7 +11,7 @@ namespace noob
 	template <typename T>
 		struct mat3_type
 		{
-			mat3_type() noexcept(true) {}
+			mat3_type() noexcept(true) = default;
 
 			/* note: entered in COLUMNS */
 			mat3_type(T a, T b, T c, T d, T e, T f, T g, T h, T i) noexcept(true)

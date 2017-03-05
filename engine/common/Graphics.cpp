@@ -9,7 +9,7 @@
 
 // Project-local
 #include "ShadersGL.hpp"
-#include "NoobUtils.hpp"
+#include "Logger.hpp"
 #include "StringFuncs.hpp"
 
 //////////////////////////////////////////////////////////////
@@ -631,9 +631,6 @@ void noob::graphics::draw_text(const noob::billboard_buffer_handle Handle, noob:
 }
 
 
-
-
-
 void noob::graphics::draw_terrain(uint32_t Verts) const noexcept(true)
 {
 	glBindVertexArray(terrain.vao);
@@ -645,7 +642,6 @@ void noob::graphics::draw_terrain(uint32_t Verts) const noexcept(true)
 	texture_wrap_mode(std::array<noob::tex_wrap_mode, 2>({tex_wrap_mode::REPEAT, tex_wrap_mode::REPEAT}));
 	texture_mag_filter(noob::tex_mag_filter::NEAREST);
 	texture_min_filter(noob::tex_min_filter::NEAREST);
-
 
 	upload_terrain_uniforms();
 	glDrawArrays(GL_TRIANGLES, 0, Verts);
@@ -698,9 +694,9 @@ noob::instanced_model_handle noob::graphics::add_instanced_models(const noob::me
 	for(uint32_t i = 0; i < num_verts; ++i)
 	{
 		const uint32_t current_offset = i * 3;
-		interleaved[current_offset] = noob::vec4f(Mesh.vertices[i].v[0], Mesh.vertices[i].v[1], Mesh.vertices[i].v[2], 1.0);
-		interleaved[current_offset + 1] = noob::vec4f(Mesh.normals[i].v[0], Mesh.normals[i].v[1], Mesh.normals[i].v[2], 0.0);
-		interleaved[current_offset + 2] = Mesh.colours[i];
+		interleaved[current_offset] = noob::vec4f(Mesh.vertices[i].position, 1.0);
+		interleaved[current_offset + 1] = noob::vec4f(Mesh.vertices[i].normal, 0.0);
+		interleaved[current_offset + 2] = Mesh.vertices[i].colour;
 	}
 
 	// Upload interleaved buffer

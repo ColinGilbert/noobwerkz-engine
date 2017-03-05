@@ -27,7 +27,7 @@ namespace noob
 		noob::vec3f get_gravity() const noexcept(true);
 
 		noob::body_handle add_body(noob::body_type, const noob::shape_handle, float mass, const noob::vec3f& pos, const noob::versorf& orient, bool ccd) noexcept(true);
-		noob::body_handle add_body(noob::body_type, const noob::shape_handle, const noob::body::info&) noexcept(true);		
+		noob::body_handle add_body(noob::body_type, const noob::shape_handle, const noob::body_info&) noexcept(true);		
 		noob::ghost_handle add_ghost(const noob::shape_handle, const noob::vec3f&, const noob::versorf&) noexcept(true);
 		
 		noob::body& get_body(noob::body_handle) noexcept(true);
@@ -36,6 +36,7 @@ namespace noob
 		std::vector<noob::contact_point> get_intersecting(const noob::ghost_handle) const noexcept(true);
 
 		protected:
+		// TODO: Move shapes here
 		std::vector<noob::body> bodies;
 		std::vector<noob::ghost> ghosts;
 		std::vector<noob::joint> joints;

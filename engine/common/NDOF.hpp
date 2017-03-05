@@ -3,7 +3,7 @@
 
 #include <noob/math/math_funcs.hpp>
 
-#include "NoobUtils.hpp"
+#include "Logger.hpp"
 
 namespace noob
 {

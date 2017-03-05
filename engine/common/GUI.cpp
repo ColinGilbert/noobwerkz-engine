@@ -1,5 +1,8 @@
 #include "GUI.hpp"
 
+
+#include "LoadFileAsString.hpp"
+
 // #define GUI_FILL_LAYER_1 1
 // #define GUI_FILL_LAYER_2 2
 // #define GUI_FILL_LAYER_3 3

@@ -4,4 +4,5 @@ cd ../../build/nix &&
 rm -rf ./CMakeCache.txt  ./CMakeFiles  ./cmake_install.cmake  ./lib  ./Makefile  ./NoobEdit &&
 cd .. &&
 cd ../../sandbox/runtime &&
-rm noobengine
+rm noobengine &&
+rm assets/NoobStorage.sqlite

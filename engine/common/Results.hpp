@@ -7,21 +7,28 @@
 
 #pragma once
 
+#include <utility>
+
 namespace noob
 {
 	template <typename T>
 		struct results
 		{
-			results(bool Valid, T Value) noexcept(true) : valid(Valid), value(Value) {}
+			//results() noexcept(true) = default;
+			results(bool Valid, T Value) noexcept(true) : valid(Valid), value(Value) {};
 
-			static noob::results<T> make_invalid()
+			static noob::results<T> make_valid(T Value) noexcept(true)
+			{
+				return noob::results<T>(true, Value);
+			}
+
+			static noob::results<T> make_invalid() noexcept(true)
 			{
 				T t;
 				return noob::results<T>(false, t);
 			}
+
 			const bool valid;
 			T value;
 		};
-
-
 }

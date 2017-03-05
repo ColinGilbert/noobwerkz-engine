@@ -13,7 +13,7 @@
 
 // Project files
 #include "Globals.hpp"
-#include "NoobUtils.hpp"
+#include "Logger.hpp"
 
 bool noob::audio_sample::load_file(const std::string& filename) noexcept(true)
 {

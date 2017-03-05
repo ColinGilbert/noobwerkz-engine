@@ -96,7 +96,13 @@ bool noob::application::user_init()
 	{	
 		ah = stage.actor(bph, 7, random_vec3(-stage_dim, -stage_dim, -stage_dim), random_versor());
 	}
-	
+
+
+	// const noob::vec2d test_val = noob::vec2d(1.0, 0.7);
+	// uint32_t db_idx = db.vec2fp_add(test_val);
+	// noob::vec2d ret_val = db.vec2fp_get(db_idx).value;
+	// noob::logger::log(noob::importance::INFO, noob::concat("[Application] Inserted value: ", noob::to_string(test_val), ". Returned value: ", noob::to_string(ret_val), "."));
+
 	logger::log(noob::importance::INFO, "[Application] Successfully done (C++) user init.");
 	return true;
 }

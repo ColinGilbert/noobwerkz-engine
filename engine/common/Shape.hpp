@@ -1,6 +1,6 @@
 // This represents a conceptual geometric shape, using the physics engine under-the-hood.
-// Limitation: btCollisionShape* inner_shape pointer must be delete'd by the application.
-// Reason: The destructor used to do the above, but that unfortunately led to deletion of the btCollisionShape*  every time it went out of scope in a local block. This led to all sorts of fun.
+// Limitation: btCollisionShape* inner_shape pointer must be manually cleared.
+// Reason: The destructor used to do the above, but that unfortunately led to deletion of the btCollisionShape* every time it went out of scope in a local block. This led to all sorts of fun.
 #pragma once
 
 #include <vector>
@@ -11,7 +11,7 @@
 #include <rdestl/fixed_array.h>
 #include <btBulletDynamicsCommon.h>
 
-#include "NoobUtils.hpp"
+#include "Logger.hpp"
 #include "Mesh3D.hpp"
 #include "MeshUtils.hpp"
 
@@ -26,15 +26,17 @@ namespace noob
 		public:
 		enum class type { SPHERE, BOX, /* CYLINDER, CONE, */ HULL, TRIMESH };
 
-		shape() noexcept(true) : physics_valid(false), scales(noob::vec3f(1.0, 1.0, 1.0)) {}
+		shape() noexcept(true) = default;//: physics_valid(false) {} //, scales(noob::vec3f(1.0, 1.0, 1.0)) {}
 
 		// Initializers
 		void sphere(float radius) noexcept(true);
 		void box(float width, float height, float depth) noexcept(true);
-		void cylinder(float radius, float height) noexcept(true);
-		void capsule(float radius, float height) noexcept(true);
-		void cone(float radius, float height) noexcept(true);
+		void cylinder(float radius, float height) noexcept(true); // TODO: Fix
+		void capsule(float radius, float height) noexcept(true); // TODO: Fix
+		void cone(float radius, float height) noexcept(true); // TODO: Fix
 		void hull(const std::vector<noob::vec3f>&) noexcept(true);
+		 // Known limitation: The mesh indices MUST be fewer than uint16_t max or else UB...
+		 // TODO: Fix!
 		void trimesh(const noob::mesh_3d&) noexcept(true);
 
 		void set_margin(float) noexcept(true);
@@ -57,8 +59,8 @@ namespace noob
 		// void plane(const noob::vec3f& normal, float offset) noexcept(true);
 		
 		noob::shape::type shape_type;
-		bool physics_valid;
-		noob::vec3f scales;
+		bool physics_valid = false;
+		noob::vec3f scales = noob::vec3f(1.0, 1.0, 1.0);
 		btCollisionShape* inner;
 	};
 

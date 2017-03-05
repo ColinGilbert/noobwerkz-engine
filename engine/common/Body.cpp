@@ -56,7 +56,7 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type typ
 }
 
 
-void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type type_arg, const noob::shape& shape, const noob::body::info& _info) noexcept(true) 
+void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type type_arg, const noob::shape& shape, const noob::body_info& _info) noexcept(true) 
 {
 	btTransform start_transform;
 	// start_transform.setIdentity();
@@ -115,9 +115,9 @@ noob::mat4f noob::body::get_transform() const noexcept(true)
 }
 
 
-noob::body::info noob::body::get_info() const noexcept(true)
+noob::body_info noob::body::get_info() const noexcept(true)
 {
-	noob::body::info results;
+	noob::body_info results;
 
 	float inv_mass = inner->getInvMass();
 	if (inv_mass > 0.0)

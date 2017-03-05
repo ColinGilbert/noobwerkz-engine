@@ -1,4 +1,5 @@
-// TODO: Convert to Eigen and test
+// TODO: Add adaptor types and explore expression templates for overall maintainability.
+
 #pragma once
 
 #include <array>
@@ -9,6 +10,15 @@
 #include <glm/gtc/quaternion.hpp>
 #include <btBulletDynamicsCommon.h>
 #include <Eigen/Geometry>
+
+#if defined NOOB_USE_ASSIMP
+#include <assimp/quaternion.h>
+#include <assimp/anim.h>
+#include <assimp/cimport.h>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+#include <assimp/types.h>
+#endif
 
 #define NOOB_PI 3.1415926535
 #define NOOB_TAU 2.0 * NOOB_PI
@@ -50,11 +60,53 @@ namespace noob
 	typedef mat3_type<uint32_t> mat3ui;
 	typedef mat4_type<uint32_t> mat4ui;
 
+	/////////////////////////
+	// CONVERSION FUNCTIONS:
+	/////////////////////////
+	//TODO: Replace with expression templates...
+	template<typename From, typename To>
+	static noob::vec2_type<To> convert(const noob::vec2_type<From> Vec)
+	{
+		return noob::vec2_type<To>(static_cast<To>(Vec[0]), static_cast<To>(Vec[1]));
+	}
+
+	template<typename From, typename To>
+	static noob::vec3_type<To> convert(const noob::vec3_type<From> Vec)
+	{
+		return noob::vec3_type<To>(static_cast<To>(Vec[0]), static_cast<To>(Vec[1]), static_cast<To>(Vec[2]));
+	}
+
+	template<typename From, typename To>
+	static noob::vec4_type<To> convert(const noob::vec4_type<From> Vec)
+	{
+		return noob::vec4_type<To>(static_cast<To>(Vec[0]), static_cast<To>(Vec[1]), static_cast<To>(Vec[2]), static_cast<To>(Vec[3]));
+	}
+
+	template<typename From, typename To>
+	static noob::versor_type<To> convert(const noob::versor_type<From> Versor)
+	{
+		return noob::versor_type<To>(static_cast<To>(Versor[0]), static_cast<To>(Versor[1]), static_cast<To>(Versor[2]), static_cast<To>(Versor[3]));
+	}
 
 
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	template<typename From, typename To>
+	static noob::mat3_type<To> convert(const noob::mat3_type<From> Mat)
+	{
+		return noob::mat3_type<To>(static_cast<To>(Mat[0]), static_cast<To>(Mat[1]), static_cast<To>(Mat[2]), static_cast<To>(Mat[3]), static_cast<To>(Mat[4]), static_cast<To>(Mat[5]), static_cast<To>(Mat[6]), static_cast<To>(Mat[7]), static_cast<To>(Mat[8]));
+	}
+
+	// Comment: Yuck. Yuck. YUCK!
+	// Followup: This kind of code happens to be why people actually *want* to look up horrible, miserable things such as C++ template metaprogramming
+	template<typename From, typename To>
+	static noob::mat4_type<To> convert(const noob::mat4_type<From> Mat)
+	{
+		return noob::mat4_type<To>(static_cast<To>(Mat[0]), static_cast<To>(Mat[1]), static_cast<To>(Mat[2]), static_cast<To>(Mat[3]), static_cast<To>(Mat[4]), static_cast<To>(Mat[5]), static_cast<To>(Mat[6]), static_cast<To>(Mat[7]), static_cast<To>(Mat[8]), static_cast<To>(Mat[9]), static_cast<To>(Mat[10]), static_cast<To>(Mat[11]), static_cast<To>(Mat[12]), static_cast<To>(Mat[13]), static_cast<To>(Mat[14]), static_cast<To>(Mat[15]));
+	}
+
+
+	///////////////////
 	// UTILITY TYPES:
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////
 
 	enum class binary_op
 	{
@@ -84,12 +136,12 @@ namespace noob
 		return val;
 	}
 
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////
 	// ONE-FLOAT FUNCTIONS:
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////
 	// TODO: Test
 
-	template <typename T> int sign(T val) noexcept(true)
+	template <typename T> static int sign(T val) noexcept(true)
 	{
 		return (T(0) < val) - (val < T(0));
 	}
@@ -101,9 +153,9 @@ namespace noob
 		else return true;
 	}
 
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////
 	// TWO-FLOAT FUNCTIONS(S):
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////
 
 	static bool compare_floats(float a, float b) noexcept(true)
 	{
@@ -356,11 +408,11 @@ namespace noob
 
 			if (cos_half_theta < 0.0f)
 			{
-				for (int i = 0; i < 4; i++)
+				for (int i = 0; i < 4; ++i)
 				{
 					temp_q.q[i] *= -1.0f;
 				}
-				cos_half_theta = dot (temp_q, r);
+				cos_half_theta = dot(temp_q, r);
 			}
 			// if qa=qb or qa=-qb then theta = 0 and we can return qa
 			if (fabs(cos_half_theta) >= 1.0f)

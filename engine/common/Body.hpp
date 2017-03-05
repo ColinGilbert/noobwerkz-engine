@@ -6,14 +6,13 @@
 #include <noob/component/component.hpp>
 // Project-local
 #include "Shape.hpp"
-
+#include "BodyInfo.hpp"
 
 namespace noob
 {
 	class physics;
 	class joint;
 
-	enum class body_type {DYNAMIC = 0, KINEMATIC = 1, STATIC = 2};
 
 	class body 
 	{
@@ -23,17 +22,9 @@ namespace noob
 		public:	
 		body() noexcept(true) : physics_valid(false), ccd(false) {}
 
-		struct info
-		{
-			noob::body_type type;
-			float mass, friction, restitution;
-			noob::vec3f position, linear_velocity, angular_velocity, linear_factor, angular_factor;
-			noob::versorf orientation;
-			bool ccd;
-		};
 
 		void init(btDynamicsWorld* const, noob::body_type, const noob::shape&, float mass, const noob::vec3f& position, const noob::versorf& orientation, bool ccd) noexcept(true);
-		void init(btDynamicsWorld* const, noob::body_type, const noob::shape&, const noob::body::info&) noexcept(true);
+		void init(btDynamicsWorld* const, noob::body_type, const noob::shape&, const noob::body_info&) noexcept(true);
 
 		// void set_type(noob::body_type) noexcept(true);
 
@@ -47,7 +38,7 @@ namespace noob
 		noob::vec3f get_linear_velocity() const noexcept(true);
 		noob::vec3f get_angular_velocity() const noexcept(true);
 
-		noob::body::info get_info() const noexcept(true);
+		noob::body_info get_info() const noexcept(true);
 
 		std::string get_debug_string() const noexcept(true);
 

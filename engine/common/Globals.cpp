@@ -179,6 +179,11 @@ double noob::globals::get_random() noexcept(true)
 
 }
 
+noob::shape noob::globals::shape_from_handle(const noob::shape_handle Handle) const noexcept(true)
+{
+	return shapes.get(Handle);
+}
+
 
 // Hack used to set the shape's index-to-self
 noob::shape_handle noob::globals::add_shape(const noob::shape& s) noexcept(true)

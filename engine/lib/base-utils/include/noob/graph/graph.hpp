@@ -23,16 +23,12 @@ namespace noob
 	{
 		public:
 
-			digraph() noexcept(true) : ready(false) {}
-
 			// Backed by uint64_t bitmask: First 32 bits = from, second 32 bits = to.
 			class edge
 			{
 				friend class digraph;
 
 				public:
-
-				edge() noexcept(true) : val(0) {}
 
 				void set_from(const noob::node_handle from) noexcept(true)
 				{
@@ -63,7 +59,7 @@ namespace noob
 
 
 				protected:
-				uint64_t val;
+				uint64_t val = 0;
 			};
 
 			static std::string to_string(const noob::digraph::edge e)
@@ -330,6 +326,6 @@ namespace noob
 			rde::vector<noob::digraph::edge> edges;
 			rde::vector<noob::digraph::node> nodes;
 
-			bool ready;
+			bool ready = false;
 	};
 }

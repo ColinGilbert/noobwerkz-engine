@@ -132,6 +132,7 @@ namespace noob
 			noob::duration draw_duration;
 			noob::duration last_navmesh_build_duration;
 
+
 			void run_ai() noexcept(true);
 
 			// rde::slist<rde::vector<noob::vec3f>> paths;

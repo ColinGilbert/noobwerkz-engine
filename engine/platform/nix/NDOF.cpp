@@ -1,20 +1,22 @@
 #include "NDOF.hpp"
-#include "NoobUtils.hpp"
+
 #include <thread>
 #include <stdlib.h>
 //#include <signal.h>
 #include <csignal>
-#include <spnav.h>
+// #include <spnav.h>
+
+#include "Logger.hpp"
 
 void sig()
 {
-	spnav_close();
-	noob::logger::log(noob::importance::WARNING, "[NDOF] libsnpav received SIGINT.");
+//	spnav_close();
+//	noob::logger::log(noob::importance::WARNING, "[NDOF] libsnpav received SIGINT.");
 }
 
 void noob::ndof::run()
 {	
-	if(spnav_open()==-1)
+/*	if(spnav_open()==-1)
 	{
 		logger::log(noob::importance::ERROR, "[NDOF] Failed to connect to the space navigator daemon.");
 		return;
@@ -35,12 +37,12 @@ void noob::ndof::run()
 			rx += sev.motion.rx;
 			ry += sev.motion.ry;
 			rz += sev.motion.rz;
-			//logger::log(fmt::format("[NDOF] Got motion event: t({0}, {1}, {2}) r({3}, {4}, {5})", sev.motion.x, sev.motion.y, sev.motion.z, sev.motion.rx, sev.motion.ry, sev.motion.rz));
+			// logger::log(fmt::format("[NDOF] Got motion event: t({0}, {1}, {2}) r({3}, {4}, {5})", sev.motion.x, sev.motion.y, sev.motion.z, sev.motion.rx, sev.motion.ry, sev.motion.rz));
 			}
 			else
 			{
-			/* SPNAV_EVENT_BUTTON */
-			//logger::log(fmt::format("[NDOF] Got button {0} event {1}", sev.button.press ? "press" : "release", sev.button.bnum));
+			// SPNAV_EVENT_BUTTON 
+			// logger::log(fmt::format("[NDOF] Got button {0} event {1}", sev.button.press ? "press" : "release", sev.button.bnum));
 			}
 			}
 
@@ -48,6 +50,7 @@ void noob::ndof::run()
 
 			});
 	t.detach();
+*/
 }
 
 

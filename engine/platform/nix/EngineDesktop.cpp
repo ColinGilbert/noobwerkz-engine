@@ -1,13 +1,15 @@
+
+#define GLFW_INCLUDE_ES3
+#include <GLFW/glfw3.h>
+
+
 #include "Graphics.hpp"
 #include "Application.hpp"
-#include "NoobUtils.hpp"
+#include "Logger.hpp"
 #include "SoundInterface.hpp"
 #include "KeyInfo.hpp"
 #include "NDOF.hpp"
 // #include <glad/glad.h>
-
-#define GLFW_INCLUDE_ES3
-#include <GLFW/glfw3.h>
 
 uint32_t width = 1280;
 uint32_t height = 720;

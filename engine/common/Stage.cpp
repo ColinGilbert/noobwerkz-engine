@@ -395,9 +395,9 @@ void noob::stage::upload_terrain() noexcept(true)
 			// Add up triangles independently
 			for (uint32_t i = 0; i < tmp_msh.indices.size(); ++i)
 			{
-				tmp_verts.push_back(model_mat * noob::vec4f(tmp_msh.vertices[i], 1.0));
-				tmp_verts.push_back(noob::vec4f(tmp_msh.normals[i], 0.0));
-				tmp_verts.push_back(tmp_msh.colours[i]);
+				tmp_verts.push_back(model_mat * noob::vec4f(tmp_msh.vertices[i].position, 1.0));
+				tmp_verts.push_back(noob::vec4f(tmp_msh.vertices[i].normal, 0.0));
+				tmp_verts.push_back(tmp_msh.vertices[i].colour);
 			}
 		}
 
@@ -417,6 +417,7 @@ void noob::stage::upload_terrain() noexcept(true)
 		{
 			buf.push_back(tmp_verts[i]);
 		}
+
 		logger::log(noob::importance::INFO, noob::concat("[Stage] ", noob::to_string(num_terrain_verts), " terrain vertices uploaded."));
 
 		gfx.unmap_buffer();

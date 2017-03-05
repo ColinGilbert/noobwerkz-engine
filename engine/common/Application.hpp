@@ -4,7 +4,8 @@
 #include <noob/math/math_funcs.hpp>
 
 #include "Globals.hpp"
-#include "NoobUtils.hpp"
+#include "Logger.hpp"
+#include "LoadFileAsString.hpp"
 #include "GUI.hpp"
 #include "Camera.hpp"
 #include "NDOF.hpp"
@@ -13,6 +14,7 @@
 #include "Body.hpp"
 #include "RandomGenerator.hpp"
 #include "ProfilingInfo.hpp"
+#include "Database.hpp"
 
 #if defined(NOOB_USE_SHINY)
 #include "Shiny.h"
@@ -74,6 +76,7 @@ namespace noob
 			std::vector<noob::vec2f> finger_positions;
 
 			noob::stage stage;
+			noob::database db;
 
 			std::string script_name;
 

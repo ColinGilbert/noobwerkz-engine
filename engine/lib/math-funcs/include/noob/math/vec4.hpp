@@ -9,7 +9,8 @@ namespace noob
 	template <typename T>
 		struct vec4_type
 		{
-			vec4_type() noexcept(true) {}
+			vec4_type() noexcept(true)  = default;
+			// vec4_type(const vec4_type<T>& rhs) noexcept(true)  = default;
 
 			vec4_type(T x, T y, T z, T w) noexcept(true)
 			{
@@ -25,6 +26,14 @@ namespace noob
 				v[1] = arg.v[1];
 				v[2] = arg.v[2];
 				v[3] = w;
+			}
+
+			vec4_type(const std::array<T, 4>& arg) noexcept(true)
+			{
+				v[0] = arg[0];
+				v[1] = arg[1];
+				v[2] = arg[2];
+				v[3] = arg[3];
 			}
 
 			vec4_type operator+(const vec4_type& rhs) const noexcept(true)

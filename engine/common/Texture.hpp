@@ -11,7 +11,7 @@
 
 // Project-local headers
 #include "Attrib.hpp"
-#include "NoobUtils.hpp"
+#include "Logger.hpp"
 
 namespace noob
 {
