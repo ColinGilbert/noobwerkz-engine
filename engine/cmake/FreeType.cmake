@@ -130,27 +130,27 @@ list (APPEND main_src
 	lib/freetype/src/truetype/ttpic.c
 	lib/freetype/src/truetype/ttgxvar.c
 	lib/freetype/src/truetype/ttsubpix.c
-	lib/freetype/src/cff/cf2font.c
-	lib/freetype/src/cff/cffload.c
-	lib/freetype/src/cff/cffgload.c
-	lib/freetype/src/cff/cf2hints.c
-	lib/freetype/src/cff/cf2error.c
-	lib/freetype/src/cff/cf2read.c
-	lib/freetype/src/cff/cf2arrst.c
-	lib/freetype/src/cff/cf2ft.c
-	lib/freetype/src/cff/cffdrivr.c
-	lib/freetype/src/cff/cf2intrp.c
-	lib/freetype/src/cff/cf2blues.c
-	lib/freetype/src/cff/cffparse.c
-	lib/freetype/src/cff/cffcmap.c
-	lib/freetype/src/cff/cf2stack.c
-	lib/freetype/src/cff/cffobjs.c
-	lib/freetype/src/cff/cffpic.c
-	lib/freetype/src/cid/cidgload.c
-	lib/freetype/src/cid/cidload.c
-	lib/freetype/src/cid/cidobjs.c
-	lib/freetype/src/cid/cidriver.c
-	lib/freetype/src/cid/cidparse.c
+	#lib/freetype/src/cff/cf2font.c
+	#lib/freetype/src/cff/cffload.c
+	#lib/freetype/src/cff/cffgload.c
+	#lib/freetype/src/cff/cf2hints.c
+	#lib/freetype/src/cff/cf2error.c
+	#lib/freetype/src/cff/cf2read.c
+	#lib/freetype/src/cff/cf2arrst.c
+	#lib/freetype/src/cff/cf2ft.c
+	#lib/freetype/src/cff/cffdrivr.c
+	#lib/freetype/src/cff/cf2intrp.c
+	#lib/freetype/src/cff/cf2blues.c
+	#lib/freetype/src/cff/cffparse.c
+	#lib/freetype/src/cff/cffcmap.c
+	#lib/freetype/src/cff/cf2stack.c
+	#lib/freetype/src/cff/cffobjs.c
+	#lib/freetype/src/cff/cffpic.c
+	#lib/freetype/src/cid/cidgload.c
+	#lib/freetype/src/cid/cidload.c
+	#lib/freetype/src/cid/cidobjs.c
+	#lib/freetype/src/cid/cidriver.c
+	#lib/freetype/src/cid/cidparse.c
 	)
 #########################
 #
@@ -162,7 +162,7 @@ list (APPEND main_src
 # lib/freetype/builds/amiga/src/base/ftdebug.c
 # lib/freetype/builds/amiga/src/base/ftsystem.c
 # lib/freetype/builds/mac/ftmac.c
-# lib/freetype/builds/windows/ftdebug.c
+## lib/freetype/builds/windows/ftdebug.c
 # lib/freetype/builds/vms/ftsystem.c
 # lib/freetype/builds/unix/ftsystem.c
 # lib/freetype/src/psaux/psaux.c

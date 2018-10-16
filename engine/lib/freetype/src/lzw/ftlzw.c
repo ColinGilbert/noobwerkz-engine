@@ -8,7 +8,7 @@
 /*  be used to parse compressed PCF fonts, as found with many X11 server   */
 /*  distributions.                                                         */
 /*                                                                         */
-/*  Copyright 2004-2016 by                                                 */
+/*  Copyright 2004-2018 by                                                 */
 /*  Albert Chin-A-Young.                                                   */
 /*                                                                         */
 /*  based on code in `src/gzip/ftgzip.c'                                   */
@@ -396,6 +396,8 @@
     return error;
   }
 
+
+#include "ftzopen.c"
 
 
 #else  /* !FT_CONFIG_OPTION_USE_LZW */

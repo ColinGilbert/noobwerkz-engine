@@ -25,7 +25,7 @@
 #ifndef EIGEN_ARPACKGENERALIZEDSELFADJOINTEIGENSOLVER_H
 #define EIGEN_ARPACKGENERALIZEDSELFADJOINTEIGENSOLVER_H
 
-#include <Eigen/Dense>
+#include "../../../../Eigen/Dense"
 
 namespace Eigen { 
 
@@ -300,7 +300,7 @@ public:
 
   /** \brief Reports whether previous computation was successful.
    *
-   * \returns \c Success if computation was succesful, \c NoConvergence otherwise.
+   * \returns \c Success if computation was successful, \c NoConvergence otherwise.
    */
   ComputationInfo info() const
   {
@@ -628,15 +628,15 @@ ArpackGeneralizedSelfAdjointEigenSolver<MatrixType, MatrixSolver, BisSPD>&
       m_info = Success;
     }
 
-    delete select;
+    delete[] select;
   }
 
-  delete v;
-  delete iparam;
-  delete ipntr;
-  delete workd;
-  delete workl;
-  delete resid;
+  delete[] v;
+  delete[] iparam;
+  delete[] ipntr;
+  delete[] workd;
+  delete[] workl;
+  delete[] resid;
 
   m_isInitialized = true;
 

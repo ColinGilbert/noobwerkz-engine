@@ -13,7 +13,6 @@
 
 template<typename MatrixType> void basicStuff(const MatrixType& m)
 {
-  typedef typename MatrixType::Index Index;
   typedef typename MatrixType::Scalar Scalar;
   typedef Matrix<Scalar, MatrixType::RowsAtCompileTime, 1> VectorType;
   typedef Matrix<Scalar, MatrixType::RowsAtCompileTime, MatrixType::RowsAtCompileTime> SquareMatrixType;
@@ -48,6 +47,22 @@ template<typename MatrixType> void basicStuff(const MatrixType& m)
   VERIFY_IS_APPROX(x, v1(r));
   v1[r] = x;
   VERIFY_IS_APPROX(x, v1[r]);
+
+  // test fetching with various index types.
+  Index r1 = internal::random<Index>(0, numext::mini(Index(127),rows-1));
+  x = v1(static_cast<char>(r1));
+  x = v1(static_cast<signed char>(r1));
+  x = v1(static_cast<unsigned char>(r1));
+  x = v1(static_cast<signed short>(r1));
+  x = v1(static_cast<unsigned short>(r1));
+  x = v1(static_cast<signed int>(r1));
+  x = v1(static_cast<unsigned int>(r1));
+  x = v1(static_cast<signed long>(r1));
+  x = v1(static_cast<unsigned long>(r1));
+#if EIGEN_HAS_CXX11
+  x = v1(static_cast<long long int>(r1));
+  x = v1(static_cast<unsigned long long int>(r1));
+#endif
 
   VERIFY_IS_APPROX(               v1,    v1);
   VERIFY_IS_NOT_APPROX(           v1,    2*v1);
@@ -108,29 +123,42 @@ template<typename MatrixType> void basicStuff(const MatrixType& m)
   
   // check automatic transposition
   sm2.setZero();
-  for(typename MatrixType::Index i=0;i<rows;++i)
+  for(Index i=0;i<rows;++i)
     sm2.col(i) = sm1.row(i);
   VERIFY_IS_APPROX(sm2,sm1.transpose());
   
   sm2.setZero();
-  for(typename MatrixType::Index i=0;i<rows;++i)
+  for(Index i=0;i<rows;++i)
     sm2.col(i).noalias() = sm1.row(i);
   VERIFY_IS_APPROX(sm2,sm1.transpose());
   
   sm2.setZero();
-  for(typename MatrixType::Index i=0;i<rows;++i)
+  for(Index i=0;i<rows;++i)
     sm2.col(i).noalias() += sm1.row(i);
   VERIFY_IS_APPROX(sm2,sm1.transpose());
   
   sm2.setZero();
-  for(typename MatrixType::Index i=0;i<rows;++i)
+  for(Index i=0;i<rows;++i)
     sm2.col(i).noalias() -= sm1.row(i);
   VERIFY_IS_APPROX(sm2,-sm1.transpose());
+  
+  // check ternary usage
+  {
+    bool b = internal::random<int>(0,10)>5;
+    m3 = b ? m1 : m2;
+    if(b) VERIFY_IS_APPROX(m3,m1);
+    else  VERIFY_IS_APPROX(m3,m2);
+    m3 = b ? -m1 : m2;
+    if(b) VERIFY_IS_APPROX(m3,-m1);
+    else  VERIFY_IS_APPROX(m3,m2);
+    m3 = b ? m1 : -m2;
+    if(b) VERIFY_IS_APPROX(m3,m1);
+    else  VERIFY_IS_APPROX(m3,-m2);
+  }
 }
 
 template<typename MatrixType> void basicStuffComplex(const MatrixType& m)
 {
-  typedef typename MatrixType::Index Index;
   typedef typename MatrixType::Scalar Scalar;
   typedef typename NumTraits<Scalar>::Real RealScalar;
   typedef Matrix<RealScalar, MatrixType::RowsAtCompileTime, MatrixType::ColsAtCompileTime> RealMatrixType;
@@ -166,7 +194,7 @@ template<typename MatrixType> void basicStuffComplex(const MatrixType& m)
   VERIFY(!static_cast<const MatrixType&>(cm).imag().isZero());
 }
 
-#ifdef EIGEN_TEST_PART_2
+template<int>
 void casting()
 {
   Matrix4f m = Matrix4f::Random(), m2;
@@ -175,23 +203,71 @@ void casting()
   m2 = m.cast<float>(); // check the specialization when NewType == Type
   VERIFY(m.isApprox(m2));
 }
-#endif
 
 template <typename Scalar>
 void fixedSizeMatrixConstruction()
 {
-  const Scalar raw[3] = {1,2,3};
-  Matrix<Scalar,3,1> m(raw);
-  Array<Scalar,3,1> a(raw);
-  VERIFY(m(0) == 1);
-  VERIFY(m(1) == 2);
-  VERIFY(m(2) == 3);
-  VERIFY(a(0) == 1);
-  VERIFY(a(1) == 2);
-  VERIFY(a(2) == 3);  
+  Scalar raw[4];
+  for(int k=0; k<4; ++k)
+    raw[k] = internal::random<Scalar>();
+  
+  {
+    Matrix<Scalar,4,1> m(raw);
+    Array<Scalar,4,1> a(raw);
+    for(int k=0; k<4; ++k) VERIFY(m(k) == raw[k]);
+    for(int k=0; k<4; ++k) VERIFY(a(k) == raw[k]);    
+    VERIFY_IS_EQUAL(m,(Matrix<Scalar,4,1>(raw[0],raw[1],raw[2],raw[3])));
+    VERIFY((a==(Array<Scalar,4,1>(raw[0],raw[1],raw[2],raw[3]))).all());
+  }
+  {
+    Matrix<Scalar,3,1> m(raw);
+    Array<Scalar,3,1> a(raw);
+    for(int k=0; k<3; ++k) VERIFY(m(k) == raw[k]);
+    for(int k=0; k<3; ++k) VERIFY(a(k) == raw[k]);
+    VERIFY_IS_EQUAL(m,(Matrix<Scalar,3,1>(raw[0],raw[1],raw[2])));
+    VERIFY((a==Array<Scalar,3,1>(raw[0],raw[1],raw[2])).all());
+  }
+  {
+    Matrix<Scalar,2,1> m(raw), m2( (DenseIndex(raw[0])), (DenseIndex(raw[1])) );
+    Array<Scalar,2,1> a(raw),  a2( (DenseIndex(raw[0])), (DenseIndex(raw[1])) );
+    for(int k=0; k<2; ++k) VERIFY(m(k) == raw[k]);
+    for(int k=0; k<2; ++k) VERIFY(a(k) == raw[k]);
+    VERIFY_IS_EQUAL(m,(Matrix<Scalar,2,1>(raw[0],raw[1])));
+    VERIFY((a==Array<Scalar,2,1>(raw[0],raw[1])).all());
+    for(int k=0; k<2; ++k) VERIFY(m2(k) == DenseIndex(raw[k]));
+    for(int k=0; k<2; ++k) VERIFY(a2(k) == DenseIndex(raw[k]));
+  }
+  {
+    Matrix<Scalar,1,2> m(raw),
+                       m2( (DenseIndex(raw[0])), (DenseIndex(raw[1])) ),
+                       m3( (int(raw[0])), (int(raw[1])) ),
+                       m4( (float(raw[0])), (float(raw[1])) );
+    Array<Scalar,1,2> a(raw),  a2( (DenseIndex(raw[0])), (DenseIndex(raw[1])) );
+    for(int k=0; k<2; ++k) VERIFY(m(k) == raw[k]);
+    for(int k=0; k<2; ++k) VERIFY(a(k) == raw[k]);
+    VERIFY_IS_EQUAL(m,(Matrix<Scalar,1,2>(raw[0],raw[1])));
+    VERIFY((a==Array<Scalar,1,2>(raw[0],raw[1])).all());
+    for(int k=0; k<2; ++k) VERIFY(m2(k) == DenseIndex(raw[k]));
+    for(int k=0; k<2; ++k) VERIFY(a2(k) == DenseIndex(raw[k]));
+    for(int k=0; k<2; ++k) VERIFY(m3(k) == int(raw[k]));
+    for(int k=0; k<2; ++k) VERIFY((m4(k)) == Scalar(float(raw[k])));
+  }
+  {
+    Matrix<Scalar,1,1> m(raw), m1(raw[0]), m2( (DenseIndex(raw[0])) ), m3( (int(raw[0])) );
+    Array<Scalar,1,1> a(raw), a1(raw[0]), a2( (DenseIndex(raw[0])) );
+    VERIFY(m(0) == raw[0]);
+    VERIFY(a(0) == raw[0]);
+    VERIFY(m1(0) == raw[0]);
+    VERIFY(a1(0) == raw[0]);
+    VERIFY(m2(0) == DenseIndex(raw[0]));
+    VERIFY(a2(0) == DenseIndex(raw[0]));
+    VERIFY(m3(0) == int(raw[0]));
+    VERIFY_IS_EQUAL(m,(Matrix<Scalar,1,1>(raw[0])));
+    VERIFY((a==Array<Scalar,1,1>(raw[0])).all());
+  }
 }
 
-void test_basicstuff()
+EIGEN_DECLARE_TEST(basicstuff)
 {
   for(int i = 0; i < g_repeat; i++) {
     CALL_SUBTEST_1( basicStuff(Matrix<float, 1, 1>()) );
@@ -207,8 +283,11 @@ void test_basicstuff()
   }
 
   CALL_SUBTEST_1(fixedSizeMatrixConstruction<unsigned char>());
+  CALL_SUBTEST_1(fixedSizeMatrixConstruction<float>());
   CALL_SUBTEST_1(fixedSizeMatrixConstruction<double>());
-  CALL_SUBTEST_1(fixedSizeMatrixConstruction<double>());
+  CALL_SUBTEST_1(fixedSizeMatrixConstruction<int>());
+  CALL_SUBTEST_1(fixedSizeMatrixConstruction<long int>());
+  CALL_SUBTEST_1(fixedSizeMatrixConstruction<std::ptrdiff_t>());
 
-  CALL_SUBTEST_2(casting());
+  CALL_SUBTEST_2(casting<0>());
 }

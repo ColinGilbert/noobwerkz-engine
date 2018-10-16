@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 project(NoobWerkz)
 
-#set(CMAKE_BUILD_TYPE "DEBUG")
-set(CMAKE_BUILD_TYPE "RELEASE")
+set(CMAKE_BUILD_TYPE "DEBUG")
+#set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
 # Current Bullet bug: -ftrapv causes crash on Android.
@@ -26,8 +26,8 @@ if(NOT NOOB_STRICT_FLAGS)
 endif()
 
 list (APPEND main_src)
-include(cmake/BStr.cmake)
-include(cmake/FreeType.cmake)
+# include(cmake/BStr.cmake)
+#include(cmake/FreeType.cmake)
 include(cmake/BaseUtils.cmake)
 include(cmake/Voropp.cmake)
 include(cmake/Ozz.cmake)
@@ -39,11 +39,12 @@ include(cmake/Recast.cmake)
 include(cmake/R8.cmake)
 include(cmake/Shiny.cmake)
 include(cmake/TextureAtlas.cmake)
-include(cmake/Harfbuzz.cmake)
+#include(cmake/Harfbuzz.cmake)
 include(cmake/Sqlite.cmake)
 
-#add_subdirectory(lib/ozz-animation)
-
+# add_subdirectory(lib/ozz-animation)
+add_subdirectory(lib/freetype)
+include_directories(lib/freetype/include)
 include_directories(lib/sema)
 include_directories(lib/glm)
 include_directories(lib/eigen)
@@ -90,8 +91,8 @@ list (APPEND main_src ${common_src} ${user_src})
 
 if (NOOB_PLATFORM_LINUX)
 	set(CMAKE_C_FLAGS "-DHAVE_ALLOCA_H ${CMAKE_C_FLAGS}")
-	include_directories(lib/Khronos)
-	
+	include_directories(lib/Khronos/OpenGL-Registry/api)
+	include_directories(lib/Khronos/EGL-Registry/api)	
 	add_subdirectory(lib/glfw)
 	include_directories(lib/libsoundio)
 	add_subdirectory(lib/libsoundio)
@@ -106,7 +107,7 @@ if (NOOB_PLATFORM_LINUX)
 
 	add_executable(NoobEdit ${main_src})
 
-	target_link_libraries(NoobEdit LINK_PUBLIC rt z dl pthread m libsoundio_static asound X11 Xrandr Xcursor Xinerama glfw ${GLFW_LIBRARIES} GL ${OpenGL_gl_LIBRARY})
+	target_link_libraries(NoobEdit LINK_PUBLIC rt z dl pthread m libsoundio_static asound X11 Xrandr Xcursor Xinerama glfw freetype ${GLFW_LIBRARIES} GL ${OpenGL_gl_LIBRARY})
 endif()
 
 if (NOOB_PLATFORM_ANDROID)

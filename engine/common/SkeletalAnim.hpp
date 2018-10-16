@@ -1,4 +1,5 @@
 // This class represents an animated character. Current only does one animation at a time, in order to learn the system.
+// TODO: Complete!
 #pragma once
 
 
@@ -31,7 +32,7 @@ namespace noob
 	class skeletal_anim
 	{
 		public:
-			skeletal_anim(): valid(false), current_time(0.0), allocator(ozz::memory::default_allocator()) {}
+			skeletal_anim(): valid(false), current_time(0.0), total_runtime(1.0), allocator(ozz::memory::default_allocator()) {}
 			
 			~skeletal_anim();
 			// Loads a runtime skeleton. Possibly convert to raw skeleton
@@ -41,9 +42,9 @@ namespace noob
 			// If name = "" all animations get processed. If all the tolerances == 0.0 it doesn't run an optimization pre-pass prior to creating runtime animations. 
 			void optimize(float translation_tolerance = 0.0, float rotation_tolerance = 0.0, float scale_tolerance = 0.0, const std::string& name = "");
 
-			void update(float dt = 0.0);
+			void update(float dt);
 			void reset_time(float t = 0.0);
-			
+			void set_total_runtime(float r);
 			bool anim_exists(const std::string& name) const;
 			bool switch_to_anim(const std::string& name);
 			std::string get_current_anim() const;
@@ -72,7 +73,7 @@ namespace noob
 
 				public:
 				void update(float dt);
-				float weight;
+				float weight, runtime;
 
 				ozz::Range<ozz::math::SoaTransform> get_local_mats() const;
 				void get_model_mats(ozz::Range<ozz::math::Float4x4>& models);
@@ -94,7 +95,7 @@ namespace noob
 			bool valid;
 			std::string current_anim_name;
 			ozz::animation::Animation* current_anim;
-			float current_time;
+			float current_time, total_runtime;
 
 			std::unordered_map<std::string, ozz::animation::Animation*> runtime_anims;
 			std::unordered_map<std::string, ozz::animation::offline::RawAnimation> raw_anims;

@@ -173,6 +173,11 @@ void noob::skeletal_anim::reset_time(float t)
 	current_time = t;
 }
 
+void noob::skeletal_anim::set_total_runtime(float f)
+{
+	total_runtime = f;
+}
+
 
 std::string noob::skeletal_anim::get_current_anim() const
 {
@@ -185,7 +190,7 @@ std::vector<noob::mat4f> noob::skeletal_anim::get_matrices() const
 	std::vector<noob::mat4f> mats;
 	mats.reserve(skeleton.num_joints());
 	
-	size_t num_mats = model_matrices.Size();
+	size_t num_mats = model_matrices.size();
 	for (size_t i = 0; i < num_mats; ++i)
 	{
 		noob::mat4f m;
@@ -255,7 +260,7 @@ void noob::skeletal_anim::sampler::update(float dt)
 	sampling_job.animation = animation;
 	sampling_job.cache = cache;
 	controller.update(*animation, dt);
-	sampling_job.time = controller.time;
+	sampling_job.ratio = controller.time / runtime;
 	sampling_job.output = locals;
 	if (!sampling_job.Run())
 	{
