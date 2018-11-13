@@ -73,6 +73,12 @@ void noob::gui::draw() noexcept(true)
 
 	auto mapped_buf = gfx.map_billboards(billbuf, 0, drawlist.size());
 
+	if (!mapped_buf.valid())
+	{
+			noob::logger::log(noob::importance::ERROR, noob::concat(std::string("[GUI] Could not get valid buffer for "), noob::to_string(drawlist.size()), std::string(" vertices. Max verts = "), noob::to_string(max_text_verts)));
+			return;
+	}
+
 	for (noob::billboard_vertex vv : drawlist)
 	{
 		noob::vec4f pos_and_tex;

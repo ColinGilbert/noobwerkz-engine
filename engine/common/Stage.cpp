@@ -71,7 +71,7 @@ void noob::stage::update(double dt) noexcept(true)
 	// nav_changed = false;
 	//}
 
-
+	// TODO: Change?
 	world.step(1.0/60.0);
 
 	// update_particle_systems();
@@ -96,6 +96,7 @@ void noob::stage::draw() noexcept(true)
 	gfx.set_view_mat(view_matrix);
 	gfx.set_projection_mat(projection_matrix);
 	
+	// TODO: Change
 	gfx.set_light_direction(noob::normalize(noob::vec3f(0.5, -1.0, 0.33)));
 
 	for (uint32_t drawables_index = 0; drawables_index < drawables.size(); ++drawables_index)
@@ -117,12 +118,12 @@ void noob::stage::draw() noexcept(true)
 
 	if (terrain_started)
 	{
-		
 		if (terrain_changed)
 		{
 			upload_terrain();
 			terrain_changed = false;
 		}
+
 		gfx.draw_terrain(num_terrain_verts);
 	}
 }
@@ -297,7 +298,7 @@ void noob::stage::upload_colours(drawable_info_handle arg) const noexcept(true)
 
 	if (buf.valid() == false)
 	{
-		logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced colour buffer for model ", noob::to_string(arg.index())));	
+		// logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced colour buffer for model ", noob::to_string(arg.index()), " - Number of instances = ", noob::to_string(count)));	
 		return;
 	}
 
@@ -337,7 +338,7 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 	noob::gpu_write_buffer buf = gfx.map_matrices_buffer(model_h, 0, count);
 	if (buf.valid() == false)
 	{
-		logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced matrices buffer for model ", noob::to_string(arg.index())));	
+		logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced matrices buffer for model ", noob::to_string(arg.index()), " - count: ", noob::to_string(count)));	
 		return;
 	}
 

@@ -530,6 +530,9 @@ void noob::graphics::init(const noob::vec2ui Dims, const noob::texture_loader_2d
 
 	// Do an initial frame and log
 	frame(Dims);
+	
+	check_error_gl();
+
 	noob::logger::log(noob::importance::INFO, "[Graphics] Done init.");
 }
 

@@ -25,8 +25,6 @@ if(NOT NOOB_STRICT_FLAGS)
 	set(CMAKE_CXX_FLAGS "${NOOB_STRICT_FLAGS} ${NOOB_STRICT_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
 endif()
 
-find_library(OPENGLES3_LIBRARY GLESv2 "OpenGL ES v3.0 library")
-find_library(EGL_LIBRARY EGL "EGL 1.4 library")
 
 list (APPEND main_src)
 # include(cmake/BStr.cmake)
@@ -95,10 +93,18 @@ list (APPEND main_src ${common_src} ${user_src})
 if (NOOB_PLATFORM_LINUX)
 	set(CMAKE_C_FLAGS "-DHAVE_ALLOCA_H ${CMAKE_C_FLAGS}")
 	set(CMAKE_CXX_FLAGS "-DNOOB_PLATFORM_LINUX ${CMAKE_CXX_FLAGS}")
+
 	include_directories(lib/Khronos/OpenGL-Registry/api)
 	include_directories(lib/Khronos/EGL-Registry/api)	
-	#add_subdirectory(lib/glfw)
 
+	find_package(X11)
+	find_library(M_LIB m)
+
+	find_library(OPENGLES3_LIBRARY GLESv2)
+	find_library(EGL_LIBRARY EGL)
+	
+	#include_directories(${EGL_INCLUDE_DIR})
+	
 	include_directories(lib/libsoundio)
 	add_subdirectory(lib/libsoundio)
 
@@ -113,7 +119,7 @@ if (NOOB_PLATFORM_LINUX)
 
 	add_executable(NoobEdit ${main_src})
 
-	target_link_libraries(NoobEdit LINK_PUBLIC rt z dl pthread m libsoundio_static asound X11 Xrandr Xcursor Xinerama glfw freetype ${OPENGLES3_LIBRARY} ${EGL_LIBRARY})
+	target_link_libraries(NoobEdit LINK_PUBLIC  rt z dl pthread libsoundio_static asound freetype ${OPENGLES3_LIBRARY} ${EGL_LIBRARY} ${X11_LIBRARIES} ${M_LIBRARY})
 endif()
 
 if (NOOB_PLATFORM_ANDROID)

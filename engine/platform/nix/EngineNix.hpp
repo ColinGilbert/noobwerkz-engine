@@ -1,8 +1,14 @@
 #include <memory>
 
 #include <GLES3/gl3.h>
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
+#include "EGL/egl.h"
+#include "EGL/eglext.h"
+
+
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+#include <X11/Xutil.h>
+#include <X11/extensions/Xrandr.h>
 
 
 #include "Application.hpp"
@@ -21,15 +27,21 @@ namespace noob
 	{
 		public:
 			bool init();
+			void step();
 		protected:
-			void callback();
+
+			EGLint get_context_renderable_type(EGLDisplay egl_display);
+			std::string get_egl_error();
+
 			std::unique_ptr<noob::application> app;
 			uint32_t width, height;
+
 			EGLNativeDisplayType native_display;
 			EGLNativeWindowType native_window;
-			EGLDisplay display;
-			EGLContext context;
-			EGLSurface surface;
+			EGLDisplay egl_display;
+			EGLContext egl_context;
+			EGLSurface egl_surface;
+			Display* x_display = nullptr;
 	};
 
 }

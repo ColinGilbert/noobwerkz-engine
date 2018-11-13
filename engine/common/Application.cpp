@@ -26,7 +26,12 @@ void noob::application::init(const noob::vec2ui Dims, const noob::vec2d Dpi, con
 
 	tex_data.free();
 
-	if (!app_gui.init(*prefix, window_dims, dpi))
+	bool gui_okay = app_gui.init(*prefix, window_dims, dpi);
+	if (gui_okay)
+	{
+		noob::logger::log(noob::importance::INFO, "[Application] GUI Init success!");
+	}
+	else
 	{
 		noob::logger::log(noob::importance::ERROR, "[Application] GUI failed to init!");
 	}
@@ -77,7 +82,6 @@ void noob::application::draw()
 	gfx.frame(window_dims);
 
 	stage.draw();
-
 	app_gui.draw();
 
 	const noob::time end_time = noob::clock::now();
