@@ -9,6 +9,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <btBulletDynamicsCommon.h>
+
+#ifdef NOOB_PLATFORM_LINUX
+#undef Success
+#endif
 #include <Eigen/Geometry>
 
 #if defined NOOB_USE_ASSIMP

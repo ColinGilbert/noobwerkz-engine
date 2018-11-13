@@ -25,19 +25,22 @@ if(NOT NOOB_STRICT_FLAGS)
 	set(CMAKE_CXX_FLAGS "${NOOB_STRICT_FLAGS} ${NOOB_STRICT_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
 endif()
 
+find_library(OPENGLES3_LIBRARY GLESv2 "OpenGL ES v3.0 library")
+find_library(EGL_LIBRARY EGL "EGL 1.4 library")
+
 list (APPEND main_src)
 # include(cmake/BStr.cmake)
 #include(cmake/FreeType.cmake)
 include(cmake/BaseUtils.cmake)
 include(cmake/Voropp.cmake)
 include(cmake/Ozz.cmake)
-include(cmake/Assimp.cmake)
+# include(cmake/Assimp.cmake)
 include(cmake/Bullet.cmake)
 include(cmake/Ogg.cmake)
 include(cmake/Vorbis.cmake)
-include(cmake/Recast.cmake)
+#include(cmake/Recast.cmake)
 include(cmake/R8.cmake)
-include(cmake/Shiny.cmake)
+#include(cmake/Shiny.cmake)
 include(cmake/TextureAtlas.cmake)
 #include(cmake/Harfbuzz.cmake)
 include(cmake/Sqlite.cmake)
@@ -91,23 +94,26 @@ list (APPEND main_src ${common_src} ${user_src})
 
 if (NOOB_PLATFORM_LINUX)
 	set(CMAKE_C_FLAGS "-DHAVE_ALLOCA_H ${CMAKE_C_FLAGS}")
+	set(CMAKE_CXX_FLAGS "-DNOOB_PLATFORM_LINUX ${CMAKE_CXX_FLAGS}")
 	include_directories(lib/Khronos/OpenGL-Registry/api)
 	include_directories(lib/Khronos/EGL-Registry/api)	
-	add_subdirectory(lib/glfw)
+	#add_subdirectory(lib/glfw)
+
 	include_directories(lib/libsoundio)
 	add_subdirectory(lib/libsoundio)
-	
-	include_directories(lib/glfw/include)
+
+	#include_directories(lib/glfw/include)
 	include_directories(platform/nix)
 
 	list(APPEND main_src
-		platform/nix/EngineDesktop.cpp
+		platform/nix/EntryPoint.cpp
+		platform/nix/EngineNix.cpp
 		platform/nix/NDOF.cpp
 		platform/desktop/SoundInterface.cpp)
 
 	add_executable(NoobEdit ${main_src})
 
-	target_link_libraries(NoobEdit LINK_PUBLIC rt z dl pthread m libsoundio_static asound X11 Xrandr Xcursor Xinerama glfw freetype ${GLFW_LIBRARIES} GL ${OpenGL_gl_LIBRARY})
+	target_link_libraries(NoobEdit LINK_PUBLIC rt z dl pthread m libsoundio_static asound X11 Xrandr Xcursor Xinerama glfw freetype ${OPENGLES3_LIBRARY} ${EGL_LIBRARY})
 endif()
 
 if (NOOB_PLATFORM_ANDROID)

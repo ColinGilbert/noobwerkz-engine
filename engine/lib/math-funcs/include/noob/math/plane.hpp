@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef NOOB_PLATFORM_LINUX
+#undef Success
+#endif
+
 #include <Eigen/Geometry>
 #include "vec3.hpp"
 

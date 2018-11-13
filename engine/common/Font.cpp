@@ -15,7 +15,7 @@ noob::font::~font() noexcept(true)
 
 	if (ft_face_valid)
 	{
-		FT_Done_Face(ft_face);
+	//	FT_Done_Face(ft_face);
 	}
 }
 
