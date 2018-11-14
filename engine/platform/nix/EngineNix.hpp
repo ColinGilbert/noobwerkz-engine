@@ -1,8 +1,8 @@
 #include <memory>
 
 #include <GLES3/gl3.h>
-#include "EGL/egl.h"
-#include "EGL/eglext.h"
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
 
 
 #include <X11/Xlib.h>
@@ -10,15 +10,7 @@
 #include <X11/Xutil.h>
 #include <X11/extensions/Xrandr.h>
 
-
 #include "Application.hpp"
-
-
-#define ES_WINDOW_RGB 0
-#define ES_WINDOW_ALPHA 1
-#define ES_WINDOW_DEPTH 2
-#define ES_WINDOW_STENCIL 4
-#define ES_WINDOW_MULTISAMPLE 8
 
 namespace noob
 {
@@ -28,20 +20,27 @@ namespace noob
 		public:
 			bool init();
 			void step();
+	
 		protected:
+		std::string get_egl_error();
 
-			EGLint get_context_renderable_type(EGLDisplay egl_display);
-			std::string get_egl_error();
+		/// Display handle
+		EGLNativeDisplayType eglNativeDisplay;
 
-			std::unique_ptr<noob::application> app;
-			uint32_t width, height;
+		/// Window handle
+		EGLNativeWindowType  eglNativeWindow;
 
-			EGLNativeDisplayType native_display;
-			EGLNativeWindowType native_window;
-			EGLDisplay egl_display;
-			EGLContext egl_context;
-			EGLSurface egl_surface;
-			Display* x_display = nullptr;
+		/// EGL display
+		EGLDisplay  eglDisplay;
+
+		/// EGL context
+		EGLContext  eglContext;
+
+		/// EGL surface
+		EGLSurface  eglSurface;
+		
+		std::unique_ptr<noob::application> app;
+	
 	};
 
 }

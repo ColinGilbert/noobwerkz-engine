@@ -1,240 +1,273 @@
-#include "Application.hpp"
-#include "Graphics.hpp"
 #include "EngineNix.hpp"
+#include "Application.hpp"
+
+#include <iostream>
+#include <cstring>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <string.h>
+
+// X11 related local variables
+static Display *x_display = NULL;
+static Atom s_wmDeleteMessage;
+
 
 
 bool noob::engine_nix::init()
 {
-	// First, we setup X11
-	width = 320;
-	height = 200;
-	
-	// First, we wrangle X11 (moderately easy)
-	x_display = XOpenDisplay(nullptr);
-
-	if (x_display == nullptr)
-	{
-		// Log oops
-		return false;
-	}
-	
-	auto screen = DefaultScreen(x_display);
-	auto root = DefaultRootWindow(x_display);
-
+	Window root;
 	XSetWindowAttributes swa;
-	swa.event_mask = ExposureMask | PointerMotionMask | KeyPressMask;
-	auto win = XCreateWindow(x_display, root, 0, 0, width, height, 0, CopyFromParent, InputOutput, CopyFromParent, CWEventMask, &swa);
-
-	Atom wm_delete_message = XInternAtom(x_display, "WM_DELETE_WINDOW", false);
-	XSetWMProtocols(x_display, win, &wm_delete_message, 1);
-
 	XSetWindowAttributes  xattr;
-	xattr.override_redirect = false;
-	XChangeWindowAttributes(x_display, win, CWOverrideRedirect, &xattr);
-
+	Atom wm_state;
 	XWMHints hints;
+	XEvent xev;
+	EGLConfig ecfg;
+	EGLint num_config;
+	Window win;
+	EGLint width = 800;
+	EGLint height = 640;
+
+	std::string title = "noobwerkz!";
+	/*
+	 * X11 native display initialization
+	 */
+
+	x_display = XOpenDisplay(NULL);
+	if ( x_display == NULL )
+	{
+		return EGL_FALSE;
+	}
+
+	root = DefaultRootWindow(x_display);
+
+	swa.event_mask  =  ExposureMask | PointerMotionMask | KeyPressMask;
+	win = XCreateWindow(
+			x_display, root,
+			0, 0, width, height, 0,
+			CopyFromParent, InputOutput,
+			CopyFromParent, CWEventMask,
+			&swa );
+	s_wmDeleteMessage = XInternAtom(x_display, "WM_DELETE_WINDOW", False);
+	XSetWMProtocols(x_display, win, &s_wmDeleteMessage, 1);
+
+	xattr.override_redirect = False;
+	XChangeWindowAttributes ( x_display, win, CWOverrideRedirect, &xattr );
+
 	hints.input = True;
 	hints.flags = InputHint;
 	XSetWMHints(x_display, win, &hints);
 
-	// Make the window visible on the screen
-	XMapWindow(x_display, win);
-	std::string title = "Noobwerkz!";
-	XStoreName(x_display, win, title.c_str());
+	// make the window visible on the screen
+	XMapWindow (x_display, win);
+	XStoreName (x_display, win, title.c_str());
 
-	auto wm_state = XInternAtom(x_display, "_NET_WM_STATE", false);
+	// get identifiers for the provided atom name strings
+	wm_state = XInternAtom (x_display, "_NET_WM_STATE", False);
 
-	// TODO: Change
-	XEvent xev;
-	memset(&xev, 0, sizeof(xev));
-	xev.type = ClientMessage;
-	xev.xclient.window = win;
+	memset ( &xev, 0, sizeof(xev) );
+	xev.type                 = ClientMessage;
+	xev.xclient.window       = win;
 	xev.xclient.message_type = wm_state;
-	xev.xclient.format = 32;
-	xev.xclient.data.l[0] = 1;
-	xev.xclient.data.l[1] = false;
-	XSendEvent(x_display, DefaultRootWindow(x_display), false, SubstructureNotifyMask, &xev);
+	xev.xclient.format       = 32;
+	xev.xclient.data.l[0]    = 1;
+	xev.xclient.data.l[1]    = False;
+	XSendEvent (
+			x_display,
+			DefaultRootWindow ( x_display ),
+			False,
+			SubstructureNotifyMask,
+			&xev );
+
+	eglNativeWindow = (EGLNativeWindowType) win;
+	eglNativeDisplay = (EGLNativeDisplayType) x_display;
 
 
-	// Then we wrangle EGL
+	EGLConfig config;
+	EGLint majorVersion;
+	EGLint minorVersion;
+	EGLint contextAttribs[] = { EGL_CONTEXT_CLIENT_VERSION, 3, EGL_NONE };
 
-	// EGLint egl_context_attribs[] = { EGL_CONTEXT_CLIENT_VERSION, 3, EGL_NONE };
+	//width = width;
+	//height = height;
 
-	native_window = (EGLNativeWindowType) win;
-	native_display = (EGLNativeDisplayType) x_display;
+	eglDisplay = eglGetDisplay( eglNativeDisplay );
 
-	egl_display = eglGetDisplay(native_display);
-
-	// noob::logger::log(noob::importance::INFO, get_egl_error());
-	
-	if (egl_display == EGL_NO_DISPLAY)
+	// printf(get_egl_error().c_str());
+	if ( eglDisplay == EGL_NO_DISPLAY )
 	{
-		noob::logger::log(noob::importance::ERROR, "[EngineNix] Couldn't get EGL display");
-		return false;
+		// printf("ERROR: Couldn't get EGL display.\n");
+		return GL_FALSE;
 	}
 
-	EGLint major_version, minor_version;
-	if (!eglInitialize(egl_display, &major_version, &minor_version))
-	{	
-		noob::logger::log(noob::importance::ERROR, "[EngineNix] Couldn't init EGL display");
-		return false;
-	}
-		
-	// noob::logger::log(noob::importance::INFO, get_egl_error());
-	
-	noob::logger::log(noob::importance::INFO, noob::concat("[EngineNix] EGL initialized; version = ", noob::to_string(major_version), ".", noob::to_string(minor_version)));
-
-	EGLint num_configs = 0;
-	
-	EGLint attrib_list[] =
-       	{
-	//	EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-		EGL_RED_SIZE, 8,
-		EGL_GREEN_SIZE, 8,
-		EGL_BLUE_SIZE, 8,
-		EGL_ALPHA_SIZE, 8,
-		EGL_DEPTH_SIZE, 8,
-		EGL_STENCIL_SIZE, 8,
-		EGL_SAMPLE_BUFFERS, EGL_DONT_CARE,
-		EGL_RENDERABLE_TYPE, get_context_renderable_type(egl_display),
-		EGL_NONE
-	};
-	
-	EGLConfig egl_config;
-	
-	if (!eglChooseConfig(egl_display, attrib_list, &egl_config, 1, &num_configs))
+	// printf(get_egl_error().c_str());
+	// Initialize EGL
+	if ( !eglInitialize ( eglDisplay, &majorVersion, &minorVersion ) )
 	{
-		noob::logger::log(noob::importance::ERROR, "Could not choose EGL config!");
-		return false;
+		// printf("ERROR: Couldn't init EGL.\n");
+		return GL_FALSE;
 	}
 
-	noob::logger::log(noob::importance::INFO, get_egl_error());
+	// printf(get_egl_error().c_str());
 	
-	if (num_configs < 1)
+	//{
+		EGLint numConfigs = 0;
+		EGLint attribList[] =
+		{
+			EGL_RED_SIZE,       5,
+			EGL_GREEN_SIZE,     6,
+			EGL_BLUE_SIZE,      5,
+			EGL_ALPHA_SIZE,     8,
+			EGL_DEPTH_SIZE,     8,
+			EGL_STENCIL_SIZE,   8,
+			EGL_SAMPLE_BUFFERS, 0,
+			// if EGL_KHR_create_context extension is supported, then we will use
+			// EGL_OPENGL_ES3_BIT_KHR instead of EGL_OPENGL_ES2_BIT in the attribute list
+			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+			EGL_NONE
+		};
+
+		// printf(get_egl_error().c_str());
+		// Choose config
+		if ( !eglChooseConfig ( eglDisplay, attribList, &config, 1, &numConfigs ) )
+		{
+			// printf("ERROR: Couldn't choose EGL config.\n");
+			return GL_FALSE;
+		}
+
+		// printf(get_egl_error().c_str());
+		if ( numConfigs < 1 )
+		{
+			// printf("ERROR: No configs found!\n");
+			return GL_FALSE;
+		}
+	//}
+
+	// printf(get_egl_error().c_str());
+
+	// Create a surface
+	eglSurface = eglCreateWindowSurface ( eglDisplay, config, 
+			eglNativeWindow, NULL );
+
+	// printf(get_egl_error().c_str());
+	if ( eglSurface == EGL_NO_SURFACE )
 	{
-		noob::logger::log(noob::importance::ERROR, "EGL config chooser returned 0 configs");
-		return false;
+		// printf("ERROR: No EGL surface.\n");
+		return GL_FALSE;
 	}
-	
-	egl_surface = eglCreateWindowSurface(egl_display, egl_config, native_window, NULL);
-	
-	noob::logger::log(noob::importance::INFO, get_egl_error());
 
-	if (egl_surface == EGL_NO_SURFACE)
+	// printf(get_egl_error().c_str());
+	// Create a GL context
+	eglContext = eglCreateContext ( eglDisplay, config, 
+			EGL_NO_CONTEXT, contextAttribs );
+
+	// printf(get_egl_error().c_str());
+	if (eglContext == EGL_NO_CONTEXT)
 	{
-		noob::logger::log(noob::importance::ERROR, "Could not create EGL surface!");
-		return false;
+		// printf("ERROR: No EGL Context!\n");
+		return GL_FALSE;
 	}
 
-	noob::logger::log(noob::importance::INFO, get_egl_error());
-	
-	if (!eglMakeCurrent(egl_display, egl_surface, egl_surface, egl_context))
+	// printf(get_egl_error().c_str());
+	// Make the context current
+	if (!eglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext))
 	{
-		noob::logger::log(noob::importance::ERROR, noob::concat("Could not make EGL context current - ", get_egl_error(), ", number of configs = ", noob::to_string(num_configs)));
-		return false;
+		return GL_FALSE;
+		// printf("ERROR: Couldn't make egl context current!\n");
 	}
 
-	// Now we deal with our own app init code...
-	
-	noob::sound_interface audio_interface;
-	audio_interface.init();
-	
-	const double dpi_x = static_cast<double>(DisplayWidth(x_display, screen)) / (static_cast<double>(DisplayWidthMM(x_display, screen)) / 25.4);
-	const double dpi_y = static_cast<double>(DisplayHeight(x_display, screen)) / (static_cast<double>(DisplayHeightMM(x_display, screen))/ 25.4);
+
+	// Now, we init our app!
+	noob::sound_interface audio;
+	audio.init();
+
+	auto screen = DefaultScreen(x_display);
+
+	const double dpi_x = static_cast<double>(DisplayWidth(x_display, screen) / static_cast<double>(DisplayWidthMM(x_display, screen)) / 25.4);
+	const double dpi_y = static_cast<double>(DisplayHeight(x_display, screen) / static_cast<double>(DisplayHeightMM(x_display, screen)) / 25.4);
 
 	app = std::make_unique<noob::application>();
-
-	app->init(noob::vec2ui(width, height), noob::vec2d(dpi_x, dpi_y), "./assets/");
+	app->init(noob::vec2ui(height, width), noob::vec2d(dpi_x, dpi_y), "./assets/");
 
 	noob::ndof ndof;
 	ndof.run();
 
+	// printf("At the end of esCreateWindow. All Good!\n");
+	// printf(get_egl_error().c_str());
+	return GL_TRUE;
 
-	return true;
+
 
 }
-
-
-EGLint noob::engine_nix::get_context_renderable_type(EGLDisplay egl_display)
-{
-	const char *extensions = eglQueryString(egl_display, EGL_EXTENSIONS);
-	if (extensions != NULL && std::string(extensions).compare("EGL_KHR_create_context"))
-	{
-		return EGL_OPENGL_ES3_BIT_KHR;
-	}
-	return EGL_OPENGL_ES2_BIT;
-}
-
 
 void noob::engine_nix::step()
 {
-
-	// app->step();
-	eglSwapBuffers(egl_display, egl_surface);
+	app->step();
+	eglSwapBuffers(eglDisplay, eglSurface);
 }
 
 std::string noob::engine_nix::get_egl_error()
 {
 	auto val = eglGetError();
-
 	switch (val)
 	{
 		case EGL_SUCCESS:
-		{
-			return std::string("EGL_SUCCESS");
-		}
+			{
+				return std::string("EGL_SUCCESS");
+			}
 		case EGL_NOT_INITIALIZED:
-		{
-			return std::string("EGL_NOT_INITIALIZED");
-		}
+			{
+				return std::string("EGL_NOT_INITIALIZED");
+			}
 		case EGL_BAD_ACCESS:
-		{
-			return std::string("EGL_BAD_ACCSS");
-		}
+			{
+				return std::string("EGL_BAD_ACCSS");
+			}
 		case EGL_BAD_ALLOC:
-		{
-			return std::string("EGL_BAD_ALLOC");
-		}
+			{
+				return std::string("EGL_BAD_ALLOC");
+			}
 		case EGL_BAD_ATTRIBUTE:
-		{
-			return std::string("EGL_BAD_ATTRIBUTE");
-		}
+			{
+				return std::string("EGL_BAD_ATTRIBUTE");
+			}
 		case EGL_BAD_CONTEXT:
-		{
-			return std::string("EGL_BAD_CONTEXT");
-		}
+			{
+				return std::string("EGL_BAD_CONTEXT");
+			}
 		case EGL_BAD_CONFIG:
-		{
-			return std::string("EGL_BAD_CONFIG");		
-		}
+			{
+				return std::string("EGL_BAD_CONFIG");		
+			}
 		case EGL_BAD_CURRENT_SURFACE:
-		{
-			return std::string("EGL_BAD_CURRENT_SURFACE");
-		}
+			{
+				return std::string("EGL_BAD_CURRENT_SURFACE");
+			}
 		case EGL_BAD_MATCH:
-		{
-			return std::string("EGL_BAD_MATCH");
-		}
+			{
+				return std::string("EGL_BAD_MATCH");
+			}
 		case EGL_BAD_PARAMETER:
-		{
-			return std::string("EGL_BAD_PARAMETER");
-		}
+			{
+				return std::string("EGL_BAD_PARAMETER");
+			}
 		case EGL_BAD_NATIVE_PIXMAP:
-		{
-			return std::string("EGL_BAD_NATIVE_PIXMAP");
-		}
+			{
+				return std::string("EGL_BAD_NATIVE_PIXMAP");
+			}
 		case EGL_BAD_NATIVE_WINDOW:
-		{
-			return std::string("EGL_BAD_NATIVE_WINDOW");
-		}
+			{
+				return std::string("EGL_BAD_NATIVE_WINDOW");
+			}
 		case EGL_CONTEXT_LOST:
-		{
-			return std::string("EGL_CONTEXT_LOST");
-		}
+			{
+				return std::string("EGL_CONTEXT_LOST");
+			}
 		default:
-		{
-			return noob::concat("UNDEFINED EGL ERROR: ", noob::to_string(val));
-		}
+			{
+				return std::string("UNDEFINED EGL ERROR");
+			}
 	}
 }
 
