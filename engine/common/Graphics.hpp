@@ -39,7 +39,7 @@ namespace noob
 
 			// Call before killing.
 			void destroy() noexcept(true);
-
+			
 			void set_light_direction(const noob::vec3f&) noexcept(true);
 
 			void use_program(noob::graphics::program_handle) const noexcept(true);

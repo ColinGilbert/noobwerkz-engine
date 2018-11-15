@@ -25,7 +25,6 @@ bool noob::engine_nix::init()
 	XEvent xev;
 	EGLConfig ecfg;
 	EGLint num_config;
-	Window win;
 	EGLint width = 800;
 	EGLint height = 640;
 
@@ -42,7 +41,7 @@ bool noob::engine_nix::init()
 
 	root = DefaultRootWindow(x_display);
 
-	swa.event_mask  =  ExposureMask | PointerMotionMask | KeyPressMask;
+	swa.event_mask  =  ExposureMask | PointerMotionMask | KeyPressMask | VisibilityNotify | ConfigureNotify;
 	win = XCreateWindow(
 			x_display, root,
 			0, 0, width, height, 0,
@@ -60,13 +59,13 @@ bool noob::engine_nix::init()
 	XSetWMHints(x_display, win, &hints);
 
 	// make the window visible on the screen
-	XMapWindow (x_display, win);
-	XStoreName (x_display, win, title.c_str());
+	XMapWindow(x_display, win);
+	XStoreName(x_display, win, title.c_str());
 
 	// get identifiers for the provided atom name strings
 	wm_state = XInternAtom (x_display, "_NET_WM_STATE", False);
 
-	memset ( &xev, 0, sizeof(xev) );
+	memset( &xev, 0, sizeof(xev) );
 	xev.type                 = ClientMessage;
 	xev.xclient.window       = win;
 	xev.xclient.message_type = wm_state;
@@ -89,9 +88,6 @@ bool noob::engine_nix::init()
 	EGLint minorVersion;
 	EGLint contextAttribs[] = { EGL_CONTEXT_CLIENT_VERSION, 3, EGL_NONE };
 
-	//width = width;
-	//height = height;
-
 	eglDisplay = eglGetDisplay( eglNativeDisplay );
 
 	// printf(get_egl_error().c_str());
@@ -103,52 +99,51 @@ bool noob::engine_nix::init()
 
 	// printf(get_egl_error().c_str());
 	// Initialize EGL
-	if ( !eglInitialize ( eglDisplay, &majorVersion, &minorVersion ) )
+	if ( !eglInitialize(eglDisplay, &majorVersion, &minorVersion))
 	{
 		// printf("ERROR: Couldn't init EGL.\n");
 		return GL_FALSE;
 	}
 
 	// printf(get_egl_error().c_str());
-	
+
 	//{
-		EGLint numConfigs = 0;
-		EGLint attribList[] =
-		{
-			EGL_RED_SIZE,       5,
-			EGL_GREEN_SIZE,     6,
-			EGL_BLUE_SIZE,      5,
-			EGL_ALPHA_SIZE,     8,
-			EGL_DEPTH_SIZE,     8,
-			EGL_STENCIL_SIZE,   8,
-			EGL_SAMPLE_BUFFERS, 0,
-			// if EGL_KHR_create_context extension is supported, then we will use
-			// EGL_OPENGL_ES3_BIT_KHR instead of EGL_OPENGL_ES2_BIT in the attribute list
-			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
-			EGL_NONE
-		};
+	EGLint numConfigs = 0;
+	EGLint attribList[] =
+	{
+		EGL_RED_SIZE,       5,
+		EGL_GREEN_SIZE,     6,
+		EGL_BLUE_SIZE,      5,
+		EGL_ALPHA_SIZE,     8,
+		EGL_DEPTH_SIZE,     8,
+		EGL_STENCIL_SIZE,   8,
+		EGL_SAMPLE_BUFFERS, 0,
+		// if EGL_KHR_create_context extension is supported, then we will use
+		// EGL_OPENGL_ES3_BIT_KHR instead of EGL_OPENGL_ES2_BIT in the attribute list
+		EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+		EGL_NONE
+	};
 
-		// printf(get_egl_error().c_str());
-		// Choose config
-		if ( !eglChooseConfig ( eglDisplay, attribList, &config, 1, &numConfigs ) )
-		{
-			// printf("ERROR: Couldn't choose EGL config.\n");
-			return GL_FALSE;
-		}
+	// printf(get_egl_error().c_str());
+	// Choose config
+	if ( !eglChooseConfig ( eglDisplay, attribList, &config, 1, &numConfigs ) )
+	{
+		// printf("ERROR: Couldn't choose EGL config.\n");
+		return GL_FALSE;
+	}
 
-		// printf(get_egl_error().c_str());
-		if ( numConfigs < 1 )
-		{
-			// printf("ERROR: No configs found!\n");
-			return GL_FALSE;
-		}
+	// printf(get_egl_error().c_str());
+	if ( numConfigs < 1 )
+	{
+		// printf("ERROR: No configs found!\n");
+		return GL_FALSE;
+	}
 	//}
 
 	// printf(get_egl_error().c_str());
 
 	// Create a surface
-	eglSurface = eglCreateWindowSurface ( eglDisplay, config, 
-			eglNativeWindow, NULL );
+	eglSurface = eglCreateWindowSurface ( eglDisplay, config, eglNativeWindow, NULL );
 
 	// printf(get_egl_error().c_str());
 	if ( eglSurface == EGL_NO_SURFACE )
@@ -159,8 +154,7 @@ bool noob::engine_nix::init()
 
 	// printf(get_egl_error().c_str());
 	// Create a GL context
-	eglContext = eglCreateContext ( eglDisplay, config, 
-			EGL_NO_CONTEXT, contextAttribs );
+	eglContext = eglCreateContext ( eglDisplay, config, EGL_NO_CONTEXT, contextAttribs );
 
 	// printf(get_egl_error().c_str());
 	if (eglContext == EGL_NO_CONTEXT)
@@ -196,15 +190,45 @@ bool noob::engine_nix::init()
 	// printf("At the end of esCreateWindow. All Good!\n");
 	// printf(get_egl_error().c_str());
 	return GL_TRUE;
-
-
-
 }
 
-void noob::engine_nix::step()
+void noob::engine_nix::loop()
 {
-	app->step();
-	eglSwapBuffers(eglDisplay, eglSurface);
+	bool running = true;
+	while (running)
+	{
+
+		while (XPending(x_display))
+		{
+			XEvent ev;
+			XNextEvent(x_display, &ev);
+
+			switch (ev.type)
+			{
+				case(Expose):
+					{
+						XWindowAttributes attribs;
+						// Add checking code
+						XGetWindowAttributes(x_display, win, &attribs);
+						app->window_resize(noob::vec2ui(attribs.width, attribs.height));
+						break;
+					}
+				case(VisibilityNotify):
+					{
+						break;
+					}
+				default:
+					{
+						break;
+					}
+			};
+
+
+		}
+
+		app->step();
+		eglSwapBuffers(eglDisplay, eglSurface);
+	}
 }
 
 std::string noob::engine_nix::get_egl_error()
@@ -270,4 +294,3 @@ std::string noob::engine_nix::get_egl_error()
 			}
 	}
 }
-

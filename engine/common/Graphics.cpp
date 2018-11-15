@@ -561,7 +561,6 @@ void noob::graphics::destroy() noexcept(true)
 
 }
 
-
 void noob::graphics::use_program(noob::graphics::program_handle Arg) const noexcept(true)
 {
 	glUseProgram(Arg.index());

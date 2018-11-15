@@ -29,14 +29,12 @@ namespace noob
 			// Init must always be called.
 			void init(const noob::vec2ui Dims, const noob::vec2d Dpi, const std::string& FilePath);
 
-			// Those three allow an app to be controlled better by an external environment (ie: Android/iOS)
 			void pause();
 			void resume();
 			void gc();
 
 			// Callbacks
 			void touch(int pointerID, float x, float y, int action);
-
 			void window_resize(const noob::vec2ui);
 			void key_input(char c);
 			uint32_t get_height() const { return window_dims[0]; }

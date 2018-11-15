@@ -11,10 +11,7 @@ int main()
 		return -1;
 	}
 
-	bool running = true;
-	
-	while(running)
-	{
-		engine->step();
-	}
+	engine->loop();
+
+	return 0;
 }

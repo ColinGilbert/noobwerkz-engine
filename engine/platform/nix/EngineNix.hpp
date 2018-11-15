@@ -19,28 +19,25 @@ namespace noob
 	{
 		public:
 			bool init();
-			void step();
-	
+			void loop();	
+
 		protected:
-		std::string get_egl_error();
 
-		/// Display handle
-		EGLNativeDisplayType eglNativeDisplay;
-
-		/// Window handle
-		EGLNativeWindowType  eglNativeWindow;
-
-		/// EGL display
-		EGLDisplay  eglDisplay;
-
-		/// EGL context
-		EGLContext  eglContext;
-
-		/// EGL surface
-		EGLSurface  eglSurface;
-		
-		std::unique_ptr<noob::application> app;
+			std::string get_egl_error();
+			
+			// Our data members
+			std::unique_ptr<noob::application> app;
+			
+			// EGL-related
+			EGLNativeDisplayType eglNativeDisplay;
+			EGLNativeWindowType  eglNativeWindow;
+			EGLDisplay  eglDisplay;
+			EGLContext  eglContext;
+			EGLSurface  eglSurface;
 	
+			// X11-related
+			Window win;
+
 	};
 
 }
