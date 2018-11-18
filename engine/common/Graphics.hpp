@@ -87,9 +87,9 @@ namespace noob
 
 			// Texture data uploaders
 			// void texture_data(noob::texture_1d_handle, const std::string&) const noexcept(true);	// TODO
-			void texture_data(noob::texture_2d_handle, uint32_t Mip, const noob::vec2ui Offsets, const noob::vec2ui Dims, const uint8_t* DataPtr) const noexcept(true);
-			void texture_data(noob::texture_array_2d_handle, uint32_t Mip, uint32_t Index, const noob::vec2ui Offsets, const noob::vec2ui Dims, const uint8_t* DataPtr) const noexcept(true);
-			void texture_data(noob::texture_3d_handle, uint32_t Mip, const noob::vec3ui Offsets, const noob::vec3ui Dims, const uint8_t* DataPtr) const noexcept(true);
+			// void texture_data(noob::texture_2d_handle, uint32_t Mip, const noob::vec2ui Offsets, const noob::vec2ui Dims, const uint8_t* DataPtr) const noexcept(true);
+			// void texture_data(noob::texture_array_2d_handle, uint32_t Mip, uint32_t Index, const noob::vec2ui Offsets, const noob::vec2ui Dims, const uint8_t* DataPtr) const noexcept(true);
+			// void texture_data(noob::texture_3d_handle, uint32_t Mip, const noob::vec3ui Offsets, const noob::vec3ui Dims, const uint8_t* DataPtr) const noexcept(true);
 
 			// Texture parameter setters, made typesafe, at the cost of more overloads. Ah well, tradeoffs...
 			// Params for 2d textures

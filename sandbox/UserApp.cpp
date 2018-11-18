@@ -24,6 +24,13 @@ bool noob::application::user_init()
 	message_collision = std::make_unique<std::string>("");
 	noob::logger::log(noob::importance::INFO, "[Application] Begin user init!");
 
+
+
+	noob::globals& g = noob::get_globals();
+
+	const noob::shape_handle scenery_shp = g.box_shape(50.0, 20.0, 50.0);
+	const noob::scenery_handle sc_h = stage.scenery(scenery_shp, noob::vec3f(0.0, 0.0, 0.0), noob::versorf(0.0, 0.0, 0.0, 1.0));//versor_from_axis_rad(0.0, 0.0, 0.0, 1.0)); // 0 rad rotation, facing up
+
 	noob::reflectance r;
 	r.set_specular(noob::vec3f(0.1, 0.1, 0.1));
 	r.set_diffuse(noob::vec3f(0.1, 0.1, 0.1));
@@ -32,16 +39,12 @@ bool noob::application::user_init()
 	r.set_albedo(0.3);
 	r.set_fresnel(0.2);
 
-	noob::globals& g = noob::get_globals();
-
-	const noob::shape_handle scenery_shp = g.sphere_shape(10.0);//box_shape(50.0, 20.0, 50.0);
-	const noob::scenery_handle sc_h = stage.scenery(scenery_shp, noob::vec3f(0.0, 0.0, 0.0), noob::versorf(0.0, 0.0, 0.0, 1.0));//versor_from_axis_rad(0.0, 0.0, 0.0, 1.0)); // 0 rad rotation, facing up
 	const noob::reflectance_handle rh = g.reflectances.add(r);
 
 	const float actor_dims = 2.0;
 	// const noob::shape_handle shp = g.sphere_shape(actor_dims);
 	
-	const noob::shape_handle actor_shp = g.sphere_shape(5.0);//box_shape(actor_dims, actor_dims, actor_dims);
+	const noob::shape_handle actor_shp = g.sphere_shape(actor_dims);//box_shape(actor_dims, actor_dims, actor_dims);
 
 	const uint32_t actor_count = 50;
 

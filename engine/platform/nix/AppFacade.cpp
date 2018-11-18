@@ -1,7 +1,8 @@
-#include "AppPrivateImplementation.hpp"
+#include "AppFacade.hpp"
 #include "Application.hpp"
 
 #include <memory>
+#include "Logger.hpp"
 
 static std::unique_ptr<noob::application> app;
 
@@ -22,3 +23,11 @@ void noob::app_facade::step()
 {
 	app->step();
 }
+
+
+void noob::app_facade::accept_ndof_data(const noob::ndof::data& Arg)
+{
+	// noob::logger::log(noob::importance::INFO, "[AppFacade] Sending NDOF to app");
+	app->accept_ndof_data(Arg);
+}
+

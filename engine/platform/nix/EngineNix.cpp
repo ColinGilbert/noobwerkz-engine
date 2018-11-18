@@ -89,13 +89,15 @@ bool noob::engine_nix::init()
 	}
 
 
-	XIEventMask evmasks[1];
-	unsigned char mask1[(XI_LASTEVENT + 7)/8];
+	XIEventMask evmasks[1] = {0};
+	unsigned char mask1[(XI_LASTEVENT + 7)/8] = {0};
 
-	memset(mask1, 0, sizeof(mask1));
+	//memset(mask1, 0, sizeof(mask1));
 
 	/* select for button and key events from all master devices */
 	XISetMask(mask1, XI_RawMotion);
+	XISetMask(mask1, XI_RawKeyPress);
+	XISetMask(mask1, XI_RawKeyRelease);
 
 	evmasks[0].deviceid = XIAllMasterDevices;
 	evmasks[0].mask_len = sizeof(mask1);
@@ -153,7 +155,7 @@ bool noob::engine_nix::init()
 	// printf(get_egl_error().c_str());
 
 	// Choose config
-	if (!eglChooseConfig ( eglDisplay, attribList, &config, 1, &numConfigs))
+	if (!eglChooseConfig(eglDisplay, attribList, &config, 1, &numConfigs))
 	{
 		// printf("ERROR: Couldn't choose EGL config.\n");
 		return false;
@@ -211,8 +213,7 @@ bool noob::engine_nix::init()
 
 	app.init(width, height, dpi_x, dpi_y, "./assets/");
 
-	// noob::ndof ndof;
-	/// ndof.run();
+	ndof.run();
 
 	return true;
 }
@@ -222,55 +223,61 @@ void noob::engine_nix::loop()
 	bool running = true;
 	while (running)
 	{
+		if (XPending(x_display))
+		{
 			XEvent ev;
-		XIRawEvent *re;
+			XIRawEvent *re;
 
-		XGenericEventCookie *cookie = static_cast<XGenericEventCookie*>(&ev.xcookie);
-		XNextEvent(x_display, &ev);
+			XGenericEventCookie *cookie = static_cast<XGenericEventCookie*>(&ev.xcookie);
+			XNextEvent(x_display, &ev);
 
-		if (XGetEventData(x_display, cookie) /*&& cookie->type == GenericEvent */ && cookie->extension == xi_opcode)
-		{
-		// TODO: Add rawevent handling code :)
-			/*	switch(cookie->type)
-				{
-				case (XI_RawKeyRelease):
-				{
-
-				break;
-				}
-				case (XI_RawKeyPress):
-				{
-
-				break;
-				}
-				};
-			 */
-
-			//noob::logger::log(noob::importance::INFO, "[EngineNix] GenericEvent received!");
-		}
-		else
-		{
-			switch (ev.type)
+			if (XGetEventData(x_display, cookie) && cookie->extension == xi_opcode)
 			{
-				case(Expose):
-					{
-						XWindowAttributes attribs;
-						// Add checking code
-						XGetWindowAttributes(x_display, win, &attribs);
-						app.window_resize(attribs.width, attribs.height);
-						break;
-					}
-				case(VisibilityNotify):
-					{
-						break;
-					}
-				default:
-					{
-						break;
-					}
-			};
-		}
+				// TODO: Add RawEvent handling code
+				switch(cookie->type)
+				{
+					case (XI_RawKeyRelease):
+						{
 
+							break;
+						}
+					case (XI_RawKeyPress):
+						{
+
+							break;
+						}
+					case (XI_RawMotion):
+						{
+							break;
+						}
+				};
+			}
+			else
+			{
+				switch (ev.type)
+				{
+					case(Expose):
+						{
+							XWindowAttributes attribs;
+							// Add checking code
+							XGetWindowAttributes(x_display, win, &attribs);
+							app.window_resize(attribs.width, attribs.height);
+							break;
+						}
+					case(VisibilityNotify):
+						{
+							break;
+						}
+					default:
+						{
+							break;
+						}
+				};
+			}
+		}
+	
+		app.accept_ndof_data(ndof.get_data());
+		
 		app.step();
 		eglSwapBuffers(eglDisplay, eglSurface);
 	}

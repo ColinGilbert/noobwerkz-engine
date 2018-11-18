@@ -63,9 +63,9 @@ namespace noob
 
 			void reserve_actors(const noob::actor_blueprints_handle, uint32_t num) noexcept(true);
 
-			noob::actor_handle actor(noob::actor_blueprints_handle, uint32_t team, const noob::vec3f&, const noob::versorf&) noexcept(true);
-
 			void set_team_colour(uint32_t team_num, const noob::vec4f& colour) noexcept(true);
+			
+			noob::actor_handle actor(noob::actor_blueprints_handle, uint32_t team, const noob::vec3f&, const noob::versorf&) noexcept(true);
 			
 			noob::scenery_handle scenery(const noob::shape_handle, const noob::vec3f&, const noob::versorf&) noexcept(true); // Add checkers and such
 
@@ -132,6 +132,8 @@ namespace noob
 			noob::duration draw_duration;
 			noob::duration last_navmesh_build_duration;
 
+			bool ndof_happened = false;
+			noob::vec3f ndof_translation, ndof_rotation;			
 
 			void run_ai() noexcept(true);
 
@@ -142,7 +144,7 @@ namespace noob
 			void actor_dither(noob::actor_handle) noexcept(true);
 			typedef noob::handle<drawable_info> drawable_info_handle;
 			
-			void upload_colours(drawable_info_handle) const noexcept(true);
+			void upload_actor_colours(drawable_info_handle) const noexcept(true);
 			void upload_matrices(drawable_info_handle) noexcept(true);
 			
 			// This method checks to see if there have been any models of this type reserved prior to reserving them and reserves + allocates if not. If anything *is* reserved, it'll still only allocate if Num > originally allocated.

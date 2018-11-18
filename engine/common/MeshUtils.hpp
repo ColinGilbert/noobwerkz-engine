@@ -13,10 +13,10 @@ namespace noob
 	{
 		public:
 			static noob::mesh_3d sphere(float radius, uint32_t details);
-			static noob::mesh_3d box(float width, float height, float depth);
+			static noob::mesh_3d box(float width, float height, float depth); // TODO: Fix when adding box-moeling
 			// static noob::mesh_3d cone(float radius, float height, uint32_t segments);
 			// static noob::mesh_3d cylinder(float radius, float height, uint32_t segments);
-			static noob::mesh_3d hull(const std::vector<noob::vec3f>& points);
+			static noob::mesh_3d hull(const std::vector<noob::vec3f>& points); // TODO: Investigate scaling (or overall correctness) issues
 			// TODO: Test
 			static noob::mesh_3d circle(float radius, uint32_t segments);
 	};

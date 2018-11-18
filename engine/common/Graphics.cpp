@@ -1197,6 +1197,7 @@ void noob::graphics::bind_texture(noob::texture_3d_handle Handle) const noexcept
    }
    */
 
+/*
 void noob::graphics::texture_data(noob::texture_array_2d_handle Handle, uint32_t Mip, uint32_t Index, const noob::vec2ui Offset, const noob::vec2ui Dims, const uint8_t* DataPtr) const noexcept(true)
 {
 	// void glCompressedTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const GLvoid * data);
@@ -1215,6 +1216,7 @@ void noob::graphics::texture_data(noob::texture_3d_handle Handle, uint32_t Mip, 
 
 	check_error_gl();
 }
+*/
 
 void noob::graphics::texture_base_level(uint32_t Mip) const noexcept(true)
 {

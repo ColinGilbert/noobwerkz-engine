@@ -25,15 +25,16 @@ void noob::stage::init(const noob::vec2ui Dims, const noob::mat4f& projection_ma
 	main_light.colour = noob::vec4f(1.0, 1.0, 1.0, 0.3);
 	main_light.direction = noob::vec4f(-0.3333, -1.0, -0.3333, 1.0);
 
+
 	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
-	team_colours.push_back(noob::vec4f(1.0, 0.0, 0.0, 1.0));
-	team_colours.push_back(noob::vec4f(0.0, 1.0, 0.0, 1.0));
-	team_colours.push_back(noob::vec4f(0.0, 0.0, 1.0, 1.0));
-	team_colours.push_back(noob::vec4f(1.0, 1.0, 0.0, 1.0));
-	team_colours.push_back(noob::vec4f(0.0, 1.0, 1.0, 1.0));
-	team_colours.push_back(noob::vec4f(1.0, 0.0, 1.0, 1.0));
-	team_colours.push_back(noob::vec4f(0.2, 0.2, 0.2, 1.0));
-	team_colours.push_back(noob::vec4f(0.2, 0.5, 0.2, 1.0));
+	team_colours.push_back(noob::vec4f(1.0 , 1.0, 1.0, 1.0));
+	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
+	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
+
+	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
+	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
+	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
+	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
 
 	logger::log(noob::importance::INFO, "[Stage] Done init.");
 }
@@ -72,7 +73,7 @@ void noob::stage::update(double dt) noexcept(true)
 	//}
 
 	// TODO: Change?
-	world.step(1.0/60.0);
+	world.step(dt);//1.0/60.0);
 
 	// update_particle_systems();
 	update_actors();
@@ -88,6 +89,14 @@ void noob::stage::update(double dt) noexcept(true)
 void noob::stage::draw() noexcept(true) 
 {
 	// PROFILE_FUNC();
+	if (ndof_happened == true)
+	{
+		view_matrix = noob::rotate_x_deg(view_matrix, ndof_rotation[0]);
+		view_matrix = noob::rotate_y_deg(view_matrix, ndof_rotation[1]);
+		view_matrix = noob::rotate_z_deg(view_matrix, ndof_rotation[2]);
+		view_matrix = noob::translate(view_matrix, ndof_translation);
+		ndof_happened = false;
+	}
 
 	noob::graphics& gfx = noob::get_graphics();
 	noob::graphics::program_handle prog = gfx.get_instanced_shader();
@@ -95,7 +104,7 @@ void noob::stage::draw() noexcept(true)
 
 	gfx.set_view_mat(view_matrix);
 	gfx.set_projection_mat(projection_matrix);
-	
+
 	// TODO: Change
 	gfx.set_light_direction(noob::normalize(noob::vec3f(0.5, -1.0, 0.33)));
 
@@ -104,7 +113,7 @@ void noob::stage::draw() noexcept(true)
 		const noob::stage::drawable_info_handle handle = noob::stage::drawable_info_handle::make(drawables_index);
 		if (drawables[drawables_index].needs_colours)
 		{
-			upload_colours(handle);
+			upload_actor_colours(handle);
 			drawables[drawables_index].needs_colours = false;
 		}
 
@@ -172,6 +181,16 @@ void noob::stage::reserve_actors(noob::actor_blueprints_handle bp_h, uint32_t nu
 		info.max = new_max;
 		actor_factories[bp_h.index()] = info;
 	}
+}
+
+
+void noob::stage::set_team_colour(uint32_t Team, const noob::vec4f& Colour)
+{
+	if (team_colours.size() < Team)
+	{
+		team_colours.reserve(Team - 1);
+	}
+	team_colours[Team - 1] = Colour;
 }
 
 
@@ -279,11 +298,11 @@ void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
 	   gst.set_position(temp_pos);
 	   }
 	   }
-	   */
+	 */
 }
 
 
-void noob::stage::upload_colours(drawable_info_handle arg) const noexcept(true)
+void noob::stage::upload_actor_colours(drawable_info_handle arg) const noexcept(true)
 {
 	const uint32_t count = drawables[arg.index()].count;
 
@@ -426,12 +445,6 @@ void noob::stage::upload_terrain() noexcept(true)
 }
 
 
-
-
-
-
-
-
 void noob::stage::reserve_models(noob::instanced_model_handle Handle, uint32_t Num) noexcept(true)
 {
 	noob::fast_hashtable::cell* results = models_to_instances.lookup(Handle.index());
@@ -474,13 +487,18 @@ void noob::stage::reserve_models(noob::instanced_model_handle Handle, uint32_t N
 
 void noob::stage::accept_ndof_data(const noob::ndof::data& info) noexcept(true)
 {
-	if (info.movement == true)
+	if (info.valid == true)
 	{
-		float damping = 360.0;
-		view_matrix = noob::rotate_x_deg(view_matrix, -info.rotation[0] / damping);
-		view_matrix = noob::rotate_y_deg(view_matrix, -info.rotation[1] / damping);
-		view_matrix = noob::rotate_z_deg(view_matrix, -info.rotation[2] / damping);
-		view_matrix = noob::translate(view_matrix, noob::vec3f(-info.translation[0] / damping, -info.translation[1] / damping, -info.translation[2] / damping));
-	}
+		ndof_happened = true;
 
+		const float damping = 360.0;
+
+		ndof_rotation[0] = static_cast<float>(-info.rx) / static_cast<float>(damping);
+		ndof_rotation[1] = static_cast<float>(-info.ry) / static_cast<float>(damping);
+		ndof_rotation[2] = static_cast<float>(-info.rz) / static_cast<float>(damping);
+
+		ndof_translation[0] =  static_cast<float>(-info.x) / static_cast<float>(damping);
+		ndof_translation[1] = static_cast<float>(-info.y) / static_cast<float>(damping);
+		ndof_translation[2] = static_cast<float>(-info.z) / static_cast<float>(damping);
+	}
 }

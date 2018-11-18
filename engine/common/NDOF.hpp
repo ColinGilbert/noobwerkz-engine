@@ -1,9 +1,7 @@
 // Used to represent input from SpaceMouse NDOF, which was dead-simple to use along with libspnav (linked-in separately
 #pragma once
 
-#include <noob/math/math_funcs.hpp>
-
-#include "Logger.hpp"
+#include <cstddef>
 
 namespace noob
 {
@@ -12,9 +10,8 @@ namespace noob
 		public:
 			struct data
 			{
-				bool movement;
-				noob::vec3f translation;
-				noob::vec3f rotation;
+				bool valid;
+				float x, y, z, rx, ry, rz;
 			};
 
 			enum button_state
@@ -31,10 +28,12 @@ namespace noob
 			// bool init();
 			void run();
 			noob::ndof::data get_data();
+			bool has_data() const;
 			//std::vector<size_t> get_button_presses();
 			//std::vector<size_t> get_held_buttons();
 		protected:
-			double x, y, z, rx, ry, rz;
+			int x, y, z, rx, ry, rz;
+			
 			//std::vector<size_t> held_buttons;
 			size_t ticks;
 	};

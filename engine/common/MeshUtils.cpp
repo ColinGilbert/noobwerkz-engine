@@ -171,7 +171,6 @@ noob::mesh_3d noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-
 noob::mesh_3d noob::mesh_utils::box(float width, float height, float depth)
 {
 	const uint32_t num_vertices = 24;

@@ -1,22 +1,23 @@
 #include "NDOF.hpp"
 
 #include <thread>
-#include <stdlib.h>
+//#include <stdlib.h>
 //#include <signal.h>
 #include <csignal>
-// #include <spnav.h>
+#include <spnav.h>
 
 #include "Logger.hpp"
-
+/*
 void sig()
 {
-//	spnav_close();
-//	noob::logger::log(noob::importance::WARNING, "[NDOF] libsnpav received SIGINT.");
+	spnav_close();
+	noob::logger::log(noob::importance::WARNING, "[NDOF] libsnpav received SIGINT.");
 }
+*/
 
 void noob::ndof::run()
 {	
-/*	if(spnav_open()==-1)
+	if(spnav_open()==-1)
 	{
 		logger::log(noob::importance::ERROR, "[NDOF] Failed to connect to the space navigator daemon.");
 		return;
@@ -30,19 +31,22 @@ void noob::ndof::run()
 			{
 			if(sev.type == SPNAV_EVENT_MOTION)
 			{
+
 			ticks++;
+
 			x += sev.motion.x;
 			y += sev.motion.y;
 			z += sev.motion.z;
 			rx += sev.motion.rx;
 			ry += sev.motion.ry;
 			rz += sev.motion.rz;
-			// logger::log(fmt::format("[NDOF] Got motion event: t({0}, {1}, {2}) r({3}, {4}, {5})", sev.motion.x, sev.motion.y, sev.motion.z, sev.motion.rx, sev.motion.ry, sev.motion.rz));
+
+			 // logger::log(noob::importance::INFO, noob::concat("[NDOF] Got motion event: t", noob::to_string(sev.motion.x), ",", noob::to_string(sev.motion.y), ",", noob::to_string(sev.motion.z), " - r ", noob::to_string(sev.motion.rx), ",", noob::to_string(sev.motion.ry), ",", noob::to_string(sev.motion.rz)));
 			}
 			else
 			{
-			// SPNAV_EVENT_BUTTON 
-			// logger::log(fmt::format("[NDOF] Got button {0} event {1}", sev.button.press ? "press" : "release", sev.button.bnum));
+				// SPNAV_EVENT_BUTTON 
+				// logger::log(fmt::format("[NDOF] Got button {0} event {1}", sev.button.press ? "press" : "release", sev.button.bnum));
 			}
 			}
 
@@ -50,7 +54,7 @@ void noob::ndof::run()
 
 			});
 	t.detach();
-*/
+
 }
 
 
@@ -65,16 +69,20 @@ noob::ndof::data noob::ndof::get_data()
 
 	if (x == 0 && y == 0 && z == 0 && rx == 0 && ry == 0 && rz == 0)
 	{
-		temp.movement = false;
+		temp.valid = false;
 	}
 
 	else
 	{
-		temp.movement = true;
+		temp.valid = true;
 	}
 
-	temp.translation = noob::vec3f(x/ticks, y/ticks, z/ticks);
-	temp.rotation = noob::vec3f(rx/ticks, ry/ticks, rz/ticks);
+	temp.x = static_cast<float>(x)/static_cast<float>(ticks);
+	temp.y = static_cast<float>(y)/static_cast<float>(ticks);
+	temp.z = static_cast<float>(z)/static_cast<float>(ticks);
+	temp.rx = static_cast<float>(rx)/static_cast<float>(ticks);
+	temp,ry = static_cast<float>(ry)/static_cast<float>(ticks);
+	temp.rz = static_cast<float>(rz)/static_cast<float>(ticks);
 
 	x = y = z = rx = ry = rz = 0;
 	ticks = 0;
