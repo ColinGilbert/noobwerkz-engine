@@ -1,13 +1,4 @@
 #include "EngineNix.hpp"
-#include "Application.hpp"
-
-#include <iostream>
-#include <cstring>
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
 
 // X11 related local variables
 static Display *x_display = NULL;
@@ -19,101 +10,136 @@ bool noob::engine_nix::init()
 {
 	Window root;
 	XSetWindowAttributes swa;
-	XSetWindowAttributes  xattr;
+	XSetWindowAttributes xattr;
 	Atom wm_state;
 	XWMHints hints;
 	XEvent xev;
+
 	EGLConfig ecfg;
 	EGLint num_config;
 	EGLint width = 800;
 	EGLint height = 640;
 
 	std::string title = "noobwerkz!";
-	/*
-	 * X11 native display initialization
-	 */
+
+	// X11 native display initialization
 
 	x_display = XOpenDisplay(NULL);
-	if ( x_display == NULL )
+	if (x_display == NULL)
 	{
 		return EGL_FALSE;
 	}
 
 	root = DefaultRootWindow(x_display);
 
-	swa.event_mask  =  ExposureMask | PointerMotionMask | KeyPressMask | VisibilityNotify | ConfigureNotify;
-	win = XCreateWindow(
-			x_display, root,
-			0, 0, width, height, 0,
-			CopyFromParent, InputOutput,
-			CopyFromParent, CWEventMask,
-			&swa );
+	swa.event_mask  =  ExposureMask /* | PointerMotionMask | KeyPressMask */ | VisibilityNotify | ConfigureNotify;
+	win = XCreateWindow(x_display, root, 0, 0, width, height, 0, CopyFromParent, InputOutput, CopyFromParent, CWEventMask, &swa);
+
 	s_wmDeleteMessage = XInternAtom(x_display, "WM_DELETE_WINDOW", False);
 	XSetWMProtocols(x_display, win, &s_wmDeleteMessage, 1);
 
 	xattr.override_redirect = False;
-	XChangeWindowAttributes ( x_display, win, CWOverrideRedirect, &xattr );
+	XChangeWindowAttributes(x_display, win, CWOverrideRedirect, &xattr);
 
 	hints.input = True;
 	hints.flags = InputHint;
 	XSetWMHints(x_display, win, &hints);
 
-	// make the window visible on the screen
+	// Make the window visible on the screen
 	XMapWindow(x_display, win);
 	XStoreName(x_display, win, title.c_str());
 
-	// get identifiers for the provided atom name strings
+	// Get identifiers for the provided atom name strings
 	wm_state = XInternAtom (x_display, "_NET_WM_STATE", False);
 
-	memset( &xev, 0, sizeof(xev) );
-	xev.type                 = ClientMessage;
-	xev.xclient.window       = win;
+	xev = {0};
+	xev.type = ClientMessage;
+	xev.xclient.window = win;
 	xev.xclient.message_type = wm_state;
-	xev.xclient.format       = 32;
-	xev.xclient.data.l[0]    = 1;
-	xev.xclient.data.l[1]    = False;
-	XSendEvent (
-			x_display,
-			DefaultRootWindow ( x_display ),
-			False,
-			SubstructureNotifyMask,
-			&xev );
+	xev.xclient.format = 32;
+	xev.xclient.data.l[0] = 1;
+	xev.xclient.data.l[1] = False;
+	XSendEvent(x_display, DefaultRootWindow(x_display), False, SubstructureNotifyMask, &xev);
+
+	int xi_query_event, xi_query_error;
+	if (!XQueryExtension(x_display, "XInputExtension", &xi_opcode, &xi_query_event, &xi_query_error))
+	{
+		noob::logger::log(noob::importance::ERROR, noob::concat("[EngineNix] Xinput extension not available - Event ", noob::to_string(xi_query_event), ", error ", noob::to_string(xi_query_error)));
+		return false;
+	}
+
+	noob::logger::log(noob::importance::INFO, "[EngineNix] Prior to init xi2");
+
+	int major, minor;
+	int rc;
+
+	/* We support XI 2.2 */
+	major = 2;
+	minor = 2;
+
+	rc = XIQueryVersion(x_display, &major, &minor);
+	if (rc == BadRequest)
+	{
+		noob::logger::log(noob::importance::INFO, noob::concat("[EngineNix] XI2 not supported. Supported: ", noob::to_string(major), ",", noob::to_string(minor), "."));
+		return false;
+	} else if (rc != Success)
+	{
+		noob::logger::log(noob::importance::ERROR, "[EngineNix] X11 (internal) bug detected");
+		return false;
+	}
+
+
+	XIEventMask evmasks[1];
+	unsigned char mask1[(XI_LASTEVENT + 7)/8];
+
+	memset(mask1, 0, sizeof(mask1));
+
+	/* select for button and key events from all master devices */
+	XISetMask(mask1, XI_RawMotion);
+
+	evmasks[0].deviceid = XIAllMasterDevices;
+	evmasks[0].mask_len = sizeof(mask1);
+	evmasks[0].mask = mask1;
+
+	XISelectEvents(x_display, root, evmasks, 1);
+	XFlush(x_display);
+
+	// Now, onto EGL
+
 
 	eglNativeWindow = (EGLNativeWindowType) win;
 	eglNativeDisplay = (EGLNativeDisplayType) x_display;
-
 
 	EGLConfig config;
 	EGLint majorVersion;
 	EGLint minorVersion;
 	EGLint contextAttribs[] = { EGL_CONTEXT_CLIENT_VERSION, 3, EGL_NONE };
 
-	eglDisplay = eglGetDisplay( eglNativeDisplay );
+	eglDisplay = eglGetDisplay(eglNativeDisplay);
 
 	// printf(get_egl_error().c_str());
-	if ( eglDisplay == EGL_NO_DISPLAY )
+	if (eglDisplay == EGL_NO_DISPLAY)
 	{
 		// printf("ERROR: Couldn't get EGL display.\n");
-		return GL_FALSE;
+		return false;
 	}
 
 	// printf(get_egl_error().c_str());
 	// Initialize EGL
-	if ( !eglInitialize(eglDisplay, &majorVersion, &minorVersion))
+	if (!eglInitialize(eglDisplay, &majorVersion, &minorVersion))
 	{
 		// printf("ERROR: Couldn't init EGL.\n");
-		return GL_FALSE;
+		return false;
 	}
 
 	// printf(get_egl_error().c_str());
 
-	//{
 	EGLint numConfigs = 0;
 	EGLint attribList[] =
 	{
-		EGL_RED_SIZE,       5,
-		EGL_GREEN_SIZE,     6,
-		EGL_BLUE_SIZE,      5,
+		EGL_RED_SIZE,       8,
+		EGL_GREEN_SIZE,     8,
+		EGL_BLUE_SIZE,      8,
 		EGL_ALPHA_SIZE,     8,
 		EGL_DEPTH_SIZE,     8,
 		EGL_STENCIL_SIZE,   8,
@@ -125,49 +151,51 @@ bool noob::engine_nix::init()
 	};
 
 	// printf(get_egl_error().c_str());
+
 	// Choose config
-	if ( !eglChooseConfig ( eglDisplay, attribList, &config, 1, &numConfigs ) )
+	if (!eglChooseConfig ( eglDisplay, attribList, &config, 1, &numConfigs))
 	{
 		// printf("ERROR: Couldn't choose EGL config.\n");
-		return GL_FALSE;
+		return false;
 	}
 
 	// printf(get_egl_error().c_str());
-	if ( numConfigs < 1 )
+	if (numConfigs < 1)
 	{
 		// printf("ERROR: No configs found!\n");
-		return GL_FALSE;
+		return false;
 	}
-	//}
 
 	// printf(get_egl_error().c_str());
 
 	// Create a surface
-	eglSurface = eglCreateWindowSurface ( eglDisplay, config, eglNativeWindow, NULL );
+	eglSurface = eglCreateWindowSurface(eglDisplay, config, eglNativeWindow, NULL);
 
 	// printf(get_egl_error().c_str());
-	if ( eglSurface == EGL_NO_SURFACE )
+	if (eglSurface == EGL_NO_SURFACE)
 	{
 		// printf("ERROR: No EGL surface.\n");
-		return GL_FALSE;
+		return false;
 	}
 
 	// printf(get_egl_error().c_str());
+
 	// Create a GL context
-	eglContext = eglCreateContext ( eglDisplay, config, EGL_NO_CONTEXT, contextAttribs );
+	eglContext = eglCreateContext(eglDisplay, config, EGL_NO_CONTEXT, contextAttribs);
 
 	// printf(get_egl_error().c_str());
 	if (eglContext == EGL_NO_CONTEXT)
 	{
 		// printf("ERROR: No EGL Context!\n");
-		return GL_FALSE;
+		return false;
 	}
 
 	// printf(get_egl_error().c_str());
+
 	// Make the context current
 	if (!eglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext))
 	{
-		return GL_FALSE;
+		return false;
 		// printf("ERROR: Couldn't make egl context current!\n");
 	}
 
@@ -181,15 +209,12 @@ bool noob::engine_nix::init()
 	const double dpi_x = static_cast<double>(DisplayWidth(x_display, screen) / static_cast<double>(DisplayWidthMM(x_display, screen)) / 25.4);
 	const double dpi_y = static_cast<double>(DisplayHeight(x_display, screen) / static_cast<double>(DisplayHeightMM(x_display, screen)) / 25.4);
 
-	app = std::make_unique<noob::application>();
-	app->init(noob::vec2ui(height, width), noob::vec2d(dpi_x, dpi_y), "./assets/");
+	app.init(width, height, dpi_x, dpi_y, "./assets/");
 
-	noob::ndof ndof;
-	ndof.run();
+	// noob::ndof ndof;
+	/// ndof.run();
 
-	// printf("At the end of esCreateWindow. All Good!\n");
-	// printf(get_egl_error().c_str());
-	return GL_TRUE;
+	return true;
 }
 
 void noob::engine_nix::loop()
@@ -197,12 +222,34 @@ void noob::engine_nix::loop()
 	bool running = true;
 	while (running)
 	{
-
-		while (XPending(x_display))
-		{
 			XEvent ev;
-			XNextEvent(x_display, &ev);
+		XIRawEvent *re;
 
+		XGenericEventCookie *cookie = static_cast<XGenericEventCookie*>(&ev.xcookie);
+		XNextEvent(x_display, &ev);
+
+		if (XGetEventData(x_display, cookie) /*&& cookie->type == GenericEvent */ && cookie->extension == xi_opcode)
+		{
+		// TODO: Add rawevent handling code :)
+			/*	switch(cookie->type)
+				{
+				case (XI_RawKeyRelease):
+				{
+
+				break;
+				}
+				case (XI_RawKeyPress):
+				{
+
+				break;
+				}
+				};
+			 */
+
+			//noob::logger::log(noob::importance::INFO, "[EngineNix] GenericEvent received!");
+		}
+		else
+		{
 			switch (ev.type)
 			{
 				case(Expose):
@@ -210,7 +257,7 @@ void noob::engine_nix::loop()
 						XWindowAttributes attribs;
 						// Add checking code
 						XGetWindowAttributes(x_display, win, &attribs);
-						app->window_resize(noob::vec2ui(attribs.width, attribs.height));
+						app.window_resize(attribs.width, attribs.height);
 						break;
 					}
 				case(VisibilityNotify):
@@ -222,11 +269,9 @@ void noob::engine_nix::loop()
 						break;
 					}
 			};
-
-
 		}
 
-		app->step();
+		app.step();
 		eglSwapBuffers(eglDisplay, eglSurface);
 	}
 }

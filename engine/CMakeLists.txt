@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 project(NoobWerkz)
 
-#set(CMAKE_BUILD_TYPE "DEBUG")
-set(CMAKE_BUILD_TYPE "RELEASE")
+set(CMAKE_BUILD_TYPE "DEBUG")
+#set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
 # Current Bullet bug: -ftrapv causes crash on Android.
@@ -115,11 +115,12 @@ if (NOOB_PLATFORM_LINUX)
 		platform/nix/EntryPoint.cpp
 		platform/nix/EngineNix.cpp
 		platform/nix/NDOF.cpp
+		platform/nix/AppPrivateImplementation.cpp
 		platform/desktop/SoundInterface.cpp)
 
 	add_executable(NoobEdit ${main_src})
 
-	target_link_libraries(NoobEdit LINK_PUBLIC rt z dl pthread libsoundio_static asound freetype ${OPENGLES3_LIBRARY} ${EGL_LIBRARY} ${X11_LIBRARIES} ${M_LIBRARY})
+	target_link_libraries(NoobEdit LINK_PUBLIC rt z dl pthread libsoundio_static asound freetype Xi ${OPENGLES3_LIBRARY} ${EGL_LIBRARY} ${X11_LIBRARIES} ${M_LIBRARY})
 endif()
 
 if (NOOB_PLATFORM_ANDROID)

@@ -9,8 +9,11 @@
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 #include <X11/extensions/Xrandr.h>
+#include <X11/extensions/XInput2.h>
 
-#include "Application.hpp"
+#include "AppPrivateImplementation.hpp"
+#include "Logger.hpp"
+#include "SoundInterface.hpp"
 
 namespace noob
 {
@@ -26,7 +29,7 @@ namespace noob
 			std::string get_egl_error();
 			
 			// Our data members
-			std::unique_ptr<noob::application> app;
+			noob::app_facade app;
 			
 			// EGL-related
 			EGLNativeDisplayType eglNativeDisplay;
@@ -37,7 +40,7 @@ namespace noob
 	
 			// X11-related
 			Window win;
-
+			int xi_opcode;
 	};
 
 }
