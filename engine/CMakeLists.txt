@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 project(NoobWerkz)
 
 # set(CMAKE_BUILD_TYPE "DEBUG")
-set(CMAKE_BUILD_TYPE "RELEASE")
+	set(CMAKE_BUILD_TYPE "RELEASE")
 set(BUILD_SHARED_LIBS false)
 
 # Current Bullet bug: -ftrapv causes crash on Android.
@@ -27,24 +27,26 @@ endif()
 
 
 list (APPEND main_src)
-# include(cmake/BStr.cmake)
+#include(cmake/BStr.cmake)
 #include(cmake/FreeType.cmake)
+#include(cmake/Assimp.cmake)
+#include(cmake/Recast.cmake)
+#include(cmake/Shiny.cmake)
+#include(cmake/Harfbuzz.cmake)
+#add_subdirectory(lib/ozz-animation)
+
 	include(cmake/BaseUtils.cmake)
 	include(cmake/Voropp.cmake)
-include(cmake/Ozz.cmake)
-# include(cmake/Assimp.cmake)
+	include(cmake/Ozz.cmake)
 	include(cmake/Bullet.cmake)
 	include(cmake/Ogg.cmake)
-include(cmake/Vorbis.cmake)
-#include(cmake/Recast.cmake)
-include(cmake/R8.cmake)
-#include(cmake/Shiny.cmake)
-include(cmake/TextureAtlas.cmake)
-#include(cmake/Harfbuzz.cmake)
-include(cmake/Sqlite.cmake)
+	include(cmake/Vorbis.cmake)
+	include(cmake/R8.cmake)
+	include(cmake/TextureAtlas.cmake)
+	include(cmake/Sqlite.cmake)
 
-# add_subdirectory(lib/ozz-animation)
 	add_subdirectory(lib/freetype)
+	
 	include_directories(lib/freetype/include)
 	include_directories(lib/sema)
 	include_directories(lib/glm)
@@ -52,7 +54,8 @@ include(cmake/Sqlite.cmake)
 	include_directories(lib/sdf)
 	include_directories(lib/stb)
 	include_directories(lib/math-funcs/include)
-include_directories(common)
+	
+	include_directories(common)
 
 	list(APPEND common_src
 			common/Globals.cpp
@@ -81,7 +84,7 @@ include_directories(common)
 	)
 
 	list(APPEND user_src
-			../sandbox/UserApp.cpp
+			../sandbox/user-project/UserApp.cpp
 	    )
 
 list (APPEND main_src ${common_src} ${user_src})
@@ -95,22 +98,21 @@ if (NOOB_PLATFORM_LINUX)
 	set(CMAKE_CXX_FLAGS "-DNOOB_PLATFORM_LINUX ${CMAKE_CXX_FLAGS}")
 
 	include_directories(lib/Khronos/OpenGL-Registry/api)
-include_directories(lib/Khronos/EGL-Registry/api)	
+	include_directories(lib/Khronos/EGL-Registry/api)	
 
 	find_package(X11)
-find_library(M_LIB m)
+	find_library(M_LIB m)
 
 	find_library(OPENGLES3_LIBRARY GLESv2)
-find_library(EGL_LIBRARY EGL)
+	find_library(EGL_LIBRARY EGL)
 
 #include_directories(${EGL_INCLUDE_DIR})
 
 	include_directories(lib/libsoundio)
-add_subdirectory(lib/libsoundio)
+	add_subdirectory(lib/libsoundio)
 
 #include_directories(lib/glfw/include)
-include_directories(platform/nix)
-
+	include_directories(platform/nix)
 
 	list(APPEND main_src
 			platform/nix/EntryPoint.cpp
@@ -129,7 +131,6 @@ endif()
 add_executable(NoobEdit ${main_src})
 
 target_link_libraries(NoobEdit LINK_PUBLIC rt z dl pthread libsoundio_static asound freetype Xi ${OPENGLES3_LIBRARY} ${EGL_LIBRARY} ${X11_LIBRARIES} ${M_LIBRARY} ${3dmouse})
-
 
 endif()
 

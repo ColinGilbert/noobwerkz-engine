@@ -8,16 +8,16 @@
 // External
 #include <GLES3/gl3.h>
 
-
-
 // Project-local
 #include "ShadersGL.hpp"
 #include "Logger.hpp"
 #include "StringFuncs.hpp"
 
+
 //////////////////////////////////////////////////////////////
 // Error-checking helper + macro. Good for troubleshooting.
 /////////////////////////////////////////////////////////////
+
 
 static GLenum check_error_gl(const char *file, int line)
 {
@@ -50,6 +50,7 @@ static GLenum check_error_gl(const char *file, int line)
 
 
 #define check_error_gl() check_error_gl(__FILE__, __LINE__) 
+
 
 ///////////////////////////////////////////////////////////
 // This is where we place several other helper functions
@@ -418,6 +419,7 @@ static GLuint load_program_gl(const std::string& vert_shader_arg, const std::str
 	return program_object;
 }
 
+
 // This allows us to return a texture_id that can be made const by the programmer.
 static GLuint prep_texture()
 {
@@ -448,6 +450,7 @@ static bool texture_packing_valid(uint32_t Arg) noexcept(true)
 	return false;
 
 }
+
 
 /////////////////////////////////////////////////////////////////////////
 // Finally, this is where the implementation of the interface begins.
@@ -561,6 +564,7 @@ void noob::graphics::destroy() noexcept(true)
 
 }
 
+
 void noob::graphics::use_program(noob::graphics::program_handle Arg) const noexcept(true)
 {
 	glUseProgram(Arg.index());
@@ -580,6 +584,10 @@ void noob::graphics::set_projection_mat(const noob::mat4f ProjMat) noexcept(true
 	proj_mat = ProjMat;
 }
 
+void noob::graphics::set_eye_position(const noob::vec3f& EyePos) noexcept(true)
+{
+	eye_pos = EyePos;
+}
 
 void noob::graphics::upload_instanced_uniforms() const noexcept(true)
 {
@@ -751,6 +759,14 @@ noob::instanced_model_handle noob::graphics::add_instanced_models(const noob::me
 	glVertexAttribPointer(9, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*5));
 	glVertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*6));
 	glVertexAttribPointer(11, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*7));
+	// Per-instance normal matrices
+	//glVertexAttribPointer(12, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*4));
+//	glVertexAttribPointer(13, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*5));
+//	glVertexAttribPointer(14, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*6));
+//	glVertexAttribPointer(15, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*7));
+
+
+
 
 	glEnableVertexAttribArray(4);
 	glEnableVertexAttribArray(5);
@@ -760,6 +776,11 @@ noob::instanced_model_handle noob::graphics::add_instanced_models(const noob::me
 	glEnableVertexAttribArray(9);
 	glEnableVertexAttribArray(10);
 	glEnableVertexAttribArray(11);
+	//glEnableVertexAttribArray(12);
+	//glEnableVertexAttribArray(13);
+	//glEnableVertexAttribArray(14);
+	//glEnableVertexAttribArray(15);
+
 
 	glVertexAttribDivisor(4, 1);
 	glVertexAttribDivisor(5, 1);
@@ -769,6 +790,10 @@ noob::instanced_model_handle noob::graphics::add_instanced_models(const noob::me
 	glVertexAttribDivisor(9, 1);
 	glVertexAttribDivisor(10, 1);
 	glVertexAttribDivisor(11, 1);
+	//glVertexAttribDivisor(12, 1);
+	//glVertexAttribDivisor(13, 1);
+	//glVertexAttribDivisor(14, 1);
+	//glVertexAttribDivisor(15, 1);
 
 	model.matrices_vbo = matrices_vbo;
 
@@ -907,6 +932,7 @@ void noob::graphics::set_terrain_uniforms(const noob::terrain_shading Shading) n
 {
 	terrain_unis = Shading;
 }
+
 
 void noob::graphics::upload_terrain_uniforms() const noexcept(true)
 {
@@ -1549,7 +1575,6 @@ void noob::graphics::texture_wrap_mode(const std::array<noob::tex_wrap_mode, 3> 
 
 	check_error_gl();
 }
-
 
 
 void noob::graphics::texture_pack_alignment(uint32_t Arg) const noexcept(true)

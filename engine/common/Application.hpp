@@ -50,7 +50,6 @@ namespace noob
 			void update(double delta);
 			void draw();
 
-			// You these were needed, as See these in sandbox/UserApp.cpp if you're writing a game that is setup or developing the engine in C++.
 			bool user_init();
 			void user_update(double);
 

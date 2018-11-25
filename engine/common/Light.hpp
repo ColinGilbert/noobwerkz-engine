@@ -9,7 +9,8 @@ namespace noob
 {
 	struct directional_light
 	{
-			noob::vec4f colour, direction;
+			noob::vec4f colour;
+			noob::vec3f direction;
 	};
 
 	struct light 

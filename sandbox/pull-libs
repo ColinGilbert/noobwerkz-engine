@@ -1,0 +1,2 @@
+cd ../engine/lib && rm -rf base-utils && git clone https://www.github.com/ColinGilbert/base-utils && cd base-utils && rm -rf .git* &&
+cd .. && rm -rf math-funcs && git clone https://www.github.com/ColinGilbert/math-funcs && cd math-funcs && rm -rf .git*

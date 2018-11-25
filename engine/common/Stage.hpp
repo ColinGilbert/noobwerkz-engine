@@ -75,7 +75,6 @@ namespace noob
 
 			// TODO: Make more flexible.
 			noob::vec4f ambient_light;
-			noob::directional_light main_light;
 
 			std::string print_drawables_info() const noexcept(true);
 
@@ -107,6 +106,7 @@ namespace noob
 
 			bool terrain_changed = false;
 			bool terrain_started = false;
+			// bool graphics_enabled = false; // TODO: Implement conditional checks
 
 			noob::physics world;
 			
@@ -114,6 +114,8 @@ namespace noob
 			noob::vec2ui viewport_dims;
 			uint32_t num_terrain_verts = 0;
 
+			noob::directional_light main_light;
+			
 			rde::vector<noob::stage::drawable_info> drawables;
 			rde::vector<noob::stage::actor_info> actor_factories;
 			rde::vector<noob::vec4f> team_colours;

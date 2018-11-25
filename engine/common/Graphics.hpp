@@ -41,6 +41,7 @@ namespace noob
 			void destroy() noexcept(true);
 			
 			void set_light_direction(const noob::vec3f&) noexcept(true);
+			void set_eye_position(const noob::vec3f&) noexcept(true);
 
 			void use_program(noob::graphics::program_handle) const noexcept(true);
 			void set_view_mat(const noob::mat4f) noexcept(true);
@@ -55,7 +56,6 @@ namespace noob
 
 			void resize_buffers(noob::instanced_model_handle Handle, uint32_t MaxInstances) noexcept(true);
 			void resize_buffers(noob::billboard_buffer_handle Handle, uint32_t MaxBillboards) noexcept(true);
-			
 			void upload_instanced_uniforms() const noexcept(true);
 
 			// Currently implemented as a triplanar-shaded, single-buffer model.

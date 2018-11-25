@@ -68,7 +68,7 @@ namespace noob
 			}
 
 			// Does not affect the digraph - only reads from it. Therefore if you have a constant digraph, you can iterate over it from anywhere using these. :)
-			// However, you MUST call is_valid prior to using it, and then has_child() prior to get_child(). Failure to do so will cause either garbage reads or segfaults.
+			// However, you MUST either call has_child() prior to get_child(), or num_children() prior to looping accordingly. Failure to do so will cause either garbage reads or segfaults.
 			class visitor
 			{
 				friend class digraph;
@@ -78,7 +78,7 @@ namespace noob
 				   {
 				   return (start_index != std::numeric_limits<uint32_t>::max());
 				   }
-				   */
+				 */
 				bool has_child() const noexcept(true)
 				{
 					// assert(current_index < g.edges.size());
@@ -181,61 +181,6 @@ namespace noob
 			bool is_ready() const noexcept(true)
 			{
 				return ready;
-			}
-
-			void sort() noexcept(true)
-			{
-				rde::quick_sort(edges.begin(), edges.end(), rde::less<noob::digraph::edge>());
-
-				//TODO: Fix algorithm
-				uint32_t edges_till_current = 0;
-				const uint32_t num_nodes = nodes.size();
-				for (uint32_t i = 0; i < num_nodes; ++i)
-				{
-					noob::digraph::node n = nodes[i];
-					n.set_first_edge(edges_till_current);
-					edges_till_current += n.get_num_children();
-
-					nodes[i] = n;
-				}
-				/*
-				   uint32_t current_node, node_child_count;
-				   current_node = node_child_count = 0;
-
-				   noob::digraph::node n;
-				   n.set_first_edge(0);
-				   n.set_num_children(0);
-
-				   for (uint32_t edge_counter = 0; edge_counter < edges.size(); ++edge_counter)
-				   {
-				   const noob::digraph::edge e = edges[edge_counter];
-
-				// The begin position stored in the node cannot be bigger than our current position on the edgelist.
-				assert(!(n.get_first_edge() > edge_counter));
-
-				if (n.get_first_edge() == e.get_from().index())
-				{
-				++node_child_count;
-				}
-				// Once we hit a new node;
-				else 
-				{
-				n.set_num_children(node_child_count);
-
-				node_child_count = 0;
-
-				nodes[current_node] = n;
-
-				++current_node;
-
-				n = nodes[current_node];
-				n.set_first_edge(edge_counter);
-				n.set_num_children(0);
-				}
-
-				}
-				*/
-				ready = true;
 			}
 
 			noob::digraph::visitor get_visitor(const noob::node_handle n) const noexcept(true)

@@ -7,12 +7,9 @@ void noob::stage::init(const noob::vec2ui Dims, const noob::mat4f& projection_ma
 	update_viewport_params(Dims, projection_mat);
 
 	noob::vec3f eye_pos, eye_target, eye_up;
-	eye_pos = noob::vec3f(0.0, 0.0, -40.0);
-	eye_target = noob::vec3f(0.0, 0.0, 10.0);
-	eye_up = noob::vec3f(0.0, 1.0, 0.0);
-	//const noob::vec3f eye_forward = eye_pos - eye_target;
-	//eye_up = noob::cross(eye_forward, noob::vec3f(0.0, 1.0, 0.0));
-	//eye_up = noob::cross(eye_up, eye_forward);
+	eye_pos = noob::vec3f(0.0, 200.0, 0.0);
+	eye_target = noob::vec3f(0.0, 0.0, 0.0);
+	eye_up = noob::vec3f(0.0, 0.0, 1.0);
 	view_matrix = noob::look_at(eye_pos, eye_target, eye_up);
 	projection_matrix = projection_mat;
 
@@ -22,8 +19,8 @@ void noob::stage::init(const noob::vec2ui Dims, const noob::mat4f& projection_ma
 
 	world.init();
 
-	main_light.colour = noob::vec4f(1.0, 1.0, 1.0, 0.3);
-	main_light.direction = noob::vec4f(-0.3333, -1.0, -0.3333, 1.0);
+	main_light.colour = noob::vec4f(1.0, 1.0, 1.0, 0.0);
+	main_light.direction = noob::vec3f(0.0, 1.0, 0.0);
 
 
 	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
@@ -104,9 +101,11 @@ void noob::stage::draw() noexcept(true)
 
 	gfx.set_view_mat(view_matrix);
 	gfx.set_projection_mat(projection_matrix);
-
 	// TODO: Change
-	gfx.set_light_direction(noob::normalize(noob::vec3f(0.5, -1.0, 0.33)));
+	gfx.set_light_direction(main_light.direction);
+	gfx.set_eye_position(noob::translation_from_mat4(view_matrix));
+
+	gfx.upload_instanced_uniforms();
 
 	for (uint32_t drawables_index = 0; drawables_index < drawables.size(); ++drawables_index)
 	{
@@ -118,7 +117,6 @@ void noob::stage::draw() noexcept(true)
 		}
 
 		upload_matrices(handle);
-
 		const noob::instanced_model_handle modl_h = drawables[drawables_index].model;
 		const uint32_t instance_count = drawables[drawables_index].count;
 
@@ -202,7 +200,6 @@ noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32
 
 		if (info.count < info.max)
 		{
-
 			const noob::ghost_handle ghost_h = world.add_ghost(info.bp.bounds, pos, orient);
 
 			noob::actor a;
