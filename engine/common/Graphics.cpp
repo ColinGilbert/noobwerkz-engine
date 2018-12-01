@@ -488,6 +488,7 @@ void noob::graphics::init(const noob::vec2ui Dims, const noob::texture_loader_2d
 	terrain_unis.texture_scales = noob::vec3f(0.5, 0.5, 0.5);
 
 	u_mvp_terrain = glGetUniformLocation(terrain_shader.index(), "mvp");
+	u_view_terrain = glGetUniformLocation(terrain_shader.index(), "view_matrix");
 	u_texture_0 = glGetUniformLocation(terrain_shader.index(), "texture_0");
 	u_colour_0 = glGetUniformLocation(terrain_shader.index(), "colour_0");
 	u_colour_1 = glGetUniformLocation(terrain_shader.index(), "colour_1");
@@ -951,6 +952,7 @@ void noob::graphics::upload_terrain_uniforms() const noexcept(true)
 	const noob::mat4f mvp = proj_mat * view_mat;
 	glUniform1i(u_texture_0, 0);
 	glUniformMatrix4fv(u_mvp_terrain, 1, false, &mvp[0]);
+	glUniformMatrix4fv(u_view_terrain, 1, false, &view_mat[0]);
 	glUniform4fv(u_colour_0, 1, &terrain_unis.colours[0][0]);
 	glUniform4fv(u_colour_1, 1, &terrain_unis.colours[1][0]);
 	glUniform4fv(u_colour_2, 1, &terrain_unis.colours[2][0]);

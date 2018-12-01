@@ -136,7 +136,7 @@ namespace noob
 
 			// These will soon be replaced by proper UBO's and made typesafe. The only reason they're here is to serve as a stable, well-understood prior case example.
 			uint32_t u_eye_pos, u_light_directional, u_view, u_projection;
-			uint32_t u_mvp_terrain, u_eye_pos_terrain, u_light_directional_terrain, u_texture_0, u_colour_0, u_colour_1, u_colour_2, u_colour_3, u_blend_0, u_blend_1, u_tex_scales, u_model_scales;
+			uint32_t u_mvp_terrain, u_view_terrain, u_eye_pos_terrain, u_light_directional_terrain, u_texture_0, u_colour_0, u_colour_1, u_colour_2, u_colour_3, u_blend_0, u_blend_1, u_tex_scales, u_model_scales;
 			uint32_t u_text_texture_0;
 
 			noob::mat4f view_mat, proj_mat;	
