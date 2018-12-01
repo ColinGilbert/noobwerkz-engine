@@ -30,10 +30,12 @@ namespace noob
 		noob::body_handle add_body(noob::body_type, const noob::shape_handle, const noob::body_info&) noexcept(true);		
 		noob::ghost_handle add_ghost(const noob::shape_handle, const noob::vec3f&, const noob::versorf&) noexcept(true);
 		
-		noob::body& get_body(noob::body_handle) noexcept(true);
-		noob::ghost& get_ghost(noob::ghost_handle) noexcept(true);
+		noob::body& get_body(const noob::body_handle) noexcept(true);
+		noob::ghost& get_ghost(const noob::ghost_handle) noexcept(true);
 		
-		std::vector<noob::contact_point> get_intersecting(const noob::ghost_handle) const noexcept(true);
+		// Oh crap... One of these kinds of functions...
+		// You know the drill; the vector of contact points is passed to the function from calling scope and the number returned is how many contact points you've got.
+		uint32_t get_intersecting(const noob::ghost_handle, std::vector<noob::contact_point>&) const noexcept(true);
 		
 		protected:
 		// TODO: Move shapes here
@@ -47,7 +49,7 @@ namespace noob
 		btSequentialImpulseConstraintSolver* solver;
 		btDiscreteDynamicsWorld* dynamics_world;
 		
-		void remove_body(noob::body_handle) noexcept(true);
-		void remove_ghost(noob::ghost_handle) noexcept(true);
+		void remove_body(const noob::body_handle) noexcept(true);
+		void remove_ghost(const noob::ghost_handle) noexcept(true);
 	};
 }

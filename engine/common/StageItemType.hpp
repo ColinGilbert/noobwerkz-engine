@@ -5,7 +5,7 @@ namespace noob
 {
 	enum class stage_item_type : uint32_t
 	{
-		ACTOR = 0, SCENERY = 1, TRIGGER = 2, PARTICLES = 3, LIGHT = 4
+		ACTOR = 0, SCENERY = 1, TRIGGER = 2, LIGHT = 4
 	};
 
 	struct stage_item_variant
@@ -29,10 +29,6 @@ namespace noob
 			case (stage_item_type::TRIGGER):
 			{
 				return "trigger";
-			}
-			case (stage_item_type::PARTICLES):
-			{
-				return "particles";
 			}
 			case (stage_item_type::LIGHT):
 			{

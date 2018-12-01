@@ -88,7 +88,7 @@ noob::body_handle noob::physics::add_body(noob::body_type type_arg, const noob::
 
 noob::ghost_handle noob::physics::add_ghost(const noob::shape_handle shape_h, const noob::vec3f& pos, const noob::versorf& orient) noexcept(true)
 {
-	noob::globals& g = noob::get_globals();
+	const noob::globals& g = noob::get_globals();
 
 	noob::ghost temp;
 	temp.init(dynamics_world, g.shapes.get(shape_h), pos, orient);
@@ -98,37 +98,36 @@ noob::ghost_handle noob::physics::add_ghost(const noob::shape_handle shape_h, co
 }
 
 
-noob::body& noob::physics::get_body(noob::body_handle h) noexcept(true)
+noob::body& noob::physics::get_body(const noob::body_handle h) noexcept(true)
 {
 	return bodies[h.index()];
 }
 
 
-noob::ghost& noob::physics::get_ghost(noob::ghost_handle h) noexcept(true)
+noob::ghost& noob::physics::get_ghost(const noob::ghost_handle h) noexcept(true)
 {
 	return ghosts[h.index()];
 }
 
 
-std::vector<noob::contact_point> noob::physics::get_intersecting(const noob::ghost_handle ghost_h) const noexcept(true) 
+uint32_t noob::physics::get_intersecting(const noob::ghost_handle ghost_h, std::vector<noob::contact_point>& Results) const noexcept(true) 
 {
+	Results.clear();
 	noob::ghost temp_ghost = ghosts[ghost_h.index()];
 
 	btManifoldArray manifold_array;
 
-	btBroadphasePairArray& pair_array = temp_ghost.inner->getOverlappingPairCache()->getOverlappingPairArray();
+	const btBroadphasePairArray& pair_array = temp_ghost.inner->getOverlappingPairCache()->getOverlappingPairArray();
 
-	std::vector<noob::contact_point> results;
-
-	size_t num_pairs = pair_array.size();
+	const size_t num_pairs = pair_array.size();
 
 	for (size_t i = 0; i < num_pairs; ++i)
 	{
 		manifold_array.clear();
 
-		const btBroadphasePair& pair = pair_array[i];
+		const btBroadphasePair &pair = pair_array[i];
 
-		btBroadphasePair* collision_pair = dynamics_world->getPairCache()->findPair(pair.m_pProxy0, pair.m_pProxy1);
+		const btBroadphasePair *collision_pair = dynamics_world->getPairCache()->findPair(pair.m_pProxy0, pair.m_pProxy1);
 
 		if (!collision_pair)
 		{
@@ -142,8 +141,8 @@ std::vector<noob::contact_point> noob::physics::get_intersecting(const noob::gho
 
 		for (size_t j = 0; j < manifold_array.size(); ++j)
 		{
-			btPersistentManifold* manifold = manifold_array[j];
-			const btCollisionObject* bt_obj = manifold->getBody0();
+			const btPersistentManifold *manifold = manifold_array[j];
+			const btCollisionObject *bt_obj = manifold->getBody0();
 			// Sanity check
 			const uint32_t index = static_cast<uint32_t>(bt_obj->getUserIndex2());
 			if (index != std::numeric_limits<uint32_t>::max())
@@ -151,7 +150,7 @@ std::vector<noob::contact_point> noob::physics::get_intersecting(const noob::gho
 				// btScalar direction = is_first_body ? btScalar(-1.0) : btScalar(1.0);
 				for (size_t p = 0; p < manifold->getNumContacts(); ++p)
 				{
-					const btManifoldPoint& pt = manifold->getContactPoint(p);
+					const btManifoldPoint &pt = manifold->getContactPoint(p);
 					if (pt.getDistance() < 0.0f)
 					{
 						noob::contact_point cp;
@@ -162,7 +161,7 @@ std::vector<noob::contact_point> noob::physics::get_intersecting(const noob::gho
 						cp.pos_b = vec3f_from_bullet(pt.getPositionWorldOnB());
 						cp.normal_on_b = vec3f_from_bullet(pt.m_normalWorldOnB);
 
-						results.push_back(cp);
+						Results.push_back(cp);
 					}
 				}
 			}
@@ -173,11 +172,11 @@ std::vector<noob::contact_point> noob::physics::get_intersecting(const noob::gho
 		}
 	}
 
-	return results;
+	return Results.size();
 }
 
 
-void noob::physics::remove_body(noob::body_handle h) noexcept(true)
+void noob::physics::remove_body(const noob::body_handle h) noexcept(true)
 {
 	noob::body temp = bodies[h.index()];
 	if (temp.physics_valid)
@@ -189,7 +188,7 @@ void noob::physics::remove_body(noob::body_handle h) noexcept(true)
 }
 
 
-void noob::physics::remove_ghost(noob::ghost_handle h) noexcept(true) 
+void noob::physics::remove_ghost(const noob::ghost_handle h) noexcept(true) 
 {
 	noob::ghost temp = ghosts[h.index()];
 	dynamics_world->removeCollisionObject(temp.inner);

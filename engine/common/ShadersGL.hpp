@@ -94,16 +94,19 @@ namespace noob
 					"layout(location = 2) in vec4 a_vert_colour;			\n"
 					"layout(location = 3) in vec4 a_instance_colour;		\n"
 					"layout(location = 4) in mat4 a_model_mat;			\n"
-					"layout(location = 8) in mat4 a_mvp_mat;			\n"
+					"uniform mat4 view_matrix;					\n"
+					"uniform mat4 projection_matrix;				\n"
 					"out vec4 v_world_pos;						\n"
 					"out vec4 v_world_normal;					\n"
-					"out vec4 v_vert_colour;					\n"				
+					"out vec4 v_vert_colour;					\n"
 					"void main()							\n"
 					"{								\n"
 					"	v_world_pos = a_model_mat * a_pos;			\n"
-					"	v_world_normal = a_model_mat * a_normal;		\n"
+					"	mat4 modelview_mat = view_matrix * a_model_mat;		\n"
+					"	v_world_normal = modelview_mat * vec4(a_normal.xyz, 0);	\n"
 					"	v_vert_colour = a_vert_colour * a_instance_colour;	\n"
-					"	gl_Position = a_mvp_mat * a_pos;			\n"
+					"	mat4 mvp_mat = projection_matrix * modelview_mat;	\n"
+					"	gl_Position = mvp_mat * a_pos;				\n"
 					"}								\n"));
 
 
@@ -114,7 +117,6 @@ namespace noob
 					"out vec4 v_world_pos;						\n"
 					"out vec4 v_world_normal;					\n"
 					"out vec4 v_vert_colour;					\n"
-					// "uniform mat4 model_mat;					\n"
 					"uniform mat4 mvp;						\n"				
 					"void main()							\n"
 					"{								\n"
@@ -157,7 +159,7 @@ namespace noob
 				"}														\n");
 
 		static const std::string fs_instancing_src = noob::concat(shader_prefix, lambert_diffuse, blinn_phong_specular, std::string(
-					"in vec4 v_world_pos;										\n"							"in vec4 v_world_normal;										\n"
+					"in vec4 v_world_pos;										\n"		"in vec4 v_world_normal;										\n"
 					"in vec4 v_vert_colour;										\n"
 					"layout (location = 0) out vec4 out_colour;										\n"
 					"uniform vec3 eye_pos;													\n"

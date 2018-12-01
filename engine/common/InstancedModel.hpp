@@ -11,7 +11,7 @@ namespace noob
 	struct instanced_model : public model_indexed
 	{
 		static constexpr uint32_t colours_stride = sizeof(noob::vec4f);
-		static constexpr uint32_t matrices_stride = sizeof(noob::mat4f) * 2;
+		static constexpr uint32_t matrices_stride = sizeof(noob::mat4f);
 
 		uint32_t colours_vbo = 0;
 		uint32_t matrices_vbo = 0;

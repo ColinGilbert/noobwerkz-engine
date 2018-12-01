@@ -465,6 +465,11 @@ void noob::graphics::init(const noob::vec2ui Dims, const noob::texture_loader_2d
 	check_error_gl();	
 	u_light_directional = glGetUniformLocation(instanced_shader.index(), "directional_light");
 	check_error_gl();
+	u_view = glGetUniformLocation(instanced_shader.index(), "view_matrix");	
+	check_error_gl();
+	u_projection = glGetUniformLocation(instanced_shader.index(), "projection_matrix");
+	check_error_gl();
+
 
 	noob::logger::log(noob::importance::INFO, "Loading terrain shader!");
 
@@ -591,8 +596,13 @@ void noob::graphics::set_eye_position(const noob::vec3f& EyePos) noexcept(true)
 
 void noob::graphics::upload_instanced_uniforms() const noexcept(true)
 {
-	glUniform3fv(u_eye_pos_terrain, 1, &eye_pos[0]);
-	glUniform3fv(u_light_directional_terrain, 1, &light_direction[0]);
+	glUniformMatrix4fv(u_view, 1, false, &view_mat[0]);
+	check_error_gl();
+	glUniformMatrix4fv(u_projection, 1, false, &proj_mat[0]);
+	check_error_gl();
+	glUniform3fv(u_eye_pos, 1, &eye_pos[0]);
+	check_error_gl();
+	glUniform3fv(u_light_directional, 1, &light_direction[0]);
 	check_error_gl();
 }
 
@@ -605,6 +615,7 @@ void noob::graphics::draw_instanced(const noob::instanced_model_handle Handle, u
 	glDrawElementsInstanced(GL_TRIANGLES, m.n_indices, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0), std::min(m.n_instances, NumInstances));
 	check_error_gl();
 	glBindVertexArray(0);		
+	check_error_gl();
 }
 
 
@@ -733,7 +744,6 @@ noob::instanced_model_handle noob::graphics::add_instanced_models(const noob::me
 	glEnableVertexAttribArray(2);
 
 	// Setup colours VBO:
-	// std::vector<noob::vec4f> colours(MaxInstances, noob::vec4f(1.0, 1.0, 1.0, 1.0));
 	glBindBuffer(GL_ARRAY_BUFFER, colours_vbo);
 	glBufferData(GL_ARRAY_BUFFER, MaxInstances * noob::instanced_model::colours_stride, nullptr, GL_DYNAMIC_DRAW);
 	//glBufferData(GL_ARRAY_BUFFER, MaxInstances * noob::model::materials_stride, &colours[0].v[0], GL_DYNAMIC_DRAW);
@@ -744,56 +754,58 @@ noob::instanced_model_handle noob::graphics::add_instanced_models(const noob::me
 	model.colours_vbo = colours_vbo;
 
 	// Setup matrices VBO:
-	// std::vector<noob::mat4f> matrices(MaxInstances * 2, noob::identity_mat4());
 	glBindBuffer(GL_ARRAY_BUFFER, matrices_vbo);
 	glBufferData(GL_ARRAY_BUFFER, MaxInstances * noob::instanced_model::matrices_stride, nullptr, GL_DYNAMIC_DRAW);
-	// glBufferData(GL_ARRAY_BUFFER, MaxInstances * noob::model::matrices_stride, &matrices[0].m[0], GL_DYNAMIC_DRAW);
 
 	// Per instance model matrices
-	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(0));
-	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)));
-	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*2));
-	glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*3));
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, noob::instanced_model::matrices_stride, reinterpret_cast<const void *>(0));
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, noob::instanced_model::matrices_stride, reinterpret_cast<const void *>(sizeof(noob::vec4f)));
+	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, noob::instanced_model::matrices_stride, reinterpret_cast<const void *>(sizeof(noob::vec4f)*2));
+	glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, noob::instanced_model::matrices_stride, reinterpret_cast<const void *>(sizeof(noob::vec4f)*3));
+
 	// Per-instance MVP matrices
-	glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*4));
-	glVertexAttribPointer(9, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*5));
-	glVertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*6));
-	glVertexAttribPointer(11, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*7));
-	// Per-instance normal matrices
-	//glVertexAttribPointer(12, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*4));
-//	glVertexAttribPointer(13, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*5));
-//	glVertexAttribPointer(14, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*6));
-//	glVertexAttribPointer(15, 4, GL_FLOAT, GL_FALSE, sizeof(noob::mat4f)*2, reinterpret_cast<const void *>(sizeof(noob::vec4f)*7));
+	// glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, noob::instanced_model::matrices_stride, reinterpret_cast<const void *>(sizeof(noob::vec4f)*4));
+	// glVertexAttribPointer(9, 4, GL_FLOAT, GL_FALSE, noob::instanced_model::matrices_stride, reinterpret_cast<const void *>(sizeof(noob::vec4f)*5));
+	// glVertexAttribPointer(10, 4, GL_FLOAT, GL_FALSE, noob::instanced_model::matrices_stride, reinterpret_cast<const void *>(sizeof(noob::vec4f)*6));
+	// glVertexAttribPointer(11, 4, GL_FLOAT, GL_FALSE, noob::instanced_model::matrices_stride, reinterpret_cast<const void *>(sizeof(noob::vec4f)*7));
 
-
+	// Per-instance view matrices
+	// glVertexAttribPointer(12, 4, GL_FLOAT, GL_FALSE, noob::instanced_model::matrices_stride, reinterpret_cast<const void *>(sizeof(noob::vec4f)*8));
+	// glVertexAttribPointer(13, 4, GL_FLOAT, GL_FALSE, noob::instanced_model::matrices_stride, reinterpret_cast<const void *>(sizeof(noob::vec4f)*9));
+	// glVertexAttribPointer(14, 4, GL_FLOAT, GL_FALSE,  noob::instanced_model::matrices_stride, reinterpret_cast<const void *>(sizeof(noob::vec4f)*10));
+	// glVertexAttribPointer(15, 4, GL_FLOAT, GL_FALSE, noob::instanced_model::matrices_stride, reinterpret_cast<const void *>(sizeof(noob::vec4f)*11));
 
 
 	glEnableVertexAttribArray(4);
 	glEnableVertexAttribArray(5);
 	glEnableVertexAttribArray(6);
 	glEnableVertexAttribArray(7);
-	glEnableVertexAttribArray(8);
-	glEnableVertexAttribArray(9);
-	glEnableVertexAttribArray(10);
-	glEnableVertexAttribArray(11);
-	//glEnableVertexAttribArray(12);
-	//glEnableVertexAttribArray(13);
-	//glEnableVertexAttribArray(14);
-	//glEnableVertexAttribArray(15);
+
+	// glEnableVertexAttribArray(8);
+	// glEnableVertexAttribArray(9);
+	// glEnableVertexAttribArray(10);
+	// glEnableVertexAttribArray(11);
+	
+	// glEnableVertexAttribArray(12);
+	// glEnableVertexAttribArray(13);
+	// glEnableVertexAttribArray(14);
+	// glEnableVertexAttribArray(15);
 
 
 	glVertexAttribDivisor(4, 1);
 	glVertexAttribDivisor(5, 1);
 	glVertexAttribDivisor(6, 1);
 	glVertexAttribDivisor(7, 1);
-	glVertexAttribDivisor(8, 1);
-	glVertexAttribDivisor(9, 1);
-	glVertexAttribDivisor(10, 1);
-	glVertexAttribDivisor(11, 1);
-	//glVertexAttribDivisor(12, 1);
-	//glVertexAttribDivisor(13, 1);
-	//glVertexAttribDivisor(14, 1);
-	//glVertexAttribDivisor(15, 1);
+	
+	// glVertexAttribDivisor(8, 1);
+	// glVertexAttribDivisor(9, 1);
+	// glVertexAttribDivisor(10, 1);
+	// glVertexAttribDivisor(11, 1);
+	
+	// glVertexAttribDivisor(12, 1);
+	// glVertexAttribDivisor(13, 1);
+	// glVertexAttribDivisor(14, 1);
+	// glVertexAttribDivisor(15, 1);
 
 	model.matrices_vbo = matrices_vbo;
 
@@ -962,12 +974,11 @@ noob::gpu_write_buffer noob::graphics::map_matrices_buffer(noob::instanced_model
 	if (Handle.index() < instanced_models.size())
 	{
 		const noob::instanced_model m = instanced_models[Handle.index()];
-		const uint32_t stride_in_bytes = noob::instanced_model::matrices_stride;
 		glBindBuffer(GL_ARRAY_BUFFER, m.matrices_vbo);
 		check_error_gl();
 
-		const uint32_t total_size = stride_in_bytes * m.n_instances;
-		float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, Min, Max, GL_MAP_WRITE_BIT));
+		const uint32_t total_size = noob::instanced_model::matrices_stride * m.n_instances;
+		float *ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, Min, Max, GL_MAP_WRITE_BIT));
 		check_error_gl();
 
 		if (ptr != nullptr)

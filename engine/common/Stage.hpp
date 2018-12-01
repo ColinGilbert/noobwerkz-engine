@@ -3,8 +3,8 @@
 
 #include <functional>
 
-#include <rdestl/slist.h>
-// #include <btBulletDynamicsCommon.h>
+// #include <rdestl/slist.h>
+
 #include <noob/fast_hashtable/fast_hashtable.hpp>
 #include <noob/graph/graph.hpp>
 #include <noob/component/component.hpp>
@@ -37,7 +37,6 @@ namespace noob
 
 			// This one must be called by the application.
 			void init(const noob::vec2ui Dims, const noob::mat4f& projection_mat) noexcept(true);
-
 			// Brings everything back to scratch.
 			void tear_down() noexcept(true);
 
@@ -47,29 +46,38 @@ namespace noob
 			// Also, one stage could be preloading an updated scene (from file, network, or procedural content) prior to being swapped to being currently-displayed stage.
 			// Draw() can also feasibly be called more than once per frame, especially after setting the viewport to a different FOV/LOD. The results can then be treated as a texture and displayed within a game, or on a HUD.
 			void update(double dt) noexcept(true);
-
 			void draw() noexcept(true);
-
 			void update_viewport_params(const noob::vec2ui Dims, const noob::mat4f& projection_mat) noexcept(true);
 
 			// Call this when your graphics context went dead and is now back (ie: app got sent into background)
 			void rebuild_graphics(const noob::vec2ui Dims, const noob::mat4f& projection_mat) noexcept(true);
-
 			void rebuild_models() noexcept(true);
-
 			void build_navmesh() noexcept(true);
 
 			noob::actor_blueprints_handle add_actor_blueprints(const noob::actor_blueprints&) noexcept(true);
 
 			void reserve_actors(const noob::actor_blueprints_handle, uint32_t num) noexcept(true);
-
 			void set_team_colour(uint32_t team_num, const noob::vec4f& colour) noexcept(true);
 			
-			noob::actor_handle actor(noob::actor_blueprints_handle, uint32_t team, const noob::vec3f&, const noob::versorf&) noexcept(true);
-			
-			noob::scenery_handle scenery(const noob::shape_handle, const noob::vec3f&, const noob::versorf&) noexcept(true); // Add checkers and such
+			noob::actor_handle create_actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3f&, const noob::versorf&) noexcept(true);
+			noob::scenery_handle create_scenery(const noob::shape_handle, const noob::vec3f&, const noob::versorf&) noexcept(true);
 
-			std::vector<noob::contact_point> get_intersecting(const noob::actor_handle) const noexcept(true);
+			void set_actor_position(const noob::actor_handle, const noob::vec3f&) noexcept(true);
+			void set_actor_orientation(const noob::actor_handle, const noob::versorf&) noexcept(true);
+			void set_actor_velocity(const noob::actor_handle, const noob::vec3f&) noexcept(true);
+			void set_actor_target(const noob::actor_handle, const noob::vec3f&) noexcept(true);
+			void set_actor_self_controlled(const noob::actor_handle, bool) noexcept(true);
+			void set_actor_team(const noob::actor_handle, uint32_t) noexcept(true);
+
+			noob::vec3f get_actor_position(const noob::actor_handle) noexcept(true);
+			noob::versorf get_actor_orientation(const noob::actor_handle) noexcept(true);
+			noob::vec3f get_actor_velocity(const noob::actor_handle) noexcept(true);
+			noob::vec3f get_actor_target(const noob::actor_handle) noexcept(true);
+			bool get_actor_self_controlled(const noob::actor_handle) noexcept(true);
+			uint32_t get_actor_team(const noob::actor_handle) noexcept(true);
+
+
+			size_t get_intersecting(const noob::actor_handle, std::vector<noob::contact_point>&) const noexcept(true);
 
 			bool show_origin;
 
@@ -77,7 +85,8 @@ namespace noob
 			noob::vec4f ambient_light;
 
 			std::string print_drawables_info() const noexcept(true);
-
+			
+			// TODO: Remove
 			void accept_ndof_data(const noob::ndof::data& info) noexcept(true);
 
 
@@ -116,18 +125,20 @@ namespace noob
 
 			noob::directional_light main_light;
 			
-			rde::vector<noob::stage::drawable_info> drawables;
-			rde::vector<noob::stage::actor_info> actor_factories;
-			rde::vector<noob::vec4f> team_colours;
+			std::vector<noob::stage::drawable_info> drawables;
+			std::vector<noob::stage::actor_info> actor_factories;
+			std::vector<noob::vec4f> team_colours;
 
 			// Voronoi cells are preferred over convex hulls generated from a set of points for data representation, as we can be certain that the voronoi cell is unambiguous.
 			// rde::vector<noob::vorocell> voros;
 
 			noob::fast_hashtable models_to_instances;
 
-			noob::component<noob::actor> actors;
-			noob::component<noob::scenery> sceneries;
-			noob::component<noob::particle_system> particle_systems;
+			std::vector<noob::actor> actors;
+			std::vector<noob::scenery> sceneries;
+			std::vector<noob::particle_system> particle_systems;
+			std::vector<noob::contact_point> contacts; // Our holder for temporary contact points; this limits us to single-threaded use and it thus might be worth exploring a multithreaded solution.
+
 			noob::component_dynamic<noob::armature> armatures;
 
 			noob::duration update_duration;
@@ -143,14 +154,14 @@ namespace noob
 
 			void update_actors() noexcept(true);
 
-			void actor_dither(noob::actor_handle) noexcept(true);
+			void actor_dither(const noob::actor_handle) noexcept(true);
 			typedef noob::handle<drawable_info> drawable_info_handle;
 			
-			void upload_actor_colours(drawable_info_handle) const noexcept(true);
-			void upload_matrices(drawable_info_handle) noexcept(true);
+			void upload_actor_colours(const drawable_info_handle) const noexcept(true);
+			void upload_matrices(const drawable_info_handle) noexcept(true);
 			
 			// This method checks to see if there have been any models of this type reserved prior to reserving them and reserves + allocates if not. If anything *is* reserved, it'll still only allocate if Num > originally allocated.
-			void reserve_models(noob::instanced_model_handle h, uint32_t Num) noexcept(true);
+			void reserve_models(const noob::instanced_model_handle h, uint32_t Num) noexcept(true);
 
 			void upload_terrain() noexcept(true);
 

@@ -168,7 +168,7 @@ noob::actor_blueprints_handle noob::stage::add_actor_blueprints(const noob::acto
 }
 
 
-void noob::stage::reserve_actors(noob::actor_blueprints_handle bp_h, uint32_t num) noexcept(true)
+void noob::stage::reserve_actors(const noob::actor_blueprints_handle bp_h, uint32_t num) noexcept(true)
 {
 	if (actor_factories.size() > bp_h.index())
 	{
@@ -192,7 +192,7 @@ void noob::stage::set_team_colour(uint32_t Team, const noob::vec4f& Colour)
 }
 
 
-noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32_t team, const noob::vec3f& pos, const noob::versorf& orient) noexcept(true)
+noob::actor_handle noob::stage::create_actor(const noob::actor_blueprints_handle bp_h, uint32_t team, const noob::vec3f& pos, const noob::versorf& orient) noexcept(true)
 {
 	if (actor_factories.size() > bp_h.index())
 	{
@@ -207,8 +207,9 @@ noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32
 			a.ghost = ghost_h;
 			a.bp_handle = bp_h;
 
-			const noob::actor_handle a_h = actors.add(a);
+			actors.push_back(a);
 
+			const noob::actor_handle a_h = noob::actor_handle::make(actors.size() - 1); 
 			noob::fast_hashtable::cell* results = models_to_instances.lookup(info.bp.model.index());
 
 			const uint32_t index = results->value;
@@ -239,7 +240,7 @@ noob::actor_handle noob::stage::actor(noob::actor_blueprints_handle bp_h, uint32
 }
 
 
-noob::scenery_handle noob::stage::scenery(const noob::shape_handle Shape, const noob::vec3f& Pos, const noob::versorf& Orient) noexcept(true)
+noob::scenery_handle noob::stage::create_scenery(const noob::shape_handle Shape, const noob::vec3f& Pos, const noob::versorf& Orient) noexcept(true)
 {
 	const noob::globals& g = noob::get_globals();
 	const noob::body_handle bod_h = world.add_body(noob::body_type::STATIC, Shape, 0.0, Pos, Orient, false);
@@ -247,8 +248,9 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle Shape, const 
 	noob::scenery sc;
 	sc.body = bod_h;
 
-	const noob::scenery_handle scenery_h = sceneries.add(sc);
+	sceneries.push_back(sc);
 
+	const noob::scenery_handle scenery_h = noob::scenery_handle::make(sceneries.size() - 1);
 	noob::body b = world.get_body(bod_h);
 	b.set_user_index_1(static_cast<uint32_t>(noob::stage_item_type::SCENERY));
 	b.set_user_index_2(scenery_h.index());
@@ -261,45 +263,114 @@ noob::scenery_handle noob::stage::scenery(const noob::shape_handle Shape, const 
 }
 
 
-std::vector<noob::contact_point> noob::stage::get_intersecting(const noob::actor_handle ah) const noexcept(true)
+void noob::stage::set_actor_position(const noob::actor_handle Actor, const noob::vec3f& Pos) noexcept(true)
 {
-	noob::actor a = actors.get(ah);
-	return world.get_intersecting(a.ghost);
+	noob::ghost& pryzrak = world.get_ghost(actors[Actor.index()].ghost);
+	pryzrak.set_position(Pos);
+}
+
+
+void noob::stage::set_actor_orientation(const noob::actor_handle Actor, const noob::versorf& Orient) noexcept(true)
+{
+	noob::ghost& pryzrak = world.get_ghost(actors[Actor.index()].ghost);
+	pryzrak.set_orientation(Orient);
+}
+
+
+void noob::stage::set_actor_velocity(const noob::actor_handle Actor, const noob::vec3f& Vel) noexcept(true)
+{
+	actors[Actor.index()].velocity = Vel;
+}
+
+
+void noob::stage::set_actor_target(const noob::actor_handle Actor, const noob::vec3f& Target) noexcept(true)
+{
+	actors[Actor.index()].target_pos = Target;
+}
+
+
+void noob::stage::set_actor_self_controlled(const noob::actor_handle Actor, bool Control) noexcept(true)
+{
+	actors[Actor.index()].self_control = Control;
+}
+
+
+void noob::stage::set_actor_team(const noob::actor_handle Actor, uint32_t Team) noexcept(true)
+{
+	actors[Actor.index()].team = Team;
+}
+
+
+noob::vec3f noob::stage::get_actor_position(const noob::actor_handle Actor) noexcept(true)
+{
+	return world.get_ghost(actors[Actor.index()].ghost).get_position();
+}
+
+
+noob::versorf noob::stage::get_actor_orientation(const noob::actor_handle Actor) noexcept(true)
+{
+	return world.get_ghost(actors[Actor.index()].ghost).get_orientation();	
+}
+
+
+noob::vec3f noob::stage::get_actor_velocity(const noob::actor_handle Actor) noexcept(true)
+{
+	return actors[Actor.index()].velocity;
+}
+
+
+noob::vec3f noob::stage::get_actor_target(const noob::actor_handle Actor) noexcept(true)
+{
+	return actors[Actor.index()].target_pos;
+}
+
+
+bool noob::stage::get_actor_self_controlled(const noob::actor_handle Actor) noexcept(true)
+{
+	return actors[Actor.index()].self_control;
+}
+
+
+uint32_t noob::stage::get_actor_team(const noob::actor_handle Actor) noexcept(true)
+{
+	return actors[Actor.index()].team;
+}
+
+
+size_t noob::stage::get_intersecting(const noob::actor_handle ah, std::vector<noob::contact_point>& Results) const noexcept(true)
+{
+	noob::actor a = actors[ah.index()];
+	return world.get_intersecting(a.ghost, Results);
 }
 
 
 void noob::stage::update_actors() noexcept(true)
 {
-	for (uint32_t i = 0; i < actors.count(); ++i)
+	for (uint32_t i = 0; i < actors.size(); ++i)
 	{
-		//noob::actor a = actors.get_unsafe(noob::actor_handle::make(i));
 		actor_dither(noob::actor_handle::make(i));
 	}
 }
 
 
-void noob::stage::actor_dither(noob::actor_handle ah) noexcept(true)
+void noob::stage::actor_dither(const noob::actor_handle ah) noexcept(true)
 {
-	/*
-	   noob::actor a = actors.get(ah);
-
-	   if (a.alive)
-	   {
-	   std::vector<noob::contact_point> cps = get_intersecting(ah);
-	   if (cps.size() == 0)
-	   {
-	   noob::vec3f gravity = world.get_gravity();// * a.gravity_coeff;
-	   noob::ghost& gst = world.get_ghost(a.ghost);
-	   noob::vec3f temp_pos = gst.get_position();
-	   temp_pos += gravity;
-	   gst.set_position(temp_pos);
-	   }
-	   }
-	 */
+	noob::actor a = actors[ah.index()];
+	// static uint64_t value = 0;
+	if (a.self_control)
+	{
+		size_t num_contacts = get_intersecting(ah, contacts);
+		for (auto cp : contacts)
+		{
+			
+			// Here, we implement behaviours.
+		}
+	}
+	// TODO: Implement physics-based code
 }
 
 
-void noob::stage::upload_actor_colours(drawable_info_handle arg) const noexcept(true)
+void noob::stage::upload_actor_colours(const drawable_info_handle arg) const noexcept(true)
 {
 	const uint32_t count = drawables[arg.index()].count;
 
@@ -322,7 +393,7 @@ void noob::stage::upload_actor_colours(drawable_info_handle arg) const noexcept(
 	while (current < count)
 	{
 		const noob::actor_handle a_h = drawables[arg.index()].instances[current].actor;
-		const noob::actor a = actors.get(a_h);
+		const noob::actor a = actors[a_h.index()];
 		const noob::vec4f colour = team_colours[a.team];
 		bool valid = buf.push_back(colour);
 
@@ -342,7 +413,7 @@ void noob::stage::upload_actor_colours(drawable_info_handle arg) const noexcept(
 }
 
 
-void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
+void noob::stage::upload_matrices(const drawable_info_handle arg) noexcept(true)
 {
 	const uint32_t count = drawables[arg.index()].count;
 
@@ -350,47 +421,57 @@ void noob::stage::upload_matrices(drawable_info_handle arg) noexcept(true)
 	assert(count <= theoretical_max);
 
 	const noob::instanced_model_handle model_h = drawables[arg.index()].model;
+	
 	noob::graphics& gfx = noob::get_graphics();
 	noob::gpu_write_buffer buf = gfx.map_matrices_buffer(model_h, 0, count);
+
 	if (buf.valid() == false)
 	{
 		logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced matrices buffer for model ", noob::to_string(arg.index()), " - count: ", noob::to_string(count)));	
 		return;
 	}
 
+
 	const noob::mat4f viewproj_mat = projection_matrix * view_matrix;
 	uint32_t current = 0;
 	while (current < count)
 	{
 		const noob::stage::drawable_instance info = drawables[arg.index()].instances[current];
-		const noob::actor a = actors.get(info.actor);
+		const noob::actor a = actors[info.actor.index()];
 
 		const noob::ghost& gst = world.get_ghost(a.ghost);
-		const noob::mat4f model_mat = gst.get_transform();
+		const noob::mat4f model_matrix = gst.get_transform();
 
-		bool valid = buf.push_back(model_mat);
+		bool valid = buf.push_back(model_matrix);
 
 		if (!valid)
 		{
-			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu matrices buffer for model ", noob::to_string(arg.index()), " MVP."));
+			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu (model) matrices buffer for model ", noob::to_string(arg.index()), "."));
 			gfx.unmap_buffer();			
 			return;
 		}
-
-		const noob::mat4f mvp_mat = viewproj_mat * model_mat;
-		valid = buf.push_back(mvp_mat);
+	/*	
+		valid = buf.push_back(view_matrix);
 
 		if (!valid)
 		{
-			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu matrices buffer for model ", noob::to_string(arg.index()), " normal."));
+			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu (view) matrices buffer for model ", noob::to_string(arg.index()), "."));
 			gfx.unmap_buffer();
 			return;
 		}
 
+		const noob::mat4f mvp_mat = viewproj_mat * model_matrix;
+		valid = buf.push_back(mvp_mat);
+
+		if (!valid)
+		{
+			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu (MVP) matrices buffer for model ", noob::to_string(arg.index()), "."));
+			gfx.unmap_buffer();
+			return;
+		}
+*/
 		++current;
 	}
-
-	// logger::log(noob::importance::INFO, noob::concat("[Stage] ", noob::to_string(current), "*2 matrices uploaded"));
 
 	gfx.unmap_buffer();
 }
@@ -401,12 +482,12 @@ void noob::stage::upload_terrain() noexcept(true)
 	if (terrain_started)
 	{
 		std::vector<noob::vec4f> tmp_verts;
-		for (uint32_t i = 0; i < sceneries.count(); ++i)
+		for (uint32_t i = 0; i < sceneries.size(); ++i)
 		{
-			const noob::scenery sc = sceneries.get(noob::scenery_handle::make(i));
+			const noob::scenery sc = sceneries[i];
 			const noob::body& bod = world.get_body(sc.body);
 			const noob::mat4f model_mat = bod.get_transform();
-			noob::globals& g = noob::get_globals();
+			const noob::globals& g = noob::get_globals();
 			const noob::shape tmp_shp = g.shapes.get(noob::shape_handle::make(bod.get_shape_index()));
 			const noob::mesh_3d tmp_msh = tmp_shp.get_mesh();
 			// Add up triangles independently
@@ -442,9 +523,9 @@ void noob::stage::upload_terrain() noexcept(true)
 }
 
 
-void noob::stage::reserve_models(noob::instanced_model_handle Handle, uint32_t Num) noexcept(true)
+void noob::stage::reserve_models(const noob::instanced_model_handle Handle, uint32_t Num) noexcept(true)
 {
-	noob::fast_hashtable::cell* results = models_to_instances.lookup(Handle.index());
+	noob::fast_hashtable::cell *results = models_to_instances.lookup(Handle.index());
 
 	// If we haven't gotten a model with that handle yet...
 	if (!models_to_instances.is_valid(results))

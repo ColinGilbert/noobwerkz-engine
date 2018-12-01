@@ -4,6 +4,7 @@
 // External libs
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
+
 #include <noob/component/component.hpp>
 
 #include "Shape.hpp"
@@ -17,7 +18,6 @@ namespace noob
 		public:
 		ghost() noexcept(true) : inner(nullptr) {}
 
-		void init(btCollisionWorld* world, const noob::shape&, const noob::vec3f&, const noob::versorf&) noexcept(true);
 
 		void set_position(const noob::vec3f&) noexcept(true);
 		void set_orientation(const noob::versorf&) noexcept(true);
@@ -34,6 +34,8 @@ namespace noob
 		uint32_t get_shape_index() const noexcept(true);		
 
 		protected:
+
+		void init(btCollisionWorld* world, const noob::shape&, const noob::vec3f&, const noob::versorf&) noexcept(true);
 		btPairCachingGhostObject* inner;
 	};
 

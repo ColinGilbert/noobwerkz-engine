@@ -43,6 +43,7 @@ namespace noob
 			void accept_ndof_data(const noob::ndof::data& info) noexcept(true);
 
 			// step() is called by the target platform. It calculates the delta-time and drives the app's main logic loop.
+			// TODO: Check timing
 			void step();
 
 		protected:

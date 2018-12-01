@@ -1,4 +1,4 @@
-// TODO: Replace hard-coded cylinder, cone, sphere functions with more generic swept shape algorithm. Low priority.
+// TODO: Replace hard-coded box, cylinder, cone functions with more generic extruded/swept shape algorithm. Low priority.
 #pragma once
 
 #include <rdestl/vector.h>
