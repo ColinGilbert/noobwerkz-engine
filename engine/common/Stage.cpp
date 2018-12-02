@@ -7,7 +7,7 @@ void noob::stage::init(const noob::vec2ui Dims, const noob::mat4f& projection_ma
 	update_viewport_params(Dims, projection_mat);
 
 	noob::vec3f eye_pos, eye_target, eye_up;
-	eye_pos = noob::vec3f(0.0, 200.0, 0.0);
+	eye_pos = noob::vec3f(0.0, 300.0, 0.0);
 	eye_target = noob::vec3f(0.0, 0.0, 0.0);
 	eye_up = noob::vec3f(0.0, 0.0, 1.0);
 	view_matrix = noob::look_at(eye_pos, eye_target, eye_up);
@@ -24,7 +24,7 @@ void noob::stage::init(const noob::vec2ui Dims, const noob::mat4f& projection_ma
 
 
 	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
-	team_colours.push_back(noob::vec4f(1.0 , 1.0, 1.0, 1.0));
+	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
 	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
 	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
 
@@ -210,7 +210,7 @@ noob::actor_handle noob::stage::create_actor(const noob::actor_blueprints_handle
 			actors.push_back(a);
 
 			const noob::actor_handle a_h = noob::actor_handle::make(actors.size() - 1); 
-			noob::fast_hashtable::cell* results = models_to_instances.lookup(info.bp.model.index());
+			noob::fast_hashtable::cell *results = models_to_instances.lookup(info.bp.model.index());
 
 			const uint32_t index = results->value;
 			const uint32_t old_count = drawables[index].count;
@@ -425,14 +425,14 @@ void noob::stage::upload_matrices(const drawable_info_handle arg) noexcept(true)
 	noob::graphics& gfx = noob::get_graphics();
 	noob::gpu_write_buffer buf = gfx.map_matrices_buffer(model_h, 0, count);
 
-	if (buf.valid() == false)
+	if (!buf.valid())
 	{
 		logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced matrices buffer for model ", noob::to_string(arg.index()), " - count: ", noob::to_string(count)));	
 		return;
 	}
 
 
-	const noob::mat4f viewproj_mat = projection_matrix * view_matrix;
+	// const noob::mat4f viewproj_mat = projection_matrix * view_matrix;
 	uint32_t current = 0;
 	while (current < count)
 	{

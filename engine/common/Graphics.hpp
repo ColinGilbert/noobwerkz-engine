@@ -16,11 +16,6 @@
 #include "Attrib.hpp"
 #include "Shader.hpp"
 #include "TextureLoader.hpp"
-#include "Model.hpp"
-#include "InstancedModel.hpp"
-#include "TerrainModel.hpp"
-#include "BillboardModel.hpp"
-
 
 
 namespace noob
@@ -103,7 +98,7 @@ namespace noob
 			void texture_swizzle(const std::array<noob::tex_swizzle, 2>) const noexcept(true);
 			void texture_swizzle(const std::array<noob::tex_swizzle, 3>) const noexcept(true);			
 			void texture_swizzle(const std::array<noob::tex_swizzle, 4>) const noexcept(true);
-			void texture_wrap_mode(const std::array<noob::tex_wrap_mode, 2>) const noexcept(true);			
+			void texture_wrap_mode(const std::array<noob::tex_wrap_mode, 2>) const noexcept(true);
 			void texture_wrap_mode(const std::array<noob::tex_wrap_mode, 3>) const noexcept(true);
 
 			// Texture packing and unpacking alignments.

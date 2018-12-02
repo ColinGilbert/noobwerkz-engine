@@ -94,7 +94,7 @@ list (APPEND main_src ${common_src} ${user_src})
 ########################
 
 if (NOOB_PLATFORM_LINUX)
-	set(CMAKE_C_FLAGS "-DHAVE_ALLOCA_H ${CMAKE_C_FLAGS}")
+	#set(CMAKE_C_FLAGS "-DHAVE_ALLOCA_H ${CMAKE_C_FLAGS}")
 	set(CMAKE_CXX_FLAGS "-DNOOB_PLATFORM_LINUX ${CMAKE_CXX_FLAGS}")
 
 	include_directories(lib/Khronos/OpenGL-Registry/api)

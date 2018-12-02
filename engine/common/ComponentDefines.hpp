@@ -18,7 +18,7 @@
 namespace noob
 {
 	typedef noob::component<noob::shape> shapes_holder;
-	typedef noob::component<noob::light> lights_holder;
+	typedef noob::component<noob::point_light> point_lights_holder;
 	typedef noob::component<noob::reflectance> reflectances_holder;
 	typedef noob::component<noob::text_label> text_label_holder;
 

@@ -58,8 +58,8 @@ namespace noob
 
 		noob::skeletal_anim_handle skeleton(const std::string& filename) noexcept(true);
 
-		noob::light_handle set_light(const noob::light&, const std::string& name) noexcept(true);
-		noob::light_handle get_light(const std::string& name) const noexcept(true);
+		noob::point_light_handle set_point_light(const noob::point_light&, const std::string& name) noexcept(true);
+		noob::point_light_handle get_point_light(const std::string& name) const noexcept(true);
 
 		noob::reflectance_handle set_reflectance(const noob::reflectance&, const std::string& name) noexcept(true);
 		noob::reflectance_handle get_reflectance(const std::string& name) const noexcept(true);
@@ -82,7 +82,7 @@ namespace noob
 		
 		shapes_holder shapes;
 		skeletal_anims_holder skeletal_anims;
-		lights_holder lights;
+		point_lights_holder lights;
 		reflectances_holder reflectances;
 		samples_holder samples;
 
@@ -99,7 +99,7 @@ namespace noob
 			return unit_cube_shape;
 		}
 		
-		noob::light_handle get_default_light() const noexcept(true)
+		noob::point_light_handle get_default_light() const noexcept(true)
 		{
 			return default_light;
 		}
@@ -117,7 +117,7 @@ namespace noob
 
 		// The following are basic, commonly-used objects that we provide as a convenience.
 		noob::shape_handle unit_sphere_shape, unit_cube_shape;
-		noob::light_handle default_light;
+		noob::point_light_handle default_light;
 		noob::reflectance_handle default_reflectance;
 
 		noob::fast_hashtable shapes_to_models;
@@ -126,7 +126,7 @@ namespace noob
 		rde::fixed_array<double, num_pseudo_randoms> pseudo_randoms;
 
 		rde::hash_map<rde::string, noob::shape_handle> names_to_shapes;
-		rde::hash_map<rde::string, noob::light_handle> names_to_lights;
+		rde::hash_map<rde::string, noob::point_light_handle> names_to_lights;
 		rde::hash_map<rde::string, noob::reflectance_handle> names_to_reflectances;
 
 		std::atomic<bool> init_done;

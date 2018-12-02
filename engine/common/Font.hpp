@@ -19,7 +19,6 @@
 #include "Results.hpp"
 #include "Graphics.hpp"
 #include "StringFuncs.hpp"
-#include "BillboardModel.hpp"
 
 
 namespace noob

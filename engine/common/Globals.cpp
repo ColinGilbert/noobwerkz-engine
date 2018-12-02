@@ -11,9 +11,9 @@ bool noob::globals::init() noexcept(true)
 	noob::logger::log(noob::importance::INFO, noob::concat("[Globals] unit sphere shape handle ", noob::to_string(unit_sphere_shape.index()) ,", unit cube shape handle ", noob::to_string(unit_cube_shape.index())));
 	// << ", unit cylinder shape handle " << unit_cylinder_shape.index() << ", unit cone shape handle " << unit_cone_shape.index();
 
-	noob::light l;
+	noob::point_light l;
 	l.set_colour(noob::vec3f(0.0, 1.0, 1.0));
-	default_light = set_light(l, "default");
+	default_light = set_point_light(l, "default");
 
 	noob::reflectance r;
 	default_reflectance = set_reflectance(r, "default");
@@ -109,7 +109,7 @@ noob::skeletal_anim_handle noob::globals::skeleton(const std::string& filename) 
 }
 
 
-noob::light_handle noob::globals::set_light(const noob::light& l, const std::string& s) noexcept(true) 
+noob::point_light_handle noob::globals::set_point_light(const noob::point_light& l, const std::string& s) noexcept(true) 
 {
 	auto search = names_to_lights.find(rde::string(s.c_str()));
 	if (search != names_to_lights.end())
@@ -119,7 +119,7 @@ noob::light_handle noob::globals::set_light(const noob::light& l, const std::str
 	}
 	else
 	{
-		noob::light_handle h = lights.add(l);
+		noob::point_light_handle h = lights.add(l);
 		names_to_lights.insert(rde::make_pair(rde::string(s.c_str()), h));
 		return h;
 	}
@@ -127,9 +127,9 @@ noob::light_handle noob::globals::set_light(const noob::light& l, const std::str
 }
 
 
-noob::light_handle noob::globals::get_light(const std::string& s) const noexcept(true) 
+noob::point_light_handle noob::globals::get_point_light(const std::string& s) const noexcept(true) 
 {
-	noob::light_handle temp;
+	noob::point_light_handle temp;
 	auto search = names_to_lights.find(rde::string(s.c_str()));
 	if (search != names_to_lights.end())
 	{		

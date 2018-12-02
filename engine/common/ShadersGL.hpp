@@ -103,7 +103,7 @@ namespace noob
 					"{								\n"
 					"	v_world_pos = a_model_mat * a_pos;			\n"
 					"	mat4 modelview_mat = view_matrix * a_model_mat;		\n"
-					"	v_world_normal = mat4(view_matrix * a_model_mat) * vec4(a_normal.xyz, 0);	\n"
+					"	v_world_normal = a_model_mat * vec4(a_normal.xyz, 0);	\n"
 					"	v_vert_colour = a_vert_colour * a_instance_colour;	\n"
 					"	mat4 mvp_mat = projection_matrix * modelview_mat;	\n"
 					"	gl_Position = mvp_mat * a_pos;				\n"
@@ -121,7 +121,7 @@ namespace noob
 					"void main()							\n"
 					"{								\n"
 					"	v_world_pos = a_pos;					\n"
-					"	v_world_normal = view_matrix * a_normal;		\n"
+					"	v_world_normal = vec4(a_normal.xyz, 0);			\n"
 					"	v_vert_colour = a_vert_colour;				\n"
 					"	gl_Position = mvp * a_pos;				\n"
 					"}								\n"));
@@ -167,8 +167,8 @@ namespace noob
 					"void main()														\n"
 					"{															\n"
 					"	vec3 view_direction = normalize(eye_pos - v_world_pos.xyz);							\n"
-					"	float diffuse = lambert_diffuse(directional_light, v_world_normal.xyz);						\n"
-					"	float specular = blinn_phong_specular(directional_light, view_direction, v_world_normal.xyz, 10.0);		\n"
+					"	float diffuse = lambert_diffuse(-directional_light, v_world_normal.xyz);						\n"
+					"	float specular = blinn_phong_specular(-directional_light, -view_direction, v_world_normal.xyz, 10.0);		\n"
 					"	float light = 0.1 + diffuse + specular;										\n"
 					"	out_colour = vec4(clamp(v_vert_colour.xyz * light, 0.0, 1.0), 1.0);						\n"
 					"}															\n"));
@@ -211,11 +211,10 @@ namespace noob
 					"	float ratio_2_to_3 = noob_when_ge(tex_falloff, blend_1.y) * ((tex_falloff + 1.0) * 0.5);								\n"
 					"	vec4 tex_final = ((colour_0 + colour_1) * ratio_0_to_1) + ((colour_1 + colour_2) * ratio_1_to_2) + ((colour_2 + colour_3) * ratio_2_to_3);	\n"
 					"	vec3 view_direction = normalize(eye_pos - v_world_pos.xyz);											\n"
-					"	float diffuse = lambert_diffuse(directional_light, v_world_normal.xyz);										\n"
-					"	float specular = blinn_phong_specular(directional_light, view_direction, v_world_normal.xyz, 10.0);						\n"
+					"	float diffuse = lambert_diffuse(-directional_light, v_world_normal.xyz);										\n"
+					"	float specular = blinn_phong_specular(-directional_light, -view_direction, v_world_normal.xyz, 10.0);						\n"
 					"	float light = 0.1 + diffuse + specular;														\n"
-					"	vec3 total_colour = tex_final.xyz * light;													\n"
-					"	out_colour = vec4(clamp(total_colour, 0.0, 1.0), 1.0);												\n"
+					"	out_colour = vec4(clamp(tex_final.xyz * light, 0.0, 1.0), 1.0);												\n"
 					"}																			\n"));
 
 

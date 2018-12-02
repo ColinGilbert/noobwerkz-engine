@@ -25,7 +25,7 @@ namespace noob
 
 		// enum class mentality_type : uint16_t { ALERT = 0, AGGRESSIVE = 1, DEFENSIVE = 2, PANIC = 3, RELAXED = 4, UNCONSCIOUS = 5 };
 
-		static const noob::stage_item_type type = noob::stage_item_type::ACTOR;
+		static constexpr noob::stage_item_type type = noob::stage_item_type::ACTOR;
 
 		bool self_control;
 		uint32_t team, pose;

@@ -13,9 +13,9 @@ namespace noob
 			noob::vec3f direction;
 	};
 
-	struct light 
+	struct point_light 
 	{
-		light() noexcept(true) : rgb_falloff(noob::vec4f(1.0, 1.0, 1.0, 1.0)), pos_radius(noob::vec4f(0.0, 200.0, 0.0, 300.0))  {}
+		point_light() noexcept(true) : rgb_falloff(noob::vec4f(1.0, 1.0, 1.0, 1.0)), pos_radius(noob::vec4f(0.0, 200.0, 0.0, 300.0))  {}
 
 		void set_position(const noob::vec3f& arg) noexcept(true)
 		{
@@ -70,6 +70,6 @@ namespace noob
 		noob::vec4f rgb_falloff, pos_radius;
 	};
 
-	typedef noob::handle<noob::light> light_handle;
+	typedef noob::handle<noob::point_light> point_light_handle;
 
 }

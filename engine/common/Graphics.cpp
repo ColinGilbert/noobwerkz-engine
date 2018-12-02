@@ -590,10 +590,12 @@ void noob::graphics::set_projection_mat(const noob::mat4f ProjMat) noexcept(true
 	proj_mat = ProjMat;
 }
 
+
 void noob::graphics::set_eye_position(const noob::vec3f& EyePos) noexcept(true)
 {
 	eye_pos = EyePos;
 }
+
 
 void noob::graphics::upload_instanced_uniforms() const noexcept(true)
 {
@@ -962,6 +964,7 @@ void noob::graphics::upload_terrain_uniforms() const noexcept(true)
 	glUniform3fv(u_tex_scales, 1, &terrain_unis.texture_scales[0]);
 	glUniform3fv(u_eye_pos_terrain, 1, &eye_pos[0]);
 	glUniform3fv(u_light_directional_terrain, 1, &light_direction[0]);
+	check_error_gl();
 }
 
 
@@ -997,11 +1000,10 @@ noob::gpu_write_buffer noob::graphics::map_colours_buffer(noob::instanced_model_
 	if (Handle.index() < instanced_models.size())
 	{
 		const noob::instanced_model m = instanced_models[Handle.index()];
-		const uint32_t stride_in_bytes = noob::instanced_model::colours_stride;
 		glBindBuffer(GL_ARRAY_BUFFER, m.colours_vbo);
 		check_error_gl();
 
-		const uint32_t total_size = stride_in_bytes * m.n_instances;
+		const uint32_t total_size = noob::instanced_model::colours_stride * m.n_instances;
 		float* ptr = reinterpret_cast<float*>(glMapBufferRange(GL_ARRAY_BUFFER, Min, Max, GL_MAP_WRITE_BIT));
 		check_error_gl();
 

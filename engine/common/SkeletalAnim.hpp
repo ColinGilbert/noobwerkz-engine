@@ -76,7 +76,7 @@ namespace noob
 				float weight, runtime;
 
 				ozz::Range<ozz::math::SoaTransform> get_local_mats() const;
-				void get_model_mats(ozz::Range<ozz::math::Float4x4>& models);
+				void get_model_mats(ozz::Range<ozz::math::Float4x4>&);
 				
 				protected:
 				sampler() : weight(1.0), cache(nullptr) {}

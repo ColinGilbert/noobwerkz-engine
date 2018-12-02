@@ -5,15 +5,13 @@
 #include <noob/component/component.hpp>
 #include <noob/math/math_funcs.hpp>
 
-#include <rdestl/hash_map.h>
-
-#include "InstancedModel.hpp"
-#include "Shape.hpp"
+#include "Model.hpp"
 #include "Joint.hpp"
+#include "Ghost.hpp"
 
 namespace noob
 {
-	// This represents a multipart model.
+	// This represents a (potentially) multipart model, with physics and joints and such. It will also include such goodies as trigger points
 	class armature
 	{
 		public:

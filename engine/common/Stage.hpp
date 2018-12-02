@@ -24,9 +24,6 @@
 #include "Particles.hpp"
 #include "Armature.hpp"
 #include "NDOF.hpp"
-#include "InstancedModel.hpp"
-#include "TerrainModel.hpp"
-#include "BillboardModel.hpp"
 
 namespace noob
 {
