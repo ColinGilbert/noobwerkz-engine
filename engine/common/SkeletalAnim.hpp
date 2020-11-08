@@ -34,13 +34,11 @@ namespace noob
 		public:
 			skeletal_anim(): valid(false), current_time(0.0), total_runtime(1.0), allocator(ozz::memory::default_allocator()) {}
 			
-			~skeletal_anim();
 			// Loads a runtime skeleton. Possibly convert to raw skeleton
 			void init(const std::string& filename);
 			// Loads a raw animation. You then create runtime animations via optimize()
 			bool load_animation_file(const std::string& filename, const std::string& anim_name);
-			// If name = "" all animations get processed. If all the tolerances == 0.0 it doesn't run an optimization pre-pass prior to creating runtime animations. 
-			void optimize(float translation_tolerance = 0.0, float rotation_tolerance = 0.0, float scale_tolerance = 0.0, const std::string& name = "");
+			void optimize(const std::string& name);
 
 			void update(float dt);
 			void reset_time(float t = 0.0);
@@ -75,8 +73,8 @@ namespace noob
 				void update(float dt);
 				float weight, runtime;
 
-				ozz::Range<ozz::math::SoaTransform> get_local_mats() const;
-				void get_model_mats(ozz::Range<ozz::math::Float4x4>&);
+				ozz::vector<ozz::math::SoaTransform> get_local_mats() const;
+				void get_model_mats(ozz::vector<ozz::math::Float4x4>&);
 				
 				protected:
 				sampler() : weight(1.0), cache(nullptr) {}
@@ -85,7 +83,7 @@ namespace noob
 				ozz::animation::Animation* animation;
 				ozz::animation::Skeleton* skeleton;
 				ozz::animation::SamplingCache* cache;
-				ozz::Range<ozz::math::SoaTransform> locals;
+				ozz::vector<ozz::math::SoaTransform> locals;
 			};
 			
 			
@@ -97,17 +95,17 @@ namespace noob
 			ozz::animation::Animation* current_anim;
 			float current_time, total_runtime;
 
-			std::unordered_map<std::string, ozz::animation::Animation*> runtime_anims;
+			std::unordered_map<std::string, ozz::unique_ptr<ozz::animation::Animation>> runtime_anims;
 			std::unordered_map<std::string, ozz::animation::offline::RawAnimation> raw_anims;
 			std::unordered_map<std::string, noob::skeletal_anim::sampler> samplers;
 
 			// float threshold;
 			// size_t num_layers;
 			// lemon::StaticDigraph blend_tree;
-			// ozz::Range<ozz::math::SoaTransform> blended_locals;
+			// ozz::vector<ozz::math::SoaTransform> blended_locals;
 			
 			ozz::animation::Skeleton skeleton;
-			ozz::Range<ozz::math::Float4x4> model_matrices;
+			ozz::vector<ozz::math::Float4x4> model_matrices;
 			ozz::memory::Allocator* allocator;
 	};
 
