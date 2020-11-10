@@ -58,7 +58,7 @@ namespace noob
 			void set_team_colour(uint32_t team_num, const noob::vec4f& colour) noexcept(true);
 
 			noob::actor_handle create_actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3f&, const noob::versorf&) noexcept(true);
-			noob::prop_handle create_prop(const noob::prop_blueprints_handle, const noob::vec3f&, const noob::versorf&, const noob::colourfp_handle) noexcept(true);
+			noob::prop_handle create_prop(const noob::prop_blueprints_handle, uint32_t team, const noob::vec3f&, const noob::versorf&) noexcept(true);
 			noob::scenery_handle create_scenery(const noob::shape_handle, const noob::vec3f&, const noob::versorf&) noexcept(true);
 			noob::body_handle create_body(const noob::shape_handle, const noob::body_info) noexcept(true); 
 			

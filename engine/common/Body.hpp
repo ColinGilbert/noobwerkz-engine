@@ -23,7 +23,7 @@ namespace noob
 
 
 		void init(btDynamicsWorld* const, noob::body_type, const noob::shape&, float mass, const noob::vec3f& position, const noob::versorf& orientation, bool ccd) noexcept(true);
-		void init(btDynamicsWorld* const, noob::body_type, const noob::shape&, const noob::body_info&) noexcept(true);
+		void init(btDynamicsWorld* const, const noob::body_info&) noexcept(true);
 
 		// void set_type(noob::body_type) noexcept(true);
 

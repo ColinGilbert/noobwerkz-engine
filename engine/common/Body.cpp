@@ -57,7 +57,7 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type typ
 }
 
 
-void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type type_arg, const noob::shape& shape, const noob::body_info& _info) noexcept(true) 
+void noob::body::init(btDynamicsWorld* const dynamics_world, const noob::body_info& _info) noexcept(true) 
 {
 	btTransform start_transform;
 	// start_transform.setIdentity();
@@ -65,8 +65,12 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type typ
 	start_transform.setOrigin(btVector3(_info.position.v[0], _info.position.v[1], _info.position.v[2]));
 	btVector3 inertia(0, 0, 0);
 	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
-	shape.inner->calculateLocalInertia(_info.mass, inertia);
-	btRigidBody::btRigidBodyConstructionInfo ci(_info.mass, motion_state, shape.inner, inertia);
+	
+	noob::globals &g = noob::get_globals();
+	
+	noob::shape shp = g.shape_from_handle(_info.shape);
+	shp.inner->calculateLocalInertia(_info.mass, inertia);
+	btRigidBody::btRigidBodyConstructionInfo ci(_info.mass, motion_state, shp.inner, inertia);
 	inner = new btRigidBody(ci);
 	inner->setFriction(_info.friction);
 	inner->setRestitution(_info.restitution);

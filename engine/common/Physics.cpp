@@ -74,12 +74,12 @@ noob::body_handle noob::physics::add_body(noob::body_type b_type, const noob::sh
 }
 
 
-noob::body_handle noob::physics::add_body(noob::body_type type_arg, const noob::body_info& info_arg) noexcept(true)
+noob::body_handle noob::physics::add_body(const noob::body_info& info_arg) noexcept(true)
 {
 	noob::globals& g = noob::get_globals();
 
 	noob::body b;
-	b.init(dynamics_world, type_arg, g.shapes.get(info_arg.shape), info_arg);
+	b.init(dynamics_world, info_arg);
 	bodies.push_back(b);
 
 	return noob::body_handle::make(bodies.size() - 1);

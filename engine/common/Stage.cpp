@@ -17,7 +17,6 @@ void noob::stage::init(const noob::vec2ui Dims, const noob::mat4f& projection_ma
 	// gfx.set_projection_mat(projection_matrix);
 
 	world.init();
-
 	main_light.colour = noob::vec4f(1.0, 1.0, 1.0, 0.0);
 	main_light.direction = noob::vec3f(0.0, 1.0, 0.0);
 
@@ -69,7 +68,7 @@ void noob::stage::update(double dt) noexcept(true)
 	//}
 
 	// TODO: Change?
-	world.step(dt);//1.0/60.0);
+	world.step(1.0/120.0);
 
 	// update_particle_systems();
 	update_actors();
@@ -236,7 +235,6 @@ noob::actor_handle noob::stage::create_actor(const noob::actor_blueprints_handle
 
 			const noob::actor_handle actor_h = noob::actor_handle::make(actors.size() - 1); 
 			noob::fast_hashtable::cell *results = models_to_drawable_instances.lookup(info.bp.model.index());
-
 			const uint32_t instance_index = results->value;
 			const uint32_t old_count = drawables[instance_index].count;
 
@@ -258,7 +256,7 @@ noob::actor_handle noob::stage::create_actor(const noob::actor_blueprints_handle
 }
 
 
-noob::prop_handle noob::stage::create_prop(const noob::prop_blueprints_handle blueprint_h, const noob::vec3f& pos, const noob::versorf& orient, const noob::colourfp_handle colour_h) noexcept(true)
+noob::prop_handle noob::stage::create_prop(const noob::prop_blueprints_handle blueprint_h, uint32_t team, const noob::vec3f& pos, const noob::versorf& orient) noexcept(true)
 {
 	if (props_extra_info.size() > blueprint_h.index())
 	{
@@ -266,20 +264,17 @@ noob::prop_handle noob::stage::create_prop(const noob::prop_blueprints_handle bl
 
 		if (info.count < info.max)
 		{
-			noob::body_info temp = info.bp.body_properties;
-			temp.position = pos;
-			temp.orientation = orient;
-			const noob::body_handle body_h = world.add_body(noob::body_type::DYNAMIC, temp);
+			const noob::body_handle body_h = world.add_body(noob::body_type::DYNAMIC, info.bp.shape, info.bp.mass, pos, orient, info.bp.ccd);
 
 			noob::prop p;
 			p.body = body_h;
-			p.colour = colour_h;
+			p.colour = noob::colourfp_handle::make(team);
 			p.bp_handle = blueprint_h;
 			
 			props.push_back(p);
 
 			const noob::prop_handle prop_h = noob::prop_handle::make(props.size() - 1);
-			noob::stage::prop_info info = props_extra_info[prop_h.index()];
+			//noob::stage::prop_info info = props_extra_info[prop_h.index()];
 
 			noob::fast_hashtable::cell *results = models_to_drawable_instances.lookup(info.bp.model.index());
 			const uint32_t instance_index = results->value;
@@ -524,7 +519,10 @@ void noob::stage::upload_matrices(const drawable_info_handle arg) noexcept(true)
 		}
 		else // Its a prop!
 		{
-			model_matrix = world.get_body(props[info.index].body).get_transform();
+			const noob::prop p = props[info.index];
+			const noob::body& bod = world.get_body(p.body);
+			model_matrix = bod.get_transform();
+			// logger::log(noob::importance::INFO, noob::concat(bod.get_debug_string()));
 		}
 		valid = buf.push_back(model_matrix);
 

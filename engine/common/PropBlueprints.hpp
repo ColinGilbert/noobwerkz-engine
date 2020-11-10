@@ -11,9 +11,11 @@ namespace noob
 		//noob::shape_handle bounds;
 		// TODO: replace with armature
 		//noob::instanced_model_handle model;
-		noob::body_info body_properties;
+		noob::shape_handle shape;
 		noob::instanced_model_handle model;
 		noob::reflectance_handle reflect;
+		float mass;//, friction, restitution;
+		bool ccd;
 	};
 
 	typedef noob::handle<noob::prop_blueprints> prop_blueprints_handle;

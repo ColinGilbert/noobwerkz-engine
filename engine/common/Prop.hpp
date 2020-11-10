@@ -14,7 +14,6 @@ namespace noob
 		noob::prop_blueprints_handle bp_handle;
 	};
 
-	typedef noob::component<noob::prop> prop_holder;
 	typedef noob::handle<noob::prop> prop_handle;
 /*
 	static std::string to_string(const noob::prop_blueprints Blueprints) noexcept(true)
