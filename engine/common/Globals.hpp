@@ -65,7 +65,7 @@ namespace noob
 		noob::reflectance_handle get_reflectance(const std::string& name) const noexcept(true);
 
 		noob::shape shape_from_handle(const noob::shape_handle) const noexcept(true);
-		noob::instanced_model_handle model_from_shape(noob::shape_handle, uint32_t) noexcept(true);
+		noob::instanced_model_handle model_from_shape(noob::shape_handle, uint32_t count) noexcept(true);
 
 		double get_random() noexcept(true);
 

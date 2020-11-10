@@ -100,6 +100,7 @@ void noob::stage::draw() noexcept(true)
 
 	gfx.set_view_mat(view_matrix);
 	gfx.set_projection_mat(projection_matrix);
+
 	// TODO: Change
 	gfx.set_light_direction(main_light.direction);
 	gfx.set_eye_position(noob::translation_from_mat4(view_matrix));
@@ -110,7 +111,7 @@ void noob::stage::draw() noexcept(true)
 		const noob::stage::drawable_info_handle handle = noob::stage::drawable_info_handle::make(drawables_index);
 		if (drawables[drawables_index].needs_colours)
 		{
-			upload_actor_colours(handle);
+			upload_colours(handle);
 			drawables[drawables_index].needs_colours = false;
 		}
 
@@ -160,22 +161,48 @@ noob::actor_blueprints_handle noob::stage::add_actor_blueprints(const noob::acto
 	info.bp = arg;
 	info.count = 0;
 	info.max = 0;
-	actor_factories.push_back(info);
+	actors_extra_info.push_back(info);
 
-	return noob::actor_blueprints_handle::make(actor_factories.size() - 1);
+	return noob::actor_blueprints_handle::make(actors_extra_info.size() - 1);
 }
 
 
-void noob::stage::reserve_actors(const noob::actor_blueprints_handle bp_h, uint32_t num) noexcept(true)
+noob::prop_blueprints_handle noob::stage::add_props_blueprints(const noob::prop_blueprints& arg) noexcept(true)
 {
-	if (actor_factories.size() > bp_h.index())
+	noob::stage::prop_info info;
+	info.bp = arg;
+	info.count = 0;
+	info.max = 0;
+	props_extra_info.push_back(info);
+
+	return noob::prop_blueprints_handle::make(props_extra_info.size() - 1);
+}
+
+
+void noob::stage::reserve_actors(const noob::actor_blueprints_handle blueprint_h, uint32_t num) noexcept(true)
+{
+	if (actors_extra_info.size() > blueprint_h.index())
 	{
-		noob::stage::actor_info info = actor_factories[bp_h.index()];
+		noob::stage::actor_info info = actors_extra_info[blueprint_h.index()];
 		const uint32_t old_max = info.max;
 		const uint32_t new_max = info.max + num;
 		reserve_models(info.bp.model, num);
 		info.max = new_max;
-		actor_factories[bp_h.index()] = info;
+		actors_extra_info[blueprint_h.index()] = info;
+	}
+}
+
+
+void noob::stage::reserve_props(const noob::prop_blueprints_handle blueprint_h, uint32_t num) noexcept(true)
+{
+	if (props_extra_info.size() > blueprint_h.index())
+	{
+		noob::stage::prop_info info = props_extra_info[blueprint_h.index()];
+		const uint32_t old_max = info.max;
+		const uint32_t new_max = info.max + num;
+		reserve_models(info.bp.model, num);
+		info.max = new_max;
+		props_extra_info[blueprint_h.index()] = info;
 	}
 }
 
@@ -190,11 +217,11 @@ void noob::stage::set_team_colour(uint32_t Team, const noob::vec4f& Colour)
 }
 
 
-noob::actor_handle noob::stage::create_actor(const noob::actor_blueprints_handle bp_h, uint32_t team, const noob::vec3f& pos, const noob::versorf& orient) noexcept(true)
+noob::actor_handle noob::stage::create_actor(const noob::actor_blueprints_handle blueprint_h, uint32_t team, const noob::vec3f& pos, const noob::versorf& orient) noexcept(true)
 {
-	if (actor_factories.size() > bp_h.index())
+	if (actors_extra_info.size() > blueprint_h.index())
 	{
-		noob::stage::actor_info info = actor_factories[bp_h.index()];
+		noob::stage::actor_info info = actors_extra_info[blueprint_h.index()];
 
 		if (info.count < info.max)
 		{
@@ -203,59 +230,75 @@ noob::actor_handle noob::stage::create_actor(const noob::actor_blueprints_handle
 			noob::actor a;
 			a.team = team;
 			a.ghost = ghost_h;
-			a.bp_handle = bp_h;
+			a.bp_handle = blueprint_h;
 
 			actors.push_back(a);
 
-			const noob::actor_handle a_h = noob::actor_handle::make(actors.size() - 1); 
-			noob::fast_hashtable::cell *results = models_to_instances.lookup(info.bp.model.index());
+			const noob::actor_handle actor_h = noob::actor_handle::make(actors.size() - 1); 
+			noob::fast_hashtable::cell *results = models_to_drawable_instances.lookup(info.bp.model.index());
 
-			const uint32_t index = results->value;
-			const uint32_t old_count = drawables[index].count;
+			const uint32_t instance_index = results->value;
+			const uint32_t old_count = drawables[instance_index].count;
 
-			drawables[index].count++;
-			drawables[index].instances[old_count].which = noob::stage::drawable_instance::type::ACTOR;
-			drawables[index].instances[old_count].index = a_h.index();
+			drawables[instance_index].count++;
+			drawables[instance_index].instances[old_count].which = noob::stage::drawable_instance::type::ACTOR;
+			drawables[instance_index].instances[old_count].index = actor_h.index();
 
 			// Setting index-to-self info:
 			noob::ghost& temp_ghost = world.get_ghost(ghost_h);
-
 			temp_ghost.set_user_index_1(static_cast<uint32_t>(noob::stage_item_type::ACTOR));
-			temp_ghost.set_user_index_2(a_h.index());
+			temp_ghost.set_user_index_2(actor_h.index());
 
-			actor_factories[bp_h.index()].count++;
+			actors_extra_info[blueprint_h.index()].count++;
 
-			return a_h;
-		}
-		else
-		{
-			return noob::actor_handle::make_invalid();
+			return actor_h;
 		}
 	}
-	else
-	{
-		return noob::actor_handle::make_invalid();
-	}
+	return noob::actor_handle::make_invalid();
 }
-/*
-   noob::prop_handle noob::stage::create_prop(const noob::body_info bod, noob::vec3f& pos, const noob::versorf& orient, const noob::emissive_handle colours) noexcept(true)
-   {
-   noob::global& g = noob::globals::get();
-
-   noob::instanced_model_handle model = g.model_from_shape(bod.shape);
-
-   noob::fast_hashtable::cell *results = models_to_instances.lookup(model.index());
-
-   const uint32_t index = results->value;
-   const uint32_t old_count = drawables[index].count;
-
-   drawables[index].count++;
-   drawables[index].instances[old_count].actor = a_h;
 
 
-   return a_h;
-   }
- */
+noob::prop_handle noob::stage::create_prop(const noob::prop_blueprints_handle blueprint_h, const noob::vec3f& pos, const noob::versorf& orient, const noob::colourfp_handle colour_h) noexcept(true)
+{
+	if (props_extra_info.size() > blueprint_h.index())
+	{
+		noob::stage::prop_info info = props_extra_info[blueprint_h.index()];
+
+		if (info.count < info.max)
+		{
+			noob::body_info temp = info.bp.body_properties;
+			temp.position = pos;
+			temp.orientation = orient;
+			const noob::body_handle body_h = world.add_body(noob::body_type::DYNAMIC, temp);
+
+			noob::prop p;
+			p.body = body_h;
+			p.colour = colour_h;
+			p.bp_handle = blueprint_h;
+			
+			props.push_back(p);
+
+			const noob::prop_handle prop_h = noob::prop_handle::make(props.size() - 1);
+			noob::stage::prop_info info = props_extra_info[prop_h.index()];
+
+			noob::fast_hashtable::cell *results = models_to_drawable_instances.lookup(info.bp.model.index());
+			const uint32_t instance_index = results->value;
+			const uint32_t old_count = drawables[instance_index].count;
+
+			drawables[instance_index].count++;
+			drawables[instance_index].instances[old_count].which = noob::stage::drawable_instance::type::PROP;
+			drawables[instance_index].instances[old_count].index = prop_h.index();
+
+			// Setting index-to-self info:
+			noob::body& temp_bod = world.get_body(body_h);
+			temp_bod.set_user_index_1(static_cast<uint32_t>(noob::stage::drawable_instance::type::PROP));
+			temp_bod.set_user_index_2(prop_h.index());
+
+			return prop_h;
+		}
+	}
+	return noob::prop_handle::make_invalid();
+}
 
 
 noob::scenery_handle noob::stage::create_scenery(const noob::shape_handle Shape, const noob::vec3f& Pos, const noob::versorf& Orient) noexcept(true)
@@ -393,7 +436,7 @@ void noob::stage::actor_dither(const noob::actor_handle ah) noexcept(true)
 }
 
 
-void noob::stage::upload_actor_colours(const drawable_info_handle arg) const noexcept(true)
+void noob::stage::upload_colours(const drawable_info_handle arg) const noexcept(true)
 {
 	const uint32_t count = drawables[arg.index()].count;
 
@@ -466,7 +509,6 @@ void noob::stage::upload_matrices(const drawable_info_handle arg) noexcept(true)
 		return;
 	}
 
-
 	// const noob::mat4f viewproj_mat = projection_matrix * view_matrix;
 	uint32_t current = 0;
 	while (current < count)
@@ -482,7 +524,7 @@ void noob::stage::upload_matrices(const drawable_info_handle arg) noexcept(true)
 		}
 		else // Its a prop!
 		{
-			model_matrix = world.get_body(props[info.index].bod).get_transform();
+			model_matrix = world.get_body(props[info.index].body).get_transform();
 		}
 		valid = buf.push_back(model_matrix);
 
@@ -492,26 +534,6 @@ void noob::stage::upload_matrices(const drawable_info_handle arg) noexcept(true)
 			gfx.unmap_buffer();			
 			return;
 		}
-		/*	
-			valid = buf.push_back(view_matrix);
-
-			if (!valid)
-			{
-			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu (view) matrices buffer for model ", noob::to_string(arg.index()), "."));
-			gfx.unmap_buffer();
-			return;
-			}
-
-			const noob::mat4f mvp_mat = viewproj_mat * model_matrix;
-			valid = buf.push_back(mvp_mat);
-
-			if (!valid)
-			{
-			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu (MVP) matrices buffer for model ", noob::to_string(arg.index()), "."));
-			gfx.unmap_buffer();
-			return;
-			}
-		 */
 		++current;
 	}
 
@@ -522,6 +544,7 @@ void noob::stage::upload_matrices(const drawable_info_handle arg) noexcept(true)
 void noob::stage::upload_terrain() noexcept(true)
 {
 	if (terrain_started)
+
 	{
 		std::vector<noob::vec4f> tmp_verts;
 		for (uint32_t i = 0; i < sceneries.size(); ++i)
@@ -567,12 +590,12 @@ void noob::stage::upload_terrain() noexcept(true)
 
 void noob::stage::reserve_models(const noob::instanced_model_handle Handle, uint32_t Num) noexcept(true)
 {
-	noob::fast_hashtable::cell *results = models_to_instances.lookup(Handle.index());
+	noob::fast_hashtable::cell *results = models_to_drawable_instances.lookup(Handle.index());
 
 	// If we haven't gotten a model with that handle yet...
-	if (!models_to_instances.is_valid(results))
+	if (!models_to_drawable_instances.is_valid(results))
 	{
-		results = models_to_instances.insert(Handle.index());
+		results = models_to_drawable_instances.insert(Handle.index());
 
 		noob::stage::drawable_info info;
 		info.model = Handle;

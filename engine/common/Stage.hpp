@@ -50,14 +50,18 @@ namespace noob
 			void build_navmesh() noexcept(true);
 
 			noob::actor_blueprints_handle add_actor_blueprints(const noob::actor_blueprints&) noexcept(true);
+			noob::prop_blueprints_handle add_props_blueprints(const noob::prop_blueprints&) noexcept(true);;
 
 			void reserve_actors(const noob::actor_blueprints_handle, uint32_t num) noexcept(true);
+			void reserve_props(const noob::prop_blueprints_handle, uint32_t num) noexcept(true);
+
 			void set_team_colour(uint32_t team_num, const noob::vec4f& colour) noexcept(true);
 
 			noob::actor_handle create_actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3f&, const noob::versorf&) noexcept(true);
-			noob::prop_handle create_prop(const noob::body_info, const noob::vec3f&, const noob::versorf&, const noob::reflectance_handle) noexcept(true);
+			noob::prop_handle create_prop(const noob::prop_blueprints_handle, const noob::vec3f&, const noob::versorf&, const noob::colourfp_handle) noexcept(true);
 			noob::scenery_handle create_scenery(const noob::shape_handle, const noob::vec3f&, const noob::versorf&) noexcept(true);
 			noob::body_handle create_body(const noob::shape_handle, const noob::body_info) noexcept(true); 
+			
 			noob::constraint_handle create_fixed_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& frame_in_a, const noob::mat4f& frame_in_b) noexcept(true);
 
 			void set_actor_position(const noob::actor_handle, const noob::vec3f&) noexcept(true);
@@ -74,15 +78,10 @@ namespace noob
 			bool get_actor_self_controlled(const noob::actor_handle) noexcept(true);
 			uint32_t get_actor_team(const noob::actor_handle) noexcept(true);
 
-
 			size_t get_intersecting(const noob::actor_handle, std::vector<noob::contact_point>&) const noexcept(true);
-
-
-
 
 			// TODO: Methodize
 			bool show_origin;
-
 
 			// TODO: Make more flexible.
 			noob::vec4f ambient_light;
@@ -109,10 +108,16 @@ namespace noob
 				bool needs_colours;
 				std::vector<drawable_instance> instances;
 			};
-
+			
 			struct actor_info
 			{
 				noob::actor_blueprints bp;
+				uint32_t count, max;
+			};
+			
+			struct prop_info
+			{
+				noob::prop_blueprints bp;
 				uint32_t count, max;
 			};
 
@@ -131,12 +136,15 @@ namespace noob
 			noob::directional_light main_light;
 
 			std::vector<noob::stage::drawable_info> drawables;
-			std::vector<noob::stage::actor_info> actor_factories;
+			std::vector<noob::stage::actor_info> actors_extra_info;
+			std::vector<noob::stage::prop_info> props_extra_info;
 			std::vector<noob::vec4f> team_colours;
 			// Voronoi cells are preferred over convex hulls generated from a set of points for data representation, as we can be certain that the voronoi cell is unambiguous.
 			// rde::vector<noob::vorocell> voros;
 
-			noob::fast_hashtable models_to_instances;
+			noob::fast_hashtable models_to_drawable_instances;
+			noob::fast_hashtable shapes_to_instanced_models;
+
 
 			std::vector<noob::actor> actors;
 			std::vector<noob::prop> props;
@@ -162,7 +170,7 @@ namespace noob
 			void actor_dither(const noob::actor_handle) noexcept(true);
 			typedef noob::handle<drawable_info> drawable_info_handle;
 
-			void upload_actor_colours(const drawable_info_handle) const noexcept(true);
+			void upload_colours(const drawable_info_handle) const noexcept(true);
 			void upload_matrices(const drawable_info_handle) noexcept(true);
 
 			// This method checks to see if there have been any models of this type reserved prior to reserving them and reserves + allocates if not. If anything *is* reserved, it'll still only allocate if Num > originally allocated.

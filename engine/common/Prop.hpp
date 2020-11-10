@@ -1,15 +1,17 @@
 #pragma once
 
-#include "BodyInfo.hpp"
-#include "Reflectance.hpp"
+#include "PropBlueprints.hpp"
 #include "Colour.hpp"
+
+
 
 namespace noob
 {
 	struct prop
 	{
-		noob::body_handle bod;
+		noob::body_handle body;
 		noob::colourfp_handle colour;
+		noob::prop_blueprints_handle bp_handle;
 	};
 
 	typedef noob::component<noob::prop> prop_holder;

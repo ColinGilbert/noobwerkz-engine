@@ -26,7 +26,7 @@ namespace noob
 			noob::vec3f get_gravity() const noexcept(true);
 
 			noob::body_handle add_body(noob::body_type, const noob::shape_handle, float mass, const noob::vec3f& pos, const noob::versorf& orient, bool ccd) noexcept(true);
-			noob::body_handle add_body(noob::body_type, const noob::shape_handle, const noob::body_info&) noexcept(true);		
+			noob::body_handle add_body(noob::body_type, const noob::body_info&) noexcept(true);		
 			noob::ghost_handle add_ghost(const noob::shape_handle, const noob::vec3f&, const noob::versorf&) noexcept(true);
 
 			noob::constraint_handle add_fixed_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true);
