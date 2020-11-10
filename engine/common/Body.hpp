@@ -17,8 +17,7 @@ namespace noob
 	class body 
 	{
 		friend class physics;
-		friend class joint;
-
+		friend class constraint;
 		public:	
 		body() noexcept(true) : physics_valid(false), ccd(false) {}
 

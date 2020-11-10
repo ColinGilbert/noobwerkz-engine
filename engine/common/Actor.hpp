@@ -1,11 +1,11 @@
 #pragma once
 
+#include <noob/component/component.hpp>
 #include <rdestl/fixed_array.h>
 
 #include <limits>
 
 #include "Shape.hpp"
-#include "ComponentDefines.hpp"
 #include "StageItemType.hpp"
 #include "Armature.hpp"
 #include "ActorBlueprints.hpp"
@@ -19,11 +19,11 @@ namespace noob
 
 		// These are basic stances upon which all other activities are animated.
 		// 
-		// enum class stance_type : uint16_t { STAND = 0, MOUNT = 1, SIT = 2, KNEEL = 3, PRONE = 4, KO = 5 };
+		enum class stance_type : uint16_t { STAND = 0, MOUNT = 1, SIT = 2, KNEEL = 3, PRONE = 4, KO = 5 };
 
-		// enum class activity_type : uint16_t { GUARDING = 0, CHARGING = 1, BRACING = 2, MELEE = 3, SHOOTING = 4, RELOADING = 5, TAUNTING = 6, DEAD = 7, PRAYING = 8, SALUTING = 9, WORKING = 10, CELEBRATING = 11, SLEEPING = 12 };
+		enum class activity_type : uint16_t { GUARDING = 0, CHARGING = 1, BRACING = 2, MELEE = 3, SHOOTING = 4, RELOADING = 5, TAUNTING = 6, DEAD = 7, PRAYING = 8, SALUTING = 9, WORKING = 10, CELEBRATING = 11, SLEEPING = 12 };
 
-		// enum class mentality_type : uint16_t { ALERT = 0, AGGRESSIVE = 1, DEFENSIVE = 2, PANIC = 3, RELAXED = 4, UNCONSCIOUS = 5 };
+		enum class mentality_type : uint16_t { ALERT = 0, AGGRESSIVE = 1, DEFENSIVE = 2, PANIC = 3, RELAXED = 4, UNCONSCIOUS = 5 };
 
 		static constexpr noob::stage_item_type type = noob::stage_item_type::ACTOR;
 
@@ -34,9 +34,9 @@ namespace noob
 		noob::vec3f velocity, target_pos;
 		// float incline, gravity_coeff;
 
-		// noob::actor::stance_type stance;
-		// noob::actor::activity_type activity;
-		// noob::actor::mentality_type mentality;
+		noob::actor::stance_type stance;
+		noob::actor::activity_type activity;
+		noob::actor::mentality_type mentality;
 	};
 
 	typedef noob::handle<noob::actor> actor_handle;

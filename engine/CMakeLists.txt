@@ -66,7 +66,7 @@ list (APPEND main_src)
 			common/Camera.cpp
 			common/Stage.cpp
 			common/Body.cpp
-			common/Joint.cpp
+			common/Constraint.cpp
 			common/Ghost.cpp
 			common/Shape.cpp
 			common/Shapes.cpp	

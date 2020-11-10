@@ -5,7 +5,6 @@
 #include <limits>
 
 #include "Shape.hpp"
-#include "ComponentDefines.hpp"
 #include "StageItemType.hpp"
 
 namespace noob

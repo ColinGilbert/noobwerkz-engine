@@ -28,7 +28,7 @@
 #include "Ghost.hpp"
 #include "AudioSample.hpp"
 #include "SoundInterface.hpp"
-
+#include "Reflectance.hpp"
 #include "Mixer.hpp"
 #include "Actor.hpp"
 #include "ProfilingInfo.hpp"
@@ -80,12 +80,12 @@ namespace noob
 		
 		noob::profiler_snap profile_run;
 		
-		shapes_holder shapes;
-		skeletal_anims_holder skeletal_anims;
-		point_lights_holder lights;
-		reflectances_holder reflectances;
-		samples_holder samples;
-
+		noob::component<noob::shape> shapes;
+		noob::component<noob::point_light> lights;
+		noob::component<noob::reflectance> reflectances;
+		noob::component_dynamic<noob::audio_sample> samples;
+		noob::component_dynamic<noob::skeletal_anim> skeletal_anims;
+		
 		noob::mixer master_mixer;
 
 		// The following are basic, commonly-used objects that we provide as a convenience.

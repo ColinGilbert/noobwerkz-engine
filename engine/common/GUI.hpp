@@ -2,13 +2,10 @@
 
 #include <memory>
 #include <vector>
-
-
 #include <noob/math/math_funcs.hpp>
 
-
-#include "ComponentDefines.hpp"
 #include "Font.hpp"
+#include "TextLabel.hpp"
 
 namespace noob
 {

@@ -3,8 +3,6 @@
 
 #include <functional>
 
-// #include <rdestl/slist.h>
-
 #include <noob/fast_hashtable/fast_hashtable.hpp>
 #include <noob/graph/graph.hpp>
 #include <noob/component/component.hpp>
@@ -14,13 +12,12 @@
 #include "SkeletalAnim.hpp"
 #include "Physics.hpp"
 #include "Body.hpp"
-#include "Joint.hpp"
+#include "Constraint.hpp"
 #include "Shape.hpp"
 #include "Actor.hpp"
 #include "StageItemType.hpp"
 #include "Scenery.hpp"
 #include "Globals.hpp"
-#include "ComponentDefines.hpp"
 #include "Particles.hpp"
 #include "Armature.hpp"
 #include "NDOF.hpp"
@@ -58,6 +55,9 @@ namespace noob
 			
 			noob::actor_handle create_actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3f&, const noob::versorf&) noexcept(true);
 			noob::scenery_handle create_scenery(const noob::shape_handle, const noob::vec3f&, const noob::versorf&) noexcept(true);
+			noob::body_handle create_body(const noob::shape_handle, const noob::body_info); 
+			noob::constraint create_joint(const noob::body_handle a, const noob::body_handle b);
+
 
 			void set_actor_position(const noob::actor_handle, const noob::vec3f&) noexcept(true);
 			void set_actor_orientation(const noob::actor_handle, const noob::versorf&) noexcept(true);
@@ -76,7 +76,12 @@ namespace noob
 
 			size_t get_intersecting(const noob::actor_handle, std::vector<noob::contact_point>&) const noexcept(true);
 
+
+
+
+			// TODO: Methodize
 			bool show_origin;
+
 
 			// TODO: Make more flexible.
 			noob::vec4f ambient_light;

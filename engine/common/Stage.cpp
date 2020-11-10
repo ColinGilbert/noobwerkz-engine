@@ -1,5 +1,4 @@
 #include "Stage.hpp"
-// #include "Shiny.h"
 
 
 void noob::stage::init(const noob::vec2ui Dims, const noob::mat4f& projection_mat) noexcept(true) 
@@ -7,9 +6,9 @@ void noob::stage::init(const noob::vec2ui Dims, const noob::mat4f& projection_ma
 	update_viewport_params(Dims, projection_mat);
 
 	noob::vec3f eye_pos, eye_target, eye_up;
-	eye_pos = noob::vec3f(0.0, 300.0, 0.0);
+	eye_pos = noob::vec3f(0.0, -300.0, 0.0);
 	eye_target = noob::vec3f(0.0, 0.0, 0.0);
-	eye_up = noob::vec3f(0.0, 0.0, 1.0);
+	eye_up = noob::vec3f(0.0, 0.0, -1.0);
 	view_matrix = noob::look_at(eye_pos, eye_target, eye_up);
 	projection_matrix = projection_mat;
 

@@ -39,7 +39,7 @@ void noob::physics::clear() noexcept(true)
 	bodies.reserve(0);
 
 	// Joints are automatically cleaned up by Bullet once all bodies have been destroyed. I think...
-	joints.empty();
+	constraints.empty();
 
 	for (size_t i = 0; i < ghosts.size(); ++i)
 	{
@@ -69,7 +69,7 @@ noob::body_handle noob::physics::add_body(noob::body_type b_type, const noob::sh
 	noob::body b;
 	b.init(dynamics_world, b_type, g.shapes.get(shape_h), mass, pos, orient, ccd);	
 	bodies.push_back(b);
-	
+
 	return noob::body_handle::make(bodies.size() - 1);
 }
 
@@ -81,7 +81,7 @@ noob::body_handle noob::physics::add_body(noob::body_type type_arg, const noob::
 	noob::body b;
 	b.init(dynamics_world, type_arg, g.shapes.get(shape_h), info_arg);
 	bodies.push_back(b);
-	
+
 	return noob::body_handle::make(bodies.size() - 1);
 }
 
@@ -93,7 +93,7 @@ noob::ghost_handle noob::physics::add_ghost(const noob::shape_handle shape_h, co
 	noob::ghost temp;
 	temp.init(dynamics_world, g.shapes.get(shape_h), pos, orient);
 	ghosts.push_back(temp);
-	
+
 	return noob::ghost_handle::make(ghosts.size() - 1);
 }
 
@@ -107,6 +107,50 @@ noob::body& noob::physics::get_body(const noob::body_handle h) noexcept(true)
 noob::ghost& noob::physics::get_ghost(const noob::ghost_handle h) noexcept(true)
 {
 	return ghosts[h.index()];
+}
+
+
+noob::constraint_handle noob::physics::add_fixed_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true)
+{
+	noob::constraint c;
+	c.init_fixed(dynamics_world, bodies[a.index()], bodies[b.index()], local_a, local_b);
+	constraints.push_back(c);
+	return noob::constraint_handle::make(constraints.size() - 1);
+}
+
+noob::constraint_handle noob::physics::add_point_constraint(const noob::body_handle a, const noob::body_handle b, const noob::vec3f& pivot_a, const noob::vec3f& pivot_b) noexcept(true)
+{
+	noob::constraint c;
+	c.init_point(dynamics_world, bodies[a.index()], bodies[b.index()], pivot_a, pivot_b);
+	constraints.push_back(c);
+	return noob::constraint_handle::make(constraints.size() - 1);
+
+}
+
+noob::constraint_handle noob::physics::add_hinge_constraint(const noob::body_handle a, const noob::body_handle b, const noob::vec3f& pivot_in_a, const noob::vec3f& pivot_in_b, const noob::vec3f& axis_in_a, const noob::vec3f& axis_in_b) noexcept(true)
+{
+	noob::constraint c;
+	c.init_hinge(dynamics_world, bodies[a.index()], bodies[b.index()], pivot_in_a, pivot_in_b, axis_in_a, axis_in_b);
+	constraints.push_back(c);
+	return noob::constraint_handle::make(constraints.size() - 1);
+
+}
+
+noob::constraint_handle noob::physics::add_slide_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true)
+{
+	noob::constraint c;
+	c.init_slide(dynamics_world, bodies[a.index()], bodies[b.index()], local_a, local_b);
+	constraints.push_back(c);
+	return noob::constraint_handle::make(constraints.size() - 1);
+
+}
+
+noob::constraint_handle noob::physics::add_generic_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true)
+{
+	noob::constraint c;
+	c.init_generic(dynamics_world, bodies[a.index()], bodies[b.index()], local_a, local_b);
+	constraints.push_back(c);
+	return noob::constraint_handle::make(constraints.size() - 1);
 }
 
 

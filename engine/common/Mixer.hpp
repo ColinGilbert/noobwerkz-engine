@@ -13,7 +13,6 @@
 #include <noob/component/component.hpp>
 
 // Project headers
-#include "ComponentDefines.hpp"
 #include "AudioSample.hpp"
 #include "RingBuffer.hpp"
 

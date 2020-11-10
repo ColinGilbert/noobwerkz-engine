@@ -4,12 +4,15 @@
 
 // This class can only provide data members, as the stage is responsible for ghosts and drawing.
 #pragma once
-
+#include <noob/component/component.hpp>
 #include <rdestl/fixed_array.h>
 #include <noob/math/math_funcs.hpp>
 
-#include "ComponentDefines.hpp"
 #include "Timing.hpp"
+#include "Reflectance.hpp"
+#include "Logger.hpp"
+#include "Shape.hpp"
+
 //#include "RandomGenerator.hpp"
 
 

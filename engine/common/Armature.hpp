@@ -6,7 +6,7 @@
 #include <noob/math/math_funcs.hpp>
 
 #include "Model.hpp"
-#include "Joint.hpp"
+#include "Constraint.hpp"
 #include "Ghost.hpp"
 
 namespace noob
@@ -21,10 +21,10 @@ namespace noob
 		protected:
 
 			noob::digraph hierarchy; // The nodes' numbers index into the vector structures below.
-			rde::vector<noob::body_handle> bodies;
-			rde::vector<noob::joint_handle> joints;
-			rde::vector<noob::vec4f> colours;
-			rde::vector<bool> team_colours; // Refers the to the limbs to get coloured on a per-team basis.
+			std::vector<noob::body_handle> bodies;
+			std::vector<noob::constraint_handle> constraints;
+			std::vector<noob::vec4f> colours;
+			std::vector<bool> team_colours; // Refers the to the limbs to get coloured on a per-team basis.
 	};
 
 	typedef noob::handle<noob::armature> armature_handle;
