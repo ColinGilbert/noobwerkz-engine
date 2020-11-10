@@ -21,6 +21,7 @@
 #include "Particles.hpp"
 #include "Armature.hpp"
 #include "NDOF.hpp"
+#include "Prop.hpp"
 
 namespace noob
 {
@@ -52,12 +53,12 @@ namespace noob
 
 			void reserve_actors(const noob::actor_blueprints_handle, uint32_t num) noexcept(true);
 			void set_team_colour(uint32_t team_num, const noob::vec4f& colour) noexcept(true);
-			
+
 			noob::actor_handle create_actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3f&, const noob::versorf&) noexcept(true);
+			noob::prop_handle create_prop(const noob::body_info, const noob::vec3f&, const noob::versorf&, const noob::reflectance_handle) noexcept(true);
 			noob::scenery_handle create_scenery(const noob::shape_handle, const noob::vec3f&, const noob::versorf&) noexcept(true);
 			noob::body_handle create_body(const noob::shape_handle, const noob::body_info) noexcept(true); 
 			noob::constraint_handle create_fixed_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& frame_in_a, const noob::mat4f& frame_in_b) noexcept(true);
-
 
 			void set_actor_position(const noob::actor_handle, const noob::vec3f&) noexcept(true);
 			void set_actor_orientation(const noob::actor_handle, const noob::versorf&) noexcept(true);
@@ -87,7 +88,7 @@ namespace noob
 			noob::vec4f ambient_light;
 
 			std::string print_drawables_info() const noexcept(true);
-			
+
 			// TODO: Remove
 			void accept_ndof_data(const noob::ndof::data& info) noexcept(true);
 
@@ -95,8 +96,10 @@ namespace noob
 		protected:
 			struct drawable_instance
 			{
-				noob::actor_handle actor;
-				uint32_t part, pose;
+				enum class type { ACTOR = 0, PROP = 1 };
+				noob::stage::drawable_instance::type which;
+				uint32_t index;
+				// uint32_t part, pose;
 			};
 
 			struct drawable_info
@@ -120,13 +123,13 @@ namespace noob
 			// bool graphics_enabled = false; // TODO: Implement conditional checks
 
 			noob::physics world;
-			
+
 			noob::mat4f view_matrix, projection_matrix;
 			noob::vec2ui viewport_dims;
 			uint32_t num_terrain_verts = 0;
 
 			noob::directional_light main_light;
-			
+
 			std::vector<noob::stage::drawable_info> drawables;
 			std::vector<noob::stage::actor_info> actor_factories;
 			std::vector<noob::vec4f> team_colours;
@@ -137,6 +140,7 @@ namespace noob
 			noob::fast_hashtable models_to_instances;
 
 			std::vector<noob::actor> actors;
+			std::vector<noob::prop> props;
 			std::vector<noob::scenery> sceneries;
 			std::vector<noob::particle_system> particle_systems;
 			std::vector<noob::contact_point> contacts; // Our holder for temporary contact points; this limits us to single-threaded use and it thus might be worth exploring a multithreaded solution.
@@ -158,10 +162,10 @@ namespace noob
 
 			void actor_dither(const noob::actor_handle) noexcept(true);
 			typedef noob::handle<drawable_info> drawable_info_handle;
-			
+
 			void upload_actor_colours(const drawable_info_handle) const noexcept(true);
 			void upload_matrices(const drawable_info_handle) noexcept(true);
-			
+
 			// This method checks to see if there have been any models of this type reserved prior to reserving them and reserves + allocates if not. If anything *is* reserved, it'll still only allocate if Num > originally allocated.
 			void reserve_models(const noob::instanced_model_handle h, uint32_t Num) noexcept(true);
 

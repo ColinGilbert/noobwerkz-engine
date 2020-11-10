@@ -215,7 +215,8 @@ noob::actor_handle noob::stage::create_actor(const noob::actor_blueprints_handle
 			const uint32_t old_count = drawables[index].count;
 
 			drawables[index].count++;
-			drawables[index].instances[old_count].actor = a_h;
+			drawables[index].instances[old_count].which = noob::stage::drawable_instance::type::ACTOR;
+			drawables[index].instances[old_count].index = a_h.index();
 
 			// Setting index-to-self info:
 			noob::ghost& temp_ghost = world.get_ghost(ghost_h);
@@ -237,6 +238,25 @@ noob::actor_handle noob::stage::create_actor(const noob::actor_blueprints_handle
 		return noob::actor_handle::make_invalid();
 	}
 }
+/*
+   noob::prop_handle noob::stage::create_prop(const noob::body_info bod, noob::vec3f& pos, const noob::versorf& orient, const noob::emissive_handle colours) noexcept(true)
+   {
+   noob::global& g = noob::globals::get();
+
+   noob::instanced_model_handle model = g.model_from_shape(bod.shape);
+
+   noob::fast_hashtable::cell *results = models_to_instances.lookup(model.index());
+
+   const uint32_t index = results->value;
+   const uint32_t old_count = drawables[index].count;
+
+   drawables[index].count++;
+   drawables[index].instances[old_count].actor = a_h;
+
+
+   return a_h;
+   }
+ */
 
 
 noob::scenery_handle noob::stage::create_scenery(const noob::shape_handle Shape, const noob::vec3f& Pos, const noob::versorf& Orient) noexcept(true)
@@ -366,7 +386,7 @@ void noob::stage::actor_dither(const noob::actor_handle ah) noexcept(true)
 		size_t num_contacts = get_intersecting(ah, contacts);
 		for (auto cp : contacts)
 		{
-			
+
 			// Here, we implement behaviours.
 		}
 	}
@@ -396,19 +416,22 @@ void noob::stage::upload_actor_colours(const drawable_info_handle arg) const noe
 	uint32_t current = 0;
 	while (current < count)
 	{
-		const noob::actor_handle a_h = drawables[arg.index()].instances[current].actor;
-		const noob::actor a = actors[a_h.index()];
-		const noob::vec4f colour = team_colours[a.team];
-		bool valid = buf.push_back(colour);
-
-		if (!valid)
+		if (drawables[arg.index()].instances[current].which == noob::stage::drawable_instance::type::ACTOR) 
 		{
-			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu colours buffer for model ", noob::to_string(arg.index())));
-			gfx.unmap_buffer();			
-			return;
-		}
+			const noob::actor_handle a_h = noob::actor_handle::make(drawables[arg.index()].instances[current].index);
+			const noob::actor a = actors[a_h.index()];
+			const noob::vec4f colour = team_colours[a.team];
+			bool valid = buf.push_back(colour);
 
-		++current;
+			if (!valid)
+			{
+				logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu colours buffer for model ", noob::to_string(arg.index())));
+				gfx.unmap_buffer();			
+				return;
+			}
+
+			++current;
+		}
 	}
 
 	// logger::log(noob::importance::INFO, noob::concat("[Stage] ", noob::to_string(current), " colours uploaded"));
@@ -425,7 +448,7 @@ void noob::stage::upload_matrices(const drawable_info_handle arg) noexcept(true)
 	assert(count <= theoretical_max);
 
 	const noob::instanced_model_handle model_h = drawables[arg.index()].model;
-	
+
 	noob::graphics& gfx = noob::get_graphics();
 	noob::gpu_write_buffer buf = gfx.map_matrices_buffer(model_h, 0, count);
 
@@ -441,12 +464,19 @@ void noob::stage::upload_matrices(const drawable_info_handle arg) noexcept(true)
 	while (current < count)
 	{
 		const noob::stage::drawable_instance info = drawables[arg.index()].instances[current];
-		const noob::actor a = actors[info.actor.index()];
-
-		const noob::ghost& gst = world.get_ghost(a.ghost);
-		const noob::mat4f model_matrix = gst.get_transform();
-
-		bool valid = buf.push_back(model_matrix);
+		bool valid = false;
+		noob::mat4f model_matrix; 
+		if (info.which == noob::stage::drawable_instance::type::ACTOR) // Its an actor
+		{
+			const noob::actor a = actors[info.index];
+			const noob::ghost& gst = world.get_ghost(a.ghost);
+			model_matrix = gst.get_transform();
+		}
+		else // Its a prop!
+		{
+			model_matrix = world.get_body(props[info.index].bod).get_transform();
+		}
+		valid = buf.push_back(model_matrix);
 
 		if (!valid)
 		{
@@ -454,26 +484,26 @@ void noob::stage::upload_matrices(const drawable_info_handle arg) noexcept(true)
 			gfx.unmap_buffer();			
 			return;
 		}
-	/*	
-		valid = buf.push_back(view_matrix);
+		/*	
+			valid = buf.push_back(view_matrix);
 
-		if (!valid)
-		{
+			if (!valid)
+			{
 			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu (view) matrices buffer for model ", noob::to_string(arg.index()), "."));
 			gfx.unmap_buffer();
 			return;
-		}
+			}
 
-		const noob::mat4f mvp_mat = viewproj_mat * model_matrix;
-		valid = buf.push_back(mvp_mat);
+			const noob::mat4f mvp_mat = viewproj_mat * model_matrix;
+			valid = buf.push_back(mvp_mat);
 
-		if (!valid)
-		{
+			if (!valid)
+			{
 			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu (MVP) matrices buffer for model ", noob::to_string(arg.index()), "."));
 			gfx.unmap_buffer();
 			return;
-		}
-*/
+			}
+		 */
 		++current;
 	}
 

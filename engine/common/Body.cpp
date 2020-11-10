@@ -3,6 +3,7 @@
 #include "Globals.hpp"
 #include "StringFuncs.hpp"
 
+
 void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type type_arg, const noob::shape& shape, float mass, const noob::vec3f& pos, const noob::versorf& orient, bool ccd) noexcept(true) 
 {
 	btTransform start_transform;

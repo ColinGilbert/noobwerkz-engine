@@ -52,7 +52,7 @@ namespace noob
 		uint32_t get_user_index_1() const noexcept(true);
 		uint32_t get_user_index_2() const noexcept(true);
 
-		// This will give you an offset into the array you store your shyapes in, no matter where it may be.
+		// This will give you an offset into the array you store your shapes in, no matter where it may be.
 		// Note: Only really useful if you store your shapes in one place.
 		uint32_t get_shape_index() const noexcept(true);
 
