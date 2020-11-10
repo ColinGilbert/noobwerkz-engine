@@ -103,7 +103,6 @@ void noob::stage::draw() noexcept(true)
 	// TODO: Change
 	gfx.set_light_direction(main_light.direction);
 	gfx.set_eye_position(noob::translation_from_mat4(view_matrix));
-
 	gfx.upload_instanced_uniforms();
 
 	for (uint32_t drawables_index = 0; drawables_index < drawables.size(); ++drawables_index)
@@ -416,22 +415,31 @@ void noob::stage::upload_actor_colours(const drawable_info_handle arg) const noe
 	uint32_t current = 0;
 	while (current < count)
 	{
+		noob::vec4f colour;
 		if (drawables[arg.index()].instances[current].which == noob::stage::drawable_instance::type::ACTOR) 
 		{
+
 			const noob::actor_handle a_h = noob::actor_handle::make(drawables[arg.index()].instances[current].index);
 			const noob::actor a = actors[a_h.index()];
-			const noob::vec4f colour = team_colours[a.team];
-			bool valid = buf.push_back(colour);
-
-			if (!valid)
-			{
-				logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu colours buffer for model ", noob::to_string(arg.index())));
-				gfx.unmap_buffer();			
-				return;
-			}
-
-			++current;
+			colour = team_colours[a.team];
 		}
+		else // Its a prop!
+		{
+			const noob::prop_handle h = noob::prop_handle::make(drawables[arg.index()].instances[current].index);
+			const noob::prop p = props[h.index()];
+			colour = team_colours[p.colour.index()];
+		}
+
+		bool valid = buf.push_back(colour);
+
+		if (!valid)
+		{
+			logger::log(noob::importance::WARNING, noob::concat("[Stage] Tried to overflow gpu colours buffer for model ", noob::to_string(arg.index())));
+			gfx.unmap_buffer();			
+			return;
+		}
+
+		++current;
 	}
 
 	// logger::log(noob::importance::INFO, noob::concat("[Stage] ", noob::to_string(current), " colours uploaded"));

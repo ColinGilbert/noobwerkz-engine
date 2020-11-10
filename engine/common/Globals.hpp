@@ -66,7 +66,7 @@ namespace noob
 
 		noob::shape shape_from_handle(const noob::shape_handle) const noexcept(true);
 		noob::instanced_model_handle model_from_shape(noob::shape_handle, uint32_t) noexcept(true);
-		
+
 		double get_random() noexcept(true);
 
 		size_t get_sample_rate() const noexcept(true)
@@ -77,15 +77,15 @@ namespace noob
 		// ---------------
 		// Data members:
 		// ---------------
-		
+
 		noob::profiler_snap profile_run;
-		
+
 		noob::component<noob::shape> shapes;
 		noob::component<noob::point_light> lights;
 		noob::component<noob::reflectance> reflectances;
 		noob::component_dynamic<noob::audio_sample> samples;
 		noob::component_dynamic<noob::skeletal_anim> skeletal_anims;
-		
+
 		noob::mixer master_mixer;
 
 		// The following are basic, commonly-used objects that we provide as a convenience.
@@ -98,12 +98,12 @@ namespace noob
 		{
 			return unit_cube_shape;
 		}
-		
+
 		noob::point_light_handle get_default_light() const noexcept(true)
 		{
 			return default_light;
 		}
-		
+
 		size_t sample_rate;
 
 		bool finished_init() const noexcept(true)

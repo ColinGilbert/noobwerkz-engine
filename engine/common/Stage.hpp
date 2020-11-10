@@ -133,7 +133,6 @@ namespace noob
 			std::vector<noob::stage::drawable_info> drawables;
 			std::vector<noob::stage::actor_info> actor_factories;
 			std::vector<noob::vec4f> team_colours;
-
 			// Voronoi cells are preferred over convex hulls generated from a set of points for data representation, as we can be certain that the voronoi cell is unambiguous.
 			// rde::vector<noob::vorocell> voros;
 

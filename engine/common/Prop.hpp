@@ -2,14 +2,14 @@
 
 #include "BodyInfo.hpp"
 #include "Reflectance.hpp"
-
+#include "Colour.hpp"
 
 namespace noob
 {
 	struct prop
 	{
 		noob::body_handle bod;
-		noob::reflectance_handle reflect;
+		noob::colourfp_handle colour;
 	};
 
 	typedef noob::component<noob::prop> prop_holder;
