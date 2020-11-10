@@ -39,7 +39,7 @@ namespace noob
 
 			noob::body& get_body(const noob::body_handle) noexcept(true);
 			noob::ghost& get_ghost(const noob::ghost_handle) noexcept(true);
-
+			noob::constraint& get_constraint(const noob::constraint_handle) noexcept(true);
 			// Oh crap... One of these kinds of functions...
 			// You know the drill; your vector (for contact points) is passed to the function from calling scope and the number returned is how many contact points you've got.
 			uint32_t get_intersecting(const noob::ghost_handle, std::vector<noob::contact_point>&) const noexcept(true);

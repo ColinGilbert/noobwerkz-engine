@@ -109,6 +109,10 @@ noob::ghost& noob::physics::get_ghost(const noob::ghost_handle h) noexcept(true)
 	return ghosts[h.index()];
 }
 
+noob::constraint& noob::physics::get_constraint(const noob::constraint_handle h) noexcept(true)
+{
+	return constraints[h.index()];
+}
 
 noob::constraint_handle noob::physics::add_fixed_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true)
 {

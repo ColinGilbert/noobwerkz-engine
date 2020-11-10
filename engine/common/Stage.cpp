@@ -261,6 +261,11 @@ noob::scenery_handle noob::stage::create_scenery(const noob::shape_handle Shape,
 	return scenery_h;
 }
 
+noob::constraint_handle noob::stage::create_fixed_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& frame_in_a, const noob::mat4f& frame_in_b)
+{
+	return world.add_fixed_constraint(a, b, frame_in_a, frame_in_b);
+}
+
 
 void noob::stage::set_actor_position(const noob::actor_handle Actor, const noob::vec3f& Pos) noexcept(true)
 {
