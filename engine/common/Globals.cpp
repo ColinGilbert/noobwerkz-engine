@@ -7,7 +7,6 @@ bool noob::globals::init() noexcept(true)
 	unit_sphere_shape = sphere_shape(0.5);
 	unit_cube_shape = box_shape(0.5, 0.5, 0.5);
 
-
 	noob::logger::log(noob::importance::INFO, noob::concat("[Globals] unit sphere shape handle ", noob::to_string(unit_sphere_shape.index()) ,", unit cube shape handle ", noob::to_string(unit_cube_shape.index())));
 	// << ", unit cylinder shape handle " << unit_cylinder_shape.index() << ", unit cone shape handle " << unit_cone_shape.index();
 
@@ -19,7 +18,6 @@ bool noob::globals::init() noexcept(true)
 	default_reflectance = set_reflectance(r, "default");
 
 	// logger::log(noob::importance::INFO, "[Globals] Got default triplanar shader handle.");
-
 
 	for (uint32_t i = 0; i < num_pseudo_randoms; ++i)
 	{

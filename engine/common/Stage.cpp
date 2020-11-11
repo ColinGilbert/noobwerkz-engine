@@ -6,9 +6,10 @@ void noob::stage::init(const noob::vec2ui Dims, const noob::mat4f& projection_ma
 	update_viewport_params(Dims, projection_mat);
 
 	noob::vec3f eye_pos, eye_target, eye_up;
-	eye_pos = noob::vec3f(0.0, -300.0, 0.0);
+	eye_pos = noob::vec3f(100.0, 100.0, 0.0);
 	eye_target = noob::vec3f(0.0, 0.0, 0.0);
-	eye_up = noob::vec3f(0.0, 0.0, -1.0);
+	eye_up = noob::vec3f(0.0, 1.0, 0.0);
+
 	view_matrix = noob::look_at(eye_pos, eye_target, eye_up);
 	projection_matrix = projection_mat;
 
@@ -18,7 +19,7 @@ void noob::stage::init(const noob::vec2ui Dims, const noob::mat4f& projection_ma
 
 	world.init();
 	main_light.colour = noob::vec4f(1.0, 1.0, 1.0, 0.0);
-	main_light.direction = noob::vec3f(0.0, 1.0, 0.0);
+	main_light.direction = noob::vec3f(0.0, -1.0, 0.0);
 
 
 	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
@@ -344,7 +345,7 @@ noob::constraint_handle noob::stage::create_slide_constraint(const noob::body_ha
 
 
 // noob::constraint_handle noob::stage::create_conical_constraint() noexcept(true);
-// noob::constraint_handle noob::stage:: create_gear_constraint() noexcept(true);
+// noob::constraint_handle noob::stage::create_gear_constraint() noexcept(true);
 
 
 noob::constraint_handle noob::stage::create_generic_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true)
@@ -571,30 +572,31 @@ void noob::stage::upload_matrices(const drawable_info_handle arg) noexcept(true)
 void noob::stage::upload_terrain() noexcept(true)
 {
 	if (terrain_started)
-
 	{
-		std::vector<noob::vec4f> tmp_verts;
-		for (uint32_t i = 0; i < sceneries.size(); ++i)
+		std::vector<noob::vec4f> tmp_vertices;
+		for (uint32_t sceneries_iter = 0; sceneries_iter < sceneries.size(); ++sceneries_iter)
 		{
-			const noob::scenery sc = sceneries[i];
+			const noob::scenery sc = sceneries[sceneries_iter];
 			const noob::body& bod = world.get_body(sc.body);
 			const noob::mat4f model_mat = bod.get_transform();
 			const noob::globals& g = noob::get_globals();
-			const noob::shape tmp_shp = g.shapes.get(noob::shape_handle::make(bod.get_shape_index()));
-			const noob::mesh_3d tmp_msh = tmp_shp.get_mesh();
+			const noob::shape tmp_shape = g.shapes.get(noob::shape_handle::make(bod.get_shape_index()));
+			const noob::mesh_3d tmp_mesh = tmp_shape.get_mesh();
 			// Add up triangles independently
-			for (uint32_t i = 0; i < tmp_msh.indices.size(); ++i)
+			for (uint32_t ii = 0; ii < tmp_mesh.indices.size(); ++ii)
 			{
-				tmp_verts.push_back(model_mat * noob::vec4f(tmp_msh.vertices[i].position, 1.0));
-				tmp_verts.push_back(noob::vec4f(tmp_msh.vertices[i].normal, 0.0));
-				tmp_verts.push_back(tmp_msh.vertices[i].colour);
+				const uint32_t vert_index = tmp_mesh.indices[ii];
+				const auto tmp_vert = tmp_mesh.vertices[vert_index];
+				tmp_vertices.push_back(model_mat * noob::vec4f(tmp_vert.position, 1.0));
+				tmp_vertices.push_back(noob::vec4f(tmp_vert.normal, 0.0));
+				tmp_vertices.push_back(tmp_vert.colour);
 			}
 		}
 
-		num_terrain_verts = tmp_verts.size() / 3;
+		num_terrain_verts = tmp_vertices.size() / 3;
 
 		noob::graphics& gfx = noob::get_graphics();
-		noob::gpu_write_buffer buf = gfx.map_terrain_buffer(0, tmp_verts.size());
+		noob::gpu_write_buffer buf = gfx.map_terrain_buffer(0, tmp_vertices.size());
 
 		if (!buf.valid())
 		{
@@ -603,9 +605,9 @@ void noob::stage::upload_terrain() noexcept(true)
 			return;
 		}
 
-		for (uint32_t i = 0; i < tmp_verts.size(); ++i)
+		for (uint32_t i = 0; i < tmp_vertices.size(); ++i)
 		{
-			buf.push_back(tmp_verts[i]);
+			buf.push_back(tmp_vertices[i]);
 		}
 
 		logger::log(noob::importance::INFO, noob::concat("[Stage] ", noob::to_string(num_terrain_verts), " terrain vertices uploaded."));

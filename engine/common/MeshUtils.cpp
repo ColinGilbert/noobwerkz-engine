@@ -177,6 +177,26 @@ noob::mesh_3d noob::mesh_utils::box(float width, float height, float depth)
 	const uint32_t num_indices = 36;
 
 	noob::mesh_3d results;
+/*
+	noob::vec3f point_a(-0.5*width, 0.5*height, -0.5*depth);
+	noob::vec3f point_b(0.5*width, 0.5*height, -0.5*depth);
+	noob::vec3f point_c(0.5*width, 0.5*height, 0.5*depth);
+	noob::vec3f point_d(-0.5*width, 0.5*height, 0.5*depth);
+	noob::vec3f point_e(-0.5*width, -0.5*height, -0.5*depth);
+	noob::vec3f point_f(0.5*width, -0.5*height, -0.5*depth);
+	noob::vec3f point_g(0.5*width, -0.5*height, 0.5*depth);
+	noob::vec3f point_h(-0.5*width, -0.5*height, 0.5*depth);
+
+	results.vertices.push_back(point_a);
+	results.vertices.push_back(point_b);
+	results.vertices.push_back(point_c);
+	results.verts.push_back(point_d);
+	results.push_back(point_e);
+	results.push_back(point_f);
+	results.push_back(point_g);
+	results.push_back(point_h);
+
+*/	
 
 	const float cube_verts[] =
 	{
@@ -234,7 +254,7 @@ noob::mesh_3d noob::mesh_utils::box(float width, float height, float depth)
 		1.0f, 0.0f, 0.0f,
 	};
 
-	for (uint32_t i = 0; i < num_vertices * 3; i += 3)
+	for (uint32_t i = 0; i < num_vertices*3; i += 3)
 	{
 		noob::mesh_3d::vert vv;
 
@@ -245,6 +265,7 @@ noob::mesh_3d noob::mesh_utils::box(float width, float height, float depth)
 		results.vertices.push_back(vv);
 	}
 
+/*
 	 const float cube_tex[] =
 	{
 		0.0f, 0.0f,
@@ -277,7 +298,7 @@ noob::mesh_3d noob::mesh_utils::box(float width, float height, float depth)
 	{
 		results.vertices[i/2].texcoords = noob::vec3f(cube_tex[i], cube_tex[i+1], 0);
 	}
-
+*/
 	const uint32_t cube_indices[] =
 	{
 		0, 2, 1,
@@ -294,14 +315,13 @@ noob::mesh_3d noob::mesh_utils::box(float width, float height, float depth)
 		20, 22, 21
 	};
 
-
 	for (uint32_t i = 0; i < num_indices; ++i)
 	{
 		results.indices.push_back(cube_indices[i]);
 	}
 
 	results.bbox.min = noob::vec3f(-0.5f * width, -0.5f * height, -0.5f * depth);
-	results.bbox.max = noob::vec3f(0.5f * width, 0.5f * height, 0.5 * depth);
+	results.bbox.max = noob::vec3f(0.5f * width, 0.5f * height, 0.5f * depth);
 
 	return results;
 }
