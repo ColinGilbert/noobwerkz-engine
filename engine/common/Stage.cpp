@@ -270,7 +270,7 @@ noob::prop_handle noob::stage::create_prop(const noob::prop_blueprints_handle bl
 			p.body = body_h;
 			p.colour = noob::colourfp_handle::make(team);
 			p.bp_handle = blueprint_h;
-			
+
 			props.push_back(p);
 
 			const noob::prop_handle prop_h = noob::prop_handle::make(props.size() - 1);
@@ -318,9 +318,38 @@ noob::scenery_handle noob::stage::create_scenery(const noob::shape_handle Shape,
 	return scenery_h;
 }
 
+
 noob::constraint_handle noob::stage::create_fixed_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& frame_in_a, const noob::mat4f& frame_in_b)
 {
 	return world.add_fixed_constraint(a, b, frame_in_a, frame_in_b);
+}
+
+
+noob::constraint_handle noob::stage::create_point_constraint(const noob::body_handle a, const noob::body_handle b, const noob::vec3f& pivot_a, const noob::vec3f& pivot_b) noexcept(true)
+{
+	return world.add_point_constraint(a, b, pivot_a, pivot_b);
+}
+
+
+noob::constraint_handle noob::stage::create_hinge_constraint(const noob::body_handle a, const noob::body_handle b, const noob::vec3f& pivot_in_a, const noob::vec3f& pivot_in_b, const noob::vec3f& axis_in_a, const noob::vec3f& axis_in_b) noexcept(true)
+{
+	return world.add_hinge_constraint(a, b, pivot_in_a, pivot_in_b, axis_in_a, axis_in_b);
+}
+
+
+noob::constraint_handle noob::stage::create_slide_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true)
+{
+	return world.add_slide_constraint(a, b, local_a, local_b);
+}
+
+
+// noob::constraint_handle noob::stage::create_conical_constraint() noexcept(true);
+// noob::constraint_handle noob::stage:: create_gear_constraint() noexcept(true);
+
+
+noob::constraint_handle noob::stage::create_generic_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true)
+{
+	return world.add_generic_constraint(a, b, local_a, local_b);
 }
 
 
