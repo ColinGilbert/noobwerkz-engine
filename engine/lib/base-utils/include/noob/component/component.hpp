@@ -3,8 +3,8 @@
 #include <memory>
 #include <vector>
 #include <limits>
+#include <cassert>
 
-#include <rdestl/vector.h>
 #include <noob/strings/strings.hpp>
 
 namespace noob
@@ -38,17 +38,17 @@ namespace noob
 					return (inner > other.inner); 
 				}
 
-				uint32_t index() const noexcept(true)
+				size_t index() const noexcept(true)
 				{
 					return inner;
 				}
 
 				bool is_invalid() const noexcept(true)
 				{
-					return (inner == std::numeric_limits<uint32_t>::max());
+					return (inner == std::numeric_limits<size_t>::max());
 				}
 
-				static handle make(uint32_t i) noexcept(true)
+				static handle make(size_t i) noexcept(true)
 				{
 					handle h;
 					h.inner = i;
@@ -58,7 +58,7 @@ namespace noob
 				static handle make_invalid() noexcept(true)
 				{
 					handle h;
-					h.inner = std::numeric_limits<uint32_t>::max();
+					h.inner = std::numeric_limits<size_t>::max();
 					return h;
 				}
 
@@ -66,7 +66,7 @@ namespace noob
 
 			protected:
 
-				uint32_t inner;
+				size_t inner;
 		};
 
 	template <typename T>
@@ -140,13 +140,13 @@ namespace noob
 					items.resize(0);
 				}
 
-				uint32_t count() const noexcept(true)
+				size_t count() const noexcept(true)
 				{
 					return items.size();
 
 				}
 				/*
-				   std::tuple<bool, uint32_t> index_from_ptr(const T* ptr) const noexcept(true)
+				   std::tuple<bool, size_t> index_from_ptr(const T* ptr) const noexcept(true)
 				   {
 				   const ptrdiff_t max_size = (items.size() * sizeof(T)) - sizeof(T);
 				   const ptrdiff_t diff = ptr - &(items[0]);
@@ -160,7 +160,7 @@ namespace noob
 				   }
 				   }
 
-				   uint32_t index_from_ptr_unsafe(const T* ptr) const noexcept(true)
+				   size_t index_from_ptr_unsafe(const T* ptr) const noexcept(true)
 				   {
 				   const ptrdiff_t diff = ptr - &(items[0]);
 				   return diff / sizeof(T);
@@ -168,7 +168,7 @@ namespace noob
 				 */
 			protected:
 
-				rde::vector<T> items;
+				std::vector<T> items;
 		};
 
 	template <typename T>
@@ -215,7 +215,7 @@ namespace noob
 					items.resize(0);
 				}
 
-				uint32_t count() const noexcept(true)
+				size_t count() const noexcept(true)
 				{
 					return items.size();
 				}

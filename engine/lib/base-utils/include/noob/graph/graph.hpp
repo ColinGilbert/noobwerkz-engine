@@ -13,7 +13,6 @@
 #include <noob/strings/strings.hpp>
 #include <iostream>
 
-#include <rdestl/sort.h>
 
 namespace noob
 {
@@ -227,7 +226,7 @@ namespace noob
 				noob::digraph::edge e;
 				e.set_from(n);
 				e.set_to(noob::node_handle::make(0));
-				auto search = rde::lower_bound(edges.begin(), edges.end(), e , rde::less<noob::digraph::edge>());
+				auto search = std::lower_bound(edges.begin(), edges.end(), e , std::less<noob::digraph::edge>());
 
 				return (search - edges.begin());
 			}
@@ -268,8 +267,8 @@ namespace noob
 
 			noob::fast_hashtable edge_table;
 
-			rde::vector<noob::digraph::edge> edges;
-			rde::vector<noob::digraph::node> nodes;
+			std::vector<noob::digraph::edge> edges;
+			std::vector<noob::digraph::node> nodes;
 
 			bool ready = false;
 	};

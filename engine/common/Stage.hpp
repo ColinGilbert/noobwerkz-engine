@@ -61,6 +61,11 @@ namespace noob
 			noob::prop_handle create_prop(const noob::prop_blueprints_handle, uint32_t team, const noob::vec3f&, const noob::versorf&) noexcept(true);
 			noob::scenery_handle create_scenery(const noob::shape_handle, const noob::vec3f&, const noob::versorf&) noexcept(true);
 			noob::body_handle create_body(const noob::shape_handle, const noob::body_info) noexcept(true); 
+
+			noob::scenery& get_scenery(const noob::scenery_handle) noexcept(true);
+			noob::actor& get_actor(const noob::actor_handle) noexcept(true);
+			noob::prop& get_prop(const noob::prop_handle) noexcept(true);
+
 			
 			noob::constraint_handle create_fixed_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& frame_in_a, const noob::mat4f& frame_in_b) noexcept(true);
 			noob::constraint_handle create_point_constraint(const noob::body_handle a, const noob::body_handle b, const noob::vec3f& pivot_a, const noob::vec3f& pivot_b) noexcept(true);

@@ -21,7 +21,6 @@ void noob::stage::init(const noob::vec2ui Dims, const noob::mat4f& projection_ma
 	main_light.colour = noob::vec4f(1.0, 1.0, 1.0, 0.0);
 	main_light.direction = noob::vec3f(0.0, -1.0, 0.0);
 
-
 	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
 	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
 	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
@@ -261,10 +260,13 @@ noob::prop_handle noob::stage::create_prop(const noob::prop_blueprints_handle bl
 {
 	if (props_extra_info.size() > blueprint_h.index())
 	{
+
+		logger::log(noob::importance::INFO, "[Stage] create_prop. Inside first conditional block.");
 		noob::stage::prop_info info = props_extra_info[blueprint_h.index()];
 
 		if (info.count < info.max)
 		{
+		logger::log(noob::importance::INFO, "[Stage] create_prop. Inside second conditional block.");
 			const noob::body_handle body_h = world.add_body(noob::body_type::DYNAMIC, info.bp.shape, info.bp.mass, pos, orient, info.bp.ccd);
 
 			noob::prop p;
@@ -318,6 +320,27 @@ noob::scenery_handle noob::stage::create_scenery(const noob::shape_handle Shape,
 
 	return scenery_h;
 }
+
+
+noob::scenery& noob::stage::get_scenery(const noob::scenery_handle arg) noexcept(true)
+{
+	return sceneries[arg.index()];
+}
+
+
+noob::actor& noob::stage::get_actor(const noob::actor_handle arg) noexcept(true)
+{
+	return actors[arg.index()];
+}
+
+
+noob::prop& noob::stage::get_prop(const noob::prop_handle arg) noexcept(true)
+{
+	logger::log(noob::importance::INFO, noob::concat("[Stage] props.size ", noob::to_string(props.size()), "handle = ", noob::to_string(arg.index())));
+	assert(props.size() > arg.index());
+	return props[arg.index()];
+}
+
 
 
 noob::constraint_handle noob::stage::create_fixed_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& frame_in_a, const noob::mat4f& frame_in_b)
@@ -476,7 +499,7 @@ void noob::stage::upload_colours(const drawable_info_handle arg) const noexcept(
 
 	if (buf.valid() == false)
 	{
-		// logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced colour buffer for model ", noob::to_string(arg.index()), " - Number of instances = ", noob::to_string(count)));	
+		logger::log(noob::importance::WARNING, noob::concat("[Stage] Could not map instanced colour buffer for model ", noob::to_string(arg.index()), " - Number of instances = ", noob::to_string(count)));	
 		return;
 	}
 

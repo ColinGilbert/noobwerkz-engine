@@ -157,7 +157,6 @@ noob::constraint_handle noob::physics::add_generic_constraint(const noob::body_h
 	return noob::constraint_handle::make(constraints.size() - 1);
 }
 
-
 uint32_t noob::physics::get_intersecting(const noob::ghost_handle ghost_h, std::vector<noob::contact_point>& Results) const noexcept(true) 
 {
 	Results.clear();

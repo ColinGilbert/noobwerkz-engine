@@ -10,6 +10,10 @@
 #include "Constraint.hpp"
 #include "ContactPoint.hpp"
 #include "Globals.hpp"
+#include "Actor.hpp"
+#include "Prop.hpp"
+#include "Scenery.hpp"
+
 
 namespace noob
 {
