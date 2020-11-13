@@ -41,14 +41,14 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
 ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ */
 noob::mesh_3d noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
 {
 	const float X = 0.525731112119133606;
 	const float Z = 0.850650808352039932;
 
 	std::vector<noob::vec3f> verts;
-	
+
 	verts.push_back(noob::vec3f(-X, 0.0, Z));
 	verts.push_back(noob::vec3f(X, 0.0, Z));
 	verts.push_back(noob::vec3f(-X, 0.0, -Z));
@@ -108,8 +108,8 @@ noob::mesh_3d noob::mesh_utils::sphere(float radius, uint32_t detail_arg)
 
 	noob::mesh_3d results;
 
-	// results.vertices.reserve(verts.size());
-	// results.normals.reserve(verts.size());
+	// results.position.reserve(verts.size());
+	// results.normal.reserve(verts.size());
 	// results.indices.reserve(indices.size());
 
 	for (uint32_t i = 0; i < verts.size(); ++i)
@@ -177,26 +177,26 @@ noob::mesh_3d noob::mesh_utils::box(float width, float height, float depth)
 	const uint32_t num_indices = 36;
 
 	noob::mesh_3d results;
-/*
-	noob::vec3f point_a(-0.5*width, 0.5*height, -0.5*depth);
-	noob::vec3f point_b(0.5*width, 0.5*height, -0.5*depth);
-	noob::vec3f point_c(0.5*width, 0.5*height, 0.5*depth);
-	noob::vec3f point_d(-0.5*width, 0.5*height, 0.5*depth);
-	noob::vec3f point_e(-0.5*width, -0.5*height, -0.5*depth);
-	noob::vec3f point_f(0.5*width, -0.5*height, -0.5*depth);
-	noob::vec3f point_g(0.5*width, -0.5*height, 0.5*depth);
-	noob::vec3f point_h(-0.5*width, -0.5*height, 0.5*depth);
+	/*
+	   noob::vec3f point_a(-0.5*width, 0.5*height, -0.5*depth);
+	   noob::vec3f point_b(0.5*width, 0.5*height, -0.5*depth);
+	   noob::vec3f point_c(0.5*width, 0.5*height, 0.5*depth);
+	   noob::vec3f point_d(-0.5*width, 0.5*height, 0.5*depth);
+	   noob::vec3f point_e(-0.5*width, -0.5*height, -0.5*depth);
+	   noob::vec3f point_f(0.5*width, -0.5*height, -0.5*depth);
+	   noob::vec3f point_g(0.5*width, -0.5*height, 0.5*depth);
+	   noob::vec3f point_h(-0.5*width, -0.5*height, 0.5*depth);
 
-	results.vertices.push_back(point_a);
-	results.vertices.push_back(point_b);
-	results.vertices.push_back(point_c);
-	results.verts.push_back(point_d);
-	results.push_back(point_e);
-	results.push_back(point_f);
-	results.push_back(point_g);
-	results.push_back(point_h);
+	   results.position.push_back(point_a);
+	   results.position.push_back(point_b);
+	   results.position.push_back(point_c);
+	   results.verts.push_back(point_d);
+	   results.push_back(point_e);
+	   results.push_back(point_f);
+	   results.push_back(point_g);
+	   results.push_back(point_h);
 
-*/	
+	 */	
 
 	const float cube_verts[] =
 	{
@@ -226,7 +226,7 @@ noob::mesh_3d noob::mesh_utils::box(float width, float height, float depth)
 		0.5f * width,  0.5f * height, -0.5f * depth,
 	};
 
-	 const float cube_normals[] =
+	const float cube_normals[] =
 	{
 		0.0f, -1.0f, 0.0f,
 		0.0f, -1.0f, 0.0f,
@@ -254,7 +254,7 @@ noob::mesh_3d noob::mesh_utils::box(float width, float height, float depth)
 		1.0f, 0.0f, 0.0f,
 	};
 
-	for (uint32_t i = 0; i < num_vertices*3; i += 3)
+	for (uint32_t i = 0; i < num_vertices * 3; i += 3)
 	{
 		noob::mesh_3d::vert vv;
 
@@ -265,40 +265,40 @@ noob::mesh_3d noob::mesh_utils::box(float width, float height, float depth)
 		results.vertices.push_back(vv);
 	}
 
-/*
-	 const float cube_tex[] =
-	{
-		0.0f, 0.0f,
-		0.0f, 1.0f,
-		1.0f, 1.0f,
-		1.0f, 0.0f,
-		1.0f, 0.0f,
-		1.0f, 1.0f,
-		0.0f, 1.0f,
-		0.0f, 0.0f,
-		0.0f, 0.0f,
-		0.0f, 1.0f,
-		1.0f, 1.0f,
-		1.0f, 0.0f,
-		0.0f, 0.0f,
-		0.0f, 1.0f,
-		1.0f, 1.0f,
-		1.0f, 0.0f,
-		0.0f, 0.0f,
-		0.0f, 1.0f,
-		1.0f, 1.0f,
-		1.0f, 0.0f,
-		0.0f, 0.0f,
-		0.0f, 1.0f,
-		1.0f, 1.0f,
-		1.0f, 0.0f,
-	};
+	/*
+	   const float cube_tex[] =
+	   {
+	   0.0f, 0.0f,
+	   0.0f, 1.0f,
+	   1.0f, 1.0f,
+	   1.0f, 0.0f,
+	   1.0f, 0.0f,
+	   1.0f, 1.0f,
+	   0.0f, 1.0f,
+	   0.0f, 0.0f,
+	   0.0f, 0.0f,
+	   0.0f, 1.0f,
+	   1.0f, 1.0f,
+	   1.0f, 0.0f,
+	   0.0f, 0.0f,
+	   0.0f, 1.0f,
+	   1.0f, 1.0f,
+	   1.0f, 0.0f,
+	   0.0f, 0.0f,
+	   0.0f, 1.0f,
+	   1.0f, 1.0f,
+	   1.0f, 0.0f,
+	   0.0f, 0.0f,
+	   0.0f, 1.0f,
+	   1.0f, 1.0f,
+	   1.0f, 0.0f,
+	   };
 
-	for (uint32_t i = 0; i < num_vertices * 2; i += 2)
-	{
-		results.vertices[i/2].texcoords = noob::vec3f(cube_tex[i], cube_tex[i+1], 0);
-	}
-*/
+	   for (uint32_t i = 0; i < num_vertices * 2; i += 2)
+	   {
+	   results.position[i/2].texcoords = noob::vec3f(cube_tex[i], cube_tex[i+1], 0);
+	   }
+	 */
 	const uint32_t cube_indices[] =
 	{
 		0, 2, 1,
@@ -325,6 +325,132 @@ noob::mesh_3d noob::mesh_utils::box(float width, float height, float depth)
 
 	return results;
 }
+
+
+// This code is adapted from http://www.songho.ca/opengl/gl_cylinder.html
+noob::mesh_3d noob::mesh_utils::cylinder(float radius, float height, uint32_t segments) {
+	// Generate a unit circle on XY-plane
+	const float PI = 3.1415926f;
+	const float sector_step = 2 * PI / static_cast<float>(segments);
+	float sector_angle;  // radians
+
+	noob::mesh_3d results;
+	std::vector<noob::vec3f> unit_circle_vertices;
+	for(int i = 0; i <= segments; ++i)
+	{
+		sector_angle = i * sector_step;
+		unit_circle_vertices.push_back(noob::vec3f(std::cos(sector_angle), std::sin(sector_angle), 0.0));
+	}
+
+	for(int i = 0; i < 2; ++i)
+	{
+		const float h = -height / 2.0f + i * height;           // z value; -h/2 to h/2
+		const float t = 1.0f - i;                              // vertical tex coord; 1 to 0
+
+		for(uint32_t j = 0, k = 0; j <= segments; ++j)
+		{
+			noob::vec3f temp = unit_circle_vertices[j];
+			const float ux = temp.v[0];
+			const float uy = temp.v[1];
+			const float uz = temp.v[2];
+
+			noob::mesh_3d::vert v;
+			v.position = noob::vec3f(noob::vec3f(ux * radius, uy * radius, h));
+			v.normal = noob::vec3f(ux, uy, uz);
+			v.texcoords = noob::vec3f(static_cast<float>(j) / static_cast<float>(segments), t, 0.0);
+
+			results.vertices.push_back(v);
+		}
+	}
+
+	// The starting index for the base/top surface
+	// NOTE: It is used for generating indices later
+	uint32_t base_center_index = results.vertices.size();
+	uint32_t top_center_index = base_center_index + segments + 1;
+
+	// Put base and top vertices to arrays
+	for (uint32_t i = 0; i < 2; ++i)
+	{
+		float h = -height / 2.0f + static_cast<float>(i) * height;
+		float nz = -1.0 + static_cast<float>(i) * 2.0;
+	
+		noob::mesh_3d::vert center;
+		// Center point
+		center.position = noob::vec3f(0.0, 0.0, h);
+		center.normal = noob::vec3f(0.0, 0.0, nz);
+		center.texcoords = noob::vec3f(0.5, 0.5, 0.0);
+
+		results.vertices.push_back(center);
+
+		for (uint32_t j = 0, k = 0; j < segments; ++j)
+		{
+			
+			float ux = unit_circle_vertices[j].v[0];
+			float uy = unit_circle_vertices[j].v[1];
+			noob::mesh_3d::vert v;
+			v.position = noob::vec3f(ux * radius, uy * radius, h);    
+			v.normal = noob::vec3f(0.0, 0.0, nz);
+			v.texcoords = noob::vec3f(-ux * 0.5 + 0.5, -uy * 0.5f + 0.5f, 0.0);
+			results.vertices.push_back(v);
+		}
+	}
+
+	uint32_t k1 = 0;
+	uint32_t k2 = segments + 1;
+
+	// Indices for the side surface
+	for(uint32_t i = 0; i < segments; ++i, ++k1, ++k2)
+	{
+		// 2 triangles per sector
+		// k1 => k1+1 => k2
+		results.indices.push_back(k1);
+		results.indices.push_back(k1 + 1);
+		results.indices.push_back(k2);
+
+		// k2 => k1+1 => k2+1
+		results.indices.push_back(k2);
+		results.indices.push_back(k1 + 1);
+		results.indices.push_back(k2 + 1);
+	}
+
+	// Indices for the base surface
+	for(uint32_t i = 0, k = base_center_index + 1; i < segments; ++i, ++k)
+	{
+		if(i < segments - 1)
+		{
+			results.indices.push_back(base_center_index);
+			results.indices.push_back(k + 1);
+			results.indices.push_back(k);
+		}
+		else // Last triangle
+		{
+			results.indices.push_back(base_center_index);
+			results.indices.push_back(base_center_index + 1);
+			results.indices.push_back(k);
+		}
+	}
+
+	// Indices for the top surface
+	for(int i = 0, k = top_center_index + 1; i < segments; ++i, ++k)
+	{
+		if(i < segments - 1)
+		{
+			results.indices.push_back(top_center_index);
+			results.indices.push_back(k);
+			results.indices.push_back(k + 1);
+		}
+		else // Last triangle
+		{
+			results.indices.push_back(top_center_index);
+			results.indices.push_back(k);
+			results.indices.push_back(top_center_index + 1);
+		}
+	}
+
+	return results;
+
+}
+
 
 /*
    noob::mesh_3d noob::mesh_utils::voro(float width, float height, float depth)
@@ -363,7 +489,7 @@ results.bbox.max = noob::vec3f(x, y, z);
 return results;
 
 }
-*/
+ */
 
 /*
    noob::mesh_3d noob::mesh_utils::cone(float radius, float height, uint32_t segments_arg)
@@ -401,17 +527,17 @@ noob::mesh_3d results;
 
 const uint32_t num_split_verts = num_verts * 3;
 
-results.vertices.resize(num_split_verts + num_verts);
-results.normals.resize(num_split_verts + num_verts);
+results.position.resize(num_split_verts + num_verts);
+results.normal.resize(num_split_verts + num_verts);
 results.indices.resize(num_indices * 2);
 
 const noob::vec3f top_origin = top.vertices[0];	
 
 for (uint32_t i = 0; i < num_verts; i += 2)
 {
-results.vertices[i * 3] = top_origin;
-results.vertices[(i * 3) + 1] = top.vertices[i];
-results.vertices[(i * 3) + 2] = top.vertices[i + 1];
+results.position[i * 3] = top_origin;
+results.position[(i * 3) + 1] = top.vertices[i];
+results.position[(i * 3) + 2] = top.vertices[i + 1];
 }
 
 // Now, calculate the normals: TODO:
@@ -421,17 +547,17 @@ const noob::vec3f first = top.vertices[i] - top_origin;
 const noob::vec3f second = top.vertices[i+1] - top_origin;
 const noob::vec3f n = noob::normalize(noob::cross(first, second));
 
-results.normals[i * 3] = n;
-results.normals[(i * 3) + 1] = n;
-results.normals[(i * 3) + 2] = n;
+results.normal[i * 3] = n;
+results.normal[(i * 3) + 1] = n;
+results.normal[(i * 3) + 2] = n;
 }
 
 // Now, add our bottom to the results
-const uint32_t total_verts = results.vertices.size();
+const uint32_t total_verts = results.position.size();
 for (uint32_t i = num_split_verts; i < total_verts; ++i)
 {
-results.vertices[i] = bottom.vertices[i - num_split_verts];
-results.normals[i] = noob::vec3f(0.0, -1.0, 0.0);
+results.position[i] = bottom.vertices[i - num_split_verts];
+results.normal[i] = noob::vec3f(0.0, -1.0, 0.0);
 }
 const uint32_t total_indices = results.indices.size();
 for (uint32_t i = num_indices; i < total_indices; ++i)
@@ -515,12 +641,12 @@ noob::mesh_3d noob::mesh_utils::circle(float radius, uint32_t segments_arg)
 	const Eigen::Vector3f p(radius, 0.0, radius);
 
 	noob::mesh_3d results;
-	results.vertices.reserve(segments + 1);
-	// results.normals.reserve(segments + 1);
+	//results.position.reserve(segments + 1);
+	// results.normal.reserve(segments + 1);
 	const uint32_t num_indices = segments * 3;
 	// results.indices.reserve(num_indices);
 
-	// std::fill(results.normals.begin(), results.normals.end(), noob::vec3f(0.0, 1.0, 0.0));
+	// std::fill(results.normal.begin(), results.normal.end(), noob::vec3f(0.0, 1.0, 0.0));
 
 	noob::mesh_3d::vert vv;
 

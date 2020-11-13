@@ -41,8 +41,7 @@ noob::instanced_model_handle noob::globals::model_from_shape(noob::shape_handle 
 
 noob::shape_handle noob::globals::sphere_shape(float r) noexcept(true) 
 {
-	std::string s = noob::concat("sphere-", noob::to_string(static_cast<uint32_t>(r)));
-
+	const std::string s = noob::concat("sphere-", noob::to_string(static_cast<uint32_t>(r)));
 	auto search = names_to_shapes.find(rde::string(s.c_str()));
 	// auto search = sphere_shapes.find(r);
 	if (search == names_to_shapes.end())
@@ -59,7 +58,7 @@ noob::shape_handle noob::globals::sphere_shape(float r) noexcept(true)
 
 noob::shape_handle noob::globals::box_shape(float x, float y, float z) noexcept(true) 
 {
-	std::string s = noob::concat("box-", noob::to_string(static_cast<uint32_t>(x)), "-", noob::to_string(static_cast<uint32_t>(y)), "-", noob::to_string(static_cast<uint32_t>(z)));
+	const std::string s = noob::concat("box-", noob::to_string(static_cast<uint32_t>(x)), "-", noob::to_string(static_cast<uint32_t>(y)), "-", noob::to_string(static_cast<uint32_t>(z)));
 	auto search = names_to_shapes.find(rde::string(s.c_str()));
 	//auto search = box_shapes.find(std::make_tuple(x,y,z));
 	if (search == names_to_shapes.end())
@@ -72,6 +71,23 @@ noob::shape_handle noob::globals::box_shape(float x, float y, float z) noexcept(
 	}
 	return search->second;
 }
+
+
+noob::shape_handle noob::globals::cylinder_shape(float radius, float height, uint32_t segments)
+{
+	const std::string s = noob::concat("cylinder-", noob::to_string(static_cast<uint32_t>(radius)), "-", noob::to_string(static_cast<uint32_t>(height)), "-", noob::to_string(segments));
+	auto search = names_to_shapes.find(rde::string(s.c_str()));
+	//auto search = box_shapes.find(std::make_tuple(x,y,z));
+	if (search == names_to_shapes.end())
+	{
+		noob::shape temp;
+		temp.cylinder(radius, height, segments);
+		auto results = names_to_shapes.insert(rde::make_pair(rde::string(s.c_str()), add_shape(temp)));
+		return (results.first)->second;
+	}
+	return search->second;
+}
+
 
 
 noob::shape_handle noob::globals::hull_shape(const std::vector<noob::vec3f>& points) noexcept(true) 

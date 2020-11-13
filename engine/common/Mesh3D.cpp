@@ -44,6 +44,11 @@ void noob::mesh_3d::calculate_dims() noexcept(true)
 		}
 	}
 }
+
+
+
+
+
 /*
    void noob::mesh_3d::to_origin()
    {

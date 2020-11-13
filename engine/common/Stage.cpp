@@ -22,14 +22,19 @@ void noob::stage::init(const noob::vec2ui Dims, const noob::mat4f& projection_ma
 	main_light.direction = noob::vec3f(0.0, -1.0, 0.0);
 
 	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
-	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
-	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
-	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
-
-	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
-	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
-	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
-	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
+	team_colours.push_back(noob::vec4f(0.1, 0.3, 0.3, 1.0));
+	team_colours.push_back(noob::vec4f(0.3, 0.1, 0.1, 1.0));
+	team_colours.push_back(noob::vec4f(0.3, 0.1, 0.3, 1.0));
+	team_colours.push_back(noob::vec4f(0.3, 0.3, 0.1, 1.0));
+	team_colours.push_back(noob::vec4f(0.4, 0.4, 0.4, 1.0));
+	team_colours.push_back(noob::vec4f(0.4, 0.4, 0.1, 1.0));
+	team_colours.push_back(noob::vec4f(0.1, 0.4, 0.4, 1.0));
+	team_colours.push_back(noob::vec4f(0.4, 0.4, 0.1, 1.0));
+	team_colours.push_back(noob::vec4f(0.4, 0.1, 0.4, 1.0));
+	team_colours.push_back(noob::vec4f(0.5, 0.7, 0.7, 1.0));
+	team_colours.push_back(noob::vec4f(0.7, 0.5, 0.5, 1.0));
+	team_colours.push_back(noob::vec4f(0.7, 0.5, 0.7, 1.0));
+	team_colours.push_back(noob::vec4f(0.0, 1.0, 1.0, 1.0));
 
 	logger::log(noob::importance::INFO, "[Stage] Done init.");
 }
@@ -261,12 +266,12 @@ noob::prop_handle noob::stage::create_prop(const noob::prop_blueprints_handle bl
 	if (props_extra_info.size() > blueprint_h.index())
 	{
 
-		logger::log(noob::importance::INFO, "[Stage] create_prop. Inside first conditional block.");
+		// logger::log(noob::importance::INFO, "[Stage] create_prop. Inside first conditional block.");
 		noob::stage::prop_info info = props_extra_info[blueprint_h.index()];
 
 		if (info.count < info.max)
 		{
-		logger::log(noob::importance::INFO, "[Stage] create_prop. Inside second conditional block.");
+			// logger::log(noob::importance::INFO, "[Stage] create_prop. Inside second conditional block.");
 			const noob::body_handle body_h = world.add_body(noob::body_type::DYNAMIC, info.bp.shape, info.bp.mass, pos, orient, info.bp.ccd);
 
 			noob::prop p;
@@ -343,7 +348,7 @@ noob::prop& noob::stage::get_prop(const noob::prop_handle arg) noexcept(true)
 
 
 
-noob::constraint_handle noob::stage::create_fixed_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& frame_in_a, const noob::mat4f& frame_in_b)
+noob::constraint_handle noob::stage::create_fixed_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& frame_in_a, const noob::mat4f& frame_in_b) noexcept(true)
 {
 	return world.add_fixed_constraint(a, b, frame_in_a, frame_in_b);
 }

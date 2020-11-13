@@ -1036,7 +1036,7 @@ noob::gpu_write_buffer noob::graphics::map_terrain_buffer(uint32_t Min, uint32_t
 	}
 	else
 	{
-		noob::logger::log(noob::importance::WARNING, "[Graphics] Tried to use invalid value for mapping terrain buffer.");
+		// noob::logger::log(noob::importance::WARNING, "[Graphics] Tried to use invalid value for mapping terrain buffer.");
 	}
 
 	return noob::gpu_write_buffer::make_invalid();	
@@ -1066,7 +1066,7 @@ noob::gpu_write_buffer noob::graphics::map_billboards(noob::billboard_buffer_han
 		}
 		else
 		{
-			noob::logger::log(noob::importance::WARNING, "[Graphics] Tried to use invalid value for mapping terrain buffer.");
+			// noob::logger::log(noob::importance::WARNING, "[Graphics] Tried to use invalid value for mapping billboard buffer.");
 		}
 
 		return noob::gpu_write_buffer::make_invalid();	
@@ -1147,7 +1147,7 @@ noob::texture_2d_handle noob::graphics::texture_2d(const noob::texture_loader_2d
 
 	noob::texture_2d t(texture_id, noob::texture_info(mips > 1, TextureLoader.format()), dims[0], dims[1]);
 	textures_2d.push_back(t);
-	noob::logger::log(noob::importance::INFO, noob::concat("[Graphics] Created 2D texture of size ", noob::to_string(dims[0]), "-", noob::to_string(dims[1]), " with format ", noob::to_string(TextureLoader.format()), " and ", noob::to_string(mips) ," mips."));
+	// noob::logger::log(noob::importance::INFO, noob::concat("[Graphics] Created 2D texture of size ", noob::to_string(dims[0]), "-", noob::to_string(dims[1]), " with format ", noob::to_string(TextureLoader.format()), " and ", noob::to_string(mips) ," mips."));
 
 	return noob::texture_2d_handle::make(textures_2d.size() - 1);
 }

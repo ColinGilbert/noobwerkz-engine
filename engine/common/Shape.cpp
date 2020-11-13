@@ -24,14 +24,27 @@ void noob::shape::box(float width, float height, float depth) noexcept(true)
 	physics_valid = true;
 }
 
+
+void noob::shape::cylinder(float radius, float height, uint32_t segments) noexcept(true) 
+{
+	if (!physics_valid)
+	{
+		shape_type = noob::shape::type::CYLINDER;
+		inner = new btCylinderShape(btVector3(radius, radius, height * 0.5));
+	}
+	scales = noob::vec3f(radius * 2.0, radius * 2.0, height);
+	physics_valid = true;
+}
+
+
 void noob::shape::hull(const std::vector<noob::vec3f>& points) noexcept(true) 
 {
 	if (!physics_valid)
 	{
 		shape_type = noob::shape::type::HULL;
-		scales = noob::vec3f(1.0, 1.0, 1.0);
 		inner = new btConvexHullShape(&points[0].v[0], points.size());
 	}
+	scales = noob::vec3f(1.0, 1.0, 1.0);
 	physics_valid = true;
 }
 
@@ -98,6 +111,10 @@ noob::mesh_3d noob::shape::get_mesh() const noexcept(true)
 		case (noob::shape::type::BOX):
 			{
 				return noob::mesh_utils::box(scales[0], scales[1], scales[2]);
+			}
+		case (noob::shape::type::CYLINDER):
+			{
+				return noob::mesh_utils::cylinder(scales[0], scales[1], 12);
 			}
 		case (noob::shape::type::HULL):
 			{
@@ -175,17 +192,17 @@ noob::mesh_3d noob::shape::get_mesh() const noexcept(true)
 					noob::mesh_3d::vert vv;					
 
 					m.indices.push_back(m.vertices.size());
-					
+
 					vv.normal = noob::cross(noob::vec3f_from_bullet(triangle_verts[1] - triangle_verts[0]), vec3f_from_bullet(triangle_verts[2] - triangle_verts[0]));
 					vv.position = vec3f_from_bullet(triangle_verts[0]);
 					vv.colour = noob::vec4f(1.0, 1.0, 1.0, 1.0);
 					m.vertices.push_back(vv);
 
 					m.indices.push_back(m.vertices.size());
-					
+
 					vv.position = vec3f_from_bullet(triangle_verts[1]);
 					m.vertices.push_back(vv);
-					
+
 					m.indices.push_back(m.vertices.size());
 					vv.position = vec3f_from_bullet(triangle_verts[2]);
 					m.vertices.push_back(vv);					
@@ -197,7 +214,7 @@ noob::mesh_3d noob::shape::get_mesh() const noexcept(true)
 			}
 		default:
 			{
-				logger::log(noob::importance::ERROR, "[Shape] Trying to turn invalid shape type into mesh! If this is build has asserts disabled, we will return a unit sphere mesh instead to prevent a crash. Dear Dev: Get your act together!");
+				logger::log(noob::importance::ERROR, "[Shape] Trying to turn invalid shape type into mesh! If this is build has asserts disabled, we will return a unit sphere mesh instead to prevent a crash. Dear dev: Get your act together! ;)");
 				assert(0 && "[Shape] Tried to turn invalid shape type into mesh! This shouldn't happen in release mode. Ever.");
 				return noob::mesh_utils::sphere(0.5, 2);
 			}

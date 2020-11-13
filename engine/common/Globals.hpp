@@ -50,6 +50,7 @@ namespace noob
 		// Parametric shapes. These get cached for reuse by the physics engine.
 		noob::shape_handle sphere_shape(float r) noexcept(true);
 		noob::shape_handle box_shape(float x, float y, float z) noexcept(true);
+		noob::shape_handle cylinder_shape(float radius, float height, uint32_t segments) noexcept(true);
 		noob::shape_handle hull_shape(const std::vector<noob::vec3f>&) noexcept(true);
 		noob::shape_handle static_trimesh_shape(const noob::mesh_3d&) noexcept(true);
 		noob::skeletal_anim_handle skeleton(const std::string& filename) noexcept(true);

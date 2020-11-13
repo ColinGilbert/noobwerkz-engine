@@ -39,7 +39,6 @@ void noob::gui::set_dims(const noob::vec2ui Dims) noexcept(true)
 void noob::gui::text(const std::string& Text, const noob::vec2f Pos, noob::gui::font_size Size, const noob::vec4f Colour) noexcept(true)
 {
 	auto shaped = gui_font.shape_text(Text);
-
 	if (shaped.valid)
 	{
 		for (std::array<noob::billboard_vertex, 6> qq : shaped.value.quads)
@@ -52,7 +51,6 @@ void noob::gui::text(const std::string& Text, const noob::vec2f Pos, noob::gui::
 				temp.colour = Colour;
 				drawlist.push_back(temp);
 			}
-
 			++num_quads;
 		}
 	}
@@ -67,7 +65,6 @@ void noob::gui::draw() noexcept(true)
 	if (drawlist.size() < max_text_verts)
 	{
 		max_text_verts = drawlist.size();
-
 		gfx.resize_buffers(billbuf, max_text_verts);
 	}
 
@@ -75,7 +72,7 @@ void noob::gui::draw() noexcept(true)
 
 	if (!mapped_buf.valid())
 	{
-			noob::logger::log(noob::importance::ERROR, noob::concat(std::string("[GUI] Could not get valid buffer for "), noob::to_string(drawlist.size()), std::string(" vertices. Max verts = "), noob::to_string(max_text_verts)));
+			// noob::logger::log(noob::importance::ERROR, noob::concat(std::string("[GUI] Could not get valid buffer for "), noob::to_string(drawlist.size()), std::string(" vertices. Max verts = "), noob::to_string(max_text_verts)));
 			return;
 	}
 
@@ -98,7 +95,6 @@ void noob::gui::draw() noexcept(true)
 			noob::logger::log(noob::importance::ERROR, "[GUI] Could not push back colour vertex attribute.");
 			break;
 		}
-
 	}
 
 	gfx.unmap_buffer();
