@@ -31,7 +31,7 @@ namespace noob
 			stage() noexcept(true) : show_origin(true), ambient_light(noob::vec4f(0.6, 0.6, 0.6, 1.0)) {}
 
 			// This one must be called by the application.
-			void init(const noob::vec2ui Dims, const noob::mat4f& projection_mat) noexcept(true);
+			void init(const noob::vec2ui& dims, const noob::mat4f& projection_mat) noexcept(true);
 			// Brings everything back to scratch.
 			void tear_down() noexcept(true);
 
@@ -42,10 +42,10 @@ namespace noob
 			// Draw() can also feasibly be called more than once per frame, especially after setting the viewport to a different FOV/LOD. The results can then be treated as a texture and displayed within a game, or on a HUD.
 			void update(double dt) noexcept(true);
 			void draw() noexcept(true);
-			void update_viewport_params(const noob::vec2ui Dims, const noob::mat4f& projection_mat) noexcept(true);
+			void update_viewport_params(const noob::vec2ui& dims, const noob::mat4f& projection_mat) noexcept(true);
 
 			// Call this when your graphics context went dead and is now back (ie: app got sent into background)
-			void rebuild_graphics(const noob::vec2ui Dims, const noob::mat4f& projection_mat) noexcept(true);
+			void rebuild_graphics(const noob::vec2ui& dims, const noob::mat4f& projection_mat) noexcept(true);
 			void rebuild_models() noexcept(true);
 			void build_navmesh() noexcept(true);
 
@@ -188,6 +188,5 @@ namespace noob
 			void reserve_models(const noob::instanced_model_handle h, uint32_t Num) noexcept(true);
 
 			void upload_terrain() noexcept(true);
-
 	};
 }

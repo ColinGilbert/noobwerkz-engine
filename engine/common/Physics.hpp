@@ -40,7 +40,7 @@ namespace noob
 			// noob::constraint_handle add_conical_constraint() noexcept(true);
 			// noob::constraint_handle add_gear_constraint() noexcept(true);
 			noob::constraint_handle add_generic_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true);
-
+			
 			noob::body& get_body(const noob::body_handle) noexcept(true);
 			noob::ghost& get_ghost(const noob::ghost_handle) noexcept(true);
 			noob::constraint& get_constraint(const noob::constraint_handle) noexcept(true);
@@ -55,7 +55,6 @@ namespace noob
 			std::vector<noob::body> bodies;
 			std::vector<noob::ghost> ghosts;
 			std::vector<noob::constraint> constraints;
-
 
 			btBroadphaseInterface* broadphase;
 			btDefaultCollisionConfiguration* collision_configuration;

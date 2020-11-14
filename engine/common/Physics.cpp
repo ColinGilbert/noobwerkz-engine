@@ -109,10 +109,12 @@ noob::ghost& noob::physics::get_ghost(const noob::ghost_handle h) noexcept(true)
 	return ghosts[h.index()];
 }
 
+
 noob::constraint& noob::physics::get_constraint(const noob::constraint_handle h) noexcept(true)
 {
 	return constraints[h.index()];
 }
+
 
 noob::constraint_handle noob::physics::add_fixed_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true)
 {
@@ -121,6 +123,7 @@ noob::constraint_handle noob::physics::add_fixed_constraint(const noob::body_han
 	constraints.push_back(c);
 	return noob::constraint_handle::make(constraints.size() - 1);
 }
+
 
 noob::constraint_handle noob::physics::add_point_constraint(const noob::body_handle a, const noob::body_handle b, const noob::vec3f& pivot_a, const noob::vec3f& pivot_b) noexcept(true)
 {
@@ -131,6 +134,7 @@ noob::constraint_handle noob::physics::add_point_constraint(const noob::body_han
 
 }
 
+
 noob::constraint_handle noob::physics::add_hinge_constraint(const noob::body_handle a, const noob::body_handle b, const noob::vec3f& pivot_in_a, const noob::vec3f& pivot_in_b, const noob::vec3f& axis_in_a, const noob::vec3f& axis_in_b) noexcept(true)
 {
 	noob::constraint c;
@@ -139,6 +143,7 @@ noob::constraint_handle noob::physics::add_hinge_constraint(const noob::body_han
 	return noob::constraint_handle::make(constraints.size() - 1);
 
 }
+
 
 noob::constraint_handle noob::physics::add_slide_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true)
 {
@@ -149,6 +154,7 @@ noob::constraint_handle noob::physics::add_slide_constraint(const noob::body_han
 
 }
 
+
 noob::constraint_handle noob::physics::add_generic_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true)
 {
 	noob::constraint c;
@@ -156,6 +162,7 @@ noob::constraint_handle noob::physics::add_generic_constraint(const noob::body_h
 	constraints.push_back(c);
 	return noob::constraint_handle::make(constraints.size() - 1);
 }
+
 
 uint32_t noob::physics::get_intersecting(const noob::ghost_handle ghost_h, std::vector<noob::contact_point>& Results) const noexcept(true) 
 {

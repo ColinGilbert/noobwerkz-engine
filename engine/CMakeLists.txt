@@ -104,12 +104,12 @@ if (NOOB_PLATFORM_LINUX)
 	find_library(OPENGLES3_LIBRARY GLESv2)
 	find_library(EGL_LIBRARY EGL)
 
-#include_directories(${EGL_INCLUDE_DIR})
+	#include_directories(${EGL_INCLUDE_DIR})
 
 	include_directories(lib/libsoundio)
 	add_subdirectory(lib/libsoundio)
 
-#include_directories(lib/glfw/include)
+	#include_directories(lib/glfw/include)
 	include_directories(platform/nix)
 
 	list(APPEND main_src

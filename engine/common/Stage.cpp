@@ -1,13 +1,13 @@
 #include "Stage.hpp"
 
 
-void noob::stage::init(const noob::vec2ui Dims, const noob::mat4f& projection_mat) noexcept(true) 
+void noob::stage::init(const noob::vec2ui& dims, const noob::mat4f& projection_mat) noexcept(true) 
 {
-	update_viewport_params(Dims, projection_mat);
+	update_viewport_params(dims, projection_mat);
 
 	noob::vec3f eye_pos, eye_target, eye_up;
-	eye_pos = noob::vec3f(100.0, 100.0, 0.0);
-	eye_target = noob::vec3f(0.0, 0.0, 0.0);
+	eye_pos = noob::vec3f(300.0, 350.0, 300.0);
+	eye_target = noob::vec3f(150.0, 50.0, 0.0);
 	eye_up = noob::vec3f(0.0, 1.0, 0.0);
 
 	view_matrix = noob::look_at(eye_pos, eye_target, eye_up);
@@ -18,8 +18,11 @@ void noob::stage::init(const noob::vec2ui Dims, const noob::mat4f& projection_ma
 	// gfx.set_projection_mat(projection_matrix);
 
 	world.init();
+
+	
+
 	main_light.colour = noob::vec4f(1.0, 1.0, 1.0, 0.0);
-	main_light.direction = noob::vec3f(0.0, -1.0, 0.0);
+	main_light.direction = noob::vec3f(0.0, -0.90, 0.3);
 
 	team_colours.push_back(noob::vec4f(1.0, 1.0, 1.0, 1.0));
 	team_colours.push_back(noob::vec4f(0.1, 0.3, 0.3, 1.0));
@@ -139,9 +142,9 @@ void noob::stage::draw() noexcept(true)
 }
 
 
-void noob::stage::update_viewport_params(const noob::vec2ui Dims, const noob::mat4f& projection_mat) noexcept(true)
+void noob::stage::update_viewport_params(const noob::vec2ui& dims, const noob::mat4f& projection_mat) noexcept(true)
 {
-	viewport_dims = Dims;
+	viewport_dims = dims;
 	projection_matrix = projection_mat;
 }
 
@@ -152,10 +155,10 @@ void noob::stage::build_navmesh() noexcept(true)
 }
 
 
-void noob::stage::rebuild_graphics(const noob::vec2ui Dims, const noob::mat4f& projection_mat) noexcept(true)
+void noob::stage::rebuild_graphics(const noob::vec2ui& dims, const noob::mat4f& projection_mat) noexcept(true)
 {
 	noob::graphics& gfx = noob::get_graphics();
-	update_viewport_params(Dims, projection_mat);
+	update_viewport_params(dims, projection_mat);
 }
 
 
@@ -211,7 +214,7 @@ void noob::stage::reserve_props(const noob::prop_blueprints_handle blueprint_h, 
 }
 
 
-void noob::stage::set_team_colour(uint32_t Team, const noob::vec4f& Colour)
+void noob::stage::set_team_colour(uint32_t Team, const noob::vec4f& Colour) noexcept(true)
 {
 	if (team_colours.size() < Team)
 	{
@@ -265,7 +268,6 @@ noob::prop_handle noob::stage::create_prop(const noob::prop_blueprints_handle bl
 {
 	if (props_extra_info.size() > blueprint_h.index())
 	{
-
 		// logger::log(noob::importance::INFO, "[Stage] create_prop. Inside first conditional block.");
 		noob::stage::prop_info info = props_extra_info[blueprint_h.index()];
 
@@ -296,6 +298,8 @@ noob::prop_handle noob::stage::create_prop(const noob::prop_blueprints_handle bl
 			noob::body& temp_bod = world.get_body(body_h);
 			temp_bod.set_user_index_1(static_cast<uint32_t>(noob::stage::drawable_instance::type::PROP));
 			temp_bod.set_user_index_2(prop_h.index());
+			
+			props_extra_info[blueprint_h.index()].count++;
 
 			return prop_h;
 		}
@@ -319,7 +323,7 @@ noob::scenery_handle noob::stage::create_scenery(const noob::shape_handle Shape,
 	b.set_user_index_1(static_cast<uint32_t>(noob::stage_item_type::SCENERY));
 	b.set_user_index_2(scenery_h.index());
 
-	logger::log(noob::importance::INFO, noob::concat("[Stage] Scenery added! Handle ", noob::to_string(scenery_h.index())) );
+	// logger::log(noob::importance::INFO, noob::concat("[Stage] Scenery added! Handle ", noob::to_string(scenery_h.index())) );
 
 	terrain_changed = terrain_started = true;
 
@@ -341,7 +345,7 @@ noob::actor& noob::stage::get_actor(const noob::actor_handle arg) noexcept(true)
 
 noob::prop& noob::stage::get_prop(const noob::prop_handle arg) noexcept(true)
 {
-	logger::log(noob::importance::INFO, noob::concat("[Stage] props.size ", noob::to_string(props.size()), "handle = ", noob::to_string(arg.index())));
+	// logger::log(noob::importance::INFO, noob::concat("[Stage] props.size ", noob::to_string(props.size()), "handle = ", noob::to_string(arg.index())));
 	assert(props.size() > arg.index());
 	return props[arg.index()];
 }
@@ -674,7 +678,7 @@ void noob::stage::reserve_models(const noob::instanced_model_handle Handle, uint
 	{
 		// To prevent repeated pointer dereferences
 		const uint32_t index = results->value;
-		const uint32_t old_max = drawables[index].instances.size();
+		const uint32_t old_max = drawables[index].instances.size() - 1;
 		const uint32_t max_new = std::max(old_max, Num);
 
 		drawables[index].instances.resize(max_new);

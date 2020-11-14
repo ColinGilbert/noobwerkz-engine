@@ -32,7 +32,7 @@ void noob::shape::cylinder(float radius, float height, uint32_t segments) noexce
 		shape_type = noob::shape::type::CYLINDER;
 		inner = new btCylinderShapeZ(btVector3(radius, radius, height/2.0));
 	}
-	scales = noob::vec3f(radius, radius, height);
+	scales = noob::vec3f(radius, height, radius);
 	physics_valid = true;
 }
 

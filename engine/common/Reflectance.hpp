@@ -7,7 +7,7 @@ namespace noob
 {
 	struct reflectance
 	{
-		reflectance() noexcept(true) : specular_shine(noob::vec4f(1.0, 1.0, 1.0, 32.0)), diffuse_albedo(noob::vec4f(0.7, 0.7, 0.7, 0.4)), emissive_fresnel(noob::vec4f(0.0, 0.0, 0.0, 0.3)) {}
+		reflectance() noexcept(true) : specular_shine(noob::vec4f(1.0, 1.0, 1.0, 1.0)), diffuse_albedo(noob::vec4f(0.7, 0.7, 0.7, 0.4)), emissive_fresnel(noob::vec4f(0.0, 0.0, 0.0, 0.3)) {}
 
 		void set_specular(const noob::vec3f& arg) noexcept(true)
 		{
