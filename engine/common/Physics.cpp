@@ -131,6 +131,15 @@ noob::constraint_handle noob::physics::add_point_constraint(const noob::body_han
 }
 
 
+noob::constraint_handle noob::physics::add_hinge_constraint(const noob::body_handle a, const noob::vec3f& pivot, const noob::vec3f& axis) noexcept(true)
+{
+	noob::constraint c;
+	c.init_hinge(dynamics_world, bodies[a.index()], pivot, axis);
+	constraints.push_back(c);
+	return noob::constraint_handle::make(constraints.size() - 1);
+}
+
+
 noob::constraint_handle noob::physics::add_hinge_constraint(const noob::body_handle a, const noob::body_handle b, const noob::vec3f& pivot_in_a, const noob::vec3f& pivot_in_b, const noob::vec3f& axis_in_a, const noob::vec3f& axis_in_b) noexcept(true)
 {
 	noob::constraint c;

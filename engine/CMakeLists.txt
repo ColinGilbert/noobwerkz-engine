@@ -44,7 +44,9 @@ list (APPEND main_src)
 	include(cmake/Sqlite.cmake)
 
 	add_subdirectory(lib/freetype)
+	#add_subdirectory(lib/bullet)
 	
+	#include_directories(lib/bullet/src)
 	include_directories(lib/freetype/include)
 	include_directories(lib/sema)
 	include_directories(lib/glm)
@@ -56,7 +58,6 @@ list (APPEND main_src)
 	include_directories(common)
 
 	list(APPEND common_src
-			common/Assembly.cpp
 			common/Globals.cpp
 			common/Mesh3D.cpp
 			common/Graphics.cpp
@@ -68,6 +69,7 @@ list (APPEND main_src)
 			common/Constraint.cpp
 			common/Ghost.cpp
 			common/Shape.cpp
+			common/Assembly.cpp
 			common/CompoundShape.cpp
 			common/Physics.cpp
 			common/MeshUtils.cpp
@@ -130,7 +132,7 @@ endif()
 add_executable(NoobEdit ${main_src})
 
 target_link_libraries(NoobEdit LINK_PUBLIC rt z dl pthread libsoundio_static asound freetype Xi ${OPENGLES3_LIBRARY} ${EGL_LIBRARY} ${X11_LIBRARIES} ${M_LIBRARY} ${3dmouse})
-
+# BulletDynamics  BulletCollision  Bullet3Common LinearMath 
 endif()
 
 if (NOOB_PLATFORM_ANDROID)

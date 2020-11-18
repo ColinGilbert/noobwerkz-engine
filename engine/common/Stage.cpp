@@ -347,7 +347,9 @@ noob::assembly_handle noob::stage::create_assembly(const noob::vec3f& pos, const
 
 		props[stage_props_index].in_assembly = true;
 		props[stage_props_index].child_num_for_assembly = i;
-		world.remove_body(props[stage_props_index].body);
+		//world.remove_body(props[stage_props_index].body);
+
+		bod.toggle_active();
 	}
 	noob::assembly a;
 	assemblies.push_back(a);
@@ -405,6 +407,14 @@ noob::constraint_handle noob::stage::create_point_constraint(const noob::body_ha
 {
 	return world.add_point_constraint(a, b, pivot_a, pivot_b);
 }
+
+
+
+noob::constraint_handle noob::stage::create_hinge_constraint(const noob::body_handle a, const noob::vec3f& pivot, const noob::vec3f& axis) noexcept(true)
+{
+	return world.add_hinge_constraint(a, pivot, axis);
+}
+
 
 
 noob::constraint_handle noob::stage::create_hinge_constraint(const noob::body_handle a, const noob::body_handle b, const noob::vec3f& pivot_in_a, const noob::vec3f& pivot_in_b, const noob::vec3f& axis_in_a, const noob::vec3f& axis_in_b) noexcept(true)

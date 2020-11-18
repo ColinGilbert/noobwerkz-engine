@@ -11,7 +11,8 @@ void noob::compound_shape::init(const std::vector<noob::compound_shape::child_in
 	}
 
 	btTransform t;
-	std::vector<float> masses(arg.size());
+	std::vector<float> masses;
+	masses.reserve(arg.size());
 	for (noob::compound_shape::child_info info : arg)
 	{
 		t.setIdentity();

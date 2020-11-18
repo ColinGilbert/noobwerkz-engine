@@ -23,6 +23,9 @@ namespace noob
 			
 			void init_fixed(btDynamicsWorld* const w, const noob::body& a, const noob::body& b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true);
 			void init_point(btDynamicsWorld* const w, const noob::body& a, const noob::body& b, const noob::vec3f& pivot_a, const noob::vec3f& pivot_b) noexcept(true);
+
+
+			void init_hinge(btDynamicsWorld* const w, const noob::body& a, const noob::vec3f& pivot, const noob::vec3f& axis) noexcept(true);
 			void init_hinge(btDynamicsWorld* const w, const noob::body& a, const noob::body& b, const noob::vec3f& pivot_in_a, const noob::vec3f& pivot_in_b, const noob::vec3f& axis_in_a, const noob::vec3f& axis_in_b) noexcept(true);
 			void init_slide(btDynamicsWorld* const w, const noob::body& a, const noob::body& b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true);
 	//		void init_conical() noexcept(true);

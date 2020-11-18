@@ -62,7 +62,8 @@ namespace noob
 		// This will give you an offset into the array you store your shapes in, no matter where it may be.
 		// Note: Only really useful if you store your shapes in one place.
 		noob::shape_handle get_shape() const noexcept(true);
-	
+		void toggle_active() const noexcept(true);
+		
 		protected:
 		
 		void set_user_index_1(uint32_t) noexcept(true);

@@ -75,7 +75,12 @@ namespace noob
 			noob::constraint& get_constraint(const noob::constraint_handle) noexcept(true);		
 			noob::constraint_handle create_fixed_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& frame_in_a, const noob::mat4f& frame_in_b) noexcept(true);
 			noob::constraint_handle create_point_constraint(const noob::body_handle a, const noob::body_handle b, const noob::vec3f& pivot_a, const noob::vec3f& pivot_b) noexcept(true);
+
+
+			noob::constraint_handle create_hinge_constraint(const noob::body_handle a, const noob::vec3f& pivot, const noob::vec3f& axis) noexcept(true);
 			noob::constraint_handle create_hinge_constraint(const noob::body_handle a, const noob::body_handle b, const noob::vec3f& pivot_in_a, const noob::vec3f& pivot_in_b, const noob::vec3f& axis_in_a, const noob::vec3f& axis_in_b) noexcept(true);
+
+
 			noob::constraint_handle create_slide_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true);
 			// noob::constraint_handle create_conical_constraint() noexcept(true);
 			// noob::constraint_handle create_gear_constraint() noexcept(true);

@@ -21,6 +21,15 @@ void noob::constraint::init_point(btDynamicsWorld* const w, const noob::body& a,
 	w->addConstraint(inner, true);
 }
 
+
+
+void noob::constraint::init_hinge(btDynamicsWorld* const w, const noob::body& a, const noob::vec3f& pivot, const noob::vec3f& axis) noexcept(true)
+{
+	inner = new btHingeConstraint(*(a.inner), noob::vec3f_to_bullet(pivot), noob::vec3f_to_bullet(axis), true);
+	w->addConstraint(inner, true);
+}
+
+
 void noob::constraint::init_hinge(btDynamicsWorld* const w, const noob::body& a, const noob::body& b, const noob::vec3f& pivot_in_a, const noob::vec3f& pivot_in_b, const noob::vec3f& axis_in_a, const noob::vec3f& axis_in_b) noexcept(true)
 {
 	inner = new btHingeConstraint(*(a.inner), *(b.inner), noob::vec3f_to_bullet(pivot_in_a), noob::vec3f_to_bullet(pivot_in_b), noob::vec3f_to_bullet(axis_in_a), noob::vec3f_to_bullet(axis_in_b), true);
