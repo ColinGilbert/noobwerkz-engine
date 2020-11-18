@@ -7,9 +7,13 @@
 
 namespace noob
 {
+	class assembly;
+	typedef noob::handle<noob::assembly> assembly_handle;
 	struct prop
 	{
 		bool in_assembly = false;
+		noob::assembly_handle assembly;
+		uint32_t child_num_for_assembly;
 		noob::body_handle body;
 		noob::colourfp_handle colour;
 		noob::prop_blueprints_handle bp;

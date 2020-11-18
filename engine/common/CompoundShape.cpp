@@ -31,6 +31,10 @@ void noob::compound_shape::init(const std::vector<noob::compound_shape::child_in
 	physics_valid = true;	
 }
 
+noob::mat4f noob::compound_shape::get_child_transform(uint32_t i) const noexcept(true)
+{
+	return noob::mat4f_from_bullet(inner->getChildTransform(i));
+}
 
 void noob::compound_shape::set_self_index(uint32_t i) noexcept(true)
 {

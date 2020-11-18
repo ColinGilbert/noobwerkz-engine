@@ -11,6 +11,7 @@ namespace noob
 	{
 		friend class body;
 		friend class ghost;
+		friend class globals;
 
 		public:
 			struct child_info
@@ -23,10 +24,8 @@ namespace noob
 
 			void init(const std::vector<noob::compound_shape::child_info> & arg) noexcept(true);
 			
-			void set_self_index(uint32_t) noexcept(true);
-			uint32_t get_self_index() const noexcept(true);
-			
-			const btCompoundShape* get_inner() { return inner; }
+			noob::mat4f get_child_transform(uint32_t) const noexcept(true);	
+			const btCompoundShape* get_inner() const noexcept(true) { return inner; }
 
 
 		protected:
@@ -34,6 +33,8 @@ namespace noob
 			btVector3 inertia = btVector3(0.0, 0.0, 0.0);
 			bool physics_valid = false;
 
+			void set_self_index(uint32_t) noexcept(true);
+			uint32_t get_self_index() const noexcept(true);
 
 	};
 

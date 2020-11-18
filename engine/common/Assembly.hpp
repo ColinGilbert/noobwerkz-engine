@@ -17,6 +17,8 @@ namespace noob
 		public:
 			void init(btDynamicsWorld* const, float mass, const noob::vec3f& pos, const noob::versorf& orient, bool ccd, const std::vector<noob::prop_handle>&, const std::vector<noob::compound_shape::child_info>&) noexcept(true);
 			
+			noob::mat4f get_child_transform(uint32_t) const noexcept(true);
+	
 		protected:
 			std::vector<noob::prop_handle> props; // Indexed in the same manner
 			noob::body bod;

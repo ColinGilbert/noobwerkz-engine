@@ -12,3 +12,8 @@ void noob::assembly::init(btDynamicsWorld* const world, float mass, const noob::
 
 	bod.init(world, noob::body_type::DYNAMIC, compound, mass, pos, orient, ccd);
 }
+
+noob::mat4f noob::assembly::get_child_transform(uint32_t index) const noexcept(true)
+{
+	return bod.get_transform() * compound.get_child_transform(index);
+}

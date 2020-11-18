@@ -116,11 +116,11 @@ void noob::stage::draw() noexcept(true)
 	for (uint32_t drawables_index = 0; drawables_index < drawables.size(); ++drawables_index)
 	{
 		const noob::stage::drawable_info_handle handle = noob::stage::drawable_info_handle::make(drawables_index);
-		//		if (drawables[drawables_index].needs_colours)
-		//		{
-		upload_colours(handle);
-		//			drawables[drawables_index].needs_colours = false;
-		//		}
+		if (drawables[drawables_index].needs_colours)
+		{
+			upload_colours(handle);
+			drawables[drawables_index].needs_colours = false;
+		}
 
 		upload_matrices(handle);
 		const noob::instanced_model_handle modl_h = drawables[drawables_index].model;
@@ -332,7 +332,7 @@ noob::scenery_handle noob::stage::create_scenery(const noob::shape_handle Shape,
 noob::assembly_handle noob::stage::create_assembly(const noob::vec3f& pos, const noob::versorf& orient, bool ccd, const std::vector<noob::prop_handle>& props_arg, const std::vector<noob::compound_shape::child_info>& infos) noexcept(true)
 {
 	assert(props_arg.size() == infos.size());
-	
+
 	double mass_accum = 0.0;
 	for (size_t i = 0; i < props_arg.size(); ++i)
 	{
@@ -610,8 +610,17 @@ void noob::stage::upload_matrices(const drawable_info_handle arg) noexcept(true)
 		else // Its a prop!
 		{
 			const noob::prop p = props[info.index];
-			const noob::body& bod = world.get_body(p.body);
-			model_matrix = bod.get_transform();
+			if (p.in_assembly)
+			{
+				model_matrix = assemblies[p.assembly.index()].get_child_transform(p.child_num_for_assembly);
+			}
+			else
+			{
+				const noob::body& bod = world.get_body(p.body);
+				model_matrix = bod.get_transform();
+			}
+
+
 			// logger::log(noob::importance::INFO, noob::concat(bod.get_debug_string()));
 		}
 		valid = buf.push_back(model_matrix);
