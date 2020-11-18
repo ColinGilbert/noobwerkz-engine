@@ -22,6 +22,7 @@
 #include "Graphics.hpp"
 #include "MeshUtils.hpp"
 #include "Shape.hpp"
+#include "CompoundShape.hpp"
 #include "Body.hpp"
 #include "SkeletalAnim.hpp"
 #include "Light.hpp"
@@ -53,6 +54,9 @@ namespace noob
 		noob::shape_handle cylinder_shape(float radius, float height, uint32_t segments) noexcept(true);
 		noob::shape_handle hull_shape(const std::vector<noob::vec3f>&) noexcept(true);
 		noob::shape_handle static_trimesh_shape(const noob::mesh_3d&) noexcept(true);
+		
+		noob::compound_shape_handle compound_shape(const std::vector<noob::compound_shape::child_info>&) noexcept(true);
+
 		noob::skeletal_anim_handle skeleton(const std::string& filename) noexcept(true);
 
 		noob::point_light_handle set_point_light(const noob::point_light&, const std::string& name) noexcept(true);
@@ -78,6 +82,7 @@ namespace noob
 		noob::profiler_snap profile_run;
 
 		noob::component<noob::shape> shapes;
+		noob::component<noob::compound_shape> compound_shapes;
 		noob::component<noob::point_light> lights;
 		noob::component<noob::reflectance> reflectances;
 		noob::component_dynamic<noob::audio_sample> samples;
@@ -110,8 +115,9 @@ namespace noob
 
 		protected:
 		// Hack used to set the shape's index-to-self
-		shape_handle add_shape(const noob::shape& s) noexcept(true);
-
+		noob::shape_handle add_shape(const noob::shape& s) noexcept(true);
+		noob::compound_shape_handle add_compound_shape(const noob::compound_shape& s) noexcept(true);
+		
 		// The following are basic, commonly-used objects that we provide as a convenience.
 		noob::shape_handle unit_sphere_shape, unit_cube_shape;
 		noob::point_light_handle default_light;

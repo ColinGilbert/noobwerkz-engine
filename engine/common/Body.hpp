@@ -6,13 +6,13 @@
 #include <noob/component/component.hpp>
 // Project-local
 #include "Shape.hpp"
+#include "CompoundShape.hpp"
 #include "BodyInfo.hpp"
 
 namespace noob
 {
 	class physics;
 	class joint;
-
 
 	class body 
 	{
@@ -21,8 +21,8 @@ namespace noob
 		public:	
 		body() noexcept(true) : physics_valid(false), ccd(false) {}
 
-
 		void init(btDynamicsWorld* const, noob::body_type, const noob::shape&, float mass, const noob::vec3f& position, const noob::versorf& orientation, bool ccd) noexcept(true);
+		void init(btDynamicsWorld* const, noob::body_type, const noob::compound_shape&, float mass, const noob::vec3f& position, const noob::versorf& orientation, bool ccd) noexcept(true);
 		void init(btDynamicsWorld* const, const noob::body_info&) noexcept(true);
 
 		// void set_type(noob::body_type) noexcept(true);
@@ -59,7 +59,11 @@ namespace noob
 		// Note: Only really useful if you store your shapes in one place.
 		uint32_t get_shape_index() const noexcept(true);
 
+		bool is_compound() const noexcept(true) { return compound; }
+			
 		protected:
+		
+		bool compound = false;
 		noob::body_type type;
 		bool physics_valid, ccd;
 		btRigidBody* inner;

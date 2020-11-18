@@ -1,6 +1,7 @@
 // This represents a conceptual geometric shape, using the physics engine under-the-hood.
 // Limitation: btCollisionShape* inner_shape pointer must be manually cleared.
 // Reason: The destructor used to do the above, but that unfortunately led to deletion of the btCollisionShape* every time it went out of scope in a local block. This led to all sorts of fun.
+
 #pragma once
 
 #include <vector>
@@ -20,9 +21,9 @@ namespace noob
 {
 	class shape 
 	{
+		friend class compound_shape;
 		friend class body;
 		friend class ghost;
-
 		public:
 		enum class type { SPHERE, BOX, CYLINDER, /*CONE, */ CONVEX, TRIMESH };
 
@@ -39,8 +40,6 @@ namespace noob
 	// TODO: Fix!
 	void trimesh(const noob::mesh_3d&) noexcept(true);
 
-
-
 	void set_margin(float) noexcept(true);
 	float get_margin() const noexcept(true);
 
@@ -56,9 +55,9 @@ namespace noob
 
 	void set_self_index(uint32_t) noexcept(true);
 	uint32_t get_self_index() const noexcept(true);
-	// const btCollisionShape* get_inner() const noexcept(true);
-	// btCollisionShape* get_inner_mutable() const noexcept(true);	
 
+	const btCollisionShape* get_inner() const noexcept(true);
+	// btCollisionShape* get_inner_mutable() const noexcept(true);	
 
 		protected:
 	// void plane(const noob::vec3f& normal, float offset) noexcept(true);

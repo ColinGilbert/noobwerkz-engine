@@ -86,6 +86,7 @@ void noob::shape::trimesh(const noob::mesh_3d& mesh) noexcept(true)
 	physics_valid = true;
 }
 
+
 void noob::shape::set_margin(float m) noexcept(true) 
 {
 	inner->setMargin(m);
@@ -97,15 +98,18 @@ float noob::shape::get_margin() const noexcept(true)
 	return inner->getMargin();
 }
 
+
 noob::vec3f noob::shape::get_scales() const noexcept(true) 
 {
 	return scales;
 }
 
+
 noob::shape::type noob::shape::get_type() const noexcept(true) 
 {
 	return shape_type;
 }
+
 
 noob::mesh_3d noob::shape::get_mesh() const noexcept(true)
 {
@@ -237,6 +241,12 @@ void noob::shape::clear() noexcept(true)
 		scales = noob::vec3f(1.0, 1.0, 1.0);
 		physics_valid = false;
 	}
+}
+
+	
+const btCollisionShape* noob::shape::get_inner() const noexcept(true)
+{
+	return inner;
 }
 
 

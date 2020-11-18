@@ -89,7 +89,6 @@ noob::shape_handle noob::globals::cylinder_shape(float radius, float height, uin
 }
 
 
-
 noob::shape_handle noob::globals::hull_shape(const std::vector<noob::vec3f>& points) noexcept(true) 
 {
 	noob::shape temp;
@@ -104,6 +103,14 @@ noob::shape_handle noob::globals::hull_shape(const std::vector<noob::vec3f>& poi
 	// temp_cell->value = temp_model.index();
 
 	return shape_h;
+}
+
+
+noob::compound_shape_handle noob::globals::compound_shape(const std::vector<noob::compound_shape::child_info> & arg) noexcept(true)
+{
+	noob::compound_shape compound;
+	compound.init(arg);
+	return add_compound_shape(compound);
 }
 
 
@@ -203,6 +210,15 @@ noob::shape_handle noob::globals::add_shape(const noob::shape& s) noexcept(true)
 {
 	noob::shape_handle h = shapes.add(s);
 	std::get<1>(shapes.get_ptr_mutable(h))->set_self_index(h.index());
+	return h;
+}
+
+
+// Hack used to set the compound shape's index-to-self
+noob::compound_shape_handle noob::globals::add_compound_shape(const noob::compound_shape& s) noexcept(true)
+{
+	noob::compound_shape_handle h = compound_shapes.add(s);
+	std::get<1>(compound_shapes.get_ptr_mutable(h))->set_self_index(h.index());
 	return h;
 }
 

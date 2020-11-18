@@ -1,30 +1,43 @@
+#include "CompoundShape.hpp"
 
+#include "Globals.hpp"
 
-
-void noob::compound_shape::init() noexcept(true)
+void noob::compound_shape::init(const std::vector<noob::compound_shape::child_info> & arg) noexcept(true)
 {
 	if (!physics_valid)
 	{
-		shape_type = noob::shape::type::MULTI;
 		inner = new btCompoundShape();
 		physics_valid = true;
 	}
-}
 
-void noob::compound_shape::add_children(const std::vector<noob::multi_shape_info> & arg, std::vector<) noexcept(true)
-{
+	btTransform t;
 	std::vector<float> masses(arg.size());
-	for (noob::multi_shape_info info : arg)
+	for (noob::compound_shape::child_info info : arg)
 	{
-		btTransform t;
 		t.setIdentity();
 		t.setOrigin(noob::vec3f_to_bullet(info.pos));
 		t.setRotation(noob::versorf_to_bullet(info.orient));
 
 		noob::globals & g = noob::get_globals();
-
+		
 		masses.push_back(info.mass);
-		static_cast<btCompoundShape*>(inner)->addChildShape(t, g.shape_from_handle(info.shape).inner);
+		inner->addChildShape(t, g.shape_from_handle(info.shape).inner);
 	}
+
+	inertia = btVector3(0.0, 0.0, 0.0);
+	t.setIdentity();
+	inner->calculatePrincipalAxisTransform(&masses[0], t, inertia);
+
+	physics_valid = true;	
 }
 
+
+void noob::compound_shape::set_self_index(uint32_t i) noexcept(true)
+{
+	inner->setUserIndex(i);
+}
+
+uint32_t noob::compound_shape::get_self_index() const noexcept(true)
+{
+	return inner->getUserIndex();
+}

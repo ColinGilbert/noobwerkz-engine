@@ -67,6 +67,7 @@ list (APPEND main_src)
 			common/Constraint.cpp
 			common/Ghost.cpp
 			common/Shape.cpp
+			common/CompoundShape.cpp
 			common/Physics.cpp
 			common/MeshUtils.cpp
 			common/SkeletalAnim.cpp

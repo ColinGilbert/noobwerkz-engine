@@ -66,10 +66,9 @@ namespace noob
 			noob::actor& get_actor(const noob::actor_handle) noexcept(true);
 			noob::prop& get_prop(const noob::prop_handle) noexcept(true);
 
-
-			
-			noob::body& get_body(const noob::body_handle) noexcept(true);
 	
+			noob::body& get_body(const noob::body_handle) noexcept(true);
+
 			noob::constraint& get_constraint(const noob::constraint_handle) noexcept(true);		
 			noob::constraint_handle create_fixed_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& frame_in_a, const noob::mat4f& frame_in_b) noexcept(true);
 			noob::constraint_handle create_point_constraint(const noob::body_handle a, const noob::body_handle b, const noob::vec3f& pivot_a, const noob::vec3f& pivot_b) noexcept(true);

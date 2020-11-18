@@ -2,6 +2,7 @@
 
 #include "Prop.hpp"
 #include "Model.hpp"
+#include "CompoundShape.hpp"
 
 namespace noob
 {
@@ -11,7 +12,9 @@ namespace noob
 		//noob::shape_handle bounds;
 		// TODO: replace with armature
 		//noob::instanced_model_handle model;
+		bool is_compound = false;
 		noob::shape_handle shape;
+		noob::compound_shape_handle compound_shape;
 		noob::instanced_model_handle model;
 		noob::reflectance_handle reflect;
 		float mass;//, friction, restitution;

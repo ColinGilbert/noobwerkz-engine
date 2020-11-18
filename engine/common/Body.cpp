@@ -57,6 +57,61 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type typ
 }
 
 
+void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type type_arg, const noob::compound_shape& shape, float mass, const noob::vec3f& position, const noob::versorf& orientation, bool ccd) noexcept(true)
+{
+	btTransform start_transform;
+
+	start_transform.setRotation(btQuaternion(orientation.q[0], orientation.q[1], orientation.q[2], orientation.q[3]));
+	start_transform.setOrigin(btVector3(position.v[0], position.v[1], position.v[2]));
+
+	float _mass = mass;
+
+	type = type_arg;
+
+	switch(type)
+	{
+		case(noob::body_type::DYNAMIC):
+			{
+				break;
+			}
+		case(noob::body_type::KINEMATIC):
+			{
+				_mass = 0.0;
+				break;
+			}
+		case(noob::body_type::STATIC):
+			{
+				_mass = 0.0;
+				break;
+			}
+		default:
+			{
+				break;
+			}
+	};
+
+
+	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
+
+	btVector3 inertia = shape.inertia;
+
+	if (type == noob::body_type::DYNAMIC)
+	{
+		shape.inner->calculateLocalInertia(_mass, inertia);
+	}
+
+	btRigidBody::btRigidBodyConstructionInfo ci(_mass, motion_state, shape.inner, inertia);
+	inner = new btRigidBody(ci);
+
+	set_ccd(ccd);
+
+	dynamics_world->addRigidBody(inner);
+	noob::globals& g = noob::get_globals();
+	physics_valid = true;	
+	compound = true;
+}
+
+
 void noob::body::init(btDynamicsWorld* const dynamics_world, const noob::body_info& _info) noexcept(true) 
 {
 	btTransform start_transform;
