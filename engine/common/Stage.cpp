@@ -329,6 +329,12 @@ noob::scenery_handle noob::stage::create_scenery(const noob::shape_handle Shape,
 }
 
 
+noob::assembly_handle noob::stage::create_assembly(const noob::vec3f& pos, const noob::versorf& orient, const std::vector<noob::prop_handle>& props) noexcept(true)
+{
+	
+}
+
+
 noob::scenery& noob::stage::get_scenery(const noob::scenery_handle arg) noexcept(true)
 {
 	return sceneries[arg.index()];

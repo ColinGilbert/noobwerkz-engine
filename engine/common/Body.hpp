@@ -60,7 +60,10 @@ namespace noob
 		uint32_t get_shape_index() const noexcept(true);
 
 		bool is_compound() const noexcept(true) { return compound; }
-			
+		
+		void set_activated(bool) const noexcept(true);
+		bool get_activated() const noexcept(true);
+	
 		protected:
 		
 		bool compound = false;

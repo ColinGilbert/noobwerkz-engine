@@ -22,6 +22,8 @@
 #include "Armature.hpp"
 #include "NDOF.hpp"
 #include "Prop.hpp"
+#include "Assembly.hpp"
+
 
 namespace noob
 {
@@ -61,12 +63,13 @@ namespace noob
 			noob::actor_handle create_actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3f&, const noob::versorf&) noexcept(true);
 			noob::prop_handle create_prop(const noob::prop_blueprints_handle, uint32_t team, const noob::vec3f&, const noob::versorf&) noexcept(true);
 			noob::scenery_handle create_scenery(const noob::shape_handle, const noob::vec3f&, const noob::versorf&) noexcept(true);
+			noob::assembly_handle create_assembly(const noob::vec3f&, const noob::versorf&, const std::vector<noob::prop_handle> &) noexcept(true);
+
 
 			noob::scenery& get_scenery(const noob::scenery_handle) noexcept(true);
 			noob::actor& get_actor(const noob::actor_handle) noexcept(true);
 			noob::prop& get_prop(const noob::prop_handle) noexcept(true);
 
-	
 			noob::body& get_body(const noob::body_handle) noexcept(true);
 
 			noob::constraint& get_constraint(const noob::constraint_handle) noexcept(true);		
@@ -149,6 +152,7 @@ namespace noob
 
 			noob::directional_light main_light;
 
+			noob::component<noob::assembly> assemblies;
 			std::vector<noob::stage::drawable_info> drawables;
 			std::vector<noob::stage::actor_info> actors_extra_info;
 			std::vector<noob::stage::prop_info> props_extra_info;

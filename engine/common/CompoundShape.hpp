@@ -32,7 +32,9 @@ namespace noob
 		protected:
 			btCompoundShape * inner;
 			btVector3 inertia = btVector3(0.0, 0.0, 0.0);
-			bool physics_valid = false; 
+			bool physics_valid = false;
+
+
 	};
 
 	typedef noob::handle<noob::compound_shape> compound_shape_handle;

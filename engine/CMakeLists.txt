@@ -56,6 +56,7 @@ list (APPEND main_src)
 	include_directories(common)
 
 	list(APPEND common_src
+			common/Assembly.cpp
 			common/Globals.cpp
 			common/Mesh3D.cpp
 			common/Graphics.cpp
