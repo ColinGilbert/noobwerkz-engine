@@ -139,6 +139,12 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, const noob::body_in
 }
 
 
+bool noob::body::is_active() const noexcept(true)
+{
+	return active;
+}
+
+
 noob::vec3f noob::body::get_position() const noexcept(true) 
 {
 	btTransform xform;
@@ -245,19 +251,6 @@ float noob::body::get_ccd_threshold() const noexcept(true)
 {
 	return inner->getCcdMotionThreshold();
 }
-
-
-void noob::body::set_activated(bool arg) const noexcept(true)
-{
-	inner->setActivationState(arg);
-}
-
-
-bool noob::body::get_activated() const noexcept(true)
-{
-	return inner->getActivationState();
-}
-
 
 
 void noob::body::set_user_index_1(uint32_t i) noexcept(true)

@@ -63,7 +63,7 @@ namespace noob
 			noob::actor_handle create_actor(const noob::actor_blueprints_handle, uint32_t team, const noob::vec3f&, const noob::versorf&) noexcept(true);
 			noob::prop_handle create_prop(const noob::prop_blueprints_handle, uint32_t team, const noob::vec3f&, const noob::versorf&) noexcept(true);
 			noob::scenery_handle create_scenery(const noob::shape_handle, const noob::vec3f&, const noob::versorf&) noexcept(true);
-			noob::assembly_handle create_assembly(const noob::vec3f&, const noob::versorf&, const std::vector<noob::prop_handle> &) noexcept(true);
+			noob::assembly_handle create_assembly(const noob::vec3f&, const noob::versorf&, bool ccd, const std::vector<noob::prop_handle> &, const std::vector<noob::compound_shape::child_info>&) noexcept(true);
 
 
 			noob::scenery& get_scenery(const noob::scenery_handle) noexcept(true);
@@ -152,7 +152,6 @@ namespace noob
 
 			noob::directional_light main_light;
 
-			noob::component<noob::assembly> assemblies;
 			std::vector<noob::stage::drawable_info> drawables;
 			std::vector<noob::stage::actor_info> actors_extra_info;
 			std::vector<noob::stage::prop_info> props_extra_info;
@@ -163,10 +162,10 @@ namespace noob
 			noob::fast_hashtable models_to_drawable_instances;
 			noob::fast_hashtable shapes_to_instanced_models;
 
-
 			std::vector<noob::actor> actors;
 			std::vector<noob::prop> props;
 			std::vector<noob::scenery> sceneries;
+			std::vector<noob::assembly> assemblies;
 			std::vector<noob::particle_system> particle_systems;
 			std::vector<noob::contact_point> contacts; // Our holder for temporary contact points; this limits us to single-threaded use and it thus might be worth exploring a multithreaded solution.
 

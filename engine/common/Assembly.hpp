@@ -24,5 +24,5 @@ namespace noob
 	
 	};
 
-	typedef noob::component<noob::assembly> assembly_handle;
+	typedef noob::handle<noob::assembly> assembly_handle;
 }

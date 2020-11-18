@@ -9,9 +9,10 @@ namespace noob
 {
 	struct prop
 	{
+		bool in_assembly = false;
 		noob::body_handle body;
 		noob::colourfp_handle colour;
-		noob::prop_blueprints_handle bp_handle;
+		noob::prop_blueprints_handle bp;
 	};
 
 	typedef noob::handle<noob::prop> prop_handle;

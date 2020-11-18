@@ -278,7 +278,7 @@ noob::prop_handle noob::stage::create_prop(const noob::prop_blueprints_handle bl
 			noob::prop p;
 			p.body = body_h;
 			p.colour = noob::colourfp_handle::make(team);
-			p.bp_handle = blueprint_h;
+			p.bp = blueprint_h;
 
 			props.push_back(p);
 
@@ -329,9 +329,24 @@ noob::scenery_handle noob::stage::create_scenery(const noob::shape_handle Shape,
 }
 
 
-noob::assembly_handle noob::stage::create_assembly(const noob::vec3f& pos, const noob::versorf& orient, const std::vector<noob::prop_handle>& props) noexcept(true)
+noob::assembly_handle noob::stage::create_assembly(const noob::vec3f& pos, const noob::versorf& orient, bool ccd, const std::vector<noob::prop_handle>& props_arg, const std::vector<noob::compound_shape::child_info>& infos) noexcept(true)
 {
+	assert(props_arg.size() == infos.size());
 	
+	double mass_accum = 0.0;
+	for (size_t i = 0; i < props_arg.size(); ++i)
+	{
+		assert(noob::compare_floats(infos[i].mass, props_extra_info[props[i].bp.index()].bp.mass));
+		mass_accum += static_cast<double>(infos[i].mass);
+		props[i].in_assembly = true;
+		world.remove_body(props[i].body);
+	}
+	noob::assembly a;
+	assemblies.push_back(a);
+	const size_t i = assemblies.size() - 1;
+	assemblies[i].init(world.get_inner(), static_cast<float>(mass_accum), pos, orient, ccd, props_arg, infos);
+
+	return noob::assembly_handle::make(i);
 }
 
 

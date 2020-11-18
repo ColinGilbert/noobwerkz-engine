@@ -30,7 +30,7 @@ namespace noob
 			noob::vec3f get_gravity() const noexcept(true);
 
 			noob::body_handle add_body(noob::body_type, const noob::shape_handle, float mass, const noob::vec3f& pos, const noob::versorf& orient, bool ccd) noexcept(true);
-			noob::body_handle add_body(const noob::body_info&) noexcept(true);		
+			noob::body_handle add_body(const noob::body_info&) noexcept(true);
 			noob::ghost_handle add_ghost(const noob::shape_handle, const noob::vec3f&, const noob::versorf&) noexcept(true);
 
 			noob::constraint_handle add_fixed_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true);
@@ -43,6 +43,10 @@ namespace noob
 			
 			noob::body& get_body(const noob::body_handle) noexcept(true);
 			noob::ghost& get_ghost(const noob::ghost_handle) noexcept(true);
+
+			void remove_body(const noob::body_handle) noexcept(true);
+			void remove_ghost(const noob::ghost_handle) noexcept(true);
+
 			noob::constraint& get_constraint(const noob::constraint_handle) noexcept(true);
 			// Oh crap... One of these kinds of functions...
 			// You know the drill; your vector (for contact points) is passed to the function from calling scope and the number returned is how many contact points you've got.
@@ -62,8 +66,6 @@ namespace noob
 			btSequentialImpulseConstraintSolver* solver;
 			btDiscreteDynamicsWorld* dynamics_world;
 
-			void remove_body(const noob::body_handle) noexcept(true);
-			void remove_ghost(const noob::ghost_handle) noexcept(true);
 			// void remove_constraint(const noob::constraint_handle) noexcept (true);
 	};
 }
