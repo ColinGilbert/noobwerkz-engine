@@ -75,6 +75,29 @@ float noob::constraint::get_breaking_threshold() noexcept(true)
 	return inner->getBreakingImpulseThreshold();
 }
 
+void noob::constraint::set_bounce(int index, float bounce)
+{
+	if(inner_type == noob::constraint::type::POINT_TO_POINT || inner_type == noob::constraint::type::GENERIC)
+	{
+		static_cast<btGeneric6DofSpring2Constraint*>(inner)->setBounce(index, bounce);
+	}
+}
+void noob::constraint::set_stiffness(int index, float stiffness)
+{
+	if(inner_type == noob::constraint::type::POINT_TO_POINT || inner_type == noob::constraint::type::GENERIC)
+	{
+		static_cast<btGeneric6DofSpring2Constraint*>(inner)->setStiffness(index, stiffness);
+	}
+}
+
+void noob::constraint::set_damping(int index, float damping)
+{
+	if(inner_type == noob::constraint::type::POINT_TO_POINT || inner_type == noob::constraint::type::GENERIC)
+	{
+		static_cast<btGeneric6DofSpring2Constraint*>(inner)->setDamping(index, damping);
+	}
+}
+
 // ..........................................
 // Methods for hinge constraints (and also slide constraints)
 // TODO: Add motor-related methods

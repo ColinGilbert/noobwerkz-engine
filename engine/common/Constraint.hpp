@@ -38,6 +38,10 @@ namespace noob
 			bool is_enabled() noexcept(true);
 			float get_breaking_threshold() noexcept(true);
 
+			void set_bounce(int index, float bounce);
+			void set_stiffness(int index, float stiffness);
+			void set_damping(int index, float damping);
+
 			// ..........................................
 			// Methods for hinge constraints (and also slide constraints)
 			// TODO: Add motor-related methods

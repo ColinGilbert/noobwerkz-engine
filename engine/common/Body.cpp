@@ -65,9 +65,9 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, const noob::body_in
 	start_transform.setOrigin(btVector3(_info.position.v[0], _info.position.v[1], _info.position.v[2]));
 	btVector3 inertia(0, 0, 0);
 	btDefaultMotionState* motion_state = new btDefaultMotionState(start_transform);
-	
+
 	noob::globals &g = noob::get_globals();
-	
+
 	noob::shape shp = g.shape_from_handle(_info.shape);
 	shp.inner->calculateLocalInertia(_info.mass, inertia);
 	btRigidBody::btRigidBodyConstructionInfo ci(_info.mass, motion_state, shp.inner, inertia);
@@ -98,6 +98,19 @@ noob::versorf noob::body::get_orientation() const noexcept(true)
 	inner->getMotionState()->getWorldTransform(xform);
 	return versorf_from_bullet(xform.getRotation());
 }
+
+
+void noob::body::set_angular_factor(const noob::vec3f& arg) const noexcept(true)
+{
+	inner->setAngularFactor(noob::vec3f_to_bullet(arg));
+}
+
+
+void noob::body::set_linear_factor(const noob::vec3f& arg) const noexcept(true)
+{
+	inner->setLinearFactor(noob::vec3f_to_bullet(arg));
+}
+
 
 
 noob::vec3f noob::body::get_linear_velocity() const noexcept(true) 

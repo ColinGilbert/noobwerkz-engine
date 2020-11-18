@@ -19,7 +19,7 @@ void noob::stage::init(const noob::vec2ui& dims, const noob::mat4f& projection_m
 
 	world.init();
 
-	
+
 
 	main_light.colour = noob::vec4f(1.0, 1.0, 1.0, 0.0);
 	main_light.direction = noob::vec3f(0.0, -0.90, 0.3);
@@ -116,11 +116,11 @@ void noob::stage::draw() noexcept(true)
 	for (uint32_t drawables_index = 0; drawables_index < drawables.size(); ++drawables_index)
 	{
 		const noob::stage::drawable_info_handle handle = noob::stage::drawable_info_handle::make(drawables_index);
-		if (drawables[drawables_index].needs_colours)
-		{
-			upload_colours(handle);
-			drawables[drawables_index].needs_colours = false;
-		}
+		//		if (drawables[drawables_index].needs_colours)
+		//		{
+		upload_colours(handle);
+		//			drawables[drawables_index].needs_colours = false;
+		//		}
 
 		upload_matrices(handle);
 		const noob::instanced_model_handle modl_h = drawables[drawables_index].model;
@@ -202,25 +202,24 @@ void noob::stage::reserve_actors(const noob::actor_blueprints_handle blueprint_h
 
 void noob::stage::reserve_props(const noob::prop_blueprints_handle blueprint_h, uint32_t num) noexcept(true)
 {
-	if (props_extra_info.size() > blueprint_h.index())
-	{
-		noob::stage::prop_info info = props_extra_info[blueprint_h.index()];
-		const uint32_t old_max = info.max;
-		const uint32_t new_max = info.max + num;
-		reserve_models(info.bp.model, num);
-		info.max = new_max;
-		props_extra_info[blueprint_h.index()] = info;
-	}
+	assert(team_colours.size() > blueprint_h.index());
+	noob::stage::prop_info info = props_extra_info[blueprint_h.index()];
+	const uint32_t old_max = info.max;
+	const uint32_t new_max = info.max + num;
+	reserve_models(info.bp.model, num);
+	info.max = new_max;
+	props_extra_info[blueprint_h.index()] = info;
 }
 
 
 void noob::stage::set_team_colour(uint32_t Team, const noob::vec4f& Colour) noexcept(true)
 {
-	if (team_colours.size() < Team)
-	{
-		team_colours.reserve(Team - 1);
-	}
-	team_colours[Team - 1] = Colour;
+	//if (team_colours.size() < Team)
+	//{
+	//		team_colours.reserve(Team);
+	//	}
+	assert(team_colours.size() > Team);
+	team_colours[Team] = Colour;
 }
 
 
@@ -284,8 +283,6 @@ noob::prop_handle noob::stage::create_prop(const noob::prop_blueprints_handle bl
 			props.push_back(p);
 
 			const noob::prop_handle prop_h = noob::prop_handle::make(props.size() - 1);
-			//noob::stage::prop_info info = props_extra_info[prop_h.index()];
-
 			noob::fast_hashtable::cell *results = models_to_drawable_instances.lookup(info.bp.model.index());
 			const uint32_t instance_index = results->value;
 			const uint32_t old_count = drawables[instance_index].count;
@@ -298,11 +295,12 @@ noob::prop_handle noob::stage::create_prop(const noob::prop_blueprints_handle bl
 			noob::body& temp_bod = world.get_body(body_h);
 			temp_bod.set_user_index_1(static_cast<uint32_t>(noob::stage::drawable_instance::type::PROP));
 			temp_bod.set_user_index_2(prop_h.index());
-			
+
 			props_extra_info[blueprint_h.index()].count++;
 
 			return prop_h;
 		}
+		else noob::logger::log(noob::importance::INFO, "[Stage] Prop info count exceeded");
 	}
 	return noob::prop_handle::make_invalid();
 }
@@ -351,6 +349,15 @@ noob::prop& noob::stage::get_prop(const noob::prop_handle arg) noexcept(true)
 }
 
 
+noob::body& noob::stage::get_body(const noob::body_handle arg) noexcept(true)
+{
+	return world.get_body(arg);
+}
+
+noob::constraint& noob::stage::get_constraint(const noob::constraint_handle arg) noexcept(true)
+{
+	return world.get_constraint(arg);
+}
 
 noob::constraint_handle noob::stage::create_fixed_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& frame_in_a, const noob::mat4f& frame_in_b) noexcept(true)
 {
@@ -666,7 +673,6 @@ void noob::stage::reserve_models(const noob::instanced_model_handle Handle, uint
 		drawables.push_back(info);
 
 		const uint32_t results_index  = drawables.size() - 1;
-
 		drawables[results_index].instances.resize(Num);
 
 		results->value = results_index;
@@ -676,13 +682,12 @@ void noob::stage::reserve_models(const noob::instanced_model_handle Handle, uint
 	}
 	else
 	{
-		// To prevent repeated pointer dereferences
 		const uint32_t index = results->value;
-		const uint32_t old_max = drawables[index].instances.size() - 1;
+		const uint32_t old_max = drawables[index].instances.size();
 		const uint32_t max_new = std::max(old_max, Num);
 
 		drawables[index].instances.resize(max_new);
-
+		// drawables[index].needs_colours = true;
 		noob::graphics& gfx = noob::get_graphics();
 		gfx.resize_buffers(Handle, Num);
 	}

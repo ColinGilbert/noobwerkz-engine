@@ -1,5 +1,7 @@
 #include "Shape.hpp"
 #include "MeshUtils.hpp"
+#include "Globals.hpp"
+
 
 void noob::shape::sphere(float radius) noexcept(true) 
 {
@@ -7,9 +9,9 @@ void noob::shape::sphere(float radius) noexcept(true)
 	{
 		shape_type = noob::shape::type::SPHERE;
 		inner = new btSphereShape(radius);
+		scales = noob::vec3f(radius*2.0, radius*2.0, radius*2.0);
+		physics_valid = true;
 	}
-	scales = noob::vec3f(radius*2.0, radius*2.0, radius*2.0);
-	physics_valid = true;
 }
 
 
@@ -19,9 +21,9 @@ void noob::shape::box(float width, float height, float depth) noexcept(true)
 	{
 		shape_type = noob::shape::type::BOX;
 		inner = new btBoxShape(btVector3(width * 0.5, height * 0.5, depth * 0.5));
+		scales = noob::vec3f(width, height, depth);
+		physics_valid = true;	
 	}
-	scales = noob::vec3f(width, height, depth);
-	physics_valid = true;
 }
 
 
@@ -31,9 +33,9 @@ void noob::shape::cylinder(float radius, float height, uint32_t segments) noexce
 	{
 		shape_type = noob::shape::type::CYLINDER;
 		inner = new btCylinderShapeZ(btVector3(radius, radius, height/2.0));
+		scales = noob::vec3f(radius*2.0, height, radius*2.0);
+		physics_valid = true;
 	}
-	scales = noob::vec3f(radius, height, radius);
-	physics_valid = true;
 }
 
 
@@ -41,12 +43,17 @@ void noob::shape::hull(const std::vector<noob::vec3f>& points) noexcept(true)
 {
 	if (!physics_valid)
 	{
-		shape_type = noob::shape::type::HULL;
+		shape_type = noob::shape::type::CONVEX;
+		btVector3 min, max;
+		btTransform t;
+		t.setIdentity();
 		inner = new btConvexHullShape(&points[0].v[0], points.size());
+		inner->getAabb(t, min, max);
+		scales = noob::vec3f_from_bullet(max - min);
+		physics_valid = true;
 	}
-	scales = noob::vec3f(1.0, 1.0, 1.0);
-	physics_valid = true;
 }
+
 
 void noob::shape::trimesh(const noob::mesh_3d& mesh) noexcept(true) 
 {
@@ -74,7 +81,7 @@ void noob::shape::trimesh(const noob::mesh_3d& mesh) noexcept(true)
 		}        
 		inner = new btBvhTriangleMeshShape(phyz_mesh, true);
 		// set_margin(2.5);
-		scales = noob::vec3f(1.0, 1.0, 1.0);
+		scales = mesh.bbox.max - mesh.bbox.min;//noob::vec3f(m1.0, 1.0, 1.0);
 	}
 	physics_valid = true;
 }
@@ -116,7 +123,7 @@ noob::mesh_3d noob::shape::get_mesh() const noexcept(true)
 			{
 				return noob::mesh_utils::cylinder(scales[0], scales[1], 12);
 			}
-		case (noob::shape::type::HULL):
+		case (noob::shape::type::CONVEX):
 			{
 				const btVector3* btpoints = static_cast<btConvexHullShape*>(inner)->getUnscaledPoints();
 				uint32_t num_points = static_cast<btConvexHullShape*>(inner)->getNumPoints();

@@ -33,6 +33,9 @@ namespace noob
 		noob::vec3f get_position() const noexcept(true);
 		noob::versorf get_orientation() const noexcept(true);
 
+		void set_linear_factor(const noob::vec3f&) const noexcept(true);
+		void set_angular_factor(const noob::vec3f&) const noexcept(true);
+
 		noob::mat4f get_transform() const noexcept(true);
 		noob::vec3f get_linear_velocity() const noexcept(true);
 		noob::vec3f get_angular_velocity() const noexcept(true);

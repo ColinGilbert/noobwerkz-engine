@@ -137,7 +137,6 @@ noob::point_light_handle noob::globals::set_point_light(const noob::point_light&
 		names_to_lights.insert(rde::make_pair(rde::string(s.c_str()), h));
 		return h;
 	}
-
 }
 
 

@@ -24,45 +24,50 @@ namespace noob
 		friend class ghost;
 
 		public:
-		enum class type { SPHERE, BOX, CYLINDER, /*CONE, */ HULL, TRIMESH };
+		enum class type { SPHERE, BOX, CYLINDER, /*CONE, */ CONVEX, TRIMESH };
 
-		shape() noexcept(true) = default;//: physics_valid(false) {} //, scales(noob::vec3f(1.0, 1.0, 1.0)) {}
+		shape() noexcept(true) = default; //: physics_valid(false) {} //, scales(noob::vec3f(1.0, 1.0, 1.0)) {}
 
-		// Initializers
-		void sphere(float radius) noexcept(true);
-		void box(float width, float height, float depth) noexcept(true);
-		void cylinder(float radius, float height, uint32_t segments) noexcept(true);
-		void capsule(float radius, float height) noexcept(true); // TODO: Fix
-		void cone(float radius, float height) noexcept(true); // TODO: Fix
-		void hull(const std::vector<noob::vec3f>&) noexcept(true);
-		 // Known limitation: The mesh indices MUST be fewer than uint16_t max or else UB...
-		 // TODO: Fix!
-		void trimesh(const noob::mesh_3d&) noexcept(true);
+	// Initializers
+	void sphere(float radius) noexcept(true);
+	void box(float width, float height, float depth) noexcept(true);
+	void cylinder(float radius, float height, uint32_t segments) noexcept(true);
+	void capsule(float radius, float height) noexcept(true); // TODO: Fix
+	void cone(float radius, float height) noexcept(true); // TODO: Fix
+	void hull(const std::vector<noob::vec3f>&) noexcept(true);
+	// Known limitation: The mesh indices MUST be fewer than uint16_t max or else UB...
+	// TODO: Fix!
+	void trimesh(const noob::mesh_3d&) noexcept(true);
 
-		void set_margin(float) noexcept(true);
-		float get_margin() const noexcept(true);
 
-		noob::shape::type get_type() const noexcept(true);
 
-		noob::vec3f get_scales() const noexcept(true);
+	void set_margin(float) noexcept(true);
+	float get_margin() const noexcept(true);
 
-		noob::mesh_3d get_mesh() const noexcept(true);
+	noob::shape::type get_type() const noexcept(true);
 
-		void clear() noexcept(true);
+	// TODO: Remove the scales member and use btCollisionShape directly.
+	noob::vec3f get_scales() const noexcept(true);
 
-		void set_self_index(uint32_t) noexcept(true);
-		uint32_t get_self_index() const noexcept(true);
-		// const btCollisionShape* get_inner() const noexcept(true);
-		// btCollisionShape* get_inner_mutable() const noexcept(true);	
+	// TODO: Move out!
+	noob::mesh_3d get_mesh() const noexcept(true);
+
+	void clear() noexcept(true);
+
+	void set_self_index(uint32_t) noexcept(true);
+	uint32_t get_self_index() const noexcept(true);
+	// const btCollisionShape* get_inner() const noexcept(true);
+	// btCollisionShape* get_inner_mutable() const noexcept(true);	
+
 
 		protected:
-		// void plane(const noob::vec3f& normal, float offset) noexcept(true);
-		
-		noob::shape::type shape_type;
-		bool physics_valid = false;
-		noob::vec3f scales = noob::vec3f(1.0, 1.0, 1.0);
-		btCollisionShape* inner;
+	// void plane(const noob::vec3f& normal, float offset) noexcept(true);
+
+	noob::shape::type shape_type;
+	bool physics_valid = false;
+	noob::vec3f scales = noob::vec3f(1.0, 1.0, 1.0);
+	btCollisionShape* inner;
 	};
 
-	typedef noob::handle<noob::shape> shape_handle;
+	typedef noob::handle<shape> shape_handle;
 }

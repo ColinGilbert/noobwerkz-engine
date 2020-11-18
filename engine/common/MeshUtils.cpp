@@ -357,6 +357,7 @@ noob::mesh_3d noob::mesh_utils::cylinder(float radius, float height, uint32_t se
 			noob::mesh_3d::vert v;
 			v.position = noob::vec3f(noob::vec3f(ux * radius, uy * radius, h));
 			v.normal = noob::vec3f(ux, uy, uz);
+			v.colour = noob::vec4f(1.0, 1.0, 1.0, 1.0);
 			v.texcoords = noob::vec3f(static_cast<float>(j) / static_cast<float>(segments), t, 0.0);
 
 			results.vertices.push_back(v);
@@ -379,7 +380,7 @@ noob::mesh_3d noob::mesh_utils::cylinder(float radius, float height, uint32_t se
 		center.position = noob::vec3f(0.0, 0.0, h);
 		center.normal = noob::vec3f(0.0, 0.0, nz);
 		center.texcoords = noob::vec3f(0.5, 0.5, 0.0);
-
+		center.colour = noob::vec4f(1.0, 1.0, 1.0, 1.0);
 		results.vertices.push_back(center);
 
 		for (uint32_t j = 0, k = 0; j < segments; ++j)
@@ -390,6 +391,7 @@ noob::mesh_3d noob::mesh_utils::cylinder(float radius, float height, uint32_t se
 			noob::mesh_3d::vert v;
 			v.position = noob::vec3f(ux * radius, uy * radius, h);    
 			v.normal = noob::vec3f(0.0, 0.0, nz);
+			v.colour = noob::vec4f(1.0, 1.0, 1.0, 1.0);
 			v.texcoords = noob::vec3f(-ux * 0.5 + 0.5, -uy * 0.5f + 0.5f, 0.0);
 			results.vertices.push_back(v);
 		}

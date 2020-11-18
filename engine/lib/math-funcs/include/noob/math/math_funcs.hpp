@@ -259,7 +259,7 @@ namespace noob
 		return results;
 	}
 
-	static versorf versorf_from_bullet(const btQuaternion& arg) noexcept(true)
+	static versorf versorf_from_bullet(const btQuaternion & arg) noexcept(true)
 	{
 		noob::versorf qq;
 		qq.q[0] = arg[0];
@@ -268,6 +268,13 @@ namespace noob
 		qq.q[3] = arg[3];
 		return qq;
 	}
+
+	static btQuaternion versorf_to_bullet(const noob::versorf & arg) noexcept(true)
+	{
+		btQuaternion results(arg.q[0], arg.q[1], arg.q[2], arg[3]);
+		return results;
+	}
+
 
 	static versorf versorf_from_eigen(const Eigen::Quaternion<float>& arg) noexcept(true)
 	{
