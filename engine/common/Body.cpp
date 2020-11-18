@@ -138,12 +138,10 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, const noob::body_in
 	physics_valid = true;
 }
 
-
-bool noob::body::is_active() const noexcept(true)
+float noob::body::get_mass() const noexcept(true)
 {
-	return active;
+	return static_cast<float>(1.0/static_cast<double>(inner->getInvMass()));
 }
-
 
 noob::vec3f noob::body::get_position() const noexcept(true) 
 {
@@ -277,7 +275,7 @@ uint32_t noob::body::get_user_index_2() const noexcept(true)
 }
 
 
-uint32_t noob::body::get_shape_index() const noexcept(true)
+noob::shape_handle noob::body::get_shape() const noexcept(true)
 {
-	return inner->getCollisionShape()->getUserIndex();
+	return noob::shape_handle::make(inner->getCollisionShape()->getUserIndex());
 }

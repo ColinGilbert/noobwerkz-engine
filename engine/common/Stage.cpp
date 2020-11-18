@@ -329,22 +329,30 @@ noob::scenery_handle noob::stage::create_scenery(const noob::shape_handle Shape,
 }
 
 
-noob::assembly_handle noob::stage::create_assembly(const noob::vec3f& pos, const noob::versorf& orient, bool ccd, const std::vector<noob::prop_handle>& props_arg, const std::vector<noob::compound_shape::child_info>& infos) noexcept(true)
+noob::assembly_handle noob::stage::create_assembly(const noob::vec3f& pos, const noob::versorf& orient, bool ccd, const std::vector<noob::prop_handle>& props_arg) noexcept(true)
 {
-	assert(props_arg.size() == infos.size());
-
 	double mass_accum = 0.0;
+	std::vector<noob::compound_shape::child_info> infos;
 	for (size_t i = 0; i < props_arg.size(); ++i)
 	{
-		assert(noob::compare_floats(infos[i].mass, props_extra_info[props[i].bp.index()].bp.mass));
+		noob::compound_shape::child_info inf;
+		noob::body bod = world.get_body(props[i].body);
+		inf.shape = bod.get_shape();
+		inf.mass = bod.get_mass();
+		inf.pos = bod.get_position();
+		inf.orient = bod.get_orientation();
+		infos.push_back(inf);
 		mass_accum += static_cast<double>(infos[i].mass);
-		props[i].in_assembly = true;
-		world.remove_body(props[i].body);
+		size_t stage_props_index = props_arg[i].index();
+
+		props[stage_props_index].in_assembly = true;
+		props[stage_props_index].child_num_for_assembly = i;
+		world.remove_body(props[stage_props_index].body);
 	}
 	noob::assembly a;
 	assemblies.push_back(a);
-	const size_t i = assemblies.size() - 1;
-	assemblies[i].init(world.get_inner(), static_cast<float>(mass_accum), pos, orient, ccd, props_arg, infos);
+	const uint32_t i = assemblies.size() - 1;
+	assemblies[i].init(world, static_cast<float>(mass_accum), pos, orient, ccd, props_arg, infos);
 
 	return noob::assembly_handle::make(i);
 }
@@ -374,6 +382,13 @@ noob::body& noob::stage::get_body(const noob::body_handle arg) noexcept(true)
 {
 	return world.get_body(arg);
 }
+
+
+noob::body_handle noob::stage::get_body_handle(const noob::assembly_handle ah) const noexcept(true)
+{
+	return assemblies[ah.index()].get_body_handle();
+}
+
 
 noob::constraint& noob::stage::get_constraint(const noob::constraint_handle arg) noexcept(true)
 {
@@ -649,7 +664,7 @@ void noob::stage::upload_terrain() noexcept(true)
 			const noob::body& bod = world.get_body(sc.body);
 			const noob::mat4f model_mat = bod.get_transform();
 			const noob::globals& g = noob::get_globals();
-			const noob::shape tmp_shape = g.shapes.get(noob::shape_handle::make(bod.get_shape_index()));
+			const noob::shape tmp_shape = g.shapes.get(bod.get_shape());
 			const noob::mesh_3d tmp_mesh = tmp_shape.get_mesh();
 			// Add up triangles independently
 			for (uint32_t ii = 0; ii < tmp_mesh.indices.size(); ++ii)

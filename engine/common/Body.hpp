@@ -14,11 +14,13 @@ namespace noob
 	class physics;
 	class joint;
 	class compound_shape;
+
 	class body 
 	{
 		friend class physics;
 		friend class constraint;
 		friend class compound_shape;
+		friend class stage;
 
 		public:	
 		body() noexcept(true) : physics_valid(false), ccd(false) {}
@@ -29,10 +31,11 @@ namespace noob
 
 		bool is_compound() const noexcept(true) { return compound; }
 
-		bool is_active() const noexcept(true);
 
 		// void set_type(noob::body_type) noexcept(true);
 
+		float get_mass() const noexcept(true);
+		
 		void set_position(const noob::vec3f&) noexcept(true);
 		void set_orientation(const noob::versorf&) noexcept(true);
 
@@ -56,22 +59,23 @@ namespace noob
 		bool get_ccd_enabled() const noexcept(true); 
 		float get_ccd_threshold() const noexcept(true); 
 
+		// This will give you an offset into the array you store your shapes in, no matter where it may be.
+		// Note: Only really useful if you store your shapes in one place.
+		noob::shape_handle get_shape() const noexcept(true);
+	
+		protected:
+		
 		void set_user_index_1(uint32_t) noexcept(true);
 		void set_user_index_2(uint32_t) noexcept(true);
 		uint32_t get_user_index_1() const noexcept(true);
 		uint32_t get_user_index_2() const noexcept(true);
 
-		// This will give you an offset into the array you store your shapes in, no matter where it may be.
-		// Note: Only really useful if you store your shapes in one place.
-		uint32_t get_shape_index() const noexcept(true);
-
-	
-		protected:
-		
-		bool compound = false;
 		noob::body_type type;
-		bool physics_valid, ccd;
 		btRigidBody* inner;
+
+		bool compound = false;
+		bool physics_valid = false;
+		bool ccd = false;
 		bool active = true;
 	};
 

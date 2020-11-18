@@ -65,11 +65,9 @@ noob::vec3f noob::physics::get_gravity() const noexcept(true)
 noob::body_handle noob::physics::add_body(noob::body_type b_type, const noob::shape_handle shape_h, float mass, const noob::vec3f& pos, const noob::versorf& orient, bool ccd) noexcept(true)
 {
 	noob::globals& g = noob::get_globals();
-
 	noob::body b;
 	b.init(dynamics_world, b_type, g.shapes.get(shape_h), mass, pos, orient, ccd);	
 	bodies.push_back(b);
-
 	return noob::body_handle::make(bodies.size() - 1);
 }
 
@@ -77,11 +75,9 @@ noob::body_handle noob::physics::add_body(noob::body_type b_type, const noob::sh
 noob::body_handle noob::physics::add_body(const noob::body_info& info_arg) noexcept(true)
 {
 	noob::globals& g = noob::get_globals();
-
 	noob::body b;
 	b.init(dynamics_world, info_arg);
 	bodies.push_back(b);
-
 	return noob::body_handle::make(bodies.size() - 1);
 }
 
