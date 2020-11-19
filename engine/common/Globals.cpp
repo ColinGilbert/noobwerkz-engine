@@ -75,7 +75,7 @@ noob::shape_handle noob::globals::box_shape(float x, float y, float z) noexcept(
 
 noob::shape_handle noob::globals::cylinder_shape(float radius, float height, uint32_t segments)
 {
-	const std::string s = noob::concat("cylinder-", noob::to_string(static_cast<uint32_t>(radius)), "-", noob::to_string(static_cast<uint32_t>(height)), "-", noob::to_string(segments));
+	const std::string s = noob::concat("cylinder-", noob::to_string(radius), "-", noob::to_string(height), "-", noob::to_string(segments));
 	auto search = names_to_shapes.find(rde::string(s.c_str()));
 	//auto search = box_shapes.find(std::make_tuple(x,y,z));
 	if (search == names_to_shapes.end())
@@ -110,7 +110,8 @@ noob::compound_shape_handle noob::globals::compound_shape(const std::vector<noob
 {
 	noob::compound_shape compound;
 	compound.init(arg);
-	return add_compound_shape(compound);
+	noob::compound_shape_handle cc = add_compound_shape(compound);
+	return cc;
 }
 
 

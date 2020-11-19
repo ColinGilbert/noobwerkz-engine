@@ -9,10 +9,6 @@ namespace noob
 {
 	struct prop_blueprints
 	{
-		// uint16_t strength, range, armour, defense, movement_speed, attack_speed, stamina, morale, los;
-		//noob::shape_handle bounds;
-		// TODO: replace with armature
-		//noob::instanced_model_handle model;
 		noob::shape_handle shape;
 		noob::instanced_model_handle model;
 		noob::reflectance_handle reflect;

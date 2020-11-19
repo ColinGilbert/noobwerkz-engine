@@ -14,6 +14,7 @@ namespace noob
 	class assembly
 	{
 
+		friend class stage;
 		// This wraps around a body with a compound shape. It also stores the prop handles which pertain to the (now disactivated) bodies.
 		public:
 			void init(noob::physics &, float mass, const noob::vec3f& pos, const noob::versorf& orient, bool ccd, const std::vector<noob::prop_handle>&, const std::vector<noob::compound_shape::child_info>&) noexcept(true);

@@ -6,8 +6,8 @@ void noob::stage::init(const noob::vec2ui& dims, const noob::mat4f& projection_m
 	update_viewport_params(dims, projection_mat);
 
 	noob::vec3f eye_pos, eye_target, eye_up;
-	eye_pos = noob::vec3f(300.0, 350.0, 300.0);
-	eye_target = noob::vec3f(150.0, 50.0, 0.0);
+	eye_pos = noob::vec3f(300.0, 700.0, 100.0);
+	eye_target = noob::vec3f(10.0, 50.0, 0.0);
 	eye_up = noob::vec3f(0.0, 1.0, 0.0);
 
 	view_matrix = noob::look_at(eye_pos, eye_target, eye_up);
@@ -254,17 +254,25 @@ noob::actor_handle noob::stage::create_actor(const noob::actor_blueprints_handle
 			temp_ghost.set_user_index_1(static_cast<uint32_t>(noob::stage_item_type::ACTOR));
 			temp_ghost.set_user_index_2(actor_h.index());
 
+
 			actors_extra_info[blueprint_h.index()].count++;
+
+
+			logger::log(noob::importance::INFO, "[Stage] Actor added.");
 
 			return actor_h;
 		}
 	}
+
+
+			logger::log(noob::importance::INFO, "[Stage] Actor failed to add.");
 	return noob::actor_handle::make_invalid();
 }
 
 
 noob::prop_handle noob::stage::create_prop(const noob::prop_blueprints_handle blueprint_h, uint32_t team, const noob::vec3f& pos, const noob::versorf& orient) noexcept(true)
 {
+
 	if (props_extra_info.size() > blueprint_h.index())
 	{
 		// logger::log(noob::importance::INFO, "[Stage] create_prop. Inside first conditional block.");
@@ -347,7 +355,7 @@ noob::assembly_handle noob::stage::create_assembly(const noob::vec3f& pos, const
 
 		props[stage_props_index].in_assembly = true;
 		props[stage_props_index].child_num_for_assembly = i;
-		//world.remove_body(props[stage_props_index].body);
+		// world.remove_body(props[stage_props_index].body);
 
 		bod.toggle_active();
 	}
@@ -355,6 +363,11 @@ noob::assembly_handle noob::stage::create_assembly(const noob::vec3f& pos, const
 	assemblies.push_back(a);
 	const uint32_t i = assemblies.size() - 1;
 	assemblies[i].init(world, static_cast<float>(mass_accum), pos, orient, ccd, props_arg, infos);
+
+	assemblies[i].bod.set_user_index_1(static_cast<uint32_t>(noob::stage::drawable_instance::type::ASSEMBLY));
+	assemblies[i].bod.set_user_index_2(i);
+
+	logger::log(noob::importance::INFO, noob::concat("[Stage] Made assembly with ",  noob::to_string(props_arg.size()), " children and index ", noob::to_string(i)));
 
 	return noob::assembly_handle::make(i);
 }
@@ -413,6 +426,13 @@ noob::constraint_handle noob::stage::create_point_constraint(const noob::body_ha
 noob::constraint_handle noob::stage::create_hinge_constraint(const noob::body_handle a, const noob::vec3f& pivot, const noob::vec3f& axis) noexcept(true)
 {
 	return world.add_hinge_constraint(a, pivot, axis);
+}
+
+
+
+noob::constraint_handle noob::stage::create_conical_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& frame_in_a, const noob::mat4f& frame_in_b) noexcept(true)
+{
+	return world.add_conical_constraint(a, b, frame_in_a, frame_in_b);
 }
 
 
@@ -611,8 +631,8 @@ void noob::stage::upload_matrices(const drawable_info_handle arg) noexcept(true)
 	const noob::instanced_model_handle model_h = drawables[arg.index()].model;
 
 	noob::graphics& gfx = noob::get_graphics();
-	noob::gpu_write_buffer buf = gfx.map_matrices_buffer(model_h, 0, count);
-
+	noob::gpu_write_buffer buf = gfx.map_matrices_buffer(model_h, 0, count); // Mapping count + 1 is wierd but it seems to fix a problem when dealing with multiple models
+ 
 	if (!buf.valid())
 	{
 		logger::log(noob::importance::ERROR, noob::concat("[Stage] Could not map instanced matrices buffer for model ", noob::to_string(arg.index()), " - count: ", noob::to_string(count)));	
@@ -637,6 +657,7 @@ void noob::stage::upload_matrices(const drawable_info_handle arg) noexcept(true)
 			const noob::prop p = props[info.index];
 			if (p.in_assembly)
 			{
+
 				model_matrix = assemblies[p.assembly.index()].get_child_transform(p.child_num_for_assembly);
 			}
 			else
@@ -648,6 +669,7 @@ void noob::stage::upload_matrices(const drawable_info_handle arg) noexcept(true)
 
 			// logger::log(noob::importance::INFO, noob::concat(bod.get_debug_string()));
 		}
+
 		valid = buf.push_back(model_matrix);
 
 		if (!valid)

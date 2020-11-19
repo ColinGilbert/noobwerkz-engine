@@ -53,6 +53,8 @@ namespace noob
 
 		std::string get_debug_string() const noexcept(true);
 
+		void apply_impulse(const noob::vec3f& force, const noob::vec3f& rel_pos) noexcept(true);
+
 		// At this point in time, we can only set ccd on.
 		// TODO: Find out how to turn it off properly.
 		void set_ccd(bool) noexcept(true); 

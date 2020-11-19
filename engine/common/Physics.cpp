@@ -169,6 +169,15 @@ noob::constraint_handle noob::physics::add_generic_constraint(const noob::body_h
 }
 
 
+noob::constraint_handle noob::physics::add_conical_constraint(const noob::body_handle a, const noob::body_handle b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true)
+{
+	noob::constraint c;
+	c.init_conical(dynamics_world, bodies[a.index()], bodies[b.index()], local_a, local_b);
+	constraints.push_back(c);
+	return noob::constraint_handle::make(constraints.size() - 1);
+}
+
+
 uint32_t noob::physics::get_intersecting(const noob::ghost_handle ghost_h, std::vector<noob::contact_point>& Results) const noexcept(true) 
 {
 	Results.clear();

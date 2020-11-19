@@ -106,7 +106,9 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type typ
 	set_ccd(ccd);
 
 	dynamics_world->addRigidBody(inner);
+	
 	noob::globals& g = noob::get_globals();
+
 	physics_valid = true;	
 	compound = true;
 }
@@ -137,6 +139,13 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, const noob::body_in
 	dynamics_world->addRigidBody(inner);	
 	physics_valid = true;
 }
+
+
+void noob::body::apply_impulse(const noob::vec3f& force, const noob::vec3f& rel_pos) noexcept(true)
+{
+	inner->applyImpulse(noob::vec3f_to_bullet(force), noob::vec3f_to_bullet(rel_pos));
+}
+
 
 float noob::body::get_mass() const noexcept(true)
 {
@@ -169,7 +178,6 @@ void noob::body::set_linear_factor(const noob::vec3f& arg) const noexcept(true)
 {
 	inner->setLinearFactor(noob::vec3f_to_bullet(arg));
 }
-
 
 
 noob::vec3f noob::body::get_linear_velocity() const noexcept(true) 
@@ -283,5 +291,6 @@ uint32_t noob::body::get_user_index_2() const noexcept(true)
 
 noob::shape_handle noob::body::get_shape() const noexcept(true)
 {
+	assert(physics_valid);
 	return noob::shape_handle::make(inner->getCollisionShape()->getUserIndex());
 }

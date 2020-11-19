@@ -11,6 +11,7 @@ void noob::constraint::init_fixed(btDynamicsWorld* const w, const noob::body& a,
 	inner = new btFixedConstraint(*(a.inner), *(b.inner), tr_a, tr_b);
 	// static_cast<btFixedConstraint*>(inner)->setEquilibriumPoint();//0, 0);
 	w->addConstraint(inner, true);
+	inner_type = noob::constraint::type::FIXED;
 
 }
 
@@ -19,6 +20,7 @@ void noob::constraint::init_point(btDynamicsWorld* const w, const noob::body& a,
 	inner = new btPoint2PointConstraint(*(a.inner), *(b.inner), noob::vec3f_to_bullet(pivot_a), noob::vec3f_to_bullet(pivot_b));
 	// static_cast<btFixedConstraint*>(inner)->setEquilibriumPoint();//0, 0);
 	w->addConstraint(inner, true);
+	inner_type = noob::constraint::type::POINT_TO_POINT;
 }
 
 
@@ -27,6 +29,7 @@ void noob::constraint::init_hinge(btDynamicsWorld* const w, const noob::body& a,
 {
 	inner = new btHingeConstraint(*(a.inner), noob::vec3f_to_bullet(pivot), noob::vec3f_to_bullet(axis), true);
 	w->addConstraint(inner, true);
+	inner_type = noob::constraint::type::HINGE;
 }
 
 
@@ -34,6 +37,7 @@ void noob::constraint::init_hinge(btDynamicsWorld* const w, const noob::body& a,
 {
 	inner = new btHingeConstraint(*(a.inner), *(b.inner), noob::vec3f_to_bullet(pivot_in_a), noob::vec3f_to_bullet(pivot_in_b), noob::vec3f_to_bullet(axis_in_a), noob::vec3f_to_bullet(axis_in_b), true);
 	w->addConstraint(inner, true);
+	inner_type = noob::constraint::type::HINGE;
 }
 
 void noob::constraint::init_slide(btDynamicsWorld* const w, const noob::body& a, const noob::body& b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true)
@@ -43,9 +47,18 @@ void noob::constraint::init_slide(btDynamicsWorld* const w, const noob::body& a,
 	tr_b.setFromOpenGLMatrix(&local_b.m[0]);
 	inner = new btSliderConstraint(*(a.inner), *(b.inner), tr_a, tr_b, true);
 	w->addConstraint(inner, true);
+	inner_type = noob::constraint::type::SLIDE;
 }
 
-// void init_conical() noexcept(true);
+void noob::constraint::init_conical(btDynamicsWorld* const w, const noob::body& a, const noob::body& b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true)
+{
+	btTransform tr_a, tr_b;
+	tr_a.setFromOpenGLMatrix(&local_a.m[0]);
+	tr_b.setFromOpenGLMatrix(&local_b.m[0]);
+	inner = new btConeTwistConstraint(*(a.inner), *(b.inner), tr_a, tr_b);
+	w->addConstraint(inner, true);
+	inner_type = noob::constraint::type::CONICAL;
+}
 // void init_gear() noexcept (true);
 
 void noob::constraint::init_generic(btDynamicsWorld* const w, const noob::body& a, const noob::body& b, const noob::mat4f& local_a, const noob::mat4f& local_b) noexcept(true)
@@ -56,6 +69,7 @@ void noob::constraint::init_generic(btDynamicsWorld* const w, const noob::body& 
 	inner = new btGeneric6DofSpringConstraint(*(a.inner), *(b.inner), tr_a, tr_b, true);
 	static_cast<btGeneric6DofSpringConstraint*>(inner)->setEquilibriumPoint();//0, 0);
 	w->addConstraint(inner, true);
+	inner_type = noob::constraint::type::GENERIC;
 }
 
 void noob::constraint::enable() noexcept(true)
