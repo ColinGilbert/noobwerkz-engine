@@ -106,7 +106,7 @@ void noob::body::init(btDynamicsWorld* const dynamics_world, noob::body_type typ
 	set_ccd(ccd);
 
 	dynamics_world->addRigidBody(inner);
-	
+
 	noob::globals& g = noob::get_globals();
 
 	physics_valid = true;	
@@ -259,11 +259,18 @@ float noob::body::get_ccd_threshold() const noexcept(true)
 }
 
 
-void noob::body::toggle_active() const noexcept(true)
+void noob::body::toggle_active() noexcept(true)
 {
 	inner->setCollisionFlags(inner->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	if (active)
+	{
+		inner->setLinearFactor(btVector3(0.0, 0.0, 0.0));
+	} else
+	{
+		inner->setLinearFactor(btVector3(1.0, 1.0, 1.0));
+	}
+	active ^= active;
 }
-
 
 void noob::body::set_user_index_1(uint32_t i) noexcept(true)
 {

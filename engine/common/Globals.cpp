@@ -58,7 +58,7 @@ noob::shape_handle noob::globals::sphere_shape(float r) noexcept(true)
 
 noob::shape_handle noob::globals::box_shape(float x, float y, float z) noexcept(true) 
 {
-	const std::string s = noob::concat("box-", noob::to_string(static_cast<uint32_t>(x)), "-", noob::to_string(static_cast<uint32_t>(y)), "-", noob::to_string(static_cast<uint32_t>(z)));
+	const std::string s = noob::concat("box-", noob::to_string(x), "-", noob::to_string(y), "-", noob::to_string(z));
 	auto search = names_to_shapes.find(rde::string(s.c_str()));
 	//auto search = box_shapes.find(std::make_tuple(x,y,z));
 	if (search == names_to_shapes.end())
@@ -81,7 +81,23 @@ noob::shape_handle noob::globals::cylinder_shape(float radius, float height, uin
 	if (search == names_to_shapes.end())
 	{
 		noob::shape temp;
-		temp.cylinder(radius, height, segments);
+		temp.cylinder(radius, height);
+		auto results = names_to_shapes.insert(rde::make_pair(rde::string(s.c_str()), add_shape(temp)));
+		return (results.first)->second;
+	}
+	return search->second;
+}
+
+
+noob::shape_handle noob::globals::cone_shape(float radius, float height, uint32_t segments)
+{
+	const std::string s = noob::concat("cone-", noob::to_string(radius), "-", noob::to_string(height), "-", noob::to_string(segments));
+	auto search = names_to_shapes.find(rde::string(s.c_str()));
+	//auto search = box_shapes.find(std::make_tuple(x,y,z));
+	if (search == names_to_shapes.end())
+	{
+		noob::shape temp;
+		temp.cone(radius, height);
 		auto results = names_to_shapes.insert(rde::make_pair(rde::string(s.c_str()), add_shape(temp)));
 		return (results.first)->second;
 	}

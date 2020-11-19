@@ -27,17 +27,34 @@ void noob::shape::box(float width, float height, float depth) noexcept(true)
 }
 
 
-void noob::shape::cylinder(float radius, float height, uint32_t segments) noexcept(true) 
+void noob::shape::cylinder(float radius, float height) noexcept(true) 
 {
 	if (!physics_valid)
 	{
 		shape_type = noob::shape::type::CYLINDER;
-		inner = new btCylinderShapeZ(btVector3(radius, radius, height/2.0));
+		inner = new btCylinderShapeZ(btVector3(radius, radius, height * 2.0));
 		scales = noob::vec3f(radius*2.0, height, radius*2.0);
 		physics_valid = true;
 	}
 }
 
+
+void noob::shape::cone(float radius, float height) noexcept(true)
+{
+	if (!physics_valid)
+	{
+		shape_type = noob::shape::type::CONE;
+		inner = new btConeShapeZ(radius, radius);
+
+		btVector3 min, max;
+		btTransform t;
+		t.setIdentity();
+		inner = new btConeShapeZ(radius, height);
+		inner->getAabb(t, min, max);
+		scales = noob::vec3f_from_bullet(max - min);
+		physics_valid = true;
+	}
+}
 
 void noob::shape::hull(const std::vector<noob::vec3f>& points) noexcept(true) 
 {
@@ -126,6 +143,10 @@ noob::mesh_3d noob::shape::get_mesh() const noexcept(true)
 		case (noob::shape::type::CYLINDER):
 			{
 				return noob::mesh_utils::cylinder(scales[0], scales[1], 12);
+			}
+		case (noob::shape::type::CONE):
+			{
+				return noob::mesh_utils::cone(scales[0], scales[1], 12);
 			}
 		case (noob::shape::type::CONVEX):
 			{
@@ -243,7 +264,7 @@ void noob::shape::clear() noexcept(true)
 	}
 }
 
-	
+
 const btCollisionShape* noob::shape::get_inner() const noexcept(true)
 {
 	return inner;

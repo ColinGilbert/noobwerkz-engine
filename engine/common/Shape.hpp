@@ -25,14 +25,14 @@ namespace noob
 		friend class body;
 		friend class ghost;
 		public:
-		enum class type { SPHERE, BOX, CYLINDER, /*CONE, */ CONVEX, TRIMESH };
+		enum class type { SPHERE, BOX, CYLINDER, CONE, CONVEX, TRIMESH };
 
 		shape() noexcept(true) = default; //: physics_valid(false) {} //, scales(noob::vec3f(1.0, 1.0, 1.0)) {}
 
 	// Initializers
 	void sphere(float radius) noexcept(true);
 	void box(float width, float height, float depth) noexcept(true);
-	void cylinder(float radius, float height, uint32_t segments) noexcept(true);
+	void cylinder(float radius, float height) noexcept(true);
 	void capsule(float radius, float height) noexcept(true); // TODO: Fix
 	void cone(float radius, float height) noexcept(true); // TODO: Fix
 	void hull(const std::vector<noob::vec3f>&) noexcept(true);

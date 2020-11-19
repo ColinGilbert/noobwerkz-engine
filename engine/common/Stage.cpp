@@ -6,8 +6,8 @@ void noob::stage::init(const noob::vec2ui& dims, const noob::mat4f& projection_m
 	update_viewport_params(dims, projection_mat);
 
 	noob::vec3f eye_pos, eye_target, eye_up;
-	eye_pos = noob::vec3f(300.0, 700.0, 100.0);
-	eye_target = noob::vec3f(10.0, 50.0, 0.0);
+	eye_pos = noob::vec3f(00.0, 1000.0, 400.0);
+	eye_target = noob::vec3f(0.0, 50.0, -50.0);
 	eye_up = noob::vec3f(0.0, 1.0, 0.0);
 
 	view_matrix = noob::look_at(eye_pos, eye_target, eye_up);

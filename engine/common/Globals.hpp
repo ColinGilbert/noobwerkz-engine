@@ -52,6 +52,7 @@ namespace noob
 		noob::shape_handle sphere_shape(float r) noexcept(true);
 		noob::shape_handle box_shape(float x, float y, float z) noexcept(true);
 		noob::shape_handle cylinder_shape(float radius, float height, uint32_t segments) noexcept(true);
+		noob::shape_handle cone_shape(float radius, float, uint32_t segments) noexcept(true);
 		noob::shape_handle hull_shape(const std::vector<noob::vec3f>&) noexcept(true);
 		noob::shape_handle static_trimesh_shape(const noob::mesh_3d&) noexcept(true);
 		

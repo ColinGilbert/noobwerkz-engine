@@ -328,7 +328,7 @@ noob::mesh_3d noob::mesh_utils::box(float width, float height, float depth)
 
 
 // This code is adapted from http://www.songho.ca/opengl/gl_cylinder.html
-noob::mesh_3d noob::mesh_utils::cylinder(float radius, float height, uint32_t segments) {
+noob::mesh_3d noob::mesh_utils::cylinder(float radius, float height, uint32_t segments, bool narrowed_end, float narrow_to) {
 	// Generate a unit circle on XY-plane
 	const float PI = 3.1415926f;
 	const float sector_step = 2 * PI / static_cast<float>(segments);
@@ -347,20 +347,29 @@ noob::mesh_3d noob::mesh_utils::cylinder(float radius, float height, uint32_t se
 		const float h = -height / 2.0f + i * height;           // z value; -h/2 to h/2
 		const float t = 1.0f - i;                              // vertical tex coord; 1 to 0
 
+		const bool narrow_me = (i == 0 && narrowed_end);
 		for(uint32_t j = 0, k = 0; j <= segments; ++j)
 		{
+
 			noob::vec3f temp = unit_circle_vertices[j];
 			const float ux = temp.v[0];
 			const float uy = temp.v[1];
 			const float uz = temp.v[2];
 
 			noob::mesh_3d::vert v;
-			v.position = noob::vec3f(noob::vec3f(ux * radius, uy * radius, h));
+			if (narrow_me)
+			{
+				v.position = noob::vec3f(ux * std::fabs(narrow_to), uy * fabs(narrow_to), h);
+			} else
+			{
+				v.position = noob::vec3f(ux * radius, uy * radius, h);
+			}
 			v.normal = noob::vec3f(ux, uy, uz);
 			v.colour = noob::vec4f(1.0, 1.0, 1.0, 1.0);
 			v.texcoords = noob::vec3f(static_cast<float>(j) / static_cast<float>(segments), t, 0.0);
 
 			results.vertices.push_back(v);
+
 		}
 	}
 
@@ -372,9 +381,11 @@ noob::mesh_3d noob::mesh_utils::cylinder(float radius, float height, uint32_t se
 	// Put base and top vertices to arrays
 	for (uint32_t i = 0; i < 2; ++i)
 	{
+		const bool narrow_me = (i == 0 && narrowed_end);
+
 		float h = -height / 2.0f + static_cast<float>(i) * height;
 		float nz = -1.0 + static_cast<float>(i) * 2.0;
-	
+
 		noob::mesh_3d::vert center;
 		// Center point
 		center.position = noob::vec3f(0.0, 0.0, h);
@@ -385,11 +396,21 @@ noob::mesh_3d noob::mesh_utils::cylinder(float radius, float height, uint32_t se
 
 		for (uint32_t j = 0, k = 0; j < segments; ++j)
 		{
-			
+
 			float ux = unit_circle_vertices[j].v[0];
 			float uy = unit_circle_vertices[j].v[1];
 			noob::mesh_3d::vert v;
-			v.position = noob::vec3f(ux * radius, uy * radius, h);    
+
+			if (narrow_me)
+			{
+				v.position = noob::vec3f(ux * narrow_to, uy * narrow_to, h);
+			}
+			else
+			{
+				v.position = noob::vec3f(ux * radius, uy * radius, h);
+			}			
+
+
 			v.normal = noob::vec3f(0.0, 0.0, nz);
 			v.colour = noob::vec4f(1.0, 1.0, 1.0, 1.0);
 			v.texcoords = noob::vec3f(-ux * 0.5 + 0.5, -uy * 0.5f + 0.5f, 0.0);
@@ -451,6 +472,11 @@ noob::mesh_3d noob::mesh_utils::cylinder(float radius, float height, uint32_t se
 
 	return results;
 
+}
+
+noob::mesh_3d noob::mesh_utils::cone(float radius, float height, uint32_t segments)
+{
+	return cylinder(radius, height, segments, true, 0.0);
 }
 
 
